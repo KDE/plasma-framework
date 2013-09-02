@@ -26,51 +26,20 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
+#include <plasmaview/plasmaview_export.h>
+
 namespace Plasma {
     class Applet;
 }
 
 class ConfigPropertyMap;
 
+class ConfigCategoryPrivate;
 
-class ConfigCategory : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
-    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QString pluginName READ pluginName WRITE setPluginName NOTIFY pluginNameChanged)
+class ConfigModelPrivate;
+class ConfigCategory;
 
-public:
-    ConfigCategory(QObject *parent = 0);
-    ~ConfigCategory();
-
-    QString name() const;
-    void setName(const QString &name);
-
-    QString icon() const;
-    void setIcon(const QString &icon);
-
-    QString source() const;
-    void setSource(const QString &source);
-
-    QString pluginName() const;
-    void setPluginName(const QString &pluginName);
-
-Q_SIGNALS:
-    void nameChanged();
-    void iconChanged();
-    void sourceChanged();
-    void pluginNameChanged();
-
-private:
-    QString m_name;
-    QString m_icon;
-    QString m_source;
-    QString m_pluginName;
-};
-
-class ConfigModel : public QAbstractListModel
+class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
@@ -87,7 +56,15 @@ public:
     ConfigModel(QObject *parent = 0);
     ~ConfigModel();
 
+    /**
+     * add a new category in the model
+     * @param ConfigCategory the new category
+     **/
     void appendCategory(ConfigCategory *c);
+
+    /**
+     * clears the model
+     **/
     void clear();
 
     void setApplet(Plasma::Applet *interface);
@@ -96,35 +73,57 @@ public:
     int count() {return rowCount();}
     virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
     virtual QVariant data(const QModelIndex&, int) const;
+
+    /**
+     * @param row the row for which the data will be returned
+     * @raturn the data of the specified row
+     **/
     Q_INVOKABLE QVariant get(int row) const;
 
+    /**
+     * @return the categories of the model
+     **/
     QQmlListProperty<ConfigCategory> categories();
-    
+
     static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
     static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
     static int categories_count(QQmlListProperty<ConfigCategory> *prop);
     static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
 
 Q_SIGNALS:
+    /**
+     * emitted when the count is changed
+     **/
     void countChanged();
 
 private:
-    QList<ConfigCategory*>m_categories;
-    QWeakPointer<Plasma::Applet> m_appletInterface;
+    friend class ConfigModelPrivate;
+    ConfigModelPrivate *const d;
 };
 
 
-class ConfigView : public QQuickView
+class ConfigViewPrivate;
+
+//TODO: the config view for the containment should be a subclass
+//TODO: is it possible to move this in the shell?
+class PLASMAVIEW_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
 
 public:
+    /**
+     * @param applet the applet of this ConfigView
+     * @param parent the QWindow in which this ConfigView is parented to
+     **/
     ConfigView(Plasma::Applet *applet, QWindow *parent = 0);
     virtual ~ConfigView();
 
     virtual void init();
 
+    /**
+     * @return the ConfigModel of the ConfigView
+     **/
     ConfigModel *configModel() const;
 
 protected:
@@ -132,8 +131,7 @@ protected:
      void resizeEvent(QResizeEvent *re);
 
 private:
-    Plasma::Applet *m_applet;
-    ConfigModel *m_configModel;
+    ConfigViewPrivate *const d;
 };
 
 #endif // multiple inclusion guard
