@@ -235,6 +235,14 @@ Q_SIGNALS:
      */
     void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
 
+    /**
+     * Emitted when the package for this corona has been changed.
+     * Shells must support changing the shell package on the fly (for instance due to device form factor changing)
+     *
+     * @param package the new package that defines the Corona furniture and behavior
+     */
+    void packageChanged(const Plasma::Package &package);
+
 protected:
     /**
      * Loads the default (system wide) layout for this user

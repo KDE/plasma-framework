@@ -73,6 +73,7 @@ Plasma::Package Corona::package() const
 void Corona::setPackage(const Plasma::Package &package)
 {
     d->package = package;
+    emit packageChanged(package);
 }
 
 void Corona::saveLayout(const QString &configName) const
