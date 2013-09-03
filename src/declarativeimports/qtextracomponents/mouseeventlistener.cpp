@@ -158,7 +158,7 @@ void MouseEventListener::mouseMoveEvent(QMouseEvent *me)
 
 void MouseEventListener::mouseReleaseEvent(QMouseEvent *me)
 {
-    if (m_lastEvent == me || !(me->buttons() & m_acceptedButtons)) {
+    if (m_lastEvent == me) {
         me->setAccepted(false);
         return;
     }
@@ -263,9 +263,6 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
     case QEvent::MouseButtonRelease: {
         m_lastEvent = event;
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
-        if (!(me->buttons() & m_acceptedButtons)) {
-            break;
-        }
 
         const QPointF myPos = item->mapToItem(this, me->pos());
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
