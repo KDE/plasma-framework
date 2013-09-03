@@ -12,9 +12,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     )
 
-add_library(plasmaview SHARED ${plasmaview_LIB_SRC})
+add_library(PlasmaView SHARED ${plasmaview_LIB_SRC})
 
-target_link_libraries(plasmaview
+target_link_libraries(PlasmaView
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
@@ -26,14 +26,14 @@ target_link_libraries(plasmaview
     kdeclarative
 )
 
-set_target_properties(plasmaview PROPERTIES
+set_target_properties(PlasmaView PROPERTIES
                              VERSION 5.0.0
                              SOVERSION 5
                       )
 
-install(TARGETS plasmaview EXPORT PlasmaViewTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS PlasmaView EXPORT PlasmaViewTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-generate_export_header(plasmaview)
+generate_export_header(PlasmaView)
 
 set(plasmaview_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaview_export.h
