@@ -150,9 +150,9 @@ void AppletInterface::init()
 
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
         if (defaults.isValid()) {
-            pkg.setPath(defaults.readEntry("ToolBox", "org.kde.toolbox"));
+            pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
         } else {
-            pkg.setPath("org.kde.toolbox");
+            pkg.setPath("org.kde.desktoptoolbox");
         }
 
         if (pkg.isValid()) {
@@ -167,9 +167,9 @@ void AppletInterface::init()
             } else {
                 delete toolBoxObject;
             }
-            qDebug() << "Loaded org.kde.toolbox";
+            qDebug() << "Loaded toolbox package" << pkg.path();
         } else {
-            qWarning() << "Could not load org.kde.toolbox package.";
+            qWarning() << "Could not load toolbox package." << pkg.path();
         }
     }
 
