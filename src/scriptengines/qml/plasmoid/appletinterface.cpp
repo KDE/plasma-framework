@@ -635,6 +635,7 @@ void AppletInterface::compactRepresentationCheck()
     if (m_qmlObject->rootObject()->property("minimumWidth").canConvert<qreal>()) {
         minHint.setWidth(m_qmlObject->rootObject()->property("minimumWidth").toReal());
     }
+
     if (m_qmlObject->rootObject()->property("minimumHeight").canConvert<qreal>()) {
         minHint.setHeight(m_qmlObject->rootObject()->property("minimumHeight").toReal());
     }
