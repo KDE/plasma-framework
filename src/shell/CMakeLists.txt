@@ -69,6 +69,7 @@ add_executable(plasma-shell
     shellmanager.cpp
     packages.cpp
     panelconfigview.cpp
+    shellpluginloader.cpp
     ${scripting_SRC}
     ${widgetexplorer_SRC}
 )

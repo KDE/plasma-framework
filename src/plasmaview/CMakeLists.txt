@@ -5,8 +5,6 @@ set(plasmaview_LIB_SRC
     configview.cpp
     containmentconfigview_p.cpp
     currentcontainmentactionsmodel_p.cpp
-    shellpluginloader.cpp
-    ../shell/packages.cpp
 )
 
 
@@ -41,7 +39,6 @@ set(plasmaview_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaview_export.h
     view.h
     configview.h
-    shellpluginloader.h
 )
 
 install(FILES ${plasmaview_LIB_INCLUDES}
