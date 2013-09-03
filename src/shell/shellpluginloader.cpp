@@ -21,19 +21,16 @@
 #include "shellpackage_p.h"
 
 
-class ShellPluginLoaderPrivate
-{
-public:
-    ShellPluginLoaderPrivate();
-    ~ShellPluginLoaderPrivate();
-    Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization);
-};
-
-ShellPluginLoaderPrivate::ShellPluginLoaderPrivate()
+ShellPluginLoader::ShellPluginLoader()
+    : Plasma::PluginLoader()
 {
 }
 
-Plasma::Package ShellPluginLoaderPrivate::internalLoadPackage(const QString &packageFormat, const QString &specialization)
+ShellPluginLoader::~ShellPluginLoader()
+{
+}
+
+Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFormat, const QString &specialization)
 {
     Q_UNUSED(specialization)
 
@@ -45,22 +42,8 @@ Plasma::Package ShellPluginLoaderPrivate::internalLoadPackage(const QString &pac
     }
 }
 
-
-
-
-/////////////////////ShellPluginLoader
-ShellPluginLoader::ShellPluginLoader()
-    : Plasma::PluginLoader(),
-      d(new ShellPluginLoaderPrivate())
+void ShellPluginLoader::init()
 {
-}
-
-ShellPluginLoader::~ShellPluginLoader()
-{
-}
-
-Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFormat, const QString &specialization)
-{
-    return d->internalLoadPackage(packageFormat, specialization);
+    Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
 }
 
