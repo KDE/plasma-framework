@@ -114,7 +114,7 @@ bool Package::isValid() const
         }
 
         if (failed) {
-            qWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key();
+            qWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key() << "for package" << path();
             d->valid = false;
             break;
         }
