@@ -23,6 +23,9 @@
  *   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <QUrl>
+#include <QDebug>
+
 #include "customDataContainersEngine.h"
 
 #include "httpContainer.h"
@@ -44,9 +47,9 @@ bool DataContainersEngine::sourceRequestEvent(const QString &source)
 {
     // This engine will fetch webpages over http. First thing we do is check
     // the source to make sure it is indeed an http URL.
-    KUrl url(source);
-    kDebug() << "goin to fetch" << source << url << url.protocol();
-    if (!url.protocol().startsWith("http", Qt::CaseInsensitive)) {
+    QUrl url(source);
+    qDebug() << "goin to fetch" << source << url << url.scheme();
+    if (!url.scheme().startsWith("http", Qt::CaseInsensitive)) {
         return false;
     }
 
@@ -80,7 +83,7 @@ bool DataContainersEngine::updateSourceEvent(const QString &source)
 }
 
 // export the plugin; use the plugin name and the class name
-K_EXPORT_PLASMA_DATAENGINE(org.kde.examples.customDataContainers, DataContainersEngine)
+K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.customDataContainers, DataContainersEngine, "plasma-dataengine-example-customDataContainers.json")
 
 // include the moc file so the build system makes it for us
 #include "customDataContainersEngine.moc"

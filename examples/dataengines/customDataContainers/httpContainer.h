@@ -26,6 +26,8 @@
 #ifndef HTTPCONTAINER_H
 #define HTTPCONTAINER_H
 
+#include <QUrl>
+
 #include <Plasma/DataContainer>
 
 namespace KIO
@@ -38,7 +40,7 @@ class HttpContainer : public Plasma::DataContainer
     Q_OBJECT
 
 public:
-    HttpContainer(const KUrl &url, QObject *parent = 0);
+    HttpContainer(const QUrl &url, QObject *parent = 0);
 
     void fetchUrl(bool reload = true);
 
@@ -47,7 +49,7 @@ private Q_SLOTS:
     void fetchFinished(KJob *);
 
 private:
-    const KUrl m_url;
+    const QUrl m_url;
     QWeakPointer<KJob> m_job;
     QByteArray m_data;
 };

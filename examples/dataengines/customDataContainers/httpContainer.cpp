@@ -28,7 +28,7 @@
 #include <KIO/Job>
 #include <KIO/TransferJob>
 
-HttpContainer::HttpContainer(const KUrl &url, QObject *parent)
+HttpContainer::HttpContainer(const QUrl &url, QObject *parent)
     : Plasma::DataContainer(parent),
       m_url(url)
 {
