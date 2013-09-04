@@ -26,6 +26,8 @@
 #include <QColor>
 #include <QTime>
 
+#include <klocalizedstring.h>
+
 #include "simpleEngine.h"
 
 /*
@@ -39,13 +41,12 @@ SimpleEngine::SimpleEngine(QObject *parent, const QVariantList &args)
     : Plasma::DataEngine(parent, args)
 {
     // we've passed the constructor's args to our parent class
-    // we're done for now!
+    // we're done for now! Call init()
+    init();
 }
 
 void SimpleEngine::init()
 {
-    // init() is called after construction but before anything actually
-    // gets to use the Engine; it's a nice plce for delayed initialization.
 
     // So now we will set up some sources.
     // Each DataEngine will, generally, be loaded once. Each DataEngine
@@ -73,7 +74,7 @@ void SimpleEngine::init()
 }
 
 // export the plugin; use the plugin name and the class name
-K_EXPORT_PLASMA_DATAENGINE(org.kde.examples.simpleEngine, SimpleEngine)
+K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.simpleEngine, SimpleEngine, "plasma-dataengine-example-simpleEngine.json")
 
 // include the moc file so the build system makes it for us
 #include "simpleEngine.moc"
