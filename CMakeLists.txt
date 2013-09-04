@@ -195,7 +195,8 @@ install(FILES
 
 ################# list the subdirectories #################
 add_subdirectory(src)
-add_subdirectory( desktoptheme )
+add_subdirectory(desktoptheme)
+add_subdirectory(examples)
 
 install(EXPORT PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
