@@ -63,8 +63,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
             this, &ContainmentInterface::appletRemovedForward);
     connect(containment(), &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
-    connect(containment(), &Plasma::Containment::screenChanged,
-            this, &ContainmentInterface::screenChanged);
     connect(containment(), &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
     connect(containment(), &Plasma::Containment::wallpaperChanged,
@@ -125,11 +123,6 @@ Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
 void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType type)
 {
     m_appletScriptEngine->setContainmentType(type);
-}
-
-int ContainmentInterface::screen() const
-{
-    return containment()->screen();
 }
 
 void ContainmentInterface::lockWidgets(bool locked)

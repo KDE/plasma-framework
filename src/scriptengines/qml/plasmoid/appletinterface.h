@@ -71,6 +71,12 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
 
+    // TODO: This was moved up from ContainmentInterface because it is required by the
+    // Task Manager applet (for "Show only tasks from this screen") and no Qt API exposes
+    // screen numbering. An alternate solution that doesn't extend the applet interface
+    // would be preferrable if found.
+    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
+
     //Size hints Note that the containments may chose to not respect them.
     Q_PROPERTY(qreal minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
     Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
@@ -149,6 +155,8 @@ public:
     void setStatus(const Plasma::Types::ItemStatus &status);
     Plasma::Types::ItemStatus status() const;
 
+    int screen() const;
+
     QString activeConfig() const;
     void setActiveConfig(const QString &name);
 
@@ -179,6 +187,7 @@ Q_SIGNALS:
     void backgroundHintsChanged();
     void busyChanged();
     void expandedChanged();
+    void screenChanged();
 
     void minimumWidthChanged();
     void minimumHeightChanged();

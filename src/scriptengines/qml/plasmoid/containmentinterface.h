@@ -40,7 +40,6 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
     Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType)
-    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
 
 public:
@@ -57,7 +56,6 @@ public:
     bool drawWallpaper();
     Plasma::Types::ContainmentType containmentType() const;
     void setContainmentType(Plasma::Types::ContainmentType type);
-    int screen() const;
 
     QString activity() const;
 
@@ -78,7 +76,6 @@ protected:
 Q_SIGNALS:
     void appletAdded(QObject *applet, int x, int y);
     void appletRemoved(QObject *applet);
-    void screenChanged();
     void activityChanged();
     void availableScreenRegionChanged();
     void appletsChanged();

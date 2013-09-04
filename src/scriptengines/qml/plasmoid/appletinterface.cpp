@@ -80,6 +80,10 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(m_appletScriptEngine, &DeclarativeAppletScript::contextChanged,
             this, &AppletInterface::contextChanged);
 
+    if (applet()->containment()) {
+        connect(applet()->containment(), &Plasma::Containment::screenChanged,
+                this, &ContainmentInterface::screenChanged);
+    }
 
     m_qmlObject = new QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
@@ -595,6 +599,15 @@ void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)
 Plasma::Types::ItemStatus AppletInterface::status() const
 {
     return applet()->status();
+}
+
+int AppletInterface::screen() const
+{
+    if (applet()->containment()) {
+        return applet()->containment()->screen();
+    }
+
+    return -1;
 }
 
 QString AppletInterface::downloadPath(const QString &file)
