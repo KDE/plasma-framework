@@ -2,13 +2,9 @@ Still to be ported
 
 
 Applets:
-* nowplaying
+* nowplaying (Requires nowplaying DataEngine to be ported)
 * pairsgame
 * samegame
-
-Dataengines:
-* dataEngineTracker
-
 
 Kpart: only example still to be ported
 

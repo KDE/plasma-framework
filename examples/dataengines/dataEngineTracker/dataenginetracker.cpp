@@ -26,6 +26,7 @@
 #include "dataenginetracker.h"
 
 #include <QTime>
+#include <QDebug>
 
 DataEngineTracker::DataEngineTracker(Plasma::DataEngine *engine, QObject *parent)
     : QObject(parent),
@@ -38,23 +39,23 @@ DataEngineTracker::DataEngineTracker(Plasma::DataEngine *engine, QObject *parent
 
 void DataEngineTracker::dataUpdated(const QString &source, const Plasma::DataEngine::Data &data)
 {
-    kDebug() << QTime::currentTime() << source;
+    qDebug() << QTime::currentTime() << source;
     QHashIterator<QString, QVariant> it(data);
     while (it.hasNext()) {
         it.next();
-        kDebug() << "     " << it.key() << it.value();
+        qDebug() << "     " << it.key() << it.value();
     }
 }
 
 void DataEngineTracker::sourceAdded(const QString &source)
 {
-    kDebug() << QTime::currentTime() << source;
+    qDebug() << QTime::currentTime() << source;
     m_engine->connectSource(source, this);
 }
 
 void DataEngineTracker::sourceRemoved(const QString &source)
 {
-    kDebug() << QTime::currentTime() << source;
+    qDebug() << QTime::currentTime() << source;
 }
 
 #include <dataenginetracker.moc>
