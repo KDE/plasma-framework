@@ -9,12 +9,7 @@ INCLUDE_DIRECTORIES(
         ${KDECLARATIVE_INCLUDE_DIR}
 )
 
-add_definitions(-DHAVE_X11=${X11_FOUND})
-
-if(X11_FOUND)
-    # FIXME: remove when upstream CMakeLists is fixed
-    find_package(XCB REQUIRED)
-endif()
+add_definitions(-DHAVE_X11=${HAVE_X11})
 
 set(corebindings_SRCS
     corebindingsplugin.cpp
@@ -46,7 +41,7 @@ target_link_libraries(corebindingsplugin
         plasma)
 
 if(X11_FOUND)
-  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARIES} )
+  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )
   target_link_libraries(corebindingsplugin Qt5::X11Extras)
 endif(X11_FOUND)
 

@@ -76,8 +76,13 @@ find_package(KDE4Support REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
-if(X11_FOUND)
-  set(HAVE_X11 X11_FOUND)
+find_package(XCB MODULE COMPONENTS XCB)
+set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
+                       URL "http://xcb.freedesktop.org"
+                       TYPE RECOMMENDED
+                      )
+if(X11_FOUND AND XCB_XCB_FOUND)
+  set(HAVE_X11 1)
   #X11_Xrender discovery is done by FindX11
   add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
   add_feature_info("X Screensaver Extension (libXss)" X11_Xscreensaver_FOUND "Support for KIdleTime (fallback mode)")
