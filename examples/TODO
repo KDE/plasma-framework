@@ -6,3 +6,12 @@ Applets:
 * pairsgame
 * samegame
 
+Dataengines:
+* customDataContainers
+* dataEngineTracker
+* simpleEngine
+* sourcesOnRequest
+
+Kpart: only example still to be ported
+
+KRunner: only example still to be ported

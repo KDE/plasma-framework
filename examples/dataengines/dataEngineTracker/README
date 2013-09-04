@@ -1,0 +1,6 @@
+DataEngineTracker is a simple class that follows all activity in a given Plasma::DataEngine.
+
+Simply add it to your project and then instantiate it with a Plasma::DataEngine* as the first
+parameter. This will let you watch sources as they are added, removed and change state. Very
+handy to see how a Plasma::DataEngine is being used and behaving, and as such useful for both
+DataEngine authors as well as those writing code using DataEngines.
