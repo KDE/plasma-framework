@@ -2,7 +2,7 @@
 plasma_install_package(localegallery org.kde.example.locale)
 plasma_install_package(widgetgallery org.kde.example.widgetgallery)
 plasma_install_package(qmltasks org.kde.example.tasks)
-plasma_install_package(windowlist org.kde.example.windowlist)
+plasma_install_package(windowthumbnails org.kde.example.windowthumbnails)
 plasma_install_package(conditionalloader org.kde.example.conditionalloader)
 plasma_install_package(testcomponents org.kde.example.testcomponents)
 plasma_install_package(testshaders org.kde.example.testshaders)
