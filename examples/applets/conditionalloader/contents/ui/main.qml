@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -46,10 +47,11 @@ Rectangle {
         when: plasmoid.expanded
         source: Component {
             Item {
-                Column {
+                ColumnLayout {
                     id: column
                     anchors.centerIn: parent
-                    Text {
+                    PlasmaComponents.Label {
+                        anchors.horizontalCenter: parent.horizontalCenter
                         text: i18n("I'm an applet")
                     }
                     PlasmaComponents.Button {  
@@ -66,16 +68,16 @@ Rectangle {
                             }
                         }
                     }
-                    PlasmaComponents.Button {  
+                    PlasmaComponents.Button {
+                        id: busyButton
                         text: i18n("Busy")
                         checked: plasmoid.busy
                         onClicked: {
                             plasmoid.busy = !plasmoid.busy
                         }
                     }
-                    TextInput {
-                        width: 100
-                        height: 22
+                    PlasmaComponents.TextField {
+                        implicitWidth: busyButton.width
                         text: plasmoid.configuration.Test
                         onTextChanged: plasmoid.configuration.Test = text
                     }
