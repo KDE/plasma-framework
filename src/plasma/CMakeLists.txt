@@ -31,8 +31,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${KDE4_INCLUDE_DIR}
                     ${KDE4_INCLUDE_DIR}/KDE
                     ${KDE4_INCLUDE_DIR}/kio
-                    #FIXME: this will go into Qt upstream
-                    ${CMAKE_INSTALL_PREFIX}/include/kdeqt5staging/
                     )
 
 

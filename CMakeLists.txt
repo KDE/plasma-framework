@@ -53,8 +53,6 @@ endif()
 
 set (QT_MIN_VERSION "5.2.0")
 
-find_package(kdeqt5staging REQUIRED NO_MODULE)
-
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
@@ -144,9 +142,7 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 
 ################# setup the include directories #################
-include_directories( ${kdeqt5staging_INCLUDE_DIRS}
-                     ${kdeqt5staging_INCLUDE_DIR}
-                     ${KDE4_INCLUDES}
+include_directories( ${KDE4_INCLUDES}
                      ${KF5_INCLUDE_DIRS}  # since e-c-m 0.0.7
                    )
 
