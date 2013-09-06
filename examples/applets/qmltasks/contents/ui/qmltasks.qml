@@ -29,6 +29,7 @@ Item {
 
     property bool fillWidth: true
     property bool fillHeight: true
+    implicitWidth: tasksModel.count * 50
 
     PlasmaCore.DataSource {
         id: tasksSource
@@ -56,6 +57,7 @@ Item {
         orientation: ListView.Horizontal
 
         model: PlasmaCore.DataModel {
+            id: tasksModel
             dataSource: tasksSource
         }
 

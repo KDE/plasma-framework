@@ -751,11 +751,10 @@ void AppletInterface::compactRepresentationCheck()
         emit expandedChanged();
 
         //we are already expanded: nothing to do
-        if (!m_compactUiObject) {
-            return;
+        if (m_compactUiObject) {
+            disconnect(m_compactUiObject.data(), 0, this, 0);
         }
 
-        disconnect(m_compactUiObject.data(), 0, this, 0);
         //Here we have to use the old connect syntax, because we don't have access to the class type
         if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
             connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
@@ -794,7 +793,9 @@ void AppletInterface::compactRepresentationCheck()
         emit maximumHeightChanged();
 
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
-        m_compactUiObject.data()->deleteLater();
+        if (m_compactUiObject) {
+            m_compactUiObject.data()->deleteLater();
+        }
 
         //set anchors
         QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
