@@ -290,6 +290,8 @@ Item {
 
     // Overriding QtQuick.Item activeFocus property.
     //property alias activeFocus: textEdit.activeFocus
+    implicitWidth: theme.mSize(theme.defaultFont).width*25 + base.internalPadding*2
+    implicitHeight: theme.mSize(theme.defaultFont).height*8 + base.internalPadding*2
 
     opacity: enabled ? 1.0 : 0.5
 
@@ -314,6 +316,7 @@ Item {
         }
         imagePath: "widgets/lineedit"
         prefix: "base"
+        property real internalPadding: theme.mSize(theme.defaultFont).height*0.3
     }
 
     Flickable {
@@ -354,6 +357,7 @@ Item {
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.buttonTextColor
             selectByMouse: verticalScroll.interactive
+            renderType: Text.NativeRendering
 
             onCursorPositionChanged: {
                 if (cursorRectangle.x < flickArea.contentX) {

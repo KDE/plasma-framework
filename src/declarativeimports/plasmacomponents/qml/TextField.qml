@@ -287,7 +287,6 @@ FocusScope {
 
     PlasmaCore.FrameSvgItem {
         id: base
-
         // TODO: see what is the correct policy for margins
         anchors.fill: parent
         imagePath: "widgets/lineedit"
@@ -322,6 +321,7 @@ FocusScope {
         opacity: 0.5
         elide: Text.ElideRight
         clip: true
+        renderType: Text.NativeRendering
         font.capitalization: theme.defaultFont.capitalization
         font.family: theme.defaultFont.family
         font.italic: theme.defaultFont.italic
@@ -344,6 +344,7 @@ FocusScope {
             leftMargin: base.margins.left + base.internalPadding
             rightMargin: base.margins.right + (clearButton.opacity > 0 ? clearButton.width : 0)  + base.internalPadding
         }
+        renderType: Text.NativeRendering
         passwordCharacter: "•"
         selectByMouse: true
         color: theme.buttonTextColor

@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
@@ -36,6 +36,9 @@ Text {
     height: Math.max(paintedHeight, theme.mSize(theme.defaultFont).height*1.6)
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
+    activeFocusOnTab: false
+    renderType: Text.NativeRendering
+
     font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
     font.italic: theme.defaultFont.italic
@@ -48,9 +51,4 @@ Text {
     color: theme.textColor
 
     opacity: enabled? 1 : 0.6
-    Component.onCompleted: {
-        for (var i in theme.defaultFont) {
-            print("AA"+i+theme.defaultFont[i])
-        }
-    }
 }
