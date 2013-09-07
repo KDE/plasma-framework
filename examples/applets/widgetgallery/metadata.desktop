@@ -1,7 +1,16 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Widgets gallery
+Name[pt]=Galeria de elementos
+Name[pt_BR]=Galeria de widgets
+Name[sv]=Grafiskt komponentgalleri
+Name[uk]=Галерея віджетів
+Name[x-test]=xxWidgets galleryxx
 Comment=gallery of widgets done with Plasma QtComponents
+Comment[pt]=Uma galeria de elementos gráficos feita com o QtComponents do Plasma
+Comment[sv]=galleri av grafiska komponenter skapade med Plasma Qt-komponenter
+Comment[uk]=Галерея віджетів, створених за допомогою QtComponent-ів Плазми
+Comment[x-test]=xxgallery of widgets done with Plasma QtComponentsxx
 Type=Service
 ServiceTypes=Plasma/Applet
 Icon=preferences-desktop-theme

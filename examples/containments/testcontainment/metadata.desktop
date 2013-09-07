@@ -7,8 +7,11 @@ Name[fr]=Test du conteneur
 Name[mr]=कंटेनमेंट चाचणी
 Name[nl]=Test van container
 Name[pl]=Próba kontenera
+Name[pt]=Teste de Contentores
+Name[pt_BR]=Teste de contenção
 Name[sv]=Omgivningstest
 Name[uk]=Тестування контейнера
+Name[x-test]=xxContainment Testxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet,Plasma/Containment

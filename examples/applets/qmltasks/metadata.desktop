@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
+Name[pt]=Tarefas Simples
+Name[sv]=Fattigmans aktiviteter
+Name[uk]=Задачі для початківців
+Name[x-test]=xxPoor Man's Tasksxx
 Comment=Example showing how to write your own tasks Widget
+Comment[pt]=Um exemplo que demonstra como criar o seu próprio item de tarefas
+Comment[sv]=Exempel som visar hur man skriver en egen grafisk komponent för aktiviteter
+Comment[uk]=Приклад, який демонструє створення власного віджета задач
+Comment[x-test]=xxExample showing how to write your own tasks Widgetxx
 Icon=preferences-system-windows
 Encoding=UTF-8
 Keywords=

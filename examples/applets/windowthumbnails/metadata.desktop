@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=Example window list
+Name[pt]=Lista de janelas de exemplo
+Name[sv]=Exempel på fönsterlista
+Name[uk]=Приклад списку вікон
+Name[x-test]=xxExample window listxx
 Comment=Example showing how to display window thumbnails
+Comment[pt]=Exemplo que demostra como apresentar miniaturas das janelas
+Comment[sv]=Exempel som visar hur miniatyrbilder av fönster visas
+Comment[uk]=Приклад, який демонструє показ мініатюр вікон
+Comment[x-test]=xxExample showing how to display window thumbnailsxx
 Icon=preferences-system-windows
 Encoding=UTF-8
 Keywords=

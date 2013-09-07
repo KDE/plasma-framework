@@ -1,7 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Same game (QML)
+Name[pt]=Jogo de bolas (QML)
+Name[sv]=Samegame (QML)
+Name[uk]=Та сама гра (QML)
+Name[x-test]=xxSame game (QML)xx
 Comment=The Same game QML Qt demo converted as plasmoid
+Comment[pt]=A demonstração do jogo Same Game do Qt em QML
+Comment[sv]=Samegame QML Qt-demonstrationen konverterad till Plasmoid
+Comment[uk]=Плазмоїд-демонстрація тієї самої гри на основі QML
+Comment[x-test]=xxThe Same game QML Qt demo converted as plasmoidxx
 
 Type=Service
 ServiceTypes=Plasma/Applet

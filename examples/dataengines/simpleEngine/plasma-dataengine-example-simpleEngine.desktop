@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=Simple DataEngine Example
+Name[cs]=Jednoduchý příklad datového nástroje
+Name[pt]=Exemplo Simples de Motor de Dados
+Name[sv]=Enkelt exempel på DataEngine
+Name[uk]=Простий приклад рушія даних
+Name[x-test]=xxSimple DataEngine Examplexx
 Comment=A very basic DataEngine implementation
+Comment[pt]=Uma implementação muito básica do DataEngine
+Comment[sv]=En mycket grundläggande implementering av DataEngine
+Comment[uk]=Базова реалізація рушія даних
+Comment[x-test]=xxA very basic DataEngine implementationxx
 Type=Service
 Icon=plasma
 
