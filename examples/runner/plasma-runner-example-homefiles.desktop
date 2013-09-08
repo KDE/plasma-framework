@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Home Files
 Name[pt]=Ficheiros Pessoais
+Name[pt_BR]=Arquivos pessoais
 Name[sv]=Hemfiler
 Name[uk]=Файли у домашній теці
 Name[x-test]=xxHome Filesxx
 Comment=Part of a tutorial demonstrating how to create Runner plugins
 Comment[pt]=Parte de um tutorial que demonstra como criar 'plugins' do Runner
+Comment[pt_BR]=Parte de um tutorial que demonstra como criar plugins do Runner
 Comment[sv]=Del av en handledning som demonstrerar hur insticksprogram till Runner skapas
 Comment[uk]=Частина підручника, який демонструє створення додатків до засобу запуску
 Comment[x-test]=xxPart of a tutorial demonstrating how to create Runner pluginsxx

@@ -2,11 +2,13 @@
 Encoding=UTF-8
 Name=Locale gallery
 Name[pt]=Galeria regional
+Name[pt_BR]=Galeria regional
 Name[sv]=Locale-galleri
 Name[uk]=Галерея локалей
 Name[x-test]=xxLocale galleryxx
 Comment=gallery of KLocale QML Bindings
 Comment[pt]=Galeria de Interfaces em QML do KLocale
+Comment[pt_BR]=Galeria de interfaces em QML do KLocale
 Comment[sv]=galleri av QML-bindningar för KLocale
 Comment[uk]=Галерея прив’язок QML для KLocale
 Comment[x-test]=xxgallery of KLocale QML Bindingsxx
