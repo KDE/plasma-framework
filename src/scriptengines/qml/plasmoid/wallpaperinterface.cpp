@@ -24,6 +24,8 @@
 #include <kdeclarative/qmlobject.h>
 
 #include <KActionCollection>
+#include <KServiceTypeTrader>
+#include <KDesktopFile>
 
 #include <QDebug>
 #include <QQmlExpression>
@@ -55,6 +57,17 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 WallpaperInterface::~WallpaperInterface()
 {}
 
+KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
+{
+    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
+    if (!formFactor.isEmpty()) {
+        constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
+    }
+
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
+    qDebug() << offers.count() << constraint;
+    return KPluginInfo::fromServices(offers);
+}
 
 Plasma::Package WallpaperInterface::package() const
 {
@@ -100,7 +113,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_actions->clear();
-    m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/QmlWallpaper");
+    m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Wallpaper");
     m_pkg.setPath(m_wallpaperPlugin);
 
     m_configLoader->deleteLater();
@@ -143,6 +156,20 @@ void WallpaperInterface::syncWallpaperPackage()
 QList<QAction*> WallpaperInterface::contextualActions() const
 {
     return m_actions->actions();
+}
+
+bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
+{
+    //FIXME: a less brutal way? packages should have valid KService :/
+    KDesktopFile desktop(m_pkg.path() + "/" + "metadata.desktop");
+    return desktop.desktopGroup().readEntry<QStringList>("X-Plasma-DropMimeTypes", QStringList()).contains(mimetype);
+}
+
+void WallpaperInterface::setUrl(const QUrl &url)
+{
+    if (m_qmlObject->rootObject()) {
+         QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
+    }
 }
 
 void WallpaperInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)

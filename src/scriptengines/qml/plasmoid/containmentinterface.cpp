@@ -402,13 +402,14 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
         KPluginInfo::List wallpaperList;
         //TODO: how restore wallpaper dnd?
-        /*if (drawWallpaper) {
-            if (wallpaper && wallpaper->supportsMimetype(mimetype)) {
-                wallpaperList << wallpaper->d->wallpaperDescription;
+
+        if (drawWallpaper()) {
+            if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
+                wallpaperList << m_wallpaperInterface->package().metadata();
             } else {
-                wallpaperList = Wallpaper::listWallpaperInfoForMimetype(mimetype);
+                wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
             }
-        }*/
+        }
 
         if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
             choices->clear();
@@ -426,7 +427,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 actionsToApplets.insert(action, info.pluginName());
                 qDebug() << info.pluginName();
             }
-            actionsToApplets.insert(choices->addAction(i18n("Icon")), "icon");
+            actionsToApplets.insert(choices->addAction(i18n("Icon")), "org.kde.icon");
 
             QHash<QAction *, QString> actionsToWallpapers;
             if (!wallpaperList.isEmpty())  {
@@ -462,17 +463,9 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 if (plugin.isEmpty()) {
                     //set wallpapery stuff
                     plugin = actionsToWallpapers.value(choice);
-                    //TODO: wallpapers
-                    /*
-                    if (!wallpaper || plugin != wallpaper->pluginName()) {
-                        qDebug() << "Wallpaper dropped:" << tjob->url();
-                        q->setWallpaper(plugin);
+                    if (m_wallpaperInterface && tjob->url().isValid()) {
+                        m_wallpaperInterface->setUrl(tjob->url());
                     }
-
-                    if (wallpaper) {
-                        qDebug() << "Wallpaper dropped:" << tjob->url();
-                        wallpaper->setUrls(KUrl::List() << tjob->url());
-                    }*/
                 } else {
                     addApplet(actionsToApplets[choice], args, posi);
                 }
@@ -482,7 +475,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            addApplet("icon", args, posi);
+            addApplet("org.kde.icon", args, posi);
         }
     }
 

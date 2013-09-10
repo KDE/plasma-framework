@@ -46,6 +46,15 @@ public:
     WallpaperInterface(ContainmentInterface *parent = 0);
     ~WallpaperInterface();
 
+    /**
+    * Returns a list of all known wallpapers that can accept the given mimetype
+    * @param mimetype the mimetype to search for
+    * @param formFactor the format of the wallpaper being search for (e.g. desktop)
+    * @return list of wallpapers
+    */
+    static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
+                                                          const QString &formFactor = QString());
+
     Plasma::Package package() const;
 
     ConfigPropertyMap *configuration() const;
@@ -53,6 +62,10 @@ public:
     Plasma::ConfigLoader *configScheme();
 
     QList<QAction*> contextualActions() const;
+
+    bool supportsMimetype(const QString &mimetype) const;
+
+    void setUrl(const QUrl &urls);
 
     Q_INVOKABLE void setAction(const QString &name, const QString &text,
                                const QString &icon = QString(), const QString &shortcut = QString());
