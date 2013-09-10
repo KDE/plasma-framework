@@ -38,7 +38,7 @@ public:
     void init();
     void setContainment(Plasma::Containment *cont);
     Plasma::Types::FormFactor formFactor() const;
-    int location() const;
+    Plasma::Types::Location location() const;
     void showConfigurationInterface(Plasma::Applet *applet);
 
     View *q;
@@ -65,8 +65,8 @@ void ViewPrivate::init()
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
 
-    setFormat(format);
-    setColor(Qt::transparent);
+    q->setFormat(format);
+    q->setColor(Qt::transparent);
 
 
     QObject::connect(q->screen(), &QScreen::virtualGeometryChanged,
@@ -79,7 +79,7 @@ void ViewPrivate::init()
     q->setResizeMode(View::SizeRootObjectToView);
     q->setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
 
-    connect(m_corona, &Plasma::Corona::packageChanged,
+    QObject::connect(corona, &Plasma::Corona::packageChanged,
             q, &View::coronaPackageChanged);
 }
 
@@ -113,22 +113,15 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     emit q->containmentChanged();
 
     if (cont) {
-        connect(cont, &Plasma::Containment::locationChanged,
-                this, &View::locationChanged);
-        connect(cont, &Plasma::Containment::formFactorChanged,
-                this, &View::formFactorChanged);
-        connect(cont, &Plasma::Containment::configureRequested,
-                this, &View::showConfigurationInterface);
+        QObject::connect(cont, &Plasma::Containment::locationChanged,
+                q, &View::locationChanged);
+        QObject::connect(cont, &Plasma::Containment::formFactorChanged,
+                q, &View::formFactorChanged);
+        QObject::connect(cont, &Plasma::Containment::configureRequested,
+                q, &View::showConfigurationInterface);
     } else {
         return;
     }
-
-    QObject::connect(cont, &Plasma::Containment::locationChanged,
-            q, &View::locationChanged);
-    QObject::connect(cont, &Plasma::Containment::formFactorChanged,
-            q, &View::formFactorChanged);
-    QObject::connect(cont, &Plasma::Containment::configureRequested,
-            q, &View::showConfigurationInterface);
 
     QObject *graphicObject = containment.data()->property("graphicObject").value<QObject *>();
 
@@ -147,7 +140,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     }
 }
 
-int ViewPrivate::location() const
+Plasma::Types::Location ViewPrivate::location() const
 {
     if (!containment) {
         return Plasma::Types::Desktop;

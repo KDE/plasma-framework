@@ -62,23 +62,16 @@ public:
      **/
     Plasma::Containment *containment() const;
 
-<<<<<<< HEAD:src/shell/view.h
-    Plasma::Types::Location location() const;
-    void setLocation(Plasma::Types::Location location);
-=======
     /**
      * @return the location of this View
      **/
-
-    //FIXME: Plasma::Types::Location should be something qml can understand
-    int location() const;
-
+    Plasma::Types::Location location() const;
+    
     /**
      * Sets the location of the View
      * @param location the location of the View
      **/
-    void setLocation(int location);
->>>>>>> plasmaview2:src/plasmaview/view.h
+    void setLocation(Plasma::Types::Location location);
 
     /**
      * @return the formfactor of the View

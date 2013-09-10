@@ -5,8 +5,6 @@ set(plasmaview_LIB_SRC
     configview.cpp
     containmentconfigview_p.cpp
     currentcontainmentactionsmodel_p.cpp
-    shellpluginloader.cpp
-    shellpackage_p.cpp
 )
 
 
