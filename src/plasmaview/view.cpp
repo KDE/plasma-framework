@@ -38,7 +38,7 @@ public:
     void init();
     void setContainment(Plasma::Containment *cont);
     Plasma::Types::FormFactor formFactor() const;
-    int location() const;
+    Plasma::Types::Location location() const;
     void showConfigurationInterface(Plasma::Applet *applet);
     void coronaPackageChanged(const Plasma::Package &package);
 
@@ -89,7 +89,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    Plasma::Types::Location oldLoc = (Plasma::Types::Location)location();
+    Plasma::Types::Location oldLoc = location();
     Plasma::Types::FormFactor oldForm = formFactor();
 
     if (containment) {
@@ -104,7 +104,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     containment = cont;
 
     if (oldLoc != location()) {
-        emit q->locationChanged((Plasma::Types::Location)location());
+        emit q->locationChanged(location());
     }
     if (oldForm != formFactor()) {
         emit q->formFactorChanged(formFactor());
@@ -139,7 +139,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     }
 }
 
-int ViewPrivate::location() const
+Plasma::Types::Location ViewPrivate::location() const
 {
     if (!containment) {
         return Plasma::Types::Desktop;
@@ -223,13 +223,13 @@ Plasma::Containment *View::containment() const
 }
 
 //FIXME: wrong types
-void View::setLocation(int location)
+void View::setLocation(Plasma::Types::Location location)
 {
-    d->containment.data()->setLocation((Plasma::Types::Location)location);
+    d->containment.data()->setLocation(location);
 }
 
 //FIXME: wrong types
-int View::location() const
+Plasma::Types::Location View::location() const
 {
     return d->location();
 }
