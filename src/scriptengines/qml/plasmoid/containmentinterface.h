@@ -37,9 +37,25 @@ namespace KIO {
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
+
+    /**
+     * List of applets this containment has: the containments
+     */
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
+    
+    /**
+     * True if the containment should draw a wallpaper TODO: notify
+     */
     Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper)
+
+    /**
+     * Type of this containment TODO: notify
+     */
     Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType)
+
+    /**
+     * Activity name of this containment
+     */
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
 
 public:
@@ -59,9 +75,24 @@ public:
 
     QString activity() const;
 
+    /**
+     * FIXME: either a property or not accessible at all. Lock or unlock widgets
+     */
     Q_INVOKABLE void lockWidgets(bool locked);
+
+    /**
+     * Geometry of this screen
+     */
     Q_INVOKABLE QRectF screenGeometry(int id) const;
+
+    /**
+     * The available region of this screen, panels excluded. It's a list of rectangles
+     */
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
+
+    /**
+     * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
+     */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
 
 protected:
@@ -74,8 +105,22 @@ protected:
     void addContainmentActions(QMenu &desktopMenu, QEvent *event);
 
 Q_SIGNALS:
+    /**
+     * Emitted when an applet is added
+     * @param applet the applet object: it's a qml graphical object and an instance of AppletInterface
+     * @param x coordinate containment relative
+     * @param y coordinate containment relative
+     */
     void appletAdded(QObject *applet, int x, int y);
+
+    /**
+     * Emitted when an applet is removed
+     * @param applet the applet object: it's a qml graphical object and an instance of AppletInterface.
+     *               It's still valid, even if it will be deleted shortly
+     */
     void appletRemoved(QObject *applet);
+
+    //Property notifiers
     void activityChanged();
     void availableScreenRegionChanged();
     void appletsChanged();
