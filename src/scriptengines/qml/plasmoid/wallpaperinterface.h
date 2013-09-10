@@ -28,9 +28,12 @@ namespace Plasma {
     class ConfigLoader;
 }
 
+class KActionCollection;
+
 class ContainmentInterface;
 class ConfigPropertyMap;
 class QmlObject;
+class QSignalMapper;
 
 class WallpaperInterface : public QQuickItem
 {
@@ -38,6 +41,7 @@ class WallpaperInterface : public QQuickItem
 
     //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
     Q_PROPERTY(ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
+    Q_PROPERTY(QList<QAction*> contextualActions READ contextualActions)
 
 public:
     WallpaperInterface(ContainmentInterface *parent = 0);
@@ -49,12 +53,22 @@ public:
 
     Plasma::ConfigLoader *configScheme();
 
+    QList<QAction*> contextualActions() const;
+
+    Q_INVOKABLE void setAction(const QString &name, const QString &text,
+                               const QString &icon = QString(), const QString &shortcut = QString());
+
+    Q_INVOKABLE void removeAction(const QString &name);
+
+    Q_INVOKABLE QAction *action(QString name) const;
+
 Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
 
 private Q_SLOTS:
     void syncWallpaperPackage();
+    void executeAction(const QString &name);
 
 private:
     QString m_wallpaperPlugin;
@@ -63,6 +77,8 @@ private:
     Plasma::Package m_pkg;
     ConfigPropertyMap *m_configuration;
     Plasma::ConfigLoader *m_configLoader;
+    KActionCollection *m_actions;
+    QSignalMapper *m_actionSignals;
 };
 
 #endif

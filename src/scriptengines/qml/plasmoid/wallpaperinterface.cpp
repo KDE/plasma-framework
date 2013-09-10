@@ -23,10 +23,13 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 
+#include <KActionCollection>
+
 #include <QDebug>
 #include <QQmlExpression>
 #include <QQmlContext>
 #include <QQmlProperty>
+#include <QSignalMapper>
 
 #include <Plasma/ConfigLoader>
 #include <Plasma/PluginLoader>
@@ -36,8 +39,11 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
       m_containmentInterface(parent),
       m_qmlObject(0),
       m_configLoader(0),
-      m_configuration(0)
+      m_configuration(0),
+      m_actionSignals(0)
 {
+    m_actions = new KActionCollection(this);
+
     if (!m_containmentInterface->containment()->wallpaper().isEmpty()) {
         syncWallpaperPackage();
     }
@@ -93,6 +99,7 @@ void WallpaperInterface::syncWallpaperPackage()
         m_qmlObject->setInitializationDelayed(true);
     }
 
+    m_actions->clear();
     m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/QmlWallpaper");
     m_pkg.setPath(m_wallpaperPlugin);
 
@@ -104,6 +111,7 @@ void WallpaperInterface::syncWallpaperPackage()
         m_configuration = new ConfigPropertyMap(configScheme(), this);
     }
 
+    
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
     m_qmlObject->completeInitialization();
@@ -130,6 +138,71 @@ void WallpaperInterface::syncWallpaperPackage()
 
     emit packageChanged();
     emit configurationChanged();
+}
+
+QList<QAction*> WallpaperInterface::contextualActions() const
+{
+    return m_actions->actions();
+}
+
+void WallpaperInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
+{
+    QAction *action = m_actions->action(name);
+
+    if (action) {
+        action->setText(text);
+    } else {
+        action = new QAction(text, this);
+        m_actions->addAction(name, action);
+
+        Q_ASSERT(!m_actions->actions().contains(name));
+        m_actions->addAction(name, action);
+
+        if (!m_actionSignals) {
+            m_actionSignals = new QSignalMapper(this);
+            connect(m_actionSignals, SIGNAL(mapped(QString)),
+                    this, SLOT(executeAction(QString)));
+        }
+
+        connect(action, SIGNAL(triggered()), m_actionSignals, SLOT(map()));
+        m_actionSignals->setMapping(action, name);
+    }
+
+    if (!icon.isEmpty()) {
+        action->setIcon(QIcon::fromTheme(icon));
+    }
+
+    if (!shortcut.isEmpty()) {
+        action->setShortcut(shortcut);
+    }
+
+    action->setObjectName(name);
+}
+
+void WallpaperInterface::removeAction(const QString &name)
+{
+    QAction *action = m_actions->action(name);
+
+    if (action) {
+        if (m_actionSignals) {
+            m_actionSignals->removeMappings(action);
+        }
+        m_actions->removeAction(action);
+
+        delete action;
+    }
+}
+
+QAction *WallpaperInterface::action(QString name) const
+{
+    return m_actions->action(name);
+}
+
+void WallpaperInterface::executeAction(const QString &name)
+{
+    if (m_qmlObject->rootObject()) {
+         QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
+    }
 }
 
 #include "moc_wallpaperinterface.cpp"
