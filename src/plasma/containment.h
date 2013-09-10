@@ -273,6 +273,11 @@ Q_SIGNALS:
          */
         void uiReadyChanged(bool uiReady);
 
+        /**
+         * Emitted when the value of drawWallpaper() has changed
+         */
+        void drawWallpaperChanged();
+
     public Q_SLOTS:
         /**
          * Informs the Corona as to what position it is in. This is informational

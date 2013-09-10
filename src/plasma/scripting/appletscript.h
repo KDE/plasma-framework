@@ -150,6 +150,11 @@ Q_SIGNALS:
      */
     void uiReadyChanged(bool uiReady);
 
+    /**
+     * Emitted when the value of drawWallpaper() has changed
+     */
+    void drawWallpaperChanged();
+
 public Q_SLOTS:
 
     /**

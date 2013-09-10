@@ -453,7 +453,12 @@ int Containment::screen() const
 
 void Containment::setDrawWallpaper(bool drawWallpaper)
 {
+    if (d->drawWallpaper == drawWallpaper) {
+        return;
+    }
+
     d->drawWallpaper = drawWallpaper;
+    emit drawWallpaperChanged();
 }
 
 bool Containment::drawWallpaper()

@@ -39,6 +39,10 @@ AppletScript::AppletScript(QObject *parent)
       d(new AppletScriptPrivate)
 {
     d->applet = 0;
+    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
+    if (cont) {
+        connect(cont, &Plasma::Containment::drawWallpaperChanged, this, &AppletScript::drawWallpaperChanged);
+    }
 }
 
 AppletScript::~AppletScript()
