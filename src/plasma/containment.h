@@ -256,6 +256,11 @@ Q_SIGNALS:
         void wallpaperChanged();
 
         /**
+         * Emitted when the value of drawWallpaper() has changed
+         */
+        void drawWallpaperChanged();
+
+        /**
          * Emitted when the location has changed
          * @since 5.0
          */
@@ -274,9 +279,9 @@ Q_SIGNALS:
         void uiReadyChanged(bool uiReady);
 
         /**
-         * Emitted when the value of drawWallpaper() has changed
+         * emitted when the containment type changed
          */
-        void drawWallpaperChanged();
+        void containmentTypeChanged();
 
     public Q_SLOTS:
         /**

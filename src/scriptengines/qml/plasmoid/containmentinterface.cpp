@@ -69,6 +69,8 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
             this, &ContainmentInterface::loadWallpaper);
     connect(containment(), &Plasma::Containment::drawWallpaperChanged,
             this, &ContainmentInterface::drawWallpaperChanged);
+    connect(containment(), &Plasma::Containment::containmentTypeChanged,
+            this, &ContainmentInterface::containmentTypeChanged);
 
      if (containment()->corona()) {
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,

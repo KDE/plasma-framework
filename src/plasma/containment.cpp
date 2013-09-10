@@ -303,6 +303,7 @@ void Containment::setContainmentType(Plasma::Types::ContainmentType type)
     }
 
     d->type = type;
+    emit containmentTypeChanged();
 }
 
 Corona *Containment::corona() const
