@@ -57,18 +57,14 @@ set(widgetexplorer_SRC
 
 add_executable(plasma-shell
     main.cpp
-    configview.cpp
-    containmentconfigview.cpp
     # desktopcorona.cpp
     shellcorona.cpp
-    currentcontainmentactionsmodel.cpp
     panelshadows.cpp
     panelview.cpp
-    shellpluginloader.cpp
     shellmanager.cpp
     packages.cpp
-    view.cpp
     panelconfigview.cpp
+    shellpluginloader.cpp
     ${scripting_SRC}
     ${widgetexplorer_SRC}
 )
@@ -83,6 +79,7 @@ target_link_libraries(plasma-shell
  ${KWindowSystem_LIBRARIES}
  ${KCoreAddons_LIBRARIES}
  plasma
+ PlasmaView
  ${Qt5Script_LIBRARIES}
  ${KDE4Support_LIBRARIES}
  ${Solid_LIBRARIES}
