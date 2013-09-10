@@ -576,11 +576,6 @@ qreal AppletInterface::implicitHeight() const
     return readGraphicsObjectSizeHint("implicitHeight");
 }
 
-void AppletInterface::debug(const QString &msg)
-{
-    qDebug() << msg;
-}
-
 void AppletInterface::setAssociatedApplication(const QString &string)
 {
     applet()->setAssociatedApplication(string);

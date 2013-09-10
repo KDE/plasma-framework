@@ -193,8 +193,6 @@ public:
     Q_INVOKABLE QString file(const QString &fileType);
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
 
-    Q_INVOKABLE void debug(const QString &msg);
-
     //FIXME-API: remove?
     Q_INVOKABLE QString downloadPath(const QString &file);
     Q_INVOKABLE QStringList downloadedFiles() const;
