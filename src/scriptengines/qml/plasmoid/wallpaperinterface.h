@@ -41,7 +41,6 @@ class WallpaperInterface : public QQuickItem
 
     //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
     Q_PROPERTY(ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
-    Q_PROPERTY(QList<QAction*> contextualActions READ contextualActions)
 
 public:
     WallpaperInterface(ContainmentInterface *parent = 0);

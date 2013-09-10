@@ -177,6 +177,7 @@ void WallpaperInterface::setAction(const QString &name, const QString &text, con
     }
 
     action->setObjectName(name);
+    setProperty("contextualActions", QVariant::fromValue(contextualActions()));
 }
 
 void WallpaperInterface::removeAction(const QString &name)
@@ -191,6 +192,7 @@ void WallpaperInterface::removeAction(const QString &name)
 
         delete action;
     }
+    setProperty("contextualActions", QVariant::fromValue(contextualActions()));
 }
 
 QAction *WallpaperInterface::action(QString name) const
