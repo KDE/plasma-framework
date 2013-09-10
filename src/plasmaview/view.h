@@ -21,52 +21,108 @@
 
 #include <QtQuick/QQuickView>
 
-
+#include <plasmaview/plasmaview_export.h>
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
-#include "configview.h"
+class ViewPrivate;
 
-class View : public QQuickView
+class PLASMAVIEW_EXPORT View : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
     Q_PROPERTY(QRectF screenGeometry READ screenGeometry NOTIFY screenGeometryChanged)
 
 public:
+    /**
+     * @param corona the corona of this view
+     * @param parent the QWindow this View is parented to
+     **/
     explicit View(Plasma::Corona *corona, QWindow *parent = 0);
     virtual ~View();
 
+    /**
+     * @return the corona of this view
+     **/
     Plasma::Corona *corona() const;
 
+    /**
+     * @return the KConfigGroup of this view
+     **/
     virtual KConfigGroup config() const;
 
-    void setContainment(Plasma::Containment *cont);
+    /**
+     * sets the containment for this view
+     * @param cont the containment of this view
+     **/
+    virtual void setContainment(Plasma::Containment *cont);
+
+    /**
+     * @return the containment of this View
+     **/
     Plasma::Containment *containment() const;
 
+<<<<<<< HEAD:src/shell/view.h
     Plasma::Types::Location location() const;
     void setLocation(Plasma::Types::Location location);
+=======
+    /**
+     * @return the location of this View
+     **/
 
+    //FIXME: Plasma::Types::Location should be something qml can understand
+    int location() const;
+
+    /**
+     * Sets the location of the View
+     * @param location the location of the View
+     **/
+    void setLocation(int location);
+>>>>>>> plasmaview2:src/plasmaview/view.h
+
+    /**
+     * @return the formfactor of the View
+     **/
     Plasma::Types::FormFactor formFactor() const;
 
+    /**
+     * @return the screenGeometry of the View
+     **/
     QRectF screenGeometry();
 
 protected Q_SLOTS:
-    void showConfigurationInterface(Plasma::Applet *applet);
+    /**
+     * It will be called when the configuration is requested
+     */
+    virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 private Q_SLOTS:
     void coronaPackageChanged(const Plasma::Package &package);
 
 Q_SIGNALS:
+    /**
+     * emitted when the location is changed
+     **/
     void locationChanged(Plasma::Types::Location location);
+
+    /**
+     * emitted when the formfactor is changed
+     **/
     void formFactorChanged(Plasma::Types::FormFactor formFactor);
+
+    /**
+     * emitted when the containment is changed
+     **/
     void containmentChanged();
+
+    /**
+     * emitted when the screenGeometry is changed
+     **/
     void screenGeometryChanged();
 
 private:
-    Plasma::Corona *m_corona;
-    QWeakPointer<Plasma::Containment> m_containment;
-    QWeakPointer<ConfigView> m_configView;
+    ViewPrivate *const d;
+    friend class ViewPrivate;
 };
 
 #endif // VIEW_H
