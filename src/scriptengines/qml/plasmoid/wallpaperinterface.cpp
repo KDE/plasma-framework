@@ -179,10 +179,8 @@ void WallpaperInterface::setAction(const QString &name, const QString &text, con
     if (action) {
         action->setText(text);
     } else {
-        action = new QAction(text, this);
-        m_actions->addAction(name, action);
-
         Q_ASSERT(!m_actions->action(name));
+        action = new QAction(text, this);
         m_actions->addAction(name, action);
 
         if (!m_actionSignals) {
