@@ -1,7 +1,7 @@
 project(PlasmaQuick)
 
 set(plasmaquick_LIB_SRC
-    view.cpp
+    plasmaquickview.cpp
     configview.cpp
     containmentconfigview_p.cpp
     currentcontainmentactionsmodel_p.cpp
@@ -37,7 +37,7 @@ generate_export_header(plasmaquick)
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
-    view.h
+    plasmaquickview.h
     configview.h
 )
 

@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef VIEW_H
-#define VIEW_H
+#ifndef PLASMAQUICKVIEW_H
+#define PLASMAQUICKVIEW_H
 
 #include <QtQuick/QQuickView>
 
@@ -25,9 +25,9 @@
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
-class ViewPrivate;
+class PlasmaQuickViewPrivate;
 
-class PLASMAQUICK_EXPORT View : public QQuickView
+class PLASMAQUICK_EXPORT PlasmaQuickView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
@@ -38,8 +38,8 @@ public:
      * @param corona the corona of this view
      * @param parent the QWindow this View is parented to
      **/
-    explicit View(Plasma::Corona *corona, QWindow *parent = 0);
-    virtual ~View();
+    explicit PlasmaQuickView(Plasma::Corona *corona, QWindow *parent = 0);
+    virtual ~PlasmaQuickView();
 
     /**
      * @return the corona of this view
@@ -114,8 +114,8 @@ Q_SIGNALS:
     void screenGeometryChanged();
 
 private:
-    ViewPrivate *const d;
-    friend class ViewPrivate;
+    PlasmaQuickViewPrivate *const d;
+    friend class PlasmaQuickViewPrivate;
 };
 
-#endif // VIEW_H
+#endif // PLASMAQUICKVIEW_H
