@@ -30,7 +30,7 @@ class KDeclarativeMouseEvent : public QObject
     Q_PROPERTY(int y READ y)
     Q_PROPERTY(int screenX READ screenX)
     Q_PROPERTY(int screenY READ screenY)
-    Q_PROPERTY(Qt::MouseButton button READ button)
+    Q_PROPERTY(int button READ button)
     Q_PROPERTY(Qt::MouseButtons buttons READ buttons)
     Q_PROPERTY(Qt::KeyboardModifiers modifiers READ modifiers)
 
@@ -52,7 +52,7 @@ public:
     int y() const { return m_y; }
     int screenX() const { return m_screenX; }
     int screenY() const { return m_screenY; }
-    Qt::MouseButton button() const { return m_button; }
+    int button() const { return m_button; }
     Qt::MouseButtons buttons() const { return m_buttons; }
     Qt::KeyboardModifiers modifiers() const { return m_modifiers; }
 
