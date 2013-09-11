@@ -104,8 +104,6 @@ private:
 
 class ConfigViewPrivate;
 
-//TODO: the config view for the containment should be a subclass
-//TODO: is it possible to move this in the shell?
 class PLASMAVIEW_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
