@@ -42,7 +42,7 @@ endif()
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake COPYONLY)
 
-################# Enable C++11 features for clang and gcc #################
+################# Enable C++0x (still too early for -std=c++11) features for clang and gcc #################
 
 if(UNIX)
    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++0x")

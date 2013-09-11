@@ -3,7 +3,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include(CheckCXXSourceCompiles)
 
-add_definitions("-std=c++11")
+add_definitions("-std=c++0x")
 
 set(CMAKE_MODULE_PATH
     /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
