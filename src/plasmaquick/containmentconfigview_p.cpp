@@ -20,6 +20,7 @@
 #include "currentcontainmentactionsmodel_p.h"
 #include "containmentconfigview_p.h"
 #include "configview_p.h"
+#include "configmodel.h"
 
 #include <kdeclarative/configpropertymap.h>
 
@@ -45,7 +46,7 @@ ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow 
       m_currentWallpaperConfig(0),
       m_ownWallpaperConfig(0)
 {
-    qmlRegisterType<QStandardItemModel>();
+    qmlRegisterType<QAbstractItemModel>();
     engine()->rootContext()->setContextProperty("configDialog", this);
     setCurrentWallpaper(cont->containment()->wallpaper());
 
@@ -90,7 +91,7 @@ ConfigModel *ContainmentConfigView::containmentActionConfigModel()
     return m_containmentActionConfigModel;
 }
 
-QStandardItemModel *ContainmentConfigView::currentContainmentActionsModel()
+QAbstractItemModel *ContainmentConfigView::currentContainmentActionsModel()
 {
     if (!m_currentContainmentActionsModel) {
         m_currentContainmentActionsModel = new CurrentContainmentActionsModel(m_containment, this);
