@@ -223,11 +223,24 @@ void ConfigLoaderHandler::addItem()
                                          QDateTime::fromString(m_default), m_key);
     } else if (m_type == "enum") {
         m_key = (m_key.isEmpty()) ? m_name : m_key;
+        bool ok;
+        int value = m_default.toUInt(&ok);
+        //if is not an integer, try to find the string value among the registered choices
+        if (!ok) {
+            int i = 0;
+            foreach (const KConfigSkeleton::ItemEnum::Choice &choice, m_enumChoices) {
+                if (choice.name == m_default) {
+                    value = i;
+                    break;
+                }
+                ++i;
+            }
+        }
         KConfigSkeleton::ItemEnum *enumItem =
             new KConfigSkeleton::ItemEnum(m_config->currentGroup(),
                                           m_key, *d->newInt(),
                                           m_enumChoices,
-                                          m_default.toUInt());
+                                          value);
         m_config->addItem(enumItem, m_name);
         item = enumItem;
     } else if (m_type == "font") {

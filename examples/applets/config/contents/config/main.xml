@@ -26,15 +26,15 @@
       <default>test2</default>
     </entry>
     <entry name="EnumTest" type="Enum">
-      <default>0</default>
+      <default>Value2</default>
       <choices>
-          <choice name="PlasmaCore.Types.Floating"/>
-          <choice name="PlasmaCore.Types.Desktop"/>
-          <choice name="PlasmaCore.Types.FullScreen"/>
-          <choice name="PlasmaCore.Types.LeftEdge"/>
-          <choice name="PlasmaCore.Types.RightEdge"/>
-          <choice name="PlasmaCore.Types.TopEdge"/>
-          <choice name="PlasmaCore.Types.BottomEdge"/>
+          <choice name="Value0"/>
+          <choice name="Value1"/>
+          <choice name="Value2"/>
+          <choice name="Value3"/>
+          <choice name="Value4"/>
+          <choice name="Value5"/>
+          <choice name="Value6"/>
       </choices>
     </entry>
   </group>
