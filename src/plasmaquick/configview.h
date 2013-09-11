@@ -26,7 +26,7 @@
 #include <QQmlListProperty>
 #include <QStandardItemModel>
 
-#include <plasmaview/plasmaview_export.h>
+#include <plasmaquick/plasmaquick_export.h>
 
 namespace Plasma {
     class Applet;
@@ -39,7 +39,7 @@ class ConfigCategoryPrivate;
 class ConfigModelPrivate;
 class ConfigCategory;
 
-class PLASMAVIEW_EXPORT ConfigModel : public QAbstractListModel
+class PLASMAQUICK_EXPORT ConfigModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
@@ -104,7 +104,7 @@ private:
 
 class ConfigViewPrivate;
 
-class PLASMAVIEW_EXPORT ConfigView : public QQuickView
+class PLASMAQUICK_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(ConfigModel *configModel READ configModel CONSTANT)
