@@ -303,31 +303,11 @@ Plasma::Applet *ConfigModel::applet() const
 
 QQmlListProperty<ConfigCategory> ConfigModel::categories()
 {
-    return QQmlListProperty<ConfigCategory>(this, 0, ConfigModel::categories_append,
-                                             ConfigModel::categories_count,
-                                             ConfigModel::categories_at,
-                                             ConfigModel::categories_clear);
+    return QQmlListProperty<ConfigCategory>(this, 0, ConfigModelPrivate::categories_append,
+                                             ConfigModelPrivate::categories_count,
+                                             ConfigModelPrivate::categories_at,
+                                             ConfigModelPrivate::categories_clear);
 
-}
-
-ConfigCategory *ConfigModel::categories_at(QQmlListProperty<ConfigCategory> *prop, int index)
-{
-    return ConfigModelPrivate::categories_at(prop, index);
-}
-
-void ConfigModel::categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o)
-{
-    ConfigModelPrivate::categories_append(prop, o);
-}
-
-int ConfigModel::categories_count(QQmlListProperty<ConfigCategory> *prop)
-{
-    return ConfigModelPrivate::categories_count(prop);
-}
-
-void ConfigModel::categories_clear(QQmlListProperty<ConfigCategory> *prop)
-{
-    ConfigModelPrivate::categories_clear(prop);
 }
 
 

@@ -83,11 +83,6 @@ public:
      **/
     QQmlListProperty<ConfigCategory> categories();
 
-    static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
-    static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
-    static int categories_count(QQmlListProperty<ConfigCategory> *prop);
-    static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
-
 Q_SIGNALS:
     /**
      * emitted when the count is changed
