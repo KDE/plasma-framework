@@ -79,12 +79,7 @@ ConfigModel *ContainmentConfigView::containmentActionConfigModel()
 
         foreach (const KPluginInfo &info, actions) {
             pkg.setDefaultPackageRoot(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/containmentactions", QStandardPaths::LocateDirectory));
-            ConfigCategory *cat = new ConfigCategory(m_containmentActionConfigModel);
-            cat->setName(info.name());
-            cat->setIcon(info.icon());
-            cat->setSource(pkg.filePath("ui", "config.qml"));
-            cat->setPluginName(info.pluginName());
-            m_containmentActionConfigModel->appendCategory(cat);
+            m_containmentActionConfigModel->appendCategory(info.icon(), info.name(), pkg.filePath("ui", "config.qml"), info.pluginName());
         }
 
     }
@@ -122,12 +117,7 @@ ConfigModel *ContainmentConfigView::wallpaperConfigModel()
                 if (!pkg.isValid()) {
                     continue;
                 }
-                ConfigCategory *cat = new ConfigCategory(m_wallpaperConfigModel);
-                cat->setName(pkg.metadata().name());
-                cat->setIcon(pkg.metadata().icon());
-                cat->setSource(pkg.filePath("ui", "config.qml"));
-                cat->setPluginName(package);
-                m_wallpaperConfigModel->appendCategory(cat);
+                m_wallpaperConfigModel->appendCategory(pkg.metadata().icon(), pkg.metadata().name(), pkg.filePath("ui", "config.qml"), package);
             }
         }
     }

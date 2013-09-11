@@ -58,7 +58,8 @@ public:
      * add a new category in the model
      * @param ConfigCategory the new category
      **/
-    void appendCategory(ConfigCategory *c);
+    void appendCategory(const QString &iconName, const QString &name,
+                        const QString &path, const QString &pluginName);
 
     /**
      * clears the model

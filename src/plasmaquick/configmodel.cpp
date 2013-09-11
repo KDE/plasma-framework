@@ -166,7 +166,7 @@ void ConfigModelPrivate::categories_append(QQmlListProperty<ConfigCategory> *pro
     }
 
     o->setParent(prop->object);
-    model->appendCategory(o);
+    model->d->appendCategory(o);
 }
 
 int ConfigModelPrivate::categories_count(QQmlListProperty<ConfigCategory> *prop)
@@ -281,9 +281,15 @@ QVariant ConfigModel::get(int row) const
     return d->get(row);
 }
 
-void ConfigModel::appendCategory(ConfigCategory *c)
+void ConfigModel::appendCategory(const QString &iconName, const QString &name,
+                                 const QString &path, const QString &pluginName)
 {
-    d->appendCategory(c);
+    ConfigCategory *cat = new ConfigCategory(this);
+    cat->setIcon(iconName);
+    cat->setName(name);
+    cat->setSource(path);
+    cat->setPluginName(pluginName);
+    d->appendCategory(cat);
 }
 
 void ConfigModel::clear()
