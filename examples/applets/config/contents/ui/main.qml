@@ -35,7 +35,7 @@ Item {
         anchors.centerIn: parent
         PlasmaComponents.Label {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n("I'm an applet")
+            text: i18n("String test")
         }
         PlasmaComponents.TextField {
             text: plasmoid.configuration.Test
@@ -43,17 +43,33 @@ Item {
         }
         PlasmaComponents.CheckBox {
             enabled: true
-            checked: plasmoid.configuration.TestBool
+            checked: plasmoid.configuration.BoolTest
             text: i18n("Bool from config")
-            onCheckedChanged: plasmoid.configuration.TestBool = checked
+            onCheckedChanged: plasmoid.configuration.BoolTest = checked
+        }
+        PlasmaComponents.Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: i18n("String from another group")
         }
         PlasmaComponents.TextField {
             text: plasmoid.configuration.OtherTest
             onTextChanged: plasmoid.configuration.OtherTest = text
         }
+        PlasmaComponents.Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: i18n("Enum: displayed as int,\n written as string")
+        }
         PlasmaComponents.TextField {
             text: plasmoid.configuration.EnumTest
             onTextChanged: plasmoid.configuration.EnumTest = text
+        }
+        PlasmaComponents.Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: i18n("Integer: minimum -1,\n maximum 100")
+        }
+        PlasmaComponents.TextField {
+            text: plasmoid.configuration.IntTest
+            onTextChanged: plasmoid.configuration.IntTest = text
         }
     }
 

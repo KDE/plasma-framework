@@ -31,7 +31,7 @@ Item {
     implicitHeight: pageColumn.implicitHeight
 
     property alias cfg_Test: testConfigField.text
-    property alias cfg_TestBool: testBoolConfigField.checked
+    property alias cfg_BoolTest: testBoolConfigField.checked
 
     Column {
         id: pageColumn
