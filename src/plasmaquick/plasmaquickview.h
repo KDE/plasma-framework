@@ -55,7 +55,7 @@ public:
      * sets the containment for this view
      * @param cont the containment of this view
      **/
-    virtual void setContainment(Plasma::Containment *cont);
+    void setContainment(Plasma::Containment *cont);
 
     /**
      * @return the containment of this View
