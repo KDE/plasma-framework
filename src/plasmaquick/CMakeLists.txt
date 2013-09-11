@@ -1,0 +1,66 @@
+project(PlasmaQuick)
+
+set(plasmaquick_LIB_SRC
+    view.cpp
+    configview.cpp
+    containmentconfigview_p.cpp
+    currentcontainmentactionsmodel_p.cpp
+)
+
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    )
+
+add_library(plasmaquick SHARED ${plasmaquick_LIB_SRC})
+
+target_link_libraries(plasmaquick
+    ${Qt5Quick_LIBRARIES}
+    ${Qt5Qml_LIBRARIES}
+    ${KWindowSystem_LIBRARIES}
+    ${KI18n_LIBRARIES}
+    ${KService_LIBRARIES}
+    ${KCoreAddons_LIBRARIES}
+    ${XmlGui_LIBRARIES}
+    plasma
+    kdeclarative
+)
+
+set_target_properties(plasmaquick PROPERTIES
+                             VERSION 5.0.0
+                             SOVERSION 5
+                      )
+
+install(TARGETS plasmaquick EXPORT PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+generate_export_header(plasmaquick)
+
+set(plasmaquick_LIB_INCLUDES
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
+    view.h
+    configview.h
+)
+
+install(FILES ${plasmaquick_LIB_INCLUDES}
+        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
+
+install(DIRECTORY
+        includes/PlasmaQuick
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
+
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/PlasmaQuick")
+
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaQuickConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/PlasmaQuickConfig.cmake"
+    INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+    PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
+)
+
+install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/PlasmaQuickConfig.cmake"
+    DESTINATION "${CMAKECONFIG_INSTALL_DIR}" COMPONENT Devel
+)
+
+install(EXPORT PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaQuickTargets.cmake NAMESPACE KF5:: )
+
