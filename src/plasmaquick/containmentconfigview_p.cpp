@@ -19,7 +19,7 @@
 
 #include "currentcontainmentactionsmodel_p.h"
 #include "containmentconfigview_p.h"
-#include "configview_p.h"
+#include "configcategory_p.h"
 #include "configmodel.h"
 
 #include <kdeclarative/configpropertymap.h>

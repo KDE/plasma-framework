@@ -30,6 +30,7 @@ namespace Plasma {
     class ContainmentActions;
 }
 
+//TODO: out of the library?
 class CurrentContainmentActionsModel : public QStandardItemModel
 {
     Q_OBJECT

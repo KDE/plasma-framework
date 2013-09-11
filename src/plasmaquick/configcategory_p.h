@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CONFIGUILOADER_P_H
-#define CONFIGUILOADER_P_H
+#ifndef CONFIGCATEGORY_P_H
+#define CONFIGCATEGORY_P_H
 
 #include <QObject>
 

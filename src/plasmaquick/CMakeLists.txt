@@ -2,6 +2,7 @@ project(PlasmaQuick)
 
 set(plasmaquick_LIB_SRC
     plasmaquickview.cpp
+    configcategory_p.cpp
     configmodel.cpp
     configview.cpp
     containmentconfigview_p.cpp

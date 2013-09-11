@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "configview_p.h"
+#include "configcategory_p.h"
 #include "configview.h"
 #include "configmodel.h"
 #include "Plasma/Applet"
@@ -38,79 +38,6 @@
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
-
-///////////////////////ConfigCategory
-
-ConfigCategory::ConfigCategory(QObject *parent)
-    : QObject(parent)
-{
-}
-
-ConfigCategory::~ConfigCategory()
-{}
-
-QString ConfigCategory::name() const
-{
-    return m_name;
-}
-
-void ConfigCategory::setName(const QString &name)
-{
-    if (m_name == name) {
-        return;
-    }
-
-    m_name = name;
-    emit nameChanged();
-}
-
-
-QString ConfigCategory::icon() const
-{
-    return m_icon;
-}
-
-void ConfigCategory::setIcon(const QString &icon)
-{
-    if (m_icon == icon) {
-        return;
-    }
-
-    m_icon = icon;
-    emit iconChanged();
-}
-
-
-QString ConfigCategory::source() const
-{
-    return m_source;
-}
-
-void ConfigCategory::setSource(const QString &source)
-{
-    if (m_source == source) {
-        return;
-    }
-
-    m_source = source;
-    emit sourceChanged();
-}
-
-QString ConfigCategory::pluginName() const
-{
-    return m_pluginName;
-}
-
-void ConfigCategory::setPluginName(const QString &name)
-{
-    if (m_pluginName == name) {
-        return;
-    }
-
-    m_pluginName = name;
-    emit pluginNameChanged();
-}
-
 
 
 //////////////////////////////ConfigModel

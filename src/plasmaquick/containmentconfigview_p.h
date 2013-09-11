@@ -32,7 +32,7 @@ class QAbstractItemModel;
 class ConfigPropertyMap;
 class CurrentContainmentActionsModel;
 
-
+//TODO: out of the library?
 class ContainmentConfigView : public ConfigView
 {
     Q_OBJECT
