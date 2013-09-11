@@ -26,6 +26,7 @@
 #include <kservicetypetrader.h>
 #include <kglobal.h>
 #include <kplugininfo.h>
+#include <kplugintrader.h>
 
 #include "config-plasma.h"
 

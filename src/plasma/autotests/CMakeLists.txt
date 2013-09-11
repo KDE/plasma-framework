@@ -16,7 +16,8 @@ MACRO(PLASMA_UNIT_TESTS)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
                                      ${KDE4_KIO_LIBS} plasma ${KArchive_LIBRARIES} ${KCoreAddons_LIBRARIES}
                                      KF5::KConfigGui
-                                     KF5::KI18n)
+                                     KF5::KI18n
+				     KF5::KService)
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} ${QT_QTOPENGL_LIBRARY})
                endif(QT_QTOPENGL_FOUND)
@@ -28,6 +29,7 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 PLASMA_UNIT_TESTS(
     configloadertest
     packagestructuretest
+    pluginloadertest
     #    plasmoidpackagetest
     runnercontexttest
 )
