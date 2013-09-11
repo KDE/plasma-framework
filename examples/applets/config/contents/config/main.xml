@@ -20,6 +20,18 @@
       <label>This is another test</label>
       <default>test2</default>
     </entry>
+    <entry name="EnumTest" type="Enum">
+      <default>0</default>
+      <choices>
+          <choice name="PlasmaCore.Types.Floating"/>
+          <choice name="PlasmaCore.Types.Desktop"/>
+          <choice name="PlasmaCore.Types.FullScreen"/>
+          <choice name="PlasmaCore.Types.LeftEdge"/>
+          <choice name="PlasmaCore.Types.RightEdge"/>
+          <choice name="PlasmaCore.Types.TopEdge"/>
+          <choice name="PlasmaCore.Types.BottomEdge"/>
+      </choices>
+    </entry>
   </group>
 
 </kcfg>

@@ -51,6 +51,10 @@ Item {
             text: plasmoid.configuration.OtherTest
             onTextChanged: plasmoid.configuration.OtherTest = text
         }
+        PlasmaComponents.TextField {
+            text: plasmoid.configuration.EnumTest
+            onTextChanged: plasmoid.configuration.EnumTest = text
+        }
     }
 
 }
