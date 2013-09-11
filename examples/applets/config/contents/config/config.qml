@@ -17,32 +17,18 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.0 as QtControls
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.configuration 2.0
 
-
-Item {
-    id: iconsPage
-    width: childrenRect.width
-    height: childrenRect.height
-    implicitWidth: mainColumn.implicitWidth
-    implicitHeight: pageColumn.implicitHeight
-
-    property alias cfg_Test: testConfigField.text
-
-    Column {
-        id: pageColumn
-        anchors.fill: parent
-        spacing: 4
-        Row {
-            QtControls.Label {
-                text: "Text Config value"
-            }
-            QtControls.TextField {
-                id: testConfigField
-            }
-        }
+ConfigModel {
+    ConfigCategory {
+         name: "General"
+         icon: "plasma"
+         source: "configGeneral.qml"
+    }
+    ConfigCategory {
+         name: "Other page"
+         icon: "konqueror"
+         source: "configSecondPage.qml"
     }
 }

@@ -31,6 +31,7 @@ Item {
     implicitHeight: pageColumn.implicitHeight
 
     property alias cfg_Test: testConfigField.text
+    property alias cfg_TestBool: testBoolConfigField.checked
 
     Column {
         id: pageColumn
@@ -42,6 +43,14 @@ Item {
             }
             QtControls.TextField {
                 id: testConfigField
+            }
+        }
+        Row {
+            QtControls.Label {
+                text: "Bool Config value"
+            }
+            QtControls.CheckBox {
+                id: testBoolConfigField
             }
         }
     }
