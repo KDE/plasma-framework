@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "configcategory_p.h"
+#include "private/configcategory_p.h"
 #include "configview.h"
 #include "configmodel.h"
 #include "Plasma/Applet"

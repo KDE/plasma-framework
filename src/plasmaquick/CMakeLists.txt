@@ -2,11 +2,11 @@ project(PlasmaQuick)
 
 set(plasmaquick_LIB_SRC
     plasmaquickview.cpp
-    configcategory_p.cpp
     configmodel.cpp
     configview.cpp
-    containmentconfigview_p.cpp
-    currentcontainmentactionsmodel_p.cpp
+    private/configcategory_p.cpp
+    private/containmentconfigview_p.cpp
+    private/currentcontainmentactionsmodel_p.cpp
 )
 
 

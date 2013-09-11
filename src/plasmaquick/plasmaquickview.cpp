@@ -17,7 +17,7 @@
  */
 
 #include "plasmaquickview.h"
-#include "containmentconfigview_p.h"
+#include "private/containmentconfigview_p.h"
 #include "configview.h"
 
 #include <QDebug>

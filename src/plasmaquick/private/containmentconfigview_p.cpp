@@ -182,4 +182,4 @@ void ContainmentConfigView::syncWallpaperObjects()
     m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-#include "moc_containmentconfigview_p.cpp"
+#include "private/moc_containmentconfigview_p.cpp"

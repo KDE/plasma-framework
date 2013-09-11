@@ -112,4 +112,4 @@ void ConfigCategory::setPluginName(const QString &name)
 }
 
 
-#include "moc_configcategory_p.cpp"
+#include "private/moc_configcategory_p.cpp"
