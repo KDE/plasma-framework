@@ -58,6 +58,7 @@ public:
     static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
+    QString pluginDir;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
@@ -110,6 +111,7 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
 {
+    d->pluginDir = "kf5";
     d->isDefaultLoader = false;
 }
 
@@ -709,8 +711,9 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
-    return list + KPluginInfo::fromServices(offers);
+    list.append(KPluginTrader::self()->query(QStringLiteral("Plasma/DataEngine"),
+                                             d->pluginDir, constraint));
+    return list;
 }
 
 KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
