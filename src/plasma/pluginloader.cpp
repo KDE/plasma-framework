@@ -250,12 +250,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         allArgs << offers.first()->storageId();
         QString api = offers.first()->property("X-Plasma-API").toString();
         if (api.isEmpty()) {
-            if (offers.first()) {
-                KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-                    engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
-                }
-            }
+            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>("Plasma/DataEngine",
+                                                                                d->pluginDir,
+                                                                                constraint, 0);
         } else {
             engine = new DataEngine(KPluginInfo(offers.first()), 0);
         }
