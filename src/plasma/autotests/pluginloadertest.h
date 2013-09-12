@@ -31,6 +31,8 @@ class PluginTest : public QObject
     private Q_SLOTS:
         void listEngines();
         void listAppletCategories();
+        void listContainmentActions();
+        void listContainmentsOfType();
 
     private:
 };

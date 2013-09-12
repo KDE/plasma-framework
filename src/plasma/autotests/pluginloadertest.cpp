@@ -52,6 +52,22 @@ void PluginTest::listAppletCategories()
     QVERIFY(cats.count() > 0 || buildonly);
 }
 
+void PluginTest::listContainmentActions()
+{
+    const KPluginInfo::List plugins = Plasma::PluginLoader::self()->listContainmentActionsInfo("plasma-shell");
+    qDebug() << "Categories: " << plugins.count();
+    //QVERIFY(plugins.count() > 0 || buildonly);
+}
+
+void PluginTest::listContainmentsOfType()
+{
+    const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType("Desktop");
+    qDebug() << "Desktop Containments: " << plugins.count();
+    QVERIFY(plugins.count() > 0 || buildonly);
+
+}
+
+
 
 #include "moc_pluginloadertest.cpp"
 
