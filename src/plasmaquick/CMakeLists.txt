@@ -14,9 +14,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     )
 
-add_library(plasmaquick SHARED ${plasmaquick_LIB_SRC})
+add_library(PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 
-target_link_libraries(plasmaquick
+target_link_libraries(PlasmaQuick
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
@@ -28,14 +28,14 @@ target_link_libraries(plasmaquick
     kdeclarative
 )
 
-set_target_properties(plasmaquick PROPERTIES
+set_target_properties(PlasmaQuick PROPERTIES
                              VERSION 5.0.0
                              SOVERSION 5
                       )
 
-install(TARGETS plasmaquick EXPORT PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS PlasmaQuick EXPORT PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-generate_export_header(plasmaquick)
+generate_export_header(PlasmaQuick)
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
