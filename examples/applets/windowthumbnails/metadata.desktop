@@ -1,10 +1,5 @@
 [Desktop Entry]
 Name=Example window thumbnails list
-Name[pt]=Lista de janelas de exemplo
-Name[pt_BR]=Lista de janelas de exemplo
-Name[sv]=Exempel på fönsterlista
-Name[uk]=Приклад списку вікон
-Name[x-test]=xxExample window listxx
 Comment=Example showing how to display window thumbnails
 Comment[pt]=Exemplo que demonstra como apresentar miniaturas das janelas
 Comment[pt_BR]=Exemplo que demostra como apresentar as miniaturas das janelas

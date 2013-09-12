@@ -3,6 +3,13 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Wallpaper
 
 Comment=Plasma wallpaper
+Comment[cs]=Tapeta Plasmy
+Comment[nl]=Plasma-bureaubladachtergrond
+Comment[pt]=Papel de parede do Plasma
+Comment[pt_BR]=Papel de parede do Plasma
+Comment[sv]=Plasma skrivbordsunderlägg
+Comment[uk]=Тло стільниці Плазми
+Comment[x-test]=xxPlasma wallpaperxx
 
 [PropertyDef::X-Plasma-FormFactors]
 Type=QStringList
