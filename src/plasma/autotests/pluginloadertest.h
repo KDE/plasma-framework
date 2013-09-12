@@ -34,6 +34,8 @@ class PluginTest : public QObject
         void listContainmentActions();
         void listContainmentsOfType();
 
+        void loadDataEngine();
+
     private:
 };
 

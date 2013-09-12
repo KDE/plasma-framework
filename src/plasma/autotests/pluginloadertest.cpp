@@ -33,7 +33,7 @@ QTEST_MAIN(PluginTest)
 
 // Switch to true in order to let tests pass, this test usually will only
 // work with plugins installed, but there aren't any in plasma-framework
-bool buildonly = true;
+bool buildonly = false;
 
 void PluginTest::listEngines()
 {
@@ -67,6 +67,13 @@ void PluginTest::listContainmentsOfType()
 
 }
 
+void PluginTest::loadDataEngine()
+{
+    Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine("time");
+    qDebug() << "ENgine loaded successfully" << engine->pluginInfo().name();
+    QVERIFY(engine != 0 || buildonly);
+
+}
 
 
 #include "moc_pluginloadertest.cpp"
