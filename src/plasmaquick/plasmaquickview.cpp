@@ -174,7 +174,6 @@ PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
     }
 
     setResizeMode(PlasmaQuickView::SizeRootObjectToView);
-    setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
 
     QObject::connect(corona, &Plasma::Corona::packageChanged,
             this, &PlasmaQuickView::coronaPackageChanged);
