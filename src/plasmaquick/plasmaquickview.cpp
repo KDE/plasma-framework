@@ -35,7 +35,6 @@ public:
     PlasmaQuickViewPrivate(Plasma::Corona *corona, PlasmaQuickView *view);
     ~PlasmaQuickViewPrivate();
 
-    void init();
     void setContainment(Plasma::Containment *cont);
     Plasma::Types::FormFactor formFactor() const;
     Plasma::Types::Location location() const;
@@ -56,31 +55,6 @@ PlasmaQuickViewPrivate::PlasmaQuickViewPrivate(Plasma::Corona *cor, PlasmaQuickV
 
 PlasmaQuickViewPrivate::~PlasmaQuickViewPrivate()
 {
-}
-
-void PlasmaQuickViewPrivate::init()
-{
- //FIXME: for some reason all windows must have alpha enable otherwise the ones that do won't paint.
-    //Probably is an architectural problem
-    QSurfaceFormat format;
-    format.setAlphaBufferSize(8);
-
-    q->setFormat(format);
-    q->setColor(Qt::transparent);
-
-
-    QObject::connect(q->screen(), &QScreen::virtualGeometryChanged,
-            q, &PlasmaQuickView::screenGeometryChanged);
-
-    if (!corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    q->setResizeMode(PlasmaQuickView::SizeRootObjectToView);
-    q->setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
-
-    QObject::connect(corona, &Plasma::Corona::packageChanged,
-            q, &PlasmaQuickView::coronaPackageChanged);
 }
 
 void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
@@ -185,7 +159,25 @@ PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
       d(new PlasmaQuickViewPrivate(corona, this))
 {
-    d->init();
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+
+    setFormat(format);
+    setColor(Qt::transparent);
+
+
+    QObject::connect(screen(), &QScreen::virtualGeometryChanged,
+            this, &PlasmaQuickView::screenGeometryChanged);
+
+    if (!corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
+    setResizeMode(PlasmaQuickView::SizeRootObjectToView);
+    setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
+
+    QObject::connect(corona, &Plasma::Corona::packageChanged,
+            this, &PlasmaQuickView::coronaPackageChanged);
 }
 
 PlasmaQuickView::~PlasmaQuickView()
