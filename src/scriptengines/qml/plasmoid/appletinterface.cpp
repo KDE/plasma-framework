@@ -634,7 +634,8 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
 void AppletInterface::compactRepresentationCheck()
 {
-    if (!m_qmlObject->rootObject() || qobject_cast<ContainmentInterface *>(this)) {
+    if (width() <= 0 || height() <= 0 || !m_qmlObject->rootObject() ||
+        qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
 
@@ -648,7 +649,6 @@ void AppletInterface::compactRepresentationCheck()
         minHint.setHeight(m_qmlObject->rootObject()->property("minimumHeight").toReal());
     }
 
-    //TODO: completely arbitrary for now
     if (width() < minHint.width() || height() < minHint.height()) {
         m_expanded = false;
 
