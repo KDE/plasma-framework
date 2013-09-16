@@ -649,6 +649,7 @@ void AppletInterface::compactRepresentationCheck()
         minHint.setHeight(m_qmlObject->rootObject()->property("minimumHeight").toReal());
     }
 
+    //Make it an icon
     if (width() < minHint.width() || height() < minHint.height()) {
         m_expanded = false;
 
@@ -699,6 +700,13 @@ void AppletInterface::compactRepresentationCheck()
             if (m_qmlObject->rootObject()) {
                 disconnect(m_qmlObject->rootObject(), 0, this, 0);
             }
+
+            //resize of the root object means popup resize when iconified
+            connect(m_qmlObject->rootObject(), SIGNAL(widthChanged()),
+                    this, SLOT(updatePopupSize()));
+            connect(m_qmlObject->rootObject(), SIGNAL(heightChanged()),
+                    this, SLOT(updatePopupSize()));
+
             if (m_compactUiObject.data()->property("minimumWidth").isValid()) {
                 connect(m_compactUiObject.data(), SIGNAL(minimumWidthChanged()),
                         this, SIGNAL(minimumWidthChanged()));
@@ -741,6 +749,7 @@ void AppletInterface::compactRepresentationCheck()
 
         emit expandedChanged();
 
+    //show the full UI
     } else {
         m_expanded = true;
         emit expandedChanged();
@@ -749,6 +758,11 @@ void AppletInterface::compactRepresentationCheck()
         if (m_compactUiObject) {
             disconnect(m_compactUiObject.data(), 0, this, 0);
         }
+
+        disconnect(m_qmlObject->rootObject(), SIGNAL(widthChanged()),
+                    this, SLOT(updatePopupSize()));
+        disconnect(m_qmlObject->rootObject(), SIGNAL(heightChanged()),
+                this, SLOT(updatePopupSize()));
 
         //Here we have to use the old connect syntax, because we don't have access to the class type
         if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
@@ -797,6 +811,14 @@ void AppletInterface::compactRepresentationCheck()
         QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
         prop.write(expr.evaluate());
     }
+}
+
+void AppletInterface::updatePopupSize()
+{
+    KConfigGroup cg = applet()->config();
+    cg = KConfigGroup(&cg, "PopupApplet");
+    cg.writeEntry("DialogWidth", m_qmlObject->rootObject()->property("width").toInt());
+    cg.writeEntry("DialogHeight", m_qmlObject->rootObject()->property("height").toInt());
 }
 
 void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
