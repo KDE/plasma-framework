@@ -5,8 +5,8 @@ set(plasmaquick_LIB_SRC
     configmodel.cpp
     configview.cpp
     private/configcategory_p.cpp
-    private/containmentconfigview_p.cpp
-    private/currentcontainmentactionsmodel_p.cpp
+    #private/containmentconfigview_p.cpp
+    #private/currentcontainmentactionsmodel_p.cpp
 )
 
 

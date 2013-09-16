@@ -17,9 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "currentcontainmentactionsmodel_p.h"
-#include "containmentconfigview_p.h"
-#include "configcategory_p.h"
+#include "currentcontainmentactionsmodel.h"
+#include "containmentconfigview.h"
 #include "configmodel.h"
 
 #include <kdeclarative/configpropertymap.h>
@@ -182,4 +181,4 @@ void ContainmentConfigView::syncWallpaperObjects()
     m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-#include "private/moc_containmentconfigview_p.cpp"
+#include "private/moc_containmentconfigview.cpp"

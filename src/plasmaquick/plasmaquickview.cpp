@@ -17,7 +17,6 @@
  */
 
 #include "plasmaquickview.h"
-#include "private/containmentconfigview_p.h"
 #include "configview.h"
 
 #include <QDebug>
@@ -141,13 +140,8 @@ void PlasmaQuickViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
         return;
     }
 
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
+    configView = new ConfigView(applet);
 
-    if (cont) {
-        configView = new ContainmentConfigView(cont);
-    } else {
-        configView = new ConfigView(applet);
-    }
     configView.data()->init();
     configView.data()->show();
 }
