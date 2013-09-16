@@ -555,6 +555,24 @@ QString ContainmentInterface::activity() const
     return containment()->activity();
 }
 
+QList<QObject*> ContainmentInterface::actions() const
+{
+    //FIXME: giving directly a QList<QAction*> crashes
+
+    //use a multimap to sort by action type
+    QMultiMap<int, QObject*> actions;
+    foreach (QAction *a, containment()->actions()->actions()) {
+        if (a->isEnabled()) {
+            actions.insert(a->data().toInt(), a);
+        }
+    }
+    foreach (QAction *a, containment()->corona()->actions()->actions()) {
+        if (a->isEnabled()) {
+            actions.insert(a->data().toInt(), a);
+        }
+    }
+    return actions.values();
+}
 
 
 
