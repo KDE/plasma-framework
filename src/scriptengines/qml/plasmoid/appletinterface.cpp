@@ -687,12 +687,31 @@ void AppletInterface::compactRepresentationCheck()
             //replace the full applet with the collapsed view
             m_compactUiObject.data()->setProperty("visible", true);
             m_compactUiObject.data()->setProperty("parent", QVariant::fromValue(this));
-            //set anchors
-            QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
-            QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
-            prop.write(expr.evaluate());
+
+            {
+                //set anchors
+                QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
+                QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
+                prop.write(expr.evaluate());
+            }
 
             m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
+
+
+            {
+                //reset all the anchors
+                QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "anchors.fill=undefined;anchors.left=undefined;anchors.right=undefined;anchors.top=undefined;anchors.bottom=undefined;");
+                expr.evaluate();
+            }
+
+            KConfigGroup cg = applet()->config();
+            cg = KConfigGroup(&cg, "PopupApplet");
+            int width = cg.readEntry("DialogWidth", 0);
+            int height = cg.readEntry("DialogHeight", 0);
+
+            m_qmlObject->rootObject()->setProperty("width", width);
+            m_qmlObject->rootObject()->setProperty("height", height);
+
             m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_qmlObject->rootObject()));
 
             //hook m_compactUiObject size hints to this size hint
