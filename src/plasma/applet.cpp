@@ -33,7 +33,7 @@
 #include <QUiLoader>
 
 #include <kactioncollection.h>
-#include <kcoreauthorized.h>
+#include <kauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
 #include <QDebug>

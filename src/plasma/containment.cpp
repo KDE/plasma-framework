@@ -37,7 +37,7 @@
 #include <qmimedatabase.h>
 
 #include <QDebug>
-#include <kcoreauthorized.h>
+#include <kauthorized.h>
 #include <klocalizedstring.h>
 #include <kservicetypetrader.h>
 
