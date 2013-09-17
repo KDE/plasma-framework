@@ -24,6 +24,8 @@ target_link_libraries(PlasmaQuick
     ${KService_LIBRARIES}
     ${KCoreAddons_LIBRARIES}
     ${XmlGui_LIBRARIES}
+    KF5::KConfigWidgets
+    ${KDE4_KUTILS_LIBS}
     plasma
     kdeclarative
 )

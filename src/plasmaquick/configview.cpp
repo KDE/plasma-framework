@@ -32,6 +32,14 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+#ifndef PLASMA_NO_KUTILS
+#include <kcmoduleinfo.h>
+#include <kcmoduleproxy.h>
+#else
+#include <kcmodule.h>
+#endif
+
+#include <KDesktopFile>
 #include <KGlobal>
 #include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
@@ -50,6 +58,7 @@ public:
     ~ConfigViewPrivate();
 
     void init();
+    void loadKCModules();
     ConfigView *q;
     Plasma::Applet *applet;
     ConfigModel *configModel;
@@ -59,6 +68,55 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     : q(view),
       applet(appl)
 {
+}
+
+void ConfigViewPrivate::loadKCModules()
+{
+    KDesktopFile df(applet->package().path() + "/metadata.desktop");
+    const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
+    if (!kcmPlugins.isEmpty()) {
+
+        foreach (const QString &kcm, kcmPlugins) {
+#ifndef PLASMA_NO_KUTILS
+            KCModuleProxy *module = new KCModuleProxy(kcm);
+            if (module->realModule()) {
+                if (!configModel) {
+                    configModel = new ConfigModel(q);
+                }
+                configModel->appendCategory(module->moduleInfo().icon(), module->moduleInfo().moduleName(), "", module->moduleInfo().library());
+                //preemptively load modules to prevent save() crashing on some kcms, like powerdevil ones
+                module->load();
+               /* connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
+                connect(dialog, SIGNAL(okClicked()),
+                        module->realModule(), SLOT(save()));
+                connect(dialog, SIGNAL(applyClicked()),
+                        module->realModule(), SLOT(save()));
+                dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());*/
+            } else {
+                delete module;
+            }
+#else
+            KService::Ptr service = KService::serviceByStorageId(kcm);
+            if (service) {
+                QString error;
+                KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
+                if (module) {
+                    module->load();
+                   /* connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
+                    connect(dialog, SIGNAL(okClicked()),
+                            module, SLOT(save()));
+                    connect(dialog, SIGNAL(applyClicked()), 
+                            module, SLOT(save()));
+                    dialog->addPage(module, service->name(), service->icon());*/
+                } else {
+#ifndef NDEBUG
+                    kDebug() << "failed to load kcm" << kcm << "for" << name();
+#endif
+                }
+            }
+#endif
+        }
+    }
 }
 
 void ConfigViewPrivate::init()
@@ -92,6 +150,8 @@ void ConfigViewPrivate::init()
     } else {
         delete object;
     }
+
+    loadKCModules();
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
