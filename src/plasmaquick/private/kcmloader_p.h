@@ -38,8 +38,10 @@ public:
     QString pluginName() const;
     void setPluginName(const QString &pluginName);
 
-Q_SIGNALS:
+protected:
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
 
+Q_SIGNALS:
     void pluginNameChanged();
 
 private:

@@ -31,6 +31,8 @@ MouseArea {
     width: childrenRect.width
     height: childrenRect.height + 4
     property bool current: model.source == main.sourceFile
+    property string source: model.source
+    property string pluginName: model.pluginName
 //END properties
 
 //BEGIN connections
@@ -38,13 +40,13 @@ MouseArea {
         print("model source: " + model.source + " " + main.sourceFile);
         if (delegate.current) {
             return
-        } else {
-            if (typeof(categoriesView.currentItem) !== "undefined") {
-                categoriesView.currentItem = delegate;
-            }
-            main.sourceFile = model.source
-            root.restoreConfig()
         }
+
+        if (typeof(categoriesView.currentItem) !== "undefined") {
+            categoriesView.currentItem = delegate;
+        }
+        main.sourceFile = model.source
+        root.restoreConfig()
     }
     onCurrentChanged: {
         if (current) {

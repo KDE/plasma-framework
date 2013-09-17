@@ -86,6 +86,11 @@ Rectangle {
 //BEGIN UI components
     SystemPalette {id: syspal}
 
+    Component {
+        id: kcmLoaderComponent
+        KCMLoader {}
+    }
+
     ColumnLayout {
         id: mainColumn
         anchors.fill: parent
@@ -149,7 +154,7 @@ Rectangle {
                             Repeater {
                                 model: configDialog.configModel
                                 delegate: ConfigCategoryDelegate {
-                                    onClicked: categoriesView.currentIndex = index
+                                   // onClicked: categoriesView.currentIndex = index
 
                                 }
                             }
@@ -184,7 +189,13 @@ Rectangle {
                 onImplicitHeightChanged: pageSizeSync.restart()
                 onSourceFileChanged: {
                     print("Source file changed in flickable" + sourceFile);
-                    replace(Qt.resolvedUrl(sourceFile))
+                    if (sourceFile.indexOf(".qml") !== -1) {
+                        replace(Qt.resolvedUrl(sourceFile))
+                    } else if (sourceFile == "KCMLoader") {
+                        main.replace(kcmLoaderComponent);
+                        var page = main.currentItem;
+                        page.pluginName = categoriesView.currentItem.pluginName;
+                    }
                     /*
                         * This is not needed on a desktop shell that has ok/apply/cancel buttons, i'll leave it here only for future reference until we have a prototype for the active shell.
                         * root.pageChanged will start a timer, that in turn will call saveConfig() when triggered

@@ -115,7 +115,7 @@ void ConfigViewPrivate::init()
 
         foreach (const QString &kcm, kcmPlugins) {
             KCModuleInfo info(kcm);
-            configModel->appendCategory(info.icon(), info.moduleName(), "KCMLoader", info.library());
+            configModel->appendCategory(info.icon(), info.moduleName(), "KCMLoader", kcm);
         }
     }
 

@@ -32,7 +32,9 @@ KCMLoader::KCMLoader(QQuickItem *parent)
 }
 
 KCMLoader::~KCMLoader()
-{}
+{
+    delete m_module;
+}
 
 QString KCMLoader::pluginName() const
 {
@@ -47,6 +49,7 @@ void KCMLoader::setPluginName(const QString &name)
 
     delete m_module;
     m_module = new KCModuleProxy(name);
+    m_module->setAttribute(Qt::WA_TranslucentBackground);
     m_module->load();
     m_module->show();
     m_module->windowHandle()->setParent(window());
@@ -58,5 +61,17 @@ void KCMLoader::setPluginName(const QString &name)
     emit pluginNameChanged();
 }
 
+void KCMLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+
+    if (!m_module) {
+        return;
+    }
+    m_module->windowHandle()->setX(mapToScene(QPoint()).x());
+    m_module->windowHandle()->setY(mapToScene(QPoint()).y());
+    m_module->windowHandle()->setWidth(width());
+    m_module->windowHandle()->setHeight(height());
+}
 
 #include "private/moc_kcmloader_p.cpp"
