@@ -18,6 +18,7 @@
  */
 
 #include "private/configcategory_p.h"
+#include "private/kcmloader_p.h"
 #include "configview.h"
 #include "configmodel.h"
 #include "Plasma/Applet"
@@ -58,7 +59,7 @@ public:
     ~ConfigViewPrivate();
 
     void init();
-    void loadKCModules();
+
     ConfigView *q;
     Plasma::Applet *applet;
     ConfigModel *configModel;
@@ -70,55 +71,6 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
 {
 }
 
-void ConfigViewPrivate::loadKCModules()
-{
-    KDesktopFile df(applet->package().path() + "/metadata.desktop");
-    const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
-    if (!kcmPlugins.isEmpty()) {
-
-        foreach (const QString &kcm, kcmPlugins) {
-#ifndef PLASMA_NO_KUTILS
-            KCModuleProxy *module = new KCModuleProxy(kcm);
-            if (module->realModule()) {
-                if (!configModel) {
-                    configModel = new ConfigModel(q);
-                }
-                configModel->appendCategory(module->moduleInfo().icon(), module->moduleInfo().moduleName(), "", module->moduleInfo().library());
-                //preemptively load modules to prevent save() crashing on some kcms, like powerdevil ones
-                module->load();
-               /* connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
-                connect(dialog, SIGNAL(okClicked()),
-                        module->realModule(), SLOT(save()));
-                connect(dialog, SIGNAL(applyClicked()),
-                        module->realModule(), SLOT(save()));
-                dialog->addPage(module, module->moduleInfo().moduleName(), module->moduleInfo().icon());*/
-            } else {
-                delete module;
-            }
-#else
-            KService::Ptr service = KService::serviceByStorageId(kcm);
-            if (service) {
-                QString error;
-                KCModule *module = service->createInstance<KCModule>(dialog, QVariantList(), &error);
-                if (module) {
-                    module->load();
-                   /* connect(module, SIGNAL(changed(bool)), dialog, SLOT(settingsModified(bool)));
-                    connect(dialog, SIGNAL(okClicked()),
-                            module, SLOT(save()));
-                    connect(dialog, SIGNAL(applyClicked()), 
-                            module, SLOT(save()));
-                    dialog->addPage(module, service->name(), service->icon());*/
-                } else {
-#ifndef NDEBUG
-                    kDebug() << "failed to load kcm" << kcm << "for" << name();
-#endif
-                }
-            }
-#endif
-        }
-    }
-}
-
 void ConfigViewPrivate::init()
 {
     applet->setUserConfiguring(true);
@@ -128,6 +80,8 @@ void ConfigViewPrivate::init()
     kdeclarative.setupBindings();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
+    qmlRegisterType<KCMLoader>("org.kde.plasma.configuration", 2, 0, "KCMLoader");
+
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
@@ -151,7 +105,19 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    loadKCModules();
+    //Load eventual kcontrolmodules
+    KDesktopFile df(applet->package().path() + "/metadata.desktop");
+    const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
+    if (!kcmPlugins.isEmpty()) {
+        if (!configModel) {
+            configModel = new ConfigModel(q);
+        }
+
+        foreach (const QString &kcm, kcmPlugins) {
+            KCModuleInfo info(kcm);
+            configModel->appendCategory(info.icon(), info.moduleName(), "KCMLoader", info.library());
+        }
+    }
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
