@@ -72,6 +72,7 @@ Rectangle {
 
 //BEGIN connections
     Component.onCompleted: {
+        categoriesView.currentItem = categoriesColumn.children[0];
         if (configDialog.configModel && configDialog.configModel.count > 0) {
             main.sourceFile = configDialog.configModel.get(0).source
         } else {

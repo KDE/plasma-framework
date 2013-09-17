@@ -40,6 +40,10 @@ public:
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void showEvent(QShowEvent *ev);
+    void hideEvent(QHideEvent *ev);
+    void itemChange(ItemChange change, const ItemChangeData &value);
+    void checkKCMModule();
 
 Q_SIGNALS:
     void pluginNameChanged();

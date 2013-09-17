@@ -46,19 +46,25 @@ void KCMLoader::setPluginName(const QString &name)
     if (m_pluginName == name) {
         return;
     }
-
+qWarning()<<"AAAAAAA";
     delete m_module;
-    m_module = new KCModuleProxy(name);
-    m_module->setAttribute(Qt::WA_TranslucentBackground);
-    m_module->load();
-    m_module->show();
-    m_module->windowHandle()->setParent(window());
-    m_module->windowHandle()->setX(mapToScene(QPoint()).x());
-    m_module->windowHandle()->setY(mapToScene(QPoint()).y());
-    m_module->windowHandle()->setWidth(width());
-    m_module->windowHandle()->setHeight(height());
     m_pluginName = name;
+    checkKCMModule();
+
     emit pluginNameChanged();
+}
+
+void KCMLoader::showEvent(QShowEvent *ev)
+{
+    checkKCMModule();
+    m_module->show();
+}
+
+void KCMLoader::hideEvent(QHideEvent *ev)
+{
+    if (m_module) {
+        m_module->hide();
+    }
 }
 
 void KCMLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
@@ -68,6 +74,34 @@ void KCMLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeom
     if (!m_module) {
         return;
     }
+    m_module->windowHandle()->setX(mapToScene(QPoint()).x());
+    m_module->windowHandle()->setY(mapToScene(QPoint()).y());
+    m_module->windowHandle()->setWidth(width());
+    m_module->windowHandle()->setHeight(height());
+}
+
+void KCMLoader::itemChange(ItemChange change, const ItemChangeData &value)
+{
+    if (change == QQuickItem::ItemSceneChange) {
+        //we have a window: create the 
+        if (value.window && m_module) {
+            m_module->windowHandle()->setParent(window());
+        }
+    }
+    QQuickItem::itemChange(change, value);
+}
+
+void KCMLoader::checkKCMModule()
+{
+    if (m_module || m_pluginName.isEmpty()) {
+        return;
+    }
+
+    m_module = new KCModuleProxy(m_pluginName);
+    m_module->setAttribute(Qt::WA_TranslucentBackground);
+    m_module->load();
+    m_module->show();
+    m_module->windowHandle()->setParent(window());
     m_module->windowHandle()->setX(mapToScene(QPoint()).x());
     m_module->windowHandle()->setY(mapToScene(QPoint()).y());
     m_module->windowHandle()->setWidth(width());

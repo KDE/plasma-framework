@@ -105,6 +105,10 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
+    q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
+    q->engine()->rootContext()->setContextProperty("configDialog", q);
+    component->completeCreate();
+
     //Load eventual kcontrolmodules
     KDesktopFile df(applet->package().path() + "/metadata.desktop");
     const QStringList kcmPlugins = df.desktopGroup().readEntry("X-Plasma-ConfigPlugins", QStringList());
@@ -119,9 +123,6 @@ void ConfigViewPrivate::init()
         }
     }
 
-    q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
-    q->engine()->rootContext()->setContextProperty("configDialog", q);
-    component->completeCreate();
     delete component;
 }
 
@@ -131,9 +132,9 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent),
       d(new ConfigViewPrivate(applet, this))
 {
-    d->init();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
+    d->init();
 }
 
 ConfigView::~ConfigView()
