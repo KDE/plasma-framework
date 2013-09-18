@@ -23,7 +23,7 @@
 #include <QQmlEngine>
 #include <QFile>
 
-#include <kdeclarative.h>
+#include <kdeclarative/kdeclarative.h>
 
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
     : QQmlAbstractUrlInterceptor(),
