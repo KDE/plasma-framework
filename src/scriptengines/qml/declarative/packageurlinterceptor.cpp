@@ -20,10 +20,12 @@
 #include "packageurlinterceptor.h"
 
 #include <QDebug>
+#include <QQmlEngine>
 
-PackageUrlInterceptor::PackageUrlInterceptor(const Plasma::Package &p)
+PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
     : QQmlAbstractUrlInterceptor(),
-      m_package(p)
+      m_package(p),
+      m_engine(engine)
 {
 }
 
@@ -34,6 +36,44 @@ PackageUrlInterceptor::~PackageUrlInterceptor()
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
     //qDebug() << "Intercepted URL:" << path;
+
+    //TODO: security: permission for remote urls
+    if (!path.isLocalFile() ) {
+        return path;
+    }
+
+    switch (type) {
+    case QQmlAbstractUrlInterceptor::QmlFile:
+        if (path.path().startsWith(m_package.path())) {
+            //qDebug() << "Found URL in package" << path;
+            QStringList components = path.toLocalFile().split("/");
+            if (components.count() < 2) {
+                return path;
+            }
+            QString filename = components.last();
+            components.pop_back();
+            QString type = components.last();
+            if (type == "ui" || type == "config") {
+                //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(type.toLatin1(), filename));
+                return QUrl::fromLocalFile(m_package.filePath(type.toLatin1(), filename));
+            }
+        //forbid to load random absolute paths
+        } else {
+            foreach (const QString &import, m_engine->importPathList()) {
+                //it's from an import, good
+                //TODO: implement imports whitelist?
+                if (path.path().startsWith(import)) {
+                   // qDebug() << "Found import, access granted";
+                    return path;
+                }
+            }
+            qWarning() << "Access denied for url" << path;
+        }
+        break;
+
+    default:
+        break;
+    }
 
     return path;
 }

@@ -24,16 +24,19 @@
 
 #include <Plasma/Package>
 
+class QQmlEngine;
+
 class PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
 public:
-    PackageUrlInterceptor(const Plasma::Package &p);
+    PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p);
     virtual ~PackageUrlInterceptor();
 
     virtual QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type);
 
 private:
     Plasma::Package m_package;
+    QQmlEngine *m_engine;
 };
 
 
