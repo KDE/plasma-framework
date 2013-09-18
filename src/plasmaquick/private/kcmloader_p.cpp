@@ -58,6 +58,7 @@ void KCMLoader::showEvent(QShowEvent *ev)
 {
     checkKCMModule();
     m_module->show();
+    m_module->windowHandle()->setParent(window());
 }
 
 void KCMLoader::hideEvent(QHideEvent *ev)
