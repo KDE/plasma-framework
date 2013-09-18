@@ -44,30 +44,44 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
     switch (type) {
     case QQmlAbstractUrlInterceptor::QmlFile:
+    case QQmlAbstractUrlInterceptor::JavaScriptFile:
+        //asked a file inside a package: let's rewrite the url!
         if (path.path().startsWith(m_package.path())) {
-            //qDebug() << "Found URL in package" << path;
-            QStringList components = path.toLocalFile().split("/");
-            if (components.count() < 2) {
-                return path;
+            qDebug() << "Found URL in package" << path;
+
+            //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
+            QString relativePath;
+            foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
+                if (path.path().startsWith(m_package.path()+prefix)) {
+                    //obtain a string in the form ui/foo/bar/baz.qml
+                    relativePath = path.path().mid(QString(m_package.path()+prefix).length());
+                    break;
+                }
             }
-            QString filename = components.last();
-            components.pop_back();
-            QString type = components.last();
-            if (type == "ui" || type == "config") {
-                //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(type.toLatin1(), filename));
-                return QUrl::fromLocalFile(m_package.filePath(type.toLatin1(), filename));
-            }
+            //should never happen
+            Q_ASSERT(!relativePath.isEmpty());
+
+            QStringList components = relativePath.split("/");
+            Q_ASSERT(components.count() >= 2);
+
+            components.pop_front();
+            //obtain a string in the form foo/bar/baz.qml, ui/ gets discarded
+            QString filename = components.join("/");
+
+            //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+            return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+
         //forbid to load random absolute paths
         } else {
             foreach (const QString &import, m_engine->importPathList()) {
                 //it's from an import, good
                 //TODO: implement imports whitelist?
                 if (path.path().startsWith(import)) {
-                   // qDebug() << "Found import, access granted";
+                    //qDebug() << "Found import, access granted";
                     return path;
                 }
             }
-            qWarning() << "Access denied for url" << path;
+            qWarning() << "WARNING: Access denied for URL" << path;
         }
         break;
 

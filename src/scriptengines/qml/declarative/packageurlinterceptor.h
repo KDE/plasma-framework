@@ -34,6 +34,19 @@ public:
 
     virtual QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type);
 
+    static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
+    {
+        switch (type) {
+        case QQmlAbstractUrlInterceptor::QmlFile:
+            return "ui";
+        case QQmlAbstractUrlInterceptor::JavaScriptFile:
+            return "scripts";
+        default:
+            break;
+        }
+        return "";
+    }
+
 private:
     Plasma::Package m_package;
     QQmlEngine *m_engine;
