@@ -44,7 +44,23 @@ public:
         default:
             break;
         }
-        return "";
+
+        //failed by type, let's try by extension
+        const QString extension = fileName.mid(fileName.lastIndexOf(".") + 1).toLower();
+
+        if (extension == "svg" || extension == "svgz" ||
+            extension == "png" || extension == "gif" ||
+            extension == "jpg" || extension == "jpeg") {
+            return "images";
+        //FIXME: are those necessary? are they *always* catched by type?
+        } else if (extension == "js") {
+            return "scripts";
+        } else if (extension == "qml") {
+            return "ui";
+        //everything else, throw it in "data"
+        } else {
+            return "data";
+        }
     }
 
 private:

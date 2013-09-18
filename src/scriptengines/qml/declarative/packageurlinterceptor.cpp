@@ -42,12 +42,11 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return path;
     }
 
-    switch (type) {
-    case QQmlAbstractUrlInterceptor::QmlFile:
-    case QQmlAbstractUrlInterceptor::JavaScriptFile:
+    if (type != QQmlAbstractUrlInterceptor::QmldirFile) {
+
         //asked a file inside a package: let's rewrite the url!
         if (path.path().startsWith(m_package.path())) {
-            qDebug() << "Found URL in package" << path;
+            //qDebug() << "Found URL in package" << path;
 
             //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
             QString relativePath;
@@ -83,10 +82,6 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             }
             qWarning() << "WARNING: Access denied for URL" << path;
         }
-        break;
-
-    default:
-        break;
     }
 
     return path;
