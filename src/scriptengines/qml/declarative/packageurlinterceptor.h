@@ -26,6 +26,7 @@
 
 class QQmlEngine;
 
+//depends from https://codereview.qt-project.org/#change,65626
 class PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
 public:

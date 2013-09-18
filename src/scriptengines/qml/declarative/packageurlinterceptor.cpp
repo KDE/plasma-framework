@@ -21,6 +21,9 @@
 
 #include <QDebug>
 #include <QQmlEngine>
+#include <QFile>
+
+#include <kdeclarative.h>
 
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
     : QQmlAbstractUrlInterceptor(),
@@ -42,6 +45,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return path;
     }
 
+    //FIXME: probably needed for QmldirFile as well.
+    //at the moment a qt bug prevents intercept() working with qmldirs
+    //see https://codereview.qt-project.org/#change,61208
     if (type != QQmlAbstractUrlInterceptor::QmldirFile) {
 
         //asked a file inside a package: let's rewrite the url!
@@ -61,10 +67,11 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             Q_ASSERT(!relativePath.isEmpty());
 
             QStringList components = relativePath.split("/");
+            //a path with less than 2 items should ever happen
             Q_ASSERT(components.count() >= 2);
 
             components.pop_front();
-            //obtain a string in the form foo/bar/baz.qml, ui/ gets discarded
+            //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
             QString filename = components.join("/");
 
             //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
@@ -76,7 +83,21 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 //it's from an import, good
                 //TODO: implement imports whitelist?
                 if (path.path().startsWith(import)) {
-                    //qDebug() << "Found import, access granted";
+                    qDebug() << "Found import, access granted" << path;
+
+                    //check if there is a platform specific file that overrides this import
+                    foreach (const QString &platform, KDeclarative::runtimePlatform()) {
+                        qDebug() << "Trying" << platform;
+
+                        //search for a platformqml/ path sibling of this import path
+                        QString platformPath = import+"/../platformqml/"+platform+path.path().mid(import.length());
+                        QFile f(platformPath);
+
+                        qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
+                        if (f.exists()) {
+                            return QUrl::fromLocalFile(platformPath);
+                        }
+                    }
                     return path;
                 }
             }
