@@ -46,7 +46,7 @@ void KCMLoader::setPluginName(const QString &name)
     if (m_pluginName == name) {
         return;
     }
-qWarning()<<"AAAAAAA";
+
     delete m_module;
     m_pluginName = name;
     checkKCMModule();
