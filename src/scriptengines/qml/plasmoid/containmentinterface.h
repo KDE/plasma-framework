@@ -145,7 +145,7 @@ protected Q_SLOTS:
 
 private:
     void clearDataForMimeJob(KIO::Job *job);
-    void addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+    Plasma::Applet *addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
 
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;

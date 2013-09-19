@@ -195,7 +195,7 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
     return regVal;
 }
 
-void ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
 {
     //HACK
     //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
@@ -211,6 +211,7 @@ void ContainmentInterface::addApplet(const QString &plugin, const QVariantList &
 
     emit appletAdded(appletGraphicObject, pos.x(), pos.y());
     emit appletsChanged();
+    return applet;
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
@@ -467,7 +468,29 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         m_wallpaperInterface->setUrl(tjob->url());
                     }
                 } else {
-                    addApplet(actionsToApplets[choice], args, posi);
+                    Plasma::Applet *applet = addApplet(actionsToApplets[choice], args, posi);
+                    //TODO: put in a function
+                    if (applet) {
+                        KConfig argsConf(applet->package().filePath("config", "argsrc"));
+                        foreach (const QString &group, argsConf.groupList()) {
+                            KConfigGroup cg(&argsConf, group);
+                            if (cg.hasKey(mimetype)) {
+                                QString key = cg.readEntry(mimetype);
+
+                                Plasma::ConfigLoader *config = applet->configScheme();
+                                if (config) {
+                                    KConfigSkeletonItem *item = config->findItemByName(key);
+                                    if (item) {
+                                        item->setProperty(tjob->url());
+                                        config->blockSignals(true);
+                                        config->writeConfig();
+                                        config->blockSignals(false);
+                                        m_appletScriptEngine->configNeedsSaving();
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 clearDataForMimeJob(job);
