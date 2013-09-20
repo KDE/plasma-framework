@@ -55,7 +55,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
       m_wallpaperInterface(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
-    setFlag(QQuickItem::ItemAcceptsDrops);
 
     qmlRegisterType<ContainmentInterface>();
 

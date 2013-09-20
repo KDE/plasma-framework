@@ -143,7 +143,11 @@ void AppletInterface::init()
 
     m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
 
-    m_qmlObject->completeInitialization();
+    //initialize size, so an useless resize less
+    QVariantHash initialProperties;
+    initialProperties["width"] = width();
+    initialProperties["height"] = height();
+    m_qmlObject->completeInitialization(initialProperties);
 
     qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
