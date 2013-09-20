@@ -76,27 +76,17 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
      }
-}
-
-void ContainmentInterface::init()
-{
-    AppletInterface::init();
-
-    foreach (QObject *appletObj, m_appletInterfaces) {
-        AppletInterface *applet = qobject_cast<AppletInterface *>(appletObj);
-        if (applet) {
-            if (!applet->qmlObject()) {
-                applet->init();
-            }
-            m_appletInterfaces << applet;
-            emit appletAdded(applet, 0, 0);
-        }
-    }
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
-    
+}
+
+void ContainmentInterface::init()
+{
+
+    AppletInterface::init();
+
     if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
         connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
                 this, SIGNAL(minimumWidthChanged()));

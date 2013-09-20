@@ -192,6 +192,7 @@ public:
     Q_INVOKABLE QAction *action(QString name) const;
 
     /**
+     * FIXME: remove?
      * Retrieve the path of a file from the Plasmoid package
      * @param fileName the package-recognized name, such as "mainscript"
      * @returns the full absolute path of the file, if found, an empty string if not
@@ -199,6 +200,7 @@ public:
     Q_INVOKABLE QString file(const QString &fileName);
 
     /**
+     * FIXME: remove?
      * Retrieve the path of a file from the Plasmoid package
      * @param fileType the type supported from the package, such as "ui", "config" or "image"
      * @param filePath the name of the file, such as "foo.qml" or "bar.png"
