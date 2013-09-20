@@ -281,6 +281,13 @@ public:
     qreal implicitHeight() const;
 
 Q_SIGNALS:
+    /**
+     * somebody else, usually the containment sent some data to the applet
+     * @param mimetype the mime type of the data such as text/plain
+     * @param data either the actual data or an URL representing it
+     */
+    void externalData(const QString &mimetype, const QVariant &data);
+
     void releaseVisualFocus();
     void configNeedsSaving();
 

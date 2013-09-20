@@ -220,25 +220,8 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
         return;
     }
 
-    KConfig argsConf(applet->package().filePath("config", "argsrc"));
-    foreach (const QString &group, argsConf.groupList()) {
-        KConfigGroup cg(&argsConf, group);
-        if (cg.hasKey(mimetype)) {
-            QString key = cg.readEntry(mimetype);
-
-            Plasma::ConfigLoader *config = applet->configScheme();
-            if (config) {
-                KConfigSkeletonItem *item = config->findItemByName(key);
-                if (item) {
-                    item->setProperty(data);
-                    config->blockSignals(true);
-                    config->writeConfig();
-                    config->blockSignals(false);
-                    m_appletScriptEngine->configNeedsSaving();
-                }
-            }
-        }
-    }
+    AppletInterface *appletInterface = applet->property("graphicObject").value<AppletInterface *>();
+    emit appletInterface->externalData(mimetype, data);
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
