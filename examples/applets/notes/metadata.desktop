@@ -1,8 +1,20 @@
 [Desktop Entry]
 Comment=Example on how to manage Drop data
+Comment[nl]=Voorbeeld van hoe gegevens van Drop te beheren
+Comment[pt]=Exemplo de gestão de dados do Drop
+Comment[pt_BR]=Exemplo de gerenciamento de dados do Drop
+Comment[sv]=Exempel på hur Släpp data hanteras
+Comment[uk]=Приклад керування скинутими даними
+Comment[x-test]=xxExample on how to manage Drop dataxx
 Encoding=UTF-8
 Keywords=
 Name=Example notes
+Name[nl]=Voorbeeldnotities
+Name[pt]=Notas de exemplo
+Name[pt_BR]=Notas de exemplo
+Name[sv]=Exempelanteckningar
+Name[uk]=Приклад нотаток
+Name[x-test]=xxExample notesxx
 Type=Service
 Icon=knotes
 X-KDE-ParentApp=
