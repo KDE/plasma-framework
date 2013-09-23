@@ -210,7 +210,9 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
     }
 
     AppletInterface *appletInterface = applet->property("graphicObject").value<AppletInterface *>();
-    emit appletInterface->externalData(mimetype, data);
+    if (appletInterface) {
+        emit appletInterface->externalData(mimetype, data);
+    }
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
