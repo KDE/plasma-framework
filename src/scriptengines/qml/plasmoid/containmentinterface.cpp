@@ -311,26 +311,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
         if (!selectedPlugin.isEmpty()) {
 
-            //TODO: remove all this temp file logic
-            KTemporaryFile tempFile;
-            if (mimeData && tempFile.open()) {
-                //TODO: what should we do with files after the applet is done with them??
-                tempFile.setAutoRemove(false);
+            Plasma::Applet *applet = addApplet(selectedPlugin, QVariantList(), QPoint(x, y));
+            setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
 
-                {
-                    QDataStream stream(&tempFile);
-                    QByteArray data = mimeData->data(pluginFormats[selectedPlugin]);
-                    stream.writeRawData(data, data.size());
-                }
-
-                QVariantList args;
-                args << tempFile.fileName();
-                qDebug() << args;
-                tempFile.close();
-
-                Plasma::Applet *applet = addApplet(selectedPlugin, args, QPoint(x, y));
-                setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
-            }
         }
     }
 }
@@ -398,11 +381,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             return;
         }
 
-        //TODO: remove assignment of applet args
-        QVariantList args;
-        args << tjob->url().url() << mimetype;
 
-        qDebug() << "Creating menu for:" << mimetype  << posi << args;
+        qDebug() << "Creating menu for:" << mimetype  << posi;
 
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
         KPluginInfo::List wallpaperList;
@@ -472,7 +452,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         m_wallpaperInterface->setUrl(tjob->url());
                     }
                 } else {
-                    Plasma::Applet *applet = addApplet(actionsToApplets[choice], args, posi);
+                    Plasma::Applet *applet = addApplet(actionsToApplets[choice], QVariantList(), posi);
                     setAppletArgs(applet, mimetype, tjob->url().toString());
                 }
 
@@ -481,7 +461,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            Plasma::Applet *applet = addApplet("org.kde.icon", args, posi);
+            Plasma::Applet *applet = addApplet("org.kde.icon", QVariantList(), posi);
             setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
