@@ -282,10 +282,16 @@ class PLASMA_EXPORT Applet : public QObject
         static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
 
         /**
-         * Returns the icon related to this applet
+         * @returns The icon name related to this applet
+         * By default is the one in the plasmoid desktop file
          **/
         QString icon() const;
 
+        /**
+         * Sets an icon name for this applet
+         * @param icon Freedesktop compatible icon name
+         */
+        void setIcon(const QString &icon);
 
 
 //ACTIONS

@@ -52,6 +52,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           q(applet),
           immutability(Types::Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
+          icon(appletDescription.isValid() ? appletDescription.icon() : QString()),
           mainConfig(0),
           pendingConstraints(Types::NoConstraint),
           script(0),

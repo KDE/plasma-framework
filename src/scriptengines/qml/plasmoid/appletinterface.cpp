@@ -221,19 +221,29 @@ QObject* AppletInterface::configuration() const
     return m_configuration;
 }
 
+uint AppletInterface::id() const
+{
+    return applet()->id();
+}
+
 QString AppletInterface::icon() const
 {
     return applet()->icon();
 }
 
+void AppletInterface::setIcon(const QString &icon)
+{
+    if (applet()->icon() == icon) {
+        return;
+    }
+
+    applet()->setIcon(icon);
+    emit iconChanged();
+}
+
 QString AppletInterface::title() const
 {
     return applet()->title();
-}
-
-uint AppletInterface::id() const
-{
-    return applet()->id();
 }
 
 void AppletInterface::setTitle(const QString &title)

@@ -64,11 +64,10 @@ class AppletInterface : public QQuickItem
      */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
 
-    //TODO: writable icon
     /**
      * Icon to represent the plasmoid
      */
-    Q_PROPERTY(QString icon READ icon CONSTANT)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
 
     /**
      * Applet id: is unique in the whole Plasma session and will never change across restarts
@@ -235,6 +234,7 @@ public:
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
     QString icon() const;
+    void setIcon(const QString &icon);
 
     QString title() const;
     void setTitle(const QString &title);
@@ -294,6 +294,7 @@ Q_SIGNALS:
     void configNeedsSaving();
 
 //PROPERTY change notifiers--------------
+    void iconChanged();
     void titleChanged();
     void formFactorChanged();
     void locationChanged();
