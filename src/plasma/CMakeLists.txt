@@ -51,7 +51,7 @@ endif(NOT PLASMA_NO_PACKAGEKIT)
 
 if (NOT PLASMA_NO_KUTILS)
    #FIXME: for kcmodule classes; should not be in libplasma if possible
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KUTILS_LIBS})
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KCMUTILS_LIBS})
 endif(NOT PLASMA_NO_KUTILS)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
