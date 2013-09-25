@@ -17,20 +17,99 @@
  */
 
 #include "desktopview.h"
+#include "containmentconfigview.h"
 #include "shellcorona.h"
+#include "shellmanager.h"
 
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QScreen>
+
+#include <KWindowSystem>
+
+#include <Plasma/Package>
 
 DesktopView::DesktopView(ShellCorona *corona, QWindow *parent)
-    : PlasmaQuickView(corona, parent)
+    : PlasmaQuickView(corona, parent),
+      m_stayBehind(false),
+      m_fillScreen(false)
 {
-    
+    engine()->rootContext()->setContextProperty("desktop", this);
+    setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
 }
 
 DesktopView::~DesktopView()
 {
     
 }
-/*
+
+bool DesktopView::stayBehind() const
+{
+    return m_stayBehind;
+}
+
+void DesktopView::setStayBehind(bool stayBehind)
+{
+    if (ShellManager::s_forceWindowed || stayBehind == m_stayBehind) {
+        return;
+    }
+
+    if (stayBehind) {
+        KWindowSystem::setType(winId(), NET::Desktop);
+    } else {
+        KWindowSystem::setType(winId(), NET::Normal);
+    }
+
+    m_stayBehind = stayBehind;
+    emit stayBehindChanged();
+}
+
+bool DesktopView::fillScreen() const
+{
+    return m_fillScreen;
+}
+
+void DesktopView::setFillScreen(bool fillScreen)
+{
+    if (ShellManager::s_forceWindowed || fillScreen == m_fillScreen) {
+        return;
+    }
+
+    resize(screen()->geometry().width(), screen()->geometry().height());
+    connect(screen(), &QScreen::geometryChanged, [=]{resize(screen()->geometry().width(), screen()->geometry().height());});
+
+    fillScreen = fillScreen;
+    emit fillScreenChanged();
+}
+
+void DesktopView::setDashboardShown(bool shown)
+{
+    if (shown) {
+        if (m_stayBehind) {
+            KWindowSystem::setType(winId(), NET::Normal);
+        }
+        raise();
+        KWindowSystem::raiseWindow(winId());
+        
+        QObject *wpGraphicObject = containment()->property("wallpaperGraphicsObject").value<QObject *>();
+        if (wpGraphicObject) {
+            wpGraphicObject->setProperty("opacity", 0.3);
+        }
+    } else {
+        if (m_stayBehind) {
+            KWindowSystem::setType(winId(), NET::Desktop);
+        }
+        lower();
+        KWindowSystem::lowerWindow(winId());
+
+        QObject *wpGraphicObject = containment()->property("wallpaperGraphicsObject").value<QObject *>();
+        if (wpGraphicObject) {
+            wpGraphicObject->setProperty("opacity", 1);
+        }
+    }
+}
+
+
 void DesktopView::showConfigurationInterface(Plasma::Applet *applet)
 {
     if (m_configView) {
@@ -45,13 +124,13 @@ void DesktopView::showConfigurationInterface(Plasma::Applet *applet)
     Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
 
     if (cont) {
-        m_configView = new PanelConfigView(cont, this);
+        m_configView = new ContainmentConfigView(cont);
     } else {
         m_configView = new ConfigView(applet);
     }
     m_configView.data()->init();
     m_configView.data()->show();
-}*/
+}
 
 
 #include "moc_desktopview.cpp"

@@ -33,7 +33,7 @@
 #include <QUiLoader>
 
 #include <kactioncollection.h>
-#include <kcoreauthorized.h>
+#include <kauthorized.h>
 #include <kcolorscheme.h>
 #include <kdesktopfile.h>
 #include <QDebug>
@@ -332,11 +332,12 @@ void Applet::setTitle(const QString &title) const
 
 QString Applet::icon() const
 {
-    if (!d->appletDescription.isValid()) {
-        return QString();
-    }
+    return d->icon;
+}
 
-    return d->appletDescription.icon();
+void Applet::setIcon(const QString &icon)
+{
+    d->icon = icon;
 }
 
 KPluginInfo Applet::pluginInfo() const

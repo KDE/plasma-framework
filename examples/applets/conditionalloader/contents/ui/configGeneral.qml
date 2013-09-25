@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.0 as QtControls
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -36,10 +37,10 @@ Item {
         anchors.fill: parent
         spacing: 4
         Row {
-            PlasmaComponents.Label {
+            QtControls.Label {
                 text: "Text Config value"
             }
-            PlasmaComponents.TextField {
+            QtControls.TextField {
                 id: testConfigField
             }
         }

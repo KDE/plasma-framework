@@ -87,8 +87,6 @@ Item {
         textInput.forceActiveFocus();
     }
 
-    // Overriding QtQuick.Item activeFocus property.
-    property alias activeFocus: textInput.activeFocus
 
     // TODO: fix default size
     implicitWidth: theme.mSize(theme.defaultFont).width*12

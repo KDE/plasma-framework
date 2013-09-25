@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <entry name="Test" type="String">
+      <label>This is a test</label>
+      <default>test</default>
+    </entry>
+    <entry name="BoolTest" type="Bool">
+      <default>true</default>
+    </entry>
+    <entry name="IntTest" type="Int">
+      <default>1</default>
+      <min>-1</min>
+      <max>100</max>
+    </entry>
+  </group>
+  
+  <group name="Group2">
+    <entry name="OtherTest" type="String">
+      <label>This is another test</label>
+      <default>test2</default>
+    </entry>
+    <entry name="EnumTest" type="Enum">
+      <default>Value2</default>
+      <choices>
+          <choice name="Value0"/>
+          <choice name="Value1"/>
+          <choice name="Value2"/>
+          <choice name="Value3"/>
+          <choice name="Value4"/>
+          <choice name="Value5"/>
+          <choice name="Value6"/>
+      </choices>
+    </entry>
+  </group>
+
+</kcfg>

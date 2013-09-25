@@ -17,7 +17,6 @@
  */
 
 #include "plasmaquickview.h"
-#include "containmentconfigview_p.h"
 #include "configview.h"
 
 #include <QDebug>
@@ -35,7 +34,6 @@ public:
     PlasmaQuickViewPrivate(Plasma::Corona *corona, PlasmaQuickView *view);
     ~PlasmaQuickViewPrivate();
 
-    void init();
     void setContainment(Plasma::Containment *cont);
     Plasma::Types::FormFactor formFactor() const;
     Plasma::Types::Location location() const;
@@ -56,31 +54,6 @@ PlasmaQuickViewPrivate::PlasmaQuickViewPrivate(Plasma::Corona *cor, PlasmaQuickV
 
 PlasmaQuickViewPrivate::~PlasmaQuickViewPrivate()
 {
-}
-
-void PlasmaQuickViewPrivate::init()
-{
- //FIXME: for some reason all windows must have alpha enable otherwise the ones that do won't paint.
-    //Probably is an architectural problem
-    QSurfaceFormat format;
-    format.setAlphaBufferSize(8);
-
-    q->setFormat(format);
-    q->setColor(Qt::transparent);
-
-
-    QObject::connect(q->screen(), &QScreen::virtualGeometryChanged,
-            q, &PlasmaQuickView::screenGeometryChanged);
-
-    if (!corona->package().isValid()) {
-        qWarning() << "Invalid home screen package";
-    }
-
-    q->setResizeMode(PlasmaQuickView::SizeRootObjectToView);
-    q->setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
-
-    QObject::connect(corona, &Plasma::Corona::packageChanged,
-            q, &PlasmaQuickView::coronaPackageChanged);
 }
 
 void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
@@ -129,7 +102,9 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
     if (graphicObject) {
         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
-        //graphicObject->setProperty("visible", false);
+        //by resizing before adding, it will avoid some resizes in most cases
+        graphicObject->setProperty("width", q->width());
+        graphicObject->setProperty("height", q->height());
         graphicObject->setProperty("drawWallpaper",
                                    (cont->containmentType() == Plasma::Types::DesktopContainment ||
                                     cont->containmentType() == Plasma::Types::CustomContainment));
@@ -167,13 +142,8 @@ void PlasmaQuickViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
         return;
     }
 
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(applet);
+    configView = new ConfigView(applet);
 
-    if (cont) {
-        configView = new ContainmentConfigView(cont);
-    } else {
-        configView = new ConfigView(applet);
-    }
     configView.data()->init();
     configView.data()->show();
 }
@@ -185,7 +155,24 @@ PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
       d(new PlasmaQuickViewPrivate(corona, this))
 {
-    d->init();
+    QSurfaceFormat format;
+    format.setAlphaBufferSize(8);
+
+    setFormat(format);
+    setColor(Qt::transparent);
+
+
+    QObject::connect(screen(), &QScreen::virtualGeometryChanged,
+            this, &PlasmaQuickView::screenGeometryChanged);
+
+    if (!corona->package().isValid()) {
+        qWarning() << "Invalid home screen package";
+    }
+
+    setResizeMode(PlasmaQuickView::SizeRootObjectToView);
+
+    QObject::connect(corona, &Plasma::Corona::packageChanged,
+            this, &PlasmaQuickView::coronaPackageChanged);
 }
 
 PlasmaQuickView::~PlasmaQuickView()

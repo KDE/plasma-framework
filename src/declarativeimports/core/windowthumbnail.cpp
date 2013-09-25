@@ -71,6 +71,14 @@ WindowThumbnail::WindowThumbnail(QQuickItem* parent)
 #endif
 {
     setFlag(ItemHasContents);
+    connect(this, &QQuickItem::windowChanged, [this](QQuickWindow *window) {
+        if (!window) {
+            return;
+        }
+        // restart the redirection, it might not have been active yet
+        stopRedirecting();
+        startRedirecting();
+    });
     if (QGuiApplication *gui = dynamic_cast<QGuiApplication*>(QCoreApplication::instance())) {
         m_xcb = (gui->platformName() == QStringLiteral("xcb"));
         if (m_xcb) {
@@ -111,6 +119,10 @@ void WindowThumbnail::setWinId(uint32_t winId)
         // invalid Id, don't updated
         return;
     }
+    if (window() && winId == window()->winId()) {
+        // don't redirect to yourself
+        return;
+    }
     stopRedirecting();
     m_winId = winId;
     startRedirecting();
@@ -125,7 +137,7 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
         node = new WindowTextureNode();
         node->setFiltering(QSGTexture::Linear);
     }
-    if (!m_xcb || m_winId == 0) {
+    if (!m_xcb || m_winId == 0 || (window() && window()->winId() == m_winId)) {
         iconToTexture(node);
     } else {
         windowToTexture(node);
@@ -347,7 +359,7 @@ void WindowThumbnail::stopRedirecting()
 
 void WindowThumbnail::startRedirecting()
 {
-    if (!m_xcb) {
+    if (!m_xcb || !window() || window()->winId() == m_winId) {
         return;
     }
 #if HAVE_XCB_COMPOSITE

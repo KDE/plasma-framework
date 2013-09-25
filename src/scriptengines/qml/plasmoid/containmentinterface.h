@@ -58,6 +58,11 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
 
+    /**
+     * Actions associated to this containment or corona
+     */
+    Q_PROPERTY(QList<QObject*> actions READ actions NOTIFY actionsChanged)
+
 public:
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
@@ -74,6 +79,8 @@ public:
     void setContainmentType(Plasma::Types::ContainmentType type);
 
     QString activity() const;
+
+    QList<QObject*> actions() const;
 
     /**
      * FIXME: either a property or not accessible at all. Lock or unlock widgets
@@ -127,6 +134,7 @@ Q_SIGNALS:
     void drawWallpaperChanged();
     void containmentTypeChanged();
     ///void immutableChanged();
+    void actionsChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
@@ -137,7 +145,8 @@ protected Q_SLOTS:
 
 private:
     void clearDataForMimeJob(KIO::Job *job);
-    void addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+    Plasma::Applet *addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+    void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QString &data);
 
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;

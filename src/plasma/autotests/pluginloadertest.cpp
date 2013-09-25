@@ -70,7 +70,7 @@ void PluginTest::listContainmentsOfType()
 void PluginTest::loadDataEngine()
 {
     Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine("time");
-    qDebug() << "ENgine loaded successfully" << engine->pluginInfo().name();
+    //qDebug() << "Engine loaded successfully" << engine->pluginInfo().name();
     QVERIFY(engine != 0 || buildonly);
 
 }

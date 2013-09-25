@@ -57,6 +57,8 @@ set(widgetexplorer_SRC
 
 add_executable(plasma-shell
     main.cpp
+    containmentconfigview.cpp
+    currentcontainmentactionsmodel.cpp
     desktopview.cpp
     panelview.cpp
     panelconfigview.cpp
@@ -79,7 +81,7 @@ target_link_libraries(plasma-shell
  ${KWindowSystem_LIBRARIES}
  ${KCoreAddons_LIBRARIES}
  plasma
- plasmaquick
+ PlasmaQuick
  ${Qt5Script_LIBRARIES}
  ${KDE4Support_LIBRARIES}
  ${Solid_LIBRARIES}

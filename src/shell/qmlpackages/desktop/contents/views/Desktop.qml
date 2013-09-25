@@ -24,7 +24,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Rectangle {
     id: root
-    color: "black"
+    color: Qt.rgba(0, 0, 0, 0.2)
     width: 1024
     height: 768
 
@@ -38,6 +38,8 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        desktop.stayBehind = true;
+        desktop.fillScreen = true;
         print("View QML loaded")
     }
 }

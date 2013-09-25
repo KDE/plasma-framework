@@ -49,6 +49,7 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 #include "declarative/packageaccessmanagerfactory.h"
+#include "declarative/packageurlinterceptor.h"
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
@@ -112,6 +113,10 @@ void AppletInterface::init()
     delete factory;
     engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
 
+    //Hook generic url resolution to the applet package as well
+    //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?
+    engine->setUrlInterceptor(new PackageUrlInterceptor(engine, m_appletScriptEngine->package()));
+
     m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
 
     if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
@@ -138,7 +143,11 @@ void AppletInterface::init()
 
     m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
 
-    m_qmlObject->completeInitialization();
+    //initialize size, so an useless resize less
+    QVariantHash initialProperties;
+    initialProperties["width"] = width();
+    initialProperties["height"] = height();
+    m_qmlObject->completeInitialization(initialProperties);
 
     qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
@@ -212,19 +221,29 @@ QObject* AppletInterface::configuration() const
     return m_configuration;
 }
 
+uint AppletInterface::id() const
+{
+    return applet()->id();
+}
+
 QString AppletInterface::icon() const
 {
     return applet()->icon();
 }
 
+void AppletInterface::setIcon(const QString &icon)
+{
+    if (applet()->icon() == icon) {
+        return;
+    }
+
+    applet()->setIcon(icon);
+    emit iconChanged();
+}
+
 QString AppletInterface::title() const
 {
     return applet()->title();
-}
-
-uint AppletInterface::id() const
-{
-    return applet()->id();
 }
 
 void AppletInterface::setTitle(const QString &title)
@@ -634,7 +653,8 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 
 void AppletInterface::compactRepresentationCheck()
 {
-    if (!m_qmlObject->rootObject() || qobject_cast<ContainmentInterface *>(this)) {
+    if (width() <= 0 || height() <= 0 || !m_qmlObject->rootObject() ||
+        qobject_cast<ContainmentInterface *>(this)) {
         return;
     }
 
@@ -648,7 +668,7 @@ void AppletInterface::compactRepresentationCheck()
         minHint.setHeight(m_qmlObject->rootObject()->property("minimumHeight").toReal());
     }
 
-    //TODO: completely arbitrary for now
+    //Make it an icon
     if (width() < minHint.width() || height() < minHint.height()) {
         m_expanded = false;
 
@@ -686,12 +706,31 @@ void AppletInterface::compactRepresentationCheck()
             //replace the full applet with the collapsed view
             m_compactUiObject.data()->setProperty("visible", true);
             m_compactUiObject.data()->setProperty("parent", QVariant::fromValue(this));
-            //set anchors
-            QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
-            QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
-            prop.write(expr.evaluate());
+
+            {
+                //set anchors
+                QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_compactUiObject.data(), "parent");
+                QQmlProperty prop(m_compactUiObject.data(), "anchors.fill");
+                prop.write(expr.evaluate());
+            }
 
             m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(m_compactUiObject.data()));
+
+
+            {
+                //reset all the anchors
+                QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "anchors.fill=undefined;anchors.left=undefined;anchors.right=undefined;anchors.top=undefined;anchors.bottom=undefined;");
+                expr.evaluate();
+            }
+
+            KConfigGroup cg = applet()->config();
+            cg = KConfigGroup(&cg, "PopupApplet");
+            int width = cg.readEntry("DialogWidth", 0);
+            int height = cg.readEntry("DialogHeight", 0);
+
+            m_qmlObject->rootObject()->setProperty("width", width);
+            m_qmlObject->rootObject()->setProperty("height", height);
+
             m_compactUiObject.data()->setProperty("applet", QVariant::fromValue(m_qmlObject->rootObject()));
 
             //hook m_compactUiObject size hints to this size hint
@@ -699,6 +738,13 @@ void AppletInterface::compactRepresentationCheck()
             if (m_qmlObject->rootObject()) {
                 disconnect(m_qmlObject->rootObject(), 0, this, 0);
             }
+
+            //resize of the root object means popup resize when iconified
+            connect(m_qmlObject->rootObject(), SIGNAL(widthChanged()),
+                    this, SLOT(updatePopupSize()));
+            connect(m_qmlObject->rootObject(), SIGNAL(heightChanged()),
+                    this, SLOT(updatePopupSize()));
+
             if (m_compactUiObject.data()->property("minimumWidth").isValid()) {
                 connect(m_compactUiObject.data(), SIGNAL(minimumWidthChanged()),
                         this, SIGNAL(minimumWidthChanged()));
@@ -741,6 +787,7 @@ void AppletInterface::compactRepresentationCheck()
 
         emit expandedChanged();
 
+    //show the full UI
     } else {
         m_expanded = true;
         emit expandedChanged();
@@ -749,6 +796,11 @@ void AppletInterface::compactRepresentationCheck()
         if (m_compactUiObject) {
             disconnect(m_compactUiObject.data(), 0, this, 0);
         }
+
+        disconnect(m_qmlObject->rootObject(), SIGNAL(widthChanged()),
+                    this, SLOT(updatePopupSize()));
+        disconnect(m_qmlObject->rootObject(), SIGNAL(heightChanged()),
+                this, SLOT(updatePopupSize()));
 
         //Here we have to use the old connect syntax, because we don't have access to the class type
         if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
@@ -797,6 +849,14 @@ void AppletInterface::compactRepresentationCheck()
         QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
         prop.write(expr.evaluate());
     }
+}
+
+void AppletInterface::updatePopupSize()
+{
+    KConfigGroup cg = applet()->config();
+    cg = KConfigGroup(&cg, "PopupApplet");
+    cg.writeEntry("DialogWidth", m_qmlObject->rootObject()->property("width").toInt());
+    cg.writeEntry("DialogHeight", m_qmlObject->rootObject()->property("height").toInt());
 }
 
 void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)

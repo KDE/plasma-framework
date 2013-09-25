@@ -27,6 +27,7 @@
 #include <QQmlContext>
 #include <QTimer>
 
+#include <KActionCollection>
 #include <KLocalizedString>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
@@ -95,6 +96,17 @@ ShellCorona::ShellCorona(QObject *parent)
     connect(d->scriptEngine, &WorkspaceScripting::ScriptEngine::print,
             this, &ShellCorona::printScriptMessage);
 
+    QAction *dashboardAction = actions()->add<QAction>("show dashboard");
+    QObject::connect(dashboardAction, &QAction::triggered,
+                     this, &ShellCorona::setDashboardShown);
+    dashboardAction->setText(i18n("Show Dashboard"));
+    dashboardAction->setAutoRepeat(true);
+    dashboardAction->setCheckable(true);
+    dashboardAction->setIcon(QIcon::fromTheme("dashboard-show"));
+    dashboardAction->setData(Plasma::Types::ControlAction);
+    dashboardAction->setShortcut(QKeySequence("ctrl+f12"));
+    dashboardAction->setShortcutContext(Qt::ApplicationShortcut);
+
 }
 
 ShellCorona::~ShellCorona()
@@ -114,6 +126,7 @@ void ShellCorona::setShell(const QString &shell)
     setPackage(package);
 
     load();
+    //TODO: panel views should be synced here: either creating views for panels without, or deleting views for panels that don't have one anymore
 }
 
 QString ShellCorona::shell() const
@@ -363,6 +376,7 @@ void ShellCorona::updateScreenOwner(int wasScreen, int isScreen, Plasma::Contain
     } else {
 
         if (containment->isUiReady()) {
+            d->loadingDesktops.remove(containment);
             checkLoadingDesktopsComplete();
         } else {
             d->loadingDesktops.insert(containment);
@@ -383,6 +397,9 @@ void ShellCorona::handleContainmentAdded(Plasma::Containment* c)
 {
     connect(c, &Plasma::Containment::showAddWidgetsInterface,
             this, &ShellCorona::showWidgetExplorer);
+    connect(c, &QObject::destroyed, [=] (QObject *o) {
+        d->loadingDesktops.remove(static_cast<Plasma::Containment *>(o));
+    });
 }
 
 void ShellCorona::showWidgetExplorer()
@@ -410,6 +427,20 @@ void ShellCorona::syncAppConfig()
 {
     qDebug() << "Syncing plasma-shellrc config";
     applicationConfig()->sync();
+}
+
+void ShellCorona::setDashboardShown(bool show)
+{
+    qDebug() << "TODO: Toggling dashboard view";
+
+    QAction *dashboardAction = actions()->action("show dashboard");
+
+    if (dashboardAction) {
+        dashboardAction->setText(show ? i18n("Hide Dashboard") : i18n("Show Dashboard"));
+    }
+    foreach (DesktopView *view, d->views) {
+        view->setDashboardShown(show);
+    }
 }
 
 void ShellCorona::printScriptError(const QString &error)

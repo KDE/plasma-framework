@@ -55,7 +55,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
       m_wallpaperInterface(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
-    setFlag(QQuickItem::ItemAcceptsDrops);
 
     qmlRegisterType<ContainmentInterface>();
 
@@ -76,27 +75,17 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
      }
-}
-
-void ContainmentInterface::init()
-{
-    AppletInterface::init();
-
-    foreach (QObject *appletObj, m_appletInterfaces) {
-        AppletInterface *applet = qobject_cast<AppletInterface *>(appletObj);
-        if (applet) {
-            if (!applet->qmlObject()) {
-                applet->init();
-            }
-            m_appletInterfaces << applet;
-            emit appletAdded(applet, 0, 0);
-        }
-    }
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
-    
+}
+
+void ContainmentInterface::init()
+{
+
+    AppletInterface::init();
+
     if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
         connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
                 this, SIGNAL(minimumWidthChanged()));
@@ -195,7 +184,7 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
     return regVal;
 }
 
-void ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
 {
     //HACK
     //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
@@ -211,6 +200,19 @@ void ContainmentInterface::addApplet(const QString &plugin, const QVariantList &
 
     emit appletAdded(appletGraphicObject, pos.x(), pos.y());
     emit appletsChanged();
+    return applet;
+}
+
+void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QString &data)
+{
+    if (!applet) {
+        return;
+    }
+
+    AppletInterface *appletInterface = applet->property("graphicObject").value<AppletInterface *>();
+    if (appletInterface) {
+        emit appletInterface->externalData(mimetype, data);
+    }
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
@@ -309,24 +311,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
         if (!selectedPlugin.isEmpty()) {
 
-            KTemporaryFile tempFile;
-            if (mimeData && tempFile.open()) {
-                //TODO: what should we do with files after the applet is done with them??
-                tempFile.setAutoRemove(false);
+            Plasma::Applet *applet = addApplet(selectedPlugin, QVariantList(), QPoint(x, y));
+            setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
 
-                {
-                    QDataStream stream(&tempFile);
-                    QByteArray data = mimeData->data(pluginFormats[selectedPlugin]);
-                    stream.writeRawData(data, data.size());
-                }
-
-                QVariantList args;
-                args << tempFile.fileName();
-                qDebug() << args;
-                tempFile.close();
-
-                addApplet(selectedPlugin, args, QPoint(x, y));
-            }
         }
     }
 }
@@ -394,10 +381,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             return;
         }
 
-        QVariantList args;
-        args << tjob->url().url() << mimetype;
 
-        qDebug() << "Creating menu for:" << mimetype  << posi << args;
+        qDebug() << "Creating menu for:" << mimetype  << posi;
 
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
         KPluginInfo::List wallpaperList;
@@ -467,7 +452,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         m_wallpaperInterface->setUrl(tjob->url());
                     }
                 } else {
-                    addApplet(actionsToApplets[choice], args, posi);
+                    Plasma::Applet *applet = addApplet(actionsToApplets[choice], QVariantList(), posi);
+                    setAppletArgs(applet, mimetype, tjob->url().toString());
                 }
 
                 clearDataForMimeJob(job);
@@ -475,7 +461,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            addApplet("org.kde.icon", args, posi);
+            Plasma::Applet *applet = addApplet("org.kde.icon", QVariantList(), posi);
+            setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
 
@@ -555,6 +542,24 @@ QString ContainmentInterface::activity() const
     return containment()->activity();
 }
 
+QList<QObject*> ContainmentInterface::actions() const
+{
+    //FIXME: giving directly a QList<QAction*> crashes
+
+    //use a multimap to sort by action type
+    QMultiMap<int, QObject*> actions;
+    foreach (QAction *a, containment()->actions()->actions()) {
+        if (a->isEnabled()) {
+            actions.insert(a->data().toInt(), a);
+        }
+    }
+    foreach (QAction *a, containment()->corona()->actions()->actions()) {
+        if (a->isEnabled()) {
+            actions.insert(a->data().toInt(), a);
+        }
+    }
+    return actions.values();
+}
 
 
 

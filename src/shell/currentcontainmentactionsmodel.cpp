@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "currentcontainmentactionsmodel_p.h"
+#include "currentcontainmentactionsmodel.h"
 
 #include <QMouseEvent>
 
@@ -259,4 +259,4 @@ void CurrentContainmentActionsModel::save()
     }
 }
 
-#include "moc_currentcontainmentactionsmodel_p.cpp"
+#include "private/moc_currentcontainmentactionsmodel.cpp"

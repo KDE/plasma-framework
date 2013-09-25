@@ -52,6 +52,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
           q(applet),
           immutability(Types::Mutable),
           appletDescription(info ? *info : KPluginInfo(service)),
+          icon(appletDescription.isValid() ? appletDescription.icon() : QString()),
           mainConfig(0),
           pendingConstraints(Types::NoConstraint),
           script(0),
@@ -280,6 +281,8 @@ void AppletPrivate::setUiReady()
         //if we are the containment and there is still some uncomplete applet, we're still incomplete
         if (!c->d->loadingApplets.isEmpty()) {
             return;
+        } else if (!uiReady) {
+            emit c->uiReadyChanged(true);
         }
     } else {
         c = q->containment();

@@ -30,6 +30,8 @@ namespace Plasma {
     class ContainmentActions;
 }
 
+//This model load the data about available containment actions plugins, such as context menus that can be loaded on mouse click
+//TODO: out of the library?
 class CurrentContainmentActionsModel : public QStandardItemModel
 {
     Q_OBJECT

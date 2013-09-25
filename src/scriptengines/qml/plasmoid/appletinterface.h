@@ -64,11 +64,10 @@ class AppletInterface : public QQuickItem
      */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
 
-    //TODO: writable icon
     /**
      * Icon to represent the plasmoid
      */
-    Q_PROPERTY(QString icon READ icon CONSTANT)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
 
     /**
      * Applet id: is unique in the whole Plasma session and will never change across restarts
@@ -192,6 +191,7 @@ public:
     Q_INVOKABLE QAction *action(QString name) const;
 
     /**
+     * FIXME: remove?
      * Retrieve the path of a file from the Plasmoid package
      * @param fileName the package-recognized name, such as "mainscript"
      * @returns the full absolute path of the file, if found, an empty string if not
@@ -199,6 +199,7 @@ public:
     Q_INVOKABLE QString file(const QString &fileName);
 
     /**
+     * FIXME: remove?
      * Retrieve the path of a file from the Plasmoid package
      * @param fileType the type supported from the package, such as "ui", "config" or "image"
      * @param filePath the name of the file, such as "foo.qml" or "bar.png"
@@ -233,6 +234,7 @@ public:
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
     QString icon() const;
+    void setIcon(const QString &icon);
 
     QString title() const;
     void setTitle(const QString &title);
@@ -281,10 +283,18 @@ public:
     qreal implicitHeight() const;
 
 Q_SIGNALS:
+    /**
+     * somebody else, usually the containment sent some data to the applet
+     * @param mimetype the mime type of the data such as text/plain
+     * @param data either the actual data or an URL representing it
+     */
+    void externalData(const QString &mimetype, const QVariant &data);
+
     void releaseVisualFocus();
     void configNeedsSaving();
 
 //PROPERTY change notifiers--------------
+    void iconChanged();
     void titleChanged();
     void formFactorChanged();
     void locationChanged();
@@ -317,6 +327,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void compactRepresentationCheck();
+    void updatePopupSize();
 
 private:
     //Helper for minimumWidth etc.

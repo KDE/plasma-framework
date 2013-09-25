@@ -17,11 +17,13 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef CONFIGUILOADER_P_H
-#define CONFIGUILOADER_P_H
+#ifndef CONFIGCATEGORY_P_H
+#define CONFIGCATEGORY_P_H
 
 #include <QObject>
 
+//This class represents a single row item of the ConfigModel model in a QML friendly manner.
+//the properties contains all the data needed to represent an icon in the sidebar of a configuration dialog, of applets or containments 
 class ConfigCategory : public QObject
 {
     Q_OBJECT

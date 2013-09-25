@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=Now playing (QML)
+Name[de]=Musiktitel-Anzeige (QML)
+Name[nl]=Speelt nu (QML)
 Name[pt]=Agora a tocar (QML)
 Name[pt_BR]=Reproduzindo (QML)
 Name[sv]=Spelar nu (QML)
 Name[uk]=Зараз відтворюється (QML)
 Name[x-test]=xxNow playing (QML)xx
 Comment=A proof of concept media player controller qml
+Comment[nl]=Een 'proof of concept' qml voor besturing van een mediaspeler
 Comment[pt]=A prova de conceito de um QML com controlo de leitor multimédia
 Comment[pt_BR]=A prova de conceito de um QML com controle de reprodutor multimídia
 Comment[sv]=Ett koncept för styrning av mediaspelare i QML

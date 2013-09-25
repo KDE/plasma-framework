@@ -1,11 +1,14 @@
 [Desktop Entry]
 Name=Custom DataContainers
+Name[de]=Benutzerdefinierte Datencontainer
+Name[nl]=Aangepaste gegevenscontainers
 Name[pt]=Contentores Personalizados
 Name[pt_BR]=DataContainers personalizados
 Name[sv]=Egen DataContainer
 Name[uk]=Нетипові контейнери даних
 Name[x-test]=xxCustom DataContainersxx
 Comment=A demonstration of how to subclass DataContainer
+Comment[nl]=Een demonstratie van hoe een subklasse toe te kennen aan een gegevenscontainer
 Comment[pt]=Um demonstração de como usar a classe DataContainer
 Comment[pt_BR]=Demonstração de como usar a subclasse DataContainer
 Comment[sv]=En demonstration av hur en delklass av DataContainer skapas

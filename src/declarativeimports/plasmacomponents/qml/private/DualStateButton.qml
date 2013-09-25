@@ -93,6 +93,7 @@ Item {
         id: label
 
         text: dualButton.text
+        renderType: Text.NativeRendering
         anchors {
             top: parent.top
             bottom: parent.bottom

@@ -52,6 +52,11 @@ static PluginLoader *s_pluginLoader = 0;
 class PluginLoaderPrivate
 {
 public:
+    PluginLoaderPrivate()
+        : packageRE("[^a-zA-Z0-9\\-_]")
+    {
+    }
+
     static QSet<QString> knownCategories();
     static QString parentAppConstraint(const QString &parentApp = QString());
 
@@ -59,6 +64,7 @@ public:
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
     QString pluginDir;
+    QRegExp packageRE;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
@@ -250,9 +256,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         allArgs << offers.first()->storageId();
         QString api = offers.first()->property("X-Plasma-API").toString();
         if (api.isEmpty()) {
-            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>("Plasma/DataEngine",
-                                                                                d->pluginDir,
-                                                                                constraint, 0);
+            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>(d->pluginDir, "Plasma/DataEngine", constraint, 0);
         } else {
             engine = new DataEngine(KPluginInfo(offers.first()), 0);
         }
@@ -423,9 +427,8 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     }
 
     if (!specialization.isEmpty()) {
-        QRegExp re("[^a-zA-Z0-9\\-_]");
         // check that the provided strings are safe to use in a ServiceType query
-        if (re.indexIn(specialization) == -1 && re.indexIn(packageFormat) == -1) {
+        if (d->packageRE.indexIn(specialization) == -1 && d->packageRE.indexIn(packageFormat) == -1) {
             // FIXME: The query below is rather spepcific to script engines. generify if possible
             const QString component = packageFormat.right(packageFormat.size() - packageFormat.lastIndexOf('/') - 1);
             const QString constraint = QString("[X-Plasma-API] == '%1' and " "'%2' in [X-Plasma-ComponentTypes]").arg(specialization, component);
@@ -708,8 +711,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
-    list.append(KPluginTrader::self()->query(QStringLiteral("Plasma/DataEngine"),
-                                             d->pluginDir, constraint));
+    list.append(KPluginTrader::self()->query(d->pluginDir, "Plasma/DataEngine", constraint));
     return list;
 }
 

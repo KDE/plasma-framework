@@ -87,6 +87,7 @@ public:
     // applet info we keep around in case its needed
     KPluginInfo appletDescription;
     QString customTitle;
+    QString icon;
 
     // bookkeeping
     KConfigGroup *mainConfig;

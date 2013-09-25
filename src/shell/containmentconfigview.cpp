@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "currentcontainmentactionsmodel_p.h"
-#include "containmentconfigview_p.h"
-#include "configview_p.h"
+#include "currentcontainmentactionsmodel.h"
+#include "containmentconfigview.h"
+#include "configmodel.h"
 
 #include <kdeclarative/configpropertymap.h>
 
@@ -45,7 +45,7 @@ ContainmentConfigView::ContainmentConfigView(Plasma::Containment *cont, QWindow 
       m_currentWallpaperConfig(0),
       m_ownWallpaperConfig(0)
 {
-    qmlRegisterType<QStandardItemModel>();
+    qmlRegisterType<QAbstractItemModel>();
     engine()->rootContext()->setContextProperty("configDialog", this);
     setCurrentWallpaper(cont->containment()->wallpaper());
 
@@ -78,19 +78,14 @@ ConfigModel *ContainmentConfigView::containmentActionConfigModel()
 
         foreach (const KPluginInfo &info, actions) {
             pkg.setDefaultPackageRoot(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "plasma/containmentactions", QStandardPaths::LocateDirectory));
-            ConfigCategory *cat = new ConfigCategory(m_containmentActionConfigModel);
-            cat->setName(info.name());
-            cat->setIcon(info.icon());
-            cat->setSource(pkg.filePath("ui", "config.qml"));
-            cat->setPluginName(info.pluginName());
-            m_containmentActionConfigModel->appendCategory(cat);
+            m_containmentActionConfigModel->appendCategory(info.icon(), info.name(), pkg.filePath("ui", "config.qml"), info.pluginName());
         }
 
     }
     return m_containmentActionConfigModel;
 }
 
-QStandardItemModel *ContainmentConfigView::currentContainmentActionsModel()
+QAbstractItemModel *ContainmentConfigView::currentContainmentActionsModel()
 {
     if (!m_currentContainmentActionsModel) {
         m_currentContainmentActionsModel = new CurrentContainmentActionsModel(m_containment, this);
@@ -121,12 +116,7 @@ ConfigModel *ContainmentConfigView::wallpaperConfigModel()
                 if (!pkg.isValid()) {
                     continue;
                 }
-                ConfigCategory *cat = new ConfigCategory(m_wallpaperConfigModel);
-                cat->setName(pkg.metadata().name());
-                cat->setIcon(pkg.metadata().icon());
-                cat->setSource(pkg.filePath("ui", "config.qml"));
-                cat->setPluginName(package);
-                m_wallpaperConfigModel->appendCategory(cat);
+                m_wallpaperConfigModel->appendCategory(pkg.metadata().icon(), pkg.metadata().name(), pkg.filePath("ui", "config.qml"), package);
             }
         }
     }
@@ -191,4 +181,4 @@ void ContainmentConfigView::syncWallpaperObjects()
     m_currentWallpaperConfig = static_cast<ConfigPropertyMap *>(wallpaperGraphicsObject->property("configuration").value<QObject *>());
 }
 
-#include "moc_containmentconfigview_p.cpp"
+#include "private/moc_containmentconfigview.cpp"

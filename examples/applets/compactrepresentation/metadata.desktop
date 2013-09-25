@@ -3,6 +3,7 @@ Comment=
 Encoding=UTF-8
 Keywords=
 Name=hello world
+Name[de]=Hallo Welt
 Name[nl]=hallo wereld
 Name[pt]=olá mundo
 Name[pt_BR]=Olá mundo

@@ -15,6 +15,7 @@ include_directories(${KDE4_INCLUDE_DIR}/KDE ${PHONON_INCLUDES} ${CMAKE_CURRENT_S
 set(declarative_appletscript_SRCS
     declarative/packageaccessmanager.cpp
     declarative/packageaccessmanagerfactory.cpp
+    declarative/packageurlinterceptor.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
