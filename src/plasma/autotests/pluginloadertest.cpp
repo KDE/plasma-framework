@@ -33,7 +33,7 @@ QTEST_MAIN(PluginTest)
 
 // Switch to true in order to let tests pass, this test usually will only
 // work with plugins installed, but there aren't any in plasma-framework
-bool buildonly = false;
+bool buildonly = true;
 
 void PluginTest::listEngines()
 {
