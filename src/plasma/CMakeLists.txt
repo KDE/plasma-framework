@@ -141,6 +141,7 @@ target_link_libraries(plasma
     ${QT_QTSQL_LIBRARY}
     ${Qt5Quick_LIBRARIES}
     Qt5::Svg
+    Qt5::DBus
     ${ThreadWeaver_LIBRARIES}
     ${KAuth_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
@@ -149,6 +150,7 @@ target_link_libraries(plasma
     KF5::KIconThemes
     KF5::KI18n
     KF5::KDE4Attic
+    Qt5::UiTools
     ${KDE4Attic_LIBRARIES}
     ${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
 )

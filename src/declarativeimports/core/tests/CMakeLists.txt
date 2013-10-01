@@ -19,6 +19,7 @@ target_link_libraries(sortfiltermodeltest
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${KI18n_LIBRARIES}
+    Qt5::Qml
     )
 
 

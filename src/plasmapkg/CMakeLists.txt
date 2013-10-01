@@ -5,7 +5,7 @@ add_executable(plasmapkg
     plasmapkg.cpp
 )
 
-target_link_libraries(plasmapkg plasma ${KI18n_LIBRARIES} ${KService_LIBRARIES} KF5::KCoreAddons)
+target_link_libraries(plasmapkg plasma ${KI18n_LIBRARIES} ${KService_LIBRARIES} KF5::KCoreAddons Qt5::DBus)
 
 message("INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}")
 
