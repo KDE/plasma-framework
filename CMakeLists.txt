@@ -22,12 +22,6 @@ find_package(ECM 0.0.8 REQUIRED NO_MODULE)
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
-find_package(Qt5Core REQUIRED NO_MODULE)
-
-find_package(Qt5Transitional MODULE)
-find_package(Qt5Quick REQUIRED NO_MODULE)
-find_package(Qt5X11Extras REQUIRED NO_MODULE)
-
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
 #add_definitions(-Wno-deprecated) 
@@ -71,6 +65,11 @@ find_package(KDELibs4 REQUIRED NO_MODULE)
 
 # must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
 find_package(KDE4Support REQUIRED NO_MODULE)
+
+find_package(Qt5Transitional MODULE REQUIRED)
+
+find_package(Qt5Quick REQUIRED NO_MODULE)
+find_package(Qt5X11Extras REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
