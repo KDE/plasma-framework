@@ -183,7 +183,7 @@ set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Plasma")
 include(CMakePackageConfigHelpers)
 
 include(ECMSetupVersion)
-ecm_setup_version(2 0 0 VARIABLE_PREFIX PLASMA
+ecm_setup_version(2.0.0 VARIABLE_PREFIX PLASMA
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake")
 
