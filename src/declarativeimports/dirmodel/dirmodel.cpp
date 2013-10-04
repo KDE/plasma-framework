@@ -22,23 +22,24 @@
 #include <QImage>
 #include <QPixmap>
 
-#include <KDirLister>
+#include <kdirlister.h>
 #include <QDebug>
-#include <KIO/PreviewJob>
-#include <KImageCache>
-#include <KMimeType>
+#include <kio/previewjob.h>
+#include <kimagecache.h>
+#include <QMimeDatabase>
 
 
 DirModel::DirModel(QObject *parent)
     : KDirModel(parent),
       m_screenshotSize(180, 120)
 {
-    KMimeType::List mimeList = KMimeType::allMimeTypes();
+    QMimeDatabase db;
+    QList<QMimeType> mimeList = db.allMimeTypes();
 
     m_mimeTypes << "inode/directory";
-    foreach (KMimeType::Ptr mime, mimeList) {
-        if (mime->name().startsWith(QLatin1String("image/"))) {
-            m_mimeTypes << mime->name();
+    foreach (const QMimeType &mime, mimeList) {
+        if (mime.name().startsWith(QStringLiteral("image/"))) {
+            m_mimeTypes << mime.name();
         }
     }
 

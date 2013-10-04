@@ -8,11 +8,10 @@ set(dirmodel_SRCS
 
 add_library(dirmodelplugin SHARED ${dirmodel_SRCS})
 target_link_libraries(dirmodelplugin
-        ${QT_QTCORE_LIBRARY}
-        ${Qt5Qml_LIBRARIES}
+	Qt5::Core
+        Qt5::Qml
 	KF5::KIOCore
 	KF5::KIOWidgets
-        ${KDE4Support_LIBRARIES}
         KF5::KGuiAddons
         )
 
