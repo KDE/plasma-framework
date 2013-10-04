@@ -14,7 +14,7 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                     plasma ${KArchive_LIBRARIES} ${KCoreAddons_LIBRARIES}
+                                     plasma ${KArchive_LIBRARIES} KF5::KCoreAddons
                                      KF5::KConfigGui
                                      KF5::KI18n
 				     KF5::KIOCore
@@ -36,7 +36,7 @@ PLASMA_UNIT_TESTS(
 )
 
 add_executable(storagetest storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)
-target_link_libraries(storagetest ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSQL_LIBRARY} KF5::KIOCore plasma ${KCoreAddons_LIBRARIES} )
+target_link_libraries(storagetest ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSQL_LIBRARY} KF5::KIOCore plasma KF5::KCoreAddons )
 add_test(plasma-storagetest storagetest)
 ecm_mark_as_test(plasma-storagetest)
 

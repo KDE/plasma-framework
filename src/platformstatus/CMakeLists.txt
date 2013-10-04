@@ -16,8 +16,8 @@ plasma_add_plugin(kded_platformstatus ${kded_platformstatus_SRCS} )
 target_link_libraries(
    kded_platformstatus
    ${KCore_LIBRARIES}
-   ${KService_LIBRARIES}
-   ${KCoreAddons_LIBRARIES}
+   KF5::KService
+   KF5::KCoreAddons
    ${KDBusAddons_LIBRARIES}
    ${KI18n_LIBRARIES}
    KF5::KIOCore KF5::KIOWidgets
