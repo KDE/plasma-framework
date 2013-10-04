@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QFontDatabase>
 
 #include <kdirwatch.h>
 #include <kglobalsettings.h>
@@ -339,7 +340,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QFont font = QApplication::font();
     elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
     elements["%fontfamily"] = font.family().split('[').first();
-    elements["%smallfontsize"] = QString("%1pt").arg(KGlobalSettings::smallestReadableFont().pointSize());
+    elements["%smallfontsize"] = QString("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
     QHash<QString, QString>::const_iterator itEnd = elements.constEnd();
