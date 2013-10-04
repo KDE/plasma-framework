@@ -37,7 +37,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 if(NOT PLASMA_NO_KIO)
    include_directories(${KDE4_KIO_INCLUDES})
-   set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KDE4_KIO_LIBS})
+   set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS})
 endif(NOT PLASMA_NO_KIO)
 
 if(NOT PLASMA_NO_SOLID)
@@ -149,13 +149,16 @@ target_link_libraries(plasma
     KF5::KGuiAddons
     KF5::KIconThemes
     KF5::KI18n
+    KF5::KService
+    KF5::KIOCore
+    KF5::KIOWidgets
     KF5::KDE4Attic
     Qt5::UiTools
     ${KDE4Attic_LIBRARIES}
     ${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
 )
 #FIXME gpgme++ is in kdepimlibs, needs to be elsewhere
-target_link_libraries(plasma KDeclarative ${KArchive_LIBRARIES})
+target_link_libraries(plasma KF5::KDeclarative ${KArchive_LIBRARIES})
 
 if(X11_FOUND)
    target_link_libraries(plasma Qt5::X11Extras ${X11_LIBRARIES})

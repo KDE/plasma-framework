@@ -28,7 +28,8 @@ add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SR
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
 target_link_libraries(plasma_appletscript_declarative
-    ${KDE4_KIO_LIBS}
+    KF5::KIOCore
+    KF5::KIOWidgets	
     ${KDE4Support_LIBRARIES}
     ${KDE4Attic_LIBRARIES}
     ${QT_QTSCRIPT_LIBRARY}
@@ -38,7 +39,7 @@ target_link_libraries(plasma_appletscript_declarative
     ${KCore_LIBRARIES}
     KF5::KI18n
     plasma
-    KDeclarative
+    KF5::KDeclarative
 )
 
 

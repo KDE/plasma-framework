@@ -25,7 +25,7 @@ target_link_libraries(PlasmaQuick
     ${KCoreAddons_LIBRARIES}
     ${XmlGui_LIBRARIES}
     plasma
-    KDeclarative
+    KF5::KDeclarative
 )
 
 set_target_properties(PlasmaQuick PROPERTIES

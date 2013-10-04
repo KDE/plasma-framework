@@ -20,8 +20,10 @@ target_link_libraries(
    ${KCoreAddons_LIBRARIES}
    ${KDBusAddons_LIBRARIES}
    ${KI18n_LIBRARIES}
+   KF5::KIOCore KF5::KIOWidgets
    Qt5::DBus
    Qt5::Quick
+   #${KDE4_KIO_LIBS}
    )
 
 install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR} )
