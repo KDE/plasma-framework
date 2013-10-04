@@ -25,10 +25,10 @@
 #include <QHash>
 
 #include <QDebug>
-#include <KColorScheme>
-#include <KImageCache>
-#include <KSharedDataCache>
-#include <KWindowSystem>
+#include <kcolorscheme.h>
+#include <kimagecache.h>
+#include <kshareddatacache.h>
+#include <kwindowsystem.h>
 #include <QTimer>
 
 #if HAVE_X11
