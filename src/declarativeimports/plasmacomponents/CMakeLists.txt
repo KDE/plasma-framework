@@ -17,7 +17,6 @@ set(plasmacomponents_SRCS
 INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
         ${KDeclarative_INCLUDE_DIR}
 )
 

@@ -33,7 +33,7 @@
 #include <QDesktopWidget>
 #include <QFile>
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 #include <KStandardDirs>
 
 #include <kdeclarative/kdeclarative.h>

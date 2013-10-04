@@ -25,9 +25,9 @@
 
 #include "qrangemodel.h"
 
-#include <KSharedConfig>
+#include <ksharedconfig.h>
 #include <QDebug>
-#include <KGlobal>
+#include <kglobal.h>
 
 #include <kdeclarative/kdeclarative.h>
 
