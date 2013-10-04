@@ -22,8 +22,8 @@
 #include <QQmlPropertyMap>
 
 #include <QFontMetrics>
-#include <KGlobalSettings>
-#include <KIconLoader>
+#include <QFontDatabase>
+#include <kiconloader.h>
 #include <QApplication>
 
 
@@ -46,8 +46,8 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     connect(this, &Plasma::Theme::themeChanged, this, &ThemeProxy::themeChanged);
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
-    connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::defaultFontChanged);
-    connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::smallestFontChanged);
+    //connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::defaultFontChanged);
+    //connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::smallestFontChanged);
 }
 
 ThemeProxy::~ThemeProxy()
@@ -66,7 +66,7 @@ QFont ThemeProxy::defaultFont() const
 
 QFont ThemeProxy::smallestFont() const
 {
-    return KGlobalSettings::smallestReadableFont();
+    return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 }
 
 QSizeF ThemeProxy::mSize(const QFont &font) const

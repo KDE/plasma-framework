@@ -44,7 +44,6 @@ target_link_libraries(corebindingsplugin
         ${Qt5Qml_LIBRARIES}
         ${KDeclarative_LIBRARIES}
         ${KCore_LIBRARIES}
-        ${KDE4Support_LIBRARIES}
         KF5::KIconThemes
         KF5::KWindowSystem
         plasma)
@@ -68,4 +67,4 @@ endif(X11_FOUND)
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir ToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)

@@ -31,7 +31,7 @@
 #include <QLayout>
 #include <QScreen>
 
-#include <KWindowSystem>
+#include <kwindowsystem.h>
 #include <kwindoweffects.h>
 #include <Plasma/Plasma>
 #include <Plasma/Corona>

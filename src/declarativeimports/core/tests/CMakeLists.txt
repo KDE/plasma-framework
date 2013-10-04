@@ -15,7 +15,6 @@ qt4_automoc(sortfiltermodeltest.cpp)
 
 target_link_libraries(sortfiltermodeltest
     plasma
-    ${KDE4Support_LIBRARIES}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     KF5::KI18n

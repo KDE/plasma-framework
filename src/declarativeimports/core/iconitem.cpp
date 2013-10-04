@@ -24,8 +24,8 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
-#include <KIconLoader>
-#include <KIconEffect>
+#include <kiconloader.h>
+#include <kiconeffect.h>
 
 #include <plasma/svg.h>
 
