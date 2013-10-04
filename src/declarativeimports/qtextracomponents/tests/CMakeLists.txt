@@ -10,7 +10,7 @@ target_link_libraries(fullmodelaccesstest
     ${KCore_LIBRARIES}
     ${KDE4Support_LIBRARIES}
 
-    ${KI18n_LIBRARIES}
+    KF5::KI18n
     )
 
 add_test(plasma-fullmodelaccesstest fullmodelaccesstest)

@@ -20,7 +20,7 @@ target_link_libraries(PlasmaQuick
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${KWindowSystem_LIBRARIES}
-    ${KI18n_LIBRARIES}
+    KF5::KI18n
     KF5::KService
     KF5::KCoreAddons
     ${XmlGui_LIBRARIES}

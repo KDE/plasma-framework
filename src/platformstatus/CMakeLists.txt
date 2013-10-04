@@ -19,7 +19,7 @@ target_link_libraries(
    KF5::KService
    KF5::KCoreAddons
    ${KDBusAddons_LIBRARIES}
-   ${KI18n_LIBRARIES}
+   KF5::KI18n
    KF5::KIOCore KF5::KIOWidgets
    Qt5::DBus
    Qt5::Quick

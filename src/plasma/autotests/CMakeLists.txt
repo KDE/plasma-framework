@@ -14,7 +14,7 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                     plasma ${KArchive_LIBRARIES} KF5::KCoreAddons
+                                     plasma KF5::KArchive KF5::KCoreAddons
                                      KF5::KConfigGui
                                      KF5::KI18n
 				     KF5::KIOCore
