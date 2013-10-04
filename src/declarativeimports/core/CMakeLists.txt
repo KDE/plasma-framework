@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
         ${KDE4_INCLUDE_DIR}
-        ${KDECLARATIVE_INCLUDE_DIR}
+        ${KDeclarative_INCLUDE_DIR}
 )
 
 add_definitions(-DHAVE_X11=${HAVE_X11})
@@ -42,7 +42,7 @@ target_link_libraries(corebindingsplugin
         ${QT_QTSCRIPT_LIBRARY}
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
-        ${KDECLARATIVE_LIBRARIES}
+        ${KDeclarative_LIBRARIES}
         ${KCore_LIBRARIES}
         ${KDE4Support_LIBRARIES}
         KF5::KIconThemes

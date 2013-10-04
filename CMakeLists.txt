@@ -57,7 +57,7 @@ find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
 
 # those are not "done" yet:
 find_package(KIO REQUIRED NO_MODULE)
-find_package(kdeclarative REQUIRED NO_MODULE)
+find_package(KDeclarative REQUIRED NO_MODULE)
 
 # Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up

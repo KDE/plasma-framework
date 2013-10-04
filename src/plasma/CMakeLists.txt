@@ -155,7 +155,7 @@ target_link_libraries(plasma
     ${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
 )
 #FIXME gpgme++ is in kdepimlibs, needs to be elsewhere
-target_link_libraries(plasma kdeclarative ${KArchive_LIBRARIES})
+target_link_libraries(plasma KDeclarative ${KArchive_LIBRARIES})
 
 if(X11_FOUND)
    target_link_libraries(plasma Qt5::X11Extras ${X11_LIBRARIES})

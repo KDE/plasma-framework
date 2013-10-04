@@ -1,6 +1,6 @@
 project(plasmacomponents)
 
-#find_package(kdeclarative REQUIRED NO_MODULE)
+#find_package(KDeclarative REQUIRED NO_MODULE)
 
 set(plasmacomponents_SRCS
     #fullscreensheet.cpp
@@ -18,7 +18,7 @@ INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
-        ${KDECLARATIVE_INCLUDE_DIR}
+        ${KDeclarative_INCLUDE_DIR}
 )
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
@@ -27,7 +27,7 @@ target_link_libraries(plasmacomponentsplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
         ${QT_QTGUI_LIBRARY}
-        ${KDECLARATIVE_LIBRARIES}
+        ${KDeclarative_LIBRARIES}
         plasma)
 
 

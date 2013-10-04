@@ -38,7 +38,7 @@ target_link_libraries(plasma_appletscript_declarative
     ${KCore_LIBRARIES}
     KF5::KI18n
     plasma
-    kdeclarative
+    KDeclarative
 )
 
 
