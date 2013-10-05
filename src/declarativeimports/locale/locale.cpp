@@ -22,8 +22,8 @@
 #include "locale_p.h"
 
 //KDE
-#include <KLocale>
-#include <KLocalizedString>
+#include <klocale.h>
+#include <klocalizedstring.h>
 
 //Qt
 #include <QDebug>

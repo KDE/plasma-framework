@@ -21,8 +21,8 @@
 #include "calendarsystem.h"
 
 //KDE
-#include <KCalendarSystem>
-#include <KGlobal>
+#include <kcalendarsystem.h>
+#include <kglobal.h>
 
 //Qt
 #include <QtCore/QDateTime>

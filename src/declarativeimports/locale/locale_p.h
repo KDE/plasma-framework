@@ -26,7 +26,7 @@
 #include <QDate>
 
 //KDE
-#include <KLocale>
+#include <klocale.h>
 #include <QLocale>
 class QString;
 class QDate;
