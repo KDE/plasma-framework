@@ -19,8 +19,8 @@
 
 #include "qiconitem.h"
 
-#include <KIconLoader>
-#include <KIconEffect>
+#include <kiconloader.h>
+#include <kiconeffect.h>
 
 #include <QIcon>
 #include <QPainter>

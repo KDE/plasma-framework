@@ -539,11 +539,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     if (colorsFile.isEmpty()) {
         colors = 0;
-        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                         this, SLOT(colorsChanged()), Qt::UniqueConnection);
+//         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+//                          this, SLOT(colorsChanged()), Qt::UniqueConnection);
     } else {
-        QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                            this, SLOT(colorsChanged()));
+//         QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+//                             this, SLOT(colorsChanged()));
         colors = KSharedConfig::openConfig(colorsFile);
     }
 

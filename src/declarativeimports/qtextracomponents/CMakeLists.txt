@@ -1,6 +1,6 @@
 project(qtextracomponents)
 
-add_subdirectory(tests)
+#add_subdirectory(tests)
 
 set(qtextracomponents_SRCS
     qtextracomponentsplugin.cpp
@@ -14,7 +14,6 @@ set(qtextracomponents_SRCS
 INCLUDE_DIRECTORIES(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
 )
 
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})

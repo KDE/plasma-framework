@@ -155,7 +155,7 @@ target_link_libraries(plasma
     KF5::KDE4Attic
     Qt5::UiTools
     ${KDE4Attic_LIBRARIES}
-    ${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
+    #${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
 )
 #FIXME gpgme++ is in kdepimlibs, needs to be elsewhere
 target_link_libraries(plasma KF5::KDeclarative KF5::KArchive)
@@ -168,7 +168,7 @@ if(DL_LIBRARY)
     target_link_libraries(plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-target_link_libraries(plasma LINK_INTERFACE_LIBRARIES ${KCore_LIBRARIES} Qt5::Widgets)
+target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES

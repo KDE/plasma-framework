@@ -547,11 +547,11 @@ void SvgPrivate::checkColorHints()
     // check to see if we are using colors, but the theme isn't being used or isn't providing
     // a colorscheme
     if (usesColors && (!themed || !actualTheme()->colorScheme())) {
-        QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                         q, SLOT(colorsChanged()), Qt::UniqueConnection);
+//         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+//                          q, SLOT(colorsChanged()), Qt::UniqueConnection);
     } else {
-        QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-                            q, SLOT(colorsChanged()));
+//         QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+//                             q, SLOT(colorsChanged()));
     }
 }
 
