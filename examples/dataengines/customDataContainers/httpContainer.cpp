@@ -25,8 +25,7 @@
 
 #include "httpContainer.h"
 
-#include <KIO/Job>
-#include <KIO/TransferJob>
+#include <kio/job.h>
 
 HttpContainer::HttpContainer(const QUrl &url, QObject *parent)
     : Plasma::DataContainer(parent),
