@@ -23,9 +23,9 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 
-#include <KActionCollection>
-#include <KServiceTypeTrader>
-#include <KDesktopFile>
+#include <kactioncollection.h>
+#include <kservicetypetrader.h>
+#include <kdesktopfile.h>
 
 #include <QDebug>
 #include <QQmlExpression>

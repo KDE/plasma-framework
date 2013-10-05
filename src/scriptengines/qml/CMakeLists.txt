@@ -30,7 +30,6 @@ set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 target_link_libraries(plasma_appletscript_declarative
     KF5::KIOCore
     KF5::KIOWidgets	
-    ${KDE4Support_LIBRARIES}
     ${KDE4Attic_LIBRARIES}
     ${QT_QTSCRIPT_LIBRARY}
     ${Qt5Quick_LIBRARIES}

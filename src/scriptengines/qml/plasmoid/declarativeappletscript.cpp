@@ -28,11 +28,10 @@
 #include <QUiLoader>
 #include <QWidget>
 
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 #include <QDebug>
-#include <KGlobal>
-#include <KLocale>
-#include <KGlobalSettings>
+#include <kglobal.h>
+#include <klocale.h>
 #include <klocalizedstring.h>
 
 #include <Plasma/Applet>

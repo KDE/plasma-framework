@@ -28,13 +28,13 @@
 #include <QQmlProperty>
 #include <QMimeData>
 
-#include <KActionCollection>
-#include <KAuthorized>
+#include <kactioncollection.h>
+#include <kauthorized.h>
 #include <QDebug>
-#include <KLocalizedString>
+#include <klocalizedstring.h>
 #include <kurlmimedata.h>
-#include <KMimeType>
-#include <KTemporaryFile>
+#include <QMimeDatabase>
+#include <ktemporaryfile.h>
 
 #ifndef PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
@@ -239,8 +239,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
         foreach (const QUrl &url, urls) {
 
 #ifndef PLASMA_NO_KIO
-            KMimeType::Ptr mime = KMimeType::findByUrl(url);
-            QString mimeName = mime->name();
+            QMimeDatabase db;
+            const QMimeType &mime = db.mimeTypeForUrl(url);
+            QString mimeName = mime.name();
             QVariantList args;
             args << url.url();
             qDebug() << "can decode" << mimeName << args;

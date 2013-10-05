@@ -32,12 +32,11 @@
 #include <QSignalMapper>
 #include <QTimer>
 
-#include <KActionCollection>
+#include <kactioncollection.h>
 #include <QDebug>
-#include <KGlobalSettings>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KLocalizedString>
+#include <kservice.h>
+#include <kservicetypetrader.h>
+#include <klocalizedstring.h>
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
