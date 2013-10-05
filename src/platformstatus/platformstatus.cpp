@@ -3,10 +3,10 @@
 #include <QDBusConnection>
 #include <QStandardPaths>
 
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 #include <QDebug>
-#include <KDirWatch>
-#include <KPluginFactory>
+#include <kdirwatch.h>
+#include <kpluginfactory.h>
 
 #include "platformstatusadaptor.h"
 

@@ -1,7 +1,7 @@
 #ifndef PLATFORMSTATUS_H
 #define PLATFORMSTATUS_H
 
-#include <KDEDModule>
+#include <kdedmodule.h>
 
 #include <QStringList>
 
