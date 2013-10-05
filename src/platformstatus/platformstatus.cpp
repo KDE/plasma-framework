@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <kdirwatch.h>
 #include <kpluginfactory.h>
+#include <qstandardpaths.h>
 
 #include "platformstatusadaptor.h"
 

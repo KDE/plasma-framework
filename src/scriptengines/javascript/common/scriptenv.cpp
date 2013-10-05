@@ -37,6 +37,7 @@
 #include <KRun>
 
 #include <Plasma/Package>
+#include <qstandardpaths.h>
 
 #ifdef USEGUI
 #include "simplebindings/filedialogproxy.h"
@@ -335,7 +336,7 @@ QScriptValue ScriptEnv::loadAddon(QScriptContext *context, QScriptEngine *engine
 
     Plasma::PackageStructure::Ptr structure(new JavascriptAddonPackageStructure);
     const QString subPath = structure->defaultPackageRoot() + '/' + plugin + '/';
-    const QString path = KStandardDirs::locate("data", subPath);
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
     Plasma::Package package(path, structure);
 
     QFile file(package.filePath("mainscript"));

@@ -32,6 +32,7 @@
 #include <Plasma/Corona>
 #include <Plasma/Package>
 #include <Plasma/Theme>
+#include <qstandardpaths.h>
 
 #include "widget.h"
 #include "layouttemplatepackagestructure.h"
@@ -231,7 +232,7 @@ QStringList ScriptEngine::pendingUpdateScripts()
         return scriptPaths;
     }
 
-    KConfigGroup cg(KGlobal::config(), "Updates");
+    KConfigGroup cg(KSharedConfig::openConfig(), "Updates");
     QStringList performed = cg.readEntry("performed", QStringList());
     const QString localDir = KGlobal::dirs()->localkdedir();
     const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
@@ -251,7 +252,7 @@ QStringList ScriptEngine::pendingUpdateScripts()
     }
 
     cg.writeEntry("performed", performed);
-    KGlobal::config()->sync();
+    KSharedConfig::openConfig()->sync();
     return scriptPaths;
 }
 

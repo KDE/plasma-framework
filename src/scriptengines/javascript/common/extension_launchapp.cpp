@@ -40,7 +40,7 @@ QScriptValue ScriptEnv::runApplication(QScriptContext *context, QScriptEngine *e
 
     const QString app = context->argument(0).toString();
 
-    const QString exec = KGlobal::dirs()->findExe(app);
+    const QString exec = KStandardDirs::findExe(app);
     if (!exec.isEmpty()) {
         return KRun::run(exec, urls, 0);
     }
@@ -61,7 +61,7 @@ QScriptValue ScriptEnv::runCommand(QScriptContext *context, QScriptEngine *engin
         return false;
     }
 
-    const QString exec = KGlobal::dirs()->findExe(context->argument(0).toString());
+    const QString exec = KStandardDirs::findExe(context->argument(0).toString());
     if (!exec.isEmpty()) {
         QString args;
         if (context->argumentCount() > 1) {
@@ -148,7 +148,7 @@ QScriptValue ScriptEnv::defaultApplication(QScriptContext *context, QScriptEngin
 
         if (!command.isEmpty()) {
             if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
-                KConfigGroup confGroup(KGlobal::config(), "General");
+                KConfigGroup confGroup(KSharedConfig::openConfig(), "General");
                 const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication",
                         QString::fromLatin1("konsole"));
                 command = preferredTerminal + QString::fromLatin1(" -e ") + command;
@@ -157,7 +157,7 @@ QScriptValue ScriptEnv::defaultApplication(QScriptContext *context, QScriptEngin
             return command;
         }
     } else if (application.compare("browser", Qt::CaseInsensitive) == 0) {
-        KConfigGroup config(KGlobal::config(), "General");
+        KConfigGroup config(KSharedConfig::openConfig(), "General");
         QString browserApp = config.readPathEntry("BrowserApplication", QString());
         if (browserApp.isEmpty()) {
             const KService::Ptr htmlApp = KMimeTypeTrader::self()->preferredService(QLatin1String("text/html"));
@@ -170,7 +170,7 @@ QScriptValue ScriptEnv::defaultApplication(QScriptContext *context, QScriptEngin
 
         return browserApp;
     } else if (application.compare("terminal", Qt::CaseInsensitive) == 0) {
-        KConfigGroup confGroup(KGlobal::config(), "General");
+        KConfigGroup confGroup(KSharedConfig::openConfig(), "General");
         return confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
     } else if (application.compare("filemanager", Qt::CaseInsensitive) == 0) {
         KService::Ptr service = KMimeTypeTrader::self()->preferredService("inode/directory");

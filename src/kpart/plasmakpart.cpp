@@ -93,14 +93,14 @@ void PlasmaKPart::setThemeDefaults()
     Plasma::Theme::defaultTheme()->setUseGlobalSettings(false);
     Plasma::Theme::defaultTheme()->setThemeName(themeName);
 
-    cg = KConfigGroup(KGlobal::config(), "General");
+    cg = KConfigGroup(KSharedConfig::openConfig(), "General");
 
     Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans") ));
 }
 
 void PlasmaKPart::syncConfig()
 {
-    KGlobal::config()->sync();
+    KSharedConfig::openConfig()->sync();
 }
 
 void PlasmaKPart::initCorona()
