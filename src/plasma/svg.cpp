@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QDomDocument>
 #include <QMatrix>
@@ -546,13 +547,23 @@ void SvgPrivate::checkColorHints()
 
     // check to see if we are using colors, but the theme isn't being used or isn't providing
     // a colorscheme
-    if (usesColors && (!themed || !actualTheme()->colorScheme())) {
-//         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-//                          q, SLOT(colorsChanged()), Qt::UniqueConnection);
-    } else {
-//         QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-//                             q, SLOT(colorsChanged()));
+    if (qApp) {
+        if (usesColors && (!themed || !actualTheme()->colorScheme())) {
+            qApp->installEventFilter(q);
+        } else {
+            qApp->removeEventFilter(q);
+        }
     }
+}
+
+bool Svg::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == QCoreApplication::instance()) {
+        if (event->type() == QEvent::ApplicationPaletteChange) {
+            d->colorsChanged();
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }
 
 //Following two are utility functions to snap rendered elements to the pixel grid

@@ -385,6 +385,7 @@ class PLASMA_EXPORT Svg : public QObject
 
     private:
         SvgPrivate *const d;
+        bool eventFilter(QObject *watched, QEvent *event);
 
         Q_PRIVATE_SLOT(d, void themeChanged())
         Q_PRIVATE_SLOT(d, void colorsChanged())
