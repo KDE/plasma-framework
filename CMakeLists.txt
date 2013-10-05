@@ -52,7 +52,7 @@ find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
                                             KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash
-					    KIO KUnitConversion KDE4Attic KBookmarks)
+                                            KBookmarks KIO KUnitConversion KDE4Attic)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
