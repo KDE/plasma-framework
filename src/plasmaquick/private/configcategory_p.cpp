@@ -32,8 +32,8 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-#include <KGlobal>
-#include <KLocalizedString>
+#include <kglobal.h>
+#include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Corona>
