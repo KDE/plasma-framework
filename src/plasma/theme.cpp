@@ -37,7 +37,6 @@
 #include <QDebug>
 #include <kdirwatch.h>
 #include <kglobal.h>
-#include <kglobalsettings.h>
 #include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>

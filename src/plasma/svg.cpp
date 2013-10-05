@@ -36,7 +36,6 @@
 #include <QDebug>
 #include <kfilterdev.h>
 #include <kiconeffect.h>
-#include <kglobalsettings.h>
 #include <ksharedptr.h>
 
 #include "applet.h"
