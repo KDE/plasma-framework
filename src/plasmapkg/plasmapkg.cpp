@@ -24,13 +24,13 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshell.h>
-#include <KSycoca>
+#include <ksycoca.h>
 #include <klocalizedstring.h>
 
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
 #include <plasma/pluginloader.h>
-#include <KGlobal>
+#include <kglobal.h>
 #include <klocale.h>
 #include <kjob.h>
 
