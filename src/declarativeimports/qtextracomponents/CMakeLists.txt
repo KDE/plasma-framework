@@ -1,6 +1,6 @@
 project(qtextracomponents)
 
-#add_subdirectory(tests)
+add_subdirectory(tests)
 
 set(qtextracomponents_SRCS
     qtextracomponentsplugin.cpp

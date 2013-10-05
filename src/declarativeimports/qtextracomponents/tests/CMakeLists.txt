@@ -8,7 +8,7 @@ target_link_libraries(fullmodelaccesstest
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${KCore_LIBRARIES}
-    #${KDE4Support_LIBRARIES}
+    ${KDE4Support_LIBRARIES}
     KF5::KI18n
     )
 

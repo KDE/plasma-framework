@@ -67,4 +67,4 @@ endif(X11_FOUND)
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir ToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
-#add_subdirectory(tests)
+add_subdirectory(tests)
