@@ -136,6 +136,7 @@ Q_SIGNALS:
     void smallestFontChanged();
 
 private:
+    bool eventFilter(QObject *watched, QEvent *event);
     int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
     QQmlEngine *m_engine;

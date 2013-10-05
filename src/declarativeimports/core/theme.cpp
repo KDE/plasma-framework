@@ -46,12 +46,22 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     connect(this, &Plasma::Theme::themeChanged, this, &ThemeProxy::themeChanged);
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
-    //connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::defaultFontChanged);
-    //connect(KGlobalSettings::self(), &KGlobalSettings::kdisplayFontChanged, this, &ThemeProxy::smallestFontChanged);
+    installEventFilter(qApp);
 }
 
 ThemeProxy::~ThemeProxy()
 {
+}
+
+bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == QCoreApplication::instance()) {
+        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            defaultFontChanged();
+            smallestFontChanged();
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }
 
 QString ThemeProxy::themeName() const
