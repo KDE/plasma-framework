@@ -539,11 +539,13 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     if (colorsFile.isEmpty()) {
         colors = 0;
-//         QObject::connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-//                          this, SLOT(colorsChanged()), Qt::UniqueConnection);
+        if (qApp) {
+            installEventFilter(qApp);
+        }
     } else {
-//         QObject::disconnect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-//                             this, SLOT(colorsChanged()));
+        if (qApp) {
+            removeEventFilter(qApp);
+        }
         colors = KSharedConfig::openConfig(colorsFile);
     }
 
@@ -565,6 +567,16 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     scheduleThemeChangeNotification(SvgElementsCache);
+}
+
+bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == QCoreApplication::instance()) {
+        if (event->type() == QEvent::ApplicationPaletteChange) {
+            colorsChanged();
+        }
+    }
+    return QObject::eventFilter(watched, event);
 }
 
 }
