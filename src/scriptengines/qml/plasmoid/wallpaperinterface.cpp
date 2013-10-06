@@ -40,8 +40,8 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     : QQuickItem(parent),
       m_containmentInterface(parent),
       m_qmlObject(0),
-      m_configLoader(0),
       m_configuration(0),
+      m_configLoader(0),
       m_actionSignals(0)
 {
     m_actions = new KActionCollection(this);
