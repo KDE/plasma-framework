@@ -61,8 +61,8 @@ QString locString(const Plasma::Types::Location l) {
 
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(),
-      m_activeWindow(false),
-      m_location(Plasma::Types::TopEdge)
+      m_location(Plasma::Types::TopEdge),
+      m_activeWindow(false)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
