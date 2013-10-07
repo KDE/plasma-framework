@@ -213,7 +213,7 @@ install(FILES
 
 install(DIRECTORY
         includes/Plasma
-        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
 
 
 install(FILES
