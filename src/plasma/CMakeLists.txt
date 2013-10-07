@@ -169,14 +169,13 @@ if(DL_LIBRARY)
 endif(DL_LIBRARY)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
+target_include_directories(plasma INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>" )
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
                              VERSION 5.0.0
                              SOVERSION 5
                       )
-
-install(TARGETS plasma EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 generate_export_header(plasma)
@@ -214,7 +213,7 @@ install(FILES
 
 install(DIRECTORY
         includes/Plasma
-        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
+        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 
 install(FILES
