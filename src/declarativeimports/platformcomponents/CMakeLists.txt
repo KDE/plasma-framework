@@ -19,17 +19,16 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(CheckCXXSourceCompiles)
 
-find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core DBus Declarative Quick Qml)
+find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core DBus Quick Qml)
 
 add_library(platformcomponentsplugin SHARED ${platformcomponents_SRCS})
 
-qt5_use_modules(platformcomponentsplugin Core Widgets Declarative DBus Quick Qml)
+qt5_use_modules(platformcomponentsplugin Core Widgets DBus Quick Qml)
 
 target_link_libraries(
     platformcomponentsplugin
     Qt5::Core
     Qt5::DBus
-    Qt5::Declarative
 )
 
 install(TARGETS platformcomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/platformcomponents)
