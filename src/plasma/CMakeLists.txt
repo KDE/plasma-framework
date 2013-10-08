@@ -73,12 +73,12 @@ set(plasma_LIB_SRCS
     private/componentinstaller.cpp
 
 #runners
-    abstractrunner.cpp
-    querymatch.cpp
-    runnercontext.cpp
-    runnermanager.cpp
-    runnersyntax.cpp
-    private/runnerjobs.cpp
+#    abstractrunner.cpp
+#    querymatch.cpp
+#    runnercontext.cpp
+#    runnermanager.cpp
+#    runnersyntax.cpp
+#    private/runnerjobs.cpp
 
 #applets,containments,corona
     applet.cpp
@@ -117,7 +117,7 @@ set(plasma_LIB_SRCS
 #scripting
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
-    scripting/runnerscript.cpp
+    #    scripting/runnerscript.cpp
     scripting/scriptengine.cpp
 )
 
@@ -219,7 +219,7 @@ install(DIRECTORY
 install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
-    scripting/runnerscript.h
+    #scripting/runnerscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 

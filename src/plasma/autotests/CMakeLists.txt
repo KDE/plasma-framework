@@ -32,7 +32,7 @@ PLASMA_UNIT_TESTS(
     packagestructuretest
     pluginloadertest
     #    plasmoidpackagetest
-    runnercontexttest
+    #runnercontexttest
 )
 
 add_executable(storagetest storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)

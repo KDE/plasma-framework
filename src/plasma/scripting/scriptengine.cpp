@@ -84,7 +84,7 @@ QStringList knownLanguages(Types::ComponentTypes types)
 
         constraint.append(constraintTemplate.arg("DataEngine"));
     }
-
+#if 0
     if (types & Types::RunnerComponent) {
         if (!constraint.isEmpty()) {
             constraint.append(" or ");
@@ -92,7 +92,7 @@ QStringList knownLanguages(Types::ComponentTypes types)
 
         constraint.append(constraintTemplate.arg("Runner"));
     }
-
+#endif
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
     //qDebug() << "Applet::knownApplets constraint was '" << constraint
     //         << "' which got us " << offers.count() << " matches";
@@ -168,9 +168,11 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
             case Types::DataEngineComponent:
                 engine = service->createInstance<Plasma::DataEngineScript>(parent, args, &error);
                 break;
+#if 0
             case Types::RunnerComponent:
                 engine = service->createInstance<Plasma::RunnerScript>(parent, args, &error);
                 break;
+#endif
             default:
                 return 0;
                 break;
@@ -221,7 +223,7 @@ RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
     RunnerScript *engine = static_cast<RunnerScript*>(loadEngine(language, Types::RunnerComponent, runner));
 
     if (engine) {
-        engine->setRunner(runner);
+        //engine->setRunner(runner);
     }
 
     return engine;

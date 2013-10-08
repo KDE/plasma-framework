@@ -26,14 +26,14 @@ target_link_libraries(sortfiltermodeltest
 add_test(plasma-sortfiltermodeltest sortfiltermodeltest)
 ecm_mark_as_test(sortfiltermodeltest)
 
-set(runnermodeltest_SRCS
-    main.cpp
-    dynamictreemodel.cpp
-    modeltest.cpp
-    ../runnermodel.cpp
-    )
+#set(runnermodeltest_SRCS
+#    main.cpp
+#    dynamictreemodel.cpp
+#    modeltest.cpp
+#    ../runnermodel.cpp
+#    )
 
-qt4_automoc(${runnermodeltest_SRCS})
-add_executable(runnermodeltest ${runnermodeltest_SRCS})
-target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${plasma_LIBRARIES} plasma)
-ecm_mark_as_test(runnermodeltest)
+#qt4_automoc(${runnermodeltest_SRCS})
+#add_executable(runnermodeltest ${runnermodeltest_SRCS})
+#target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${plasma_LIBRARIES} plasma)
+#ecm_mark_as_test(runnermodeltest)

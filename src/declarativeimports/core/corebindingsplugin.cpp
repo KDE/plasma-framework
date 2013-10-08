@@ -93,11 +93,11 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
-
+#if 0
     qmlRegisterType<RunnerModel>(uri, 2, 0, "RunnerModel");
     qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
     qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
-
+#endif
     qmlRegisterType<QQmlPropertyMap>();
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
