@@ -12,12 +12,13 @@
 
 for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/kde4_add_plugin/plasma_add_plugin/g' $FS
+    perl -p -i -e 's/kde4_add_ui_files/qt5_wrap_ui/g' $FS
     perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
 
     perl -p -i -e 's/KDE4_KIDLETIME_LIBRARY/KIdleTime_LIBRARIES/g' $FS
-    perl -p -i -e 's/KDE4_PLASMA_LIBS/Plasma_LIBRARIES/g' $FS
+    perl -p -i -e 's/KDE4_PLASMA_LIBS/KF5::plasma/g' $FS
     perl -p -i -e 's/\$\{KDE4_KDECORE_LIBS\}//g' $FS
-    perl -p -i -e 's/KDE4_SOLID_LIBS/KF5\:\:Solid/g' $FS
+    perl -p -i -e 's/\$\{KDE4_SOLID_LIBS\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{Solid_LIBRARIES\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{KService_LIBRARIES\}/KF5\:\:KService/g' $FS
     perl -p -i -e 's/\$\{KCoreAddons_LIBRARIES\}/KF5\:\:KCoreAddons/g' $FS
