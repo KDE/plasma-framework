@@ -169,7 +169,7 @@ if(DL_LIBRARY)
 endif(DL_LIBRARY)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
-target_include_directories(plasma INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>" )
+target_include_directories(plasma INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>" )
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
