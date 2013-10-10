@@ -33,11 +33,10 @@
 //KDE
 #include <QDebug>
 
-
 //Plasma
 #include "applet.h"
 #include "dataengine.h"
-//#include "abstractrunner.h"
+#include "abstractrunner.h"
 #include "storagethread_p.h"
 
 
@@ -138,13 +137,12 @@ Storage::Storage(QObject* parent)
             m_clientName = engine->pluginInfo().pluginName();
             break;
         }
-#if 0
+
         Plasma::AbstractRunner *runner = qobject_cast<Plasma::AbstractRunner *>(parentObject);
         if (runner) {
             m_clientName = runner->id();
             break;
         }
-#endif 0
     }
 
     m_clientName = m_clientName.replace('.', "_");

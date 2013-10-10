@@ -27,6 +27,7 @@
 #include <threadweaver/Job.h>
 #include <threadweaver/QueuePolicy.h>
 #include <threadweaver/ThreadWeaver.h>
+#include <QObjectDecorator.h>
 
 #include "abstractrunner.h"
 
@@ -46,10 +47,11 @@ public:
 
     static DelayedRunnerPolicy &instance();
 
-    bool canRun(Job *job);
-    void free(Job *job);
-    void release(Job *job);
-    void destructed(Job *job);
+    bool canRun(ThreadWeaver::JobPointer job);
+    void free(ThreadWeaver::JobPointer job);
+    void release(ThreadWeaver::JobPointer job);
+    virtual void destructed(ThreadWeaver::JobInterface* job);
+
 private:
     DelayedRunnerPolicy();
     QMutex m_mutex;
@@ -72,10 +74,10 @@ public:
         return m_cap;
     }
 
-    bool canRun(Job *job);
-    void free(Job *job);
-    void release(Job *job);
-    void destructed(Job *job);
+    bool canRun(ThreadWeaver::JobPointer job);
+    void free(ThreadWeaver::JobPointer job);
+    void release(ThreadWeaver::JobPointer job);
+    void destructed(ThreadWeaver::JobInterface* job);
 private:
     DefaultRunnerPolicy();
 
@@ -92,10 +94,14 @@ private:
 class DummyJob : public ThreadWeaver::Job
 {
     public:
-        DummyJob(QObject *parent) : Job(parent) {}
+        DummyJob(QObject *parent) : Job(), m_decorator(new ThreadWeaver::QObjectDecorator(this, parent)) {}
         ~DummyJob() {}
+
+        ThreadWeaver::QObjectDecorator* decorator() const { return m_decorator; }
+
     private:
-        void run() {}
+        virtual void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) {}
+        ThreadWeaver::QObjectDecorator* m_decorator;
 };
 
 /*
@@ -114,14 +120,16 @@ public:
 
     QTimer* delayTimer() const;
     void setDelayTimer(QTimer *timer);
+    ThreadWeaver::QObjectDecorator* decorator() const { return m_decorator; }
 
 protected:
-    void run();
+    virtual void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread);
 
 private:
     Plasma::RunnerContext m_context;
     Plasma::AbstractRunner *m_runner;
     QTimer *m_timer;
+    ThreadWeaver::QObjectDecorator* m_decorator;
 };
 
 class DelayedJobCleaner : public QObject

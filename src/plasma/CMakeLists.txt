@@ -73,12 +73,12 @@ set(plasma_LIB_SRCS
     private/componentinstaller.cpp
 
 #runners
-#    abstractrunner.cpp
-#    querymatch.cpp
-#    runnercontext.cpp
-#    runnermanager.cpp
-#    runnersyntax.cpp
-#    private/runnerjobs.cpp
+    abstractrunner.cpp
+    querymatch.cpp
+    runnercontext.cpp
+    runnermanager.cpp
+    runnersyntax.cpp
+    private/runnerjobs.cpp
 
 #applets,containments,corona
     applet.cpp
@@ -117,7 +117,7 @@ set(plasma_LIB_SRCS
 #scripting
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
-    #    scripting/runnerscript.cpp
+    scripting/runnerscript.cpp
     scripting/scriptengine.cpp
 )
 
@@ -181,7 +181,7 @@ set_target_properties(plasma PROPERTIES
 generate_export_header(plasma)
 
 set(plasma_LIB_INCLUDES
-	#abstractrunner.h
+    abstractrunner.h
     applet.h
     configloader.h
     containment.h
@@ -196,10 +196,10 @@ set(plasma_LIB_INCLUDES
     packagestructure.h
     plasma.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
-    #querymatch.h
-    #runnercontext.h
-    #runnermanager.h
-    #runnersyntax.h
+    querymatch.h
+    runnercontext.h
+    runnermanager.h
+    runnersyntax.h
     service.h
     servicejob.h
     svg.h

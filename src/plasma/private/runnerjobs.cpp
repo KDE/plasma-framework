@@ -47,9 +47,9 @@ DelayedRunnerPolicy& DelayedRunnerPolicy::instance()
     return policy;
 }
 
-bool DelayedRunnerPolicy::canRun(Job *job)
+bool DelayedRunnerPolicy::canRun(ThreadWeaver::JobPointer job)
 {
-    FindMatchesJob *aJob = static_cast<FindMatchesJob*>(job);
+    QSharedPointer<FindMatchesJob> aJob(job.dynamicCast<FindMatchesJob>());
     if (QTimer *t = aJob->delayTimer()) {
         // If the timer is active, the required delay has not been reached
         //qDebug() << "delayed timer" << aJob->runner()->name() << !t->isActive();
@@ -59,17 +59,17 @@ bool DelayedRunnerPolicy::canRun(Job *job)
     return true;
 }
 
-void DelayedRunnerPolicy::free(Job *job)
+void DelayedRunnerPolicy::free(ThreadWeaver::JobPointer job)
 {
     Q_UNUSED(job)
 }
 
-void DelayedRunnerPolicy::release(Job *job)
+void DelayedRunnerPolicy::release(ThreadWeaver::JobPointer job)
 {
     free(job);
 }
 
-void DelayedRunnerPolicy::destructed(Job *job)
+void DelayedRunnerPolicy::destructed(ThreadWeaver::JobInterface* job)
 {
     Q_UNUSED(job)
 }
@@ -88,9 +88,9 @@ DefaultRunnerPolicy& DefaultRunnerPolicy::instance()
     return policy;
 }
 
-bool DefaultRunnerPolicy::canRun(Job *job)
+bool DefaultRunnerPolicy::canRun(ThreadWeaver::JobPointer job)
 {
-    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
+    Plasma::AbstractRunner *runner = job.dynamicCast<FindMatchesJob>()->runner();
     QMutexLocker l(&m_mutex);
 
     if (m_runCounts[runner->name()] > m_cap) {
@@ -101,20 +101,20 @@ bool DefaultRunnerPolicy::canRun(Job *job)
     }
 }
 
-void DefaultRunnerPolicy::free(Job *job)
+void DefaultRunnerPolicy::free(ThreadWeaver::JobPointer job)
 {
-    Plasma::AbstractRunner *runner = static_cast<FindMatchesJob*>(job)->runner();
+    Plasma::AbstractRunner *runner = job.dynamicCast<FindMatchesJob>()->runner();
     QMutexLocker l(&m_mutex);
 
     --m_runCounts[runner->name()];
 }
 
-void DefaultRunnerPolicy::release(Job *job)
+void DefaultRunnerPolicy::release(ThreadWeaver::JobPointer job)
 {
     free(job);
 }
 
-void DefaultRunnerPolicy::destructed(Job *job)
+void DefaultRunnerPolicy::destructed(ThreadWeaver::JobInterface* job)
 {
     Q_UNUSED(job)
 }
@@ -125,10 +125,11 @@ void DefaultRunnerPolicy::destructed(Job *job)
 
 FindMatchesJob::FindMatchesJob(Plasma::AbstractRunner *runner,
                                Plasma::RunnerContext *context, QObject *parent)
-    : ThreadWeaver::Job(parent),
+    : ThreadWeaver::Job(),
       m_context(*context, 0),
       m_runner(runner),
-      m_timer(0)
+      m_timer(0),
+      m_decorator(new ThreadWeaver::QObjectDecorator(this, true))
 {
     if (runner->speed() == Plasma::AbstractRunner::SlowSpeed) {
         assignQueuePolicy(&DelayedRunnerPolicy::instance());
@@ -151,7 +152,7 @@ void FindMatchesJob::setDelayTimer(QTimer *timer)
     m_timer = timer;
 }
 
-void FindMatchesJob::run()
+void FindMatchesJob::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
 //     qDebug() << "Running match for " << m_runner->objectName()
 //              << " in Thread " << thread()->id() << endl;
@@ -179,7 +180,7 @@ DelayedJobCleaner::DelayedJobCleaner(const QSet<QSharedPointer<FindMatchesJob> >
     connect(m_weaver, SIGNAL(finished()), this, SLOT(checkIfFinished()));
 
     for (auto it = m_jobs.constBegin(); it != m_jobs.constEnd(); ++it) {
-        connect((*it).data(), &Job::done, this, &DelayedJobCleaner::jobDone);
+        connect((*it)->decorator(), &ThreadWeaver::QObjectDecorator::done, this, &DelayedJobCleaner::jobDone);
     }
 }
 
@@ -197,7 +198,6 @@ void DelayedJobCleaner::jobDone(ThreadWeaver::JobPointer job)
     }
 
     m_jobs.remove(runJob);
-    runJob->deleteLater();
 
     if (m_jobs.isEmpty()) {
         deleteLater();
