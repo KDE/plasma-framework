@@ -49,6 +49,7 @@ for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
 
     # Fix up includes
     perl -p -i -e 's/\#include \<QtGui\/QQuickItem\>/\#include \<QtQuick\/QQuickItem\>/g' $FS
+    perl -p -i -e 's/\#include \<QtGui\/QDialog\>/\#include \<QtWidgets\/QDialog\>/g' $FS
     perl -p -i -e 's/\#include \<QtGui\/QMenu\>/\#include \<QtWidgets\/QMenu\>/g' $FS
     perl -p -i -e 's/\#include \<QtGui\/QWidget\>/\#include \<QtWidgets\/QWidget\>/g' $FS
     perl -p -i -e 's/\#include \<QtDeclarative\/QQuickItem\>/\#include \<QtQuick\/QQuickItem\>/g' $FS
