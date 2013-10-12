@@ -11,11 +11,6 @@ set(qtextracomponents_SRCS
     columnproxymodel.cpp
     )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-)
-
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 
 target_link_libraries(qtextracomponentsplugin

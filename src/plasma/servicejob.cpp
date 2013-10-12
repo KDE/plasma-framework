@@ -21,7 +21,7 @@
 
 #include <QDebug>
 
-#include <plasma/private/servicejob_p.h>
+#include "private/servicejob_p.h"
 
 namespace Plasma
 {

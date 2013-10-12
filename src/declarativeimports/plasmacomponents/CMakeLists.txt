@@ -14,12 +14,6 @@ set(plasmacomponents_SRCS
     #../core/declarativeitemcontainer.cpp
     )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDeclarative_INCLUDE_DIR}
-)
-
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
         ${QT_QTCORE_LIBRARY}

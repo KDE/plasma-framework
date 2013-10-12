@@ -26,17 +26,7 @@ endif(NOT X11_FOUND)
 #                       URL "http://www.kde.org" TYPE OPTIONAL
 #                       PURPOSE "Needed for building several Plasma DataEngines")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}
-                    ${KDE4_INCLUDE_DIR}
-                    ${KDE4_INCLUDE_DIR}/KDE
-                    ${KDE4_INCLUDE_DIR}/kio
-                    )
-
-
-
 if(NOT PLASMA_NO_KIO)
-   include_directories(${KDE4_KIO_INCLUDES})
    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS})
 endif(NOT PLASMA_NO_KIO)
 
@@ -169,7 +159,12 @@ if(DL_LIBRARY)
 endif(DL_LIBRARY)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
-target_include_directories(plasma INTERFACE "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>" )
+target_include_directories(plasma PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/includes>"
+)
+target_include_directories(plasma INTERFACE
+  "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
+)
 
 #do NOT use GENERIC versioning -- the plasma team will take care of versioning
 set_target_properties(plasma PROPERTIES
