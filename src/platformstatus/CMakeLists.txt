@@ -3,6 +3,8 @@ set(
    platformstatus.cpp
    )
 
+include_directories("../utils")
+
 qt4_add_dbus_adaptor (
    kded_platformstatus_SRCS
    org.kde.platformstatus.xml

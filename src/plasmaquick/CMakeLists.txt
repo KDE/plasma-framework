@@ -9,6 +9,11 @@ set(plasmaquick_LIB_SRC
     #private/currentcontainmentactionsmodel_p.cpp
 )
 
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    )
+
 add_library(PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 
 target_link_libraries(PlasmaQuick

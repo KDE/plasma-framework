@@ -12,6 +12,12 @@ set(calendar_SRCS
     daysmodel.cpp
 )
 
+INCLUDE_DIRECTORIES(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
+)
+
 qt4_automoc(${calendar_SRCS})
 
 add_library(calendarplugin SHARED ${calendar_SRCS})

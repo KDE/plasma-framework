@@ -7,7 +7,7 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_KIO TRUE)
 endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 
-include_directories(${PHONON_INCLUDES})
+include_directories(${KDE4_INCLUDE_DIR}/KDE ${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 
 
@@ -21,6 +21,8 @@ set(declarative_appletscript_SRCS
     plasmoid/declarativeappletscript.cpp
     plasmoid/wallpaperinterface.cpp
     )
+
+include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SRCS} )
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")

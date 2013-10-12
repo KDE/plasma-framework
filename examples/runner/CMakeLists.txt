@@ -1,6 +1,9 @@
 # Project Needs a name, of course
 project(RunnerExample)
 
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories(${KDE4_INCLUDES})
+
 # We add our source code here
 set(example_SRCS homefilesrunner.cpp)
 

@@ -47,7 +47,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/url.cpp
 )
 
-include_directories(${PHONON_INCLUDES})
+include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 plasma_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 

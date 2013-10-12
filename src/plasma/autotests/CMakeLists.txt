@@ -2,6 +2,10 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 include(ECMMarkAsTest)
 
+include_directories ( ${karchive_SOURCE_DIR}/src
+                      ${karchive_BINARY_DIR}/src
+)
+
 find_package(KCoreAddons REQUIRED)
 
 # add_definitions( -DKDESRCDIR=${CMAKE_CURRENT_SOURCE_DIR} )

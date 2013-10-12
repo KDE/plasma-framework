@@ -26,7 +26,17 @@ endif(NOT X11_FOUND)
 #                       URL "http://www.kde.org" TYPE OPTIONAL
 #                       PURPOSE "Needed for building several Plasma DataEngines")
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}
+                    ${CMAKE_CURRENT_BINARY_DIR}
+                    ${KDE4_INCLUDE_DIR}
+                    ${KDE4_INCLUDE_DIR}/KDE
+                    ${KDE4_INCLUDE_DIR}/kio
+                    )
+
+
+
 if(NOT PLASMA_NO_KIO)
+   include_directories(${KDE4_KIO_INCLUDES})
    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS})
 endif(NOT PLASMA_NO_KIO)
 

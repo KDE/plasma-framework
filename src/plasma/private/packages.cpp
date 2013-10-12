@@ -17,7 +17,7 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#include "private/packages_p.h"
+#include "plasma/private/packages_p.h"
 
 #include <math.h>
 #include <float.h> // FLT_MAX

@@ -14,6 +14,10 @@ set(plasmaextracomponents_SRCS
     fallbackcomponent.cpp
     )
 
+include_directories(
+        ${KACTIVITIES_INCLUDE_DIRS}
+)
+
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 
 target_link_libraries(plasmaextracomponentsplugin

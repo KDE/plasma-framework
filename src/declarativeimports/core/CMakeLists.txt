@@ -1,5 +1,14 @@
 project(corebindings)
 
+INCLUDE_DIRECTORIES(
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/src/plasma/includes
+        ${CMAKE_BINARY_DIR}
+        ${KDE4_INCLUDES}
+        ${KDE4_INCLUDE_DIR}
+        ${KDeclarative_INCLUDE_DIR}
+)
+
 add_definitions(-DHAVE_X11=${HAVE_X11})
 if(XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     add_definitions(-DHAVE_XCB_COMPOSITE=1)
