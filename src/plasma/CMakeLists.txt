@@ -160,7 +160,7 @@ endif(DL_LIBRARY)
 
 target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
 target_include_directories(plasma PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/includes>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
 )
 target_include_directories(plasma INTERFACE
   "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
