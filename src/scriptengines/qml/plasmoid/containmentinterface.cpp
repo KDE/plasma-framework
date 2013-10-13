@@ -191,15 +191,15 @@ Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVa
     blockSignals(true);
     Plasma::Applet *applet = containment()->createApplet(plugin, args);
 
-    QObject *appletGraphicObject;
+
     if (applet) {
-        appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+        QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+
+        blockSignals(false);
+
+        emit appletAdded(appletGraphicObject, pos.x(), pos.y());
+        emit appletsChanged();
     }
-
-    blockSignals(false);
-
-    emit appletAdded(appletGraphicObject, pos.x(), pos.y());
-    emit appletsChanged();
     return applet;
 }
 

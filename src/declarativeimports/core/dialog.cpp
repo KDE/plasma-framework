@@ -60,7 +60,7 @@ QString locString(const Plasma::Types::Location l) {
 }
 
 DialogProxy::DialogProxy(QQuickItem *parent)
-    : QQuickWindow(),
+    : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::TopEdge),
       m_activeWindow(false)
 {

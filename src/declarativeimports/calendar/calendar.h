@@ -14,7 +14,7 @@ class Calendar : public QObject
     Q_OBJECT
     Q_PROPERTY(QDate startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
     Q_PROPERTY(int types READ types WRITE setTypes NOTIFY typesChanged)
-     Q_PROPERTY(QList<int> weeksModel READ weeksModel NOTIFY startDateChanged CONSTANT)
+    Q_PROPERTY(QList<int> weeksModel READ weeksModel CONSTANT)
     Q_PROPERTY(int days READ days WRITE setDays NOTIFY daysChanged)
     Q_PROPERTY(int weeks READ weeks WRITE setWeeks NOTIFY weeksChanged)
     Q_PROPERTY(int startDay READ startDay WRITE setStartDay NOTIFY startDayChanged)
