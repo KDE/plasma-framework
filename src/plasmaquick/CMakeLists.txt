@@ -5,6 +5,9 @@ set(plasmaquick_LIB_SRC
     configmodel.cpp
     configview.cpp
     private/configcategory_p.cpp
+    packageaccessmanager.cpp
+    packageaccessmanagerfactory.cpp
+    packageurlinterceptor.cpp
     #private/containmentconfigview_p.cpp
     #private/currentcontainmentactionsmodel_p.cpp
 )
@@ -12,13 +15,14 @@ set(plasmaquick_LIB_SRC
 add_library(PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 
 target_link_libraries(PlasmaQuick
-    ${Qt5Quick_LIBRARIES}
-    ${Qt5Qml_LIBRARIES}
-    ${KWindowSystem_LIBRARIES}
+    Qt5::Quick
+    Qt5::Qml
+    KF5::KWindowSystem
+    KF5::KIOWidgets
     KF5::KI18n
     KF5::KService
     KF5::KCoreAddons
-    ${XmlGui_LIBRARIES}
+    KF5::XmlGui
     plasma
     KF5::KDeclarative
 )
@@ -37,6 +41,8 @@ set(plasmaquick_LIB_INCLUDES
     plasmaquickview.h
     configview.h
     configmodel.h
+    packageaccessmanagerfactory.h # temporary, remove once folded into urlinterceptor
+    packageurlinterceptor.h
 )
 
 install(FILES ${plasmaquick_LIB_INCLUDES}

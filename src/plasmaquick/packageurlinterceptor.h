@@ -20,14 +20,16 @@
 #ifndef PACKAGEURLINTERCEPTOR_H
 #define PACKAGEURLINTERCEPTOR_H
 
-#include "qqmlabstracturlinterceptor_p.h"
+#include <QQmlAbstractUrlInterceptor>
+
+#include <plasmaquick/plasmaquick_export.h>
 
 #include <Plasma/Package>
 
 class QQmlEngine;
 
 //depends from https://codereview.qt-project.org/#change,65626
-class PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
+class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
 public:
     PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p);

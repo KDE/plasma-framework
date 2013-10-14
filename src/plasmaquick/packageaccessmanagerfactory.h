@@ -22,12 +22,13 @@
 
 #include <QQmlNetworkAccessManagerFactory>
 
+#include <plasmaquick/plasmaquick_export.h>
 
 #include <Plasma/Package>
 
 class AppletAuthorization;
 
-class PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
+class PLASMAQUICK_EXPORT PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
 {
 public:
     PackageAccessManagerFactory(const Plasma::Package &package);

@@ -47,8 +47,8 @@
 #include "containmentinterface.h"
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
-#include "declarative/packageaccessmanagerfactory.h"
-#include "declarative/packageurlinterceptor.h"
+#include <packageaccessmanagerfactory.h>
+#include <packageurlinterceptor.h>
 
 Q_DECLARE_METATYPE(AppletInterface*)
 

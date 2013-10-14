@@ -13,9 +13,9 @@ include_directories(${PHONON_INCLUDES})
 
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
-    declarative/packageaccessmanager.cpp
-    declarative/packageaccessmanagerfactory.cpp
-    declarative/packageurlinterceptor.cpp
+#     declarative/packageaccessmanager.cpp
+#     declarative/packageaccessmanagerfactory.cpp
+#     declarative/packageurlinterceptor.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
@@ -36,6 +36,7 @@ target_link_libraries(plasma_appletscript_declarative
     ${KCore_LIBRARIES}
     KF5::KI18n
     plasma
+    PlasmaQuick
     KF5::KDeclarative
 )
 
