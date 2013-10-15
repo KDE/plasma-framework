@@ -7,15 +7,8 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_KIO TRUE)
 endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 
-include_directories(${PHONON_INCLUDES})
-
-
-
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
-#     declarative/packageaccessmanager.cpp
-#     declarative/packageaccessmanagerfactory.cpp
-#     declarative/packageurlinterceptor.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
@@ -26,14 +19,13 @@ add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SR
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
 target_link_libraries(plasma_appletscript_declarative
+    Qt5::Quick
+    Qt5::Qml
+    Qt5::Script
+    Qt5::UiTools
     KF5::KIOCore
     KF5::KIOWidgets	
-    ${KDE4Attic_LIBRARIES}
-    ${QT_QTSCRIPT_LIBRARY}
-    ${Qt5Quick_LIBRARIES}
-    ${Qt5Qml_LIBRARIES}
-    ${QT_QTUITOOLS_LIBRARY}
-    ${KCore_LIBRARIES}
+    KF5::KDE4Attic
     KF5::KI18n
     plasma
     PlasmaQuick
