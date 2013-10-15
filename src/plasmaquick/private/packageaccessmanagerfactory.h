@@ -28,7 +28,7 @@
 
 class AppletAuthorization;
 
-class PLASMAQUICK_EXPORT PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
+class PackageAccessManagerFactory : public QQmlNetworkAccessManagerFactory
 {
 public:
     PackageAccessManagerFactory(const Plasma::Package &package);

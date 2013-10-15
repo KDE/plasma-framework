@@ -52,7 +52,7 @@ public:
         }
 
         //failed by type, let's try by extension
-        const QString extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')) + 1).toLower();
+        const QString &extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')) + 1).toLower();
 
         if (extension == QStringLiteral("svg") || extension == QStringLiteral("svgz") ||
             extension == QStringLiteral("png") || extension == QStringLiteral("gif") ||

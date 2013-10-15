@@ -27,7 +27,7 @@ public:
     ErrorReply(QNetworkAccessManager::Operation op, const QNetworkRequest &req)
         : QNetworkReply()
     {
-        setError(QNetworkReply::ContentOperationNotPermittedError, "The plasmoid has not been authorized to load remote content");
+        setError(QNetworkReply::ContentOperationNotPermittedError, QStringLiteral("The plasmoid has not been authorized to load remote content"));
         setOperation(op);
         setRequest(req);
         setUrl(req.url());
@@ -60,14 +60,14 @@ QNetworkReply *PackageAccessManager::createRequest(QNetworkAccessManager::Operat
 {
     QUrl reqUrl(req.url());
 
-    if (reqUrl.scheme() == "plasmapackage") {
+    if (reqUrl.scheme() == QStringLiteral("plasmapackage")) {
         QNetworkRequest request = req;
-        reqUrl.setScheme("file");
+        reqUrl.setScheme(QStringLiteral("file"));
         reqUrl.setPath(m_package.filePath(0, reqUrl.path()));
         request.setUrl(reqUrl);
         return QNetworkAccessManager::createRequest(op, request, outgoingData);
-    } else if ((reqUrl.scheme() == "http") ||
-               ((reqUrl.scheme() == "file" || reqUrl.scheme() == "desktop"))) {
+    } else if ((reqUrl.scheme() == QStringLiteral("http")) ||
+               ((reqUrl.scheme() == QStringLiteral("file") || reqUrl.scheme() == QStringLiteral("desktop")))) {
         return new ErrorReply(op, req);
     } else {
 #ifndef PLASMA_NO_KIO

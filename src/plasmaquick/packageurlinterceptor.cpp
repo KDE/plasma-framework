@@ -84,17 +84,17 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 //it's from an import, good
                 //TODO: implement imports whitelist?
                 if (path.path().startsWith(import)) {
-                    qDebug() << "Found import, access granted" << path;
+                    //qDebug() << "Found import, access granted" << path;
 
                     //check if there is a platform specific file that overrides this import
                     foreach (const QString &platform, KDeclarative::runtimePlatform()) {
-                        qDebug() << "Trying" << platform;
+                        //qDebug() << "Trying" << platform;
 
                         //search for a platformqml/ path sibling of this import path
                         const QString &platformPath = import+QStringLiteral("/../platformqml/")+platform+path.path().mid(import.length());
                         const QFile f(platformPath);
 
-                        qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
+                        //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
                         if (f.exists()) {
                             return QUrl::fromLocalFile(platformPath);
                         }
