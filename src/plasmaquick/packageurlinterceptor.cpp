@@ -67,13 +67,13 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             //should never happen
             Q_ASSERT(!relativePath.isEmpty());
 
-            QStringList components = relativePath.split("/");
+            QStringList components = relativePath.split(QLatin1Char('/'));
             //a path with less than 2 items should ever happen
             Q_ASSERT(components.count() >= 2);
 
             components.pop_front();
             //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
-            QString filename = components.join("/");
+            const QString &filename = components.join("/");
 
             //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
             return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
@@ -91,8 +91,8 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                         qDebug() << "Trying" << platform;
 
                         //search for a platformqml/ path sibling of this import path
-                        QString platformPath = import+QStringLiteral("/../platformqml/")+platform+path.path().mid(import.length());
-                        QFile f(platformPath);
+                        const QString &platformPath = import+QStringLiteral("/../platformqml/")+platform+path.path().mid(import.length());
+                        const QFile f(platformPath);
 
                         qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
                         if (f.exists()) {

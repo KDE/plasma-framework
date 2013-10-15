@@ -30,7 +30,7 @@ QTEST_MAIN(PackageUrlInterceptorTest)
 
 void PackageUrlInterceptorTest::loadAccessManager()
 {
-    Plasma::Package pkg = Plasma::Package();
+    const Plasma::Package &pkg = Plasma::Package();
     QQmlNetworkAccessManagerFactory* pui = PackageUrlInterceptor::createPackageAccessManagerFactory(pkg);
     QVERIFY(pui != 0);
     delete pui;
