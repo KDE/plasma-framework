@@ -11,7 +11,7 @@ plasma_add_plugin(plasma_engine_testengine
                 ${testengine_engine_SRCS})
 
 target_link_libraries(plasma_engine_testengine
-                      ${KDE4_KIO_LIBS}
+                      KF5::KIOCore KF5::KIOWidgets
                       ${Plasma_LIBRARIES})
 
 install(TARGETS plasma_engine_testengine DESTINATION ${PLUGIN_INSTALL_DIR})

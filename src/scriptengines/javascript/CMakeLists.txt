@@ -53,7 +53,7 @@ plasma_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engi
 
 target_link_libraries(plasma_appletscript_simple_javascript
                        ${KCore_LIBRARIES}
-                       ${KDE4_KIO_LIBS}
+                       KF5::KIOCore KF5::KIOWidgets
                        ${Plasma_LIBRARIES}
                        ${QT_QTDECLARATIVE_LIBRARY}
                        ${QT_QTSCRIPT_LIBRARY}
@@ -79,7 +79,7 @@ plasma_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS
 
 target_link_libraries(plasma_runnerscript_javascript
                       ${KCore_LIBRARIES}
-                      ${KDE4_KIO_LIBS}
+                      KF5::KIOCore KF5::KIOWidgets
                       ${Plasma_LIBRARIES}
                       ${QT_QTSCRIPT_LIBRARY})
 
@@ -104,7 +104,7 @@ plasma_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_eng
 
 target_link_libraries(plasma_dataenginescript_javascript
                       ${KCore_LIBRARIES}
-                      ${KDE4_KIO_LIBS}
+                      KF5::KIOCore KF5::KIOWidgets
                       ${Plasma_LIBRARIES}
                       ${QT_QTSCRIPT_LIBRARY})
 
