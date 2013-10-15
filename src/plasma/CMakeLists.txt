@@ -55,7 +55,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
 
-set(plasma_LIB_SRCS
+set(Plasma_LIB_SRCS
 #global
     plasma.cpp
     pluginloader.cpp
@@ -111,9 +111,9 @@ set(plasma_LIB_SRCS
     scripting/scriptengine.cpp
 )
 
-set(plasma_LIB_SRCS ${plasma_LIB_SRCS} private/effectwatcher.cpp)
+set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
 
-kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
+kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
 #NEPOMUK_GENERATE_FROM_ONTOLOGY(
 #   nwc.nrl
@@ -124,9 +124,9 @@ kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 #)
 
 
-add_library(plasma SHARED ${plasma_LIB_SRCS})
+add_library(Plasma SHARED ${Plasma_LIB_SRCS})
 
-target_link_libraries(plasma
+target_link_libraries(Plasma
     Qt5::Network
     Qt5::Sql
     Qt5::Quick # needed in service.cpp, remove?
@@ -149,31 +149,31 @@ target_link_libraries(plasma
 )
 
 if(X11_FOUND)
-   target_link_libraries(plasma Qt5::X11Extras ${X11_LIBRARIES})
+   target_link_libraries(Plasma Qt5::X11Extras ${X11_LIBRARIES})
 endif(X11_FOUND)
 
 if(DL_LIBRARY)
-    target_link_libraries(plasma ${DL_LIBRARY})
+    target_link_libraries(Plasma ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-target_link_libraries(plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
-target_include_directories(plasma PUBLIC
+target_link_libraries(Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
+target_include_directories(Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
 )
-target_include_directories(plasma INTERFACE
+target_include_directories(Plasma INTERFACE
   "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
 )
 
-#do NOT use GENERIC versioning -- the plasma team will take care of versioning
-set_target_properties(plasma PROPERTIES
+#do NOT use GENERIC versioning -- the Plasma team will take care of versioning
+set_target_properties(Plasma PROPERTIES
                              VERSION 5.0.0
                              SOVERSION 5
                       )
 
 ########### install files ###############
-generate_export_header(plasma)
+generate_export_header(Plasma)
 
-set(plasma_LIB_INCLUDES
+set(Plasma_LIB_INCLUDES
     abstractrunner.h
     applet.h
     configloader.h
@@ -201,7 +201,7 @@ set(plasma_LIB_INCLUDES
 
 
 install(FILES
-        ${plasma_LIB_INCLUDES}
+        ${Plasma_LIB_INCLUDES}
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
 install(DIRECTORY
@@ -234,5 +234,5 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_IN
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
-install(TARGETS plasma EXPORT PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS Plasma EXPORT PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 

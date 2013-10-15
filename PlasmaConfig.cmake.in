@@ -7,6 +7,6 @@ include("${CMAKE_CURRENT_LIST_DIR}/PlasmaTargets.cmake")
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 set_and_check(Plasma_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
-set(Plasma_LIBRARIES KF5::plasma)
+set(Plasma_LIBRARIES KF5::Plasma)
 
 include("${CMAKE_CURRENT_LIST_DIR}/PlasmaMacros.cmake")

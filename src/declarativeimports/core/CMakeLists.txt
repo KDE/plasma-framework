@@ -37,7 +37,7 @@ target_link_libraries(corebindingsplugin
         ${KCore_LIBRARIES}
         KF5::KIconThemes
         KF5::KWindowSystem
-        plasma)
+        Plasma)
 
 if(X11_FOUND)
   target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )

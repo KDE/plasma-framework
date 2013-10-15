@@ -20,7 +20,7 @@ target_link_libraries(qtextracomponentsplugin
         ${QT_QTGUI_LIBRARY}
         ${KDeclarative_LIBRARIES}
         KF5::KIconThemes
-        plasma)
+        Plasma)
 
 install(TARGETS qtextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/qtextracomponents)
 

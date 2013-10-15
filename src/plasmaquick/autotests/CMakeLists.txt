@@ -12,7 +12,7 @@ MACRO(PLASMA_UNIT_TESTS)
                target_link_libraries(${_testname}
                                      Qt5::Test
                                      Qt5::Declarative
-                                     plasma KF5::KArchive KF5::KCoreAddons
+                                     Plasma KF5::KArchive KF5::KCoreAddons
                                      KF5::KConfigGui
                                      KF5::KI18n
                                      KF5::KIOCore

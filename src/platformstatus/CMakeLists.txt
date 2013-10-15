@@ -13,15 +13,13 @@ plasma_add_plugin(kded_platformstatus ${kded_platformstatus_SRCS} )
 
 target_link_libraries(
    kded_platformstatus
-   ${KCore_LIBRARIES}
    KF5::KService
    KF5::KCoreAddons
-   ${KDBusAddons_LIBRARIES}
+   KF5::KDBusAddons
    KF5::KI18n
    KF5::KIOCore KF5::KIOWidgets
    Qt5::DBus
    Qt5::Quick
-   #${KDE4_KIO_LIBS}
    )
 
 install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR} )

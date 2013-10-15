@@ -7,7 +7,7 @@ kservice_desktop_to_json(plasma-dataengine-example-customDataContainers.desktop)
 
 plasma_add_plugin(plasma_dataengine_example_customDataContainers ${customDataContainers_SRCS})
 target_link_libraries(plasma_dataengine_example_customDataContainers
-  plasma
+  Plasma
   KF5::KIOCore
   KF5::KService
 )

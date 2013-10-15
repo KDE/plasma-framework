@@ -23,7 +23,7 @@ target_link_libraries(PlasmaQuick
     KF5::KService
     KF5::KCoreAddons
     KF5::XmlGui
-    plasma
+    Plasma
     KF5::KDeclarative
 )
 

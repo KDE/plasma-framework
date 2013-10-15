@@ -14,7 +14,7 @@ add_executable(sortfiltermodeltest
 qt4_automoc(sortfiltermodeltest.cpp)
 
 target_link_libraries(sortfiltermodeltest
-    plasma
+    Plasma
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${KDE4Support_LIBRARIES}

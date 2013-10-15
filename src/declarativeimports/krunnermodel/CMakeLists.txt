@@ -10,7 +10,7 @@ target_link_libraries(runnermodelplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
 	KF5::KI18n
-        plasma
+        Plasma
 	)
 
 

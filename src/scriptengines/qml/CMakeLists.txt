@@ -28,7 +28,7 @@ target_link_libraries(plasma_appletscript_declarative
     KF5::KDE4Attic
     KF5::KDeclarative
     KF5::KI18n
-    plasma
+    Plasma
     PlasmaQuick
 )
 
