@@ -9,7 +9,9 @@ find_package(KCoreAddons REQUIRED)
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
-               target_link_libraries(${_testname} ${QT_QTTEST_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
+               target_link_libraries(${_testname}
+                                     Qt5::Test
+                                     Qt5::Declarative
                                      plasma KF5::KArchive KF5::KCoreAddons
                                      KF5::KConfigGui
                                      KF5::KI18n

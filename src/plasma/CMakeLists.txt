@@ -36,7 +36,7 @@ endif(NOT PLASMA_NO_SOLID)
 
 if(NOT PLASMA_NO_PACKAGEKIT)
     add_definitions(-DPLASMA_ENABLE_PACKAGEKIT_SUPPORT=1)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${QT_QTDBUS_LIBRARY})
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::DBus)
 endif(NOT PLASMA_NO_PACKAGEKIT)
 
 if (NOT PLASMA_NO_KUTILS)
@@ -127,28 +127,26 @@ kconfig_add_kcfg_files(plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 add_library(plasma SHARED ${plasma_LIB_SRCS})
 
 target_link_libraries(plasma
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTSQL_LIBRARY}
-    ${Qt5Quick_LIBRARIES}
+    Qt5::Network
+    Qt5::Sql
+    Qt5::Quick # needed in service.cpp, remove?
     Qt5::Svg
     Qt5::DBus
-    ${ThreadWeaver_LIBRARIES}
-    ${KAuth_LIBRARIES}
-    ${KWindowSystem_LIBRARIES}
-    ${PLASMA_EXTRA_LIBS}
+    Qt5::UiTools
+    KF5::KArchive
     KF5::KGuiAddons
     KF5::KIconThemes
     KF5::KI18n
     KF5::KService
     KF5::KIOCore
     KF5::KIOWidgets
+    KF5::ThreadWeaver
+    KF5::KWindowSystem
+    KF5::KAuth
+    KF5::KDeclarative
     KF5::KDE4Attic
-    Qt5::UiTools
-    ${KDE4Attic_LIBRARIES}
-    #${KDE4Support_LIBRARIES} # needed for KStandardDirs and KGlobal
+    ${PLASMA_EXTRA_LIBS}
 )
-#FIXME gpgme++ is in kdepimlibs, needs to be elsewhere
-target_link_libraries(plasma KF5::KDeclarative KF5::KArchive)
 
 if(X11_FOUND)
    target_link_libraries(plasma Qt5::X11Extras ${X11_LIBRARIES})
