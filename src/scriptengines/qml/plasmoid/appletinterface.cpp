@@ -47,7 +47,7 @@
 #include "containmentinterface.h"
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
-#include <packageaccessmanagerfactory.h>
+
 #include <packageurlinterceptor.h>
 
 Q_DECLARE_METATYPE(AppletInterface*)
@@ -110,7 +110,8 @@ void AppletInterface::init()
     QQmlNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
     engine->setNetworkAccessManagerFactory(0);
     delete factory;
-    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
+    //engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
+    engine->setNetworkAccessManagerFactory(PackageUrlInterceptor::createPackageAccessManagerFactory(m_appletScriptEngine->package()));
 
     //Hook generic url resolution to the applet package as well
     //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?

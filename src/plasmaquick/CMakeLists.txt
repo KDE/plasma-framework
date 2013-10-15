@@ -4,10 +4,10 @@ set(plasmaquick_LIB_SRC
     plasmaquickview.cpp
     configmodel.cpp
     configview.cpp
-    private/configcategory_p.cpp
-    packageaccessmanager.cpp
-    packageaccessmanagerfactory.cpp
     packageurlinterceptor.cpp
+    private/configcategory_p.cpp
+    private/packageaccessmanager.cpp
+    private/packageaccessmanagerfactory.cpp
     #private/containmentconfigview_p.cpp
     #private/currentcontainmentactionsmodel_p.cpp
 )
@@ -41,7 +41,6 @@ set(plasmaquick_LIB_INCLUDES
     plasmaquickview.h
     configview.h
     configmodel.h
-    packageaccessmanagerfactory.h # temporary, remove once folded into urlinterceptor
     packageurlinterceptor.h
 )
 

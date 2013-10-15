@@ -46,7 +46,6 @@
 #include "plasmoid/containmentinterface.h"
 
 #include <kdeclarative/qmlobject.h>
-#include <packageaccessmanagerfactory.h>
 #include <kdeclarative/configpropertymap.h>
 
 

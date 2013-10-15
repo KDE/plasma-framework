@@ -18,6 +18,7 @@
  */
 
 #include "packageurlinterceptor.h"
+#include "private/packageaccessmanagerfactory.h"
 
 #include <QDebug>
 #include <QQmlEngine>
@@ -90,7 +91,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                         qDebug() << "Trying" << platform;
 
                         //search for a platformqml/ path sibling of this import path
-                        QString platformPath = import+"/../platformqml/"+platform+path.path().mid(import.length());
+                        QString platformPath = import+QStringLiteral("/../platformqml/")+platform+path.path().mid(import.length());
                         QFile f(platformPath);
 
                         qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
@@ -108,5 +109,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     return path;
 }
 
+QQmlNetworkAccessManagerFactory* PackageUrlInterceptor::createPackageAccessManagerFactory(const Plasma::Package& package)
+{
+    return new PackageAccessManagerFactory(package);
+}
 
 

@@ -21,6 +21,7 @@
 #define PACKAGEURLINTERCEPTOR_H
 
 #include <QQmlAbstractUrlInterceptor>
+#include <QQmlNetworkAccessManagerFactory>
 
 #include <plasmaquick/plasmaquick_export.h>
 
@@ -36,6 +37,8 @@ public:
     virtual ~PackageUrlInterceptor();
 
     virtual QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type);
+
+    static QQmlNetworkAccessManagerFactory* createPackageAccessManagerFactory(const Plasma::Package &package);
 
     static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
     {
