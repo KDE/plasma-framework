@@ -175,6 +175,22 @@ Containment *Corona::containmentForScreen(int screen) const
     return 0;
 }
 
+Containment *Corona::containmentForScreen(int screen, const QString &defaultPluginIfNonExistent)
+{
+    Containment *containment = containmentForScreen(screen);
+    if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
+        // screen requests are allowed to bypass immutability
+        if (screen >= 0 && screen < numScreens()) {
+            containment = d->addContainment(defaultPluginIfNonExistent, QVariantList(), 0);
+            if (containment) {
+                containment->setScreen(screen);
+            }
+        }
+    }
+
+    return containment;
+}
+
 QList<Containment*> Corona::containments() const
 {
     return d->containments;

@@ -132,6 +132,10 @@ void ContainmentPrivate::setScreen(int newScreen)
 #endif
         KConfigGroup c = q->config();
         c.writeEntry("screen", screen);
+        if (newScreen != -1) {
+            lastScreen = newScreen;
+            c.writeEntry("lastScreen", lastScreen);
+        }
         emit q->configNeedsSaving();
         emit q->screenChanged(oldScreen, newScreen, q);
     }
