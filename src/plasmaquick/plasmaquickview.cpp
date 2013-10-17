@@ -69,8 +69,11 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment.data(), 0, q, 0);
         QObject *oldGraphicObject = containment.data()->property("graphicObject").value<QObject *>();
         if (oldGraphicObject) {
+            qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
-            oldGraphicObject->setParent(cont);
+            //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
+            oldGraphicObject->setProperty("visible", false);
+            oldGraphicObject->setParent(containment.data());
         }
     }
 
@@ -109,6 +112,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
                                    (cont->containmentType() == Plasma::Types::DesktopContainment ||
                                     cont->containmentType() == Plasma::Types::CustomContainment));
         graphicObject->setProperty("parent", QVariant::fromValue(q->rootObject()));
+        graphicObject->setProperty("visible", true);
         q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
     } else {
         qWarning() << "Containment graphic object not valid";
