@@ -27,12 +27,12 @@ PlasmaCore.SvgItem {
 
     id: meterPointer
 
-    property alias angle: rotation.angle
+    //property alias angle: rotation.angle
+    implicitHeight: forgroundSvg.height / 2
+    implicitWidth: forgroundSvg.height * 0.05
 
-    width: naturalSize.width
-    height: naturalSize.height / 2
-    anchors.bottom: meter.bottom
-    anchors.horizontalCenter: meter.horizontalCenter
+    anchors.bottom: parent.bottom
+    anchors.horizontalCenter: parent.horizontalCenter
 
     svg: meterSvg
     elementId: "pointer"
@@ -42,12 +42,12 @@ PlasmaCore.SvgItem {
         id: rotation
         angle: 0
         origin {
-            x: width/2
+            x: forgroundSvg.width /2
             y: 0
         }
-        Behaviour on angle {
-            //????
-        }
+//         Behaviour on angle {
+//             //????
+//         }
     }
 
 }

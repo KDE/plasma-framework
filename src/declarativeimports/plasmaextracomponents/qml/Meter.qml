@@ -25,5 +25,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
 Item {
+    anchors.fill: parent
     Private.AnalogMeter {}
 }

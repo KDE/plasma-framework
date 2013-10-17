@@ -27,7 +27,9 @@ Item {
 
     property int minimumValue: 0
     property int maximumValue: 180
-    property int value: 60
+    property int value: 20
+
+    anchors.fill: parent
 
     PlasmaCore.Svg {
         id: meterSvg
@@ -38,16 +40,18 @@ Item {
         id: backgroundSvg
         svg: meterSvg
         elementId: "background"
+        anchors.fill: parent
     }
 
     PlasmaCore.SvgItem {
         id: forgroundSvg
         svg: meterSvg
         elementId: "background"
+        anchors.fill: parent
     }
 
     MeterPointer {
-         angle: (maximumValue - minimumValue) / 180
+        
     }
 
 }
