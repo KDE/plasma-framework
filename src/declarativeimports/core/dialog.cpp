@@ -57,6 +57,10 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_syncTimer->setInterval(250);
     connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 
+    //Can't just connect to start() since it can't resolve the overload
+    connect(this, &QWindow::xChanged, [=](){m_syncTimer->start();});
+    connect(this, &QWindow::yChanged, [=](){m_syncTimer->start();});
+
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
@@ -129,41 +133,17 @@ bool DialogProxy::isVisible() const
 
 void DialogProxy::setVisible(const bool visible)
 {
-    //QRect avail = QRect(400, 300, 1200, 800); // FIXME
-    QRect avail;
     if (visible) {
-        syncToMainItemSize();
-        if (!m_visualParent.isNull() && m_visualParent.data()->window()) {
-            avail = m_visualParent.data()->window()->screen()->availableGeometry();
-            if (location() == Plasma::Types::FullScreen) {
-                m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
-                setGeometry(avail);
+        if (location() == Plasma::Types::FullScreen) {
+            m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
+            setGeometry(screen()->availableGeometry());
 
-            } else {
-                m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-                QPoint p = popupPosition(m_visualParent.data(), Qt::AlignCenter);
-
-                int borders = Plasma::FrameSvg::AllBorders;
-                if (p.x() <= 0) {
-                    borders = borders & ~Plasma::FrameSvg::LeftBorder;
-                }
-                if (p.y() <= 0) {
-                    borders = borders & ~Plasma::FrameSvg::TopBorder;
-                }
-                if (avail.width() <= p.x() + m_visualParent.data()->width()) {
-                    borders = borders & ~Plasma::FrameSvg::RightBorder;
-                }
-                if (avail.height() <= p.y() + m_visualParent.data()->height()) {
-                    borders = borders & ~Plasma::FrameSvg::BottomBorder;
-                }
-                m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
-                syncToMainItemSize();
-                setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
-            }
         } else {
-            // no visual parent or window -> center on screen
-            setPosition((avail.width() - width()) / 2, (avail.height() - height()) / 2);
+            //syncToMainItemSize();
+            setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
+            syncBorders();
         }
+
         raise();
     }
     DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
@@ -346,6 +326,7 @@ void DialogProxy::syncToMainItemSize()
     resize(s);
     emit widthChanged(s.width());
     emit heightChanged(s.height());
+    syncBorders();
 }
 
 /*
@@ -420,6 +401,32 @@ void DialogProxy::showEvent(QShowEvent *event)
 {
     DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     QQuickWindow::showEvent(event);
+}
+
+void DialogProxy::syncBorders()
+{
+    //syncToMainItemSize();
+
+    const QRect avail = screen()->availableGeometry();
+
+    m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
+
+    int borders = Plasma::FrameSvg::AllBorders;
+    if (x() <= avail.x()) {
+        borders = borders & ~Plasma::FrameSvg::LeftBorder;
+    }
+    if (y() <= avail.y()) {
+        borders = borders & ~Plasma::FrameSvg::TopBorder;
+    }
+    if (avail.right() <= x() + width()) {
+        borders = borders & ~Plasma::FrameSvg::RightBorder;
+    }
+    if (avail.bottom() <= y() + height()) {
+        borders = borders & ~Plasma::FrameSvg::BottomBorder;
+    }
+    m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+    //syncToMainItemSize();
 }
 
 #include "dialog.moc"

@@ -156,6 +156,9 @@ protected:
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
 
+private Q_SLOTS:
+    void syncBorders();
+
 private:
     Qt::WindowFlags m_flags;
     bool m_activeWindow;
