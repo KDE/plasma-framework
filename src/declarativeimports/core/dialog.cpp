@@ -38,27 +38,6 @@
 
 #include <QDebug>
 
-// just for debugging purposes, FIXME: remove later
-QString locString(const Plasma::Types::Location l) {
-    QString o = "Unknown: " + l;
-    if (l == Plasma::Types::Floating) {
-        o = "Floating";
-    } else if (l == Plasma::Types::Desktop) {
-        o = "Desktop";
-    } else if (l == Plasma::Types::FullScreen) {
-        o = "FullScreen";
-    } else if (l == Plasma::Types::TopEdge) {
-        o = "Types::TopEdge";
-    } else if (l == Plasma::Types::BottomEdge) {
-        o = "Types::BottomEdge";
-    } else if (l == Plasma::Types::LeftEdge) {
-        o = "Types::LeftEdge";
-    } else if (l == Plasma::Types::RightEdge) {
-        o = "Types::RightEdge";
-    }
-    return o;
-}
-
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::TopEdge),
@@ -219,7 +198,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         }
     }
 
-    Plasma::Types::Location l = (Plasma::Types::Location)location();
+    Plasma::Types::Location l = location();
 
     QPoint topPoint((item->boundingRect().width() - width())/2,
                     -height());
@@ -311,17 +290,17 @@ void DialogProxy::setWindowFlags(const int flags)
     setFlags(Qt::FramelessWindowHint|m_flags);
 }
 
-int DialogProxy::location() const
+Plasma::Types::Location DialogProxy::location() const
 {
-    return (Plasma::Types::Location)m_location;
+    return m_location;
 }
 
-void DialogProxy::setLocation(int location)
+void DialogProxy::setLocation(Plasma::Types::Location location)
 {
     if (m_location == location) {
         return;
     }
-    m_location = (Plasma::Types::Location)location;
+    m_location = location;
     emit locationChanged();
 }
 

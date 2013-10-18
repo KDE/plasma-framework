@@ -78,7 +78,7 @@ class DialogProxy : public QQuickWindow
     /**
      * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
      */
-    Q_PROPERTY(int location READ location WRITE setLocation NOTIFY locationChanged)
+    Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
 
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
@@ -111,8 +111,8 @@ public:
     int windowFlags() const;
     void setWindowFlags(const int);
 
-    int location() const;
-    void setLocation(int location);
+    Plasma::Types::Location location() const;
+    void setLocation(Plasma::Types::Location location);
 
     QObject *margins() const;
 
