@@ -256,7 +256,7 @@ bool DialogProxy::isActiveWindow() const
 void DialogProxy::activateWindow()
 {
     //qDebug();
-    //setWindowState(Qt::WindowActive);
+    setWindowState(Qt::WindowActive);
 }
 
 int DialogProxy::windowFlags() const
@@ -329,52 +329,10 @@ void DialogProxy::syncToMainItemSize()
     syncBorders();
 }
 
-/*
-bool DialogProxy::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == this && event->type() == QEvent::Move) {
-        QMoveEvent *me = static_cast<QMoveEvent *>(event);
-        if (me->oldPos().x() != me->pos().x()) {
-            emit xChanged();
-        }
-        if (me->oldPos().y() != me->pos().y()) {
-            emit yChanged();
-        }
-        if ((me->oldPos().x() != me->pos().x()) || (me->oldPos().y() != me->pos().y())) {
-            m_margins->checkMargins();
-        }
-    } else if (watched == this && event->type() == QEvent::Resize) {
-        QResizeEvent *re = static_cast<QResizeEvent *>(event);
-        if (re->oldSize().width() != re->size().width()) {
-            emit widthChanged();
-        }
-        if (re->oldSize().height() != re->size().height()) {
-            emit heightChanged();
-        }
-    } else if (watched == this && event->type() == QEvent::Show) {
-        //Plasma::WindowEffects::slideWindow(m_dialog, m_location);
-//         if (m_dialog->testAttribute(Qt::WA_X11NetWmWindowTypeDock)) {
-//             KWindowSystem::setOnAllDesktops(m_dialog->winId(), true);
-//         } else {
-//             KWindowSystem::setOnAllDesktops(m_dialog->winId(), false);
-//         }
-        emit visibleChanged();
-    } else if (watched == this && event->type() == QEvent::Hide) {
-        //Plasma::WindowEffects::slideWindow(m_dialog, m_location);
-        emit visibleChanged();
-    } else if (watched == this && event->type() == QEvent::WindowActivate) {
-        m_activeWindow = true;
-        emit activeWindowChanged();
-    } else if (watched == this && event->type() == QEvent::WindowDeactivate) {
-        m_activeWindow = false;
-        emit activeWindowChanged();
-    }
-    return false;
-}*/
 
 void DialogProxy::setAttribute(int attribute, bool on)
 {
-    //m_dialog->setAttribute((Qt::WidgetAttribute)attribute, on);
+    setAttribute((Qt::WidgetAttribute)attribute, on);
 
     if (attribute == Qt::WA_X11NetWmWindowTypeDock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
