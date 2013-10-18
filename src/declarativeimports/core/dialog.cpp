@@ -145,8 +145,30 @@ void DialogProxy::setVisible(const bool visible)
         }
 
         raise();
+        //DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     }
-    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+
+    KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
+
+    switch (m_location) {
+    case Plasma::Types::TopEdge:
+        slideLocation = KWindowEffects::TopEdge;
+        break;
+    case Plasma::Types::LeftEdge:
+        slideLocation = KWindowEffects::LeftEdge;
+        break;
+    case Plasma::Types::RightEdge:
+        slideLocation = KWindowEffects::RightEdge;
+        break;
+    case Plasma::Types::BottomEdge:
+        slideLocation = KWindowEffects::BottomEdge;
+        break;
+    //no edge, no slide
+    default:
+        break;        
+    }
+
+    KWindowEffects::slideWindow(winId(), slideLocation, -1);
     QQuickWindow::setVisible(visible);
 }
 
