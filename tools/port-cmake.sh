@@ -11,10 +11,12 @@
 
 
 for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
-    perl -p -i -e 's/KF5\:\:plasma/KF5\:\:Plasma/g' $FS
-#     perl -p -i -e 's/kde4_add_plugin/plasma_add_plugin/g' $FS
-#     perl -p -i -e 's/kde4_add_ui_files/qt5_wrap_ui/g' $FS
-#     perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
+    perl -p -i -e 's/kde4_add_plugin/plasma_add_plugin/g' $FS
+    perl -p -i -e 's/kde4_add_ui_files/qt5_wrap_ui/g' $FS
+    perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
+    perl -p -i -e 's/kde4_add_library/add_library/g' $FS
+    perl -p -i -e 's/kde4_add_executable/add_executable/g' $FS
+    perl -p -i -e 's/qt4_add_resources/qt5_add_resources/g' $FS
 
     perl -p -i -e 's/\$\{KDE4_KIDLETIME_LIBRARY\}/KF5::KIdleTime/g' $FS
     perl -p -i -e 's/\$\{KDE4_PLASMA_LIBS\}/KF5::Plasma/g' $FS
@@ -27,5 +29,13 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{KCoreAddons_LIBRARIES\}/KF5\:\:KCoreAddons/g' $FS
     perl -p -i -e 's/\$\{KI18n_LIBRARIES\}/KF5\:\:KI18n/g' $FS
     perl -p -i -e 's/\$\{KArchive_LIBRARIES\}/KF5\:\:KArchive/g' $FS
+    perl -p -i -e 's/\$\{QT_QTXML_LIBRARY\}/Qt5\:\:Xml/g' $FS
+    perl -p -i -e 's/\$\{QT_QTGUI_LIBRARY\}/Qt5\:\:Gui/g' $FS
+    perl -p -i -e 's/\$\{QT_QTNETWORK_LIBRARY\}/Qt5\:\:Network/g' $FS
+    perl -p -i -e 's/\$\{QT_QTCORE_LIBRARY\}/Qt5\:\:Core/g' $FS
+    perl -p -i -e 's/\$\{QT_QTDECLARATIVE_LIBRARY\}/Qt5\:\:Declarative/g' $FS
+    perl -p -i -e 's/\$\{QT_QTTEST_LIBRARY\}/Qt5\:\:Test/g' $FS
+    perl -p -i -e 's/\$\{QT_QTSVG_LIBRARY\}/Qt5\:\:Svg/g' $FS
+    perl -p -i -e 's/\$\{QT_QTOPENGL_LIBRARY\}/Qt5\:\:OpenGL/g' $FS
 done
-#
+
