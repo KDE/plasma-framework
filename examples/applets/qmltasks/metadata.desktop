@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
+Name[es]=Tareas del hombre pobre
 Name[nl]=Taken van 'Poor Man'
 Name[pt]=Tarefas Simples
 Name[pt_BR]=Tarefas simples
@@ -7,6 +8,7 @@ Name[sv]=Fattigmans aktiviteter
 Name[uk]=Задачі для початківців
 Name[x-test]=xxPoor Man's Tasksxx
 Comment=Example showing how to write your own tasks Widget
+Comment[es]=Ejemplo que muestra cómo escribir su propio widget de tareas
 Comment[nl]=Voorbeeld die toont hoe u uw eigen taak-widget schrijft
 Comment[pt]=Um exemplo que demonstra como criar o seu próprio item de tarefas
 Comment[pt_BR]=Exemplo que mostra como criar seu próprio widget de tarefas
