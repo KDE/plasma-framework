@@ -1,26 +1,15 @@
-
 cmake_minimum_required(VERSION 2.8.11)
 
-project(plasma)
-
-################# Disallow in-source build #################
-
-if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
-   message(FATAL_ERROR "plasma requires an out of source build. Please create a separate build directory and run 'cmake path_to_plasma [options]' there.")
-endif()
-
+project(Plasma)
 
 # Make CPack available to easy generate binary packages
 include(CPack)
-
 include(FeatureSummary)
 
 ################# set KDE specific information #################
 
 find_package(ECM 0.0.8 REQUIRED NO_MODULE)
-
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
@@ -47,17 +36,18 @@ endif()
 
 set (QT_MIN_VERSION "5.2.0")
 
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml Widgets Svg Declarative Script Test)
+
 # Load CMake, Compiler and InstallDirs settings from KF5 and the following are already somewhat "done" tier1/tier2 libs from kdelibs:
 find_package(KF5 MODULE REQUIRED COMPONENTS CMake Compiler InstallDirs
                                             KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
-                                            KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash
+                                            KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash KDeclarative
                                             KBookmarks KUnitConversion KDE4Attic Kross)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
 find_package(KIO REQUIRED NO_MODULE)
-find_package(KDeclarative REQUIRED NO_MODULE)
 
 # Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up
@@ -65,11 +55,6 @@ find_package(KDELibs4 REQUIRED NO_MODULE)
 
 # must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
 find_package(KDE4Support REQUIRED NO_MODULE)
-
-find_package(Qt5Transitional MODULE REQUIRED)
-
-find_package(Qt5Quick REQUIRED NO_MODULE)
-find_package(Qt5X11Extras REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
@@ -136,7 +121,7 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        TYPE OPTIONAL
                       )
 if(OPENGL_FOUND)
-    set(HAVE_GLX HAVE_X11)
+    set(HAVE_GLX ${HAVE_X11})
 else()
     set(HAVE_GLX 0)
 endif()
@@ -147,7 +132,6 @@ endif()
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
-remove_definitions(-DQT3_SUPPORT_WARNINGS -DQT3_SUPPORT)
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
 
 if(QCA2_FOUND)

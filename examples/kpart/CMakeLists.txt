@@ -5,8 +5,8 @@ set(plasma_example_kpart_shell_SRCS
    appletselector.cpp
 )
 
-kde4_add_ui_files(plasma_example_kpart_shell_SRCS appletselector.ui)
-kde4_add_executable(plasma-example-kpart-shell ${plasma_example_kpart_shell_SRCS})
+qt5_wrap_ui(plasma_example_kpart_shell_SRCS appletselector.ui)
+add_executable(plasma-example-kpart-shell ${plasma_example_kpart_shell_SRCS})
 
 target_link_libraries(plasma-example-kpart-shell ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} KF5::Plasma )
 

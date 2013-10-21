@@ -9,7 +9,7 @@ include(KDE4Defaults)
 set(test_SRCS
     test.cpp
 )
-kde4_add_ui_files(test_SRCS config.ui)
+qt5_wrap_ui(test_SRCS config.ui)
 
 plasma_add_plugin(plasma_containmentactions_test ${test_SRCS})
 target_link_libraries(plasma_containmentactions_test ${Plasma_LIBRARIES} KF5::KIOCore KF5::KIOWidgets)

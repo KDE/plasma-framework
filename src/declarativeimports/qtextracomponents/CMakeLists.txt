@@ -14,10 +14,10 @@ set(qtextracomponents_SRCS
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 
 target_link_libraries(qtextracomponentsplugin
-        ${QT_QTCORE_LIBRARY}
+        Qt5::Core
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
-        ${QT_QTGUI_LIBRARY}
+        Qt5::Gui
         ${KDeclarative_LIBRARIES}
         KF5::KIconThemes
         Plasma)

@@ -19,11 +19,11 @@
 #include <../tests/columnproxymodeltest.h>
 #include <columnproxymodel.h>
 #include <../../core/tests/modeltest.h>
-
-#include <qtest_kde.h>
+#include <qtest.h>
+#include <QSignalSpy>
 #include <QStandardItemModel>
 
-QTEST_KDEMAIN_CORE(ColumnProxyModelTest)
+QTEST_MAIN(ColumnProxyModelTest)
 
 void ColumnProxyModelTest::testInit()
 {

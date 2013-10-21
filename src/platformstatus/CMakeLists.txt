@@ -3,7 +3,7 @@ set(
    platformstatus.cpp
    )
 
-qt4_add_dbus_adaptor (
+qt5_add_dbus_adaptor (
    kded_platformstatus_SRCS
    org.kde.platformstatus.xml
    platformstatus.h PlatformStatus
@@ -20,7 +20,7 @@ target_link_libraries(
    KF5::KIOCore KF5::KIOWidgets
    Qt5::DBus
    Qt5::Quick
-   )
+)
 
 install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kded_platformstatus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )

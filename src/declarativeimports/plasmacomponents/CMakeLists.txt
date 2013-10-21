@@ -16,10 +16,10 @@ set(plasmacomponents_SRCS
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
-        ${QT_QTCORE_LIBRARY}
+        Qt5::Core
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
-        ${QT_QTGUI_LIBRARY}
+        Qt5::Gui
         ${KDeclarative_LIBRARIES}
         Plasma)
 

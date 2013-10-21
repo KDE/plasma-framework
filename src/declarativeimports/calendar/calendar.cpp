@@ -1,6 +1,4 @@
 #include <QDebug>
-#include <QListView>
-#include <QTreeView>
 
 
 #include "calendar.h"

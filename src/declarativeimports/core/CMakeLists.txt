@@ -30,11 +30,11 @@ set(corebindings_SRCS
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
-        ${QT_QTSCRIPT_LIBRARY}
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
-        ${KDeclarative_LIBRARIES}
-        ${KCore_LIBRARIES}
+        Qt5::Script
+        Qt5::Quick
+        Qt5::Qml
+        KF5::KDeclarative
+        KF5::KCoreAddons
         KF5::KIconThemes
         KF5::KWindowSystem
         Plasma)

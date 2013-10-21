@@ -12,16 +12,14 @@ set(calendar_SRCS
     daysmodel.cpp
 )
 
-qt4_automoc(${calendar_SRCS})
-
 add_library(calendarplugin SHARED ${calendar_SRCS})
 
 target_link_libraries(calendarplugin
       Qt5::Core
     ${Qt5Quick_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTDECLARATIVE_LIBRARY}
+    Qt5::Gui
+    Qt5::Declarative
     ${KDEPIMLIBS_AKONADI_LIBS}
     ${KDEPIMLIBS_KCALCORE_LIBS}
     ${KDEPIMLIBS_AKONADI_CALENDAR_LIBS}

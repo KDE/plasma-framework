@@ -10,10 +10,11 @@ set(declarativedragdrop_SRCS
 
 add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin
-        ${QT_QTCORE_LIBRARY}
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
-        ${QT_QTGUI_LIBRARY}
+        Qt5::Core
+        Qt5::Quick
+        Qt5::Qml
+        Qt5::Gui
+        Qt5::Widgets
 )
 
 install(TARGETS draganddropplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/draganddrop)

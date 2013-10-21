@@ -55,10 +55,10 @@ target_link_libraries(plasma_appletscript_simple_javascript
                        ${KCore_LIBRARIES}
                        KF5::KIOCore KF5::KIOWidgets
                        ${Plasma_LIBRARIES}
-                       ${QT_QTDECLARATIVE_LIBRARY}
+                       Qt5::Declarative
                        ${QT_QTSCRIPT_LIBRARY}
                        ${QT_QTUITOOLS_LIBRARY}
-                       ${QT_QTXML_LIBRARY}
+                       Qt5::Xml
                        )
 
 install(TARGETS plasma_appletscript_simple_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
