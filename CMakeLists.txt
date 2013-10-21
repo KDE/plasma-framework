@@ -73,10 +73,10 @@ find_package(Qt5X11Extras REQUIRED NO_MODULE)
 
 #optional features
 find_package(X11 MODULE)
-find_package(XCB MODULE REQUIRED COMPONENTS XCB COMPOSITE DAMAGE)
+find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
                        URL "http://xcb.freedesktop.org"
-                       TYPE RECOMMENDED
+                       TYPE REQUIRED
                       )
 if(X11_FOUND AND XCB_XCB_FOUND)
   set(HAVE_X11 1)
