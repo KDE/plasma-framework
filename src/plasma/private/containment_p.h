@@ -50,6 +50,7 @@ public:
           formFactor(Types::Planar),
           location(Types::Floating),
           screen(-1), // no screen
+          lastScreen(-1), // never had a screen
           type(Plasma::Types::NoContainmentType),
           drawWallpaper(false)
     {
@@ -103,6 +104,7 @@ public:
     QString wallpaper;
     QHash<QString, ContainmentActions*> localActionPlugins;
     int screen;
+    int lastScreen;
     QString activityId;
     Types::ContainmentType type;
     bool drawWallpaper : 1;

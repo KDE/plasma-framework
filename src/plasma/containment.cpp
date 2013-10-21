@@ -179,6 +179,7 @@ void Containment::restore(KConfigGroup &group)
 
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
+    d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
     
@@ -245,6 +246,7 @@ void Containment::save(KConfigGroup &g) const
     }
 
     group.writeEntry("screen", d->screen);
+    group.writeEntry("lastScreen", d->lastScreen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
@@ -450,6 +452,11 @@ void Containment::setScreen(int newScreen)
 int Containment::screen() const
 {
     return d->screen;
+}
+
+int Containment::lastScreen() const
+{
+    return d->lastScreen;
 }
 
 void Containment::setDrawWallpaper(bool drawWallpaper)

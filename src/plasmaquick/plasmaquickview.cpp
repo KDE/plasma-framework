@@ -69,8 +69,10 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment.data(), 0, q, 0);
         QObject *oldGraphicObject = containment.data()->property("graphicObject").value<QObject *>();
         if (oldGraphicObject) {
+            qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
-            oldGraphicObject->setParent(cont);
+            //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
+            oldGraphicObject->setParent(containment.data());
         }
     }
 
