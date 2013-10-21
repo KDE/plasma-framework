@@ -100,6 +100,7 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
                 connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SLOT(start()));
             }
+            syncToMainItemSize();
         }
 
         //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
@@ -354,7 +355,7 @@ void DialogProxy::syncToMainItemSize()
 
 void DialogProxy::setAttribute(int attribute, bool on)
 {
-    setAttribute((Qt::WidgetAttribute)attribute, on);
+    //setAttribute((Qt::WidgetAttribute)attribute, on);
 
     if (attribute == Qt::WA_X11NetWmWindowTypeDock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
