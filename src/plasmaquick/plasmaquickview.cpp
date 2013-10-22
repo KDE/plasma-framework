@@ -98,7 +98,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    QObject *graphicObject = containment.data()->property("graphicObject").value<QObject *>();
+    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("graphicObject").value<QObject *>());
 
 
     if (graphicObject) {
@@ -110,7 +110,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         graphicObject->setProperty("drawWallpaper",
                                    (cont->containmentType() == Plasma::Types::DesktopContainment ||
                                     cont->containmentType() == Plasma::Types::CustomContainment));
-        graphicObject->setProperty("parent", QVariant::fromValue(q->rootObject()));
+        graphicObject->setParentItem(q->rootObject());
         q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
     } else {
         qWarning() << "Containment graphic object not valid";
