@@ -145,8 +145,6 @@ void DialogProxy::setVisible(const bool visible)
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
             syncToMainItemSize();
         }
-
-        raise();
     }
 
     KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
@@ -171,6 +169,11 @@ void DialogProxy::setVisible(const bool visible)
 
     KWindowEffects::slideWindow(winId(), slideLocation, -1);
     QQuickWindow::setVisible(visible);
+
+    if (visible) {
+        raise();
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    }
 }
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
