@@ -137,16 +137,16 @@ void DialogProxy::setVisible(const bool visible)
     if (visible) {
         if (location() == Plasma::Types::FullScreen) {
             m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
+            setPosition(screen()->availableGeometry().topLeft());
             setGeometry(screen()->availableGeometry());
 
         } else {
             //syncToMainItemSize();
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
-            syncBorders();
+            syncToMainItemSize();
         }
 
         raise();
-        //DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     }
 
     KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
@@ -166,7 +166,7 @@ void DialogProxy::setVisible(const bool visible)
         break;
     //no edge, no slide
     default:
-        break;        
+        break;
     }
 
     KWindowEffects::slideWindow(winId(), slideLocation, -1);
@@ -340,6 +340,7 @@ void DialogProxy::syncToMainItemSize()
     if (!m_mainItem) {
         return;
     }
+    syncBorders();
     //qDebug() << " main item: " << m_mainItem.
     //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
     const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height()) +
@@ -349,7 +350,6 @@ void DialogProxy::syncToMainItemSize()
     resize(s);
     emit widthChanged(s.width());
     emit heightChanged(s.height());
-    syncBorders();
 }
 
 
