@@ -133,6 +133,7 @@ target_link_libraries(Plasma
     Qt5::Svg
     Qt5::DBus
     Qt5::UiTools
+    Qt5::Xml
     KF5::KArchive
     KF5::KGuiAddons
     KF5::KIconThemes
@@ -144,7 +145,8 @@ target_link_libraries(Plasma
     KF5::KWindowSystem
     KF5::KAuth
     KF5::KDeclarative
-    KF5::KDE4Attic
+    KF5::XmlGui
+    KF5::KConfigWidgets
     ${PLASMA_EXTRA_LIBS}
 )
 

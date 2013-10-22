@@ -24,8 +24,7 @@ target_link_libraries(plasma_appletscript_declarative
     Qt5::Script
     Qt5::UiTools
     KF5::KIOCore
-    KF5::KIOWidgets	
-    KF5::KDE4Attic
+    KF5::KIOWidgets
     KF5::KDeclarative
     KF5::KI18n
     Plasma
