@@ -179,7 +179,23 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem && parentItem->window()) {
-            return parentItem->window()->geometry().center() - QPoint(width()/2, height()/2);
+            switch (m_location) {
+            case Plasma::Types::TopEdge:
+                return QPoint(screen()->availableGeometry().center().x() - width()/2, screen()->availableGeometry().y());
+                break;
+            case Plasma::Types::LeftEdge:
+                return QPoint(screen()->availableGeometry().x(), screen()->availableGeometry().center().y() - height()/2);
+                break;
+            case Plasma::Types::RightEdge:
+                return QPoint(screen()->availableGeometry().right() - width(), screen()->availableGeometry().center().y() - height()/2);
+                break;
+            case Plasma::Types::BottomEdge:
+                return QPoint(screen()->availableGeometry().center().x() - width()/2, screen()->availableGeometry().bottom()-height());
+                break;
+            //Default center in the screen
+            default:
+                return screen()->geometry().center() - QPoint(width()/2, height()/2);
+            }
         } else {
             return QPoint();
         }
