@@ -16,14 +16,21 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
     perl -p -i -e 's/kde4_add_library/add_library/g' $FS
     perl -p -i -e 's/kde4_add_executable/add_executable/g' $FS
+    perl -p -i -e 's/kde4_create_handbook/kdoctools_create_handbook/g' $FS
     perl -p -i -e 's/qt4_add_resources/qt5_add_resources/g' $FS
+    perl -p -i -e 's/qt4_add_dbus_interface/qt5_add_dbus_interface/g' $FS
 
+    perl -p -i -e 's/KF5\:\:plasma/KF5\:\:Plasma/g' $FS
     perl -p -i -e 's/\$\{KDE4_KIDLETIME_LIBRARY\}/KF5::KIdleTime/g' $FS
     perl -p -i -e 's/\$\{KDE4_PLASMA_LIBS\}/KF5::Plasma/g' $FS
-    perl -p -i -e 's/KF5\:\:plasma/KF5\:\:Plasma/g' $FS
     perl -p -i -e 's/\$\{KDE4_KDECORE_LIBS\}//g' $FS
     perl -p -i -e 's/\$\{KDE4_SOLID_LIBS\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{KDE4_KIO_LIBS\}/KF5\:\:KIOCore\ KF5\:\:KIOWidgets/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KNOTIFYCONFIG_LIBRARY\}/KF5\:\:KNotifyConfig/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KNEWSTUFF3_LIBRARY\}/KF5\:\:KNewStuff/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KDESU_LIBS\}/KF5\:\:KDESu/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KTEXTEDITOR_LIBS\}/KF5\:\:KTextEditor/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KPTY_LIBS\}/KF5\:\:KPty/g' $FS
     perl -p -i -e 's/\$\{Solid_LIBRARIES\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{KService_LIBRARIES\}/KF5\:\:KService/g' $FS
     perl -p -i -e 's/\$\{KCoreAddons_LIBRARIES\}/KF5\:\:KCoreAddons/g' $FS
@@ -37,5 +44,6 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{QT_QTTEST_LIBRARY\}/Qt5\:\:Test/g' $FS
     perl -p -i -e 's/\$\{QT_QTSVG_LIBRARY\}/Qt5\:\:Svg/g' $FS
     perl -p -i -e 's/\$\{QT_QTOPENGL_LIBRARY\}/Qt5\:\:OpenGL/g' $FS
+    perl -p -i -e 's/\$\{QT_QTDBUS_LIBRARY\}/Qt5\:\:DBus/g' $FS
 done
 
