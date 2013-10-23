@@ -403,7 +403,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     if (pluginName.isEmpty() || pluginName == "default") {
         // default to the desktop containment
-        pluginName = desktopDefaultsConfig.readEntry("Containment", "org.kde.desktop");
+        pluginName = desktopDefaultsConfig.readEntry("Containment", "org.kde.desktopcontainment");
     }
 
     bool loadingNull = pluginName == "null";
