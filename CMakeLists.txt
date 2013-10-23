@@ -56,6 +56,9 @@ find_package(KDELibs4 REQUIRED NO_MODULE)
 # must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
 find_package(KDE4Support REQUIRED NO_MODULE)
 
+#the shell needs kactivities
+find_package(KActivities REQUIRED NO_MODULE)
+
 #optional features
 find_package(X11 MODULE)
 find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE)
