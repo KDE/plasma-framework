@@ -525,13 +525,6 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 #endif
     }
 
-    foreach (Containment *containment, newContainments) {
-        emit q->containmentAdded(containment);
-#ifndef NDEBUG
-//         qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Containment" << containment->name();
-#endif
-    }
-
     return newContainments;
 }
 
