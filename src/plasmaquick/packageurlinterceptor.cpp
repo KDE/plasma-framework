@@ -18,7 +18,6 @@
  */
 
 #include "packageurlinterceptor.h"
-#include "private/packageaccessmanagerfactory.h"
 
 #include <QDebug>
 #include <QQmlEngine>
@@ -116,9 +115,6 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     return path;
 }
 
-QQmlNetworkAccessManagerFactory* PackageUrlInterceptor::createPackageAccessManagerFactory(const Plasma::Package& package)
-{
-    return new PackageAccessManagerFactory(package);
-}
+
 
 

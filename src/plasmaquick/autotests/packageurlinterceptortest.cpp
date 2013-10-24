@@ -21,8 +21,6 @@
 
 #include <packageurlinterceptor.h>
 
-#include <QQmlNetworkAccessManagerFactory>
-
 #include <qtest.h>
 #include <QDebug>
 
@@ -31,9 +29,7 @@ QTEST_MAIN(PackageUrlInterceptorTest)
 void PackageUrlInterceptorTest::loadAccessManager()
 {
     const Plasma::Package &pkg = Plasma::Package();
-    QQmlNetworkAccessManagerFactory* pui = PackageUrlInterceptor::createPackageAccessManagerFactory(pkg);
-    QVERIFY(pui != 0);
-    delete pui;
+    //TODO: tests on path resolution
 }
 
 #include "moc_packageurlinterceptortest.cpp"

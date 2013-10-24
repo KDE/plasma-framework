@@ -6,10 +6,6 @@ set(plasmaquick_LIB_SRC
     configview.cpp
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
-    private/packageaccessmanager.cpp
-    private/packageaccessmanagerfactory.cpp
-    #private/containmentconfigview_p.cpp
-    #private/currentcontainmentactionsmodel_p.cpp
 )
 
 add_library(PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
