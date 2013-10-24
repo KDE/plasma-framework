@@ -41,6 +41,13 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 {
     //qDebug() << "Intercepted URL:" << path;
 
+    if (path.scheme() == QStringLiteral("plasmapackage")) {
+        QUrl pkgUrl;
+        pkgUrl.setScheme(QStringLiteral("file"));
+        pkgUrl.setPath(m_package.filePath(0, path.path()));
+        return pkgUrl;
+    }
+
     //TODO: security: permission for remote urls
     if (!path.isLocalFile() ) {
         return path;

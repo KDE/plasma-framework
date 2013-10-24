@@ -107,11 +107,6 @@ void AppletInterface::init()
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
     QQmlEngine *engine = m_qmlObject->engine();
-    QQmlNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
-    engine->setNetworkAccessManagerFactory(0);
-    delete factory;
-    //engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(m_appletScriptEngine->package()));
-    engine->setNetworkAccessManagerFactory(PackageUrlInterceptor::createPackageAccessManagerFactory(m_appletScriptEngine->package()));
 
     //Hook generic url resolution to the applet package as well
     //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?
