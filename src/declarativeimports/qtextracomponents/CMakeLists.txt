@@ -18,7 +18,7 @@ target_link_libraries(qtextracomponentsplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
         Qt5::Gui
-        ${KDeclarative_LIBRARIES}
+        KF5::KDeclarative
         KF5::KIconThemes
         Plasma)
 
