@@ -15,7 +15,7 @@ target_link_libraries(sortfiltermodeltest
     Plasma
     Qt5::Gui
     Qt5::Test
-    ${KDE4Support_LIBRARIES}
+    KF5::KDE4Support
     KF5::KI18n
     Qt5::Qml
     )

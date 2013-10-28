@@ -20,7 +20,7 @@ target_link_libraries(localebindingsplugin
         ${Qt5Quick_LIBRARIES}
         ${Qt5Qml_LIBRARIES}
         ${KCore_LIBRARIES}
-        ${KDE4Support_LIBRARIES}
+        KF5::KDE4Support
         KF5::KI18n
         )
 install(TARGETS localebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/locale)

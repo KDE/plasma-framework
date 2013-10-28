@@ -7,7 +7,7 @@ target_link_libraries(fullmodelaccesstest
     Qt5::Gui
     Qt5::Test
     KF5::KCoreAddons
-    ${KDE4Support_LIBRARIES}
+    KF5::KDE4Support
     KF5::KI18n
     )
 
