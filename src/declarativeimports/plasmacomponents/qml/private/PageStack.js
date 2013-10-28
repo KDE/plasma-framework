@@ -70,7 +70,10 @@ function push(page, properties, replace, immediate) {
     }
 
     // get the current container
-    var oldContainer = pageStack[pageStack.length - 1];
+    var oldContainer;
+    if (pageStack.length) {
+        oldContainer = pageStack[pageStack.length - 1];
+    }
 
     // pop the old container off the stack if this is a replace
     if (oldContainer && replace) {
