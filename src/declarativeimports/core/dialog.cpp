@@ -181,6 +181,7 @@ void DialogProxy::setVisible(const bool visible)
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
         }
+        setFlags(m_flags);
     }
 }
 
