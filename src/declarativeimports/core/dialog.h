@@ -27,6 +27,8 @@
 
 #include <Plasma/Plasma>
 
+#include <netwm_def.h>
+
 class QQuickItem;
 
 namespace Plasma
@@ -80,12 +82,22 @@ class DialogProxy : public QQuickWindow
      */
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
 
+    /**
+     * Type of the window
+     */
+    Q_PROPERTY(WindowType type READ type WRITE setType NOTIFY typeChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
-    enum WidgetAttribute {
-        WA_X11NetWmWindowTypeDock = Qt::WA_X11NetWmWindowTypeDock
+    enum WindowType {
+        Normal = NET::Normal,
+        Dock = NET::Dock,
+        Dialog = NET::Dialog,
+        PopupMenu = NET::PopupMenu,
+        Tooltip = NET::Tooltip
     };
+    Q_ENUMS(WindowType)
 
     DialogProxy(QQuickItem *parent = 0);
     ~DialogProxy();
@@ -123,14 +135,8 @@ public:
      */
     QPoint popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
 
-    /**
-     * Set a Qt.WidgetAttribute to the dialog window
-     *
-     * @arg int attribute see Qt.WidgetAttribute
-     * @arg bool on activate or deactivate the atrtibute
-     */
-    //FIXME:: Qt::WidgetAttribute should be already 
-    Q_INVOKABLE void setAttribute(int attribute, bool on);
+    void setType(WindowType type);
+    WindowType type() const;
 
 Q_SIGNALS:
     void mainItemChanged();
@@ -138,6 +144,7 @@ Q_SIGNALS:
     void activeWindowChanged();
     void locationChanged();
     void visualParentChanged();
+    void typeChanged();
 
 public Q_SLOTS:
     void syncMainItemToSize();
@@ -163,6 +170,7 @@ private:
     Qt::WindowFlags m_flags;
     bool m_activeWindow;
     QRect m_cachedGeometry;
+    WindowType m_type;
 };
 
 #endif

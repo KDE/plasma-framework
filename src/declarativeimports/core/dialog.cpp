@@ -41,7 +41,8 @@
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::TopEdge),
-      m_activeWindow(false)
+      m_activeWindow(false),
+      m_type(Normal)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -173,6 +174,13 @@ void DialogProxy::setVisible(const bool visible)
     if (visible) {
         raise();
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+
+        KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        if (m_type == Dock) {
+            KWindowSystem::setOnAllDesktops(winId(), true);
+        } else {
+            KWindowSystem::setOnAllDesktops(winId(), false);
+        }
     }
 }
 
@@ -372,15 +380,28 @@ void DialogProxy::syncToMainItemSize()
 }
 
 
-void DialogProxy::setAttribute(int attribute, bool on)
-{
-    //setAttribute((Qt::WidgetAttribute)attribute, on);
 
-    if (attribute == Qt::WA_X11NetWmWindowTypeDock) {
+void DialogProxy::setType(WindowType type)
+{
+    if (type == m_type) {
+        return;
+    }
+
+    m_type = type;
+    KWindowSystem::setType(winId(), (NET::WindowType)type);
+
+    if (type == Dock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
     } else {
         KWindowSystem::setOnAllDesktops(winId(), false);
     }
+
+    emit typeChanged();
+}
+
+DialogProxy::WindowType DialogProxy::type() const
+{
+    return m_type;
 }
 
 void DialogProxy::focusInEvent(QFocusEvent *ev)
