@@ -181,7 +181,7 @@ void DialogProxy::setVisible(const bool visible)
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
         }
-        setFlags(m_flags);
+        setFlags(Qt::FramelessWindowHint|m_flags);
     }
 }
 
