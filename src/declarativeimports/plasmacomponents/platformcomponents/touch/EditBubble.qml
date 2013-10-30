@@ -42,9 +42,9 @@ PlasmaCore.FrameSvgItem {
         spacing: iconSize
         anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter; margins: 8; }
         height: editBubble.iconSize
-        QIconItem {
+        PlasmaCore.IconItem {
             id: copyIcon
-            icon: QIcon("edit-copy")
+            source: "edit-copy"
             width: editBubble.iconSize
             height: editBubble.iconSize
             enabled: textInput.selectedText != ""
@@ -61,9 +61,9 @@ PlasmaCore.FrameSvgItem {
                                                 duration: 175; easing.type: Easing.OutExpo; }
             }
         }
-        QIconItem {
+        PlasmaCore.IconItem {
             id: pasteIcon
-            icon: QIcon("edit-paste")
+            source: "edit-paste"
             width: editBubble.iconSize
             height: editBubble.iconSize
             enabled: textInput.canPaste
