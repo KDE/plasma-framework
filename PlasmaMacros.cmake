@@ -1,5 +1,6 @@
 
-find_package(KF5 MODULE REQUIRED COMPONENTS InstallDirs)
+find_package(ECM 0.0.9 CONFIG REQUIRED)
+include(KDEInstallDirs)
 
 
 # plasma_install_package(path componentname [root] [type])
