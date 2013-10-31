@@ -44,19 +44,18 @@ find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml W
 
 find_package(KF5 MODULE REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
-                                            KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash KDeclarative
-                                            KBookmarks KUnitConversion Kross)
+                                            KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash
+                                            KBookmarks KDeclarative KUnitConversion Kross)
 #find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
 find_package(KIO REQUIRED NO_MODULE)
 
+find_package(KDE4Support REQUIRED NO_MODULE)
+
 # Needed for some includes from KDE/ (KMimeType, etc.)
 # FIXME: remove when kdeui is fully split up
 find_package(KDELibs4 REQUIRED NO_MODULE)
-
-# must be after KDELibs4, since it links against imported targets coming from KDELibs4Config.cmake:
-find_package(KDE4Support REQUIRED NO_MODULE)
 
 #the shell needs kactivities
 find_package(KActivities REQUIRED NO_MODULE)
