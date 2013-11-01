@@ -384,15 +384,13 @@ public:
 
     void unblockJobs()
     {
-        // WORKAROUND: Queue an empty job to force ThreadWeaver to awaken threads
         if (searchJobs.isEmpty() && Weaver::instance()->isIdle()) {
             oldSearchJobs.clear();
             checkTearDown();
             return;
         }
 
-        DummyJob *dummy = new DummyJob(q);
-        Weaver::instance()->enqueueRaw(dummy);
+        Weaver::instance()->reschedule();
     }
 
     void runnerMatchingSuspended(bool suspended)

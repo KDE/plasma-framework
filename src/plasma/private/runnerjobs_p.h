@@ -86,24 +86,6 @@ private:
     QMutex m_mutex;
 };
 
-/* ThreadWeaver work around:
- * There is no method exposed that allows us to inform
- * ThreadWeaver that a previously unavailable job is now
- * available; thus, we use an empty job to wake up the threads
- */
-class DummyJob : public ThreadWeaver::Job
-{
-    public:
-        DummyJob(QObject *parent) : Job(), m_decorator(new ThreadWeaver::QObjectDecorator(this, parent)) {}
-        ~DummyJob() {}
-
-        ThreadWeaver::QObjectDecorator* decorator() const { return m_decorator; }
-
-    private:
-        virtual void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*) {}
-        ThreadWeaver::QObjectDecorator* m_decorator;
-};
-
 /*
  * FindMatchesJob class
  * Class to run queries in different threads
