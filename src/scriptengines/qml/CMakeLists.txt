@@ -27,6 +27,7 @@ target_link_libraries(plasma_appletscript_declarative
     KF5::KIOWidgets
     KF5::KDeclarative
     KF5::KI18n
+    KF5::XmlGui # KActionCollection
     Plasma
     PlasmaQuick
 )
