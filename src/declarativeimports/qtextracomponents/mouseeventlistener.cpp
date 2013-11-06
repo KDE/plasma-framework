@@ -220,6 +220,7 @@ bool MouseEventListener::childMouseEventFilter(QQuickItem *item, QEvent *event)
         KDeclarativeMouseEvent dme(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         m_pressAndHoldEvent = new KDeclarativeMouseEvent(myPos.x(), myPos.y(), me->screenPos().x(), me->screenPos().y(), me->button(), me->buttons(), me->modifiers());
         //qDebug() << "pressed in sceneEventFilter";
+        m_buttonDownPos[me->button()] = me->pos();
         emit pressed(&dme);
         m_pressed = true;
 
