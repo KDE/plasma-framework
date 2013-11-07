@@ -68,7 +68,6 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     m_frameSvgItem->setImagePath("dialogs/background");
     //m_frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
-    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
 }
 
 DialogProxy::~DialogProxy()
@@ -447,7 +446,9 @@ void DialogProxy::syncBorders()
         borders = borders & ~Plasma::FrameSvg::BottomBorder;
     }
     m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
-    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+    if (isVisible()) {
+        DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+    }
     //syncToMainItemSize();
 }
 
