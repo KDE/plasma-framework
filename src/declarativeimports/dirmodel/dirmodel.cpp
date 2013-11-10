@@ -21,6 +21,7 @@
 
 #include <QImage>
 #include <QPixmap>
+#include <QTimer>
 
 #include <kdirlister.h>
 #include <QDebug>
