@@ -53,10 +53,6 @@ find_package(KIO REQUIRED NO_MODULE)
 
 find_package(KDE4Support REQUIRED NO_MODULE)
 
-# Needed for some includes from KDE/ (KMimeType, etc.)
-# FIXME: remove when kdeui is fully split up
-find_package(KDELibs4 REQUIRED NO_MODULE)
-
 #the shell needs kactivities
 find_package(KActivities REQUIRED NO_MODULE)
 
@@ -92,13 +88,6 @@ set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure networ
                        PURPOSE "KDE uses OpenSSL for the bulk of secure communications, including secure web browsing via HTTPS"
                       )
 
-find_package(Libintl MODULE)
-set_package_properties(Libintl PROPERTIES DESCRIPTION "Support for multiple languages"
-                       URL "http://www.gnu.org/software/gettext"
-                       TYPE RECOMMENDED
-                       PURPOSE "Enables KDE to be available in many different languages"
-                      )
-
 #FIXME: when we have a qca for qt5, reenable
 find_package(QCA2 2.0.0 MODULE)
 set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
@@ -132,16 +121,15 @@ endif()
 
 #########################################################################
 
-#add_definitions(${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
 
 if(QCA2_FOUND)
-    include_directories(
-        ${QCA2_INCLUDE_DIR}
-    )
+#     include_directories(
+#         ${QCA2_INCLUDE_DIR}
+#     )
 endif()
 
 include(PlasmaMacros.cmake)

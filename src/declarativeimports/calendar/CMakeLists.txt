@@ -1,5 +1,4 @@
 project(calendar)
-include(KDE4Defaults)
 
 set(calendar_SRCS
     calendarplugin.cpp
@@ -15,9 +14,9 @@ set(calendar_SRCS
 add_library(calendarplugin SHARED ${calendar_SRCS})
 
 target_link_libraries(calendarplugin
-      Qt5::Core
-    ${Qt5Quick_LIBRARIES}
-    ${Qt5Qml_LIBRARIES}
+    Qt5::Core
+    Qt5::Quick
+    Qt5::Qml
     Qt5::Gui
     Qt5::Declarative
     ${KDEPIMLIBS_AKONADI_LIBS}

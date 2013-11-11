@@ -8,7 +8,7 @@ set(plasma_example_kpart_shell_SRCS
 qt5_wrap_ui(plasma_example_kpart_shell_SRCS appletselector.ui)
 add_executable(plasma-example-kpart-shell ${plasma_example_kpart_shell_SRCS})
 
-target_link_libraries(plasma-example-kpart-shell ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} KF5::Plasma )
+target_link_libraries(plasma-example-kpart-shell KF5::Plasma KF5::KParts)
 
 ########### install files ###############
 install(TARGETS plasma-example-kpart-shell ${INSTALL_TARGETS_DEFAULT_ARGS} )
