@@ -46,7 +46,6 @@ find_package(KF5 CONFIG REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSyst
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
                                             KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash
                                             KBookmarks KDeclarative KUnitConversion Kross KParts)
-#find_package(KF5Transitional REQUIRED)
 
 # those are not "done" yet:
 find_package(KIO REQUIRED NO_MODULE)
@@ -89,7 +88,7 @@ set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure networ
                       )
 
 #FIXME: when we have a qca for qt5, reenable
-find_package(QCA2 2.0.0 MODULE)
+# find_package(QCA2 2.0.0 MODULE)
 set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
                        URL "http://delta.affinix.com/qca"
                        TYPE OPTIONAL
