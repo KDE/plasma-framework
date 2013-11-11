@@ -126,12 +126,6 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
 
-if(QCA2_FOUND)
-#     include_directories(
-#         ${QCA2_INCLUDE_DIR}
-#     )
-endif()
-
 include(PlasmaMacros.cmake)
 
 ################# configure checks and create the configured files #################

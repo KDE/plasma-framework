@@ -1,3 +1,8 @@
+if(QCA2_FOUND)
+    include_directories(
+        ${QCA2_INCLUDE_DIR}
+    )
+endif()
 
 # This option should be removed, or moved down as far as possible.
 # That means porting the existing frameworks to the CMake automoc
