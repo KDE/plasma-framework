@@ -26,7 +26,7 @@
 #include <kiconloader.h>
 #include <QApplication>
 
-
+#include <QDebug>
 
 //********** Theme *************
 
@@ -46,6 +46,7 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     connect(this, &Plasma::Theme::themeChanged, this, &ThemeProxy::themeChanged);
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
+    updateSpacing();
     installEventFilter(qApp);
 }
 
@@ -57,11 +58,19 @@ bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == QCoreApplication::instance()) {
         if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            //updateSpacing();
             defaultFontChanged();
             smallestFontChanged();
         }
     }
     return QObject::eventFilter(watched, event);
+}
+
+void ThemeProxy::updateSpacing()
+{
+    const int _s = mSize().height();
+    m_smallSpacing = (int)(_s / 10);
+    m_largeSpacing = (int)(_s / 2);
 }
 
 QString ThemeProxy::themeName() const
@@ -84,6 +93,15 @@ QSizeF ThemeProxy::mSize(const QFont &font) const
     return QFontMetrics(font).boundingRect("M").size();
 }
 
+int ThemeProxy::smallSpacing() const
+{
+    return m_smallSpacing;
+}
+
+int ThemeProxy::largeSpacing() const
+{
+    return m_largeSpacing;
+}
 
 bool ThemeProxy::useGlobalSettings() const
 {

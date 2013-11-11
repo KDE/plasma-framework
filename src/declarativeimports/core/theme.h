@@ -85,6 +85,10 @@ class ThemeProxy : public Plasma::Theme
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
+    // layout hints
+    Q_PROPERTY(int smallSpacing READ smallSpacing CONSTANT)
+    Q_PROPERTY(int largeSpacing READ largeSpacing CONSTANT)
+
 public:
     ThemeProxy(QQmlEngine *parent = 0);
     ~ThemeProxy();
@@ -125,6 +129,9 @@ public:
     int defaultIconSize() const;
     QQmlPropertyMap *iconSizes() const;
 
+    int smallSpacing() const;
+    int largeSpacing() const;
+
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
 
@@ -137,6 +144,9 @@ Q_SIGNALS:
 
 private:
     bool eventFilter(QObject *watched, QEvent *event);
+    void updateSpacing();
+    int m_smallSpacing;
+    int m_largeSpacing;
     int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
     QQmlEngine *m_engine;
