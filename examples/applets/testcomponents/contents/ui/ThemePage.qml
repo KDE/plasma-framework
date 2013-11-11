@@ -26,30 +26,75 @@ import org.kde.qtextracomponents 2.0 as QtExtras
 // IconTab
 
 PlasmaComponents.Page {
+
+
+    property int cheight: 48
+    property int cwidth: themePage.width / 1.5
+
     id: themePage
     anchors {
         fill: parent
         margins: _s
     }
+
     Column {
-        anchors.fill: parent
-        spacing: _s
+        //anchors.fill: parent
+        spacing: _s / 4
 
         PlasmaExtras.Title {
             width: parent.width
             elide: Text.ElideRight
             text: "Theme"
         }
-        PlasmaComponents.Label {
-            text: "This is the default Font."
-            font: theme.smallestFont
-            //font.pointSize: theme.smallestReadableFont.pointSize
 
-        }
         PlasmaComponents.Label {
             text: "This is the smallest readable Font."
             font.pointSize: theme.smallestFont.pointSize
 
+        }
+        Row {
+            PlasmaComponents.Label {
+                text: "textColor: "
+                width: cwidth
+            }
+            Rectangle {
+                width: cheight
+                height: cheight / 2
+                color: theme.textColor
+            }
+        }
+        Row {
+            PlasmaComponents.Label {
+                text: "buttonTextColor: "
+                width: cwidth
+            }
+            Rectangle {
+                width: cheight
+                height: cheight / 2
+                color: buttonTextColor
+            }
+        }
+        Row {
+            PlasmaComponents.Label {
+                text: "highlightColor: "
+                width: cwidth
+            }
+            Rectangle {
+                width: cheight
+                height: cheight / 2
+                color: theme.highlightColor
+            }
+        }
+        Row {
+            PlasmaComponents.Label {
+                text: "viewBackgroundColor: "
+                width: cwidth
+            }
+            Rectangle {
+                width: cheight
+                height: cheight / 2
+                color: theme.viewBackgroundColor
+            }
         }
     }
 }
