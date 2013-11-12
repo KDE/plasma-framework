@@ -89,15 +89,12 @@ Item {
         return Qt.formatDate(d, "dddd dd MMM yyyy");
     }
 
-    //Rectangle { anchors.fill: monthCalendar; color: "green"; opacity: 0.3 }
-
     PlasmaExtras.Heading {
         id: monthHeading
 
         anchors {
             top: parent.top
             left: calendarGrid.left
-            //right: parent.right
             leftMargin: -borderWidth
         }
 
@@ -119,8 +116,6 @@ Item {
             onClicked: {
                 if (menuLoader.source == "") {
                     menuLoader.source = "MonthMenu.qml"
-                } else {
-                    //menuLoader.source = ""
                 }
                 menuLoader.item.open(0, height);
             }
@@ -133,24 +128,19 @@ Item {
         days: 7
         weeks: 6
         startDay: 1
-        //startDate: "2013-08-01"
         startDate: isTodayMonth();
         onStartDateChanged: {
-            //monthHeading.text = monthName
-            //monthHeading.text = monthName
             selectedMonth = monthName
             selectedYear = year
-            //print("Year now: " + selectedMonth + ", " + year)
             monthHeading.text = selectedMonth + ", " + year;
             //monthYear.text = year
         }
     }
 
-    CalendarToolbar {
+//     CalendarToolbar {
+//
+//     }
 
-    }
-
-    //Rectangle { anchors.fill: calendarGrid; color: "orange"; opacity: 0.3; }
     DaysCalendar {
         id: calendarGrid
         anchors {
