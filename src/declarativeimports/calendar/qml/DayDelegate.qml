@@ -34,7 +34,7 @@ DayStyle {
         font.pixelSize: Math.max(theme.defaultFont.pixelSize, cellHeight / 3)
         text: dayNumber
         z: 99
-        font.bold: (containsEventItems)||(containsTodoItems) ? true: false
+        //font.bold: (containsEventItems)||(containsTodoItems) ? true: false
         opacity: (isPreviousMonth || isNextMonth) ? 0.5: 1.0
     }
     MouseArea {

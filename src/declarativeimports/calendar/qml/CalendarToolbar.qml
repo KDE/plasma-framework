@@ -29,7 +29,8 @@ Row {
         right: parent.right
     }
     spacing: 4
-
+    visible: false
+    
     Components.ToolButton {
         id: monthright
         flat: true;
@@ -42,24 +43,24 @@ Row {
         }
     }
 
-    Components.ToolButton {
-        id: month
-        anchors.left: monthright.right
-        anchors.right: monthYear.left
-        anchors.leftMargin: 20
-        Loader {
-            id: menuLoader
-        }
-        onClicked: {
-            if (menuLoader.source == "") {
-                menuLoader.source = "MonthMenu.qml"
-            } else {
-                //menuLoader.source = ""
-            }
-            menuLoader.item.open(0, height);
-        }
-        text: monthCalendar.monthName
-    }
+//     Components.ToolButton {
+//         id: month
+//         anchors.left: monthright.right
+//         anchors.right: monthYear.left
+//         anchors.leftMargin: 20
+//         Loader {
+//             id: menuLoader
+//         }
+//         onClicked: {
+//             if (menuLoader.source == "") {
+//                 menuLoader.source = "MonthMenu.qml"
+//             } else {
+//                 //menuLoader.source = ""
+//             }
+//             menuLoader.item.open(0, height);
+//         }
+//         text: monthCalendar.monthName
+//     }
 
     Components.ToolButton {
         id: monthYear

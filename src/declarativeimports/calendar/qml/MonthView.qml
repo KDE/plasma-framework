@@ -27,6 +27,9 @@ Item {
     height: parent.height
     property string date ;
     property date showDate: new Date()
+
+    property string selectedMonth
+    property string selectedYear
   
     property alias calendarGrid: calendarGrid
     property int mWidth: theme.mSize(theme.defaultFont).width
@@ -34,7 +37,7 @@ Item {
     property int borderWidth: 1
 
     property int columns: monthCalendar.days
-    property int rows: 1 + monthCalendar.weeks
+    property int rows: monthCalendar.weeks
 
     property int cellWidth: prefCellWidth()
     property int cellHeight: prefCellHeight()
@@ -49,7 +52,7 @@ Item {
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
-    
+
     anchors.margins: theme.largeSpacing * 3
 
     function prefCellWidth() {
@@ -74,6 +77,7 @@ Item {
 
     function isToday(date) {
         if (date == Qt.formatDateTime(new Date(), "d/M/yyyy")) {
+            print("!!!!!!!!!!!!!! TODAY: " + date);
             return true;
         }
         else return false;
@@ -96,13 +100,34 @@ Item {
         anchors {
             top: parent.top
             left: calendarGrid.left
-            right: parent.right
+            //right: parent.right
             leftMargin: -borderWidth
         }
 
         level: 1
         opacity: 0.8
-        text: monthCalendar.monthName
+        text: monthCalendar.monthName + ", " + monthCalendar.year
+        MouseArea {
+            id: month
+            width: monthHeading.paintedWidth
+            anchors {
+                left: parent.left
+                top: parent.top
+                bottom: parent.bottom
+            }
+            anchors.fill: parent
+            Loader {
+                id: menuLoader
+            }
+            onClicked: {
+                if (menuLoader.source == "") {
+                    menuLoader.source = "MonthMenu.qml"
+                } else {
+                    //menuLoader.source = ""
+                }
+                menuLoader.item.open(0, height);
+            }
+        }
     }
 
     Calendar {
@@ -114,14 +139,18 @@ Item {
         startDate: "2013-08-01"
         onStartDateChanged: {
             //monthHeading.text = monthName
-            month.text = monthName
-            monthYear.text = year
+            //monthHeading.text = monthName
+            selectedMonth = monthName
+            selectedYear = year
+            //print("Year now: " + selectedMonth + ", " + year)
+            monthHeading.text = selectedMonth + ", " + year;
+            //monthYear.text = year
         }
     }
 
-//     CalendarToolbar {
-//
-//     }
+    CalendarToolbar {
+
+    }
 
     //Rectangle { anchors.fill: calendarGrid; color: "orange"; opacity: 0.3; }
     DaysCalendar {
