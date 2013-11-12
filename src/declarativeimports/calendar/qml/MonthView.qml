@@ -47,8 +47,6 @@ Item {
     property int implicitWidth: theme.mSize(theme.defaultFont).width * 6 * 8
     property int implicitHeight: theme.mSize(theme.defaultFont).height * 2 * 9
 
-    //property int cellFontPixelSize: theme.defaultFont.pixelSize
- 
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
@@ -77,7 +75,6 @@ Item {
 
     function isToday(date) {
         if (date == Qt.formatDateTime(new Date(), "d/M/yyyy")) {
-            print("!!!!!!!!!!!!!! TODAY: " + date);
             return true;
         }
         else return false;
@@ -136,7 +133,8 @@ Item {
         days: 7
         weeks: 6
         startDay: 1
-        startDate: "2013-08-01"
+        //startDate: "2013-08-01"
+        startDate: isTodayMonth();
         onStartDateChanged: {
             //monthHeading.text = monthName
             //monthHeading.text = monthName
@@ -169,6 +167,7 @@ Item {
 
     Item {
         id: calendarToolbar
+        visible: false
         anchors {
             left: parent.left
             right: parent.right
@@ -214,5 +213,4 @@ Item {
             }
         }
     }
-
 }

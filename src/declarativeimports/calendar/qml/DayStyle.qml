@@ -41,7 +41,7 @@ Item {
         width: parent.width - (borderWidth)
         height: parent.height - (borderWidth)
 //         anchors.fill: parent
-        opacity: (calendarDays.selectedItem == dayStyle || isToday(dayNumber+"/"+monthNumber+"/"+yearNumber)) ? 0.8 : 0
+        opacity: (isToday(dayNumber+"/"+monthNumber+"/"+yearNumber)) ? 0.8 : 0
         Behavior on opacity { NumberAnimation {} }
         color: theme.highlightColor
         //border.color: isToday(dayNumber+"/"+monthNumber+"/"+yearNumber) ? theme.highlightColor : "transparent"
@@ -52,10 +52,15 @@ Item {
         anchors {
             fill: todayRect
         }
-        opacity: dateMouse.containsMouse ? 0.3 : 0
-        //visible: dateMouse.containsMouse
+        opacity: {
+            if (calendarDays.selectedItem == dayStyle) 0.6
+            else if (dateMouse.containsMouse) 0.3
+            else 0
+        }
+                    //visible: dateMouse.containsMouse
         Behavior on opacity { NumberAnimation {} }
         color: theme.viewBackgroundColor
+        z: todayRect.z - 1
         //border.color: isToday(dayNumber+"/"+monthNumber+"/"+yearNumber) ? theme.highlightColor : "transparent"
     }
 
