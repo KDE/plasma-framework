@@ -34,7 +34,7 @@ PLASMA_UNIT_TESTS(
 add_executable(storagetest storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)
 target_link_libraries(storagetest Qt5::Test Qt5::Declarative Qt5::Sql KF5::KIOCore Plasma KF5::KCoreAddons )
 add_test(plasma-storagetest storagetest)
-ecm_mark_as_test(plasma-storagetest)
+ecm_mark_as_test(storagetest)
 
 if(QT_QTOPENGL_FOUND)
   target_link_libraries(storagetest Qt5::OpenGL)
