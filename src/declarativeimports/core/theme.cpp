@@ -58,7 +58,6 @@ bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == QCoreApplication::instance()) {
         if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            //updateSpacing();
             defaultFontChanged();
             smallestFontChanged();
         }
@@ -70,7 +69,7 @@ void ThemeProxy::updateSpacing()
 {
     const int _s = mSize().height();
     m_smallSpacing = (int)(_s / 10);
-    m_largeSpacing = (int)(_s / 2);
+    m_largeSpacing = _s;
 }
 
 QString ThemeProxy::themeName() const
