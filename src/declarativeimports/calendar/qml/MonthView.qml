@@ -31,6 +31,7 @@ Item {
 
     property real borderOpacity: 0.2
 
+    property alias calendar: monthCalendar
 
     property alias selectedMonth: monthCalendar.monthName
     property alias selectedYear: monthCalendar.year
