@@ -18,23 +18,29 @@
 import QtQuick 2.0
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
+import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
     id: root
     width: parent.width
     height: parent.height
-    property string date ;
+
+    property QtObject date
     property date showDate: new Date()
 
-    property string selectedMonth
-    property string selectedYear
+    property real borderOpacity: 0.2
+
+
+    property alias selectedMonth: monthCalendar.monthName
+    property alias selectedYear: monthCalendar.year
   
     property alias calendarGrid: calendarGrid
     property int mWidth: theme.mSize(theme.defaultFont).width
     property int mHeight: theme.mSize(theme.defaultFont).height
     property int borderWidth: 1
+
+    property alias startDate: monthCalendar.startDate
 
     property int columns: monthCalendar.days
     property int rows: monthCalendar.weeks
@@ -42,21 +48,21 @@ Item {
     property int cellWidth: prefCellWidth()
     property int cellHeight: prefCellHeight()
 
-    property int miniumWidth: implicitWidth
-    property int miniumHeight: implicitHeight
-    property int implicitWidth: theme.mSize(theme.defaultFont).width * 6 * 8
-    property int implicitHeight: theme.mSize(theme.defaultFont).height * 2 * 9
+//     property int miniumWidth: implicitWidth
+//     property int miniumHeight: implicitHeight
+//     property int implicitWidth: theme.mSize(theme.defaultFont).width * 6 * 8
+//     property int implicitHeight: theme.mSize(theme.defaultFont).height * 2 * 9
 
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
 
-    anchors.margins: theme.largeSpacing * 3
+    anchors.margins: borderWidth
 
     function prefCellWidth() {
         return Math.min(
             Math.max(
-                mWidth * 4,
+                mWidth * 3,
                 calendarGrid.width / (root.columns)
             ),
             mWidth * 100
@@ -89,39 +95,6 @@ Item {
         return Qt.formatDate(d, "dddd dd MMM yyyy");
     }
 
-    PlasmaExtras.Heading {
-        id: monthHeading
-
-        anchors {
-            top: parent.top
-            left: calendarGrid.left
-            leftMargin: -borderWidth
-        }
-
-        level: 1
-        opacity: 0.8
-        text: monthCalendar.monthName + ", " + monthCalendar.year
-        MouseArea {
-            id: month
-            width: monthHeading.paintedWidth
-            anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-            }
-            anchors.fill: parent
-            Loader {
-                id: menuLoader
-            }
-            onClicked: {
-                if (menuLoader.source == "") {
-                    menuLoader.source = "MonthMenu.qml"
-                }
-                menuLoader.item.open(0, height);
-            }
-        }
-    }
-
     Calendar {
         id: monthCalendar
 
@@ -129,12 +102,6 @@ Item {
         weeks: 6
         startDay: 1
         startDate: isTodayMonth();
-        onStartDateChanged: {
-            selectedMonth = monthName
-            selectedYear = year
-            monthHeading.text = selectedMonth + ", " + year;
-            //monthYear.text = year
-        }
     }
 
 //     CalendarToolbar {
@@ -144,17 +111,54 @@ Item {
     DaysCalendar {
         id: calendarGrid
         anchors {
-            top: monthHeading.bottom
-            left: parent.left
-            right: parent.right
-            bottom: calendarToolbar.top
-            margins: theme.largeSpacing
-            bottomMargin: theme.largeSpacing * 3
-            topMargin: - (theme.largeSpacing / 2)
+            fill: parent
+            leftMargin: borderWidth
         }
 
+        PlasmaComponents.Label {
+            text: "◀"
+            //x: spacing / 2
+            opacity: leftmouse.containsMouse ? 0.5 : 0.2
+            Behavior on opacity { NumberAnimation {} }
+            anchors {
+                top: parent.top
+                left: parent.left
+                leftMargin: spacing / 2
+            }
+            MouseArea {
+                id: leftmouse
+                anchors.fill: parent
+                anchors.margins: -spacing / 3
+                hoverEnabled: true
+                onClicked: {
+                    monthCalendar.previousMonth()
+                }
+            }
+        }
+        PlasmaComponents.Label {
+            text: "▶"
+            opacity: rightmouse.containsMouse ? 0.5 : 0.2
+            Behavior on opacity { NumberAnimation {} }
+            anchors {
+                top: parent.top
+                right: parent.right
+                rightMargin: spacing / 2
+            }
+            MouseArea {
+                id: rightmouse
+                anchors.fill: parent
+                anchors.margins: -spacing / 3
+                hoverEnabled: true
+                onClicked: {
+                    monthCalendar.nextMonth()
+                }
+            }
+        }
     }
 
+
+
+/*
     Item {
         id: calendarToolbar
         visible: false
@@ -165,7 +169,7 @@ Item {
             bottom: parent.bottom
         }
 
-        Components.ToolButton {
+        PlasmaComponents.ToolButton {
             id: currentDate
             iconSource: "view-pim-calendar"
             width: height
@@ -182,7 +186,7 @@ Item {
             }
         }
 
-        Components.TextField {
+        PlasmaComponents.TextField {
             id: dateField
             text: date == "" ? Qt.formatDateTime ( new Date(), "d/M/yyyy" ): date
             width: calendarOperations.width/3
@@ -194,7 +198,7 @@ Item {
             }
         }
 
-        Components.TextField {
+        PlasmaComponents.TextField {
             id: weekField
             text: week == 0 ? monthCalendar.currentWeek(): week
             width: calendarOperations.width/10
@@ -203,4 +207,5 @@ Item {
             }
         }
     }
+    */
 }
