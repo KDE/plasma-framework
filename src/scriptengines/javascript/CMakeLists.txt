@@ -49,7 +49,7 @@ set(simple_javascript_engine_SRCS
 
 include_directories(${PHONON_INCLUDES})
 
-plasma_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
+add_library(plasma_appletscript_simple_javascript MODULE ${simple_javascript_engine_SRCS})
 
 target_link_libraries(plasma_appletscript_simple_javascript
                        ${KCore_LIBRARIES}
@@ -75,7 +75,7 @@ set(javascript_runner_engine_SRCS
     simplebindings/i18n.cpp
 )
 
-plasma_add_plugin(plasma_runnerscript_javascript ${javascript_runner_engine_SRCS})
+add_library(plasma_runnerscript_javascript MODULE ${javascript_runner_engine_SRCS})
 
 target_link_libraries(plasma_runnerscript_javascript
                       ${KCore_LIBRARIES}
@@ -100,7 +100,7 @@ set(javascript_dataengine_engine_SRCS
     simplebindings/i18n.cpp
     simplebindings/qscriptnonguibookkeeping.cpp
 )
-plasma_add_plugin(plasma_dataenginescript_javascript ${javascript_dataengine_engine_SRCS})
+add_library(plasma_dataenginescript_javascript MODULE ${javascript_dataengine_engine_SRCS})
 
 target_link_libraries(plasma_dataenginescript_javascript
                       ${KCore_LIBRARIES}
@@ -118,7 +118,7 @@ set(javascript_addon_packagestructure_SRCS
     common/javascriptaddonpackagestructure.cpp
 )
 
-plasma_add_plugin(plasma_packagestructure_javascriptaddon ${javascript_addon_packagestructure_SRCS})
+add_library(plasma_packagestructure_javascriptaddon MODULE ${javascript_addon_packagestructure_SRCS})
 target_link_libraries(plasma_packagestructure_javascriptaddon ${Plasma_LIBRARIES})
 
 install(TARGETS plasma_packagestructure_javascriptaddon DESTINATION ${PLUGIN_INSTALL_DIR})

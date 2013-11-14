@@ -45,6 +45,7 @@ endmacro()
 # plasma_add_plugin(plasma_engine_statusnotifieritem ${statusnotifieritem_engine_SRCS})
 #
 macro(plasma_add_plugin plugin)
+    message(WARNING "plasma_add_plugin() is deprecated, use add_library(MODULE) instead. You can use the porting scripts in plasma-framework/tools")
     set(plugin_sources ${ARGN} )
     add_library(${plugin} MODULE ${plugin_sources} )
     set_target_properties(${plugin} PROPERTIES PREFIX "")

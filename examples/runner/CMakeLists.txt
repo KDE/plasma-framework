@@ -5,7 +5,7 @@ project(RunnerExample)
 set(example_SRCS homefilesrunner.cpp)
 
 # Now make sure all files get to the right place
-plasma_add_plugin(plasma_runner_example_homefiles ${example_SRCS})
+add_library(plasma_runner_example_homefiles MODULE ${example_SRCS})
 target_link_libraries(plasma_runner_example_homefiles KF5::Plasma KF5::KIOCore KF5::KIOWidgets)
 
 # Install the library and .desktop file

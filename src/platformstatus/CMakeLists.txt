@@ -9,7 +9,7 @@ qt5_add_dbus_adaptor (
    platformstatus.h PlatformStatus
    )
 
-plasma_add_plugin(kded_platformstatus ${kded_platformstatus_SRCS} )
+add_library(kded_platformstatus MODULE ${kded_platformstatus_SRCS} )
 
 target_link_libraries(
    kded_platformstatus

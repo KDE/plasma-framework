@@ -7,7 +7,7 @@ include(KDE4Defaults)
 set(testengine_engine_SRCS
     testengine.cpp)
 
-plasma_add_plugin(plasma_engine_testengine
+add_library(plasma_engine_testengine MODULE
                 ${testengine_engine_SRCS})
 
 target_link_libraries(plasma_engine_testengine

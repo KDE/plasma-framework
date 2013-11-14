@@ -4,7 +4,7 @@ set(sourcesOnRequest_SRCS
 
 kservice_desktop_to_json(plasma-dataengine-example-sourcesOnRequest.desktop)
 
-plasma_add_plugin(plasma_dataengine_example_sourcesOnRequest ${sourcesOnRequest_SRCS})
+add_library(plasma_dataengine_example_sourcesOnRequest MODULE ${sourcesOnRequest_SRCS})
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
   Plasma

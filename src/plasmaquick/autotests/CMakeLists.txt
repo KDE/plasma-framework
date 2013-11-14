@@ -20,7 +20,7 @@ MACRO(PLASMA_UNIT_TESTS)
                                      PlasmaQuick
                                     )
                if(QT_QTOPENGL_FOUND)
-                   target_link_libraries(${_testname} ${QT_QTOPENGL_LIBRARY})
+                   target_link_libraries(${_testname} Qt5::OpenGL)
                endif()
                add_test(plasma-${_testname} ${_testname})
                ecm_mark_as_test(${_testname})

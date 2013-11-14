@@ -13,7 +13,7 @@ set(plasma_kpart_SRCS
     plasmakpart.cpp
 )
 
-plasma_add_plugin(plasma-kpart ${plasma_kpart_SRCS})
+add_library(plasma-kpart MODULE ${plasma_kpart_SRCS})
 
 target_link_libraries(plasma-kpart Qt5::Script KF5::Plasma KF5::KIOCore KF5::KIOWidgets ${X11_LIBRARIES} KF5::KParts )
 
