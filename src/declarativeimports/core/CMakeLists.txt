@@ -53,7 +53,7 @@ if(X11_FOUND)
   if(OPENGL_FOUND)
     target_link_libraries(corebindingsplugin ${OPENGL_gl_LIBRARY})
   endif()
-endif(X11_FOUND)
+endif()
 
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir ToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)

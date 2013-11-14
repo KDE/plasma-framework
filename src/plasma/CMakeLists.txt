@@ -19,11 +19,11 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
     set(PLASMA_NO_KUTILS TRUE)
     set(PLASMA_NO_GLOBAL_SHORTCUTS TRUE)
-endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
+endif()
 
 if(NOT X11_FOUND)
     set(PLASMA_NO_PACKAGEKIT TRUE)
-endif(NOT X11_FOUND)
+endif()
 
 #find_package(KdepimLibs 4.5.60)
 #find_package(Gpgme)
@@ -33,21 +33,21 @@ endif(NOT X11_FOUND)
 
 if(NOT PLASMA_NO_KIO)
    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS})
-endif(NOT PLASMA_NO_KIO)
+endif()
 
 if(NOT PLASMA_NO_SOLID)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} KF5::Solid)
-endif(NOT PLASMA_NO_SOLID)
+endif()
 
 if(NOT PLASMA_NO_PACKAGEKIT)
     add_definitions(-DPLASMA_ENABLE_PACKAGEKIT_SUPPORT=1)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::DBus)
-endif(NOT PLASMA_NO_PACKAGEKIT)
+endif()
 
 if (NOT PLASMA_NO_KUTILS)
    #FIXME: for kcmodule classes; should not be in libplasma if possible
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KCMUTILS_LIBS})
-endif(NOT PLASMA_NO_KUTILS)
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
@@ -158,11 +158,11 @@ target_link_libraries(Plasma
 
 if(X11_FOUND)
    target_link_libraries(Plasma Qt5::X11Extras ${X11_LIBRARIES})
-endif(X11_FOUND)
+endif()
 
 if(DL_LIBRARY)
     target_link_libraries(Plasma ${DL_LIBRARY})
-endif(DL_LIBRARY)
+endif()
 
 target_link_libraries(Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
 target_include_directories(Plasma PUBLIC
