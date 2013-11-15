@@ -44,13 +44,6 @@
 #include <kservicetypetrader.h>
 #include <kwindowsystem.h>
 
-#if !PLASMA_NO_KUTILS
-#include <kcmoduleinfo.h>
-#include <kcmoduleproxy.h>
-#else
-#include <kcmodule.h>
-#endif
-
 #include "configloader.h"
 #include "containment.h"
 #include "corona.h"

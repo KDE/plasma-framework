@@ -15,7 +15,6 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_KIO TRUE)
     set(PLASMA_NO_PACKAGEKIT TRUE)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
-    set(PLASMA_NO_KUTILS TRUE)
     set(PLASMA_NO_GLOBAL_SHORTCUTS TRUE)
 endif()
 
@@ -29,10 +28,6 @@ endif()
 #                       URL "http://www.kde.org" TYPE OPTIONAL
 #                       PURPOSE "Needed for building several Plasma DataEngines")
 
-if(NOT PLASMA_NO_KIO)
-   set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS})
-endif()
-
 if(NOT PLASMA_NO_SOLID)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} KF5::Solid)
 endif()
@@ -40,11 +35,6 @@ endif()
 if(NOT PLASMA_NO_PACKAGEKIT)
     add_definitions(-DPLASMA_ENABLE_PACKAGEKIT_SUPPORT=1)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::DBus)
-endif()
-
-if (NOT PLASMA_NO_KUTILS)
-   #FIXME: for kcmodule classes; should not be in libplasma if possible
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${KCMUTILS_LIBS})
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
