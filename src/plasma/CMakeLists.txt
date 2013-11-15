@@ -1,7 +1,3 @@
-if(QCA2_FOUND)
-    include_directories( ${QCA2_INCLUDE_DIR} )
-endif()
-
 # This option should be removed, or moved down as far as possible.
 # That means porting the existing frameworks to the CMake automoc
 # feature. Porting is mostly removing explicit moc includes, and
@@ -10,12 +6,10 @@ endif()
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
-    set(PLASMA_NO_KNEWSTUFF TRUE)
     set(PLASMA_NO_SOLID TRUE)
     set(PLASMA_NO_KIO TRUE)
     set(PLASMA_NO_PACKAGEKIT TRUE)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
-    set(PLASMA_NO_GLOBAL_SHORTCUTS TRUE)
 endif()
 
 if(NOT X11_FOUND)

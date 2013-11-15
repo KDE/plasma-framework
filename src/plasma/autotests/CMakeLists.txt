@@ -39,8 +39,3 @@ ecm_mark_as_test(storagetest)
 if(QT_QTOPENGL_FOUND)
   target_link_libraries(storagetest Qt5::OpenGL)
 endif()
-
-if(QCA2_FOUND)
-   #  target_link_libraries(plasmoidpackagetest ${QCA2_LIBRARIES})
-endif()
-
