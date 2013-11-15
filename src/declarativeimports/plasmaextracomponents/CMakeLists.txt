@@ -17,8 +17,8 @@ set(plasmaextracomponents_SRCS
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 
 target_link_libraries(plasmaextracomponentsplugin
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
+        Qt5::Quick
+        Qt5::Qml
         ${KACTIVITIES_LIBRARY}
         Plasma)
 

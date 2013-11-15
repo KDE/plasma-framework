@@ -15,8 +15,8 @@ add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 
 target_link_libraries(qtextracomponentsplugin
         Qt5::Core
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
+        Qt5::Quick
+        Qt5::Qml
         Qt5::Gui
         KF5::KDeclarative
         KF5::KIconThemes

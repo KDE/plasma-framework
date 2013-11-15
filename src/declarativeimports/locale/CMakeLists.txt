@@ -17,9 +17,8 @@ set(localebindings_SRCS
 add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 target_link_libraries(localebindingsplugin
         Qt5::Core
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
-        ${KCore_LIBRARIES}
+        Qt5::Quick
+        Qt5::Qml
         KF5::KDE4Support
         KF5::KI18n
         )

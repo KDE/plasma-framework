@@ -44,6 +44,7 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{KIconThemes_LIBRARIES\}/KF5\:\:KIconThemes/g' $FS
     perl -p -i -e 's/\$\{KWindowSystem_LIBRARIES\}/KF5\:\:KWindowSystem/g' $FS
     perl -p -i -e 's/\$\{KConfigWidgets_LIBRARIES\}/KF5\:\:KConfigWidgets/g' $FS
+    perl -p -i -e 's/\$\{KCMUTILS_LIBS\}/KF5\:\:KCMUtils/g' $FS
 
     perl -p -i -e 's/\$\{QT_QTXML_LIBRARY\}/Qt5\:\:Xml/g' $FS
     perl -p -i -e 's/\$\{QT_QTGUI_LIBRARY\}/Qt5\:\:Gui/g' $FS
@@ -59,5 +60,6 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{Qt5Quick_LIBRARIES\}/Qt5\:\:Quick/g' $FS
     perl -p -i -e 's/\$\{Qt5Qml_LIBRARIES\}/Qt5\:\:Qml/g' $FS
     perl -p -i -e 's/\$\{Qt5Widgets_LIBRARIES\}/Qt5\:\:Widgets/g' $FS
+    perl -p -i -e 's/\$\{Qt5Script_LIBRARIES\}/Qt5\:\:Script/g' $FS
 done
 

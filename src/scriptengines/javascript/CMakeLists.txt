@@ -52,12 +52,9 @@ include_directories(${PHONON_INCLUDES})
 add_library(plasma_appletscript_simple_javascript MODULE ${simple_javascript_engine_SRCS})
 
 target_link_libraries(plasma_appletscript_simple_javascript
-                       ${KCore_LIBRARIES}
                        KF5::KIOCore KF5::KIOWidgets
-                       ${Plasma_LIBRARIES}
+                       KF5::Plasma
                        Qt5::Declarative
-                       ${QT_QTSCRIPT_LIBRARY}
-                       ${QT_QTUITOOLS_LIBRARY}
                        Qt5::Xml
                        )
 
@@ -78,10 +75,10 @@ set(javascript_runner_engine_SRCS
 add_library(plasma_runnerscript_javascript MODULE ${javascript_runner_engine_SRCS})
 
 target_link_libraries(plasma_runnerscript_javascript
-                      ${KCore_LIBRARIES}
-                      KF5::KIOCore KF5::KIOWidgets
-                      ${Plasma_LIBRARIES}
-                      ${QT_QTSCRIPT_LIBRARY})
+                      KF5::KCoreAddons
+                      KF5::KIOWidgets
+                      KF5::Plasma
+                      Qt5::Script)
 
 install(TARGETS plasma_runnerscript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-scriptengine-runner-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -103,10 +100,10 @@ set(javascript_dataengine_engine_SRCS
 add_library(plasma_dataenginescript_javascript MODULE ${javascript_dataengine_engine_SRCS})
 
 target_link_libraries(plasma_dataenginescript_javascript
-                      ${KCore_LIBRARIES}
-                      KF5::KIOCore KF5::KIOWidgets
-                      ${Plasma_LIBRARIES}
-                      ${QT_QTSCRIPT_LIBRARY})
+                      KF5::KCoreAddons
+                      KF5::KIOWidgets
+                      KF5::Plasma
+                      Qt5::Script)
 
 install(TARGETS plasma_dataenginescript_javascript DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-scriptengine-dataengine-javascript.desktop DESTINATION ${SERVICES_INSTALL_DIR})
@@ -119,7 +116,7 @@ set(javascript_addon_packagestructure_SRCS
 )
 
 add_library(plasma_packagestructure_javascriptaddon MODULE ${javascript_addon_packagestructure_SRCS})
-target_link_libraries(plasma_packagestructure_javascriptaddon ${Plasma_LIBRARIES})
+target_link_libraries(plasma_packagestructure_javascriptaddon KF5::Plasma)
 
 install(TARGETS plasma_packagestructure_javascriptaddon DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-packagestructure-javascript-addon.desktop DESTINATION ${SERVICES_INSTALL_DIR})

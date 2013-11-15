@@ -1,7 +1,5 @@
 if(QCA2_FOUND)
-    include_directories(
-        ${QCA2_INCLUDE_DIR}
-    )
+    include_directories( ${QCA2_INCLUDE_DIR} )
 endif()
 
 # This option should be removed, or moved down as far as possible.
@@ -129,7 +127,8 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 #)
 
 
-add_library(Plasma SHARED ${Plasma_LIB_SRCS})
+add_library(Plasma ${Plasma_LIB_SRCS})
+add_library(KF5::Plasma ALIAS Plasma)
 
 target_link_libraries(Plasma
     Qt5::Network

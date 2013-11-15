@@ -7,8 +7,8 @@ set(runnermodel_SRCS
 
 add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
 target_link_libraries(runnermodelplugin
-        ${Qt5Quick_LIBRARIES}
-        ${Qt5Qml_LIBRARIES}
+        Qt5::Quick
+        Qt5::Qml
 	KF5::KI18n
         Plasma
 	)
