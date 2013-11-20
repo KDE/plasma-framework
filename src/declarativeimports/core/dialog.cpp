@@ -40,7 +40,7 @@
 
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
-      m_location(Plasma::Types::TopEdge),
+      m_location(Plasma::Types::BottomEdge),
       m_activeWindow(false),
       m_type(Normal)
 {
@@ -374,6 +374,8 @@ void DialogProxy::syncToMainItemSize()
                     QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
                           m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
     //resize(0,0);
+    qDebug() << "DIALOG mainItem: " << m_mainItem.data()->objectName()<< QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
+    qDebug() << "DIALOG resize: " << s;
     resize(s);
     emit widthChanged(s.width());
     emit heightChanged(s.height());
