@@ -30,7 +30,7 @@
 
 using namespace Plasma;
 
-QTEST_KDEMAIN(SortFilterModelTest, GUI)
+QTEST_MAIN(SortFilterModelTest)
 
 void SortFilterModelTest::setModel()
 {

@@ -135,7 +135,6 @@ target_link_libraries(Plasma
     KF5::KDeclarative
     KF5::XmlGui
     KF5::KConfigWidgets
-    KF5::KDE4Support
     ${PLASMA_EXTRA_LIBS}
 )
 

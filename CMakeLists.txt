@@ -45,15 +45,7 @@ find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml W
 find_package(KF5 CONFIG REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
                                             KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets KConfigWidgets Sonnet KTextWidgets XmlGui KCrash
-                                            KBookmarks KDeclarative KUnitConversion Kross KParts)
-
-# those are not "done" yet:
-find_package(KIO REQUIRED NO_MODULE)
-
-find_package(KDE4Support REQUIRED NO_MODULE)
-
-#the shell needs kactivities
-find_package(KActivities REQUIRED NO_MODULE)
+                                            KBookmarks KDeclarative KUnitConversion Kross KParts KIO KActivities)
 
 #optional features
 find_package(X11 MODULE)
