@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Example window thumbnails list
+Name[de]=Beispiel einer Liste mit Fenstervorschaubilden
 Name[nl]=Voorbeeld van lijst met miniaturen van vensters
 Name[pt]=Lista de miniaturas das janelas de exemplo
 Name[pt_BR]=Lista de miniaturas das janelas de exemplo
@@ -8,6 +9,7 @@ Name[sv]=Exempel på miniatyrbilder av fönster
 Name[uk]=Приклад списку мініатюр вікон
 Name[x-test]=xxExample window thumbnails listxx
 Comment=Example showing how to display window thumbnails
+Comment[de]=Beispiel zur Anzeige einer Liste mit Fenstervorschaubilden
 Comment[nl]=Voorbeeld van hoe miniaturen van vensters te tonen
 Comment[pt]=Exemplo que demonstra como apresentar miniaturas das janelas
 Comment[pt_BR]=Exemplo que demostra como apresentar as miniaturas das janelas
