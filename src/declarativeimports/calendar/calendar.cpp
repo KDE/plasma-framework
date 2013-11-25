@@ -132,9 +132,7 @@ QString Calendar::errorMessage() const
 
 QString Calendar::monthName() const
 {
-    // Capitalize the first letter
-    QString tmp = QDate::longMonthName(m_startDate.month(), QDate::StandaloneFormat);
-    return tmp.left(1).toUpper() + tmp.mid(1);
+    return QDate::longMonthName(m_startDate.month(), QDate::StandaloneFormat);
 }
 
 int Calendar::year() const
