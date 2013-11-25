@@ -101,7 +101,7 @@ Item {
 
         days: 7
         weeks: 6
-        startDay: 1
+        firstDayOfWeek: Qt.locale().firstDayOfWeek
         startDate: isTodayMonth();
     }
 

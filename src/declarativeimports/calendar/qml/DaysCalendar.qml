@@ -100,7 +100,7 @@ Item {
                 width: cellWidth
                 height: cellHeight
                 Components.Label {
-                    text: Qt.formatDate(new Date(showDate.getFullYear(), showDate.getMonth(), index - firstDay +1), "ddd");
+                    text: Qt.locale().dayName(monthCalendar.firstDayOfWeek + index, Locale.ShortFormat)
                     font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
                     //font: theme.smallestFont
                     opacity: 0.2

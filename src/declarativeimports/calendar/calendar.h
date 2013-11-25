@@ -36,7 +36,7 @@ class Calendar : public QObject
     Q_PROPERTY(QList<int> weeksModel READ weeksModel CONSTANT)
     Q_PROPERTY(int days READ days WRITE setDays NOTIFY daysChanged)
     Q_PROPERTY(int weeks READ weeks WRITE setWeeks NOTIFY weeksChanged)
-    Q_PROPERTY(int startDay READ startDay WRITE setStartDay NOTIFY startDayChanged)
+    Q_PROPERTY(int firstDayOfWeek READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged)
     Q_PROPERTY(int year READ year NOTIFY yearChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(QString monthName READ monthName NOTIFY monthNameChanged)
@@ -73,8 +73,8 @@ public:
     void setWeeks(int weeks);
 
     // Start day
-    int startDay();
-    void setStartDay(int day);
+    int firstDayOfWeek();
+    void setFirstDayOfWeek(int day);
 
     // Error message
     QString errorMessage() const;
@@ -101,7 +101,7 @@ Q_SIGNALS:
     void typesChanged();
     void daysChanged();
     void weeksChanged();
-    void startDayChanged();
+    void firstDayOfWeekChanged();
     void errorMessageChanged();
     void monthNameChanged();
     void yearChanged();
@@ -118,7 +118,7 @@ private:
 
     int m_days;
     int m_weeks;
-    int m_startDay;
+    int m_firstDayOfWeek;
     QString m_errorMessage;
 };
 

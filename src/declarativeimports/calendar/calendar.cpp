@@ -29,7 +29,7 @@ Calendar::Calendar(QObject *parent)
     , m_weekList()
     , m_days(0)
     , m_weeks(0)
-    , m_startDay(Qt::Sunday)
+    , m_firstDayOfWeek(QLocale::system().firstDayOfWeek())
     , m_errorMessage()
 {
     m_daysModel = new DaysModel(this);
@@ -99,21 +99,29 @@ void Calendar::setWeeks(int weeks)
     }
 }
 
-int Calendar::startDay()
+int Calendar::firstDayOfWeek()
 {
-    return m_startDay;
+    // QML has Sunday as 0, so we need to accomodate here
+    return m_firstDayOfWeek == 7 ? 0 : m_firstDayOfWeek;
 }
 
-void Calendar::setStartDay(int day)
+void Calendar::setFirstDayOfWeek(int day)
 {
-    if(day > 7 || day < 1) {
-        // set the errorString to some useful message and return.
+    if (day > 7) {
         return;
     }
 
-    if(m_startDay != day) {
-        m_startDay = day;
-        emit startDayChanged();
+    if (m_firstDayOfWeek != day) {
+        // QML has Sunday as 0, so we need to accomodate here
+        // for QDate functions which have Sunday as 7
+        if (day == 0) {
+            m_firstDayOfWeek = 7;
+        } else {
+            m_firstDayOfWeek = day;
+        }
+
+        updateData();
+        emit firstDayOfWeekChanged();
     }
 }
 
@@ -124,7 +132,9 @@ QString Calendar::errorMessage() const
 
 QString Calendar::monthName() const
 {
-    return QDate::longMonthName(m_startDate.month());
+    // Capitalize the first letter
+    QString tmp = QDate::longMonthName(m_startDate.month(), QDate::StandaloneFormat);
+    return tmp.left(1).toUpper() + tmp.mid(1);
 }
 
 int Calendar::year() const
@@ -159,7 +169,7 @@ void Calendar::updateData()
 
 
     // If the first day is the same as the starting day then we add a complete row before it.
-    daysBeforeCurrentMonth = firstDay.dayOfWeek();
+    daysBeforeCurrentMonth = firstDay.dayOfWeek() - m_firstDayOfWeek;
 
     int daysThusFar = daysBeforeCurrentMonth + m_startDate.daysInMonth();
     if(daysThusFar < totalDays) {
