@@ -31,15 +31,86 @@
 class Calendar : public QObject
 {
     Q_OBJECT
+    /**
+     * This property is used to determine which data from which month to show. One should
+     * set it's Year, Month and Day although the Day is of less importance. Set it using
+     * YYYY-MM-DD format.
+     */
     Q_PROPERTY(QDate startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
+
+    /**
+     * This determines which kind of data types should be contained in
+     * selectedDayModel and upcomingEventsModel. By default all types are included.
+     * NOTE: Only the Event type is fully implemented.
+     * TODO: Fully implement the other data types throughout this code.
+     */
     Q_PROPERTY(int types READ types WRITE setTypes NOTIFY typesChanged)
+
+    /**
+     * This model contains the week numbers for the given date grid.
+     */
     Q_PROPERTY(QList<int> weeksModel READ weeksModel CONSTANT)
+
+    /**
+     * The number of days a week contains.
+     * TODO: perhaps this one can just be removed. A week is 7 days by definition.
+     * However, i don't know if that's also the case in other more exotic calendars.
+     */
     Q_PROPERTY(int days READ days WRITE setDays NOTIFY daysChanged)
+
+    /**
+     * The number of weeks that the model property should contain.
+     */
     Q_PROPERTY(int weeks READ weeks WRITE setWeeks NOTIFY weeksChanged)
+
+    /**
+     * The start day of a week. By default this follows current Locale. It can be
+     * changed. One then needs to use the numbers in the Qt DayOfWeek enum:
+     *
+     *    Monday = 1
+     *    Tuesday = 2
+     *    Wednesday = 3
+     *    Thursday = 4
+     *    Friday = 5
+     *    Saturday = 6
+     *    Sunday = 7
+     *
+     * This value doesn't do anything to other data structures, but helps you
+     * visualizing the data.
+     *
+     * WARNING: QML has different enum values for week days - Sunday is 0, this function
+     *          automatically converts that on READ and WRITE and it's stored as QDate format
+     *          (ie. the one above). So firstDayOfWeek() call from QML would return 0 for Sunday
+     *          while internally it's 7 and vice-versa.
+     */
     Q_PROPERTY(int firstDayOfWeek READ firstDayOfWeek WRITE setFirstDayOfWeek NOTIFY firstDayOfWeekChanged)
+
+    /**
+     * The full year in a numeric value. For example 2013, not 13.
+     */
     Q_PROPERTY(int year READ year NOTIFY yearChanged)
+
+    /**
+     * If an error occured, it will be set in this string as human readable text.
+     */
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
+
+    /**
+     * This is the human readable long month name. So not "Feb" but "February".
+     * TODO: this should either be done in QML using javascript or by making a
+     *       function available because this is limiting. There are places
+     *       where you would want the short month name.
+     */
     Q_PROPERTY(QString monthName READ monthName NOTIFY monthNameChanged)
+
+    /**
+     * This model contains the actual grid data of days. For example, if you had set:
+     * - days = 7 (7 days in one week)
+     * - weeks = 6 (6 weeks in one month view)
+     * then this model will contain 42 entries (days * weeks). Each entry contains
+     * metadata about the current day. The exact metadata can be found in "daysmodel.cpp"
+     * where the exact names usable in QML are being set.
+     */
     Q_PROPERTY(QAbstractListModel* daysModel READ daysModel CONSTANT)
 
     Q_ENUMS(Type)
@@ -61,7 +132,7 @@ public:
     void setStartDate(const QDate &dateTime);
 
     // Types
-   int types() const;
+    int types() const;
     void setTypes(int types);
 
     // Days
