@@ -87,7 +87,7 @@ Item {
         else return false;
     }
 
-    function isTodayMonth() {
+    function today() {
         return Qt.formatDateTime(new Date(), "yyyy-MM-dd")
     }
 
@@ -102,7 +102,7 @@ Item {
         days: 7
         weeks: 6
         firstDayOfWeek: Qt.locale().firstDayOfWeek
-        startDate: isTodayMonth();
+        startDate: today();
     }
 
 //     CalendarToolbar {
@@ -175,7 +175,7 @@ Item {
             iconSource: "view-pim-calendar"
             width: height
             onClicked: {
-                monthCalendar.startDate = isTodayMonth();
+                monthCalendar.startDate = today();
             }
             PlasmaCore.ToolTip {
                 id: tool
