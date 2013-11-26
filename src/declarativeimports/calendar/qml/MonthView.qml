@@ -81,10 +81,11 @@ Item {
     }
 
     function isToday(date) {
-        if (date == Qt.formatDateTime(new Date(), "d/M/yyyy")) {
+        if (date.toDateString() == new Date().toDateString()) {
             return true;
         }
-        else return false;
+
+        return false;
     }
 
     function today() {

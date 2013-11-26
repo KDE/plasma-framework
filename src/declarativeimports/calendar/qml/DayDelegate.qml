@@ -43,7 +43,7 @@ Item {
         width: parent.width - (borderWidth)
         height: parent.height - (borderWidth)
         //         anchors.fill: parent
-        opacity: (isToday(dayNumber+"/"+monthNumber+"/"+yearNumber)) ? 0.8 : 0
+        opacity: isToday(new Date(yearNumber, monthNumber - 1, dayNumber)) ? 0.8 : 0
         Behavior on opacity { NumberAnimation {} }
         color: theme.highlightColor
         //border.color: isToday(dayNumber+"/"+monthNumber+"/"+yearNumber) ? theme.highlightColor : "transparent"
@@ -152,7 +152,7 @@ Item {
     }
 
     Component.onCompleted: {
-        var t = isToday(dayNumber+"/"+monthNumber+"/"+yearNumber)
+        var t = isToday(new Date(yearNumber, monthNumber - 1, dayNumber))
         if (t) {
             root.date = model;
         }
