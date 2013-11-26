@@ -1,5 +1,6 @@
 /*
  *  Copyright 2013 Heena Mahour <heena393@gmail.com>
+ *  Copyright 2013 Martin Klapetek <mklapetek@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,66 +18,66 @@
  */
 
 import QtQuick 2.0
-// import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
-// import org.kde.plasma.extras 2.0 as PlasmaExtras
-// import org.kde.qtextracomponents 2.0 as QtExtras
 
 PlasmaComponents.Menu {
     id: testMenu
+    property date today: new Date()
 
     PlasmaComponents.MenuItem {
-        text: "January"
-        onClicked: monthCalendar.startDate="2013-01-01"
-    }
-
-    PlasmaComponents.MenuItem {
-        text: "February"
-        onClicked: monthCalendar.startDate="2013-02-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(0))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 0, 1)
     }
 
     PlasmaComponents.MenuItem {
-        text: "March"
-        onClicked: monthCalendar.startDate="2013-03-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(1))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 1, 1)
+    }
+
+    PlasmaComponents.MenuItem {
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(2))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 2, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "April"
-        onClicked: monthCalendar.startDate="2013-04-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(3))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 3, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "May"
-        onClicked: monthCalendar.startDate="2013-05-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(4))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 4, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "June"
-        onClicked: monthCalendar.startDate="2013-06-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(5))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 5, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "July"
-        onClicked: monthCalendar.startDate="2013-07-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(6))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 6, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "August"
-        onClicked: monthCalendar.startDate="2013-08-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(7))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 7, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "September"
-        onClicked: monthCalendar.startDate="2013-09-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(8))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 8, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "October"
-        onClicked: monthCalendar.startDate="2013-10-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(9))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 9, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "November"
-        onClicked: monthCalendar.startDate="2013-11-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(10))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 10, 1)
     }
     PlasmaComponents.MenuItem {
-        text: "December"
-        onClicked: monthCalendar.startDate="2013-12-01"
+        text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(11))
+        onClicked: monthCalendar.startDate = new Date(today.getFullYear(), 11, 1)
     }
-    Component.onCompleted:{
-        print("TestMenu.qml served .. opening");
+
+    // Because some locales don't have it in standaloneMonthNames,
+    // but we want our GUI to be pretty and want capitalization always
+    function capitalizeFirstLetter(monthName) {
+        return monthName.charAt(0).toUpperCase() + monthName.slice(1);
     }
 }
- 
