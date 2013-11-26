@@ -61,7 +61,7 @@ int DaysModel::rowCount(const QModelIndex &parent) const
 
 QVariant DaysModel::data(const QModelIndex &index, int role) const
 {
-    if(index.row() >= 0 && role > Qt::UserRole) {
+    if (index.isValid()) {
 
         DayData currentData = m_data->at(index.row());
 
