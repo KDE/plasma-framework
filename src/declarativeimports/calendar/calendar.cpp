@@ -173,7 +173,11 @@ void Calendar::updateData()
 
 
     // If the first day is the same as the starting day then we add a complete row before it.
-    daysBeforeCurrentMonth = firstDay.dayOfWeek() - m_firstDayOfWeek;
+    if (m_firstDayOfWeek < firstDay.dayOfWeek()) {
+        daysBeforeCurrentMonth = firstDay.dayOfWeek() - m_firstDayOfWeek;
+    } else {
+        daysBeforeCurrentMonth = days() - (m_firstDayOfWeek - firstDay.dayOfWeek());
+    }
 
     int daysThusFar = daysBeforeCurrentMonth + m_startDate.daysInMonth();
     if(daysThusFar < totalDays) {
