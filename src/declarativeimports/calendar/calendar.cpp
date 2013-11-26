@@ -130,6 +130,17 @@ QString Calendar::errorMessage() const
     return m_errorMessage;
 }
 
+int Calendar::currentWeek() const
+{
+    QDate date(QDate::currentDate());
+    return date.weekNumber();
+}
+
+QString Calendar::dayName(int weekday) const
+{
+    return QDate::shortDayName(weekday);
+}
+
 QString Calendar::monthName() const
 {
     // Some CLDR (locale) data used by Qt have standalone months names
@@ -269,15 +280,7 @@ void Calendar::nextMonth()
     emit monthNameChanged();
     emit yearChanged();
 }
-int Calendar::currentWeek() const
-{
-    QDate date(QDate::currentDate());
-    return date.weekNumber();
-}
-QString Calendar::dayName(int weekday) const
-{
-    return QDate::shortDayName(weekday);
-}
+
 void Calendar::previousMonth()
 {
     m_startDate = m_startDate.addMonths(-1);
