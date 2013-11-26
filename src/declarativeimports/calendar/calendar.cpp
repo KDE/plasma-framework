@@ -264,6 +264,7 @@ void Calendar::nextYear()
     m_startDate = m_startDate.addYears(1);
     updateData();
     emit startDateChanged();
+    emit yearChanged();
 }
 
 void Calendar::previousYear()
@@ -271,12 +272,14 @@ void Calendar::previousYear()
     m_startDate = m_startDate.addYears(-1);
     updateData();
     emit startDateChanged();
+    emit yearChanged();
 }
 
 void Calendar::nextMonth()
 {
     m_startDate = m_startDate.addMonths(1);
     updateData();
+    emit startDateChanged();
     emit monthNameChanged();
     emit yearChanged();
 }
@@ -285,6 +288,7 @@ void Calendar::previousMonth()
 {
     m_startDate = m_startDate.addMonths(-1);
     updateData();
+    emit startDateChanged();
     emit monthNameChanged();
     emit yearChanged();
 }
