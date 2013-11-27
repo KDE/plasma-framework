@@ -1,6 +1,5 @@
  
 plasma_install_package(config org.kde.example.configuration)
-plasma_install_package(localegallery org.kde.example.locale)
 plasma_install_package(notes org.kde.example.notes)
 plasma_install_package(widgetgallery org.kde.example.widgetgallery)
 plasma_install_package(qmltasks org.kde.example.tasks)
