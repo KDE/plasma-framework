@@ -16,6 +16,7 @@ Icon=plasma-example-kpart-shell
 Type=Application
 X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
+GenericName[de]=Eine KPart-Shell für Plasma
 GenericName[nl]=Een KPart-shell voor Plasma
 GenericName[pt]=Uma consola de KPart para o Plasma
 GenericName[pt_BR]=Shell KPart para o Plasma

@@ -10,6 +10,7 @@ Name[sv]=Enkelt exempel på DataEngine
 Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
 Comment=A very basic DataEngine implementation
+Comment[de]=Eine Basis-Implementation eines Datentreibers
 Comment[nl]=Een erge basisimplementatie van een gegevens-engine
 Comment[pt]=Uma implementação muito básica do DataEngine
 Comment[pt_BR]=Implementação muito básica do DataEngine

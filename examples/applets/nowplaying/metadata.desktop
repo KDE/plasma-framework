@@ -10,6 +10,7 @@ Name[sv]=Spelar nu (QML)
 Name[uk]=Зараз відтворюється (QML)
 Name[x-test]=xxNow playing (QML)xx
 Comment=A proof of concept media player controller qml
+Comment[de]=Ein Konzeptnachweis für eine Medien-Wiedergabe geschrieben in QML
 Comment[es]=Una prueba de concepto de controlador de reproductor multimedia en QML
 Comment[nl]=Een 'proof of concept' qml voor besturing van een mediaspeler
 Comment[pt]=A prova de conceito de um QML com controlo de leitor multimédia
