@@ -41,6 +41,8 @@ endif()
 set (QT_MIN_VERSION "5.2.0")
 
 find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
+# QQmlAbstractUrlInterceptor is not Public yet
+include_directories( ${Qt5Qml_PRIVATE_INCLUDE_DIRS} )
 
 find_package(KF5 CONFIG REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
