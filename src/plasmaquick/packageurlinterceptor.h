@@ -20,7 +20,7 @@
 #ifndef PACKAGEURLINTERCEPTOR_H
 #define PACKAGEURLINTERCEPTOR_H
 
-#include <QQmlAbstractUrlInterceptor>
+#include <private/qqmlabstracturlinterceptor_p.h>
 
 #include <plasmaquick/plasmaquick_export.h>
 
