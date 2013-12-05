@@ -95,16 +95,17 @@ void Application::setRunning(bool run)
 
 void Application::start()
 {
-    qDebug() << "starting?";
-    if (d->application.isEmpty()) return;
+    if (d->application.isEmpty()) {
+        qWarning() << "Cannot run an empty application";
+        return;
+    }
 
-    qDebug() << "starting.";
     d->process.start(d->application);
 
-    qDebug() <<
-    d->process.waitForStarted();
+    if(!d->process.waitForStarted()) {
+        qWarning() << "Error" << d->process.error() << "while starting" << d->application;
+    }
 
-    qDebug() << "do we have an error " << d->process.error();
 }
 
 void Application::terminate()
