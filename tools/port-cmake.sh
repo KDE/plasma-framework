@@ -21,8 +21,12 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/kde4_create_handbook/kdoctools_create_handbook/g' $FS
     perl -p -i -e 's/qt4_add_resources/qt5_add_resources/g' $FS
     perl -p -i -e 's/qt4_add_dbus_interface/qt5_add_dbus_interface/g' $FS
+    perl -p -i -e 's/qt4_add_dbus_adaptor/qt5_add_dbus_adaptor/g' $FS
+    perl -p -i -e 's/qt4_generate_dbus_interface/qt5_generate_dbus_interface/g' $FS
+    perl -p -i -e 's/qt4_wrap_cpp/qt5_wrap_cpp/g' $FS
     perl -p -i -e 's/kde4_install_auth_helper_files/kauth_install_helper_files/g' $FS
     perl -p -i -e 's/kde4_install_auth_actions/kauth_install_actions/g' $FS
+    perl -p -i -e 's/kde4_add_kcfg_files/kconfig_add_kcfg_files/g' $FS
 
     perl -p -i -e 's/KF5\:\:plasma/KF5\:\:Plasma/g' $FS
     perl -p -i -e 's/\$\{KDE4_KIDLETIME_LIBRARY\}/KF5::KIdleTime/g' $FS
