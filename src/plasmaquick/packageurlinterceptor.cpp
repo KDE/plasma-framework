@@ -108,7 +108,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                     return path;
                 }
             }
-            qWarning() << "WARNING: Access denied for URL" << path << "by" << m_package.name();
+            qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
         }
     }
 
