@@ -111,8 +111,12 @@ void QIconItem::paint(QPainter *painter)
         QPixmap result = m_icon.pixmap(boundingRect().size().toSize());
         result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
         painter->drawPixmap(0, 0, result);
+    } else if (m_state == QIconItem::DisabledState) {
+        QPixmap result = m_icon.pixmap(boundingRect().size().toSize());
+        result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::DisabledState);
+        painter->drawPixmap(0, 0, result);
     } else {
-        m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, isEnabled() ? QIcon::Normal : QIcon::Disabled);
+        m_icon.paint(painter, boundingRect().toRect(), Qt::AlignCenter, QIcon::Normal);
     }
 
     painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
