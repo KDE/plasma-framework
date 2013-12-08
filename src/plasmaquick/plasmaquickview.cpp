@@ -111,7 +111,11 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
                                    (cont->containmentType() == Plasma::Types::DesktopContainment ||
                                     cont->containmentType() == Plasma::Types::CustomContainment));
         graphicObject->setParentItem(q->rootObject());
-        q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
+        if (q->rootObject()) {
+            q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
+        } else {
+            qWarning() << "Could not set containment property on rootObject";
+        }
     } else {
         qWarning() << "Containment graphic object not valid";
     }
