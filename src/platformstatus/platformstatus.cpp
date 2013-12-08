@@ -23,7 +23,7 @@ PlatformStatus::PlatformStatus(QObject *parent, const QVariantList &)
 
     findShellPackage(false);
 
-    const QString globalrcPath = QStandardPaths::locate(QStandardPaths::ConfigLocation, "kdeglobals");
+    const QString globalrcPath = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, "kdeglobals");
     connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(fileDirtied(QString)));
     KDirWatch::self()->addFile(globalrcPath);
 }
