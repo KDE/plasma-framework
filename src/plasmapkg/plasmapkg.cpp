@@ -30,8 +30,6 @@
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
 #include <plasma/pluginloader.h>
-#include <kglobal.h>
-#include <klocale.h>
 #include <kjob.h>
 
 #include <qcommandlineparser.h>

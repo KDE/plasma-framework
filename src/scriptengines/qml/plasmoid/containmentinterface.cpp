@@ -34,7 +34,6 @@
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
 #include <QMimeDatabase>
-#include <ktemporaryfile.h>
 
 #ifndef PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags

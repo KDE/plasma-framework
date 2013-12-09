@@ -32,7 +32,6 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-#include <kglobal.h>
 #include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
 

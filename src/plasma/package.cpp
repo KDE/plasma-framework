@@ -28,7 +28,6 @@
 #include <QDebug>
 #include <kdesktopfile.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 #include <ktar.h>
 #include <kzip.h>
 

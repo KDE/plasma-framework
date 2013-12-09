@@ -32,11 +32,9 @@
 #include "config-plasma.h"
 
 #include <kcolorscheme.h>
-#include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <QDebug>
 #include <kdirwatch.h>
-#include <kglobal.h>
 #include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>

@@ -30,10 +30,8 @@
 #include <QDebug>
 #include <kplugininfo.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 #include <kiconloader.h>
-#include <kglobal.h>
 #include <qstandardpaths.h>
 
 #include "package.h"

@@ -30,8 +30,6 @@
 
 #include <kconfiggroup.h>
 #include <QDebug>
-#include <kglobal.h>
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 #include <Plasma/Applet>

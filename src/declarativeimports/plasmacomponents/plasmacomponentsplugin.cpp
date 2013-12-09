@@ -27,7 +27,6 @@
 
 #include <ksharedconfig.h>
 #include <QDebug>
-#include <kglobal.h>
 
 #include <kdeclarative/kdeclarative.h>
 
@@ -44,7 +43,7 @@ class BKSingleton
 public:
    EngineBookKeeping self;
 };
-K_GLOBAL_STATIC(BKSingleton, privateBKSelf)
+Q_GLOBAL_STATIC(BKSingleton, privateBKSelf)
 
 EngineBookKeeping::EngineBookKeeping()
 {

@@ -29,10 +29,8 @@
 
 #include <QDebug>
 #include <kplugininfo.h>
-#include <kglobal.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
-#include <kstandarddirs.h>
 #include <klocalizedstring.h>
 
 #include "datacontainer.h"

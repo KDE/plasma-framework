@@ -33,8 +33,6 @@
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
-#include <kstandarddirs.h>
-#include <kglobal.h>
 #include <kglobalaccel.h>
 
 #include "containment.h"
