@@ -371,7 +371,7 @@ void PlasmaPkgPrivate::runKbuildsycoca()
 {
     return;
     if (KSycoca::isAvailable()) {
-        QDBusInterface dbus("org.kde.kded", "/kbuildsycoca", "org.kde.kbuildsycoca");
+        QDBusInterface dbus("org.kde.kded5", "/kbuildsycoca", "org.kde.kbuildsycoca");
         dbus.call(QDBus::NoBlock, "recreate");
     }
 }
