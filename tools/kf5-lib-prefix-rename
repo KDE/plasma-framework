@@ -1,0 +1,75 @@
+#!/bin/sh
+set -e
+
+repl() {
+    name=$1
+    if [ $# = 3 ] ; then
+        from=$2
+        to=$3
+    else
+        to=$2
+        from=K$to
+    fi
+    sed -i \
+        -e "s/find_package *($from/find_package(KF5$to/g" \
+        -e "s/\(find_package *( *KF5 [A-Za-z0-9 ]*\)$from/\1$to/g" \
+        -e "s/find_dependency($from/find_dependency(KF5$to/g" \
+        -e "s/KF5::$from/KF5::$to/g" \
+        $name
+}
+
+find -name CMakeLists.txt -o -name '*Config.cmake.in'| while read name ; do
+    echo $name
+    # tier1
+    repl $name Archive
+    repl $name Codecs
+    repl $name Config
+    repl $name CoreAddons
+    repl $name DBusAddons
+    repl $name GuiAddons
+    repl $name IdleTime
+    repl $name ItemModels
+    repl $name ItemViews
+    repl $name JS
+    repl $name JobWidgets
+    repl $name Plotting
+    repl $name Solid
+    repl $name Sonnet
+    repl $name ThreadWeaver
+    repl $name WidgetsAddons
+    repl $name WindowSystem
+    # tier2
+    repl $name DNSSD
+    repl $name Auth
+    repl $name Completion
+    repl $name Crash
+    repl $name XsltKde
+    repl $name I18n
+    repl $name JobWidgets
+    repl $name Notifications
+    repl $name Wallet
+    # tier3
+    repl $name Bookmarks
+    repl $name ConfigWidgets
+    repl $name Declarative
+    repl $name KCMUtils
+    repl $name KIOCore
+    repl $name KIOFileWidgets
+    repl $name KIOWidgets
+    repl $name Kross
+    repl $name KDESu KF5Su
+    repl $name WebKit
+    repl $name Emoticons
+    repl $name IconThemes
+    repl $name JsEmbed
+    repl $name MediaPlayer
+    repl $name NewStuff
+    repl $name NotifyConfig
+    repl $name Parts
+    repl $name PrintUtils
+    repl $name Pty
+    repl $name Service
+    repl $name TextWidgets
+    repl $name UnitConversion
+    repl $name XmlGui
+done
