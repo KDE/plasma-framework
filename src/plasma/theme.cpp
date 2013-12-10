@@ -332,7 +332,9 @@ void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QStrin
 
         d->keysToCache.insert(key, id);
         d->idsToCache.insert(id, key);
-        d->saveTimer->start();
+
+        //always start timer in d->saveTimer's thread
+        QMetaObject::invokeMethod(d->saveTimer, "start", Qt::QueuedConnection);
     }
 }
 
