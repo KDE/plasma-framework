@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Same game (QML)
 Name[es]=Juego Iguales (QML)
+Name[fr]=Same Game (QML)
 Name[nl]=Zelfde spel (QML)
 Name[pt]=Jogo de bolas (QML)
 Name[pt_BR]=Jogo de bolas (QML)
@@ -11,6 +12,7 @@ Name[uk]=Та сама гра (QML)
 Name[x-test]=xxSame game (QML)xx
 Comment=The Same game QML Qt demo converted as plasmoid
 Comment[es]=Demo en QML de Qt del juego Iguales convertido en plasmoide
+Comment[fr]=Le jeu « Same Game » de la démo QML de Qt, converti en plasmoid
 Comment[nl]=De demo van QML Qt van 'Zelfde spel' geconverteerd als plasmoid
 Comment[pt]=A demonstração do jogo Same Game do Qt em QML
 Comment[pt_BR]=Demonstração do jogo Same Game do Qt em QML convertido como plasmoide

@@ -2,6 +2,7 @@
 Name=Now playing (QML)
 Name[de]=Musiktitel-Anzeige (QML)
 Name[es]=Reproduciendo (QML)
+Name[fr]=Lecture en cours (QML)
 Name[nl]=Speelt nu (QML)
 Name[pt]=Agora a tocar (QML)
 Name[pt_BR]=Reproduzindo (QML)
@@ -12,6 +13,7 @@ Name[x-test]=xxNow playing (QML)xx
 Comment=A proof of concept media player controller qml
 Comment[de]=Ein Konzeptnachweis für eine Medien-Wiedergabe geschrieben in QML
 Comment[es]=Una prueba de concepto de controlador de reproductor multimedia en QML
+Comment[fr]=Un contrôleur de lecteur multimédia comme démonstrateur de faisabilité en QML
 Comment[nl]=Een 'proof of concept' qml voor besturing van een mediaspeler
 Comment[pt]=A prova de conceito de um QML com controlo de leitor multimédia
 Comment[pt_BR]=A prova de conceito de um QML com controle de reprodutor multimídia

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Example on how to manage Drop data
 Comment[es]=Ejemplo sobre cómo usar los datos soltados
+Comment[fr]=Exemple de comment gérer les données déposées
 Comment[nl]=Voorbeeld van hoe gegevens van Drop te beheren
 Comment[pt]=Exemplo de gestão de dados do Drop
 Comment[pt_BR]=Exemplo de gerenciamento de dados do Drop
@@ -13,6 +14,7 @@ Keywords=
 Name=Example notes
 Name[de]=Beispielnotizen
 Name[es]=Notas del ejemplo
+Name[fr]=Exemples de notes
 Name[nl]=Voorbeeldnotities
 Name[pt]=Notas de exemplo
 Name[pt_BR]=Notas de exemplo
