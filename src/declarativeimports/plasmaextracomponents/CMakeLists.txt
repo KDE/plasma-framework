@@ -20,7 +20,7 @@ target_link_libraries(plasmaextracomponentsplugin
         Qt5::Quick
         Qt5::Qml
         ${KACTIVITIES_LIBRARY}
-        Plasma)
+        KF5::Plasma)
 
 
 install(TARGETS plasmaextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)

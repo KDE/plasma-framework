@@ -2,11 +2,11 @@
 
 # Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
 
-include("${CMAKE_CURRENT_LIST_DIR}/PlasmaTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaTargets.cmake")
 
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 set_and_check(Plasma_INCLUDE_DIR    "@PACKAGE_INCLUDE_INSTALL_DIR@")
 
 set(Plasma_LIBRARIES KF5::Plasma)
 
-include("${CMAKE_CURRENT_LIST_DIR}/PlasmaMacros.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaMacros.cmake")

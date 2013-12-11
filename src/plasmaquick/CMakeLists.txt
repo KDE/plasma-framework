@@ -8,9 +8,9 @@ set(plasmaquick_LIB_SRC
     private/configcategory_p.cpp
 )
 
-add_library(PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
+add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 
-target_link_libraries(PlasmaQuick
+target_link_libraries(KF5PlasmaQuick
     Qt5::Quick
     Qt5::Qml
     KF5::KWindowSystem
@@ -19,18 +19,19 @@ target_link_libraries(PlasmaQuick
     KF5::KService
     KF5::KCoreAddons
     KF5::XmlGui
-    Plasma
+    KF5::Plasma
     KF5::KDeclarative
 )
 
-set_target_properties(PlasmaQuick PROPERTIES
-                             VERSION 5.0.0
-                             SOVERSION 5
+set_target_properties(KF5PlasmaQuick PROPERTIES
+                                     VERSION 5.0.0
+                                     SOVERSION 5
+                                     EXPORT_NAME PlasmaQuick
                       )
 
-install(TARGETS PlasmaQuick EXPORT PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-generate_export_header(PlasmaQuick)
+generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
@@ -47,20 +48,20 @@ install(DIRECTORY
         includes/PlasmaQuick
         DESTINATION ${INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
 
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/PlasmaQuick")
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
 
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaQuickConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/PlasmaQuickConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
     PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/PlasmaQuickConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}" COMPONENT Devel
 )
 
-install(EXPORT PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaQuickTargets.cmake NAMESPACE KF5:: )
+install(EXPORT KF5PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5PlasmaQuickTargets.cmake NAMESPACE KF5:: )
 
 add_subdirectory(autotests)

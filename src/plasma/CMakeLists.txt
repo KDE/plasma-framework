@@ -111,10 +111,10 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 #)
 
 
-add_library(Plasma ${Plasma_LIB_SRCS})
-add_library(KF5::Plasma ALIAS Plasma)
+add_library(KF5Plasma ${Plasma_LIB_SRCS})
+add_library(KF5::Plasma ALIAS KF5Plasma)
 
-target_link_libraries(Plasma
+target_link_libraries(KF5Plasma
     Qt5::Network
     Qt5::Sql
     Qt5::Quick # needed in service.cpp, remove?
@@ -140,25 +140,26 @@ target_link_libraries(Plasma
 )
 
 if(X11_FOUND)
-   target_link_libraries(Plasma Qt5::X11Extras ${X11_LIBRARIES})
+   target_link_libraries(KF5Plasma Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 if(DL_LIBRARY)
-    target_link_libraries(Plasma ${DL_LIBRARY})
+    target_link_libraries(KF5Plasma ${DL_LIBRARY})
 endif()
 
-target_link_libraries(Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
-target_include_directories(Plasma PUBLIC
+target_link_libraries(KF5Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
+target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
 )
-target_include_directories(Plasma INTERFACE
+target_include_directories(KF5Plasma INTERFACE
   "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
 )
 
 #do NOT use GENERIC versioning -- the Plasma team will take care of versioning
-set_target_properties(Plasma PROPERTIES
-                             VERSION 5.0.0
-                             SOVERSION 5
+set_target_properties(KF5Plasma PROPERTIES
+                                VERSION 5.0.0
+                                SOVERSION 5
+                                EXPORT_NAME Plasma
                       )
 
 ########### install files ###############
@@ -225,5 +226,5 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_IN
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
-install(TARGETS Plasma EXPORT PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 

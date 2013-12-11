@@ -12,12 +12,13 @@ MACRO(PLASMA_UNIT_TESTS)
                target_link_libraries(${_testname}
                                      Qt5::Test
                                      Qt5::Declarative
-                                     Plasma KF5::KArchive KF5::KCoreAddons
+                                     KF5::Plasma
+                                     KF5::KArchive KF5::KCoreAddons
                                      KF5::KConfigGui
                                      KF5::KI18n
                                      KF5::KIOCore
                                      KF5::KService
-                                     PlasmaQuick
+                                     KF5::PlasmaQuick
                                     )
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} Qt5::OpenGL)

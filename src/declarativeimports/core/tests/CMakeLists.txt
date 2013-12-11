@@ -12,7 +12,7 @@ add_executable(sortfiltermodeltest
     )
 
 target_link_libraries(sortfiltermodeltest
-    Plasma
+    KF5::Plasma
     Qt5::Gui
     Qt5::Test
     KF5::KI18n
