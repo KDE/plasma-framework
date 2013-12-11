@@ -163,7 +163,7 @@ set_target_properties(KF5Plasma PROPERTIES
                       )
 
 ########### install files ###############
-generate_export_header(Plasma)
+generate_export_header(KF5Plasma BASE_NAME Plasma)
 
 set(Plasma_LIB_INCLUDES
     abstractrunner.h

@@ -123,7 +123,7 @@ add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FROM_BYTEARRAY -DQT_NO_KEYWORDS)
 
-include(PlasmaMacros.cmake)
+include(KF5PlasmaMacros.cmake)
 
 ################# configure checks and create the configured files #################
 
@@ -135,18 +135,18 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/Plasma")
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
 
 include(CMakePackageConfigHelpers)
 
 include(ECMSetupVersion)
 ecm_setup_version(2.0.0 VARIABLE_PREFIX PLASMA
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake")
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake")
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
   PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
@@ -155,9 +155,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
         DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake"
-  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaMacros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
@@ -167,5 +167,5 @@ add_subdirectory(src)
 add_subdirectory(desktoptheme)
 add_subdirectory(examples)
 
-install(EXPORT PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
+install(EXPORT KF5PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
