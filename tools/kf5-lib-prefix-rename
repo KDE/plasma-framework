@@ -1,75 +1,92 @@
-#!/bin/sh
-set -e
+#!/usr/bin/env python
+import os
+import re
+import sys
 
-repl() {
-    name=$1
-    if [ $# = 3 ] ; then
-        from=$2
-        to=$3
-    else
-        to=$2
-        from=K$to
-    fi
-    sed -i \
-        -e "s/find_package *($from/find_package(KF5$to/g" \
-        -e "s/\(find_package *( *KF5 [A-Za-z0-9 ]*\)$from/\1$to/g" \
-        -e "s/find_dependency($from/find_dependency(KF5$to/g" \
-        -e "s/KF5::$from/KF5::$to/g" \
-        $name
-}
+def replace_one(txt, dst, src=None):
+    if src is None:
+        src = "K" + dst
 
-find -name CMakeLists.txt -o -name '*Config.cmake.in'| while read name ; do
-    echo $name
+    txt = re.sub(r"find_package *\(" + src, "find_package(KF5" + dst, txt)
+    txt = re.sub(r"(find_package *\( *KF5 [A-Za-z0-9\n ]*)\W" + src + "(\W)", r"\1 " + dst + r"\2", txt, re.M)
+    txt = re.sub(r"find_dependency *\(" + src, "find_dependency(KF5" + dst, txt)
+    return txt.replace("KF5::" + src, "KF5::" + dst)
+
+
+def replace_all(path):
+    with open(path) as f:
+        txt = f.read()
     # tier1
-    repl $name Archive
-    repl $name Codecs
-    repl $name Config
-    repl $name CoreAddons
-    repl $name DBusAddons
-    repl $name GuiAddons
-    repl $name IdleTime
-    repl $name ItemModels
-    repl $name ItemViews
-    repl $name JS
-    repl $name JobWidgets
-    repl $name Plotting
-    repl $name Solid
-    repl $name Sonnet
-    repl $name ThreadWeaver
-    repl $name WidgetsAddons
-    repl $name WindowSystem
+    txt = replace_one(txt, "Archive")
+    txt = replace_one(txt, "Codecs")
+    txt = replace_one(txt, "Config")
+    txt = replace_one(txt, "CoreAddons")
+    txt = replace_one(txt, "DBusAddons")
+    txt = replace_one(txt, "GuiAddons")
+    txt = replace_one(txt, "IdleTime")
+    txt = replace_one(txt, "ItemModels", "ItemModels")
+    txt = replace_one(txt, "ItemViews", "ItemViews")
+    txt = replace_one(txt, "JS")
+    txt = replace_one(txt, "JobWidgets")
+    txt = replace_one(txt, "Plotting")
+    txt = replace_one(txt, "Solid")
+    txt = replace_one(txt, "Sonnet")
+    txt = replace_one(txt, "ThreadWeaver", "ThreadWeaver")
+    txt = replace_one(txt, "WidgetsAddons")
+    txt = replace_one(txt, "WindowSystem")
     # tier2
-    repl $name DNSSD
-    repl $name Auth
-    repl $name Completion
-    repl $name Crash
-    repl $name XsltKde
-    repl $name I18n
-    repl $name JobWidgets
-    repl $name Notifications
-    repl $name Wallet
+    txt = replace_one(txt, "DNSSD")
+    txt = replace_one(txt, "Auth")
+    txt = replace_one(txt, "Completion")
+    txt = replace_one(txt, "Crash")
+    txt = replace_one(txt, "XsltKde")
+    txt = replace_one(txt, "I18n")
+    txt = replace_one(txt, "JobWidgets")
+    txt = replace_one(txt, "Notifications")
+    txt = replace_one(txt, "Wallet")
     # tier3
-    repl $name Bookmarks
-    repl $name ConfigWidgets
-    repl $name Declarative
-    repl $name KCMUtils
-    repl $name KIOCore
-    repl $name KIOFileWidgets
-    repl $name KIOWidgets
-    repl $name Kross
-    repl $name KDESu KF5Su
-    repl $name WebKit
-    repl $name Emoticons
-    repl $name IconThemes
-    repl $name JsEmbed
-    repl $name MediaPlayer
-    repl $name NewStuff
-    repl $name NotifyConfig
-    repl $name Parts
-    repl $name PrintUtils
-    repl $name Pty
-    repl $name Service
-    repl $name TextWidgets
-    repl $name UnitConversion
-    repl $name XmlGui
-done
+    txt = replace_one(txt, "Bookmarks")
+    txt = replace_one(txt, "ConfigWidgets")
+    txt = replace_one(txt, "Declarative")
+    txt = replace_one(txt, "KCMUtils", "KCMUtils")
+    txt = replace_one(txt, "KIOCore", "KIOCore")
+    txt = replace_one(txt, "KIOFileWidgets", "KIOFileWidgets")
+    txt = replace_one(txt, "KIOWidgets", "KIOWidgets")
+    txt = replace_one(txt, "Kross", "Kross")
+    txt = replace_one(txt, "KF5Su", "KDESu")
+    txt = replace_one(txt, "WebKit")
+    txt = replace_one(txt, "Emoticons")
+    txt = replace_one(txt, "IconThemes")
+    txt = replace_one(txt, "JsEmbed")
+    txt = replace_one(txt, "MediaPlayer")
+    txt = replace_one(txt, "NewStuff")
+    txt = replace_one(txt, "NotifyConfig")
+    txt = replace_one(txt, "Parts")
+    txt = replace_one(txt, "PrintUtils")
+    txt = replace_one(txt, "Pty")
+    txt = replace_one(txt, "Service")
+    txt = replace_one(txt, "TextWidgets")
+    txt = replace_one(txt, "UnitConversion")
+    txt = replace_one(txt, "XmlGui", "XmlGui")
+    # plasma
+    txt = replace_one(txt, "Plasma", "Plasma")
+
+    with open(path, "w") as f:
+        f.write(txt)
+
+
+def main():
+    if len(sys.argv) == 2:
+        return replace_all(sys.argv[1])
+
+    for root, dirs, names in os.walk('.'):
+        for name in names:
+            if name == "CMakeLists.txt" or name.endswith("Config.cmake.in"):
+                path = os.path.join(root, name)
+                print(path)
+                replace_all(path)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+
