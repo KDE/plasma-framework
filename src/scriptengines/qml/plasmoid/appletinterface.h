@@ -162,6 +162,14 @@ class AppletInterface : public QQuickItem
      */
     Q_PROPERTY(bool fillHeight READ fillHeight NOTIFY fillHeightChanged)
 
+    /**
+     * Whether the dialog should be hidden when the dialog loses focus.
+     *
+     * The default value is @c false.
+     **/
+    Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
+
+
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletInterface();
@@ -273,6 +281,9 @@ public:
     bool userConfiguring() const;
     int apiVersion() const;
 
+    bool hideOnWindowDeactivate() const;
+    void setHideOnWindowDeactivate(bool hide);
+
     bool fillWidth() const;
     bool fillHeight() const;
     qreal minimumWidth() const;
@@ -305,6 +316,7 @@ Q_SIGNALS:
     void busyChanged();
     void expandedChanged();
     void screenChanged();
+    void hideOnWindowDeactivateChanged();
 
     void minimumWidthChanged();
     void minimumHeightChanged();
@@ -350,6 +362,7 @@ private:
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_expanded : 1;
+    bool m_hideOnDeactivate : 1;
     friend class ContainmentInterface;
 };
 

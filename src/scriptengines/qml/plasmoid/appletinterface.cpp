@@ -58,7 +58,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_actionSignals(0),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
-      m_expanded(false)
+      m_expanded(false),
+      m_hideOnDeactivate(true)
 {
     qmlRegisterType<AppletInterface>();
     qmlRegisterType<QAction>();
@@ -618,6 +619,20 @@ int AppletInterface::screen() const
 
     return -1;
 }
+
+void AppletInterface::setHideOnWindowDeactivate(bool hide)
+{
+    if (m_hideOnDeactivate != hide) {
+        m_hideOnDeactivate = hide;
+        emit hideOnWindowDeactivateChanged();
+    }
+}
+
+bool AppletInterface::hideOnWindowDeactivate() const
+{
+    return m_hideOnDeactivate;
+}
+
 
 QString AppletInterface::downloadPath(const QString &file)
 {
