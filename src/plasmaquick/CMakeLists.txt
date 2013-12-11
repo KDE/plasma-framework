@@ -9,6 +9,7 @@ set(plasmaquick_LIB_SRC
 )
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
+add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
 
 target_link_libraries(KF5PlasmaQuick
     Qt5::Quick
