@@ -221,7 +221,7 @@ KConfigGroup Applet::config() const
         return KConfigGroup(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
     }
 
-    if (d->isContainment) {
+    if (isContainment()) {
         return *(d->mainConfigGroup());
     }
 
@@ -349,10 +349,12 @@ Types::Types::ImmutabilityType Applet::immutability() const
 
     //Returning the more strict immutability between the applet immutability, Containment and Corona
     Types::ImmutabilityType upperImmutability = Types::Mutable;
-    Containment *cont = d->isContainment ? 0 : containment();
 
-    if (cont) {
-        upperImmutability = cont->immutability();
+    if (!isContainment()) {
+        const Containment *cont = containment();
+        if (cont) {
+            upperImmutability = cont->immutability();
+        }
     }
 
     if (upperImmutability != Types::Mutable) {
@@ -496,7 +498,7 @@ void Applet::flushPendingConstraintsEvents()
 
     // now take care of constraints in special subclass: Contaiment
     Containment* containment = qobject_cast<Plasma::Containment*>(this);
-    if (d->isContainment && containment) {
+    if (containment) {
         containment->d->containmentConstraintsEvent(c);
     }
 
@@ -542,19 +544,16 @@ Types::FormFactor Applet::formFactor() const
 
 Containment *Applet::containment() const
 {
-    if (d->isContainment) {
-        Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
-        if (c) {
-            return c;
-        }
+    Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
+    if (c) {
+        return c;
     }
 
     QObject *parent = this->parent();
-    Containment *c = 0;
 
     while (parent) {
-        Containment *possibleC = dynamic_cast<Containment*>(parent);
-        if (possibleC && possibleC->Applet::d->isContainment) {
+        Containment *possibleC = qobject_cast<Containment*>(parent);
+        if (possibleC) {
             c = possibleC;
             break;
         }
@@ -567,7 +566,7 @@ Containment *Applet::containment() const
         QObject *objParent = this->parent();
         while (objParent) {
             Containment *possibleC = qobject_cast<Containment*>(objParent);
-            if (possibleC && possibleC->Applet::d->isContainment) {
+            if (possibleC) {
                 c = possibleC;
                 break;
             }
@@ -737,7 +736,7 @@ void Applet::timerEvent(QTimerEvent *event)
 
 bool Applet::isContainment() const
 {
-    return d->isContainment;
+    return qobject_cast<const Containment*>(this);
 }
 
 } // Plasma namespace

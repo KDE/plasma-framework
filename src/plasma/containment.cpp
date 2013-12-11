@@ -90,18 +90,12 @@ Containment::Containment(const QString &packagePath, uint appletId)
 
 Containment::~Containment()
 {
-    // Applet touches our dptr if we are a containment and is the superclass (think of dtors)
-    // so we reset this as we exit the building
-    Applet::d->isContainment = false;
     delete d;
 }
 
 void Containment::init()
 {
     Applet::init();
-    if (!isContainment()) {
-        return;
-    }
 
     if (d->type == Types::NoContainmentType) {
         //setContainmentType(Plasma::Types::DesktopContainment);
@@ -172,11 +166,6 @@ void Containment::restore(KConfigGroup &group)
     // qDebug() << "    screen:" << group.readEntry("screen", d->screen);
 #endif
 */
-    if (!isContainment()) {
-        Applet::restore(group);
-        return;
-    }
-
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
@@ -240,10 +229,6 @@ void Containment::save(KConfigGroup &g) const
 
     // locking is saved in Applet::save
     Applet::save(group);
-
-    if (!isContainment()) {
-        return;
-    }
 
     group.writeEntry("screen", d->screen);
     group.writeEntry("lastScreen", d->lastScreen);
@@ -357,7 +342,7 @@ Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 
 void Containment::addApplet(Applet *applet)
 {
-    if (!isContainment() || immutability() != Types::Mutable) {
+    if (immutability() != Types::Mutable) {
         return;
     }
 

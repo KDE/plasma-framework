@@ -448,8 +448,6 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         conf.deleteGroup();
     }
 
-    applet->d->isContainment = true;
-    applet->d->setIsContainment(true, true);
     containments.append(containment);
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),

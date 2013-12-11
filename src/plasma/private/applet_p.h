@@ -56,11 +56,6 @@ public:
     // package exists and that we have a script engin
     void setupPackage();
 
-    /**
-     * Sets whether or not this Applet is acting as a Containment
-     */
-    void setIsContainment(bool isContainment, bool forceUpdate = false);
-
     QString globalName() const;
     void scheduleConstraintsUpdate(Plasma::Types::Constraints c);
     void scheduleModificationNotification();
@@ -110,7 +105,6 @@ public:
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;
-    bool isContainment : 1;
     bool failed : 1;
     bool transient : 1;
     bool needsConfig : 1;
