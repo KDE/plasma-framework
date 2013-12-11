@@ -82,6 +82,7 @@ def replace_all(path):
     txt = replace_one(txt, "KDE4Support", "KDE4Support")
     # plasma
     txt = replace_one(txt, "Plasma", "Plasma")
+    txt = replace_one(txt, "PlasmaQuick", "PlasmaQuick")
 
     with open(path, "w") as f:
         f.write(txt)
