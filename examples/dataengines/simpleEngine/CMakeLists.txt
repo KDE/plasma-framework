@@ -8,8 +8,8 @@ add_library(plasma_dataengine_example_simpleEngine MODULE ${simpleEngine_SRCS})
 
 target_link_libraries(plasma_dataengine_example_simpleEngine
   KF5::Plasma
-  KF5::KService
-  KF5::KI18n
+  KF5::Service
+  KF5::I18n
 )
 
 install(TARGETS plasma_dataengine_example_simpleEngine DESTINATION ${PLUGIN_INSTALL_DIR})

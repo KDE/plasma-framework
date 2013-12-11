@@ -8,7 +8,7 @@ add_library(plasma_dataengine_example_sourcesOnRequest MODULE ${sourcesOnRequest
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
   KF5::Plasma
-  KF5::KService
+  KF5::Service
 )
 
 install(TARGETS plasma_dataengine_example_sourcesOnRequest DESTINATION ${PLUGIN_INSTALL_DIR})

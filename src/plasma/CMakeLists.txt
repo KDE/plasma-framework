@@ -122,19 +122,19 @@ target_link_libraries(KF5Plasma
     Qt5::DBus
     Qt5::UiTools
     Qt5::Xml
-    KF5::KArchive
-    KF5::KGuiAddons
-    KF5::KIconThemes
-    KF5::KI18n
-    KF5::KService
+    KF5::Archive
+    KF5::GuiAddons
+    KF5::IconThemes
+    KF5::I18n
+    KF5::Service
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::ThreadWeaver
-    KF5::KWindowSystem
-    KF5::KAuth
-    KF5::KDeclarative
+    KF5::WindowSystem
+    KF5::Auth
+    KF5::Declarative
     KF5::XmlGui
-    KF5::KConfigWidgets
+    KF5::ConfigWidgets
     KF5::GlobalAccel
     ${PLASMA_EXTRA_LIBS}
 )
@@ -147,7 +147,7 @@ if(DL_LIBRARY)
     target_link_libraries(KF5Plasma ${DL_LIBRARY})
 endif()
 
-target_link_libraries(KF5Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::KConfigWidgets)
+target_link_libraries(KF5Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::ConfigWidgets)
 target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
 )

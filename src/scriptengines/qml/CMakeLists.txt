@@ -24,8 +24,8 @@ target_link_libraries(plasma_appletscript_declarative
     Qt5::UiTools
     KF5::KIOCore
     KF5::KIOWidgets
-    KF5::KDeclarative
-    KF5::KI18n
+    KF5::Declarative
+    KF5::I18n
     KF5::XmlGui # KActionCollection
     KF5::Plasma
     KF5::PlasmaQuick

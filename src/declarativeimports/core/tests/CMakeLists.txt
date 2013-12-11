@@ -15,7 +15,7 @@ target_link_libraries(sortfiltermodeltest
     KF5::Plasma
     Qt5::Gui
     Qt5::Test
-    KF5::KI18n
+    KF5::I18n
     Qt5::Qml
     )
 

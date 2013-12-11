@@ -33,10 +33,10 @@ target_link_libraries(corebindingsplugin
         Qt5::Script
         Qt5::Quick
         Qt5::Qml
-        KF5::KDeclarative
-        KF5::KCoreAddons
-        KF5::KIconThemes
-        KF5::KWindowSystem
+        KF5::Declarative
+        KF5::CoreAddons
+        KF5::IconThemes
+        KF5::WindowSystem
         KF5::Plasma)
 
 if(X11_FOUND)

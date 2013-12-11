@@ -5,7 +5,7 @@ add_executable(plugintest
     plugintest.cpp
 )
 
-target_link_libraries(plugintest KF5::Plasma KF5::KI18n KF5::KService Qt5::DBus)
+target_link_libraries(plugintest KF5::Plasma KF5::I18n KF5::Service Qt5::DBus)
 
 message("INSTALL_TARGETS_DEFAULT_ARGS ${INSTALL_TARGETS_DEFAULT_ARGS}")
 

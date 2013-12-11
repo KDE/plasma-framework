@@ -6,8 +6,8 @@ add_executable(fullmodelaccesstest columnproxymodeltest.cpp ../columnproxymodel.
 target_link_libraries(fullmodelaccesstest
     Qt5::Gui
     Qt5::Test
-    KF5::KCoreAddons
-    KF5::KI18n
+    KF5::CoreAddons
+    KF5::I18n
     )
 
 add_test(plasma-fullmodelaccesstest fullmodelaccesstest)

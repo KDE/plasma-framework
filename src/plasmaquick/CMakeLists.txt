@@ -13,14 +13,14 @@ add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 target_link_libraries(KF5PlasmaQuick
     Qt5::Quick
     Qt5::Qml
-    KF5::KWindowSystem
+    KF5::WindowSystem
     KF5::KIOWidgets
-    KF5::KI18n
-    KF5::KService
-    KF5::KCoreAddons
+    KF5::I18n
+    KF5::Service
+    KF5::CoreAddons
     KF5::XmlGui
     KF5::Plasma
-    KF5::KDeclarative
+    KF5::Declarative
 )
 
 set_target_properties(KF5PlasmaQuick PROPERTIES

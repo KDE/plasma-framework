@@ -42,10 +42,10 @@ set (QT_MIN_VERSION "5.2.0")
 
 find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
 
-find_package(KF5 CONFIG REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver KF5GlobalAccel
-                                            KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
-                                            KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets Sonnet KTextWidgets XmlGui KCrash
-                                            KBookmarks KDeclarative KUnitConversion KParts Kross KIO)
+find_package(KF5 CONFIG REQUIRED IdleTime ItemModels WidgetsAddons WindowSystem Codecs Archive CoreAddons Solid ThreadWeaver GlobalAccel
+                                            Config Auth JS Wallet DBusAddons I18n GuiAddons ConfigWidgets
+                                            Service ItemViews Notifications IconThemes Completion JobWidgets Sonnet TextWidgets XmlGui Crash
+                                            Bookmarks Declarative UnitConversion Parts Kross KIO)
 
 find_package(KActivities)
 set_package_properties(KActivities PROPERTIES DESCRIPTION "The KActivities library"

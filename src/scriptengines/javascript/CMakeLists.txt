@@ -74,7 +74,7 @@ set(javascript_runner_engine_SRCS
 add_library(plasma_runnerscript_javascript MODULE ${javascript_runner_engine_SRCS})
 
 target_link_libraries(plasma_runnerscript_javascript
-                      KF5::KCoreAddons
+                      KF5::CoreAddons
                       KF5::KIOWidgets
                       KF5::Plasma
                       Qt5::Script)
@@ -99,7 +99,7 @@ set(javascript_dataengine_engine_SRCS
 add_library(plasma_dataenginescript_javascript MODULE ${javascript_dataengine_engine_SRCS})
 
 target_link_libraries(plasma_dataenginescript_javascript
-                      KF5::KCoreAddons
+                      KF5::CoreAddons
                       KF5::KIOWidgets
                       KF5::Plasma
                       Qt5::Script)

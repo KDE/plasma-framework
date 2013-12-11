@@ -12,7 +12,7 @@ target_link_libraries(dirmodelplugin
         Qt5::Qml
         KF5::KIOCore
         KF5::KIOWidgets
-        KF5::KGuiAddons
+        KF5::GuiAddons
         )
 
 install(TARGETS dirmodelplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/dirmodel)

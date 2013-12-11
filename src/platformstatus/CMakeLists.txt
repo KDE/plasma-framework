@@ -13,10 +13,10 @@ add_library(kded_platformstatus MODULE ${kded_platformstatus_SRCS} )
 
 target_link_libraries(
    kded_platformstatus
-   KF5::KService
-   KF5::KCoreAddons
-   KF5::KDBusAddons
-   KF5::KI18n
+   KF5::Service
+   KF5::CoreAddons
+   KF5::DBusAddons
+   KF5::I18n
    KF5::KIOCore KF5::KIOWidgets
    Qt5::DBus
    Qt5::Quick

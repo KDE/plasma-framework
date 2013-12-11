@@ -1,6 +1,6 @@
 project(plasmacomponents)
 
-#find_package(KDeclarative REQUIRED NO_MODULE)
+#find_package(KF5Declarative REQUIRED NO_MODULE)
 
 set(plasmacomponents_SRCS
     #fullscreensheet.cpp
@@ -20,7 +20,7 @@ target_link_libraries(plasmacomponentsplugin
         Qt5::Quick
         Qt5::Qml
         Qt5::Gui
-        KF5::KDeclarative
+        KF5::Declarative
         KF5::Plasma)
 
 
