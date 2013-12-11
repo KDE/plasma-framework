@@ -64,6 +64,7 @@ def replace_all(path):
     txt = replace_one(txt, "WebKit")
     txt = replace_one(txt, "Emoticons")
     txt = replace_one(txt, "IconThemes")
+    txt = replace_one(txt, "Init")
     txt = replace_one(txt, "JsEmbed")
     txt = replace_one(txt, "MediaPlayer")
     txt = replace_one(txt, "NewStuff")
@@ -75,6 +76,9 @@ def replace_all(path):
     txt = replace_one(txt, "TextWidgets")
     txt = replace_one(txt, "UnitConversion")
     txt = replace_one(txt, "XmlGui", "XmlGui")
+    # tier4
+    txt = replace_one(txt, "Style")
+    txt = replace_one(txt, "KDE4Support", "KDE4Support")
     # plasma
     txt = replace_one(txt, "Plasma", "Plasma")
 
