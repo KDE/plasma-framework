@@ -1,11 +1,13 @@
 find_package(KF5 CONFIG REQUIRED KIdleTime ItemModels KWidgetsAddons KWindowSystem KCodecs KArchive KCoreAddons Solid ThreadWeaver KF5GlobalAccel
                                             KConfig KAuth KJS KWallet KDBusAddons KI18n KGuiAddons KConfigWidgets
                                             KService ItemViews KNotifications KIconThemes KCompletion KJobWidgets Sonnet KTextWidgets XmlGui KCrash
-                                            KBookmarks KDeclarative KUnitConversion KParts Kross KIO KInit)
+                                            KBookmarks KDeclarative KUnitConversion KParts Kross KIO KInit KDocTools KDESu)
 
 find_package(KCoreAddons REQUIRED)
 
 find_package(Solid REQUIRED)
+
+find_package(KDESu REQUIRED NO_MODULE)
 
 find_package(KDeclarative REQUIRED NO_MODULE)
 
