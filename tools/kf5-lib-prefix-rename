@@ -94,7 +94,7 @@ def main():
 
     for root, dirs, names in os.walk('.'):
         for name in names:
-            if name == "CMakeLists.txt" or name.endswith("Config.cmake.in"):
+            if name == "CMakeLists.txt" or name.endswith("Config.cmake.in") or name.endswith("Config.cmake"):
                 path = os.path.join(root, name)
                 print(path)
                 replace_all(path)
