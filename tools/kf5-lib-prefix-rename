@@ -6,11 +6,14 @@ import sys
 def replace_one(txt, dst, src=None):
     if src is None:
         src = "K" + dst
+    word_src = r"%s\b" % src
 
-    txt = re.sub(r"find_package *\(" + src, "find_package(KF5" + dst, txt)
-    txt = re.sub(r"(find_package *\( *KF5 [A-Za-z0-9\n ]*)\W" + src + "(\W)", r"\1 " + dst + r"\2", txt, re.M)
-    txt = re.sub(r"find_dependency *\(" + src, "find_dependency(KF5" + dst, txt)
-    return txt.replace("KF5::" + src, "KF5::" + dst)
+    txt = re.sub(r"find_dependency *\(" + word_src, "find_dependency(KF5" + dst, txt)
+    txt = re.sub(r"find_package *\(" + word_src, "find_package(KF5" + dst, txt)
+    txt = re.sub(r"(find_package *\( *KF5 [A-Za-z0-9\n ]*\s*)" + word_src, r"\1" + dst, txt, re.M)
+    txt = re.sub(r"include *\(" + src + r"Macros", "include(KF5" + dst + "Macros", txt)
+    txt = re.sub(r"KF5::" + src + r"\b", "KF5::" + dst, txt)
+    return txt
 
 
 def replace_all(path):
