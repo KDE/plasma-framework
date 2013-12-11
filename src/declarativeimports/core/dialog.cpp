@@ -42,7 +42,8 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::BottomEdge),
       m_activeWindow(false),
-      m_type(Normal)
+      m_type(Normal),
+      m_hideOnWindowDeactivate(false)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -182,6 +183,7 @@ void DialogProxy::setVisible(const bool visible)
         }
         setFlags(Qt::FramelessWindowHint|m_flags);
     }
+    emit visibleChanged();
 }
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
@@ -417,6 +419,9 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
 {
     m_activeWindow = false;
     emit activeWindowChanged();
+    if (m_hideOnWindowDeactivate) {
+        setVisible(false);
+    }
     QQuickWindow::focusOutEvent(ev);
 }
 
@@ -452,6 +457,24 @@ void DialogProxy::syncBorders()
         DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     }
     //syncToMainItemSize();
+}
+
+bool DialogProxy::hideOnWindowDeactivate() const
+{
+    return m_hideOnWindowDeactivate;
+}
+
+void DialogProxy::setHideOnWindowDeactivate(bool hide)
+{
+    if (flags() & Qt::X11BypassWindowManagerHint) {
+        // doesn't get keyboard focus, so let's just ignore it
+        return;
+    }
+    if (m_hideOnWindowDeactivate == hide) {
+        return;
+    }
+    m_hideOnWindowDeactivate = hide;
+    emit hideOnWindowDeactivateChanged();
 }
 
 #include "dialog.moc"

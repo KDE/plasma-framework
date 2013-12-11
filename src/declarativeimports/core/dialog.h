@@ -87,6 +87,13 @@ class DialogProxy : public QQuickWindow
      */
     Q_PROPERTY(WindowType type READ type WRITE setType NOTIFY typeChanged)
 
+    /**
+     * Whether the dialog should be hidden when the dialog loses focus.
+     *
+     * The default value is @c false.
+     **/
+    Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -137,6 +144,8 @@ public:
 
     void setType(WindowType type);
     WindowType type() const;
+    bool hideOnWindowDeactivate() const;
+    void setHideOnWindowDeactivate(bool hide);
 
 Q_SIGNALS:
     void mainItemChanged();
@@ -145,6 +154,7 @@ Q_SIGNALS:
     void locationChanged();
     void visualParentChanged();
     void typeChanged();
+    void hideOnWindowDeactivateChanged();
 
 public Q_SLOTS:
     void syncMainItemToSize();
@@ -171,6 +181,7 @@ private:
     bool m_activeWindow;
     QRect m_cachedGeometry;
     WindowType m_type;
+    bool m_hideOnWindowDeactivate;
 };
 
 #endif
