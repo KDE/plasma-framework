@@ -74,6 +74,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
             //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
             oldGraphicObject->setParent(containment.data());
         }
+        containment.data()->reactToScreenChange();
     }
 
     containment = cont;
@@ -88,6 +89,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
     emit q->containmentChanged();
 
     if (cont) {
+        cont->reactToScreenChange();
         QObject::connect(cont, &Plasma::Containment::locationChanged,
                 q, &PlasmaQuickView::locationChanged);
         QObject::connect(cont, &Plasma::Containment::formFactorChanged,
