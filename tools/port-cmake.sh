@@ -27,6 +27,8 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/kde4_install_auth_helper_files/kauth_install_helper_files/g' $FS
     perl -p -i -e 's/kde4_install_auth_actions/kauth_install_actions/g' $FS
     perl -p -i -e 's/kde4_add_kcfg_files/kconfig_add_kcfg_files/g' $FS
+    perl -p -i -e 's/kde4_install_icons/ecm_install_icons/g' $FS
+    perl -p -i -e 's/macro_optional_add_subdirectory/ecm_optional_add_subdirectory/g' $FS
 
     perl -p -i -e 's/KF5\:\:plasma/KF5\:\:Plasma/g' $FS
     perl -p -i -e 's/\$\{KDE4_KIDLETIME_LIBRARY\}/KF5::KIdleTime/g' $FS
