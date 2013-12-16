@@ -170,7 +170,7 @@ PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
     setColor(Qt::transparent);
 
 
-    QObject::connect(screen(), &QScreen::virtualGeometryChanged,
+    QObject::connect(screen(), &QScreen::geometryChanged,
             this, &PlasmaQuickView::screenGeometryChanged);
 
     if (!corona->package().isValid()) {
