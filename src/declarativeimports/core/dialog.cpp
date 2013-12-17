@@ -56,7 +56,6 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_syncTimer->setInterval(250);
     connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 
-    //Can't just connect to start() since it can't resolve the overload
     connect(this, &QWindow::xChanged, [=](){m_syncTimer->start();});
     connect(this, &QWindow::yChanged, [=](){m_syncTimer->start();});
     connect(this, &QWindow::visibleChanged, this, &DialogProxy::onVisibleChanged);
@@ -101,7 +100,7 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             syncToMainItemSize();
         }
 
-        //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
+        //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
         emit mainItemChanged();
     }
 }
@@ -336,14 +335,9 @@ void DialogProxy::syncToMainItemSize()
         return;
     }
     syncBorders();
-    //qDebug() << " main item: " << m_mainItem.
-    //FIXME: workaround to prevent dialogs of Popup type disappearing on the second show
     const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height()) +
                     QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
                           m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
-    //resize(0,0);
-    qDebug() << "DIALOG mainItem: " << m_mainItem.data()->objectName()<< QSize(m_mainItem.data()->width(), m_mainItem.data()->height());
-    qDebug() << "DIALOG resize: " << s;
     resize(s);
     emit widthChanged(s.width());
     emit heightChanged(s.height());
@@ -396,8 +390,6 @@ void DialogProxy::showEvent(QShowEvent *event)
 
 void DialogProxy::syncBorders()
 {
-    //syncToMainItemSize();
-
     const QRect avail = screen()->availableGeometry();
 
     m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
@@ -419,7 +411,6 @@ void DialogProxy::syncBorders()
     if (isVisible()) {
         DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     }
-    //syncToMainItemSize();
 }
 
 bool DialogProxy::hideOnWindowDeactivate() const
