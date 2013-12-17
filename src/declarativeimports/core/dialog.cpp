@@ -142,6 +142,11 @@ void DialogProxy::setVisible(const bool visible)
             setGeometry(screen()->availableGeometry());
 
         } else {
+            // FIXME: abuse of flags
+            // The dialog hiding is animated, keep it raised while it's animating
+            // This seems to be a bit of a hack, but as it works, let's use it for
+            // now and keep looking for a better solution.
+            setFlags(Qt::WindowStaysOnTopHint|m_flags);
             //syncToMainItemSize();
             setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
             syncToMainItemSize();
