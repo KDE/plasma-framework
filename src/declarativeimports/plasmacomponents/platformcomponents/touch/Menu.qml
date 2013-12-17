@@ -56,7 +56,7 @@ Item {
         dialog.y = pos.y
 
         dialog.visible = true
-        dialog.activateWindow()
+        dialog.requestActivate()
     }
 
     function close()
