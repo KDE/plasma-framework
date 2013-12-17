@@ -33,19 +33,22 @@ class KDeclarativeMouseEvent : public QObject
     Q_PROPERTY(int button READ button)
     Q_PROPERTY(Qt::MouseButtons buttons READ buttons)
     Q_PROPERTY(Qt::KeyboardModifiers modifiers READ modifiers)
+    Q_PROPERTY(QScreen* screen READ screen CONSTANT)
 
 public:
     KDeclarativeMouseEvent(int x, int y, int screenX, int screenY,
                            Qt::MouseButton button,
                            Qt::MouseButtons buttons,
-                           Qt::KeyboardModifiers modifiers)
+                           Qt::KeyboardModifiers modifiers,
+                           QScreen* screen)
         : m_x(x),
           m_y(y),
           m_screenX(screenX),
           m_screenY(screenY),
           m_button(button),
           m_buttons(buttons),
-          m_modifiers(modifiers)
+          m_modifiers(modifiers),
+          m_screen(screen)
     {}
 
     int x() const { return m_x; }
@@ -55,6 +58,7 @@ public:
     int button() const { return m_button; }
     Qt::MouseButtons buttons() const { return m_buttons; }
     Qt::KeyboardModifiers modifiers() const { return m_modifiers; }
+    QScreen* screen() const { return m_screen; }
 
     // only for internal usage
     void setX(int x) { m_x = x; }
@@ -68,6 +72,7 @@ private:
     Qt::MouseButton m_button;
     Qt::MouseButtons m_buttons;
     Qt::KeyboardModifiers m_modifiers;
+    QScreen *m_screen;
 };
 
 class KDeclarativeWheelEvent : public QObject
@@ -173,6 +178,8 @@ private Q_SLOTS:
     void handlePressAndHold();
 
 private:
+    static QScreen* screenForGlobalPos(const QPoint &globalPos);
+
     QPointF buttonDownPos(int btn) const;
     bool m_pressed;
     KDeclarativeMouseEvent* m_pressAndHoldEvent;

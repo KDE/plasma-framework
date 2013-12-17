@@ -178,9 +178,6 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    //qDebug() << "setScreen from restore";
-    d->setScreen(group.readEntry("screen", d->screen));
-
     KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
     cfg = KConfigGroup(&cfg, QString::number(containmentType()));
 
@@ -230,7 +227,7 @@ void Containment::save(KConfigGroup &g) const
     // locking is saved in Applet::save
     Applet::save(group);
 
-    group.writeEntry("screen", d->screen);
+//     group.writeEntry("screen", d->screen);
     group.writeEntry("lastScreen", d->lastScreen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
@@ -429,14 +426,9 @@ QList<Applet *> Containment::applets() const
     return d->applets;
 }
 
-void Containment::setScreen(int newScreen)
-{
-    d->setScreen(newScreen);
-}
-
 int Containment::screen() const
 {
-    return d->screen;
+    return corona()->screenForContainment(this);
 }
 
 int Containment::lastScreen() const
@@ -544,6 +536,23 @@ void Containment::setActivity(const QString &activityId)
 QString Containment::activity() const
 {
     return d->activityId;
+}
+
+void Containment::reactToScreenChange()
+{
+    int newScreen = screen();
+
+    KConfigGroup c = config();
+    if (newScreen >= 0) {
+        d->lastScreen = newScreen;
+        c.writeEntry("lastScreen", d->lastScreen);
+    }
+    emit configNeedsSaving();
+    emit screenChanged(newScreen);
+
+    if (newScreen >= 0) {
+        emit activate();
+    }
 }
 
 } // Plasma namespace

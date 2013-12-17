@@ -134,15 +134,6 @@ class PLASMA_EXPORT Containment : public Applet
         QList<Applet *> applets() const;
 
         /**
-         * Sets the physical screen this Containment is associated with.
-         *
-         * @param screen the screen number this containment is the desktop for, or -1
-         *               if it is not serving as the desktop for any screen
-         * @param desktop the virtual desktop to also associate this this screen with
-         */
-        void setScreen(int screen);
-
-        /**
          * @return the screen number this containment is serving as the desktop for
          *         or -1 if none
          */
@@ -243,14 +234,12 @@ Q_SIGNALS:
         void showAddWidgetsInterface(const QPointF &pos);
 
         /**
-         * This signal indicates that a containment has been newly
+         * This signal indicates that a containment has been
          * associated (or dissociated) with a physical screen.
          *
-         * @param wasScreen the screen it was associated with
-         * @param isScreen the screen it is now associated with
-         * @param containment the containment switching screens
+         * @param newScreen the screen it is now associated with
          */
-        void screenChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
+        void screenChanged(int newScreen);
 
         /**
          * Emitted when the user wants to configure/change the containment, or an applet inside it.
@@ -316,6 +305,8 @@ Q_SIGNALS:
          * Sets whether wallpaper is painted or not.
          */
         void setDrawWallpaper(bool drawWallpaper);
+
+        void reactToScreenChange();
 
     protected:
         /**
