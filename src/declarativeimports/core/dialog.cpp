@@ -217,18 +217,17 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
         }
     }
 
-    Plasma::Types::Location l = location();
-
-    QPoint topPoint((item->boundingRect().width() - width())/2,
+    const QPoint topPoint((item->boundingRect().width() - width())/2,
                     -height());
-    QPoint bottomPoint((item->boundingRect().width() - width())/2,
+    const QPoint bottomPoint((item->boundingRect().width() - width())/2,
                        item->boundingRect().height());
-    QPoint leftPoint(-width(),
+    const QPoint leftPoint(-width(),
                      (item->boundingRect().height() - height())/2);
 
-    QPoint rightPoint(item->boundingRect().width(),
+    const QPoint rightPoint(item->boundingRect().width(),
                       (item->boundingRect().height() - height())/2);
 
+    const Plasma::Types::Location l = location();
     QPoint offset(0, 0);
     if (l == Plasma::Types::BottomEdge) {
         offset = bottomPoint;
