@@ -198,7 +198,8 @@ Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVa
 
         emit appletAdded(appletGraphicObject, pos.x(), pos.y());
         emit appletsChanged();
-    }
+    } else
+        blockSignals(false);
     return applet;
 }
 
