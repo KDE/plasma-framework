@@ -41,7 +41,6 @@
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::BottomEdge),
-      m_activeWindow(false),
       m_type(Normal),
       m_hideOnWindowDeactivate(false)
 {
@@ -289,17 +288,6 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     return menuPos;
 }
 
-bool DialogProxy::isActiveWindow() const
-{
-    return m_activeWindow;
-}
-
-void DialogProxy::activateWindow()
-{
-    //qDebug();
-    setWindowState(Qt::WindowActive);
-}
-
 Plasma::Types::Location DialogProxy::location() const
 {
     return m_location;
@@ -388,15 +376,12 @@ DialogProxy::WindowType DialogProxy::type() const
 
 void DialogProxy::focusInEvent(QFocusEvent *ev)
 {
-    m_activeWindow = true;
-    emit activeWindowChanged();
+    requestActivate();
     QQuickWindow::focusInEvent(ev);
 }
 
 void DialogProxy::focusOutEvent(QFocusEvent *ev)
 {
-    m_activeWindow = false;
-    emit activeWindowChanged();
     if (m_hideOnWindowDeactivate) {
         setVisible(false);
     }

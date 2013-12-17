@@ -63,11 +63,6 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
     /**
-     * True if the dialog window is the active one in the window manager.
-     */
-    Q_PROPERTY(bool activeWindow READ isActiveWindow NOTIFY activeWindowChanged)
-
-    /**
      * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
      */
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
@@ -105,14 +100,6 @@ public:
     QQuickItem *visualParent() const;
     void setVisualParent(QQuickItem *visualParent);
 
-    bool isActiveWindow() const;
-
-    /**
-     * Ask the window manager to activate the window.
-     * The window manager may or may not accept the activation request
-     */
-    Q_INVOKABLE void activateWindow();
-
     Plasma::Types::Location location() const;
     void setLocation(Plasma::Types::Location location);
 
@@ -132,7 +119,6 @@ public:
 
 Q_SIGNALS:
     void mainItemChanged();
-    void activeWindowChanged();
     void locationChanged();
     void visualParentChanged();
     void typeChanged();
@@ -161,7 +147,6 @@ private Q_SLOTS:
     void onVisibleChanged();
 
 private:
-    bool m_activeWindow;
     QRect m_cachedGeometry;
     WindowType m_type;
     bool m_hideOnWindowDeactivate;
