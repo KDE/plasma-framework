@@ -62,7 +62,7 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     //Can't just connect to start() since it can't resolve the overload
     connect(this, &QWindow::xChanged, [=](){m_syncTimer->start();});
     connect(this, &QWindow::yChanged, [=](){m_syncTimer->start();});
-
+    connect(this, &QWindow::visibleChanged, this, &DialogProxy::onVisibleChanged);
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
@@ -120,7 +120,6 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
         return;
     }
 
-
     m_visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent && isVisible()) {
@@ -128,13 +127,9 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
     }
 }
 
-bool DialogProxy::isVisible() const
+void DialogProxy::onVisibleChanged()
 {
-    return QQuickWindow::isVisible();
-}
-
-void DialogProxy::setVisible(const bool visible)
-{
+    const bool visible = isVisible();
     if (visible) {
         if (location() == Plasma::Types::FullScreen) {
             m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
@@ -174,7 +169,6 @@ void DialogProxy::setVisible(const bool visible)
     }
 
     KWindowEffects::slideWindow(winId(), slideLocation, -1);
-    QQuickWindow::setVisible(visible);
 
     if (visible) {
         raise();
@@ -188,7 +182,6 @@ void DialogProxy::setVisible(const bool visible)
         }
         setFlags(Qt::FramelessWindowHint|m_flags);
     }
-    emit visibleChanged();
 }
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)

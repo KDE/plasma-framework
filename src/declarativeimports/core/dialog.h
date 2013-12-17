@@ -57,11 +57,6 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
 
     /**
-     * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
-     */
-    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
-
-    /**
      * Window flags of the Dialog window
      */
     Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
@@ -115,9 +110,6 @@ public:
     QQuickItem *visualParent() const;
     void setVisualParent(QQuickItem *visualParent);
 
-    bool isVisible() const;
-    void setVisible(const bool visible);
-
     bool isActiveWindow() const;
 
     /**
@@ -149,7 +141,6 @@ public:
 
 Q_SIGNALS:
     void mainItemChanged();
-    void visibleChanged();
     void activeWindowChanged();
     void locationChanged();
     void visualParentChanged();
@@ -175,6 +166,8 @@ protected:
 
 private Q_SLOTS:
     void syncBorders();
+
+    void onVisibleChanged();
 
 private:
     Qt::WindowFlags m_flags;
