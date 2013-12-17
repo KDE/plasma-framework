@@ -161,7 +161,7 @@ public:
      * @returns the id of the screen which is showing @p containment
      * -1 is returned if the containment is not associated with a screen.
      */
-    virtual int screenForContainment(const Containment *containment) const = 0;
+    virtual int screenForContainment(const Containment *containment) const;
 
 public Q_SLOTS:
     /**

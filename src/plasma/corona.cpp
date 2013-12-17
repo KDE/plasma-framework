@@ -198,6 +198,12 @@ Containment *Corona::createContainment(const QString &name, const QVariantList &
     return 0;
 }
 
+int Corona::screenForContainment(const Containment* containment) const
+{
+    return -1;
+}
+
+
 int Corona::numScreens() const
 {
     return 1;
