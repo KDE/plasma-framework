@@ -57,11 +57,6 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
 
     /**
-     * Window flags of the Dialog window
-     */
-    Q_PROPERTY(int windowFlags READ windowFlags WRITE setWindowFlags)
-
-    /**
      * Margins of the dialog around the mainItem.
      * @see DialogMargins
      */
@@ -118,10 +113,6 @@ public:
      */
     Q_INVOKABLE void activateWindow();
 
-    //FIXME: passing an int is ugly
-    int windowFlags() const;
-    void setWindowFlags(const int);
-
     Plasma::Types::Location location() const;
     void setLocation(Plasma::Types::Location location);
 
@@ -170,7 +161,6 @@ private Q_SLOTS:
     void onVisibleChanged();
 
 private:
-    Qt::WindowFlags m_flags;
     bool m_activeWindow;
     QRect m_cachedGeometry;
     WindowType m_type;

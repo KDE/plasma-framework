@@ -52,8 +52,6 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    m_flags = flags();
-
     m_syncTimer = new QTimer(this);
     m_syncTimer->setSingleShot(true);
     m_syncTimer->setInterval(250);
@@ -173,7 +171,7 @@ void DialogProxy::onVisibleChanged()
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
         }
-        setFlags(Qt::FramelessWindowHint|m_flags);
+        setFlags(Qt::FramelessWindowHint|flags());
     }
 }
 
@@ -300,17 +298,6 @@ void DialogProxy::activateWindow()
 {
     //qDebug();
     setWindowState(Qt::WindowActive);
-}
-
-int DialogProxy::windowFlags() const
-{
-    return (int)m_flags;
-}
-
-void DialogProxy::setWindowFlags(const int flags)
-{
-    m_flags = (Qt::WindowFlags)flags;
-    setFlags(Qt::FramelessWindowHint|m_flags);
 }
 
 Plasma::Types::Location DialogProxy::location() const
