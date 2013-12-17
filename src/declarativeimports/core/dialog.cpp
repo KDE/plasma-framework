@@ -93,10 +93,10 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-                connect(mainItem, SIGNAL(widthChanged()), m_syncTimer, SLOT(start()));
+                connect(mainItem, &QQuickItem::widthChanged, [=](){m_syncTimer->start();});
             }
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-                connect(mainItem, SIGNAL(heightChanged()), m_syncTimer, SLOT(start()));
+                connect(mainItem, &QQuickItem::heightChanged, [=](){m_syncTimer->start();});
             }
             syncToMainItemSize();
         }
