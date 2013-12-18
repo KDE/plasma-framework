@@ -250,7 +250,7 @@ void AppletPrivate::updateShortcuts()
         for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
-                actions->add<QAction>(names.at(i), a);
+                actions->addAction(names.at(i), a);
             }
         }
     } else {
