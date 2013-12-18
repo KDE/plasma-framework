@@ -136,6 +136,7 @@ target_link_libraries(KF5Plasma
     KF5::XmlGui
     KF5::ConfigWidgets
     KF5::GlobalAccel
+    KF5::DNSSD
     ${PLASMA_EXTRA_LIBS}
 )
 

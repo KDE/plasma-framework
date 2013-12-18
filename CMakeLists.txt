@@ -45,7 +45,7 @@ find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml W
 find_package(KF5 CONFIG REQUIRED IdleTime ItemModels WidgetsAddons WindowSystem Codecs Archive CoreAddons Solid ThreadWeaver GlobalAccel
                                             Config Auth JS Wallet DBusAddons I18n GuiAddons ConfigWidgets
                                             Service ItemViews Notifications IconThemes Completion JobWidgets Sonnet TextWidgets XmlGui Crash
-                                            Bookmarks Declarative UnitConversion Parts Kross KIO)
+                                            Bookmarks Declarative UnitConversion Parts Kross KIO DNSSD)
 
 find_package(KActivities)
 set_package_properties(KActivities PROPERTIES DESCRIPTION "The KActivities library"
