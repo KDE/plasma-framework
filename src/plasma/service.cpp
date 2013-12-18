@@ -31,8 +31,8 @@
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
 
-#include <dnssd/publicservice.h>
-#include <dnssd/servicebrowser.h>
+#include <kdnssd/publicservice.h>
+#include <kdnssd/servicebrowser.h>
 #include <qstandardpaths.h>
 
 #include "configloader.h"
