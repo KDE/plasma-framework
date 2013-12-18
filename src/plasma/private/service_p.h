@@ -31,8 +31,8 @@
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 
-#include <dnssd/publicservice.h>
-#include <dnssd/servicebrowser.h>
+#include <kdnssd/publicservice.h>
+#include <kdnssd/servicebrowser.h>
 
 #include "plasma/configloader.h"
 
@@ -99,7 +99,7 @@ public:
     QString resourcename;
     QMap<QString, QVariantMap> operationsMap;
     KConfig *dummyConfig;
-    DNSSD::PublicService *publicService;
+    KDNSSD::PublicService *publicService;
     QSet<QString> disabledOperations;
 };
 
