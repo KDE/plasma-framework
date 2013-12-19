@@ -126,7 +126,7 @@ target_link_libraries(KF5Plasma
     KF5::GuiAddons
     KF5::IconThemes
     KF5::I18n
-    KF5::Service
+    KF5::Service # For kplugininfo.h
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::ThreadWeaver
@@ -137,6 +137,7 @@ target_link_libraries(KF5Plasma
     KF5::ConfigWidgets
     KF5::GlobalAccel
     KF5::DNSSD
+    KF5::KDE4Support #ksharedptr
     ${PLASMA_EXTRA_LIBS}
 )
 

@@ -20,6 +20,7 @@ target_link_libraries(plasmaextracomponentsplugin
         Qt5::Quick
         Qt5::Qml
         ${KACTIVITIES_LIBRARY}
+        KF5::Service
         KF5::Plasma)
 
 

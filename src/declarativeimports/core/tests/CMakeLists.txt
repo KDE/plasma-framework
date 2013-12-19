@@ -16,6 +16,8 @@ target_link_libraries(sortfiltermodeltest
     Qt5::Gui
     Qt5::Test
     KF5::I18n
+    KF5::KDE4Support #qtest_kde.h
+    KF5::Service
     Qt5::Qml
     )
 

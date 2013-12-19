@@ -21,7 +21,9 @@ target_link_libraries(plasmacomponentsplugin
         Qt5::Qml
         Qt5::Gui
         KF5::Declarative
-        KF5::Plasma)
+        KF5::Plasma
+        KF5::Service #for kplugininfo.h
+)
 
 
 install(TARGETS plasmacomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
