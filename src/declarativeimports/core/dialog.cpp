@@ -269,7 +269,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment)
     if (menuPos.x() + width() > avail.width() - rightMargin) {
         // popup hits rhs
         if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
-            menuPos.setX(avail.width() - width() / 2 );
+            menuPos.setX(avail.width() - width());
         } else {
             menuPos.setX(pos.x() + leftPoint.x());
         }
