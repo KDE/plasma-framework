@@ -33,7 +33,6 @@
 #include <plasma/package.h>
 #include <plasma/pluginloader.h>
 #include <plasma/dataengine.h>
-//#include <kglobal.h>
 #include <kjob.h>
 
 #include <qcommandlineparser.h>
