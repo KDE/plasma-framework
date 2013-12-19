@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Keywords=
 Name=Containment Test
+Name[de]=Container-Test
 Name[es]=Prueba de contenedor
 Name[fi]=Sovelmasäiliötesti
 Name[fr]=Test du conteneur
