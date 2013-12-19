@@ -1,6 +1,6 @@
 /** @mainpage Qt Extra Components
 
-<h2>import org.kde.plasma.qtextracomponents</h2>
+<h2>import org.kde.qtextracomponents</h2>
 
 - QPixmapItem
 - QImageItem
