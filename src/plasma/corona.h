@@ -217,11 +217,9 @@ Q_SIGNALS:
      * This signal indicates that a containment has been newly
      * associated (or dissociated) with a physical screen.
      *
-     * @param wasScreen the screen it was associated with
      * @param isScreen the screen it is now associated with
-     * @param containment the containment switching screens
      */
-    void screenOwnerChanged(int wasScreen, int isScreen, Plasma::Containment *containment);
+    void screenOwnerChanged(int isScreen);
 
     /**
      * This signal indicates that the configuration file was flushed to disk.

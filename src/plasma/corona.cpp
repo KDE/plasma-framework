@@ -444,8 +444,8 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             q, SLOT(containmentDestroyed(QObject*)));
     QObject::connect(containment, SIGNAL(configNeedsSaving()),
             q, SLOT(requestConfigSync()));
-    QObject::connect(containment, SIGNAL(screenChanged(int,int,Plasma::Containment*)),
-            q, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)));
+    QObject::connect(containment, SIGNAL(screenChanged(int)),
+            q, SIGNAL(screenOwnerChanged(int)));
 
     containment->init();
     KConfigGroup cg = containment->config();
