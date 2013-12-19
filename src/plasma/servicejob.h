@@ -23,7 +23,6 @@
 #include <QtCore/QVariant>
 
 #include <kjob.h>
-#include <kservice.h>
 
 #include <plasma/plasma_export.h>
 

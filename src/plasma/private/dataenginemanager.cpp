@@ -23,7 +23,6 @@
 #include <QTextStream>
 
 #include <QDebug>
-#include <klocale.h>
 
 #include <kservicetypetrader.h>
 #include <qstandardpaths.h>

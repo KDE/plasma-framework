@@ -21,8 +21,6 @@
 #ifndef DECLARATIVE_APPLETSCRIPT_H
 #define DECLARATIVE_APPLETSCRIPT_H
 
-#include <kdemacros.h>
-
 #include <QQmlEngine>
 #include <QSet>
 

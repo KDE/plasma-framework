@@ -30,7 +30,6 @@
 
 #include <QDebug>
 #include <kiconloader.h>
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
