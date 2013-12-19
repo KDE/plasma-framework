@@ -6,9 +6,6 @@ The classes documented here are not C++ public libraries: they are intended to b
 <h3>org.kde.draganddrop</h3>
 <p>Bindings for the Qt drag and drop system, see <a href="../declarativeimports/draganddrop/html/index.html">draganddrop</a> </p>
 
-<h3>org.kde.locale</h3>
-<p>Bindings for the use of KLocale, see <a href="classLocale.html">Locale</a></p>
-
 <h3>org.kde.plasma.components</h3>
 <p>Graphical components for common items such as buttons, lineedits, tabbars and so on. Compatible subset of the MeeGo components used on the N9, see <a href="../declarativeimports/plasmacomponents/html/index.html">plasmacomponents</a> </p>
 
