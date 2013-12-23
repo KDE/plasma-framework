@@ -47,11 +47,14 @@
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
+#include <kactivities/info.h>
+
 #include "kdeclarative/configpropertymap.h"
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
-      m_wallpaperInterface(0)
+      m_wallpaperInterface(0),
+      m_activityInfo(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 
@@ -63,6 +66,14 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
             this, &ContainmentInterface::appletAddedForward);
     connect(containment(), &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
+    connect(containment(), &Plasma::Containment::activityChanged,
+            [=]() {
+                delete m_activityInfo;
+                m_activityInfo = new KActivities::Info(containment()->activity(), this);
+                connect(m_activityInfo, &KActivities::Info::nameChanged,
+                        this, &ContainmentInterface::activityNameChanged);
+                emit activityNameChanged();
+            });
     connect(containment(), &Plasma::Containment::wallpaperChanged,
             this, &ContainmentInterface::loadWallpaper);
     connect(containment(), &Plasma::Containment::drawWallpaperChanged,
@@ -82,6 +93,10 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
 
 void ContainmentInterface::init()
 {
+    m_activityInfo = new KActivities::Info(containment()->activity(), this);
+    connect(m_activityInfo, &KActivities::Info::nameChanged,
+            this, &ContainmentInterface::activityNameChanged);
+    emit activityNameChanged();
 
     AppletInterface::init();
 
@@ -541,6 +556,14 @@ void ContainmentInterface::loadWallpaper()
 QString ContainmentInterface::activity() const
 {
     return containment()->activity();
+}
+
+QString ContainmentInterface::activityName() const
+{
+    if (!m_activityInfo) {
+        return QString();
+    }
+    return m_activityInfo->name();
 }
 
 QList<QObject*> ContainmentInterface::actions() const

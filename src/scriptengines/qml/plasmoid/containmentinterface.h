@@ -34,6 +34,10 @@ namespace KIO {
     class Job;
 }
 
+namespace KActivities {
+    class Info;
+}
+
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
@@ -59,6 +63,11 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
 
     /**
+     * Activity name of this containment
+     */
+    Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
+
+    /**
      * Actions associated to this containment or corona
      */
     Q_PROPERTY(QList<QObject*> actions READ actions NOTIFY actionsChanged)
@@ -79,6 +88,7 @@ public:
     void setContainmentType(Plasma::Types::ContainmentType type);
 
     QString activity() const;
+    QString activityName() const;
 
     QList<QObject*> actions() const;
 
@@ -129,6 +139,7 @@ Q_SIGNALS:
 
     //Property notifiers
     void activityChanged();
+    void activityNameChanged();
     void availableScreenRegionChanged();
     void appletsChanged();
     void drawWallpaperChanged();
@@ -152,6 +163,7 @@ private:
     QList<QObject *> m_appletInterfaces;
     QHash<KJob*, QPoint> m_dropPoints;
     QHash<KJob*, QMenu*> m_dropMenus;
+    KActivities::Info *m_activityInfo;
 };
 
 #endif
