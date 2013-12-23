@@ -84,9 +84,6 @@ bool DeclarativeAppletScript::init()
     // set the graphicObject dynamic property on applet
     a->setProperty("graphicObject", QVariant::fromValue(m_interface));
 
-    connect(applet(), &Plasma::Applet::activate,
-            this, &DeclarativeAppletScript::activate);
-
     return true;
 }
 
@@ -108,18 +105,6 @@ void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constr
     if (constraints & Plasma::Types::ContextConstraint) {
         emit contextChanged();
     }
-}
-
-void DeclarativeAppletScript::activate()
-{
-#if 0
-TODO: callEventListeners is broken without qscriptengine
-    if (!m_env) {
-        return;
-    }
-
-    m_env->callEventListeners("activate");
-#endif
 }
 
 void DeclarativeAppletScript::executeAction(const QString &name)

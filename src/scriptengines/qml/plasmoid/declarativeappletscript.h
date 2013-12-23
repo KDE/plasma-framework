@@ -46,7 +46,6 @@ public:
 
 public Q_SLOTS:
     void executeAction(const QString &name);
-    void activate();
 
 protected:
     bool init();
