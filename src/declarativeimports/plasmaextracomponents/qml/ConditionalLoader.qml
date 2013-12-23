@@ -66,6 +66,12 @@ Item {
         onWhenChanged: loadTimer.restart()
         onConditionalSourceChanged: loadTimer.restart()
 
+        onLoaded: {
+            loader.oldConditionalSource = loader.conditionalSource
+            loader.item.visible = true
+            loader.item.anchors.fill = loader.item.parent
+            loadTimer.stop()
+        }
         Timer {
             id: loadTimer
             interval: 0
@@ -79,9 +85,6 @@ Item {
                     } else {
                         loader.sourceComponent = loader.conditionalSource
                     }
-                    loader.oldConditionalSource = loader.conditionalSource
-                    loader.item.visible = true
-                    loader.item.anchors.fill = loader.item.parent
                 }
             }
         }
