@@ -27,6 +27,8 @@
 #include <QtCore/QTime>
 #include <QtCore/QBasicTimer>
 
+#include <QAbstractItemModel>
+
 class QTimer;
 
 namespace Plasma
@@ -87,6 +89,7 @@ public:
     Storage* storage;
     QBasicTimer storageTimer;
     QBasicTimer checkUsageTimer;
+    QWeakPointer<QAbstractItemModel> model;
     int  storageCount;
     bool dirty : 1;
     bool cached : 1;
