@@ -380,6 +380,12 @@ void DataContainer::timerEvent(QTimerEvent * event)
         if (!isUsed()) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
             //qDebug() << objectName() << "is unused";
+            
+            //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
+            if (d->model) {
+                d->model.clear();
+                emit modelChanged(objectName(), 0);
+            }
             emit becameUnused(objectName());
         }
         d->checkUsageTimer.stop();

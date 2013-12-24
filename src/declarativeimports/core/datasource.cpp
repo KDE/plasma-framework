@@ -151,7 +151,13 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
 
 void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *model)
 {
+    if (!model) {
+        m_models->clear(sourceName);
+        return;
+    }
+
     m_models->insert(sourceName, QVariant::fromValue(model));
+    //FIXME: this will break in the case a second model is set
     connect(model, &QObject::destroyed, [=]() {
         m_models->clear(sourceName);
     });
