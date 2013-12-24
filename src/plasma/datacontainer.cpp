@@ -77,6 +77,11 @@ void DataContainer::setModel(QAbstractItemModel *model)
     emit modelChanged(objectName(), model);
 }
 
+QAbstractItemModel *DataContainer::model()
+{
+    return d->model.data();
+}
+
 void DataContainer::removeAllData()
 {
     if (d->data.isEmpty()) {

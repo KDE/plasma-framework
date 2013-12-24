@@ -122,6 +122,11 @@ class PLASMA_EXPORT DataContainer : public QObject
         void setModel(QAbstractItemModel *model);
 
         /**
+         * @return the model owned by this DataSource
+         */
+        QAbstractItemModel *model();
+
+        /**
          * @return true if the visualization is currently connected
          */
         bool visualizationIsConnected(QObject *visualization) const;
