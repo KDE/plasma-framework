@@ -98,7 +98,7 @@ class DataEnginePrivate
         int updateTimerId;
         int minPollingInterval;
         QTime updateTimestamp;
-        QHash<QString, DataContainer*> sources;
+        DataEngine::SourceDict sources;
         bool valid;
         DataEngineScript *script;
         QString serviceName;

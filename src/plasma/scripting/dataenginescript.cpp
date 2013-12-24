@@ -166,12 +166,12 @@ void DataEngineScript::addSource(DataContainer *source)
     }
 }
 
-QHash<QString, DataContainer*> DataEngineScript::containerDict() const
+DataEngine::SourceDict DataEngineScript::containerDict() const
 {
     if (d->dataEngine) {
         return d->dataEngine->containerDict();
     }
-    return QHash<QString, DataContainer*>();
+    return DataEngine::SourceDict();
 }
 
 void DataEngineScript::removeSource(const QString &source)
