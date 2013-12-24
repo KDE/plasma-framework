@@ -95,7 +95,9 @@ public:
     QVariantMap data() const {return m_data;}
 
     /**
-     * All the models associated to this DataEngine, indexed by source
+     * All the models associated to this DataEngine, indexed by source.
+     * In order for a model to be present, besides being implemented in the DataEngine,
+     * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
      */
     Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT);
     QQmlPropertyMap *models()  const {return m_models;}
