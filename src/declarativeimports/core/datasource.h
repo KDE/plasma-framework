@@ -97,8 +97,8 @@ public:
     /**
      * All the models associated to this DataEngine, indexed by source
      */
-    Q_PROPERTY(QVariantMap models READ models NOTIFY modelsChanged);
-    QVariantMap models()  const {return m_models;}
+    Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT);
+    QQmlPropertyMap *models()  const {return m_models;}
 
     /**
      * @returns a Plasma::Service given a source name
@@ -131,7 +131,6 @@ Q_SIGNALS:
     void intervalChanged();
     void engineChanged();
     void dataChanged();
-    void modelsChanged();
     void connectedSourcesChanged();
     void sourcesChanged();
 
@@ -140,7 +139,7 @@ private:
     int m_interval;
     QString m_engine;
     QVariantMap m_data;
-    QVariantMap m_models;
+    QQmlPropertyMap *m_models;
     Plasma::DataEngine* m_dataEngine;
     Plasma::DataEngineConsumer* m_dataEngineConsumer;
     QStringList m_connectedSources;

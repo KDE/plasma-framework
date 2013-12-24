@@ -30,6 +30,7 @@ DataSource::DataSource(QObject* parent)
       m_dataEngine(0),
       m_dataEngineConsumer(0)
 {
+    m_models = new QQmlPropertyMap(this);
     setObjectName("DataSource");
 }
 
@@ -150,12 +151,10 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
 
 void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *model)
 {
-    m_models[sourceName] = QVariant::fromValue(model);
+    m_models->insert(sourceName, QVariant::fromValue(model));
     connect(model, &QObject::destroyed, [=]() {
-        m_models.remove(sourceName);
-        emit modelsChanged();
+        m_models->clear(sourceName);
     });
-    emit modelsChanged();
 }
 
 void DataSource::removeSource(const QString &source)
