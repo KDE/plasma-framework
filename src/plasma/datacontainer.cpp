@@ -106,7 +106,7 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
                                          Plasma::Types::IntervalAlignment alignment)
 {
-    //qDebug() << "connecting visualization" << visualization << "at interval of"
+    //qDebug() << "connecting visualization" <<this<< visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
@@ -363,7 +363,7 @@ void DataContainer::setNeedsUpdate(bool update)
 
 bool DataContainer::isUsed() const
 {
-    return !d->relays.isEmpty() &&
+    return !d->relays.isEmpty() ||
            receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) > 0;
 }
 
