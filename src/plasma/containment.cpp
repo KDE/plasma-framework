@@ -32,7 +32,6 @@
 #include <QContextMenuEvent>
 #include <QMimeData>
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
 #include <qtemporaryfile.h>
 #include <qmimedatabase.h>
 

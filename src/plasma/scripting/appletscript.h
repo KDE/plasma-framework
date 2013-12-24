@@ -32,7 +32,6 @@
 
 class QAction;
 class QPainter;
-class QStyleOptionGraphicsItem;
 
 namespace Plasma
 {

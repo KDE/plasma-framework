@@ -29,7 +29,6 @@
 #include <QtCore/QSizeF>
 
 class QPainter;
-class QStyleOptionGraphicsItem;
 
 namespace Plasma
 {
