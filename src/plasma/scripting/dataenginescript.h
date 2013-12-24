@@ -134,7 +134,7 @@ protected:
     void setPollingInterval(uint frequency);
     void removeAllSources();
     void addSource(DataContainer *source);
-    DataEngine::SourceDict containerDict() const;
+    QHash<QString, DataContainer*> containerDict() const;
     void removeSource(const QString &source);
     void updateAllSources();
     void forceImmediateUpdateOfAllVisualizations();
