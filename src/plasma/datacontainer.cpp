@@ -68,6 +68,10 @@ void DataContainer::setData(const QString &key, const QVariant &value)
 
 void DataContainer::setModel(QAbstractItemModel *model)
 {
+    if (d->model.data() == model) {
+        return;
+    }
+
     if (d->model) {
         d->model.data()->deleteLater();
     }

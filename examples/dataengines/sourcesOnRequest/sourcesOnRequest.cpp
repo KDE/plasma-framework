@@ -97,12 +97,12 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
     setData(source, "Update Count", updateCount);
 
     Plasma::DataContainer *s = containerForSource(source);
-    if (!s->model()) {
-        QStandardItemModel *m = new QStandardItemModel;
-        m->appendRow(new QStandardItem("Item1, update " + updateCount));
-        m->appendRow(new QStandardItem("Item2, update " + updateCount));
-        m->appendRow(new QStandardItem("Item3, update " + updateCount));
-        s->setModel(m);
+    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(s->model());
+    if (s->model()) {
+        m->clear();
+        m->appendRow(new QStandardItem(QString("Item1, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QString("Item2, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QString("Item3, update %1").arg(updateCount)));
     }
 
     // Since we updated the source immediately here, we need to return true so the DataEngine

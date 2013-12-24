@@ -148,6 +148,16 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
     }
 }
 
+void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *model)
+{
+    m_models[sourceName] = QVariant::fromValue(model);
+    connect(model, &QObject::destroyed, [=]() {
+        m_models.remove(sourceName);
+        emit modelsChanged();
+    });
+    emit modelsChanged();
+}
+
 void DataSource::removeSource(const QString &source)
 {
     m_data.remove(source);

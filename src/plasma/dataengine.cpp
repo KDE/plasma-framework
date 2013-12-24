@@ -521,6 +521,11 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
         QMetaObject::invokeMethod(visualization, "dataUpdated",
                                   Q_ARG(QString, s->objectName()),
                                   Q_ARG(Plasma::DataEngine::Data, s->data()));
+        if (s->d->model) {
+            QMetaObject::invokeMethod(visualization, "modelChanged",
+                                    Q_ARG(QString, s->objectName()),
+                                    Q_ARG(QAbstractItemModel *, s->d->model.data()));
+        }
         s->d->dirty = false;
     }
 }
