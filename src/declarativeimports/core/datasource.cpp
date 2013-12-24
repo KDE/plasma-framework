@@ -160,6 +160,7 @@ void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *mod
 void DataSource::removeSource(const QString &source)
 {
     m_data.remove(source);
+    m_models->clear(source);
 
     //TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {
