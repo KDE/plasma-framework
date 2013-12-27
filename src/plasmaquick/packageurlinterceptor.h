@@ -35,6 +35,10 @@ public:
     PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p);
     virtual ~PackageUrlInterceptor();
 
+    void addAllowedPath(const QString &path);
+    void removeAllowedPath(const QString &path);
+    QStringList allowedPaths() const;
+
     virtual QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type);
 
     static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
@@ -68,6 +72,7 @@ public:
 
 private:
     Plasma::Package m_package;
+    QStringList m_allowedPaths;
     QQmlEngine *m_engine;
 };
 

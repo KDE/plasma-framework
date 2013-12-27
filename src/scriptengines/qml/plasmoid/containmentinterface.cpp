@@ -50,6 +50,7 @@
 #include <kactivities/info.h>
 
 #include "kdeclarative/configpropertymap.h"
+#include <packageurlinterceptor.h>
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     : AppletInterface(parent),
@@ -111,10 +112,16 @@ void ContainmentInterface::init()
         }
 
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+
         if (defaults.isValid()) {
             pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
         } else {
             pkg.setPath("org.kde.desktoptoolbox");
+        }
+
+        PackageUrlInterceptor *interceptor = dynamic_cast<PackageUrlInterceptor *>(m_qmlObject->engine()->urlInterceptor());
+        if (interceptor) {
+            interceptor->addAllowedPath(pkg.path());
         }
 
         if (pkg.isValid()) {

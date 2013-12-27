@@ -111,7 +111,9 @@ void AppletInterface::init()
 
     //Hook generic url resolution to the applet package as well
     //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?
-    engine->setUrlInterceptor(new PackageUrlInterceptor(engine, m_appletScriptEngine->package()));
+    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, m_appletScriptEngine->package());
+    interceptor->addAllowedPath(applet()->containment()->corona()->package().path());
+    engine->setUrlInterceptor(interceptor);
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
 

@@ -30,10 +30,28 @@ PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::P
       m_package(p),
       m_engine(engine)
 {
+    foreach (const QString &import, m_engine->importPathList()) {
+        m_allowedPaths << import;
+    }
 }
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
 {
+}
+
+void PackageUrlInterceptor::addAllowedPath(const QString &path)
+{
+    m_allowedPaths << path;
+}
+
+void PackageUrlInterceptor::removeAllowedPath(const QString &path)
+{
+    m_allowedPaths.removeAll(path);
+}
+
+QStringList PackageUrlInterceptor::allowedPaths() const
+{
+    return m_allowedPaths;
 }
 
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
@@ -86,18 +104,17 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         //forbid to load random absolute paths
         } else {
-            foreach (const QString &import, m_engine->importPathList()) {
-                //it's from an import, good
-                //TODO: implement imports whitelist?
-                if (path.path().startsWith(import)) {
-                    //qDebug() << "Found import, access granted" << path;
+            foreach (const QString &allowed, m_allowedPaths) {
+                //it's from an allowed, good
+                if (path.path().startsWith(allowed)) {
+                    //qDebug() << "Found allowed, access granted" << path;
 
-                    //check if there is a platform specific file that overrides this import
+                    //check if there is a platform specific file that overrides this allowed
                     foreach (const QString &platform, KDeclarative::runtimePlatform()) {
                         //qDebug() << "Trying" << platform;
 
-                        //search for a platformqml/ path sibling of this import path
-                        const QString &platformPath = import+QStringLiteral("/../platformqml/")+platform+path.path().mid(import.length());
+                        //search for a platformqml/ path sibling of this allowed path
+                        const QString &platformPath = allowed+QStringLiteral("/../platformqml/")+platform+path.path().mid(allowed.length());
                         const QFile f(platformPath);
 
                         //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
@@ -108,11 +125,14 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                     return path;
                 }
             }
-            qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
         }
+    //for now, just allow qmldirs
+    } else {
+        return path;
     }
 
-    return path;
+    qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
+    return QUrl();
 }
 
 
