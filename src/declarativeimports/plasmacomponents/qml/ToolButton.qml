@@ -282,7 +282,7 @@ Item {
                         }
                         PlasmaCore.SvgItem {
                             svg: bordersSvg
-                            width: naturalSize.width
+                            height: naturalSize.height
                             elementId: surface.prefix+"-bottom"
                             visible: button.y + button.height < button.parent.height
                             anchors {
