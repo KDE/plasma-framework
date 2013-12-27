@@ -100,6 +100,52 @@ void ContainmentInterface::init()
 
     AppletInterface::init();
 
+    //Create the ToolBox
+    Plasma::Containment *pc = containment();
+    if (pc) {
+        KConfigGroup defaults;
+        if (pc->containmentType() == Plasma::Types::DesktopContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Desktop");
+        } else if (pc->containmentType() == Plasma::Types::PanelContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Panel");
+        }
+
+        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        if (defaults.isValid()) {
+            pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
+        } else {
+            pkg.setPath("org.kde.desktoptoolbox");
+        }
+
+        if (pkg.isValid()) {
+            QObject *toolBoxObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
+
+            QObject *containmentGraphicObject = m_qmlObject->rootObject();
+
+            if (containmentGraphicObject && toolBoxObject) {
+                toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
+
+                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+            } else {
+                delete toolBoxObject;
+            }
+            qDebug() << "Loaded toolbox package" << pkg.path();
+        } else {
+            qWarning() << "Could not load toolbox package." << pkg.path();
+        }
+    }
+
+    //set parent, both as object hyerarchy and visually
+    //do this only for containments, applets will do it in compactrepresentationcheck
+    if (m_qmlObject->rootObject()) {
+        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+
+        //set anchors
+        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
+        QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+        prop.write(expr.evaluate());
+    }
+
     if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
         connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
                 this, SIGNAL(minimumWidthChanged()));
