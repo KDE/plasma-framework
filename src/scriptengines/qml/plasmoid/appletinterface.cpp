@@ -183,7 +183,8 @@ void AppletInterface::init()
     }
 
     //set parent, both as object hyerarchy and visually
-    if (m_qmlObject->rootObject()) {
+    //do this only for containments, applets will do it in compactrepresentationcheck
+    if (pc && m_qmlObject->rootObject()) {
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
         //set anchors
