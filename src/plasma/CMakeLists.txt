@@ -114,7 +114,20 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)
 
+if(X11_FOUND)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES})
+endif()
+
+if(DL_LIBRARY)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} ${DL_LIBRARY})
+endif()
+
 target_link_libraries(KF5Plasma
+PUBLIC
+    Qt5::Widgets
+    KF5::ConfigWidgets
+    KF5::Service # For kplugininfo.h and kservice.h
+PRIVATE
     Qt5::Network
     Qt5::Sql
     Qt5::Quick # needed in service.cpp, remove?
@@ -126,7 +139,6 @@ target_link_libraries(KF5Plasma
     KF5::GuiAddons
     KF5::IconThemes
     KF5::I18n
-    KF5::Service # For kplugininfo.h
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::ThreadWeaver
@@ -134,22 +146,12 @@ target_link_libraries(KF5Plasma
     KF5::Auth
     KF5::Declarative
     KF5::XmlGui
-    KF5::ConfigWidgets
     KF5::GlobalAccel
     KF5::DNSSD
     KF5::KDE4Support #ksharedptr
     ${PLASMA_EXTRA_LIBS}
 )
 
-if(X11_FOUND)
-   target_link_libraries(KF5Plasma Qt5::X11Extras ${X11_LIBRARIES})
-endif()
-
-if(DL_LIBRARY)
-    target_link_libraries(KF5Plasma ${DL_LIBRARY})
-endif()
-
-target_link_libraries(KF5Plasma LINK_INTERFACE_LIBRARIES Qt5::Widgets KF5::ConfigWidgets)
 target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
 )
