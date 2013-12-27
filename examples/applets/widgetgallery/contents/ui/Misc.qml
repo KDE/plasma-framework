@@ -638,6 +638,7 @@ Page {
                     ButtonRow {
                         id: buttonRow3
                         exclusive: true
+                        spacing: 0
 
                         ToolButton { flat:false; iconSource: "go-previous" }
                         ToolButton { flat:false; text: "tb2" }
@@ -647,6 +648,7 @@ Page {
                     ButtonColumn {
                         id: buttonRow4
                         exclusive: true
+                        spacing: 0
 
                         ToolButton { flat:false; text: "tb1" }
                         ToolButton { flat:false; text: "tb2" }
