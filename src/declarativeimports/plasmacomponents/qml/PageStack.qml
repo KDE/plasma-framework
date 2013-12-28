@@ -79,6 +79,11 @@ Item {
     property Item toolBar
 
     /**
+     * Should page transitions be animated? Default is true.
+     */
+    property bool animate: true
+
+    /**
      * The page to be automatically loaded when this PageStack component gets
      * instantiated.
      */
@@ -259,7 +264,7 @@ Item {
             property int stackWidth: Math.max(root.width, root.height)
 
             // Duration of transition animation (in ms)
-            property int transitionDuration: 250
+            property int transitionDuration: root.animate ? 250 : 0
 
             // Flag that indicates the container should be cleaned up after the transition has ended.
             property bool cleanupAfterTransition: false
