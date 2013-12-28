@@ -27,26 +27,17 @@ Item {
     width: cellWidth
     height: cellHeight
 
-    //property int borderWidth: root.borderWidth
-    property real borderOpacity: root.borderOpacity
-
-    property bool showtop: false
-    property bool showright: true
-    property bool showleft: false
-    property bool showbottom: true
+    property real borderOpacity: daysCalendar.borderOpacity
 
     Rectangle {
         id: todayRect
         x: 0
         y: 0
-        //z: -1
         width: parent.width - (borderWidth)
         height: parent.height - (borderWidth)
-        //         anchors.fill: parent
         opacity: isToday(new Date(yearNumber, monthNumber - 1, dayNumber)) ? 0.8 : 0
         Behavior on opacity { NumberAnimation {} }
         color: theme.highlightColor
-        //border.color: isToday(dayNumber+"/"+monthNumber+"/"+yearNumber) ? theme.highlightColor : "transparent"
     }
 
     Rectangle {
@@ -63,29 +54,13 @@ Item {
         Behavior on opacity { NumberAnimation {} }
         color: theme.viewBackgroundColor
         z: todayRect.z - 1
-        //border.color: isToday(dayNumber+"/"+monthNumber+"/"+yearNumber) ? theme.highlightColor : "transparent"
     }
-
-    //     Rectangle {
-    //         id: frameTop
-    //         height: borderWidth
-    //         color: theme.textColor
-    //         opacity: borderOpacity
-    //         visible: showtop
-    //
-    //         anchors {
-    //             top: parent.top
-    //             left: parent.left
-    //             right: parent.right
-    //         }
-    //     }
 
     Rectangle {
         id: frameRight
         width: borderWidth
         color: theme.textColor
         opacity: borderOpacity
-        visible: showright
 
         anchors {
             top: parent.top
@@ -99,7 +74,6 @@ Item {
         height: borderWidth
         color: theme.textColor
         opacity: borderOpacity
-        visible: showbottom
 
         anchors {
             bottom: parent.bottom
@@ -108,27 +82,11 @@ Item {
         }
     }
 
-    //     Rectangle {
-    //         id: frameLeft
-    //         width: borderWidth
-    //         color: theme.textColor
-    //         opacity: borderOpacity
-    //         visible: showleft
-    //
-    //         anchors {
-    //             top: parent.top
-    //             left: parent.left
-    //             bottom: parent.bottom
-    //         }
-    //     }
-
     Components.Label {
         id: label
         anchors.centerIn: parent
-        //anchors.topMargin: 10
         font.pixelSize: Math.max(theme.defaultFont.pixelSize, cellHeight / 3)
         text: dayNumber
-        //z: 99
         //font.bold: (containsEventItems)||(containsTodoItems) ? true: false
         opacity: (isPreviousMonth || isNextMonth) ? 0.5: 1.0
     }
@@ -141,11 +99,9 @@ Item {
         //z: label.z + 1
         hoverEnabled: true
         onClicked: {
-            print("Click");
             print("date change:" + dayNumber + monthNumber)
             var rowNumber = Math.floor ( index / 7)   ;
             week = 1+monthCalendar.weeksModel[rowNumber];
-            //date = dayNumber + "/" + monthNumber + "/" + yearNumber
             root.date = model
             calendarDays.selectedItem = dayStyle
         }

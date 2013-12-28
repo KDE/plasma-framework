@@ -29,7 +29,7 @@ Item {
     property QtObject date
     property date showDate: new Date()
 
-    property real borderOpacity: 0.2
+    property real borderOpacity: 0.4
 
     property alias calendar: monthCalendar
 
@@ -112,15 +112,18 @@ Item {
 
     DaysCalendar {
         id: calendarGrid
+
         anchors {
             fill: parent
             leftMargin: borderWidth
         }
 
+        borderOpacity: root.borderOpacity
+
         PlasmaComponents.Label {
             text: "◀"
             //x: spacing / 2
-            opacity: leftmouse.containsMouse ? 0.5 : 0.2
+            opacity: leftmouse.containsMouse ? 1 : 0.4
             Behavior on opacity { NumberAnimation {} }
             anchors {
                 top: parent.top
@@ -139,7 +142,7 @@ Item {
         }
         PlasmaComponents.Label {
             text: "▶"
-            opacity: rightmouse.containsMouse ? 0.5 : 0.2
+            opacity: rightmouse.containsMouse ? 1 : 0.4
             Behavior on opacity { NumberAnimation {} }
             anchors {
                 top: parent.top

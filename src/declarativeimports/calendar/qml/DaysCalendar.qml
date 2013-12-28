@@ -21,7 +21,9 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 Item {
-    property real borderOpacity: root.borderOpacity
+    id: daysCalendar
+
+    property real borderOpacity: 1.0
 
     Rectangle {
         id: frameTop
@@ -102,8 +104,6 @@ Item {
                 Components.Label {
                     text: Qt.locale().dayName(monthCalendar.firstDayOfWeek + index, Locale.ShortFormat)
                     font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
-                    //font: theme.smallestFont
-                    opacity: 0.2
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -117,7 +117,9 @@ Item {
             id: repeater
             model: monthCalendar.daysModel
 
-            DayDelegate {}
+            DayDelegate {
+                borderOpacity: daysCalendar.borderOpacity
+            }
         }
     }
 }
