@@ -148,9 +148,6 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
     Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
     Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
-    //FIXME?implicitWidth/height is already there
-    Q_PROPERTY(qreal implicitWidth READ implicitWidth NOTIFY implicitWidthChanged)
-    Q_PROPERTY(qreal implicitHeight READ implicitHeight NOTIFY implicitHeightChanged)
 
     /**
      * If the plasmoid is in a linear layout, such as a panel, it indicates to take as much horizontal space as possible
@@ -290,8 +287,6 @@ public:
     qreal minimumHeight() const;
     qreal maximumWidth() const;
     qreal maximumHeight() const;
-    qreal implicitWidth() const;
-    qreal implicitHeight() const;
 
 Q_SIGNALS:
     /**
@@ -322,8 +317,6 @@ Q_SIGNALS:
     void minimumHeightChanged();
     void maximumWidthChanged();
     void maximumHeightChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
     void fillWidthChanged();
     void fillHeightChanged();
     void userConfiguringChanged();
@@ -340,6 +333,8 @@ protected Q_SLOTS:
 private Q_SLOTS:
     void compactRepresentationCheck();
     void updatePopupSize();
+    void updateImplicitWidth();
+    void updateImplicitHeight();
 
 private:
     //Helper for minimumWidth etc.

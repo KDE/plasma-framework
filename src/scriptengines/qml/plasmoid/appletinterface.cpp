@@ -539,16 +539,6 @@ qreal AppletInterface::maximumHeight() const
     return readGraphicsObjectSizeHint("maximumHeight");
 }
 
-qreal AppletInterface::implicitWidth() const
-{
-    return readGraphicsObjectSizeHint("implicitWidth");
-}
-
-qreal AppletInterface::implicitHeight() const
-{
-    return readGraphicsObjectSizeHint("implicitHeight");
-}
-
 void AppletInterface::setAssociatedApplication(const QString &string)
 {
     applet()->setAssociatedApplication(string);
@@ -791,19 +781,17 @@ void AppletInterface::compactRepresentationCheck()
 
         if (m_qmlObject->rootObject()->property("implicitWidth").isValid()) {
             connect(m_qmlObject->rootObject(), SIGNAL(implicitWidthChanged()),
-                    this, SIGNAL(implicitWidthChanged()));
+                    this, SLOT(updateImplicitWidth()));
         }
         if (m_qmlObject->rootObject()->property("implicitHeight").isValid()) {
             connect(m_qmlObject->rootObject(), SIGNAL(implicitHeightChanged()),
-                    this, SIGNAL(implicitHeightChanged()));
+                    this, SLOT(updateImplicitHeight()));
         }
 
         emit fillWidthChanged();
         emit fillHeightChanged();
         emit minimumWidthChanged();
         emit minimumHeightChanged();
-        emit implicitWidthChanged();
-        emit implicitHeightChanged();
         emit maximumWidthChanged();
         emit maximumHeightChanged();
 
@@ -818,6 +806,17 @@ void AppletInterface::compactRepresentationCheck()
         prop.write(expr.evaluate());
     }
 }
+
+void AppletInterface::updateImplicitWidth()
+{
+    setImplicitWidth(readGraphicsObjectSizeHint("implicitWidth"));
+}
+
+void AppletInterface::updateImplicitHeight()
+{
+    setImplicitHeight(readGraphicsObjectSizeHint("implicitHeight"));
+}
+
 
 void AppletInterface::updatePopupSize()
 {
