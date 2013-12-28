@@ -68,7 +68,7 @@ bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
 void ThemeProxy::updateSpacing()
 {
     const int _s = mSize().height();
-    m_smallSpacing = (int)(_s / 10);
+    m_smallSpacing = qMax(2, (int)(_s / 8));
     m_largeSpacing = _s;
 }
 
