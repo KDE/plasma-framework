@@ -57,6 +57,7 @@ Label {
 
     font.pointSize: headerPointSize(level)
     wrapMode: Text.WordWrap
+    opacity: 0.8
 
     function headerPointSize(l) {
         var n = theme.defaultFont.pointSize;
