@@ -31,6 +31,8 @@
 #include <plasma/plasma.h>
 #include <plasma/service.h>
 
+class QAbstractItemModel;
+
 namespace Plasma
 {
 
@@ -305,6 +307,27 @@ Types::NoAlignment) const;
          * @param key the data entry to remove
          **/
         void removeData(const QString &source, const QString &key);
+
+        /**
+         * Associates a model to a data source. If the source
+         * doesn't exist then it is created. The source will have the key "HasModel" to easily indicate there is a model present.
+         *
+         * The ownership of the model is transferred to the DataContainer,
+         * so the model will be deletd when a new one is set or when the
+         * DataContainer itself is deleted. As the DataContainer, it will be
+         * deleted when there won't be any
+         * visualization associated to this source.
+         *
+         * @param source the name of the data source
+         * @param model the model instance
+         */
+        void setModel(const QString &source, QAbstractItemModel *model);
+
+        /**
+         * @return The model associated to a source if any. The ownership of the model stays with the DataContainer.
+         *         Returns 0 if there isn't any model associated or if the source doesn't exists.
+         */
+        QAbstractItemModel *model(const QString &source);
 
         /**
          * Adds an already constructed data source. The DataEngine takes

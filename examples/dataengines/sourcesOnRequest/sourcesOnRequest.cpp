@@ -64,13 +64,12 @@ bool SourcesOnRequestEngine::sourceRequestEvent(const QString &source)
     // expects. So ALWAYS key the new data by the source string as below:
     setData(source, "Update Count", 0);
 
-    Plasma::DataContainer *s = containerForSource(source);
-    if (!s->model()) {
+    if (!model(source)) {
         QStandardItemModel *m = new QStandardItemModel;
         m->appendRow(new QStandardItem("Item1, first update"));
         m->appendRow(new QStandardItem("Item2, first update"));
         m->appendRow(new QStandardItem("Item3, first update"));
-        s->setModel(m);
+        setModel(source, m);
     }
 
     // as we successfully set up the source, return true
@@ -96,9 +95,8 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
     const int updateCount = containerForSource(source)->data().value("Update Count").toInt() + 1;
     setData(source, "Update Count", updateCount);
 
-    Plasma::DataContainer *s = containerForSource(source);
-    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(s->model());
-    if (s->model()) {
+    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(model(source));
+    if (m) {
         m->clear();
         m->appendRow(new QStandardItem(QString("Item1, update %1").arg(updateCount)));
         m->appendRow(new QStandardItem(QString("Item2, update %1").arg(updateCount)));

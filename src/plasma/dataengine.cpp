@@ -21,6 +21,7 @@
 #include "private/dataengine_p.h"
 #include "private/datacontainer_p.h"
 
+#include <QAbstractItemModel>
 #include <QQueue>
 #include <QTimer>
 #include <QTime>
@@ -224,6 +225,32 @@ void DataEngine::removeData(const QString &source, const QString &key)
     if (s) {
         s->setData(key, QVariant());
         d->scheduleSourcesUpdated();
+    }
+}
+
+void DataEngine::setModel(const QString &source, QAbstractItemModel *model)
+{
+    if (model) {
+        setData(source, "HasModel", true);
+    } else {
+        removeData(source, "HasModel");
+    }
+
+    Plasma::DataContainer *s = containerForSource(source);
+
+    if (s) {
+        s->setModel(model);
+    }
+}
+
+QAbstractItemModel *DataEngine::model(const QString &source)
+{
+    Plasma::DataContainer *s = containerForSource(source);
+
+    if (s) {
+        return s->model();
+    } else {
+        return 0;
     }
 }
 
