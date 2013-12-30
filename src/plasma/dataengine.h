@@ -178,6 +178,12 @@ Types::NoAlignment) const;
         Q_INVOKABLE DataContainer *containerForSource(const QString &source);
 
         /**
+         * @return The model associated to a source if any. The ownership of the model stays with the DataContainer.
+         *         Returns 0 if there isn't any model associated or if the source doesn't exists.
+         */
+        QAbstractItemModel *modelForSource(const QString &source);
+
+        /**
          * Returns true if this engine is valid, otherwise returns false
          *
          * @return true if the engine is valid
@@ -322,12 +328,6 @@ Types::NoAlignment) const;
          * @param model the model instance
          */
         void setModel(const QString &source, QAbstractItemModel *model);
-
-        /**
-         * @return The model associated to a source if any. The ownership of the model stays with the DataContainer.
-         *         Returns 0 if there isn't any model associated or if the source doesn't exists.
-         */
-        QAbstractItemModel *model(const QString &source);
 
         /**
          * Adds an already constructed data source. The DataEngine takes

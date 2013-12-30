@@ -64,7 +64,7 @@ bool SourcesOnRequestEngine::sourceRequestEvent(const QString &source)
     // expects. So ALWAYS key the new data by the source string as below:
     setData(source, "Update Count", 0);
 
-    if (!model(source)) {
+    if (!modelForSource(source)) {
         QStandardItemModel *m = new QStandardItemModel;
         m->appendRow(new QStandardItem("Item1, first update"));
         m->appendRow(new QStandardItem("Item2, first update"));
@@ -95,7 +95,7 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
     const int updateCount = containerForSource(source)->data().value("Update Count").toInt() + 1;
     setData(source, "Update Count", updateCount);
 
-    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(model(source));
+    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(modelForSource(source));
     if (m) {
         m->clear();
         m->appendRow(new QStandardItem(QString("Item1, update %1").arg(updateCount)));

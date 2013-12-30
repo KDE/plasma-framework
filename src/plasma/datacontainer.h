@@ -117,6 +117,8 @@ class PLASMA_EXPORT DataContainer : public QObject
          * DataContainer itself is deleted, so it will be deleted when there won't be any
          * visualization associated to this source.
          *
+         * Normally you should set the model from DataEngine::setModel instead from here.
+         *
          * @param model the model that will be associated with this DataContainer
          */
         void setModel(QAbstractItemModel *model);

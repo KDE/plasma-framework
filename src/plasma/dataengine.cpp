@@ -243,7 +243,7 @@ void DataEngine::setModel(const QString &source, QAbstractItemModel *model)
     }
 }
 
-QAbstractItemModel *DataEngine::model(const QString &source)
+QAbstractItemModel *DataEngine::modelForSource(const QString &source)
 {
     Plasma::DataContainer *s = containerForSource(source);
 
