@@ -210,13 +210,9 @@ void IconItem::setSource(const QVariant &source)
         if (!m_svgIcon) {
             m_svgIcon = new Plasma::Svg(this);
         }
-        //try as a svg toolbar icon
-        m_svgIcon->setImagePath("toolbar-icons/" + source.toString().split("-").first());
+        //try as a svg icon
+        m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
 
-        //try as a svg normal icon (like systray)
-        if (!m_svgIcon->isValid() || !m_svgIcon->hasElement(m_source.toString())) {
-            m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
-        }
         m_svgIcon->setContainsMultipleImages(true);
 
         //success?
