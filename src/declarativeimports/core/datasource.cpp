@@ -30,6 +30,7 @@ DataSource::DataSource(QObject* parent)
       m_dataEngine(0),
       m_dataEngineConsumer(0)
 {
+    m_models = new QQmlPropertyMap(this);
     setObjectName("DataSource");
 }
 
@@ -148,9 +149,24 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
     }
 }
 
+void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *model)
+{
+    if (!model) {
+        m_models->clear(sourceName);
+        return;
+    }
+
+    m_models->insert(sourceName, QVariant::fromValue(model));
+    //FIXME: this will break in the case a second model is set
+    connect(model, &QObject::destroyed, [=]() {
+        m_models->clear(sourceName);
+    });
+}
+
 void DataSource::removeSource(const QString &source)
 {
     m_data.remove(source);
+    m_models->clear(source);
 
     //TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {

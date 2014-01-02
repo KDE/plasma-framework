@@ -21,6 +21,7 @@
 #include "private/storage_p.h"
 
 #include <QDebug>
+#include <QAbstractItemModel>
 
 #include "plasma.h"
 
@@ -63,6 +64,26 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     }
 
     setNeedsToBeStored(true);
+}
+
+void DataContainer::setModel(QAbstractItemModel *model)
+{
+    if (d->model.data() == model) {
+        return;
+    }
+
+    if (d->model) {
+        d->model.data()->deleteLater();
+    }
+
+    d->model = model;
+    model->setParent(this);
+    emit modelChanged(objectName(), model);
+}
+
+QAbstractItemModel *DataContainer::model()
+{
+    return d->model.data();
 }
 
 void DataContainer::removeAllData()
@@ -109,6 +130,9 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
             } else {
                 disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                            visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+                //modelChanged is always emitted by the dataSource since there is no polling there
+                disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
                 //relay->isUnused();
             }
         } else if (pollingInterval < 1) {
@@ -120,6 +144,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+            disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
         }
     } else {
         connect(visualization, SIGNAL(destroyed(QObject*)),
@@ -131,6 +157,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         d->relayObjects[visualization] = 0;
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        connect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
     } else {
         //qDebug() << "    connecting to a relay";
         // we only want to do an imediate update if this is not the first object to connect to us
@@ -141,6 +169,9 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
                                             alignment, immediateUpdate);
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        //modelChanged is always emitted by the dataSource since there is no polling there
+        connect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
     }
 }
 
@@ -271,6 +302,8 @@ void DataContainer::disconnectVisualization(QObject *visualization)
         // it is connected directly to the DataContainer itself
         disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
     } else {
         SignalRelay *relay = objIt.value();
 
@@ -280,6 +313,9 @@ void DataContainer::disconnectVisualization(QObject *visualization)
         } else {
             disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+            //modelChanged is always emitted by the dataSource since there is no polling there
+            disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
+                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
         }
     }
 
@@ -344,6 +380,12 @@ void DataContainer::timerEvent(QTimerEvent * event)
         if (!isUsed()) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
             //qDebug() << objectName() << "is unused";
+            
+            //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
+            if (d->model) {
+                d->model.clear();
+                emit modelChanged(objectName(), 0);
+            }
             emit becameUnused(objectName());
         }
         d->checkUsageTimer.stop();

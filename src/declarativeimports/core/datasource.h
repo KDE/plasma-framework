@@ -89,10 +89,18 @@ public:
 
     /**
      * All the data fetched by this dataengine.
-     * This is a map of maps. At the first level, there are the source names, at the secons, they keys set by the DataEngine
+     * This is a map of maps. At the first level, there are the source names, at the second, they keys set by the DataEngine
      */
     Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged);
     QVariantMap data() const {return m_data;}
+
+    /**
+     * All the models associated to this DataEngine, indexed by source.
+     * In order for a model to be present, besides being implemented in the DataEngine,
+     * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
+     */
+    Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT);
+    QQmlPropertyMap *models()  const {return m_models;}
 
     /**
      * @returns a Plasma::Service given a source name
@@ -112,6 +120,7 @@ public:
 
 protected Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+    void modelChanged(const QString &sourceName, QAbstractItemModel *model);
     void removeSource(const QString &source);
     void setupData();
 
@@ -132,6 +141,7 @@ private:
     int m_interval;
     QString m_engine;
     QVariantMap m_data;
+    QQmlPropertyMap *m_models;
     Plasma::DataEngine* m_dataEngine;
     Plasma::DataEngineConsumer* m_dataEngineConsumer;
     QStringList m_connectedSources;

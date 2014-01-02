@@ -27,9 +27,12 @@
 
 #include <Plasma/DataContainer>
 
+#include <QStandardItemModel>
+
 /*
  This DataEngine shows how to created sources on demand as they are requested
  and update them on visualization-requested update intervals.
+ It also shows how to bind and arbitrary QAbstractItemModel to a source
 */
 
 SourcesOnRequestEngine::SourcesOnRequestEngine(QObject *parent, const QVariantList &args)
@@ -61,6 +64,14 @@ bool SourcesOnRequestEngine::sourceRequestEvent(const QString &source)
     // expects. So ALWAYS key the new data by the source string as below:
     setData(source, "Update Count", 0);
 
+    if (!modelForSource(source)) {
+        QStandardItemModel *m = new QStandardItemModel;
+        m->appendRow(new QStandardItem("Item1, first update"));
+        m->appendRow(new QStandardItem("Item2, first update"));
+        m->appendRow(new QStandardItem("Item3, first update"));
+        setModel(source, m);
+    }
+
     // as we successfully set up the source, return true
     return true;
 }
@@ -81,7 +92,16 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
     // sourceRequestEvent, however, this will result in expected behavior: visualizations
     // connected to the sources which have setData called for them will be notified
     // of these changes.
-    setData(source, "Update Count", containerForSource(source)->data().value("Update Count").toInt() + 1);
+    const int updateCount = containerForSource(source)->data().value("Update Count").toInt() + 1;
+    setData(source, "Update Count", updateCount);
+
+    QStandardItemModel *m = qobject_cast<QStandardItemModel *>(modelForSource(source));
+    if (m) {
+        m->clear();
+        m->appendRow(new QStandardItem(QString("Item1, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QString("Item2, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QString("Item3, update %1").arg(updateCount)));
+    }
 
     // Since we updated the source immediately here, we need to return true so the DataEngine
     // knows to continue with the update notification for visualizations.

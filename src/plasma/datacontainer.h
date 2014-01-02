@@ -28,6 +28,8 @@
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
 
+class QAbstractItemModel;
+
 namespace Plasma
 {
 
@@ -105,6 +107,26 @@ class PLASMA_EXPORT DataContainer : public QObject
          * DataContainer.
          **/
         void removeAllData();
+
+        /**
+         * Associates a model with this DataContainer. Use this for data
+         * that is intended to be a long list of items.
+         *
+         * The ownership of the model is transferred to the DataContainer,
+         * so the model will be deletd when a new one is set or when the
+         * DataContainer itself is deleted, so it will be deleted when there won't be any
+         * visualization associated to this source.
+         *
+         * Normally you should set the model from DataEngine::setModel instead from here.
+         *
+         * @param model the model that will be associated with this DataContainer
+         */
+        void setModel(QAbstractItemModel *model);
+
+        /**
+         * @return the model owned by this DataSource
+         */
+        QAbstractItemModel *model();
 
         /**
          * @return true if the visualization is currently connected
@@ -187,6 +209,16 @@ class PLASMA_EXPORT DataContainer : public QObject
          * @param data   the updated data
          **/
         void dataUpdated(const QString &source, const Plasma::DataEngine::Data &data);
+
+        /**
+         * A new model has been associated to this source,
+         * visualizations can safely use it as long they are connected to this source.
+         *
+         * @param source the objectName() of the DataContainer (and hence the name
+         *               of the source) that owns the model
+         * @param model the QAbstractItemModel instance
+         */
+        void modelChanged(const QString &source, QAbstractItemModel *model);
 
         /**
          * Emitted when the last visualization is disconnected.
