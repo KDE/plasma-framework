@@ -136,13 +136,15 @@ void DialogProxy::onVisibleChanged()
             }
             setPosition(screen()->availableGeometry().topLeft());
             setGeometry(screen()->availableGeometry());
-        } else if (m_visualParent) {
+        } else {
             if (!m_cachedGeometry.isNull()) {
                 resize(m_cachedGeometry.size());
                 syncMainItemToSize();
                 m_cachedGeometry = QRect();
             }
-            setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
+            if (m_visualParent) {
+                setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
+            }
             syncToMainItemSize();
         }
     }
