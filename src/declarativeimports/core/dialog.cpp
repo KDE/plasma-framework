@@ -136,7 +136,7 @@ void DialogProxy::onVisibleChanged()
             }
             setPosition(screen()->availableGeometry().topLeft());
             setGeometry(screen()->availableGeometry());
-        } else {
+        } else if (m_visualParent) {
             if (!m_cachedGeometry.isNull()) {
                 resize(m_cachedGeometry.size());
                 syncMainItemToSize();
