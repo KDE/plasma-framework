@@ -23,6 +23,15 @@
 
 #include <QQuickItem>
 
+/**
+ * This item spies on mouse events from all child objects including child MouseAreas regardless
+ * of whether the child MouseArea propegates events. It does not accept the event.
+ *
+ * In addition unlike MouseArea events include the mouse position in global co-ordinates and provides
+ * the sceen the mouse is in.
+ */
+
+
 class KDeclarativeMouseEvent : public QObject
 {
     Q_OBJECT
