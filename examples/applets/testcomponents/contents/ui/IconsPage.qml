@@ -96,7 +96,7 @@ PlasmaComponents.Page {
                 objectName: "akonadiIcon"
                 source: "akonadi"
                 width: height
-                height: _h*2
+                height: _h
                 //anchors.horizontalCenter: parent.horizontalCenter
                 Rectangle { color: "orange"; opacity: 0.3; anchors.fill: parent; }
                 PlasmaCore.ToolTip {
@@ -109,7 +109,7 @@ PlasmaComponents.Page {
             }
             Image {
                 objectName: "bridgeimage"
-                height: _h*2
+                height: _h
                 width: height
                 fillMode: Image.PreserveAspectFit
                 source: "../images/bridge.jpg"
@@ -122,7 +122,7 @@ PlasmaComponents.Page {
             }
             Image {
                 objectName: "surfboardimage"
-                height: _h*2
+                height: _h
                 width: height
                 fillMode: Image.PreserveAspectFit
                 source: "../images/surfboard.jpg"
@@ -139,6 +139,48 @@ PlasmaComponents.Page {
                     //across the water from Nijmegen, Netherlands. It was taken during the summer festivals a few years back."
                 }
             }
+
+
+            QtExtras.MouseEventListener {
+                id: task1
+
+                width: height
+                height: _h*2
+
+                hoverEnabled: true
+
+                onContainsMouseChanged: {
+                    if (containsMouse) {
+                        print("Setting target to task1");
+                        tooltip.target = task1;
+                        tooltip.mainText = "Bridge"
+                        tooltip.subText = "in Nijmegen"
+                    } else {
+                        print("Setting target to null");
+                        tooltip.target = null;
+                    }
+                }
+                Image {
+                    objectName: "bridgeimage1"
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: "../images/bridge.jpg"
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            print("bridgeimage1 clicked");
+                        }
+                    }
+                }
+            }
+
+
         }
     }
+
+    PlasmaCore.ToolTip {
+        id: tooltip
+        target: null
+    }
+
 }
