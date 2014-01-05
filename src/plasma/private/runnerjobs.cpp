@@ -24,13 +24,14 @@
 #include <QDebug>
 
 //#include <Weaver/DebuggingAids.h>
-#include <threadweaver/ThreadWeaver.h>
+#include <threadweaver/Job.h>
+#include <threadweaver/Queue.h>
 
 #include "runnermanager.h"
 #include "plasma/querymatch.h"
 
 using ThreadWeaver::Job;
-using ThreadWeaver::Weaver;
+using ThreadWeaver::Queue;
 
 namespace Plasma {
 
@@ -172,8 +173,8 @@ Plasma::AbstractRunner* FindMatchesJob::runner() const
 }
 
 DelayedJobCleaner::DelayedJobCleaner(const QSet<QSharedPointer<FindMatchesJob> > &jobs, const QSet<AbstractRunner *> &runners)
-    : QObject(Weaver::instance()),
-      m_weaver(Weaver::instance()),
+    : QObject(Queue::instance()),
+      m_weaver(Queue::instance()),
       m_jobs(jobs),
       m_runners(runners)
 {

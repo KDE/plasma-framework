@@ -26,7 +26,7 @@
 
 #include <threadweaver/Job.h>
 #include <threadweaver/QueuePolicy.h>
-#include <threadweaver/ThreadWeaver.h>
+#include <threadweaver/Queue.h>
 #include <QObjectDecorator.h>
 
 #include "abstractrunner.h"
@@ -125,7 +125,7 @@ private Q_SLOTS:
     void checkIfFinished();
 
 private:
-    ThreadWeaver::Weaver *m_weaver;
+    ThreadWeaver::Queue *m_weaver;
     QSet<QSharedPointer<FindMatchesJob> > m_jobs;
     QSet<AbstractRunner *> m_runners;
 };
