@@ -24,10 +24,10 @@
 #include <QMutex>
 #include <QSet>
 
-#include <threadweaver/Job.h>
-#include <threadweaver/QueuePolicy.h>
-#include <threadweaver/Queue.h>
-#include <QObjectDecorator.h>
+#include <ThreadWeaver/Job>
+#include <ThreadWeaver/QueuePolicy>
+#include <ThreadWeaver/Queue>
+#include <ThreadWeaver/QObjectDecorator>
 
 #include "abstractrunner.h"
 

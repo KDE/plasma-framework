@@ -37,9 +37,9 @@
 #include <solid/deviceinterface.h>
 #endif
 
-#include <threadweaver/DebuggingAids.h>
-#include <threadweaver/Queue.h>
-#include <threadweaver/Thread.h>
+#include <ThreadWeaver/DebuggingAids>
+#include <ThreadWeaver/Queue>
+#include <ThreadWeaver/Thread>
 
 #include "private/runnerjobs_p.h"
 #include "pluginloader.h"

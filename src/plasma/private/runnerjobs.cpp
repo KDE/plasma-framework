@@ -23,10 +23,6 @@
 
 #include <QDebug>
 
-//#include <Weaver/DebuggingAids.h>
-#include <threadweaver/Job.h>
-#include <threadweaver/Queue.h>
-
 #include "runnermanager.h"
 #include "plasma/querymatch.h"
 
