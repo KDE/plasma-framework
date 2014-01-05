@@ -21,6 +21,7 @@ import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.qtextracomponents 2.0 as QtExtras
 
 /**
  * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
@@ -53,7 +54,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * @endcode
  *
  */
-MouseArea {
+QtExtras.MouseEventListener {
     id: tooltip
 
     property string mainText // title text of the tooltip
@@ -65,8 +66,22 @@ MouseArea {
 
     hoverEnabled: true
 
-    onEntered: show();
-    onExited: hide();
+    onContainsMouseChanged: {
+        // hide immediately, show after a while
+        tooltipTimer.interval = tooltip.containsMouse ? 500 : 0;
+        tooltipTimer.start();
+    }
+
+    Timer {
+        id: tooltipTimer
+        onTriggered: {
+            if (tooltip.containsMouse) {
+                show();
+            } else {
+                hide();
+            }
+        }
+    }
 
     function show() {
         var mi = tooltip.mainItem;
@@ -85,7 +100,9 @@ MouseArea {
 
     function hide() {
         tooltipWindow.visible = false;
-        tooltipWindow.mainItem.destroy();
+        if (tooltipWindow.mainItem != null) {
+            tooltipWindow.mainItem.destroy();
+        }
     }
 
     Component {
@@ -115,11 +132,11 @@ MouseArea {
 
             PlasmaCore.IconItem {
                 id: tooltipIcon
-                width: theme.iconSizes.desktop
+                width: iconSource != "" ? theme.iconSizes.desktop : 0
                 height: width
                 source: iconSource
                 anchors {
-                    leftMargin: _s
+                    leftMargin: width != 0 ? _s : 0
                 }
             }
             PlasmaExtras.Heading {
@@ -152,5 +169,11 @@ MouseArea {
     PlasmaCore.ToolTipProxy {
         id: tooltipWindow
         visualParent: tooltip.target
+    }
+    onTargetChanged: {
+        print("Target changed");
+        tooltip.parent = target;
+        //target.visualParent = tooltip
+        anchors.fill = target
     }
 }
