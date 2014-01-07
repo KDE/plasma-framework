@@ -5,6 +5,7 @@ project(Plasma)
 # Make CPack available to easy generate binary packages
 include(CPack)
 include(FeatureSummary)
+include(GenerateExportHeader)
 
 ################# set KDE specific information #################
 
