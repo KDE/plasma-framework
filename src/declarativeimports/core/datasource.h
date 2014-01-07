@@ -91,8 +91,8 @@ public:
      * All the data fetched by this dataengine.
      * This is a map of maps. At the first level, there are the source names, at the second, they keys set by the DataEngine
      */
-    Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged);
-    QVariantMap data() const {return m_data;}
+    Q_PROPERTY(QQmlPropertyMap *data READ data CONSTANT);
+    QQmlPropertyMap *data() const {return m_data;}
 
     /**
      * All the models associated to this DataEngine, indexed by source.
@@ -140,7 +140,7 @@ private:
     QString m_id;
     int m_interval;
     QString m_engine;
-    QVariantMap m_data;
+    QQmlPropertyMap *m_data;
     QQmlPropertyMap *m_models;
     Plasma::DataEngine* m_dataEngine;
     Plasma::DataEngineConsumer* m_dataEngineConsumer;

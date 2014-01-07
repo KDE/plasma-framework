@@ -198,21 +198,17 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
         //an item is represented by a source: keys are roles m_roleLevel == FirstLevel
         QVariantList list;
 
-        if (!m_dataSource->data().isEmpty()) {
-            QVariantMap::const_iterator i = m_dataSource->data().constBegin();
-
-            while (i != m_dataSource->data().constEnd()) {
-                if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(i.key())) {
-                    ++i;
+        if (!m_dataSource->data()->isEmpty()) {
+            foreach (const QString &key, m_dataSource->data()->keys()) {
+                if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(key)) {
                     continue;
                 }
-                QVariant value = i.value();
+                QVariant value = m_dataSource->data()->value(key);
                 if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
-                    data["DataEngineSource"] = i.key();
+                    data["DataEngineSource"] = key;
                     list.append(data);
                 }
-                ++i;
             }
         }
         setItems(QString(), list);
@@ -252,11 +248,8 @@ void DataModel::setDataSource(QObject *object)
 
     m_dataSource = source;
 
-    const QMap<QString, QVariant> data = source->data();
-    QMap<QString, QVariant>::const_iterator i = data.constBegin();
-    while (i != data.constEnd()) {
-        dataUpdated(i.key(), i.value().value<Plasma::DataEngine::Data>());
-        ++i;
+    foreach (const QString &key, m_dataSource->data()->keys()) {
+        dataUpdated(key, m_dataSource->data()->value(key).value<Plasma::DataEngine::Data>());
     }
 
     connect(m_dataSource, &DataSource::newData,

@@ -31,6 +31,7 @@ DataSource::DataSource(QObject* parent)
       m_dataEngineConsumer(0)
 {
     m_models = new QQmlPropertyMap(this);
+    m_data = new QQmlPropertyMap(this);
     setObjectName("DataSource");
 }
 
@@ -50,7 +51,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
 
     foreach (const QString &source, m_connectedSources) {
         if (!sources.contains(source)) {
-            m_data.remove(source);
+            m_data->clear(source);
             sourcesChanged = true;
             if (m_dataEngine) {
                 m_dataEngine->disconnectSource(source, this);
@@ -141,7 +142,7 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
 {
     //it can arrive also data we don't explicitly connected a source
     if (m_connectedSources.contains(sourceName)) {
-        m_data.insert(sourceName.toLatin1(), data);
+        m_data->insert(sourceName.toLatin1(), data);
         emit dataChanged();
         emit newData(sourceName, data);
     } else if (m_dataEngine) {
@@ -165,7 +166,7 @@ void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *mod
 
 void DataSource::removeSource(const QString &source)
 {
-    m_data.remove(source);
+    m_data->clear(source);
     m_models->clear(source);
 
     //TODO: emit those signals as last thing
