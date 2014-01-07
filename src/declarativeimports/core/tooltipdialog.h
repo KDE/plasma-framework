@@ -29,6 +29,7 @@
 
 class QQuickItem;
 class QGraphicsWidget;
+class QmlObject;
 
 /**
  * QML wrapper for kdelibs Plasma::ToolTipDialog
@@ -43,11 +44,16 @@ public:
     ToolTipDialog(QQuickItem *parent = 0);
     ~ToolTipDialog();
 
+    QQuickItem *loadDefaultItem();
+
     static ToolTipDialog* instance();
 
-Q_SIGNALS:
+protected:
+    void showEvent(QShowEvent *event);
 
 private:
+    QmlObject *m_qmlObject;
+    QTimer *m_showTimer;
 };
 
 #endif

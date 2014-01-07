@@ -34,7 +34,7 @@ class QGraphicsWidget;
  *
  * DO NOT USE THIS API, PlasmaCore.ToolTip is what you should use.
  */
-class ToolTip : public QObject
+class ToolTip : public QQuickItem
 {
     Q_OBJECT
 
@@ -46,35 +46,80 @@ class ToolTip : public QObject
     /**
      * The main QML item that will be displayed in the Dialog
      */
-    Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
+    Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
 
     /**
      * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
      */
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
 
+    /**
+     * The main text of this tooltip
+     */
+    Q_PROPERTY(QString mainText READ mainText WRITE setMainText NOTIFY mainTextChanged)
+
+    /**
+     * The description of this tooltip
+     */
+    Q_PROPERTY(QString subText READ subText WRITE setSubText NOTIFY subTextChanged)
+
+    /**
+     * An icon for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
+     */
+    Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
+
+    /**
+     * TODO: single property for images?
+     * An image for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
+     */
+    Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
 public:
-    ToolTip(QObject *parent = 0);
+    ToolTip(QQuickItem *parent = 0);
     ~ToolTip();
 
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
-    QQuickItem *visualParent() const;
-    void setVisualParent(QQuickItem *visualParent);
+    QQuickItem *target() const;
+    void setTarget(QQuickItem *target);
 
     bool isVisible() const;
     void setVisible(const bool visible);
 
+    QString mainText() const;
+    void setMainText(const QString &mainText);
+
+    QString subText() const;
+    void setSubText(const QString &subText);
+
+    QVariant icon() const;
+    void setIcon(const QVariant &icon);
+
+    QVariant image() const;
+    void setImage(const QVariant &image);
+
+protected:
+    void hoverEnterEvent(QHoverEvent *event);
+    void hoverLeaveEvent(QHoverEvent *event);
+
 Q_SIGNALS:
     void mainItemChanged();
-    void visualParentChanged();
+    void targetChanged();
     void visibleChanged();
+    void mainTextChanged();
+    void subTextChanged();
+    void iconChanged();
+    void imageChanged();
 
 private:
     QWeakPointer<QQuickItem> m_mainItem;
-    QWeakPointer<QQuickItem> m_visualParent;
+    QWeakPointer<QQuickItem> m_target;
+    QTimer *m_showTimer;
+    QString m_mainText;
+    QString m_subText;
+    QVariant m_image;
+    QVariant m_icon;
 };
 
 #endif

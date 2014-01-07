@@ -22,15 +22,22 @@
 #include "tooltip.h"
 #include "tooltipdialog.h"
 
+#include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
 
 #include "framesvgitem.h"
 #include <kwindoweffects.h>
 
-ToolTip::ToolTip(QObject *parent)
-    : QObject(parent)
+ToolTip::ToolTip(QQuickItem *parent)
+    : QQuickItem(parent)
 {
+    m_showTimer = new QTimer(this);
+    m_showTimer->setSingleShot(true);
+    connect(m_showTimer, &QTimer::timeout, [=]() {
+        setVisible(true);
+    });
+    setAcceptHoverEvents(true);
 }
 
 ToolTip::~ToolTip()
@@ -45,30 +52,34 @@ QQuickItem *ToolTip::mainItem() const
 void ToolTip::setMainItem(QQuickItem *mainItem)
 {
     if (m_mainItem.data() != mainItem) {
-        if (m_mainItem) {
-            m_mainItem.data()->setParent(parent());
-        }
         m_mainItem = mainItem;
+
         emit mainItemChanged();
     }
 }
 
-QQuickItem *ToolTip::visualParent() const
+QQuickItem *ToolTip::target() const
 {
-    if (m_visualParent.data()) {
-        return m_visualParent.data();
+    if (m_target.data()) {
+        return m_target.data();
     } else {
         QQuickItem *qqi = qobject_cast<QQuickItem*>(parent());
         return qqi;
     }
 }
 
-void ToolTip::setVisualParent(QQuickItem *visualParent)
+void ToolTip::setTarget(QQuickItem *target)
 {
-    if (m_visualParent.data() == visualParent) {
+    if (m_target.data() == target) {
         return;
     }
-    emit visualParentChanged();
+
+    m_target = target;
+    setParentItem(target);
+
+    property("anchors").value<QObject *>()->setProperty("fill", QVariant::fromValue(parentItem()));
+
+    emit targetChanged();
 }
 
 bool ToolTip::isVisible() const
@@ -81,11 +92,117 @@ void ToolTip::setVisible(const bool visible)
 {
     ToolTipDialog *dlg = ToolTipDialog::instance();
     if (visible) {
+
+        if (!mainItem()) {
+            setMainItem(dlg->loadDefaultItem());
+        }
+
+        if (dlg->mainItem()) {
+            dlg->mainItem()->setVisible(false);
+        }
+
+        if (mainItem()) {
+            mainItem()->setProperty("toolTip", QVariant::fromValue(this));
+            mainItem()->setVisible(true);
+        }
+
         dlg->setMainItem(mainItem());
-        dlg->setVisualParent(visualParent());
+        dlg->setVisualParent(target());
         dlg->setVisible(true);
     } else {
         dlg->setVisible(false);
     }
 }
 
+QString ToolTip::mainText() const
+{
+    return m_mainText;
+}
+
+void ToolTip::setMainText(const QString &mainText)
+{
+    if (mainText == m_mainText) {
+        return;
+    }
+
+    m_mainText = mainText;
+    emit mainTextChanged();
+}
+
+QString ToolTip::subText() const
+{
+    return m_subText;
+}
+
+void ToolTip::setSubText(const QString &subText)
+{
+    if (subText == m_subText) {
+        return;
+    }
+
+    m_subText = subText;
+    emit subTextChanged();
+}
+
+QVariant ToolTip::icon() const
+{
+    if (m_icon.isValid()) {
+        return m_icon;
+    } else {
+        return QString();
+    }
+}
+
+void ToolTip::setIcon(const QVariant &icon)
+{
+    if (icon == m_icon) {
+        return;
+    }
+
+    m_icon = icon;
+    emit iconChanged();
+}
+
+QVariant ToolTip::image() const
+{
+    if (m_image.isValid()) {
+        return m_image;
+    } else {
+        return QString();
+    }
+}
+
+void ToolTip::setImage(const QVariant &image)
+{
+    if (image == m_image) {
+        return;
+    }
+
+    m_image = image;
+    emit imageChanged();
+}
+
+void ToolTip::hoverEnterEvent(QHoverEvent *event)
+{
+    if (ToolTipDialog::instance()->isVisible()) {
+        //FIXME: setVisible needs to be renamed in sync or something like that
+        setVisible(true);
+    } else {
+        m_showTimer->start(500);
+    }
+
+    //relay the event
+    if (window()) {
+        window()->sendEvent(target(), event);
+    }
+}
+
+void ToolTip::hoverLeaveEvent(QHoverEvent *event)
+{
+    m_showTimer->stop();
+
+    //relay the event
+    if (window()) {
+        window()->sendEvent(target(), event);
+    }
+}

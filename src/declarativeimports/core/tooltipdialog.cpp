@@ -19,22 +19,59 @@
 
 #include "tooltipdialog.h"
 
+#include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
 
 #include "framesvgitem.h"
 
+#include <kdeclarative/qmlobject.h>
+
 Q_GLOBAL_STATIC(ToolTipDialog, toolTipDialogInstance)
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
-    : DialogProxy(parent)
+    : DialogProxy(parent),
+      m_qmlObject(0)
 {
     setFlags(Qt::ToolTip);
+    setLocation(Plasma::Types::Floating);
     m_frameSvgItem->setImagePath("widgets/tooltip");
+
+    m_showTimer = new QTimer(this);
+    m_showTimer->setSingleShot(true);
+    connect(m_showTimer, &QTimer::timeout, [=]() {
+        setVisible(false);
+    });
 }
 
 ToolTipDialog::~ToolTipDialog()
 {
+}
+
+QQuickItem *ToolTipDialog::loadDefaultItem()
+{
+    if (!m_qmlObject) {
+        m_qmlObject = new QmlObject(this);
+    }
+
+    if (!m_qmlObject->rootObject()) {
+        //HACK: search our own import
+        foreach (const QString &path, m_qmlObject->engine()->importPathList()) {
+            if (QFile::exists(path + "/org/kde/plasma/core")) {
+                m_qmlObject->setSource(QUrl::fromLocalFile(path + "/org/kde/plasma/core/private/DefaultToolTip.qml"));
+                break;
+            }
+        }
+    }
+
+    return qobject_cast<QQuickItem *>(m_qmlObject->rootObject());
+}
+
+void ToolTipDialog::showEvent(QShowEvent *event)
+{
+    m_showTimer->start(4000);
+
+    DialogProxy::showEvent(event);
 }
 
 ToolTipDialog* ToolTipDialog::instance()

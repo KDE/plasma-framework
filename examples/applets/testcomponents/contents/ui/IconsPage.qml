@@ -102,7 +102,7 @@ PlasmaComponents.Page {
                 PlasmaCore.ToolTip {
                     anchors.fill: parent
                     target: akonadiIcon
-                    iconSource: "klipper"
+                    icon: "klipper"
                     mainText: "Fish sighted in the wild, in the wild, a fish was seen."
                     subText: "A mean-looking grouper swam by."
                 }
@@ -114,7 +114,7 @@ PlasmaComponents.Page {
                 fillMode: Image.PreserveAspectFit
                 source: "../images/bridge.jpg"
                 PlasmaCore.ToolTip {
-                    anchors.fill: parent
+                    target: parent
                     image: parent.source
                     mainText: "Bridge"
                     subText: "Waalbrug."
@@ -129,14 +129,21 @@ PlasmaComponents.Page {
                 PlasmaCore.ToolTip {
                     anchors.fill: parent
                     image: parent.source
-                    mainComponent: Component {
-                        PlasmaComponents.Label {
-                            text: "Nijmegen North Beach"
-                            anchors.centerIn: parent
-                        }
+                    mainItem: PlasmaComponents.Label {
+                        text: "Nijmegen North Beach"
+                        anchors.centerIn: parent
                     }
+
                     //subText: "A surfboard on the beach. <br />The photo shows the Waal river's north beach, \
                     //across the water from Nijmegen, Netherlands. It was taken during the summer festivals a few years back."
+                }
+            }
+            PlasmaComponents.Button {
+                text: "Button"
+                iconSource: "call-start"
+                PlasmaCore.ToolTip {
+                    target: parent
+                    mainText: "Tooltip on button"
                 }
             }
 
