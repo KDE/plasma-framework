@@ -43,9 +43,8 @@ void QMenuItem::setAction(QAction* a)
         }
         m_action = a;
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
-        connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
+        connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
         connect(m_action, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
-        connect(m_action, SIGNAL(checkableChanged()), this, SIGNAL(checkableChanged()));
         emit actionChanged();
     }
 }
