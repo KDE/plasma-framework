@@ -70,76 +70,68 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return path;
     }
 
-    //FIXME: probably needed for QmldirFile as well.
-    //at the moment a qt bug prevents intercept() working with qmldirs
-    //see https://codereview.qt-project.org/#change,61208
-    if (1||type != QQmlAbstractUrlInterceptor::QmldirFile) {
 
-        //asked a file inside a package: let's rewrite the url!
-        if (path.path().startsWith(m_package.path())) {
-            //qDebug() << "Found URL in package" << path;
+    //asked a file inside a package: let's rewrite the url!
+    if (path.path().startsWith(m_package.path())) {
+        //qDebug() << "Found URL in package" << path;
 
-            //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
-            QString relativePath;
-            foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
-                if (path.path().startsWith(m_package.path()+prefix)) {
-                    //obtain a string in the form ui/foo/bar/baz.qml
-                    relativePath = path.path().mid(QString(m_package.path()+prefix).length());
-                    break;
-                }
-            }
-            //should never happen
-            Q_ASSERT(!relativePath.isEmpty());
-
-            QStringList components = relativePath.split(QLatin1Char('/'));
-            //a path with less than 2 items should ever happen
-            Q_ASSERT(components.count() >= 2);
-
-            components.pop_front();
-            //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
-            const QString &filename = components.join("/");
-
-            //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
-            return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
-
-        //forbid to load random absolute paths
-        } else {
-            foreach (const QString &allowed, m_allowedPaths) {
-                //It's a private import
-                if (path.path().contains("org/kde/plasma/private")) {
-                    QString pathCheck(path.path());
-                    pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
-
-                    if (pathCheck == m_package.metadata().pluginName()) {
-                        return path;
-                    } else {
-                        return QUrl("file://" + allowed + "/org/kde/plasma/accessdenied/qmldir");
-                    }
-                }
-                //it's from an allowed, good
-                if (path.path().startsWith(allowed)) {
-                    //qDebug() << "Found allowed, access granted" << path;
-
-                    //check if there is a platform specific file that overrides this allowed
-                    foreach (const QString &platform, KDeclarative::runtimePlatform()) {
-                        //qDebug() << "Trying" << platform;
-
-                        //search for a platformqml/ path sibling of this allowed path
-                        const QString &platformPath = allowed+QStringLiteral("/../platformqml/")+platform+path.path().mid(allowed.length());
-                        const QFile f(platformPath);
-
-                        //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
-                        if (f.exists()) {
-                            return QUrl::fromLocalFile(platformPath);
-                        }
-                    }
-                    return path;
-                }
+        //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
+        QString relativePath;
+        foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
+            if (path.path().startsWith(m_package.path()+prefix)) {
+                //obtain a string in the form ui/foo/bar/baz.qml
+                relativePath = path.path().mid(QString(m_package.path()+prefix).length());
+                break;
             }
         }
-    //for now, just allow qmldirs
+        //should never happen
+        Q_ASSERT(!relativePath.isEmpty());
+
+        QStringList components = relativePath.split(QLatin1Char('/'));
+        //a path with less than 2 items should ever happen
+        Q_ASSERT(components.count() >= 2);
+
+        components.pop_front();
+        //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
+        const QString &filename = components.join("/");
+
+        //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+        return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+
+    //forbid to load random absolute paths
     } else {
-        return path;
+        foreach (const QString &allowed, m_allowedPaths) {
+            //It's a private import
+            if (path.path().contains("org/kde/plasma/private")) {
+                QString pathCheck(path.path());
+                pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
+
+                if (pathCheck == m_package.metadata().pluginName()) {
+                    return path;
+                } else {
+                    return QUrl("file://" + allowed + "/org/kde/plasma/accessdenied/qmldir");
+                }
+            }
+            //it's from an allowed, good
+            if (path.path().startsWith(allowed)) {
+                //qDebug() << "Found allowed, access granted" << path;
+
+                //check if there is a platform specific file that overrides this allowed
+                foreach (const QString &platform, KDeclarative::runtimePlatform()) {
+                    //qDebug() << "Trying" << platform;
+
+                    //search for a platformqml/ path sibling of this allowed path
+                    const QString &platformPath = allowed+QStringLiteral("/../platformqml/")+platform+path.path().mid(allowed.length());
+                    const QFile f(platformPath);
+
+                    //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
+                    if (f.exists()) {
+                        return QUrl::fromLocalFile(platformPath);
+                    }
+                }
+                return path;
+            }
+        }
     }
 
     qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
