@@ -73,7 +73,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     //FIXME: probably needed for QmldirFile as well.
     //at the moment a qt bug prevents intercept() working with qmldirs
     //see https://codereview.qt-project.org/#change,61208
-    if (type != QQmlAbstractUrlInterceptor::QmldirFile) {
+    if (1||type != QQmlAbstractUrlInterceptor::QmldirFile) {
 
         //asked a file inside a package: let's rewrite the url!
         if (path.path().startsWith(m_package.path())) {
@@ -105,6 +105,17 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //forbid to load random absolute paths
         } else {
             foreach (const QString &allowed, m_allowedPaths) {
+                //It's a private import
+                if (path.path().contains("org/kde/plasma/private")) {
+                    QString pathCheck(path.path());
+                    pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
+
+                    if (pathCheck == m_package.metadata().pluginName()) {
+                        return path;
+                    } else {
+                        return QUrl("file://" + allowed + "/org/kde/plasma/accessdenied/qmldir");
+                    }
+                }
                 //it's from an allowed, good
                 if (path.path().startsWith(allowed)) {
                     //qDebug() << "Found allowed, access granted" << path;
