@@ -9,6 +9,7 @@ Comment[x-test]=xxExample applet that shows how to use Models embedded in DataEn
 Encoding=UTF-8
 Keywords=
 Name=Dataengine model
+Name[de]=Datenquellen-Modell
 Name[nl]=Model van gegevensengine
 Name[pt]=Modelo de motor de dados
 Name[pt_BR]=Modelo de mecanismo de dados
