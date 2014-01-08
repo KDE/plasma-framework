@@ -10,6 +10,7 @@ Name[sv]=Egen DataContainer
 Name[uk]=Нетипові контейнери даних
 Name[x-test]=xxCustom DataContainersxx
 Comment=A demonstration of how to subclass DataContainer
+Comment[de]=Eine Demonstration wie Unterklassen von Datencontainern erstellt werden
 Comment[fr]=Une démonstration de comment faire une sous-classe de « DataContainer »
 Comment[nl]=Een demonstratie van hoe een subklasse toe te kennen aan een gegevenscontainer
 Comment[pt]=Um demonstração de como usar a classe DataContainer
