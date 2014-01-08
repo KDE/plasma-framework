@@ -90,7 +90,6 @@ Item {
     PlasmaExtras.Heading {
         id: tooltipMaintext
         level: 3
-        width: parent.preferredTextWidth
         wrapMode: Text.WordWrap
         text: toolTip ? toolTip.mainText : ""
         anchors {

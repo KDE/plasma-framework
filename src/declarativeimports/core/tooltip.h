@@ -44,16 +44,6 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
 
     /**
-     * The main QML item that will be displayed in the Dialog
-     */
-    Q_PROPERTY(QQuickItem *target READ target WRITE setTarget NOTIFY targetChanged)
-
-    /**
-     * Visibility of the Dialog window. Doesn't have anything to do with the visibility of the mainItem.
-     */
-    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
-
-    /**
      * The main text of this tooltip
      */
     Q_PROPERTY(QString mainText READ mainText WRITE setMainText NOTIFY mainTextChanged)
@@ -81,11 +71,7 @@ public:
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
-    QQuickItem *target() const;
-    void setTarget(QQuickItem *target);
-
-    bool isVisible() const;
-    void setVisible(const bool visible);
+    void showToolTip();
 
     QString mainText() const;
     void setMainText(const QString &mainText);
@@ -100,12 +86,12 @@ public:
     void setImage(const QVariant &image);
 
 protected:
+    bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);
     void hoverLeaveEvent(QHoverEvent *event);
 
 Q_SIGNALS:
     void mainItemChanged();
-    void targetChanged();
     void visibleChanged();
     void mainTextChanged();
     void subTextChanged();
@@ -114,7 +100,6 @@ Q_SIGNALS:
 
 private:
     QWeakPointer<QQuickItem> m_mainItem;
-    QWeakPointer<QQuickItem> m_target;
     QTimer *m_showTimer;
     QString m_mainText;
     QString m_subText;

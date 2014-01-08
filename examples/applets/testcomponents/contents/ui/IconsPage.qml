@@ -91,103 +91,67 @@ PlasmaComponents.Page {
 
         Row {
             spacing: _s
-            PlasmaCore.IconItem {
-                id: akonadiIcon
-                objectName: "akonadiIcon"
-                source: "akonadi"
-                width: height
-                height: _h
-                //anchors.horizontalCenter: parent.horizontalCenter
-                Rectangle { color: "orange"; opacity: 0.3; anchors.fill: parent; }
-                PlasmaCore.ToolTip {
-                    anchors.fill: parent
-                    target: akonadiIcon
-                    icon: "klipper"
-                    mainText: "Fish sighted in the wild, in the wild, a fish was seen."
-                    subText: "A mean-looking grouper swam by."
+            PlasmaCore.ToolTipArea {
+                width: childrenRect.width
+                height: childrenRect.height
+                icon: "klipper"
+                mainText: "Fish sighted in the wild, in the wild, a fish was seen."
+                subText: "A mean-looking grouper swam by."
+                PlasmaCore.IconItem {
+                    id: akonadiIcon
+                    objectName: "akonadiIcon"
+                    source: "akonadi"
+                    width: height
+                    height: _h
+                    //anchors.horizontalCenter: parent.horizontalCenter
+                    Rectangle { color: "orange"; opacity: 0.3; anchors.fill: parent; }
                 }
             }
-            Image {
-                objectName: "bridgeimage"
+            PlasmaCore.ToolTipArea {
                 height: _h
                 width: height
-                fillMode: Image.PreserveAspectFit
-                source: "../images/bridge.jpg"
-                PlasmaCore.ToolTip {
-                    target: parent
-                    image: parent.source
-                    mainText: "Bridge"
-                    subText: "Waalbrug."
+                image: bridgeimage.source
+                mainText: "Bridge"
+                subText: "Waalbrug."
+                Image {
+                    id: bridgeimage
+                    objectName: "bridgeimage"
+                    height: _h
+                    width: height
+                    fillMode: Image.PreserveAspectFit
+                    source: "../images/bridge.jpg"
                 }
             }
-            Image {
-                objectName: "surfboardimage"
-                height: _h
-                width: height
-                fillMode: Image.PreserveAspectFit
-                source: "../images/surfboard.jpg"
-                PlasmaCore.ToolTip {
-                    anchors.fill: parent
-                    image: parent.source
-                    mainItem: PlasmaComponents.Label {
-                        text: "Nijmegen North Beach"
-                        anchors.centerIn: parent
-                    }
+            PlasmaCore.ToolTipArea {
+                width: childrenRect.width
+                height: childrenRect.height
+                mainItem: PlasmaComponents.Label {
+                    text: "Nijmegen North Beach"
+                    anchors.centerIn: parent
+                }
+                Image {
+                    objectName: "surfboardimage"
+                    height: _h
+                    width: height
+                    fillMode: Image.PreserveAspectFit
+                    source: "../images/surfboard.jpg"
 
                     //subText: "A surfboard on the beach. <br />The photo shows the Waal river's north beach, \
                     //across the water from Nijmegen, Netherlands. It was taken during the summer festivals a few years back."
                 }
             }
-            PlasmaComponents.Button {
-                text: "Button"
-                iconSource: "call-start"
-                PlasmaCore.ToolTip {
-                    target: parent
-                    mainText: "Tooltip on button"
-                }
-            }
-
-
-            QtExtras.MouseEventListener {
-                id: task1
-
-                width: height
-                height: _h*2
-
-                hoverEnabled: true
-
-                onContainsMouseChanged: {
-                    if (containsMouse) {
-                        print("Setting target to task1");
-                        tooltip.target = task1;
-                        tooltip.mainText = "Bridge"
-                        tooltip.subText = "in Nijmegen"
-                    } else {
-                        print("Setting target to null");
-                        tooltip.target = null;
-                    }
-                }
-                Image {
-                    objectName: "bridgeimage1"
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    source: "../images/bridge.jpg"
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            print("bridgeimage1 clicked");
-                        }
-                    }
+            PlasmaCore.ToolTipArea {
+                width: childrenRect.width
+                height: childrenRect.height
+                mainText: "Tooltip on button"
+                PlasmaComponents.Button {
+                    id: button
+                    text: "Button"
+                    iconSource: "call-start"
                 }
             }
 
 
         }
     }
-
-    PlasmaCore.ToolTip {
-        id: tooltip
-        target: null
-    }
-
 }
