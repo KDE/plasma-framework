@@ -148,7 +148,6 @@ PRIVATE
     KF5::XmlGui
     KF5::GlobalAccel
     KF5::DNSSD
-    KF5::KDE4Support #ksharedptr
     ${PLASMA_EXTRA_LIBS}
 )
 
