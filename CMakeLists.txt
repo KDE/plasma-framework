@@ -49,7 +49,7 @@ find_package(KF5 CONFIG REQUIRED IdleTime ItemModels WidgetsAddons WindowSystem 
                                             Bookmarks Declarative UnitConversion Parts Kross KIO DNSSD KDE4Support)
 
 
-find_package(KActivities)
+find_package(KActivities 5.0.0 CONFIG REQUIRED)
 set_package_properties(KActivities PROPERTIES DESCRIPTION "The KActivities library"
                        URL "https://projects.kde.org/kactivities"
                        TYPE REQUIRED
