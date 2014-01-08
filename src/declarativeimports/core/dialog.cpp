@@ -134,7 +134,6 @@ void DialogProxy::onVisibleChanged()
             if (geometry() != screen()->availableGeometry()) {
                 m_cachedGeometry = geometry();
             }
-            setPosition(screen()->availableGeometry().topLeft());
             setGeometry(screen()->availableGeometry());
         } else {
             if (!m_cachedGeometry.isNull()) {
@@ -402,8 +401,6 @@ void DialogProxy::showEvent(QShowEvent *event)
 void DialogProxy::syncBorders()
 {
     const QRect avail = screen()->availableGeometry();
-
-    m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
 
     int borders = Plasma::FrameSvg::AllBorders;
     if (x() <= avail.x() || m_location == Plasma::Types::LeftEdge) {
