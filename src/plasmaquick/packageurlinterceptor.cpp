@@ -59,10 +59,12 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     //qDebug() << "Intercepted URL:" << path;
 
     if (path.scheme() == QStringLiteral("plasmapackage")) {
-        QUrl pkgUrl;
-        pkgUrl.setScheme(QStringLiteral("file"));
-        pkgUrl.setPath(m_package.filePath(0, path.path()));
-        return pkgUrl;
+        //FIXME: this is incorrect but works around a bug in qml in resolution of urls of qmldir files
+        if (type == QQmlAbstractUrlInterceptor::QmldirFile) {
+            return QUrl(m_package.filePath(0, path.path()));
+        } else {
+            return QUrl::fromLocalFile(m_package.filePath(0, path.path()));
+        }
     }
 
     //TODO: security: permission for remote urls
