@@ -18,6 +18,7 @@
 
 #include "dialogshadows_p.h"
 
+#include <QGlobalStatic>
 #include <QWindow>
 #include <QPainter>
 
@@ -30,7 +31,6 @@
 #endif
 
 #include <qdebug.h>
-#include <kglobal.h>
 
 class DialogShadows::Private
 {
@@ -94,7 +94,7 @@ public:
    DialogShadows self;
 };
 
-K_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
+Q_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
 
 DialogShadows::DialogShadows(QObject *parent, const QString &prefix)
     : Plasma::Svg(parent),

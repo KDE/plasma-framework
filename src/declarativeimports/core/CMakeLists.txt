@@ -35,7 +35,6 @@ target_link_libraries(corebindingsplugin
         KF5::Declarative
         KF5::CoreAddons
         KF5::IconThemes
-        KF5::KDE4Support #for kglobal.h
         KF5::Service #for kplugininfo.h
         KF5::WindowSystem
         KF5::Plasma)
