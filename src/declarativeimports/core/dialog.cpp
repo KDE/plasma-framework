@@ -415,19 +415,25 @@ void DialogProxy::syncBorders()
     m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
 
     int borders = Plasma::FrameSvg::AllBorders;
-    if (x() <= avail.x() || m_location == Plasma::Types::LeftEdge) {
-        borders = borders & ~Plasma::FrameSvg::LeftBorder;
+
+    //Tooltips always have all the borders
+    if (flags() & Qt::ToolTip) {
+        if (x() <= avail.x() || m_location == Plasma::Types::LeftEdge) {
+            borders = borders & ~Plasma::FrameSvg::LeftBorder;
+        }
+        if (y() <= avail.y() || m_location == Plasma::Types::TopEdge) {
+            borders = borders & ~Plasma::FrameSvg::TopBorder;
+        }
+        if (avail.right() <= x() + width() || m_location == Plasma::Types::RightEdge) {
+            borders = borders & ~Plasma::FrameSvg::RightBorder;
+        }
+        if (avail.bottom() <= y() + height() || m_location == Plasma::Types::BottomEdge) {
+            borders = borders & ~Plasma::FrameSvg::BottomBorder;
+        }
     }
-    if (y() <= avail.y() || m_location == Plasma::Types::TopEdge) {
-        borders = borders & ~Plasma::FrameSvg::TopBorder;
-    }
-    if (avail.right() <= x() + width() || m_location == Plasma::Types::RightEdge) {
-        borders = borders & ~Plasma::FrameSvg::RightBorder;
-    }
-    if (avail.bottom() <= y() + height() || m_location == Plasma::Types::BottomEdge) {
-        borders = borders & ~Plasma::FrameSvg::BottomBorder;
-    }
+
     m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+
     if (isVisible()) {
         DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     }
