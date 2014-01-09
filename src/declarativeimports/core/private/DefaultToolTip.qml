@@ -69,7 +69,8 @@ Item {
     property string image: "" // string / url to the image
 
     property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
-    property int maxSize: theme.iconSizes.desktop * 6
+    property int maxSize: theme.mSize(theme.defaultFont).width * 100
+    //property int maxSize: 200
     property int preferredTextWidth: Math.min(maxTextSize, maxSize)
     property int _s: theme.iconSizes.small / 2
 
@@ -90,7 +91,12 @@ Item {
     PlasmaExtras.Heading {
         id: tooltipMaintext
         level: 3
+        //width: parent.preferredTextWidth
+        //width: 400
+
+        maximumLineCount: 2
         wrapMode: Text.WordWrap
+        elide: Text.ElideRight
         text: toolTip ? toolTip.mainText : ""
         anchors {
             left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
