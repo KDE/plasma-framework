@@ -21,12 +21,12 @@
 #include <datamodel.h>
 
 // KDE
-#include <qtest_kde.h>
 
 // Qt
 #include <QStandardItemModel>
 #include <QStringListModel>
 #include <QSignalSpy>
+#include <QtTest>
 
 using namespace Plasma;
 
