@@ -22,6 +22,7 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
+#include <QPropertyAnimation>
 
 #include "framesvgitem.h"
 
@@ -32,6 +33,7 @@ Q_GLOBAL_STATIC(ToolTipDialog, toolTipDialogInstance)
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : DialogProxy(parent),
       m_qmlObject(0),
+      m_animation(0),
       m_hideTimeout(4000)
 {
     setFlags(Qt::ToolTip);
@@ -75,6 +77,26 @@ void ToolTipDialog::showEvent(QShowEvent *event)
     DialogProxy::showEvent(event);
 }
 
+void ToolTipDialog::adjustPosition(const QPoint &point)
+{
+    if (isVisible()) {
+        if (!m_animation) {
+            m_animation = new QPropertyAnimation(this);
+            connect(m_animation, SIGNAL(valueChanged(QVariant)),
+                    this, SLOT(valueChanged(QVariant)));
+            m_animation->setTargetObject(this);
+            m_animation->setEasingCurve(QEasingCurve::InOutQuad);
+            m_animation->setDuration(250);
+        }
+
+        m_animation->setStartValue(position());
+        m_animation->setEndValue(point);
+        m_animation->start();
+    } else {
+        setPosition(point);
+    }
+}
+
 void ToolTipDialog::dismiss()
 {
     m_showTimer->start(m_hideTimeout / 20); // pretty short: 200ms
@@ -85,10 +107,14 @@ void ToolTipDialog::keepalive()
     m_showTimer->start(m_hideTimeout);
 }
 
+void ToolTipDialog::valueChanged(const QVariant &value)
+{
+    setPosition(value.value<QPoint>());
+}
+
 ToolTipDialog* ToolTipDialog::instance()
 {
     return toolTipDialogInstance();
 }
 
-
-
+#include "moc_tooltipdialog.cpp"

@@ -30,6 +30,7 @@
 class QQuickItem;
 class QGraphicsWidget;
 class QmlObject;
+class QPropertyAnimation;
 
 /**
  * QML wrapper for kdelibs Plasma::ToolTipDialog
@@ -46,6 +47,11 @@ public:
 
     QQuickItem *loadDefaultItem();
 
+    /**
+     * animate the position change if visible
+     */
+    virtual void adjustPosition(const QPoint &point);
+
     static ToolTipDialog* instance();
 
     void dismiss();
@@ -54,9 +60,13 @@ public:
 protected:
     void showEvent(QShowEvent *event);
 
+private Q_SLOTS:
+    void valueChanged(const QVariant &value);
+
 private:
     QmlObject *m_qmlObject;
     QTimer *m_showTimer;
+    QPropertyAnimation *m_animation;
     int m_hideTimeout;
 };
 

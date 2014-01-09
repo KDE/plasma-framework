@@ -105,6 +105,11 @@ public:
 
     QObject *margins() const;
 
+    /*
+     * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
+     */
+    virtual void adjustPosition(const QPoint &point);
+
     /**
      * @returns The suggested screen position for the popup
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window

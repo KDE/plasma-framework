@@ -118,7 +118,7 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
     m_visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent && isVisible()) {
-        setPosition(popupPosition(visualParent, Qt::AlignCenter));
+        adjustPosition(popupPosition(visualParent, Qt::AlignCenter));
     }
 }
 
@@ -143,7 +143,7 @@ void DialogProxy::onVisibleChanged()
                 m_cachedGeometry = QRect();
             }
             if (m_visualParent) {
-                setPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
+                adjustPosition(popupPosition(m_visualParent.data(), Qt::AlignCenter));
             }
             syncToMainItemSize();
         }
@@ -317,6 +317,11 @@ QObject *DialogProxy::margins() const
     return m_frameSvgItem->margins();
 }
 
+void DialogProxy::adjustPosition(const QPoint &point)
+{
+    setPosition(point);
+}
+
 void DialogProxy::resizeEvent(QResizeEvent *re)
 {
     syncMainItemToSize();
@@ -350,7 +355,7 @@ void DialogProxy::syncToMainItemSize()
                           m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
     resize(s);
     if (visualParent()) {
-        setPosition(popupPosition(visualParent(), Qt::AlignCenter));
+        adjustPosition(popupPosition(visualParent(), Qt::AlignCenter));
     }
     
     emit widthChanged(s.width());
