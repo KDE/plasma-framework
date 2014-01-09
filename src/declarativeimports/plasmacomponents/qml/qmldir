@@ -13,6 +13,7 @@ Dialog 2.0 Dialog.qml
 Highlight 2.0 Highlight.qml
 Label 2.0 Label.qml
 ListItem 2.0 ListItem.qml
+ModelContextMenu 2.0 ModelContextMenu.qml
 Page 2.0 Page.qml
 PageStack 2.0 PageStack.qml
 ProgressBar 2.0 ProgressBar.qml
