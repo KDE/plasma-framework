@@ -77,16 +77,57 @@ Plasma::Types::Direction ToolTipDialog::direction() const
     return m_direction;
 }
 
-void ToolTipDialog::setDirection(Plasma::Types::Direction loc)
+void ToolTipDialog::setDirection(Plasma::Types::Direction dir)
 {
-    m_direction = loc;
+    m_direction = dir;
 }
 
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
+    m_animation->stop();
 
     DialogProxy::showEvent(event);
+}
+
+void ToolTipDialog::hideEvent(QHideEvent *event)
+{
+    m_showTimer->stop();
+    m_animation->stop();
+
+    DialogProxy::hideEvent(event);
+}
+
+void ToolTipDialog::resizeEvent(QResizeEvent *re)
+{
+    //TODO: less duplication
+    if (!m_animation) {
+        m_animation = new QPropertyAnimation(this);
+        connect(m_animation, SIGNAL(valueChanged(QVariant)),
+                this, SLOT(valueChanged(QVariant)));
+        m_animation->setTargetObject(this);
+        m_animation->setEasingCurve(QEasingCurve::InOutQuad);
+        m_animation->setDuration(250);
+    }
+    m_animation->stop();
+
+    switch (m_direction) {
+    case Plasma::Types::Right:
+        setX(x() + (re->oldSize().width() - re->size().width()));
+        break;
+    case Plasma::Types::Up:
+        setY(y() + (re->oldSize().height() - re->size().height()));
+        break;
+    default:
+        break;
+    }
+
+    if (isVisible()) {
+        m_animation->setStartValue(position());
+        m_animation->setEndValue(popupPosition(visualParent(), Qt::AlignCenter));
+        m_animation->start();
+    }
+    DialogProxy::resizeEvent(re);
 }
 
 void ToolTipDialog::adjustPosition(const QPoint &point)
@@ -99,19 +140,6 @@ void ToolTipDialog::adjustPosition(const QPoint &point)
             m_animation->setTargetObject(this);
             m_animation->setEasingCurve(QEasingCurve::InOutQuad);
             m_animation->setDuration(250);
-        }
-
-        switch (m_direction) {
-        case Plasma::Types::Left:
-        case Plasma::Types::Right:
-            setX(point.x());
-            break;
-        case Plasma::Types::Up:
-        case Plasma::Types::Down:
-            setY(point.y());
-            break;
-        default:
-            break;
         }
 
         m_animation->setStartValue(position());

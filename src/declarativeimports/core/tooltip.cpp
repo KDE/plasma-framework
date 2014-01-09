@@ -77,8 +77,6 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
-    dlg->setMainItem(mainItem());
-
     //heuristics for knowing the diration
     Plasma::Types::Direction dir = Plasma::Types::Up;
     QPoint pos = mapToScene(QPoint(0, 0)).toPoint();
@@ -99,8 +97,9 @@ void ToolTip::showToolTip()
     }
 
     dlg->setDirection(dir);
-    dlg->setVisible(true);
+    dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
+    dlg->setVisible(true);
 }
 
 QString ToolTip::mainText() const
