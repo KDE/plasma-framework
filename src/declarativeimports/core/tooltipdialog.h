@@ -53,7 +53,7 @@ public:
     /**
      * animate the position change if visible
      */
-    virtual void adjustPosition(const QPoint &point);
+    virtual void adjustGeometry(const QRect &geom);
 
     static ToolTipDialog* instance();
 

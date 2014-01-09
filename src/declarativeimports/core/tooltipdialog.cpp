@@ -100,38 +100,22 @@ void ToolTipDialog::hideEvent(QHideEvent *event)
 
 void ToolTipDialog::resizeEvent(QResizeEvent *re)
 {
-    //TODO: less duplication
-    if (!m_animation) {
-        m_animation = new QPropertyAnimation(this);
-        connect(m_animation, SIGNAL(valueChanged(QVariant)),
-                this, SLOT(valueChanged(QVariant)));
-        m_animation->setTargetObject(this);
-        m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-        m_animation->setDuration(250);
-    }
-    m_animation->stop();
+    DialogProxy::resizeEvent(re);
+}
 
+void ToolTipDialog::adjustGeometry(const QRect &geom)
+{
     switch (m_direction) {
     case Plasma::Types::Right:
-        setX(x() + (re->oldSize().width() - re->size().width()));
+        setX(x() + (size().width() - geom.size().width()));
         break;
     case Plasma::Types::Up:
-        setY(y() + (re->oldSize().height() - re->size().height()));
+        setY(y() + (size().height() - geom.size().height()));
         break;
     default:
         break;
     }
 
-    if (isVisible()) {
-        m_animation->setStartValue(position());
-        m_animation->setEndValue(popupPosition(visualParent(), Qt::AlignCenter));
-        m_animation->start();
-    }
-    DialogProxy::resizeEvent(re);
-}
-
-void ToolTipDialog::adjustPosition(const QPoint &point)
-{
     if (isVisible()) {
         if (!m_animation) {
             m_animation = new QPropertyAnimation(this);
@@ -142,11 +126,14 @@ void ToolTipDialog::adjustPosition(const QPoint &point)
             m_animation->setDuration(250);
         }
 
+
+        resize(geom.size());
+        
         m_animation->setStartValue(position());
-        m_animation->setEndValue(point);
+        m_animation->setEndValue(geom.topLeft());
         m_animation->start();
     } else {
-        setPosition(point);
+        setGeometry(geom);
     }
 }
 

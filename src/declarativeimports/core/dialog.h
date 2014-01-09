@@ -108,7 +108,7 @@ public:
     /*
      * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
      */
-    virtual void adjustPosition(const QPoint &point);
+    virtual void adjustGeometry(const QRect &geom);
 
     /**
      * @returns The suggested screen position for the popup
