@@ -181,9 +181,9 @@ Item {
             onClicked: {
                 monthCalendar.startDate = today();
             }
-            PlasmaCore.ToolTip {
+            PlasmaCore.ToolTipArea {
                 id: tool
-                target: currentDate
+                anchors.fill: currentDate
                 mainText: "Select Today"
             }
             anchors {
