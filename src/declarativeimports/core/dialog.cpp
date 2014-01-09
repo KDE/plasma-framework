@@ -349,6 +349,10 @@ void DialogProxy::syncToMainItemSize()
                     QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
                           m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
     resize(s);
+    if (visualParent()) {
+        setPosition(popupPosition(visualParent(), Qt::AlignCenter));
+    }
+    
     emit widthChanged(s.width());
     emit heightChanged(s.height());
 }
