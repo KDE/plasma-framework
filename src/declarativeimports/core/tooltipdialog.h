@@ -47,6 +47,9 @@ public:
 
     QQuickItem *loadDefaultItem();
 
+    Plasma::Types::Direction direction() const;
+    void setDirection(Plasma::Types::Direction loc);
+
     /**
      * animate the position change if visible
      */
@@ -68,6 +71,7 @@ private:
     QTimer *m_showTimer;
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
+    Plasma::Types::Direction m_direction;
 };
 
 #endif

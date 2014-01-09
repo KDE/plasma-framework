@@ -34,10 +34,12 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : DialogProxy(parent),
       m_qmlObject(0),
       m_animation(0),
-      m_hideTimeout(4000)
+      m_hideTimeout(4000),
+      m_direction(Plasma::Types::Up)
 {
     setFlags(Qt::ToolTip);
     setLocation(Plasma::Types::Floating);
+    setDirection(Plasma::Types::Up);
     m_frameSvgItem->setImagePath("widgets/tooltip");
 
     m_showTimer = new QTimer(this);
@@ -70,6 +72,16 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
     return qobject_cast<QQuickItem *>(m_qmlObject->rootObject());
 }
 
+Plasma::Types::Direction ToolTipDialog::direction() const
+{
+    return m_direction;
+}
+
+void ToolTipDialog::setDirection(Plasma::Types::Direction loc)
+{
+    m_direction = loc;
+}
+
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
@@ -87,6 +99,19 @@ void ToolTipDialog::adjustPosition(const QPoint &point)
             m_animation->setTargetObject(this);
             m_animation->setEasingCurve(QEasingCurve::InOutQuad);
             m_animation->setDuration(250);
+        }
+
+        switch (m_direction) {
+        case Plasma::Types::Left:
+        case Plasma::Types::Right:
+            setX(point.x());
+            break;
+        case Plasma::Types::Up:
+        case Plasma::Types::Down:
+            setY(point.y());
+            break;
+        default:
+            break;
         }
 
         m_animation->setStartValue(position());
