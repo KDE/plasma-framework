@@ -31,7 +31,8 @@ Q_GLOBAL_STATIC(ToolTipDialog, toolTipDialogInstance)
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : DialogProxy(parent),
-      m_qmlObject(0)
+      m_qmlObject(0),
+      m_hideTimeout(4000)
 {
     setFlags(Qt::ToolTip);
     setLocation(Plasma::Types::Floating);
@@ -69,9 +70,19 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
 
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
-    m_showTimer->start(4000);
+    m_showTimer->start(m_hideTimeout);
 
     DialogProxy::showEvent(event);
+}
+
+void ToolTipDialog::dismiss()
+{
+    m_showTimer->start(m_hideTimeout / 20); // pretty short: 200ms
+}
+
+void ToolTipDialog::keepalive()
+{
+    m_showTimer->start(m_hideTimeout);
 }
 
 ToolTipDialog* ToolTipDialog::instance()

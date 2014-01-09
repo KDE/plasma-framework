@@ -59,6 +59,11 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
 
     /**
+     * An icon for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
+     */
+    Q_PROPERTY(bool m_containsMouse READ containsMouse NOTIFY containsMouseChanged)
+
+    /**
      * TODO: single property for images?
      * An image for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
      */
@@ -85,6 +90,9 @@ public:
     QVariant image() const;
     void setImage(const QVariant &image);
 
+    bool containsMouse() const;
+    void setContainsMouse(bool contains);
+
 protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);
@@ -97,8 +105,10 @@ Q_SIGNALS:
     void subTextChanged();
     void iconChanged();
     void imageChanged();
+    void containsMouseChanged();
 
 private:
+    bool m_containsMouse;
     QWeakPointer<QQuickItem> m_mainItem;
     QTimer *m_showTimer;
     QString m_mainText;

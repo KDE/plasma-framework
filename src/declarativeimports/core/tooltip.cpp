@@ -150,9 +150,32 @@ void ToolTip::setImage(const QVariant &image)
     emit imageChanged();
 }
 
+bool ToolTip::containsMouse() const
+{
+    return m_containsMouse;
+}
+
+void ToolTip::setContainsMouse(bool contains)
+{
+    if (m_containsMouse != contains) {
+        m_containsMouse = contains;
+        emit containsMouseChanged();
+    }
+    if (!contains) {
+        ToolTipDialog::instance()->dismiss();
+    }
+}
+
 void ToolTip::hoverEnterEvent(QHoverEvent *event)
 {
+    setContainsMouse(true);
+    //m_showTimer->stop();
     if (ToolTipDialog::instance()->isVisible()) {
+        // We signal the tooltipmanager that we're "potentially interested,
+        // and ask to keep it open for a bit, so other items get the chance
+        // to update the content before the tooltip hides -- this avoids
+        // flickering
+        ToolTipDialog::instance()->keepalive();
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
     } else {
@@ -162,6 +185,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
 
 void ToolTip::hoverLeaveEvent(QHoverEvent *event)
 {
+    setContainsMouse(false);
     m_showTimer->stop();
 }
 

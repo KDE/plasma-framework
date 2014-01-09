@@ -48,12 +48,16 @@ public:
 
     static ToolTipDialog* instance();
 
+    void dismiss();
+    void keepalive();
+
 protected:
     void showEvent(QShowEvent *event);
 
 private:
     QmlObject *m_qmlObject;
     QTimer *m_showTimer;
+    int m_hideTimeout;
 };
 
 #endif
