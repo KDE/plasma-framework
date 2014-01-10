@@ -81,9 +81,9 @@ Item {
 
     PlasmaCore.IconItem {
         id: tooltipIcon
-        width: toolTip.icon != "" ? theme.iconSizes.desktop : 0
+        width: toolTip.icon != null ? theme.iconSizes.desktop : 0
         height: width
-        source: toolTip ? toolTip.icon : ""
+        source: toolTip.icon != null ? toolTip.icon : ""
         anchors {
             leftMargin: width != 0 ? _s : 0
         }
