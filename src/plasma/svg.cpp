@@ -36,7 +36,6 @@
 #include <QDebug>
 #include <kfilterdev.h>
 #include <kiconeffect.h>
-#include <ksharedptr.h>
 
 #include "applet.h"
 #include "package.h"
@@ -419,17 +418,15 @@ void SvgPrivate::createRenderer()
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet();
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
 
-    QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
+    QHash<QString, QWeakPointer<SharedSvgRenderer> >::const_iterator it = s_renderers.constFind(styleCrc + path);
 
-    if (it != s_renderers.constEnd()) {
-        //qDebug() << "gots us an existing one!";
-        renderer = it.value();
-    } else {
+    renderer = it == s_renderers.constEnd() ? QWeakPointer<SharedSvgRenderer>() : it.value();
+    if (!renderer) {
         if (path.isEmpty()) {
-            renderer = new SharedSvgRenderer();
+            renderer.reset(new SharedSvgRenderer());
         } else {
             QHash<QString, QRectF> interestingElements;
-            renderer = new SharedSvgRenderer(path, styleSheet, interestingElements);
+            renderer.reset(new SharedSvgRenderer(path, styleSheet, interestingElements));
 
             // Add interesting elements to the theme's rect cache.
             QHashIterator<QString, QRectF> i(interestingElements);
@@ -455,16 +452,15 @@ void SvgPrivate::createRenderer()
 
 void SvgPrivate::eraseRenderer()
 {
-    if (renderer && renderer.count() == 2) {
-        // this and the cache reference it
-        s_renderers.erase(s_renderers.find(styleCrc + path));
-
-        if (theme) {
+    if (renderer) {
+        QWeakPointer<SharedSvgRenderer> guard = renderer;
+        renderer.reset();
+        if (guard.isNull() && theme) {
+            // no SvgPrivate instance references this anymore
             theme.data()->releaseRectsCache(path);
         }
     }
 
-    renderer = 0;
     styleCrc = 0;
     localRectCache.clear();
     elementsWithSizeHints.clear();
@@ -646,7 +642,7 @@ void SvgPrivate::colorsChanged()
     emit q->repaintNeeded();
 }
 
-QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
+QHash<QString, QWeakPointer<SharedSvgRenderer> > SvgPrivate::s_renderers;
 QWeakPointer<Theme> SvgPrivate::s_systemColorsCache;
 
 Svg::Svg(QObject *parent)
