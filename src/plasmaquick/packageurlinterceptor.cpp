@@ -30,9 +30,7 @@ PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::P
       m_package(p),
       m_engine(engine)
 {
-    foreach (const QString &import, m_engine->importPathList()) {
-        m_allowedPaths << import;
-    }
+    m_allowedPaths << m_engine->importPathList();
 }
 
 PackageUrlInterceptor::~PackageUrlInterceptor()

@@ -63,7 +63,7 @@ class DialogProxy : public QQuickWindow
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
     /**
-     * Plasma Location of the dialog window. Useful if this dialog is apopup for a panel
+     * Plasma Location of the dialog window. Useful if this dialog is a popup for a panel
      */
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
 
