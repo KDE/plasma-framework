@@ -17,6 +17,7 @@ Name[sv]=Plattformstatus
 Name[uk]=Стан платформи
 Name[x-test]=xxPlatform Statusxx
 Comment=Tracks the current shell package and the platform definition strings.
+Comment[de]=Überwacht das aktuelle Shell-Paket und die Plattformdefinitionen.
 Comment[fr]=Suit le paquet du terminal actuel et les chaînes de définition de la plate-forme.
 Comment[nl]=Volgt het huidige shell-pakket en de definitietekenreeksen van platform.
 Comment[pl]=Śledzi bieżący pakiet powłoki i ciągi znaków definiujące platformę.

@@ -10,6 +10,7 @@ Name[sv]=Hemfiler
 Name[uk]=Файли у домашній теці
 Name[x-test]=xxHome Filesxx
 Comment=Part of a tutorial demonstrating how to create Runner plugins
+Comment[de]=Teil einer Anleitung zur Demonstration, wie Runner-Module erstellt werden
 Comment[fr]=Éléments d'un tutoriel montrant comment créer des modules « Runner »
 Comment[nl]=Deel van een inleiding die demonstreert hoe Runner-plug-ins te maken
 Comment[pt]=Parte de um tutorial que demonstra como criar 'plugins' do Runner
