@@ -465,6 +465,70 @@ QFont Theme::smallestFont() const
     return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 }
 
+QColor Theme::textColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor);
+}
+
+QColor Theme::highlightColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::HighlightColor);
+}
+
+QColor Theme::backgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::BackgroundColor);
+}
+
+QColor Theme::buttonTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonTextColor);
+}
+
+QColor Theme::buttonBackgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonBackgroundColor);
+}
+
+QColor Theme::linkColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::LinkColor);
+}
+
+QColor Theme::visitedLinkColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::VisitedLinkColor);
+}
+
+QColor Theme::buttonHoverColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonHoverColor);
+}
+
+QColor Theme::buttonFocusColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonFocusColor);
+}
+
+QColor Theme::viewTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewTextColor);
+}
+
+QColor Theme::viewBackgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewBackgroundColor);
+}
+
+QColor Theme::viewHoverColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewHoverColor);
+}
+
+QColor Theme::viewFocusColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
+}
 
 }
 
