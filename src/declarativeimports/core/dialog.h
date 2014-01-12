@@ -115,7 +115,7 @@ public:
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
      * @arg alignment alignment of the popup compared to the item
      */
-    QPoint popupPosition(QQuickItem *item, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
+    QPoint popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
 
     void setType(WindowType type);
     WindowType type() const;
@@ -139,6 +139,8 @@ protected:
     void focusInEvent(QFocusEvent *ev);
     void focusOutEvent(QFocusEvent *ev);
     void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
+    bool event(QEvent *event);
 
     QTimer *m_syncTimer;
     Plasma::Types::Location m_location;
@@ -149,7 +151,7 @@ protected:
 private Q_SLOTS:
     void syncBorders();
 
-    void onVisibleChanged();
+    void updateVisibility(bool visible);
 
 private:
     QRect m_cachedGeometry;

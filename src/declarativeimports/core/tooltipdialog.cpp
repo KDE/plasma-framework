@@ -42,6 +42,13 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     setDirection(Plasma::Types::Up);
     m_frameSvgItem->setImagePath("widgets/tooltip");
 
+    m_animation = new QPropertyAnimation(this);
+    connect(m_animation, SIGNAL(valueChanged(QVariant)),
+            this, SLOT(valueChanged(QVariant)));
+    m_animation->setTargetObject(this);
+    m_animation->setEasingCurve(QEasingCurve::InOutQuad);
+    m_animation->setDuration(250);
+
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, [=]() {
@@ -86,7 +93,6 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
     m_animation->stop();
-
     DialogProxy::showEvent(event);
 }
 
@@ -117,15 +123,6 @@ void ToolTipDialog::adjustGeometry(const QRect &geom)
     }
 
     if (isVisible()) {
-        if (!m_animation) {
-            m_animation = new QPropertyAnimation(this);
-            connect(m_animation, SIGNAL(valueChanged(QVariant)),
-                    this, SLOT(valueChanged(QVariant)));
-            m_animation->setTargetObject(this);
-            m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-            m_animation->setDuration(250);
-        }
-
 
         resize(geom.size());
         
