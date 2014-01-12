@@ -2,6 +2,7 @@
 Name=Simple DataEngine Example
 Name[cs]=Jednoduchý příklad datového nástroje
 Name[de]=Einfaches Datentreiber-Beispiel
+Name[fi]=Yksinkertainen esimerkki tietomoottorista
 Name[fr]=Exemple simple de DataEngine
 Name[nl]=Eenvoudig voorbeeld voor gegevensengine
 Name[pt]=Exemplo Simples de Motor de Dados
@@ -12,6 +13,7 @@ Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
 Comment=A very basic DataEngine implementation
 Comment[de]=Eine Basis-Implementation eines Datentreibers
+Comment[fi]=Erittäin yksinkertainen tietomoottorin toteutus
 Comment[fr]=Une implémentation très basique de DataEngine
 Comment[nl]=Een erge basisimplementatie van een gegevens-engine
 Comment[pt]=Uma implementação muito básica do DataEngine

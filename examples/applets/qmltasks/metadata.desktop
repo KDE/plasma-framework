@@ -14,6 +14,7 @@ Name[x-test]=xxPoor Man's Tasksxx
 Comment=Example showing how to write your own tasks Widget
 Comment[de]=Beispiel für das Schreiben eigener Aufgaben-Miniprogramme
 Comment[es]=Ejemplo que muestra cómo escribir su propio widget de tareas
+Comment[fi]=Esimerkki oman tehtäväsovelman kirjoittamisesta
 Comment[fr]=Exemple montrant comment écrire votre propre composant graphique de tâches
 Comment[nl]=Voorbeeld die toont hoe u uw eigen taak-widget schrijft
 Comment[pt]=Um exemplo que demonstra como criar o seu próprio item de tarefas
