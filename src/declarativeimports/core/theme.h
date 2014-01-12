@@ -59,7 +59,6 @@ public:
     ThemeProxy(QQmlEngine *parent = 0);
     ~ThemeProxy();
 
-    QString themeName() const;
     /**
      * @return The size of an uppercase M in a font, defaultFont() by default
      */
