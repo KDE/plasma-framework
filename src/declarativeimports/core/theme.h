@@ -40,10 +40,6 @@ class ThemeProxy : public Plasma::Theme
 {
     Q_OBJECT
 
-    //fonts
-    Q_PROPERTY(QFont  defaultFont READ defaultFont NOTIFY defaultFontChanged)
-    Q_PROPERTY(QFont  smallestFont READ smallestFont NOTIFY smallestFontChanged)
-
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
@@ -90,15 +86,11 @@ public:
     ~ThemeProxy();
 
     QString themeName() const;
-    QFont defaultFont() const;
-    QFont smallestFont() const;
     /**
      * @return The size of an uppercase M in a font, defaultFont() by default
      */
     Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
-    bool useGlobalSettings() const;
-    QString wallpaperPath() const;
     Q_INVOKABLE QString wallpaperPathForSize(int width=-1, int height=-1) const;
 
     QColor textColor() const;
@@ -135,11 +127,8 @@ Q_SIGNALS:
     void themeChanged();
     void defaultIconSizeChanged();
     void iconSizesChanged();
-    void defaultFontChanged();
-    void smallestFontChanged();
 
 private:
-    bool eventFilter(QObject *watched, QEvent *event);
     void updateSpacing();
     int m_smallSpacing;
     int m_largeSpacing;

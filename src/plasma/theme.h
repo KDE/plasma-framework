@@ -56,6 +56,9 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
+    //fonts
+    Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
 
     public:
         enum ColorRole {
@@ -304,6 +307,9 @@ class PLASMA_EXPORT Theme : public QObject
          */
         KPluginInfo pluginInfo() const;
 
+        QFont defaultFont() const;
+        QFont smallestFont() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should
@@ -314,6 +320,9 @@ class PLASMA_EXPORT Theme : public QObject
          * Svg::repaintNeeded() at an appropriate time.
          */
         void themeChanged();
+
+        void defaultFontChanged();
+        void smallestFontChanged();
 
     private:
         friend class SvgPrivate;

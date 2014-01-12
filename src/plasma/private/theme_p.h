@@ -94,6 +94,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void themeChanged();
+    void defaultFontChanged();
+    void smallestFontChanged();
 
 public:
     static const char *defaultTheme;

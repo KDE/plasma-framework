@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QFont>
+#include <QFontDatabase>
 #include <QFileInfo>
 #include <QMutableListIterator>
 #include <QPair>
@@ -62,6 +63,8 @@ Theme::Theme(QObject *parent)
                 d, SLOT(onAppExitCleanup()));
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
+    connect(d, &ThemePrivate::defaultFontChanged, this, &Theme::defaultFontChanged);
+    connect(d, &ThemePrivate::smallestFontChanged, this, &Theme::smallestFontChanged);
 }
 
 Theme::Theme(const QString &themeName, QObject *parent)
@@ -451,6 +454,17 @@ KPluginInfo Theme::pluginInfo() const
 {
     return d->pluginInfo;
 }
+
+QFont Theme::defaultFont() const
+{
+    return QApplication::font();
+}
+
+QFont Theme::smallestFont() const
+{
+    return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+}
+
 
 }
 

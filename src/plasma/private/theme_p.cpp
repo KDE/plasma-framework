@@ -88,6 +88,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
         QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), this, SLOT(blurBehindChanged(bool)));
 #endif
     }
+    installEventFilter(qApp);
 }
 
 ThemePrivate::~ThemePrivate()
@@ -573,6 +574,10 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
     if (watched == QCoreApplication::instance()) {
         if (event->type() == QEvent::ApplicationPaletteChange) {
             colorsChanged();
+        }
+        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            defaultFontChanged();
+            smallestFontChanged();
         }
     }
     return QObject::eventFilter(watched, event);

@@ -22,7 +22,6 @@
 #include <QQmlPropertyMap>
 
 #include <QFontMetrics>
-#include <QFontDatabase>
 #include <kiconloader.h>
 #include <QApplication>
 
@@ -47,22 +46,10 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
     updateSpacing();
-    installEventFilter(qApp);
 }
 
 ThemeProxy::~ThemeProxy()
 {
-}
-
-bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == QCoreApplication::instance()) {
-        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            defaultFontChanged();
-            smallestFontChanged();
-        }
-    }
-    return QObject::eventFilter(watched, event);
 }
 
 void ThemeProxy::updateSpacing()
@@ -70,16 +57,6 @@ void ThemeProxy::updateSpacing()
     const int _s = mSize().height();
     m_smallSpacing = qMax(2, (int)(_s / 8));
     m_largeSpacing = _s;
-}
-
-QFont ThemeProxy::defaultFont() const
-{
-    return QApplication::font();
-}
-
-QFont ThemeProxy::smallestFont() const
-{
-    return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
 }
 
 QSizeF ThemeProxy::mSize(const QFont &font) const
