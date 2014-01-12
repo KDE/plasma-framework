@@ -36,6 +36,7 @@
 #include <kconfiggroup.h>
 #include <QDebug>
 #include <kdirwatch.h>
+#include <kiconloader.h>
 #include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>
@@ -529,6 +530,42 @@ QColor Theme::viewFocusColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
 }
+
+int Theme::defaultIconSize() const
+{
+    return d->defaultIconSize;
+}
+
+int Theme::smallIconSize() const
+{
+    return KIconLoader::SizeSmall;
+}
+
+int Theme::smallMediumIconSize() const
+{
+    return KIconLoader::SizeSmallMedium;
+}
+
+int Theme::mediumIconSize() const
+{
+    return KIconLoader::SizeMedium;
+}
+
+int Theme::largeIconSize() const
+{
+    return KIconLoader::SizeLarge;
+}
+
+int Theme::hugeIconSize() const
+{
+    return KIconLoader::SizeHuge;
+}
+
+int Theme::enormousIconSize() const
+{
+    return KIconLoader::SizeEnormous;
+}
+
 
 }
 

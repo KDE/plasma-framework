@@ -76,6 +76,16 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
 
+    // icon sizes
+    Q_PROPERTY(int smallIconSize READ smallIconSize CONSTANT)
+    Q_PROPERTY(int smallMediumIconSize READ smallMediumIconSize CONSTANT)
+    Q_PROPERTY(int mediumIconSize READ mediumIconSize CONSTANT)
+    Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
+    Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
+    Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
+    Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
+
+
     public:
         enum ColorRole {
             TextColor = 0, /**<  the text color to be used by items resting on the background */
@@ -341,6 +351,14 @@ class PLASMA_EXPORT Theme : public QObject
         QColor viewFocusColor() const;
         QString styleSheet() const;
 
+        int smallIconSize() const;
+        int smallMediumIconSize() const;
+        int mediumIconSize() const;
+        int largeIconSize() const;
+        int hugeIconSize() const;
+        int enormousIconSize() const;
+        int defaultIconSize() const;
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should
@@ -354,6 +372,8 @@ class PLASMA_EXPORT Theme : public QObject
 
         void defaultFontChanged();
         void smallestFontChanged();
+
+        void defaultIconSizeChanged();
 
     private:
         friend class SvgPrivate;

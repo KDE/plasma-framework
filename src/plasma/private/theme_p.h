@@ -136,6 +136,8 @@ public:
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
 
+    int defaultIconSize;
+
     bool locolor : 1;
     bool compositingActive : 1;
     bool blurActive : 1;

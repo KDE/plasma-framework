@@ -40,15 +40,6 @@ class ThemeProxy : public Plasma::Theme
 {
     Q_OBJECT
 
-    // icon sizes
-    Q_PROPERTY(int smallIconSize READ smallIconSize CONSTANT)
-    Q_PROPERTY(int smallMediumIconSize READ smallMediumIconSize CONSTANT)
-    Q_PROPERTY(int mediumIconSize READ mediumIconSize CONSTANT)
-    Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
-    Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
-    Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
-    Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
-
     /**
      * icon sizes depending from the context: use those if possible
      * Access with theme.iconSizes.desktop theme.iconSizes.small etc.
@@ -78,13 +69,6 @@ public:
 
     QString styleSheet() const;
 
-    int smallIconSize() const;
-    int smallMediumIconSize() const;
-    int mediumIconSize() const;
-    int largeIconSize() const;
-    int hugeIconSize() const;
-    int enormousIconSize() const;
-    int defaultIconSize() const;
     QQmlPropertyMap *iconSizes() const;
 
     int smallSpacing() const;
@@ -95,14 +79,12 @@ private Q_SLOTS:
 
 Q_SIGNALS:
     void themeChanged();
-    void defaultIconSizeChanged();
     void iconSizesChanged();
 
 private:
     void updateSpacing();
     int m_smallSpacing;
     int m_largeSpacing;
-    int m_defaultIconSize;
     QQmlPropertyMap *m_iconSizes;
     QQmlEngine *m_engine;
 };

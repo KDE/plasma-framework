@@ -33,8 +33,6 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     : Plasma::Theme(parent),
       m_engine(parent)
 {
-    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-
     m_iconSizes = new QQmlPropertyMap(this);
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
@@ -84,40 +82,9 @@ QString ThemeProxy::styleSheet() const
     return Plasma::Theme::styleSheet(QString());
 }
 
-int ThemeProxy::smallIconSize() const
-{
-    return KIconLoader::SizeSmall;
-}
-
-int ThemeProxy::smallMediumIconSize() const
-{
-    return KIconLoader::SizeSmallMedium;
-}
-
-int ThemeProxy::mediumIconSize() const
-{
-    return KIconLoader::SizeMedium;
-}
-
-int ThemeProxy::largeIconSize() const
-{
-    return KIconLoader::SizeLarge;
-}
-
-int ThemeProxy::hugeIconSize() const
-{
-    return KIconLoader::SizeHuge;
-}
-
-int ThemeProxy::enormousIconSize() const
-{
-    return KIconLoader::SizeEnormous;
-}
 
 void ThemeProxy::iconLoaderSettingsChanged()
 {
-    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
@@ -125,11 +92,6 @@ void ThemeProxy::iconLoaderSettingsChanged()
 
     emit defaultIconSizeChanged();
     emit iconSizesChanged();
-}
-
-int ThemeProxy::defaultIconSize() const
-{
-    return m_defaultIconSize;
 }
 
 QQmlPropertyMap *ThemeProxy::iconSizes() const

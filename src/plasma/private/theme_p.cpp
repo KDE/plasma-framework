@@ -26,6 +26,7 @@
 #include <QFontDatabase>
 
 #include <kdirwatch.h>
+#include <kiconloader.h>
 #include <kwindoweffects.h>
 
 namespace Plasma
@@ -51,6 +52,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
+      defaultIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)),
       defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
       defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
