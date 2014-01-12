@@ -23,98 +23,66 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.qtextracomponents 2.0 as QtExtras
 
-/**
- * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
- * You can either specify iconSource, mainText and subText, or a custom Component
- * that will be put inside the tooltip. By specifying the target property, you
- * "attach" the ToolTip to an item in your code, by default the tooltip will be
- * rendered when hovering over the parent item.
- *
- * The item inside the ToolTip is loaded on demand and will be destroyed when the
- * tooltip is being hidden.
- *
- * Example usage:
- * @code
- * import org.kde.plasma.core 2.0 as PlasmaCore
- *
- * [...]
- * PlasmaComponents.IconItem {
- *     ...
- *     PlasmaCore.ToolTip {
- *         mainText: "Tooltip Title"
- *         subText: "Some explanation."
- *         iconSource: "plasma"
- *         // alternatively, you can specify your own component
- *         // to be loaded when the tooltip shows
- *         mainComponent: Component {
- *              YourCustomItem { ...  }
- *         }
- * ... }
- * }
- * @endcode
- *
- */
 
-Item {
+
+Row {
     id: tooltipContentItem
-    x: _s
-    y: _s
-    width: childrenRect.width + _s
-    height: childrenRect.height
+
     property Item toolTip
 
-    property string mainText: "" // string
-    property string subText: "" // string
-    property string iconSource: "" // icon name
-    property string image: "" // string / url to the image
-
-    property int maxTextSize: Math.max(tooltipMaintext.paintedWidth, tooltipSubtext.paintedWidth)
-    property int maxSize: theme.mSize(theme.defaultFont).width * 100
-    //property int maxSize: 200
-    property int preferredTextWidth: Math.min(maxTextSize, maxSize)
+    property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 25
     property int _s: theme.iconSizes.small / 2
 
-    Image {
-        id: tooltipImage
-        source: toolTip ? toolTip.image : ""
-    }
+    width: childrenRect.width + _s
+    height: childrenRect.height
+    spacing: _s
 
-    PlasmaCore.IconItem {
-        id: tooltipIcon
-        width: toolTip.icon != null ? theme.iconSizes.desktop : 0
-        height: width
-        source: toolTip.icon != null ? toolTip.icon : ""
-        anchors {
-            leftMargin: width != 0 ? _s : 0
+    Item {
+        id: imageContainer
+        visible: toolTip.image || toolTip.icon
+        width: Math.max(tooltipImage.width, tooltipIcon.width)
+        height: Math.max(tooltipImage.height, tooltipIcon.height)
+
+        Image {
+            id: tooltipImage
+            source: toolTip ? toolTip.image : ""
+        }
+
+        PlasmaCore.IconItem {
+            id: tooltipIcon
+            width: toolTip.icon != null ? theme.iconSizes.desktop : 0
+            height: width
+            source: toolTip.icon != null ? toolTip.icon : ""
+            anchors {
+                leftMargin: width != 0 ? _s : 0
+            }
         }
     }
-    PlasmaExtras.Heading {
-        id: tooltipMaintext
-        level: 3
-        //width: parent.preferredTextWidth
-        //width: 400
 
-        maximumLineCount: 2
-        wrapMode: Text.WordWrap
-        elide: Text.ElideRight
-        text: toolTip ? toolTip.mainText : ""
-        anchors {
-            left: (tooltipImage.source != "") ? tooltipImage.right : tooltipIcon.right
-            leftMargin: _s*2
-            top: tooltipIcon.top
+    Column {
+        id: mainColumn
+
+        //This instance is purely for metrics
+        PlasmaExtras.Heading {
+            id: tooltipMaintextPlaceholder
+            visible: false
+            level: 3
+            text: toolTip ? toolTip.mainText : ""
         }
-    }
-    PlasmaComponents.Label {
-        id: tooltipSubtext
-        width: parent.preferredTextWidth
-        wrapMode: Text.WordWrap
-        text: toolTip ? toolTip.subText : ""
-        opacity: 0.5
-        anchors {
-            left: tooltipMaintext.left
-            topMargin: _s
-            bottomMargin: _s
-            top: tooltipMaintext.bottom
+        PlasmaExtras.Heading {
+            id: tooltipMaintext
+            level: 3
+            width: Math.min(tooltipMaintextPlaceholder.width, preferredTextWidth)
+            //width: 400
+            elide: Text.ElideRight
+            text: toolTip ? toolTip.mainText : ""
+        }
+        PlasmaComponents.Label {
+            id: tooltipSubtext
+            width: parent.preferredTextWidth
+            wrapMode: Text.WordWrap
+            text: toolTip ? toolTip.subText : ""
+            opacity: 0.5
         }
     }
 }

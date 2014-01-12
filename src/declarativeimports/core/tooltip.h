@@ -30,9 +30,35 @@ class QQuickItem;
 class QGraphicsWidget;
 
 /**
- * Exposed as `ToolTipProxy` in QML. This is used only internally for WIndow handling
+ * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
+ * You can either specify iconSource, mainText and subText, or a custom Component
+ * that will be put inside the tooltip. By specifying the target property, you
+ * "attach" the ToolTip to an item in your code, by default the tooltip will be
+ * rendered when hovering over the parent item.
  *
- * DO NOT USE THIS API, PlasmaCore.ToolTip is what you should use.
+ * The item inside the ToolTip is loaded on demand and will be destroyed when the
+ * tooltip is being hidden.
+ *
+ * Example usage:
+ * @code
+ * import org.kde.plasma.core 2.0 as PlasmaCore
+ *
+ * [...]
+ * PlasmaComponents.IconItem {
+ *     ...
+ *     PlasmaCore.ToolTipArea {
+ *         mainText: "Tooltip Title"
+ *         subText: "Some explanation."
+ *         iconSource: "plasma"
+ *         // alternatively, you can specify your own component
+ *         // to be loaded when the tooltip shows
+ *         mainComponent: Component {
+ *              YourCustomItem { ...  }
+ *         }
+ * ... }
+ * }
+ * @endcode
+ *
  */
 class ToolTip : public QQuickItem
 {
