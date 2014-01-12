@@ -40,10 +40,6 @@ class ThemeProxy : public Plasma::Theme
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
-    Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
-    Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
-
     //fonts
     Q_PROPERTY(QFont  defaultFont READ defaultFont NOTIFY defaultFontChanged)
     Q_PROPERTY(QFont  smallestFont READ smallestFont NOTIFY smallestFontChanged)

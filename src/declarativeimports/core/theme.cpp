@@ -72,11 +72,6 @@ void ThemeProxy::updateSpacing()
     m_largeSpacing = _s;
 }
 
-QString ThemeProxy::themeName() const
-{
-    return Plasma::Theme::themeName();
-}
-
 QFont ThemeProxy::defaultFont() const
 {
     return QApplication::font();
@@ -100,16 +95,6 @@ int ThemeProxy::smallSpacing() const
 int ThemeProxy::largeSpacing() const
 {
     return m_largeSpacing;
-}
-
-bool ThemeProxy::useGlobalSettings() const
-{
-    return Plasma::Theme::useGlobalSettings();
-}
-
-QString ThemeProxy::wallpaperPath() const
-{
-    return Plasma::Theme::wallpaperPath();
 }
 
 QString ThemeProxy::wallpaperPathForSize(int width, int height) const
@@ -226,7 +211,6 @@ void ThemeProxy::iconLoaderSettingsChanged()
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
-
     emit defaultIconSizeChanged();
     emit iconSizesChanged();
 }
@@ -242,4 +226,3 @@ QQmlPropertyMap *ThemeProxy::iconSizes() const
 }
 
 #include "moc_theme.cpp"
-

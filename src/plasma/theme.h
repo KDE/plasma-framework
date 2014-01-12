@@ -52,6 +52,11 @@ class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
+    Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
+    Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
+
+
     public:
         enum ColorRole {
             TextColor = 0, /**<  the text color to be used by items resting on the background */
