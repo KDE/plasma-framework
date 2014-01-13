@@ -30,7 +30,9 @@
 #include <kwindoweffects.h>
 
 ToolTip::ToolTip(QQuickItem *parent)
-    : QQuickItem(parent)
+    : QQuickItem(parent),
+      m_containsMouse(false),
+      m_location(Plasma::Types::Floating)
 {
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
@@ -78,25 +80,31 @@ void ToolTip::showToolTip()
     }
 
     //heuristics for knowing the diration
-    Plasma::Types::Direction dir = Plasma::Types::Up;
-    QPoint pos = mapToScene(QPoint(0, 0)).toPoint();
-
-    if (window() && window()->screen()) {
-        pos = window()->mapToGlobal(pos);
-    }
-    QPoint popupPos = dlg->popupPosition(this, dlg->size(), Qt::AlignCenter);
-
-    if (pos.y() + height() <= popupPos.y()) {
-        dir = Plasma::Types::Down;
-    } else if (pos.x() + width() <= popupPos.x()) {
-        dir = Plasma::Types::Right;
-    } else if (pos.y() >= popupPos.y() + dlg->height()) {
+    Plasma::Types::Direction dir;
+    if (m_location == Plasma::Types::Floating) {
         dir = Plasma::Types::Up;
-    } else if (pos.x() >= popupPos.x() + dlg->width()) {
-        dir = Plasma::Types::Left;
+        QPoint pos = mapToScene(QPoint(0, 0)).toPoint();
+
+        if (window() && window()->screen()) {
+            pos = window()->mapToGlobal(pos);
+        }
+        QPoint popupPos = dlg->popupPosition(this, dlg->size(), Qt::AlignCenter);
+
+        if (pos.y() + height() <= popupPos.y()) {
+            dir = Plasma::Types::Down;
+        } else if (pos.x() + width() <= popupPos.x()) {
+            dir = Plasma::Types::Right;
+        } else if (pos.y() >= popupPos.y() + dlg->height()) {
+            dir = Plasma::Types::Up;
+        } else if (pos.x() >= popupPos.x() + dlg->width()) {
+            dir = Plasma::Types::Left;
+        }
+    } else {
+        dir = Plasma::locationToDirection(m_location);
     }
 
     dlg->setDirection(dir);
+    dlg->setLocation(m_location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
     dlg->setVisible(true);
@@ -130,6 +138,20 @@ void ToolTip::setSubText(const QString &subText)
 
     m_subText = subText;
     emit subTextChanged();
+}
+
+Plasma::Types::Location ToolTip::location() const
+{
+    return m_location;
+}
+
+void ToolTip::setLocation(Plasma::Types::Location location)
+{
+    if (m_location == location) {
+        return;
+    }
+    m_location = location;
+    emit locationChanged();
 }
 
 QVariant ToolTip::icon() const

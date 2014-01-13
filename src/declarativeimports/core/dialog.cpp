@@ -445,7 +445,7 @@ void DialogProxy::syncBorders()
     int borders = Plasma::FrameSvg::AllBorders;
 
     //Tooltips always have all the borders
-    if (flags() & Qt::ToolTip) {
+    if (!(flags() & Qt::ToolTip)) {
         if (x() <= avail.x() || m_location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }

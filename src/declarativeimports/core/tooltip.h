@@ -25,6 +25,7 @@
 #include <QQuickItem>
 #include <QWeakPointer>
 #include <QtCore/QVariant>
+#include <Plasma/Plasma>
 
 class QQuickItem;
 class QGraphicsWidget;
@@ -90,6 +91,11 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(bool m_containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
     /**
+     * Plasma Location of the dialog window. Useful if this dialog is a popup for a panel
+     */
+    Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
+
+    /**
      * TODO: single property for images?
      * An image for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
      */
@@ -116,6 +122,9 @@ public:
     QVariant image() const;
     void setImage(const QVariant &image);
 
+    Plasma::Types::Location location() const;
+    void setLocation(Plasma::Types::Location location);
+
     bool containsMouse() const;
     void setContainsMouse(bool contains);
 
@@ -132,9 +141,11 @@ Q_SIGNALS:
     void iconChanged();
     void imageChanged();
     void containsMouseChanged();
+    void locationChanged();
 
 private:
     bool m_containsMouse;
+    Plasma::Types::Location m_location;
     QWeakPointer<QQuickItem> m_mainItem;
     QTimer *m_showTimer;
     QString m_mainText;
