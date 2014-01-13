@@ -74,7 +74,7 @@ Plasma::Package WallpaperInterface::package() const
     return m_pkg;
 }
 
-ConfigPropertyMap *WallpaperInterface::configuration() const
+KDeclarative::ConfigPropertyMap *WallpaperInterface::configuration() const
 {
     return m_configuration;
 }
@@ -108,7 +108,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
     
     if (!m_qmlObject) {
-        m_qmlObject = new QmlObject(this);
+        m_qmlObject = new KDeclarative::QmlObject(this);
         m_qmlObject->setInitializationDelayed(true);
     }
 
@@ -121,7 +121,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_configLoader = 0;
     m_configuration = 0;
     if (configScheme()) {
-        m_configuration = new ConfigPropertyMap(configScheme(), this);
+        m_configuration = new KDeclarative::ConfigPropertyMap(configScheme(), this);
     }
 
     

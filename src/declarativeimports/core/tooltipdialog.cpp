@@ -63,7 +63,7 @@ ToolTipDialog::~ToolTipDialog()
 QQuickItem *ToolTipDialog::loadDefaultItem()
 {
     if (!m_qmlObject) {
-        m_qmlObject = new QmlObject(this);
+        m_qmlObject = new KDeclarative::QmlObject(this);
     }
 
     if (!m_qmlObject->rootObject()) {

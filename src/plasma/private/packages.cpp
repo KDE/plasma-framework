@@ -67,7 +67,7 @@ void GenericPackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
 
-    QStringList platform = KDeclarative::runtimePlatform();
+    QStringList platform = KDeclarative::KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
         QMutableStringListIterator it(platform);
         while (it.hasNext()) {

@@ -55,7 +55,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_interface(0)
 {
     qmlRegisterType<AppletInterface>();
-    qmlRegisterType<ConfigPropertyMap>();
+    qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
 }
 

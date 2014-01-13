@@ -28,8 +28,6 @@
 
 class AppletInterface;
 
-class QmlObject;
-
 class DeclarativeAppletScript : public Plasma::AppletScript
 {
     Q_OBJECT

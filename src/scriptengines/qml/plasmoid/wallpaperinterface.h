@@ -31,16 +31,20 @@ namespace Plasma {
 class KActionCollection;
 
 class ContainmentInterface;
-class ConfigPropertyMap;
-class QmlObject;
 class QSignalMapper;
+
+namespace KDeclarative {
+    class ConfigPropertyMap;
+    class QmlObject;
+}
+
 
 class WallpaperInterface : public QQuickItem
 {
     Q_OBJECT
 
     //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
-    Q_PROPERTY(ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
+    Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
 
 public:
     WallpaperInterface(ContainmentInterface *parent = 0);
@@ -57,7 +61,7 @@ public:
 
     Plasma::Package package() const;
 
-    ConfigPropertyMap *configuration() const;
+    KDeclarative::ConfigPropertyMap *configuration() const;
 
     Plasma::ConfigLoader *configScheme();
 
@@ -85,9 +89,9 @@ private Q_SLOTS:
 private:
     QString m_wallpaperPlugin;
     ContainmentInterface *m_containmentInterface;
-    QmlObject *m_qmlObject;
+    KDeclarative::QmlObject *m_qmlObject;
     Plasma::Package m_pkg;
-    ConfigPropertyMap *m_configuration;
+    KDeclarative::ConfigPropertyMap *m_configuration;
     Plasma::ConfigLoader *m_configLoader;
     KActionCollection *m_actions;
     QSignalMapper *m_actionSignals;

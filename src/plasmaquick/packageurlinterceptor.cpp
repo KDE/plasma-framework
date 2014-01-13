@@ -117,7 +117,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 //qDebug() << "Found allowed, access granted" << path;
 
                 //check if there is a platform specific file that overrides this allowed
-                foreach (const QString &platform, KDeclarative::runtimePlatform()) {
+                foreach (const QString &platform, KDeclarative::KDeclarative::runtimePlatform()) {
                     //qDebug() << "Trying" << platform;
 
                     //search for a platformqml/ path sibling of this allowed path

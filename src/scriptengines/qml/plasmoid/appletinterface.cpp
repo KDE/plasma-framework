@@ -86,7 +86,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
                 this, &ContainmentInterface::screenChanged);
     }
 
-    m_qmlObject = new QmlObject(this);
+    m_qmlObject = new KDeclarative::QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
 
     m_collapseTimer = new QTimer(this);
@@ -104,7 +104,7 @@ void AppletInterface::init()
         return;
     }
 
-    m_configuration = new ConfigPropertyMap(applet()->configScheme(), this);
+    m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
     QQmlEngine *engine = m_qmlObject->engine();
@@ -837,7 +837,7 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
-QmlObject *AppletInterface::qmlObject()
+KDeclarative::QmlObject *AppletInterface::qmlObject()
 {
     return m_qmlObject;
 }
