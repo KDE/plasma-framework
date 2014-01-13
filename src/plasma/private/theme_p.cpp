@@ -52,7 +52,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
       colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
-      defaultIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)),
       defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
       defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -60,6 +59,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       pixmapCache(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
+      defaultIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
       blurActive(false),
@@ -91,6 +91,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
 #endif
     }
     installEventFilter(qApp);
+    updateSpacing();
 }
 
 ThemePrivate::~ThemePrivate()
@@ -583,6 +584,13 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
         }
     }
     return QObject::eventFilter(watched, event);
+}
+
+void ThemePrivate::updateSpacing()
+{
+    const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+    smallSpacing = qMax(2, (int)(_s / 8));
+    largeSpacing = _s;
 }
 
 }

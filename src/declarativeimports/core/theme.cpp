@@ -42,46 +42,16 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
 
     connect(this, &Plasma::Theme::themeChanged, this, &ThemeProxy::themeChanged);
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
-
-    updateSpacing();
 }
 
 ThemeProxy::~ThemeProxy()
 {
 }
 
-void ThemeProxy::updateSpacing()
-{
-    const int _s = mSize().height();
-    m_smallSpacing = qMax(2, (int)(_s / 8));
-    m_largeSpacing = _s;
-}
-
-QSizeF ThemeProxy::mSize(const QFont &font) const
-{
-    return QFontMetrics(font).boundingRect("M").size();
-}
-
-int ThemeProxy::smallSpacing() const
-{
-    return m_smallSpacing;
-}
-
-int ThemeProxy::largeSpacing() const
-{
-    return m_largeSpacing;
-}
-
 QString ThemeProxy::wallpaperPathForSize(int width, int height) const
 {
     return Plasma::Theme::wallpaperPath(QSize(width, height));
 }
-
-QString ThemeProxy::styleSheet() const
-{
-    return Plasma::Theme::styleSheet(QString());
-}
-
 
 void ThemeProxy::iconLoaderSettingsChanged()
 {

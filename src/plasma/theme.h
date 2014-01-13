@@ -21,6 +21,8 @@
 #ifndef PLASMA_THEME_H
 #define PLASMA_THEME_H
 
+#include <QApplication>
+#include <QFont>
 #include <QtCore/QObject>
 
 #include <kplugininfo.h>
@@ -59,6 +61,9 @@ class PLASMA_EXPORT Theme : public QObject
     //fonts
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
     Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
+
+    // stylesheet
+    Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
 
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
@@ -349,7 +354,6 @@ class PLASMA_EXPORT Theme : public QObject
         QColor viewBackgroundColor() const;
         QColor viewHoverColor() const;
         QColor viewFocusColor() const;
-        QString styleSheet() const;
 
         int smallIconSize() const;
         int smallMediumIconSize() const;
@@ -358,6 +362,12 @@ class PLASMA_EXPORT Theme : public QObject
         int hugeIconSize() const;
         int enormousIconSize() const;
         int defaultIconSize() const;
+
+        int smallSpacing() const;
+        int largeSpacing() const;
+
+        Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
+
 
     Q_SIGNALS:
         /**
