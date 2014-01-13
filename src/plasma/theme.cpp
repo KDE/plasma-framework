@@ -256,6 +256,11 @@ QString Theme::wallpaperPath(const QSize &size) const
     return fullPath;
 }
 
+QString Theme::wallpaperPathForSize(int width, int height) const
+{
+    return Plasma::Theme::wallpaperPath(QSize(width, height));
+}
+
 bool Theme::currentThemeHasImage(const QString &name) const
 {
     if (name.contains("../")) {

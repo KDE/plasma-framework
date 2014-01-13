@@ -90,6 +90,9 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
     Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
+    // layout hints
+    Q_PROPERTY(int smallSpacing READ smallSpacing CONSTANT)
+    Q_PROPERTY(int largeSpacing READ largeSpacing CONSTANT)
 
     public:
         enum ColorRole {
@@ -152,6 +155,8 @@ class PLASMA_EXPORT Theme : public QObject
          * @return the full path to the wallpaper image
          */
         QString wallpaperPath(const QSize &size = QSize()) const;
+
+        Q_INVOKABLE QString wallpaperPathForSize(int width=-1, int height=-1) const;
 
         /**
          * Checks if this theme has an image named in a certain way

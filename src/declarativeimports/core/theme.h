@@ -51,15 +51,9 @@ class ThemeProxy : public Plasma::Theme
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
-    // layout hints
-    Q_PROPERTY(int smallSpacing READ smallSpacing CONSTANT)
-    Q_PROPERTY(int largeSpacing READ largeSpacing CONSTANT)
-
 public:
     ThemeProxy(QQmlEngine *parent = 0);
     ~ThemeProxy();
-
-    Q_INVOKABLE QString wallpaperPathForSize(int width=-1, int height=-1) const;
 
     QQmlPropertyMap *iconSizes() const;
 
@@ -71,8 +65,6 @@ Q_SIGNALS:
     void iconSizesChanged();
 
 private:
-    int m_smallSpacing;
-    int m_largeSpacing;
     QQmlPropertyMap *m_iconSizes;
     QQmlEngine *m_engine;
 };

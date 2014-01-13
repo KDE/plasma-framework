@@ -48,11 +48,6 @@ ThemeProxy::~ThemeProxy()
 {
 }
 
-QString ThemeProxy::wallpaperPathForSize(int width, int height) const
-{
-    return Plasma::Theme::wallpaperPath(QSize(width, height));
-}
-
 void ThemeProxy::iconLoaderSettingsChanged()
 {
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
