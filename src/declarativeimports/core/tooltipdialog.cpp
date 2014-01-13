@@ -94,6 +94,7 @@ void ToolTipDialog::showEvent(QShowEvent *event)
     m_showTimer->start(m_hideTimeout);
     m_animation->stop();
     DialogProxy::showEvent(event);
+    setFlags(Qt::ToolTip);
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
