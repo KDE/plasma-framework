@@ -21,19 +21,20 @@
 #define PLASMA_SVG_P_H
 
 #include <QHash>
-#include <QSharedPointer>
+#include <QSharedData>
 #include <QSvgRenderer>
-#include <QWeakPointer>
+#include <QExplicitlySharedDataPointer>
 
 namespace Plasma
 {
 
 class Svg;
 
-class SharedSvgRenderer : public QSvgRenderer
+class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {
     public:
-        typedef QSharedPointer<SharedSvgRenderer> Ptr;
+        typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
+
         SharedSvgRenderer(QObject *parent = 0);
         SharedSvgRenderer(
             const QString &filename,
@@ -92,7 +93,7 @@ public:
     void themeChanged();
     void colorsChanged();
 
-    static QHash<QString, QWeakPointer<SharedSvgRenderer> > s_renderers;
+    static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
     static QWeakPointer<Theme> s_systemColorsCache;
 
     Svg *q;
