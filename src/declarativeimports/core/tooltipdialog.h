@@ -29,8 +29,12 @@
 
 class QQuickItem;
 class QGraphicsWidget;
-class QmlObject;
 class QPropertyAnimation;
+
+namespace KDeclarative
+{
+    class QmlObject;
+}
 
 /**
  * QML wrapper for kdelibs Plasma::ToolTipDialog
@@ -69,7 +73,7 @@ private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
 private:
-    QmlObject *m_qmlObject;
+    KDeclarative::QmlObject *m_qmlObject;
     QTimer *m_showTimer;
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
