@@ -39,7 +39,7 @@ Row {
 
     Item {
         id: imageContainer
-        visible: toolTip.image || toolTip.icon
+        visible: toolTip != null && (toolTip.image != undefined || toolTip.icon != undefined)
         width: Math.max(tooltipImage.width, tooltipIcon.width)
         height: Math.max(tooltipImage.height, tooltipIcon.height)
 
@@ -50,9 +50,9 @@ Row {
 
         PlasmaCore.IconItem {
             id: tooltipIcon
-            width: toolTip.icon != null ? theme.iconSizes.desktop : 0
+            width: toolTip != undefined && toolTip.icon != null ? theme.iconSizes.desktop : 0
             height: width
-            source: toolTip.icon != null ? toolTip.icon : ""
+            source: toolTip != undefined && toolTip.icon != null ? toolTip.icon : ""
             anchors {
                 leftMargin: width != 0 ? _s : 0
             }
