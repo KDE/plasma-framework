@@ -26,6 +26,7 @@
 #include <QFontDatabase>
 
 #include <kdirwatch.h>
+#include <kiconloader.h>
 #include <kwindoweffects.h>
 
 namespace Plasma
@@ -58,6 +59,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       pixmapCache(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
+      defaultIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
       blurActive(false),
@@ -88,6 +90,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
         QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), this, SLOT(blurBehindChanged(bool)));
 #endif
     }
+    installEventFilter(qApp);
+    updateSpacing();
 }
 
 ThemePrivate::~ThemePrivate()
@@ -574,8 +578,19 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
         if (event->type() == QEvent::ApplicationPaletteChange) {
             colorsChanged();
         }
+        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            defaultFontChanged();
+            smallestFontChanged();
+        }
     }
     return QObject::eventFilter(watched, event);
+}
+
+void ThemePrivate::updateSpacing()
+{
+    const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+    smallSpacing = qMax(2, (int)(_s / 8));
+    largeSpacing = _s;
 }
 
 }

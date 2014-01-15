@@ -20,9 +20,9 @@
 #include "theme.h"
 #include "private/theme_p.h"
 
-#include <QApplication>
 #include <QFile>
 #include <QFont>
+#include <QFontDatabase>
 #include <QFileInfo>
 #include <QMutableListIterator>
 #include <QPair>
@@ -35,6 +35,7 @@
 #include <kconfiggroup.h>
 #include <QDebug>
 #include <kdirwatch.h>
+#include <kiconloader.h>
 #include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>
@@ -62,6 +63,8 @@ Theme::Theme(QObject *parent)
                 d, SLOT(onAppExitCleanup()));
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
+    connect(d, &ThemePrivate::defaultFontChanged, this, &Theme::defaultFontChanged);
+    connect(d, &ThemePrivate::smallestFontChanged, this, &Theme::smallestFontChanged);
 }
 
 Theme::Theme(const QString &themeName, QObject *parent)
@@ -251,6 +254,11 @@ QString Theme::wallpaperPath(const QSize &size) const
     }
 
     return fullPath;
+}
+
+QString Theme::wallpaperPathForSize(int width, int height) const
+{
+    return Plasma::Theme::wallpaperPath(QSize(width, height));
 }
 
 bool Theme::currentThemeHasImage(const QString &name) const
@@ -451,6 +459,133 @@ KPluginInfo Theme::pluginInfo() const
 {
     return d->pluginInfo;
 }
+
+QFont Theme::defaultFont() const
+{
+    return QApplication::font();
+}
+
+QFont Theme::smallestFont() const
+{
+    return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+}
+
+QColor Theme::textColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor);
+}
+
+QColor Theme::highlightColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::HighlightColor);
+}
+
+QColor Theme::backgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::BackgroundColor);
+}
+
+QColor Theme::buttonTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonTextColor);
+}
+
+QColor Theme::buttonBackgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonBackgroundColor);
+}
+
+QColor Theme::linkColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::LinkColor);
+}
+
+QColor Theme::visitedLinkColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::VisitedLinkColor);
+}
+
+QColor Theme::buttonHoverColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonHoverColor);
+}
+
+QColor Theme::buttonFocusColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ButtonFocusColor);
+}
+
+QColor Theme::viewTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewTextColor);
+}
+
+QColor Theme::viewBackgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewBackgroundColor);
+}
+
+QColor Theme::viewHoverColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewHoverColor);
+}
+
+QColor Theme::viewFocusColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
+}
+
+int Theme::defaultIconSize() const
+{
+    return d->defaultIconSize;
+}
+
+int Theme::smallIconSize() const
+{
+    return KIconLoader::SizeSmall;
+}
+
+int Theme::smallMediumIconSize() const
+{
+    return KIconLoader::SizeSmallMedium;
+}
+
+int Theme::mediumIconSize() const
+{
+    return KIconLoader::SizeMedium;
+}
+
+int Theme::largeIconSize() const
+{
+    return KIconLoader::SizeLarge;
+}
+
+int Theme::hugeIconSize() const
+{
+    return KIconLoader::SizeHuge;
+}
+
+int Theme::enormousIconSize() const
+{
+    return KIconLoader::SizeEnormous;
+}
+
+QSizeF Theme::mSize(const QFont &font) const
+{
+    return QFontMetrics(font).boundingRect("M").size();
+}
+
+int Theme::smallSpacing() const
+{
+    return d->smallSpacing;
+}
+
+int Theme::largeSpacing() const
+{
+    return d->largeSpacing;
+}
+
+
 
 }
 

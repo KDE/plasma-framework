@@ -77,6 +77,7 @@ public:
     bool useCache();
     void setThemeName(const QString &themeName, bool writeSettings);
     void processWallpaperSettings(KConfigBase *metadata);
+    void updateSpacing();
 
     const QString processStyleSheet(const QString &css);
     const QString svgStyleSheet();
@@ -94,6 +95,8 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void themeChanged();
+    void defaultFontChanged();
+    void smallestFontChanged();
 
 public:
     static const char *defaultTheme;
@@ -134,6 +137,10 @@ public:
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
 
+    int defaultIconSize;
+    int smallSpacing;
+    int largeSpacing;
+
     bool locolor : 1;
     bool compositingActive : 1;
     bool blurActive : 1;
@@ -146,3 +153,5 @@ public:
 }
 
 #endif
+
+extern const QString s;

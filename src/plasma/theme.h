@@ -21,6 +21,8 @@
 #ifndef PLASMA_THEME_H
 #define PLASMA_THEME_H
 
+#include <QApplication>
+#include <QFont>
 #include <QtCore/QObject>
 
 #include <kplugininfo.h>
@@ -51,6 +53,46 @@ class SvgPrivate;
 class PLASMA_EXPORT Theme : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString themeName READ themeName NOTIFY themeChanged)
+    Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
+    Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
+
+    //fonts
+    Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
+    Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
+
+    // stylesheet
+    Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
+
+    // colors
+    Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonHoverColor READ buttonHoverColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor buttonFocusColor READ buttonFocusColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewTextColor READ viewTextColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
+
+    // icon sizes
+    Q_PROPERTY(int smallIconSize READ smallIconSize CONSTANT)
+    Q_PROPERTY(int smallMediumIconSize READ smallMediumIconSize CONSTANT)
+    Q_PROPERTY(int mediumIconSize READ mediumIconSize CONSTANT)
+    Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
+    Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
+    Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
+    Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
+
+    // layout hints
+    Q_PROPERTY(int smallSpacing READ smallSpacing CONSTANT)
+    Q_PROPERTY(int largeSpacing READ largeSpacing CONSTANT)
 
     public:
         enum ColorRole {
@@ -113,6 +155,8 @@ class PLASMA_EXPORT Theme : public QObject
          * @return the full path to the wallpaper image
          */
         QString wallpaperPath(const QSize &size = QSize()) const;
+
+        Q_INVOKABLE QString wallpaperPathForSize(int width=-1, int height=-1) const;
 
         /**
          * Checks if this theme has an image named in a certain way
@@ -299,6 +343,37 @@ class PLASMA_EXPORT Theme : public QObject
          */
         KPluginInfo pluginInfo() const;
 
+        QFont defaultFont() const;
+        QFont smallestFont() const;
+
+        QColor textColor() const;
+        QColor highlightColor() const;
+        QColor backgroundColor() const;
+        QColor buttonTextColor() const;
+        QColor buttonBackgroundColor() const;
+        QColor linkColor() const;
+        QColor visitedLinkColor() const;
+        QColor buttonHoverColor() const;
+        QColor buttonFocusColor() const;
+        QColor viewTextColor() const;
+        QColor viewBackgroundColor() const;
+        QColor viewHoverColor() const;
+        QColor viewFocusColor() const;
+
+        int smallIconSize() const;
+        int smallMediumIconSize() const;
+        int mediumIconSize() const;
+        int largeIconSize() const;
+        int hugeIconSize() const;
+        int enormousIconSize() const;
+        int defaultIconSize() const;
+
+        int smallSpacing() const;
+        int largeSpacing() const;
+
+        Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
+
+
     Q_SIGNALS:
         /**
          * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should
@@ -309,6 +384,11 @@ class PLASMA_EXPORT Theme : public QObject
          * Svg::repaintNeeded() at an appropriate time.
          */
         void themeChanged();
+
+        void defaultFontChanged();
+        void smallestFontChanged();
+
+        void defaultIconSizeChanged();
 
     private:
         friend class SvgPrivate;

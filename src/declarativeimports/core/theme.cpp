@@ -22,7 +22,6 @@
 #include <QQmlPropertyMap>
 
 #include <QFontMetrics>
-#include <QFontDatabase>
 #include <kiconloader.h>
 #include <QApplication>
 
@@ -34,8 +33,6 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
     : Plasma::Theme(parent),
       m_engine(parent)
 {
-    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-
     m_iconSizes = new QQmlPropertyMap(this);
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
@@ -45,195 +42,21 @@ ThemeProxy::ThemeProxy(QQmlEngine *parent)
 
     connect(this, &Plasma::Theme::themeChanged, this, &ThemeProxy::themeChanged);
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
-
-    updateSpacing();
-    installEventFilter(qApp);
 }
 
 ThemeProxy::~ThemeProxy()
 {
 }
 
-bool ThemeProxy::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == QCoreApplication::instance()) {
-        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            defaultFontChanged();
-            smallestFontChanged();
-        }
-    }
-    return QObject::eventFilter(watched, event);
-}
-
-void ThemeProxy::updateSpacing()
-{
-    const int _s = mSize().height();
-    m_smallSpacing = qMax(2, (int)(_s / 8));
-    m_largeSpacing = _s;
-}
-
-QString ThemeProxy::themeName() const
-{
-    return Plasma::Theme::themeName();
-}
-
-QFont ThemeProxy::defaultFont() const
-{
-    return QApplication::font();
-}
-
-QFont ThemeProxy::smallestFont() const
-{
-    return QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
-}
-
-QSizeF ThemeProxy::mSize(const QFont &font) const
-{
-    return QFontMetrics(font).boundingRect("M").size();
-}
-
-int ThemeProxy::smallSpacing() const
-{
-    return m_smallSpacing;
-}
-
-int ThemeProxy::largeSpacing() const
-{
-    return m_largeSpacing;
-}
-
-bool ThemeProxy::useGlobalSettings() const
-{
-    return Plasma::Theme::useGlobalSettings();
-}
-
-QString ThemeProxy::wallpaperPath() const
-{
-    return Plasma::Theme::wallpaperPath();
-}
-
-QString ThemeProxy::wallpaperPathForSize(int width, int height) const
-{
-    return Plasma::Theme::wallpaperPath(QSize(width, height));
-}
-
-QColor ThemeProxy::textColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::TextColor);
-}
-
-QColor ThemeProxy::highlightColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::HighlightColor);
-}
-
-QColor ThemeProxy::backgroundColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::BackgroundColor);
-}
-
-QColor ThemeProxy::buttonTextColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ButtonTextColor);
-}
-
-QColor ThemeProxy::buttonBackgroundColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ButtonBackgroundColor);
-}
-
-QColor ThemeProxy::linkColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::LinkColor);
-}
-
-QColor ThemeProxy::visitedLinkColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::VisitedLinkColor);
-}
-
-QColor ThemeProxy::buttonHoverColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ButtonHoverColor);
-}
-
-QColor ThemeProxy::buttonFocusColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ButtonFocusColor);
-}
-
-QColor ThemeProxy::viewTextColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ViewTextColor);
-}
-
-QColor ThemeProxy::viewBackgroundColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ViewBackgroundColor);
-}
-
-QColor ThemeProxy::viewHoverColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ViewHoverColor);
-}
-
-QColor ThemeProxy::viewFocusColor() const
-{
-    return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
-}
-
-QString ThemeProxy::styleSheet() const
-{
-    return Plasma::Theme::styleSheet(QString());
-}
-
-int ThemeProxy::smallIconSize() const
-{
-    return KIconLoader::SizeSmall;
-}
-
-int ThemeProxy::smallMediumIconSize() const
-{
-    return KIconLoader::SizeSmallMedium;
-}
-
-int ThemeProxy::mediumIconSize() const
-{
-    return KIconLoader::SizeMedium;
-}
-
-int ThemeProxy::largeIconSize() const
-{
-    return KIconLoader::SizeLarge;
-}
-
-int ThemeProxy::hugeIconSize() const
-{
-    return KIconLoader::SizeHuge;
-}
-
-int ThemeProxy::enormousIconSize() const
-{
-    return KIconLoader::SizeEnormous;
-}
-
 void ThemeProxy::iconLoaderSettingsChanged()
 {
-    m_defaultIconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
-
     emit defaultIconSizeChanged();
     emit iconSizesChanged();
-}
-
-int ThemeProxy::defaultIconSize() const
-{
-    return m_defaultIconSize;
 }
 
 QQmlPropertyMap *ThemeProxy::iconSizes() const
@@ -242,4 +65,3 @@ QQmlPropertyMap *ThemeProxy::iconSizes() const
 }
 
 #include "moc_theme.cpp"
-
