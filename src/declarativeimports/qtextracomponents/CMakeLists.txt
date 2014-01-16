@@ -9,7 +9,8 @@ set(qtextracomponents_SRCS
     qiconitem.cpp
     mouseeventlistener.cpp
     columnproxymodel.cpp
-    )
+    clipboard.cpp
+)
 
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 
