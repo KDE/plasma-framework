@@ -34,7 +34,7 @@
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.qtextracomponents"));
-    qDebug() << "=========> import loading: " << uri;
+
     qmlRegisterType<QPixmapItem>(uri, 2, 0, "QPixmapItem");
     qmlRegisterType<QImageItem>(uri, 2, 0, "QImageItem");
     qmlRegisterType<QIconItem>(uri, 2, 0, "QIconItem");

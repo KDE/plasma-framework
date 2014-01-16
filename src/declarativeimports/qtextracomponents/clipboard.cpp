@@ -103,7 +103,6 @@ void Clipboard::setContent(const QVariant &content)
             }
             break;
     }
-    qDebug() << "seeeeeeeeet" << mimeData->formats();
     m_clipboard->setMimeData(mimeData, m_mode);
 }
 
