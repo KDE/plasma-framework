@@ -50,6 +50,7 @@ class Clipboard : public QObject
         QClipboard::Mode mode() const;
         void setMode(QClipboard::Mode mode);
 
+        Q_SCRIPTABLE QVariant contentFormat(const QString &format) const;
         QVariant content() const;
         void setContent(const QVariant &content);
 

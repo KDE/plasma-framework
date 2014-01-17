@@ -54,11 +54,18 @@ QClipboard::Mode Clipboard::mode() const
     return m_mode;
 }
 
-QVariant Clipboard::content() const
+QVariant Clipboard::contentFormat(const QString &format) const
 {
     const QMimeData* data = m_clipboard->mimeData(m_mode);
 
-    return data->data(data->formats().first());
+    QByteArray variant = data->data(format.isEmpty() ? data->formats().first(): format);
+
+    return variant;
+}
+
+QVariant Clipboard::content() const
+{
+    return contentFormat(m_clipboard->mimeData(m_mode)->formats().first());
 }
 
 void Clipboard::setContent(const QVariant &content)
