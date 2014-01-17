@@ -100,12 +100,7 @@ set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma wi
 #TYPE REQUIRED
 #)
 
-# TODO remove it in future
-find_package(LibAttica NO_MODULE)
-set_package_properties(LibAttica PROPERTIES DESCRIPTION "Support for Get Hot New Stuff related stuff"
-                       URL "https://projects.kde.org/attica"
-                       TYPE REQUIRED
-                      )
+
 
 find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
