@@ -57,10 +57,20 @@ QClipboard::Mode Clipboard::mode() const
 QVariant Clipboard::contentFormat(const QString &format) const
 {
     const QMimeData* data = m_clipboard->mimeData(m_mode);
+    QVariant ret;
+    if(format == QStringLiteral("text/uri-list")) {
+        QVariantList retList;
+        foreach(const QUrl& url, data->urls())
+            retList += url;
+        ret = retList;
+    } else if(format.startsWith(QStringLiteral("text/"))) {
+        ret = data->text();
+    } else if(format.startsWith(QStringLiteral("image/"))) {
+        ret = data->imageData();
+    } else
+        ret = data->data(format.isEmpty() ? data->formats().first(): format);
 
-    QByteArray variant = data->data(format.isEmpty() ? data->formats().first(): format);
-
-    return variant;
+    return ret;
 }
 
 QVariant Clipboard::content() const
@@ -104,9 +114,8 @@ void Clipboard::setContent(const QVariant &content)
             if (content.canConvert(QVariant::String)) {
                 mimeData->setText(content.toString());
             } else {
-                delete mimeData;
-                mimeData = nullptr;
-                qWarning() << "Couldn't manage to set the content to the clipboard";
+                mimeData->setData("application/octet-stream", content.toByteArray());
+                qWarning() << "Couldn't figure out the content type, storing as application/octet-stream";
             }
             break;
     }
