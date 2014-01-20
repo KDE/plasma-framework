@@ -24,6 +24,8 @@
 #include <QFontMetrics>
 #include <kiconloader.h>
 #include <QApplication>
+#include <QScreen>
+#include <QQuickWindow>
 
 #include <QDebug>
 
@@ -63,5 +65,27 @@ QQmlPropertyMap *ThemeProxy::iconSizes() const
 {
     return m_iconSizes;
 }
+
+int ThemeProxy::dpi(QQuickItem* item)
+{
+    int  _dpi = 1337;
+    qDebug() << " ----- dpi() ---- ";
+    if (item) {
+        QScreen* screen = item->window()->screen();
+        if (screen) {
+            qDebug() << "screen geo: " << screen->availableGeometry();
+            _dpi = screen->physicalDotsPerInch();
+            qDebug() << "   refreshRate     : " << screen->refreshRate();
+            qDebug() << "   devicePixelRatio: " << screen->devicePixelRatio();
+            qDebug() << "   depth           : " << screen->depth();
+            qDebug() << "   dpi X:            " << screen->physicalDotsPerInchX();
+            qDebug() << "   dpi Y:            " << screen->physicalDotsPerInchY();
+            qDebug() << "   ->> dpi:          " << _dpi;
+        }
+    }
+    return _dpi;
+}
+
+
 
 #include "moc_theme.cpp"

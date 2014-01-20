@@ -26,6 +26,7 @@
 #include <QColor>
 #include <QJSValue>
 #include <QQmlEngine>
+#include <QQuickItem>
 
 #include <Plasma/Theme>
 
@@ -56,6 +57,8 @@ public:
     ~ThemeProxy();
 
     QQmlPropertyMap *iconSizes() const;
+
+    Q_INVOKABLE int dpi(QQuickItem *item);
 
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
