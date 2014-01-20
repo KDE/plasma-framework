@@ -87,7 +87,8 @@ public:
         Dock = NET::Dock,
         Dialog = NET::Dialog,
         PopupMenu = NET::PopupMenu,
-        Tooltip = NET::Tooltip
+        Tooltip = NET::Tooltip,
+        Notification = NET::Notification
     };
     Q_ENUMS(WindowType)
 
