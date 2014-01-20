@@ -57,7 +57,7 @@ set_package_properties(KActivities PROPERTIES DESCRIPTION "The KActivities libra
 
 #optional features
 find_package(X11 MODULE)
-find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE)
+find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
                        URL "http://xcb.freedesktop.org"
                        TYPE REQUIRED

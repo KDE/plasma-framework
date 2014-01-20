@@ -79,6 +79,16 @@ class DialogProxy : public QQuickWindow
      **/
     Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
 
+    /**
+     * Whether the dialog is output only. Default value is @c false. If it is @c true
+     * the dialog does not accept input and all pointer events are not accepted, thus the dialog
+     * is click through.
+     *
+     * This property is currently only supported on the X11 platform. On any other platform the
+     * property has no effect.
+     **/
+    Q_PROPERTY(bool outputOnly READ isOutputOnly WRITE setOutputOnly NOTIFY outputOnlyChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -123,12 +133,18 @@ public:
     bool hideOnWindowDeactivate() const;
     void setHideOnWindowDeactivate(bool hide);
 
+    void setOutputOnly(bool outputOnly);
+    bool isOutputOnly() const;
+
+    void updateInputShape();
+
 Q_SIGNALS:
     void mainItemChanged();
     void locationChanged();
     void visualParentChanged();
     void typeChanged();
     void hideOnWindowDeactivateChanged();
+    void outputOnlyChanged();
 
 public Q_SLOTS:
     void syncMainItemToSize();
@@ -158,6 +174,7 @@ private:
     QRect m_cachedGeometry;
     WindowType m_type;
     bool m_hideOnWindowDeactivate;
+    bool m_outputOnly;
 };
 
 #endif

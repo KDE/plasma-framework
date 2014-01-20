@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2011 Marco Martin <mart@kde.org>                            *
  *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
+ *   Copyright 2014 Martin Gräßlin <mgraesslin@kde.org>                    *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,11 +39,17 @@
 
 #include <QDebug>
 
+#if HAVE_XCB_SHAPE
+#include <QX11Info>
+#include <xcb/shape.h>
+#endif
+
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::BottomEdge),
       m_type(Normal),
-      m_hideOnWindowDeactivate(false)
+      m_hideOnWindowDeactivate(false),
+      m_outputOnly(false)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -58,6 +65,8 @@ DialogProxy::DialogProxy(QQuickItem *parent)
 
     connect(this, &QWindow::xChanged, [=](){m_syncTimer->start(150);});
     connect(this, &QWindow::yChanged, [=](){m_syncTimer->start(150);});
+    connect(this, &QWindow::visibleChanged, this, &DialogProxy::updateInputShape);
+    connect(this, &DialogProxy::outputOnlyChanged, this, &DialogProxy::updateInputShape);
 //    connect(this, &QWindow::visibleChanged, this, &DialogProxy::onVisibleChanged);
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
@@ -483,6 +492,59 @@ void DialogProxy::setHideOnWindowDeactivate(bool hide)
     }
     m_hideOnWindowDeactivate = hide;
     emit hideOnWindowDeactivateChanged();
+}
+
+bool DialogProxy::isOutputOnly() const
+{
+    return m_outputOnly;
+}
+
+void DialogProxy::setOutputOnly(bool outputOnly)
+{
+    if (m_outputOnly == outputOnly) {
+        return;
+    }
+    m_outputOnly = outputOnly;
+    emit outputOnlyChanged();
+}
+
+void DialogProxy::updateInputShape()
+{
+    if (!isVisible()) {
+        return;
+    }
+#if HAVE_XCB_SHAPE
+    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+        xcb_connection_t *c = QX11Info::connection();
+        static bool s_shapeExtensionChecked = false;
+        static bool s_shapeAvailable = false;
+        if (!s_shapeExtensionChecked) {
+            xcb_prefetch_extension_data(c, &xcb_shape_id);
+            const xcb_query_extension_reply_t *extension = xcb_get_extension_data(c, &xcb_shape_id);
+            if (extension->present) {
+                // query version
+                auto cookie = xcb_shape_query_version(c);
+                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, Q_NULLPTR));
+                if (!version.isNull()) {
+                    s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
+                }
+            }
+            s_shapeExtensionChecked = true;
+        }
+        if (!s_shapeAvailable) {
+            return;
+        }
+        if (m_outputOnly) {
+            // set input shape, so that it doesn't accept any input events
+            xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
+                                 XCB_CLIP_ORDERING_UNSORTED, winId(), 0, 0, 0, NULL);
+        } else {
+            // delete the shape
+            xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT,
+                           winId(), 0, 0, XCB_PIXMAP_NONE);
+        }
+    }
+#endif
 }
 
 #include "dialog.moc"

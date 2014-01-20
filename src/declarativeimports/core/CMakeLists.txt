@@ -8,6 +8,10 @@ if(XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
         ${XCB_COMPOSITE_INCLUDE_DIR}
     )
 endif()
+if(XCB_XCB_FOUND AND XCB_SHAPE_FOUND)
+    add_definitions(-DHAVE_XCB_SHAPE=1)
+    include_directories(${XCB_SHAPE_INCLUDE_DIR})
+endif()
 
 set(corebindings_SRCS
     corebindingsplugin.cpp
@@ -48,6 +52,9 @@ if(X11_FOUND)
         ${XCB_DAMAGE_LIBRARY}
         ${XCB_COMPOSITE_LIBRARY}
         )
+  endif()
+  if(XCB_SHAPE_FOUND)
+    target_link_libraries(corebindingsplugin ${XCB_SHAPE_LIBRARY})
   endif()
 
   if(OPENGL_FOUND)
