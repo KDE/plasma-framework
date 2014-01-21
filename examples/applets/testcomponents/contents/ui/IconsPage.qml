@@ -41,10 +41,10 @@ PlasmaComponents.Page {
             text: "Icons"
         }
         PlasmaComponents.Label {
-            text: "iconSizes.small  : " + theme.iconSizes.small +
-                    ", iconSizes.desktop: " + theme.iconSizes.desktop +
-                    ",<br />iconSizes.toolbar: " + theme.iconSizes.toolbar +
-                    ", iconSizes.dialog : " + theme.iconSizes.dialog
+            text: "iconSizes.small  : " + units.iconSizes.small +
+                    ", iconSizes.desktop: " + units.iconSizes.desktop +
+                    ",<br />iconSizes.toolbar: " + units.iconSizes.toolbar +
+                    ", iconSizes.dialog : " + units.iconSizes.dialog
 
         }
         Flow {

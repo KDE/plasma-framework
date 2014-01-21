@@ -61,7 +61,7 @@ PlasmaComponents.Page {
         }
 
         PlasmaComponents.Button {
-            height: theme.iconSizes.desktop
+            height: units.iconSizes.desktop
             text: "Busy"
             checked: plasmoid.busy
             onClicked: {
@@ -71,7 +71,7 @@ PlasmaComponents.Page {
 
         PlasmaComponents.Button {
             id: ctxButton
-            height: theme.iconSizes.desktop
+            height: units.iconSizes.desktop
             text: "Context Menu"
             Loader {
                 id: menuLoader

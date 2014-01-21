@@ -73,7 +73,7 @@ ShaderExample {
     }
     PlasmaComponents.Button {
         anchors { right: parent.right; bottom: parent.bottom; }
-//         height: theme.iconSizes.toolbar
+//         height: units.iconSizes.toolbar
         text: "Busy"
         checked: plasmoid.busy
         onClicked: {

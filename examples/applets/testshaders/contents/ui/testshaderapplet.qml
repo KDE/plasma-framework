@@ -30,8 +30,8 @@ Item {
 
     property int minimumWidth: units.gridUnit * 20
     property int minimumHeight: units.gridUnit * 30
-    property int _s: theme.iconSizes.small
-    property int _h: theme.iconSizes.desktop
+    property int _s: units.iconSizes.small
+    property int _h: units.iconSizes.desktop
     property int _m: 12
 
     Item {
@@ -46,7 +46,7 @@ Item {
                 right: parent.right
                 top: parent.top
             }
-            height: theme.iconSizes.toolbar * 1.5
+            height: units.iconSizes.toolbar * 1.5
 
             PlasmaComponents.TabButton { tab: colorShower; text: tab.pageName; }
             PlasmaComponents.TabButton { tab: wobbleExample; text: tab.pageName; }

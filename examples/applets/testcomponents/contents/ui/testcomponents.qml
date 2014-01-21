@@ -31,8 +31,8 @@ Item {
     property int minimumWidth: units.gridUnit * 20
     property int minimumHeight: units.gridUnit * 30
 
-    property int _s: theme.iconSizes.small
-    property int _h: theme.iconSizes.desktop
+    property int _s: units.iconSizes.small
+    property int _h: units.iconSizes.desktop
 
     PlasmaCore.DataSource {
         id: dataSource
