@@ -579,6 +579,7 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
             colorsChanged();
         }
         if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            updateSpacing();
             defaultFontChanged();
             smallestFontChanged();
         }
@@ -589,8 +590,8 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
 void ThemePrivate::updateSpacing()
 {
     const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
-    smallSpacing = qMax(2, (int)(_s / 8));
-    largeSpacing = _s;
+    smallSpacing = qMax(2, (int)(_s / 8)); // 1/8 of msize.height, at least 2
+    largeSpacing = _s; // msize.height
 }
 
 }
