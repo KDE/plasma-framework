@@ -29,7 +29,7 @@ Item {
 
 
     property int cheight: 48
-    property int cwidth: themePage.width / 1.5
+    property int cwidth: themePage.width / 1.2
 
     id: themePage
     anchors {
@@ -38,7 +38,7 @@ Item {
 
     Column {
         //anchors.fill: parent
-        spacing: theme.smallSpacing
+        //spacing: theme.smallSpacing/2
 
         PlasmaExtras.Title {
             width: parent.width
@@ -49,11 +49,12 @@ Item {
         Row {
             PlasmaComponents.Button {
                 text: "DPI"
+                width: cwidth/2
                 onClicked: {
                     print("DPI Button onClicked");
                     print(units.gridUnit);
                     var d = theme.dpi(dpilabel);
-                    dpilabel.text = "DPI: " + d
+                    dpilabel.text = "\t" + d
                 }
             }
             PlasmaComponents.Label {
@@ -98,6 +99,30 @@ Item {
 
         Row {
             PlasmaComponents.Label {
+                text: "theme.largeSpacing: "
+                width: cwidth
+            }
+            PlasmaComponents.Label {
+                width: cheight
+                height: cheight / 2
+                text: theme.largeSpacing
+            }
+        }
+        Row {
+            PlasmaComponents.Label {
+                text: "theme.smallSpacing: "
+                width: cwidth
+            }
+            PlasmaComponents.Label {
+                width: cheight
+                height: cheight / 2
+                text: theme.smallSpacing
+            }
+        }
+
+/*
+        Row {
+            PlasmaComponents.Label {
                 text: "highlightColor: "
                 width: cwidth
             }
@@ -106,6 +131,6 @@ Item {
                 height: cheight / 2
                 color: theme.highlightColor
             }
-        }
+        }*/
     }
 }
