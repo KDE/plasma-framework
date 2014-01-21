@@ -54,7 +54,7 @@ Row {
         PlasmaCore.IconItem {
             id: tooltipIcon
             x: _s
-            width: toolTip != undefined && toolTip.icon != null ? theme.iconSizes.desktop : 0
+            width: toolTip != undefined && toolTip.icon != null ? units.iconSizes.desktop : 0
             height: width
             source: toolTip != undefined && toolTip.icon != null ? toolTip.icon : ""
         }
