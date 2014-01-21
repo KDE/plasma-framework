@@ -51,6 +51,7 @@ Item {
                 text: "DPI"
                 onClicked: {
                     print("DPI Button onClicked");
+                    print(units.gridUnit);
                     var d = theme.dpi(dpilabel);
                     dpilabel.text = "DPI: " + d
                 }

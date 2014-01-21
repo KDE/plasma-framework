@@ -41,6 +41,10 @@ Units::~Units()
 
 qreal Units::gridUnit() const
 {
+    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
+    qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
+    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
+    qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
     return m_gridUnit;
 }
 
@@ -65,6 +69,9 @@ qreal Units::gu(qreal value) const
 void Units::themeChanged()
 {
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
+    qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
+    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
+    qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
     if (gridUnit != m_gridUnit) {
         m_gridUnit = gridUnit;
         emit gridUnitChanged();
