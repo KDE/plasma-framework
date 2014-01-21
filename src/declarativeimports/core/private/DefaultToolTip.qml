@@ -30,37 +30,40 @@ Row {
 
     property Item toolTip
 
-    property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 25
-    property int _s: theme.iconSizes.small / 2
+    property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 40
+    property int _s: theme.largeSpacing / 2
 
     width: childrenRect.width + _s
-    height: childrenRect.height
-    spacing: _s
+    height: childrenRect.height + _s * 2
+    spacing: _s*2
 
     Item {
         id: imageContainer
-        visible: toolTip != null && (toolTip.image != undefined || toolTip.icon != undefined)
+        visible: toolTip != null && (toolTip.image != null || toolTip.icon != null)
         width: Math.max(tooltipImage.width, tooltipIcon.width)
         height: Math.max(tooltipImage.height, tooltipIcon.height)
+        x: _s
+        y: _s
 
         Image {
             id: tooltipImage
             source: toolTip ? toolTip.image : ""
+            x: _s
         }
 
         PlasmaCore.IconItem {
             id: tooltipIcon
+            x: _s
             width: toolTip != undefined && toolTip.icon != null ? theme.iconSizes.desktop : 0
             height: width
             source: toolTip != undefined && toolTip.icon != null ? toolTip.icon : ""
-            anchors {
-                leftMargin: width != 0 ? _s : 0
-            }
         }
     }
 
     Column {
         id: mainColumn
+        x: _s
+        y: _s
 
         //This instance is purely for metrics
         PlasmaExtras.Heading {
