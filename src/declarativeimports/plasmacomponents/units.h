@@ -37,7 +37,7 @@ class Units : public QObject
 
     /**
      * icon sizes depending from the context: use those if possible
-     * Access with theme.iconSizes.desktop theme.iconSizes.small etc.
+     * Access with units.iconSizes.desktop units.iconSizes.small etc.
      * available keys are:
      * * desktop
      * * toolbar
