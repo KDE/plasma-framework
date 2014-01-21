@@ -91,8 +91,8 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
     // layout hints
-    Q_PROPERTY(int smallSpacing READ smallSpacing CONSTANT)
-    Q_PROPERTY(int largeSpacing READ largeSpacing CONSTANT)
+    Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY defaultFontChanged)
+    Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY defaultFontChanged)
 
     public:
         enum ColorRole {
