@@ -25,11 +25,21 @@
 #include <QtGlobal>
 #include <cmath>
 
+#include <KIconLoader>
 
 Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1)
 {
+    m_iconSizes = new QQmlPropertyMap(this);
+    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
+    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
+    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
+    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
+
+    connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
+
     themeChanged();
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
@@ -39,12 +49,35 @@ Units::~Units()
 {
 }
 
+void Units::iconLoaderSettingsChanged()
+{
+    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
+    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
+    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
+
+    emit iconSizesChanged();
+}
+
+QQmlPropertyMap *Units::iconSizes() const
+{
+    return m_iconSizes;
+}
+
+
+qreal Units::dpiRatio() const
+{
+    const qreal ratio = (qreal)QApplication::desktop()->physicalDpiX() / (qreal)96;
+    return ratio;
+}
+
 qreal Units::gridUnit() const
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
     qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+    
+    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
 

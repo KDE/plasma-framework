@@ -11,7 +11,6 @@ set(plasmacomponents_SRCS
     qmenu.cpp
     qmenuitem.cpp
     units.cpp
-    #../core/declarativeitemcontainer.cpp
     )
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
@@ -22,6 +21,7 @@ target_link_libraries(plasmacomponentsplugin
         Qt5::Gui
         KF5::Declarative
         KF5::Plasma
+        KF5::IconThemes
         KF5::Service #for kplugininfo.h
 )
 

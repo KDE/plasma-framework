@@ -21,6 +21,7 @@
 #define UNITS_H
 
 #include <QObject>
+#include <QQmlPropertyMap>
 
 #include <Plasma/Theme>
 
@@ -34,11 +35,25 @@ class Units : public QObject
      */
     Q_PROPERTY(qreal gridUnit READ gridUnit NOTIFY gridUnitChanged())
 
+    /**
+     * icon sizes depending from the context: use those if possible
+     * Access with theme.iconSizes.desktop theme.iconSizes.small etc.
+     * available keys are:
+     * * desktop
+     * * toolbar
+     * * small
+     * * dialog
+     */
+    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
+
 public:
     Units(QObject *parent = 0);
     ~Units();
 
     qreal gridUnit() const;
+    qreal dpiRatio() const;
+
+    QQmlPropertyMap *iconSizes() const;
 
     /**
      * @returns the number of pixels value density independent pixels correspond to.
@@ -53,13 +68,17 @@ public:
 
 Q_SIGNALS:
     void gridUnitChanged();
+    void iconSizesChanged();
 
 private Q_SLOTS:
     void themeChanged();
+    void iconLoaderSettingsChanged();
 
 private:
     int m_gridUnit;
     Plasma::Theme m_theme;
+    qreal m_dpiRatio;
+    QQmlPropertyMap *m_iconSizes;
 };
 
 #endif //UNITS_H
