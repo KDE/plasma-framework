@@ -68,7 +68,7 @@ qreal Units::gu(qreal value) const
 
 void Units::themeChanged()
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
+    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").height();
     qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
     qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
