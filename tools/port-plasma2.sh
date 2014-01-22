@@ -31,6 +31,8 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/theme\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
    perl -p -i -e 's/theme\.defaultFont\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
    perl -p -i -e 's/\(theme\.defaultFont\)\(theme\.defaultFont\)/(theme.defaultFont)/g' $FS
+
+    perl -p -i -e 's/theme\.iconSizes/units.iconSizes/g' $FS
 #    perl -p -i -e 's/Plasma\.Types\./PlasmaCore.Types./g' $FS
 done
 
