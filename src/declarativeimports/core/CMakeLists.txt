@@ -27,6 +27,7 @@ set(corebindings_SRCS
     serviceoperationstatus.cpp
     dataenginebindings.cpp
     iconitem.cpp
+    units.cpp
     windowthumbnail.cpp
     )
 

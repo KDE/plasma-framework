@@ -10,7 +10,6 @@ set(plasmacomponents_SRCS
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
-    units.cpp
     )
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})

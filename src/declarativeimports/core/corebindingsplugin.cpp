@@ -43,6 +43,7 @@
 #include "serviceoperationstatus.h"
 
 #include "tooltip.h"
+#include "units.h"
 #include "windowthumbnail.h"
 
 // #include "dataenginebindings_p.h"
@@ -59,6 +60,10 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     Plasma::Theme *theme = new Plasma::Theme(engine);
     context->setContextProperty("theme", theme);
 
+    Units *units = new Units(context);
+    context->setContextProperty("units", units);
+
+
     if (!engine->rootContext()->contextObject()) {
         KDeclarative::KDeclarative kdeclarative;
         kdeclarative.setDeclarativeEngine(engine);
@@ -71,6 +76,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
 
     qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", "");
+    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", "");
 
     qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
     qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
@@ -105,7 +111,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::DataSource*>("DataSource");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
-
 }
 
 

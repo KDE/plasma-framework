@@ -33,10 +33,6 @@
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
-//#include "fullscreensheet.h"
-#include "units.h"
-
-//Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
 
 class BKSingleton
 {
@@ -83,10 +79,6 @@ void PlasmaComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *ur
 {
     QQmlExtensionPlugin::initializeEngine(engine, uri);
     EngineBookKeeping::self()->insertEngine(engine);
-
-    QQmlContext *context = engine->rootContext();
-    Units *units = new Units(context);
-    context->setContextProperty("units", units);
 }
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
@@ -107,7 +99,6 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", "");
     qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", "");
     qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", "");
-    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", "");
 }
 
 
