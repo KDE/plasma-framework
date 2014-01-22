@@ -15,7 +15,6 @@ endif()
 
 set(corebindings_SRCS
     corebindingsplugin.cpp
-    theme.cpp
     datamodel.cpp
     datasource.cpp
     dialogshadows.cpp
