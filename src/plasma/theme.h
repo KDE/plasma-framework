@@ -81,13 +81,6 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
 
-    // icon sizes
-    Q_PROPERTY(int smallIconSize READ smallIconSize CONSTANT)
-    Q_PROPERTY(int smallMediumIconSize READ smallMediumIconSize CONSTANT)
-    Q_PROPERTY(int mediumIconSize READ mediumIconSize CONSTANT)
-    Q_PROPERTY(int largeIconSize READ largeIconSize CONSTANT)
-    Q_PROPERTY(int hugeIconSize READ hugeIconSize CONSTANT)
-    Q_PROPERTY(int enormousIconSize READ enormousIconSize CONSTANT)
     Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
     // layout hints
@@ -360,19 +353,12 @@ class PLASMA_EXPORT Theme : public QObject
         QColor viewHoverColor() const;
         QColor viewFocusColor() const;
 
-        int smallIconSize() const;
-        int smallMediumIconSize() const;
-        int mediumIconSize() const;
-        int largeIconSize() const;
-        int hugeIconSize() const;
-        int enormousIconSize() const;
         int defaultIconSize() const;
 
         int smallSpacing() const;
         int largeSpacing() const;
 
         Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
-
 
     Q_SIGNALS:
         /**
