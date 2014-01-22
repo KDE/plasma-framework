@@ -46,12 +46,15 @@ class Units : public QObject
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
+    Q_PROPERTY(qreal dpiScale READ dpiScale WRITE setDpiScale NOTIFY dpiScaleChanged)
 public:
     Units(QObject *parent = 0);
     ~Units();
 
     qreal gridUnit() const;
-    qreal dpiRatio() const;
+
+    void setDpiScale(const qreal scale);
+    qreal dpiScale() const;
 
     QQmlPropertyMap *iconSizes() const;
 
@@ -67,6 +70,7 @@ public:
 
 
 Q_SIGNALS:
+    void dpiScaleChanged();
     void gridUnitChanged();
     void iconSizesChanged();
 
@@ -77,7 +81,8 @@ private Q_SLOTS:
 private:
     int m_gridUnit;
     Plasma::Theme m_theme;
-    qreal m_dpiRatio;
+    qreal m_dpiScale;
+    qreal m_dpi;
     QQmlPropertyMap *m_iconSizes;
 };
 

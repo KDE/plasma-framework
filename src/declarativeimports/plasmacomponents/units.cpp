@@ -31,6 +31,11 @@ Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1)
 {
+    //Usual "default" is 96 dpi
+    //that magic ratio follows the definition of "device independent pixel" by Microsoft
+    m_dpi = QApplication::desktop()->physicalDpiX();
+    m_dpiScale = (qreal)m_dpi / (qreal)96;
+
     m_iconSizes = new QQmlPropertyMap(this);
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
@@ -65,10 +70,19 @@ QQmlPropertyMap *Units::iconSizes() const
 }
 
 
-qreal Units::dpiRatio() const
+qreal Units::dpiScale() const
 {
-    const qreal ratio = (qreal)QApplication::desktop()->physicalDpiX() / (qreal)96;
-    return ratio;
+
+    return m_dpiScale;
+}
+
+void Units::setDpiScale(const qreal scale)
+{
+    if (m_dpiScale != scale) {
+        m_dpiScale = scale;
+        qDebug() << "Setting dpi scale to " << scale;
+        emit dpiScaleChanged();
+    }
 }
 
 qreal Units::gridUnit() const
@@ -76,21 +90,18 @@ qreal Units::gridUnit() const
     qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
     qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
-    
+    qDebug() << "m_dpi: " << m_dpi;
+    qDebug() << "m_dpiScale: " << m_dpiScale;
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
 
 qreal Units::dp(qreal value) const
 {
-    //Usual "default" is 96 dpi
-    //that magic ratio follows the definition of "device independent pixel" by Microsoft
-    const qreal ratio = (qreal)QApplication::desktop()->physicalDpiX() / (qreal)96;
-
     if (value <= 2.0) {
-        return qRound(value * floor(ratio));
+        return qRound(value * floor(m_dpiScale));
     } else {
-        return qRound(value * ratio);
+        return qRound(value * m_dpiScale);
     }
 }
 
