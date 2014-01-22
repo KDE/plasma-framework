@@ -40,11 +40,7 @@ Units::Units (QObject *parent)
     m_dpiScale = (qreal)m_dpi / (qreal)96;
 
     m_iconSizes = new QQmlPropertyMap(this);
-    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
-    m_iconSizes->insert("panel", QVariant(KIconLoader::global()->currentSize(KIconLoader::Panel)));
-    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
-    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
-    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
+    iconLoaderSettingsChanged();
 
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
@@ -63,6 +59,12 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
+
+    m_iconSizes->insert("smallMedium", KIconLoader::SizeSmallMedium);
+    m_iconSizes->insert("medium", KIconLoader::SizeMedium);
+    m_iconSizes->insert("large", KIconLoader::SizeLarge);
+    m_iconSizes->insert("huge", KIconLoader::SizeHuge);
+    m_iconSizes->insert("enormous", KIconLoader::SizeEnormous);
 
     emit iconSizesChanged();
 }

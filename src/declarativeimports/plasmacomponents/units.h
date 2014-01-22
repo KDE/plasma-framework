@@ -38,12 +38,24 @@ class Units : public QObject
     Q_PROPERTY(qreal gridUnit READ gridUnit NOTIFY gridUnitChanged())
 
     /**
-     * icon sizes depending from the context: use those if possible
+     * units.iconSizes provides access to platform-dependent icon sizing
+     *
+     * The icon sizes provided are normalized for different DPI, so icons
+     * will scale depending on the DPI.
+     *
+     * Icon sizes from KIconLoader:
+     * * small
+     * * smallMedium
+     * * medium
+     * * large
+     * * huge
+     * * enormous
+     *
+     * Icon sizes depending on the context: use those if possible
      * Access with units.iconSizes.desktop units.iconSizes.small etc.
      * available keys are:
      * * desktop
      * * toolbar
-     * * small
      * * dialog
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
