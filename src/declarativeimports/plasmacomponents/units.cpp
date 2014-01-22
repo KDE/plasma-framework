@@ -23,6 +23,9 @@
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QtGlobal>
+#include <QQuickItem>
+#include <QQuickWindow>
+#include <QScreen>
 #include <cmath>
 
 #include <KIconLoader>
@@ -113,14 +116,47 @@ qreal Units::gu(qreal value) const
 void Units::themeChanged()
 {
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").height();
-    qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
-    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
-    qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
     if (gridUnit != m_gridUnit) {
         m_gridUnit = gridUnit;
         emit gridUnitChanged();
     }
 }
+
+qreal Units::dpi(QQuickItem* item)
+{
+    int  _dpi = 96;
+    if (item) {
+        QScreen* screen = item->window()->screen();
+        if (screen) {
+            _dpi = screen->physicalDotsPerInch();
+        }
+    }
+    return _dpi;
+}
+
+void Units::printScreenInfo(QQuickItem* item)
+{
+    int  _dpi = dpi(item);
+    qDebug() << " ----- printScreenInfo() ---- ";
+    if (item) {
+        QScreen* screen = item->window()->screen();
+        if (screen) {
+            qDebug() << "screen geo: " << screen->availableGeometry();
+            _dpi = screen->physicalDotsPerInch();
+            qDebug() << "   refreshRate     : " << screen->refreshRate();
+            qDebug() << "   devicePixelRatio: " << screen->devicePixelRatio();
+            qDebug() << "   depth           : " << screen->depth();
+            qDebug() << "   dpi X:            " << screen->physicalDotsPerInchX();
+            qDebug() << "   dpi Y:            " << screen->physicalDotsPerInchY();
+            qDebug() << "   ->> dpi:          " << _dpi;
+        }
+    }
+    qDebug() << "FontMetrics: " << QApplication::font().pointSize() << QFontMetrics(QApplication::font()).boundingRect("M");
+    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
+    qDebug() << " gridUnit: " << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+}
+
+
 
 #include "units.moc"
 

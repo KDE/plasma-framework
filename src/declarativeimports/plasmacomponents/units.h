@@ -25,6 +25,8 @@
 
 #include <Plasma/Theme>
 
+class QQuickItem;
+
 class Units : public QObject
 {
     Q_OBJECT
@@ -68,6 +70,12 @@ public:
      */
     Q_INVOKABLE qreal gu(qreal value) const;
 
+    /**
+     * @returns the dpi value for the item's screen
+     */
+    Q_INVOKABLE qreal dpi(QQuickItem *item);
+
+    Q_INVOKABLE void printScreenInfo(QQuickItem *item);
 
 Q_SIGNALS:
     void dpiScaleChanged();
