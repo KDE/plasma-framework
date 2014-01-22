@@ -100,7 +100,7 @@ Item {
     /**
      * Smallest height this button can be to show all the contents
      */
-    property real minimumHeight: Math.max(theme.smallIconSize, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+    property real minimumHeight: Math.max(units.iconSizes.small, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
     /**
      * This signal is emitted when the button is clicked.

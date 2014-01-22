@@ -155,8 +155,8 @@ PlasmaComponents.Dialog {
 
         PlasmaCore.IconItem {
             id: titleAreaIcon
-            width: theme.iconSizeSmall
-            height: theme.iconSizeSmall
+            width: units.iconSizes.small
+            height: units.iconSizes.small
             source: titleIcon
             anchors.left: parent.left
             anchors.rightMargin: 4

@@ -177,7 +177,7 @@ FocusScope {
     Row {
         id: buttonsLayout
         visible: tabBarLayout.width > root.width - backgroundFrame.margins.left - backgroundFrame.margins.right
-        height: Math.min(parent.height, theme.mediumIconSize)
+        height: Math.min(parent.height, units.iconSizes.medium)
 
         anchors {
             right: parent.right

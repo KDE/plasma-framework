@@ -152,7 +152,7 @@ Item {
     PlasmaCore.IconItem {
         id: imageLoader
 
-        implicitWidth: internal.portrait ? Math.max(theme.smallIconSize, root.height - (label.text ? label.height : 0)) : Math.max(theme.smallIconSize, root.height)
+        implicitWidth: internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
         implicitHeight: implicitWidth
 
         anchors {

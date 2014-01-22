@@ -358,7 +358,7 @@ FocusScope {
     PlasmaCore.IconItem {
         id: clearButton
         source: "edit-clear-locationbar-rtl"
-        height: Math.max(textInput.height, theme.smallIconSize)
+        height: Math.max(textInput.height, units.iconSizes.small)
         width: height
         opacity: (textInput.text != "" && clearButtonShown && textField.enabled) ? 1 : 0
         Behavior on opacity {

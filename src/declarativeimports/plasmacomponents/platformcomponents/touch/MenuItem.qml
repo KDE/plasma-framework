@@ -52,7 +52,7 @@ Item {
     property alias font: textArea.font
 
     implicitWidth: textArea.paintedWidth + iconItem.width*2 + 6
-    implicitHeight: Math.max(theme.smallIconSize, textArea.paintedHeight + 6)
+    implicitHeight: Math.max(units.iconSizes.small, textArea.paintedHeight + 6)
     width: Math.max(implicitWidth, parent.width)
 
     property bool separator: false
