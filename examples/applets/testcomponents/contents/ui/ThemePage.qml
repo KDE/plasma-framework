@@ -39,7 +39,7 @@ PlasmaComponents.Page {
 
     Column {
         //anchors.fill: parent
-        spacing: _s / 4
+        //spacing: _s / 4
 
         PlasmaExtras.Title {
             width: parent.width

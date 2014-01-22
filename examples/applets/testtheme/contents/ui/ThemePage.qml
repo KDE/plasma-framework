@@ -52,8 +52,8 @@ Item {
                 width: cwidth/2
                 onClicked: {
                     print("DPI Button onClicked");
-                    print(units.gridUnit);
-                    var d = theme.dpi(dpilabel);
+                    units.printScreenInfo(dpilabel);
+                    var d = units.dpi(dpilabel);
                     dpilabel.text = "\t" + d
                 }
             }
