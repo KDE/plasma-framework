@@ -23,16 +23,23 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/org\.kde\.plasma\.core 0\.1/org.kde.plasma.core 2.0/g' $FS
     perl -p -i -e 's/org\.kde\.plasma\.components 0\.1/org.kde.plasma.components 2.0/g' $FS
     perl -p -i -e 's/org\.kde\.plasma\.extras 0\.1/org.kde.plasma.extras 2.0/g' $FS
-
     perl -p -i -e 's/org\.kde\.qtextracomponents 0\.1/org.kde.qtextracomponents 2.0/g' $FS
     perl -p -i -e 's/org\.kde\.runnermodel 0\.1/org.kde.runnermodel 2.0/g' $FS
-
     perl -p -i -e 's/org\.kde\.draganddrop 1\.0/org.kde.draganddrop 2.0/g' $FS
+
     perl -p -i -e 's/theme\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
-   perl -p -i -e 's/theme\.defaultFont\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
-   perl -p -i -e 's/\(theme\.defaultFont\)\(theme\.defaultFont\)/(theme.defaultFont)/g' $FS
+    perl -p -i -e 's/theme\.defaultFont\.mSize\./theme.mSize(theme.defaultFont)./g' $FS
+    perl -p -i -e 's/\(theme\.defaultFont\)\(theme\.defaultFont\)/(theme.defaultFont)/g' $FS
 
     perl -p -i -e 's/theme\.iconSizes/units.iconSizes/g' $FS
+    perl -p -i -e 's/theme\.iconSizeSmall/units.iconSizes.small/g' $FS
+    perl -p -i -e 's/theme\.smallIconSize/units.iconSizes.small/g' $FS
+    perl -p -i -e 's/theme\.smallMediumIconSize/units.iconSizes.smallMedium/g' $FS
+    perl -p -i -e 's/theme\.mediumIconSize/units.iconSizes.medium/g' $FS
+    perl -p -i -e 's/theme\.largeIconSize/units.iconSizes.large/g' $FS
+    perl -p -i -e 's/theme\.hugeIconSize/units.iconSizes.huge/g' $FS
+    perl -p -i -e 's/theme\.enormousIconSize/units.iconSizes.enormous/g' $FS
+
 #    perl -p -i -e 's/Plasma\.Types\./PlasmaCore.Types./g' $FS
 done
 
