@@ -354,6 +354,11 @@ void DialogProxy::syncMainItemToSize()
     m_frameSvgItem->setWidth(width());
     m_frameSvgItem->setHeight(height());
     KWindowEffects::enableBlurBehind(winId(), true, m_frameSvgItem->frameSvg()->mask());
+    if (qGray(m_theme.color(Plasma::Theme::BackgroundColor).rgb()) > 127) {
+        KWindowEffects::enableBackgroundContrast(winId(), true, 0.30, 1.9, 1.7, m_frameSvgItem->frameSvg()->mask());
+    } else {
+        KWindowEffects::enableBackgroundContrast(winId(), true, 0.45, 0.45, 1.7, m_frameSvgItem->frameSvg()->mask());
+    }
 
     if (m_mainItem) {
         m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
