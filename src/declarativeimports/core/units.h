@@ -82,7 +82,6 @@ public:
     int smallSpacing() const;
     int largeSpacing() const;
 
-
     /**
      * @returns the number of pixels value density independent pixels correspond to.
      */
@@ -113,11 +112,14 @@ private Q_SLOTS:
 private:
     void updateSpacing();
 
-    int m_gridUnit;
     Plasma::Theme m_theme;
+
+    int m_gridUnit;
     qreal m_dpiScale;
     qreal m_dpi;
+
     QQmlPropertyMap *m_iconSizes;
+
     int m_smallSpacing;
     int m_largeSpacing;
 };

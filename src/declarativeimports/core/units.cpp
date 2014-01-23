@@ -58,6 +58,7 @@ Units::~Units()
 
 void Units::iconLoaderSettingsChanged()
 {
+    m_iconSizes->insert("default", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
     m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
@@ -76,7 +77,6 @@ QQmlPropertyMap *Units::iconSizes() const
 {
     return m_iconSizes;
 }
-
 
 qreal Units::dpiScale() const
 {

@@ -535,11 +535,6 @@ QColor Theme::viewFocusColor() const
     return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
 }
 
-int Theme::defaultIconSize() const
-{
-    return d->defaultIconSize;
-}
-
 QSizeF Theme::mSize(const QFont &font) const
 {
     return QFontMetrics(font).boundingRect("M").size();

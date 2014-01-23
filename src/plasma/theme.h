@@ -81,8 +81,6 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
 
-    Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
-
     public:
         enum ColorRole {
             TextColor = 0, /**<  the text color to be used by items resting on the background */
@@ -358,8 +356,6 @@ class PLASMA_EXPORT Theme : public QObject
         QColor viewHoverColor() const;
         QColor viewFocusColor() const;
 
-        int defaultIconSize() const;
-
         Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
     Q_SIGNALS:
@@ -375,8 +371,6 @@ class PLASMA_EXPORT Theme : public QObject
 
         void defaultFontChanged();
         void smallestFontChanged();
-
-        void defaultIconSizeChanged();
 
     private:
         friend class SvgPrivate;

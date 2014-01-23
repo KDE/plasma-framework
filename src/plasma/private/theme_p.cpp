@@ -59,7 +59,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
       pixmapCache(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
-      defaultIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
       blurActive(false),
@@ -91,7 +90,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
 #endif
     }
     installEventFilter(qApp);
-    updateSpacing();
 }
 
 ThemePrivate::~ThemePrivate()
@@ -579,19 +577,11 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
             colorsChanged();
         }
         if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            updateSpacing();
             defaultFontChanged();
             smallestFontChanged();
         }
     }
     return QObject::eventFilter(watched, event);
-}
-
-void ThemePrivate::updateSpacing()
-{
-    const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
-    smallSpacing = qMax(2, (int)(_s / 8)); // 1/8 of msize.height, at least 2
-    largeSpacing = _s; // msize.height
 }
 
 }

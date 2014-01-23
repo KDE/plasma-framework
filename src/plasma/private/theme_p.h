@@ -77,7 +77,6 @@ public:
     bool useCache();
     void setThemeName(const QString &themeName, bool writeSettings);
     void processWallpaperSettings(KConfigBase *metadata);
-    void updateSpacing();
 
     const QString processStyleSheet(const QString &css);
     const QString svgStyleSheet();
@@ -136,10 +135,6 @@ public:
     QTimer *updateNotificationTimer;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
-
-    int defaultIconSize;
-    int smallSpacing;
-    int largeSpacing;
 
     bool locolor : 1;
     bool compositingActive : 1;
