@@ -63,6 +63,18 @@ Item {
         }
         Row {
             PlasmaComponents.Label {
+                text: "units.devicePixelRatio: "
+                width: cwidth
+            }
+            PlasmaComponents.Label {
+                width: cheight
+                height: cheight / 2
+                text: units.devicePixelRatio
+            }
+        }
+
+        Row {
+            PlasmaComponents.Label {
                 text: "units.gridUnit: "
                 width: cwidth
             }
