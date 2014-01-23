@@ -40,10 +40,14 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/theme\.hugeIconSize/units.iconSizes.huge/g' $FS
     perl -p -i -e 's/theme\.enormousIconSize/units.iconSizes.enormous/g' $FS
 
-#    perl -p -i -e 's/Plasma\.Types\./PlasmaCore.Types./g' $FS
+    perl -p -i -e 's/theme\.smallSpacing/units.smallSpacing/g' $FS
+    perl -p -i -e 's/theme\.largeSpacing/units.largeSpacing/g' $FS
+    perl -p -i -e 's/theme\.defaultIconSize/units.iconSizes.default/g' $FS
+
+    #    perl -p -i -e 's/Plasma\.Types\./PlasmaCore.Types./g' $FS
 done
 
-#exit
+exit
 
 # Qt 4.7, QtQuick 1.0 and QtQuick 1.1 imports become QtQuick 2.0
 
