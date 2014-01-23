@@ -1,0 +1,103 @@
+/*
+ *  Copyright 2014 Sebastian Kügler <sebas@kde.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
+ */
+
+import QtQuick 2.1
+
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.qtextracomponents 2.0 as QtExtras
+
+// IconTab
+
+Item {
+
+
+    property int cheight: 48
+    property int cwidth: themePage.width / 1.2
+    property int _m: units.gridUnit / 2 * units.devicePixelRatio
+
+    id: themePage
+//     anchors {
+//     }
+
+    Column {
+        id: col
+        spacing: _m
+
+        anchors {
+            margins: _m
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        PlasmaExtras.Title {
+            width: parent.width
+            elide: Text.ElideRight
+            text: "Scaling Test"
+            font.pointSize: cheatLabel.font.pointSize * 2
+        }
+
+        Row {
+            PlasmaComponents.Button {
+                text: "devicePixelRatio"
+                font.pointSize: cheatLabel.font.pointSize
+
+                width: cwidth/2
+                //scale: units.devicePixelRatio
+                onClicked: {
+                    var d = units.devicePixelRatio * 96;
+                    dpilabel.text = "\tdpi from ratio:" + d;
+                }
+            }
+            PlasmaComponents.Label {
+                id: dpilabel
+            }
+        }
+        Row {
+
+        }
+    }
+    PlasmaComponents.Label {
+        id: cheatLabel
+        text: "Cheating with the font size. This label scales with the devicePixelRatio <b>on top of</b> font rendering. Just to show how text scaling can work dynamically."
+        font.pointSize: theme.defaultFont.pointSize * units.devicePixelRatio / 1.8
+        wrapMode: Text.WordWrap
+        anchors {
+            margins: _m
+            top: col.bottom
+            left: parent.left
+            right: apeImage.left
+        }
+    }
+    Image {
+        id: apeImage
+        objectName: "apeImage"
+        height: parent.height / 6 * units.devicePixelRatio
+        //width: height
+        anchors {
+            top: cheatLabel.top
+            right: parent.right
+            rightMargin: _m
+        }
+        fillMode: Image.PreserveAspectFit
+        source: "../images/orangutan.jpg"
+    }
+
+}
