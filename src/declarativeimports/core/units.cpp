@@ -39,6 +39,8 @@ Units::Units (QObject *parent)
     m_dpi = QApplication::desktop()->physicalDpiX();
     m_dpiScale = (qreal)m_dpi / (qreal)96;
 
+    updateSpacing();
+
     m_iconSizes = new QQmlPropertyMap(this);
     iconLoaderSettingsChanged();
 
@@ -47,6 +49,7 @@ Units::Units (QObject *parent)
     themeChanged();
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
+    installEventFilter(qApp);
 }
 
 Units::~Units()
@@ -158,7 +161,35 @@ void Units::printScreenInfo(QQuickItem* item)
     qDebug() << " gridUnit: " << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
 }
 
+int Units::smallSpacing() const
+{
+    return m_smallSpacing;
+}
 
+int Units::largeSpacing() const
+{
+    return m_largeSpacing;
+}
+
+void Units::updateSpacing()
+{
+    const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+    if (_s != m_largeSpacing) {
+        m_smallSpacing = qMax(2, (int)(_s / 8)); // 1/8 of msize.height, at least 2
+        m_largeSpacing = _s; // msize.height
+        emit spacingChanged();
+    }
+}
+
+bool Units::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == QCoreApplication::instance()) {
+        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
+            updateSpacing();
+        }
+    }
+    return QObject::eventFilter(watched, event);
+}
 
 #include "units.moc"
 

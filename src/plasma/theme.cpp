@@ -545,17 +545,6 @@ QSizeF Theme::mSize(const QFont &font) const
     return QFontMetrics(font).boundingRect("M").size();
 }
 
-int Theme::smallSpacing() const
-{
-    return d->smallSpacing;
-}
-
-int Theme::largeSpacing() const
-{
-    return d->largeSpacing;
-}
-
-
 
 }
 

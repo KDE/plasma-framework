@@ -83,10 +83,6 @@ class PLASMA_EXPORT Theme : public QObject
 
     Q_PROPERTY(int defaultIconSize READ defaultIconSize NOTIFY defaultIconSizeChanged)
 
-    // layout hints
-    Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY defaultFontChanged)
-    Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY defaultFontChanged)
-
     public:
         enum ColorRole {
             TextColor = 0, /**<  the text color to be used by items resting on the background */
@@ -336,7 +332,16 @@ class PLASMA_EXPORT Theme : public QObject
          */
         KPluginInfo pluginInfo() const;
 
+        /**
+         * @return The default application font
+         * @since 5.0
+         */
         QFont defaultFont() const;
+
+        /**
+         * @return The smallest readable font
+         * @since 5.0
+         */
         QFont smallestFont() const;
 
         QColor textColor() const;
@@ -354,9 +359,6 @@ class PLASMA_EXPORT Theme : public QObject
         QColor viewFocusColor() const;
 
         int defaultIconSize() const;
-
-        int smallSpacing() const;
-        int largeSpacing() const;
 
         Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 

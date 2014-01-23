@@ -60,10 +60,17 @@ class Units : public QObject
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
+    // layout hints
+    Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
+    Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY spacingChanged)
+
     Q_PROPERTY(qreal dpiScale READ dpiScale WRITE setDpiScale NOTIFY dpiScaleChanged)
+
 public:
     Units(QObject *parent = 0);
     ~Units();
+
+    bool eventFilter(QObject *watched, QEvent *event);
 
     qreal gridUnit() const;
 
@@ -71,6 +78,10 @@ public:
     qreal dpiScale() const;
 
     QQmlPropertyMap *iconSizes() const;
+
+    int smallSpacing() const;
+    int largeSpacing() const;
+
 
     /**
      * @returns the number of pixels value density independent pixels correspond to.
@@ -93,17 +104,22 @@ Q_SIGNALS:
     void dpiScaleChanged();
     void gridUnitChanged();
     void iconSizesChanged();
+    void spacingChanged();
 
 private Q_SLOTS:
     void themeChanged();
     void iconLoaderSettingsChanged();
 
 private:
+    void updateSpacing();
+
     int m_gridUnit;
     Plasma::Theme m_theme;
     qreal m_dpiScale;
     qreal m_dpi;
     QQmlPropertyMap *m_iconSizes;
+    int m_smallSpacing;
+    int m_largeSpacing;
 };
 
 #endif //UNITS_H
