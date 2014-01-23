@@ -191,13 +191,16 @@ void DialogProxy::updateVisibility(bool visible)
         raise();
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
 
-        KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        if (m_type != Normal) {
+            KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        } else {
+            setFlags(Qt::FramelessWindowHint|flags());
+        }
         if (m_type == Dock) {
             KWindowSystem::setOnAllDesktops(winId(), true);
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
         }
-        setFlags(Qt::FramelessWindowHint|flags());
     }
 }
 
@@ -394,7 +397,11 @@ void DialogProxy::setType(WindowType type)
     }
 
     m_type = type;
-    KWindowSystem::setType(winId(), (NET::WindowType)type);
+    if (m_type != Normal) {
+        KWindowSystem::setType(winId(), (NET::WindowType)type);
+    } else {
+        setFlags(Qt::FramelessWindowHint|flags());
+    }
 
     if (type == Dock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
