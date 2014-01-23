@@ -37,7 +37,7 @@ Units::Units (QObject *parent)
     //Usual "default" is 96 dpi
     //that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_dpi = QApplication::desktop()->physicalDpiX();
-    m_dpiScale = (qreal)m_dpi / (qreal)96;
+    m_devicePixelRatio = (qreal)m_dpi / (qreal)96;
 
     updateSpacing();
 
@@ -78,18 +78,18 @@ QQmlPropertyMap *Units::iconSizes() const
     return m_iconSizes;
 }
 
-qreal Units::dpiScale() const
+qreal Units::devicePixelRatio() const
 {
 
-    return m_dpiScale;
+    return m_devicePixelRatio;
 }
 
-void Units::setDpiScale(const qreal scale)
+void Units::setDevicePixelRatio(const qreal scale)
 {
-    if (m_dpiScale != scale) {
-        m_dpiScale = scale;
+    if (m_devicePixelRatio != scale) {
+        m_devicePixelRatio = scale;
         qDebug() << "Setting dpi scale to " << scale;
-        emit dpiScaleChanged();
+        emit devicePixelRatioChanged();
     }
 }
 
@@ -99,7 +99,7 @@ qreal Units::gridUnit() const
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
     qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
     qDebug() << "m_dpi: " << m_dpi;
-    qDebug() << "m_dpiScale: " << m_dpiScale;
+    qDebug() << "m_devicePixelRatio: " << m_devicePixelRatio;
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
@@ -107,9 +107,9 @@ qreal Units::gridUnit() const
 qreal Units::dp(qreal value) const
 {
     if (value <= 2.0) {
-        return qRound(value * floor(m_dpiScale));
+        return qRound(value * floor(m_devicePixelRatio));
     } else {
-        return qRound(value * m_dpiScale);
+        return qRound(value * m_devicePixelRatio);
     }
 }
 

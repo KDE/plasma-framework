@@ -64,7 +64,7 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
     Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY spacingChanged)
 
-    Q_PROPERTY(qreal dpiScale READ dpiScale WRITE setDpiScale NOTIFY dpiScaleChanged)
+    Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio WRITE setDevicePixelRatio NOTIFY devicePixelRatioChanged)
 
 public:
     Units(QObject *parent = 0);
@@ -74,8 +74,8 @@ public:
 
     qreal gridUnit() const;
 
-    void setDpiScale(const qreal scale);
-    qreal dpiScale() const;
+    void setDevicePixelRatio(const qreal scale);
+    qreal devicePixelRatio() const;
 
     QQmlPropertyMap *iconSizes() const;
 
@@ -100,7 +100,7 @@ public:
     Q_INVOKABLE void printScreenInfo(QQuickItem *item);
 
 Q_SIGNALS:
-    void dpiScaleChanged();
+    void devicePixelRatioChanged();
     void gridUnitChanged();
     void iconSizesChanged();
     void spacingChanged();
@@ -115,7 +115,7 @@ private:
     Plasma::Theme m_theme;
 
     int m_gridUnit;
-    qreal m_dpiScale;
+    qreal m_devicePixelRatio;
     qreal m_dpi;
 
     QQmlPropertyMap *m_iconSizes;
