@@ -33,12 +33,12 @@ Item {
 
     id: themePage
     anchors {
-        margins: theme.largeSpacing
+        margins: units.largeSpacing
     }
 
     Column {
         //anchors.fill: parent
-        //spacing: theme.smallSpacing/2
+        //spacing: units.smallSpacing/2
 
         PlasmaExtras.Title {
             width: parent.width
@@ -99,24 +99,24 @@ Item {
 
         Row {
             PlasmaComponents.Label {
-                text: "theme.largeSpacing: "
+                text: "units.largeSpacing: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: theme.largeSpacing
+                text: units.largeSpacing
             }
         }
         Row {
             PlasmaComponents.Label {
-                text: "theme.smallSpacing: "
+                text: "units.smallSpacing: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: theme.smallSpacing
+                text: units.smallSpacing
             }
         }
 
