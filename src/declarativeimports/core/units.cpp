@@ -32,13 +32,10 @@
 
 Units::Units (QObject *parent)
     : QObject(parent),
-      m_gridUnit(-1)
+      m_gridUnit(-1),
+      m_devicePixelRatio(-1)
 {
-    //Usual "default" is 96 dpi
-    //that magic ratio follows the definition of "device independent pixel" by Microsoft
-    m_dpi = QApplication::desktop()->physicalDpiX();
-    m_devicePixelRatio = (qreal)m_dpi / (qreal)96;
-
+    setDevicePixelRatio(0);
     updateSpacing();
 
     m_iconSizes = new QQmlPropertyMap(this);
@@ -80,15 +77,21 @@ QQmlPropertyMap *Units::iconSizes() const
 
 qreal Units::devicePixelRatio() const
 {
-
     return m_devicePixelRatio;
 }
 
 void Units::setDevicePixelRatio(const qreal scale)
 {
     if (m_devicePixelRatio != scale) {
-        m_devicePixelRatio = scale;
-        qDebug() << "Setting dpi scale to " << scale;
+        if (scale <= 0) {
+            //Usual "default" is 96 dpi
+            //that magic ratio follows the definition of "device independent pixel" by Microsoft
+            m_dpi = QApplication::desktop()->physicalDpiX();
+            m_devicePixelRatio = (qreal)m_dpi / (qreal)96;
+        } else {
+            m_devicePixelRatio = scale;
+        }
+            qDebug() << "Setting dpi scale to " << scale;
         emit devicePixelRatioChanged();
     }
 }

@@ -64,6 +64,9 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
     Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY spacingChanged)
 
+    /**
+     * The ratio between physical and device-independent pixels.
+     */
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio WRITE setDevicePixelRatio NOTIFY devicePixelRatioChanged)
 
 public:
@@ -74,7 +77,19 @@ public:
 
     qreal gridUnit() const;
 
-    void setDevicePixelRatio(const qreal scale);
+
+    /**
+     * Overrides the devicePixelRatio
+     *
+     * Set the device pixel ratio to a custom value.
+     *
+     * @arg ratio, 0 resets to detected value
+     */
+    void setDevicePixelRatio(const qreal ratio);
+
+    /**
+     * @return The ratio between physical and device-independent pixels.
+     */
     qreal devicePixelRatio() const;
 
     QQmlPropertyMap *iconSizes() const;
