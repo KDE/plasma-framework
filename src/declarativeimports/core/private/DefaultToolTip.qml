@@ -31,7 +31,7 @@ Row {
     property Item toolTip
 
     property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 40
-    property int _s: theme.largeSpacing / 2
+    property int _s: units.largeSpacing / 2
 
     width: childrenRect.width + _s
     height: childrenRect.height + _s * 2
