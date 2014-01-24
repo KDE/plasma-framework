@@ -26,6 +26,7 @@
 #include <QPoint>
 
 #include <Plasma/Plasma>
+#include <Plasma/Theme>
 
 #include <netwm_def.h>
 
@@ -175,6 +176,7 @@ private:
     WindowType m_type;
     bool m_hideOnWindowDeactivate;
     bool m_outputOnly;
+    Plasma::Theme m_theme;
 };
 
 #endif

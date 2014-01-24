@@ -191,13 +191,16 @@ void DialogProxy::updateVisibility(bool visible)
         raise();
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
 
-        KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        if (m_type != Normal) {
+            KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        } else {
+            setFlags(Qt::FramelessWindowHint|flags());
+        }
         if (m_type == Dock) {
             KWindowSystem::setOnAllDesktops(winId(), true);
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
         }
-        setFlags(Qt::FramelessWindowHint|flags());
     }
 }
 
@@ -351,6 +354,11 @@ void DialogProxy::syncMainItemToSize()
     m_frameSvgItem->setWidth(width());
     m_frameSvgItem->setHeight(height());
     KWindowEffects::enableBlurBehind(winId(), true, m_frameSvgItem->frameSvg()->mask());
+    if (qGray(m_theme.color(Plasma::Theme::BackgroundColor).rgb()) > 127) {
+        KWindowEffects::enableBackgroundContrast(winId(), true, 0.30, 1.9, 1.7, m_frameSvgItem->frameSvg()->mask());
+    } else {
+        KWindowEffects::enableBackgroundContrast(winId(), true, 0.45, 0.45, 1.7, m_frameSvgItem->frameSvg()->mask());
+    }
 
     if (m_mainItem) {
         m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
@@ -394,7 +402,11 @@ void DialogProxy::setType(WindowType type)
     }
 
     m_type = type;
-    KWindowSystem::setType(winId(), (NET::WindowType)type);
+    if (m_type != Normal) {
+        KWindowSystem::setType(winId(), (NET::WindowType)type);
+    } else {
+        setFlags(Qt::FramelessWindowHint|flags());
+    }
 
     if (type == Dock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
