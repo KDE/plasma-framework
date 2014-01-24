@@ -25,6 +25,7 @@ set(corebindings_SRCS
     dialog.cpp
     tooltip.cpp
     tooltipdialog.cpp
+    formats.cpp
     serviceoperationstatus.cpp
     dataenginebindings.cpp
     iconitem.cpp
