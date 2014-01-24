@@ -35,7 +35,7 @@ class Units : public QObject
      * The fundamental unit of space that should be used for sizes, expressed in pixels.
      * Given the screen has an accurate DPI settings, it corresponds to a millimeter
      */
-    Q_PROPERTY(qreal gridUnit READ gridUnit NOTIFY gridUnitChanged())
+    Q_PROPERTY(int gridUnit READ gridUnit NOTIFY gridUnitChanged())
 
     /**
      * units.iconSizes provides access to platform-dependent icon sizing
@@ -75,7 +75,7 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
-    qreal gridUnit() const;
+    int gridUnit() const;
 
 
     /**

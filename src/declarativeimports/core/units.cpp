@@ -96,7 +96,7 @@ void Units::setDevicePixelRatio(const qreal scale)
     }
 }
 
-qreal Units::gridUnit() const
+int Units::gridUnit() const
 {
     qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
