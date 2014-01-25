@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2013 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2014 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -126,6 +127,10 @@ private Q_SLOTS:
 
 private:
     void updateSpacing();
+    /**
+     * @return The dpi-adjusted size for a given icon size
+     */
+    int devicePixelIconSize(const int size) const;
 
     Plasma::Theme m_theme;
 

@@ -35,11 +35,11 @@ Units::Units (QObject *parent)
       m_gridUnit(-1),
       m_devicePixelRatio(-1)
 {
+    m_iconSizes = new QQmlPropertyMap(this);
     setDevicePixelRatio(0);
     updateSpacing();
 
-    m_iconSizes = new QQmlPropertyMap(this);
-    iconLoaderSettingsChanged();
+    //iconLoaderSettingsChanged();
 
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
 
@@ -58,14 +58,15 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert("default", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
-    m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
+    //m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
     m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
-    m_iconSizes->insert("smallMedium", KIconLoader::SizeSmallMedium);
-    m_iconSizes->insert("medium", KIconLoader::SizeMedium);
-    m_iconSizes->insert("large", KIconLoader::SizeLarge);
-    m_iconSizes->insert("huge", KIconLoader::SizeHuge);
-    m_iconSizes->insert("enormous", KIconLoader::SizeEnormous);
+    m_iconSizes->insert("small", devicePixelIconSize(KIconLoader::SizeSmall));
+    m_iconSizes->insert("smallMedium", devicePixelIconSize(KIconLoader::SizeSmallMedium));
+    m_iconSizes->insert("medium", devicePixelIconSize(KIconLoader::SizeMedium));
+    m_iconSizes->insert("large", devicePixelIconSize(KIconLoader::SizeLarge));
+    m_iconSizes->insert("huge", devicePixelIconSize(KIconLoader::SizeHuge));
+    m_iconSizes->insert("enormous", devicePixelIconSize(KIconLoader::SizeEnormous));
 
     emit iconSizesChanged();
 }
@@ -73,6 +74,38 @@ void Units::iconLoaderSettingsChanged()
 QQmlPropertyMap *Units::iconSizes() const
 {
     return m_iconSizes;
+}
+
+int Units::devicePixelIconSize(const int size) const
+{
+    /*
+    enum StdSizes {
+        SizeSmall=16,
+        SizeSmallMedium=22,
+        SizeMedium=32,
+        SizeLarge=48,
+        SizeHuge=64,
+        SizeEnormous=128
+    };
+    */
+    // Scale the icon sizes up using the devicePixelRatio
+    // This function returns the next stepping icon size
+    // and multiplies the global settings with the dpi ratio.
+    const int dpisize = devicePixelRatio() * size;
+    int out = KIconLoader::SizeSmall;
+    if (devicePixelRatio() < 1.5) {
+        return size;
+    } else if (devicePixelRatio() < 2.0) {
+        out = size * 1.5;
+    } else if (devicePixelRatio() < 2.5) {
+        out = size * 2.0;
+    } else if (devicePixelRatio() < 3.0) {
+        out = size * 3.0;
+    } else {
+        out = dpisize;
+    }
+    //qDebug() << " Size in: " << size << dpisize << " -> " << out;
+    return out;
 }
 
 qreal Units::devicePixelRatio() const
@@ -91,18 +124,14 @@ void Units::setDevicePixelRatio(const qreal scale)
         } else {
             m_devicePixelRatio = scale;
         }
-            qDebug() << "Setting dpi scale to " << scale;
+        qDebug() << "Setting dpi scale to " << scale;
+        iconLoaderSettingsChanged();
         emit devicePixelRatioChanged();
     }
 }
 
 int Units::gridUnit() const
 {
-    qDebug() << "FontMetrics: " << QApplication::font().pixelSize() << QFontMetrics(QApplication::font()).boundingRect("M");
-    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
-    qDebug() << " like spacing" << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
-    qDebug() << "m_dpi: " << m_dpi;
-    qDebug() << "m_devicePixelRatio: " << m_devicePixelRatio;
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
@@ -162,6 +191,14 @@ void Units::printScreenInfo(QQuickItem* item)
     qDebug() << "FontMetrics: " << QApplication::font().pointSize() << QFontMetrics(QApplication::font()).boundingRect("M");
     qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
     qDebug() << " gridUnit: " << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+
+
+    qDebug() << " Small " << KIconLoader::SizeSmall << " -> " << devicePixelIconSize(KIconLoader::SizeSmall);
+    qDebug() << " SMedi " << KIconLoader::SizeSmallMedium << " -> " << devicePixelIconSize(KIconLoader::SizeSmallMedium);
+    qDebug() << " Mediu " << KIconLoader::SizeMedium << " -> " << devicePixelIconSize(KIconLoader::SizeMedium);
+    qDebug() << " Large " << KIconLoader::SizeLarge << " -> " << devicePixelIconSize(KIconLoader::SizeLarge);
+    qDebug() << " Huge  " << KIconLoader::SizeHuge << " -> " << devicePixelIconSize(KIconLoader::SizeHuge);
+    qDebug() << " Enorm " << KIconLoader::SizeEnormous << " -> " << devicePixelIconSize(KIconLoader::SizeEnormous);
 }
 
 int Units::smallSpacing() const
