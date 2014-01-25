@@ -95,16 +95,6 @@ public:
     int largeSpacing() const;
 
     /**
-     * @returns the number of pixels value density independent pixels correspond to.
-     */
-    Q_INVOKABLE qreal dp(qreal value) const;
-
-    /**
-     * @returns the number of pixels value grid units correspond to.
-     */
-    Q_INVOKABLE qreal gu(qreal value) const;
-
-    /**
      * @returns the dpi value for the item's screen
      */
     Q_INVOKABLE qreal dpi(QQuickItem *item);

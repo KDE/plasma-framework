@@ -136,20 +136,6 @@ int Units::gridUnit() const
     return m_gridUnit;
 }
 
-qreal Units::dp(qreal value) const
-{
-    if (value <= 2.0) {
-        return qRound(value * floor(m_devicePixelRatio));
-    } else {
-        return qRound(value * m_devicePixelRatio);
-    }
-}
-
-qreal Units::gu(qreal value) const
-{
-    return qRound(m_gridUnit * value);
-}
-
 void Units::themeChanged()
 {
     const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").height();
