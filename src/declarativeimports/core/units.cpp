@@ -57,9 +57,6 @@ void Units::iconLoaderSettingsChanged()
 {
     m_iconSizes->insert("default", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
-    m_iconSizes->insert("toolbar", KIconLoader::global()->currentSize(KIconLoader::Toolbar));
-    //m_iconSizes->insert("small", KIconLoader::global()->currentSize(KIconLoader::Small));
-    m_iconSizes->insert("dialog", KIconLoader::global()->currentSize(KIconLoader::Dialog));
 
     m_iconSizes->insert("small", devicePixelIconSize(KIconLoader::SizeSmall));
     m_iconSizes->insert("smallMedium", devicePixelIconSize(KIconLoader::SizeSmallMedium));
@@ -78,7 +75,7 @@ QQmlPropertyMap *Units::iconSizes() const
 
 int Units::devicePixelIconSize(const int size) const
 {
-    /*
+    /* in kiconloader.h
     enum StdSizes {
         SizeSmall=16,
         SizeSmallMedium=22,
@@ -104,6 +101,8 @@ int Units::devicePixelIconSize(const int size) const
     } else {
         out = dpisize;
     }
+    // FIXME: Add special casing for < 64 cases: align to kiconloader size
+    
     //qDebug() << " Size in: " << size << dpisize << " -> " << out;
     return out;
 }
