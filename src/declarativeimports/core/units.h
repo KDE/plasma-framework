@@ -44,7 +44,7 @@ class Units : public QObject
      * The icon sizes provided are normalized for different DPI, so icons
      * will scale depending on the DPI.
      *
-     * Icon sizes from KIconLoader:
+     * Icon sizes from KIconLoader, adjusted to devicePixelRatio:
      * * small
      * * smallMedium
      * * medium
@@ -52,12 +52,8 @@ class Units : public QObject
      * * huge
      * * enormous
      *
-     * Icon sizes depending on the context: use those if possible
-     * Access with units.iconSizes.desktop units.iconSizes.small etc.
-     * available keys are:
+     * Not devicePixelRation-adjusted::
      * * desktop
-     * * toolbar
-     * * dialog
      */
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 

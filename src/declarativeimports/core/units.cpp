@@ -55,9 +55,10 @@ Units::~Units()
 
 void Units::iconLoaderSettingsChanged()
 {
-    m_iconSizes->insert("default", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    // These are not scaled, we respect the user's setting over dpi scaling
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
 
+    // The following icon sizes are fully scaled to dpi
     m_iconSizes->insert("small", devicePixelIconSize(KIconLoader::SizeSmall));
     m_iconSizes->insert("smallMedium", devicePixelIconSize(KIconLoader::SizeSmallMedium));
     m_iconSizes->insert("medium", devicePixelIconSize(KIconLoader::SizeMedium));
@@ -102,7 +103,7 @@ int Units::devicePixelIconSize(const int size) const
         out = dpisize;
     }
     // FIXME: Add special casing for < 64 cases: align to kiconloader size
-    
+
     //qDebug() << " Size in: " << size << dpisize << " -> " << out;
     return out;
 }
