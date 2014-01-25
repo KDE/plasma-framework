@@ -40,6 +40,9 @@ for FS in `find $PWD  -name '*.qml'`; do
     perl -p -i -e 's/theme\.hugeIconSize/units.iconSizes.huge/g' $FS
     perl -p -i -e 's/theme\.enormousIconSize/units.iconSizes.enormous/g' $FS
 
+    perl -p -i -e 's/units\.iconSizes\.dialog/units.iconSizes.medium/g' $FS
+    perl -p -i -e 's/units\.toolbar\.dialog/units.iconSizes.smallMedium/g' $FS
+
     perl -p -i -e 's/theme\.smallSpacing/units.smallSpacing/g' $FS
     perl -p -i -e 's/theme\.largeSpacing/units.largeSpacing/g' $FS
     perl -p -i -e 's/theme\.defaultIconSize/units.iconSizes.default/g' $FS
