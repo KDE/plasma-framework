@@ -124,11 +124,11 @@ Item {
             width: units.iconSizes.huge
             height: width
         }
-        QtExtras.QIconItem {
-            icon: "preferences-desktop-icons"
-            width: units.iconSizes.enormous
-            height: width
-        }
+//         QtExtras.QIconItem {
+//             icon: "preferences-desktop-icons"
+//             width: units.iconSizes.enormous
+//             height: width
+//         }
 
     }
 }
