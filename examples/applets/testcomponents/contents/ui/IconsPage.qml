@@ -63,7 +63,7 @@ PlasmaComponents.Page {
                 height: width
             }
             PlasmaCore.IconItem {
-                source: "resize-tr2bl"
+                source: "folder-green"
                 width: _h
                 height: width
             }

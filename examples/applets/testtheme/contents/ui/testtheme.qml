@@ -32,7 +32,7 @@ Item {
     property int minimumHeight: units.gridUnit * 10
 
     property int _s: units.iconSizes.small
-    property int _h: units.iconSizes.default
+    property int _h: units.iconSizes.medium
 
     PlasmaComponents.TabBar {
         id: tabBar
@@ -94,7 +94,7 @@ Item {
             print("Setting units.devicePixelRatio: " + r);
             units.devicePixelRatio = r;
             if (value == 0) {
-                value = units.devicePixelRatio;
+                value = units.devicePixelRatio * 96;
             }
         }
 

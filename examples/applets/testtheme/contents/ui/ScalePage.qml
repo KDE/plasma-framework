@@ -23,18 +23,11 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.qtextracomponents 2.0 as QtExtras
 
-// IconTab
-
 Item {
-
 
     property int cheight: 48
     property int cwidth: themePage.width / 1.2
     property int _m: units.gridUnit / 2 * units.devicePixelRatio
-
-    id: themePage
-//     anchors {
-//     }
 
     Column {
         id: col
@@ -70,9 +63,6 @@ Item {
                 id: dpilabel
             }
         }
-        Row {
-
-        }
     }
     PlasmaComponents.Label {
         id: cheatLabel
@@ -99,5 +89,46 @@ Item {
         fillMode: Image.PreserveAspectFit
         source: "../images/orangutan.jpg"
     }
+    Flow {
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
+        }
+        //height: _h
+        //width: parent.width
+        spacing: units.smallSpacing
 
+        PlasmaCore.IconItem {
+            source: "configure"
+            width: units.iconSizes.small
+            height: width
+        }
+        PlasmaCore.IconItem {
+            source: "dialog-ok"
+            width: units.iconSizes.smallMedium
+            height: width
+        }
+        PlasmaCore.IconItem {
+            source: "resize-tr2bl"
+            width: units.iconSizes.medium
+            height: width
+        }
+        PlasmaCore.IconItem {
+            source: "akonadi"
+            width: units.iconSizes.large
+            height: width
+        }
+        PlasmaCore.IconItem {
+            source: "clock"
+            width: units.iconSizes.huge
+            height: width
+        }
+        QtExtras.QIconItem {
+            icon: "preferences-desktop-icons"
+            width: units.iconSizes.enormous
+            height: width
+        }
+
+    }
 }
