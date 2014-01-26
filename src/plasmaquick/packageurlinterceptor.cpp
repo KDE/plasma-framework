@@ -58,7 +58,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
     if (path.scheme() == QStringLiteral("plasmapackage")) {
         //FIXME: this is incorrect but works around a bug in qml in resolution of urls of qmldir files
-        if (0&&type == QQmlAbstractUrlInterceptor::QmldirFile) {
+        if (type == QQmlAbstractUrlInterceptor::QmldirFile) {
             return QUrl(m_package.filePath(0, path.path()));
         } else {
             return QUrl::fromLocalFile(m_package.filePath(0, path.path()));
