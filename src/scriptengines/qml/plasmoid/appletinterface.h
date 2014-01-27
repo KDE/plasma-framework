@@ -153,6 +153,13 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      **/
     Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
 
+    /**
+     * The global shortcut to activate the plasmoid
+     *
+     * This is typically only used by the default configuration module
+     *
+     */
+    Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut NOTIFY globalShortcutChanged)
 
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
@@ -259,6 +266,9 @@ public:
     bool hideOnWindowDeactivate() const;
     void setHideOnWindowDeactivate(bool hide);
 
+    QKeySequence globalShortcut() const;
+    void setGlobalShortcut(const QKeySequence &keySequence);
+
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -268,6 +278,7 @@ Q_SIGNALS:
     void externalData(const QString &mimetype, const QVariant &data);
 
     void configNeedsSaving();
+
 
 //PROPERTY change notifiers--------------
     void iconChanged();
@@ -285,6 +296,7 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
 
     void userConfiguringChanged();
+    void globalShortcutChanged();
 
 protected Q_SLOTS:
     virtual void init();
