@@ -1,0 +1,140 @@
+2010-02-14  Richard Dale  <richard.j.dale@gmail.com>
+
+* Special case the constructors of the new Plasma widgets so that they can be
+passed a PlasmaScripting::Applet as parent
+* Fixed the dialog handling so that it uses the standardConfigurationDialog()
+and addStandardConfigurationPages() methods
+ 
+2009-08-07  Richard Dale  <richard.j.dale@gmail.com>
+* Fixed typo in the type signature of the initExtenderItem() slot. Thanks to
+David Palacio for reporting the bug
+
+2009-07-19  Richard Dale  <richard.j.dale@gmail.com>
+* Use the new name 'extenderItemRestored()' for the signal to connect to
+initExtenderItem()
+
+2009-07-18  Richard Dale  <richard.j.dale@gmail.com>
+* Add a Ruby version of the C++ extender tutorial example on Techbase
+
+2009-07-17  Richard Dale  <richard.j.dale@gmail.com>
+* If an applet has implemented an initExtenderItem() method, then connect the
+new initScriptingExtenderItem() signal to it.
+
+2009-06-16  Richard Dale  <richard.j.dale@gmail.com>
+* The resize() method doesn't work with scripting plasmoids, so if it is used
+output a warning message, and suggest adding a X-Plasma-DefautSize entry in
+the metadata.desktop file.
+
+2009-05-26  Richard Dale  <richard.j.dale@gmail.com>
+* Add a callback for the configChanged() method in scripting applets
+
+2009-04-27  Richard Dale  <richard.j.dale@gmail.com>
+* Added some special casing for the new KDE 4.3 widgets, so they work with 
+PLasmaScripting::Applet arguments
+
+2009-04-22  Richard Dale  <richard.j.dale@gmail.com>
+* Added PlasmaScripting::Containment and PlasmaScripting::PopupApplet classes,
+  now that scripting containments and popups can be created
+
+2009-02-10  Richard Dale  <richard.j.dale@gmail.com>
+* For the methods that need to be special cased to work with 
+  PlasmaScripting::Applet type arguments, add lower case/underscore versions
+  of the methods
+
+2009-02-05  Richard Dale  <richard.j.dale@gmail.com>
+* Added various special casing to the Plasma::ToolTipManager class so you can
+  pass a PlasmaScripting::Applet to the methods. Thanks to Mathieu Jobin for
+  reporting the bug.
+
+2008-12-22  Richard Dale  <richard.j.dale@gmail.com>
+* Changed the tiger applet example to find its tiger.svg resource from within
+  the plasmoid package. Thanks to Rany Keddo for helping to get it working.
+
+2008-12-01  Richard Dale  <richard.j.dale@gmail.com>
+* Added updateAllSources() and removeSource() slots to the 
+  PlasmScripting::DataEngine
+* Add DBus notification to the time data engine example for when the config 
+  changes
+
+2008-11-18  Richard Dale  <richard.j.dale@gmail.com>
+* Fix problem with the ruby 'type()' method clashing with the one in
+  Qt::GraphicsItem subclasses reported by David Palacio
+* Added a 'dbpedia-queries' data engine for making SPARQL queries to DBpedia
+  about music albums
+* The sources() and init() methods needn't be implemented by a scripting
+  data engine
+
+2008-11-17  Richard Dale  <richard.j.dale@gmail.com>
+* Fixed missing constructor bug in Qt::GraphicsProxyWidget reported by David
+  Palacio. Thanks to David for reporting the bug.
+* Improved the names of the Ruby applet and dataengine examples
+* Allow a PlasmaScripting::Applet to be a parent of all the Qt::GraphicsItem
+  sub classes in their constructors
+
+2008-11-05  Richard Dale  <richard.j.dale@gmail.com>
+* Fixed some bugs in the DataEngineScript class. The expected path was 
+  'plasma/engines' whereas the plasmapkg tool installs them in 
+  'plasma/dataengines'. The mainScript() and package() methods hadn't been
+  implemented and were added.
+* Added a 'ruby_time' example scripting data engine
+
+2008-10-30  Richard Dale  <richard.j.dale@gmail.com>
+* Separated the script engine plugins from the plasma ruby extension and moved
+  the script engine code to kdebase with the other script engines
+
+2008-10-23  Richard Dale  <richard.j.dale@gmail.com>
+* Converted the webapplet to use the script engine api, and renamed it
+  plasma_applet_ruby_webapplet
+
+2008-08-15  Richard Dale  <richard.j.dale@gmail.com>
+* Re-added the ruby version of the plasmoidviewer app
+
+2008-08-12  Arno Rehn  <arno@arnorehn.de>
+* Fix restoring of applet sizes.
+
+2008-08-07  Richard Dale  <richard.j.dale@gmail.com>
+* The marshaller for Plasma::DataEngine::Data was creating Qt::Variants with
+  the wrong smoke pointer in the smokeruby_object struct, and this was causing
+  a crash in the GC marking function.
+* In PlasmaScripting::Applet, if a constant such as NoBackground is referenced
+  and found to be missing, then look for it in Plasma::Applet.
+* Fix bugs in the PlasmaScripting::Applet#showConfigurationInterface method
+* Special case Plasma::Applet#id so it doesn't get a Ruby warning.
+* In PlasmaScriptengineRuby::Applet the module name wasn't being derived 
+  correctly from the Package path
+* Add two versions of the clock applet
+    * plasma_applet_ruby_clock uses the ScriptEngine api and is packaged as a
+      plasmoid. It can be installed by typing the following command in the
+      examples/applets directory:
+
+      $ plasmapkg --install plasma_applet_ruby_clock --type plasmoid
+
+    * analog-clock uses the C++ plugin api. Normally Ruby applets should be 
+      written using the script engine api, and this example is only included
+      to show how the two apis differ. The clocks are functionally identical.
+
+2008-08-06  Richard Dale  <richard.j.dale@gmail.com>
+* Add some fixes for the new Plasma::Frame and Plasma::Slider widgets
+
+2008-07-03  Richard Dale  <richard.j.dale@gmail.com>
+* Add slots and signals for scripting applets and data engines corresponding
+  to the ones in Plasma::Applet and Plasma::DataEngine
+* Change the install destination to plasma_scriptengine_ruby and the modules
+  of the plugin classes to match
+
+2008-06-30  Richard Dale  <richard.j.dale@gmail.com>
+* For script engine based applets, add the directory where the mainScript was
+  found to the ruby load path.
+
+2008-06-29  Richard Dale  <richard.j.dale@gmail.com>
+* If a method call is invoked on a PlasmaScripting::Applet, then relay it to
+  the underlying Plasma::Applet in the script engine.
+* Add an event filter to the RubyAppletScript::Applet class so that scripting
+  applets can implement event method handling overrides.
+* Change various methods in the QGraphicsView and Plasma api so that they can
+  accept instances of PlasmaScripting::Applet, and the instance is substituted
+  for the underlying Plasma::Applet in the ScriptEngine.
+
+2008-06-28  Richard Dale  <richard.j.dale@gmail.com>
+* Make the Ruby ScriptEngine based plugins work
+* Add a Ruby version of the Javascript Tiger applet
