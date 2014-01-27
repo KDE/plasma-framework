@@ -168,6 +168,11 @@ class AppletInterface : public QQuickItem
      **/
     Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
 
+    /**
+     * The global shortcut associated with this wiget, or
+     * an empty shortcut if no global shortcut is associated
+     */
+    Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut NOTIFY globalShortcutChanged)
 
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
@@ -290,6 +295,9 @@ public:
     qreal maximumWidth() const;
     qreal maximumHeight() const;
 
+    QKeySequence globalShortcut() const;
+    void setGlobalShortcut(const QKeySequence &sequence);
+
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -322,6 +330,7 @@ Q_SIGNALS:
     void fillWidthChanged();
     void fillHeightChanged();
     void userConfiguringChanged();
+    void globalShortcutChanged();
 
 protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);

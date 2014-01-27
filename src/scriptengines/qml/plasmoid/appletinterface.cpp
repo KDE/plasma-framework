@@ -581,6 +581,15 @@ bool AppletInterface::hideOnWindowDeactivate() const
     return m_hideOnDeactivate;
 }
 
+QKeySequence AppletInterface::globalShortcut() const
+{
+    return applet()->globalShortcut();
+}
+
+void AppletInterface::setGlobalShortcut(const QKeySequence& sequence)
+{
+    applet()->setGlobalShortcut(sequence);
+}
 
 QString AppletInterface::downloadPath(const QString &file)
 {

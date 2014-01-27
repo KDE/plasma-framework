@@ -182,6 +182,7 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
 
 void AppletPrivate::globalShortcutChanged()
 {
+    qDebug() << "CHEESE ****!";
     if (!activationAction) {
         return;
     }
