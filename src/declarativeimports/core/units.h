@@ -58,11 +58,28 @@ class Units : public QObject
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
 
     // layout hints
+
+    /**
+     * units.largeSpacing is the amount of spacing that should be used around bigger UI elements,
+     * for example between the content and the border. Internally, this size depends on the size of
+     * the default font as rendered on the screen, so it takes user-configured font size and DPI
+     * into account.
+     */
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
+
+    /**
+     * units.smallSpacing is the amount of spacing that should be used inside bigger UI elements,
+     * for example between an icon and the corresponding text. Internally, this size depends on
+     * the size of the default font as rendered on the screen, so it takes user-configured font
+     * size and DPI into account.
+     */
     Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY spacingChanged)
 
     /**
-     * The ratio between physical and device-independent pixels.
+     * The ratio between physical and device-independent pixels. This value does not depend on the \
+     * size of the configured font. If you want to take font sizes into account when scaling elements,
+     * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
+     * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio WRITE setDevicePixelRatio NOTIFY devicePixelRatioChanged)
 
@@ -72,6 +89,9 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event);
 
+    /**
+     * @return pixel value for a grid Unit. Depends on DPI and font size.
+     */
     int gridUnit() const;
 
 
@@ -89,9 +109,21 @@ public:
      */
     qreal devicePixelRatio() const;
 
+    /**
+     * @return map with iconsizes, indexed by name
+     */
     QQmlPropertyMap *iconSizes() const;
 
+    /**
+     * @return Pixel value for large spacing between elements.
+     * @since 5.0
+     */
     int smallSpacing() const;
+
+    /**
+     * @return Pixel value for large spacing between elements.
+     * @since 5.0
+     */
     int largeSpacing() const;
 
     /**
