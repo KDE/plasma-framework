@@ -37,8 +37,8 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{KDE4_SOLID_LIBS\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{KDE4_KIO_LIBS\}/KF5\:\:KIOWidgets/g' $FS
     perl -p -i -e 's/\$\{KDE4_KNOTIFYCONFIG_LIBRARY\}/KF5\:\:NotifyConfig/g' $FS
-    perl -p -i -e 's/\$\{KDE4_KNEWSTUFF3_LIBRARY\}/KF5\:\KNewStuff/g' $FS
-    perl -p -i -e 's/\$\{KDE4_KNEWSTUFF3_LIBS\}/KF5\:\KNewStuff/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KNEWSTUFF3_LIBRARY\}/KF5\:\:NewStuff/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KNEWSTUFF3_LIBS\}/KF5\:\:NewStuff/g' $FS
     perl -p -i -e 's/\$\{KDE4_KDESU_LIBS\}/KF5\:\:KDESu/g' $FS
     perl -p -i -e 's/\$\{KDE4_KTEXTEDITOR_LIBS\}/KF5\:\:TextEditor/g' $FS
     perl -p -i -e 's/\$\{KDE4_KPTY_LIBS\}/KF5\:\:Pty/g' $FS
