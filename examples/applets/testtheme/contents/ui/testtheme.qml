@@ -82,11 +82,12 @@ Item {
         id: dprSlider
         anchors {
             bottom: parent.bottom
+            bottomMargin: units.largeSpacing/2
             left: sliderLabel.right
             right: parent.right
         }
         minimumValue: 0
-        maximumValue: 400
+        maximumValue: 300
         stepSize: 20
         focus: true
         onValueChanged: {
