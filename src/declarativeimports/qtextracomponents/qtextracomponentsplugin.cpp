@@ -30,6 +30,7 @@
 #include "mouseeventlistener.h"
 #include "columnproxymodel.h"
 #include "clipboard.h"
+#include "keysequencehelper.h"
 
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
@@ -41,6 +42,7 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<MouseEventListener>(uri, 2, 0, "MouseEventListener");
     qmlRegisterType<ColumnProxyModel>(uri, 2, 0, "ColumnProxyModel");
     qmlRegisterType<Clipboard>(uri, 2, 0, "Clipboard");
+    qmlRegisterType<KeySequenceHelper>(uri, 2, 0, "KeySequenceHelper");
 
     qmlRegisterType<QAbstractItemModel>();
     qRegisterMetaType<QModelIndex>("QModelIndex");

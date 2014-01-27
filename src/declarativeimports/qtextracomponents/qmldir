@@ -2,3 +2,4 @@ module org.kde.qtextracomponents
 plugin qtextracomponentsplugin
 
 
+ShortcutButton 2.0 ShortcutButton.qml
