@@ -342,20 +342,103 @@ class PLASMA_EXPORT Theme : public QObject
          */
         QFont smallestFont() const;
 
+        /**
+         * @return The theme's colorscheme's text color
+         * @since 5.0
+         */
         QColor textColor() const;
+
+        /**
+         * @return The theme's colorscheme's highlight color
+         * @since 5.0
+         */
         QColor highlightColor() const;
+
+        /**
+         * @return The theme's colorscheme's background color
+         * @since 5.0
+         */
         QColor backgroundColor() const;
+
+        /**
+         * @return The theme's colorscheme's color for text on buttons
+         * @since 5.0
+         */
         QColor buttonTextColor() const;
+
+        /**
+         * @return The theme's colorscheme's background color color of buttons
+         * @since 5.0
+         */
         QColor buttonBackgroundColor() const;
+
+        /**
+         * @return The theme's colorscheme's link color
+         * @since 5.0
+         */
         QColor linkColor() const;
+
+        /**
+         * @return The theme's colorscheme's text color for visited links
+         * @since 5.0
+         */
         QColor visitedLinkColor() const;
+
+        /**
+         * @return The theme's colorscheme's color of hovered buttons
+         * @since 5.0
+         */
         QColor buttonHoverColor() const;
+
+        /**
+         * @return The theme's colorscheme's color of focused buttons
+         * @since 5.0
+         */
         QColor buttonFocusColor() const;
+
+        /**
+         * @return The theme's colorscheme's text color in views
+         * @since 5.0
+         */
         QColor viewTextColor() const;
+
+        /**
+         * @return The theme's colorscheme's background color of views
+         * @since 5.0
+         */
         QColor viewBackgroundColor() const;
+
+        /**
+         * @return The theme's colorscheme's color of hovered views
+         * @since 5.0
+         */
         QColor viewHoverColor() const;
+
+        /**
+         * @return The theme's colorscheme's color of focused views
+         * @since 5.0
+         */
         QColor viewFocusColor() const;
 
+
+        /**
+         * Returns the size of the letter "M" as rendered on the screen with the given font.
+         * This values gives you a base size that:
+         * * scales dependent on the DPI of the screen
+         * * Scales with the default font as set by the user
+         * You can use it like this in QML Items:
+         * \code
+         * Item {
+         *     width: theme.mSize(theme.defaultFont).height
+         *     height: width
+         * }
+         * \endcode
+         * This allows you to dynamically scale elements of your user interface with different font settings and
+         * different physical outputs (with different DPI).
+         * @param font The font to use for the metrics.
+         * @return The size of the letter "M" as rendered on the screen with the given font.
+         * @since 5.0
+         */
         Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
     Q_SIGNALS:
@@ -369,7 +452,9 @@ class PLASMA_EXPORT Theme : public QObject
          */
         void themeChanged();
 
+        /** Notifier for change of defaultFont property */
         void defaultFontChanged();
+        /** Notifier for change of smallestFont property */
         void smallestFontChanged();
 
     private:
