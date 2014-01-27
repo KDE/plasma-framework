@@ -117,14 +117,18 @@ void Units::setDevicePixelRatio(const qreal scale)
 {
     if (m_devicePixelRatio != scale) {
         if (scale <= 0) {
-            //Usual "default" is 96 dpi
-            //that magic ratio follows the definition of "device independent pixel" by Microsoft
+            // Going through QDesktopWidget seems to be the most reliable way no
+            // to get the DPI, and thus devicePixelRatio
+            // Using QGuiApplication::devicePixelRatio() gives unexpected values,
+            // i.e. it assumes DPI to be 100 on a 180 DPI screen.
             m_dpi = QApplication::desktop()->physicalDpiX();
+            // Usual "default" is 96 dpi
+            // that magic ratio follows the definition of "device independent pixel" by Microsoft
             m_devicePixelRatio = (qreal)m_dpi / (qreal)96;
         } else {
             m_devicePixelRatio = scale;
         }
-        qDebug() << "Setting dpi scale to " << scale;
+        qDebug() << "XX Setting dpi scale to " << scale;
         iconLoaderSettingsChanged();
         emit devicePixelRatioChanged();
     }
@@ -168,6 +172,7 @@ void Units::printScreenInfo(QQuickItem* item)
             _dpi = screen->physicalDotsPerInch();
             qDebug() << "   refreshRate     : " << screen->refreshRate();
             qDebug() << "   devicePixelRatio: " << screen->devicePixelRatio();
+            qDebug() << "   qApp->devicePR  : " << qApp->devicePixelRatio();
             qDebug() << "   depth           : " << screen->depth();
             qDebug() << "   dpi X:            " << screen->physicalDotsPerInchX();
             qDebug() << "   dpi Y:            " << screen->physicalDotsPerInchY();
