@@ -389,8 +389,6 @@ void DialogProxy::syncToMainItemSize()
         resize(s);
     }
     
-    emit widthChanged(s.width());
-    emit heightChanged(s.height());
 }
 
 
