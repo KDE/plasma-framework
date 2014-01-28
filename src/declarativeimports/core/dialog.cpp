@@ -461,7 +461,20 @@ void DialogProxy::hideEvent(QHideEvent *event)
 
 void DialogProxy::syncBorders()
 {
-    const QRect avail = screen()->availableGeometry();
+    // FIXME: QWindow::screen() never ever changes if the window is moved across
+    //        virtual screens (normal two screens with X), this seems to be intentional
+    //        as it's explicitly mentioned in the docs. Until that's changed or some
+    //        more proper way of howto get the current QScreen for given QWindow is found,
+    //        we simply iterate over the virtual screens and pick the one our QWindow
+    //        says it's at.
+    QRect avail;
+    QPoint pos = position();
+    Q_FOREACH(QScreen *screen, screen()->virtualSiblings()) {
+        if (screen->availableGeometry().contains(pos)) {
+            avail = screen->availableGeometry();
+            break;
+        }
+    }
 
     int borders = Plasma::FrameSvg::AllBorders;
 
