@@ -52,9 +52,8 @@ Item {
                 width: cwidth/2
                 onClicked: {
                     print("DPI Button onClicked");
-                    units.printScreenInfo(dpilabel);
-                    var d = units.dpi(dpilabel);
-                    dpilabel.text = "\t" + d
+                    var d = units.devicePixelRatio * 96;
+                    dpilabel.text = "\t" + d;
                 }
             }
             PlasmaComponents.Label {

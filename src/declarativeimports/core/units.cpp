@@ -119,12 +119,13 @@ void Units::setDevicePixelRatio(const qreal scale)
         if (scale <= 0) {
             // Going through QDesktopWidget seems to be the most reliable way no
             // to get the DPI, and thus devicePixelRatio
-            // Using QGuiApplication::devicePixelRatio() gives unexpected values,
-            // i.e. it assumes DPI to be 100 on a 180 DPI screen.
-            m_dpi = QApplication::desktop()->physicalDpiX();
+            // Using QGuiApplication::devicePixelRatio() gives too coarse values,
+            // i.e. it directly jumps from 1.0 to 2.0. We want tighter control on
+            // sizing, so we compute the exact ratio and use that.
+            qreal dpi = QApplication::desktop()->physicalDpiX();
             // Usual "default" is 96 dpi
             // that magic ratio follows the definition of "device independent pixel" by Microsoft
-            m_devicePixelRatio = (qreal)m_dpi / (qreal)96;
+            m_devicePixelRatio = (qreal)dpi / (qreal)96;
         } else {
             m_devicePixelRatio = scale;
         }
@@ -147,49 +148,6 @@ void Units::themeChanged()
         m_gridUnit = gridUnit;
         emit gridUnitChanged();
     }
-}
-
-qreal Units::dpi(QQuickItem* item)
-{
-    int  _dpi = 96;
-    if (item) {
-        QScreen* screen = item->window()->screen();
-        if (screen) {
-            _dpi = screen->physicalDotsPerInch();
-        }
-    }
-    return _dpi;
-}
-
-void Units::printScreenInfo(QQuickItem* item)
-{
-    int  _dpi = dpi(item);
-    qDebug() << " ----- printScreenInfo() ---- ";
-    if (item) {
-        QScreen* screen = item->window()->screen();
-        if (screen) {
-            qDebug() << "screen geo: " << screen->availableGeometry();
-            _dpi = screen->physicalDotsPerInch();
-            qDebug() << "   refreshRate     : " << screen->refreshRate();
-            qDebug() << "   devicePixelRatio: " << screen->devicePixelRatio();
-            qDebug() << "   qApp->devicePR  : " << qApp->devicePixelRatio();
-            qDebug() << "   depth           : " << screen->depth();
-            qDebug() << "   dpi X:            " << screen->physicalDotsPerInchX();
-            qDebug() << "   dpi Y:            " << screen->physicalDotsPerInchY();
-            qDebug() << "   ->> dpi:          " << _dpi;
-        }
-    }
-    qDebug() << "FontMetrics: " << QApplication::font().pointSize() << QFontMetrics(QApplication::font()).boundingRect("M");
-    qDebug() << " MRect" << QFontMetrics(QApplication::font()).boundingRect("M").size();
-    qDebug() << " gridUnit: " << QFontMetrics(QApplication::font()).boundingRect("M").size().height();
-
-
-    qDebug() << " Small " << KIconLoader::SizeSmall << " -> " << devicePixelIconSize(KIconLoader::SizeSmall);
-    qDebug() << " SMedi " << KIconLoader::SizeSmallMedium << " -> " << devicePixelIconSize(KIconLoader::SizeSmallMedium);
-    qDebug() << " Mediu " << KIconLoader::SizeMedium << " -> " << devicePixelIconSize(KIconLoader::SizeMedium);
-    qDebug() << " Large " << KIconLoader::SizeLarge << " -> " << devicePixelIconSize(KIconLoader::SizeLarge);
-    qDebug() << " Huge  " << KIconLoader::SizeHuge << " -> " << devicePixelIconSize(KIconLoader::SizeHuge);
-    qDebug() << " Enorm " << KIconLoader::SizeEnormous << " -> " << devicePixelIconSize(KIconLoader::SizeEnormous);
 }
 
 int Units::smallSpacing() const

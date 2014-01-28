@@ -80,6 +80,7 @@ Item {
 
     PlasmaComponents.Slider {
         id: dprSlider
+        visible: false
         anchors {
             bottom: parent.bottom
             bottomMargin: units.largeSpacing/2

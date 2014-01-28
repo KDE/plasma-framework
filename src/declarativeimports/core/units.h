@@ -81,7 +81,7 @@ class Units : public QObject
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio WRITE setDevicePixelRatio NOTIFY devicePixelRatioChanged)
+    Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)
 
 public:
     Units(QObject *parent = 0);
@@ -93,16 +93,6 @@ public:
      * @return pixel value for a grid Unit. Depends on DPI and font size.
      */
     int gridUnit() const;
-
-
-    /**
-     * Overrides the devicePixelRatio
-     *
-     * Set the device pixel ratio to a custom value.
-     *
-     * @arg ratio, 0 resets to detected value
-     */
-    void setDevicePixelRatio(const qreal ratio);
 
     /**
      * @return The ratio between physical and device-independent pixels.
@@ -126,13 +116,6 @@ public:
      */
     int largeSpacing() const;
 
-    /**
-     * @returns the dpi value for the item's screen
-     */
-    Q_INVOKABLE qreal dpi(QQuickItem *item);
-
-    Q_INVOKABLE void printScreenInfo(QQuickItem *item);
-
 Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
@@ -144,6 +127,15 @@ private Q_SLOTS:
     void iconLoaderSettingsChanged();
 
 private:
+    /**
+     * Overrides the devicePixelRatio
+     *
+     * Set the device pixel ratio to a custom value.
+     *
+     * @arg ratio, 0 resets to detected value
+     */
+    void setDevicePixelRatio(const qreal ratio);
+
     void updateSpacing();
     /**
      * @return The dpi-adjusted size for a given icon size
