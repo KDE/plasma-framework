@@ -54,7 +54,9 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     : Plasma::AppletScript(parent),
       m_interface(0)
 {
-    qmlRegisterType<AppletInterface>();
+    //qmlRegisterType<AppletInterface>();
+    qmlRegisterUncreatableType<AppletInterface>("org.kde.shell", 2, 0, "AppletInterface",
+                                             QLatin1String("Do not create objects of type AppletInterface"));
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
 }

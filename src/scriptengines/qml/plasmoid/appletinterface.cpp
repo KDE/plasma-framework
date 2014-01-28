@@ -52,6 +52,8 @@
 
 Q_DECLARE_METATYPE(AppletInterface*)
 
+QHash<QObject *, AppletInterface *> AppletInterface::s_rootObjects = QHash<QObject *, AppletInterface *>();
+
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
     : QQuickItem(parent),
       m_appletScriptEngine(script),
@@ -96,6 +98,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
 
 AppletInterface::~AppletInterface()
 {
+    s_rootObjects.remove(m_qmlObject->engine());
 }
 
 void AppletInterface::init()
@@ -108,6 +111,8 @@ void AppletInterface::init()
 
     //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
     QQmlEngine *engine = m_qmlObject->engine();
+
+    s_rootObjects[m_qmlObject->engine()] = this;
 
     //Hook generic url resolution to the applet package as well
     //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?

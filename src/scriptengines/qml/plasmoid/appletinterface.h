@@ -237,7 +237,15 @@ public:
      * DEPRECATED: use plasmoid.configuration instead
      */
     Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
-    
+
+    static AppletInterface *qmlAttachedProperties(QObject *object)
+    {
+        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
+            return s_rootObjects.value(QtQml::qmlEngine(object));
+        } else {
+            return 0;
+        }
+    }
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
     QString icon() const;
@@ -361,6 +369,10 @@ private:
     bool m_expanded : 1;
     bool m_hideOnDeactivate : 1;
     friend class ContainmentInterface;
+
+    static QHash<QObject *, AppletInterface *> s_rootObjects;
 };
+
+QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

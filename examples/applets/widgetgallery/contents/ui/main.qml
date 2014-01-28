@@ -19,14 +19,18 @@
 
 import QtQuick 2.0
 import org.kde.plasma.components 2.0
+import org.kde.shell 2.0
 
 Item {
     property int minimumWidth: 300
     property int minimumHeight: 400
 
+    AppletInterface.title: "bah"
+
     ToolBar {
         id: toolBar
         z: 10
+        //AppletInterface.title: "bah"
         anchors {
             top: parent.top
             left: parent.left
