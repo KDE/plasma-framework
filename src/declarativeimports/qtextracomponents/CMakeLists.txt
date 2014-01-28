@@ -10,6 +10,7 @@ set(qtextracomponents_SRCS
     mouseeventlistener.cpp
     columnproxymodel.cpp
     clipboard.cpp
+    mimedatabase.cpp
 )
 
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})

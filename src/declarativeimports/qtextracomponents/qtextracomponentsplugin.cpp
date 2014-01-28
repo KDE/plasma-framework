@@ -30,6 +30,7 @@
 #include "mouseeventlistener.h"
 #include "columnproxymodel.h"
 #include "clipboard.h"
+#include "mimedatabase.h"
 
 void QtExtraComponentsPlugin::registerTypes(const char *uri)
 {
@@ -41,6 +42,7 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<MouseEventListener>(uri, 2, 0, "MouseEventListener");
     qmlRegisterType<ColumnProxyModel>(uri, 2, 0, "ColumnProxyModel");
     qmlRegisterType<Clipboard>(uri, 2, 0, "Clipboard");
+    qmlRegisterType<MimeDatabase>(uri, 2, 0, "MimeDatabase");
 
     qmlRegisterType<QAbstractItemModel>();
     qRegisterMetaType<QModelIndex>("QModelIndex");
