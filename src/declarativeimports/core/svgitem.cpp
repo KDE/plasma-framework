@@ -19,6 +19,8 @@
 
 #include "svgitem.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QPainter>
 
 #include "QDebug"
@@ -68,10 +70,10 @@ QSizeF SvgItem::naturalSize() const
     if (!m_svg) {
         return QSizeF();
     } else if (!m_elementID.isEmpty()) {
-        return m_svg.data()->elementSize(m_elementID);
+        return m_svg.data()->elementSize(m_elementID) * floor(m_units.devicePixelRatio());
     }
 
-    return m_svg.data()->size();
+    return m_svg.data()->size() * floor(m_units.devicePixelRatio());
 }
 
 

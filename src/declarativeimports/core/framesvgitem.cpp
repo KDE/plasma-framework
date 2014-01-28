@@ -82,6 +82,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
+    updateDevicePixelRatio();
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
@@ -227,6 +228,12 @@ void FrameSvgItem::componentComplete()
     m_frameSvg->resizeFrame(QSize(width(), height()));
 }
 
+
+void FrameSvgItem::updateDevicePixelRatio()
+{
+    m_frameSvg->resize();
+    m_frameSvg->resize(m_frameSvg->size() * 5);
+}
 
 } // Plasma namespace
 

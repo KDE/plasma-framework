@@ -107,6 +107,7 @@ public:
     QSizeF naturalSize;
     QChar styleCrc;
     unsigned int lastModified;
+    qreal devicePixelRatio;
     bool multipleImages : 1;
     bool themed : 1;
     bool applyColors : 1;
