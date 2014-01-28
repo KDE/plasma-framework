@@ -127,15 +127,7 @@ private Q_SLOTS:
     void iconLoaderSettingsChanged();
 
 private:
-    /**
-     * Overrides the devicePixelRatio
-     *
-     * Set the device pixel ratio to a custom value.
-     *
-     * @arg ratio, 0 resets to detected value
-     */
-    void setDevicePixelRatio(const qreal ratio);
-
+    void updateDevicePixelRatio();
     void updateSpacing();
     /**
      * @return The dpi-adjusted size for a given icon size

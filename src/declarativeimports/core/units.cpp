@@ -36,7 +36,7 @@ Units::Units (QObject *parent)
       m_devicePixelRatio(-1)
 {
     m_iconSizes = new QQmlPropertyMap(this);
-    setDevicePixelRatio(0);
+    updateDevicePixelRatio();
     updateSpacing();
 
     //iconLoaderSettingsChanged();
@@ -113,26 +113,19 @@ qreal Units::devicePixelRatio() const
     return m_devicePixelRatio;
 }
 
-void Units::setDevicePixelRatio(const qreal scale)
+void Units::updateDevicePixelRatio()
 {
-    if (m_devicePixelRatio != scale) {
-        if (scale <= 0) {
-            // Going through QDesktopWidget seems to be the most reliable way no
-            // to get the DPI, and thus devicePixelRatio
-            // Using QGuiApplication::devicePixelRatio() gives too coarse values,
-            // i.e. it directly jumps from 1.0 to 2.0. We want tighter control on
-            // sizing, so we compute the exact ratio and use that.
-            qreal dpi = QApplication::desktop()->physicalDpiX();
-            // Usual "default" is 96 dpi
-            // that magic ratio follows the definition of "device independent pixel" by Microsoft
-            m_devicePixelRatio = (qreal)dpi / (qreal)96;
-        } else {
-            m_devicePixelRatio = scale;
-        }
-        qDebug() << "XX Setting dpi scale to " << scale;
-        iconLoaderSettingsChanged();
-        emit devicePixelRatioChanged();
-    }
+    // Going through QDesktopWidget seems to be the most reliable way no
+    // to get the DPI, and thus devicePixelRatio
+    // Using QGuiApplication::devicePixelRatio() gives too coarse values,
+    // i.e. it directly jumps from 1.0 to 2.0. We want tighter control on
+    // sizing, so we compute the exact ratio and use that.
+    qreal dpi = QApplication::desktop()->physicalDpiX();
+    // Usual "default" is 96 dpi
+    // that magic ratio follows the definition of "device independent pixel" by Microsoft
+    m_devicePixelRatio = (qreal)dpi / (qreal)96;
+    iconLoaderSettingsChanged();
+    emit devicePixelRatioChanged();
 }
 
 int Units::gridUnit() const
