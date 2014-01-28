@@ -29,6 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
+#include "appletloader.h"
 #include "declarativeappletscript.h"
 
 class QAction;
@@ -48,7 +49,7 @@ namespace Plasma
     class ConfigLoader;
 } // namespace Plasma
 
-class AppletInterface : public QQuickItem
+class AppletInterface : public AppletLoader
 {
     Q_OBJECT
 
@@ -335,13 +336,13 @@ protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     void itemChange(ItemChange change, const ItemChangeData &value);
 
-    DeclarativeAppletScript *m_appletScriptEngine;
+    
 
 protected Q_SLOTS:
     virtual void init();
 
 private Q_SLOTS:
-    void compactRepresentationCheck();
+    void _compactRepresentationCheck();
     void updatePopupSize();
     void updateImplicitWidth();
     void updateImplicitHeight();
@@ -359,7 +360,6 @@ private:
     KDeclarative::ConfigPropertyMap *m_configuration;
 
 //UI-specific members ------------------
-    KDeclarative::QmlObject *m_qmlObject;
     QWeakPointer<QObject> m_compactUiObject;
 
     QTimer *m_collapseTimer;

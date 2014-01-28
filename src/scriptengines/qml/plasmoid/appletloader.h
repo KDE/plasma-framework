@@ -1,0 +1,169 @@
+/*
+ *   Copyright 2014 Marco Martin <mart@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#ifndef APPLETLOADER_P
+#define APPLETLOADER_P
+
+#include <QQuickItem>
+#include <QWeakPointer>
+#include <QQmlComponent>
+#include <QTimer>
+
+#include "declarativeappletscript.h"
+
+class QQmlComponent;
+
+namespace Plasma {
+    class Applet;
+    class AppletScript;
+}
+
+namespace KDeclarative {
+    class QmlObject;
+}
+
+
+class AppletLoader : public QQuickItem
+{
+    Q_OBJECT
+
+    Q_PROPERTY(int switchWidth READ switchWidth WRITE setSwitchWidth NOTIFY switchWidthChanged)
+    Q_PROPERTY(int switchHeight READ switchHeight WRITE setSwitchHeight NOTIFY switchHeightChanged)
+
+    Q_PROPERTY(QQmlComponent *compactRepresentation READ compactRepresentation WRITE setCompactRepresentation NOTIFY compactRepresentationChanged)
+    Q_PROPERTY(QObject *compactRepresentationItem READ compactRepresentationItem NOTIFY compactRepresentationItemChanged)
+
+    Q_PROPERTY(QQmlComponent *fullRepresentation READ fullRepresentation WRITE setFullRepresentation NOTIFY fullRepresentationChanged)
+    Q_PROPERTY(QObject *fullRepresentationItem READ fullRepresentationItem NOTIFY fullRepresentationItemChanged)
+
+
+    /**
+     * this is supposed to be either one between compactRepresentation or fullRepresentation
+     */
+    Q_PROPERTY(QQmlComponent *preferredRepresentation READ preferredRepresentation WRITE setPreferredRepresentation NOTIFY preferredRepresentationChanged)
+
+    //FIXME: is it wise to expose this?
+    Q_PROPERTY(QQmlComponent *compactRepresentation READ compactRepresentation WRITE setCompactRepresentation NOTIFY compactRepresentationChanged)
+
+public:
+    AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent = 0);
+    ~AppletLoader();
+
+    Plasma::Applet *applet() const;
+    Plasma::AppletScript *appletScript();
+
+    int switchWidth() const;
+    void setSwitchWidth(int width);
+
+    int switchHeight() const;
+    void setSwitchHeight(int width);
+
+
+    QQmlComponent *compactRepresentation();
+    void setCompactRepresentation(QQmlComponent *component);
+
+    QQmlComponent *fullRepresentation();
+    void setFullRepresentation(QQmlComponent *component);
+
+    QQmlComponent *preferredRepresentation();
+    void setPreferredRepresentation(QQmlComponent *component);
+
+
+    QQmlComponent *compactRepresentationExpander();
+    void setCompactRepresentationExpander(QQmlComponent *component);
+
+    QObject *compactRepresentationItem();
+    QObject *fullRepresentationItem();
+    QObject *compactRepresentationExpanderItem();
+
+    //Reimplemented
+    virtual void classBegin();
+    virtual void init();
+    
+Q_SIGNALS:
+    void switchWidthChanged(int width);
+    void switchHeightChanged(int height);
+
+    void compactRepresentationChanged(QQmlComponent *compactRepresentation);
+    void fullRepresentationChanged(QQmlComponent *fullRepresentation);
+    void preferredRepresentationChanged(QQmlComponent *preferredRepresentation);
+
+    void compactRepresentationExpanderChanged(QQmlComponent *compactRepresentationExpander);
+
+    void compactRepresentationItemChanged(QObject *compactRepresentationItem);
+    void fullRepresentationItemChanged(QObject *fullRepresentationItem);
+    void compactRepresentationExpanderItemChanged(QObject *compactRepresentationExpanderItem);
+
+protected:
+    KDeclarative::QmlObject *qmlObject();
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
+    void itemChange(ItemChange change, const ItemChangeData &value);
+
+    QObject *createCompactRepresentationItem();
+    QObject *createFullRepresentationItem();
+    QObject *createCompactRepresentationExpanderItem();
+
+    //look into item, and return the Layout attached property, if found
+    void connectLayoutAttached(QObject *item);
+    void propagateSizeHint(const QByteArray &layoutProperty);
+
+private Q_SLOTS:
+    void compactRepresentationCheck();
+
+    //handlers of Layout signals
+    void minimumWidthChanged();
+    void minimumHeightChanged();
+    void preferredWidthChanged();
+    void preferredHeightChanged();
+    void maximumWidthChanged();
+    void maximumHeightChanged();
+    void fillWidthChanged();
+    void fillHeightChanged();
+
+//FIXME:
+protected:
+    DeclarativeAppletScript *m_appletScriptEngine;
+    KDeclarative::QmlObject *m_qmlObject;
+
+private:
+    int m_switchWidth;
+    int m_switchHeight;
+
+    QWeakPointer<QQmlComponent> m_compactRepresentation;
+    QWeakPointer<QQmlComponent> m_fullRepresentation;
+    QWeakPointer<QQmlComponent> m_preferredRepresentation;
+    QWeakPointer<QQmlComponent> m_compactRepresentationExpander;
+
+    QWeakPointer<QObject> m_compactRepresentationItem;
+    QWeakPointer<QObject> m_fullRepresentationItem;
+    QWeakPointer<QObject> m_compactRepresentationExpanderItem;
+    QWeakPointer<QObject> m_currentRepresentationItem;
+
+    //Attached layout objects: own and the representation's one
+    QWeakPointer<QObject> m_representationLayout;
+    QWeakPointer<QObject> m_ownLayout;
+
+    QTimer m_compactRepresentationCheckTimer;
+    QTimer m_fullRepresentationResizeTimer;
+
+    Plasma::Applet *m_applet;
+};
+
+
+#endif

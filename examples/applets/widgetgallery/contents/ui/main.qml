@@ -18,14 +18,17 @@
 */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
 import org.kde.plasma.components 2.0
-import org.kde.shell 2.0
+import org.kde.plasma.shell 2.0
 
 Item {
-    property int minimumWidth: 300
-    property int minimumHeight: 400
+    Layout.minimumWidth: 300
+    Layout.minimumHeight: 400
 
-    AppletInterface.title: "bah"
+    Plasmoid.title: "bah"
+    Plasmoid.switchWidth: 300
+    Plasmoid.switchHeight: 400
 
     ToolBar {
         id: toolBar

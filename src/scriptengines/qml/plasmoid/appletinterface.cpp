@@ -55,8 +55,7 @@ Q_DECLARE_METATYPE(AppletInterface*)
 QHash<QObject *, AppletInterface *> AppletInterface::s_rootObjects = QHash<QObject *, AppletInterface *>();
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
-    : QQuickItem(parent),
-      m_appletScriptEngine(script),
+    : AppletLoader(script, parent),
       m_actionSignals(0),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
@@ -93,7 +92,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
 
     m_collapseTimer = new QTimer(this);
     m_collapseTimer->setSingleShot(true);
-    connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
+    //connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
 }
 
 AppletInterface::~AppletInterface()
@@ -103,6 +102,8 @@ AppletInterface::~AppletInterface()
 
 void AppletInterface::init()
 {
+    AppletLoader::init();
+
     if (m_qmlObject->rootObject()) {
         return;
     }
@@ -239,7 +240,7 @@ void AppletInterface::setExpanded(bool expanded)
 {
     //if there is no compact representation it means it's always expanded
     //Containnments are always expanded
-    if (!m_compactUiObject || qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
+    if (/*!m_compactUiObject ||*/ qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
         return;
     }
 
@@ -610,11 +611,11 @@ void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &o
 {
     Q_UNUSED(oldGeometry)
 
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
+    AppletLoader::geometryChanged(newGeometry, oldGeometry);
     m_collapseTimer->start(100);
 }
 
-void AppletInterface::compactRepresentationCheck()
+void AppletInterface::_compactRepresentationCheck()
 {
     if (width() <= 0 || height() <= 0 || !m_qmlObject->rootObject() ||
         qobject_cast<ContainmentInterface *>(this)) {
@@ -839,7 +840,7 @@ void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
             init();
         }
     }
-    QQuickItem::itemChange(change, value);
+    AppletLoader::itemChange(change, value);
 }
 
 KDeclarative::QmlObject *AppletInterface::qmlObject()
