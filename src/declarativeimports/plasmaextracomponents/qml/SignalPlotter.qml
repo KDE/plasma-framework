@@ -34,17 +34,6 @@ Canvas {
 	property int graphPadding: 10  //Replace with units later
 	property int max: 0
 
-	Timer {
-        interval: 500
-        running: true
-        repeat: true
-        onTriggered: {
-			var r = Math.ceil (Math.random () * 100);
-			addSample(r);
-		}
-
-    }
-
 	QtObject {
 		id: internal
 		property int availableVSpace: height - (2*graphPadding)
