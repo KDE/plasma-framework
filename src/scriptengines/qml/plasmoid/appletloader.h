@@ -61,6 +61,12 @@ class AppletLoader : public QQuickItem
     //FIXME: is it wise to expose this?
     Q_PROPERTY(QQmlComponent *compactRepresentation READ compactRepresentation WRITE setCompactRepresentation NOTIFY compactRepresentationChanged)
 
+    /**
+     * True when the applet is showing its full representation. either as the main only view, or in a popup.
+     * Setting it will open or close the popup if the plasmoid is iconified, however it won't have effect if the applet is open
+     */
+    Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
+
 public:
     AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletLoader();
@@ -105,6 +111,9 @@ public:
         }
     }
 
+    bool isExpanded() const;
+    void setExpanded(bool expanded);
+
 Q_SIGNALS:
     void switchWidthChanged(int width);
     void switchHeightChanged(int height);
@@ -118,6 +127,8 @@ Q_SIGNALS:
     void compactRepresentationItemChanged(QObject *compactRepresentationItem);
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
     void compactRepresentationExpanderItemChanged(QObject *compactRepresentationExpanderItem);
+
+    void expandedChanged();
 
 protected:
     KDeclarative::QmlObject *qmlObject();
@@ -168,6 +179,8 @@ private:
 
     DeclarativeAppletScript *m_appletScriptEngine;
     KDeclarative::QmlObject *m_qmlObject;
+
+    bool m_expanded : 1;
 
     static QHash<QObject *, AppletLoader *> s_rootObjects;
 };

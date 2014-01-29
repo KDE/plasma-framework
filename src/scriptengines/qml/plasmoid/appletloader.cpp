@@ -44,7 +44,8 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
     : QQuickItem(parent),
       m_switchWidth(-1),
       m_switchHeight(-1),
-      m_appletScriptEngine(script)
+      m_appletScriptEngine(script),
+      m_expanded(false)
 {
     m_compactRepresentationCheckTimer.setSingleShot(true);
     m_compactRepresentationCheckTimer.setInterval(250);
@@ -52,16 +53,16 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
              this, SLOT(compactRepresentationCheck()));
     m_compactRepresentationCheckTimer.start();
 
-   /* m_fullRepresentationResizeTimer.setSingleShot(true);
+    m_fullRepresentationResizeTimer.setSingleShot(true);
     m_fullRepresentationResizeTimer.setInterval(250);
     connect (&m_fullRepresentationResizeTimer, &QTimer::timeout,
              [=]() {
-                KConfigGroup cg = applet()->config();
+                KConfigGroup cg = m_appletScriptEngine->applet()->config();
                 cg = KConfigGroup(&cg, "PopupApplet");
                 cg.writeEntry("DialogWidth", m_fullRepresentationItem.data()->property("width").toInt());
                 cg.writeEntry("DialogHeight", m_fullRepresentationItem.data()->property("height").toInt());
             }
-    );*/
+    );
 
 
 
@@ -71,11 +72,20 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
 
 AppletLoader::~AppletLoader()
 {
+    //Here the order is important
+    delete m_compactRepresentationItem.data();
+    delete m_fullRepresentationItem.data();
+    delete m_compactRepresentationExpanderItem.data();
+
     s_rootObjects.remove(m_qmlObject->engine());
 }
 
 void AppletLoader::init()
 {
+    if (s_rootObjects.contains(this)) {
+        return;
+    }
+
     s_rootObjects[m_qmlObject->engine()] = this;
 
     Q_ASSERT(m_appletScriptEngine);
@@ -111,7 +121,6 @@ void AppletLoader::init()
         appletScript()->setLaunchErrorMessage(reason);
     }
 
-qWarning()<<"AAAAAAAAAAA"<<m_qmlObject->mainComponent()->errors();
     engine->rootContext()->setContextProperty("plasmoid", this);
 
     //initialize size, so an useless resize less
@@ -119,7 +128,7 @@ qWarning()<<"AAAAAAAAAAA"<<m_qmlObject->mainComponent()->errors();
     initialProperties["width"] = width();
     initialProperties["height"] = height();
     m_qmlObject->completeInitialization(initialProperties);
-qWarning()<<"BBBBB";
+
 
 
     //default m_compactRepresentation is a simple icon provided by the shell package
@@ -127,12 +136,6 @@ qWarning()<<"BBBBB";
         m_compactRepresentation = new QQmlComponent(engine, this);
         m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
     }
-
-    //we really want a full representation, default m_fullRepresentation is an error message
-   /* if (!m_fullRepresentation) {
-        m_fullRepresentation = new QQmlComponent(m_qmlObject->engine(), this);
-        m_fullRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("appleterror")));
-    }*/
 
     //default m_compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!m_compactRepresentationExpander) {
@@ -223,6 +226,29 @@ void AppletLoader::setPreferredRepresentation(QQmlComponent *component)
     emit preferredRepresentationChanged(component);
 }
 
+bool AppletLoader::isExpanded() const
+{
+    return m_expanded;
+}
+
+void AppletLoader::setExpanded(bool expanded)
+{
+    if (m_appletScriptEngine->applet()->isContainment()) {
+        expanded = true;
+    }
+
+    //if there is no compact representation it means it's always expanded
+    //Containnments are always expanded
+    if (m_expanded == expanded) {
+        return;
+    }
+
+    createFullRepresentationItem();
+    createCompactRepresentationExpanderItem();
+
+    m_expanded = expanded;
+    emit expandedChanged();
+}
 
 ////////////Internals
 
@@ -302,6 +328,10 @@ QObject *AppletLoader::createCompactRepresentationExpanderItem()
     }
 
     m_compactRepresentationExpanderItem = m_qmlObject->createObjectFromComponent(m_compactRepresentationExpander.data(), QtQml::qmlContext(m_qmlObject->rootObject()));
+
+
+    m_compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
+    m_compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
 
     emit compactRepresentationExpanderItemChanged(m_compactRepresentationExpanderItem.data());
 
@@ -480,11 +510,9 @@ void AppletLoader::compactRepresentationCheck()
 
     //Icon
     } else {
-        QQuickItem *fullItem = qobject_cast<QQuickItem *>(createFullRepresentationItem());
         QQuickItem *compactItem = qobject_cast<QQuickItem *>(createCompactRepresentationItem());
-        QObject *compactExpanderItem = createCompactRepresentationExpanderItem();
 
-        if (fullItem && compactItem && compactExpanderItem) {
+        if (compactItem) {
             //set the root item as the main visible item
             compactItem->setParentItem(this);
             compactItem->setVisible(true);
@@ -495,8 +523,15 @@ void AppletLoader::compactRepresentationCheck()
                 prop.write(expr.evaluate());
             }
 
-            compactExpanderItem->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
-            compactExpanderItem->setProperty("fullRepresentation", QVariant::fromValue(fullItem));
+            if (m_fullRepresentationItem) {
+                m_fullRepresentationItem.data()->setProperty("parent", QVariant());
+            }
+
+            if (m_compactRepresentationExpanderItem) {
+                m_compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
+                m_compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
+            }
+
             m_currentRepresentationItem = compactItem;
             connectLayoutAttached(compactItem);
         }

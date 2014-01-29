@@ -109,12 +109,6 @@ class AppletInterface : public AppletLoader
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
 
     /**
-     * True when the applet is showing its full representation. either as the main only view, or in a popup.
-     * Setting it will open or close the popup if the plasmoid is iconified, however it won't have effect if the applet is open
-     */
-    Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
-
-    /**
      * How the applet wants its background to be drawn. The containment may chose to ignore this hint.
      */
     Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
@@ -249,9 +243,6 @@ public:
     bool isBusy() const;
     void setBusy(bool busy);
 
-    bool isExpanded() const;
-    void setExpanded(bool expanded);
-
     Plasma::Types::BackgroundHints backgroundHints() const;
     void setBackgroundHints(Plasma::Types::BackgroundHints hint);
 
@@ -294,7 +285,6 @@ Q_SIGNALS:
     void statusChanged();
     void backgroundHintsChanged();
     void busyChanged();
-    void expandedChanged();
     void screenChanged();
     void hideOnWindowDeactivateChanged();
 
@@ -302,9 +292,6 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     virtual void init();
-
-private Q_SLOTS:
-    void updatePopupSize();
 
 private:
 
@@ -321,7 +308,6 @@ private:
 
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
-    bool m_expanded : 1;
     bool m_hideOnDeactivate : 1;
     friend class ContainmentInterface;
 };

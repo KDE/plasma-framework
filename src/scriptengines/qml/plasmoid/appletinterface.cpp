@@ -57,7 +57,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_actionSignals(0),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
-      m_expanded(false),
       m_hideOnDeactivate(true)
 {
     qmlRegisterType<AppletInterface>();
@@ -177,23 +176,6 @@ void AppletInterface::setBusy(bool busy)
 
     m_busy = busy;
     emit busyChanged();
-}
-
-bool AppletInterface::isExpanded() const
-{
-    return m_expanded;
-}
-
-void AppletInterface::setExpanded(bool expanded)
-{
-    //if there is no compact representation it means it's always expanded
-    //Containnments are always expanded
-    if (qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
-        return;
-    }
-
-    m_expanded = expanded;
-    emit expandedChanged();
 }
 
 Plasma::Types::BackgroundHints AppletInterface::backgroundHints() const
@@ -468,15 +450,6 @@ QStringList AppletInterface::downloadedFiles() const
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
-
-void AppletInterface::updatePopupSize()
-{
-    KConfigGroup cg = applet()->config();
-    cg = KConfigGroup(&cg, "PopupApplet");
-    cg.writeEntry("DialogWidth", qmlObject()->rootObject()->property("width").toInt());
-    cg.writeEntry("DialogHeight", qmlObject()->rootObject()->property("height").toInt());
-}
-
 
 void AppletInterface::executeAction(const QString &name)
 {
