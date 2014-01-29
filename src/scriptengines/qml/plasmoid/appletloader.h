@@ -93,7 +93,6 @@ public:
     QObject *compactRepresentationExpanderItem();
 
     //Reimplemented
-    virtual void classBegin();
     virtual void init();
     
 Q_SIGNALS:

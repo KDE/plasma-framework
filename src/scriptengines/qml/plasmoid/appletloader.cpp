@@ -171,13 +171,6 @@ void AppletLoader::setPreferredRepresentation(QQmlComponent *component)
 
 ////////////Internals
 
-void AppletLoader::classBegin()
-{
-    Q_ASSERT(m_qmlObject->engine());
-    m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
-
-}
-
 void AppletLoader::init()
 {
     //m_appletScriptEngine = property("_plasma_appletscript").value<Plasma::AppletScript *>();

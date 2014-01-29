@@ -152,42 +152,6 @@ void ContainmentInterface::init()
         QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
         prop.write(expr.evaluate());
     }
-
-    if (m_qmlObject->rootObject()->property("minimumWidth").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(minimumWidthChanged()),
-                this, SIGNAL(minimumWidthChanged()));
-    }
-    if (m_qmlObject->rootObject()->property("minimumHeight").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(minimumHeightChanged()),
-                this, SIGNAL(minimumHeightChanged()));
-    }
-
-    if (m_qmlObject->rootObject()->property("maximumWidth").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(maximumWidthChanged()),
-                this, SIGNAL(maximumWidthChanged()));
-    }
-    if (m_qmlObject->rootObject()->property("maximumHeight").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(maximumHeightChanged()),
-                this, SIGNAL(maximumHeightChanged()));
-    }
-
-    if (m_qmlObject->rootObject()->property("implicitWidth").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(implicitWidthChanged()),
-                this, SIGNAL(implicitWidthChanged()));
-    }
-    if (m_qmlObject->rootObject()->property("implicitHeight").isValid()) {
-        connect(m_qmlObject->rootObject(), SIGNAL(implicitHeightChanged()),
-                this, SIGNAL(implicitHeightChanged()));
-    }
-
-    emit fillWidthChanged();
-    emit fillHeightChanged();
-    emit minimumWidthChanged();
-    emit minimumHeightChanged();
-    emit implicitWidthChanged();
-    emit implicitHeightChanged();
-    emit maximumWidthChanged();
-    emit maximumHeightChanged();
 }
 
 QList <QObject *> ContainmentInterface::applets()
