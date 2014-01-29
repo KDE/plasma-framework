@@ -26,8 +26,6 @@
 #include <QApplication>
 #include <QQuickItem>
 #include <QDesktopWidget>
-#include <QQuickItem>
-#include <QQuickItem>
 #include <QTimer>
 #include <QLayout>
 #include <QScreen>
