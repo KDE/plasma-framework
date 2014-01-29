@@ -138,5 +138,19 @@ for FS in `find $PWD  -name '*.h' -o -name '*.cpp'`; do
     perl -p -i -e 's/Plasma\:\:AcceptingInputStatus/Plasma::Types::AcceptingInputStatus/g' $FS
 done
 
+# make compactrepresentation come from Plasmoid.*
+# size hints come from Layout
+for FS in `find $PWD -type f -name '*.qml'`; do
+    perl -p -i -e 's/property Component compactRepresentation/Plasmoid.compactRepresentation/g' $FS
+    perl -p -i -e 's/property int minimumWidth/Layout.minimumWidth/g' $FS
+    perl -p -i -e 's/property int minimumHeight/Layout.minimumHeight/g' $FS
+    perl -p -i -e 's/property int maximumWidth/Layout.maximumWidth/g' $FS
+    perl -p -i -e 's/property int maximumHeight/Layout.maximumHeight/g' $FS
+    perl -p -i -e 's/property bool fillWidth/Layout.fillWidth/g' $FS
+    perl -p -i -e 's/property bool fillHeight/Layout.fillHeight/g' $FS
+done
 
+for FS in `find $PWD -type f -name '*main.qml'`; do
+    perl -p -i -e 's/QtQuick 2.0/QtQuick 2.0\nimport org.kde.plasma.shell 2.0/g' $FS
+done
 
