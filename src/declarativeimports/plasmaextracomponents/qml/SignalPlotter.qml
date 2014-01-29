@@ -29,7 +29,7 @@ Canvas {
 	property bool showAxis: true
 	property bool showHorizontalLines: true
 
-	property bool smooth: false
+	property bool smooth: true
 
 	property int graphPadding: 10  //Replace with units later
 	property int max: 0
@@ -56,6 +56,12 @@ Canvas {
 			max = sample;
 		}
 		requestPaint();
+	}
+
+	function getYPos(sample) {
+		var yPer = (sample * 100) / max;
+		var yPos = (internal.availableVSpace * (yPer / 100));
+		return yPos;
 	}
 
 	function drawGraph(context) {
@@ -92,11 +98,30 @@ Canvas {
 		if (graphSamples == undefined)
 			graphSamples = new Array();
 		if (graphSamples.length != 0) {
+			var xPos = (graphSamples.length < internal.sampleCount) ? (internal.availableHSpace - (graphSamples.length * graphPadding)) : 0 - (2*graphPadding);
 			if(smooth && graphPadding > 5) {
+
+				context.beginPath();
+				context.moveTo(xPos, height - graphPadding);
+				var yPos0 = (internal.availableVSpace * (1 / 2));
+				context.lineTo(xPos, yPos0);
+				xPos += graphPadding;
+
+				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
+
+				for (var i = loopInit; i < graphSamples.length; i ++)
+				{
+					var xc = ((xPos * 2) + graphPadding ) / 2;
+					var yc = (getYPos(graphSamples[i]) + getYPos(graphSamples[i + 1])) / 2;
+					context.quadraticCurveTo(xPos, getYPos(graphSamples[i]), xc, yc);
+					xPos += graphPadding;
+				}
+				context.quadraticCurveTo(xPos, height-graphPadding, width - graphPadding,height -graphPadding);
+				context.stroke();
+				context.fillStyle = '#8ED6FF';
+				context.fill();
 			}
 			else {
-
-				var xPos = (graphSamples.length < internal.sampleCount) ? (internal.availableHSpace - (graphSamples.length * graphPadding)) : 0 - (2*graphPadding);
 				context.beginPath();
 				context.moveTo(xPos, height - graphPadding);
 				var yPos0 = (internal.availableVSpace * (1 / 2));
@@ -105,17 +130,14 @@ Canvas {
 
 				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 2;
 				for(var i = loopInit; i < graphSamples.length ; i++){
-					var yPer = (graphSamples[i] * 100) / max;
-					//print(yPer);
-					//print(internal.availableVSpace);
-					var yPos = (internal.availableVSpace * (yPer / 100));
-					context.lineTo(xPos, yPos);
+					context.lineTo(xPos, getYPos(graphSamples[i]));
 					xPos += graphPadding;
 				}
 				context.lineTo(xPos, height-graphPadding);
 				context.stroke();
 				context.fillStyle = '#8ED6FF';
 				context.fill();
+
 			}
 		} else {
 			print("No samples yet");
