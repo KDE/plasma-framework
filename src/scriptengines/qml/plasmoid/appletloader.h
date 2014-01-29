@@ -65,8 +65,7 @@ public:
     AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent = 0);
     ~AppletLoader();
 
-    Plasma::Applet *applet() const;
-    Plasma::AppletScript *appletScript();
+    DeclarativeAppletScript *appletScript() const;
 
     int switchWidth() const;
     void setSwitchWidth(int width);
@@ -94,7 +93,18 @@ public:
 
     //Reimplemented
     virtual void init();
-    
+
+    static AppletLoader *qmlAttachedProperties(QObject *object)
+    {
+        //at the moment of the attached object creation, the root item is the only one that hasn't a parent
+        //only way to avoid creation of this attached for everybody but the root item
+        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
+            return s_rootObjects.value(QtQml::qmlEngine(object));
+        } else {
+            return 0;
+        }
+    }
+
 Q_SIGNALS:
     void switchWidthChanged(int width);
     void switchHeightChanged(int height);
@@ -112,7 +122,7 @@ Q_SIGNALS:
 protected:
     KDeclarative::QmlObject *qmlObject();
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    void itemChange(ItemChange change, const ItemChangeData &value);
+    virtual void itemChange(ItemChange change, const ItemChangeData &value);
 
     QObject *createCompactRepresentationItem();
     QObject *createFullRepresentationItem();
@@ -135,11 +145,6 @@ private Q_SLOTS:
     void fillWidthChanged();
     void fillHeightChanged();
 
-//FIXME:
-protected:
-    DeclarativeAppletScript *m_appletScriptEngine;
-    KDeclarative::QmlObject *m_qmlObject;
-
 private:
     int m_switchWidth;
     int m_switchHeight;
@@ -161,8 +166,12 @@ private:
     QTimer m_compactRepresentationCheckTimer;
     QTimer m_fullRepresentationResizeTimer;
 
-    Plasma::Applet *m_applet;
+    DeclarativeAppletScript *m_appletScriptEngine;
+    KDeclarative::QmlObject *m_qmlObject;
+
+    static QHash<QObject *, AppletLoader *> s_rootObjects;
 };
 
+QML_DECLARE_TYPEINFO(AppletLoader, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

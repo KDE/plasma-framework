@@ -48,11 +48,9 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 
-#include <packageurlinterceptor.h>
+
 
 Q_DECLARE_METATYPE(AppletInterface*)
-
-QHash<QObject *, AppletInterface *> AppletInterface::s_rootObjects = QHash<QObject *, AppletInterface *>();
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
     : AppletLoader(script, parent),
@@ -75,11 +73,11 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 
-    connect(m_appletScriptEngine, &DeclarativeAppletScript::formFactorChanged,
+    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
-    connect(m_appletScriptEngine, &DeclarativeAppletScript::locationChanged,
+    connect(appletScript(), &DeclarativeAppletScript::locationChanged,
             this, &AppletInterface::locationChanged);
-    connect(m_appletScriptEngine, &DeclarativeAppletScript::contextChanged,
+    connect(appletScript(), &DeclarativeAppletScript::contextChanged,
             this, &AppletInterface::contextChanged);
 
     if (applet()->containment()) {
@@ -87,71 +85,21 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
                 this, &ContainmentInterface::screenChanged);
     }
 
-    m_qmlObject = new KDeclarative::QmlObject(this);
-    m_qmlObject->setInitializationDelayed(true);
-
-    m_collapseTimer = new QTimer(this);
-    m_collapseTimer->setSingleShot(true);
-    //connect(m_collapseTimer, &QTimer::timeout, this, &AppletInterface::compactRepresentationCheck);
 }
 
 AppletInterface::~AppletInterface()
 {
-    s_rootObjects.remove(m_qmlObject->engine());
 }
 
 void AppletInterface::init()
 {
-    AppletLoader::init();
-
-    if (m_qmlObject->rootObject()) {
+    if (qmlObject()->rootObject() && m_configuration) {
         return;
     }
 
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
 
-    //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    QQmlEngine *engine = m_qmlObject->engine();
-
-    s_rootObjects[m_qmlObject->engine()] = this;
-
-    //Hook generic url resolution to the applet package as well
-    //TODO: same thing will have to be done for every qqmlengine: PackageUrlInterceptor is material for plasmaquick?
-    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, m_appletScriptEngine->package());
-    interceptor->addAllowedPath(applet()->containment()->corona()->package().path());
-    engine->setUrlInterceptor(interceptor);
-
-    m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
-
-    if (!m_qmlObject->engine() || !m_qmlObject->engine()->rootContext() || !m_qmlObject->engine()->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
-        QString reason;
-        foreach (QQmlError error, m_qmlObject->mainComponent()->errors()) {
-            reason += error.toString()+'\n';
-        }
-        reason = i18n("Error loading QML file: %1", reason);
-
-        m_qmlObject->setSource(QUrl::fromLocalFile(applet()->containment()->corona()->package().filePath("appleterror")));
-        m_qmlObject->completeInitialization();
-
-
-        //even the error message QML may fail
-        if (m_qmlObject->mainComponent()->isError()) {
-            return;
-        } else {
-            m_qmlObject->rootObject()->setProperty("reason", reason);
-        }
-
-        m_appletScriptEngine->setLaunchErrorMessage(reason);
-    }
-
-
-    m_qmlObject->engine()->rootContext()->setContextProperty("plasmoid", this);
-
-    //initialize size, so an useless resize less
-    QVariantHash initialProperties;
-    initialProperties["width"] = width();
-    initialProperties["height"] = height();
-    m_qmlObject->completeInitialization(initialProperties);
+    AppletLoader::init();
 
     qDebug() << "Graphic object created:" << applet() << applet()->property("graphicObject");
 
@@ -218,7 +166,7 @@ void AppletInterface::setTitle(const QString &title)
 
 bool AppletInterface::isBusy() const
 {
-    return !m_qmlObject->rootObject() || m_busy;
+    return m_busy;
 }
 
 void AppletInterface::setBusy(bool busy)
@@ -240,7 +188,7 @@ void AppletInterface::setExpanded(bool expanded)
 {
     //if there is no compact representation it means it's always expanded
     //Containnments are always expanded
-    if (/*!m_compactUiObject ||*/ qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
+    if (qobject_cast<ContainmentInterface *>(this) || m_expanded == expanded) {
         return;
     }
 
@@ -265,7 +213,7 @@ void AppletInterface::setBackgroundHints(Plasma::Types::BackgroundHints hint)
 
 void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)
 {
-    m_appletScriptEngine->setConfigurationRequired(needsConfiguring, reason);
+    appletScript()->setConfigurationRequired(needsConfiguring, reason);
 }
 
 QString AppletInterface::activeConfig() const
@@ -283,7 +231,7 @@ void AppletInterface::setActiveConfig(const QString &name)
     Plasma::ConfigLoader *loader = m_configs.value(name, 0);
 
     if (!loader) {
-        QString path = m_appletScriptEngine->filePath("config", name + ".xml");
+        QString path = appletScript()->filePath("config", name + ".xml");
         if (path.isEmpty()) {
             return;
         }
@@ -313,7 +261,7 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
             config->blockSignals(true);
             config->writeConfig();
             config->blockSignals(false);
-            m_appletScriptEngine->configNeedsSaving();
+            appletScript()->configNeedsSaving();
         }
     } else
         qWarning() << "Couldn't find a configuration entry";
@@ -339,12 +287,12 @@ QVariant AppletInterface::readConfig(const QString &entry) const
 
 QString AppletInterface::file(const QString &fileType)
 {
-    return m_appletScriptEngine->filePath(fileType, QString());
+    return appletScript()->filePath(fileType, QString());
 }
 
 QString AppletInterface::file(const QString &fileType, const QString &filePath)
 {
-    return m_appletScriptEngine->filePath(fileType, filePath);
+    return appletScript()->filePath(fileType, filePath);
 }
 
 QList<QAction*> AppletInterface::contextualActions() const
@@ -398,7 +346,7 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
         if (!m_actionSignals) {
             m_actionSignals = new QSignalMapper(this);
             connect(m_actionSignals, SIGNAL(mapped(QString)),
-                    m_appletScriptEngine, SLOT(executeAction(QString)));
+                    appletScript(), SLOT(executeAction(QString)));
         }
 
         connect(action, SIGNAL(triggered()), m_actionSignals, SLOT(map()));
@@ -521,36 +469,20 @@ QStringList AppletInterface::downloadedFiles() const
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
 
-void AppletInterface::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
-{
-    Q_UNUSED(oldGeometry)
-
-    AppletLoader::geometryChanged(newGeometry, oldGeometry);
-    m_collapseTimer->start(100);
-}
-
 void AppletInterface::updatePopupSize()
 {
     KConfigGroup cg = applet()->config();
     cg = KConfigGroup(&cg, "PopupApplet");
-    cg.writeEntry("DialogWidth", m_qmlObject->rootObject()->property("width").toInt());
-    cg.writeEntry("DialogHeight", m_qmlObject->rootObject()->property("height").toInt());
+    cg.writeEntry("DialogWidth", qmlObject()->rootObject()->property("width").toInt());
+    cg.writeEntry("DialogHeight", qmlObject()->rootObject()->property("height").toInt());
 }
 
-void AppletInterface::itemChange(ItemChange change, const ItemChangeData &value)
+
+void AppletInterface::executeAction(const QString &name)
 {
-    if (change == QQuickItem::ItemSceneChange) {
-        //we have a window: create the 
-        if (value.window && !m_qmlObject->rootObject()) {
-            init();
-        }
+    if (qmlObject()->rootObject()) {
+         QMetaObject::invokeMethod(qmlObject()->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
     }
-    AppletLoader::itemChange(change, value);
-}
-
-KDeclarative::QmlObject *AppletInterface::qmlObject()
-{
-    return m_qmlObject;
 }
 
 #include "moc_appletinterface.cpp"

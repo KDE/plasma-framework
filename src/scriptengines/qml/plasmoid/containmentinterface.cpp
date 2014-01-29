@@ -119,15 +119,15 @@ void ContainmentInterface::init()
             pkg.setPath("org.kde.desktoptoolbox");
         }
 
-        PackageUrlInterceptor *interceptor = dynamic_cast<PackageUrlInterceptor *>(m_qmlObject->engine()->urlInterceptor());
+        PackageUrlInterceptor *interceptor = dynamic_cast<PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
         if (interceptor) {
             interceptor->addAllowedPath(pkg.path());
         }
 
         if (pkg.isValid()) {
-            QObject *toolBoxObject = m_qmlObject->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
+            QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
 
-            QObject *containmentGraphicObject = m_qmlObject->rootObject();
+            QObject *containmentGraphicObject = qmlObject()->rootObject();
 
             if (containmentGraphicObject && toolBoxObject) {
                 toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
@@ -144,12 +144,12 @@ void ContainmentInterface::init()
 
     //set parent, both as object hyerarchy and visually
     //do this only for containments, applets will do it in compactrepresentationcheck
-    if (m_qmlObject->rootObject()) {
-        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+    if (qmlObject()->rootObject()) {
+        qmlObject()->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
         //set anchors
-        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
-        QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+        QQmlExpression expr(qmlObject()->engine()->rootContext(), qmlObject()->rootObject(), "parent");
+        QQmlProperty prop(qmlObject()->rootObject(), "anchors.fill");
         prop.write(expr.evaluate());
     }
 }
@@ -161,28 +161,28 @@ QList <QObject *> ContainmentInterface::applets()
 
 void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
 {
-    if (drawWallpaper == m_appletScriptEngine->drawWallpaper()) {
+    if (drawWallpaper == appletScript()->drawWallpaper()) {
         return;
     }
 
-    m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
+    appletScript()->setDrawWallpaper(drawWallpaper);
 
     loadWallpaper();
 }
 
 bool ContainmentInterface::drawWallpaper()
 {
-    return m_appletScriptEngine->drawWallpaper();
+    return appletScript()->drawWallpaper();
 }
 
 Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
 {
-    return m_appletScriptEngine->containmentType();
+    return appletScript()->containmentType();
 }
 
 void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType type)
 {
-    m_appletScriptEngine->setContainmentType(type);
+    appletScript()->setContainmentType(type);
 }
 
 void ContainmentInterface::lockWidgets(bool locked)
@@ -548,7 +548,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (m_appletScriptEngine->drawWallpaper() && !containment()->wallpaper().isEmpty()) {
+    if (appletScript()->drawWallpaper() && !containment()->wallpaper().isEmpty()) {
         delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);

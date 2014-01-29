@@ -75,7 +75,7 @@ class ContainmentInterface : public AppletInterface
 public:
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
-    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()->containment()); }
+    Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(appletScript()->applet()->containment()); }
 
     inline WallpaperInterface *wallpaperInterface() const { return m_wallpaperInterface;}
 
@@ -111,6 +111,11 @@ public:
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
+
+    static ContainmentInterface *qmlAttachedProperties(QObject *object)
+    {
+        return qobject_cast<ContainmentInterface *>(AppletLoader::qmlAttachedProperties(object));
+    }
 
 protected:
     void init();

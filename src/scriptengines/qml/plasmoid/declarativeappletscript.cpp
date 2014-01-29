@@ -57,6 +57,9 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     //qmlRegisterType<AppletInterface>();
     qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.shell", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));
+    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.shell", 2, 0, "Containment",
+                                             QLatin1String("Do not create objects of type Containment"));
+
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
 }
@@ -111,9 +114,7 @@ void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constr
 
 void DeclarativeAppletScript::executeAction(const QString &name)
 {
-    if (m_interface->qmlObject()->rootObject()) {
-         QMetaObject::invokeMethod(m_interface->qmlObject()->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
-    }
+    m_interface->executeAction(name);
 }
 
 QList<QAction*> DeclarativeAppletScript::contextualActions()

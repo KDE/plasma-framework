@@ -159,11 +159,12 @@ public:
     ~AppletInterface();
 
 //API not intended for the QML part
-    KDeclarative::QmlObject *qmlObject();
 
     QList<QAction*> contextualActions() const;
 
-    inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
+    void executeAction(const QString &name);
+
+    Plasma::Applet *applet() const { return appletScript()->applet(); }
 
 //QML API-------------------------------------------------------------------
 
@@ -225,11 +226,7 @@ public:
 
     static AppletInterface *qmlAttachedProperties(QObject *object)
     {
-        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
-            return s_rootObjects.value(QtQml::qmlEngine(object));
-        } else {
-            return 0;
-        }
+        return qobject_cast<AppletInterface *>(AppletLoader::qmlAttachedProperties(object));
     }
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
@@ -303,12 +300,6 @@ Q_SIGNALS:
 
     void userConfiguringChanged();
 
-protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    void itemChange(ItemChange change, const ItemChangeData &value);
-
-    
-
 protected Q_SLOTS:
     virtual void init();
 
@@ -326,17 +317,13 @@ private:
     KDeclarative::ConfigPropertyMap *m_configuration;
 
 //UI-specific members ------------------
-    QWeakPointer<QObject> m_compactUiObject;
 
-    QTimer *m_collapseTimer;
 
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_expanded : 1;
     bool m_hideOnDeactivate : 1;
     friend class ContainmentInterface;
-
-    static QHash<QObject *, AppletInterface *> s_rootObjects;
 };
 
 QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)

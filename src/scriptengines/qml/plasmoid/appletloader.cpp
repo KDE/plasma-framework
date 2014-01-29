@@ -27,6 +27,8 @@
 
 #include <QDebug>
 
+#include <klocalizedstring.h>
+
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -34,7 +36,9 @@
 #include <kdeclarative/qmlobject.h>
 #include <plasma/scripting/appletscript.h>
 
+#include <packageurlinterceptor.h>
 
+QHash<QObject *, AppletLoader *> AppletLoader::s_rootObjects = QHash<QObject *, AppletLoader *>();
 
 AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
     : QQuickItem(parent),
@@ -48,7 +52,7 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
              this, SLOT(compactRepresentationCheck()));
     m_compactRepresentationCheckTimer.start();
 
-    m_fullRepresentationResizeTimer.setSingleShot(true);
+   /* m_fullRepresentationResizeTimer.setSingleShot(true);
     m_fullRepresentationResizeTimer.setInterval(250);
     connect (&m_fullRepresentationResizeTimer, &QTimer::timeout,
              [=]() {
@@ -57,37 +61,88 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
                 cg.writeEntry("DialogWidth", m_fullRepresentationItem.data()->property("width").toInt());
                 cg.writeEntry("DialogHeight", m_fullRepresentationItem.data()->property("height").toInt());
             }
-    );
-
-    //hide all the children that aren't the known ones.
-    //all the UI is supposed to happen in the representations
-   /* connect (this, &QQuickItem::childrenChanged, [=]() {
-        foreach (QQuickItem *child, childItems()) {
-            if (child != m_compactRepresentationItem.data() &&
-                child != m_fullRepresentationItem.data() &&
-                child != m_compactRepresentationExpanderItem.data()) {
-                child->setVisible(false);
-            }
-        }
-    });*/
+    );*/
 
 
 
-    m_applet = m_appletScriptEngine->applet();
-    
     m_qmlObject = new KDeclarative::QmlObject(this);
+    m_qmlObject->setInitializationDelayed(true);
 }
 
 AppletLoader::~AppletLoader()
 {
+    s_rootObjects.remove(m_qmlObject->engine());
 }
 
-Plasma::Applet *AppletLoader::applet() const
+void AppletLoader::init()
 {
-    return m_applet;
+    s_rootObjects[m_qmlObject->engine()] = this;
+
+    Q_ASSERT(m_appletScriptEngine);
+
+
+    //Initialize the main QML file
+    QQmlEngine *engine = m_qmlObject->engine();
+
+    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, appletScript()->package());
+    interceptor->addAllowedPath(m_appletScriptEngine->applet()->containment()->corona()->package().path());
+    engine->setUrlInterceptor(interceptor);
+
+    m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
+
+    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
+        QString reason;
+        foreach (QQmlError error, m_qmlObject->mainComponent()->errors()) {
+            reason += error.toString()+'\n';
+        }
+        reason = i18n("Error loading QML file: %1", reason);
+
+        m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("appleterror")));
+        m_qmlObject->completeInitialization();
+
+
+        //even the error message QML may fail
+        if (m_qmlObject->mainComponent()->isError()) {
+            return;
+        } else {
+            m_qmlObject->rootObject()->setProperty("reason", reason);
+        }
+
+        appletScript()->setLaunchErrorMessage(reason);
+    }
+
+qWarning()<<"AAAAAAAAAAA"<<m_qmlObject->mainComponent()->errors();
+    engine->rootContext()->setContextProperty("plasmoid", this);
+
+    //initialize size, so an useless resize less
+    QVariantHash initialProperties;
+    initialProperties["width"] = width();
+    initialProperties["height"] = height();
+    m_qmlObject->completeInitialization(initialProperties);
+qWarning()<<"BBBBB";
+
+
+    //default m_compactRepresentation is a simple icon provided by the shell package
+    if (!m_compactRepresentation) {
+        m_compactRepresentation = new QQmlComponent(engine, this);
+        m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
+    }
+
+    //we really want a full representation, default m_fullRepresentation is an error message
+   /* if (!m_fullRepresentation) {
+        m_fullRepresentation = new QQmlComponent(m_qmlObject->engine(), this);
+        m_fullRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("appleterror")));
+    }*/
+
+    //default m_compactRepresentationExpander is the popup in which fullRepresentation goes
+    if (!m_compactRepresentationExpander) {
+        m_compactRepresentationExpander = new QQmlComponent(engine, this);
+        m_compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("compactapplet")));
+    }
+
 }
 
-Plasma::AppletScript *AppletLoader::appletScript()
+DeclarativeAppletScript *AppletLoader::appletScript() const
 {
     return m_appletScriptEngine;
 }
@@ -170,37 +225,6 @@ void AppletLoader::setPreferredRepresentation(QQmlComponent *component)
 
 
 ////////////Internals
-
-void AppletLoader::init()
-{
-    //m_appletScriptEngine = property("_plasma_appletscript").value<Plasma::AppletScript *>();
-
-    Q_ASSERT(m_appletScriptEngine);
-  //  m_applet = m_appletScriptEngine->applet();
-    Q_ASSERT(m_applet);
-
-  //  m_qmlObject = new KDeclarative::QmlObject(m_qmlObject->engine(), this);
-
-    //default m_compactRepresentation is a simple icon provided by the shell package
-    if (!m_compactRepresentation) {
-        m_compactRepresentation = new QQmlComponent(m_qmlObject->engine(), this);
-        m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_applet->containment()->corona()->package().filePath("defaultcompactrepresentation")));
-    }
-
-    //we really want a full representation, default m_fullRepresentation is an error message
-   /* if (!m_fullRepresentation) {
-        m_fullRepresentation = new QQmlComponent(m_qmlObject->engine(), this);
-        m_fullRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_applet->containment()->corona()->package().filePath("appleterror")));
-    }*/
-
-    //default m_compactRepresentationExpander is the popup in which fullRepresentation goes
-    if (!m_compactRepresentationExpander) {
-        m_compactRepresentationExpander = new QQmlComponent(m_qmlObject->engine(), this);
-        m_compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(m_applet->containment()->corona()->package().filePath("compactapplet")));
-    }
-
-}
-
 
 
 KDeclarative::QmlObject *AppletLoader::qmlObject()
@@ -387,7 +411,7 @@ void AppletLoader::itemChange(ItemChange change, const ItemChangeData &value)
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the representations if needed
         if (value.window) {
-            m_compactRepresentationCheckTimer.start();
+            init();
         }
     }
 
@@ -406,7 +430,7 @@ void AppletLoader::compactRepresentationCheck()
 
     bool full = false;
 
-    if (applet()->isContainment()) {
+    if (m_appletScriptEngine->applet()->isContainment()) {
         full = true;
 
     } else {
@@ -419,7 +443,7 @@ void AppletLoader::compactRepresentationCheck()
                 full = m_preferredRepresentation.data() == m_fullRepresentation.data();
             //Otherwise, base on FormFactor
             } else {
-                full = (m_applet->formFactor() != Plasma::Types::Horizontal && m_applet->formFactor() != Plasma::Types::Vertical);
+                full = (m_appletScriptEngine->applet()->formFactor() != Plasma::Types::Horizontal && m_appletScriptEngine->applet()->formFactor() != Plasma::Types::Vertical);
             }
         }
 
@@ -518,7 +542,6 @@ void AppletLoader::fillHeightChanged()
 {
     propagateSizeHint("fillHeight");
 }
-
 
 
 #include "moc_appletloader.cpp"
