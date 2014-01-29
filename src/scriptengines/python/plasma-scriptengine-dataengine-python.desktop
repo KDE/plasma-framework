@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=Python data engine
+Name[de]=Python-Datentreiber
+Name[hu]=Python adatmotor
+Name[nl]=Gegevensengine van Python
+Name[pt]=Motor de dados em Python
+Name[sv]=Python datagränssnitt
+Name[uk]=Рушій даних Python
+Name[x-test]=xxPython data enginexx
 Comment=Plasma data engine support for Python
+Comment[de]=Unterstützung für Plasma-Datentreiber in Python
+Comment[hu]=Plazma adatmotor támogatás Pythonhoz
+Comment[nl]=Ondersteuning voor Plasma-gegevensengine voor Python
+Comment[pt]=Suporte para motores de dados do Plasma em Python
+Comment[sv]=Plasma datagränssnittstöd för Python
+Comment[uk]=Підтримка Python у рушії роботи з даними Плазми
+Comment[x-test]=xxPlasma data engine support for Pythonxx
 
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service

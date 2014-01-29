@@ -2,6 +2,12 @@
 Encoding=UTF-8
 Keywords=
 Name=Theme Test
+Name[de]=Designtest
+Name[nl]=Test van thema
+Name[pt]=Teste de Tema
+Name[sv]=Tematest
+Name[uk]=Тестування теми
+Name[x-test]=xxTheme Testxx
 Type=Service
 Icon=preferences-desktop-appearance
 

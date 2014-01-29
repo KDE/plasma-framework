@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=Python Runner
+Name[de]=Python-Runner
+Name[hu]=Python-indító
+Name[nl]=Python-starter
+Name[pt]=Módulo de Execução em Python
+Name[sv]=Python körningsprogram
+Name[uk]=Засіб запуску Python
+Name[x-test]=xxPython Runnerxx
 Comment=Plasma Runner support for Python
+Comment[de]=Unterstützung für Plasma-Runner in Python
+Comment[hu]=Plazma-indító támogatás Pythonhoz
+Comment[nl]=Ondersteuning voor Plasma-starter voor Python
+Comment[pt]=Suporte de módulos de execução do Plasma em Python
+Comment[sv]=Plasma körningsstöd för Python
+Comment[uk]=Підтримка Python у інструментах запуску
+Comment[x-test]=xxPlasma Runner support for Pythonxx
 
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
