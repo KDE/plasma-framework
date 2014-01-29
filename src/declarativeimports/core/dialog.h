@@ -136,7 +136,6 @@ public:
 
     void setOutputOnly(bool outputOnly);
     bool isOutputOnly() const;
-
     void updateInputShape();
 
 Q_SIGNALS:
