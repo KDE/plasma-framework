@@ -70,7 +70,7 @@ PlasmaComponents.ContextMenu {
                 //for QAbstractItemModel* it doesn't. Not checking causes errors
                 text: typeof(modelData) != "undefined" ? modelData.text : model.display
                 icon: typeof(modelData) != "undefined" ? modelData.icon : model.decoration
-                separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator
+                separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator === true
                 onClicked: {
                     menu.clicked(typeof(modelData) != "undefined" ? modelData : model)
                 }
