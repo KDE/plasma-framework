@@ -150,6 +150,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void syncMainItemToSize();
     void syncToMainItemSize();
+    void requestSyncToMainItemSize(bool delayed = false);
 
 protected:
    // bool eventFilter(QObject *watched, QEvent *event);

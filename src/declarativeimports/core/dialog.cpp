@@ -61,8 +61,8 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     m_syncTimer->setInterval(0);
     connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 
-    connect(this, &QWindow::xChanged, [=](){m_syncTimer->start(150);});
-    connect(this, &QWindow::yChanged, [=](){m_syncTimer->start(150);});
+    connect(this, &QWindow::xChanged, [=](){requestSyncToMainItemSize(true);});
+    connect(this, &QWindow::yChanged, [=](){requestSyncToMainItemSize(true);});
     connect(this, &QWindow::visibleChanged, this, &DialogProxy::updateInputShape);
     connect(this, &DialogProxy::outputOnlyChanged, this, &DialogProxy::updateInputShape);
 //    connect(this, &QWindow::visibleChanged, this, &DialogProxy::onVisibleChanged);
@@ -103,12 +103,7 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
                 connect(mainItem, &QQuickItem::heightChanged, [=](){m_syncTimer->start(0);});
             }
-            if (isVisible()) {
-                m_syncTimer->start(0);
-            } else {
-                m_syncTimer->stop();
-                syncToMainItemSize();
-            }
+            requestSyncToMainItemSize();
         }
 
         //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
@@ -130,12 +125,7 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
     m_visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent) {
-        if (isVisible()) {
-            m_syncTimer->start(0);
-        } else {
-            m_syncTimer->stop();
-            syncToMainItemSize();
-        }
+        requestSyncToMainItemSize();
     }
 }
 
@@ -157,8 +147,6 @@ void DialogProxy::updateVisibility(bool visible)
                 syncMainItemToSize();
                 m_cachedGeometry = QRect();
             }
-
-            m_syncTimer->stop();
             syncToMainItemSize();
         }
     }
@@ -368,6 +356,9 @@ void DialogProxy::syncMainItemToSize()
 
 void DialogProxy::syncToMainItemSize()
 {
+    //if manually sync a sync timer was running cancel it so we don't get called twice
+    m_syncTimer->stop();
+
     if (!m_mainItem) {
         return;
     }
@@ -385,10 +376,16 @@ void DialogProxy::syncToMainItemSize()
     } else {
         resize(s);
     }
-    
 }
 
-
+void DialogProxy::requestSyncToMainItemSize(bool delayed)
+{
+    if (delayed && !m_syncTimer->isActive()) {
+        m_syncTimer->start(150);
+    } else {
+        m_syncTimer->start(0);
+    }
+}
 
 void DialogProxy::setType(WindowType type)
 {
