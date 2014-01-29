@@ -129,18 +129,25 @@ void AppletLoader::init()
     initialProperties["height"] = height();
     m_qmlObject->completeInitialization(initialProperties);
 
-
+    //default fullrepresentation is our root main component, if none specified
+    if (!m_fullRepresentation) {
+        m_fullRepresentation = m_qmlObject->mainComponent();
+        m_fullRepresentationItem = m_qmlObject->rootObject();
+        emit fullRepresentationChanged(m_fullRepresentation.data());
+    }
 
     //default m_compactRepresentation is a simple icon provided by the shell package
     if (!m_compactRepresentation) {
         m_compactRepresentation = new QQmlComponent(engine, this);
         m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
+        emit compactRepresentationChanged(m_compactRepresentation.data());
     }
 
     //default m_compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!m_compactRepresentationExpander) {
         m_compactRepresentationExpander = new QQmlComponent(engine, this);
         m_compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("compactapplet")));
+        emit compactRepresentationExpanderItemChanged(m_compactRepresentationExpander.data());
     }
 
 }
@@ -301,7 +308,9 @@ QObject *AppletLoader::createFullRepresentationItem()
     if (m_fullRepresentation) {
         m_fullRepresentationItem = m_qmlObject->createObjectFromComponent(m_fullRepresentation.data(), QtQml::qmlContext(m_qmlObject->rootObject()));
     } else {
+        m_fullRepresentation = m_qmlObject->mainComponent();
         m_fullRepresentationItem = m_qmlObject->rootObject();
+        emit fullRepresentationChanged(m_fullRepresentation.data());
     }
 
     QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(m_fullRepresentationItem.data());
