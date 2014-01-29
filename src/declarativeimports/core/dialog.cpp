@@ -378,12 +378,11 @@ void DialogProxy::syncToMainItemSize()
                     QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
                           m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
 
-    const QRect geom(popupPosition(visualParent(), s, Qt::AlignCenter), s);
-    if (geom == geometry()) {
-        return;
-    }
-
     if (visualParent()) {
+        const QRect geom(popupPosition(visualParent(), s, Qt::AlignCenter), s);
+        if (geom == geometry()) {
+            return;
+        }
         adjustGeometry(geom);
     } else {
         resize(s);
