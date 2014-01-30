@@ -77,8 +77,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
             });
     connect(containment(), &Plasma::Containment::wallpaperChanged,
             this, &ContainmentInterface::loadWallpaper);
-    connect(containment(), &Plasma::Containment::drawWallpaperChanged,
-            this, &ContainmentInterface::drawWallpaperChanged);
     connect(containment(), &Plasma::Containment::containmentTypeChanged,
             this, &ContainmentInterface::containmentTypeChanged);
 
@@ -193,22 +191,6 @@ void ContainmentInterface::init()
 QList <QObject *> ContainmentInterface::applets()
 {
     return m_appletInterfaces;
-}
-
-void ContainmentInterface::setDrawWallpaper(bool drawWallpaper)
-{
-    if (drawWallpaper == m_appletScriptEngine->drawWallpaper()) {
-        return;
-    }
-
-    m_appletScriptEngine->setDrawWallpaper(drawWallpaper);
-
-    loadWallpaper();
-}
-
-bool ContainmentInterface::drawWallpaper()
-{
-    return m_appletScriptEngine->drawWallpaper();
 }
 
 Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
@@ -455,14 +437,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
         KPluginInfo::List wallpaperList;
-        //TODO: how restore wallpaper dnd?
 
-        if (drawWallpaper()) {
-            if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
-                wallpaperList << m_wallpaperInterface->package().metadata();
-            } else {
-                wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
-            }
+        if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
+            wallpaperList << m_wallpaperInterface->package().metadata();
+        } else {
+            wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
         }
 
         if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
@@ -584,7 +563,12 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (m_appletScriptEngine->drawWallpaper() && !containment()->wallpaper().isEmpty()) {
+    if (containment()->containmentType() != Plasma::Types::DesktopContainment &&
+        containment()->containmentType() != Plasma::Types::CustomContainment) {
+        return;
+    }
+
+    if (!containment()->wallpaper().isEmpty()) {
         delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);

@@ -39,10 +39,6 @@ AppletScript::AppletScript(QObject *parent)
       d(new AppletScriptPrivate)
 {
     d->applet = 0;
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
-    if (cont) {
-        connect(cont, &Plasma::Containment::drawWallpaperChanged, this, &AppletScript::drawWallpaperChanged);
-    }
 }
 
 AppletScript::~AppletScript()
@@ -119,26 +115,6 @@ KPluginInfo AppletScript::description() const
 {
     Q_ASSERT(d->applet);
     return d->applet->d->appletDescription;
-}
-
-bool AppletScript::drawWallpaper() const
-{
-    Q_ASSERT(d->applet);
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
-    if (cont) {
-        return cont->drawWallpaper();
-    } else {
-        return false;
-    }
-}
-
-void AppletScript::setDrawWallpaper(bool drawWallpaper)
-{
-    Q_ASSERT(d->applet);
-    Plasma::Containment *cont = qobject_cast<Plasma::Containment *>(d->applet);
-    if (cont) {
-        cont->setDrawWallpaper(drawWallpaper);
-    }
 }
 
 Plasma::Types::ContainmentType AppletScript::containmentType() const

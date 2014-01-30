@@ -48,11 +48,6 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     
     /**
-     * True if the containment should draw a wallpaper
-     */
-    Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper NOTIFY drawWallpaperChanged)
-
-    /**
      * Type of this containment TODO: notify
      */
     Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType NOTIFY containmentTypeChanged)
@@ -82,8 +77,6 @@ public:
 //For QML use
     QList<QObject *> applets();
 
-    void setDrawWallpaper(bool drawWallpaper);
-    bool drawWallpaper();
     Plasma::Types::ContainmentType containmentType() const;
     void setContainmentType(Plasma::Types::ContainmentType type);
 
