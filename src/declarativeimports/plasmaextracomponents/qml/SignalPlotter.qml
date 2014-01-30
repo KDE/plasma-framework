@@ -84,7 +84,7 @@ Canvas {
 			context.beginPath();
 			context.lineWidth = 1;
 			context.strokeStyle = "rgb(150, 150, 150)" //TODO: use from theme
-			for (var y = 0; y < height - graphPadding; y += height/10) {
+			for (var y = 0; y < height - graphPadding; y += (height-graphPadding)/10) {
 				context.moveTo(0, y);
 				context.lineTo(width, y);
 			}
