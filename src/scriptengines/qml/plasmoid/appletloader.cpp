@@ -218,6 +218,21 @@ void AppletLoader::setFullRepresentation(QQmlComponent *component)
     emit fullRepresentationChanged(component);
 }
 
+QQmlComponent *AppletLoader::compactRepresentationExpander()
+{
+    return m_compactRepresentationExpander.data();
+}
+
+void AppletLoader::setCompactRepresentationExpander(QQmlComponent *component)
+{
+    if (m_compactRepresentationExpander.data() == component) {
+        return;
+    }
+
+    m_compactRepresentationExpander = component;
+    emit compactRepresentationExpanderChanged(component);
+}
+
 QQmlComponent *AppletLoader::preferredRepresentation()
 {
     return m_preferredRepresentation.data();
@@ -254,7 +269,7 @@ void AppletLoader::setExpanded(bool expanded)
     createCompactRepresentationExpanderItem();
 
     m_expanded = expanded;
-    emit expandedChanged();
+    emit expandedChanged(expanded);
 }
 
 ////////////Internals
