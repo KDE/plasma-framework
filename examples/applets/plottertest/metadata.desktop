@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=
+Encoding=UTF-8
+Keywords=
+Name=SignalPlotter test Applet
+Type=Service
+Icon=package_toys
+X-KDE-PluginInfo-Author=Bhushan Shah
+X-KDE-PluginInfo-Category=Miscellaneous
+X-KDE-PluginInfo-Email=bhush94@gmail.com
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=org.kde.examples.signalplotter
+X-KDE-PluginInfo-Version=
+X-KDE-PluginInfo-Website=
+X-KDE-ServiceTypes=Plasma/Applet
+X-Plasma-API=declarativeappletscript
+
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-RemoteLocation=
