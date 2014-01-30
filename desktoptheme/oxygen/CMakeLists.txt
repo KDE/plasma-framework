@@ -13,3 +13,6 @@ install( FILES ${opaque} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/oxygen/opa
 FILE(GLOB opaque opaque/dialogs/*.svgz)
 install( FILES ${opaque} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/oxygen/opaque/dialogs/ )
 
+FILE(GLOB icons ../air/icons/*.svgz)
+install( FILES ${icons} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/oxygen/icons/ )
+
