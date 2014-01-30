@@ -20,6 +20,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Canvas {
 
@@ -32,6 +33,7 @@ Canvas {
 
 	property bool smooth: true
 
+	property bool drawBackGround: false
 	property color backGroundColor: theme.buttonBackgroundColor
 	property color plotColor: theme.highlightColor
 
@@ -45,6 +47,11 @@ Canvas {
 		property int sampleCount: availableHSpace / graphPadding
 	}
 
+	PlasmaComponents.Label {
+		id: sampleLabel
+		anchors.horizontalCenter: graphCanvas.horizontalCenter
+	}
+
 	function addSample(sample) {
 		var temp = samples;
 		if (temp == undefined) {
@@ -52,19 +59,12 @@ Canvas {
 		}
 		temp.push(sample);
 		samples = temp;
-		//Assume first sample is 50% and adjust accordingly.
-		if (max == 0) {
-			max = sample*2;
-		}
-		if (sample > max) {
-			max = sample;
-		}
 		requestPaint();
 	}
 
 	function getYPos(sample) {
 		var yPer = (sample * 100) / max;
-		var yPos = (internal.availableVSpace * (yPer / 100));
+		var yPos = (internal.availableVSpace * ((100-yPer) / 100));
 		return yPos;
 	}
 
@@ -108,11 +108,10 @@ Canvas {
 
 				context.beginPath();
 				context.moveTo(xPos, height - graphPadding);
-				var yPos0 = (internal.availableVSpace * (1 / 2));
+				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
+				var yPos0 = (getYPos(graphSamples[loopInit]));
 				context.lineTo(xPos, yPos0);
 				xPos += graphPadding;
-
-				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
 
 				for (var i = loopInit; i < graphSamples.length; i ++)
 				{
@@ -121,7 +120,7 @@ Canvas {
 					context.quadraticCurveTo(xPos, getYPos(graphSamples[i]), xc, yc);
 					xPos += graphPadding;
 				}
-				context.quadraticCurveTo(xPos, height-graphPadding, width - graphPadding,height -graphPadding);
+				context.quadraticCurveTo(width+graphPadding, height-graphPadding, width - graphPadding,height -graphPadding);
 				context.stroke();
 				context.fillStyle = plotColor;
 				context.fill();
@@ -129,11 +128,10 @@ Canvas {
 			else {
 				context.beginPath();
 				context.moveTo(xPos, height - graphPadding);
-				var yPos0 = (internal.availableVSpace * (1 / 2));
+				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 2;
+				var yPos0 = (getYPos(graphSamples[loopInit]));
 				context.lineTo(xPos, yPos0);
 				xPos += graphPadding;
-
-				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 2;
 				for(var i = loopInit; i < graphSamples.length ; i++){
 					context.lineTo(xPos, getYPos(graphSamples[i]));
 					xPos += graphPadding;
@@ -142,8 +140,8 @@ Canvas {
 				context.stroke();
 				context.fillStyle = plotColor;
 				context.fill();
-
 			}
+			sampleLabel.text = graphSamples[graphSamples.length-3]
 		} else {
 			print("No samples yet");
 		}
@@ -154,10 +152,14 @@ Canvas {
 
 		var ctx = getContext("2d");
 
-		var gradient = ctx.createLinearGradient(0, 0, 0, height);
-		gradient.addColorStop(0, backGroundColor);
-		ctx.fillStyle = gradient;
-		ctx.fillRect(0, 0, width, height);
+		ctx.clearRect(0, 0, width, height)
+
+		if (drawBackGround) {
+			var gradient = ctx.createLinearGradient(0, 0, 0, height);
+			gradient.addColorStop(0, backGroundColor);
+			ctx.fillStyle = gradient;
+			ctx.fillRect(0, 0, width, height);
+		}
 
 		drawGraph(ctx);
 
