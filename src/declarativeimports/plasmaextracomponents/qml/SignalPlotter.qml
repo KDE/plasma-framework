@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 Canvas {
 
@@ -30,6 +31,9 @@ Canvas {
 	property bool showHorizontalLines: true
 
 	property bool smooth: true
+
+	property color backGroundColor: theme.buttonBackgroundColor
+	property color plotColor: theme.highlightColor
 
 	property int graphPadding: 10  //Replace with units later
 	property int max: 0
@@ -98,6 +102,7 @@ Canvas {
 		if (graphSamples == undefined)
 			graphSamples = new Array();
 		if (graphSamples.length != 0) {
+
 			var xPos = (graphSamples.length < internal.sampleCount) ? (internal.availableHSpace - (graphSamples.length * graphPadding)) : 0 - (2*graphPadding);
 			if(smooth && graphPadding > 5) {
 
@@ -118,7 +123,7 @@ Canvas {
 				}
 				context.quadraticCurveTo(xPos, height-graphPadding, width - graphPadding,height -graphPadding);
 				context.stroke();
-				context.fillStyle = '#8ED6FF';
+				context.fillStyle = plotColor;
 				context.fill();
 			}
 			else {
@@ -135,7 +140,7 @@ Canvas {
 				}
 				context.lineTo(xPos, height-graphPadding);
 				context.stroke();
-				context.fillStyle = '#8ED6FF';
+				context.fillStyle = plotColor;
 				context.fill();
 
 			}
@@ -149,11 +154,9 @@ Canvas {
 
 		var ctx = getContext("2d");
 
-		//TODO: from theme
-		var grad = ctx.createLinearGradient(0, 0, 0, height);
-		grad.addColorStop(0,   '#aaa');
-		grad.addColorStop(1, '#fff');
-		ctx.fillStyle = grad;
+		var gradient = ctx.createLinearGradient(0, 0, 0, height);
+		gradient.addColorStop(0, backGroundColor);
+		ctx.fillStyle = gradient;
 		ctx.fillRect(0, 0, width, height);
 
 		drawGraph(ctx);
