@@ -20,7 +20,7 @@
 import QtQuick 2.0
 import org.kde.plasma.extras 2.0 as PlasmaExtra
 
-PlasmaExtras.SignalPlotter {
+PlasmaExtra.SignalPlotter {
 
 	id: plot
 
