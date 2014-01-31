@@ -135,7 +135,6 @@ public:
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
     QTimer *updateNotificationTimer;
-    KDirWatch *configWatcher;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
 

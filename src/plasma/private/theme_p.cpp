@@ -57,7 +57,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
       defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
       pixmapCache(0),
-      configWatcher(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
       locolor(false),
@@ -92,14 +91,13 @@ ThemePrivate::ThemePrivate(QObject *parent)
     }
     installEventFilter(qApp);
 
-    const QString configLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
-    KDirWatch::self()->addFile(configLocation);
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
+    KDirWatch::self()->addFile(configFile);
 
+    // Catch both, direct changes to the config file ...
     connect(KDirWatch::self(), &KDirWatch::dirty, this, &ThemePrivate::settingsFileChanged);
+    // ... but also remove/recreate cycles, like KConfig does it
     connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
-
-    qDebug() << "Theme ctor " << themeName << QCoreApplication::applicationName();
-    qDebug() << "configfile: " << configLocation;
 }
 
 ThemePrivate::~ThemePrivate()
