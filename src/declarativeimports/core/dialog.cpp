@@ -44,6 +44,10 @@
 #include <xcb/shape.h>
 #endif
 
+//Unfortunately QWINDOWSIZE_MAX is not exported
+#define DIALOGSIZE_MAX ((1<<24)-1)
+
+
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::BottomEdge),
@@ -110,6 +114,35 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             } else {
                 m_syncTimer->stop();
                 syncToMainItemSize();
+            }
+
+            //Extract the representation's Layout, if any
+            QObject *layout = 0;
+
+            //Search a child that has the needed Layout properties
+            //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+            foreach (QObject *child, mainItem->children()) {
+                //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+                if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+                    child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                    child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                    child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+                ) {
+                    layout = child;
+                }
+            }
+            m_mainItemLayout = layout;
+
+            if (layout) {
+                connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
+                connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
+                connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updatemaximumWidth()));
+                connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updatemaximumHeight()));
+
+                updateMinimumWidth();
+                updateMinimumHeight();
+                updateMaximumWidth();
+                updateMaximumHeight();
             }
         }
 
@@ -557,6 +590,42 @@ void DialogProxy::updateInputShape()
         }
     }
 #endif
+}
+
+void DialogProxy::updateMinimumWidth()
+{
+    if (m_mainItemLayout) {
+        setMinimumWidth(m_mainItemLayout.data()->property("minimumWidth").toInt());
+    } else {
+        setMinimumWidth(-1);
+    }
+}
+
+void DialogProxy::updateMinimumHeight()
+{
+    if (m_mainItemLayout) {
+        setMinimumHeight(m_mainItemLayout.data()->property("minimumHeight").toInt());
+    } else {
+        setMinimumHeight(-1);
+    }
+}
+
+void DialogProxy::updateMaximumWidth()
+{
+    if (m_mainItemLayout) {
+        setMaximumWidth(m_mainItemLayout.data()->property("maximumWidth").toInt());
+    } else {
+        setMaximumWidth(DIALOGSIZE_MAX);
+    }
+}
+
+void DialogProxy::updateMaximumHeight()
+{
+    if (m_mainItemLayout) {
+        setMaximumHeight(m_mainItemLayout.data()->property("maximumWidth").toInt());
+    } else {
+        setMaximumHeight(DIALOGSIZE_MAX);
+    }
 }
 
 #include "dialog.moc"
