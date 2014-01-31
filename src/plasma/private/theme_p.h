@@ -37,8 +37,6 @@
 
 #include "libplasma-theme-global.h"
 
-class KDirWatch;
-
 namespace Plasma
 {
 

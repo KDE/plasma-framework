@@ -125,7 +125,6 @@ void Theme::setThemeName(const QString &themeName)
     if (d->themeName == themeName) {
         return;
     }
-    qDebug() << "Set themeName: " << d->themeName << " to " << themeName;
 
     if (d != ThemePrivate::globalTheme) {
         disconnect(QCoreApplication::instance(), 0, d, 0);
@@ -145,7 +144,7 @@ void Theme::setThemeName(const QString &themeName)
             connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                     d, SLOT(onAppExitCleanup()));
         }
-//         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
+        connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
 
     d->setThemeName(themeName, true);

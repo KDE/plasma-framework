@@ -117,11 +117,9 @@ KConfigGroup &ThemePrivate::config()
 #ifndef NDEBUG
                     // qDebug() << "using theme for app" << app;
 #endif
-                    qDebug() << "using theme for app" << app;
                     groupName.append("-").append(app);
                 }
             }
-            qDebug() << "Opening " << themeRcFile << groupName;
             cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
         }
 
@@ -476,11 +474,9 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 {
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
-        //qDebug() << "eeuh";
         // let's try and get the default theme at least
         if (themeName.isEmpty()) {
             theme = ThemePrivate::defaultTheme;
-            qDebug() << "eeuh" << theme;
         } else {
             return;
         }
@@ -570,7 +566,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     const QString wallpaperPath = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 
-    qDebug() << "Writing Settings " << themeName << realTheme << isDefault << writeSettings;
     if (realTheme && isDefault && writeSettings) {
         // we're the default theme, let's save our state
         KConfigGroup &cg = config();
