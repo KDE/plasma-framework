@@ -38,7 +38,7 @@ int main(int argc, char **argv)
     parser.setApplicationDescription(description);
     parser.addOption(QCommandLineOption(QStringList() << "h" << "hash", i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), "path"));
     parser.addOption(QCommandLineOption(QStringList() << "g" << "global", i18n("For install or remove, operates on packages installed for all users.")));
-    parser.addOption(QCommandLineOption(QStringList() << "type",
+    parser.addOption(QCommandLineOption(QStringList() << "t" << "type",
                 i18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
                        "are recognized by the application "
                        "(if translated, should be same as messages with 'package type' context below)",
