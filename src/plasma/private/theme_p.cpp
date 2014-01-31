@@ -92,8 +92,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     }
     installEventFilter(qApp);
 
-    configWatcher = KDirWatch::self();
-    const QString configLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/plasmarc");
+    const QString configLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
     KDirWatch::self()->addFile(configLocation);
 
     connect(KDirWatch::self(), &KDirWatch::dirty, this, &ThemePrivate::settingsFileChanged);
@@ -111,7 +110,7 @@ ThemePrivate::~ThemePrivate()
 KConfigGroup &ThemePrivate::config()
     {
         if (!cfg.isValid()) {
-            QString groupName = "Theme-plasma-shell";
+            QString groupName = "Theme";
 
             if (!useGlobal) {
                 QString app = QCoreApplication::applicationName();
@@ -130,28 +129,6 @@ KConfigGroup &ThemePrivate::config()
 
         return cfg;
     }
-
-
-void ThemePrivate::configDirty(const QString &path)
-{
-    qDebug() << "config dirty: " << path;
-    //config()->reparseConfiguration();
-    settingsChanged();
-}
-
-void ThemePrivate::configCreated(const QString& path)
-{
-    qDebug() << "config created: " << path;
-    settingsChanged();
-    emit themeChanged();
-}
-
-void ThemePrivate::configDeleted(const QString& path)
-{
-    qDebug() << "config deleted: " << path;
-    //settingsChanged();
-
-}
 
 
 bool ThemePrivate::useCache()
