@@ -90,7 +90,6 @@ void AppletLoader::init()
 
     Q_ASSERT(m_appletScriptEngine);
 
-
     //Initialize the main QML file
     QQmlEngine *engine = m_qmlObject->engine();
 
@@ -401,7 +400,19 @@ void AppletLoader::connectLayoutAttached(QObject *item)
 
     //HACK: check the Layout properties we wrote
     QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(m_qmlObject->rootObject()));
-    QObject *ownLayout = p.object();
+
+    QObject *ownLayout = 0;
+
+    foreach (QObject *child, children()) {
+        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+        ) {
+            ownLayout = child;
+        }
+    }
 
     //this should never happen, since we ask to create it if doesn't exists
     if (!ownLayout) {
@@ -409,12 +420,13 @@ void AppletLoader::connectLayoutAttached(QObject *item)
     }
 
     //if the representation didn't change, don't do anything
-    if (m_representationLayout.data() == layout ||
-        m_ownLayout.data() == ownLayout) {
+    if (m_representationLayout.data() == layout) {
         return;
     }
 
-    disconnect(layout, 0, this, 0);
+    if (m_representationLayout) {
+        disconnect(m_representationLayout.data(), 0, this, 0);
+    }
 
     //Here we can't use the new connect syntax because we can't link against QtQuick layouts
     connect(layout, SIGNAL(minimumWidthChanged()),
@@ -439,17 +451,22 @@ void AppletLoader::connectLayoutAttached(QObject *item)
 
     m_representationLayout = layout;
     m_ownLayout = ownLayout;
+
+    propagateSizeHint("minimumWidth");
+    propagateSizeHint("minimumHeight");
+    propagateSizeHint("preferredWidth");
+    propagateSizeHint("preferredHeight");
+    propagateSizeHint("maximumWidth");
+    propagateSizeHint("maximumHeight");
+    propagateSizeHint("fillWidth");
+    propagateSizeHint("fillHeight");
 }
 
 void AppletLoader::propagateSizeHint(const QByteArray &layoutProperty)
 {
-    if (!m_currentRepresentationItem) {
-        return;
+    if (m_ownLayout && m_representationLayout) {
+        m_ownLayout.data()->setProperty(layoutProperty, m_representationLayout.data()->property(layoutProperty));
     }
-
-    QQmlExpression *expr = new QQmlExpression(QtQml::qmlContext(m_currentRepresentationItem.data()), m_currentRepresentationItem.data(), "Layout."+layoutProperty);
-    QQmlProperty prop(this, "Layout."+layoutProperty, QtQml::qmlContext(m_currentRepresentationItem.data()));
-    prop.write(expr->evaluate());
 }
 
 void AppletLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
