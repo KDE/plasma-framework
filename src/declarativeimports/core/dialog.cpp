@@ -613,7 +613,12 @@ void DialogProxy::updateMinimumHeight()
 void DialogProxy::updateMaximumWidth()
 {
     if (m_mainItemLayout) {
-        setMaximumWidth(m_mainItemLayout.data()->property("maximumWidth").toInt());
+        const int hint = m_mainItemLayout.data()->property("maximumWidth").toInt();
+        if (hint > 0) {
+            setMaximumWidth(hint);
+        } else {
+            setMaximumWidth(DIALOGSIZE_MAX);
+        }
     } else {
         setMaximumWidth(DIALOGSIZE_MAX);
     }
@@ -622,7 +627,12 @@ void DialogProxy::updateMaximumWidth()
 void DialogProxy::updateMaximumHeight()
 {
     if (m_mainItemLayout) {
-        setMaximumHeight(m_mainItemLayout.data()->property("maximumWidth").toInt());
+        const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt();
+        if (hint > 0) {
+            setMaximumWidth(hint);
+        } else {
+            setMaximumWidth(DIALOGSIZE_MAX);
+        }
     } else {
         setMaximumHeight(DIALOGSIZE_MAX);
     }
