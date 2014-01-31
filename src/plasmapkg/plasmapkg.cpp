@@ -192,14 +192,15 @@ void PlasmaPkg::runMain()
         d->pluginTypes << "Plasma/Applet";
         //d->pluginTypes << "Plasma/PopupApplet";
         d->pluginTypes << "Plasma/Containment";
-    } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 ||
-               type.compare("theme", Qt::CaseInsensitive) == 0) {
+    } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 /*||
+               type.compare("theme", Qt::CaseInsensitive) == 0*/) {
         d->packageRoot = "plasma/packages/";
         d->servicePrefix = "plasma-package-";
         d->pluginTypes << "Plasma/Generic";
     } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) == 0 ||
                type.compare("theme", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "desktoptheme/";
+        d->pluginTypes << "Plasma/Theme";
     } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
         d->pluginTypes << "Plasma/Wallpaper";
@@ -396,6 +397,28 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 }
             }
         }
+
+        if (type.compare("Plasma/Theme", Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "desktoptheme/", QStandardPaths::LocateDirectory);
+            foreach (const QString &ppath, packs) {
+                qDebug() << "THeme path: " << ppath;
+                const QDir cd(ppath);
+                const QStringList &entries = cd.entryList(QDir::Dirs);
+                foreach (const QString pack, entries) {
+                    if ((pack != "." && pack != "..") &&
+                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+                        qDebug() << "Theme exists" << pack;
+                        result << pack;
+                    }
+                }
+            }
+        }
+
+            // get all desktop themes
+//             KStandardDirs dirs;
+//             const QStringList themes = dirs.findAllResources("data", "desktoptheme/*/metadata.desktop",
+//                                                     KStandardDirs::NoDuplicates);
+
         const KService::List services = KServiceTypeTrader::self()->query(type);
         foreach (const KService::Ptr &service, services) {
             const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
