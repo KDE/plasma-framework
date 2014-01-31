@@ -57,12 +57,13 @@ ThemePrivate::ThemePrivate(QObject *parent)
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
       defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
       pixmapCache(0),
+      configWatcher(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
       blurActive(false),
-      isDefault(false),
+      isDefault(true),
       useGlobal(true),
       hasWallpapers(false)
 {
@@ -90,6 +91,17 @@ ThemePrivate::ThemePrivate(QObject *parent)
 #endif
     }
     installEventFilter(qApp);
+
+    configWatcher = new KDirWatch(this);
+    const QString configLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/plasmarc");
+    configWatcher->addFile(configLocation);
+
+    //connect(configWatcher, &KDirWatch::dirty, this, &ThemePrivate::configDirty);
+    connect(configWatcher, &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
+    //connect(configWatcher, &KDirWatch::deleted, this, &ThemePrivate::configDeleted);
+
+    qDebug() << "Theme ctor " << themeName << QCoreApplication::applicationName();
+    qDebug() << "configfile: " << configLocation;
 }
 
 ThemePrivate::~ThemePrivate()
@@ -100,7 +112,7 @@ ThemePrivate::~ThemePrivate()
 KConfigGroup &ThemePrivate::config()
     {
         if (!cfg.isValid()) {
-            QString groupName = "Theme";
+            QString groupName = "Theme-plasma-shell";
 
             if (!useGlobal) {
                 QString app = QCoreApplication::applicationName();
@@ -109,15 +121,39 @@ KConfigGroup &ThemePrivate::config()
 #ifndef NDEBUG
                     // qDebug() << "using theme for app" << app;
 #endif
+                    qDebug() << "using theme for app" << app;
                     groupName.append("-").append(app);
                 }
             }
-
+            qDebug() << "Opening " << themeRcFile << groupName;
             cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
         }
 
         return cfg;
     }
+
+
+void ThemePrivate::configDirty(const QString &path)
+{
+    qDebug() << "config dirty: " << path;
+    //config()->reparseConfiguration();
+    settingsChanged();
+}
+
+void ThemePrivate::configCreated(const QString& path)
+{
+    qDebug() << "config created: " << path;
+    settingsChanged();
+    emit themeChanged();
+}
+
+void ThemePrivate::configDeleted(const QString& path)
+{
+    qDebug() << "config deleted: " << path;
+    //settingsChanged();
+
+}
+
 
 bool ThemePrivate::useCache()
 {
@@ -379,6 +415,7 @@ const QString ThemePrivate::svgStyleSheet()
 
 void ThemePrivate::settingsFileChanged(const QString &file)
 {
+    qDebug() << "settingsFile: " << file;
     if (file.endsWith(themeRcFile)) {
         config().config()->reparseConfiguration();
         settingsChanged();
@@ -387,6 +424,7 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void ThemePrivate::settingsChanged()
 {
+    //qDebug() << "Settings Changed!";
     KConfigGroup cg = config();
     setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
 }
@@ -462,16 +500,18 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
 
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
-    //qDebug() << tempThemeName;
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
+        //qDebug() << "eeuh";
         // let's try and get the default theme at least
         if (themeName.isEmpty()) {
             theme = ThemePrivate::defaultTheme;
+            qDebug() << "eeuh" << theme;
         } else {
             return;
         }
     }
+    qDebug() << tempThemeName;
 
     // we have one special theme: essentially a dummy theme used to cache things with
     // the system colors.
@@ -556,6 +596,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     const QString wallpaperPath = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 
+    qDebug() << "Writing Settings " << themeName << realTheme << isDefault << writeSettings;
     if (realTheme && isDefault && writeSettings) {
         // we're the default theme, let's save our state
         KConfigGroup &cg = config();

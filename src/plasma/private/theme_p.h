@@ -37,6 +37,8 @@
 
 #include "libplasma-theme-global.h"
 
+class KDirWatch;
+
 namespace Plasma
 {
 
@@ -92,6 +94,10 @@ public Q_SLOTS:
     void notifyOfChanged();
     void settingsChanged();
 
+    void configDirty(const QString &path);
+    void configCreated(const QString &path);
+    void configDeleted(const QString &path);
+
 Q_SIGNALS:
     void themeChanged();
     void defaultFontChanged();
@@ -133,6 +139,7 @@ public:
     QHash<QString, QString> discoveries;
     QTimer *saveTimer;
     QTimer *updateNotificationTimer;
+    KDirWatch *configWatcher;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
 
