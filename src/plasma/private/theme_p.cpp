@@ -92,13 +92,12 @@ ThemePrivate::ThemePrivate(QObject *parent)
     }
     installEventFilter(qApp);
 
-    configWatcher = new KDirWatch(this);
+    configWatcher = KDirWatch::self();
     const QString configLocation = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/plasmarc");
-    configWatcher->addFile(configLocation);
+    KDirWatch::self()->addFile(configLocation);
 
-    //connect(configWatcher, &KDirWatch::dirty, this, &ThemePrivate::configDirty);
-    connect(configWatcher, &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
-    //connect(configWatcher, &KDirWatch::deleted, this, &ThemePrivate::configDeleted);
+    connect(KDirWatch::self(), &KDirWatch::dirty, this, &ThemePrivate::settingsFileChanged);
+    connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
 
     qDebug() << "Theme ctor " << themeName << QCoreApplication::applicationName();
     qDebug() << "configfile: " << configLocation;
