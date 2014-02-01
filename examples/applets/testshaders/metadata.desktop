@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Keywords=
 Name=Shader Test
+Name[bs]=Šader test
 Name[de]=Schattentest
 Name[fi]=Varjostintesti
 Name[fr]=Test du nuanceur
@@ -15,6 +16,7 @@ Name[sv]=Skuggningstest
 Name[uk]=Тестування підпрограм побудови тіней
 Name[x-test]=xxShader Testxx
 Comment=Futzing with Visual Effects
+Comment[bs]=Futzing sa vizuelnim efektima
 Comment[de]=Verschwommen mit optischen Effekten
 Comment[fr]=Jouer avec les effets visuels
 Comment[mr]=दृश्यास्पद परिणाम बरोबर फट्झिंग

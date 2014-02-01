@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[bs]=Deklarativna grafička kontrola
 Name[cs]=Deklarativní widget
 Name[de]=Deklaratives Bedienelement
 Name[fi]=Deklaratiivinen sovelma
@@ -17,6 +18,7 @@ Name[ug]=ئېنىقلىما ۋىجېت
 Name[uk]=Декларативний віджет
 Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[bs]=Prirodna Plasma grafička kontrola pisana u QML i JavaScript
 Comment[cs]=Nativní Plasma widget napsaný v  QML a JavaScriptu
 Comment[de]=Echtes Plasma-Programm, geschrieben in QML und JavaScript
 Comment[fi]=Natiivi, QML-pohjainen Plasma-sovelma

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Wallpaper
 
 Comment=Plasma wallpaper
+Comment[bs]=Plazma tapeta
 Comment[cs]=Tapeta Plasmy
 Comment[de]=Plasma-Hintergrundbild
 Comment[fi]=Plasma-taustakuva
