@@ -29,11 +29,20 @@ PlasmaExtra.SignalPlotter {
 	Timer {
 		id: timer
 		interval: 500
-		running: true
+		running: false
 		repeat: true
 		onTriggered: {
-			plot.addSample(Math.ceil(Math.random()*100));
+			var sample = new Array();
+			sample.push(Math.ceil(Math.random()*100));
+			sample.push(Math.ceil(Math.random()*100));
+			plot.addSample(sample);
 		}
+	}
+
+	Component.onCompleted: {
+		plot.addPlot("red");
+		plot.addPlot("green");
+		timer.running = true;
 	}
 
 }

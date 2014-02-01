@@ -27,6 +27,7 @@ Canvas {
 	id: graphCanvas
 
 	property variant samples
+	property variant plots
 
 	property bool showAxis: true
 	property bool showHorizontalLines: true
@@ -38,7 +39,7 @@ Canvas {
 	property color plotColor: theme.highlightColor
 
 	property int graphPadding: 10  //Replace with units later
-	property int max: 0
+	property int max: 100
 
 	QtObject {
 		id: internal
@@ -52,13 +53,35 @@ Canvas {
 		anchors.horizontalCenter: graphCanvas.horizontalCenter
 	}
 
-	function addSample(sample) {
-		var temp = samples;
-		if (temp == undefined) {
-			temp = new Array();
+	function addPlot(color) {
+		var plotData = plots;
+		var sampleData = samples;
+		if (plotData == undefined || sampleData == undefined) {
+			plotData = new Array();
+			sampleData = new Array();
 		}
-		temp.push(sample);
-		samples = temp;
+		plotData.push(color);
+		sampleData.push(new Array());
+		plots = plotData;
+		samples = sampleData;
+	}
+
+	function addSample(sample) {
+		var plotData = plots;
+		var sampleData = samples;
+		if (plotData == undefined) {
+			print("You need to add plot first");
+			return;
+		}
+		if (plotData.length != sample.length) {
+			print("Count of plots and data in sample mismatch, discarding sample");
+			return;
+		}
+		for(var i=0; i<plotData.length; i++) {
+			sampleData[i].push(sample[i]);
+		}
+		samples = sampleData;
+		plots = plotData;
 		requestPaint();
 	}
 
@@ -70,7 +93,6 @@ Canvas {
 
 	function drawGraph(context) {
 
-		//print(internal.sampleCount);
 		// Draw Axis
 		if (showAxis) {
 			context.beginPath();
@@ -83,7 +105,6 @@ Canvas {
 			context.closePath();
 		}
 
-		// Draw horizontal lines
 		if (showHorizontalLines) {
 			context.beginPath();
 			context.lineWidth = 1;
@@ -96,54 +117,57 @@ Canvas {
 			context.closePath();
 		}
 
-		// Time to draw graph
 		var graphSamples;
-		graphSamples = samples;
-		if (graphSamples == undefined)
-			graphSamples = new Array();
-		if (graphSamples.length != 0) {
+		for(var j = 0; j<plots.length; j++) {
+			graphSamples = samples[j];
 
-			var xPos = (graphSamples.length < internal.sampleCount) ? (internal.availableHSpace - (graphSamples.length * graphPadding)) : 0 - (2*graphPadding);
-			if(smooth && graphPadding > 5) {
+			if (graphSamples == undefined)
+				graphSamples = new Array();
+			if (graphSamples.length != 0) {
+				var xPos = (graphSamples.length < internal.sampleCount) ? (internal.availableHSpace - (graphSamples.length * graphPadding)) : 0 - (2*graphPadding);
+				if(smooth && graphPadding > 5) {
 
-				context.beginPath();
-				context.moveTo(xPos, height - graphPadding);
-				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
-				var yPos0 = (getYPos(graphSamples[loopInit]));
-				context.lineTo(xPos, yPos0);
-				xPos += graphPadding;
-
-				for (var i = loopInit; i < graphSamples.length; i ++)
-				{
-					var xc = ((xPos * 2) + graphPadding ) / 2;
-					var yc = (getYPos(graphSamples[i]) + getYPos(graphSamples[i + 1])) / 2;
-					context.quadraticCurveTo(xPos, getYPos(graphSamples[i]), xc, yc);
+					context.beginPath();
+					context.moveTo(xPos, height - graphPadding);
+					var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
+					var yPos0 = (getYPos(graphSamples[loopInit]));
+					print(graphSamples[loopInit]);
+					context.lineTo(xPos, yPos0);
 					xPos += graphPadding;
+
+					for (var i = loopInit; i < graphSamples.length; i ++)
+					{
+						var xc = ((xPos * 2) + graphPadding ) / 2;
+						var yc = (getYPos(graphSamples[i]) + getYPos(graphSamples[i + 1])) / 2;
+						context.quadraticCurveTo(xPos, getYPos(graphSamples[i]), xc, yc);
+						xPos += graphPadding;
+					}
+					context.quadraticCurveTo(width+graphPadding, height-graphPadding, width - graphPadding,height -graphPadding);
+					context.stroke();
+					context.fillStyle = plots[j]
+					context.fill();
 				}
-				context.quadraticCurveTo(width+graphPadding, height-graphPadding, width - graphPadding,height -graphPadding);
-				context.stroke();
-				context.fillStyle = plotColor;
-				context.fill();
-			}
-			else {
-				context.beginPath();
-				context.moveTo(xPos, height - graphPadding);
-				var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 2;
-				var yPos0 = (getYPos(graphSamples[loopInit]));
-				context.lineTo(xPos, yPos0);
-				xPos += graphPadding;
-				for(var i = loopInit; i < graphSamples.length ; i++){
-					context.lineTo(xPos, getYPos(graphSamples[i]));
+				else {
+					context.beginPath();
+					context.moveTo(xPos, height - graphPadding);
+					var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 2;
+					var yPos0 = (getYPos(graphSamples[loopInit]));
+					context.lineTo(xPos, yPos0);
 					xPos += graphPadding;
+					for(var i = loopInit; i < graphSamples.length ; i++){
+						context.lineTo(xPos, getYPos(graphSamples[i]));
+						xPos += graphPadding;
+					}
+					context.lineTo(xPos, height-graphPadding);
+					context.stroke();
+					context.fillStyle = plots[j];
+					context.fill();
 				}
-				context.lineTo(xPos, height-graphPadding);
-				context.stroke();
-				context.fillStyle = plotColor;
-				context.fill();
+				//sampleLabel.text = graphSamples[graphSamples.length-3]
+
+			} else {
+				print("No samples yet");
 			}
-			sampleLabel.text = graphSamples[graphSamples.length-3]
-		} else {
-			print("No samples yet");
 		}
 
 	}
