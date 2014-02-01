@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Example window thumbnails list
+Name[bs]=Primjer prozor liste sličica
 Name[de]=Beispiel einer Liste mit Fenstervorschaubilden
 Name[fr]=Exemple de liste de vignettes de fenêtres
 Name[nl]=Voorbeeld van lijst met miniaturen van vensters
@@ -10,6 +11,7 @@ Name[sv]=Exempel på miniatyrbilder av fönster
 Name[uk]=Приклад списку мініатюр вікон
 Name[x-test]=xxExample window thumbnails listxx
 Comment=Example showing how to display window thumbnails
+Comment[bs]=Primjer prikazuje kako prikazati prozor sličica
 Comment[de]=Beispiel zur Anzeige einer Liste mit Fenstervorschaubilden
 Comment[fr]=Exemple montrant comment afficher des vignettes de fenêtres
 Comment[nl]=Voorbeeld van hoe miniaturen van vensters te tonen

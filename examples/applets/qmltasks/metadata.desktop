@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
+Name[bs]=Zadaci siromašnog čovjeka
 Name[de]=Einfache Aufgaben
 Name[es]=Tareas del hombre pobre
 Name[fi]=Köyhän miehen tehtävät
@@ -12,6 +13,7 @@ Name[sv]=Fattigmans aktiviteter
 Name[uk]=Задачі для початківців
 Name[x-test]=xxPoor Man's Tasksxx
 Comment=Example showing how to write your own tasks Widget
+Comment[bs]=Primjer prikazuje kako da napišete svoj vlastiti podsjetnik zadataka
 Comment[de]=Beispiel für das Schreiben eigener Aufgaben-Miniprogramme
 Comment[es]=Ejemplo que muestra cómo escribir su propio widget de tareas
 Comment[fi]=Esimerkki oman tehtäväsovelman kirjoittamisesta

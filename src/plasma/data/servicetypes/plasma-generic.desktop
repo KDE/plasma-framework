@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/Generic
 Name=Plasma Package
+Name[bs]=Plazma paket
 Name[cs]=Balíček Plasmy
 Name[de]=Plasma-Paket
 Name[fi]=Plasma-paketti
@@ -15,6 +16,7 @@ Name[sv]=Plasma-paket
 Name[uk]=Пакунок Плазми
 Name[x-test]=xxPlasma Packagexx
 Comment=Generic Plasma Package
+Comment[bs]=Generički plazma paket
 Comment[de]=Allgemeines Plasma-Paket
 Comment[fr]=Paquet Plasma générique
 Comment[nl]=Algemeen plasma-pakket

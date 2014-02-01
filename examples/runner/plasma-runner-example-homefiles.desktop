@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Home Files
+Name[bs]=Lične datoteke
 Name[de]=Persönliche Dateien
 Name[fi]=Kodin tiedostot
 Name[fr]=Fichiers personnels
@@ -11,6 +12,7 @@ Name[sv]=Hemfiler
 Name[uk]=Файли у домашній теці
 Name[x-test]=xxHome Filesxx
 Comment=Part of a tutorial demonstrating how to create Runner plugins
+Comment[bs]=Dio tutorijala demonstrira kako se kreiraju Runner priključci
 Comment[de]=Teil einer Anleitung zur Demonstration, wie Runner-Module erstellt werden
 Comment[fr]=Éléments d'un tutoriel montrant comment créer des modules « Runner »
 Comment[nl]=Deel van een inleiding die demonstreert hoe Runner-plug-ins te maken

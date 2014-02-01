@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Simple DataEngine Example
+Name[bs]=Jednostavan primjer pogona podataka
 Name[cs]=Jednoduchý příklad datového nástroje
 Name[de]=Einfaches Datentreiber-Beispiel
 Name[fi]=Yksinkertainen esimerkki tietomoottorista
@@ -13,6 +14,7 @@ Name[sv]=Enkelt exempel på DataEngine
 Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
 Comment=A very basic DataEngine implementation
+Comment[bs]=Veoma jednostavna implementacija pogona podataka
 Comment[de]=Eine Basis-Implementation eines Datentreibers
 Comment[fi]=Erittäin yksinkertainen tietomoottorin toteutus
 Comment[fr]=Une implémentation très basique de DataEngine

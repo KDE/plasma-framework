@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Example on how to manage Drop data
+Comment[bs]=Primjer upravljanja ispuštenim podacima
 Comment[de]=Beispiel zur Verwaltung von abgelegten Daten
 Comment[es]=Ejemplo sobre cómo usar los datos soltados
 Comment[fi]=Esimerkki tiedon pudottamisen käsittelemisestä
@@ -14,6 +15,7 @@ Comment[x-test]=xxExample on how to manage Drop dataxx
 Encoding=UTF-8
 Keywords=
 Name=Example notes
+Name[bs]=Primjer bilješke
 Name[de]=Beispielnotizen
 Name[es]=Notas del ejemplo
 Name[fi]=Muistiinpanoesimerkki
