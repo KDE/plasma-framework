@@ -233,7 +233,8 @@ KPluginInfo Package::metadata() const
     return *d->metadata;
 }
 
-QString PackagePrivate::unpack(const QString& filePath) {
+QString PackagePrivate::unpack(const QString& filePath)
+{
     KArchive *archive = 0;
     QMimeDatabase db;
     QMimeType mimeType = db.mimeTypeForFile(filePath);
@@ -252,9 +253,20 @@ QString PackagePrivate::unpack(const QString& filePath) {
         const KArchiveDirectory *source = archive->directory();
         QTemporaryDir tempdir;
         tempdir.setAutoRemove(false);
-        source->copyTo(tempdir.path() + '/');
-        createPackageMetadata(tempdir.path() + '/');
         tempRoot = tempdir.path() + '/';
+        source->copyTo(tempRoot);
+
+        // search metadata.desktop, the zip file might have the package contents in a subdirectory
+        QDir unpackedPath(tempdir.path());
+        const QStringList &entries = unpackedPath.entryList(QDir::Dirs);
+        foreach (const QString pack, entries) {
+            if ((pack != "." && pack != "..") &&
+                (QFile::exists(unpackedPath.absolutePath()+'/'+pack+"/metadata.desktop"))) {
+                tempRoot = unpackedPath.absolutePath()+'/'+pack+'/';
+            }
+        }
+
+        createPackageMetadata(tempRoot);
     } else {
         qWarning() << "Could not open package file:" << path;
     }
@@ -448,10 +460,9 @@ void Package::setPath(const QString &path)
             paths << path;
         }
     }
-    QFileInfo fileInfo(path);
 
+    QFileInfo fileInfo(path);
     if (fileInfo.isFile() && d->tempRoot.isEmpty()) {
-        //qDebug() << "before unzip: path " << path;
         d->path = path;
         d->tempRoot = d->unpack(path);
     }
@@ -822,7 +833,6 @@ void PackagePrivate::updateHash(const QString &basePath, const QString &subPath,
 void PackagePrivate::createPackageMetadata(const QString &path)
 {
     delete metadata;
-
     QString metadataPath(path + "/metadata.desktop");
     if (!QFile::exists(metadataPath)) {
         qWarning() << "No metadata file in the package, expected it at:" << metadataPath;
