@@ -347,7 +347,7 @@ void PlasmaPkg::runMain()
                 d->installer->setPath(d->packageFile);
                 if (d->installer->isValid()) {
                     if (d->installer->metadata().isValid()) {
-                        pluginName = d->installer->metadata().property("X-KDE-PluginInfo-Name").toString();
+                        pluginName = d->installer->metadata().pluginName();
                     }
                 }
             }
