@@ -131,7 +131,6 @@ void Units::updateDevicePixelRatio()
 
 int Units::gridUnit() const
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
 
@@ -184,6 +183,4 @@ bool Units::eventFilter(QObject *watched, QEvent *event)
     }
     return QObject::eventFilter(watched, event);
 }
-
-#include "units.moc"
 
