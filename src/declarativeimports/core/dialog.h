@@ -31,6 +31,7 @@
 #include <netwm_def.h>
 
 class QQuickItem;
+class QScreen;
 
 namespace Plasma
 {
@@ -172,6 +173,8 @@ private Q_SLOTS:
     void updateVisibility(bool visible);
 
 private:
+    QScreen* screenForItem(QQuickItem *item) const;
+
     QRect m_cachedGeometry;
     WindowType m_type;
     bool m_hideOnWindowDeactivate;

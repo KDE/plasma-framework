@@ -202,26 +202,28 @@ void DialogProxy::updateVisibility(bool visible)
 
 QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment)
 {
-    if (!item || !item->window()) {
+    if (!item) {
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
-        if (parentItem && parentItem->window()) {
+        if (parentItem) {
+            QScreen *screen = screenForItem(parentItem);
+
             switch (m_location) {
             case Plasma::Types::TopEdge:
-                return QPoint(screen()->availableGeometry().center().x() - size.width()/2, screen()->availableGeometry().y());
+                return QPoint(screen->availableGeometry().center().x() - size.width()/2, screen->availableGeometry().y());
                 break;
             case Plasma::Types::LeftEdge:
-                return QPoint(screen()->availableGeometry().x(), screen()->availableGeometry().center().y() - size.height()/2);
+                return QPoint(screen->availableGeometry().x(), screen->availableGeometry().center().y() - size.height()/2);
                 break;
             case Plasma::Types::RightEdge:
-                return QPoint(screen()->availableGeometry().right() - size.width(), screen()->availableGeometry().center().y() - size.height()/2);
+                return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height()/2);
                 break;
             case Plasma::Types::BottomEdge:
-                return QPoint(screen()->availableGeometry().center().x() - size.width()/2, screen()->availableGeometry().bottom() -size.height());
+                return QPoint(screen->availableGeometry().center().x() - size.width()/2, screen->availableGeometry().bottom() -size.height());
                 break;
                 //Default center in the screen
             default:
-                return screen()->geometry().center() - QPoint(size.width()/2, size.height()/2);
+                return screen->geometry().center() - QPoint(size.width()/2, size.height()/2);
             }
         } else {
             return QPoint();
@@ -230,7 +232,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
 
     QPointF pos = item->mapToScene(QPointF(0, 0));
 
-    if (item->window() && item->window()->screen()) {
+    if (item->window()) {
         pos = item->window()->mapToGlobal(pos.toPoint());
     } else {
         return QPoint();
@@ -248,15 +250,26 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     //if the item is in a dock we want to position the popups outside of the dock
     const KWindowInfo winInfo = KWindowSystem::windowInfo(item->window()->winId(), NET::WMWindowType);
     const bool isDock = winInfo.windowType((int)NET::AllTypesMask) == NET::Dock;
-    QRect parentGeometryBounds;
 
+    //flag shows if the popup should be placed inside or outside the parent item
+    //i.e if the parent item is the desktop we want to position the dialog to the left edge of
+    //the parent, not just outside the parent
+    const bool locateInsideParent = winInfo.windowType((int)NET::AllTypesMask) == NET::Desktop;
+
+    QRect parentGeometryBounds;
     if (isDock) {
         parentGeometryBounds = item->window()->geometry();
     } else {
         parentGeometryBounds = QRect(pos.toPoint(), QSize(item->width(), item->height()));
     }
 
-                           const QPoint topPoint(pos.x() + (item->boundingRect().width() - size.width())/2,
+    if (locateInsideParent) {
+        //pretend the parent is smaller so that positioning to the outside edge of the parent is
+        //aligned on the inside edge of the real parent
+        parentGeometryBounds.adjust(size.width(), size.height(), -size.width(), -size.height());
+    }
+
+    const QPoint topPoint(pos.x() + (item->boundingRect().width() - size.width())/2,
                                    parentGeometryBounds.top() - size.height());
     const QPoint bottomPoint(pos.x() + (item->boundingRect().width() - size.width())/2,
                              parentGeometryBounds.bottom());
@@ -279,7 +292,14 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
         dialogPos = topPoint;
     }
 
-    const QRect avail = item->window()->screen()->availableGeometry();
+    return dialogPos;
+
+
+    //find the correct screen for the item
+    //we do not rely on item->window()->screen() because
+    //QWindow::screen() is always only the screen where the window gets first created
+    //not actually the current window. See QWindow::screen() documentation
+    QRect avail = screenForItem(item)->availableGeometry();
 
     const int leftMargin = m_frameSvgItem->margins()->left();
     const int rightMargin = m_frameSvgItem->margins()->right();
@@ -585,6 +605,18 @@ void DialogProxy::updateInputShape()
         }
     }
 #endif
+}
+
+//find the screen which contains the item
+QScreen* DialogProxy::screenForItem(QQuickItem* item) const
+{
+    const QPoint globalPosition = item->window()->mapToGlobal(item->position().toPoint());
+    foreach(QScreen *screen, QGuiApplication::screens()) {
+        if (screen->geometry().contains(globalPosition)) {
+            return screen;
+        }
+    }
+    return QGuiApplication::primaryScreen();
 }
 
 #include "dialog.moc"
