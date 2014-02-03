@@ -131,7 +131,6 @@ Canvas {
 					context.moveTo(xPos, height - graphPadding);
 					var loopInit = (graphSamples.length < internal.sampleCount) ? 0 : (graphSamples.length - internal.sampleCount) - 3;
 					var yPos0 = (getYPos(graphSamples[loopInit]));
-					print(graphSamples[loopInit]);
 					context.lineTo(xPos, yPos0);
 					xPos += graphPadding;
 
