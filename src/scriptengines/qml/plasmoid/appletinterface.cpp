@@ -84,6 +84,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
                 this, &ContainmentInterface::screenChanged);
     }
 
+    setProperty("_plasma_applet", QVariant::fromValue(applet()));
 }
 
 AppletInterface::~AppletInterface()
