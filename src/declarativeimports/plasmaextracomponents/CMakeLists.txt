@@ -12,6 +12,7 @@ set(plasmaextracomponents_SRCS
     #resourceinstance.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
+    plotterprivate.cpp
     )
 
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})

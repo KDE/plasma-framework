@@ -1,5 +1,5 @@
 /*
- * Copyright 2014  Bhushan Shah <bhush94@gmail.com>
+ * Copyright 201  Bhushan Shah <bhush94@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,6 +21,7 @@
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtra
 
 Canvas {
 
@@ -41,6 +42,10 @@ Canvas {
 	property int graphPadding: 10  //Replace with units later
 	property int max: 100
 
+	PlasmaExtra.PlotterPrivate {
+		id: pr
+	}
+
 	QtObject {
 		id: internal
 		property int availableVSpace: height - (2*graphPadding)
@@ -54,34 +59,11 @@ Canvas {
 	}
 
 	function addPlot(color) {
-		var plotData = plots;
-		var sampleData = samples;
-		if (plotData == undefined || sampleData == undefined) {
-			plotData = new Array();
-			sampleData = new Array();
-		}
-		plotData.push(color);
-		sampleData.push(new Array());
-		plots = plotData;
-		samples = sampleData;
+		pr.addPlot(color);
 	}
 
 	function addSample(sample) {
-		var plotData = plots;
-		var sampleData = samples;
-		if (plotData == undefined) {
-			print("You need to add plot first");
-			return;
-		}
-		if (plotData.length != sample.length) {
-			print("Count of plots and data in sample mismatch, discarding sample");
-			return;
-		}
-		for(var i=0; i<plotData.length; i++) {
-			sampleData[i].push(sample[i]);
-		}
-		samples = sampleData;
-		plots = plotData;
+		pr.addSample(sample);
 		requestPaint();
 	}
 
@@ -118,8 +100,8 @@ Canvas {
 		}
 
 		var graphSamples;
-		for(var j = 0; j<plots.length; j++) {
-			graphSamples = samples[j];
+		for(var j = 0; j<pr.plotCount; j++) {
+			graphSamples = pr.getSamples(j);
 
 			if (graphSamples == undefined)
 				graphSamples = new Array();
@@ -143,7 +125,7 @@ Canvas {
 					}
 					context.quadraticCurveTo(width+graphPadding, height-graphPadding, width - graphPadding,height -graphPadding);
 					context.stroke();
-					context.fillStyle = plots[j]
+					context.fillStyle = pr.getPlotColor(j);
 					context.fill();
 				}
 				else {

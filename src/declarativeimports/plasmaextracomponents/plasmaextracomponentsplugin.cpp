@@ -22,6 +22,7 @@
 #include "appbackgroundprovider_p.h"
 //#include "resourceinstance.h"
 #include "fallbackcomponent.h"
+#include "plotterprivate.h"
 
 #include <QtQml>
 #include <QQmlEngine>
@@ -41,6 +42,7 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
     //qmlRegisterType<ResourceInstance>(uri, 2, 0, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
+	qmlRegisterType<PlotterPrivate>(uri, 2, 0, "PlotterPrivate");
 }
 
 
