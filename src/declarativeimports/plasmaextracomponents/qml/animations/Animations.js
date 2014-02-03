@@ -2,7 +2,7 @@
 .pragma library
 
 // a normal animation
-var normalDuration = 250;
+var normalDuration = units.longDuration;
 
 // for direct feedback, such as tapping
-var feedbackDuration = 50;
+var feedbackDuration = units.shortDuration;

@@ -83,6 +83,18 @@ class Units : public QObject
      */
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)
 
+    /**
+     * units.longDuration should be used for longer, screen-covering animations, for opening and
+     * closing of dialogs and other "not too small" animations
+     */
+    Q_PROPERTY(int longDuration READ longDuration NOTIFY durationChanged)
+
+    /**
+     * units.longDuration should be used for short animations, such as accentuating a UI event,
+     * hover events, etc..
+     */
+    Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
+
 public:
     Units(QObject *parent = 0);
     ~Units();
@@ -116,11 +128,24 @@ public:
      */
     int largeSpacing() const;
 
+    /**
+     * @return Duration for long animations, in milliseconds.
+     * @since 5.0
+     */
+    int longDuration() const;
+
+    /**
+     * @return Duration for short animations, in milliseconds.
+     * @since 5.0
+     */
+    int shortDuration() const;
+
 Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
     void iconSizesChanged();
     void spacingChanged();
+    void durationChanged();
 
 private Q_SLOTS:
     void themeChanged();
@@ -144,6 +169,8 @@ private:
 
     int m_smallSpacing;
     int m_largeSpacing;
+
+    int m_longDuration;
 };
 
 #endif //UNITS_H

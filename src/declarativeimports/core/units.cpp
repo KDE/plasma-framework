@@ -33,7 +33,8 @@
 Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
-      m_devicePixelRatio(-1)
+      m_devicePixelRatio(-1),
+      m_longDuration(250)
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
@@ -161,6 +162,17 @@ void Units::updateSpacing()
         m_largeSpacing = _s; // msize.height
         emit spacingChanged();
     }
+}
+
+
+int Units::longDuration() const
+{
+    return m_longDuration;
+}
+
+int Units::shortDuration() const
+{
+    return m_longDuration / 5;
 }
 
 bool Units::eventFilter(QObject *watched, QEvent *event)
