@@ -19,14 +19,14 @@
  */
 
 import QtQuick 2.0
-import "Animations.js" as Animations
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 SequentialAnimation {
     id: releasedAnimation
     objectName: "releasedAnimation"
 
     property Item targetItem
-    property int duration: Animations.feedbackDuration
+    property int duration: units.shortDuration
 
     // Fast scaling while we're animation == more FPS
     ScriptAction { script: targetItem.smooth = false }
