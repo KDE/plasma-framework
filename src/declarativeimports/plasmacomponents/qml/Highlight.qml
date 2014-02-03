@@ -26,7 +26,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  * derivates)
  *
  * Provides built-in animation of Behavior on opacity Easing.OutQuad for a
- * duration of 250.
+ * duration of 250 (defined in units.longDuration).
  *
  * (TODO, make optional? e.g. animate: false)
  */

@@ -94,7 +94,7 @@ Item {
         Component.onCompleted: {
             prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
         }
-        Behavior on opacity { NumberAnimation { duration: 200 } }
+        Behavior on opacity { NumberAnimation { duration: units.longDuration } }
     }
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}
