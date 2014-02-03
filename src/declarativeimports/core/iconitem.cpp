@@ -224,6 +224,7 @@ void IconItem::setSource(const QVariant &source)
         //success?
         if (m_svgIcon->isValid() && m_svgIcon->hasElement(m_source.toString())) {
             m_icon = QIcon();
+            connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
 
         //ok, svg not available
         } else {
