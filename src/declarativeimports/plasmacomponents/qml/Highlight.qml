@@ -55,7 +55,7 @@ Item {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: 250
+            duration: units.longDuration
             easing.type: Easing.OutQuad
         }
     }
@@ -75,7 +75,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.OutQuad
             }
         }

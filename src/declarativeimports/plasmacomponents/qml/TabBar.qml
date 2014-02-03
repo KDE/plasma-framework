@@ -100,7 +100,7 @@ FocusScope {
             Behavior on x {
                 PropertyAnimation {
                     easing.type: Easing.InQuad
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
         }
@@ -168,7 +168,7 @@ FocusScope {
             }
             Behavior on x {
                 NumberAnimation {
-                    duration: 250
+                    duration: units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

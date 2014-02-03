@@ -34,7 +34,7 @@ PlasmaCore.FrameSvgItem {
     opacity: 0
     Behavior on opacity {
         NumberAnimation {
-            duration: 250
+            duration: units.longDuration
             easing.type: Easing.OutQuad
         }
     }

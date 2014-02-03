@@ -157,7 +157,7 @@ Item {
                         target: frame
                         properties: "scale"
                         to: 0
-                        duration: 250
+                        duration: units.longDuration
                     }
                     ScriptAction { script: frame.destroy()}
                 }
