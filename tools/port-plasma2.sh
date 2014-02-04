@@ -151,6 +151,6 @@ for FS in `find $PWD -type f -name '*.qml'`; do
 done
 
 for FS in `find $PWD -type f -name '*main.qml'`; do
-    perl -p -i -e 's/QtQuick 2.0/QtQuick 2.0\nimport org.kde.plasma.shell 2.0/g' $FS
+    perl -p -i -e 's/QtQuick 2.0/QtQuick 2.0\nimport org.kde.plasma.plasmoid 2.0/g' $FS
 done
 

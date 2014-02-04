@@ -55,9 +55,9 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_interface(0)
 {
     //qmlRegisterType<AppletInterface>();
-    qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.shell", 2, 0, "Plasmoid",
+    qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));
-    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.shell", 2, 0, "Containment",
+    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
                                              QLatin1String("Do not create objects of type Containment"));
 
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
