@@ -29,7 +29,6 @@
  * theme.
  */
 import QtQuick 2.0
-
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -215,8 +214,8 @@ Item {
                 to: "normal"
                 // Cross fade from pressed to normal
                 ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: units.shortDuration * 2 }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: units.shortDuration * 2 }
                 }
             }
         ]

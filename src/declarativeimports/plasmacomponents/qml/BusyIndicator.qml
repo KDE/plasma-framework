@@ -63,7 +63,7 @@ Item {
 
         from: 0
         to: 360
-        duration: units.longDuration * 6
+        duration: 1500
         running: busy.running
         loops: Animation.Infinite
     }

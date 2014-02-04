@@ -55,10 +55,10 @@ PlasmaCore.FrameSvgItem {
                 onClicked: { textField.copy(); editBubble.state = "collapsed"; }
                 onPressed: PropertyAnimation {  target: copyIcon; properties: "scale";
                                                 from: 1.0; to: 0.9;
-                                                duration: 175; easing.type: Easing.OutExpo; }
+                                                duration: units.shortDuration * 3; easing.type: Easing.OutExpo; }
                 onReleased: PropertyAnimation { target: copyIcon; properties: "scale";
                                                 from: 0.9; to: 1.0;
-                                                duration: 175; easing.type: Easing.OutExpo; }
+                                                duration: units.shortDuration * 3; easing.type: Easing.OutExpo; }
             }
         }
         PlasmaCore.IconItem {
@@ -74,10 +74,10 @@ PlasmaCore.FrameSvgItem {
                 onClicked: { textField.paste(); editBubble.state = "collapsed"; }
                 onPressed: PropertyAnimation {  target: pasteIcon; properties: "scale";
                                                 from: 1.0; to: 0.9;
-                                                duration: 175; easing.type: Easing.OutExpo; }
+                                                duration: units.shortDuration * 3; easing.type: Easing.OutExpo; }
                 onReleased: PropertyAnimation { target: pasteIcon; properties: "scale";
                                                 from: 0.9; to: 1.0;
-                                                duration: 175; easing.type: Easing.OutExpo; }
+                                                duration: units.shortDuration * 3; easing.type: Easing.OutExpo; }
             }
         }
     }
@@ -98,15 +98,15 @@ PlasmaCore.FrameSvgItem {
         Transition {
             from: "collapsed"; to: "expanded"
             ParallelAnimation {
-                PropertyAnimation { properties: "opacity"; duration: 175; easing.type: Easing.InExpo; }
-                PropertyAnimation { properties: "scale"; duration: 175; easing.type: Easing.InExpo; }
+                PropertyAnimation { properties: "opacity"; duration: units.shortDuration * 3; easing.type: Easing.InExpo; }
+                PropertyAnimation { properties: "scale"; duration: units.shortDuration * 3; easing.type: Easing.InExpo; }
             }
         },
         Transition {
             from: "expanded"; to: "collapsed"
             ParallelAnimation {
-                PropertyAnimation { properties: "opacity"; duration: 175; easing.type: Easing.OutExpo; }
-                PropertyAnimation { properties: "scale"; duration: 100; easing.type: Easing.OutExpo; }
+                PropertyAnimation { properties: "opacity"; duration: units.shortDuration * 3; easing.type: Easing.OutExpo; }
+                PropertyAnimation { properties: "scale"; duration: units.shortDuration * 2; easing.type: Easing.OutExpo; }
             }
         }
     ]

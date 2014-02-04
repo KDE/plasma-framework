@@ -365,7 +365,7 @@ Item {
             height: parent.height
 
             color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
-            Behavior on color { ColorAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: units.shortDuration * 2 } }
             elide: Text.ElideRight
 
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
