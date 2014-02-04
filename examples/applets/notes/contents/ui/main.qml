@@ -18,12 +18,13 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 PlasmaCore.SvgItem {
-    property int minimumWidth: 150
-    property int minimumHeight: 150
+    Layout.minimumWidth: 150
+    Layout.minimumHeight: 150
     svg: PlasmaCore.Svg("widgets/notes")
     elementId: "yellow-notes"
 

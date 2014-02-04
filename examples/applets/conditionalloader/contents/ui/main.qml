@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import QtQuick.Layouts 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -30,10 +31,10 @@ Rectangle {
     height: 100
     radius: 10
     smooth: true
-    property int minimumWidth: units.gridUnit * 20
-    property int minimumHeight: column.implicitHeight
+    Layout.minimumWidth: units.gridUnit * 20
+    Layout.minimumHeight: column.implicitHeight
 
-    property Component compactRepresentation: Component {
+    Plasmoid.compactRepresentation: Component {
         Rectangle {
             MouseArea {
                 anchors.fill: parent
