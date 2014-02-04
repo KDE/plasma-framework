@@ -292,9 +292,6 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
         dialogPos = topPoint;
     }
 
-    return dialogPos;
-
-
     //find the correct screen for the item
     //we do not rely on item->window()->screen() because
     //QWindow::screen() is always only the screen where the window gets first created
