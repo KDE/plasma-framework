@@ -34,7 +34,7 @@ Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
       m_devicePixelRatio(-1),
-      m_longDuration(0) // default base value for animations
+      m_longDuration(250) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
