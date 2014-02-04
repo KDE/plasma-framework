@@ -190,7 +190,6 @@ void PlasmaPkg::runMain()
         d->packageRoot = "plasma/plasmoids/";
         d->servicePrefix = "plasma-applet-";
         d->pluginTypes << "Plasma/Applet";
-        //d->pluginTypes << "Plasma/PopupApplet";
         d->pluginTypes << "Plasma/Containment";
     } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 /*||
                type.compare("theme", Qt::CaseInsensitive) == 0*/) {
@@ -206,7 +205,6 @@ void PlasmaPkg::runMain()
         d->pluginTypes << "Plasma/Wallpaper";
         d->packageRoot = "plasma/wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
-        //qDebug() << "service type and root set " << d->servicePrefix << d->packageRoot << d->pluginTypes;
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/dataengines/";
@@ -222,7 +220,6 @@ void PlasmaPkg::runMain()
         d->packageRoot = "plasma/wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
         d->pluginTypes << "Plasma/Wallpaper";
-        //qDebug() << "2service type and root set " << d->servicePrefix << d->packageRoot << d->pluginTypes;
     } else if (type.compare(i18nc("package type", "lookandfeel"), Qt::CaseInsensitive) == 0 ||
                type.compare("lookandfeel", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/look-and-feel/";
@@ -343,7 +340,6 @@ void PlasmaPkg::runMain()
 
             if (QFile::exists(d->packageFile)) {
                 const QString file = QDir::currentPath() + '/' + d->package;
-                //Plasma::Package *p = d->installer;
                 d->installer->setPath(d->packageFile);
                 if (d->installer->isValid()) {
                     if (d->installer->metadata().isValid()) {
@@ -394,7 +390,7 @@ void PlasmaPkgPrivate::runKbuildsycoca()
 QStringList PlasmaPkgPrivate::packages(const QStringList& types)
 {
     QStringList result;
-    //qDebug() << "listing " << types;
+
     foreach (const QString& type, types) {
 
         if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
@@ -415,28 +411,21 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
         if (type.compare("Plasma/Theme", Qt::CaseInsensitive) == 0) {
             const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "desktoptheme/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
-                //qDebug() << "THeme path: " << ppath;
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
                 foreach (const QString pack, entries) {
                     if ((pack != "." && pack != "..") &&
                         (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
-                        //qDebug() << "Theme exists" << pack;
+
                         result << pack;
                     }
                 }
             }
         }
 
-            // get all desktop themes
-//             KStandardDirs dirs;
-//             const QStringList themes = dirs.findAllResources("data", "desktoptheme/*/metadata.desktop",
-//                                                     KStandardDirs::NoDuplicates);
-
         const KService::List services = KServiceTypeTrader::self()->query(type);
         foreach (const KService::Ptr &service, services) {
             const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
-            //qDebug() << "Found plugin: " << _plugin;
             if (!result.contains(_plugin)) {
                 result << _plugin;
             }
@@ -448,7 +437,6 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
 
 void PlasmaPkg::showPackageInfo(const QString& pluginName)
 {
-    //qDebug() << "showPackageInfo" << pluginName;
     QString type = QStringLiteral("Plasma/Applet");
     if (!d->pluginTypes.contains(type) && d->pluginTypes.count() > 0) {
         type = d->pluginTypes.at(0);
@@ -489,10 +477,8 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
         //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
     } else if (d->parser->isSet("global")) {
         packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
-        //qDebug() << "(set via locateAll) d->packageRoot is: " << d->packageRoot;
     } else {
         packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->packageRoot;
-        //qDebug() << "(set via locateLocal) d->packageRoot is: " << d->packageRoot;
     }
     return packageRoot;
 }

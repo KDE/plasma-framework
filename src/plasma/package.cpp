@@ -260,7 +260,7 @@ QString PackagePrivate::unpack(const QString& filePath)
             // search metadata.desktop, the zip file might have the package contents in a subdirectory
             QDir unpackedPath(tempdir.path());
             const QStringList &entries = unpackedPath.entryList(QDir::Dirs);
-            foreach (const QString pack, entries) {
+            foreach (const QString &pack, entries) {
                 if ((pack != "." && pack != "..") &&
                     (QFile::exists(unpackedPath.absolutePath()+'/'+pack+"/metadata.desktop"))) {
                     tempRoot = unpackedPath.absolutePath()+'/'+pack+'/';
