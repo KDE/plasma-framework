@@ -28,13 +28,18 @@
 #include <QScreen>
 #include <cmath>
 
+#include <KDirWatch>
 #include <KIconLoader>
+
+const QString plasmarc = QStringLiteral("plasmarc");
+const QString groupName = QStringLiteral("Units");
+const int defaultLongDuration = 250;
 
 Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
       m_devicePixelRatio(-1),
-      m_longDuration(250) // default base value for animations
+      m_longDuration(defaultLongDuration) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
@@ -48,10 +53,35 @@ Units::Units (QObject *parent)
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
     installEventFilter(qApp);
+
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
+    KDirWatch::self()->addFile(configFile);
+
+    // Catch both, direct changes to the config file ...
+    connect(KDirWatch::self(), &KDirWatch::dirty, this, &Units::settingsFileChanged);
+    // ... but also remove/recreate cycles, like KConfig does it
+    connect(KDirWatch::self(), &KDirWatch::created, this, &Units::settingsFileChanged);
+    // Trigger configuration read
+    settingsFileChanged(plasmarc);
 }
 
 Units::~Units()
 {
+}
+
+void Units::settingsFileChanged(const QString &file)
+{
+    if (file.endsWith(plasmarc)) {
+
+        KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
+        cfg.config()->reparseConfiguration();
+        const int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
+
+        if (longDuration != m_longDuration) {
+            m_longDuration = longDuration;
+            emit durationChanged();
+        }
+    }
 }
 
 void Units::iconLoaderSettingsChanged()

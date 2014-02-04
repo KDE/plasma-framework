@@ -150,6 +150,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void themeChanged();
     void iconLoaderSettingsChanged();
+    void settingsFileChanged(const QString &settings);
 
 private:
     void updateDevicePixelRatio();
