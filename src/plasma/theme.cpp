@@ -348,7 +348,7 @@ void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QStrin
 
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
-    if (!d->svgElementsCache) {
+    if (!d->useCache()) {
         return false;
     }
 
@@ -381,7 +381,7 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
 
 QStringList Theme::listCachedRectKeys(const QString &image) const
 {
-    if (!d->svgElementsCache) {
+    if (!d->useCache()) {
         return QStringList();
     }
 
@@ -404,7 +404,7 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
 
 void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
 {
-    if (!d->svgElementsCache) {
+    if (!d->useCache()) {
         return;
     }
 
@@ -427,7 +427,7 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
 
 void Theme::invalidateRectsCache(const QString& image)
 {
-    if (d->svgElementsCache) {
+    if (d->useCache()) {
         KConfigGroup imageGroup(d->svgElementsCache, image);
         imageGroup.deleteGroup();
     }
@@ -439,7 +439,7 @@ void Theme::releaseRectsCache(const QString &image)
 {
     QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
     if (it != d->invalidElements.end()) {
-        if (!d->svgElementsCache) {
+        if (d->useCache()) {
             KConfigGroup imageGroup(d->svgElementsCache, it.key());
             imageGroup.writeEntry("invalidElements", it.value().toList());
         }

@@ -135,6 +135,8 @@ public:
     QTimer *updateNotificationTimer;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
+    QString themeVersion;
+    QString themeMetadataPath;
 
     bool locolor : 1;
     bool compositingActive : 1;
