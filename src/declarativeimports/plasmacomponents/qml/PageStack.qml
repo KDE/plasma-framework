@@ -266,7 +266,7 @@ Item {
             property int stackWidth: Math.max(root.width, root.height)
 
             // Duration of transition animation (in ms)
-            property int transitionDuration: root.animate ? units.longAnimation / 2 : 0
+            property int transitionDuration: units.longDuration / 2
 
             // Flag that indicates the container should be cleaned up after the transition has ended.
             property bool cleanupAfterTransition: false
