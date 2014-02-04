@@ -180,6 +180,9 @@ private:
     DeclarativeAppletScript *m_appletScriptEngine;
     KDeclarative::QmlObject *m_qmlObject;
 
+    Plasma::Package m_appletPackage;
+    Plasma::Package m_coronaPackage;
+
     bool m_expanded : 1;
 
     static QHash<QObject *, AppletLoader *> s_rootObjects;

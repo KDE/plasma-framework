@@ -47,6 +47,11 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
       m_appletScriptEngine(script),
       m_expanded(false)
 {
+    m_appletPackage = m_appletScriptEngine->package();
+    if (m_appletScriptEngine->applet() && m_appletScriptEngine->applet()->containment() && m_appletScriptEngine->applet()->containment()->corona()) {
+        m_coronaPackage = m_appletScriptEngine->applet()->containment()->corona()->package();
+    }
+
     m_compactRepresentationCheckTimer.setSingleShot(true);
     m_compactRepresentationCheckTimer.setInterval(250);
     connect (&m_compactRepresentationCheckTimer, SIGNAL(timeout()),
@@ -94,7 +99,7 @@ void AppletLoader::init()
     QQmlEngine *engine = m_qmlObject->engine();
 
     PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, appletScript()->package());
-    interceptor->addAllowedPath(m_appletScriptEngine->applet()->containment()->corona()->package().path());
+    interceptor->addAllowedPath(m_coronaPackage.path());
     engine->setUrlInterceptor(interceptor);
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
@@ -106,7 +111,7 @@ void AppletLoader::init()
         }
         reason = i18n("Error loading QML file: %1", reason);
 
-        m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("appleterror")));
+        m_qmlObject->setSource(QUrl::fromLocalFile(m_coronaPackage.filePath("appleterror")));
         m_qmlObject->completeInitialization();
 
 
@@ -138,14 +143,14 @@ void AppletLoader::init()
     //default m_compactRepresentation is a simple icon provided by the shell package
     if (!m_compactRepresentation) {
         m_compactRepresentation = new QQmlComponent(engine, this);
-        m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("defaultcompactrepresentation")));
+        m_compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(m_coronaPackage.filePath("defaultcompactrepresentation")));
         emit compactRepresentationChanged(m_compactRepresentation.data());
     }
 
     //default m_compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!m_compactRepresentationExpander) {
         m_compactRepresentationExpander = new QQmlComponent(engine, this);
-        m_compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(m_appletScriptEngine->applet()->containment()->corona()->package().filePath("compactapplet")));
+        m_compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(m_coronaPackage.filePath("compactapplet")));
         emit compactRepresentationExpanderItemChanged(m_compactRepresentationExpander.data());
     }
 
