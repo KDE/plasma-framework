@@ -36,6 +36,8 @@
 #include <Plasma/ConfigLoader>
 #include <Plasma/PluginLoader>
 
+QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
+
 WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     : QQuickItem(parent),
       m_containmentInterface(parent),
@@ -55,7 +57,9 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 }
 
 WallpaperInterface::~WallpaperInterface()
-{}
+{
+    s_rootObjects.remove(m_qmlObject->engine());
+}
 
 KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
 {
@@ -109,6 +113,7 @@ void WallpaperInterface::syncWallpaperPackage()
     
     if (!m_qmlObject) {
         m_qmlObject = new KDeclarative::QmlObject(this);
+        s_rootObjects[m_qmlObject->engine()] = this;
         m_qmlObject->setInitializationDelayed(true);
     }
 
@@ -142,6 +147,7 @@ void WallpaperInterface::syncWallpaperPackage()
 
     } else if (m_qmlObject->mainComponent()) {
         qWarning() << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
+        s_rootObjects.remove(m_qmlObject->engine());
         m_qmlObject->deleteLater();
         m_qmlObject = 0;
 

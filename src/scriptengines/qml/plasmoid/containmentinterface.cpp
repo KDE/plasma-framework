@@ -59,8 +59,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    qmlRegisterType<ContainmentInterface>();
-
     connect(containment(), &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
     connect(containment(), &Plasma::Containment::appletAdded,

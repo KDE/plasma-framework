@@ -59,7 +59,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
       m_busy(false),
       m_hideOnDeactivate(true)
 {
-    qmlRegisterType<AppletInterface>();
     qmlRegisterType<QAction>();
 
     connect(this, &AppletInterface::configNeedsSaving,

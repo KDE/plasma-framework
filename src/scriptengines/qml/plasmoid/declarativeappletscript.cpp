@@ -42,6 +42,7 @@
 
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
+#include "plasmoid/wallpaperinterface.h"
 
 #include <kdeclarative/qmlobject.h>
 #include <kdeclarative/configpropertymap.h>
@@ -59,6 +60,9 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
                                              QLatin1String("Do not create objects of type Plasmoid"));
     qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
                                              QLatin1String("Do not create objects of type Containment"));
+
+    qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
+                                             QLatin1String("Do not create objects of type Wallpaper"));
 
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
