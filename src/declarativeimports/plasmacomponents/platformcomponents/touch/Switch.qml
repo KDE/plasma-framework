@@ -50,7 +50,7 @@ Private.DualStateButton {
 
             opacity: checked ? 1 : 0
             Behavior on opacity {
-                PropertyAnimation { duration: 100 }
+                PropertyAnimation { duration: units.shortDuration * 2 }
             }
         }
 
@@ -77,7 +77,7 @@ Private.DualStateButton {
             width: height
             x: checked ? width : 0
             Behavior on x {
-                PropertyAnimation { duration: 100 }
+                PropertyAnimation { duration: units.shortDuration * 2 }
             }
         }
     }

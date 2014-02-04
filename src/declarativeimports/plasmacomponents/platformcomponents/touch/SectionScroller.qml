@@ -85,7 +85,7 @@ Item {
     opacity: 0
     Behavior on opacity {
         NumberAnimation {
-            duration: 250
+            duration: units.longDuration
         }
     }
 
@@ -172,7 +172,7 @@ Item {
         opacity: dragArea.pressed?1:0
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
             }
         }
     }

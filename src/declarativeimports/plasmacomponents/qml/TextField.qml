@@ -363,7 +363,7 @@ FocusScope {
         opacity: (textInput.text != "" && clearButtonShown && textField.enabled) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

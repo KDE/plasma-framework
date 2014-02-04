@@ -19,14 +19,14 @@
  */
 
 import QtQuick 2.0
-import "Animations.js" as Animations
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 SequentialAnimation {
     id: disappearAnimation
     objectName: "disappearAnimation"
 
     property Item targetItem
-    property int duration: Animations.normalDuration
+    property int duration: units.longDuration
 
     ScriptAction { script: targetItem.smooth = false; }
 

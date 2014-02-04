@@ -227,7 +227,7 @@ Item {
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
                 opacity: (internal.userPressed || checked || !flat || (shadow.hasOverState && mouse.containsMouse && button.enabled)) ? 1 : 0
                 Behavior on opacity {
-                    PropertyAnimation { duration: 250 }
+                    PropertyAnimation { duration: units.longDuration }
                 }
 
                 PlasmaCore.Svg {
@@ -333,7 +333,7 @@ Item {
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
                 opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
                 Behavior on opacity {
-                    PropertyAnimation { duration: 250 }
+                    PropertyAnimation { duration: units.longDuration }
                 }
             }
         }
@@ -365,7 +365,7 @@ Item {
             height: parent.height
 
             color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
-            Behavior on color { ColorAnimation { duration: 100 } }
+            Behavior on color { ColorAnimation { duration: units.shortDuration * 2 } }
             elide: Text.ElideRight
 
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter

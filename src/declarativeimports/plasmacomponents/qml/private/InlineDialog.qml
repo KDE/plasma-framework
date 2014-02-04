@@ -47,7 +47,7 @@ Item {
     SequentialAnimation {
         id: appearAnimation
         NumberAnimation {
-            duration: 250
+            duration: units.longDuration
             easing.type: Easing.InOutQuad
             target: dismissArea
             properties: "opacity"

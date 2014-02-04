@@ -33,7 +33,8 @@
 Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
-      m_devicePixelRatio(-1)
+      m_devicePixelRatio(-1),
+      m_longDuration(250) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
@@ -130,7 +131,6 @@ void Units::updateDevicePixelRatio()
 
 int Units::gridUnit() const
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
 
@@ -163,6 +163,17 @@ void Units::updateSpacing()
     }
 }
 
+
+int Units::longDuration() const
+{
+    return m_longDuration;
+}
+
+int Units::shortDuration() const
+{
+    return m_longDuration / 5;
+}
+
 bool Units::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == QCoreApplication::instance()) {
@@ -172,6 +183,4 @@ bool Units::eventFilter(QObject *watched, QEvent *event)
     }
     return QObject::eventFilter(watched, event);
 }
-
-#include "units.moc"
 
