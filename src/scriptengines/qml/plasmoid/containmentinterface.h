@@ -171,4 +171,6 @@ private:
     KActivities::Info *m_activityInfo;
 };
 
+QML_DECLARE_TYPEINFO(ContainmentInterface, QML_HAS_ATTACHED_PROPERTIES)
+
 #endif
