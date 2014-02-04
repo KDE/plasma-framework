@@ -177,8 +177,8 @@ Item {
                 property real startX: mouseArea.startX/mouseArea.width
                 property real startY: mouseArea.startY/mouseArea.height
                 
-                NumberAnimation on dx { id: dxAnim; to: 0; duration: 350; easing.type: Easing.OutElastic }
-                NumberAnimation on dy { id: dyAnim; to: 0; duration: 350; easing.type: Easing.OutElastic }
+                NumberAnimation on dx { id: dxAnim; to: 0; duration: units.longDuration; easing.type: Easing.OutElastic }
+                NumberAnimation on dy { id: dyAnim; to: 0; duration: units.longDuration; easing.type: Easing.OutElastic }
                 //! [fragment]
                 fragmentShader: {
                     "uniform lowp float qt_Opacity;" +
