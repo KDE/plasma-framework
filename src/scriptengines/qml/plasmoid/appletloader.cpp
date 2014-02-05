@@ -164,6 +164,26 @@ void AppletLoader::init()
 
 }
 
+Plasma::Package AppletLoader::appletPackage() const
+{
+    return m_appletPackage;
+}
+
+void AppletLoader::setAppletPackage(const Plasma::Package &package)
+{
+    m_appletPackage = package;
+}
+
+Plasma::Package AppletLoader::coronaPackage() const
+{
+    return m_coronaPackage;
+}
+
+void AppletLoader::setCoronaPackage(const Plasma::Package &package)
+{
+    m_coronaPackage = package;
+}
+
 int AppletLoader::switchWidth() const
 {
     return m_switchWidth;

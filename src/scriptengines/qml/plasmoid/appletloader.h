@@ -39,6 +39,7 @@ namespace KDeclarative {
 }
 
 
+
 class AppletLoader : public QQuickItem
 {
     Q_OBJECT
@@ -71,8 +72,23 @@ public:
     AppletLoader(Plasma::Applet *applet, QQuickItem *parent = 0);
     ~AppletLoader();
 
+////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
 
+    //Make the constructor lighter and delay the actual instantiation of the qml in the applet
+    virtual void init();
+
+    Plasma::Package appletPackage() const;
+    void setAppletPackage(const Plasma::Package &package);
+
+    Plasma::Package coronaPackage() const;
+    void setCoronaPackage(const Plasma::Package &package);
+
+    QObject *compactRepresentationItem();
+    QObject *fullRepresentationItem();
+    QObject *compactRepresentationExpanderItem();
+
+////PROPERTY ACCESSORS
     int switchWidth() const;
     void setSwitchWidth(int width);
 
@@ -93,13 +109,10 @@ public:
     QQmlComponent *compactRepresentationExpander();
     void setCompactRepresentationExpander(QQmlComponent *component);
 
-    QObject *compactRepresentationItem();
-    QObject *fullRepresentationItem();
-    QObject *compactRepresentationExpanderItem();
+    bool isExpanded() const;
+    void setExpanded(bool expanded);
 
-    //Reimplemented
-    virtual void init();
-
+////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletLoader *qmlAttachedProperties(QObject *object)
     {
         //at the moment of the attached object creation, the root item is the only one that hasn't a parent
@@ -111,12 +124,12 @@ public:
         }
     }
 
-    bool isExpanded() const;
-    void setExpanded(bool expanded);
 
 Q_SIGNALS:
     void switchWidthChanged(int width);
     void switchHeightChanged(int height);
+
+    void expandedChanged(bool expanded);
 
     void compactRepresentationChanged(QQmlComponent *compactRepresentation);
     void fullRepresentationChanged(QQmlComponent *fullRepresentation);
@@ -127,8 +140,6 @@ Q_SIGNALS:
     void compactRepresentationItemChanged(QObject *compactRepresentationItem);
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
     void compactRepresentationExpanderItemChanged(QObject *compactRepresentationExpanderItem);
-
-    void expandedChanged(bool expanded);
 
 protected:
     KDeclarative::QmlObject *qmlObject();
