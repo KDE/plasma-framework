@@ -64,7 +64,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
       blurActive(false),
       isDefault(true),
       useGlobal(true),
-      hasWallpapers(false)
+      hasWallpapers(false),
+      backgroundContrastEnabled(true)
 {
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
@@ -521,6 +522,20 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
     defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 }
 
+void ThemePrivate::processContrastSettings(KConfigBase* metadata)
+{
+    KConfigGroup cg;
+    if (metadata->hasGroup("ContrastEffect")) {
+        cg = KConfigGroup(metadata, "ContrastEffect");
+        backgroundContrastEnabled = cg.readEntry("enabled", false);
+        backgroundContrast = cg.readEntry("contrast", 0.45);
+        backgroundIntensity = cg.readEntry("contrast", 0.45);
+        backgroundSaturation = cg.readEntry("saturation", 1.7);
+    } else {
+        backgroundContrastEnabled = false;
+    }
+}
+
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
 {
     QString theme = tempThemeName;
@@ -570,6 +585,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         pluginInfo = KPluginInfo(metadataPath);
 
         processWallpaperSettings(&metadata);
+        processContrastSettings(&metadata);
 
         KConfigGroup cg(&metadata, "Settings");
         QString fallback = cg.readEntry("FallbackTheme", QString());

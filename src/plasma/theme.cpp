@@ -540,6 +540,26 @@ QSizeF Theme::mSize(const QFont &font) const
     return QFontMetrics(font).boundingRect("M").size();
 }
 
+bool Theme::backgroundContrastEnabled() const
+{
+    return d->backgroundContrastEnabled;
+}
+
+qreal Theme::backgroundContrast() const
+{
+    return d->backgroundContrast;
+}
+
+qreal Theme::backgroundIntensity() const
+{
+    return d->backgroundIntensity;
+}
+
+qreal Theme::backgroundSaturation() const
+{
+    return d->backgroundSaturation;
+}
+
 
 }
 
