@@ -124,7 +124,11 @@ Plasma::Types::Location AppletInterface::location() const
 
 QString AppletInterface::currentActivity() const
 {
-    return applet()->containment()->activity();
+    if (applet()->containment()) {
+        return applet()->containment()->activity();
+    } else {
+        return QString();
+    }
 }
 
 QObject* AppletInterface::configuration() const
