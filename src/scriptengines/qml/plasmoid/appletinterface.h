@@ -29,7 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
-#include "appletloader.h"
+#include "appletquickitem.h"
 #include "declarativeappletscript.h"
 
 class QAction;
@@ -49,7 +49,7 @@ namespace Plasma
     class ConfigLoader;
 } // namespace Plasma
 
-class AppletInterface : public AppletLoader
+class AppletInterface : public AppletQuickItem
 {
     Q_OBJECT
 
@@ -220,7 +220,7 @@ public:
 
     static AppletInterface *qmlAttachedProperties(QObject *object)
     {
-        return qobject_cast<AppletInterface *>(AppletLoader::qmlAttachedProperties(object));
+        return qobject_cast<AppletInterface *>(AppletQuickItem::qmlAttachedProperties(object));
     }
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------

@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "appletloader.h"
+#include "appletquickitem.h"
 
 #include <QQmlComponent>
 #include <QQmlExpression>
@@ -37,9 +37,9 @@
 
 #include <packageurlinterceptor.h>
 
-QHash<QObject *, AppletLoader *> AppletLoader::s_rootObjects = QHash<QObject *, AppletLoader *>();
+QHash<QObject *, AppletQuickItem *> AppletQuickItem::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
-AppletLoader::AppletLoader(Plasma::Applet *applet, QQuickItem *parent)
+AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       m_switchWidth(-1),
       m_switchHeight(-1),
@@ -78,7 +78,7 @@ AppletLoader::AppletLoader(Plasma::Applet *applet, QQuickItem *parent)
     setProperty("_plasma_applet", QVariant::fromValue(applet));
 }
 
-AppletLoader::~AppletLoader()
+AppletQuickItem::~AppletQuickItem()
 {
     //Here the order is important
     delete m_compactRepresentationItem.data();
@@ -88,12 +88,12 @@ AppletLoader::~AppletLoader()
     s_rootObjects.remove(m_qmlObject->engine());
 }
 
-Plasma::Applet *AppletLoader::applet() const
+Plasma::Applet *AppletQuickItem::applet() const
 {
     return m_applet;
 }
 
-void AppletLoader::init()
+void AppletQuickItem::init()
 {
     if (s_rootObjects.contains(this)) {
         return;
@@ -164,32 +164,32 @@ void AppletLoader::init()
 
 }
 
-Plasma::Package AppletLoader::appletPackage() const
+Plasma::Package AppletQuickItem::appletPackage() const
 {
     return m_appletPackage;
 }
 
-void AppletLoader::setAppletPackage(const Plasma::Package &package)
+void AppletQuickItem::setAppletPackage(const Plasma::Package &package)
 {
     m_appletPackage = package;
 }
 
-Plasma::Package AppletLoader::coronaPackage() const
+Plasma::Package AppletQuickItem::coronaPackage() const
 {
     return m_coronaPackage;
 }
 
-void AppletLoader::setCoronaPackage(const Plasma::Package &package)
+void AppletQuickItem::setCoronaPackage(const Plasma::Package &package)
 {
     m_coronaPackage = package;
 }
 
-int AppletLoader::switchWidth() const
+int AppletQuickItem::switchWidth() const
 {
     return m_switchWidth;
 }
 
-void AppletLoader::setSwitchWidth(int width)
+void AppletQuickItem::setSwitchWidth(int width)
 {
     if (m_switchWidth == width) {
         return;
@@ -199,12 +199,12 @@ void AppletLoader::setSwitchWidth(int width)
     emit switchWidthChanged(width);
 }
 
-int AppletLoader::switchHeight() const
+int AppletQuickItem::switchHeight() const
 {
     return m_switchHeight;
 }
 
-void AppletLoader::setSwitchHeight(int width)
+void AppletQuickItem::setSwitchHeight(int width)
 {
     if (m_switchHeight == width) {
         return;
@@ -214,12 +214,12 @@ void AppletLoader::setSwitchHeight(int width)
     emit switchHeightChanged(width);
 }
 
-QQmlComponent *AppletLoader::compactRepresentation()
+QQmlComponent *AppletQuickItem::compactRepresentation()
 {
     return m_compactRepresentation.data();
 }
 
-void AppletLoader::setCompactRepresentation(QQmlComponent *component)
+void AppletQuickItem::setCompactRepresentation(QQmlComponent *component)
 {
     if (m_compactRepresentation.data() == component) {
         return;
@@ -230,12 +230,12 @@ void AppletLoader::setCompactRepresentation(QQmlComponent *component)
 }
 
 
-QQmlComponent *AppletLoader::fullRepresentation()
+QQmlComponent *AppletQuickItem::fullRepresentation()
 {
     return m_fullRepresentation.data();
 }
 
-void AppletLoader::setFullRepresentation(QQmlComponent *component)
+void AppletQuickItem::setFullRepresentation(QQmlComponent *component)
 {
     if (m_fullRepresentation.data() == component) {
         return;
@@ -245,12 +245,12 @@ void AppletLoader::setFullRepresentation(QQmlComponent *component)
     emit fullRepresentationChanged(component);
 }
 
-QQmlComponent *AppletLoader::preferredRepresentation()
+QQmlComponent *AppletQuickItem::preferredRepresentation()
 {
     return m_preferredRepresentation.data();
 }
 
-void AppletLoader::setPreferredRepresentation(QQmlComponent *component)
+void AppletQuickItem::setPreferredRepresentation(QQmlComponent *component)
 {
     if (m_preferredRepresentation.data() == component) {
         return;
@@ -260,12 +260,12 @@ void AppletLoader::setPreferredRepresentation(QQmlComponent *component)
     emit preferredRepresentationChanged(component);
 }
 
-bool AppletLoader::isExpanded() const
+bool AppletQuickItem::isExpanded() const
 {
     return m_expanded;
 }
 
-void AppletLoader::setExpanded(bool expanded)
+void AppletQuickItem::setExpanded(bool expanded)
 {
     if (m_applet->isContainment()) {
         expanded = true;
@@ -287,29 +287,29 @@ void AppletLoader::setExpanded(bool expanded)
 ////////////Internals
 
 
-KDeclarative::QmlObject *AppletLoader::qmlObject()
+KDeclarative::QmlObject *AppletQuickItem::qmlObject()
 {
     return m_qmlObject;
 }
 
-QObject *AppletLoader::compactRepresentationItem()
+QObject *AppletQuickItem::compactRepresentationItem()
 {
     return m_compactRepresentationItem.data();
 }
 
-QObject *AppletLoader::fullRepresentationItem()
+QObject *AppletQuickItem::fullRepresentationItem()
 {
     return m_fullRepresentationItem.data();
 }
 
-QObject *AppletLoader::compactRepresentationExpanderItem()
+QObject *AppletQuickItem::compactRepresentationExpanderItem()
 {
     return m_compactRepresentationExpanderItem.data();
 }
 
 
 
-QObject *AppletLoader::createCompactRepresentationItem()
+QObject *AppletQuickItem::createCompactRepresentationItem()
 {
     if (!m_compactRepresentation) {
         return 0;
@@ -326,7 +326,7 @@ QObject *AppletLoader::createCompactRepresentationItem()
     return m_compactRepresentationItem.data();
 }
 
-QObject *AppletLoader::createFullRepresentationItem()
+QObject *AppletQuickItem::createFullRepresentationItem()
 {
     if (m_fullRepresentationItem) {
         return m_fullRepresentationItem.data();
@@ -353,7 +353,7 @@ QObject *AppletLoader::createFullRepresentationItem()
     return m_fullRepresentationItem.data();
 }
 
-QObject *AppletLoader::createCompactRepresentationExpanderItem()
+QObject *AppletQuickItem::createCompactRepresentationExpanderItem()
 {
     if (!m_compactRepresentationExpander) {
         return 0;
@@ -374,7 +374,7 @@ QObject *AppletLoader::createCompactRepresentationExpanderItem()
     return m_compactRepresentationExpanderItem.data();
 }
 
-void AppletLoader::connectLayoutAttached(QObject *item)
+void AppletQuickItem::connectLayoutAttached(QObject *item)
 {
     QObject *layout = 0;
 
@@ -475,14 +475,14 @@ void AppletLoader::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillHeight");
 }
 
-void AppletLoader::propagateSizeHint(const QByteArray &layoutProperty)
+void AppletQuickItem::propagateSizeHint(const QByteArray &layoutProperty)
 {
     if (m_ownLayout && m_representationLayout) {
         m_ownLayout.data()->setProperty(layoutProperty, m_representationLayout.data()->property(layoutProperty));
     }
 }
 
-void AppletLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     Q_UNUSED(oldGeometry)
 
@@ -490,7 +490,7 @@ void AppletLoader::geometryChanged(const QRectF &newGeometry, const QRectF &oldG
     m_compactRepresentationCheckTimer.start();
 }
 
-void AppletLoader::itemChange(ItemChange change, const ItemChangeData &value)
+void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the representations if needed
@@ -505,7 +505,7 @@ void AppletLoader::itemChange(ItemChange change, const ItemChangeData &value)
 
 //// Slots
 
-void AppletLoader::compactRepresentationCheck()
+void AppletQuickItem::compactRepresentationCheck()
 {
     //ignore 0,0 sizes;
     if (width() <= 0 && height() <= 0) {
@@ -592,46 +592,46 @@ void AppletLoader::compactRepresentationCheck()
     }
 }
 
-void AppletLoader::minimumWidthChanged()
+void AppletQuickItem::minimumWidthChanged()
 {
     propagateSizeHint("minimumWidth");
 }
 
-void AppletLoader::minimumHeightChanged()
+void AppletQuickItem::minimumHeightChanged()
 {
     propagateSizeHint("minimumHeight");
 }
 
-void AppletLoader::preferredWidthChanged()
+void AppletQuickItem::preferredWidthChanged()
 {
     propagateSizeHint("preferredWidth");
 }
 
-void AppletLoader::preferredHeightChanged()
+void AppletQuickItem::preferredHeightChanged()
 {
     propagateSizeHint("preferredHeight");
 }
 
-void AppletLoader::maximumWidthChanged()
+void AppletQuickItem::maximumWidthChanged()
 {
     propagateSizeHint("maximumWidth");
 }
 
-void AppletLoader::maximumHeightChanged()
+void AppletQuickItem::maximumHeightChanged()
 {
     propagateSizeHint("maximumHeight");
 }
 
-void AppletLoader::fillWidthChanged()
+void AppletQuickItem::fillWidthChanged()
 {
     propagateSizeHint("fillWidth");
 }
 
-void AppletLoader::fillHeightChanged()
+void AppletQuickItem::fillHeightChanged()
 {
     propagateSizeHint("fillHeight");
 }
 
 
-#include "moc_appletloader.cpp"
+#include "moc_appletquickitem.cpp"
 

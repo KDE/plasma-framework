@@ -114,7 +114,7 @@ public:
 
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
-        return qobject_cast<ContainmentInterface *>(AppletLoader::qmlAttachedProperties(object));
+        return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
     }
 
 protected:

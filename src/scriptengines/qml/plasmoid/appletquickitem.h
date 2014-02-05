@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef APPLETLOADER_P
-#define APPLETLOADER_P
+#ifndef APPLETQUICKITEM_P
+#define APPLETQUICKITEM_P
 
 #include <QQuickItem>
 #include <QWeakPointer>
@@ -40,7 +40,7 @@ namespace KDeclarative {
 
 
 
-class AppletLoader : public QQuickItem
+class AppletQuickItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -66,8 +66,8 @@ class AppletLoader : public QQuickItem
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
 
 public:
-    AppletLoader(Plasma::Applet *applet, QQuickItem *parent = 0);
-    ~AppletLoader();
+    AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = 0);
+    ~AppletQuickItem();
 
 ////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
@@ -106,7 +106,7 @@ public:
     void setExpanded(bool expanded);
 
 ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
-    static AppletLoader *qmlAttachedProperties(QObject *object)
+    static AppletQuickItem *qmlAttachedProperties(QObject *object)
     {
         //at the moment of the attached object creation, the root item is the only one that hasn't a parent
         //only way to avoid creation of this attached for everybody but the root item
@@ -189,9 +189,9 @@ private:
 
     bool m_expanded : 1;
 
-    static QHash<QObject *, AppletLoader *> s_rootObjects;
+    static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };
 
-QML_DECLARE_TYPEINFO(AppletLoader, QML_HAS_ATTACHED_PROPERTIES)
+QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

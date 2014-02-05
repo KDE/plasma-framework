@@ -53,7 +53,7 @@
 Q_DECLARE_METATYPE(AppletInterface*)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
-    : AppletLoader(script->applet(), parent),
+    : AppletQuickItem(script->applet(), parent),
       m_actionSignals(0),
       m_appletScriptEngine(script),
       m_backgroundHints(Plasma::Types::StandardBackground),
@@ -102,7 +102,7 @@ void AppletInterface::init()
 
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
 
-    AppletLoader::init();
+    AppletQuickItem::init();
 
     qDebug() << "Graphic object created:" << applet() << this;
 
