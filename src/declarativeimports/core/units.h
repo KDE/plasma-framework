@@ -60,7 +60,7 @@ class Units : public QObject
     // layout hints
 
     /**
-     * units.largeSpacing is the amount of spacing that should be used around bigger UI elements,
+     * units.smallSpacing is the amount of spacing that should be used around bigger UI elements,
      * for example between the content and the border. Internally, this size depends on the size of
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
@@ -68,7 +68,7 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
 
     /**
-     * units.smallSpacing is the amount of spacing that should be used inside bigger UI elements,
+     * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
      * for example between an icon and the corresponding text. Internally, this size depends on
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
