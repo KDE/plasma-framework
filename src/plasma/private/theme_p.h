@@ -31,6 +31,7 @@
 #include <kwindowsystem.h>
 #include <QTimer>
 
+#include <config-plasma.h>
 #if HAVE_X11
 #include "private/effectwatcher_p.h"
 #endif
