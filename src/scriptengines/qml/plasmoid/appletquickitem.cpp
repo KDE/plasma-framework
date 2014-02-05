@@ -216,9 +216,94 @@ QObject *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
     compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
     compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
 
-    emit q->compactRepresentationExpanderItemChanged(compactRepresentationExpanderItem.data());
-
     return compactRepresentationExpanderItem.data();
+}
+
+void AppletQuickItemPrivate::compactRepresentationCheck()
+{
+    //ignore 0,0 sizes;
+    if (q->width() <= 0 && q->height() <= 0) {
+        return;
+    }
+
+    bool full = false;
+
+    if (applet->isContainment()) {
+        full = true;
+
+    } else {
+        if (switchWidth > 0 && switchHeight > 0) {
+            full = q->width() > switchWidth && q->height() > switchHeight;
+        //if a size to switch wasn't set, determine what representation to always chose
+        } else {
+            //preferred representation set?
+            if (preferredRepresentation) {
+                full = preferredRepresentation.data() == fullRepresentation.data();
+            //Otherwise, base on FormFactor
+            } else {
+                full = (applet->formFactor() != Plasma::Types::Horizontal && applet->formFactor() != Plasma::Types::Vertical);
+            }
+        }
+
+        if ((full && fullRepresentationItem && fullRepresentationItem.data() == currentRepresentationItem.data()) ||
+            (!full && compactRepresentationItem && compactRepresentationItem.data() == currentRepresentationItem.data())
+        ) {
+            return;
+        }
+    }
+
+    //Expanded
+    if (full) {
+        QQuickItem *item = qobject_cast<QQuickItem *>(createFullRepresentationItem());
+
+        if (item) {
+            item->setParentItem(q);
+            {
+                //set anchors
+                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, "parent");
+                QQmlProperty prop(item, "anchors.fill");
+                prop.write(expr.evaluate());
+            }
+            if (compactRepresentationItem) {
+                compactRepresentationItem.data()->setProperty("visible", false);
+            }
+            if (compactRepresentationExpanderItem) {
+                compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant());
+                compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant());
+            }
+
+            currentRepresentationItem = item;
+            connectLayoutAttached(item);
+        }
+
+    //Icon
+    } else {
+        QQuickItem *compactItem = qobject_cast<QQuickItem *>(createCompactRepresentationItem());
+
+        if (compactItem) {
+            //set the root item as the main visible item
+            compactItem->setParentItem(q);
+            compactItem->setVisible(true);
+            {
+                //set anchors
+                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactItem, "parent");
+                QQmlProperty prop(compactItem, "anchors.fill");
+                prop.write(expr.evaluate());
+            }
+
+            if (fullRepresentationItem) {
+                fullRepresentationItem.data()->setProperty("parent", QVariant());
+            }
+
+            if (compactRepresentationExpanderItem) {
+                compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
+                compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
+            }
+
+            currentRepresentationItem = compactItem;
+            connectLayoutAttached(compactItem);
+        }
+    }
 }
 
 void AppletQuickItemPrivate::minimumWidthChanged()
@@ -383,7 +468,6 @@ void AppletQuickItem::init()
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         d->compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("compactapplet")));
-        emit compactRepresentationExpanderItemChanged(d->compactRepresentationExpander.data());
     }
 
 }
@@ -526,11 +610,6 @@ QObject *AppletQuickItem::fullRepresentationItem()
     return d->fullRepresentationItem.data();
 }
 
-QObject *AppletQuickItem::compactRepresentationExpanderItem()
-{
-    return d->compactRepresentationExpanderItem.data();
-}
-
 void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     Q_UNUSED(oldGeometry)
@@ -551,95 +630,6 @@ void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
-
-//// Slots
-
-void AppletQuickItem::compactRepresentationCheck()
-{
-    //ignore 0,0 sizes;
-    if (width() <= 0 && height() <= 0) {
-        return;
-    }
-
-    bool full = false;
-
-    if (d->applet->isContainment()) {
-        full = true;
-
-    } else {
-        if (d->switchWidth > 0 && d->switchHeight > 0) {
-            full = width() > d->switchWidth && height() > d->switchHeight;
-        //if a size to switch wasn't set, determine what representation to always chose
-        } else {
-            //preferred representation set?
-            if (d->preferredRepresentation) {
-                full = d->preferredRepresentation.data() == d->fullRepresentation.data();
-            //Otherwise, base on FormFactor
-            } else {
-                full = (d->applet->formFactor() != Plasma::Types::Horizontal && d->applet->formFactor() != Plasma::Types::Vertical);
-            }
-        }
-
-        if ((full && d->fullRepresentationItem && d->fullRepresentationItem.data() == d->currentRepresentationItem.data()) ||
-            (!full && d->compactRepresentationItem && d->compactRepresentationItem.data() == d->currentRepresentationItem.data())
-        ) {
-            return;
-        }
-    }
-
-    //Expanded
-    if (full) {
-        QQuickItem *item = qobject_cast<QQuickItem *>(d->createFullRepresentationItem());
-
-        if (item) {
-            item->setParentItem(this);
-            {
-                //set anchors
-                QQmlExpression expr(QtQml::qmlContext(d->qmlObject->rootObject()), item, "parent");
-                QQmlProperty prop(item, "anchors.fill");
-                prop.write(expr.evaluate());
-            }
-            if (d->compactRepresentationItem) {
-                d->compactRepresentationItem.data()->setProperty("visible", false);
-            }
-            if (d->compactRepresentationExpanderItem) {
-                d->compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant());
-                d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant());
-            }
-
-            d->currentRepresentationItem = item;
-            d->connectLayoutAttached(item);
-        }
-
-    //Icon
-    } else {
-        QQuickItem *compactItem = qobject_cast<QQuickItem *>(d->createCompactRepresentationItem());
-
-        if (compactItem) {
-            //set the root item as the main visible item
-            compactItem->setParentItem(this);
-            compactItem->setVisible(true);
-            {
-                //set anchors
-                QQmlExpression expr(QtQml::qmlContext(d->qmlObject->rootObject()), compactItem, "parent");
-                QQmlProperty prop(compactItem, "anchors.fill");
-                prop.write(expr.evaluate());
-            }
-
-            if (d->fullRepresentationItem) {
-                d->fullRepresentationItem.data()->setProperty("parent", QVariant());
-            }
-
-            if (d->compactRepresentationExpanderItem) {
-                d->compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
-                d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
-            }
-
-            d->currentRepresentationItem = compactItem;
-            d->connectLayoutAttached(compactItem);
-        }
-    }
-}
 
 
 #include "moc_appletquickitem.cpp"

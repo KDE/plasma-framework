@@ -83,7 +83,6 @@ public:
 
     QObject *compactRepresentationItem();
     QObject *fullRepresentationItem();
-    QObject *compactRepresentationExpanderItem();
 
 ////PROPERTY ACCESSORS
     int switchWidth() const;
@@ -128,25 +127,30 @@ Q_SIGNALS:
     void fullRepresentationChanged(QQmlComponent *fullRepresentation);
     void preferredRepresentationChanged(QQmlComponent *preferredRepresentation);
 
-    void compactRepresentationExpanderChanged(QQmlComponent *compactRepresentationExpander);
-
     void compactRepresentationItemChanged(QObject *compactRepresentationItem);
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
-    void compactRepresentationExpanderItemChanged(QObject *compactRepresentationExpanderItem);
 
 protected:
     KDeclarative::QmlObject *qmlObject();
+
+    //Reimplementation
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     virtual void itemChange(ItemChange change, const ItemChangeData &value);
 
 
-private Q_SLOTS:
-    void compactRepresentationCheck();
 
 private:
     AppletQuickItemPrivate *const d;
 
+    Q_PRIVATE_SLOT(d, void compactRepresentationCheck())
     Q_PRIVATE_SLOT(d, void minimumWidthChanged())
+    Q_PRIVATE_SLOT(d, void minimumHeightChanged())
+    Q_PRIVATE_SLOT(d, void preferredWidthChanged())
+    Q_PRIVATE_SLOT(d, void preferredHeightChanged())
+    Q_PRIVATE_SLOT(d, void maximumWidthChanged())
+    Q_PRIVATE_SLOT(d, void maximumHeightChanged())
+    Q_PRIVATE_SLOT(d, void fillWidthChanged())
+    Q_PRIVATE_SLOT(d, void fillHeightChanged())
 };
 
 QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)

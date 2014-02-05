@@ -46,6 +46,7 @@ public:
     void propagateSizeHint(const QByteArray &layoutProperty);
 
     //handlers of Layout signals, private slots
+    void compactRepresentationCheck();
     void minimumWidthChanged();
     void minimumHeightChanged();
     void preferredWidthChanged();
