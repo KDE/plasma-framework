@@ -56,6 +56,9 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_interface(0)
 {
     //qmlRegisterType<AppletInterface>();
+    //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
+    /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
+                                             QLatin1String("Do not create objects of type Plasmoid"));*/
     qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));
     qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
