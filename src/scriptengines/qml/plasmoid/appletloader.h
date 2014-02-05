@@ -23,15 +23,15 @@
 #include <QQuickItem>
 #include <QWeakPointer>
 #include <QQmlComponent>
+#include <QQmlEngine>
 #include <QTimer>
 
-#include "declarativeappletscript.h"
+#include <Plasma/Package>
 
 class QQmlComponent;
 
 namespace Plasma {
     class Applet;
-    class AppletScript;
 }
 
 namespace KDeclarative {
@@ -68,10 +68,10 @@ class AppletLoader : public QQuickItem
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
 
 public:
-    AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent = 0);
+    AppletLoader(Plasma::Applet *applet, QQuickItem *parent = 0);
     ~AppletLoader();
 
-    DeclarativeAppletScript *appletScript() const;
+    Plasma::Applet *applet() const;
 
     int switchWidth() const;
     void setSwitchWidth(int width);
@@ -177,7 +177,7 @@ private:
     QTimer m_compactRepresentationCheckTimer;
     QTimer m_fullRepresentationResizeTimer;
 
-    DeclarativeAppletScript *m_appletScriptEngine;
+    Plasma::Applet *m_applet;
     KDeclarative::QmlObject *m_qmlObject;
 
     Plasma::Package m_appletPackage;

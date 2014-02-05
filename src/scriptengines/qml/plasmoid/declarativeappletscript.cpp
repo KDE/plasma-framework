@@ -93,8 +93,6 @@ bool DeclarativeAppletScript::init()
     }
 
     m_interface->setParent(this);
-    // set the graphicObject dynamic property on applet
-    a->setProperty("graphicObject", QVariant::fromValue(m_interface));
 
     return true;
 }

@@ -154,11 +154,11 @@ public:
 
 //API not intended for the QML part
 
+    DeclarativeAppletScript *appletScript() const;
+
     QList<QAction*> contextualActions() const;
 
     void executeAction(const QString &name);
-
-    Plasma::Applet *applet() const { return appletScript()->applet(); }
 
 //QML API-------------------------------------------------------------------
 
@@ -302,6 +302,7 @@ private:
 
 
     KDeclarative::ConfigPropertyMap *m_configuration;
+    DeclarativeAppletScript *m_appletScriptEngine;
 
 //UI-specific members ------------------
 

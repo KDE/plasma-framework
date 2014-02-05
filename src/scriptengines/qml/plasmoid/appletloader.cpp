@@ -32,7 +32,6 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
-#include <Plasma/Package>
 #include <kdeclarative/qmlobject.h>
 #include <plasma/scripting/appletscript.h>
 
@@ -40,16 +39,16 @@
 
 QHash<QObject *, AppletLoader *> AppletLoader::s_rootObjects = QHash<QObject *, AppletLoader *>();
 
-AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
+AppletLoader::AppletLoader(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       m_switchWidth(-1),
       m_switchHeight(-1),
-      m_appletScriptEngine(script),
+      m_applet(applet),
       m_expanded(false)
 {
-    m_appletPackage = m_appletScriptEngine->package();
-    if (m_appletScriptEngine->applet() && m_appletScriptEngine->applet()->containment() && m_appletScriptEngine->applet()->containment()->corona()) {
-        m_coronaPackage = m_appletScriptEngine->applet()->containment()->corona()->package();
+    m_appletPackage = m_applet->package();
+    if (m_applet && m_applet->containment() && m_applet->containment()->corona()) {
+        m_coronaPackage = m_applet->containment()->corona()->package();
     }
 
     m_compactRepresentationCheckTimer.setSingleShot(true);
@@ -62,7 +61,7 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
     m_fullRepresentationResizeTimer.setInterval(250);
     connect (&m_fullRepresentationResizeTimer, &QTimer::timeout,
              [=]() {
-                KConfigGroup cg = m_appletScriptEngine->applet()->config();
+                KConfigGroup cg = m_applet->config();
                 cg = KConfigGroup(&cg, "PopupApplet");
                 cg.writeEntry("DialogWidth", m_fullRepresentationItem.data()->property("width").toInt());
                 cg.writeEntry("DialogHeight", m_fullRepresentationItem.data()->property("height").toInt());
@@ -73,6 +72,10 @@ AppletLoader::AppletLoader(DeclarativeAppletScript *script, QQuickItem *parent)
 
     m_qmlObject = new KDeclarative::QmlObject(this);
     m_qmlObject->setInitializationDelayed(true);
+
+    // set the graphicObject dynamic property on applet
+    m_applet->setProperty("graphicObject", QVariant::fromValue(this));
+    setProperty("_plasma_applet", QVariant::fromValue(applet));
 }
 
 AppletLoader::~AppletLoader()
@@ -85,6 +88,11 @@ AppletLoader::~AppletLoader()
     s_rootObjects.remove(m_qmlObject->engine());
 }
 
+Plasma::Applet *AppletLoader::applet() const
+{
+    return m_applet;
+}
+
 void AppletLoader::init()
 {
     if (s_rootObjects.contains(this)) {
@@ -93,16 +101,16 @@ void AppletLoader::init()
 
     s_rootObjects[m_qmlObject->engine()] = this;
 
-    Q_ASSERT(m_appletScriptEngine);
+    Q_ASSERT(m_applet);
 
     //Initialize the main QML file
     QQmlEngine *engine = m_qmlObject->engine();
 
-    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, appletScript()->package());
+    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, m_applet->package());
     interceptor->addAllowedPath(m_coronaPackage.path());
     engine->setUrlInterceptor(interceptor);
 
-    m_qmlObject->setSource(QUrl::fromLocalFile(m_appletScriptEngine->mainScript()));
+    m_qmlObject->setSource(QUrl::fromLocalFile(m_applet->package().filePath("mainscript")));
 
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || m_qmlObject->mainComponent()->isError()) {
         QString reason;
@@ -122,7 +130,7 @@ void AppletLoader::init()
             m_qmlObject->rootObject()->setProperty("reason", reason);
         }
 
-        appletScript()->setLaunchErrorMessage(reason);
+        m_applet->setLaunchErrorMessage(reason);
     }
 
     engine->rootContext()->setContextProperty("plasmoid", this);
@@ -154,11 +162,6 @@ void AppletLoader::init()
         emit compactRepresentationExpanderItemChanged(m_compactRepresentationExpander.data());
     }
 
-}
-
-DeclarativeAppletScript *AppletLoader::appletScript() const
-{
-    return m_appletScriptEngine;
 }
 
 int AppletLoader::switchWidth() const
@@ -259,7 +262,7 @@ bool AppletLoader::isExpanded() const
 
 void AppletLoader::setExpanded(bool expanded)
 {
-    if (m_appletScriptEngine->applet()->isContainment()) {
+    if (m_applet->isContainment()) {
         expanded = true;
     }
 
@@ -506,7 +509,7 @@ void AppletLoader::compactRepresentationCheck()
 
     bool full = false;
 
-    if (m_appletScriptEngine->applet()->isContainment()) {
+    if (m_applet->isContainment()) {
         full = true;
 
     } else {
@@ -519,7 +522,7 @@ void AppletLoader::compactRepresentationCheck()
                 full = m_preferredRepresentation.data() == m_fullRepresentation.data();
             //Otherwise, base on FormFactor
             } else {
-                full = (m_appletScriptEngine->applet()->formFactor() != Plasma::Types::Horizontal && m_appletScriptEngine->applet()->formFactor() != Plasma::Types::Vertical);
+                full = (m_applet->formFactor() != Plasma::Types::Horizontal && m_applet->formFactor() != Plasma::Types::Vertical);
             }
         }
 

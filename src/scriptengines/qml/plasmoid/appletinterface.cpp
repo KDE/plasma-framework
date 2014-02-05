@@ -53,8 +53,9 @@
 Q_DECLARE_METATYPE(AppletInterface*)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
-    : AppletLoader(script, parent),
+    : AppletLoader(script->applet(), parent),
       m_actionSignals(0),
+      m_appletScriptEngine(script),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
       m_hideOnDeactivate(true)
@@ -82,12 +83,15 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
                 this, &ContainmentInterface::screenChanged);
     }
-
-    setProperty("_plasma_applet", QVariant::fromValue(applet()));
 }
 
 AppletInterface::~AppletInterface()
 {
+}
+
+DeclarativeAppletScript *AppletInterface::appletScript() const
+{
+    return m_appletScriptEngine;
 }
 
 void AppletInterface::init()
