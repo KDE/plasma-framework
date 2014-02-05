@@ -59,9 +59,6 @@ class AppletLoader : public QQuickItem
      */
     Q_PROPERTY(QQmlComponent *preferredRepresentation READ preferredRepresentation WRITE setPreferredRepresentation NOTIFY preferredRepresentationChanged)
 
-    //FIXME: is it wise to expose this?
-    Q_PROPERTY(QQmlComponent *compactRepresentationExpander READ compactRepresentationExpander WRITE setCompactRepresentationExpander NOTIFY compactRepresentationExpanderChanged)
-
     /**
      * True when the applet is showing its full representation. either as the main only view, or in a popup.
      * Setting it will open or close the popup if the plasmoid is iconified, however it won't have effect if the applet is open
@@ -104,10 +101,6 @@ public:
 
     QQmlComponent *preferredRepresentation();
     void setPreferredRepresentation(QQmlComponent *component);
-
-
-    QQmlComponent *compactRepresentationExpander();
-    void setCompactRepresentationExpander(QQmlComponent *component);
 
     bool isExpanded() const;
     void setExpanded(bool expanded);
