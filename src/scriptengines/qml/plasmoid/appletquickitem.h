@@ -28,7 +28,8 @@
 
 #include <Plasma/Package>
 
-class QQmlComponent;
+#include "appletquickitem_p.h"
+
 
 namespace Plasma {
     class Applet;
@@ -37,7 +38,6 @@ namespace Plasma {
 namespace KDeclarative {
     class QmlObject;
 }
-
 
 
 class AppletQuickItem : public QQuickItem
@@ -110,8 +110,8 @@ public:
     {
         //at the moment of the attached object creation, the root item is the only one that hasn't a parent
         //only way to avoid creation of this attached for everybody but the root item
-        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
-            return s_rootObjects.value(QtQml::qmlEngine(object));
+        if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
+            return AppletQuickItemPrivate::s_rootObjects.value(QtQml::qmlEngine(object));
         } else {
             return 0;
         }
@@ -161,35 +161,7 @@ private Q_SLOTS:
     void fillHeightChanged();
 
 private:
-    int m_switchWidth;
-    int m_switchHeight;
-
-    QWeakPointer<QQmlComponent> m_compactRepresentation;
-    QWeakPointer<QQmlComponent> m_fullRepresentation;
-    QWeakPointer<QQmlComponent> m_preferredRepresentation;
-    QWeakPointer<QQmlComponent> m_compactRepresentationExpander;
-
-    QWeakPointer<QObject> m_compactRepresentationItem;
-    QWeakPointer<QObject> m_fullRepresentationItem;
-    QWeakPointer<QObject> m_compactRepresentationExpanderItem;
-    QWeakPointer<QObject> m_currentRepresentationItem;
-
-    //Attached layout objects: own and the representation's one
-    QWeakPointer<QObject> m_representationLayout;
-    QWeakPointer<QObject> m_ownLayout;
-
-    QTimer m_compactRepresentationCheckTimer;
-    QTimer m_fullRepresentationResizeTimer;
-
-    Plasma::Applet *m_applet;
-    KDeclarative::QmlObject *m_qmlObject;
-
-    Plasma::Package m_appletPackage;
-    Plasma::Package m_coronaPackage;
-
-    bool m_expanded : 1;
-
-    static QHash<QObject *, AppletQuickItem *> s_rootObjects;
+    AppletQuickItemPrivate *const d;
 };
 
 QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)

@@ -1,0 +1,71 @@
+/*
+ *   Copyright 2014 Marco Martin <mart@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+#ifndef APPLETQUICKITEM_H
+#define APPLETQUICKITEM_H
+
+#include <QQmlComponent>
+
+namespace Plasma {
+    class Applet;
+}
+
+namespace KDeclarative {
+    class QmlObject;
+}
+
+class AppletQuickItem;
+
+class AppletQuickItemPrivate
+{
+public:
+    AppletQuickItemPrivate(Plasma::Applet *a);
+
+    int switchWidth;
+    int switchHeight;
+
+    QWeakPointer<QQmlComponent> compactRepresentation;
+    QWeakPointer<QQmlComponent> fullRepresentation;
+    QWeakPointer<QQmlComponent> preferredRepresentation;
+    QWeakPointer<QQmlComponent> compactRepresentationExpander;
+
+    QWeakPointer<QObject> compactRepresentationItem;
+    QWeakPointer<QObject> fullRepresentationItem;
+    QWeakPointer<QObject> compactRepresentationExpanderItem;
+    QWeakPointer<QObject> currentRepresentationItem;
+
+    //Attached layout objects: own and the representation's one
+    QWeakPointer<QObject> representationLayout;
+    QWeakPointer<QObject> ownLayout;
+
+    QTimer compactRepresentationCheckTimer;
+    QTimer fullRepresentationResizeTimer;
+
+    Plasma::Applet *applet;
+    KDeclarative::QmlObject *qmlObject;
+
+    Plasma::Package appletPackage;
+    Plasma::Package coronaPackage;
+
+    bool expanded : 1;
+
+    static QHash<QObject *, AppletQuickItem *> s_rootObjects;
+};
+
+#endif
