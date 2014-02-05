@@ -28,8 +28,9 @@
 
 #include <Plasma/Package>
 
-#include "appletquickitem_p.h"
+#include "private/appletquickitem_p.h"
 
+#include <plasmaquick/plasmaquick_export.h>
 
 namespace Plasma {
     class Applet;
@@ -40,7 +41,7 @@ namespace KDeclarative {
 }
 
 
-class AppletQuickItem : public QQuickItem
+class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -105,16 +106,7 @@ public:
     void setExpanded(bool expanded);
 
 ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
-    static AppletQuickItem *qmlAttachedProperties(QObject *object)
-    {
-        //at the moment of the attached object creation, the root item is the only one that hasn't a parent
-        //only way to avoid creation of this attached for everybody but the root item
-        if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
-            return AppletQuickItemPrivate::s_rootObjects.value(QtQml::qmlEngine(object));
-        } else {
-            return 0;
-        }
-    }
+    static AppletQuickItem *qmlAttachedProperties(QObject *object);
 
 
 Q_SIGNALS:

@@ -29,7 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
-#include "appletquickitem.h"
+#include <appletquickitem.h>
 #include "declarativeappletscript.h"
 
 class QAction;
