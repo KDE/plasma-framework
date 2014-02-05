@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef APPLETQUICKITEM_P
-#define APPLETQUICKITEM_P
+#ifndef APPLETQUICKITEM_H
+#define APPLETQUICKITEM_H
 
 #include <QQuickItem>
 #include <QWeakPointer>
@@ -27,8 +27,6 @@
 #include <QTimer>
 
 #include <Plasma/Package>
-
-#include "private/appletquickitem_p.h"
 
 #include <plasmaquick/plasmaquick_export.h>
 
@@ -40,6 +38,8 @@ namespace KDeclarative {
     class QmlObject;
 }
 
+
+class AppletQuickItemPrivate;
 
 class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 {

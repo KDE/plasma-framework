@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef APPLETQUICKITEM_H
-#define APPLETQUICKITEM_H
+#ifndef APPLETQUICKITEM_P_H
+#define APPLETQUICKITEM_P_H
 
 #include <QQmlComponent>
 

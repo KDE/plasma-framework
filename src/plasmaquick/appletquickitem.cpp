@@ -18,6 +18,7 @@
  */
 
 #include "appletquickitem.h"
+#include "private/appletquickitem_p.h"
 
 #include <QQmlComponent>
 #include <QQmlExpression>
