@@ -74,7 +74,7 @@ AppletLoader::AppletLoader(Plasma::Applet *applet, QQuickItem *parent)
     m_qmlObject->setInitializationDelayed(true);
 
     // set the graphicObject dynamic property on applet
-    m_applet->setProperty("graphicObject", QVariant::fromValue(this));
+    m_applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
     setProperty("_plasma_applet", QVariant::fromValue(applet));
 }
 

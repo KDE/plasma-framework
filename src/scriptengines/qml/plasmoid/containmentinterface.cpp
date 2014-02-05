@@ -222,7 +222,7 @@ Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVa
 
 
     if (applet) {
-        QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+        QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
 
         blockSignals(false);
 
@@ -239,7 +239,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
         return;
     }
 
-    AppletInterface *appletInterface = applet->property("graphicObject").value<AppletInterface *>();
+    AppletInterface *appletInterface = applet->property("_plasma_graphicObject").value<AppletInterface *>();
     if (appletInterface) {
         emit appletInterface->externalData(mimetype, data);
     }
@@ -509,8 +509,8 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
         return;
     }
 
-    QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
-    QObject *contGraphicObject = containment()->property("graphicObject").value<QObject *>();
+    QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
+    QObject *contGraphicObject = containment()->property("_plasma_graphicObject").value<QObject *>();
 
     qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
              << "Applet: " << applet << applet->title() << appletGraphicObject;
@@ -538,7 +538,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
-    QObject *appletGraphicObject = applet->property("graphicObject").value<QObject *>();
+    QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
     m_appletInterfaces.removeAll(appletGraphicObject);
     emit appletRemoved(appletGraphicObject);
     emit appletsChanged();
