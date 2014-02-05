@@ -296,7 +296,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     //we do not rely on item->window()->screen() because
     //QWindow::screen() is always only the screen where the window gets first created
     //not actually the current window. See QWindow::screen() documentation
-    QRect avail = screenForItem(item)->availableGeometry();
+    const QRect avail = screenForItem(item)->availableGeometry();
 
     const int leftMargin = m_frameSvgItem->margins()->left();
     const int rightMargin = m_frameSvgItem->margins()->right();
