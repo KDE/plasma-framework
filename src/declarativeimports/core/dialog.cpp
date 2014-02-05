@@ -303,7 +303,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     const int topMargin = m_frameSvgItem->margins()->top();
     const int bottomMargin = m_frameSvgItem->margins()->bottom();
 
-    if (dialogPos.x() < leftMargin) {
+    if (dialogPos.x() < avail.left() + leftMargin) {
         // popup hits lhs
         if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
             // move it
@@ -313,7 +313,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
             dialogPos.setX(rightPoint.x());
         }
     }
-    if (dialogPos.x() + size.width() > avail.width() - rightMargin) {
+    if (dialogPos.x() + size.width() > avail.right() - rightMargin) {
         // popup hits rhs
         if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
             dialogPos.setX(avail.width() - size.width());
@@ -321,7 +321,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
             dialogPos.setX(leftPoint.x());
         }
     }
-    if (dialogPos.y() < topMargin) {
+    if (dialogPos.y() < avail.top() + topMargin) {
         // hitting top
         if (m_location == Plasma::Types::LeftEdge || m_location == Plasma::Types::RightEdge) {
             dialogPos.setY(0);
@@ -329,7 +329,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
             dialogPos.setY(bottomPoint.y());
         }
     }
-    if (dialogPos.y() + size.height() > avail.height() - bottomMargin) {
+    if (dialogPos.y() + size.height() > avail.bottom() - bottomMargin) {
         // hitting bottom
         if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
