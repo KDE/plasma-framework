@@ -118,6 +118,7 @@ public:
 
 
 Q_SIGNALS:
+//Property signals
     void switchWidthChanged(int width);
     void switchHeightChanged(int height);
 
