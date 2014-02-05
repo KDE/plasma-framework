@@ -35,7 +35,28 @@ class AppletQuickItem;
 class AppletQuickItemPrivate
 {
 public:
-    AppletQuickItemPrivate(Plasma::Applet *a);
+    AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);
+
+    QObject *createCompactRepresentationItem();
+    QObject *createFullRepresentationItem();
+    QObject *createCompactRepresentationExpanderItem();
+
+    //look into item, and return the Layout attached property, if found
+    void connectLayoutAttached(QObject *item);
+    void propagateSizeHint(const QByteArray &layoutProperty);
+
+    //handlers of Layout signals, private slots
+    void minimumWidthChanged();
+    void minimumHeightChanged();
+    void preferredWidthChanged();
+    void preferredHeightChanged();
+    void maximumWidthChanged();
+    void maximumHeightChanged();
+    void fillWidthChanged();
+    void fillHeightChanged();
+
+
+    AppletQuickItem *q;
 
     int switchWidth;
     int switchHeight;

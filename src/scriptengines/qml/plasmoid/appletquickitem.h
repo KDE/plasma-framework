@@ -139,29 +139,14 @@ protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     virtual void itemChange(ItemChange change, const ItemChangeData &value);
 
-    QObject *createCompactRepresentationItem();
-    QObject *createFullRepresentationItem();
-    QObject *createCompactRepresentationExpanderItem();
-
-    //look into item, and return the Layout attached property, if found
-    void connectLayoutAttached(QObject *item);
-    void propagateSizeHint(const QByteArray &layoutProperty);
 
 private Q_SLOTS:
     void compactRepresentationCheck();
 
-    //handlers of Layout signals
-    void minimumWidthChanged();
-    void minimumHeightChanged();
-    void preferredWidthChanged();
-    void preferredHeightChanged();
-    void maximumWidthChanged();
-    void maximumHeightChanged();
-    void fillWidthChanged();
-    void fillHeightChanged();
-
 private:
     AppletQuickItemPrivate *const d;
+
+    Q_PRIVATE_SLOT(d, void minimumWidthChanged())
 };
 
 QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)

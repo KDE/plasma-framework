@@ -39,19 +39,234 @@
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
-AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a)
-    : switchWidth(-1),
+AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
+    : q(item),
+      switchWidth(-1),
       switchHeight(-1),
       applet(a),
       expanded(false)
 {
 }
 
+void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
+{
+    QObject *layout = 0;
+
+    //Extract the representation's Layout, if any
+    //No Item?
+    if (!item) {
+        return;
+    }
+
+    //Search a child that has the needed Layout properties
+    //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+    foreach (QObject *child, item->children()) {
+        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+        ) {
+            layout = child;
+        }
+    }
+
+    if (!layout) {
+        return;
+    }
+
+    //propagate all the size hints
+    propagateSizeHint("minimumWidth");
+    propagateSizeHint("minimumHeight");
+    propagateSizeHint("preferredWidth");
+    propagateSizeHint("preferredHeight");
+    propagateSizeHint("maximumWidth");
+    propagateSizeHint("maximumHeight");
+    propagateSizeHint("fillWidth");
+    propagateSizeHint("fillHeight");
+
+    //HACK: check the Layout properties we wrote
+    QQmlProperty p(q, "Layout.minimumWidth", QtQml::qmlContext(qmlObject->rootObject()));
+
+    QObject *ownLayout = 0;
+
+    foreach (QObject *child, q->children()) {
+        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+        ) {
+            ownLayout = child;
+        }
+    }
+
+    //this should never happen, since we ask to create it if doesn't exists
+    if (!ownLayout) {
+        return;
+    }
+
+    //if the representation didn't change, don't do anything
+    if (representationLayout.data() == layout) {
+        return;
+    }
+
+    if (representationLayout) {
+        QObject::disconnect(representationLayout.data(), 0, q, 0);
+    }
+
+    //Here we can't use the new connect syntax because we can't link against QtQuick layouts
+    QObject::connect(layout, SIGNAL(minimumWidthChanged()),
+            q, SLOT(minimumWidthChanged()));
+    QObject::connect(layout, SIGNAL(minimumHeightChanged()),
+            q, SLOT(minimumHeightChanged()));
+
+    QObject::connect(layout, SIGNAL(preferredWidthChanged()),
+            q, SLOT(preferredWidthChanged()));
+    QObject::connect(layout, SIGNAL(preferredHeightChanged()),
+            q, SLOT(preferredHeightChanged()));
+
+    QObject::connect(layout, SIGNAL(maximumWidthChanged()),
+            q, SLOT(maximumWidthChanged()));
+    QObject::connect(layout, SIGNAL(maximumHeightChanged()),
+            q, SLOT(maximumHeightChanged()));
+
+    QObject::connect(layout, SIGNAL(fillWidthChanged()),
+            q, SLOT(fillWidthChanged()));
+    QObject::connect(layout, SIGNAL(fillHeightChanged()),
+            q, SLOT(fillHeightChanged()));
+
+    representationLayout = layout;
+    AppletQuickItemPrivate::ownLayout = ownLayout;
+
+    propagateSizeHint("minimumWidth");
+    propagateSizeHint("minimumHeight");
+    propagateSizeHint("preferredWidth");
+    propagateSizeHint("preferredHeight");
+    propagateSizeHint("maximumWidth");
+    propagateSizeHint("maximumHeight");
+    propagateSizeHint("fillWidth");
+    propagateSizeHint("fillHeight");
+}
+
+void AppletQuickItemPrivate::propagateSizeHint(const QByteArray &layoutProperty)
+{
+    if (ownLayout && representationLayout) {
+        ownLayout.data()->setProperty(layoutProperty, representationLayout.data()->property(layoutProperty));
+    }
+}
+
+QObject *AppletQuickItemPrivate::createCompactRepresentationItem()
+{
+    if (!compactRepresentation) {
+        return 0;
+    }
+
+    if (compactRepresentationItem) {
+        return compactRepresentationItem.data();
+    }
+
+    compactRepresentationItem = qmlObject->createObjectFromComponent(compactRepresentation.data(), QtQml::qmlContext(qmlObject->rootObject()));
+
+    emit q->compactRepresentationItemChanged(compactRepresentationItem.data());
+
+    return compactRepresentationItem.data();
+}
+
+QObject *AppletQuickItemPrivate::createFullRepresentationItem()
+{
+    if (fullRepresentationItem) {
+        return fullRepresentationItem.data();
+    }
+
+    if (fullRepresentation) {
+        fullRepresentationItem = qmlObject->createObjectFromComponent(fullRepresentation.data(), QtQml::qmlContext(qmlObject->rootObject()));
+    } else {
+        fullRepresentation = qmlObject->mainComponent();
+        fullRepresentationItem = qmlObject->rootObject();
+        emit q->fullRepresentationChanged(fullRepresentation.data());
+    }
+
+    QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(fullRepresentationItem.data());
+    QObject::connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
+        fullRepresentationResizeTimer.start();
+    });
+    QObject::connect (graphicsObj, &QQuickItem::heightChanged, [=]() {
+        fullRepresentationResizeTimer.start();
+    });
+
+    emit q->fullRepresentationItemChanged(fullRepresentationItem.data());
+
+    return fullRepresentationItem.data();
+}
+
+QObject *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
+{
+    if (!compactRepresentationExpander) {
+        return 0;
+    }
+
+    if (compactRepresentationExpanderItem) {
+        return compactRepresentationExpanderItem.data();
+    }
+
+    compactRepresentationExpanderItem = qmlObject->createObjectFromComponent(compactRepresentationExpander.data(), QtQml::qmlContext(qmlObject->rootObject()));
+
+
+    compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
+    compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
+
+    emit q->compactRepresentationExpanderItemChanged(compactRepresentationExpanderItem.data());
+
+    return compactRepresentationExpanderItem.data();
+}
+
+void AppletQuickItemPrivate::minimumWidthChanged()
+{
+    propagateSizeHint("minimumWidth");
+}
+
+void AppletQuickItemPrivate::minimumHeightChanged()
+{
+    propagateSizeHint("minimumHeight");
+}
+
+void AppletQuickItemPrivate::preferredWidthChanged()
+{
+    propagateSizeHint("preferredWidth");
+}
+
+void AppletQuickItemPrivate::preferredHeightChanged()
+{
+    propagateSizeHint("preferredHeight");
+}
+
+void AppletQuickItemPrivate::maximumWidthChanged()
+{
+    propagateSizeHint("maximumWidth");
+}
+
+void AppletQuickItemPrivate::maximumHeightChanged()
+{
+    propagateSizeHint("maximumHeight");
+}
+
+void AppletQuickItemPrivate::fillWidthChanged()
+{
+    propagateSizeHint("fillWidth");
+}
+
+void AppletQuickItemPrivate::fillHeightChanged()
+{
+    propagateSizeHint("fillHeight");
+}
+
+
 
 
 AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
-      d(new AppletQuickItemPrivate(applet))
+      d(new AppletQuickItemPrivate(applet, this))
 {
     if (d->applet) {
         d->appletPackage = d->applet->package();
@@ -286,8 +501,8 @@ void AppletQuickItem::setExpanded(bool expanded)
         return;
     }
 
-    createFullRepresentationItem();
-    createCompactRepresentationExpanderItem();
+    d->createFullRepresentationItem();
+    d->createCompactRepresentationExpanderItem();
 
     d->expanded = expanded;
     emit expandedChanged(expanded);
@@ -314,181 +529,6 @@ QObject *AppletQuickItem::fullRepresentationItem()
 QObject *AppletQuickItem::compactRepresentationExpanderItem()
 {
     return d->compactRepresentationExpanderItem.data();
-}
-
-
-
-QObject *AppletQuickItem::createCompactRepresentationItem()
-{
-    if (!d->compactRepresentation) {
-        return 0;
-    }
-
-    if (d->compactRepresentationItem) {
-        return d->compactRepresentationItem.data();
-    }
-
-    d->compactRepresentationItem = d->qmlObject->createObjectFromComponent(d->compactRepresentation.data(), QtQml::qmlContext(d->qmlObject->rootObject()));
-
-    emit compactRepresentationItemChanged(d->compactRepresentationItem.data());
-
-    return d->compactRepresentationItem.data();
-}
-
-QObject *AppletQuickItem::createFullRepresentationItem()
-{
-    if (d->fullRepresentationItem) {
-        return d->fullRepresentationItem.data();
-    }
-
-    if (d->fullRepresentation) {
-        d->fullRepresentationItem = d->qmlObject->createObjectFromComponent(d->fullRepresentation.data(), QtQml::qmlContext(d->qmlObject->rootObject()));
-    } else {
-        d->fullRepresentation = d->qmlObject->mainComponent();
-        d->fullRepresentationItem = d->qmlObject->rootObject();
-        emit fullRepresentationChanged(d->fullRepresentation.data());
-    }
-
-    QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(d->fullRepresentationItem.data());
-    connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
-        d->fullRepresentationResizeTimer.start();
-    });
-    connect (graphicsObj, &QQuickItem::heightChanged, [=]() {
-        d->fullRepresentationResizeTimer.start();
-    });
-
-    emit fullRepresentationItemChanged(d->fullRepresentationItem.data());
-
-    return d->fullRepresentationItem.data();
-}
-
-QObject *AppletQuickItem::createCompactRepresentationExpanderItem()
-{
-    if (!d->compactRepresentationExpander) {
-        return 0;
-    }
-
-    if (d->compactRepresentationExpanderItem) {
-        return d->compactRepresentationExpanderItem.data();
-    }
-
-    d->compactRepresentationExpanderItem = d->qmlObject->createObjectFromComponent(d->compactRepresentationExpander.data(), QtQml::qmlContext(d->qmlObject->rootObject()));
-
-
-    d->compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
-    d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
-
-    emit compactRepresentationExpanderItemChanged(d->compactRepresentationExpanderItem.data());
-
-    return d->compactRepresentationExpanderItem.data();
-}
-
-void AppletQuickItem::connectLayoutAttached(QObject *item)
-{
-    QObject *layout = 0;
-
-    //Extract the representation's Layout, if any
-    //No Item?
-    if (!item) {
-        return;
-    }
-
-    //Search a child that has the needed Layout properties
-    //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-    foreach (QObject *child, item->children()) {
-        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-        ) {
-            layout = child;
-        }
-    }
-
-    if (!layout) {
-        return;
-    }
-
-    //propagate all the size hints
-    propagateSizeHint("minimumWidth");
-    propagateSizeHint("minimumHeight");
-    propagateSizeHint("preferredWidth");
-    propagateSizeHint("preferredHeight");
-    propagateSizeHint("maximumWidth");
-    propagateSizeHint("maximumHeight");
-    propagateSizeHint("fillWidth");
-    propagateSizeHint("fillHeight");
-
-    //HACK: check the Layout properties we wrote
-    QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(d->qmlObject->rootObject()));
-
-    QObject *ownLayout = 0;
-
-    foreach (QObject *child, children()) {
-        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-        ) {
-            ownLayout = child;
-        }
-    }
-
-    //this should never happen, since we ask to create it if doesn't exists
-    if (!ownLayout) {
-        return;
-    }
-
-    //if the representation didn't change, don't do anything
-    if (d->representationLayout.data() == layout) {
-        return;
-    }
-
-    if (d->representationLayout) {
-        disconnect(d->representationLayout.data(), 0, this, 0);
-    }
-
-    //Here we can't use the new connect syntax because we can't link against QtQuick layouts
-    connect(layout, SIGNAL(minimumWidthChanged()),
-            this, SLOT(minimumWidthChanged()));
-    connect(layout, SIGNAL(minimumHeightChanged()),
-            this, SLOT(minimumHeightChanged()));
-
-    connect(layout, SIGNAL(preferredWidthChanged()),
-            this, SLOT(preferredWidthChanged()));
-    connect(layout, SIGNAL(preferredHeightChanged()),
-            this, SLOT(preferredHeightChanged()));
-
-    connect(layout, SIGNAL(maximumWidthChanged()),
-            this, SLOT(maximumWidthChanged()));
-    connect(layout, SIGNAL(maximumHeightChanged()),
-            this, SLOT(maximumHeightChanged()));
-
-    connect(layout, SIGNAL(fillWidthChanged()),
-            this, SLOT(fillWidthChanged()));
-    connect(layout, SIGNAL(fillHeightChanged()),
-            this, SLOT(fillHeightChanged()));
-
-    d->representationLayout = layout;
-    d->ownLayout = ownLayout;
-
-    propagateSizeHint("minimumWidth");
-    propagateSizeHint("minimumHeight");
-    propagateSizeHint("preferredWidth");
-    propagateSizeHint("preferredHeight");
-    propagateSizeHint("maximumWidth");
-    propagateSizeHint("maximumHeight");
-    propagateSizeHint("fillWidth");
-    propagateSizeHint("fillHeight");
-}
-
-void AppletQuickItem::propagateSizeHint(const QByteArray &layoutProperty)
-{
-    if (d->ownLayout && d->representationLayout) {
-        d->ownLayout.data()->setProperty(layoutProperty, d->representationLayout.data()->property(layoutProperty));
-    }
 }
 
 void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
@@ -549,7 +589,7 @@ void AppletQuickItem::compactRepresentationCheck()
 
     //Expanded
     if (full) {
-        QQuickItem *item = qobject_cast<QQuickItem *>(createFullRepresentationItem());
+        QQuickItem *item = qobject_cast<QQuickItem *>(d->createFullRepresentationItem());
 
         if (item) {
             item->setParentItem(this);
@@ -568,12 +608,12 @@ void AppletQuickItem::compactRepresentationCheck()
             }
 
             d->currentRepresentationItem = item;
-            connectLayoutAttached(item);
+            d->connectLayoutAttached(item);
         }
 
     //Icon
     } else {
-        QQuickItem *compactItem = qobject_cast<QQuickItem *>(createCompactRepresentationItem());
+        QQuickItem *compactItem = qobject_cast<QQuickItem *>(d->createCompactRepresentationItem());
 
         if (compactItem) {
             //set the root item as the main visible item
@@ -592,53 +632,13 @@ void AppletQuickItem::compactRepresentationCheck()
 
             if (d->compactRepresentationExpanderItem) {
                 d->compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
-                d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
+                d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
             }
 
             d->currentRepresentationItem = compactItem;
-            connectLayoutAttached(compactItem);
+            d->connectLayoutAttached(compactItem);
         }
     }
-}
-
-void AppletQuickItem::minimumWidthChanged()
-{
-    propagateSizeHint("minimumWidth");
-}
-
-void AppletQuickItem::minimumHeightChanged()
-{
-    propagateSizeHint("minimumHeight");
-}
-
-void AppletQuickItem::preferredWidthChanged()
-{
-    propagateSizeHint("preferredWidth");
-}
-
-void AppletQuickItem::preferredHeightChanged()
-{
-    propagateSizeHint("preferredHeight");
-}
-
-void AppletQuickItem::maximumWidthChanged()
-{
-    propagateSizeHint("maximumWidth");
-}
-
-void AppletQuickItem::maximumHeightChanged()
-{
-    propagateSizeHint("maximumHeight");
-}
-
-void AppletQuickItem::fillWidthChanged()
-{
-    propagateSizeHint("fillWidth");
-}
-
-void AppletQuickItem::fillHeightChanged()
-{
-    propagateSizeHint("fillHeight");
 }
 
 
