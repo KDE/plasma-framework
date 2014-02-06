@@ -169,7 +169,7 @@ protected:
 
 private Q_SLOTS:
     void syncBorders();
-
+    void updateContrast();
     void updateVisibility(bool visible);
 
 private:
