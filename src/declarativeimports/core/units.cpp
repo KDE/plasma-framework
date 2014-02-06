@@ -40,6 +40,8 @@ Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
       m_devicePixelRatio(-1),
+      m_smallSpacing(-1),
+      m_largeSpacing(-1),
       m_longDuration(defaultLongDuration) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
