@@ -528,9 +528,26 @@ void ThemePrivate::processContrastSettings(KConfigBase* metadata)
     if (metadata->hasGroup("ContrastEffect")) {
         cg = KConfigGroup(metadata, "ContrastEffect");
         backgroundContrastEnabled = cg.readEntry("enabled", false);
-        backgroundContrast = cg.readEntry("contrast", 0.45);
-        backgroundIntensity = cg.readEntry("contrast", 0.45);
-        backgroundSaturation = cg.readEntry("saturation", 1.7);
+
+        //if (backgroundContrastEnabled) {
+            // Make up sensible default values, based on the background color
+            // This works for a light theme -- lighting up the background
+            qreal _contrast = 0.3;
+            qreal _intensity = 1.9;
+            qreal _saturation = 1.7;
+
+            // If we're using a dark background color, darken the background
+            qDebug() << "CON grey <<<<< " << qGray(color(Plasma::Theme::BackgroundColor).rgb()) << themeName << color(Plasma::Theme::BackgroundColor);
+            if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
+                qDebug() << "CON Dark! <<<<< " << qGray(color(Plasma::Theme::BackgroundColor).rgb());
+                _contrast = 0.45;
+                _intensity = 0.45;
+                _saturation = 1.7;
+            }
+            backgroundContrast = cg.readEntry("contrast", _contrast);
+            backgroundIntensity = cg.readEntry("intensity", _intensity);
+            backgroundSaturation = cg.readEntry("saturation", _saturation);
+        //}
     } else {
         backgroundContrastEnabled = false;
     }
@@ -578,14 +595,33 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     //qDebug() << "we're going for..." << colorsFile << "*******************";
 
+    if (colorsFile.isEmpty()) {
+        colors = 0;
+        if (qApp) {
+            installEventFilter(qApp);
+        }
+    } else {
+        if (qApp) {
+            removeEventFilter(qApp);
+        }
+        colors = KSharedConfig::openConfig(colorsFile);
+    }
+
+    colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
+    buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
+    viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
+    const QString wallpaperPath = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
+    hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
+
     // load the wallpaper settings, if any
     if (realTheme) {
         const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
         KConfig metadata(metadataPath);
         pluginInfo = KPluginInfo(metadataPath);
 
-        processWallpaperSettings(&metadata);
         processContrastSettings(&metadata);
+
+        processWallpaperSettings(&metadata);
 
         KConfigGroup cg(&metadata, "Settings");
         QString fallback = cg.readEntry("FallbackTheme", QString());
@@ -614,24 +650,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             processWallpaperSettings(&metadata);
         }
     }
-
-    if (colorsFile.isEmpty()) {
-        colors = 0;
-        if (qApp) {
-            installEventFilter(qApp);
-        }
-    } else {
-        if (qApp) {
-            removeEventFilter(qApp);
-        }
-        colors = KSharedConfig::openConfig(colorsFile);
-    }
-
-    colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
-    buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
-    viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
-    const QString wallpaperPath = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
-    hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 
     if (realTheme && isDefault && writeSettings) {
         // we're the default theme, let's save our state
