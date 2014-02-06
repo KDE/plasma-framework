@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Python data engine
+Name[cs]=Rozhraní v Pythonu
 Name[de]=Python-Datentreiber
+Name[fi]=Python-tietomoottori
 Name[hu]=Python adatmotor
 Name[nl]=Gegevensengine van Python
 Name[pt]=Motor de dados em Python
@@ -10,6 +12,7 @@ Name[uk]=Рушій даних Python
 Name[x-test]=xxPython data enginexx
 Comment=Plasma data engine support for Python
 Comment[de]=Unterstützung für Plasma-Datentreiber in Python
+Comment[fi]=Plasma-tietomoottorituki Python-kielelle
 Comment[hu]=Plazma adatmotor támogatás Pythonhoz
 Comment[nl]=Ondersteuning voor Plasma-gegevensengine voor Python
 Comment[pt]=Suporte para os motores de dados do Plasma em Python
