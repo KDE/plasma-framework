@@ -19,7 +19,7 @@
 
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-import QtQuick 2.0
+import QtQuick 2.1
 
 /**
  * A ModelMenu creates a context menu with items populated from a model or a QList<QAction*>

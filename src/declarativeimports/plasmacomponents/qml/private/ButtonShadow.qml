@@ -23,7 +23,7 @@ Inherits:
         Item
 
 Imports:
-        QtQuick 2.0
+        QtQuick 2.1
         org.kde.plasma.core
 
 Description:
@@ -33,7 +33,7 @@ TODO i need more info here
 Properties:
 **/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {

@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import "private/TabGroup.js" as Engine
 
 import "." 2.0 as PlasmaComponents
