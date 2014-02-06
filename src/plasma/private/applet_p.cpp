@@ -360,8 +360,8 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
     Containment *c = q->containment();
     Plasma::Applet *parentApplet = 0;
-    if (c && c->corona()) {
-        parentApplet = qobject_cast<Plasma::Applet *>(c->corona()->parent());
+    if (c) {
+        parentApplet = qobject_cast<Plasma::Applet *>(c->parent());
     }
 
     if (q->isContainment()) {
