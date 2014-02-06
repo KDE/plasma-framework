@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import "private" as Private
@@ -109,6 +109,8 @@ Item {
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5
+
+    activeFocusOnTab: true
 
     Keys.onUpPressed: {
         if (!enabled || !contents.isVertical)

@@ -416,6 +416,21 @@ class PLASMA_EXPORT Applet : public QObject
     public Q_SLOTS:
 //BOOKKEEPING
         /**
+         * Call this method when the applet fails to launch properly. An
+         * optional reason can be provided.
+         *
+         * Not that all children items will be deleted when this method is
+         * called. If you have pointers to these items, you will need to
+         * reset them after calling this method.
+         *
+         * @param failed true when the applet failed, false when it succeeded
+         * @param reason an optional reason to show the user why the applet
+         *               failed to launch
+         * @since 5.0
+         **/
+        void setLaunchErrorMessage(const QString &reason = QString());
+
+        /**
          * Sets the immutability type for this applet (not immutable,
          * user immutable or system immutable)
          * @param immutable the new immutability type of this applet
@@ -487,22 +502,6 @@ class PLASMA_EXPORT Applet : public QObject
          *      and the applet id
          */
         Applet(QObject *parent, const QVariantList &args);
-
-//BOOKEEPING
-        /**
-         * Call this method when the applet fails to launch properly. An
-         * optional reason can be provided.
-         *
-         * Not that all children items will be deleted when this method is
-         * called. If you have pointers to these items, you will need to
-         * reset them after calling this method.
-         *
-         * @param failed true when the applet failed, false when it succeeded
-         * @param reason an optional reason to show the user why the applet
-         *               failed to launch
-         * @since 5.0
-         **/
-        void setLaunchErrorMessage(const QString &reason = QString());
 
 //CONFIGURATION
         /**

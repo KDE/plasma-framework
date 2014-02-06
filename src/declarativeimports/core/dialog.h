@@ -172,6 +172,11 @@ private Q_SLOTS:
     void updateContrast();
     void updateVisibility(bool visible);
 
+    void updateMinimumWidth();
+    void updateMinimumHeight();
+    void updateMaximumWidth();
+    void updateMaximumHeight();
+
 private:
     QScreen* screenForItem(QQuickItem *item) const;
 
@@ -180,6 +185,9 @@ private:
     bool m_hideOnWindowDeactivate;
     bool m_outputOnly;
     Plasma::Theme m_theme;
+
+    //Attached Layout property of mainItem, if any
+    QWeakPointer <QObject> m_mainItemLayout;
 };
 
 #endif

@@ -44,6 +44,10 @@
 #include <xcb/shape.h>
 #endif
 
+//Unfortunately QWINDOWSIZE_MAX is not exported
+#define DIALOGSIZE_MAX ((1<<24)-1)
+
+
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       m_location(Plasma::Types::BottomEdge),
@@ -117,6 +121,36 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
                 });
             }
             requestSyncToMainItemSize();
+
+            //Extract the representation's Layout, if any
+            QObject *layout = 0;
+
+            //Search a child that has the needed Layout properties
+            //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+            foreach (QObject *child, mainItem->children()) {
+                //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+                if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+                    child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                    child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                    child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+                ) {
+                    layout = child;
+                }
+            }
+            m_mainItemLayout = layout;
+
+            if (layout) {
+                connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
+                connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
+                connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updatemaximumWidth()));
+                connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updatemaximumHeight()));
+
+                updateMinimumWidth();
+                updateMinimumHeight();
+                updateMaximumWidth();
+                updateMaximumHeight();
+            }
+
         }
 
         //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
@@ -613,6 +647,7 @@ void DialogProxy::updateInputShape()
 #endif
 }
 
+
 //find the screen which contains the item
 QScreen* DialogProxy::screenForItem(QQuickItem* item) const
 {
@@ -623,6 +658,52 @@ QScreen* DialogProxy::screenForItem(QQuickItem* item) const
         }
     }
     return QGuiApplication::primaryScreen();
+}
+
+void DialogProxy::updateMinimumWidth()
+{
+    if (m_mainItemLayout) {
+        setMinimumWidth(m_mainItemLayout.data()->property("minimumWidth").toInt());
+    } else {
+        setMinimumWidth(-1);
+    }
+}
+
+void DialogProxy::updateMinimumHeight()
+{
+    if (m_mainItemLayout) {
+        setMinimumHeight(m_mainItemLayout.data()->property("minimumHeight").toInt());
+    } else {
+        setMinimumHeight(-1);
+    }
+}
+
+void DialogProxy::updateMaximumWidth()
+{
+    if (m_mainItemLayout) {
+        const int hint = m_mainItemLayout.data()->property("maximumWidth").toInt();
+        if (hint > 0) {
+            setMaximumWidth(hint);
+        } else {
+            setMaximumWidth(DIALOGSIZE_MAX);
+        }
+    } else {
+        setMaximumWidth(DIALOGSIZE_MAX);
+    }
+}
+
+void DialogProxy::updateMaximumHeight()
+{
+    if (m_mainItemLayout) {
+        const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt();
+        if (hint > 0) {
+            setMaximumWidth(hint);
+        } else {
+            setMaximumWidth(DIALOGSIZE_MAX);
+        }
+    } else {
+        setMaximumHeight(DIALOGSIZE_MAX);
+    }
 }
 
 #include "dialog.moc"

@@ -28,7 +28,7 @@
  * theme which changes via the systemsetting-workspace appearance -desktop
  * theme.
  */
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -119,6 +119,9 @@ Item {
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
+
+    activeFocusOnTab: true
+
 
     QtObject {
         id: internal

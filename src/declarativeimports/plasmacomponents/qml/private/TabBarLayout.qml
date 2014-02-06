@@ -45,7 +45,7 @@ Inherits:
         Item
 
 Imports:
-        QtQuick 2.0
+        QtQuick 2.1
 
 Description:
  TODO
@@ -54,7 +54,7 @@ Properties:
 
 **/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.qtextracomponents 2.0
 import "AppManager.js" as Utils
 

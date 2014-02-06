@@ -20,6 +20,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
@@ -28,8 +29,8 @@ Item {
     width: 400
     height: 32
 
-    property bool fillWidth: true
-    property bool fillHeight: true
+    Layout.fillWidth: true
+    Layout.fillHeight: true
 
     PlasmaCore.DataSource {
         id: tasksSource

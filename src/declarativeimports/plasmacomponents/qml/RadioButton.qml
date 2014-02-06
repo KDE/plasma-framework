@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -60,6 +60,7 @@ Private.DualStateButton {
             }
         }
     }
+    activeFocusOnTab: true
 
     shadow: Private.RoundShadow {}
 }

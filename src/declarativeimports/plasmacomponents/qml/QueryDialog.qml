@@ -40,7 +40,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import "." 2.0 as PlasmaComponents
 

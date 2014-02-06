@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import "private/SectionScroller.js" as Sections
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "." 2.0 as PlasmaComponents
