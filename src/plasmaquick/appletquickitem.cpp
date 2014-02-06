@@ -275,6 +275,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             currentRepresentationItem = item;
             connectLayoutAttached(item);
+            expanded = true;
+            emit q->expandedChanged(true);
         }
 
     //Icon
@@ -303,6 +305,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             currentRepresentationItem = compactItem;
             connectLayoutAttached(compactItem);
+            expanded = false;
+            emit q->expandedChanged(false);
         }
     }
 }
