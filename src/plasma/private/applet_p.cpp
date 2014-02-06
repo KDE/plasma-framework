@@ -358,12 +358,21 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         return mainConfig;
     }
 
+    Containment *c = q->containment();
+    Plasma::Applet *parentApplet = 0;
+    if (c) {
+        parentApplet = qobject_cast<Plasma::Applet *>(c->parent());
+    }
+
     if (q->isContainment()) {
         Corona *corona = static_cast<Containment*>(q)->corona();
         KConfigGroup containmentConfig;
         //qDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
-        if (corona) {
+        if (parentApplet) {
+            containmentConfig = parentApplet->config();
+            containmentConfig = KConfigGroup(&containmentConfig, "Containments");
+        } else if (corona) {
             containmentConfig = KConfigGroup(corona->config(), "Containments");
         } else {
             containmentConfig =  KConfigGroup(KSharedConfig::openConfig(), "Containments");
@@ -373,14 +382,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     } else {
         KConfigGroup appletConfig;
 
-        Containment *c = q->containment();
-        Applet *parentApplet = qobject_cast<Applet *>(q->parent());
-        if (parentApplet && parentApplet != static_cast<Applet *>(c)) {
-            // this applet is nested inside another applet! use it's config
-            // as the parent group in the config
-            appletConfig = parentApplet->config();
-            appletConfig = KConfigGroup(&appletConfig, "Applets");
-        } else if (c) {
+        if (c) {
             // applet directly in a Containment, as usual
             appletConfig = c->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");

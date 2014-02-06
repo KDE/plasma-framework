@@ -29,6 +29,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
+#include <appletquickitem.h>
 #include "declarativeappletscript.h"
 
 class QAction;
@@ -48,7 +49,7 @@ namespace Plasma
     class ConfigLoader;
 } // namespace Plasma
 
-class AppletInterface : public QQuickItem
+class AppletInterface : public AppletQuickItem
 {
     Q_OBJECT
 
@@ -108,12 +109,6 @@ class AppletInterface : public QQuickItem
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
 
     /**
-     * True when the applet is showing its full representation. either as the main only view, or in a popup.
-     * Setting it will open or close the popup if the plasmoid is iconified, however it won't have effect if the applet is open
-     */
-    Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
-
-    /**
      * How the applet wants its background to be drawn. The containment may chose to ignore this hint.
      */
     Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
@@ -145,22 +140,6 @@ class AppletInterface : public QQuickItem
     // would be preferrable if found.
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
 
-    //Size hints. Note that the containments may chose to not respect them.
-    Q_PROPERTY(qreal minimumWidth READ minimumWidth NOTIFY minimumWidthChanged)
-    Q_PROPERTY(qreal minimumHeight READ minimumHeight NOTIFY minimumHeightChanged)
-    Q_PROPERTY(qreal maximumWidth READ maximumWidth NOTIFY maximumWidthChanged)
-    Q_PROPERTY(qreal maximumHeight READ maximumHeight NOTIFY maximumHeightChanged)
-
-    /**
-     * If the plasmoid is in a linear layout, such as a panel, it indicates to take as much horizontal space as possible
-     */
-    Q_PROPERTY(bool fillWidth READ fillWidth NOTIFY fillWidthChanged)
-
-    /**
-     * If the plasmoid is in a linear layout, such as a panel, it indicates to take as much vertical space as possible
-     */
-    Q_PROPERTY(bool fillHeight READ fillHeight NOTIFY fillHeightChanged)
-
     /**
      * Whether the dialog should be hidden when the dialog loses focus.
      *
@@ -174,11 +153,12 @@ public:
     ~AppletInterface();
 
 //API not intended for the QML part
-    KDeclarative::QmlObject *qmlObject();
+
+    DeclarativeAppletScript *appletScript() const;
 
     QList<QAction*> contextualActions() const;
 
-    inline Plasma::Applet *applet() const { return m_appletScriptEngine->applet(); }
+    void executeAction(const QString &name);
 
 //QML API-------------------------------------------------------------------
 
@@ -237,7 +217,11 @@ public:
      * DEPRECATED: use plasmoid.configuration instead
      */
     Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
-    
+
+    static AppletInterface *qmlAttachedProperties(QObject *object)
+    {
+        return qobject_cast<AppletInterface *>(AppletQuickItem::qmlAttachedProperties(object));
+    }
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
     QString icon() const;
@@ -258,9 +242,6 @@ public:
 
     bool isBusy() const;
     void setBusy(bool busy);
-
-    bool isExpanded() const;
-    void setExpanded(bool expanded);
 
     Plasma::Types::BackgroundHints backgroundHints() const;
     void setBackgroundHints(Plasma::Types::BackgroundHints hint);
@@ -283,13 +264,6 @@ public:
     bool hideOnWindowDeactivate() const;
     void setHideOnWindowDeactivate(bool hide);
 
-    bool fillWidth() const;
-    bool fillHeight() const;
-    qreal minimumWidth() const;
-    qreal minimumHeight() const;
-    qreal maximumWidth() const;
-    qreal maximumHeight() const;
-
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -311,36 +285,15 @@ Q_SIGNALS:
     void statusChanged();
     void backgroundHintsChanged();
     void busyChanged();
-    void expandedChanged();
     void screenChanged();
     void hideOnWindowDeactivateChanged();
 
-    void minimumWidthChanged();
-    void minimumHeightChanged();
-    void maximumWidthChanged();
-    void maximumHeightChanged();
-    void fillWidthChanged();
-    void fillHeightChanged();
     void userConfiguringChanged();
-
-protected:
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    void itemChange(ItemChange change, const ItemChangeData &value);
-
-    DeclarativeAppletScript *m_appletScriptEngine;
 
 protected Q_SLOTS:
     virtual void init();
 
-private Q_SLOTS:
-    void compactRepresentationCheck();
-    void updatePopupSize();
-    void updateImplicitWidth();
-    void updateImplicitHeight();
-
 private:
-    //Helper for minimumWidth etc.
-    qreal readGraphicsObjectSizeHint(const char *hint) const;
 
     QStringList m_actions;
     QSignalMapper *m_actionSignals;
@@ -349,18 +302,17 @@ private:
 
 
     KDeclarative::ConfigPropertyMap *m_configuration;
+    DeclarativeAppletScript *m_appletScriptEngine;
 
 //UI-specific members ------------------
-    KDeclarative::QmlObject *m_qmlObject;
-    QWeakPointer<QObject> m_compactUiObject;
 
-    QTimer *m_collapseTimer;
 
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
-    bool m_expanded : 1;
     bool m_hideOnDeactivate : 1;
     friend class ContainmentInterface;
 };
+
+QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

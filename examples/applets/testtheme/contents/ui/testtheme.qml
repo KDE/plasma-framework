@@ -28,8 +28,8 @@ Item {
     width: 300
     height: 400
     clip: true
-    property int minimumWidth: units.gridUnit * 10
-    property int minimumHeight: units.gridUnit * 10
+    Layout.minimumWidth: units.gridUnit * 10
+    Layout.minimumHeight: units.gridUnit * 10
 
     property int _s: units.iconSizes.small
     property int _h: units.iconSizes.medium

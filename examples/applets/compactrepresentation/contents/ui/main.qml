@@ -19,13 +19,14 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
-    property int minimumWidth: 200
-    property int minimumHeight: 300
-    property Component compactRepresentation: Component {
+    Layout.minimumWidth: 200
+    Layout.minimumHeight: 300
+    Plasmoid.compactRepresentation: Component {
         PlasmaComponents.Button {
             text: i18n("Click me")
             onClicked: plasmoid.expanded = !plasmoid.expanded

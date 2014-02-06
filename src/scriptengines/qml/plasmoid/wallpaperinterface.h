@@ -21,6 +21,7 @@
 #define WALLPAPERINTERFACE_H
 
 #include <QQuickItem>
+#include <QQmlEngine>
 
 #include <Plasma/Package>
 
@@ -78,6 +79,17 @@ public:
 
     Q_INVOKABLE QAction *action(QString name) const;
 
+    static WallpaperInterface *qmlAttachedProperties(QObject *object)
+    {
+        //at the moment of the attached object creation, the root item is the only one that hasn't a parent
+        //only way to avoid creation of this attached for everybody but the root item
+        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
+            return s_rootObjects.value(QtQml::qmlEngine(object));
+        } else {
+            return 0;
+        }
+    }
+
 Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
@@ -95,6 +107,10 @@ private:
     Plasma::ConfigLoader *m_configLoader;
     KActionCollection *m_actions;
     QSignalMapper *m_actionSignals;
+
+    static QHash<QObject *, WallpaperInterface *> s_rootObjects;
 };
+
+QML_DECLARE_TYPEINFO(WallpaperInterface, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

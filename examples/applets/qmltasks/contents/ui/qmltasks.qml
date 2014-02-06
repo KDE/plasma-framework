@@ -27,8 +27,8 @@ Item {
     width: 400
     height: 32
 
-    property bool fillWidth: true
-    property bool fillHeight: true
+    Layout.fillWidth: true
+    Layout.fillHeight: true
     implicitWidth: tasksModel.count * 50
 
     PlasmaCore.DataSource {

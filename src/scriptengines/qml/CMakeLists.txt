@@ -8,6 +8,8 @@ endif()
 
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
+    plasmoid/declarativeappletscript.cpp
+
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
