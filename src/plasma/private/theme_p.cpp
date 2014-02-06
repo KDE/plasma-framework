@@ -537,9 +537,7 @@ void ThemePrivate::processContrastSettings(KConfigBase* metadata)
             qreal _saturation = 1.7;
 
             // If we're using a dark background color, darken the background
-            qDebug() << "CON grey <<<<< " << qGray(color(Plasma::Theme::BackgroundColor).rgb()) << themeName << color(Plasma::Theme::BackgroundColor);
             if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
-                qDebug() << "CON Dark! <<<<< " << qGray(color(Plasma::Theme::BackgroundColor).rgb());
                 _contrast = 0.45;
                 _intensity = 0.45;
                 _saturation = 1.7;
