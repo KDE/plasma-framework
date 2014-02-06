@@ -171,6 +171,44 @@ void AppletInterface::setTitle(const QString &title)
     emit titleChanged();
 }
 
+QString AppletInterface::toolTipMainText() const
+{
+    if (m_toolTipMainText.isNull()) {
+        return title();
+    } else {
+        return m_toolTipMainText;
+    }
+}
+
+void AppletInterface::setToolTipMainText(const QString &text)
+{
+    if (m_toolTipMainText == text) {
+        return;
+    }
+
+    m_toolTipMainText = text;
+    emit toolTipMainTextChanged();
+}
+
+QString AppletInterface::toolTipSubText() const
+{
+    if (m_toolTipMainText.isNull()) {
+        return applet()->pluginInfo().comment();
+    } else {
+        return m_toolTipSubText;
+    }
+}
+
+void AppletInterface::setToolTipSubText(const QString &text)
+{
+    if (m_toolTipSubText == text) {
+        return;
+    }
+
+    m_toolTipSubText = text;
+    emit toolTipSubTextChanged();
+}
+
 bool AppletInterface::isBusy() const
 {
     return m_busy;

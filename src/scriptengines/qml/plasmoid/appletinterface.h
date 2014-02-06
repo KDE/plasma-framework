@@ -68,6 +68,18 @@ class AppletInterface : public AppletQuickItem
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
 
     /**
+     * Main title for the plasmoid tooltip or other means of quick information:
+     * it's the same as the title property by default, but it can be personalized
+     */
+    Q_PROPERTY(QString toolTipMainText READ toolTipMainText WRITE setToolTipMainText NOTIFY toolTipMainTextChanged)
+
+    /**
+     * Description for the plasmoid tooltip or other means of quick information:
+     * it comes from the pluginifo comment by default, but it can be personalized
+     */
+    Q_PROPERTY(QString toolTipSubText READ toolTipSubText WRITE setToolTipSubText NOTIFY toolTipSubTextChanged)
+
+    /**
      * Icon to represent the plasmoid
      */
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
@@ -230,6 +242,12 @@ public:
     QString title() const;
     void setTitle(const QString &title);
 
+    QString toolTipMainText() const;
+    void setToolTipMainText(const QString &text);
+
+    QString toolTipSubText() const;
+    void setToolTipSubText(const QString &text);
+
     uint id() const;
 
     Plasma::Types::FormFactor formFactor() const;
@@ -278,6 +296,8 @@ Q_SIGNALS:
 //PROPERTY change notifiers--------------
     void iconChanged();
     void titleChanged();
+    void toolTipMainTextChanged();
+    void toolTipSubTextChanged();
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
@@ -307,6 +327,8 @@ private:
 //UI-specific members ------------------
 
 
+    QString m_toolTipMainText;
+    QString m_toolTipSubText;
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_hideOnDeactivate : 1;
