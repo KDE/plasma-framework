@@ -177,6 +177,8 @@ Item {
      */
     property string placeholderText
 
+    activeFocusOnTab: true
+
     // functions
     /**
      * Copies the currently selected text to the system clipboard.

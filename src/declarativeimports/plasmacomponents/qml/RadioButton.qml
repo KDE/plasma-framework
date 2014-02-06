@@ -60,6 +60,7 @@ Private.DualStateButton {
             }
         }
     }
+    activeFocusOnTab: true
 
     shadow: Private.RoundShadow {}
 }

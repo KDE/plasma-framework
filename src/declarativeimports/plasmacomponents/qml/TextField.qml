@@ -171,6 +171,8 @@ FocusScope {
      */
     property alias maximumLength: textInput.maximumLength
 
+    activeFocusOnTab: true
+
     /**
      * Emitted when the text input is accepted.
      */

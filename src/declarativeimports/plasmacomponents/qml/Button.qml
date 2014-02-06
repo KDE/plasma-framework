@@ -120,6 +120,8 @@ Item {
     //     disabled buttons
     opacity: enabled ? 1.0 : 0.5
 
+    activeFocusOnTab: true
+
 
     QtObject {
         id: internal

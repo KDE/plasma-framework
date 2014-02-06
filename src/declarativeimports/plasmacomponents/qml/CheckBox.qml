@@ -62,5 +62,7 @@ Private.DualStateButton {
         }
     }
 
+    activeFocusOnTab: true
+
     shadow: Private.ButtonShadow {}
 }
