@@ -171,12 +171,6 @@ QObject *AppletQuickItemPrivate::createCompactRepresentationItem()
 
     emit q->compactRepresentationItemChanged(compactRepresentationItem.data());
 
-    createCompactRepresentationExpanderItem();
-
-    if (compactRepresentationExpanderItem) {
-        compactRepresentationExpanderItem.data()->setProperty("parent", QVariant::fromValue(compactRepresentationItem.data()));
-    }
-
     return compactRepresentationItem.data();
 }
 
@@ -300,12 +294,13 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
         if (compactItem && compactExpanderItem) {
             //set the root item as the main visible item
-            compactItem->setParentItem(q);
             compactItem->setVisible(true);
+            compactExpanderItem->setParentItem(q);
+            compactExpanderItem->setVisible(true);
             {
                 //set anchors
-                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactItem, "parent");
-                QQmlProperty prop(compactItem, "anchors.fill");
+                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactExpanderItem, "parent");
+                QQmlProperty prop(compactExpanderItem, "anchors.fill");
                 prop.write(expr.evaluate());
             }
 
@@ -313,7 +308,6 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
                 fullRepresentationItem.data()->setProperty("parent", QVariant());
             }
 
-            compactExpanderItem->setVisible(true);
             compactExpanderItem->setProperty("compactRepresentation", QVariant::fromValue(compactItem));
             //The actual full representation will be connected when created
             compactExpanderItem->setProperty("fullRepresentation", QVariant::fromValue(QVariant()));

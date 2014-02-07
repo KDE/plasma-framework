@@ -195,27 +195,29 @@ void DialogProxy::updateVisibility(bool visible)
         }
     }
 
-    KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
+    if (!(flags() & Qt::ToolTip)) {
+        KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
 
-    switch (m_location) {
-    case Plasma::Types::TopEdge:
-        slideLocation = KWindowEffects::TopEdge;
-        break;
-    case Plasma::Types::LeftEdge:
-        slideLocation = KWindowEffects::LeftEdge;
-        break;
-    case Plasma::Types::RightEdge:
-        slideLocation = KWindowEffects::RightEdge;
-        break;
-    case Plasma::Types::BottomEdge:
-        slideLocation = KWindowEffects::BottomEdge;
-        break;
-        //no edge, no slide
-    default:
-        break;
+        switch (m_location) {
+        case Plasma::Types::TopEdge:
+            slideLocation = KWindowEffects::TopEdge;
+            break;
+        case Plasma::Types::LeftEdge:
+            slideLocation = KWindowEffects::LeftEdge;
+            break;
+        case Plasma::Types::RightEdge:
+            slideLocation = KWindowEffects::RightEdge;
+            break;
+        case Plasma::Types::BottomEdge:
+            slideLocation = KWindowEffects::BottomEdge;
+            break;
+            //no edge, no slide
+        default:
+            break;
+        }
+
+        KWindowEffects::slideWindow(winId(), slideLocation, -1);
     }
-
-    KWindowEffects::slideWindow(winId(), slideLocation, -1);
 
     if (visible) {
         raise();
