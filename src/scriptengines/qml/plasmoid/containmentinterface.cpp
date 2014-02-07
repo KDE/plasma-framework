@@ -121,18 +121,16 @@ void ContainmentInterface::init()
         }
 
         if (pkg.isValid()) {
-            QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")));
-
             QObject *containmentGraphicObject = qmlObject()->rootObject();
-
-            if (containmentGraphicObject && toolBoxObject) {
-                toolBoxObject->setProperty("parent", QVariant::fromValue(containmentGraphicObject));
-
-                containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
-            } else {
-                delete toolBoxObject;
+            if (containmentGraphicObject) {
+                QVariantHash toolboxProperties;
+                toolboxProperties["parent"] = QVariant::fromValue(containmentGraphicObject);
+                QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), toolboxProperties);
+                if (toolBoxObject) {
+                    containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+                }
+                qDebug() << "Loaded toolbox package" << pkg.path();
             }
-            qDebug() << "Loaded toolbox package" << pkg.path();
         } else {
             qWarning() << "Could not load toolbox package." << pkg.path();
         }
