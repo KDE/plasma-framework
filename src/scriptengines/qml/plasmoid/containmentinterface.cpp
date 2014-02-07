@@ -138,7 +138,7 @@ void ContainmentInterface::init()
         }
     }
 
-    //set parent, both as object hyerarchy and visually
+    //set parent, both as object hierarchically and visually
     //do this only for containments, applets will do it in compactrepresentationcheck
     if (qmlObject()->rootObject()) {
         qmlObject()->rootObject()->setProperty("parent", QVariant::fromValue(this));
