@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(Plasma)
 
@@ -9,16 +9,12 @@ include(GenerateExportHeader)
 
 ################# set KDE specific information #################
 
-find_package(ECM 0.0.8 REQUIRED NO_MODULE)
+find_package(ECM 0.0.10 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
-
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
-
-#add_definitions(-Wno-deprecated) 
 
 if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
@@ -115,6 +111,9 @@ endif()
 
 #########################################################################
 
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
+
+#add_definitions(-Wno-deprecated)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
@@ -130,16 +129,18 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 
 ################ create PlasmaConfig.cmake and install it ###########################
 
-
 # create a Config.cmake and a ConfigVersion.cmake file and install them
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
-
 include(CMakePackageConfigHelpers)
 
 include(ECMSetupVersion)
-ecm_setup_version(2.0.0 VARIABLE_PREFIX PLASMA
-                        VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake")
+set(KF5_VERSION "4.96.0")
+ecm_setup_version(${KF5_VERSION}
+                  VARIABLE_PREFIX PLASMA
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
+)
+
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
@@ -147,9 +148,6 @@ configure_package_config_file(
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
   PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
-
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
 install(FILES
   "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
@@ -159,10 +157,18 @@ install(FILES
   COMPONENT Devel
 )
 
+install(EXPORT KF5PlasmaTargets
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        FILE KF5PlasmaTargets.cmake
+        NAMESPACE KF5::
+        COMPONENT Devel)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
+        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+
 ################# list the subdirectories #################
 add_subdirectory(src)
 add_subdirectory(desktoptheme)
 add_subdirectory(examples)
 
-install(EXPORT KF5PlasmaTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5PlasmaTargets.cmake NAMESPACE KF5:: COMPONENT Devel)
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
