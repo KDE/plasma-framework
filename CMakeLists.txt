@@ -36,20 +36,14 @@ endif()
 ################# now find all used packages #################
 
 set (QT_MIN_VERSION "5.2.0")
+set(KF5_VERSION "4.96.0")
 
 find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
 
 find_package(KF5 CONFIG REQUIRED IdleTime ItemModels WidgetsAddons WindowSystem Codecs Archive CoreAddons Solid ThreadWeaver GlobalAccel
                                             Config Auth JS Wallet DBusAddons I18n GuiAddons ConfigWidgets
                                             Service ItemViews Notifications IconThemes Completion JobWidgets Sonnet TextWidgets XmlGui Crash
-                                            Bookmarks Declarative UnitConversion Parts Kross KIO DNSSD)
-
-
-find_package(KActivities 5.0.0 CONFIG REQUIRED)
-set_package_properties(KActivities PROPERTIES DESCRIPTION "The KActivities library"
-                       URL "https://projects.kde.org/kactivities"
-                       TYPE REQUIRED
-                      )
+                                            Bookmarks Declarative UnitConversion Parts Kross KIO DNSSD Activities)
 
 #optional features
 find_package(X11 MODULE)
@@ -133,7 +127,6 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 include(CMakePackageConfigHelpers)
 
 include(ECMSetupVersion)
-set(KF5_VERSION "4.96.0")
 ecm_setup_version(${KF5_VERSION}
                   VARIABLE_PREFIX PLASMA
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
