@@ -232,7 +232,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         ToolTipDialog::instance()->keepalive();
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
-    } else {
+    } else if (!m_mainItem && !m_mainText.isEmpty() && !m_subText.isEmpty()) {
         m_showTimer->start(500);
     }
 }
