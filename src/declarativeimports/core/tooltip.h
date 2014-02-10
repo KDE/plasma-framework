@@ -101,6 +101,8 @@ class ToolTip : public QQuickItem
      */
     Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
+    Q_PROPERTY(bool active MEMBER m_active WRITE setActive NOTIFY activeChanged)
+
 public:
     ToolTip(QQuickItem *parent = 0);
     ~ToolTip();
@@ -128,6 +130,8 @@ public:
     bool containsMouse() const;
     void setContainsMouse(bool contains);
 
+    void setActive(bool active);
+
 protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);
@@ -142,6 +146,7 @@ Q_SIGNALS:
     void imageChanged();
     void containsMouseChanged();
     void locationChanged();
+    void activeChanged();
 
 private:
     bool m_containsMouse;
@@ -152,6 +157,7 @@ private:
     QString m_subText;
     QVariant m_image;
     QVariant m_icon;
+    bool m_active;
 };
 
 #endif
