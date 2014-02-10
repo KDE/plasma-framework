@@ -182,17 +182,25 @@ QString AppletInterface::toolTipMainText() const
 
 void AppletInterface::setToolTipMainText(const QString &text)
 {
-    if (m_toolTipMainText == text) {
+    //Here we are abusing the differentce between a null and and empty string.
+    //by default is null so fallsback to the name
+    //the fist time it gets set, an empty non null one is set, and won't fallback anymore
+    if (!m_toolTipMainText.isNull() && m_toolTipMainText == text) {
         return;
     }
 
-    m_toolTipMainText = text;
+    if (m_toolTipMainText.isEmpty()) {
+        m_toolTipMainText = QString("");//this "" makes it non-null
+    } else {
+        m_toolTipMainText = text;
+    }
+
     emit toolTipMainTextChanged();
 }
 
 QString AppletInterface::toolTipSubText() const
 {
-    if (m_toolTipMainText.isNull()) {
+    if (m_toolTipSubText.isNull()) {
         return applet()->pluginInfo().comment();
     } else {
         return m_toolTipSubText;
@@ -201,11 +209,17 @@ QString AppletInterface::toolTipSubText() const
 
 void AppletInterface::setToolTipSubText(const QString &text)
 {
-    if (m_toolTipSubText == text) {
+    //Also there the difference between null and empty gets exploited
+    if (!m_toolTipSubText.isNull() && m_toolTipSubText == text) {
         return;
     }
 
-    m_toolTipSubText = text;
+    if (m_toolTipSubText.isEmpty()) {
+        m_toolTipSubText = QString("");//this "" makes it non-null
+    } else {
+        m_toolTipSubText = text;
+    }
+
     emit toolTipSubTextChanged();
 }
 
