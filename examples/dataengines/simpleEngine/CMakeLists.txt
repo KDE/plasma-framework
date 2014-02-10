@@ -2,9 +2,9 @@ set(simpleEngine_SRCS
     simpleEngine.cpp
 )
 
-kservice_desktop_to_json(plasma-dataengine-example-simpleEngine.desktop)
-
 add_library(plasma_dataengine_example_simpleEngine MODULE ${simpleEngine_SRCS})
+
+kservice_desktop_to_json(plasma_dataengine_example_simpleEngine plasma-dataengine-example-simpleEngine.desktop)
 
 target_link_libraries(plasma_dataengine_example_simpleEngine
   KF5::Plasma
