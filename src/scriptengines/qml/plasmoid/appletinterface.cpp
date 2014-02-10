@@ -189,7 +189,7 @@ void AppletInterface::setToolTipMainText(const QString &text)
         return;
     }
 
-    if (m_toolTipMainText.isEmpty()) {
+    if (text.isEmpty()) {
         m_toolTipMainText = QString("");//this "" makes it non-null
     } else {
         m_toolTipMainText = text;
@@ -214,7 +214,7 @@ void AppletInterface::setToolTipSubText(const QString &text)
         return;
     }
 
-    if (m_toolTipSubText.isEmpty()) {
+    if (text.isEmpty()) {
         m_toolTipSubText = QString("");//this "" makes it non-null
     } else {
         m_toolTipSubText = text;
