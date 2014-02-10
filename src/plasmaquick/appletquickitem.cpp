@@ -215,7 +215,6 @@ QObject *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
 
 
     compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
-    compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(createFullRepresentationItem()));
 
     return compactRepresentationExpanderItem.data();
 }
@@ -611,8 +610,10 @@ void AppletQuickItem::setExpanded(bool expanded)
         return;
     }
 
-    d->createFullRepresentationItem();
-    d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
+    if (expanded) {
+        d->createFullRepresentationItem();
+        d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
+    }
 
     d->expanded = expanded;
     emit expandedChanged(expanded);
