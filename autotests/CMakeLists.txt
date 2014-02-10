@@ -31,7 +31,7 @@ PLASMA_UNIT_TESTS(
     #runnercontexttest
 )
 
-add_executable(storagetest storagetest.cpp ../private/storage.cpp ../private/storagethread.cpp)
+add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp)
 target_link_libraries(storagetest Qt5::Test Qt5::Declarative Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons )
 add_test(plasma-storagetest storagetest)
 ecm_mark_as_test(storagetest)

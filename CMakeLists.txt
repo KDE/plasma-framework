@@ -163,5 +163,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
 add_subdirectory(src)
 add_subdirectory(desktoptheme)
 add_subdirectory(examples)
+add_subdirectory(autotests)
+add_subdirectory(tests)
 
 feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
