@@ -101,6 +101,10 @@ class ToolTip : public QQuickItem
      */
     Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
+    /**
+     * Property that controls if a tooltips will show on mouse over.
+     * The default is true.
+     */
     Q_PROPERTY(bool active MEMBER m_active WRITE setActive NOTIFY activeChanged)
 
 public:
