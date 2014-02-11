@@ -35,7 +35,8 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_qmlObject(0),
       m_animation(0),
       m_hideTimeout(4000),
-      m_direction(Plasma::Types::Up)
+      m_direction(Plasma::Types::Up),
+      m_interactive(false)
 {
     setFlags(Qt::ToolTip);
     setLocation(Plasma::Types::Floating);
@@ -92,6 +93,7 @@ void ToolTipDialog::setDirection(Plasma::Types::Direction dir)
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
+
     m_animation->stop();
     DialogProxy::showEvent(event);
     setFlags(Qt::ToolTip);
@@ -110,6 +112,18 @@ void ToolTipDialog::resizeEvent(QResizeEvent *re)
     DialogProxy::resizeEvent(re);
 }
 
+bool ToolTipDialog::event(QEvent *e)
+{
+    if (e->type() == QEvent::Enter) {
+        if (m_interactive) {
+            m_showTimer->stop();
+        }
+    } else if (e->type() == QEvent::Leave) {
+        dismiss();
+    }
+    return DialogProxy::event(e);
+}
+
 void ToolTipDialog::adjustGeometry(const QRect &geom)
 {
     switch (m_direction) {
@@ -126,7 +140,6 @@ void ToolTipDialog::adjustGeometry(const QRect &geom)
     if (isVisible()) {
 
         resize(geom.size());
-        
         m_animation->setStartValue(position());
         m_animation->setEndValue(geom.topLeft());
         m_animation->start();
@@ -143,6 +156,16 @@ void ToolTipDialog::dismiss()
 void ToolTipDialog::keepalive()
 {
     m_showTimer->start(m_hideTimeout);
+}
+
+bool ToolTipDialog::interactive()
+{
+    return m_interactive;
+}
+
+void ToolTipDialog::setInteractive(bool interactive)
+{
+    m_interactive = interactive;
 }
 
 void ToolTipDialog::valueChanged(const QVariant &value)

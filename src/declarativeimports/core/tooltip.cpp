@@ -33,7 +33,8 @@ ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
       m_containsMouse(false),
       m_location(Plasma::Types::Floating),
-      m_active(true)
+      m_active(true),
+      m_interactive(false)
 {
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
@@ -124,6 +125,7 @@ void ToolTip::showToolTip()
     dlg->setLocation(location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
+    dlg->setInteractive(m_interactive);
     dlg->setVisible(true);
 }
 
@@ -182,6 +184,17 @@ void ToolTip::setActive(bool active)
         ToolTipDialog::instance()->dismiss();
     }
     emit activeChanged();
+}
+
+void ToolTip::setInteractive(bool interactive)
+{
+    if (m_interactive == interactive) {
+        return;
+    }
+
+    m_interactive = interactive;
+
+    emit interactiveChanged();
 }
 
 QVariant ToolTip::icon() const
