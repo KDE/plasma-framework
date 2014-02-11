@@ -26,8 +26,8 @@ target_link_libraries(KF5PlasmaQuick
 )
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
-                                     VERSION 5.0.0
-                                     SOVERSION 5
+                                     VERSION ${PLASMA_VERSION_STRING}
+                                     SOVERSION ${PLASMA_SOVERSION}
                                      EXPORT_NAME PlasmaQuick
                       )
 

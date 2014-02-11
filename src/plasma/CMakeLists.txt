@@ -156,10 +156,9 @@ target_include_directories(KF5Plasma INTERFACE
   "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
 )
 
-#do NOT use GENERIC versioning -- the Plasma team will take care of versioning
 set_target_properties(KF5Plasma PROPERTIES
-                                VERSION 5.0.0
-                                SOVERSION 5
+                                VERSION ${PLASMA_VERSION_STRING}
+                                SOVERSION ${PLASMA_SOVERSION}
                                 EXPORT_NAME Plasma
                       )
 
