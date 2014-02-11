@@ -110,12 +110,6 @@ class AppletInterface : public AppletQuickItem
     Q_PROPERTY(QObject* configuration READ configuration CONSTANT)
 
     /**
-     * FIXME-API: do we still want this?
-     * current active configuration
-     */
-    Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
-
-    /**
      * When true the plasmoid is busy. The containment may graphically indicate that drawing for instance a spinner busy widget over it
      */
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy NOTIFY busyChanged)
@@ -216,20 +210,6 @@ public:
      */
     Q_INVOKABLE QStringList downloadedFiles() const;
 
-    /**
-     * FIXME: remove?
-     * Read a value from the configuration
-     * DEPRECATED: use plasmoid.configuration instead
-     */
-    Q_INVOKABLE QVariant readConfig(const QString &entry) const;
-
-    /**
-     * FIXME: remove?
-     * Write a value in the configuration
-     * DEPRECATED: use plasmoid.configuration instead
-     */
-    Q_INVOKABLE void writeConfig(const QString &entry, const QVariant &value);
-
     static AppletInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<AppletInterface *>(AppletQuickItem::qmlAttachedProperties(object));
@@ -271,9 +251,6 @@ public:
     Plasma::Types::ItemStatus status() const;
 
     int screen() const;
-
-    QString activeConfig() const;
-    void setActiveConfig(const QString &name);
 
     bool immutable() const;
     bool userConfiguring() const;
@@ -317,9 +294,6 @@ private:
 
     QStringList m_actions;
     QSignalMapper *m_actionSignals;
-    QString m_currentConfig;
-    QMap<QString, Plasma::ConfigLoader*> m_configs;
-
 
     KDeclarative::ConfigPropertyMap *m_configuration;
     DeclarativeAppletScript *m_appletScriptEngine;
