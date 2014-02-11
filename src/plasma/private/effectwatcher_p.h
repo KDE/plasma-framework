@@ -45,8 +45,10 @@ Q_SIGNALS:
     void effectChanged(bool on);
 
 private:
+    void init(const QString &property);
     xcb_atom_t m_property;
     bool m_effectActive;
+    bool m_isX11;
 };
 
 } // namespace Plasma
