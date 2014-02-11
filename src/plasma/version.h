@@ -17,33 +17,15 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_VERSION_H
-#define PLASMA_VERSION_H
+#ifndef PLASMAVERSION_H
+#define PLASMAVERSION_H
 
 /** @file plasma/version.h <Plasma/Version> */
 
 #include <plasma/plasma_export.h>
-
-/**
- * String version of libplasma version, suitable for use in
- * file formats or network protocols
- */
-#define PLASMA_VERSION_STRING "3.80.0"
-
-/// @brief Major version of libplasma, at compile time
-#define PLASMA_VERSION_MAJOR 3
-/// @brief Minor version of libplasma, at compile time
-#define PLASMA_VERSION_MINOR 80
-/// @brief Release version of libplasma, at compile time
-#define PLASMA_VERSION_RELEASE 0
+#include <plasma_version.h>
 
 #define PLASMA_MAKE_VERSION(a,b,c) (((a) << 16) | ((b) << 8) | (c))
-
-/**
- * Compile time macro for the version number of libplasma
- */
-#define PLASMA_VERSION \
-    PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, PLASMA_VERSION_RELEASE)
 
 /**
  * Compile-time macro for checking the plasma version. Not useful for

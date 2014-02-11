@@ -23,14 +23,3 @@ target_link_libraries(sortfiltermodeltest
 
 add_test(plasma-sortfiltermodeltest sortfiltermodeltest)
 ecm_mark_as_test(sortfiltermodeltest)
-
-#set(runnermodeltest_SRCS
-#    main.cpp
-#    dynamictreemodel.cpp
-#    modeltest.cpp
-#    ../runnermodel.cpp
-#    )
-
-#add_executable(runnermodeltest ${runnermodeltest_SRCS})
-#target_link_libraries(runnermodeltest Qt5::Test ${plasma_LIBRARIES} plasma)
-#ecm_mark_as_test(runnermodeltest)

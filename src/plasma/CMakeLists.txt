@@ -47,14 +47,6 @@ set(Plasma_LIB_SRCS
     version.cpp
     private/componentinstaller.cpp
 
-#runners
-    abstractrunner.cpp
-    querymatch.cpp
-    runnercontext.cpp
-    runnermanager.cpp
-    runnersyntax.cpp
-    private/runnerjobs.cpp
-
 #applets,containments,corona
     applet.cpp
     configloader.cpp
@@ -92,7 +84,6 @@ set(Plasma_LIB_SRCS
 #scripting
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
-    scripting/runnerscript.cpp
     scripting/scriptengine.cpp
 )
 
@@ -166,7 +157,6 @@ set_target_properties(KF5Plasma PROPERTIES
 generate_export_header(KF5Plasma BASE_NAME Plasma)
 
 set(Plasma_LIB_INCLUDES
-    abstractrunner.h
     applet.h
     configloader.h
     containment.h
@@ -181,10 +171,6 @@ set(Plasma_LIB_INCLUDES
     packagestructure.h
     plasma.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
-    querymatch.h
-    runnercontext.h
-    runnermanager.h
-    runnersyntax.h
     service.h
     servicejob.h
     svg.h
@@ -204,7 +190,6 @@ install(DIRECTORY
 install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
-    #scripting/runnerscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
@@ -215,7 +200,6 @@ install(FILES
    data/servicetypes/plasma-dataengine.desktop
    data/servicetypes/plasma-generic.desktop
    data/servicetypes/plasma-packagestructure.desktop
-   data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop

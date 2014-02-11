@@ -40,7 +40,7 @@ unsigned int versionMinor()
 
 unsigned int versionRelease()
 {
-    return PLASMA_VERSION_RELEASE;
+    return PLASMA_VERSION_PATCH;
 }
 
 const char *versionString()

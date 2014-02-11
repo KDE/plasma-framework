@@ -29,13 +29,10 @@
 
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>
-#include <Plasma/QueryMatch>
-#include <Plasma/ServiceJob>
 
 #include "datasource.h"
 #include "datamodel.h"
 #include "framesvgitem.h"
-#include "runnermodel.h"
 #include "svgitem.h"
 #include "theme.h"
 #include "dialog.h"
@@ -46,6 +43,7 @@
 #include "tooltip.h"
 #include "units.h"
 #include "windowthumbnail.h"
+#include <plasma/servicejob.h>
 
 // #include "dataenginebindings_p.h"
 
@@ -101,11 +99,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Formats>(uri, 2, 0, "Formats");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
-#if 0
-    qmlRegisterType<RunnerModel>(uri, 2, 0, "RunnerModel");
-    qmlRegisterInterface<Plasma::QueryMatch>("QueryMatch");
-    qRegisterMetaType<Plasma::QueryMatch *>("QueryMatch");
-#endif
+
     qmlRegisterType<QQmlPropertyMap>();
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 

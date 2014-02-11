@@ -23,14 +23,12 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
-#include "abstractrunner.h"
 #include "applet.h"
 #include "dataengine.h"
 #include "package.h"
 #include "private/componentinstaller_p.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
-#include "scripting/runnerscript.h"
 
 namespace Plasma
 {
@@ -213,17 +211,6 @@ DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngi
 
     if (engine) {
         engine->setDataEngine(dataEngine);
-    }
-
-    return engine;
-}
-
-RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner)
-{
-    RunnerScript *engine = static_cast<RunnerScript*>(loadEngine(language, Types::RunnerComponent, runner));
-
-    if (engine) {
-        //engine->setRunner(runner);
     }
 
     return engine;

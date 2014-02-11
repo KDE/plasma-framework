@@ -33,7 +33,6 @@
 #endif
 
 #include "applet.h"
-#include "abstractrunner.h"
 #include "containment.h"
 #include "containmentactions.h"
 #include "dataengine.h"
