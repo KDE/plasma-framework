@@ -213,6 +213,9 @@ QObject *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
 
     compactRepresentationExpanderItem = qmlObject->createObjectFromComponent(compactRepresentationExpander.data(), QtQml::qmlContext(qmlObject->rootObject()));
 
+    if (!compactRepresentationExpanderItem) {
+        return 0;
+    }
 
     compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant::fromValue(createCompactRepresentationItem()));
 
