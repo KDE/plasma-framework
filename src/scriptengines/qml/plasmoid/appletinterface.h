@@ -267,7 +267,6 @@ Q_SIGNALS:
      */
     void externalData(const QString &mimetype, const QVariant &data);
 
-    void releaseVisualFocus();
     void configNeedsSaving();
 
 //PROPERTY change notifiers--------------
