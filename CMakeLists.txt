@@ -159,6 +159,9 @@ install(EXPORT KF5PlasmaTargets
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
         DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
 
+# make plasma_version.h available
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 ################# list the subdirectories #################
 add_subdirectory(src)
 add_subdirectory(desktoptheme)
