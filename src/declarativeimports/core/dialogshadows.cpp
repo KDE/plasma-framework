@@ -21,8 +21,9 @@
 #include <QGlobalStatic>
 #include <QWindow>
 #include <QPainter>
+#include <config-plasma.h>
 
-#ifdef HAVE_X11
+#if HAVE_X11
 #include <QX11Info>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
@@ -75,12 +76,12 @@ public:
     QPixmap m_emptyVerticalPix;
     QPixmap m_emptyHorizontalPix;
 
+#if HAVE_X11
     //! xcb connection
     xcb_connection_t* _connection;
 
     //! graphical context
     xcb_gcontext_t _gc;
-#if HAVE_X11
     bool m_isX11;
 #endif
 
@@ -230,7 +231,7 @@ void DialogShadows::Private::initPixmap(const QString &element)
 
 QPixmap DialogShadows::Private::initEmptyPixmap(const QSize &size)
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return QPixmap();
     }
@@ -240,6 +241,7 @@ QPixmap DialogShadows::Private::initEmptyPixmap(const QSize &size)
     }
     return tempEmptyPix;
 #else
+    Q_UNUSED(size)
     return QPixmap();
 #endif
 }
@@ -269,7 +271,7 @@ void DialogShadows::Private::setupPixmaps()
 
 void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return;
     }
@@ -402,7 +404,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
 void DialogShadows::Private::freeX11Pixmaps()
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return;
     }
@@ -441,7 +443,7 @@ void DialogShadows::Private::freeX11Pixmaps()
 
 void DialogShadows::Private::clearPixmaps()
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     freeX11Pixmaps();
 
     m_emptyCornerPix = QPixmap();
@@ -458,7 +460,7 @@ void DialogShadows::Private::clearPixmaps()
 
 void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return;
     }
@@ -476,18 +478,23 @@ void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSv
     //qDebug() << "going to set the shadow of" << window->winId() << "to" << data;
     XChangeProperty(dpy, window->winId(), atom, XA_CARDINAL, 32, PropModeReplace,
                     reinterpret_cast<const unsigned char *>(data[enabledBorders].constData()), data[enabledBorders].size());
+#else
+    Q_UNUSED(window)
+    Q_UNUSED(enabledBorders)
 #endif
 }
 
 void DialogShadows::Private::clearShadow(const QWindow *window)
 {
-#ifdef HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return;
     }
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_NET_WM_SHADOW", False);
     XDeleteProperty(dpy, window->winId(), atom);
+#else
+    Q_UNUSED(window)
 #endif
 }
 

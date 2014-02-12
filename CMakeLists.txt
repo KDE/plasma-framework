@@ -38,7 +38,7 @@ endif()
 set (QT_MIN_VERSION "5.2.0")
 set(KF5_VERSION "4.96.0")
 
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick X11Extras Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
 
 find_package(KF5Activities ${KF5_VERSION} REQUIRED)
 find_package(KF5Archive ${KF5_VERSION} REQUIRED)
@@ -79,13 +79,18 @@ find_package(KF5XmlGui ${KF5_VERSION} REQUIRED)
 
 #optional features
 find_package(X11 MODULE)
+set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
+                       URL "http://www.x.org"
+                       TYPE OPTIONAL
+                      )
 find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
                        URL "http://xcb.freedesktop.org"
-                       TYPE REQUIRED
+                       TYPE OPTIONAL
                       )
 if(X11_FOUND AND XCB_XCB_FOUND)
   set(HAVE_X11 1)
+  find_package(Qt5 REQUIRED NO_MODULE COMPONENTS X11Extras)
   #X11_Xrender discovery is done by FindX11
   add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
   add_feature_info("X Screensaver Extension (libXss)" X11_Xscreensaver_FOUND "Support for KIdleTime (fallback mode)")

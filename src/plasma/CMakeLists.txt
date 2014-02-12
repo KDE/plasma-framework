@@ -12,7 +12,7 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
 endif()
 
-if(NOT X11_FOUND)
+if(NOT HAVE_X11)
     set(PLASMA_NO_PACKAGEKIT TRUE)
 endif()
 
@@ -87,7 +87,9 @@ set(Plasma_LIB_SRCS
     scripting/scriptengine.cpp
 )
 
-set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
+if(HAVE_X11)
+    set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
+endif()
 
 kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
@@ -103,7 +105,7 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)
 
-if(X11_FOUND)
+if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} ${XCB_XCB_LIBRARY})
 endif()
 

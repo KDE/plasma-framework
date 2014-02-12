@@ -39,6 +39,7 @@
 
 #include <QDebug>
 
+#include <config-plasma.h>
 #if HAVE_XCB_SHAPE
 #include <QX11Info>
 #include <xcb/shape.h>

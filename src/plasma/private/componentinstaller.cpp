@@ -19,14 +19,12 @@
 
 #include "private/componentinstaller_p.h"
 
-#ifdef PLASMA_ENABLE_PACKAGEKIT_SUPPORT
 #include <QSet>
 #include <QDBusInterface>
 #include <QDBusPendingCall>
 #include <QWidget>
 #include <QLatin1String>
 #include <QStringList>
-#endif
 
 namespace Plasma
 {
