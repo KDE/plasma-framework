@@ -652,7 +652,7 @@ QScreen* DialogProxy::screenForItem(QQuickItem* item) const
 void DialogProxy::updateMinimumWidth()
 {
     if (m_mainItemLayout) {
-        setMinimumWidth(m_mainItemLayout.data()->property("minimumWidth").toInt());
+        setMinimumWidth(m_mainItemLayout.data()->property("minimumWidth").toInt() + m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right());
     } else {
         setMinimumWidth(-1);
     }
@@ -661,7 +661,7 @@ void DialogProxy::updateMinimumWidth()
 void DialogProxy::updateMinimumHeight()
 {
     if (m_mainItemLayout) {
-        setMinimumHeight(m_mainItemLayout.data()->property("minimumHeight").toInt());
+        setMinimumHeight(m_mainItemLayout.data()->property("minimumHeight").toInt() + m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
     } else {
         setMinimumHeight(-1);
     }
@@ -670,7 +670,7 @@ void DialogProxy::updateMinimumHeight()
 void DialogProxy::updateMaximumWidth()
 {
     if (m_mainItemLayout) {
-        const int hint = m_mainItemLayout.data()->property("maximumWidth").toInt();
+        const int hint = m_mainItemLayout.data()->property("maximumWidth").toInt() + m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right();
         if (hint > 0) {
             setMaximumWidth(hint);
         } else {
@@ -684,7 +684,7 @@ void DialogProxy::updateMaximumWidth()
 void DialogProxy::updateMaximumHeight()
 {
     if (m_mainItemLayout) {
-        const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt();
+        const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt() + m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom();
         if (hint > 0) {
             setMaximumWidth(hint);
         } else {
