@@ -24,6 +24,7 @@
 #include <QQuickWindow>
 #include <QWeakPointer>
 #include <QPoint>
+#include <QQmlParserStatus>
 
 #include <Plasma/Plasma>
 #include <Plasma/Theme>
@@ -44,9 +45,10 @@ namespace Plasma
  *
  * Exposed as `PlasmaCore.Dialog` in QML.
  */
-class DialogProxy : public QQuickWindow
+class DialogProxy : public QQuickWindow, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     /**
      * The main QML item that will be displayed in the Dialog
@@ -161,6 +163,9 @@ protected:
     void hideEvent(QHideEvent *event);
     bool event(QEvent *event);
 
+    virtual void classBegin();
+    virtual void componentComplete();
+
     QTimer *m_syncTimer;
     Plasma::Types::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
@@ -185,6 +190,7 @@ private:
     bool m_hideOnWindowDeactivate;
     bool m_outputOnly;
     Plasma::Theme m_theme;
+    bool m_componentComplete;
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> m_mainItemLayout;

@@ -54,7 +54,8 @@ DialogProxy::DialogProxy(QQuickItem *parent)
       m_location(Plasma::Types::BottomEdge),
       m_type(Normal),
       m_hideOnWindowDeactivate(false),
-      m_outputOnly(false)
+      m_outputOnly(false),
+      m_componentComplete(false)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -453,6 +454,10 @@ void DialogProxy::syncToMainItemSize()
 
 void DialogProxy::requestSyncToMainItemSize(bool delayed)
 {
+    if (!m_componentComplete) {
+        return;
+    }
+
     if (delayed && !m_syncTimer->isActive()) {
         m_syncTimer->start(150);
     } else {
@@ -522,6 +527,17 @@ bool DialogProxy::event(QEvent *event)
 void DialogProxy::hideEvent(QHideEvent *event)
 {
     QQuickWindow::hideEvent(event);
+}
+
+void DialogProxy::classBegin()
+{
+
+}
+
+void DialogProxy::componentComplete()
+{
+    m_componentComplete = true;
+    syncToMainItemSize();
 }
 
 void DialogProxy::syncBorders()
