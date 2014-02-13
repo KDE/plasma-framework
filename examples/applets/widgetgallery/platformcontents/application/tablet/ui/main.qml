@@ -18,11 +18,12 @@
 */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 2.0
 
 Image {
-    property int minimumWidth: 300
-    property int minimumHeight: 400
+    Layout.minimumWidth: 300
+    Layout.minimumHeight: 400
     source: "image://appbackgrounds/standard"
     fillMode: Image.Tile
     asynchronous: true

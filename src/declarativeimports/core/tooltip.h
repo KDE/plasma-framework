@@ -101,6 +101,18 @@ class ToolTip : public QQuickItem
      */
     Q_PROPERTY(QVariant image READ image WRITE setImage NOTIFY imageChanged)
 
+    /**
+     * Property that controls if a tooltips will show on mouse over.
+     * The default is true.
+     */
+    Q_PROPERTY(bool active MEMBER m_active WRITE setActive NOTIFY activeChanged)
+
+    /**
+     * if interactive is false (default), the tooltip will automatically hide 
+     * itself as soon as the mouse leaves the tooltiparea, if is true, if the mouse leaves tooltiparea and goes over the tooltip itself, the tooltip won't hide, so it will be possible to interact with tooltip contents
+     */
+    Q_PROPERTY(bool interactive MEMBER m_interactive WRITE setInteractive NOTIFY interactiveChanged)
+
 public:
     ToolTip(QQuickItem *parent = 0);
     ~ToolTip();
@@ -128,6 +140,10 @@ public:
     bool containsMouse() const;
     void setContainsMouse(bool contains);
 
+    void setActive(bool active);
+
+    void setInteractive(bool interactive);
+
 protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);
@@ -142,6 +158,8 @@ Q_SIGNALS:
     void imageChanged();
     void containsMouseChanged();
     void locationChanged();
+    void activeChanged();
+    void interactiveChanged();
 
 private:
     bool m_containsMouse;
@@ -152,6 +170,8 @@ private:
     QString m_subText;
     QVariant m_image;
     QVariant m_icon;
+    bool m_active;
+    bool m_interactive;
 };
 
 #endif

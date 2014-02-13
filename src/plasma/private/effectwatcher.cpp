@@ -28,8 +28,17 @@ namespace Plasma
 
 EffectWatcher::EffectWatcher(const QString& property, QObject *parent)
     : QObject(parent),
-      m_property(XCB_ATOM_NONE)
+      m_property(XCB_ATOM_NONE),
+      m_isX11(QX11Info::isPlatformX11())
 {
+    init(property);
+}
+
+void EffectWatcher::init(const QString &property)
+{
+    if (!m_isX11) {
+        return;
+    }
     QCoreApplication::instance()->installNativeEventFilter(this);
 
     xcb_connection_t *c = QX11Info::connection();
@@ -73,7 +82,7 @@ bool EffectWatcher::nativeEventFilter(const QByteArray& eventType, void *message
 
 bool EffectWatcher::isEffectActive() const
 {
-    if (m_property == XCB_ATOM_NONE) {
+    if (m_property == XCB_ATOM_NONE || !m_isX11) {
         return false;
     }
     xcb_connection_t *c = QX11Info::connection();

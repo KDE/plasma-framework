@@ -435,21 +435,6 @@ int Containment::lastScreen() const
     return d->lastScreen;
 }
 
-void Containment::setDrawWallpaper(bool drawWallpaper)
-{
-    if (d->drawWallpaper == drawWallpaper) {
-        return;
-    }
-
-    d->drawWallpaper = drawWallpaper;
-    emit drawWallpaperChanged();
-}
-
-bool Containment::drawWallpaper()
-{
-    return d->drawWallpaper;
-}
-
 void Containment::setWallpaper(const QString &pluginName)
 {
     if (pluginName != d->wallpaper) {

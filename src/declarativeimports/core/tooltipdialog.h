@@ -64,10 +64,14 @@ public:
     void dismiss();
     void keepalive();
 
+    bool interactive();
+    void setInteractive(bool interactive);
+
 protected:
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
     void resizeEvent(QResizeEvent *re);
+    bool event(QEvent *e);
 
 private Q_SLOTS:
     void valueChanged(const QVariant &value);
@@ -78,6 +82,7 @@ private:
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
     Plasma::Types::Direction m_direction;
+    bool m_interactive;
 };
 
 #endif

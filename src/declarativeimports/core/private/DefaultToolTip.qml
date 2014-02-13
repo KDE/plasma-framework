@@ -33,13 +33,14 @@ Row {
     property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 40
     property int _s: units.largeSpacing / 2
 
-    width: childrenRect.width + _s
-    height: childrenRect.height + _s * 2
+    width: implicitWidth + _s
+    height: implicitHeight + _s * 2
+
     spacing: _s*2
 
     Item {
         id: imageContainer
-        visible: toolTip != null && (toolTip.image != null || toolTip.icon != null)
+        visible: toolTip != null && (toolTip.image || toolTip.icon)
         width: Math.max(tooltipImage.width, tooltipIcon.width)
         height: Math.max(tooltipImage.height, tooltipIcon.height)
         x: _s

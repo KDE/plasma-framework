@@ -2,9 +2,9 @@ set(sourcesOnRequest_SRCS
     sourcesOnRequest.cpp
 )
 
-kservice_desktop_to_json(plasma-dataengine-example-sourcesOnRequest.desktop)
-
 add_library(plasma_dataengine_example_sourcesOnRequest MODULE ${sourcesOnRequest_SRCS})
+
+kservice_desktop_to_json(plasma_dataengine_example_sourcesOnRequest plasma-dataengine-example-sourcesOnRequest.desktop)
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
   KF5::Plasma

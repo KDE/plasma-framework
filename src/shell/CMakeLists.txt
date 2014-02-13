@@ -9,15 +9,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
-add_definitions(-DHAVE_X11=${HAVE_X11})
-
 find_package(Qt5Qml REQUIRED)
 find_package(Qt5Quick REQUIRED)
 find_package(Qt5Script REQUIRED)
 find_package(KF5CoreAddons REQUIRED)
 find_package(KF5Crash REQUIRED)
 find_package(KF5Solid REQUIRED)
-find_package(KActivities REQUIRED)
+find_package(KF5Activities REQUIRED)
 
 set(scripting_SRC
     scripting/appinterface.cpp
@@ -51,9 +49,7 @@ add_executable(plasma-shell
     ${scripting_SRC}
 )
 
-# The Qt5Widgets_LIBRARIES variable also includes QtGui and QtCore
 target_link_libraries(plasma-shell
- #Qt5::Widgets
  Qt5::Quick
  Qt5::Qml
  KF5::KIOCore
@@ -68,11 +64,11 @@ target_link_libraries(plasma-shell
  KF5::I18n
  KF5::XmlGui
  KF5::IconThemes
- KF5::KActivities
+ KF5::Activities
 )
 target_include_directories(plasma-shell PRIVATE "${CMAKE_BINARY_DIR}")
 
-if(X11_FOUND)
+if(HAVE_X11)
   target_link_libraries(plasma-shell ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )
   target_link_libraries(plasma-shell Qt5::X11Extras)
 endif()

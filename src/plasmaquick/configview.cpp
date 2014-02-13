@@ -92,7 +92,7 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("graphicObject").value<QObject*>());
+    q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("_plasma_graphicObject").value<QObject*>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
     component->completeCreate();
     delete component;

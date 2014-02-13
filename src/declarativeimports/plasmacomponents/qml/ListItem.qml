@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private/Config.js" as Config
 
@@ -94,7 +94,7 @@ Item {
         Component.onCompleted: {
             prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
         }
-        Behavior on opacity { NumberAnimation { duration: 200 } }
+        Behavior on opacity { NumberAnimation { duration: units.longDuration } }
     }
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}

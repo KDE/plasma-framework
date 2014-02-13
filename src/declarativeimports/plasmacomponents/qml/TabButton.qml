@@ -40,7 +40,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import "private/AppManager.js" as Utils
 import org.kde.plasma.core 2.0 as PlasmaCore
 

@@ -422,10 +422,6 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         }
         applet = containment = new Containment(q, 0, id);
 
-        if (loadingNull) {
-            containment->setDrawWallpaper(false);
-        }
-
         // we want to provide something and don't care about the failure to launch
         containment->setFormFactor(Plasma::Types::Planar);
     }

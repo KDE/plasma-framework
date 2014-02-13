@@ -106,16 +106,6 @@ PLASMA_EXPORT AppletScript *loadScriptEngine(const QString &language, Applet *ap
  **/
 PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine);
 
-/**
- * Loads an Applet script engine for the given language.
- *
- * @param language the language to load for
- * @param runner the Plasma::AbstractRunner for this script
- * @return pointer to the RunnerScript or 0 on failure; the caller is responsible
- *         for the return object which will be parented to the AbstractRunner
- **/
-PLASMA_EXPORT RunnerScript *loadScriptEngine(const QString &language, AbstractRunner *runner);
-
 } // namespace Plasma
 
 #endif

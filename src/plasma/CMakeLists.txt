@@ -12,7 +12,7 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
 endif()
 
-if(NOT X11_FOUND)
+if(NOT HAVE_X11)
     set(PLASMA_NO_PACKAGEKIT TRUE)
 endif()
 
@@ -36,8 +36,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT
 #FIXME: gpgme++ is in kdepimlibs, must move somewhere else!
 include_directories(${KDEPIMLIBS_INCLUDE_DIRS} ${GPGME_INCLUDES})
 
-add_subdirectory(autotests)
-add_subdirectory(tests)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
 
 ########### next target ###############
@@ -48,14 +46,6 @@ set(Plasma_LIB_SRCS
     pluginloader.cpp
     version.cpp
     private/componentinstaller.cpp
-
-#runners
-    abstractrunner.cpp
-    querymatch.cpp
-    runnercontext.cpp
-    runnermanager.cpp
-    runnersyntax.cpp
-    private/runnerjobs.cpp
 
 #applets,containments,corona
     applet.cpp
@@ -94,11 +84,12 @@ set(Plasma_LIB_SRCS
 #scripting
     scripting/appletscript.cpp
     scripting/dataenginescript.cpp
-    scripting/runnerscript.cpp
     scripting/scriptengine.cpp
 )
 
-set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
+if(HAVE_X11)
+    set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
+endif()
 
 kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcfgc)
 
@@ -114,7 +105,7 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)
 
-if(X11_FOUND)
+if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} ${XCB_XCB_LIBRARY})
 endif()
 
@@ -158,10 +149,9 @@ target_include_directories(KF5Plasma INTERFACE
   "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
 )
 
-#do NOT use GENERIC versioning -- the Plasma team will take care of versioning
 set_target_properties(KF5Plasma PROPERTIES
-                                VERSION 5.0.0
-                                SOVERSION 5
+                                VERSION ${PLASMA_VERSION_STRING}
+                                SOVERSION ${PLASMA_SOVERSION}
                                 EXPORT_NAME Plasma
                       )
 
@@ -169,7 +159,6 @@ set_target_properties(KF5Plasma PROPERTIES
 generate_export_header(KF5Plasma BASE_NAME Plasma)
 
 set(Plasma_LIB_INCLUDES
-    abstractrunner.h
     applet.h
     configloader.h
     containment.h
@@ -184,10 +173,6 @@ set(Plasma_LIB_INCLUDES
     packagestructure.h
     plasma.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
-    querymatch.h
-    runnercontext.h
-    runnermanager.h
-    runnersyntax.h
     service.h
     servicejob.h
     svg.h
@@ -207,7 +192,6 @@ install(DIRECTORY
 install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
-    #scripting/runnerscript.h
     scripting/scriptengine.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
@@ -218,7 +202,6 @@ install(FILES
    data/servicetypes/plasma-dataengine.desktop
    data/servicetypes/plasma-generic.desktop
    data/servicetypes/plasma-packagestructure.desktop
-   data/servicetypes/plasma-runner.desktop
    data/servicetypes/plasma-scriptengine.desktop
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop

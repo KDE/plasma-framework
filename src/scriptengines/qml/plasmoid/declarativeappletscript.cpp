@@ -42,6 +42,7 @@
 
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
+#include "plasmoid/wallpaperinterface.h"
 
 #include <kdeclarative/qmlobject.h>
 #include <kdeclarative/configpropertymap.h>
@@ -54,7 +55,18 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     : Plasma::AppletScript(parent),
       m_interface(0)
 {
-    qmlRegisterType<AppletInterface>();
+    //qmlRegisterType<AppletInterface>();
+    //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
+    /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
+                                             QLatin1String("Do not create objects of type Plasmoid"));*/
+    qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
+                                             QLatin1String("Do not create objects of type Plasmoid"));
+    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
+                                             QLatin1String("Do not create objects of type Containment"));
+
+    qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
+                                             QLatin1String("Do not create objects of type Wallpaper"));
+
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
 }
@@ -81,8 +93,6 @@ bool DeclarativeAppletScript::init()
     }
 
     m_interface->setParent(this);
-    // set the graphicObject dynamic property on applet
-    a->setProperty("graphicObject", QVariant::fromValue(m_interface));
 
     return true;
 }
@@ -109,9 +119,7 @@ void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constr
 
 void DeclarativeAppletScript::executeAction(const QString &name)
 {
-    if (m_interface->qmlObject()->rootObject()) {
-         QMetaObject::invokeMethod(m_interface->qmlObject()->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
-    }
+    m_interface->executeAction(name);
 }
 
 QList<QAction*> DeclarativeAppletScript::contextualActions()

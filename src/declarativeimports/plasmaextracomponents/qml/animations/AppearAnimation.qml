@@ -19,14 +19,13 @@
  */
 
 import QtQuick 2.0
-import "Animations.js" as Animations
 
 SequentialAnimation {
     id: appearAnimation
     objectName: "appearAnimation"
 
     property Item targetItem
-    property int duration: Animations.normalDuration
+    property int duration: units.longDuration
 
     // Fast scaling while we're animation == more FPS
     ScriptAction { script: { targetItem.smooth = false; targetItem.visible = true; } }

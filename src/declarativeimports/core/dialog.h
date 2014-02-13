@@ -31,6 +31,7 @@
 #include <netwm_def.h>
 
 class QQuickItem;
+class QScreen;
 
 namespace Plasma
 {
@@ -136,7 +137,6 @@ public:
 
     void setOutputOnly(bool outputOnly);
     bool isOutputOnly() const;
-
     void updateInputShape();
 
 Q_SIGNALS:
@@ -150,6 +150,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void syncMainItemToSize();
     void syncToMainItemSize();
+    void requestSyncToMainItemSize(bool delayed = false);
 
 protected:
    // bool eventFilter(QObject *watched, QEvent *event);
@@ -171,12 +172,22 @@ private Q_SLOTS:
 
     void updateVisibility(bool visible);
 
+    void updateMinimumWidth();
+    void updateMinimumHeight();
+    void updateMaximumWidth();
+    void updateMaximumHeight();
+
 private:
+    QScreen* screenForItem(QQuickItem *item) const;
+
     QRect m_cachedGeometry;
     WindowType m_type;
     bool m_hideOnWindowDeactivate;
     bool m_outputOnly;
     Plasma::Theme m_theme;
+
+    //Attached Layout property of mainItem, if any
+    QWeakPointer <QObject> m_mainItemLayout;
 };
 
 #endif

@@ -178,7 +178,7 @@ Item {
         property bool completed: false
 
         // Duration of transition animation (in ms)
-        property int transitionDuration: 250
+        property int transitionDuration: units.longDuration
 
         // Sets the page status.
         function setPageStatus(page, status)

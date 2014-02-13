@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import "private/TabGroup.js" as Engine
 
 import "." 2.0 as PlasmaComponents
@@ -207,14 +207,14 @@ Item {
                     to: "Incoming"
                     SequentialAnimation {
                         ScriptAction { script: root.clip = true }
-                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: 250 }
+                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: units.longDuration }
                         ScriptAction { script: {incomingDone(); root.clip = false} }
                     }
                 },
                 Transition {
                     to: "OutgoingLeft,OutgoingRight"
                     SequentialAnimation {
-                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: 250 }
+                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: units.longDuration }
                         ScriptAction { script: outgoingDone() }
                     }
                 }

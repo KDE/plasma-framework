@@ -43,7 +43,9 @@
 // The PageStack item defines a container for pages and a stack-based
 // navigation model. Pages can be defined as QML items or components.
 
-import QtQuick 2.0
+import QtQuick 2.1
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 import "." 2.0 as PlasmaComponents
 import "private/PageStack.js" as Engine
 
@@ -81,7 +83,7 @@ Item {
     /**
      * Should page transitions be animated? Default is true.
      */
-    property bool animate: true
+    property bool animate: units.longDuration > 0
 
     /**
      * The page to be automatically loaded when this PageStack component gets
@@ -264,7 +266,7 @@ Item {
             property int stackWidth: Math.max(root.width, root.height)
 
             // Duration of transition animation (in ms)
-            property int transitionDuration: root.animate ? 150 : 0
+            property int transitionDuration: units.longDuration / 2
 
             // Flag that indicates the container should be cleaned up after the transition has ended.
             property bool cleanupAfterTransition: false

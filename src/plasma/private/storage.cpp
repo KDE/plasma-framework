@@ -36,7 +36,6 @@
 //Plasma
 #include "applet.h"
 #include "dataengine.h"
-#include "abstractrunner.h"
 #include "storagethread_p.h"
 
 
@@ -135,12 +134,6 @@ Storage::Storage(QObject* parent)
         Plasma::DataEngine *engine = qobject_cast<Plasma::DataEngine *>(parentObject);
         if (engine) {
             m_clientName = engine->pluginInfo().pluginName();
-            break;
-        }
-
-        Plasma::AbstractRunner *runner = qobject_cast<Plasma::AbstractRunner *>(parentObject);
-        if (runner) {
-            m_clientName = runner->id();
             break;
         }
     }

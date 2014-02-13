@@ -48,11 +48,6 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
     
     /**
-     * True if the containment should draw a wallpaper
-     */
-    Q_PROPERTY(bool drawWallpaper READ drawWallpaper WRITE setDrawWallpaper NOTIFY drawWallpaperChanged)
-
-    /**
      * Type of this containment TODO: notify
      */
     Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType NOTIFY containmentTypeChanged)
@@ -75,15 +70,13 @@ class ContainmentInterface : public AppletInterface
 public:
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
-    inline Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(m_appletScriptEngine->applet()->containment()); }
+    Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(appletScript()->applet()->containment()); }
 
     inline WallpaperInterface *wallpaperInterface() const { return m_wallpaperInterface;}
 
 //For QML use
     QList<QObject *> applets();
 
-    void setDrawWallpaper(bool drawWallpaper);
-    bool drawWallpaper();
     Plasma::Types::ContainmentType containmentType() const;
     void setContainmentType(Plasma::Types::ContainmentType type);
 
@@ -111,6 +104,11 @@ public:
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
+
+    static ContainmentInterface *qmlAttachedProperties(QObject *object)
+    {
+        return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
+    }
 
 protected:
     void init();
@@ -165,5 +163,7 @@ private:
     QHash<KJob*, QMenu*> m_dropMenus;
     KActivities::Info *m_activityInfo;
 };
+
+QML_DECLARE_TYPEINFO(ContainmentInterface, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

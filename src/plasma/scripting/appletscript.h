@@ -113,19 +113,6 @@ public:
      */
     void configNeedsSaving() const;
 
-    /**
-     * @return true if the applet is a containment AND if the wallpaper is enabled
-     * @see Containment
-     * @since 4.7
-     */
-     bool drawWallpaper() const;
-     /**
-      * set if the containment draws its own wallpaper: it has no effect if the applet is not a containment
-      * @see Containment
-      * @since 4.7
-      */
-     void setDrawWallpaper(bool drawWallpaper);
-
      /**
       * @see Containment
       * @since 4.7
@@ -148,11 +135,6 @@ Q_SIGNALS:
      * @param uiReady true if the UI for this applet is ready
      */
     void uiReadyChanged(bool uiReady);
-
-    /**
-     * Emitted when the value of drawWallpaper() has changed
-     */
-    void drawWallpaperChanged();
 
 public Q_SLOTS:
 

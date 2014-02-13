@@ -32,7 +32,9 @@
 ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
       m_containsMouse(false),
-      m_location(Plasma::Types::Floating)
+      m_location(Plasma::Types::Floating),
+      m_active(true),
+      m_interactive(false)
 {
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
@@ -64,6 +66,10 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
 
 void ToolTip::showToolTip()
 {
+    if (!m_active) {
+        return;
+    }
+
     ToolTipDialog *dlg = ToolTipDialog::instance();
 
     if (!mainItem()) {
@@ -74,6 +80,18 @@ void ToolTip::showToolTip()
         dlg->mainItem()->setVisible(false);
     }
 
+    Plasma::Types::Location location = m_location;
+    if (m_location == Plasma::Types::Floating) {
+        QQuickItem *p = parentItem();
+        while (p) {
+            if (p->property("location").isValid()) {
+                location = (Plasma::Types::Location)p->property("location").toInt();
+                break;
+            }
+            p = p->parentItem();
+        }
+    }
+
     if (mainItem()) {
         mainItem()->setProperty("toolTip", QVariant::fromValue(this));
         mainItem()->setVisible(true);
@@ -81,7 +99,7 @@ void ToolTip::showToolTip()
 
     //heuristics for knowing the diration
     Plasma::Types::Direction dir;
-    if (m_location == Plasma::Types::Floating) {
+    if (location == Plasma::Types::Floating) {
         dir = Plasma::Types::Up;
         QPoint pos = mapToScene(QPoint(0, 0)).toPoint();
 
@@ -100,13 +118,14 @@ void ToolTip::showToolTip()
             dir = Plasma::Types::Left;
         }
     } else {
-        dir = Plasma::locationToDirection(m_location);
+        dir = Plasma::locationToDirection(location);
     }
 
     dlg->setDirection(dir);
-    dlg->setLocation(m_location);
+    dlg->setLocation(location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
+    dlg->setInteractive(m_interactive);
     dlg->setVisible(true);
 }
 
@@ -152,6 +171,30 @@ void ToolTip::setLocation(Plasma::Types::Location location)
     }
     m_location = location;
     emit locationChanged();
+}
+
+void ToolTip::setActive(bool active)
+{
+    if (m_active == active) {
+        return;
+    }
+
+    m_active = active;
+    if (!active) {
+        ToolTipDialog::instance()->dismiss();
+    }
+    emit activeChanged();
+}
+
+void ToolTip::setInteractive(bool interactive)
+{
+    if (m_interactive == interactive) {
+        return;
+    }
+
+    m_interactive = interactive;
+
+    emit interactiveChanged();
 }
 
 QVariant ToolTip::icon() const
@@ -220,7 +263,8 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         ToolTipDialog::instance()->keepalive();
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
-    } else {
+    } else if (m_mainItem ||
+        (!mainText().isEmpty() && !subText().isEmpty())) {
         m_showTimer->start(500);
     }
 }

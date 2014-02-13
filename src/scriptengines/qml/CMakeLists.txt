@@ -8,6 +8,8 @@ endif()
 
 #DECLARATIVE APPLET
 set(declarative_appletscript_SRCS
+    plasmoid/declarativeappletscript.cpp
+
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
@@ -22,7 +24,7 @@ target_link_libraries(plasma_appletscript_declarative
     Qt5::Qml
     Qt5::Script
     Qt5::UiTools
-    KF5::KActivities
+    KF5::Activities
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::Declarative

@@ -159,11 +159,6 @@ class PLASMA_EXPORT Containment : public Applet
         void restore(KConfigGroup &group);
 
         /**
-         * Return whether wallpaper is painted or not.
-         */
-        bool drawWallpaper();
-
-        /**
          * Sets wallpaper plugin.
          *
          * @param pluginName the name of the wallpaper to attempt to load
@@ -252,11 +247,6 @@ Q_SIGNALS:
         void wallpaperChanged();
 
         /**
-         * Emitted when the value of drawWallpaper() has changed
-         */
-        void drawWallpaperChanged();
-
-        /**
          * Emitted when the location has changed
          * @since 5.0
          */
@@ -300,11 +290,6 @@ Q_SIGNALS:
          * Sets the type of this containment.
          */
         void setContainmentType(Plasma::Types::ContainmentType type);
-
-        /**
-         * Sets whether wallpaper is painted or not.
-         */
-        void setDrawWallpaper(bool drawWallpaper);
 
         void reactToScreenChange();
 

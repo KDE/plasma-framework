@@ -98,6 +98,30 @@ ShellCorona::ShellCorona(QObject *parent)
 {
     d->desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package().filePath("defaults")), "Desktop");
 
+    // Look for theme config in plasmarc, if it isn't configured, take the theme from the
+    // LookAndFeel package, if either is set, change the default theme
+
+    const QString themeGroupKey = QStringLiteral("Theme");
+    const QString themeNameKey = QStringLiteral("name");
+
+    QString themeName;
+
+    KConfigGroup plasmarc(KSharedConfig::openConfig("plasmarc"), themeGroupKey);
+    themeName = plasmarc.readEntry(themeNameKey, themeName);
+
+    if (themeName.isEmpty()) {
+        const KConfigGroup lnfCfg = KConfigGroup(KSharedConfig::openConfig(
+                                                lookAndFeelPackage().filePath("defaults")),
+                                                themeGroupKey
+                                           );
+        themeName = lnfCfg.readEntry(themeNameKey, themeName);
+    }
+
+    if (!themeName.isEmpty()) {
+        Plasma::Theme *t = new Plasma::Theme(this);
+        t->setThemeName(themeName);
+    }
+
     connect(this, &ShellCorona::containmentAdded,
             this, &ShellCorona::handleContainmentAdded);
 
@@ -322,6 +346,12 @@ void ShellCorona::screenAdded(QScreen *screen)
     if (!containment) {
         containment = createContainmentForActivity(currentActivity, screenNum);
     }
+
+    QAction *removeAction = containment->actions()->action("remove");
+    if (removeAction) {
+        removeAction->setVisible(false);
+    }
+
     view->setContainment(containment);
 
     connect(screen, SIGNAL(destroyed(QObject*)), SLOT(screenRemoved(QObject*)));
@@ -334,6 +364,7 @@ Plasma::Containment* ShellCorona::createContainmentForActivity(const QString& ac
     Plasma::Containment* containment = createContainment(d->desktopDefaultsConfig.readEntry("Containment", "org.kde.desktopcontainment"));
     containment->setActivity(activity);
     insertContainment(activity, screenNum, containment);
+
     return containment;
 }
 
@@ -461,6 +492,10 @@ void ShellCorona::currentActivityChanged(const QString &newActivity)
         Plasma::Containment* c = d->desktopContainments[newActivity][i];
         if (!c) {
             c = createContainmentForActivity(newActivity, i);
+        }
+        QAction *removeAction = c->actions()->action("remove");
+        if (removeAction) {
+            removeAction->setVisible(false);
         }
         d->views[i]->setContainment(c);
     }

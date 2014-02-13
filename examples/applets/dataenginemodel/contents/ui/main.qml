@@ -19,6 +19,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
@@ -26,8 +27,8 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 Column {
     width: 500
     height: 500
-    property int minimumWidth: 200
-    property int minimumHeight: 300
+    Layout.minimumWidth: 200
+    Layout.minimumHeight: 300
 
     PlasmaCore.DataSource {
         id: source

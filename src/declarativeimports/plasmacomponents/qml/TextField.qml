@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -122,7 +122,7 @@ FocusScope {
      * integers between 11 and 31 into the text input:
      *
      * @code
-     * import QtQuick 2.0
+     * import QtQuick 2.1
      * TextInput {
      *     validator: IntValidator { bottom: 11; top: 31 }
      *     focus: true
@@ -170,6 +170,8 @@ FocusScope {
      * Default value is 32767.
      */
     property alias maximumLength: textInput.maximumLength
+
+    activeFocusOnTab: true
 
     /**
      * Emitted when the text input is accepted.
@@ -363,7 +365,7 @@ FocusScope {
         opacity: (textInput.text != "" && clearButtonShown && textField.enabled) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

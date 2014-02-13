@@ -187,7 +187,7 @@ Item {
         opacity: flickableItem.atYBeginning ? 0 : 1
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -207,7 +207,7 @@ Item {
         opacity: flickableItem.atYEnd ? 0 : 1
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -226,7 +226,7 @@ Item {
         opacity: flickableItem.atXBeginning ? 0 : 1
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -245,7 +245,7 @@ Item {
         opacity: flickableItem.atXEnd ? 0 : 1
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

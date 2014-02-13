@@ -26,9 +26,11 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QScreen>
+#include <QAction>
 
 #include <klocalizedstring.h>
 #include <kwindoweffects.h>
+#include <KActionCollection>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -66,6 +68,22 @@ void PanelConfigView::init()
 {
     setSource(QUrl::fromLocalFile(m_containment->corona()->package().filePath("panelconfigurationui")));
     syncGeometry();
+}
+
+QAction *PanelConfigView::action(const QString &name)
+{
+    if (m_containment) {
+        return m_containment->actions()->action(name);
+    }
+    return 0;
+}
+
+void PanelConfigView::showAddWidgetDialog()
+{
+    QAction *addWidgetAction = m_containment->actions()->action("add widgets");
+    if (addWidgetAction) {
+        addWidgetAction->trigger();
+    }
 }
 
 void PanelConfigView::syncGeometry()

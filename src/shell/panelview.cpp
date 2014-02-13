@@ -126,6 +126,19 @@ KConfigGroup PanelView::config() const
     }
 }
 
+void PanelView::maximize()
+{
+    int length;
+    if (containment()->formFactor() == Plasma::Types::Vertical) {
+        length = screen()->size().height();
+    } else {
+        length = screen()->size().width();
+    }
+    setOffset(0);
+    setMinimumLength(length);
+    setMaximumLength(length);
+}
+
 Qt::Alignment PanelView::alignment() const
 {
     return m_alignment;
@@ -265,7 +278,7 @@ void PanelView::setVisibilityMode(PanelView::VisibilityMode mode)
     show();
 
     disconnect(containment(), SIGNAL(activate()), this, SLOT(unhide()));
-    if (!(mode == NormalPanel && mode == WindowsGoBelow)) {
+    if (!(mode == NormalPanel || mode == WindowsGoBelow)) {
         connect(containment(), SIGNAL(activate()), this, SLOT(unhide()));
     }
 

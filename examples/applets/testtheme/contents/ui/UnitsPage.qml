@@ -86,30 +86,6 @@ Item {
 
         Row {
             PlasmaComponents.Label {
-                text: "units.dp: "
-                width: cwidth
-            }
-            PlasmaComponents.Label {
-                width: cheight
-                height: cheight / 2
-                text: units.dp(1)
-            }
-        }
-
-        Row {
-            PlasmaComponents.Label {
-                text: "units.gu: "
-                width: cwidth
-            }
-            PlasmaComponents.Label {
-                width: cheight
-                height: cheight / 2
-                text: units.gu(1)
-            }
-        }
-
-        Row {
-            PlasmaComponents.Label {
                 text: "units.largeSpacing: "
                 width: cwidth
             }

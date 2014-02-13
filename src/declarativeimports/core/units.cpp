@@ -1,5 +1,6 @@
 /***************************************************************************
- *   Copyright 2013 Marco Martin <mart@kde.org            >                *
+ *   Copyright 2013 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2014 Sebastian Kugler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,12 +29,20 @@
 #include <QScreen>
 #include <cmath>
 
+#include <KDirWatch>
 #include <KIconLoader>
+
+const QString plasmarc = QStringLiteral("plasmarc");
+const QString groupName = QStringLiteral("Units");
+const int defaultLongDuration = 250;
 
 Units::Units (QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
-      m_devicePixelRatio(-1)
+      m_devicePixelRatio(-1),
+      m_smallSpacing(-1),
+      m_largeSpacing(-1),
+      m_longDuration(defaultLongDuration) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
@@ -47,10 +56,35 @@ Units::Units (QObject *parent)
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
     installEventFilter(qApp);
+
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
+    KDirWatch::self()->addFile(configFile);
+
+    // Catch both, direct changes to the config file ...
+    connect(KDirWatch::self(), &KDirWatch::dirty, this, &Units::settingsFileChanged);
+    // ... but also remove/recreate cycles, like KConfig does it
+    connect(KDirWatch::self(), &KDirWatch::created, this, &Units::settingsFileChanged);
+    // Trigger configuration read
+    settingsFileChanged(plasmarc);
 }
 
 Units::~Units()
 {
+}
+
+void Units::settingsFileChanged(const QString &file)
+{
+    if (file.endsWith(plasmarc)) {
+
+        KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
+        cfg.config()->reparseConfiguration();
+        const int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
+
+        if (longDuration != m_longDuration) {
+            m_longDuration = longDuration;
+            emit durationChanged();
+        }
+    }
 }
 
 void Units::iconLoaderSettingsChanged()
@@ -130,7 +164,6 @@ void Units::updateDevicePixelRatio()
 
 int Units::gridUnit() const
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").width();
     return m_gridUnit;
 }
 
@@ -163,6 +196,17 @@ void Units::updateSpacing()
     }
 }
 
+
+int Units::longDuration() const
+{
+    return m_longDuration;
+}
+
+int Units::shortDuration() const
+{
+    return m_longDuration / 5;
+}
+
 bool Units::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == QCoreApplication::instance()) {
@@ -172,6 +216,4 @@ bool Units::eventFilter(QObject *watched, QEvent *event)
     }
     return QObject::eventFilter(watched, event);
 }
-
-#include "units.moc"
 

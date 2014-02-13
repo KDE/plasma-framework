@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Sources On Request
+Name[bs]=Izvori na zahtjev
 Name[de]=Ressourcen auf Anforderung
 Name[fr]=Sources à la demande
 Name[nl]=Bronnen op verzoek
@@ -10,6 +11,7 @@ Name[sv]=Källor på begäran
 Name[uk]=Джерела за запитом
 Name[x-test]=xxSources On Requestxx
 Comment=A DataEngine example showing how to respond to requests for source creation and updates
+Comment[bs]=Primjer pogona podataka prikazuje kako odgovoriti na zahtjeve za kreiranje izvora i ažuriranja
 Comment[de]=Ein Datentreiber-Beispiel, das die Antwort auf Anfragen zur Erstellung von Quellen und Aktualisierungen zeigt
 Comment[fr]=Un exemple DataEngine montrant comment répondre à des requêtes de création de source et de mise à jour
 Comment[nl]=Een voorbeeld van een gegevens-engine die toont hoe te antwoorden op verzoeken voor aanmaken van een bron en bijwerken

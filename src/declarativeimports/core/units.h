@@ -36,7 +36,7 @@ class Units : public QObject
      * The fundamental unit of space that should be used for sizes, expressed in pixels.
      * Given the screen has an accurate DPI settings, it corresponds to a millimeter
      */
-    Q_PROPERTY(int gridUnit READ gridUnit NOTIFY gridUnitChanged())
+    Q_PROPERTY(int gridUnit READ gridUnit NOTIFY gridUnitChanged)
 
     /**
      * units.iconSizes provides access to platform-dependent icon sizing
@@ -60,7 +60,7 @@ class Units : public QObject
     // layout hints
 
     /**
-     * units.largeSpacing is the amount of spacing that should be used around bigger UI elements,
+     * units.smallSpacing is the amount of spacing that should be used around bigger UI elements,
      * for example between the content and the border. Internally, this size depends on the size of
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
@@ -68,7 +68,7 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
 
     /**
-     * units.smallSpacing is the amount of spacing that should be used inside bigger UI elements,
+     * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
      * for example between an icon and the corresponding text. Internally, this size depends on
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
@@ -82,6 +82,18 @@ class Units : public QObject
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)
+
+    /**
+     * units.longDuration should be used for longer, screen-covering animations, for opening and
+     * closing of dialogs and other "not too small" animations
+     */
+    Q_PROPERTY(int longDuration READ longDuration NOTIFY durationChanged)
+
+    /**
+     * units.longDuration should be used for short animations, such as accentuating a UI event,
+     * hover events, etc..
+     */
+    Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
 
 public:
     Units(QObject *parent = 0);
@@ -116,15 +128,29 @@ public:
      */
     int largeSpacing() const;
 
+    /**
+     * @return Duration for long animations, in milliseconds.
+     * @since 5.0
+     */
+    int longDuration() const;
+
+    /**
+     * @return Duration for short animations, in milliseconds.
+     * @since 5.0
+     */
+    int shortDuration() const;
+
 Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
     void iconSizesChanged();
     void spacingChanged();
+    void durationChanged();
 
 private Q_SLOTS:
     void themeChanged();
     void iconLoaderSettingsChanged();
+    void settingsFileChanged(const QString &settings);
 
 private:
     void updateDevicePixelRatio();
@@ -144,6 +170,8 @@ private:
 
     int m_smallSpacing;
     int m_largeSpacing;
+
+    int m_longDuration;
 };
 
 #endif //UNITS_H

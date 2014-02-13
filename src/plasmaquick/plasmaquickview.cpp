@@ -67,7 +67,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
 
     if (containment) {
         QObject::disconnect(containment.data(), 0, q, 0);
-        QObject *oldGraphicObject = containment.data()->property("graphicObject").value<QObject *>();
+        QObject *oldGraphicObject = containment.data()->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
@@ -100,7 +100,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("graphicObject").value<QObject *>());
+    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("_plasma_graphicObject").value<QObject *>());
 
 
     if (graphicObject) {
@@ -109,9 +109,6 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
         //by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setProperty("width", q->width());
         graphicObject->setProperty("height", q->height());
-        graphicObject->setProperty("drawWallpaper",
-                                   (cont->containmentType() == Plasma::Types::DesktopContainment ||
-                                    cont->containmentType() == Plasma::Types::CustomContainment));
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
             q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));

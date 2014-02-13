@@ -50,8 +50,7 @@ public:
           formFactor(Types::Planar),
           location(Types::Floating),
           lastScreen(-1), // never had a screen
-          type(Plasma::Types::NoContainmentType),
-          drawWallpaper(false)
+          type(Plasma::Types::NoContainmentType)
     {
     }
 
@@ -104,7 +103,6 @@ public:
     int lastScreen;
     QString activityId;
     Types::ContainmentType type;
-    bool drawWallpaper : 1;
 
     static const char defaultWallpaper[];
 };

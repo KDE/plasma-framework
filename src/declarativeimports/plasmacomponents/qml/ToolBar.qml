@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
@@ -39,7 +39,7 @@ Item{
     Behavior on height {
         PropertyAnimation { 
             id: heightAnimation
-            duration: 250
+            duration: units.longDuration
         }
     }
     z: 1000
@@ -201,19 +201,19 @@ Item{
             Behavior on opacity {
                 PropertyAnimation {
                     id: containerAOpacityAnimation
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
             Behavior on y {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
         }
@@ -223,18 +223,18 @@ Item{
             height: parent.height
             opacity: 0
             Behavior on opacity {
-                PropertyAnimation { duration: 250 }
+                PropertyAnimation { duration: units.longDuration }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
             Behavior on y {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: 250
+                    duration: units.longDuration
                 }
             }
         }

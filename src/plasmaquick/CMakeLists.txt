@@ -1,6 +1,7 @@
 project(PlasmaQuick)
 
 set(plasmaquick_LIB_SRC
+    appletquickitem.cpp
     plasmaquickview.cpp
     configmodel.cpp
     configview.cpp
@@ -25,8 +26,8 @@ target_link_libraries(KF5PlasmaQuick
 )
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
-                                     VERSION 5.0.0
-                                     SOVERSION 5
+                                     VERSION ${PLASMA_VERSION_STRING}
+                                     SOVERSION ${PLASMA_SOVERSION}
                                      EXPORT_NAME PlasmaQuick
                       )
 
@@ -36,6 +37,7 @@ generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
+    appletquickitem.h
     plasmaquickview.h
     configview.h
     configmodel.h

@@ -31,6 +31,7 @@
 #include <kwindowsystem.h>
 #include <QTimer>
 
+#include <config-plasma.h>
 #if HAVE_X11
 #include "private/effectwatcher_p.h"
 #endif
@@ -135,6 +136,8 @@ public:
     QTimer *updateNotificationTimer;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;
+    QString themeVersion;
+    QString themeMetadataPath;
 
     bool locolor : 1;
     bool compositingActive : 1;

@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import "private/SectionScroller.js" as Sections
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "." 2.0 as PlasmaComponents
@@ -80,7 +80,7 @@ Item {
     implicitWidth: scrollBar.implicitWidth
     Behavior on opacity {
         NumberAnimation {
-            duration: 250
+            duration: units.longDuration
         }
     }
 
@@ -129,7 +129,7 @@ Item {
         opacity: sectionLabel.text && scrollBar.pressed ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
-                duration: 250
+                duration: units.longDuration
             }
         }
     }
