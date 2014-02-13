@@ -114,9 +114,11 @@ void QPixmapItem::paint(QPainter *painter)
         break;
     }
     case PreserveAspectCrop: {
-        destRect = boundingRect().toRect();
-        sourceRect = destRect;
-        sourceRect.moveCenter(m_pixmap.rect().center());
+        QSize scaled = m_pixmap.size();
+
+        scaled.scale(boundingRect().size().toSize(), Qt::KeepAspectRatioByExpanding);
+        destRect = QRect(QPoint(0, 0), scaled);
+        destRect.moveCenter(boundingRect().center().toPoint());
         break;
     }
     case TileVertically: {
