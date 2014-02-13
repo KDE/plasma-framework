@@ -94,8 +94,10 @@ void FrameSvgItem::setImagePath(const QString &path)
     emit imagePathChanged();
     m_margins->update();
 
-    m_frameSvg->resizeFrame(QSizeF(width(), height()));
-    update();
+    if (isComponentComplete()) {
+        m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        update();
+    }
 }
 
 QString FrameSvgItem::imagePath() const
@@ -123,8 +125,11 @@ void FrameSvgItem::setPrefix(const QString &prefix)
 
     emit prefixChanged();
     m_margins->update();
-    m_frameSvg->resizeFrame(QSizeF(width(), height()));
-    update();
+
+    if (isComponentComplete()) {
+        m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        update();
+    }
 }
 
 QString FrameSvgItem::prefix() const
@@ -160,7 +165,9 @@ void FrameSvgItem::paint(QPainter *painter)
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
                                           const QRectF &oldGeometry)
 {
-    m_frameSvg->resizeFrame(newGeometry.size());
+    if (isComponentComplete()) {
+        m_frameSvg->resizeFrame(newGeometry.size());
+    }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
@@ -213,6 +220,13 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 {
     return m_frameSvg;
 }
+
+void FrameSvgItem::componentComplete()
+{
+    QQuickItem::componentComplete();
+    m_frameSvg->resizeFrame(QSize(width(), height()));
+}
+
 
 } // Plasma namespace
 

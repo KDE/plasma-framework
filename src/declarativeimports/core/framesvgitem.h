@@ -143,6 +143,9 @@ public:
      */
     Plasma::FrameSvg *frameSvg() const;
 
+protected:
+    virtual void componentComplete();
+
 Q_SIGNALS:
     void imagePathChanged();
     void prefixChanged();
