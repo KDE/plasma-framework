@@ -202,8 +202,8 @@ void PlasmaPkg::runMain()
         d->pluginTypes << "Plasma/Theme";
     } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
-        d->pluginTypes << "Plasma/Wallpaper";
-        d->packageRoot = "plasma/wallpapers/";
+        d->pluginTypes << "Plasma/ImageWallpaper"; // we'll catch that later
+        d->packageRoot = "wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
@@ -408,6 +408,21 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
             }
         }
 
+        if (type.compare("Plasma/ImageWallpaper", Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "wallpapers/", QStandardPaths::LocateDirectory);
+            foreach (const QString &ppath, packs) {
+                const QDir cd(ppath);
+                const QStringList &entries = cd.entryList(QDir::Dirs);
+                foreach (const QString pack, entries) {
+                    if ((pack != "." && pack != "..") &&
+                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+
+                        result << pack;
+                    }
+                }
+            }
+        }
+
         if (type.compare("Plasma/Theme", Qt::CaseInsensitive) == 0) {
             const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "desktoptheme/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
@@ -559,7 +574,7 @@ void PlasmaPkgPrivate::listTypes()
     builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << "plasma/shells/" << "shell");
     builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/" << "theme");
     builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/" << "wallpaper");
-    builtIns.insert(i18n("Wallpaper Plugin"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/" << "wallpaperplugin");
+    builtIns.insert(i18n("Animated Wallpaper"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/" << "wallpaperplugin");
     builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/" << "kwineffect");
     builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/" << "windowswitcher");
     builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
