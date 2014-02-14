@@ -72,14 +72,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 
-    connect(applet(), &Plasma::Applet::activated,
-            [=] () {
-                setExpanded(true);
-                if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
-                    i->forceActiveFocus(Qt::ShortcutFocusReason);
-                }
-            });
-
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
     connect(appletScript(), &DeclarativeAppletScript::locationChanged,
@@ -118,6 +110,13 @@ void AppletInterface::init()
     emit busyChanged();
 
     applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+    connect(applet(), &Plasma::Applet::activated,
+        [=] () {
+            setExpanded(true);
+            if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
+                i->forceActiveFocus(Qt::ShortcutFocusReason);
+            }
+        });
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const
