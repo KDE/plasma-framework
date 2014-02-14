@@ -404,7 +404,7 @@ class PLASMA_EXPORT Applet : public QObject
          * Emitted when activation is requested due to, for example, a global
          * keyboard shortcut. By default the wiget is given focus.
          */
-        void activate();
+        void activated();
 
 
 //TODO: fix usage in containment, port to QObject::destroyed

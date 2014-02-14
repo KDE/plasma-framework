@@ -72,7 +72,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 
-    connect(applet(), &Plasma::Applet::activate,
+    connect(applet(), &Plasma::Applet::activated,
             [=] () {
                 setExpanded(true);
                 if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {

@@ -589,7 +589,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
         d->activationAction = new QAction(this);
         d->activationAction->setText(i18n("Activate %1 Widget", title()));
         d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
-        connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activate()));
+        connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activated()));
         connect(d->activationAction, SIGNAL(globalShortcutChanged(QKeySequence)),
                 this, SLOT(globalShortcutChanged()));
     } else if (d->activationAction->shortcut() == shortcut) {
