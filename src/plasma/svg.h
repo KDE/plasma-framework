@@ -236,18 +236,6 @@ class PLASMA_EXPORT Svg : public QObject
         Q_INVOKABLE bool hasElement(const QString &elementId) const;
 
         /**
-         * Returns the element (by id) at the given point.
-         *
-         * An empty string is returned if there no element is at @p point.
-         *
-         * NOTE: not implemented!  This will currently return an empty string!
-         *
-         * @param point  a point in SVG co-ordinates
-         * @return     an empty string
-         */
-        Q_INVOKABLE QString elementAtPoint(const QPoint &point) const;
-
-        /**
          * Check whether this object is backed by a valid SVG file.
          *
          * This method can be expensive as it causes disk access.

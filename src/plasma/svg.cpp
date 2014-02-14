@@ -754,24 +754,6 @@ bool Svg::hasElement(const QString &elementId) const
     return d->elementRect(elementId).isValid();
 }
 
-QString Svg::elementAtPoint(const QPoint &point) const
-{
-    Q_UNUSED(point)
-
-    return QString();
-/*
-FIXME: implement when Qt can support us!
-    d->createRenderer();
-    QSizeF naturalSize = d->renderer->defaultSize();
-    qreal dx = d->size.width() / naturalSize.width();
-    qreal dy = d->size.height() / naturalSize.height();
-    //qDebug() << point << "is really"
-    //         << QPoint(point.x() *dx, naturalSize.height() - point.y() * dy);
-
-    return QString(); // d->renderer->elementAtPoint(QPoint(point.x() *dx, naturalSize.height() - point.y() * dy));
-    */
-}
-
 bool Svg::isValid() const
 {
     if (d->path.isNull() && d->themePath.isNull()) {
