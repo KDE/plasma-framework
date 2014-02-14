@@ -124,6 +124,21 @@ ConfigModel *ConfigView::configModel() const
     return d->configModel;
 }
 
+QString ConfigView::appletGlobalShortcut() const
+{
+    return d->applet->globalShortcut().toString();
+}
+
+void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
+{
+    if (d->applet->globalShortcut().toString().toLower() == shortcut.toLower()) {
+        return;
+    }
+
+    d->applet->setGlobalShortcut(shortcut);
+    emit appletGlobalShortcutChanged();
+}
+
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
 void ConfigView::hideEvent(QHideEvent *ev)
 {
@@ -140,6 +155,5 @@ void ConfigView::resizeEvent(QResizeEvent *re)
     rootObject()->setHeight(re->size().height());
     QQuickWindow::resizeEvent(re);
 }
-
 
 #include "moc_configview.cpp"
