@@ -72,6 +72,14 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 
+    connect(applet(), &Plasma::Applet::activate,
+            [=] () {
+                setExpanded(true);
+                if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
+                    i->forceActiveFocus(Qt::ShortcutFocusReason);
+                }
+            });
+
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
     connect(appletScript(), &DeclarativeAppletScript::locationChanged,
