@@ -40,7 +40,7 @@ Row {
 
     Item {
         id: imageContainer
-        visible: toolTip != null && (toolTip.image || toolTip.icon)
+        visible: toolTip != null && (toolTip.image != null || toolTip.icon != null)
         width: Math.max(tooltipImage.width, tooltipIcon.width)
         height: Math.max(tooltipImage.height, tooltipIcon.height)
         x: _s
