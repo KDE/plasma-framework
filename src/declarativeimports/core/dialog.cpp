@@ -503,7 +503,6 @@ DialogProxy::WindowType DialogProxy::type() const
 
 void DialogProxy::focusInEvent(QFocusEvent *ev)
 {
-    requestActivate();
     QQuickWindow::focusInEvent(ev);
 }
 
