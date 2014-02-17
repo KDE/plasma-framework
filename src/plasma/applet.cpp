@@ -356,10 +356,19 @@ Types::Types::ImmutabilityType Applet::immutability() const
     //Returning the more strict immutability between the applet immutability, Containment and Corona
     Types::ImmutabilityType upperImmutability = Types::Mutable;
 
-    if (!isContainment()) {
+    if (isContainment()) {
+        Corona *cor = static_cast<Containment*>(const_cast<Applet*>(this))->corona();
+        if (cor) {
+            upperImmutability = cor->immutability();
+        }
+    } else {
         const Containment *cont = containment();
         if (cont) {
-            upperImmutability = cont->immutability();
+            if (cont->corona()) {
+                upperImmutability = cont->corona()->immutability();
+            } else {
+                upperImmutability = cont->immutability();
+            }
         }
     }
 
