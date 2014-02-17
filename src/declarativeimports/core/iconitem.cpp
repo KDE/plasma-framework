@@ -419,8 +419,9 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
             loadPixmap();
         }
 
-        QQuickItem::geometryChanged(newGeometry, oldGeometry);
     }
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 #include "iconitem.moc"
