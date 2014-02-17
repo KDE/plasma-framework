@@ -24,6 +24,7 @@
 #include <QQuickPaintedItem>
 #include <QPixmap>
 #include <QVariant>
+#include <QTimer>
 
 class QPropertyAnimation;
 
@@ -73,6 +74,7 @@ private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
 private:
+    int adjustedSize(int size);
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
@@ -80,6 +82,7 @@ private:
     QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
+    QTimer m_loadPixmapTimer;
 
     QSizeF m_implicitSize;
 

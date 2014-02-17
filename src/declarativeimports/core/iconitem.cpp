@@ -161,6 +161,12 @@ IconItem::IconItem(QQuickItem *parent)
       m_active(false),
       m_animValue(0)
 {
+    m_loadPixmapTimer.setSingleShot(true);
+    m_loadPixmapTimer.setInterval(150);
+    connect(&m_loadPixmapTimer, &QTimer::timeout, [=] () {
+        loadPixmap();
+    });
+
     m_animation = new QPropertyAnimation(this);
     connect(m_animation, SIGNAL(valueChanged(QVariant)),
             this, SLOT(valueChanged(QVariant)));
@@ -179,7 +185,7 @@ IconItem::IconItem(QQuickItem *parent)
 
 
     connect(this, SIGNAL(enabledChanged()),
-            this, SLOT(loadPixmap()));
+            &m_loadPixmapTimer, SLOT(start()));
 
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -252,7 +258,7 @@ void IconItem::setSource(const QVariant &source)
     }
 
     if (width() > 0 && height() > 0) {
-        loadPixmap();
+        m_loadPixmapTimer.start();
     }
 
     emit sourceChanged();
@@ -276,7 +282,7 @@ void IconItem::setActive(bool active)
     }
 
     m_active = active;
-    loadPixmap();
+    m_loadPixmapTimer.start();
     emit activeChanged();
 }
 
@@ -309,8 +315,10 @@ void IconItem::paint(QPainter *painter)
     painter->setRenderHint(QPainter::Antialiasing, m_smooth);
     painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    const QRect destRect(QPointF(boundingRect().center() - QPointF(m_iconPixmaps.first().width()/2, m_iconPixmaps.first().height()/2)).toPoint(),
-                         m_iconPixmaps.first().size());
+    const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+
+    const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
+                         QSize(iconSize, iconSize));
 
     if (m_animation->state() == QAbstractAnimation::Running) {
         QPixmap result = m_iconPixmaps.first();
@@ -338,29 +346,34 @@ void IconItem::valueChanged(const QVariant &value)
     update();
 }
 
-void IconItem::loadPixmap()
+int IconItem::adjustedSize(int size)
 {
-    int size = qMin(width(), height());
-
-    //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
+     //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
     if (m_svgIcon && m_svgIcon->imagePath().contains("icons/") &&
         size > KIconLoader::SizeSmallMedium &&
         size < KIconLoader::SizeMedium) {
-        size = 24;
+        return 24;
 
     //if size is less than 16, leave as is
     } else if (size < KIconLoader::SizeSmall) {
         //do nothing
     } else if (size < KIconLoader::SizeSmallMedium) {
-        size = KIconLoader::SizeSmall;
+        return KIconLoader::SizeSmall;
     } else if (size < KIconLoader::SizeMedium) {
-        size = KIconLoader::SizeSmallMedium;
+        return KIconLoader::SizeSmallMedium;
     } else if (size < KIconLoader::SizeLarge) {
-        size = KIconLoader::SizeMedium;
+        return KIconLoader::SizeMedium;
     } else if (size < KIconLoader::SizeHuge) {
-        size = KIconLoader::SizeLarge;
+        return KIconLoader::SizeLarge;
     //if size is more than 64, leave as is
     }
+
+    return size;
+}
+
+void IconItem::loadPixmap()
+{
+    const int size = adjustedSize(qMin(width(), height()));
 
     //final pixmap to paint
     QPixmap result;
@@ -399,9 +412,16 @@ void IconItem::loadPixmap()
     m_iconPixmaps << result;
     //if there is only one image, don't animate
     //if an animation was already running, immediate transition, to not overload
-    if (m_animation->state() == QAbstractAnimation::Running) {
+    if (m_iconPixmaps.first().size() != result.size()) {
+        m_animation->stop();
+        if (m_iconPixmaps.count() > 1) {
+            m_iconPixmaps.pop_front();
+        }
+
+    } else if (m_animation->state() == QAbstractAnimation::Running) {
         m_animation->stop();
         m_iconPixmaps.pop_front();
+
     } else if (m_iconPixmaps.count() > 1) {
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
@@ -414,11 +434,10 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
                                const QRectF &oldGeometry)
 {
     if (newGeometry.size() != oldGeometry.size()) {
-        m_iconPixmaps.clear();
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
-            loadPixmap();
+            m_loadPixmapTimer.start();
+            update();
         }
-
     }
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
