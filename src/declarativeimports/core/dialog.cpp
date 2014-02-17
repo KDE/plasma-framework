@@ -83,6 +83,9 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     //Create the FrameSvg background.
     m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     m_frameSvgItem->setImagePath("dialogs/background");
+
+    connect(&m_theme, &Plasma::Theme::themeChanged, this, &DialogProxy::updateContrast);
+
     //m_frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
 
@@ -412,12 +415,9 @@ void DialogProxy::syncMainItemToSize()
     m_frameSvgItem->setY(0);
     m_frameSvgItem->setWidth(width());
     m_frameSvgItem->setHeight(height());
+
     KWindowEffects::enableBlurBehind(winId(), true, m_frameSvgItem->frameSvg()->mask());
-    if (qGray(m_theme.color(Plasma::Theme::BackgroundColor).rgb()) > 127) {
-        KWindowEffects::enableBackgroundContrast(winId(), true, 0.30, 1.9, 1.7, m_frameSvgItem->frameSvg()->mask());
-    } else {
-        KWindowEffects::enableBackgroundContrast(winId(), true, 0.45, 0.45, 1.7, m_frameSvgItem->frameSvg()->mask());
-    }
+    updateContrast();
 
     if (m_mainItem) {
         m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
@@ -463,6 +463,15 @@ void DialogProxy::requestSyncToMainItemSize(bool delayed)
     } else {
         m_syncTimer->start(0);
     }
+}
+
+void DialogProxy::updateContrast()
+{
+    KWindowEffects::enableBackgroundContrast(winId(), m_theme.backgroundContrastEnabled(),
+                                                      m_theme.backgroundContrast(),
+                                                      m_theme.backgroundIntensity(),
+                                                      m_theme.backgroundSaturation(),
+                                                      m_frameSvgItem->frameSvg()->mask());
 }
 
 void DialogProxy::setType(WindowType type)

@@ -420,6 +420,53 @@ class PLASMA_EXPORT Theme : public QObject
          */
         QColor viewFocusColor() const;
 
+        /** This method allows Plasma to enable and disable the background
+         * contrast effect for a given theme, improving readability. The
+         * value is read from the "enabled" key in the "ContrastEffect"
+         * group in the Theme's metadata file.
+         * The configuration in the metadata.desktop file of the theme
+         * could look like this (for a lighter background):
+         * \code
+         * [ContrastEffect]
+         * enabled=true
+         * contrast=0.45
+         * intensity=0.45
+         * saturation=1.7
+         * \endcode
+         * @return Whether or not to enable the contrasteffect
+         * @since 5.0
+         */
+        bool backgroundContrastEnabled() const;
+
+        /** This method allows Plasma to set a background contrast effect
+         * for a given theme, improving readability. The value is read
+         * from the "contrast" key in the "ContrastEffect" group in the
+         * Theme's metadata file.
+         * @return The contrast provided to the contrasteffect
+         * @since 5.0
+         * @see backgroundContrastEnabled
+         */
+        qreal backgroundContrast() const;
+
+        /** This method allows Plasma to set a background contrast effect
+         * for a given theme, improving readability. The value is read
+         * from the "intensity" key in the "ContrastEffect" group in the
+         * Theme's metadata file.
+         * @return The intensity provided to the contrasteffect
+         * @since 5.0
+         * @see backgroundContrastEnabled
+         */
+        qreal backgroundIntensity() const;
+
+        /** This method allows Plasma to set a background contrast effect
+         * for a given theme, improving readability. The value is read
+         * from the "saturation" key in the "ContrastEffect" group in the
+         * Theme's metadata file.
+         * @return The saturation provided to the contrasteffect
+         * @since 5.0
+         * @see backgroundContrastEnabled
+         */
+        qreal backgroundSaturation() const;
 
         /**
          * Returns the size of the letter "M" as rendered on the screen with the given font.

@@ -17,7 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.1
+import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -25,7 +26,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 PlasmaCore.SvgItem {
     Layout.minimumWidth: 150
     Layout.minimumHeight: 150
-    svg: PlasmaCore.Svg("widgets/notes")
+    svg: PlasmaCore.Svg { imagePath: "widgets/notes" }
     elementId: "yellow-notes"
 
     Connections {
@@ -40,6 +41,7 @@ PlasmaCore.SvgItem {
     PlasmaComponents.TextArea {
         id: noteText
         anchors.fill: parent
+        anchors.margins: 20
         text: plasmoid.configuration.Text
         onTextChanged: plasmoid.configuration.Text = text
     }

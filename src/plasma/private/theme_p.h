@@ -78,6 +78,7 @@ public:
     bool useCache();
     void setThemeName(const QString &themeName, bool writeSettings);
     void processWallpaperSettings(KConfigBase *metadata);
+    void processContrastSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
     const QString svgStyleSheet();
@@ -146,6 +147,11 @@ public:
     bool useGlobal : 1;
     bool hasWallpapers : 1;
     bool cacheTheme : 1;
+
+    qreal backgroundContrast;
+    qreal backgroundIntensity;
+    qreal backgroundSaturation;
+    bool backgroundContrastEnabled;
 };
 
 }
