@@ -38,7 +38,7 @@ endif()
 set (QT_MIN_VERSION "5.2.0")
 set(KF5_VERSION "4.96.0")
 
-find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick Sql UiTools Qml Widgets Svg Declarative Script Test PrintSupport)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick Sql Qml Widgets Svg Declarative Script Test)
 
 find_package(KF5Activities ${KF5_VERSION} REQUIRED)
 find_package(KF5Archive ${KF5_VERSION} REQUIRED)
@@ -92,27 +92,8 @@ if(X11_FOUND AND XCB_XCB_FOUND)
   set(HAVE_X11 1)
   find_package(Qt5 REQUIRED NO_MODULE COMPONENTS X11Extras)
   #X11_Xrender discovery is done by FindX11
-  add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
-  add_feature_info("X Screensaver Extension (libXss)" X11_Xscreensaver_FOUND "Support for KIdleTime (fallback mode)")
-  add_feature_info("X Sync Extension (libXext)" X11_XSync_FOUND "Efficient operation of KIdleTime. STRONGLY RECOMMENDED")
-
-  if(NOT X11_XSync_FOUND AND NOT X11_Xscreensaver_FOUND)
-    message(FATAL_ERROR "\nNeither the XSync (libXext) nor XScreensaver (libXss) development package was found.\nPlease install one of them (XSync is recommended)\n")
-  endif()
-
-  #X11 Session Management (SM) is required
-  #X11_SM_FOUND is set in FindX11, which is required by KDE4Internal
-  if(UNIX AND NOT X11_SM_FOUND)
-    message(FATAL_ERROR "\nThe X11 Session Management (SM) development package could not be found.\nPlease install libSM.\n")
-  endif()
+  #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
 endif()
-
-find_package(OpenSSL MODULE)
-set_package_properties(OpenSSL PROPERTIES DESCRIPTION "Support for secure network communications (SSL and TLS)"
-                       URL "http://openssl.org"
-                       TYPE RECOMMENDED
-                       PURPOSE "KDE uses OpenSSL for the bulk of secure communications, including secure web browsing via HTTPS"
-                      )
 
 #FIXME: when we have a qca for qt5, reenable
 # find_package(QCA2 2.0.0 MODULE)

@@ -25,7 +25,6 @@
 #include <QQmlProperty>
 #include <QFile>
 #include <QTimer>
-#include <QUiLoader>
 #include <QWidget>
 
 #include <kconfiggroup.h>

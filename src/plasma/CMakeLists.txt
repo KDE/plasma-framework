@@ -124,7 +124,6 @@ PRIVATE
     Qt5::Quick # needed in service.cpp, remove?
     Qt5::Svg
     Qt5::DBus
-    Qt5::UiTools
     Qt5::Xml
     KF5::Archive
     KF5::GuiAddons
