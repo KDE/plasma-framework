@@ -53,7 +53,7 @@ install(DIRECTORY
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
 
-configure_package_config_file(
+ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}

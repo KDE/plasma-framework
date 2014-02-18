@@ -142,7 +142,7 @@ configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compil
 ################ create PlasmaConfig.cmake and install it ###########################
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
-include(CMakePackageConfigHelpers)
+include(ECMPackageConfigHelpers)
 
 include(ECMSetupVersion)
 ecm_setup_version(${KF5_VERSION}
@@ -153,7 +153,7 @@ ecm_setup_version(${KF5_VERSION}
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
 
-configure_package_config_file(
+ecm_configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
   "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
