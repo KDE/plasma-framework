@@ -31,8 +31,7 @@ QMenuProxy::QMenuProxy (QObject *parent)
       m_status(DialogStatus::Closed)
 {
     m_menu = new QMenu(0);
-    connect(m_menu, SIGNAL(triggered(QAction *)),
-            this, SLOT(itemTriggered(QAction *)));
+    connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
 }
 
 QMenuProxy::~QMenuProxy()
