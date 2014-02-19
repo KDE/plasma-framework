@@ -299,7 +299,7 @@ bool Theme::useGlobalSettings() const
     return d->useGlobal;
 }
 
-bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
+bool Theme::findInCache(const QString &key, QImage &pix, unsigned int lastModified)
 {
     if (lastModified != 0 && d->useCache() && lastModified > uint(d->pixmapCache->lastModifiedTime().toTime_t())) {
         return false;
@@ -312,8 +312,8 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
             return !pix.isNull();
         }
 
-        QPixmap temp;
-        if (d->pixmapCache->findPixmap(key, &temp) && !temp.isNull()) {
+        QImage temp;
+        if (d->pixmapCache->findImage(key, &temp) && !temp.isNull()) {
             pix = temp;
             return true;
         }
@@ -322,14 +322,14 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
     return false;
 }
 
-void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
+void Theme::insertIntoCache(const QString& key, const QImage& pix)
 {
     if (d->useCache()) {
-        d->pixmapCache->insertPixmap(key, pix);
+        d->pixmapCache->insertImage(key, pix);
     }
 }
 
-void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QString& id)
+void Theme::insertIntoCache(const QString& key, const QImage& pix, const QString& id)
 {
     if (d->useCache()) {
         d->pixmapsToCache.insert(id, pix);

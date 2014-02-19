@@ -128,7 +128,7 @@ public:
     KImageCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
     QHash<QString, QSet<QString> > invalidElements;
-    QHash<QString, QPixmap> pixmapsToCache;
+    QHash<QString, QImage> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
     QHash<styles, QString> cachedStyleSheets;

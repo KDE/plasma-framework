@@ -263,7 +263,7 @@ Theme *SvgPrivate::cacheAndColorsTheme()
     }
 }
 
-QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
+QImage SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 {
     QSize size;
     QString actualElementId;
@@ -326,7 +326,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     }
 
     if (size.isEmpty()) {
-        return QPixmap();
+        return QImage();
     }
 
     QString id = cachePath(path, size);
@@ -337,7 +337,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     //qDebug() << "id is " << id;
 
-    QPixmap p;
+    QImage p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
         //qDebug() << "found cached version of " << id << p.size();
         return p;
@@ -354,9 +354,11 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
     //makeUniform should never change the size so much that it gains or loses a whole pixel
-    p = QPixmap(size);
+    p = QImage(size, QImage::Format_ARGB32_Premultiplied);
 
+    //FIXME DAVE - do we need this?
     p.fill(Qt::transparent);
+
     QPainter renderPainter(&p);
 
     if (actualElementId.isEmpty()) {
@@ -369,9 +371,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     // Apply current color scheme if the svg asks for it
     if (applyColors) {
-        QImage itmp = p.toImage();
-        KIconEffect::colorize(itmp, cacheAndColorsTheme()->color(Theme::BackgroundColor), 1.0);
-        p = p.fromImage(itmp);
+        KIconEffect::colorize(p, cacheAndColorsTheme()->color(Theme::BackgroundColor), 1.0);
     }
 
     if (cacheRendering) {
@@ -662,22 +662,32 @@ Svg::~Svg()
 QPixmap Svg::pixmap(const QString &elementID)
 {
     if (elementID.isNull() || d->multipleImages) {
+        return QPixmap::fromImage((d->findInCache(elementID, size())));
+    } else {
+        return QPixmap::fromImage(d->findInCache(elementID));
+    }
+}
+
+QImage Svg::image(const QString& elementID)
+{
+    if (elementID.isNull() || d->multipleImages) {
         return d->findInCache(elementID, size());
     } else {
         return d->findInCache(elementID);
     }
 }
 
+
 void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementID)
 {
-    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size()) :
+    QImage pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size()) :
                                                             d->findInCache(elementID));
 
     if (pix.isNull()) {
         return;
     }
 
-    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
+    painter->drawImage(QRectF(point, pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
@@ -687,14 +697,14 @@ void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
 
 void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, rect.size()));
-    painter->drawPixmap(QRectF(rect.topLeft(), pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
+    QImage pix(d->findInCache(elementID, rect.size()));
+    painter->drawImage(QRectF(rect.topLeft(), pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, QSizeF(width, height)));
-    painter->drawPixmap(x, y, pix, 0, 0, pix.size().width(), pix.size().height());
+    QImage pix(d->findInCache(elementID, QSizeF(width, height)));
+    painter->drawImage(x, y, pix, 0, 0, pix.size().width(), pix.size().height());
 }
 
 QSize Svg::size() const

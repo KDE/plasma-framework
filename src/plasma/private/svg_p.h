@@ -72,7 +72,7 @@ public:
     Theme *actualTheme();
     Theme *cacheAndColorsTheme();
 
-    QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF());
+    QImage findInCache(const QString &elementId, const QSizeF &s = QSizeF());
 
     void createRenderer();
     void eraseRenderer();

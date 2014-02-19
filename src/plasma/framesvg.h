@@ -218,7 +218,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
         /**
          * @return a pixmap whose alpha channel is the opacity of the frame. It may be the frame itself or a special frame with the mask- prefix
          */
-        QPixmap alphaMask() const;
+        QImage alphaMask() const;
 
        /**
         * Sets whether saving all the rendered prefixes in a cache or not
@@ -245,7 +245,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
          *                  string for the whole SVG (the default)
          * @return a QPixmap of the rendered SVG
          */
-        Q_INVOKABLE QPixmap framePixmap();
+        QImage framePixmap();
 
         /**
          * Paints the loaded SVG with the elements that represents the border

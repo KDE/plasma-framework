@@ -138,9 +138,9 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
         m_svg.data()->resize(width(), height());
         qDebug() << "called";
         //TODO make m_svg return a QImage so that we can avoid the deep copy in toImage();
-        const QPixmap pixmap = m_svg.data()->pixmap();
-        textureNode->setRect(0,0, pixmap.width(), pixmap.height());
-        textureNode->setTexture(window()->createTextureFromImage(pixmap.toImage()));
+        const QImage image = m_svg.data()->image();
+        textureNode->setRect(0,0, image.width(), image.height());
+        textureNode->setTexture(window()->createTextureFromImage(image));
         m_dirty = false;
     }
     return textureNode;

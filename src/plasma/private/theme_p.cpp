@@ -307,10 +307,10 @@ void ThemePrivate::discardCache(CacheTypes caches)
 void ThemePrivate::scheduledCacheUpdate()
 {
     if (useCache()) {
-        QHashIterator<QString, QPixmap> it(pixmapsToCache);
+        QHashIterator<QString, QImage> it(pixmapsToCache);
         while (it.hasNext()) {
             it.next();
-            pixmapCache->insertPixmap(idsToCache[it.key()], it.value());
+            pixmapCache->insertImage(idsToCache[it.key()], it.value());
         }
     }
 

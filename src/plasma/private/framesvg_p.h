@@ -82,7 +82,7 @@ public:
     int refcount() const;
 
     FrameSvg::EnabledBorders enabledBorders;
-    QPixmap cachedBackground;
+    QImage cachedBackground;
     QHash<QString, QRegion> cachedMasks;
     static const int MAX_CACHED_MASKS = 10;
 
@@ -123,12 +123,12 @@ public:
 
     ~FrameSvgPrivate();
 
-    QPixmap alphaMask();
+    QImage alphaMask();
 
     void generateBackground(FrameData *frame);
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
-    void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
+    void cacheFrame(const QString &prefixToSave, const QImage &background, const QImage &overlay);
     void updateSizes() const;
     void updateNeeded();
     void updateAndSignalSizes();

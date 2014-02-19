@@ -442,7 +442,7 @@ QRectF FrameSvg::contentsRect() const
     }
 }
 
-QPixmap FrameSvg::alphaMask() const
+QImage FrameSvg::alphaMask() const
 {
     //FIXME: the distinction between overlay and 
     return d->alphaMask();
@@ -457,7 +457,7 @@ QRegion FrameSvg::mask() const
         if (frame->cachedMasks.count() > frame->MAX_CACHED_MASKS) {
             frame->cachedMasks.clear();
         }
-        frame->cachedMasks.insert(id, QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black))));
+        frame->cachedMasks.insert(id, QRegion(QBitmap::fromImage(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black))));
     }
     return frame->cachedMasks[id];
 }
@@ -489,7 +489,7 @@ void FrameSvg::clearCache()
             if (p->deref(this)) {
                 const QString key = d->cacheId(p, it.key());
                 FrameSvgPrivate::s_sharedFrames.remove(key);
-                p->cachedBackground = QPixmap();
+                p->cachedBackground = QImage();
             }
 
             it.remove();
@@ -497,13 +497,13 @@ void FrameSvg::clearCache()
     }
 }
 
-QPixmap FrameSvg::framePixmap()
+QImage FrameSvg::framePixmap()
 {
     FrameData *frame = d->frames[d->prefix];
     if (frame->cachedBackground.isNull()) {
         d->generateBackground(frame);
         if (frame->cachedBackground.isNull()) {
-            return QPixmap();
+            return QImage();
         }
     }
 
@@ -520,7 +520,7 @@ void FrameSvg::paintFrame(QPainter *painter, const QRectF &target, const QRectF 
         }
     }
 
-    painter->drawPixmap(target, frame->cachedBackground, source.isValid() ? source : target);
+    painter->drawImage(target, frame->cachedBackground, source.isValid() ? source : target);
 }
 
 void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
@@ -533,7 +533,7 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
         }
     }
 
-    painter->drawPixmap(pos, frame->cachedBackground);
+    painter->drawImage(pos, frame->cachedBackground);
 }
 
 //#define DEBUG_FRAMESVG_CACHE
@@ -605,7 +605,7 @@ FrameSvgPrivate::~FrameSvgPrivate()
     frames.clear();
 }
 
-QPixmap FrameSvgPrivate::alphaMask()
+QImage FrameSvgPrivate::alphaMask()
 {
     FrameData *frame = frames[prefix];
     QString maskPrefix;
@@ -618,7 +618,7 @@ QPixmap FrameSvgPrivate::alphaMask()
         if (frame->cachedBackground.isNull()) {
             generateBackground(frame);
             if (frame->cachedBackground.isNull()) {
-                return QPixmap();
+                return QImage();
             }
         }
 
@@ -658,11 +658,11 @@ QPixmap FrameSvgPrivate::alphaMask()
                 s_sharedFrames.insert(newKey, maskFrame);
             }
 
-            maskFrame->cachedBackground = QPixmap();
+            maskFrame->cachedBackground = QImage();
 
             generateBackground(maskFrame);
             if (maskFrame->cachedBackground.isNull()) {
-                return QPixmap();
+                return QImage();
             }
         }
 
@@ -682,7 +682,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     bool frameCached = !frame->cachedBackground.isNull();
     bool overlayCached = false;
     const bool overlayAvailable = !prefix.startsWith(QLatin1String("mask-")) && q->hasElement(prefix % "overlay");
-    QPixmap overlay;
+    QImage overlay;
     if (q->isUsingRenderingCache()) {
         frameCached = theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
 
@@ -737,13 +737,13 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     }
 
     if (!frameCached) {
-        cacheFrame(prefix, frame->cachedBackground, overlayCached ? overlay : QPixmap());
+        cacheFrame(prefix, frame->cachedBackground, overlayCached ? overlay : QImage());
     }
 
     if (!overlay.isNull()) {
         QPainter p(&frame->cachedBackground);
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        p.drawPixmap(actualOverlayPos, overlay, QRect(actualOverlayPos, overlaySize));
+        p.drawImage(actualOverlayPos, overlay, QRect(actualOverlayPos, overlaySize));
     }
 }
 
@@ -775,8 +775,9 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     int rightOffset = contentWidth;
     int bottomOffset = contentHeight;
 
-    frame->cachedBackground = QPixmap(frame->leftWidth + contentWidth + frame->rightWidth,
-                                      frame->topHeight + contentHeight + frame->bottomHeight);
+    frame->cachedBackground = QImage(frame->leftWidth + contentWidth + frame->rightWidth,
+                                      frame->topHeight + contentHeight + frame->bottomHeight,
+                                      QImage::Format_ARGB32_Premultiplied);
     frame->cachedBackground.fill(Qt::transparent);
     QPainter p(&frame->cachedBackground);
     p.setCompositionMode(QPainter::CompositionMode_Source);
@@ -818,7 +819,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
     if (frame->composeOverBorder) {
         p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.drawPixmap(QRect(QPoint(0, 0), size.toSize()), alphaMask());
+        p.drawImage(QRect(QPoint(0, 0), size.toSize()), alphaMask());
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }
 
@@ -940,7 +941,7 @@ QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) 
     return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath(); 
 }
 
-void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
+void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QImage &background, const QImage &overlay)
 {
     if (!q->isUsingRenderingCache()) {
         return;
@@ -973,7 +974,7 @@ void FrameSvgPrivate::updateSizes() const
 
     QSize s = q->size();
     q->resize();
-    frame->cachedBackground = QPixmap();
+    frame->cachedBackground = QImage();
 
     if (frame->enabledBorders & FrameSvg::TopBorder) {
         frame->topHeight = q->elementSize(prefix % "top").height();

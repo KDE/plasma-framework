@@ -81,7 +81,10 @@ class PLASMA_EXPORT Svg : public QObject
         ~Svg();
 
         /**
-         * Returns a pixmap of the SVG represented by this object.
+         * DEPRECATED Returns a pixmap of the SVG represented by this object.
+         *
+         * image() is significantly faster as it avoids a conversion
+         * Update your code
          *
          * The size of the pixmap will be the size of this Svg object (size())
          * if containsMultipleImages is @c true; otherwise, it will be the
@@ -93,6 +96,21 @@ class PLASMA_EXPORT Svg : public QObject
          * @return a QPixmap of the rendered SVG
          */
         Q_INVOKABLE QPixmap pixmap(const QString &elementID = QString());
+
+        /**
+         * Returns a pixmap of the SVG represented by this object.
+         *
+         * The size of the pixmap will be the size of this Svg object (size())
+         * if containsMultipleImages is @c true; otherwise, it will be the
+         * size of the requested element after the whole SVG has been scaled
+         * to size().
+         *
+         * @param elementId  the ID string of the element to render, or an empty
+         *                 string for the whole SVG (the default)
+         * @return a QPixmap of the rendered SVG
+         */
+        Q_INVOKABLE QImage image(const QString &elementID = QString());
+
 
         /**
          * Paints all or part of the SVG represented by this object
