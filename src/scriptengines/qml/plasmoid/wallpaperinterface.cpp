@@ -119,6 +119,10 @@ void WallpaperInterface::syncWallpaperPackage()
 
     m_actions->clear();
     m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Wallpaper");
+    if (!m_pkg.isValid()) {
+        qWarning() << "Error loading the wallpaper, no valid package loaded";
+        return;
+    }
     m_pkg.setPath(m_wallpaperPlugin);
 
     m_configLoader->deleteLater();
