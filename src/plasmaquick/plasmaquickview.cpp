@@ -27,36 +27,39 @@
 
 #include "plasma/pluginloader.h"
 
-class PlasmaQuickViewPrivate
+namespace PlasmaQuick
+{
+
+class ViewPrivate
 {
 public:
 
-    PlasmaQuickViewPrivate(Plasma::Corona *corona, PlasmaQuickView *view);
-    ~PlasmaQuickViewPrivate();
+    ViewPrivate(Plasma::Corona *corona, View *view);
+    ~ViewPrivate();
 
     void setContainment(Plasma::Containment *cont);
     Plasma::Types::FormFactor formFactor() const;
     Plasma::Types::Location location() const;
     void showConfigurationInterface(Plasma::Applet *applet);
 
-    PlasmaQuickView *q;
-    friend class PlasmaQuickView;
+    View *q;
+    friend class View;
     Plasma::Corona *corona;
     QWeakPointer<Plasma::Containment> containment;
     QWeakPointer<ConfigView> configView;
 };
 
-PlasmaQuickViewPrivate::PlasmaQuickViewPrivate(Plasma::Corona *cor, PlasmaQuickView *view)
+ViewPrivate::ViewPrivate(Plasma::Corona *cor, View *view)
     : q(view),
       corona(cor)
 {
 }
 
-PlasmaQuickViewPrivate::~PlasmaQuickViewPrivate()
+ViewPrivate::~ViewPrivate()
 {
 }
 
-void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
+void ViewPrivate::setContainment(Plasma::Containment *cont)
 {
     if (containment.data() == cont) {
         return;
@@ -91,11 +94,11 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
     if (cont) {
         cont->reactToScreenChange();
         QObject::connect(cont, &Plasma::Containment::locationChanged,
-                q, &PlasmaQuickView::locationChanged);
+                q, &View::locationChanged);
         QObject::connect(cont, &Plasma::Containment::formFactorChanged,
-                q, &PlasmaQuickView::formFactorChanged);
+                q, &View::formFactorChanged);
         QObject::connect(cont, &Plasma::Containment::configureRequested,
-                q, &PlasmaQuickView::showConfigurationInterface);
+                q, &View::showConfigurationInterface);
     } else {
         return;
     }
@@ -120,7 +123,7 @@ void PlasmaQuickViewPrivate::setContainment(Plasma::Containment *cont)
     }
 }
 
-Plasma::Types::Location PlasmaQuickViewPrivate::location() const
+Plasma::Types::Location ViewPrivate::location() const
 {
     if (!containment) {
         return Plasma::Types::Desktop;
@@ -128,7 +131,7 @@ Plasma::Types::Location PlasmaQuickViewPrivate::location() const
     return containment.data()->location();
 }
 
-Plasma::Types::FormFactor PlasmaQuickViewPrivate::formFactor() const
+Plasma::Types::FormFactor ViewPrivate::formFactor() const
 {
     if (!containment) {
         return Plasma::Types::Planar;
@@ -136,7 +139,7 @@ Plasma::Types::FormFactor PlasmaQuickViewPrivate::formFactor() const
     return containment.data()->formFactor();
 }
 
-void PlasmaQuickViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
+void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 {
     if (configView) {
         configView.data()->hide();
@@ -156,9 +159,9 @@ void PlasmaQuickViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 
 
 
-PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
+View::View(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
-      d(new PlasmaQuickViewPrivate(corona, this))
+      d(new ViewPrivate(corona, this))
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -168,29 +171,29 @@ PlasmaQuickView::PlasmaQuickView(Plasma::Corona *corona, QWindow *parent)
 
 
     QObject::connect(screen(), &QScreen::geometryChanged,
-            this, &PlasmaQuickView::screenGeometryChanged);
+            this, &View::screenGeometryChanged);
 
     if (!corona->package().isValid()) {
         qWarning() << "Invalid home screen package";
     }
 
-    setResizeMode(PlasmaQuickView::SizeRootObjectToView);
+    setResizeMode(View::SizeRootObjectToView);
 
     QObject::connect(corona, &Plasma::Corona::packageChanged,
-            this, &PlasmaQuickView::coronaPackageChanged);
+            this, &View::coronaPackageChanged);
 }
 
-PlasmaQuickView::~PlasmaQuickView()
+View::~View()
 {
     delete d;
 }
 
-Plasma::Corona *PlasmaQuickView::corona() const
+Plasma::Corona *View::corona() const
 {
     return d->corona;
 }
 
-KConfigGroup PlasmaQuickView::config() const
+KConfigGroup View::config() const
 {
     if (!containment()) {
         return KConfigGroup();
@@ -199,45 +202,47 @@ KConfigGroup PlasmaQuickView::config() const
     return KConfigGroup(&views, QString::number(containment()->screen()));
 }
 
-void PlasmaQuickView::setContainment(Plasma::Containment *cont)
+void View::setContainment(Plasma::Containment *cont)
 {
     d->setContainment(cont);
 }
 
-Plasma::Containment *PlasmaQuickView::containment() const
+Plasma::Containment *View::containment() const
 {
     return d->containment.data();
 }
 
-void PlasmaQuickView::setLocation(Plasma::Types::Location location)
+void View::setLocation(Plasma::Types::Location location)
 {
     d->containment.data()->setLocation(location);
 }
 
-Plasma::Types::Location PlasmaQuickView::location() const
+Plasma::Types::Location View::location() const
 {
     return d->location();
 }
 
-Plasma::Types::FormFactor PlasmaQuickView::formFactor() const
+Plasma::Types::FormFactor View::formFactor() const
 {
     return d->formFactor();
 }
 
-QRectF PlasmaQuickView::screenGeometry()
+QRectF View::screenGeometry()
 {
     return screen()->geometry();
 }
 
-void PlasmaQuickView::showConfigurationInterface(Plasma::Applet *applet)
+void View::showConfigurationInterface(Plasma::Applet *applet)
 {
     d->showConfigurationInterface(applet);
 }
 
-void PlasmaQuickView::coronaPackageChanged(const Plasma::Package &package)
+void View::coronaPackageChanged(const Plasma::Package &package)
 {
     setContainment(0);
     setSource(QUrl::fromLocalFile(package.filePath("views", "Desktop.qml")));
+}
+
 }
 
 #include "moc_plasmaquickview.cpp"

@@ -39,6 +39,8 @@ namespace KDeclarative {
 }
 
 
+namespace PlasmaQuick {
+
 class AppletQuickItemPrivate;
 
 class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
@@ -146,6 +148,9 @@ private:
     Q_PRIVATE_SLOT(d, void fillHeightChanged())
 };
 
-QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
+}
+
+QML_DECLARE_TYPEINFO(PlasmaQuick::AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
+
 
 #endif

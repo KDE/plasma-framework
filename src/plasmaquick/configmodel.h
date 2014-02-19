@@ -30,6 +30,9 @@ namespace Plasma {
     class Applet;
 }
 
+namespace PlasmaQuick
+{
+
 class ConfigPropertyMap;
 
 class ConfigCategoryPrivate;
@@ -99,5 +102,7 @@ private:
     friend class ConfigModelPrivate;
     ConfigModelPrivate *const d;
 };
+
+}
 
 #endif // multiple inclusion guard

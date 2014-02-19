@@ -28,6 +28,9 @@
 
 class QQmlEngine;
 
+namespace PlasmaQuick
+{
+
 //depends from https://codereview.qt-project.org/#change,65626
 class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
@@ -76,5 +79,6 @@ private:
     QQmlEngine *m_engine;
 };
 
+}
 
 #endif

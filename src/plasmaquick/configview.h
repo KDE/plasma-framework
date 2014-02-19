@@ -29,6 +29,9 @@ namespace Plasma {
     class Applet;
 }
 
+namespace PlasmaQuick
+{
+
 class ConfigViewPrivate;
 
 class ConfigModel;
@@ -67,5 +70,7 @@ protected:
 private:
     ConfigViewPrivate *const d;
 };
+
+}
 
 #endif // multiple inclusion guard

@@ -25,6 +25,9 @@
 
 #include <kdeclarative/kdeclarative.h>
 
+namespace PlasmaQuick
+{
+
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
     : QQmlAbstractUrlInterceptor(),
       m_package(p),
@@ -138,6 +141,6 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     return QUrl();
 }
 
-
+}
 
 

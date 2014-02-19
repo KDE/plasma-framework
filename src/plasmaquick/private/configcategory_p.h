@@ -22,6 +22,8 @@
 
 #include <QObject>
 
+namespace PlasmaQuick {
+
 //This class represents a single row item of the ConfigModel model in a QML friendly manner.
 //the properties contains all the data needed to represent an icon in the sidebar of a configuration dialog, of applets or containments 
 class ConfigCategory : public QObject
@@ -60,5 +62,7 @@ private:
     QString m_source;
     QString m_pluginName;
 };
+
+}
 
 #endif // multiple inclusion guard

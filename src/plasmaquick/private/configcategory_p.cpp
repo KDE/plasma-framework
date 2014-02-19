@@ -38,6 +38,8 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
+namespace PlasmaQuick {
+
 ///////////////////////ConfigCategory
 
 ConfigCategory::ConfigCategory(QObject *parent)
@@ -110,5 +112,6 @@ void ConfigCategory::setPluginName(const QString &name)
     emit pluginNameChanged();
 }
 
+}
 
 #include "private/moc_configcategory_p.cpp"

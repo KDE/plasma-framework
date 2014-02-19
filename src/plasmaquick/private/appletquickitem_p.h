@@ -30,6 +30,8 @@ namespace KDeclarative {
     class QmlObject;
 }
 
+namespace PlasmaQuick {
+
 class AppletQuickItem;
 
 class AppletQuickItemPrivate
@@ -89,5 +91,7 @@ public:
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };
+
+}
 
 #endif

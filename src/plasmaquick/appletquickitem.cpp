@@ -38,6 +38,9 @@
 
 #include <packageurlinterceptor.h>
 
+namespace PlasmaQuick
+{
+
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
@@ -660,7 +663,7 @@ void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
-
+}
 
 #include "moc_appletquickitem.cpp"
 
