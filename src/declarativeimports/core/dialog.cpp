@@ -514,6 +514,11 @@ DialogProxy::WindowType DialogProxy::type() const
     return m_type;
 }
 
+Plasma::FrameSvgItem *DialogProxy::frameSvgItem()
+{
+    return m_frameSvgItem;
+}
+
 void DialogProxy::focusInEvent(QFocusEvent *ev)
 {
     QQuickWindow::focusInEvent(ev);

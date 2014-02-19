@@ -163,14 +163,10 @@ protected:
     void hideEvent(QHideEvent *event);
     bool event(QEvent *event);
 
+    Plasma::FrameSvgItem *frameSvgItem();
+
     virtual void classBegin();
     virtual void componentComplete();
-
-    QTimer *m_syncTimer;
-    Plasma::Types::Location m_location;
-    Plasma::FrameSvgItem *m_frameSvgItem;
-    QWeakPointer<QQuickItem> m_mainItem;
-    QWeakPointer<QQuickItem> m_visualParent;
 
 private Q_SLOTS:
     void syncBorders();
@@ -183,6 +179,11 @@ private Q_SLOTS:
     void updateMaximumHeight();
 
 private:
+    QTimer *m_syncTimer;
+    Plasma::Types::Location m_location;
+    Plasma::FrameSvgItem *m_frameSvgItem;
+    QWeakPointer<QQuickItem> m_mainItem;
+    QWeakPointer<QQuickItem> m_visualParent;
     QScreen* screenForItem(QQuickItem *item) const;
 
     QRect m_cachedGeometry;

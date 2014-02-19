@@ -41,7 +41,7 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     setFlags(Qt::ToolTip);
     setLocation(Plasma::Types::Floating);
     setDirection(Plasma::Types::Up);
-    m_frameSvgItem->setImagePath("widgets/tooltip");
+    frameSvgItem()->setImagePath("widgets/tooltip");
 
     m_animation = new QPropertyAnimation(this);
     connect(m_animation, SIGNAL(valueChanged(QVariant)),
