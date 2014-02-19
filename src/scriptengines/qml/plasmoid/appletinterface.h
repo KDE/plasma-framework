@@ -49,7 +49,7 @@ namespace Plasma
     class ConfigLoader;
 } // namespace Plasma
 
-class AppletInterface : public AppletQuickItem
+class AppletInterface : public PlasmaQuick::AppletQuickItem
 {
     Q_OBJECT
 
