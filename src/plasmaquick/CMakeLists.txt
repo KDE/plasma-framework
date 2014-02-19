@@ -2,7 +2,7 @@ project(PlasmaQuick)
 
 set(plasmaquick_LIB_SRC
     appletquickitem.cpp
-    plasmaquickview.cpp
+    view.cpp
     configmodel.cpp
     configview.cpp
     packageurlinterceptor.cpp

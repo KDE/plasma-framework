@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "plasmaquickview.h"
+#include "view.h"
 #include "configview.h"
 
 #include <QDebug>
@@ -245,4 +245,4 @@ void View::coronaPackageChanged(const Plasma::Package &package)
 
 }
 
-#include "moc_plasmaquickview.cpp"
+#include "moc_view.cpp"
