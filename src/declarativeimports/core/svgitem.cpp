@@ -33,7 +33,8 @@ namespace Plasma
 
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_smooth(false)
+      m_smooth(false),
+      m_dirty(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -59,7 +60,7 @@ void SvgItem::setElementId(const QString &elementID)
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
-    update();
+    updateNeeded();
 }
 
 QString SvgItem::elementId() const
@@ -124,6 +125,10 @@ bool SvgItem::smooth() const
 QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData);
+    if (!m_dirty) {
+        return oldNode;
+    }
+
     QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
     if (!textureNode) {
         textureNode = new QSGSimpleTextureNode;
@@ -131,11 +136,12 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
 
     if (window() && m_svg) {
         m_svg.data()->resize(width(), height());
-
+        qDebug() << "called";
         //TODO make m_svg return a QImage so that we can avoid the deep copy in toImage();
         const QPixmap pixmap = m_svg.data()->pixmap();
         textureNode->setRect(0,0, pixmap.width(), pixmap.height());
         textureNode->setTexture(window()->createTextureFromImage(pixmap.toImage()));
+        m_dirty = false;
     }
     return textureNode;
 }
@@ -149,6 +155,7 @@ void SvgItem::updateNeeded()
         setImplicitHeight(naturalSize().height());
     }
 
+    m_dirty = true;
     update();
 }
 
