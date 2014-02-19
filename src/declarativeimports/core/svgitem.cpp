@@ -20,6 +20,10 @@
 #include "svgitem.h"
 
 #include <QPainter>
+#include <QQuickWindow>
+#include <QSGTexture>
+#include <QSGSimpleTextureNode>
+
 
 #include "QDebug"
 #include "plasma/svg.h"
@@ -28,7 +32,7 @@ namespace Plasma
 {
 
 SvgItem::SvgItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent),
+    : QQuickItem(parent),
       m_smooth(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
@@ -110,7 +114,6 @@ void SvgItem::setSmooth(const bool smooth)
     }
     m_smooth = smooth;
     emit smoothChanged();
-    update();
 }
 
 bool SvgItem::smooth() const
@@ -118,22 +121,23 @@ bool SvgItem::smooth() const
     return m_smooth;
 }
 
-void SvgItem::paint(QPainter *painter)
+QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
 {
-    if (!m_svg) {
-        return;
+    Q_UNUSED(updatePaintNodeData);
+    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
+    if (!textureNode) {
+        textureNode = new QSGSimpleTextureNode;
     }
-    //do without painter save, faster and the support can be compiled out
-    const bool wasAntiAlias = painter->testRenderHint(QPainter::Antialiasing);
-    const bool wasSmoothTransform = painter->testRenderHint(QPainter::SmoothPixmapTransform);
-    painter->setRenderHint(QPainter::Antialiasing, m_smooth);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
-    m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
-    m_svg.data()->paint(painter, boundingRect(), m_elementID);
-    painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
+    if (window() && m_svg) {
+        m_svg.data()->resize(width(), height());
+
+        //TODO make m_svg return a QImage so that we can avoid the deep copy in toImage();
+        const QPixmap pixmap = m_svg.data()->pixmap();
+        textureNode->setRect(0,0, pixmap.width(), pixmap.height());
+        textureNode->setTexture(window()->createTextureFromImage(pixmap.toImage()));
+    }
+    return textureNode;
 }
 
 void SvgItem::updateNeeded()
@@ -144,6 +148,7 @@ void SvgItem::updateNeeded()
     if (implicitHeight() <= 0) {
         setImplicitHeight(naturalSize().height());
     }
+
     update();
 }
 
