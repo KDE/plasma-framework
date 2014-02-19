@@ -19,13 +19,14 @@
 #ifndef SVGITEM_P
 #define SVGITEM_P
 
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 
+class QImage;
 namespace Plasma {
 
     class Svg;
 
-class SvgItem : public QQuickPaintedItem
+class SvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -81,13 +82,13 @@ public:
 
     QSizeF naturalSize() const;
 
-    void paint(QPainter *painter);
-
     void setImplicitWidth(qreal width);
     qreal implicitWidth() const;
 
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
+
+    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
 
 Q_SIGNALS:
     void elementIdChanged();
