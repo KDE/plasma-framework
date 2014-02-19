@@ -105,6 +105,7 @@ private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
     bool m_smooth;
+    bool m_dirty;
 };
 }
 
