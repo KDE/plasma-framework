@@ -19,10 +19,11 @@
 #ifndef FRAMESVGITEM_P
 #define FRAMESVGITEM_P
 
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 
 #include <Plasma/FrameSvg>
 
+class QSGTexture;
 namespace Plasma {
 
     class FrameSvg;
@@ -69,7 +70,7 @@ private:
     FrameSvg *m_frameSvg;
 };
 
-class FrameSvgItem : public QQuickPaintedItem
+class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -127,8 +128,6 @@ public:
 
     FrameSvgItemMargins *margins() const;
 
-    void paint(QPainter *painter);
-
     void geometryChanged(const QRectF &newGeometry,
                               const QRectF &oldGeometry);
 
@@ -137,6 +136,8 @@ public:
 
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
+
+    virtual QSGNode* updatePaintNode(QSGNode*, UpdatePaintNodeData*);
 
     /**
      * Only to be used from inside this library, is not intended to be invokable
@@ -159,6 +160,7 @@ private Q_SLOTS:
 private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
+    QSGTexture *m_texture;
     QString m_prefix;
 };
 

@@ -20,6 +20,8 @@
 #include "framesvgitem.h"
 
 #include <QPainter>
+#include <QQuickWindow>
+#include <QSGSimpleTextureNode>
 
 #include "QDebug"
 
@@ -61,7 +63,8 @@ void FrameSvgItemMargins::update()
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+    : QQuickItem(parent),
+      m_texture(0)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -72,6 +75,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
 
 FrameSvgItem::~FrameSvgItem()
 {
+    delete m_texture;
 }
 
 void FrameSvgItem::setImagePath(const QString &path)
@@ -157,9 +161,32 @@ Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
     return m_frameSvg->enabledBorders();
 }
 
-void FrameSvgItem::paint(QPainter *painter)
+QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData*)
 {
-    m_frameSvg->paintFrame(painter);
+    if (!window() || !m_frameSvg) {
+        delete oldNode;
+        return 0;
+    }
+
+    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
+    if (!textureNode) {
+        textureNode = new QSGSimpleTextureNode;
+    }
+
+    if (!m_texture || m_texture->textureSize() != QSize(width(), height())) {
+        QImage image(width(), height(), QImage::Format_ARGB32_Premultiplied);
+        QPainter painter(&image);
+        m_frameSvg->paintFrame(&painter);
+
+        qDebug() << "painting frame";
+
+        delete m_texture;
+        m_texture = window()->createTextureFromImage(image);
+        textureNode->setTexture(m_texture);
+        textureNode->setRect(0,0, width(), height());
+    }
+
+    return textureNode;
 }
 
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
