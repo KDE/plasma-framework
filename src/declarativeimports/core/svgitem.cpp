@@ -127,27 +127,32 @@ bool SvgItem::smooth() const
 QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData);
-    if (!m_dirty) {
-        return oldNode;
+
+    if (!window() || !m_svg) {
+        delete oldNode;
+        return 0;
     }
 
     QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
     if (!textureNode) {
         textureNode = new QSGSimpleTextureNode;
+        m_dirty = true;
     }
 
-    if (window() && m_svg) {
+    if (m_dirty) {
         m_svg.data()->resize(width(), height());
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
-        
-        const QImage image = m_svg.data()->image(m_elementID);
-        textureNode->setRect(0,0, width(), height());
 
+        const QImage image = m_svg.data()->image(m_elementID);
         delete m_texture;
         m_texture = window()->createTextureFromImage(image);
         textureNode->setTexture(m_texture);
+
         m_dirty = false;
     }
+
+    textureNode->setRect(0,0, width(), height());
+
     return textureNode;
 }
 
