@@ -174,14 +174,10 @@ QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     }
 
     if (!m_texture || m_texture->textureSize() != QSize(width(), height())) {
-        QImage image(width(), height(), QImage::Format_ARGB32_Premultiplied);
-        QPainter painter(&image);
-        m_frameSvg->paintFrame(&painter);
-
         qDebug() << "painting frame";
 
         delete m_texture;
-        m_texture = window()->createTextureFromImage(image);
+        m_texture = window()->createTextureFromImage(m_frameSvg->framePixmap().toImage());
         textureNode->setTexture(m_texture);
         textureNode->setRect(0,0, width(), height());
     }
