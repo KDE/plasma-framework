@@ -668,6 +668,13 @@ QPixmap Svg::pixmap(const QString &elementID)
     }
 }
 
+QImage Svg::image(const QString &elementID)
+{
+    return pixmap(elementID).toImage();
+}
+
+
+
 void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementID)
 {
     QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size()) :
