@@ -123,16 +123,16 @@ bool SvgItem::smooth() const
     return m_smooth;
 }
 
-QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updatePaintNodeData)
+QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
-    Q_UNUSED(updatePaintNodeData);
+    Q_UNUSED(updatePaintNodeData)
 
     if (!window() || !m_svg) {
         delete oldNode;
         return 0;
     }
 
-    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
+    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode *>(oldNode);
     if (!textureNode) {
         textureNode = new QSGSimpleTextureNode;
     }
@@ -149,7 +149,7 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
         delete m_texture;
         m_texture = window()->createTextureFromImage(image);
         textureNode->setTexture(m_texture);
-        textureNode->setRect(0,0, width(), height());
+        textureNode->setRect(0, 0, width(), height());
     }
 
     return textureNode;
