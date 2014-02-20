@@ -22,6 +22,17 @@
 
 #include <QQmlComponent>
 
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public Plasma API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
 namespace Plasma {
     class Applet;
 }
@@ -29,6 +40,8 @@ namespace Plasma {
 namespace KDeclarative {
     class QmlObject;
 }
+
+namespace PlasmaQuick {
 
 class AppletQuickItem;
 
@@ -89,5 +102,7 @@ public:
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };
+
+}
 
 #endif

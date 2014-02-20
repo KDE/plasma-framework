@@ -39,6 +39,8 @@
 #include <Plasma/PluginLoader>
 
 
+namespace PlasmaQuick
+{
 
 //////////////////////////////ConfigView
 
@@ -154,6 +156,8 @@ void ConfigView::resizeEvent(QResizeEvent *re)
     rootObject()->setWidth(re->size().width());
     rootObject()->setHeight(re->size().height());
     QQuickWindow::resizeEvent(re);
+}
+
 }
 
 #include "moc_configview.cpp"

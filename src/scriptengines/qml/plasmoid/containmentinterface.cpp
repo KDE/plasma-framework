@@ -115,7 +115,7 @@ void ContainmentInterface::init()
             pkg.setPath("org.kde.desktoptoolbox");
         }
 
-        PackageUrlInterceptor *interceptor = dynamic_cast<PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
+        PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
         if (interceptor) {
             interceptor->addAllowedPath(pkg.path());
         }

@@ -30,6 +30,17 @@
 
 #include <plasmaquick/plasmaquick_export.h>
 
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public Plasma API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
 namespace Plasma {
     class Applet;
 }
@@ -38,6 +49,8 @@ namespace KDeclarative {
     class QmlObject;
 }
 
+
+namespace PlasmaQuick {
 
 class AppletQuickItemPrivate;
 
@@ -146,6 +159,9 @@ private:
     Q_PRIVATE_SLOT(d, void fillHeightChanged())
 };
 
-QML_DECLARE_TYPEINFO(AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
+}
+
+QML_DECLARE_TYPEINFO(PlasmaQuick::AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
+
 
 #endif

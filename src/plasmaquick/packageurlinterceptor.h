@@ -26,7 +26,21 @@
 
 #include <Plasma/Package>
 
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public Plasma API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
 class QQmlEngine;
+
+namespace PlasmaQuick
+{
 
 //depends from https://codereview.qt-project.org/#change,65626
 class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
@@ -76,5 +90,6 @@ private:
     QQmlEngine *m_engine;
 };
 
+}
 
 #endif

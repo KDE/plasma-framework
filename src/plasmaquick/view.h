@@ -25,9 +25,23 @@
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
-class PlasmaQuickViewPrivate;
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public Plasma API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
 
-class PLASMAQUICK_EXPORT PlasmaQuickView : public QQuickView
+namespace PlasmaQuick
+{
+
+class ViewPrivate;
+
+class PLASMAQUICK_EXPORT View : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
@@ -39,8 +53,8 @@ public:
      * @param corona the corona of this view
      * @param parent the QWindow this View is parented to
      **/
-    explicit PlasmaQuickView(Plasma::Corona *corona, QWindow *parent = 0);
-    virtual ~PlasmaQuickView();
+    explicit View(Plasma::Corona *corona, QWindow *parent = 0);
+    virtual ~View();
 
     /**
      * @return the corona of this view
@@ -115,8 +129,10 @@ Q_SIGNALS:
     void screenGeometryChanged();
 
 private:
-    PlasmaQuickViewPrivate *const d;
-    friend class PlasmaQuickViewPrivate;
+    ViewPrivate *const d;
+    friend class ViewPrivate;
 };
 
-#endif // PLASMAQUICKVIEW_H
+}
+
+#endif // View_H

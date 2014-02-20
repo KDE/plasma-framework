@@ -38,6 +38,7 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
+namespace PlasmaQuick {
 
 //////////////////////////////ConfigModel
 
@@ -242,5 +243,6 @@ QQmlListProperty<ConfigCategory> ConfigModel::categories()
 
 }
 
+}
 
 #include "moc_configmodel.cpp"
