@@ -160,7 +160,10 @@ private Q_SLOTS:
 private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
-    QSGTexture *m_texture;
+    QVector<QSGTexture*> m_textures;
+
+
+
     QString m_prefix;
 };
 

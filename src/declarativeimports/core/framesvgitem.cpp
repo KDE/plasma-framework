@@ -25,6 +25,17 @@
 
 #include "QDebug"
 
+enum FramePart {
+    TopLeft,
+    Top,
+    TopRight,
+    Left,
+    Centre,
+    Right,
+    BotttomLeft,
+    Bottom,
+    BottomRight
+};
 
 namespace Plasma
 {
@@ -63,19 +74,20 @@ void FrameSvgItemMargins::update()
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_texture(0)
+    : QQuickItem(parent)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
+    m_frameSvg->setCacheAllRenderedFrames(false);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
+    m_textures.fill(0, 9);
 }
 
 
 FrameSvgItem::~FrameSvgItem()
 {
-    delete m_texture;
+    qDeleteAll(m_textures);
 }
 
 void FrameSvgItem::setImagePath(const QString &path)
@@ -84,6 +96,7 @@ void FrameSvgItem::setImagePath(const QString &path)
         return;
     }
 
+    m_frameSvg->setContainsMultipleImages(true);
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
 
@@ -161,28 +174,154 @@ Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
     return m_frameSvg->enabledBorders();
 }
 
-QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData*)
+QSGNode* FrameSvgItem::updatePaintNode(QSGNode *centralNode, QQuickItem::UpdatePaintNodeData*)
 {
     if (!window() || !m_frameSvg) {
-        delete oldNode;
+        delete centralNode;
         return 0;
     }
 
-    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
-    if (!textureNode) {
-        textureNode = new QSGSimpleTextureNode;
+    if (!centralNode) {
+        centralNode = new QSGNode;
     }
 
-    if (!m_texture || m_texture->textureSize() != QSize(width(), height())) {
-        qDebug() << "painting frame";
-
-        delete m_texture;
-        m_texture = window()->createTextureFromImage(m_frameSvg->framePixmap().toImage());
-        textureNode->setTexture(m_texture);
-        textureNode->setRect(0,0, width(), height());
+    if (centralNode->childCount() != 9) {
+        for (int i=0; i < 9 ; i++) {
+            QSGSimpleTextureNode *textureNode = new QSGSimpleTextureNode;
+            centralNode->appendChildNode(textureNode);
+        }
     }
 
-    return textureNode;
+
+    const int topWidth = m_frameSvg->elementSize(m_prefix % "top").width();
+    const int topHeight = m_frameSvg->elementSize(m_prefix % "top").height();
+    const int leftWidth = m_frameSvg->elementSize(m_prefix % "left").width();
+    const int leftHeight = m_frameSvg->elementSize(m_prefix % "left").height();
+    const int rightWidth = m_frameSvg->elementSize(m_prefix % "right").width();
+    const int rightHeight = m_frameSvg->elementSize(m_prefix % "right").height();
+    const int bottomWidth = m_frameSvg->elementSize(m_prefix % "bottom").width();
+    const int bottomHeight = m_frameSvg->elementSize(m_prefix % "bottom").height();
+
+    const int topOffset = 0;
+    const int leftOffset = 0;
+    const int contentWidth = width() - leftWidth - rightWidth;
+    const int contentHeight = height() - topHeight - bottomHeight;
+    int contentTop = 0;
+    int contentLeft = 0;
+    int rightOffset = contentWidth + leftWidth;
+    int bottomOffset = contentHeight;
+
+    //TODO
+    // borders
+    // avoid repainting textures
+    // render images at the right size to begin with
+    // tiling
+    // compose over borders
+
+
+    //corners
+    //if (enabledBorders...)
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(TopLeft));
+
+        //TODO only do this is texture is dirty, and cache the texture object
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "topleft"));
+        textureNode->setTexture(texture);
+
+        textureNode->setRect(leftOffset, topOffset , leftWidth, topHeight);
+
+        contentLeft = leftWidth;
+        contentTop = topHeight;
+        bottomOffset += topHeight;
+
+    }
+
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(TopRight));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "topright"));
+        textureNode->setTexture(texture);
+
+        textureNode->setRect(rightOffset, topOffset , rightWidth, topHeight);
+
+        contentLeft = leftWidth;
+        contentTop = topHeight;
+    }
+
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(BottomLeft));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "bottomleft"));
+        textureNode->setTexture(texture);
+
+        textureNode->setRect(leftOffset, bottomOffset , rightWidth, bottomHeight);
+
+        contentLeft = leftWidth;
+    }
+
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(BottomRight));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "bottomright"));
+        textureNode->setTexture(texture);
+
+        textureNode->setRect(rightOffset, bottomOffset , rightWidth, bottomHeight);
+
+        contentLeft = leftWidth;
+    }
+
+
+
+    // Sides
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(Left));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "left"));
+
+        textureNode->setTexture(texture);
+        textureNode->setRect(leftOffset, contentTop, leftWidth, contentHeight);
+    }
+
+        {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(Top));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "top"));
+
+        textureNode->setTexture(texture);
+        textureNode->setRect(contentLeft, topOffset , contentWidth, topHeight);
+    }
+
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(Right));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "right"));
+
+        textureNode->setTexture(texture);
+        textureNode->setRect(rightOffset, contentTop , rightWidth, contentHeight);
+    }
+
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(Bottom));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "bottom"));
+
+        textureNode->setTexture(texture);
+        textureNode->setRect(contentLeft, bottomOffset , contentWidth, bottomHeight);
+    }
+
+    //center
+    {
+        QSGSimpleTextureNode *textureNode =  static_cast<QSGSimpleTextureNode*>(centralNode->childAtIndex(Center));
+
+        QSGTexture *texture = window()->createTextureFromImage(m_frameSvg->image(m_prefix % "center"));
+
+        textureNode->setTexture(texture);
+        textureNode->setRect(leftWidth, topHeight, contentWidth, contentHeight);
+    }
+
+
+
+    return centralNode;
 }
 
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
@@ -249,7 +388,6 @@ void FrameSvgItem::componentComplete()
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
 }
-
 
 } // Plasma namespace
 
