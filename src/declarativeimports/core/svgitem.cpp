@@ -34,7 +34,8 @@ namespace Plasma
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_smooth(false),
-      m_dirty(false)
+      m_dirty(false),
+      m_texture(0)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -42,6 +43,7 @@ SvgItem::SvgItem(QQuickItem *parent)
 
 SvgItem::~SvgItem()
 {
+    delete m_texture;
 }
 
 void SvgItem::setElementId(const QString &elementID)
@@ -136,11 +138,14 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
 
     if (window() && m_svg) {
         m_svg.data()->resize(width(), height());
-        qDebug() << "called";
-        //TODO make m_svg return a QImage so that we can avoid the deep copy in toImage();
-        const QPixmap pixmap = m_svg.data()->pixmap();
-        textureNode->setRect(0,0, pixmap.width(), pixmap.height());
-        textureNode->setTexture(window()->createTextureFromImage(pixmap.toImage()));
+        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+        
+        const QImage image = m_svg.data()->image(m_elementID);
+        textureNode->setRect(0,0, image.width(), image.height());
+
+        delete m_texture;
+        m_texture = window()->createTextureFromImage(image);
+        textureNode->setTexture(m_texture);
         m_dirty = false;
     }
     return textureNode;
