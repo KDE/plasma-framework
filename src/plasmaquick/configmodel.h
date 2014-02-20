@@ -59,7 +59,7 @@ class ConfigCategory;
 class PLASMAQUICK_EXPORT ConfigModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(QQmlListProperty<ConfigCategory> categories READ categories CONSTANT)
+    Q_PROPERTY(QQmlListProperty<PlasmaQuick::ConfigCategory> categories READ categories CONSTANT)
     Q_CLASSINFO("DefaultProperty", "categories")
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
