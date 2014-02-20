@@ -22,7 +22,6 @@
 #include <QQuickItem>
 
 class QImage;
-class QSGTexture;
 namespace Plasma {
 
     class Svg;
@@ -105,7 +104,6 @@ protected Q_SLOTS:
 private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
-    QSGTexture *m_texture;
     bool m_smooth;
 };
 }

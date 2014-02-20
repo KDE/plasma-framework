@@ -19,7 +19,6 @@
 
 #include "svgitem.h"
 
-#include <QPainter>
 #include <QQuickWindow>
 #include <QSGTexture>
 #include <QSGSimpleTextureNode>
@@ -31,9 +30,22 @@
 namespace Plasma
 {
 
+class SVGTextureNode : public QSGSimpleTextureNode
+{
+    public:
+        SVGTextureNode() {}
+        void setTexture(QSGTexture *texture);
+    private:
+        QScopedPointer<QSGTexture> m_texture;
+};
+
+void SVGTextureNode::setTexture(QSGTexture *texture) {
+    m_texture.reset(texture);
+    QSGSimpleTextureNode::setTexture(texture);
+}
+
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_texture(0),
       m_smooth(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
@@ -42,7 +54,6 @@ SvgItem::SvgItem(QQuickItem *parent)
 
 SvgItem::~SvgItem()
 {
-    delete m_texture;
 }
 
 void SvgItem::setElementId(const QString &elementID)
@@ -125,30 +136,27 @@ bool SvgItem::smooth() const
 
 QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
-    Q_UNUSED(updatePaintNodeData)
-
     if (!window() || !m_svg) {
         delete oldNode;
         return 0;
     }
 
-    QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode *>(oldNode);
+    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
     if (!textureNode) {
-        textureNode = new QSGSimpleTextureNode;
+        textureNode = new SVGTextureNode;
     }
 
     //TODO use a heuristic to work out when to redraw
     //if !m_smooth and size is approximate simply change the textureNode.rect without
     //updating the material
 
-    if (!m_texture || m_texture->textureSize() != QSize(width(), height())) {
+    if (!textureNode->texture() || textureNode->texture()->textureSize() != QSize(width(), height())) {
         m_svg.data()->resize(width(), height());
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
 
         const QImage image = m_svg.data()->image(m_elementID);
-        delete m_texture;
-        m_texture = window()->createTextureFromImage(image);
-        textureNode->setTexture(m_texture);
+        QSGTexture *texture = window()->createTextureFromImage(image);
+        textureNode->setTexture(texture);
         textureNode->setRect(0, 0, width(), height());
     }
 
