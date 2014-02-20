@@ -44,7 +44,7 @@ class WallpaperInterface : public QQuickItem
 {
     Q_OBJECT
 
-    //Q_PROPERTY(QString plugin READ plugin WRITE setPlugin NOTIFY pluginChanged)
+    Q_PROPERTY(QString pluginName READ pluginName NOTIFY packageChanged)
     Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
 
 public:
@@ -61,6 +61,8 @@ public:
                                                           const QString &formFactor = QString());
 
     Plasma::Package package() const;
+
+    QString pluginName() const;
 
     KDeclarative::ConfigPropertyMap *configuration() const;
 

@@ -78,6 +78,11 @@ Plasma::Package WallpaperInterface::package() const
     return m_pkg;
 }
 
+QString WallpaperInterface::pluginName() const
+{
+    return m_wallpaperPlugin;
+}
+
 KDeclarative::ConfigPropertyMap *WallpaperInterface::configuration() const
 {
     return m_configuration;
