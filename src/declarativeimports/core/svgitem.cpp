@@ -33,9 +33,8 @@ namespace Plasma
 
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_smooth(false),
-      m_dirty(false),
-      m_texture(0)
+      m_texture(0),
+      m_smooth(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -62,7 +61,7 @@ void SvgItem::setElementId(const QString &elementID)
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
-    updateNeeded();
+    update();
 }
 
 QString SvgItem::elementId() const
@@ -136,10 +135,13 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
     QSGSimpleTextureNode *textureNode = static_cast<QSGSimpleTextureNode*>(oldNode);
     if (!textureNode) {
         textureNode = new QSGSimpleTextureNode;
-        m_dirty = true;
     }
 
-    if (m_dirty) {
+    //TODO use a heuristic to work out when to redraw
+    //if !m_smooth and size is approximate simply change the textureNode.rect without
+    //updating the material
+
+    if (!m_texture || m_texture->textureSize() != QSize(width(), height())) {
         m_svg.data()->resize(width(), height());
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
 
@@ -147,11 +149,8 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
         delete m_texture;
         m_texture = window()->createTextureFromImage(image);
         textureNode->setTexture(m_texture);
-
-        m_dirty = false;
+        textureNode->setRect(0,0, width(), height());
     }
-
-    textureNode->setRect(0,0, width(), height());
 
     return textureNode;
 }
@@ -164,8 +163,6 @@ void SvgItem::updateNeeded()
     if (implicitHeight() <= 0) {
         setImplicitHeight(naturalSize().height());
     }
-
-    m_dirty = true;
     update();
 }
 

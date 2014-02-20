@@ -107,7 +107,6 @@ private:
     QString m_elementID;
     QSGTexture *m_texture;
     bool m_smooth;
-    bool m_dirty;
 };
 }
 
