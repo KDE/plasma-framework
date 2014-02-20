@@ -44,12 +44,12 @@ set(plasmaquick_LIB_INCLUDES
     packageurlinterceptor.h
 )
 
-install(FILES ${plasmaquick_LIB_INCLUDES}
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
+#install(FILES ${plasmaquick_LIB_INCLUDES}
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
 
-install(DIRECTORY
-        includes/PlasmaQuick
-        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
+#install(DIRECTORY
+#        includes/PlasmaQuick
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
 
