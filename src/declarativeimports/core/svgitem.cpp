@@ -141,7 +141,7 @@ QSGNode* SvgItem::updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData* updateP
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         
         const QImage image = m_svg.data()->image(m_elementID);
-        textureNode->setRect(0,0, image.width(), image.height());
+        textureNode->setRect(0,0, width(), height());
 
         delete m_texture;
         m_texture = window()->createTextureFromImage(image);
