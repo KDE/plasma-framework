@@ -239,8 +239,11 @@ void ThemePrivate::onAppExitCleanup()
 
 QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bool cache)
 {
-    if (cache && discoveries.contains(image)) {
-        return discoveries.value(image);
+    if (cache) {
+        auto it = discoveries.constFind(image);
+        if (it != discoveries.constEnd()) {
+            return it.value();
+        }
     }
 
     QString search;
