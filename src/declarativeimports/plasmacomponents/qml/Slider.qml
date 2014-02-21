@@ -160,8 +160,8 @@ Item {
 
         // Plasma API
         property bool animated: units.longDuration > 0
-        property real handleWidth: (contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").width : grooveSvg.elementSize("horizontal-slider-handle").width) * units.devicePixelRatio
-        property real handleHeight: (contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").height : grooveSvg.elementSize("horizontal-slider-handle").height) * units.devicePixelRatio
+        property real handleWidth: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").width : grooveSvg.elementSize("horizontal-slider-handle").width
+        property real handleHeight: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").height : grooveSvg.elementSize("horizontal-slider-handle").height
 
         // Convenience API
         property bool isVertical: orientation == Qt.Vertical
@@ -193,7 +193,7 @@ Item {
             imagePath: "widgets/slider"
             prefix: "groove"
             //FIXME: frameSvg should have a minimumSize attribute, could be added to kdelibs 4.7(maybe just the qml binding is enough)?
-            height: (grooveSvg.elementSize("groove-topleft").height + grooveSvg.elementSize("groove-bottomleft").height) * units.devicePixelRatio
+            height: grooveSvg.elementSize("groove-topleft").height + grooveSvg.elementSize("groove-bottomleft").height
             anchors {
                 left: parent.left
                 right: parent.right
