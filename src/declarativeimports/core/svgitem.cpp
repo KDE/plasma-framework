@@ -22,7 +22,7 @@
 #include <QQuickWindow>
 #include <QSGTexture>
 #include <QSGSimpleTextureNode>
-
+#include <QRectF>
 
 #include "QDebug"
 #include "plasma/svg.h"
@@ -71,6 +71,9 @@ void SvgItem::setElementId(const QString &elementID)
     }
 
     m_elementID = elementID;
+    if (m_svg) {
+        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+    }
     emit elementIdChanged();
     emit naturalSizeChanged();
 
@@ -101,11 +104,15 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         disconnect(m_svg.data(), 0, this, 0);
     }
     m_svg = svg;
+    m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+    m_svg.data()->resize(width(), height());
+
     if (svg) {
         connect(svg, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
         connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
         connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
     }
+
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(naturalSize().width());
@@ -157,9 +164,6 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     //updating the material
 
     if (m_textureChanged || textureNode->texture()->textureSize() != QSize(width(), height())) {
-        m_svg.data()->resize(width(), height());
-        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
-
         const QImage image = m_svg.data()->image(m_elementID);
         QSGTexture *texture = window()->createTextureFromImage(image);
         textureNode->setTexture(texture);
@@ -212,6 +216,14 @@ void SvgItem::setImplicitHeight(qreal height)
 qreal SvgItem::implicitHeight() const
 {
     return QQuickItem::implicitHeight();
+}
+
+void SvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    if (m_svg) {
+        m_svg.data()->resize(newGeometry.width(), newGeometry.height());
+    }
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 } // Plasma namespace
