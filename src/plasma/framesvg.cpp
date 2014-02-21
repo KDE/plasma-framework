@@ -412,6 +412,32 @@ qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
     }
 }
 
+qreal FrameSvg::fixedMarginSize(const Plasma::Types::MarginEdge edge) const
+{
+    if (d->frames[d->prefix]->noBorderPadding) {
+        return .0;
+    }
+
+    switch (edge) {
+    case Plasma::Types::TopMargin:
+        return d->frames[d->prefix]->fixedTopMargin;
+    break;
+
+    case Plasma::Types::LeftMargin:
+        return d->frames[d->prefix]->fixedLeftMargin;
+    break;
+
+    case Plasma::Types::RightMargin:
+        return d->frames[d->prefix]->fixedRightMargin;
+    break;
+
+    //Plasma::BottomMargin
+    default:
+        return d->frames[d->prefix]->fixedBottomMargin;
+    break;
+    }
+}
+
 void FrameSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
 {
     FrameData *frame = d->frames[d->prefix];
@@ -425,6 +451,21 @@ void FrameSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) 
     left = frame->leftMargin;
     right = frame->rightMargin;
     bottom = frame->bottomMargin;
+}
+
+void FrameSvg::getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
+{
+    FrameData *frame = d->frames[d->prefix];
+
+    if (frame->noBorderPadding) {
+        left = top = right = bottom = 0;
+        return;
+    }
+
+    top = frame->fixedTopMargin;
+    left = frame->fixedLeftMargin;
+    right = frame->fixedRightMargin;
+    bottom = frame->fixedBottomMargin;
 }
 
 QRectF FrameSvg::contentsRect() const
@@ -975,6 +1016,17 @@ void FrameSvgPrivate::updateSizes() const
     q->resize();
     frame->cachedBackground = QPixmap();
 
+    //This has the same size regardless the border is enabled or not
+    frame->fixedTopHeight = q->elementSize(prefix % "top").height();
+
+    if (q->hasElement(prefix % "hint-top-margin")) {
+        frame->fixedTopMargin = q->elementSize(prefix % "hint-top-margin").height();
+    } else {
+        frame->fixedTopMargin = frame->fixedTopHeight;
+    }
+
+
+    //The same, but its size depends from the margin being enabled
     if (frame->enabledBorders & FrameSvg::TopBorder) {
         frame->topHeight = q->elementSize(prefix % "top").height();
 
@@ -985,6 +1037,14 @@ void FrameSvgPrivate::updateSizes() const
         }
     } else {
         frame->topMargin = frame->topHeight = 0;
+    }
+
+    frame->fixedLeftWidth = q->elementSize(prefix % "left").width();
+
+    if (q->hasElement(prefix % "hint-left-margin")) {
+        frame->fixedLeftMargin = q->elementSize(prefix % "hint-left-margin").width();
+    } else {
+        frame->fixedLeftMargin = frame->fixedLeftWidth;
     }
 
     if (frame->enabledBorders & FrameSvg::LeftBorder) {
@@ -999,6 +1059,14 @@ void FrameSvgPrivate::updateSizes() const
         frame->leftMargin = frame->leftWidth = 0;
     }
 
+    frame->fixedRightWidth = q->elementSize(prefix % "right").width();
+
+    if (q->hasElement(prefix % "hint-right-margin")) {
+        frame->fixedRightMargin = q->elementSize(prefix % "hint-right-margin").width();
+    } else {
+        frame->fixedRightMargin = frame->fixedRightWidth;
+    }
+
     if (frame->enabledBorders & FrameSvg::RightBorder) {
         frame->rightWidth = q->elementSize(prefix % "right").width();
 
@@ -1009,6 +1077,14 @@ void FrameSvgPrivate::updateSizes() const
         }
     } else {
         frame->rightMargin = frame->rightWidth = 0;
+    }
+
+    frame->fixedBottomHeight = q->elementSize(prefix % "bottom").height();
+
+    if (q->hasElement(prefix % "hint-bottom-margin")) {
+        frame->fixedBottomMargin = q->elementSize(prefix % "hint-bottom-margin").height();
+    } else {
+        frame->fixedBottomMargin = frame->fixedBottomHeight;
     }
 
     if (frame->enabledBorders & FrameSvg::BottomBorder) {

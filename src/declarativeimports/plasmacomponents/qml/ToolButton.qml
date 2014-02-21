@@ -177,7 +177,7 @@ Item {
         Item {
             parent: delegate
             anchors.fill: parent
-            property alias margins: surface.margins
+            property alias margins: surface.fixedMargins
             property alias hasOverState: shadow.hasOverState
             Private.ButtonShadow {
                 id: shadow

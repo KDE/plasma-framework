@@ -29,7 +29,8 @@ namespace Plasma
 
 FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent)
     : QObject(parent),
-      m_frameSvg(frameSvg)
+      m_frameSvg(frameSvg),
+      m_fixed(false)
 {
     //qDebug() << "margins at: " << left() << top() << right() << bottom();
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(update()));
@@ -37,22 +38,38 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
 
 qreal FrameSvgItemMargins::left() const
 {
-    return m_frameSvg->marginSize(Types::LeftMargin);
+    if (m_fixed) {
+        return m_frameSvg->fixedMarginSize(Types::LeftMargin);
+    } else {
+        return m_frameSvg->marginSize(Types::LeftMargin);
+    }
 }
 
 qreal FrameSvgItemMargins::top() const
 {
-    return m_frameSvg->marginSize(Types::TopMargin);
+    if (m_fixed) {
+        return m_frameSvg->fixedMarginSize(Types::TopMargin);
+    } else {
+        return m_frameSvg->marginSize(Types::TopMargin);
+    }
 }
 
 qreal FrameSvgItemMargins::right() const
 {
-    return m_frameSvg->marginSize(Types::RightMargin);
+    if (m_fixed) {
+        return m_frameSvg->fixedMarginSize(Types::RightMargin);
+    } else {
+        return m_frameSvg->marginSize(Types::RightMargin);
+    }
 }
 
 qreal FrameSvgItemMargins::bottom() const
 {
-    return m_frameSvg->marginSize(Types::BottomMargin);
+    if (m_fixed) {
+        return m_frameSvg->fixedMarginSize(Types::BottomMargin);
+    } else {
+        return m_frameSvg->marginSize(Types::BottomMargin);
+    }
 }
 
 void FrameSvgItemMargins::update()
@@ -60,11 +77,28 @@ void FrameSvgItemMargins::update()
     emit marginsChanged();
 }
 
+void FrameSvgItemMargins::setFixed(bool fixed)
+{
+    if (fixed == m_fixed) {
+        return;
+    }
+
+    m_fixed = fixed;
+    emit marginsChanged();
+}
+
+bool FrameSvgItemMargins::isFixed() const
+{
+    return m_fixed;
+}
+
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickPaintedItem(parent)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
+    m_fixedMargins = new FrameSvgItemMargins(m_frameSvg, this);
+    m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
 }
@@ -141,6 +175,11 @@ QString FrameSvgItem::prefix() const
 FrameSvgItemMargins *FrameSvgItem::margins() const
 {
     return m_margins;
+}
+
+FrameSvgItemMargins *FrameSvgItem::fixedMargins() const
+{
+    return m_fixedMargins;
 }
 
 void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)

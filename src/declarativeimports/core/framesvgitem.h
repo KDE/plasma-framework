@@ -61,6 +61,9 @@ public:
     qreal right() const;
     qreal bottom() const;
 
+    void setFixed(bool fixed);
+    bool isFixed() const;
+
 public Q_SLOTS:
     void update();
 
@@ -69,6 +72,7 @@ Q_SIGNALS:
 
 private:
     FrameSvg *m_frameSvg;
+    bool m_fixed;
 };
 
 class FrameSvgItem : public QQuickPaintedItem
@@ -92,6 +96,13 @@ class FrameSvgItem : public QQuickPaintedItem
      * @see FrameSvgItemMargins
      */
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
+
+    /**
+     * The margins of the frame, regardless if they are enabled or not
+     * read only
+     * @see FrameSvgItemMargins
+     */
+    Q_PROPERTY(QObject *fixedMargins READ fixedMargins CONSTANT)
 
     Q_FLAGS(Plasma::FrameSvg::EnabledBorders)
     /**
@@ -128,6 +139,7 @@ public:
     Plasma::FrameSvg::EnabledBorders enabledBorders() const;
 
     FrameSvgItemMargins *margins() const;
+    FrameSvgItemMargins *fixedMargins() const;
 
     void paint(QPainter *painter);
 
@@ -162,6 +174,7 @@ private Q_SLOTS:
 private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
+    FrameSvgItemMargins *m_fixedMargins;
     QString m_prefix;
     Units m_units;
 };
