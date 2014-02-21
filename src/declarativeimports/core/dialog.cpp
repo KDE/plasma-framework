@@ -288,9 +288,9 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
         }
     }
 
-    //if the item is in a dock we want to position the popups outside of the dock
+    //if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock
     const KWindowInfo winInfo = KWindowSystem::windowInfo(item->window()->winId(), NET::WMWindowType);
-    const bool isDock = winInfo.windowType(NET::AllTypesMask) == NET::Dock;
+    const bool outsideParentWindow = (winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint);
 
     //flag shows if the popup should be placed inside or outside the parent item
     //i.e if the parent item is the desktop we want to position the dialog to the left edge of
@@ -298,7 +298,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     const bool locateInsideParent = winInfo.windowType(NET::AllTypesMask) == NET::Desktop;
 
     QRect parentGeometryBounds;
-    if (isDock) {
+    if (outsideParentWindow) {
         parentGeometryBounds = item->window()->geometry();
     } else {
         parentGeometryBounds = QRect(pos.toPoint(), QSize(item->width(), item->height()));
