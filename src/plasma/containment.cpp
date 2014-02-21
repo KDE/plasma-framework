@@ -427,7 +427,19 @@ QList<Applet *> Containment::applets() const
 
 int Containment::screen() const
 {
-    return corona()->screenForContainment(this);
+    if (corona()) {
+        return corona()->screenForContainment(this);
+
+    //case in which this containment is child of an applet, hello systray :)
+    } else if (Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent())) {
+        if (parentApplet->containment()) {
+            return parentApplet->containment()->screen();
+        } else {
+            return -1;
+        }
+    } else {
+        return -1;
+    }
 }
 
 int Containment::lastScreen() const
