@@ -19,7 +19,6 @@ import QtQuick 2.0
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 
 Item {
@@ -28,6 +27,7 @@ Item {
     height: cellHeight
 
     property real borderOpacity: daysCalendar.borderOpacity
+    property bool today: isToday(new Date(yearNumber, monthNumber - 1, dayNumber))
 
     Rectangle {
         id: todayRect
@@ -35,9 +35,13 @@ Item {
         y: 0
         width: parent.width - (borderWidth)
         height: parent.height - (borderWidth)
-        opacity: isToday(new Date(yearNumber, monthNumber - 1, dayNumber)) ? 0.8 : 0
-        Behavior on opacity { NumberAnimation {} }
-        color: theme.highlightColor
+        opacity: {
+            if (calendarDays.selectedItem == dayStyle && today) 0.6
+                else if (today) 0.4
+                    else 0
+        }
+        Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
+        color: theme.textColor
     }
 
     Rectangle {
@@ -47,12 +51,12 @@ Item {
         }
         opacity: {
             if (calendarDays.selectedItem == dayStyle) 0.6
-                else if (dateMouse.containsMouse) 0.3
+                else if (dateMouse.containsMouse) 0.4
                     else 0
         }
-        //visible: dateMouse.containsMouse
-        Behavior on opacity { NumberAnimation {} }
-        color: theme.viewBackgroundColor
+        visible: !today
+        Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
+        color: theme.highlightColor
         z: todayRect.z - 1
     }
 
@@ -87,8 +91,8 @@ Item {
         anchors.centerIn: parent
         font.pixelSize: Math.max(theme.defaultFont.pixelSize, cellHeight / 3)
         text: dayNumber
-        //font.bold: (containsEventItems)||(containsTodoItems) ? true: false
         opacity: (isPreviousMonth || isNextMonth) ? 0.5: 1.0
+        color: today ? theme.backgroundColor : theme.textColor
     }
 
 
