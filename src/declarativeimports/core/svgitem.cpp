@@ -46,7 +46,8 @@ void SVGTextureNode::setTexture(QSGTexture *texture) {
 
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_smooth(false)
+      m_smooth(false),
+      m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
 }
@@ -72,6 +73,8 @@ void SvgItem::setElementId(const QString &elementID)
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
+
+    m_textureChanged = true;
     update();
 }
 
@@ -111,6 +114,8 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         setImplicitHeight(naturalSize().height());
     }
 
+    m_textureChanged = true;
+
     emit svgChanged();
     emit naturalSizeChanged();
 }
@@ -138,25 +143,28 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
 {
     if (!window() || !m_svg) {
         delete oldNode;
-        return 0;
+        return Q_NULLPTR;
     }
 
     SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
     if (!textureNode) {
         textureNode = new SVGTextureNode;
+        m_textureChanged = true;
     }
 
     //TODO use a heuristic to work out when to redraw
     //if !m_smooth and size is approximate simply change the textureNode.rect without
     //updating the material
 
-    if (!textureNode->texture() || textureNode->texture()->textureSize() != QSize(width(), height())) {
+    if (m_textureChanged || textureNode->texture()->textureSize() != QSize(width(), height())) {
         m_svg.data()->resize(width(), height());
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
 
         const QImage image = m_svg.data()->image(m_elementID);
         QSGTexture *texture = window()->createTextureFromImage(image);
         textureNode->setTexture(texture);
+        m_textureChanged = false;
+
         textureNode->setRect(0, 0, width(), height());
     }
 
