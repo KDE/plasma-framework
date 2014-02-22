@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=Report a bug in Plasma
+Encoding=UTF-8
+Keywords=plasma,bugzilla,bug,development,support
+Name=Bug
+Type=Service
+Icon=kbugbuster
+
+X-KDE-PluginInfo-Author=Sebastian Kügler
+X-KDE-PluginInfo-Category=Development
+X-KDE-PluginInfo-Email=sebas@kde.org
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=org.kde.example.bugreport
+X-KDE-PluginInfo-Version=
+X-KDE-PluginInfo-Website=http://bugs.kde.org
+X-KDE-ServiceTypes=Plasma/Applet
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml

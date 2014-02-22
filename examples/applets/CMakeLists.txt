@@ -1,4 +1,5 @@
  
+plasma_install_package(bugreport org.kde.example.bugreport)
 plasma_install_package(config org.kde.example.configuration)
 plasma_install_package(dataenginemodel org.kde.example.dataenginemodel)
 plasma_install_package(notes org.kde.example.notes)
