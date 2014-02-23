@@ -2,6 +2,7 @@
 Name=Example window thumbnails list
 Name[bs]=Primjer prozor liste sličica
 Name[de]=Beispiel einer Liste mit Fenstervorschaubilden
+Name[fi]=Esimerkki ikkunoiden pienoiskuvaluettelosta
 Name[fr]=Exemple de liste de vignettes de fenêtres
 Name[nl]=Voorbeeld van lijst met miniaturen van vensters
 Name[pt]=Lista de miniaturas das janelas de exemplo
@@ -13,6 +14,7 @@ Name[x-test]=xxExample window thumbnails listxx
 Comment=Example showing how to display window thumbnails
 Comment[bs]=Primjer prikazuje kako prikazati prozor sličica
 Comment[de]=Beispiel zur Anzeige einer Liste mit Fenstervorschaubilden
+Comment[fi]=Esimerkki, joka näyttää, miten näyttää ikkunoiden pienoiskuvat
 Comment[fr]=Exemple montrant comment afficher des vignettes de fenêtres
 Comment[nl]=Voorbeeld van hoe miniaturen van vensters te tonen
 Comment[pt]=Exemplo que demonstra como apresentar miniaturas das janelas
