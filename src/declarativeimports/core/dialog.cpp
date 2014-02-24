@@ -679,6 +679,16 @@ void DialogProxy::updateInputShape()
 #endif
 }
 
+void DialogProxy::setTransientParentAndNotify(QWindow *parent)
+{
+    if (parent == transientParent()) {
+        return;
+    }
+
+    setTransientParent(parent);
+    emit transientParentChanged();
+}
+
 
 //find the screen which contains the item
 QScreen* DialogProxy::screenForItem(QQuickItem* item) const
