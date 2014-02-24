@@ -61,7 +61,7 @@ if(HAVE_X11)
     target_link_libraries(corebindingsplugin ${XCB_SHAPE_LIBRARY})
   endif()
 
-  if(OPENGL_FOUND)
+  if(HAVE_GLX)
     target_link_libraries(corebindingsplugin ${OPENGL_gl_LIBRARY})
   endif()
 endif()
