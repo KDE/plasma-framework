@@ -101,6 +101,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void updateNeeded();
+    void updateDevicePixelRatio();
 
 private:
     QWeakPointer<Plasma::Svg> m_svg;

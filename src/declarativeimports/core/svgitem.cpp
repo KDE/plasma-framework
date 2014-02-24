@@ -34,6 +34,7 @@ SvgItem::SvgItem(QQuickItem *parent)
       m_smooth(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
+    connect(&m_units, &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
 }
 
 
@@ -83,6 +84,8 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         disconnect(m_svg.data(), 0, this, 0);
     }
     m_svg = svg;
+    updateDevicePixelRatio();
+
     if (svg) {
         connect(svg, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
         connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
@@ -179,6 +182,13 @@ void SvgItem::setImplicitHeight(qreal height)
 qreal SvgItem::implicitHeight() const
 {
     return QQuickItem::implicitHeight();
+}
+
+void SvgItem::updateDevicePixelRatio()
+{
+    if (m_svg) {
+        m_svg.data()->setDevicePixelRatio(qMax((qreal)1.0, floor(m_units.devicePixelRatio())));
+    }
 }
 
 } // Plasma namespace

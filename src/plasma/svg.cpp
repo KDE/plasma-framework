@@ -137,7 +137,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
       renderer(0),
       styleCrc(0),
       lastModified(0),
-      devicePixelRatio(2.0),
+      devicePixelRatio(1.0),
       multipleImages(false),
       themed(false),
       applyColors(false),

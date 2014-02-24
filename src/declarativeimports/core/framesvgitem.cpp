@@ -101,6 +101,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
+    connect(&m_units, &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
 }
 
 
@@ -270,8 +271,7 @@ void FrameSvgItem::componentComplete()
 
 void FrameSvgItem::updateDevicePixelRatio()
 {
-    m_frameSvg->resize();
-    m_frameSvg->resize(m_frameSvg->size() * 5);
+    m_frameSvg->setDevicePixelRatio(qMax((qreal)1.0, floor(m_units.devicePixelRatio())));
 }
 
 } // Plasma namespace
