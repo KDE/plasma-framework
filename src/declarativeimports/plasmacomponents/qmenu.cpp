@@ -91,6 +91,21 @@ void QMenuProxy::setVisualParent(QObject *parent)
     emit visualParentChanged();
 }
 
+QWindow *QMenuProxy::transientParent()
+{
+    return m_menu->windowHandle()->transientParent();
+}
+
+void QMenuProxy::setTransientParent(QWindow *parent)
+{
+    if (parent == m_menu->windowHandle()->transientParent()) {
+        return;
+    }
+
+    m_menu->windowHandle()->setTransientParent(parent);
+    emit transientParentChanged();
+}
+
 bool QMenuProxy::event(QEvent *event)
 {
     switch (event->type()) {

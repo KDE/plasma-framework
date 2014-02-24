@@ -36,6 +36,11 @@ class QMenuProxy : public QObject
     Q_CLASSINFO("DefaultProperty", "content")
 
     /**
+     * This is a hint to the window manager that this window is a dialog or pop-up on behalf of the given window.
+     */
+    Q_PROPERTY(QWindow *transientParent READ transientParent WRITE setTransientParent NOTIFY transientParentChanged)
+
+    /**
      * the visualParent is used to position the menu. it can be an item on the scene, like a button (that will open the menu on clicked) or another menuitem (in this case this will be a submenu)
      */
     Q_PROPERTY(QObject *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
@@ -53,6 +58,9 @@ public:
     QObject *visualParent() const;
     void setVisualParent(QObject *parent);
 
+    QWindow *transientParent();
+    void setTransientParent(QWindow *parent);
+
     Q_INVOKABLE void open(int x = 0, int y = 0);
     //Q_INVOKABLE void open();
     Q_INVOKABLE void close();
@@ -66,6 +74,7 @@ protected:
 Q_SIGNALS:
     void statusChanged();
     void visualParentChanged();
+    void transientParentChanged();
     void triggered(QMenuItem *item);
     void triggeredIndex(int index);
 
