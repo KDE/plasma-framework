@@ -663,6 +663,8 @@ Svg::~Svg()
 void Svg::setDevicePixelRatio(qreal ratio)
 {
     //be completely integer for now
+    //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+    //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     if (floor(d->devicePixelRatio) == floor(ratio)) {
         return;
     }

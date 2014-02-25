@@ -271,6 +271,8 @@ void FrameSvgItem::componentComplete()
 
 void FrameSvgItem::updateDevicePixelRatio()
 {
+    //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+    //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     m_frameSvg->setDevicePixelRatio(qMax((qreal)1.0, floor(m_units.devicePixelRatio())));
 }
 

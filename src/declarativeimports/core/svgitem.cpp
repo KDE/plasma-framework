@@ -187,6 +187,8 @@ qreal SvgItem::implicitHeight() const
 void SvgItem::updateDevicePixelRatio()
 {
     if (m_svg) {
+        //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+        //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
         m_svg.data()->setDevicePixelRatio(qMax((qreal)1.0, floor(m_units.devicePixelRatio())));
     }
 }
