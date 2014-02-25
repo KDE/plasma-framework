@@ -411,6 +411,12 @@ QObject *DialogProxy::margins() const
     return m_frameSvgItem->margins();
 }
 
+void DialogProxy::setFramelessFlags(Qt::WindowFlags flags)
+{
+    setFlags(Qt::FramelessWindowHint|flags);
+    emit flagsChanged();
+}
+
 void DialogProxy::adjustGeometry(const QRect &geom)
 {
     setGeometry(geom);

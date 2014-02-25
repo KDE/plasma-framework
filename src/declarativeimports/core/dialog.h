@@ -98,6 +98,8 @@ class DialogProxy : public QQuickWindow, public QQmlParserStatus
      **/
     Q_PROPERTY(bool outputOnly READ isOutputOnly WRITE setOutputOnly NOTIFY outputOnlyChanged)
 
+    Q_PROPERTY(Qt::WindowFlags flags READ flags WRITE setFramelessFlags NOTIFY flagsChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -125,6 +127,7 @@ public:
 
     QObject *margins() const;
 
+    void setFramelessFlags(Qt::WindowFlags flags);
     /*
      * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
      */
@@ -156,6 +159,7 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
     void outputOnlyChanged();
     void transientParentChanged();
+    void flagsChanged();
 
 public Q_SLOTS:
     void syncMainItemToSize();
