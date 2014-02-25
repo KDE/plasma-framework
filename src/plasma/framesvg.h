@@ -137,7 +137,7 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Returns the margin size given the margin edge we want
-         * If the given margin is disabled, it willreturn 0.
+         * If the given margin is disabled, it will return 0.
          * If you don't care about the margin being on or off, use fixedMarginSize()
          * @param edge the margin edge we want, top, bottom, left or right
          * @return the margin size
