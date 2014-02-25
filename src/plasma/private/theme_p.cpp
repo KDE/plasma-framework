@@ -383,6 +383,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     // clashes between element keys
     elements["%textcolor"] = color(Theme::TextColor).name();
     elements["%backgroundcolor"] = color(Theme::BackgroundColor).name();
+    elements["%highlightcolor"] = color(Theme::HighlightColor).name();
     elements["%visitedlink"] = color(Theme::VisitedLinkColor).name();
     elements["%activatedlink"] = color(Theme::HighlightColor).name();
     elements["%hoveredlink"] = color(Theme::HighlightColor).name();
@@ -417,6 +418,8 @@ const QString ThemePrivate::svgStyleSheet()
 
         stylesheet += skel.arg("Text","%textcolor");
         stylesheet += skel.arg("Background","%backgroundcolor");
+
+        stylesheet += skel.arg("Highlight","%highlightcolor");
 
         stylesheet += skel.arg("ButtonText","%buttontextcolor");
         stylesheet += skel.arg("ButtonBackground","%buttonbackgroundcolor");
