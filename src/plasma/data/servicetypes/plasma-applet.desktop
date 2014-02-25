@@ -31,4 +31,8 @@ Type=QStringList
 [PropertyDef::X-Plasma-DropUrlPatterns]
 Type=QStringList
 
+[PropertyDef::X-Plasma-NotificationArea]
+Type=bool
 
+[PropertyDef::X-Plasma-DBusActivationService]
+Type=QString
