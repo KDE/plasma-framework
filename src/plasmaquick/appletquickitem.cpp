@@ -183,12 +183,17 @@ QObject *AppletQuickItemPrivate::createFullRepresentationItem()
         return fullRepresentationItem.data();
     }
 
-    if (fullRepresentation) {
+    if (fullRepresentation && fullRepresentation.data() != qmlObject->mainComponent()) {
         fullRepresentationItem = qmlObject->createObjectFromComponent(fullRepresentation.data(), QtQml::qmlContext(qmlObject->rootObject()));
     } else {
         fullRepresentation = qmlObject->mainComponent();
         fullRepresentationItem = qmlObject->rootObject();
         emit q->fullRepresentationChanged(fullRepresentation.data());
+    }
+
+
+    if (!fullRepresentationItem) {
+        return 0;
     }
 
     QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(fullRepresentationItem.data());
@@ -435,7 +440,7 @@ Plasma::Applet *AppletQuickItem::applet() const
 
 void AppletQuickItem::init()
 {
-    if (AppletQuickItemPrivate::s_rootObjects.contains(this)) {
+    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->engine())) {
         return;
     }
 
