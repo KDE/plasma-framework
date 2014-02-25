@@ -358,7 +358,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     if (css.isEmpty()) {
         stylesheet = cachedStyleSheets.value(DEFAULTSTYLE);
         if (stylesheet.isEmpty()) {
-            stylesheet = QString("\n\
+            stylesheet = QStringLiteral("\n\
                         body {\n\
                             color: %textcolor;\n\
                             generalfont-size: %fontsize;\n\
@@ -381,26 +381,26 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements["%textcolor"] = color(Theme::TextColor).name();
-    elements["%backgroundcolor"] = color(Theme::BackgroundColor).name();
-    elements["%highlightcolor"] = color(Theme::HighlightColor).name();
-    elements["%visitedlink"] = color(Theme::VisitedLinkColor).name();
-    elements["%activatedlink"] = color(Theme::HighlightColor).name();
-    elements["%hoveredlink"] = color(Theme::HighlightColor).name();
-    elements["%link"] = color(Theme::LinkColor).name();
-    elements["%buttontextcolor"] = color(Theme::ButtonTextColor).name();
-    elements["%buttonbackgroundcolor"] = color(Theme::ButtonBackgroundColor).name();
-    elements["%buttonhovercolor"] = color(Theme::ButtonHoverColor).name();
-    elements["%buttonfocuscolor"] = color(Theme::ButtonFocusColor).name();
-    elements["%viewtextcolor"] = color(Theme::ViewTextColor).name();
-    elements["%viewbackgroundcolor"] = color(Theme::ViewBackgroundColor).name();
-    elements["%viewhovercolor"] = color(Theme::ViewHoverColor).name();
-    elements["%viewfocuscolor"] = color(Theme::ViewFocusColor).name();
+    elements[QStringLiteral("%textcolor")] = color(Theme::TextColor).name();
+    elements[QStringLiteral("%backgroundcolor")] = color(Theme::BackgroundColor).name();
+    elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor).name();
+    elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor).name();
+    elements[QStringLiteral("%activatedlink")] = color(Theme::HighlightColor).name();
+    elements[QStringLiteral("%hoveredlink")] = color(Theme::HighlightColor).name();
+    elements[QStringLiteral("%link")] = color(Theme::LinkColor).name();
+    elements[QStringLiteral("%buttontextcolor")] = color(Theme::ButtonTextColor).name();
+    elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::ButtonBackgroundColor).name();
+    elements[QStringLiteral("%buttonhovercolor")] = color(Theme::ButtonHoverColor).name();
+    elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::ButtonFocusColor).name();
+    elements[QStringLiteral("%viewtextcolor")] = color(Theme::ViewTextColor).name();
+    elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::ViewBackgroundColor).name();
+    elements[QStringLiteral("%viewhovercolor")] = color(Theme::ViewHoverColor).name();
+    elements[QStringLiteral("%viewfocuscolor")] = color(Theme::ViewFocusColor).name();
 
     QFont font = QApplication::font();
-    elements["%fontsize"] = QString("%1pt").arg(font.pointSize());
-    elements["%fontfamily"] = font.family().split('[').first();
-    elements["%smallfontsize"] = QString("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
+    elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
+    elements[QStringLiteral("%fontfamily")] = font.family().split('[').first();
+    elements[QStringLiteral("%smallfontsize")] = QString("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
     QHash<QString, QString>::const_iterator itEnd = elements.constEnd();
@@ -414,22 +414,22 @@ const QString ThemePrivate::svgStyleSheet()
 {
     QString stylesheet = cachedStyleSheets.value(SVGSTYLE);
     if (stylesheet.isEmpty()) {
-        QString skel = ".ColorScheme-%1{color:%2;}";
+        QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
-        stylesheet += skel.arg("Text","%textcolor");
-        stylesheet += skel.arg("Background","%backgroundcolor");
+        stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
+        stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
 
-        stylesheet += skel.arg("Highlight","%highlightcolor");
+        stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
 
-        stylesheet += skel.arg("ButtonText","%buttontextcolor");
-        stylesheet += skel.arg("ButtonBackground","%buttonbackgroundcolor");
-        stylesheet += skel.arg("ButtonHover","%buttonhovercolor");
-        stylesheet += skel.arg("ButtonFocus","%buttonfocuscolor");
+        stylesheet += skel.arg(QStringLiteral("ButtonText"), QStringLiteral("%buttontextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonBackground"), QStringLiteral("%buttonbackgroundcolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonHover"), QStringLiteral("%buttonhovercolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonFocus"), QStringLiteral("%buttonfocuscolor"));
 
-        stylesheet += skel.arg("ViewText","%viewtextcolor");
-        stylesheet += skel.arg("ViewBackground","%viewbackgroundcolor");
-        stylesheet += skel.arg("ViewHover","%viewhovercolor");
-        stylesheet += skel.arg("ViewFocus","%viewfocuscolor");
+        stylesheet += skel.arg(QStringLiteral("ViewText"), QStringLiteral("%viewtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewBackground"), QStringLiteral("%viewbackgroundcolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewHover"), QStringLiteral("%viewhovercolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
 
         stylesheet = processStyleSheet(stylesheet);
         cachedStyleSheets.insert(SVGSTYLE, stylesheet);
