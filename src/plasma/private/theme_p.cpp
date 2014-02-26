@@ -109,7 +109,7 @@ ThemePrivate::~ThemePrivate()
 KConfigGroup &ThemePrivate::config()
     {
         if (!cfg.isValid()) {
-            QString groupName = "Theme";
+            QString groupName = QStringLiteral("Theme");
 
             if (!useGlobal) {
                 QString app = QCoreApplication::applicationName();
@@ -138,7 +138,7 @@ bool ThemePrivate::useCache()
             cacheSize = config.themeCacheKb();
         }
         const bool isRegularTheme = themeName != systemColorsTheme;
-        QString cacheFile = "plasma_theme_" + themeName;
+        QString cacheFile = QStringLiteral("plasma_theme_") + themeName;
 
         // clear any cached values from the previous theme cache
         themeVersion.clear();
@@ -150,7 +150,7 @@ bool ThemePrivate::useCache()
 
 
         if (isRegularTheme) {
-            const QString cacheFileBase = cacheFile + "*.kcache";
+            const QString cacheFileBase = cacheFile + QStringLiteral("*.kcache");
 
             QString currentCacheFileName;
             if (!themeMetadataPath.isEmpty()) {
@@ -159,7 +159,7 @@ bool ThemePrivate::useCache()
                 themeVersion = pluginInfo.version();
                 if (!themeVersion.isEmpty()) {
                     cacheFile += "_v" + themeVersion;
-                    currentCacheFileName = cacheFile + ".kcache";
+                    currentCacheFileName = cacheFile + QStringLiteral(".kcache");
                 }
 
                 // watch the metadata file for changes at runtime
@@ -209,14 +209,14 @@ bool ThemePrivate::useCache()
     }
 
     if (cacheTheme && !svgElementsCache) {
-        const QString svgElementsFileNameBase = "plasma-svgelements-" + themeName;
+        const QString svgElementsFileNameBase = QStringLiteral("plasma-svgelements-") + themeName;
         QString svgElementsFileName = svgElementsFileNameBase;
         if (!themeVersion.isEmpty()) {
             svgElementsFileName += "_v" + themeVersion;
         }
 
         // now we check for (and remove) old caches
-        foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, svgElementsFileNameBase + "*")) {
+        foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, svgElementsFileNameBase + QLatin1Char('*'))) {
             if (cachesTooOld || !file.endsWith(svgElementsFileName)) {
                 QFile::remove(file);
             }
@@ -533,7 +533,7 @@ void ThemePrivate::processContrastSettings(KConfigBase* metadata)
     KConfigGroup cg;
     if (metadata->hasGroup("ContrastEffect")) {
         cg = KConfigGroup(metadata, "ContrastEffect");
-        backgroundContrastEnabled = cg.readEntry("enabled", false);
+        backgroundContrastEnabled = cg.readEntry(QStringLiteral("enabled"), false);
 
         //if (backgroundContrastEnabled) {
             // Make up sensible default values, based on the background color
@@ -548,9 +548,9 @@ void ThemePrivate::processContrastSettings(KConfigBase* metadata)
                 _intensity = 0.45;
                 _saturation = 1.7;
             }
-            backgroundContrast = cg.readEntry("contrast", _contrast);
-            backgroundIntensity = cg.readEntry("intensity", _intensity);
-            backgroundSaturation = cg.readEntry("saturation", _saturation);
+            backgroundContrast = cg.readEntry(QStringLiteral("contrast"), _contrast);
+            backgroundIntensity = cg.readEntry(QStringLiteral("intensity"), _intensity);
+            backgroundSaturation = cg.readEntry(QStringLiteral("saturation"), _saturation);
         //}
     } else {
         backgroundContrastEnabled = false;
@@ -576,7 +576,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (realTheme) {
         QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/'));
         if (themePath.isEmpty() && themeName.isEmpty()) {
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, "desktoptheme/default", QStandardPaths::LocateDirectory);
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("desktoptheme/default"), QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;
