@@ -21,6 +21,8 @@
 
 #include <QQuickPaintedItem>
 
+#include "units.h"
+
 namespace Plasma {
 
     class Svg;
@@ -99,11 +101,13 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void updateNeeded();
+    void updateDevicePixelRatio();
 
 private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
     bool m_smooth;
+    Units m_units;
 };
 }
 

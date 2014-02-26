@@ -81,6 +81,19 @@ class PLASMA_EXPORT Svg : public QObject
         ~Svg();
 
         /**
+         * Set the device pixel ratio for the Svg. This is the ratio between 
+         * image pixels and device-independent pixels.
+         * The default value is 1.0.
+         * Setting it to something more, will make all the elements of this svg appear bigger.
+         */
+        void setDevicePixelRatio(qreal ratio);
+
+        /**
+         * @return the device pixel ratio for this Svg.
+         */
+        qreal devicePixelRatio();
+
+        /**
          * Returns a pixmap of the SVG represented by this object.
          *
          * The size of the pixmap will be the size of this Svg object (size())

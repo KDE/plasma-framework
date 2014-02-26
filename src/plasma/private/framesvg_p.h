@@ -100,6 +100,18 @@ public:
     int rightMargin;
     int bottomMargin;
 
+    //measures
+    int fixedTopHeight;
+    int fixedLeftWidth;
+    int fixedRightWidth;
+    int fixedBottomHeight;
+
+    //margins, are equal to the measures by default
+    int fixedTopMargin;
+    int fixedLeftMargin;
+    int fixedRightMargin;
+    int fixedBottomMargin;
+
     //size of the svg where the size of the "center"
     //element is contentWidth x contentHeight
     bool noBorderPadding : 1;

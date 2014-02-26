@@ -137,6 +137,8 @@ class PLASMA_EXPORT FrameSvg : public Svg
 
         /**
          * Returns the margin size given the margin edge we want
+         * If the given margin is disabled, it will return 0.
+         * If you don't care about the margin being on or off, use fixedMarginSize()
          * @param edge the margin edge we want, top, bottom, left or right
          * @return the margin size
          */
@@ -145,12 +147,33 @@ class PLASMA_EXPORT FrameSvg : public Svg
         /**
          * Convenience method that extracts the size of the four margins
          * in the four output parameters
+         * The disabled margins will be 0.
+         * If you don't care about the margins being on or off, use getFixedMargins()
          * @param left left margin size
          * @param top top margin size
          * @param right right margin size
          * @param bottom bottom margin size
          */
         Q_INVOKABLE void getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
+
+        /**
+         * Returns the margin size given the margin edge we want.
+         * Compared to marginSize(), this doesn't depend whether the margin is enabled or not
+         * @param edge the margin edge we want, top, bottom, left or right
+         * @return the margin size
+         */
+        Q_INVOKABLE qreal fixedMarginSize(const Plasma::Types::MarginEdge edge) const;
+
+        /**
+         * Convenience method that extracts the size of the four margins
+         * in the four output parameters
+         * Compared to getMargins(), this doesn't depend whether the margins are enabled or not
+         * @param left left margin size
+         * @param top top margin size
+         * @param right right margin size
+         * @param bottom bottom margin size
+         */
+        Q_INVOKABLE void getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
         /**
          * @return the rectangle of the center element, taking the margins into account.
