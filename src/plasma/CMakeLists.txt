@@ -110,7 +110,6 @@ endif()
 
 target_link_libraries(KF5Plasma
 PUBLIC
-    Qt5::Widgets
     KF5::ConfigWidgets # KConfigSkeleton
     KF5::Service # For kplugininfo.h and kservice.h
 PRIVATE
