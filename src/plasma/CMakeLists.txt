@@ -114,14 +114,13 @@ PUBLIC
     KF5::ConfigWidgets # KConfigSkeleton
     KF5::Service # For kplugininfo.h and kservice.h
 PRIVATE
-    Qt5::Network
     Qt5::Sql
     Qt5::Quick # needed in service.cpp, remove?
     Qt5::Svg
     Qt5::DBus
     Qt5::Xml
     KF5::Archive
-    KF5::GuiAddons
+    KF5::GuiAddons #kimagecache
     KF5::IconThemes
     KF5::I18n
     KF5::KIOCore
