@@ -126,7 +126,6 @@ PRIVATE
     KF5::I18n
     KF5::KIOCore
     KF5::KIOWidgets
-    KF5::ThreadWeaver
     KF5::WindowSystem
     KF5::Declarative
     KF5::XmlGui
