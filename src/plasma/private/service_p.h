@@ -31,9 +31,6 @@
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 
-#include <dnssd/publicservice.h>
-#include <dnssd/servicebrowser.h>
-
 #include "plasma/configloader.h"
 
 namespace Plasma
@@ -77,8 +74,7 @@ class ServicePrivate
 public:
     ServicePrivate(Service *service)
         : q(service),
-          dummyConfig(0),
-          publicService(0)
+          dummyConfig(0)
     {        
     }
 
@@ -99,7 +95,6 @@ public:
     QString resourcename;
     QMap<QString, QVariantMap> operationsMap;
     KConfig *dummyConfig;
-    KDNSSD::PublicService *publicService;
     QSet<QString> disabledOperations;
 };
 

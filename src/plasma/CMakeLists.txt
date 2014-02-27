@@ -116,7 +116,7 @@ endif()
 target_link_libraries(KF5Plasma
 PUBLIC
     Qt5::Widgets
-    KF5::ConfigWidgets
+    KF5::ConfigWidgets # KConfigSkeleton
     KF5::Service # For kplugininfo.h and kservice.h
 PRIVATE
     Qt5::Network
@@ -137,7 +137,6 @@ PRIVATE
     KF5::Declarative
     KF5::XmlGui
     KF5::GlobalAccel
-    KF5::DNSSD
     ${PLASMA_EXTRA_LIBS}
 )
 
