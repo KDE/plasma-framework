@@ -240,7 +240,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
-            addApplet(appletName, QVariantList(), QPoint(x, y));
+
+            metaObject()->invokeMethod(this, "addApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QPoint, QPoint(x, y)));
         }
     } else if (mimeData->hasUrls()) {
         //TODO: collect the mimetypes of available script engines and offer
