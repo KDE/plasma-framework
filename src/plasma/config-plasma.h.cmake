@@ -1,5 +1,4 @@
 #cmakedefine01 PLASMA_NO_KDEWEBKIT
-#cmakedefine01 PLASMA_NO_SOLID
 #cmakedefine01 PLASMA_NO_KIO
 #cmakedefine01 PLASMA_NO_KUTILS
 #cmakedefine01 HAVE_X11
