@@ -133,7 +133,6 @@ PRIVATE
     KF5::KIOWidgets
     KF5::ThreadWeaver
     KF5::WindowSystem
-    KF5::Auth
     KF5::Declarative
     KF5::XmlGui
     KF5::GlobalAccel
