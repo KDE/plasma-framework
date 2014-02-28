@@ -77,7 +77,7 @@ QQuickItem* DeclarativeDragArea::delegate() const
 void DeclarativeDragArea::setDelegate(QQuickItem *delegate)
 {
     if (m_delegate != delegate) {
-        qDebug() << " ______________________________________________ " << delegate;
+        //qDebug() << " ______________________________________________ " << delegate;
         m_delegate = delegate;
         emit delegateChanged();
     }
@@ -219,7 +219,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
 
     if (m_draggingJustStarted) {
         m_draggingJustStarted = false;
-        qDebug() << "************ DDDD new QDrag" << objectName();
+        //qDebug() << "************ DDDD new QDrag" << objectName();
         QDrag *drag = new QDrag(parent());
         DeclarativeMimeData* dataCopy = new DeclarativeMimeData(m_data); //Qt will take ownership of this copy and delete it.
         dataCopy->setText(objectName());
@@ -288,7 +288,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
                     p.end();
                     drag->setPixmap(pm);
                 }
-                qDebug() << "DD pixmaps set for icons: " << icons;
+                //qDebug() << "DD pixmaps set for icons: " << icons;
             }
 
         }
@@ -312,19 +312,19 @@ bool DeclarativeDragArea::childMouseEventFilter(QQuickItem *item, QEvent *event)
     switch (event->type()) {
     case QEvent::MouseButtonPress: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
-        qDebug() << "press in dragarea";
+        //qDebug() << "press in dragarea";
         mousePressEvent(me);
         break;
     }
     case QEvent::MouseMove: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
-        qDebug() << "move in dragarea";
+        //qDebug() << "move in dragarea";
         mouseMoveEvent(me);
         break;
     }
     case QEvent::MouseButtonRelease: {
         QMouseEvent *me = static_cast<QMouseEvent *>(event);
-        qDebug() << "release in dragarea";
+        //qDebug() << "release in dragarea";
         mouseReleaseEvent(me);
         break;
     }
