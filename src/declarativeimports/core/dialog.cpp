@@ -91,7 +91,9 @@ DialogProxy::DialogProxy(QQuickItem *parent)
 
 DialogProxy::~DialogProxy()
 {
-    DialogShadows::self()->removeWindow(this);
+    if (!qApp->closingDown()) {
+        DialogShadows::self()->removeWindow(this);
+    }
 }
 
 QQuickItem *DialogProxy::mainItem() const
