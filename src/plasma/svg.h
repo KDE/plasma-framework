@@ -108,6 +108,21 @@ class PLASMA_EXPORT Svg : public QObject
         Q_INVOKABLE QPixmap pixmap(const QString &elementID = QString());
 
         /**
+         * Returns an image of the SVG represented by this object.
+         *
+         * The size of the image will be the size of this Svg object (size())
+         * if containsMultipleImages is @c true; otherwise, it will be the
+         * size of the requested element after the whole SVG has been scaled
+         * to size().
+         *
+         * @param elementId  the ID string of the element to render, or an empty
+         *                 string for the whole SVG (the default)
+         * @return a QPixmap of the rendered SVG
+         */
+        Q_INVOKABLE QImage image(const QSize &size, const QString &elementID = QString());
+
+
+        /**
          * Paints all or part of the SVG represented by this object
          *
          * The size of the painted area will be the size of this Svg object

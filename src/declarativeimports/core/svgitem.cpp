@@ -1,5 +1,6 @@
 /*
  *   Copyright 2010 Marco Martin <mart@kde.org>
+ *   Copyright 2014 David Edmundson <davidedmundson@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -21,7 +22,10 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QPainter>
+#include <QQuickWindow>
+#include <QSGTexture>
+#include <QSGSimpleTextureNode>
+#include <QRectF>
 
 #include "QDebug"
 #include "plasma/svg.h"
@@ -29,9 +33,24 @@
 namespace Plasma
 {
 
+class SVGTextureNode : public QSGSimpleTextureNode
+{
+    public:
+        SVGTextureNode() {}
+        void setTexture(QSGTexture *texture);
+    private:
+        QScopedPointer<QSGTexture> m_texture;
+};
+
+void SVGTextureNode::setTexture(QSGTexture *texture) {
+    m_texture.reset(texture);
+    QSGSimpleTextureNode::setTexture(texture);
+}
+
 SvgItem::SvgItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent),
-      m_smooth(false)
+    : QQuickItem(parent),
+      m_smooth(false),
+      m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
     connect(&m_units, &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
@@ -58,6 +77,8 @@ void SvgItem::setElementId(const QString &elementID)
     m_elementID = elementID;
     emit elementIdChanged();
     emit naturalSizeChanged();
+
+    m_textureChanged = true;
     update();
 }
 
@@ -92,12 +113,15 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
     }
 
+
     if (implicitWidth() <= 0) {
         setImplicitWidth(naturalSize().width());
     }
     if (implicitHeight() <= 0) {
         setImplicitHeight(naturalSize().height());
     }
+
+    m_textureChanged = true;
 
     emit svgChanged();
     emit naturalSizeChanged();
@@ -115,7 +139,6 @@ void SvgItem::setSmooth(const bool smooth)
     }
     m_smooth = smooth;
     emit smoothChanged();
-    update();
 }
 
 bool SvgItem::smooth() const
@@ -123,22 +146,39 @@ bool SvgItem::smooth() const
     return m_smooth;
 }
 
-void SvgItem::paint(QPainter *painter)
+QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
-    if (!m_svg) {
-        return;
+    if (!window() || !m_svg) {
+        delete oldNode;
+        return Q_NULLPTR;
     }
-    //do without painter save, faster and the support can be compiled out
-    const bool wasAntiAlias = painter->testRenderHint(QPainter::Antialiasing);
-    const bool wasSmoothTransform = painter->testRenderHint(QPainter::SmoothPixmapTransform);
-    painter->setRenderHint(QPainter::Antialiasing, m_smooth);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
 
-    //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
-    m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
-    m_svg.data()->paint(painter, boundingRect(), m_elementID);
-    painter->setRenderHint(QPainter::Antialiasing, wasAntiAlias);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, wasSmoothTransform);
+    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
+    if (!textureNode) {
+        textureNode = new SVGTextureNode;
+        textureNode->setFiltering(QSGTexture::Linear);
+        m_textureChanged = true;
+    }
+
+    //TODO use a heuristic to work out when to redraw
+    //if !m_smooth and size is approximate simply change the textureNode.rect without
+    //updating the material
+
+    if (m_textureChanged || textureNode->texture()->textureSize() != QSize(width(), height())) {
+        //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
+        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+        const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
+        QSGTexture *texture = window()->createTextureFromImage(image);
+        if (m_smooth) {
+            texture->setFiltering(QSGTexture::Linear);
+        }
+        textureNode->setTexture(texture);
+        m_textureChanged = false;
+
+        textureNode->setRect(0, 0, width(), height());
+    }
+
+    return textureNode;
 }
 
 void SvgItem::updateNeeded()

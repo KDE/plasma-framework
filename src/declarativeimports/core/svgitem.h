@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2010 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2014 David Edmundson <davidedmundson@kde.org>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,7 +20,7 @@
 #ifndef SVGITEM_P
 #define SVGITEM_P
 
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 
 #include "units.h"
 
@@ -27,7 +28,7 @@ namespace Plasma {
 
     class Svg;
 
-class SvgItem : public QQuickPaintedItem
+class SvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -83,13 +84,13 @@ public:
 
     QSizeF naturalSize() const;
 
-    void paint(QPainter *painter);
-
     void setImplicitWidth(qreal width);
     qreal implicitWidth() const;
 
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
+
+    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
 
 Q_SIGNALS:
     void elementIdChanged();
@@ -107,6 +108,7 @@ private:
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
     bool m_smooth;
+    bool m_textureChanged;
     Units m_units;
 };
 }
