@@ -378,12 +378,13 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
             dialogPos.setY(bottomPoint.y());
         }
     }
+
     if (dialogPos.y() + size.height() > avail.bottom()) {
         // hitting bottom
         if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
         } else {
-            dialogPos.setY(avail.bottom() - item->boundingRect().height());
+            dialogPos.setY(avail.bottom() - size.height());
         }
     }
 
