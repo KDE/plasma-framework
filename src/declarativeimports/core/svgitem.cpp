@@ -151,6 +151,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
     if (!textureNode) {
         textureNode = new SVGTextureNode;
+        textureNode->setFiltering(QSGTexture::Linear);
         m_textureChanged = true;
     }
 
@@ -163,6 +164,9 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
         QSGTexture *texture = window()->createTextureFromImage(image);
+        if (m_smooth) {
+            texture->setFiltering(QSGTexture::Linear);
+        }
         textureNode->setTexture(texture);
         m_textureChanged = false;
 
