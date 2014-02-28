@@ -28,8 +28,6 @@
 
 #include <kdeclarative/qmlobject.h>
 
-Q_GLOBAL_STATIC(ToolTipDialog, toolTipDialogInstance)
-
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : DialogProxy(parent),
       m_qmlObject(0),
@@ -171,11 +169,6 @@ void ToolTipDialog::setInteractive(bool interactive)
 void ToolTipDialog::valueChanged(const QVariant &value)
 {
     setPosition(value.value<QPoint>());
-}
-
-ToolTipDialog* ToolTipDialog::instance()
-{
-    return toolTipDialogInstance();
 }
 
 #include "moc_tooltipdialog.cpp"

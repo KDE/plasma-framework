@@ -29,12 +29,16 @@
 #include "framesvgitem.h"
 #include <kwindoweffects.h>
 
+ToolTipDialog *ToolTip::s_dialog = 0;
+int ToolTip::s_dialogUsers  = 0;
+
 ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
       m_containsMouse(false),
       m_location(Plasma::Types::Floating),
       m_active(true),
-      m_interactive(false)
+      m_interactive(false),
+      m_usingDialog(false)
 {
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
@@ -48,11 +52,34 @@ ToolTip::ToolTip(QQuickItem *parent)
 
 ToolTip::~ToolTip()
 {
+    if (m_usingDialog) {
+        --s_dialogUsers;
+    }
+
+    if (s_dialogUsers == 0) {
+        delete s_dialog;
+        s_dialog = 0;
+    }
 }
 
 QQuickItem *ToolTip::mainItem() const
 {
     return m_mainItem.data();
+}
+
+ToolTipDialog *ToolTip::tooltipDialogInstance()
+{
+    if (!s_dialog) {
+        s_dialog = new ToolTipDialog;
+        s_dialogUsers = 1;
+    }
+
+    if (!m_usingDialog) {
+        s_dialogUsers++;
+        m_usingDialog = true;
+    }
+
+    return s_dialog;
 }
 
 void ToolTip::setMainItem(QQuickItem *mainItem)
@@ -70,7 +97,7 @@ void ToolTip::showToolTip()
         return;
     }
 
-    ToolTipDialog *dlg = ToolTipDialog::instance();
+    ToolTipDialog *dlg = tooltipDialogInstance();
 
     if (!mainItem()) {
         setMainItem(dlg->loadDefaultItem());
@@ -181,7 +208,7 @@ void ToolTip::setActive(bool active)
 
     m_active = active;
     if (!active) {
-        ToolTipDialog::instance()->dismiss();
+        tooltipDialogInstance()->dismiss();
     }
     emit activeChanged();
 }
@@ -247,7 +274,7 @@ void ToolTip::setContainsMouse(bool contains)
         emit containsMouseChanged();
     }
     if (!contains) {
-        ToolTipDialog::instance()->dismiss();
+        tooltipDialogInstance()->dismiss();
     }
 }
 
@@ -255,12 +282,12 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
 {
     setContainsMouse(true);
     //m_showTimer->stop();
-    if (ToolTipDialog::instance()->isVisible()) {
+    if (tooltipDialogInstance()->isVisible()) {
         // We signal the tooltipmanager that we're "potentially interested,
         // and ask to keep it open for a bit, so other items get the chance
         // to update the content before the tooltip hides -- this avoids
         // flickering
-        ToolTipDialog::instance()->keepalive();
+        tooltipDialogInstance()->keepalive();
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
     } else if (m_mainItem ||

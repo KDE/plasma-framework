@@ -29,6 +29,7 @@
 
 class QQuickItem;
 class QGraphicsWidget;
+class ToolTipDialog;
 
 /**
  * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
@@ -149,6 +150,8 @@ protected:
     void hoverEnterEvent(QHoverEvent *event);
     void hoverLeaveEvent(QHoverEvent *event);
 
+    ToolTipDialog *tooltipDialogInstance();
+
 Q_SIGNALS:
     void mainItemChanged();
     void visibleChanged();
@@ -172,6 +175,13 @@ private:
     QVariant m_icon;
     bool m_active;
     bool m_interactive;
+
+    //ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
+    //are deleted too later after some stuff in the qml runtime has already been deleted,
+    //causing a crash on exit
+    bool m_usingDialog : 1;
+    static ToolTipDialog *s_dialog;
+    static int s_dialogUsers;
 };
 
 #endif

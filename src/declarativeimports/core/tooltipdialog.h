@@ -59,8 +59,6 @@ public:
      */
     virtual void adjustGeometry(const QRect &geom);
 
-    static ToolTipDialog* instance();
-
     void dismiss();
     void keepalive();
 
