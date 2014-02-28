@@ -98,9 +98,6 @@ Q_SIGNALS:
     void implicitWidthChanged();
     void implicitHeightChanged();
 
-protected:
-    void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
-
 protected Q_SLOTS:
     void updateNeeded();
 

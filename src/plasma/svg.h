@@ -106,7 +106,7 @@ class PLASMA_EXPORT Svg : public QObject
          *                 string for the whole SVG (the default)
          * @return a QPixmap of the rendered SVG
          */
-        Q_INVOKABLE QImage image(const QString &elementID = QString());
+        Q_INVOKABLE QImage image(const QSize &size, const QString &elementID = QString());
 
 
         /**
