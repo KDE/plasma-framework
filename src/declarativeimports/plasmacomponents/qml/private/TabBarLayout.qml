@@ -61,6 +61,10 @@ import "AppManager.js" as Utils
 Item {
     id: root
 
+    property int tabPosition: Qt.TopEdge
+
+    property bool isHorizontal: (tabPosition != Qt.LeftEdge && tabPosition != Qt.RightEdge)
+
     Component.onCompleted: priv.layoutChildren()
     onChildrenChanged: priv.layoutChildren()
     onWidthChanged: priv.layoutChildren()
@@ -69,7 +73,6 @@ Item {
 
     Keys.onPressed: {
         if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
-            
             if (event.key == Qt.Key_Right || priv.mirrored) {
                 priv.goNextTab()
                 event.accepted = true
@@ -164,9 +167,9 @@ Item {
             priv.tabBar = Utils.findParent(root, "currentTab")
             var childCount = root.children.length
             var visibleChildCount = childCount
-            var contentWidth = 0
-            var contentHeight = 0
-            var maxChildWidth = 0
+            var contentWidth = theme.mSize(theme.defaultFont).width * 3
+            var contentHeight = theme.mSize(theme.defaultFont).height * 2
+            var maxChildSize = 0
             if (childCount != 0) {
                 //not too much efficient but the loop over children needs to be done two times to get the proper child width
                 for (var i = 0; i < childCount; ++i) {
@@ -175,8 +178,9 @@ Item {
                     }
                 }
 
-                var maxAllowedWidth = theme.mSize(theme.defaultFont).width * 14
+                var maxAllowedSize = theme.mSize(theme.defaultFont).width * 14
                 var itemWidth = (root.width - (visibleChildCount-1)*10) / visibleChildCount
+                var itemHeight = (root.height - (visibleChildCount-1)*10) / visibleChildCount
 
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
@@ -188,16 +192,35 @@ Item {
                         continue
                     }
 
-                    child.x = visibleIndex * itemWidth + visibleIndex*10
-                    ++visibleIndex
-                    child.y = 0
-                    child.width = itemWidth
-                    child.height = root.height
+                    //Vertical
+                    if (!root.isHorizontal) {
+                        child.x = 0
+                        child.y = visibleIndex * itemHeight + visibleIndex*10
+                        ++visibleIndex
+                        child.width = root.width
+                        child.height = itemHeight
 
-                    if (child.implicitWidth != undefined) {
-                        maxChildWidth = Math.max(maxChildWidth, Math.min(maxAllowedWidth, child.implicitWidth))
-                        contentWidth = Math.max(contentWidth, (maxChildWidth + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
-                        contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
+                        if (child.implicitHeight != undefined) {
+                            maxChildSize = Math.max(maxChildSize, Math.min(maxAllowedSize, child.implicitHeight));
+
+                            contentWidth = Math.max(contentWidth, (child.implicitWidth + buttonFrame.margins.left + buttonFrame.margins.right));
+
+                            contentHeight = Math.max(contentHeight, (maxChildSize + buttonFrame.margins.top + buttonFrame.margins.bottom) * childCount);
+                        }
+
+                    //Horizontal
+                    } else {
+                        child.x = visibleIndex * itemWidth + visibleIndex*10
+                        ++visibleIndex
+                        child.y = 0
+                        child.width = itemWidth
+                        child.height = root.height
+
+                        if (child.implicitWidth != undefined) {
+                            maxChildSize = Math.max(maxChildSize, Math.min(maxAllowedSize, child.implicitWidth))
+                            contentWidth = Math.max(contentWidth, (maxChildSize + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
+                            contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
+                        }
                     }
                 }
             }

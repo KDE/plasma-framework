@@ -41,6 +41,7 @@
 ****************************************************************************/
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.1
 import "private/AppManager.js" as Utils
 import org.kde.plasma.core 2.0 as PlasmaCore
 
@@ -86,8 +87,8 @@ Item {
      */
     signal clicked
 
-    implicitWidth: label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? 16 : 0))
-    implicitHeight: label.implicitHeight + (internal.portrait ? (iconSource != null ? 16 : 0) : 0)
+    implicitWidth: Math.max(label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? units.iconSizes.small : 0)), height)
+    implicitHeight: label.implicitHeight + (internal.portrait ? (iconSource != null ? units.iconSizes.small : 0) : 0)
 
     opacity: enabled ? 1 : 0.6
     //long notation to not make it overwritten by implementations
@@ -113,7 +114,7 @@ Item {
 
         property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
-        property bool portrait: (root != undefined) && (label != undefined) && root.height >= label.paintedHeight + 16
+        property bool portrait: (root != undefined) && (label != undefined) && root.height >= label.paintedHeight + units.iconSizes.small
 
         function click() {
             root.clicked()
@@ -129,36 +130,36 @@ Item {
         }
     }
 
-    Label {
-        id: label
+    GridLayout {
+        anchors.fill: parent
+        rows: 1
+        columns: 1
+        flow: internal.portrait ? GridLayout.LeftToRight : GridLayout.TopToBottom
 
-        objectName: "label"
+        PlasmaCore.IconItem {
+            id: imageLoader
+            visible: iconSource != null
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-        anchors {
-            top: internal.portrait && iconSource != null ? imageLoader.bottom : parent.top
-            left: internal.portrait || iconSource == null ? parent.left : imageLoader.right
-            leftMargin: iconSource == null ? 0 : theme.mSize(theme.defaultFont).width
-            right: parent.right
-            bottom: parent.bottom
+            implicitWidth: 16//internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
+            implicitHeight: implicitWidth
+
         }
 
-        elide: Text.ElideRight
-        horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+        Label {
+            id: label
 
-        color: root.checked ? theme.buttonTextColor : theme.textColor
-    }
+            objectName: "label"
 
-    PlasmaCore.IconItem {
-        id: imageLoader
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+            Layout.preferredWidth: internal.portrait ? root.width : implicitWidth
+            Layout.preferredHeight: internal.portrait ? implicitHeight : root.height
 
-        implicitWidth: internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
-        implicitHeight: implicitWidth
+            elide: Text.ElideRight
+            horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
 
-        anchors {
-            left: internal.portrait ? undefined : parent.left
-            horizontalCenter: internal.portrait ? parent.horizontalCenter : undefined
-            verticalCenter: internal.portrait ? undefined : parent.verticalCenter
+            color: root.checked ? theme.buttonTextColor : theme.textColor
         }
     }
 

@@ -41,6 +41,7 @@
 ****************************************************************************/
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -68,6 +69,16 @@ FocusScope {
      */
     property Item currentTab
 
+    /**
+     * The position of the tabs regarding the contents.
+     * possibilities:
+     * Qt.TopEdge (default)
+     * Qt.LeftEdge
+     * Qt.RightEdge
+     * Qt.BottomEdge
+     */
+    property alias tabPosition: tabBarLayout.tabPosition
+
     implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
     implicitHeight: layout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom
 
@@ -84,20 +95,28 @@ FocusScope {
         anchors {
             fill: parent
             leftMargin: 1
-            rightMargin: (buttonsLayout.visible ? buttonsLayout.width : 0) + 1
+            topMargin: 1
+            rightMargin: (buttonsLayout.visible && layout.isHorizontal? buttonsLayout.width : 0) + 1
+            bottomMargin: (buttonsLayout.visible && !layout.isHorizontal? buttonsLayout.height : 0) + 1
         }
         clip: true
         PlasmaCore.FrameSvgItem {
             id: buttonFrame
 
             visible: currentTab !== null
-            x: tabBarLayout.x + currentTab.x + backgroundFrame.margins.left -1
-            y: backgroundFrame.margins.top
-            width: currentTab.width + margins.left + margins.right -1
-            height: currentTab.height + margins.top + margins.bottom
+            x: layout.isHorizontal ? tabBarLayout.x + currentTab.x : 0
+            y: layout.isHorizontal ? 0 : tabBarLayout.y + currentTab.y
+            width: layout.isHorizontal ? currentTab.width + margins.left + margins.right -1 : parent.width
+            height: layout.isHorizontal ? parent.height : currentTab.height + margins.top + margins.bottom
             imagePath: "widgets/button"
             prefix: "normal"
             Behavior on x {
+                PropertyAnimation {
+                    easing.type: Easing.InQuad
+                    duration: units.longDuration
+                }
+            }
+            Behavior on y {
                 PropertyAnimation {
                     easing.type: Easing.InQuad
                     duration: units.longDuration
@@ -112,61 +131,85 @@ FocusScope {
     }
     PlasmaCore.SvgItem {
         svg: scrollWidgetSvg
-        elementId: "border-left"
+        elementId: layout.isHorizontal ? "border-left" : "border-top"
         width: naturalSize.width
+        height: naturalSize.height
         visible: buttonsLayout.visible
         anchors {
+            margins: -1
             left: buttonCutter.left
-            leftMargin: -1
+            right: layout.isHorizontal ? undefined : buttonCutter.right
             top: buttonCutter.top
-            bottom: buttonCutter.bottom
-            topMargin: backgroundFrame.margins.top
-            bottomMargin: backgroundFrame.margins.bottom
+            bottom: layout.isHorizontal ? buttonCutter.bottom : undefined
         }
     }
     PlasmaCore.SvgItem {
         svg: scrollWidgetSvg
-        elementId: "border-right"
+        elementId: layout.isHorizontal ? "border-right" : "border-bottom"
         width: naturalSize.width
+        height: naturalSize.height
         visible: buttonsLayout.visible
         anchors {
+            margins: -1
+            left: layout.isHorizontal ? undefined : buttonCutter.left
             right: buttonCutter.right
-            rightMargin: -1
-            top: buttonCutter.top
+            top: layout.isHorizontal ? buttonCutter.top : undefined
             bottom: buttonCutter.bottom
-            topMargin: backgroundFrame.margins.top
-            bottomMargin: backgroundFrame.margins.bottom
         }
     }
 
-    onCurrentTabChanged: tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
+    onCurrentTabChanged: {
+        if (layout.isHorizontal) {
+            tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width);
+        } else {
+            tabBarLayout.y = Math.max(Math.min(0, -(currentTab.y + currentTab.height/2) + tabbarScroller.height/2), -tabBarLayout.height + tabbarScroller.height);
+        }
+    }
 
     onWidthChanged: {
         if (currentTab) {
-            tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width)
+            if (layout.isHorizontal) {
+                tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width);
+            } else {
+                tabBarLayout.y = Math.max(Math.min(0, -(currentTab.y + currentTab.height/2) + tabbarScroller.height/2), -tabBarLayout.height + tabbarScroller.height);
+            }
         }
     }
 
     Item {
         id: tabbarScroller
         clip: true
+
         anchors {
             fill: parent
-            leftMargin: backgroundFrame.margins.left + buttonFrame.margins.left
-            topMargin: backgroundFrame.margins.top + buttonFrame.margins.top
-            rightMargin: backgroundFrame.margins.right + (buttonsLayout.visible ? buttonsLayout.width : buttonFrame.margins.right)
-            bottomMargin: backgroundFrame.margins.bottom + buttonFrame.margins.bottom
+            leftMargin: buttonFrame.margins.left
+            topMargin: buttonFrame.margins.top
+            rightMargin: buttonsLayout.visible && layout.isHorizontal ? buttonsLayout.width : buttonFrame.margins.right
+            bottomMargin: buttonsLayout.visible && !layout.isHorizontal ? buttonsLayout.height : buttonFrame.margins.bottom
         }
+
 
         Private.TabBarLayout {
             id: tabBarLayout
             //A bit of snap before scrolling the layout
-            width: (implicitWidth - parent.width < theme.mSize(theme.defaultFont).width*4) ? parent.width : implicitWidth
+            width: layout.isHorizontal ? ((implicitWidth - parent.width < theme.mSize(theme.defaultFont).width*4) ? parent.width : implicitWidth) : root.width;
+
+            height: !layout.isHorizontal ? ((implicitHeight - parent.height < theme.mSize(theme.defaultFont).width*4) ? parent.height : implicitHeight) : root.height
+
             anchors {
-                top: parent.top
-                bottom: parent.bottom
+                top: layout.isHorizontal ? parent.top : undefined
+                bottom: layout.isHorizontal ? parent.bottom : undefined
+                left: !layout.isHorizontal ? parent.left : undefined
+                right: !layout.isHorizontal ? parent.right : undefined
             }
+
             Behavior on x {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            Behavior on y {
                 NumberAnimation {
                     duration: units.longDuration
                     easing.type: Easing.InOutQuad
@@ -174,29 +217,46 @@ FocusScope {
             }
         }
     }
-    Row {
+    GridLayout {
         id: buttonsLayout
-        visible: tabBarLayout.width > root.width - backgroundFrame.margins.left - backgroundFrame.margins.right
-        height: Math.min(parent.height, units.iconSizes.medium)
+        rows: 1
+        columns: 1
+        flow: layout.isHorizontal ? GridLayout.TopToBottom : GridLayout.LeftToRight
+        visible: layout.isHorizontal ? tabBarLayout.width > root.width : tabBarLayout.height > root.height
 
         anchors {
-            right: parent.right
-            verticalCenter: parent.verticalCenter
+            right: layout.isHorizontal ? parent.right : undefined
+            verticalCenter: layout.isHorizontal ? parent.verticalCenter : undefined
+            bottom: !layout.isHorizontal ? parent.bottom : undefined
+            horizontalCenter: !layout.isHorizontal ? parent.horizontalCenter : undefined
             rightMargin: Math.min(y, backgroundFrame.margins.right)
+            bottomMargin: Math.min(y, backgroundFrame.margins.bottom)
         }
         ToolButton {
-            height: parent.height
+            height: Math.min(parent.height, parent.width)
             width: height
-            iconSource: "go-previous"
-            enabled: tabBarLayout.x < 0
-            onClicked: tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.width/tabBarLayout.children.length)
+            iconSource: layout.isHorizontal ? "go-previous" : "go-up"
+            enabled: layout.isHorizontal ? tabBarLayout.x < 0 : tabBarLayout.y < 0
+            onClicked: {
+                if (layout.isHorizontal) {
+                    tabBarLayout.x = Math.min(0, tabBarLayout.x + tabBarLayout.width/tabBarLayout.children.length);
+                } else {
+                    tabBarLayout.y = Math.min(0, tabBarLayout.y + tabBarLayout.height/tabBarLayout.children.length);
+                }
+            }
         }
         ToolButton {
-            height: parent.height
+            height: Math.min(parent.height, parent.width)
             width: height
-            iconSource: "go-next"
-            enabled: tabBarLayout.x > -tabBarLayout.width + tabbarScroller.width
-            onClicked: tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.width/tabBarLayout.children.length)
+            iconSource: layout.isHorizontal ? "go-next" : "go-down"
+            enabled: layout.isHorizontal ? tabBarLayout.x > -tabBarLayout.width + tabbarScroller.width : tabBarLayout.y > -tabBarLayout.height + tabbarScroller.height
+            onClicked: {
+                if (layout.isHorizontal) {
+                    tabBarLayout.x = Math.max(-tabBarLayout.width + tabbarScroller.width, tabBarLayout.x - tabBarLayout.width/tabBarLayout.children.length);
+                } else {
+                    tabBarLayout.y = Math.max(-tabBarLayout.height + tabbarScroller.height, tabBarLayout.y - tabBarLayout.height/tabBarLayout.children.length);
+                }
+            }
         }
     }
 }
