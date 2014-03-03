@@ -88,7 +88,7 @@ Item {
     signal clicked
 
     implicitWidth: Math.max(label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? units.iconSizes.small : 0)), height)
-    implicitHeight: label.implicitHeight + (internal.portrait ? (iconSource != null ? units.iconSizes.small : 0) : 0)
+    implicitHeight: 20//label.implicitHeight + (internal.portrait ? (iconSource != null ? units.iconSizes.small : 0) : 0)
 
     opacity: enabled ? 1 : 0.6
     //long notation to not make it overwritten by implementations

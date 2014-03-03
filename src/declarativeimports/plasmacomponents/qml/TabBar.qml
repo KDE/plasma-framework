@@ -217,6 +217,7 @@ FocusScope {
             }
         }
     }
+
     GridLayout {
         id: buttonsLayout
         rows: 1

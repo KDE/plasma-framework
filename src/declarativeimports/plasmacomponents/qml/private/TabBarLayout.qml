@@ -65,10 +65,10 @@ Item {
 
     property bool isHorizontal: (tabPosition != Qt.LeftEdge && tabPosition != Qt.RightEdge)
 
-    Component.onCompleted: priv.layoutChildren()
-    onChildrenChanged: priv.layoutChildren()
-    onWidthChanged: priv.layoutChildren()
-    onHeightChanged: priv.layoutChildren()
+    Component.onCompleted: layoutTimer.restart()
+    onChildrenChanged: layoutTimer.restart()
+    onWidthChanged: layoutTimer.restart()
+    onHeightChanged: layoutTimer.restart()
 
 
     Keys.onPressed: {
@@ -85,6 +85,11 @@ Item {
 
     focus: true
 
+    Timer {
+        id: layoutTimer
+        interval: 150
+        onTriggered: priv.layoutChildren()
+    }
     MouseEventListener {
         anchors.fill: parent
         onWheelMoved: {
@@ -179,8 +184,8 @@ Item {
                 }
 
                 var maxAllowedSize = theme.mSize(theme.defaultFont).width * 14
-                var itemWidth = (root.width - (visibleChildCount-1)*10) / visibleChildCount
-                var itemHeight = (root.height - (visibleChildCount-1)*10) / visibleChildCount
+                var itemWidth = Math.min(maxAllowedSize, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
+                var itemHeight = Math.min(maxAllowedSize, (root.height - (visibleChildCount-1)*10) / visibleChildCount)
 
                 var itemIndex = mirrored ? childCount - 1 : 0
                 var increment = mirrored ? - 1 : 1
@@ -205,7 +210,7 @@ Item {
 
                             contentWidth = Math.max(contentWidth, (child.implicitWidth + buttonFrame.margins.left + buttonFrame.margins.right));
 
-                            contentHeight = Math.max(contentHeight, (maxChildSize + buttonFrame.margins.top + buttonFrame.margins.bottom) * childCount);
+                            contentHeight = Math.max(contentHeight, maxChildSize  * childCount);
                         }
 
                     //Horizontal
@@ -218,7 +223,7 @@ Item {
 
                         if (child.implicitWidth != undefined) {
                             maxChildSize = Math.max(maxChildSize, Math.min(maxAllowedSize, child.implicitWidth))
-                            contentWidth = Math.max(contentWidth, (maxChildSize + buttonFrame.margins.left + buttonFrame.margins.right) * childCount)
+                            contentWidth = Math.max(contentWidth, maxChildSize * childCount)
                             contentHeight = Math.max(contentHeight, (child.implicitHeight + buttonFrame.margins.top + buttonFrame.margins.bottom))
                         }
                     }
