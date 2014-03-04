@@ -413,6 +413,16 @@ class PLASMA_EXPORT Applet : public QObject
          */
         void appletDeleted(Plasma::Applet *applet);
 
+        /**
+         * Emitted when the formfactor changes
+         */
+        void formFactorChanged(Plasma::Types::FormFactor formFactor);
+
+        /**
+         * Emitted when the location changes
+         */
+        void locationChanged(Plasma::Types::Location location);
+
     public Q_SLOTS:
 //BOOKKEEPING
         /**

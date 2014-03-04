@@ -530,6 +530,14 @@ void Applet::flushPendingConstraintsEvents()
             d->modificationsTimer = new QBasicTimer;
         }
     }
+
+    if (c & Plasma::Types::FormFactorConstraint) {
+        emit formFactorChanged(formFactor());
+    }
+
+    if (c & Plasma::Types::LocationConstraint) {
+        emit locationChanged(location());
+    }
 }
 
 QList<QAction*> Applet::contextualActions()
