@@ -198,6 +198,11 @@ Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
     return m_frameSvg->enabledBorders();
 }
 
+bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
+{
+    return m_frameSvg->hasElementPrefix(prefix);
+}
+
 void FrameSvgItem::paint(QPainter *painter)
 {
     m_frameSvg->paintFrame(painter);

@@ -157,6 +157,13 @@ public:
      */
     Plasma::FrameSvg *frameSvg() const;
 
+    /**
+     * @return true if the svg has the necessary elements with the given prefix
+     * to draw a frame
+     * @param prefix the given prefix we want to check if drawable
+     */
+    Q_INVOKABLE bool hasElementPrefix(const QString & prefix) const;
+
 protected:
     virtual void componentComplete();
 
