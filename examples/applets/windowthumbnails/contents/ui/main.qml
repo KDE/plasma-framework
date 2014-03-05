@@ -81,7 +81,7 @@ Item {
                     anchors.right: parent.right
                 }
                 onClicked: {
-                    performOperation(model["WindowList"][0], "activate");
+                    performOperation(model["Id"], "activate");
                 }
             }
         }
