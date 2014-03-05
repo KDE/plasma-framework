@@ -340,18 +340,19 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     //not actually the current window. See QWindow::screen() documentation
     QRect avail = screenForItem(item)->availableGeometry();
 
-
-    //make the panel look it's inside the panel, in order to not make it look cutted
-    switch (m_location) {
-    case Plasma::Types::LeftEdge:
-    case Plasma::Types::RightEdge:
-        avail.setTop(qMax(avail.top(), parentGeometryBounds.top()));
-        avail.setBottom(qMin(avail.bottom(), parentGeometryBounds.bottom()));
-        break;
-    default:
-        avail.setLeft(qMax(avail.left(), parentGeometryBounds.left()));
-        avail.setRight(qMin(avail.right(), parentGeometryBounds.right()));
-        break;
+    if (outsideParentWindow && m_frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
+        //make the panel look it's inside the panel, in order to not make it look cutted
+        switch (m_location) {
+        case Plasma::Types::LeftEdge:
+        case Plasma::Types::RightEdge:
+            avail.setTop(qMax(avail.top(), parentGeometryBounds.top()));
+            avail.setBottom(qMin(avail.bottom(), parentGeometryBounds.bottom()));
+            break;
+        default:
+            avail.setLeft(qMax(avail.left(), parentGeometryBounds.left()));
+            avail.setRight(qMin(avail.right(), parentGeometryBounds.right()));
+            break;
+        }
     }
 
     if (dialogPos.x() < avail.left()) {
