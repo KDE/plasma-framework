@@ -71,6 +71,15 @@ void NotificationsHelper::positionPopup(QObject *win)
     }
 }
 
+void NotificationsHelper::closePopup(const QString &sourceName)
+{
+    QQuickWindow *popup = m_sourceMap.take(sourceName);
+
+    if (popup) {
+        popup->close();
+    }
+}
+
 void NotificationsHelper::popupClosed(bool visible)
 {
     if (!visible) {

@@ -33,6 +33,7 @@ class NotificationsHelper : public QObject
 public:
     Q_INVOKABLE QRect workAreaForScreen(int screenId);
     Q_INVOKABLE void positionPopup(QObject *win);
+    Q_INVOKABLE void closePopup(const QString &sourceName);
 
     void setPlasmoidScreen(int screenId);
 
