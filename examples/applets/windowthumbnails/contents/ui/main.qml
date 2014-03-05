@@ -60,9 +60,7 @@ Item {
 
             orientation: ListView.Horizontal
 
-            model: PlasmaCore.DataModel {
-                dataSource: tasksSource
-            }
+            model: tasksSource.models["tasks"]
 
             delegate: MouseArea {
                 width: height * 1.6
@@ -70,7 +68,7 @@ Item {
 
                 PlasmaCore.WindowThumbnail {
                     anchors.fill: parent
-                    winId: model["DataEngineSource"]
+                    winId: model["Id"]
                 }
 
                 PlasmaComponents.Label {
