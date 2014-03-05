@@ -79,16 +79,9 @@ FocusScope {
      */
     property alias tabPosition: tabBarLayout.tabPosition
 
-    implicitWidth: layout.implicitWidth + backgroundFrame.margins.left + backgroundFrame.margins.right
-    implicitHeight: layout.implicitHeight + backgroundFrame.margins.top + backgroundFrame.margins.bottom
+    implicitWidth: layout.implicitWidth
+    implicitHeight: layout.implicitHeight
 
-    PlasmaCore.FrameSvgItem {
-        id: backgroundFrame
-
-        anchors.fill: parent
-        imagePath: "widgets/frame"
-        prefix: "sunken"
-    }
 
     Item {
         id: buttonCutter
@@ -100,6 +93,7 @@ FocusScope {
             bottomMargin: (buttonsLayout.visible && !layout.isHorizontal? buttonsLayout.height : 0) + 1
         }
         clip: true
+
         PlasmaCore.FrameSvgItem {
             id: buttonFrame
 
@@ -108,8 +102,27 @@ FocusScope {
             y: layout.isHorizontal ? 0 : tabBarLayout.y + currentTab.y
             width: layout.isHorizontal ? currentTab.width + margins.left + margins.right -1 : parent.width
             height: layout.isHorizontal ? parent.height : currentTab.height + margins.top + margins.bottom
-            imagePath: "widgets/button"
-            prefix: "normal"
+            imagePath: "widgets/tabbar"
+            prefix: {
+                var prefix;
+                switch (tabPosition) {
+                case Qt.LeftEdge:
+                    prefix = "west-active-tab";
+                    break;
+                case Qt.TopEdge:
+                    prefix = "north-active-tab";
+                    break;
+                case Qt.RightEdge:
+                    prefix = "east-active-tab";
+                    break;
+                default:
+                    prefix = "south-active-tab";
+                }
+                if (!hasElementPrefix(prefix)) {
+                    prefix = "active-tab";
+                }
+                return prefix;
+            }
             Behavior on x {
                 PropertyAnimation {
                     easing.type: Easing.InQuad
@@ -230,8 +243,8 @@ FocusScope {
             verticalCenter: layout.isHorizontal ? parent.verticalCenter : undefined
             bottom: !layout.isHorizontal ? parent.bottom : undefined
             horizontalCenter: !layout.isHorizontal ? parent.horizontalCenter : undefined
-            rightMargin: Math.min(y, backgroundFrame.margins.right)
-            bottomMargin: Math.min(y, backgroundFrame.margins.bottom)
+            rightMargin: y
+            bottomMargin: y
         }
         ToolButton {
             height: Math.min(parent.height, parent.width)
