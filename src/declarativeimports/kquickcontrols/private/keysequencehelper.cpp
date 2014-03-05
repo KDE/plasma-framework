@@ -63,12 +63,6 @@ public:
     bool conflictWithStandardShortcuts(const QKeySequence &seq);
 
     /**
-     * Conflicts the key sequence @a seq with a current local
-     * shortcut?
-     */
-    bool conflictWithLocalShortcuts(const QKeySequence &seq);
-
-    /**
      * Conflicts the key sequence @a seq with a current global
      * shortcut?
      */
@@ -87,11 +81,6 @@ public:
     bool checkAgainstGlobalShortcuts() const
     {
         return checkAgainstShortcutTypes & KeySequenceHelper::GlobalShortcuts;
-    }
-
-    bool checkAgainstLocalShortcuts() const
-    {
-        return checkAgainstShortcutTypes & KeySequenceHelper::LocalShortcuts;
     }
 
     void controlModifierlessTimout()
@@ -159,7 +148,7 @@ KeySequenceHelperPrivate::KeySequenceHelperPrivate(KeySequenceHelper *q)
 , isRecording(false)
 , multiKeyShortcutsAllowed(true)
 , componentName()
-, checkAgainstShortcutTypes(KeySequenceHelper::LocalShortcuts | KeySequenceHelper::GlobalShortcuts)
+, checkAgainstShortcutTypes(KeySequenceHelper::StandardShortcuts | KeySequenceHelper::GlobalShortcuts)
 , stealActions()
 {
 
