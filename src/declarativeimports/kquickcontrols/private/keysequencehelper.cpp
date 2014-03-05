@@ -267,7 +267,8 @@ void KeySequenceHelper::setKeySequence(const QKeySequence& sequence)
         d->oldKeySequence = d->keySequence;
     }
     d->keySequence = sequence;
-    doneRecording();
+    d->updateShortcutDisplay();
+    emit keySequenceChanged(d->keySequence);
 }
 
 
