@@ -86,6 +86,7 @@ void NotificationsHelper::popupClosed(bool visible)
         m_popups.removeOne(qobject_cast<QQuickWindow*>(sender()));
         m_sourceMap.remove(sender()->property("sourceName").toString());
         repositionPopups();
+        sender()->deleteLater();
     }
 
 }
