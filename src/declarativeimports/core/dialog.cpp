@@ -55,7 +55,7 @@ DialogProxy::DialogProxy(QQuickItem *parent)
       m_type(Normal),
       m_hideOnWindowDeactivate(false),
       m_outputOnly(false),
-      m_componentComplete(false)
+      m_componentComplete(parent == 0)
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
