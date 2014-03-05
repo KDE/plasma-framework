@@ -1,5 +1,6 @@
 /*
  *   Copyright 2010 Marco Martin <mart@kde.org>
+ *   Copyright 2014 David Edmundson <davidedmundson@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -19,10 +20,11 @@
 
 #include "framesvgitem.h"
 
-#include <QPainter>
+#include <QQuickWindow>
+#include <QSGTexture>
+#include <QDebug>
 
-#include "QDebug"
-
+#include "svgtexturenode.h"
 
 namespace Plasma
 {
@@ -93,7 +95,8 @@ bool FrameSvgItemMargins::isFixed() const
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent)
+    : QQuickItem(parent),
+    m_textureChanged(false)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -132,6 +135,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        m_textureChanged = true;
         update();
     }
 }
@@ -164,6 +168,7 @@ void FrameSvgItem::setPrefix(const QString &prefix)
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        m_textureChanged = true;
         update();
     }
 }
@@ -190,6 +195,7 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
 
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
+    m_textureChanged = true;
     update();
 }
 
@@ -203,16 +209,12 @@ bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
     return m_frameSvg->hasElementPrefix(prefix);
 }
 
-void FrameSvgItem::paint(QPainter *painter)
-{
-    m_frameSvg->paintFrame(painter);
-}
-
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
                                           const QRectF &oldGeometry)
 {
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(newGeometry.size());
+        m_textureChanged = true;
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
@@ -227,6 +229,7 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
+    m_textureChanged = true;
     update();
 }
 
@@ -267,10 +270,37 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
     return m_frameSvg;
 }
 
+QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData*)
+{
+    if (!window() || !m_frameSvg || !m_frameSvg->hasElementPrefix(m_prefix)) {
+        delete oldNode;
+        return Q_NULLPTR;
+    }
+
+    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
+    if (!textureNode) {
+        textureNode = new SVGTextureNode;
+        textureNode->setFiltering(QSGTexture::Nearest);
+        m_textureChanged = true;
+    }
+
+    if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
+        const QImage image = m_frameSvg->framePixmap().toImage();
+        QSGTexture *texture = window()->createTextureFromImage(image);
+        texture->setFiltering(QSGTexture::Nearest);
+        textureNode->setTexture(texture);
+        m_textureChanged = false;
+        textureNode->setRect(0, 0, width(), height());
+    }
+
+    return textureNode;
+}
+
 void FrameSvgItem::componentComplete()
 {
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
+    m_textureChanged = true;
 }
 
 
@@ -279,6 +309,7 @@ void FrameSvgItem::updateDevicePixelRatio()
     //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     m_frameSvg->setDevicePixelRatio(qMax((qreal)1.0, floor(m_units.devicePixelRatio())));
+    m_textureChanged = true;
 }
 
 } // Plasma namespace

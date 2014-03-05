@@ -1,5 +1,7 @@
 /***************************************************************************
  *   Copyright 2010 Marco Martin <mart@kde.org>                            *
+ *   Copyright 2014 David Edmundson <davidedmundson@kde.org>               *
+ *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,7 +21,7 @@
 #ifndef FRAMESVGITEM_P
 #define FRAMESVGITEM_P
 
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 
 #include <Plasma/FrameSvg>
 
@@ -75,7 +77,7 @@ private:
     bool m_fixed;
 };
 
-class FrameSvgItem : public QQuickPaintedItem
+class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -141,8 +143,6 @@ public:
     FrameSvgItemMargins *margins() const;
     FrameSvgItemMargins *fixedMargins() const;
 
-    void paint(QPainter *painter);
-
     void geometryChanged(const QRectF &newGeometry,
                               const QRectF &oldGeometry);
 
@@ -164,6 +164,8 @@ public:
      */
     Q_INVOKABLE bool hasElementPrefix(const QString & prefix) const;
 
+    virtual QSGNode* updatePaintNode(QSGNode*, UpdatePaintNodeData*);
+
 protected:
     virtual void componentComplete();
 
@@ -184,6 +186,7 @@ private:
     FrameSvgItemMargins *m_fixedMargins;
     QString m_prefix;
     Units m_units;
+    bool m_textureChanged;
 };
 
 }

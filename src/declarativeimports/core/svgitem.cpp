@@ -24,28 +24,15 @@
 #include <QDesktopWidget>
 #include <QQuickWindow>
 #include <QSGTexture>
-#include <QSGSimpleTextureNode>
 #include <QRectF>
+#include <QDebug>
 
-#include "QDebug"
 #include "plasma/svg.h"
+
+#include "svgtexturenode.h"
 
 namespace Plasma
 {
-
-class SVGTextureNode : public QSGSimpleTextureNode
-{
-    public:
-        SVGTextureNode() {}
-        void setTexture(QSGTexture *texture);
-    private:
-        QScopedPointer<QSGTexture> m_texture;
-};
-
-void SVGTextureNode::setTexture(QSGTexture *texture) {
-    m_texture.reset(texture);
-    QSGSimpleTextureNode::setTexture(texture);
-}
 
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
