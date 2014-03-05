@@ -113,41 +113,6 @@ public:
     }
 
 
-    bool promptStealShortcutSystemwide(
-        QWidget *parent,
-        const QHash<QKeySequence, QList<KGlobalShortcutInfo> > &shortcuts,
-        const QKeySequence &sequence)
-    {
-        if (shortcuts.isEmpty()) {
-            // Usage error. Just say no
-            return false;
-        }
-
-        QString clashingKeys;
-        Q_FOREACH (const QKeySequence &seq, shortcuts.keys()) {
-            Q_FOREACH (const KGlobalShortcutInfo &info, shortcuts[seq]) {
-                clashingKeys += i18n("Shortcut '%1' in Application %2 for action %3\n",
-                                     seq.toString(),
-                                     info.componentFriendlyName(),
-                                     info.friendlyName());
-            }
-        }
-
-        const int hashSize = shortcuts.size();
-
-        QString message = i18ncp("%1 is the number of conflicts (hidden), %2 is the key sequence of the shortcut that is problematic",
-                                 "The shortcut '%2' conflicts with the following key combination:\n",
-                                 "The shortcut '%2' conflicts with the following key combinations:\n",
-                                 hashSize, sequence.toString());
-        message += clashingKeys;
-
-        QString title = i18ncp("%1 is the number of shortcuts with which there is a conflict",
-                               "Conflict with Registered Global Shortcut", "Conflict with Registered Global Shortcuts", hashSize);
-
-        return KMessageBox::warningContinueCancel(parent, message, title, KGuiItem(i18n("Reassign")))
-               == KMessageBox::Continue;
-    }
-
 //members
     KeySequenceHelper *const q;
     QToolButton *clearButton;
@@ -333,17 +298,17 @@ bool KeySequenceHelperPrivate::conflictWithGlobalShortcuts(const QKeySequence &k
 
     // Global shortcuts are on key+modifier shortcuts. They can clash with
     // each of the keys of a multi key shortcut.
-    QHash<QKeySequence, QList<KGlobalShortcutInfo> > others;
+    QList<KGlobalShortcutInfo> others;
     for (int i = 0; i < keySequence.count(); ++i) {
         QKeySequence tmp(keySequence[i]);
 
         if (!KGlobalAccel::isGlobalShortcutAvailable(tmp, componentName)) {
-            others.insert(tmp, KGlobalAccel::getGlobalShortcutsByKey(tmp));
+            others << KGlobalAccel::getGlobalShortcutsByKey(tmp);
         }
     }
 
     if (!others.isEmpty()
-            && !promptStealShortcutSystemwide(0, others, keySequence)) {
+            && !KGlobalAccel::promptStealShortcutSystemwide(0, others, keySequence)) {
         return true;
     }
 
