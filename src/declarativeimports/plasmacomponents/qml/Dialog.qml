@@ -101,6 +101,11 @@ Item {
     property alias privateButtonsHeight: buttonItem.height
 
     /**
+     * Hint on where to display the dialog in relation to visualParent
+     */
+    property int location: PlasmaCore.Types.Floating
+
+    /**
      * This signal is emitted when the user accepts the dialog's request or the
      * accept() method is called.
      *
@@ -249,7 +254,7 @@ Item {
             id: coreDialog
             //windowFlags: Qt.Popup
             visualParent: root.visualParent
-//             state: "Hidden"
+            location: root.location
             visible: false
             onVisibleChanged: {
                 if (visible) {
