@@ -492,7 +492,7 @@ void KeySequenceHelper::keyPressed(int key, int modifiers)
             if ((key == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 key = Qt::Key_Tab | d->modifierKeys;
             } else {
-                key |= (d->modifierKeys & ~Qt::SHIFT);
+                key |= (d->modifierKeys);
             }
 
             if (d->nKey == 0) {
