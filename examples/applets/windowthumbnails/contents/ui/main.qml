@@ -45,9 +45,10 @@ Item {
         }
     }
 
-    function performOperation(src, what) {
-        var service = tasksSource.serviceForSource(src);
+    function performOperation(id, what) {
+        var service = tasksSource.serviceForSource("tasks");
         var operation = service.operationDescription(what);
+        operation["Id"] = id
         return service.startOperationCall(operation);
     }
 
@@ -68,7 +69,7 @@ Item {
 
                 PlasmaCore.WindowThumbnail {
                     anchors.fill: parent
-                    winId: model["Id"]
+                    winId: model["WindowList"][0]
                 }
 
                 PlasmaComponents.Label {
@@ -80,7 +81,7 @@ Item {
                     anchors.right: parent.right
                 }
                 onClicked: {
-                    performOperation(model["DataEngineSource"], "activate");
+                    performOperation(model["WindowList"][0], "activate");
                 }
             }
         }
