@@ -281,7 +281,7 @@ QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (!textureNode) {
         textureNode = new SVGTextureNode;
         textureNode->setFiltering(QSGTexture::Nearest);
-        m_textureChanged = true;
+        m_textureChanged = true; //force updating the texture on our newly created node
     }
 
     if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
