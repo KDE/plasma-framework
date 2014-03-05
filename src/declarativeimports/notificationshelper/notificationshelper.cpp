@@ -49,6 +49,14 @@ void NotificationsHelper::positionPopup(QObject *win)
         m_popups << popup;
     }
 
+    QString sourceName = win->property("notificationProperties").toMap().value("source").toString();
+
+    m_sourceMap.insert(sourceName, popup);
+
+    // Set the source name directly on the popup object too
+    // to avoid looking up the notificationProperties map as above
+    popup->setProperty("sourceName", sourceName);
+
     connect(popup, SIGNAL(visibleChanged(bool)),
             this, SLOT(popupClosed(bool)));
 
@@ -67,6 +75,7 @@ void NotificationsHelper::popupClosed(bool visible)
 {
     if (!visible) {
         m_popups.removeOne(qobject_cast<QQuickWindow*>(sender()));
+        m_sourceMap.remove(sender()->property("sourceName").toString());
         repositionPopups();
     }
 
@@ -76,6 +85,7 @@ void NotificationsHelper::popupDestroyed(QObject *object)
 {
     if (object) {
         m_popups.removeOne(qobject_cast<QQuickWindow*>(object));
+        m_sourceMap.remove(object->property("sourceName").toString());
     }
 
     repositionPopups();

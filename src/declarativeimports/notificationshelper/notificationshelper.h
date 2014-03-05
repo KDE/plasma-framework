@@ -21,8 +21,10 @@
 
 #include <QObject>
 #include <QRect>
+#include <QHash>
 
 class QQuickWindow;
+
 class NotificationsHelper : public QObject
 {
     Q_OBJECT
@@ -43,6 +45,7 @@ private:
 
     QList<QQuickWindow*> m_popups;
     QList<QQuickWindow*> m_queuedPopups;
+    QHash<QString, QQuickWindow*> m_sourceMap;
     int m_plasmoidScreen;
 };
 
