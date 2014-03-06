@@ -84,6 +84,11 @@ class Units : public QObject
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)
 
     /**
+     * The ratio between the screen width and height of the main screen.
+     */
+    Q_PROPERTY(qreal displayAspectRatio READ displayAspectRatio NOTIFY displayAspectRatioChanged)
+
+    /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and
      * closing of dialogs and other "not too small" animations
      */
@@ -110,6 +115,11 @@ public:
      * @return The ratio between physical and device-independent pixels.
      */
     qreal devicePixelRatio() const;
+
+    /**
+     * @return The ratio between physical and device-independent pixels.
+     */
+    qreal displayAspectRatio() const;
 
     /**
      * @return map with iconsizes, indexed by name
@@ -142,6 +152,7 @@ public:
 
 Q_SIGNALS:
     void devicePixelRatioChanged();
+    void displayAspectRatioChanged();
     void gridUnitChanged();
     void iconSizesChanged();
     void spacingChanged();
@@ -154,6 +165,7 @@ private Q_SLOTS:
 
 private:
     void updateDevicePixelRatio();
+    void updateDisplayAspectRatio();
     void updateSpacing();
     /**
      * @return The dpi-adjusted size for a given icon size
@@ -164,6 +176,7 @@ private:
 
     int m_gridUnit;
     qreal m_devicePixelRatio;
+    qreal m_displayAspectRatio;
     qreal m_dpi;
 
     QQmlPropertyMap *m_iconSizes;
