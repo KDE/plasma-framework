@@ -102,6 +102,14 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        URL "http://www.opengl.org"
                        TYPE OPTIONAL
                       )
+
+find_package(EGL)
+set_package_properties(EGL PROPERTIES
+                       PURPOSE "Support for Window Thumbnail on EGL platform"
+                       TYPE OPTIONAL
+                      )
+set(HAVE_EGL ${EGL_FOUND})
+
 if(OPENGL_FOUND AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
     set(HAVE_GLX ${HAVE_X11})
 else()

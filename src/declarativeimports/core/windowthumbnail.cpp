@@ -34,6 +34,11 @@ typedef void (*glXBindTexImageEXT_func)(Display* dpy, GLXDrawable drawable,
                                         int buffer, const int* attrib_list);
 typedef void (*glXReleaseTexImageEXT_func)(Display* dpy, GLXDrawable drawable, int buffer);
 #endif
+#if HAVE_EGL
+typedef EGLImageKHR(*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint*);
+typedef EGLBoolean(*eglDestroyImageKHR_func)(EGLDisplay, EGLImageKHR);
+typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
+#endif // HAVE_EGL
 #endif
 
 namespace Plasma {
@@ -67,7 +72,11 @@ WindowThumbnail::WindowThumbnail(QQuickItem* parent)
     , m_texture(0)
 #if HAVE_GLX
     , m_glxPixmap(XCB_PIXMAP_NONE)
-#endif
+#endif // HAVE_GLX
+#if HAVE_EGL
+    , m_eglFunctionsResolved(false)
+    , m_image(EGL_NO_IMAGE_KHR)
+#endif // HAVE_EGL
 #endif
 {
     setFlag(ItemHasContents);
@@ -189,36 +198,23 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
     textureNode->reset(window()->createTextureFromImage(image));
 }
 
-void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
-{
-    if (!m_damaged && textureNode->texture()) {
-        return;
-    }
 #if HAVE_XCB_COMPOSITE
-    xcb_connection_t *c = QX11Info::connection();
-    if (m_pixmap == XCB_PIXMAP_NONE) {
-        m_pixmap = pixmapForWindow();
-    }
-    if (m_pixmap == XCB_PIXMAP_NONE) {
-        // create above failed
-        iconToTexture(textureNode);
-        return;
-    }
 #if HAVE_GLX
+bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
+{
     if (glXGetCurrentContext()) {
         if (!m_openGLFunctionsResolved) {
             resolveGLXFunctions();
         }
         if (!m_bindTexImage || !m_releaseTexImage) {
-            iconToTexture(textureNode);
-            return;
+            return false;
         }
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
+            xcb_connection_t *c = QX11Info::connection();
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
 
             if (!loadGLXTexture()) {
-                iconToTexture(textureNode);
-                return;
+                return false;
             }
 
             QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
@@ -231,14 +227,114 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
         }
         textureNode->texture()->bind();
         bindGLXTexture();
-    } else {
-#else
-        {
-#endif
+        return true;
+    }
+    return false;
+}
+#endif // HAVE_GLX
+
+#if HAVE_EGL
+bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
+{
+    EGLContext context = eglGetCurrentContext();
+    if (context != EGL_NO_CONTEXT) {
+        if (!m_eglFunctionsResolved) {
+            resolveEGLFunctions();
+        }
+        if (!m_eglCreateImageKHR || !m_eglDestroyImageKHR || !m_glEGLImageTargetTexture2DOES) {
+            return false;
+        }
+        if (m_image == EGL_NO_IMAGE_KHR) {
+            xcb_connection_t *c = QX11Info::connection();
+            auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
+
+            const EGLint attribs[] = {
+                EGL_IMAGE_PRESERVED_KHR, EGL_TRUE,
+                EGL_NONE
+            };
+            m_image = ((eglCreateImageKHR_func)(m_eglCreateImageKHR))(eglGetCurrentDisplay(), EGL_NO_CONTEXT,
+                                                                      EGL_NATIVE_PIXMAP_KHR,
+                                                                      (EGLClientBuffer)m_pixmap, attribs);
+
+            if (m_image == EGL_NO_IMAGE_KHR) {
+                qDebug() << "failed to create egl image";
+                return false;
+            }
+
+            glGenTextures(1, &m_texture);
+            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
+            QSize size;
+            if (!geo.isNull()) {
+                size.setWidth(geo->width);
+                size.setHeight(geo->height);
+            }
+            textureNode->reset(window()->createTextureFromId(m_texture, size));
+        }
+        textureNode->texture()->bind();
+        bindEGLTexture();
+        return true;
+    }
+    return false;
+}
+
+void WindowThumbnail::resolveEGLFunctions()
+{
+    EGLDisplay display = eglGetCurrentDisplay();
+    if (display == EGL_NO_DISPLAY) {
+        return;
+    }
+    auto *context = window()->openglContext();
+    QList<QByteArray> extensions = QByteArray(eglQueryString(display, EGL_EXTENSIONS)).split(' ');
+    if (extensions.contains(QByteArrayLiteral("EGL_KHR_image")) ||
+            (extensions.contains(QByteArrayLiteral("EGL_KHR_image_base")) &&
+             extensions.contains(QByteArrayLiteral("EGL_KHR_image_pixmap")))) {
+        if (context->hasExtension(QByteArrayLiteral("GL_OES_EGL_image"))) {
+            qDebug() << "Have EGL texture from pixmap";
+            m_eglCreateImageKHR = context->getProcAddress(QByteArrayLiteral("eglCreateImageKHR"));
+            m_eglDestroyImageKHR = context->getProcAddress(QByteArrayLiteral("eglDestroyImageKHR"));
+            m_glEGLImageTargetTexture2DOES = context->getProcAddress(QByteArrayLiteral("glEGLImageTargetTexture2DOES"));
+        }
+    }
+    m_eglFunctionsResolved = true;
+}
+
+void WindowThumbnail::bindEGLTexture()
+{
+    ((glEGLImageTargetTexture2DOES_func)(m_glEGLImageTargetTexture2DOES))(GL_TEXTURE_2D, (GLeglImageOES)m_image);
+    resetDamaged();
+}
+#endif // HAVE_EGL
+
+#endif // HAVE_XCB_COMPOSITE
+
+void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
+{
+    if (!m_damaged && textureNode->texture()) {
+        return;
+    }
+#if HAVE_XCB_COMPOSITE
+    if (m_pixmap == XCB_PIXMAP_NONE) {
+        m_pixmap = pixmapForWindow();
+    }
+    if (m_pixmap == XCB_PIXMAP_NONE) {
+        // create above failed
+        iconToTexture(textureNode);
+        return;
+    }
+    bool fallbackToIcon = true;
+#if HAVE_GLX
+    fallbackToIcon = !windowToTextureGLX(textureNode);
+#endif // HAVE_GLX
+#if HAVE_EGL
+    if (fallbackToIcon) {
+        // if glx succeeded fallbackToIcon is false, thus we shouldn't try egl
+        fallbackToIcon = !xcbWindowToTextureEGL(textureNode);
+    }
+#endif // HAVE_EGL
+    if (fallbackToIcon) {
         // just for safety to not crash
         iconToTexture(textureNode);
     }
-    // TODO: add an egl variant
     textureNode->markDirty(QSGNode::DirtyForceUpdate);
 #endif
 }
@@ -391,6 +487,13 @@ void WindowThumbnail::discardPixmap()
         ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
         glXDestroyPixmap(d, m_glxPixmap);
         m_glxPixmap = XCB_PIXMAP_NONE;
+        glDeleteTextures(1, &m_texture);
+    }
+#endif
+#if HAVE_EGL
+    if (m_image != EGL_NO_IMAGE_KHR) {
+        ((eglDestroyImageKHR_func)(m_eglDestroyImageKHR))(eglGetCurrentDisplay(), m_image);
+        m_image = EGL_NO_IMAGE_KHR;
         glDeleteTextures(1, &m_texture);
     }
 #endif

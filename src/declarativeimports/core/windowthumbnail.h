@@ -26,8 +26,15 @@
 // xcb
 #if HAVE_XCB_COMPOSITE
 #include <xcb/damage.h>
-#endif
 
+#if HAVE_EGL
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <fixx11h.h> // egl.h could include XLib.h
+
+#endif // HAVE_EGL
+
+#endif // HAVE_XCB_COMPOSITE
 class KWindowInfo;
 
 namespace Plasma {
@@ -95,13 +102,24 @@ private:
     xcb_pixmap_t m_pixmap;
     uint m_texture;
 #if HAVE_GLX
+    bool windowToTextureGLX(WindowTextureNode *textureNode);
     void resolveGLXFunctions();
     bool loadGLXTexture();
     void bindGLXTexture();
     QFunctionPointer m_bindTexImage;
     QFunctionPointer m_releaseTexImage;
     xcb_pixmap_t m_glxPixmap;
-#endif
+#endif // HAVE_GLX
+#if HAVE_EGL
+    bool xcbWindowToTextureEGL(WindowTextureNode *textureNode);
+    void resolveEGLFunctions();
+    void bindEGLTexture();
+    bool m_eglFunctionsResolved;
+    QFunctionPointer m_eglCreateImageKHR;
+    QFunctionPointer m_eglDestroyImageKHR;
+    QFunctionPointer m_glEGLImageTargetTexture2DOES;
+    EGLImageKHR m_image;
+#endif // HAVE_EGL
 #endif
 };
 

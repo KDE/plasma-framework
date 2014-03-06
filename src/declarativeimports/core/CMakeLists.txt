@@ -66,6 +66,14 @@ if(HAVE_X11)
   endif()
 endif()
 
+if(HAVE_EGL)
+    target_link_libraries(corebindingsplugin EGL::EGL)
+endif()
+
+if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")
+    target_link_libraries(corebindingsplugin Qt5::Gui_GLESv2)
+endif()
+
 install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
