@@ -94,7 +94,6 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 
     m_animation->stop();
     DialogProxy::showEvent(event);
-    setFlags(Qt::ToolTip);
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
@@ -119,7 +118,10 @@ bool ToolTipDialog::event(QEvent *e)
     } else if (e->type() == QEvent::Leave) {
         dismiss();
     }
-    return DialogProxy::event(e);
+
+    bool ret = DialogProxy::event(e);
+    setFlags(Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint);
+    return ret;
 }
 
 void ToolTipDialog::adjustGeometry(const QRect &geom)
