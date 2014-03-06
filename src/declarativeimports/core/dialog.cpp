@@ -146,8 +146,8 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
             if (layout) {
                 connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
                 connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
-                connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updatemaximumWidth()));
-                connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updatemaximumHeight()));
+                connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
+                connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updateMaximumHeight()));
 
                 updateMinimumWidth();
                 updateMinimumHeight();
@@ -750,9 +750,9 @@ void DialogProxy::updateMaximumHeight()
     if (m_mainItemLayout) {
         const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt() + m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom();
         if (hint > 0) {
-            setMaximumWidth(hint);
+            setMaximumHeight(hint);
         } else {
-            setMaximumWidth(DIALOGSIZE_MAX);
+            setMaximumHeight(DIALOGSIZE_MAX);
         }
     } else {
         setMaximumHeight(DIALOGSIZE_MAX);
