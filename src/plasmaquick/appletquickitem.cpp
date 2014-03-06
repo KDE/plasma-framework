@@ -197,6 +197,7 @@ QObject *AppletQuickItemPrivate::createFullRepresentationItem()
     }
 
     QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(fullRepresentationItem.data());
+
     QObject::connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
         fullRepresentationResizeTimer.start();
     });
@@ -490,6 +491,16 @@ void AppletQuickItem::init()
     if (!d->fullRepresentation) {
         d->fullRepresentation = d->qmlObject->mainComponent();
         d->fullRepresentationItem = d->qmlObject->rootObject();
+
+        if (d->qmlObject->rootObject()) {
+            QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(d->fullRepresentationItem.data());
+            QObject::connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
+                d->fullRepresentationResizeTimer.start();
+            });
+            QObject::connect (graphicsObj, &QQuickItem::heightChanged, [=]() {
+                d->fullRepresentationResizeTimer.start();
+            });
+        }
         emit fullRepresentationChanged(d->fullRepresentation.data());
     }
 
@@ -623,6 +634,16 @@ void AppletQuickItem::setExpanded(bool expanded)
 
     if (expanded) {
         d->createFullRepresentationItem();
+
+        KConfigGroup cg = d->applet->config();
+        cg = KConfigGroup(&cg, "PopupApplet");
+        const int width = cg.readEntry("DialogWidth", -1);
+        const int height = cg.readEntry("DialogHeight", -1);
+        if (width > 0  && height > 0) {
+            d->fullRepresentationItem.data()->setProperty("width", width);
+            d->fullRepresentationItem.data()->setProperty("height", height);
+        }
+
         d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
     }
 
