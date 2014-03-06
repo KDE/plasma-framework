@@ -544,7 +544,6 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
 
 void DialogProxy::showEvent(QShowEvent *event)
 {
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
     DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
     QQuickWindow::showEvent(event);
 }
@@ -557,7 +556,9 @@ bool DialogProxy::event(QEvent *event)
         updateVisibility(false);
     }
 
-    return QQuickWindow::event(event);
+    const bool retval = QQuickWindow::event(event);
+    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    return retval;
 }
 
 void DialogProxy::hideEvent(QHideEvent *event)
