@@ -124,23 +124,20 @@ int Units::devicePixelIconSize(const int size) const
     // Scale the icon sizes up using the devicePixelRatio
     // This function returns the next stepping icon size
     // and multiplies the global settings with the dpi ratio.
-    const int dpisize = devicePixelRatio() * size;
-    int out = KIconLoader::SizeSmall;
-    if (devicePixelRatio() < 1.5) {
+    const qreal ratio = devicePixelRatio();
+
+    if (ratio < 1.5) {
         return size;
-    } else if (devicePixelRatio() < 2.0) {
-        out = size * 1.5;
-    } else if (devicePixelRatio() < 2.5) {
-        out = size * 2.0;
-    } else if (devicePixelRatio() < 3.0) {
-        out = size * 3.0;
+    } else if (ratio < 2.0) {
+        return size * 1.5;
+    } else if (ratio < 2.5) {
+        return size * 2.0;
+    } else if (ratio < 3.0) {
+        return size * 3.0;
     } else {
-        out = dpisize;
+        return size * ratio;
     }
     // FIXME: Add special casing for < 64 cases: align to kiconloader size
-
-    //qDebug() << " Size in: " << size << dpisize << " -> " << out;
-    return out;
 }
 
 qreal Units::displayAspectRatio() const
