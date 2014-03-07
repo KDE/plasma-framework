@@ -193,7 +193,7 @@ Item {
             imagePath: "widgets/slider"
             prefix: "groove"
             //FIXME: frameSvg should have a minimumSize attribute, could be added to kdelibs 4.7(maybe just the qml binding is enough)?
-            height: grooveSvg.elementSize("groove-topleft").height + grooveSvg.elementSize("groove-bottomleft").height
+            height: margins.top + margins.bottom
             anchors {
                 left: parent.left
                 right: parent.right
@@ -244,7 +244,7 @@ Item {
             height: contents.handleHeight
             //Rotate the handle back for vertical slider so all the handles have the same shadow effect
             rotation: contents.isVertical ? 90 : 0
-            svg: PlasmaCore.Svg { imagePath: "widgets/slider" }
+            svg: grooveSvg
             elementId: contents.isVertical ?  "vertical-slider-handle" : "horizontal-slider-handle"
 
             Behavior on x {

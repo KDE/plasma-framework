@@ -62,7 +62,7 @@ Item {
     property int orientation: Qt.Horizontal
 
     width: 100
-    height: 20
+    height: 20 * Math.max(1.0, Math.floor(units.devicePixelRatio))
     opacity: enabled ? 1.0 : 0.5
 
     PlasmaComponents.RangeModel {
@@ -112,20 +112,26 @@ Item {
                 backgroundPixmapItem.pixmap = backgroundFrameSvg.framePixmap()
             }
         }
-        PlasmaCore.FrameSvg {
-            id: barFrameSvg
-            Component.onCompleted: {
-                barFrameSvg.setImagePath("widgets/bar_meter_horizontal")
-                barFrameSvg.setElementPrefix("bar-active")
-                resizeTimer.restart()
+        PlasmaCore.SvgItem {
+            visible: false
+            svg: PlasmaCore.FrameSvg {
+                id: barFrameSvg
+                Component.onCompleted: {
+                    barFrameSvg.setImagePath("widgets/bar_meter_horizontal")
+                    barFrameSvg.setElementPrefix("bar-active")
+                    resizeTimer.restart()
+                }
             }
         }
-        PlasmaCore.FrameSvg {
-            id: backgroundFrameSvg
-            Component.onCompleted: {
-                backgroundFrameSvg.setImagePath("widgets/bar_meter_horizontal")
-                backgroundFrameSvg.setElementPrefix("bar-inactive")
-                resizeTimer.restart()
+        PlasmaCore.SvgItem {
+            visible: false
+            svg: PlasmaCore.FrameSvg {
+                id: backgroundFrameSvg
+                Component.onCompleted: {
+                    backgroundFrameSvg.setImagePath("widgets/bar_meter_horizontal")
+                    backgroundFrameSvg.setElementPrefix("bar-inactive")
+                    resizeTimer.restart()
+                }
             }
         }
         QPixmapItem {
