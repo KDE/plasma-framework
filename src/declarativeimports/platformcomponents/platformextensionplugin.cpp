@@ -22,6 +22,7 @@
 #include <QDebug>
 
 #include "application.h"
+#include "icondialog.h"
 
 class PlatformComponentsPlugin: public QQmlExtensionPlugin {
     Q_OBJECT
@@ -40,7 +41,8 @@ public:
 
         Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.plasma.platformcomponents"));
 
-        qmlRegisterType<Application> (uri, 1, 0, "Application");
+        qmlRegisterType<Application> (uri, 2, 0, "Application");
+        qmlRegisterType<IconDialog>  (uri, 2, 0, "IconDialog");
     }
 
 };
