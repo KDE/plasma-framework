@@ -99,6 +99,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
     connect(KDirWatch::self(), &KDirWatch::dirty, this, &ThemePrivate::settingsFileChanged);
     // ... but also remove/recreate cycles, like KConfig does it
     connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
+
+    connect(KWindowSystem::self(), &KWindowSystem::compositingChanged, this, &ThemePrivate::compositingChanged);
 }
 
 ThemePrivate::~ThemePrivate()
