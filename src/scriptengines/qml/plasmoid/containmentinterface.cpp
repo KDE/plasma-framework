@@ -643,6 +643,12 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     } else {
         addContainmentActions(desktopMenu, event);
     }
+
+    //this is a workaround where Qt now creates the menu widget
+    //in .exec before oxygen can polish it and set the following attribute
+    desktopMenu.setAttribute( Qt::WA_TranslucentBackground );
+    //end workaround
+
     desktopMenu.exec(event->globalPos());
     event->accept();
 }
