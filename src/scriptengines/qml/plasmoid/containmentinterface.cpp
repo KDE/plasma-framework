@@ -81,7 +81,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
      if (containment()->corona()) {
          connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
                  this, &ContainmentInterface::availableScreenRegionChanged);
-     }
+         connect(containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
+                 this, &ContainmentInterface::availableScreenRectChanged);
+    }
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
@@ -191,6 +193,16 @@ QVariantList ContainmentInterface::availableScreenRegion(int id) const
         regVal << QVariant::fromValue(QRectF(rect));
     }
     return regVal;
+}
+
+QRect ContainmentInterface::availableScreenRect(int id) const
+{
+    QRect rect;
+    if (containment()->corona()) {
+        rect = containment()->corona()->availableScreenRect(id);
+    }
+
+    return rect;
 }
 
 Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)

@@ -101,6 +101,12 @@ public:
     Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
 
     /**
+     * The available rect of this screen, panels excluded. A simple rect area
+     * For more precise available geometry use availableScreenRegion()
+     */
+    Q_INVOKABLE QRect availableScreenRect(int id) const;
+
+    /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
@@ -139,6 +145,7 @@ Q_SIGNALS:
     void activityChanged();
     void activityNameChanged();
     void availableScreenRegionChanged();
+    void availableScreenRectChanged();
     void appletsChanged();
     void drawWallpaperChanged();
     void containmentTypeChanged();
