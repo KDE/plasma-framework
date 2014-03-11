@@ -30,6 +30,7 @@
 
 #include <QFile>
 #include <QList>
+#include <QAbstractButton>
 #include <QMessageBox>
 
 #include <kactioncollection.h>
@@ -255,9 +256,17 @@ void Applet::destroy()
     }
 
     if (isContainment()) {
-        if (QMessageBox::warning(0, i18nc("@title:window %1 is the name of the containment", "Remove %1", title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", title()), QMessageBox::StandardButtons( QMessageBox::Yes | QMessageBox::No ), QMessageBox::No) != QMessageBox::Yes) {
-            return;
-        }
+        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", title()), QMessageBox::StandardButtons( QMessageBox::Yes | QMessageBox::No ));
+        box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
+        box->open();
+
+        connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
+            [=] () {
+                d->transient = true;
+                d->cleanUpAndDelete();
+            });
+
+        return;
     }
 
     d->transient = true;
