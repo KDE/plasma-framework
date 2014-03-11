@@ -52,7 +52,7 @@ public:
 
     void init();
     ConfigView *q;
-    Plasma::Applet *applet;
+    QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
 };
 
@@ -64,7 +64,7 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
 
 void ConfigViewPrivate::init()
 {
-    applet->setUserConfiguring(true);
+    applet.data()->setUserConfiguring(true);
 
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(q->engine());
@@ -74,10 +74,10 @@ void ConfigViewPrivate::init()
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
-    q->setTitle(i18n("%1 Settings", applet->title()));
+    q->setTitle(i18n("%1 Settings", applet.data()->title()));
 
 
-    if (!applet->containment()->corona()->package().isValid()) {
+    if (!applet.data()->containment()->corona()->package().isValid()) {
         qWarning() << "Invalid home screen package";
     }
 
@@ -85,16 +85,16 @@ void ConfigViewPrivate::init()
 
 
     //config model local of the applet
-    QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet->package().filePath("configmodel")), q);
+    QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->package().filePath("configmodel")), q);
     QObject *object = component->beginCreate(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
     if (configModel) {
-        configModel->setApplet(applet);
+        configModel->setApplet(applet.data());
     } else {
         delete object;
     }
 
-    q->engine()->rootContext()->setContextProperty("plasmoid", applet->property("_plasma_graphicObject").value<QObject*>());
+    q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject*>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
     component->completeCreate();
     delete component;
@@ -109,16 +109,19 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     d->init();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
+    connect(applet, &QObject::destroyed, this, &ConfigView::close);
 }
 
 ConfigView::~ConfigView()
 {
-    d->applet->setUserConfiguring(false);
+    if (d->applet) {
+        d->applet.data()->setUserConfiguring(false);
+    }
 }
 
 void ConfigView::init()
 {
-    setSource(QUrl::fromLocalFile(d->applet->containment()->corona()->package().filePath("appletconfigurationui")));
+    setSource(QUrl::fromLocalFile(d->applet.data()->containment()->corona()->package().filePath("appletconfigurationui")));
 }
 
 ConfigModel *ConfigView::configModel() const
@@ -128,16 +131,20 @@ ConfigModel *ConfigView::configModel() const
 
 QString ConfigView::appletGlobalShortcut() const
 {
-    return d->applet->globalShortcut().toString();
+    if (!d->applet) {
+        return QString();
+    }
+
+    return d->applet.data()->globalShortcut().toString();
 }
 
 void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
 {
-    if (d->applet->globalShortcut().toString().toLower() == shortcut.toLower()) {
+    if (!d->applet || d->applet.data()->globalShortcut().toString().toLower() == shortcut.toLower()) {
         return;
     }
 
-    d->applet->setGlobalShortcut(shortcut);
+    d->applet.data()->setGlobalShortcut(shortcut);
     emit appletGlobalShortcutChanged();
 }
 
