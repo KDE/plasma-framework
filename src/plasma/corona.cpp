@@ -219,6 +219,11 @@ QRegion Corona::availableScreenRegion(int id) const
     return QRegion(screenGeometry(id));
 }
 
+QRect Corona::availableScreenRect(int id) const
+{
+    return screenGeometry(id);
+}
+
 void Corona::loadDefaultLayout()
 {
     //Default implementation does nothing

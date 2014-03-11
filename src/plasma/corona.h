@@ -125,6 +125,19 @@ public:
     virtual QRegion availableScreenRegion(int id) const;
 
     /**
+     * Returns the available rect for a given screen.
+     * The difference between this and availableScreenRegion()
+     * is that this method returns only a rectangular
+     * available space (it doesn't care if your panel is not 100% width).
+     * The available rect excludes panels and similar windows.
+     * Valid screen ids are 0 to numScreens()-1.
+     * By default this method returns a rectangular region
+     * equal to screenGeometry(id); subclasses that need another
+     * behavior should override this method.
+     */
+    virtual QRect availableScreenRect(int id) const;
+
+    /**
      * This method is useful in order to retrieve the list of available
      * screen edges for panel type containments.
      * @param screen the id of the screen to look for free edges.
@@ -230,6 +243,11 @@ Q_SIGNALS:
      * This signal indicates that a change in available screen gemetry occurred.
      */
     void availableScreenRegionChanged();
+
+    /**
+     * This signal indicates that a change in available screen gemetry occurred.
+     */
+    void availableScreenRectChanged();
 
     /**
      * emitted when immutability changes.
