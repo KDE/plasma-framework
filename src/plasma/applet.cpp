@@ -499,7 +499,6 @@ void Applet::flushPendingConstraintsEvents()
         }
 
         d->updateShortcuts();
-        Containment *cont = containment();
     }
 
     if (c & Plasma::Types::ImmutableConstraint) {
