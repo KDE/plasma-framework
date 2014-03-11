@@ -190,13 +190,17 @@ private Q_SLOTS:
     void updateMaximumWidth();
     void updateMaximumHeight();
 
+    void firstFramePainted();
+
 private:
+    void setWindowPending(bool pending);
+    QScreen* screenForItem(QQuickItem *item) const;
+
     QTimer *m_syncTimer;
     Plasma::Types::Location m_location;
     Plasma::FrameSvgItem *m_frameSvgItem;
     QWeakPointer<QQuickItem> m_mainItem;
     QWeakPointer<QQuickItem> m_visualParent;
-    QScreen* screenForItem(QQuickItem *item) const;
 
     QRect m_cachedGeometry;
     WindowType m_type;

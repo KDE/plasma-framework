@@ -86,6 +86,7 @@ DialogProxy::DialogProxy(QQuickItem *parent)
 
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &DialogProxy::updateContrast);
 
+
     //m_frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
 
@@ -224,6 +225,11 @@ void DialogProxy::updateVisibility(bool visible)
         }
 
         KWindowEffects::slideWindow(winId(), slideLocation, -1);
+        if (visible) {
+            setWindowPending(true);
+            connect(this, &QQuickWindow::afterRendering, this, &DialogProxy::firstFramePainted, Qt::QueuedConnection);
+
+        }
     }
 
     if (visible) {
@@ -545,6 +551,7 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
 void DialogProxy::showEvent(QShowEvent *event)
 {
     DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+
     QQuickWindow::showEvent(event);
 }
 
@@ -758,6 +765,39 @@ void DialogProxy::updateMaximumHeight()
         setMaximumHeight(DIALOGSIZE_MAX);
     }
 }
+
+void DialogProxy::firstFramePainted()
+{
+    disconnect(this, &QQuickWindow::afterRendering, this, &DialogProxy::firstFramePainted);
+    setWindowPending(false);
+}
+
+void DialogProxy::setWindowPending(bool pending)
+{
+    xcb_connection_t *c = QX11Info::connection();
+    if (!c) {
+        return;
+    }
+
+    const QByteArray effectName = QByteArrayLiteral("_KDE_WINDOW_PENDING");
+    xcb_intern_atom_cookie_t atomCookie = xcb_intern_atom_unchecked(c, false, effectName.length(), effectName.constData());
+
+    QScopedPointer<xcb_intern_atom_reply_t, QScopedPointerPodDeleter> atom(xcb_intern_atom_reply(c, atomCookie, NULL));
+
+    if (!atom) {
+        return;
+    }
+
+    if (pending) {
+        qDebug() << "setting pending";
+        int32_t data = 1;
+        xcb_change_property(c, XCB_PROP_MODE_REPLACE, winId(), atom->atom, atom->atom, 32, 1, &data);
+    } else {
+        xcb_delete_property(c, winId(), atom->atom);
+    }
+}
+
+
 
 #include "dialog.moc"
 
