@@ -4,9 +4,11 @@ set(plasmaquick_LIB_SRC
     appletquickitem.cpp
     view.cpp
     configmodel.cpp
+    shellpluginloader.cpp
     configview.cpp
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
+    private/packages.cpp
 )
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})

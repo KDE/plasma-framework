@@ -22,7 +22,9 @@
 
 #include <Plasma/PluginLoader>
 
-class ShellPluginLoader : public Plasma::PluginLoader
+#include <plasmaquick/plasmaquick_export.h>
+
+class PLASMAQUICK_EXPORT ShellPluginLoader : public Plasma::PluginLoader
 {
 public:
     ShellPluginLoader();

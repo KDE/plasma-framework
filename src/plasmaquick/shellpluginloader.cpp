@@ -19,7 +19,7 @@
 
 #include "shellpluginloader.h"
 
-#include "packages.h"
+#include "private/packages.h"
 
 
 #include <QDebug>
