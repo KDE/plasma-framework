@@ -171,9 +171,9 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
 
 
 install(FILES
-        ${Plasma_CamelCase_HEADERS}
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
+        version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
 install(DIRECTORY

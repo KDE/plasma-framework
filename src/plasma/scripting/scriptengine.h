@@ -21,7 +21,7 @@
 #define PLASMA_SCRIPTENGINE_H
 
 #include <plasma/package.h>
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 #include <plasma/plasma.h>
 
 #include <QtCore/QObject>

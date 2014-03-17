@@ -28,7 +28,7 @@
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
 
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 
 namespace Plasma
 {

@@ -27,7 +27,7 @@
 #include <kplugininfo.h>
 
 #include <plasma/containment.h>
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 #include <plasma/scripting/scriptengine.h>
 
 class QAction;

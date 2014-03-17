@@ -24,7 +24,7 @@
 #include <kconfigskeleton.h>
 #include <ksharedconfig.h>
 
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 
 /**
  * @class ConfigLoader plasma/configloader.h <Plasma/ConfigLoader>

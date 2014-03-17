@@ -22,7 +22,7 @@
 
 #include <kplugininfo.h>
 
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 #include <plasma/dataengine.h>
 #include <plasma/scripting/scriptengine.h>
 

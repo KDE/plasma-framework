@@ -25,7 +25,7 @@
 #include <kplugininfo.h>
 
 #include <plasma/plasma.h>
-#include <plasma/plasma_export.h>
+#include "plasma_export.h"
 
 class KJob;
 
