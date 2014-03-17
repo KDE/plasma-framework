@@ -12,13 +12,14 @@
 
 for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/plasma_add_plugin\(([a-zA-Z_\-]+) /add_library(\1 MODULE /g' $FS
-    perl -p -i -e 's/kde4_add_plugin\( *([a-zA-Z_\-]+) /add_library(\1 MODULE /g' $FS
+    perl -p -i -e 's/kde4_add_plugin *\( *([a-zA-Z_\-]+) /add_library(\1 MODULE /g' $FS
     perl -p -i -e 's/kde4_add_ui_files/qt5_wrap_ui/g' $FS
     perl -p -i -e 's/qt4_wrap_ui/qt5_wrap_ui/g' $FS
     perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
     perl -p -i -e 's/kde4_add_library/add_library/g' $FS
     perl -p -i -e 's/kde4_add_executable/add_executable/g' $FS
     perl -p -i -e 's/kde4_create_handbook/kdoctools_create_handbook/g' $FS
+    perl -p -i -e 's/kde4_create_manpage/kdoctools_create_manpage/g' $FS
     perl -p -i -e 's/qt4_add_resources/qt5_add_resources/g' $FS
     perl -p -i -e 's/qt4_add_dbus_interface/qt5_add_dbus_interface/g' $FS
     perl -p -i -e 's/qt4_add_dbus_adaptor/qt5_add_dbus_adaptor/g' $FS
@@ -42,6 +43,10 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{KDE4_KDESU_LIBS\}/KF5\:\:KDESu/g' $FS
     perl -p -i -e 's/\$\{KDE4_KTEXTEDITOR_LIBS\}/KF5\:\:TextEditor/g' $FS
     perl -p -i -e 's/\$\{KDE4_KPTY_LIBS\}/KF5\:\:Pty/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KPARTS_LIBS\}/KF5\:\:Parts/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KCMUTILS_LIBS\}/KF5\:\:KCMUtils/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KDNSSD_LIBS\}/KF5\:\:DNSSD/g' $FS
+    perl -p -i -e 's/\$\{KDE4_KHTML_LIBS\}/KF5\:\:KHtml/g' $FS
     perl -p -i -e 's/\$\{Solid_LIBRARIES\}/KF5\:\:Solid/g' $FS
     perl -p -i -e 's/\$\{KService_LIBRARIES\}/KF5\:\:Service/g' $FS
     perl -p -i -e 's/\$\{KCoreAddons_LIBRARIES\}/KF5\:\:CoreAddons/g' $FS
@@ -53,6 +58,7 @@ for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/\$\{KWindowSystem_LIBRARIES\}/KF5\:\:WindowSystem/g' $FS
     perl -p -i -e 's/\$\{KConfigWidgets_LIBRARIES\}/KF5\:\:ConfigWidgets/g' $FS
     perl -p -i -e 's/\$\{KCMUTILS_LIBS\}/KF5\:\:KCMUtils/g' $FS
+    perl -p -i -e 's/\$\{KDE4_LIBEXEC_INSTALL_DIR\}/\$\{LIBEXEC_INSTALL_DIR\}/g' $FS
 
     perl -p -i -e 's/\$\{QT_QTXML_LIBRARY\}/Qt5\:\:Xml/g' $FS
     perl -p -i -e 's/\$\{QT_QTGUI_LIBRARY\}/Qt5\:\:Gui/g' $FS
