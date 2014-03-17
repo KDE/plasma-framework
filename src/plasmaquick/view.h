@@ -21,7 +21,7 @@
 
 #include <QtQuick/QQuickView>
 
-#include <plasmaquick/plasmaquick_export.h>
+#include <plasmaquick_export.h>
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 

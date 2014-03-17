@@ -132,10 +132,10 @@ PRIVATE
 )
 
 target_include_directories(KF5Plasma PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR}/..;${CMAKE_CURRENT_SOURCE_DIR}/includes>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/Plasma>"
 )
 target_include_directories(KF5Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/KDE>"
+  "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/Plasma>"
 )
 
 set_target_properties(KF5Plasma PROPERTIES
@@ -146,36 +146,39 @@ set_target_properties(KF5Plasma PROPERTIES
 
 ########### install files ###############
 generate_export_header(KF5Plasma BASE_NAME Plasma)
-
-set(Plasma_LIB_INCLUDES
-    applet.h
-    configloader.h
-    containment.h
-    containmentactions.h
-    corona.h
-    datacontainer.h
-    dataengine.h
-    dataengineconsumer.h
-    pluginloader.h
-    framesvg.h
-    package.h
-    packagestructure.h
-    plasma.h
-    ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
-    service.h
-    servicejob.h
-    svg.h
-    theme.h
-    version.h)
+ecm_generate_headers(Plasma_CamelCase_HEADERS
+    HEADER_NAMES
+        Applet
+        ConfigLoader
+        Containment
+        ContainmentActions
+        Corona
+        DataContainer
+        DataEngine
+        DataEngineConsumer
+        PluginLoader
+        FrameSvg
+        Package
+        PackageStructure
+        Service
+        ServiceJob
+        Svg
+        Theme
+        Plasma
+    REQUIRED_HEADERS Plasma_HEADERS
+    PREFIX Plasma
+)
 
 
 install(FILES
-        ${Plasma_LIB_INCLUDES}
+        ${Plasma_CamelCase_HEADERS}
+        ${Plasma_HEADERS}
+        ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
 install(DIRECTORY
-        includes/Plasma
-        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/ COMPONENT Devel)
+        ${CMAKE_CURRENT_BINARY_DIR}/Plasma
+        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 
 install(FILES

@@ -20,7 +20,7 @@
 #include "storagetest.h"
 #include <QStandardPaths>
 
-#include "../private/storage_p.h"
+#include "plasma/private/storage_p.h"
 
 void StorageTest::initTestCase()
 {

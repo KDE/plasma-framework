@@ -24,7 +24,7 @@
 #include <QQmlEngine>
 #include <QSet>
 
-#include <Plasma/AppletScript>
+#include <plasma/scripting/appletscript.h>
 
 class AppletInterface;
 
