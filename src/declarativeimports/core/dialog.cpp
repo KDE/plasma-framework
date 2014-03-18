@@ -48,14 +48,39 @@
 //Unfortunately QWINDOWSIZE_MAX is not exported
 #define DIALOGSIZE_MAX ((1<<24)-1)
 
+class DialogPrivate {
+public:
+    DialogPrivate(DialogProxy *dialog)
+        : location(Plasma::Types::BottomEdge),
+          type(DialogProxy::Normal),
+          hideOnWindowDeactivate(false),
+          outputOnly(false),
+          componentComplete(dialog->parent() == 0)
+    {
+    }
+
+    DialogProxy *q;
+    QTimer *syncTimer;
+    Plasma::Types::Location location;
+    Plasma::FrameSvgItem *frameSvgItem;
+    QWeakPointer<QQuickItem> mainItem;
+    QWeakPointer<QQuickItem> visualParent;
+
+    QRect cachedGeometry;
+    DialogProxy::WindowType type;
+    bool hideOnWindowDeactivate;
+    bool outputOnly;
+    Plasma::Theme theme;
+    bool componentComplete;
+
+    //Attached Layout property of mainItem, if any
+    QWeakPointer <QObject> mainItemLayout;
+};
+
 
 DialogProxy::DialogProxy(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
-      m_location(Plasma::Types::BottomEdge),
-      m_type(Normal),
-      m_hideOnWindowDeactivate(false),
-      m_outputOnly(false),
-      m_componentComplete(parent == 0)
+      d(new DialogPrivate(this))
 {
     QSurfaceFormat format;
     format.setAlphaBufferSize(8);
@@ -64,10 +89,10 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    m_syncTimer = new QTimer(this);
-    m_syncTimer->setSingleShot(true);
-    m_syncTimer->setInterval(0);
-    connect(m_syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
+    d->syncTimer = new QTimer(this);
+    d->syncTimer->setSingleShot(true);
+    d->syncTimer->setInterval(0);
+    connect(d->syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
 
     connect(this, &QWindow::xChanged, [=]() {
         requestSyncToMainItemSize(true);
@@ -81,12 +106,12 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
-    m_frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    m_frameSvgItem->setImagePath("dialogs/background");
+    d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
+    d->frameSvgItem->setImagePath("dialogs/background");
 
-    connect(&m_theme, &Plasma::Theme::themeChanged, this, &DialogProxy::updateContrast);
+    connect(&d->theme, &Plasma::Theme::themeChanged, this, &DialogProxy::updateContrast);
 
-    //m_frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
+    //d->frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
 
 DialogProxy::~DialogProxy()
@@ -98,17 +123,17 @@ DialogProxy::~DialogProxy()
 
 QQuickItem *DialogProxy::mainItem() const
 {
-    return m_mainItem.data();
+    return d->mainItem.data();
 }
 
 void DialogProxy::setMainItem(QQuickItem *mainItem)
 {
-    if (m_mainItem.data() != mainItem) {
-        if (m_mainItem) {
-            m_mainItem.data()->setParent(parent());
+    if (d->mainItem.data() != mainItem) {
+        if (d->mainItem) {
+            d->mainItem.data()->setParent(parent());
         }
 
-        m_mainItem = mainItem;
+        d->mainItem = mainItem;
 
         if (mainItem) {
             mainItem->setParent(contentItem());
@@ -116,12 +141,12 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
 
             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
                 connect(mainItem, &QQuickItem::widthChanged, [=]() {
-                    m_syncTimer->start(0);
+                    d->syncTimer->start(0);
                 });
             }
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
                 connect(mainItem, &QQuickItem::heightChanged, [=]() {
-                    m_syncTimer->start(0);
+                    d->syncTimer->start(0);
                 });
             }
             requestSyncToMainItemSize();
@@ -141,7 +166,7 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
                     layout = child;
                 }
             }
-            m_mainItemLayout = layout;
+            d->mainItemLayout = layout;
 
             if (layout) {
                 connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
@@ -164,16 +189,16 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
 
 QQuickItem *DialogProxy::visualParent() const
 {
-    return m_visualParent.data();
+    return d->visualParent.data();
 }
 
 void DialogProxy::setVisualParent(QQuickItem *visualParent)
 {
-    if (m_visualParent.data() == visualParent) {
+    if (d->visualParent.data() == visualParent) {
         return;
     }
 
-    m_visualParent = visualParent;
+    d->visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent) {
         requestSyncToMainItemSize();
@@ -184,19 +209,19 @@ void DialogProxy::updateVisibility(bool visible)
 {
     if (visible) {
         if (location() == Plasma::Types::FullScreen) {
-            m_frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
+            d->frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
 
             // We cache the original size of the item, to retrieve it
             // when the dialog is switched back from fullscreen.
             if (geometry() != screen()->availableGeometry()) {
-                m_cachedGeometry = geometry();
+                d->cachedGeometry = geometry();
             }
             setGeometry(screen()->availableGeometry());
         } else {
-            if (!m_cachedGeometry.isNull()) {
-                resize(m_cachedGeometry.size());
+            if (!d->cachedGeometry.isNull()) {
+                resize(d->cachedGeometry.size());
                 syncMainItemToSize();
-                m_cachedGeometry = QRect();
+                d->cachedGeometry = QRect();
             }
             syncToMainItemSize();
         }
@@ -205,7 +230,7 @@ void DialogProxy::updateVisibility(bool visible)
     if (!(flags() & Qt::ToolTip)) {
         KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
 
-        switch (m_location) {
+        switch (d->location) {
         case Plasma::Types::TopEdge:
             slideLocation = KWindowEffects::TopEdge;
             break;
@@ -229,12 +254,12 @@ void DialogProxy::updateVisibility(bool visible)
     if (visible) {
         raise();
 
-        if (m_type != Normal) {
-            KWindowSystem::setType(winId(), (NET::WindowType)m_type);
+        if (d->type != Normal) {
+            KWindowSystem::setType(winId(), (NET::WindowType)d->type);
         } else {
             setFlags(Qt::FramelessWindowHint|flags());
         }
-        if (m_type == Dock) {
+        if (d->type == Dock) {
             KWindowSystem::setOnAllDesktops(winId(), true);
         } else {
             KWindowSystem::setOnAllDesktops(winId(), false);
@@ -250,7 +275,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
         if (parentItem) {
             QScreen *screen = screenForItem(parentItem);
 
-            switch (m_location) {
+            switch (d->location) {
             case Plasma::Types::TopEdge:
                 return QPoint(screen->availableGeometry().center().x() - size.width()/2, screen->availableGeometry().y());
                 break;
@@ -323,11 +348,11 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
                             pos.y() + (item->boundingRect().height() - size.height())/2);
 
     QPoint dialogPos;
-    if (m_location == Plasma::Types::BottomEdge) {
+    if (d->location == Plasma::Types::BottomEdge) {
         dialogPos = bottomPoint;
-    } else if (m_location == Plasma::Types::LeftEdge) {
+    } else if (d->location == Plasma::Types::LeftEdge) {
         dialogPos = leftPoint;
-    } else if (m_location == Plasma::Types::RightEdge) {
+    } else if (d->location == Plasma::Types::RightEdge) {
         dialogPos = rightPoint;
     } else { // Types::TopEdge
         dialogPos = topPoint;
@@ -339,9 +364,9 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     //not actually the current window. See QWindow::screen() documentation
     QRect avail = screenForItem(item)->availableGeometry();
 
-    if (outsideParentWindow && m_frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
+    if (outsideParentWindow && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
         //make the panel look it's inside the panel, in order to not make it look cutted
-        switch (m_location) {
+        switch (d->location) {
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:
             avail.setTop(qMax(avail.top(), parentGeometryBounds.top()));
@@ -356,7 +381,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
 
     if (dialogPos.x() < avail.left()) {
         // popup hits lhs
-        if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
+        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             // move it
             dialogPos.setX(avail.left());
         } else {
@@ -366,7 +391,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     }
     if (dialogPos.x() + size.width() > avail.right()) {
         // popup hits rhs
-        if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
+        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setX(avail.right() - size.width());
         } else {
             dialogPos.setX(leftPoint.x());
@@ -374,7 +399,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     }
     if (dialogPos.y() < avail.top()) {
         // hitting top
-        if (m_location == Plasma::Types::LeftEdge || m_location == Plasma::Types::RightEdge) {
+        if (d->location == Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
             dialogPos.setY(avail.top());
         } else {
             dialogPos.setY(bottomPoint.y());
@@ -383,7 +408,7 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
 
     if (dialogPos.y() + size.height() > avail.bottom()) {
         // hitting bottom
-        if (m_location == Plasma::Types::TopEdge || m_location == Plasma::Types::BottomEdge) {
+        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
         } else {
             dialogPos.setY(avail.bottom() - size.height());
@@ -395,15 +420,15 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
 
 Plasma::Types::Location DialogProxy::location() const
 {
-    return m_location;
+    return d->location;
 }
 
 void DialogProxy::setLocation(Plasma::Types::Location location)
 {
-    if (m_location == location) {
+    if (d->location == location) {
         return;
     }
-    m_location = location;
+    d->location = location;
     emit locationChanged();
     requestSyncToMainItemSize();
 }
@@ -411,7 +436,7 @@ void DialogProxy::setLocation(Plasma::Types::Location location)
 
 QObject *DialogProxy::margins() const
 {
-    return m_frameSvgItem->margins();
+    return d->frameSvgItem->margins();
 }
 
 void DialogProxy::setFramelessFlags(Qt::WindowFlags flags)
@@ -433,34 +458,34 @@ void DialogProxy::resizeEvent(QResizeEvent *re)
 
 void DialogProxy::syncMainItemToSize()
 {
-    m_frameSvgItem->setX(0);
-    m_frameSvgItem->setY(0);
-    m_frameSvgItem->setWidth(width());
-    m_frameSvgItem->setHeight(height());
+    d->frameSvgItem->setX(0);
+    d->frameSvgItem->setY(0);
+    d->frameSvgItem->setWidth(width());
+    d->frameSvgItem->setHeight(height());
 
-    KWindowEffects::enableBlurBehind(winId(), true, m_frameSvgItem->frameSvg()->mask());
+    KWindowEffects::enableBlurBehind(winId(), true, d->frameSvgItem->frameSvg()->mask());
     updateContrast();
 
-    if (m_mainItem) {
-        m_mainItem.data()->setX(m_frameSvgItem->margins()->left());
-        m_mainItem.data()->setY(m_frameSvgItem->margins()->top());
-        m_mainItem.data()->setWidth(width() - m_frameSvgItem->margins()->left() - m_frameSvgItem->margins()->right());
-        m_mainItem.data()->setHeight(height() - m_frameSvgItem->margins()->top() - m_frameSvgItem->margins()->bottom());
+    if (d->mainItem) {
+        d->mainItem.data()->setX(d->frameSvgItem->margins()->left());
+        d->mainItem.data()->setY(d->frameSvgItem->margins()->top());
+        d->mainItem.data()->setWidth(width() - d->frameSvgItem->margins()->left() - d->frameSvgItem->margins()->right());
+        d->mainItem.data()->setHeight(height() - d->frameSvgItem->margins()->top() - d->frameSvgItem->margins()->bottom());
     }
 }
 
 void DialogProxy::syncToMainItemSize()
 {
     //if manually sync a sync timer was running cancel it so we don't get called twice
-    m_syncTimer->stop();
+    d->syncTimer->stop();
 
-    if (!m_mainItem) {
+    if (!d->mainItem) {
         return;
     }
     syncBorders();
-    const QSize s = QSize(m_mainItem.data()->width(), m_mainItem.data()->height()) +
-                    QSize(m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right(),
-                          m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
+    const QSize s = QSize(d->mainItem.data()->width(), d->mainItem.data()->height()) +
+                    QSize(d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right(),
+                          d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
 
     if (visualParent()) {
         const QRect geom(popupPosition(visualParent(), s, Qt::AlignCenter), s);
@@ -476,34 +501,34 @@ void DialogProxy::syncToMainItemSize()
 
 void DialogProxy::requestSyncToMainItemSize(bool delayed)
 {
-    if (!m_componentComplete) {
+    if (!d->componentComplete) {
         return;
     }
 
-    if (delayed && !m_syncTimer->isActive()) {
-        m_syncTimer->start(150);
+    if (delayed && !d->syncTimer->isActive()) {
+        d->syncTimer->start(150);
     } else {
-        m_syncTimer->start(0);
+        d->syncTimer->start(0);
     }
 }
 
 void DialogProxy::updateContrast()
 {
-    KWindowEffects::enableBackgroundContrast(winId(), m_theme.backgroundContrastEnabled(),
-                                                      m_theme.backgroundContrast(),
-                                                      m_theme.backgroundIntensity(),
-                                                      m_theme.backgroundSaturation(),
-                                                      m_frameSvgItem->frameSvg()->mask());
+    KWindowEffects::enableBackgroundContrast(winId(), d->theme.backgroundContrastEnabled(),
+                                                      d->theme.backgroundContrast(),
+                                                      d->theme.backgroundIntensity(),
+                                                      d->theme.backgroundSaturation(),
+                                                      d->frameSvgItem->frameSvg()->mask());
 }
 
 void DialogProxy::setType(WindowType type)
 {
-    if (type == m_type) {
+    if (type == d->type) {
         return;
     }
 
-    m_type = type;
-    if (m_type != Normal) {
+    d->type = type;
+    if (d->type != Normal) {
         KWindowSystem::setType(winId(), (NET::WindowType)type);
     } else {
         setFlags(Qt::FramelessWindowHint|flags());
@@ -520,12 +545,12 @@ void DialogProxy::setType(WindowType type)
 
 DialogProxy::WindowType DialogProxy::type() const
 {
-    return m_type;
+    return d->type;
 }
 
 Plasma::FrameSvgItem *DialogProxy::frameSvgItem()
 {
-    return m_frameSvgItem;
+    return d->frameSvgItem;
 }
 
 void DialogProxy::focusInEvent(QFocusEvent *ev)
@@ -535,7 +560,7 @@ void DialogProxy::focusInEvent(QFocusEvent *ev)
 
 void DialogProxy::focusOutEvent(QFocusEvent *ev)
 {
-    if (m_hideOnWindowDeactivate) {
+    if (d->hideOnWindowDeactivate) {
         qDebug( ) << "DIALOG:  hiding dialog.";
         setVisible(false);
     }
@@ -544,7 +569,7 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
 
 void DialogProxy::showEvent(QShowEvent *event)
 {
-    DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+    DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     QQuickWindow::showEvent(event);
 }
 
@@ -573,7 +598,7 @@ void DialogProxy::classBegin()
 
 void DialogProxy::componentComplete()
 {
-    m_componentComplete = true;
+    d->componentComplete = true;
     syncToMainItemSize();
 }
 
@@ -598,30 +623,30 @@ void DialogProxy::syncBorders()
 
     //Tooltips always have all the borders
     if (!(flags() & Qt::ToolTip)) {
-        if (x() <= avail.x() || m_location == Plasma::Types::LeftEdge) {
+        if (x() <= avail.x() || d->location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
-        if (y() <= avail.y() || m_location == Plasma::Types::TopEdge) {
+        if (y() <= avail.y() || d->location == Plasma::Types::TopEdge) {
             borders = borders & ~Plasma::FrameSvg::TopBorder;
         }
-        if (avail.right() <= x() + width() || m_location == Plasma::Types::RightEdge) {
+        if (avail.right() <= x() + width() || d->location == Plasma::Types::RightEdge) {
             borders = borders & ~Plasma::FrameSvg::RightBorder;
         }
-        if (avail.bottom() <= y() + height() || m_location == Plasma::Types::BottomEdge) {
+        if (avail.bottom() <= y() + height() || d->location == Plasma::Types::BottomEdge) {
             borders = borders & ~Plasma::FrameSvg::BottomBorder;
         }
     }
 
-    m_frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+    d->frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
 
     if (isVisible()) {
-        DialogShadows::self()->addWindow(this, m_frameSvgItem->enabledBorders());
+        DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 }
 
 bool DialogProxy::hideOnWindowDeactivate() const
 {
-    return m_hideOnWindowDeactivate;
+    return d->hideOnWindowDeactivate;
 }
 
 void DialogProxy::setHideOnWindowDeactivate(bool hide)
@@ -630,24 +655,24 @@ void DialogProxy::setHideOnWindowDeactivate(bool hide)
         // doesn't get keyboard focus, so let's just ignore it
         return;
     }
-    if (m_hideOnWindowDeactivate == hide) {
+    if (d->hideOnWindowDeactivate == hide) {
         return;
     }
-    m_hideOnWindowDeactivate = hide;
+    d->hideOnWindowDeactivate = hide;
     emit hideOnWindowDeactivateChanged();
 }
 
 bool DialogProxy::isOutputOnly() const
 {
-    return m_outputOnly;
+    return d->outputOnly;
 }
 
 void DialogProxy::setOutputOnly(bool outputOnly)
 {
-    if (m_outputOnly == outputOnly) {
+    if (d->outputOnly == outputOnly) {
         return;
     }
-    m_outputOnly = outputOnly;
+    d->outputOnly = outputOnly;
     emit outputOnlyChanged();
 }
 
@@ -677,7 +702,7 @@ void DialogProxy::updateInputShape()
         if (!s_shapeAvailable) {
             return;
         }
-        if (m_outputOnly) {
+        if (d->outputOnly) {
             // set input shape, so that it doesn't accept any input events
             xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
                                  XCB_CLIP_ORDERING_UNSORTED, winId(), 0, 0, 0, NULL);
@@ -715,8 +740,8 @@ QScreen* DialogProxy::screenForItem(QQuickItem* item) const
 
 void DialogProxy::updateMinimumWidth()
 {
-    if (m_mainItemLayout) {
-        setMinimumWidth(m_mainItemLayout.data()->property("minimumWidth").toInt() + m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right());
+    if (d->mainItemLayout) {
+        setMinimumWidth(d->mainItemLayout.data()->property("minimumWidth").toInt() + d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right());
     } else {
         setMinimumWidth(-1);
     }
@@ -724,8 +749,8 @@ void DialogProxy::updateMinimumWidth()
 
 void DialogProxy::updateMinimumHeight()
 {
-    if (m_mainItemLayout) {
-        setMinimumHeight(m_mainItemLayout.data()->property("minimumHeight").toInt() + m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
+    if (d->mainItemLayout) {
+        setMinimumHeight(d->mainItemLayout.data()->property("minimumHeight").toInt() + d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
     } else {
         setMinimumHeight(-1);
     }
@@ -733,10 +758,10 @@ void DialogProxy::updateMinimumHeight()
 
 void DialogProxy::updateMaximumWidth()
 {
-    if (m_mainItemLayout) {
-        const int hint = m_mainItemLayout.data()->property("maximumWidth").toInt();
+    if (d->mainItemLayout) {
+        const int hint = d->mainItemLayout.data()->property("maximumWidth").toInt();
         if (hint > 0) {
-            setMaximumWidth(hint + m_frameSvgItem->margins()->left() + m_frameSvgItem->margins()->right());
+            setMaximumWidth(hint + d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right());
         } else {
             setMaximumWidth(DIALOGSIZE_MAX);
         }
@@ -747,10 +772,10 @@ void DialogProxy::updateMaximumWidth()
 
 void DialogProxy::updateMaximumHeight()
 {
-    if (m_mainItemLayout) {
-        const int hint = m_mainItemLayout.data()->property("maximumHeight").toInt();
+    if (d->mainItemLayout) {
+        const int hint = d->mainItemLayout.data()->property("maximumHeight").toInt();
         if (hint > 0) {
-            setMaximumHeight(hint + m_frameSvgItem->margins()->top() + m_frameSvgItem->margins()->bottom());
+            setMaximumHeight(hint + d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
         } else {
             setMaximumHeight(DIALOGSIZE_MAX);
         }

@@ -39,6 +39,7 @@ namespace Plasma
     class FrameSvgItem;
 }
 
+class DialogPrivate;
 
 /**
  * QML wrapper for dialogs
@@ -191,22 +192,8 @@ private Q_SLOTS:
     void updateMaximumHeight();
 
 private:
-    QTimer *m_syncTimer;
-    Plasma::Types::Location m_location;
-    Plasma::FrameSvgItem *m_frameSvgItem;
-    QWeakPointer<QQuickItem> m_mainItem;
-    QWeakPointer<QQuickItem> m_visualParent;
     QScreen* screenForItem(QQuickItem *item) const;
-
-    QRect m_cachedGeometry;
-    WindowType m_type;
-    bool m_hideOnWindowDeactivate;
-    bool m_outputOnly;
-    Plasma::Theme m_theme;
-    bool m_componentComplete;
-
-    //Attached Layout property of mainItem, if any
-    QWeakPointer <QObject> m_mainItemLayout;
+    DialogPrivate *const d;
 };
 
 #endif
