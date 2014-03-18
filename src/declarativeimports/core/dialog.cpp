@@ -59,6 +59,8 @@ public:
     {
     }
 
+    QScreen* screenForItem(QQuickItem *item) const;
+
     Dialog *q;
     QTimer *syncTimer;
     Plasma::Types::Location location;
@@ -76,6 +78,19 @@ public:
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
 };
+
+//find the screen which contains the item
+QScreen* DialogPrivate::screenForItem(QQuickItem* item) const
+{
+    const QPoint globalPosition = item->window()->mapToGlobal(item->position().toPoint());
+    foreach(QScreen *screen, QGuiApplication::screens()) {
+        if (screen->geometry().contains(globalPosition)) {
+            return screen;
+        }
+    }
+    return QGuiApplication::primaryScreen();
+}
+
 
 
 Dialog::Dialog(QQuickItem *parent)
@@ -273,7 +288,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentF
         //If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem) {
-            QScreen *screen = screenForItem(parentItem);
+            QScreen *screen = d->screenForItem(parentItem);
 
             switch (d->location) {
             case Plasma::Types::TopEdge:
@@ -362,7 +377,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentF
     //we do not rely on item->window()->screen() because
     //QWindow::screen() is always only the screen where the window gets first created
     //not actually the current window. See QWindow::screen() documentation
-    QRect avail = screenForItem(item)->availableGeometry();
+    QRect avail = d->screenForItem(item)->availableGeometry();
 
     if (outsideParentWindow && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
         //make the panel look it's inside the panel, in order to not make it look cutted
@@ -726,18 +741,6 @@ void Dialog::setTransientParentAndNotify(QWindow *parent)
     emit transientParentChanged();
 }
 
-
-//find the screen which contains the item
-QScreen* Dialog::screenForItem(QQuickItem* item) const
-{
-    const QPoint globalPosition = item->window()->mapToGlobal(item->position().toPoint());
-    foreach(QScreen *screen, QGuiApplication::screens()) {
-        if (screen->geometry().contains(globalPosition)) {
-            return screen;
-        }
-    }
-    return QGuiApplication::primaryScreen();
-}
 
 void Dialog::updateMinimumWidth()
 {

@@ -34,10 +34,6 @@
 class QQuickItem;
 class QScreen;
 
-namespace Plasma
-{
-    class FrameSvgItem;
-}
 
 class DialogPrivate;
 
@@ -190,7 +186,6 @@ private Q_SLOTS:
     void updateMaximumHeight();
 
 private:
-    QScreen* screenForItem(QQuickItem *item) const;
     DialogPrivate *const d;
 };
 
