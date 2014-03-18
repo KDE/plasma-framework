@@ -46,7 +46,7 @@ class DialogPrivate;
  *
  * Exposed as `PlasmaCore.Dialog` in QML.
  */
-class DialogProxy : public QQuickWindow, public QQmlParserStatus
+class Dialog : public QQuickWindow, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
@@ -107,15 +107,15 @@ public:
     enum WindowType {
         Normal = NET::Normal,
         Dock = NET::Dock,
-        Dialog = NET::Dialog,
+        DialogWindow = NET::Dialog,
         PopupMenu = NET::PopupMenu,
         Tooltip = NET::Tooltip,
         Notification = NET::Notification
     };
     Q_ENUMS(WindowType)
 
-    DialogProxy(QQuickItem *parent = 0);
-    ~DialogProxy();
+    Dialog(QQuickItem *parent = 0);
+    ~Dialog();
 
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);

@@ -41,7 +41,7 @@ namespace KDeclarative
  *
  * Exposed as `ToolTipDialog` in QML.
  */
-class ToolTipDialog : public DialogProxy
+class ToolTipDialog : public Dialog
 {
     Q_OBJECT
 

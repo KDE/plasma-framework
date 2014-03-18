@@ -29,7 +29,7 @@
 #include <kdeclarative/qmlobject.h>
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
-    : DialogProxy(parent),
+    : Dialog(parent),
       m_qmlObject(0),
       m_animation(0),
       m_hideTimeout(4000),
@@ -93,7 +93,7 @@ void ToolTipDialog::showEvent(QShowEvent *event)
     m_showTimer->start(m_hideTimeout);
 
     m_animation->stop();
-    DialogProxy::showEvent(event);
+    Dialog::showEvent(event);
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
@@ -101,12 +101,12 @@ void ToolTipDialog::hideEvent(QHideEvent *event)
     m_showTimer->stop();
     m_animation->stop();
 
-    DialogProxy::hideEvent(event);
+    Dialog::hideEvent(event);
 }
 
 void ToolTipDialog::resizeEvent(QResizeEvent *re)
 {
-    DialogProxy::resizeEvent(re);
+    Dialog::resizeEvent(re);
 }
 
 bool ToolTipDialog::event(QEvent *e)
@@ -119,7 +119,7 @@ bool ToolTipDialog::event(QEvent *e)
         dismiss();
     }
 
-    bool ret = DialogProxy::event(e);
+    bool ret = Dialog::event(e);
     setFlags(Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint);
     return ret;
 }

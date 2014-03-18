@@ -50,16 +50,16 @@
 
 class DialogPrivate {
 public:
-    DialogPrivate(DialogProxy *dialog)
+    DialogPrivate(Dialog *dialog)
         : location(Plasma::Types::BottomEdge),
-          type(DialogProxy::Normal),
+          type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0)
     {
     }
 
-    DialogProxy *q;
+    Dialog *q;
     QTimer *syncTimer;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
@@ -67,7 +67,7 @@ public:
     QWeakPointer<QQuickItem> visualParent;
 
     QRect cachedGeometry;
-    DialogProxy::WindowType type;
+    Dialog::WindowType type;
     bool hideOnWindowDeactivate;
     bool outputOnly;
     Plasma::Theme theme;
@@ -78,7 +78,7 @@ public:
 };
 
 
-DialogProxy::DialogProxy(QQuickItem *parent)
+Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
 {
@@ -92,7 +92,7 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     d->syncTimer = new QTimer(this);
     d->syncTimer->setSingleShot(true);
     d->syncTimer->setInterval(0);
-    connect(d->syncTimer, &QTimer::timeout, this,  &DialogProxy::syncToMainItemSize);
+    connect(d->syncTimer, &QTimer::timeout, this,  &Dialog::syncToMainItemSize);
 
     connect(this, &QWindow::xChanged, [=]() {
         requestSyncToMainItemSize(true);
@@ -100,33 +100,33 @@ DialogProxy::DialogProxy(QQuickItem *parent)
     connect(this, &QWindow::yChanged, [=]() {
         requestSyncToMainItemSize(true);
     });
-    connect(this, &QWindow::visibleChanged, this, &DialogProxy::updateInputShape);
-    connect(this, &DialogProxy::outputOnlyChanged, this, &DialogProxy::updateInputShape);
-//    connect(this, &QWindow::visibleChanged, this, &DialogProxy::onVisibleChanged);
+    connect(this, &QWindow::visibleChanged, this, &Dialog::updateInputShape);
+    connect(this, &Dialog::outputOnlyChanged, this, &Dialog::updateInputShape);
+//    connect(this, &QWindow::visibleChanged, this, &Dialog::onVisibleChanged);
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     d->frameSvgItem->setImagePath("dialogs/background");
 
-    connect(&d->theme, &Plasma::Theme::themeChanged, this, &DialogProxy::updateContrast);
+    connect(&d->theme, &Plasma::Theme::themeChanged, this, &Dialog::updateContrast);
 
     //d->frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
 
-DialogProxy::~DialogProxy()
+Dialog::~Dialog()
 {
     if (!qApp->closingDown()) {
         DialogShadows::self()->removeWindow(this);
     }
 }
 
-QQuickItem *DialogProxy::mainItem() const
+QQuickItem *Dialog::mainItem() const
 {
     return d->mainItem.data();
 }
 
-void DialogProxy::setMainItem(QQuickItem *mainItem)
+void Dialog::setMainItem(QQuickItem *mainItem)
 {
     if (d->mainItem.data() != mainItem) {
         if (d->mainItem) {
@@ -187,12 +187,12 @@ void DialogProxy::setMainItem(QQuickItem *mainItem)
     }
 }
 
-QQuickItem *DialogProxy::visualParent() const
+QQuickItem *Dialog::visualParent() const
 {
     return d->visualParent.data();
 }
 
-void DialogProxy::setVisualParent(QQuickItem *visualParent)
+void Dialog::setVisualParent(QQuickItem *visualParent)
 {
     if (d->visualParent.data() == visualParent) {
         return;
@@ -205,7 +205,7 @@ void DialogProxy::setVisualParent(QQuickItem *visualParent)
     }
 }
 
-void DialogProxy::updateVisibility(bool visible)
+void Dialog::updateVisibility(bool visible)
 {
     if (visible) {
         if (location() == Plasma::Types::FullScreen) {
@@ -267,7 +267,7 @@ void DialogProxy::updateVisibility(bool visible)
     }
 }
 
-QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment)
+QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment)
 {
     if (!item) {
         //If no item was specified try to align at the center of the parent view
@@ -418,12 +418,12 @@ QPoint DialogProxy::popupPosition(QQuickItem *item, const QSize &size, Qt::Align
     return dialogPos;
 }
 
-Plasma::Types::Location DialogProxy::location() const
+Plasma::Types::Location Dialog::location() const
 {
     return d->location;
 }
 
-void DialogProxy::setLocation(Plasma::Types::Location location)
+void Dialog::setLocation(Plasma::Types::Location location)
 {
     if (d->location == location) {
         return;
@@ -434,29 +434,29 @@ void DialogProxy::setLocation(Plasma::Types::Location location)
 }
 
 
-QObject *DialogProxy::margins() const
+QObject *Dialog::margins() const
 {
     return d->frameSvgItem->margins();
 }
 
-void DialogProxy::setFramelessFlags(Qt::WindowFlags flags)
+void Dialog::setFramelessFlags(Qt::WindowFlags flags)
 {
     setFlags(Qt::FramelessWindowHint|flags);
     emit flagsChanged();
 }
 
-void DialogProxy::adjustGeometry(const QRect &geom)
+void Dialog::adjustGeometry(const QRect &geom)
 {
     setGeometry(geom);
 }
 
-void DialogProxy::resizeEvent(QResizeEvent *re)
+void Dialog::resizeEvent(QResizeEvent *re)
 {
     syncMainItemToSize();
     QQuickWindow::resizeEvent(re);
 }
 
-void DialogProxy::syncMainItemToSize()
+void Dialog::syncMainItemToSize()
 {
     d->frameSvgItem->setX(0);
     d->frameSvgItem->setY(0);
@@ -474,7 +474,7 @@ void DialogProxy::syncMainItemToSize()
     }
 }
 
-void DialogProxy::syncToMainItemSize()
+void Dialog::syncToMainItemSize()
 {
     //if manually sync a sync timer was running cancel it so we don't get called twice
     d->syncTimer->stop();
@@ -499,7 +499,7 @@ void DialogProxy::syncToMainItemSize()
     }
 }
 
-void DialogProxy::requestSyncToMainItemSize(bool delayed)
+void Dialog::requestSyncToMainItemSize(bool delayed)
 {
     if (!d->componentComplete) {
         return;
@@ -512,7 +512,7 @@ void DialogProxy::requestSyncToMainItemSize(bool delayed)
     }
 }
 
-void DialogProxy::updateContrast()
+void Dialog::updateContrast()
 {
     KWindowEffects::enableBackgroundContrast(winId(), d->theme.backgroundContrastEnabled(),
                                                       d->theme.backgroundContrast(),
@@ -521,7 +521,7 @@ void DialogProxy::updateContrast()
                                                       d->frameSvgItem->frameSvg()->mask());
 }
 
-void DialogProxy::setType(WindowType type)
+void Dialog::setType(WindowType type)
 {
     if (type == d->type) {
         return;
@@ -543,22 +543,22 @@ void DialogProxy::setType(WindowType type)
     emit typeChanged();
 }
 
-DialogProxy::WindowType DialogProxy::type() const
+Dialog::WindowType Dialog::type() const
 {
     return d->type;
 }
 
-Plasma::FrameSvgItem *DialogProxy::frameSvgItem()
+Plasma::FrameSvgItem *Dialog::frameSvgItem()
 {
     return d->frameSvgItem;
 }
 
-void DialogProxy::focusInEvent(QFocusEvent *ev)
+void Dialog::focusInEvent(QFocusEvent *ev)
 {
     QQuickWindow::focusInEvent(ev);
 }
 
-void DialogProxy::focusOutEvent(QFocusEvent *ev)
+void Dialog::focusOutEvent(QFocusEvent *ev)
 {
     if (d->hideOnWindowDeactivate) {
         qDebug( ) << "DIALOG:  hiding dialog.";
@@ -567,13 +567,13 @@ void DialogProxy::focusOutEvent(QFocusEvent *ev)
     QQuickWindow::focusOutEvent(ev);
 }
 
-void DialogProxy::showEvent(QShowEvent *event)
+void Dialog::showEvent(QShowEvent *event)
 {
     DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     QQuickWindow::showEvent(event);
 }
 
-bool DialogProxy::event(QEvent *event)
+bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Show) {
         updateVisibility(true);
@@ -586,23 +586,23 @@ bool DialogProxy::event(QEvent *event)
     return retval;
 }
 
-void DialogProxy::hideEvent(QHideEvent *event)
+void Dialog::hideEvent(QHideEvent *event)
 {
     QQuickWindow::hideEvent(event);
 }
 
-void DialogProxy::classBegin()
+void Dialog::classBegin()
 {
 
 }
 
-void DialogProxy::componentComplete()
+void Dialog::componentComplete()
 {
     d->componentComplete = true;
     syncToMainItemSize();
 }
 
-void DialogProxy::syncBorders()
+void Dialog::syncBorders()
 {
     // FIXME: QWindow::screen() never ever changes if the window is moved across
     //        virtual screens (normal two screens with X), this seems to be intentional
@@ -644,12 +644,12 @@ void DialogProxy::syncBorders()
     }
 }
 
-bool DialogProxy::hideOnWindowDeactivate() const
+bool Dialog::hideOnWindowDeactivate() const
 {
     return d->hideOnWindowDeactivate;
 }
 
-void DialogProxy::setHideOnWindowDeactivate(bool hide)
+void Dialog::setHideOnWindowDeactivate(bool hide)
 {
     if (flags() & Qt::X11BypassWindowManagerHint) {
         // doesn't get keyboard focus, so let's just ignore it
@@ -662,12 +662,12 @@ void DialogProxy::setHideOnWindowDeactivate(bool hide)
     emit hideOnWindowDeactivateChanged();
 }
 
-bool DialogProxy::isOutputOnly() const
+bool Dialog::isOutputOnly() const
 {
     return d->outputOnly;
 }
 
-void DialogProxy::setOutputOnly(bool outputOnly)
+void Dialog::setOutputOnly(bool outputOnly)
 {
     if (d->outputOnly == outputOnly) {
         return;
@@ -676,7 +676,7 @@ void DialogProxy::setOutputOnly(bool outputOnly)
     emit outputOnlyChanged();
 }
 
-void DialogProxy::updateInputShape()
+void Dialog::updateInputShape()
 {
     if (!isVisible()) {
         return;
@@ -715,7 +715,7 @@ void DialogProxy::updateInputShape()
 #endif
 }
 
-void DialogProxy::setTransientParentAndNotify(QWindow *parent)
+void Dialog::setTransientParentAndNotify(QWindow *parent)
 {
     if (parent == transientParent()) {
         return;
@@ -727,7 +727,7 @@ void DialogProxy::setTransientParentAndNotify(QWindow *parent)
 
 
 //find the screen which contains the item
-QScreen* DialogProxy::screenForItem(QQuickItem* item) const
+QScreen* Dialog::screenForItem(QQuickItem* item) const
 {
     const QPoint globalPosition = item->window()->mapToGlobal(item->position().toPoint());
     foreach(QScreen *screen, QGuiApplication::screens()) {
@@ -738,7 +738,7 @@ QScreen* DialogProxy::screenForItem(QQuickItem* item) const
     return QGuiApplication::primaryScreen();
 }
 
-void DialogProxy::updateMinimumWidth()
+void Dialog::updateMinimumWidth()
 {
     if (d->mainItemLayout) {
         setMinimumWidth(d->mainItemLayout.data()->property("minimumWidth").toInt() + d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right());
@@ -747,7 +747,7 @@ void DialogProxy::updateMinimumWidth()
     }
 }
 
-void DialogProxy::updateMinimumHeight()
+void Dialog::updateMinimumHeight()
 {
     if (d->mainItemLayout) {
         setMinimumHeight(d->mainItemLayout.data()->property("minimumHeight").toInt() + d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
@@ -756,7 +756,7 @@ void DialogProxy::updateMinimumHeight()
     }
 }
 
-void DialogProxy::updateMaximumWidth()
+void Dialog::updateMaximumWidth()
 {
     if (d->mainItemLayout) {
         const int hint = d->mainItemLayout.data()->property("maximumWidth").toInt();
@@ -770,7 +770,7 @@ void DialogProxy::updateMaximumWidth()
     }
 }
 
-void DialogProxy::updateMaximumHeight()
+void Dialog::updateMaximumHeight()
 {
     if (d->mainItemLayout) {
         const int hint = d->mainItemLayout.data()->property("maximumHeight").toInt();
