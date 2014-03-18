@@ -20,9 +20,7 @@ target_link_libraries(qtextracomponentsplugin
         Qt5::Quick
         Qt5::Qml
         Qt5::Gui
-        KF5::Declarative
-        KF5::IconThemes
-        KF5::Plasma)
+        KF5::IconThemes)
 
 install(TARGETS qtextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/qtextracomponents)
 
