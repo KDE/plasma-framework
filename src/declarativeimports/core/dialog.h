@@ -176,8 +176,6 @@ protected:
     void hideEvent(QHideEvent *event);
     bool event(QEvent *event);
 
-    Plasma::FrameSvgItem *frameSvgItem();
-
     virtual void classBegin();
     virtual void componentComplete();
 

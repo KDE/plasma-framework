@@ -534,6 +534,12 @@ void Dialog::setType(WindowType type)
         setFlags(Qt::FramelessWindowHint|flags());
     }
 
+    if (type == Tooltip) {
+        d->frameSvgItem->setImagePath("widgets/tooltip");
+    } else {
+        d->frameSvgItem->setImagePath("dialogs/background");
+    }
+
     if (type == Dock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
     } else {
@@ -546,11 +552,6 @@ void Dialog::setType(WindowType type)
 Dialog::WindowType Dialog::type() const
 {
     return d->type;
-}
-
-Plasma::FrameSvgItem *Dialog::frameSvgItem()
-{
-    return d->frameSvgItem;
 }
 
 void Dialog::focusInEvent(QFocusEvent *ev)
