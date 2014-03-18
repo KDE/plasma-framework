@@ -24,7 +24,7 @@
 #include <QtCore/QObject>
 #include <QPixmap>
 
-#include "plasma_export.h"
+#include <plasma/plasma_export.h>
 
 #include <plasma/plasma.h>
 #include <plasma/svg.h>

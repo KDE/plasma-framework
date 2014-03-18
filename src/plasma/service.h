@@ -26,7 +26,7 @@
 
 #include <kconfiggroup.h>
 
-#include "plasma_export.h"
+#include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
 
 class QIODevice;

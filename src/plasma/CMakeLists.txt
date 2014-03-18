@@ -145,7 +145,9 @@ set_target_properties(KF5Plasma PROPERTIES
                       )
 
 ########### install files ###############
-generate_export_header(KF5Plasma BASE_NAME Plasma)
+generate_export_header(KF5Plasma
+    BASE_NAME Plasma
+    EXPORT_FILE_NAME plasma/plasma_export.h)
 ecm_generate_headers(Plasma_CamelCase_HEADERS
     HEADER_NAMES
         Applet
@@ -172,7 +174,7 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
 
 install(FILES
         ${Plasma_HEADERS}
-        ${CMAKE_CURRENT_BINARY_DIR}/plasma_export.h
+        ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
         version.h
         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 

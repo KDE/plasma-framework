@@ -25,7 +25,7 @@
 #include <QtCore/QTimer>
 
 #include <kjob.h>
-#include "plasma_export.h"
+#include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
 
 class QAbstractItemModel;
