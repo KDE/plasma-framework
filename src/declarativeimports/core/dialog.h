@@ -157,22 +157,16 @@ Q_SIGNALS:
     void transientParentChanged();
     void flagsChanged();
 
-public Q_SLOTS:
-    void syncMainItemToSize();
-    void syncToMainItemSize();
-    void requestSyncToMainItemSize(bool delayed = false);
-
 protected:
-   // bool eventFilter(QObject *watched, QEvent *event);
-    void resizeEvent(QResizeEvent *re);
-    void focusInEvent(QFocusEvent *ev);
-    void focusOutEvent(QFocusEvent *ev);
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-    bool event(QEvent *event);
-
+    //Reimplementations
     virtual void classBegin();
     virtual void componentComplete();
+    virtual void resizeEvent(QResizeEvent *re);
+    virtual void focusInEvent(QFocusEvent *ev);
+    virtual void focusOutEvent(QFocusEvent *ev);
+    virtual void showEvent(QShowEvent *event);
+    virtual void hideEvent(QHideEvent *event);
+    virtual bool event(QEvent *event);
 
 private:
     DialogPrivate *const d;
@@ -185,6 +179,10 @@ private:
     Q_PRIVATE_SLOT(d, void updateMinimumHeight())
     Q_PRIVATE_SLOT(d, void updateMaximumWidth())
     Q_PRIVATE_SLOT(d, void updateMaximumHeight())
+
+    Q_PRIVATE_SLOT(d, void syncMainItemToSize())
+    Q_PRIVATE_SLOT(d, void syncToMainItemSize())
+    Q_PRIVATE_SLOT(d, void requestSyncToMainItemSize(bool delayed))
 };
 
 #endif

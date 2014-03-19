@@ -73,6 +73,9 @@ public:
     void updateMaximumWidth();
     void updateMaximumHeight();
 
+    void syncMainItemToSize();
+    void syncToMainItemSize();
+    void requestSyncToMainItemSize(bool delayed = false);
 
     Dialog *q;
     QTimer *syncTimer;
@@ -170,10 +173,10 @@ void DialogPrivate::updateVisibility(bool visible)
         } else {
             if (!cachedGeometry.isNull()) {
                 q->resize(cachedGeometry.size());
-                q->syncMainItemToSize();
+                syncMainItemToSize();
                 cachedGeometry = QRect();
             }
-            q->syncToMainItemSize();
+            syncToMainItemSize();
         }
     }
 
@@ -302,6 +305,64 @@ void DialogPrivate::updateInputShape()
 #endif
 }
 
+void DialogPrivate::syncMainItemToSize()
+{
+    frameSvgItem->setX(0);
+    frameSvgItem->setY(0);
+    frameSvgItem->setWidth(q->width());
+    frameSvgItem->setHeight(q->height());
+
+    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+    updateContrast();
+
+    if (mainItem) {
+        mainItem.data()->setX(frameSvgItem->margins()->left());
+        mainItem.data()->setY(frameSvgItem->margins()->top());
+        mainItem.data()->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
+        mainItem.data()->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
+    }
+}
+
+void DialogPrivate::syncToMainItemSize()
+{
+    //if manually sync a sync timer was running cancel it so we don't get called twice
+    syncTimer->stop();
+
+    if (!mainItem) {
+        return;
+    }
+    syncBorders();
+    const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
+                    QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
+                          frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+
+    if (q->visualParent()) {
+        const QRect geom(q->popupPosition(q->visualParent(), s, Qt::AlignCenter), s);
+
+        if (geom == q->geometry()) {
+            return;
+        }
+        q->adjustGeometry(geom);
+    } else {
+        q->resize(s);
+    }
+}
+
+void DialogPrivate::requestSyncToMainItemSize(bool delayed)
+{
+    if (!componentComplete) {
+        return;
+    }
+
+    if (delayed && !syncTimer->isActive()) {
+        syncTimer->start(150);
+    } else {
+        syncTimer->start(0);
+    }
+}
+
+
+
 
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
@@ -317,13 +378,14 @@ Dialog::Dialog(QQuickItem *parent)
     d->syncTimer = new QTimer(this);
     d->syncTimer->setSingleShot(true);
     d->syncTimer->setInterval(0);
-    connect(d->syncTimer, &QTimer::timeout, this,  &Dialog::syncToMainItemSize);
+    connect(d->syncTimer, SIGNAL(timeout()),
+            this, SLOT(syncToMainItemSize()));
 
     connect(this, &QWindow::xChanged, [=]() {
-        requestSyncToMainItemSize(true);
+        d->requestSyncToMainItemSize(true);
     });
     connect(this, &QWindow::yChanged, [=]() {
-        requestSyncToMainItemSize(true);
+        d->requestSyncToMainItemSize(true);
     });
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
@@ -376,7 +438,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                     d->syncTimer->start(0);
                 });
             }
-            requestSyncToMainItemSize();
+            d->requestSyncToMainItemSize();
 
             //Extract the representation's Layout, if any
             QObject *layout = 0;
@@ -428,7 +490,7 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
     d->visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent) {
-        requestSyncToMainItemSize();
+        d->requestSyncToMainItemSize();
     }
 }
 
@@ -595,7 +657,7 @@ void Dialog::setLocation(Plasma::Types::Location location)
     }
     d->location = location;
     emit locationChanged();
-    requestSyncToMainItemSize();
+    d->requestSyncToMainItemSize();
 }
 
 
@@ -617,64 +679,8 @@ void Dialog::adjustGeometry(const QRect &geom)
 
 void Dialog::resizeEvent(QResizeEvent *re)
 {
-    syncMainItemToSize();
+    d->syncMainItemToSize();
     QQuickWindow::resizeEvent(re);
-}
-
-void Dialog::syncMainItemToSize()
-{
-    d->frameSvgItem->setX(0);
-    d->frameSvgItem->setY(0);
-    d->frameSvgItem->setWidth(width());
-    d->frameSvgItem->setHeight(height());
-
-    KWindowEffects::enableBlurBehind(winId(), true, d->frameSvgItem->frameSvg()->mask());
-    d->updateContrast();
-
-    if (d->mainItem) {
-        d->mainItem.data()->setX(d->frameSvgItem->margins()->left());
-        d->mainItem.data()->setY(d->frameSvgItem->margins()->top());
-        d->mainItem.data()->setWidth(width() - d->frameSvgItem->margins()->left() - d->frameSvgItem->margins()->right());
-        d->mainItem.data()->setHeight(height() - d->frameSvgItem->margins()->top() - d->frameSvgItem->margins()->bottom());
-    }
-}
-
-void Dialog::syncToMainItemSize()
-{
-    //if manually sync a sync timer was running cancel it so we don't get called twice
-    d->syncTimer->stop();
-
-    if (!d->mainItem) {
-        return;
-    }
-    d->syncBorders();
-    const QSize s = QSize(d->mainItem.data()->width(), d->mainItem.data()->height()) +
-                    QSize(d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right(),
-                          d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
-
-    if (visualParent()) {
-        const QRect geom(popupPosition(visualParent(), s, Qt::AlignCenter), s);
-
-        if (geom == geometry()) {
-            return;
-        }
-        adjustGeometry(geom);
-    } else {
-        resize(s);
-    }
-}
-
-void Dialog::requestSyncToMainItemSize(bool delayed)
-{
-    if (!d->componentComplete) {
-        return;
-    }
-
-    if (delayed && !d->syncTimer->isActive()) {
-        d->syncTimer->start(150);
-    } else {
-        d->syncTimer->start(0);
-    }
 }
 
 void Dialog::setType(WindowType type)
@@ -756,7 +762,7 @@ void Dialog::classBegin()
 void Dialog::componentComplete()
 {
     d->componentComplete = true;
-    syncToMainItemSize();
+    d->syncToMainItemSize();
 }
 
 bool Dialog::hideOnWindowDeactivate() const
