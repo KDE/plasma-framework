@@ -61,6 +61,7 @@ public:
     }
 
     QScreen* screenForItem(QQuickItem *item) const;
+    void updateInputShape();
 
     //SLOTS
     void syncBorders();
@@ -262,6 +263,44 @@ void DialogPrivate::updateMaximumHeight()
     }
 }
 
+void DialogPrivate::updateInputShape()
+{
+    if (!q->isVisible()) {
+        return;
+    }
+#if HAVE_XCB_SHAPE
+    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+        xcb_connection_t *c = QX11Info::connection();
+        static bool s_shapeExtensionChecked = false;
+        static bool s_shapeAvailable = false;
+        if (!s_shapeExtensionChecked) {
+            xcb_prefetch_extension_data(c, &xcb_shape_id);
+            const xcb_query_extension_reply_t *extension = xcb_get_extension_data(c, &xcb_shape_id);
+            if (extension->present) {
+                // query version
+                auto cookie = xcb_shape_query_version(c);
+                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, Q_NULLPTR));
+                if (!version.isNull()) {
+                    s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
+                }
+            }
+            s_shapeExtensionChecked = true;
+        }
+        if (!s_shapeAvailable) {
+            return;
+        }
+        if (outputOnly) {
+            // set input shape, so that it doesn't accept any input events
+            xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
+                                 XCB_CLIP_ORDERING_UNSORTED, q->winId(), 0, 0, 0, NULL);
+        } else {
+            // delete the shape
+            xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT,
+                           q->winId(), 0, 0, XCB_PIXMAP_NONE);
+        }
+    }
+#endif
+}
 
 
 Dialog::Dialog(QQuickItem *parent)
@@ -286,18 +325,20 @@ Dialog::Dialog(QQuickItem *parent)
     connect(this, &QWindow::yChanged, [=]() {
         requestSyncToMainItemSize(true);
     });
-    connect(this, &QWindow::visibleChanged, this, &Dialog::updateInputShape);
-    connect(this, &Dialog::outputOnlyChanged, this, &Dialog::updateInputShape);
-//    connect(this, &QWindow::visibleChanged, this, &Dialog::onVisibleChanged);
+    connect(this, SIGNAL(visibleChanged(bool)),
+            this, SLOT(updateInputShape()));
+    connect(this, SIGNAL(outputOnlyChanged()),
+            this, SLOT(updateInputShape()));
+
     //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     d->frameSvgItem->setImagePath("dialogs/background");
 
-    //connect(&d->theme, &Plasma::Theme::themeChanged, d, &DialogPrivate::updateContrast);
+    connect(&d->theme, SIGNAL(themeChanged()),
+            this, SLOT(updateContrast()));
 
-    //d->frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
 
 Dialog::~Dialog()
@@ -748,45 +789,6 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     emit outputOnlyChanged();
-}
-
-void Dialog::updateInputShape()
-{
-    if (!isVisible()) {
-        return;
-    }
-#if HAVE_XCB_SHAPE
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
-        xcb_connection_t *c = QX11Info::connection();
-        static bool s_shapeExtensionChecked = false;
-        static bool s_shapeAvailable = false;
-        if (!s_shapeExtensionChecked) {
-            xcb_prefetch_extension_data(c, &xcb_shape_id);
-            const xcb_query_extension_reply_t *extension = xcb_get_extension_data(c, &xcb_shape_id);
-            if (extension->present) {
-                // query version
-                auto cookie = xcb_shape_query_version(c);
-                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, Q_NULLPTR));
-                if (!version.isNull()) {
-                    s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
-                }
-            }
-            s_shapeExtensionChecked = true;
-        }
-        if (!s_shapeAvailable) {
-            return;
-        }
-        if (d->outputOnly) {
-            // set input shape, so that it doesn't accept any input events
-            xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
-                                 XCB_CLIP_ORDERING_UNSORTED, winId(), 0, 0, 0, NULL);
-        } else {
-            // delete the shape
-            xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT,
-                           winId(), 0, 0, XCB_PIXMAP_NONE);
-        }
-    }
-#endif
 }
 
 void Dialog::setTransientParentAndNotify(QWindow *parent)

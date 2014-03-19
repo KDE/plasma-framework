@@ -144,7 +144,6 @@ public:
 
     void setOutputOnly(bool outputOnly);
     bool isOutputOnly() const;
-    void updateInputShape();
 
     void setTransientParentAndNotify(QWindow *parent);
 
