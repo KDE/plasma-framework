@@ -74,11 +74,6 @@ class Dialog : public QQuickWindow, public QQmlParserStatus
     Q_PROPERTY(WindowType type READ type WRITE setType NOTIFY typeChanged)
 
     /**
-     * This is a hint to the window manager that this window is a dialog or pop-up on behalf of the given window.
-     */
-    Q_PROPERTY(QWindow *transientParent READ transientParent WRITE setTransientParentAndNotify NOTIFY transientParentChanged)
-
-    /**
      * Whether the dialog should be hidden when the dialog loses focus.
      *
      * The default value is @c false.
@@ -135,8 +130,6 @@ public:
     void setOutputOnly(bool outputOnly);
     bool isOutputOnly() const;
 
-    void setTransientParentAndNotify(QWindow *parent);
-
     /**
      * @returns The suggested screen position for the popup
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
@@ -151,7 +144,6 @@ Q_SIGNALS:
     void typeChanged();
     void hideOnWindowDeactivateChanged();
     void outputOnlyChanged();
-    void transientParentChanged();
     void flagsChanged();
 
 protected:

@@ -161,6 +161,10 @@ void DialogPrivate::updateContrast()
 void DialogPrivate::updateVisibility(bool visible)
 {
     if (visible) {
+        if (visualParent && visualParent.data()->window()) {
+            q->setTransientParent(visualParent.data()->window());
+        }
+
         if (q->location() == Plasma::Types::FullScreen) {
             frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
 
@@ -490,6 +494,9 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
     d->visualParent = visualParent;
     emit visualParentChanged();
     if (visualParent) {
+        if (visualParent->window()) {
+            setTransientParent(visualParent->window());
+        }
         d->requestSyncToMainItemSize();
     }
 }
@@ -786,16 +793,6 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     emit outputOnlyChanged();
-}
-
-void Dialog::setTransientParentAndNotify(QWindow *parent)
-{
-    if (parent == transientParent()) {
-        return;
-    }
-
-    setTransientParent(parent);
-    emit transientParentChanged();
 }
 
 
