@@ -1,7 +1,26 @@
 project(PlasmaQuick)
 
+if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
+    add_definitions(-DHAVE_XCB_COMPOSITE=1)
+    include_directories(
+        ${XCB_XCB_INCLUDE_DIR}
+        ${XCB_DAMAGE_INCLUDE_DIR}
+        ${XCB_COMPOSITE_INCLUDE_DIR}
+    )
+else()
+    add_definitions(-DHAVE_XCB_COMPOSITE=0)
+endif()
+if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_SHAPE_FOUND)
+    add_definitions(-DHAVE_XCB_SHAPE=1)
+    include_directories(${XCB_SHAPE_INCLUDE_DIR})
+else()
+    add_definitions(-DHAVE_XCB_SHAPE=0)
+endif()
+
 set(plasmaquick_LIB_SRC
     appletquickitem.cpp
+    dialog.cpp
+    dialogshadows.cpp
     view.cpp
     configmodel.cpp
     shellpluginloader.cpp
@@ -9,6 +28,8 @@ set(plasmaquick_LIB_SRC
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
     private/packages.cpp
+    ../declarativeimports/core/framesvgitem.cpp
+    ../declarativeimports/core/units.cpp
 )
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
@@ -21,12 +42,32 @@ target_link_libraries(KF5PlasmaQuick
     KF5::WindowSystem
     KF5::KIOWidgets
     KF5::I18n
+    KF5::IconThemes
     KF5::Service
     KF5::CoreAddons
     KF5::XmlGui
     KF5::Plasma
     KF5::Declarative
 )
+
+if(HAVE_X11)
+  target_link_libraries(KF5PlasmaQuick ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )
+  target_link_libraries(KF5PlasmaQuick Qt5::X11Extras)
+
+  if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
+    target_link_libraries(KF5PlasmaQuick
+        ${XCB_DAMAGE_LIBRARY}
+        ${XCB_COMPOSITE_LIBRARY}
+        )
+  endif()
+  if(XCB_SHAPE_FOUND)
+    target_link_libraries(KF5PlasmaQuick ${XCB_SHAPE_LIBRARY})
+  endif()
+
+  if(HAVE_GLX)
+    target_link_libraries(KF5PlasmaQuick ${OPENGL_gl_LIBRARY})
+  endif()
+endif()
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
                                      VERSION ${PLASMA_VERSION_STRING}

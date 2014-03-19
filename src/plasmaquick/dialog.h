@@ -31,6 +31,19 @@
 
 #include <netwm_def.h>
 
+#include <plasmaquick_export.h>
+
+//
+//  W A R N I N G
+//  -------------
+//
+// This file is not part of the public Plasma API.  It exists purely as an
+// implementation detail.  This header file may change from version to
+// version without notice, or even be removed.
+//
+// We mean it.
+//
+
 class QQuickItem;
 class QScreen;
 
@@ -44,7 +57,7 @@ class DialogPrivate;
  *
  * Exposed as `PlasmaCore.Dialog` in QML.
  */
-class Dialog : public QQuickWindow, public QQmlParserStatus
+class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
 {
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)

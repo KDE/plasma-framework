@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 #include "dialog.h"
-#include "framesvgitem.h"
+#include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
 
 #include <QApplication>
