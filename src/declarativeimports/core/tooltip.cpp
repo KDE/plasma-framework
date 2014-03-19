@@ -133,7 +133,7 @@ void ToolTip::showToolTip()
         if (window() && window()->screen()) {
             pos = window()->mapToGlobal(pos);
         }
-        QPoint popupPos = dlg->popupPosition(this, dlg->size(), Qt::AlignCenter);
+        QPoint popupPos = dlg->popupPosition(this, dlg->size());
 
         if (pos.y() + height() <= popupPos.y()) {
             dir = Plasma::Types::Down;

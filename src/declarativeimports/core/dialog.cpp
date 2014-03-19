@@ -337,7 +337,7 @@ void DialogPrivate::syncToMainItemSize()
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
 
     if (q->visualParent()) {
-        const QRect geom(q->popupPosition(q->visualParent(), s, Qt::AlignCenter), s);
+        const QRect geom(q->popupPosition(q->visualParent(), s), s);
 
         if (geom == q->geometry()) {
             return;
@@ -494,7 +494,7 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
     }
 }
 
-QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment)
+QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 {
     if (!item) {
         //If no item was specified try to align at the center of the parent view
@@ -530,15 +530,6 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentF
         pos = item->window()->mapToGlobal(pos.toPoint());
     } else {
         return QPoint();
-    }
-
-    //swap direction if necessary
-    if (QApplication::isRightToLeft() && alignment != Qt::AlignCenter) {
-        if (alignment == Qt::AlignRight) {
-            alignment = Qt::AlignLeft;
-        } else {
-            alignment = Qt::AlignRight;
-        }
     }
 
     //if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock

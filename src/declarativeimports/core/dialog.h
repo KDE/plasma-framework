@@ -113,6 +113,7 @@ public:
     Dialog(QQuickItem *parent = 0);
     ~Dialog();
 
+    //PROPERTIES ACCESSORS
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
@@ -125,17 +126,6 @@ public:
     QObject *margins() const;
 
     void setFramelessFlags(Qt::WindowFlags flags);
-    /*
-     * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
-     */
-    virtual void adjustGeometry(const QRect &geom);
-
-    /**
-     * @returns The suggested screen position for the popup
-     * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
-     * @arg alignment alignment of the popup compared to the item
-     */
-    QPoint popupPosition(QQuickItem *item, const QSize &size, Qt::AlignmentFlag alignment=Qt::AlignCenter) ;
 
     void setType(WindowType type);
     WindowType type() const;
@@ -146,6 +136,13 @@ public:
     bool isOutputOnly() const;
 
     void setTransientParentAndNotify(QWindow *parent);
+
+    /**
+     * @returns The suggested screen position for the popup
+     * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
+     * @arg alignment alignment of the popup compared to the item
+     */
+    virtual QPoint popupPosition(QQuickItem *item, const QSize &size);
 
 Q_SIGNALS:
     void mainItemChanged();
@@ -158,6 +155,11 @@ Q_SIGNALS:
     void flagsChanged();
 
 protected:
+    /*
+     * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
+     */
+    virtual void adjustGeometry(const QRect &geom);
+
     //Reimplementations
     virtual void classBegin();
     virtual void componentComplete();
@@ -169,6 +171,7 @@ protected:
     virtual bool event(QEvent *event);
 
 private:
+    friend class DialogPrivate;
     DialogPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void syncBorders())
