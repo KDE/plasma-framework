@@ -746,7 +746,9 @@ bool Dialog::event(QEvent *event)
     }
 
     const bool retval = QQuickWindow::event(event);
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    if (event->type() != QEvent::DeferredDelete) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    }
     return retval;
 }
 
