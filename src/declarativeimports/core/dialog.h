@@ -175,18 +175,17 @@ protected:
     virtual void classBegin();
     virtual void componentComplete();
 
-private Q_SLOTS:
-    void syncBorders();
-    void updateContrast();
-    void updateVisibility(bool visible);
-
-    void updateMinimumWidth();
-    void updateMinimumHeight();
-    void updateMaximumWidth();
-    void updateMaximumHeight();
-
 private:
     DialogPrivate *const d;
+
+    Q_PRIVATE_SLOT(d, void syncBorders())
+    Q_PRIVATE_SLOT(d, void updateContrast())
+    Q_PRIVATE_SLOT(d, void updateVisibility(bool visible))
+
+    Q_PRIVATE_SLOT(d, void updateMinimumWidth())
+    Q_PRIVATE_SLOT(d, void updateMinimumHeight())
+    Q_PRIVATE_SLOT(d, void updateMaximumWidth())
+    Q_PRIVATE_SLOT(d, void updateMaximumHeight())
 };
 
 #endif

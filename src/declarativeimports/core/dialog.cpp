@@ -51,7 +51,8 @@
 class DialogPrivate {
 public:
     DialogPrivate(Dialog *dialog)
-        : location(Plasma::Types::BottomEdge),
+        : q(dialog),
+          location(Plasma::Types::BottomEdge),
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
@@ -60,6 +61,17 @@ public:
     }
 
     QScreen* screenForItem(QQuickItem *item) const;
+
+    //SLOTS
+    void syncBorders();
+    void updateContrast();
+    void updateVisibility(bool visible);
+
+    void updateMinimumWidth();
+    void updateMinimumHeight();
+    void updateMaximumWidth();
+    void updateMaximumHeight();
+
 
     Dialog *q;
     QTimer *syncTimer;
@@ -89,6 +101,165 @@ QScreen* DialogPrivate::screenForItem(QQuickItem* item) const
         }
     }
     return QGuiApplication::primaryScreen();
+}
+
+void DialogPrivate::syncBorders()
+{
+    // FIXME: QWindow::screen() never ever changes if the window is moved across
+    //        virtual screens (normal two screens with X), this seems to be intentional
+    //        as it's explicitly mentioned in the docs. Until that's changed or some
+    //        more proper way of howto get the current QScreen for given QWindow is found,
+    //        we simply iterate over the virtual screens and pick the one our QWindow
+    //        says it's at.
+    QRect avail;
+    QPoint pos = q->position();
+    Q_FOREACH(QScreen *screen, q->screen()->virtualSiblings()) {
+        if (screen->availableGeometry().contains(pos)) {
+            avail = screen->availableGeometry();
+            break;
+        }
+    }
+
+    int borders = Plasma::FrameSvg::AllBorders;
+
+    //Tooltips always have all the borders
+    if (!(q->flags() & Qt::ToolTip)) {
+        if (q->x() <= avail.x() || location == Plasma::Types::LeftEdge) {
+            borders = borders & ~Plasma::FrameSvg::LeftBorder;
+        }
+        if (q->y() <= avail.y() || location == Plasma::Types::TopEdge) {
+            borders = borders & ~Plasma::FrameSvg::TopBorder;
+        }
+        if (avail.right() <= q->x() + q->width() || location == Plasma::Types::RightEdge) {
+            borders = borders & ~Plasma::FrameSvg::RightBorder;
+        }
+        if (avail.bottom() <= q->y() + q->height() || location == Plasma::Types::BottomEdge) {
+            borders = borders & ~Plasma::FrameSvg::BottomBorder;
+        }
+    }
+
+    frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+
+    if (q->isVisible()) {
+        DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
+    }
+}
+
+void DialogPrivate::updateContrast()
+{
+    KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
+                                                      theme.backgroundContrast(),
+                                                      theme.backgroundIntensity(),
+                                                      theme.backgroundSaturation(),
+                                                      frameSvgItem->frameSvg()->mask());
+}
+
+void DialogPrivate::updateVisibility(bool visible)
+{
+    if (visible) {
+        if (q->location() == Plasma::Types::FullScreen) {
+            frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
+
+            // We cache the original size of the item, to retrieve it
+            // when the dialog is switched back from fullscreen.
+            if (q->geometry() != q->screen()->availableGeometry()) {
+                cachedGeometry = q->geometry();
+            }
+            q->setGeometry(q->screen()->availableGeometry());
+        } else {
+            if (!cachedGeometry.isNull()) {
+                q->resize(cachedGeometry.size());
+                q->syncMainItemToSize();
+                cachedGeometry = QRect();
+            }
+            q->syncToMainItemSize();
+        }
+    }
+
+    if (!(q->flags() & Qt::ToolTip)) {
+        KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
+
+        switch (location) {
+        case Plasma::Types::TopEdge:
+            slideLocation = KWindowEffects::TopEdge;
+            break;
+        case Plasma::Types::LeftEdge:
+            slideLocation = KWindowEffects::LeftEdge;
+            break;
+        case Plasma::Types::RightEdge:
+            slideLocation = KWindowEffects::RightEdge;
+            break;
+        case Plasma::Types::BottomEdge:
+            slideLocation = KWindowEffects::BottomEdge;
+            break;
+            //no edge, no slide
+        default:
+            break;
+        }
+
+        KWindowEffects::slideWindow(q->winId(), slideLocation, -1);
+    }
+
+    if (visible) {
+        q->raise();
+
+        if (type != Dialog::Normal) {
+            KWindowSystem::setType(q->winId(), (NET::WindowType)type);
+        } else {
+            q->setFlags(Qt::FramelessWindowHint|q->flags());
+        }
+        if (type == Dialog::Dock) {
+            KWindowSystem::setOnAllDesktops(q->winId(), true);
+        } else {
+            KWindowSystem::setOnAllDesktops(q->winId(), false);
+        }
+    }
+}
+
+void DialogPrivate::updateMinimumWidth()
+{
+    if (mainItemLayout) {
+        q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt() + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
+    } else {
+        q->setMinimumWidth(-1);
+    }
+}
+
+void DialogPrivate::updateMinimumHeight()
+{
+    if (mainItemLayout) {
+        q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt() + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+    } else {
+        q->setMinimumHeight(-1);
+    }
+}
+
+void DialogPrivate::updateMaximumWidth()
+{
+    if (mainItemLayout) {
+        const int hint = mainItemLayout.data()->property("maximumWidth").toInt();
+        if (hint > 0) {
+            q->setMaximumWidth(hint + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
+        } else {
+            q->setMaximumWidth(DIALOGSIZE_MAX);
+        }
+    } else {
+        q->setMaximumWidth(DIALOGSIZE_MAX);
+    }
+}
+
+void DialogPrivate::updateMaximumHeight()
+{
+    if (mainItemLayout) {
+        const int hint = mainItemLayout.data()->property("maximumHeight").toInt();
+        if (hint > 0) {
+            q->setMaximumHeight(hint + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+        } else {
+            q->setMaximumHeight(DIALOGSIZE_MAX);
+        }
+    } else {
+        q->setMaximumHeight(DIALOGSIZE_MAX);
+    }
 }
 
 
@@ -124,7 +295,7 @@ Dialog::Dialog(QQuickItem *parent)
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
     d->frameSvgItem->setImagePath("dialogs/background");
 
-    connect(&d->theme, &Plasma::Theme::themeChanged, this, &Dialog::updateContrast);
+    //connect(&d->theme, &Plasma::Theme::themeChanged, d, &DialogPrivate::updateContrast);
 
     //d->frameSvgItem->setImagePath("widgets/background"); // larger borders, for testing those
 }
@@ -189,10 +360,10 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
                 connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updateMaximumHeight()));
 
-                updateMinimumWidth();
-                updateMinimumHeight();
-                updateMaximumWidth();
-                updateMaximumHeight();
+                d->updateMinimumWidth();
+                d->updateMinimumHeight();
+                d->updateMaximumWidth();
+                d->updateMaximumHeight();
             }
 
         }
@@ -217,68 +388,6 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
     emit visualParentChanged();
     if (visualParent) {
         requestSyncToMainItemSize();
-    }
-}
-
-void Dialog::updateVisibility(bool visible)
-{
-    if (visible) {
-        if (location() == Plasma::Types::FullScreen) {
-            d->frameSvgItem->setEnabledBorders(Plasma::FrameSvg::NoBorder);
-
-            // We cache the original size of the item, to retrieve it
-            // when the dialog is switched back from fullscreen.
-            if (geometry() != screen()->availableGeometry()) {
-                d->cachedGeometry = geometry();
-            }
-            setGeometry(screen()->availableGeometry());
-        } else {
-            if (!d->cachedGeometry.isNull()) {
-                resize(d->cachedGeometry.size());
-                syncMainItemToSize();
-                d->cachedGeometry = QRect();
-            }
-            syncToMainItemSize();
-        }
-    }
-
-    if (!(flags() & Qt::ToolTip)) {
-        KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
-
-        switch (d->location) {
-        case Plasma::Types::TopEdge:
-            slideLocation = KWindowEffects::TopEdge;
-            break;
-        case Plasma::Types::LeftEdge:
-            slideLocation = KWindowEffects::LeftEdge;
-            break;
-        case Plasma::Types::RightEdge:
-            slideLocation = KWindowEffects::RightEdge;
-            break;
-        case Plasma::Types::BottomEdge:
-            slideLocation = KWindowEffects::BottomEdge;
-            break;
-            //no edge, no slide
-        default:
-            break;
-        }
-
-        KWindowEffects::slideWindow(winId(), slideLocation, -1);
-    }
-
-    if (visible) {
-        raise();
-
-        if (d->type != Normal) {
-            KWindowSystem::setType(winId(), (NET::WindowType)d->type);
-        } else {
-            setFlags(Qt::FramelessWindowHint|flags());
-        }
-        if (d->type == Dock) {
-            KWindowSystem::setOnAllDesktops(winId(), true);
-        } else {
-            KWindowSystem::setOnAllDesktops(winId(), false);
-        }
     }
 }
 
@@ -479,7 +588,7 @@ void Dialog::syncMainItemToSize()
     d->frameSvgItem->setHeight(height());
 
     KWindowEffects::enableBlurBehind(winId(), true, d->frameSvgItem->frameSvg()->mask());
-    updateContrast();
+    d->updateContrast();
 
     if (d->mainItem) {
         d->mainItem.data()->setX(d->frameSvgItem->margins()->left());
@@ -497,7 +606,7 @@ void Dialog::syncToMainItemSize()
     if (!d->mainItem) {
         return;
     }
-    syncBorders();
+    d->syncBorders();
     const QSize s = QSize(d->mainItem.data()->width(), d->mainItem.data()->height()) +
                     QSize(d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right(),
                           d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
@@ -525,15 +634,6 @@ void Dialog::requestSyncToMainItemSize(bool delayed)
     } else {
         d->syncTimer->start(0);
     }
-}
-
-void Dialog::updateContrast()
-{
-    KWindowEffects::enableBackgroundContrast(winId(), d->theme.backgroundContrastEnabled(),
-                                                      d->theme.backgroundContrast(),
-                                                      d->theme.backgroundIntensity(),
-                                                      d->theme.backgroundSaturation(),
-                                                      d->frameSvgItem->frameSvg()->mask());
 }
 
 void Dialog::setType(WindowType type)
@@ -592,9 +692,9 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Show) {
-        updateVisibility(true);
+        d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
-        updateVisibility(false);
+        d->updateVisibility(false);
     }
 
     const bool retval = QQuickWindow::event(event);
@@ -616,48 +716,6 @@ void Dialog::componentComplete()
 {
     d->componentComplete = true;
     syncToMainItemSize();
-}
-
-void Dialog::syncBorders()
-{
-    // FIXME: QWindow::screen() never ever changes if the window is moved across
-    //        virtual screens (normal two screens with X), this seems to be intentional
-    //        as it's explicitly mentioned in the docs. Until that's changed or some
-    //        more proper way of howto get the current QScreen for given QWindow is found,
-    //        we simply iterate over the virtual screens and pick the one our QWindow
-    //        says it's at.
-    QRect avail;
-    QPoint pos = position();
-    Q_FOREACH(QScreen *screen, screen()->virtualSiblings()) {
-        if (screen->availableGeometry().contains(pos)) {
-            avail = screen->availableGeometry();
-            break;
-        }
-    }
-
-    int borders = Plasma::FrameSvg::AllBorders;
-
-    //Tooltips always have all the borders
-    if (!(flags() & Qt::ToolTip)) {
-        if (x() <= avail.x() || d->location == Plasma::Types::LeftEdge) {
-            borders = borders & ~Plasma::FrameSvg::LeftBorder;
-        }
-        if (y() <= avail.y() || d->location == Plasma::Types::TopEdge) {
-            borders = borders & ~Plasma::FrameSvg::TopBorder;
-        }
-        if (avail.right() <= x() + width() || d->location == Plasma::Types::RightEdge) {
-            borders = borders & ~Plasma::FrameSvg::RightBorder;
-        }
-        if (avail.bottom() <= y() + height() || d->location == Plasma::Types::BottomEdge) {
-            borders = borders & ~Plasma::FrameSvg::BottomBorder;
-        }
-    }
-
-    d->frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
-
-    if (isVisible()) {
-        DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
-    }
 }
 
 bool Dialog::hideOnWindowDeactivate() const
@@ -742,51 +800,5 @@ void Dialog::setTransientParentAndNotify(QWindow *parent)
 }
 
 
-void Dialog::updateMinimumWidth()
-{
-    if (d->mainItemLayout) {
-        setMinimumWidth(d->mainItemLayout.data()->property("minimumWidth").toInt() + d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right());
-    } else {
-        setMinimumWidth(-1);
-    }
-}
-
-void Dialog::updateMinimumHeight()
-{
-    if (d->mainItemLayout) {
-        setMinimumHeight(d->mainItemLayout.data()->property("minimumHeight").toInt() + d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
-    } else {
-        setMinimumHeight(-1);
-    }
-}
-
-void Dialog::updateMaximumWidth()
-{
-    if (d->mainItemLayout) {
-        const int hint = d->mainItemLayout.data()->property("maximumWidth").toInt();
-        if (hint > 0) {
-            setMaximumWidth(hint + d->frameSvgItem->margins()->left() + d->frameSvgItem->margins()->right());
-        } else {
-            setMaximumWidth(DIALOGSIZE_MAX);
-        }
-    } else {
-        setMaximumWidth(DIALOGSIZE_MAX);
-    }
-}
-
-void Dialog::updateMaximumHeight()
-{
-    if (d->mainItemLayout) {
-        const int hint = d->mainItemLayout.data()->property("maximumHeight").toInt();
-        if (hint > 0) {
-            setMaximumHeight(hint + d->frameSvgItem->margins()->top() + d->frameSvgItem->margins()->bottom());
-        } else {
-            setMaximumHeight(DIALOGSIZE_MAX);
-        }
-    } else {
-        setMaximumHeight(DIALOGSIZE_MAX);
-    }
-}
-
-#include "dialog.moc"
+#include "moc_dialog.cpp"
 
