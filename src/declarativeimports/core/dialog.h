@@ -90,6 +90,14 @@ class Dialog : public QQuickWindow, public QQmlParserStatus
      **/
     Q_PROPERTY(bool outputOnly READ isOutputOnly WRITE setOutputOnly NOTIFY outputOnlyChanged)
 
+    /**
+     * This property holds the window flags of the window.
+     * The window flags control the window's appearance in the windowing system,
+     * whether it's a dialog, popup, or a regular window, and whether it should
+     * have a title bar, etc.
+     * Regardless to what the user sets, the flags will always have the
+     * FramelessWindowHint flag set
+     */
     Q_PROPERTY(Qt::WindowFlags flags READ flags WRITE setFramelessFlags NOTIFY flagsChanged)
 
     Q_CLASSINFO("DefaultProperty", "mainItem")
@@ -124,6 +132,7 @@ public:
 
     void setType(WindowType type);
     WindowType type() const;
+
     bool hideOnWindowDeactivate() const;
     void setHideOnWindowDeactivate(bool hide);
 
