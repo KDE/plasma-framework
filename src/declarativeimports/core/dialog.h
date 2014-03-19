@@ -35,6 +35,8 @@ class QQuickItem;
 class QScreen;
 
 
+namespace PlasmaQuick {
+
 class DialogPrivate;
 
 /**
@@ -188,5 +190,7 @@ private:
     Q_PRIVATE_SLOT(d, void syncToMainItemSize())
     Q_PRIVATE_SLOT(d, void requestSyncToMainItemSize(bool delayed))
 };
+
+}
 
 #endif

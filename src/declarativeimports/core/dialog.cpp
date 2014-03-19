@@ -48,6 +48,9 @@
 //Unfortunately QWINDOWSIZE_MAX is not exported
 #define DIALOGSIZE_MAX ((1<<24)-1)
 
+namespace PlasmaQuick
+{
+
 class DialogPrivate {
 public:
     DialogPrivate(Dialog *dialog)
@@ -795,6 +798,7 @@ void Dialog::setOutputOnly(bool outputOnly)
     emit outputOnlyChanged();
 }
 
+}
 
 #include "moc_dialog.cpp"
 

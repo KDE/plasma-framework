@@ -41,7 +41,7 @@ namespace KDeclarative
  *
  * Exposed as `ToolTipDialog` in QML.
  */
-class ToolTipDialog : public Dialog
+class ToolTipDialog : public PlasmaQuick::Dialog
 {
     Q_OBJECT
 
