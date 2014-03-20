@@ -50,6 +50,7 @@ public:
 
     // the interface
     virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
+    void askDestroy();
     virtual void cleanUpAndDelete();
 
     // put all setup routines for script here. at this point we can assume that

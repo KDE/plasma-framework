@@ -255,20 +255,6 @@ void Applet::destroy()
         return; //don't double delete
     }
 
-    if (isContainment()) {
-        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", title()), QMessageBox::StandardButtons( QMessageBox::Yes | QMessageBox::No ));
-        box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
-        box->open();
-
-        connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
-            [=] () {
-                d->transient = true;
-                d->cleanUpAndDelete();
-            });
-
-        return;
-    }
-
     d->transient = true;
     //FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
     d->cleanUpAndDelete();
@@ -480,7 +466,7 @@ void Applet::flushPendingConstraintsEvents()
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
-            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(destroy()), Qt::UniqueConnection);
+            connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(askDestroy()), Qt::UniqueConnection);
         }
 
         QAction *configAction = d->actions->action("configure");

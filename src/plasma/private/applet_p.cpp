@@ -29,6 +29,7 @@
 #include <qstandardpaths.h>
 
 #include <QDebug>
+#include <QMessageBox>
 #include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
@@ -178,6 +179,30 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
     // reimplemented in the UI specific library
     Q_UNUSED(show)
     Q_UNUSED(reason)
+}
+
+void AppletPrivate::askDestroy()
+{
+    if (q->immutability() != Types::Mutable || transient || !started) {
+        return; //don't double delete
+    }
+
+    if (q->isContainment()) {
+        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons( QMessageBox::Yes | QMessageBox::No ));
+        box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
+        box->open();
+
+        QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
+            [=] () {
+                transient = true;
+                cleanUpAndDelete();
+            });
+
+        return;
+    }
+
+    transient = true;
+    cleanUpAndDelete();
 }
 
 void AppletPrivate::globalShortcutChanged()

@@ -589,6 +589,7 @@ class PLASMA_EXPORT Applet : public QObject
         Applet(const QString &packagePath, uint appletId);
 
         Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
+        Q_PRIVATE_SLOT(d, void askDestroy())
         Q_PRIVATE_SLOT(d, void updateShortcuts())
         Q_PRIVATE_SLOT(d, void globalShortcutChanged())
         Q_PRIVATE_SLOT(d, void propagateConfigChanged())
