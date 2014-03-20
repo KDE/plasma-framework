@@ -364,7 +364,7 @@ Item {
             width: parent.width - icon.width - parent.spacing
             height: parent.height
 
-            color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
+            color: mouse.containsMouse || !button.flat ? theme.buttonTextColor : theme.textColor
             Behavior on color { ColorAnimation { duration: units.shortDuration * 2 } }
             elide: Text.ElideRight
 
