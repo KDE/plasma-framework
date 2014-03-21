@@ -433,7 +433,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 actionsToApplets.insert(action, info.pluginName());
                 qDebug() << info.pluginName();
             }
-            actionsToApplets.insert(choices->addAction(i18n("Icon")), "org.kde.icon");
+            actionsToApplets.insert(choices->addAction(i18n("Icon")), "org.kde.plasma.icon");
 
             QHash<QAction *, QString> actionsToWallpapers;
             if (!wallpaperList.isEmpty())  {
@@ -482,7 +482,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            Plasma::Applet *applet = addApplet("org.kde.icon", QVariantList(), posi);
+            Plasma::Applet *applet = addApplet("org.kde.plasma.icon", QVariantList(), posi);
             setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
