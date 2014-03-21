@@ -336,6 +336,8 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
         iconToTexture(textureNode);
     }
     textureNode->markDirty(QSGNode::DirtyForceUpdate);
+#else
+    iconToTexture(textureNode);
 #endif
 }
 
