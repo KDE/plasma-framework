@@ -522,7 +522,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     m_appletInterfaces << appletGraphicObject;
-    emit appletAdded(appletGraphicObject, 0, 0);
+    emit appletAdded(appletGraphicObject, -1, -1);
     emit appletsChanged();
 }
 
