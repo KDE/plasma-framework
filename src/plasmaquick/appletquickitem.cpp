@@ -272,6 +272,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             //unwire with the expander
             if (compactRepresentationExpanderItem) {
                 compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant());
+                compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant());
                 compactRepresentationExpanderItem.data()->setProperty("visible", false);
             }
 
@@ -285,11 +286,6 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             if (compactRepresentationItem) {
                 compactRepresentationItem.data()->setProperty("visible", false);
-            }
-
-            if (compactRepresentationExpanderItem) {
-                compactRepresentationExpanderItem.data()->setProperty("compactRepresentation", QVariant());
-                compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant());
             }
 
             currentRepresentationItem = item;
