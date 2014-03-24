@@ -145,6 +145,12 @@ public:
 
     void setInteractive(bool interactive);
 
+public Q_SLOTS:
+    /**
+     * Hides the tooltip if shown. Does not affect whether the tooltip area is active.
+     */
+    void hideToolTip();
+
 protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);

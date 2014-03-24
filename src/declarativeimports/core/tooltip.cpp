@@ -224,6 +224,11 @@ void ToolTip::setInteractive(bool interactive)
     emit interactiveChanged();
 }
 
+void ToolTip::hideToolTip()
+{
+    tooltipDialogInstance()->dismiss();
+}
+
 QVariant ToolTip::icon() const
 {
     if (m_icon.isValid()) {
