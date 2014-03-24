@@ -633,6 +633,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     if (expanded) {
+        d->createCompactRepresentationExpanderItem();
         d->createFullRepresentationItem();
 
         KConfigGroup cg = d->applet->config();
