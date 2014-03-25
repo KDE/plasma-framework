@@ -46,23 +46,6 @@ Item {
             text: "Scaling Test"
             font.pointSize: cheatLabel.font.pointSize * 2
         }
-
-        Row {
-            PlasmaComponents.Button {
-                text: "devicePixelRatio"
-                font.pointSize: cheatLabel.font.pointSize
-
-                width: cwidth/2
-                //scale: units.devicePixelRatio
-                onClicked: {
-                    var d = units.devicePixelRatio * 96;
-                    dpilabel.text = "\tdpi from ratio:" + d;
-                }
-            }
-            PlasmaComponents.Label {
-                id: dpilabel
-            }
-        }
     }
     PlasmaComponents.Label {
         id: cheatLabel
