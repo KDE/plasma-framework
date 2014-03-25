@@ -21,7 +21,7 @@ import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.qtextracomponents 2.0 as QtExtras
+import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 
 Item {
 
@@ -125,7 +125,7 @@ Item {
             width: units.iconSizes.huge
             height: width
         }
-//         QtExtras.QIconItem {
+//         KQuickControlsAddons.QIconItem {
 //             icon: "preferences-desktop-icons"
 //             width: units.iconSizes.enormous
 //             height: width

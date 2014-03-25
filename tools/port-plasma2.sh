@@ -154,3 +154,15 @@ for FS in `find $PWD -type f -name '*main.qml'`; do
     perl -p -i -e 's/QtQuick 2.0/QtQuick 2.0\nimport org.kde.plasma.plasmoid 2.0/g' $FS
 done
 
+for FS in `find $PWD  -name '*.qml'`; do
+    perl -p -i -e 's/org.kde.qtextracomponents/org.kde.kquickcontrolsaddons/g' $FS
+done
+
+for FS in `find $PWD  -name '*.qml'`; do
+    perl -p -i -e 's/QtExtras/KQuickControlsAddons/g' $FS
+done
+
+for FS in `find $PWD  -name '*.qml'`; do
+    perl -p -i -e 's/QtExtra/KQuickControlsAddons/g' $FS
+done
+

@@ -19,7 +19,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.qtextracomponents 2.0
+import org.kde.kquickcontrolsaddons 2.0
 import "EditBubble.js" as EditBubbleHelper
 
 Item {

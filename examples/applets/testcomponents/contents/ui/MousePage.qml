@@ -21,7 +21,7 @@ import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.qtextracomponents 2.0 as QtExtras
+import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 
 // MousePage
 
@@ -36,7 +36,7 @@ PlasmaComponents.Page {
         text: "MouseEventListener"
         anchors { left: parent.left; right: parent.right; top: parent.top }
     }
-    QtExtras.MouseEventListener {
+    KQuickControlsAddons.MouseEventListener {
         id: mel
         hoverEnabled: true
         anchors { left: parent.left; right: parent.right; top: mellabel.bottom; bottom: parent.bottom; }
