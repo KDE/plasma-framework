@@ -37,36 +37,44 @@ add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
 target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
 
 target_link_libraries(KF5PlasmaQuick
-    Qt5::Quick
-    Qt5::Qml
-    KF5::WindowSystem
-    KF5::KIOWidgets
-    KF5::I18n
-    KF5::IconThemes
-    KF5::Service
-    KF5::CoreAddons
-    KF5::XmlGui
-    KF5::Plasma
-    KF5::Declarative
+    PUBLIC
+        Qt5::Quick
+        Qt5::Qml
+        KF5::Plasma
+    PRIVATE
+        KF5::WindowSystem
+        KF5::KIOWidgets
+        KF5::I18n
+        KF5::IconThemes
+        KF5::Service
+        KF5::CoreAddons
+        KF5::XmlGui
+        KF5::Declarative
 )
 
 if(HAVE_X11)
-  target_link_libraries(KF5PlasmaQuick ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )
-  target_link_libraries(KF5PlasmaQuick Qt5::X11Extras)
-
-  if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     target_link_libraries(KF5PlasmaQuick
-        ${XCB_DAMAGE_LIBRARY}
-        ${XCB_COMPOSITE_LIBRARY}
-        )
-  endif()
-  if(XCB_SHAPE_FOUND)
-    target_link_libraries(KF5PlasmaQuick ${XCB_SHAPE_LIBRARY})
-  endif()
+        PRIVATE
+            Qt5::X11Extras
+            ${X11_LIBRARIES}
+            ${XCB_XCB_LIBRARY}
+    )
 
-  if(HAVE_GLX)
-    target_link_libraries(KF5PlasmaQuick ${OPENGL_gl_LIBRARY})
-  endif()
+    if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
+        target_link_libraries(KF5PlasmaQuick
+            PRIVATE
+                ${XCB_DAMAGE_LIBRARY}
+                ${XCB_COMPOSITE_LIBRARY}
+        )
+    endif()
+
+    if(XCB_SHAPE_FOUND)
+        target_link_libraries(KF5PlasmaQuick PRIVATE ${XCB_SHAPE_LIBRARY})
+    endif()
+
+    if(HAVE_GLX)
+        target_link_libraries(KF5PlasmaQuick PRIVATE ${OPENGL_gl_LIBRARY})
+    endif()
 endif()
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
