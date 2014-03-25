@@ -91,6 +91,7 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
 
+    setPosition(m_animation->endValue().toPoint());
     m_animation->stop();
     Dialog::showEvent(event);
 }
