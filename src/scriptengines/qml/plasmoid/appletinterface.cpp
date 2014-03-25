@@ -148,6 +148,11 @@ uint AppletInterface::id() const
     return applet()->id();
 }
 
+QString AppletInterface::pluginName() const
+{
+    return applet()->pluginInfo().pluginName();
+}
+
 QString AppletInterface::icon() const
 {
     return applet()->icon();

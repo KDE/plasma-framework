@@ -63,6 +63,11 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
 
     /**
+     * Plugin name of the plasmoid
+     */
+    Q_PROPERTY(QString pluginName READ pluginName CONSTANT)
+
+    /**
      * User friendly title for the plasmoid: it's the localized applet name by default
      */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
@@ -223,6 +228,8 @@ public:
     }
 
 //PROPERTY ACCESSORS-------------------------------------------------------------------
+    QString pluginName() const;
+
     QString icon() const;
     void setIcon(const QString &icon);
 
