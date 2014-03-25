@@ -92,7 +92,7 @@ void PlasmaPkg::runMain()
         const QString hash = package.contentsHash();
         if (hash.isEmpty()) {
             d->coutput(i18n("Failed to generate a Package hash for %1", path));
-            exit(1);
+            exit(9);
         } else {
             d->coutput(i18n("SHA1 hash for Package at %1: '%2'", package.path(), hash));
             exit(0);
@@ -255,7 +255,7 @@ void PlasmaPkg::runMain()
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
             d->coutput(i18n("Could not find a suitable installer for package of type %1", type));
-            exit(1);
+            exit(5);
             return;
         }
         qWarning() << "custom PackageStructure plugins not ported";
@@ -355,7 +355,7 @@ void PlasmaPkg::runMain()
                 return;
             } else {
                 d->coutput(i18n("Error: Plugin %1 is not installed.", pluginName));
-                exit(1);
+                exit(2);
             }
         }
         if (d->parser->isSet("install")) {
@@ -365,7 +365,7 @@ void PlasmaPkg::runMain()
         }
         if (d->package.isEmpty()) {
             qWarning() << i18nc("No option was given, this is the error message telling the user he needs at least one, do not translate install, remove, upgrade nor list", "One of install, remove, upgrade or list is required.");
-            exit(1);
+            exit(6);
         } else {
             d->runKbuildsycoca();
         }
@@ -469,7 +469,7 @@ void PlasmaPkg::showPackageInfo(const QString& pluginName)
     KPluginInfo i = pkg.metadata();
     if (!i.isValid()) {
         d->coutput(i18n("Error: Can't find plugin metadata: %1", pluginName));
-        exit(1);
+        exit(3);
     }
     d->coutput(i18n("Showing info for package: %1", pluginName));
     d->coutput(i18n("      Name : %1", i.name()));
@@ -486,7 +486,7 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
     QString packageRoot;
     if (d->parser->isSet("packageroot") && d->parser->isSet("global")) {
         qWarning() << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
-        ::exit(1);
+        ::exit(7);
     } else if (d->parser->isSet("packageroot")) {
         packageRoot = d->parser->value("packageroot");
         //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
@@ -635,7 +635,7 @@ void PlasmaPkg::packageInstalled(KJob *job)
         }
     } else {
         d->coutput(i18n("Error: Installation of %1 failed: %2", d->packageFile, job->errorText()));
-        exitcode = 1;
+        exitcode = 4;
     }
     exit(exitcode);
 }
@@ -654,7 +654,7 @@ void PlasmaPkg::packageUninstalled(KJob *job)
         d->coutput(i18n("Successfully uninstalled %1", d->packageFile));
     } else {
         d->coutput(i18n("Error: Uninstallation of %1 failed: %2", d->packageFile, job->errorText()));
-        exitcode = 1;
+        exitcode = 7;
     }
     exit(exitcode);
 }

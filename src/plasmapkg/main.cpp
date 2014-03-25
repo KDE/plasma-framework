@@ -18,6 +18,24 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+/**
+ * plasmapkg2 exit codes used in this program
+
+    0 No error
+
+    1 Unspecified error
+    2 Plugin is not installed
+    3 Plugin or package invalid
+    4 Installation failed, see stderr for reason
+    5 Could not find a suitable installer for package type
+    6 No install option given
+    7 Conflicting arguments supplied
+    8 Uninstallation failed, see stderr for reason
+    9 Failed to generate package hash
+
+*/
+
 #include <klocalizedstring.h>
 #include <qcommandlineparser.h>
 #include <qcommandlineoption.h>
