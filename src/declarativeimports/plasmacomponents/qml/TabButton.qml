@@ -141,7 +141,7 @@ Item {
             visible: iconSource != null
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-            implicitWidth: 16//internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
+            implicitWidth: internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
             implicitHeight: implicitWidth
 
         }
@@ -155,7 +155,7 @@ Item {
             Layout.preferredWidth: internal.portrait ? root.width : implicitWidth
             Layout.preferredHeight: internal.portrait ? implicitHeight : root.height
 
-            elide: Text.ElideRight
+            //elide: Text.ElideRight
             horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
 
