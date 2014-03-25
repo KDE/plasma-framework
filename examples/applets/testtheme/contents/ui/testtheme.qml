@@ -46,6 +46,7 @@ Item {
         }
         height: _h
 
+        PlasmaComponents.TabButton { tab: fontsPage; text: i18n("Fonts"); iconSource: "preferences-desktop-font"}
         PlasmaComponents.TabButton { tab: scalePage; text: i18n("Scaling"); iconSource: "preferences-system-windows"}
         PlasmaComponents.TabButton { tab: unitsPage; text: i18n("Units"); iconSource: "preferences-desktop-appearance"}
     }
@@ -57,6 +58,10 @@ Item {
             right: parent.right
             top: tabBar.bottom
             bottom: dprSlider.top
+        }
+
+        FontsPage {
+            id: fontsPage
         }
 
         ScalePage {
