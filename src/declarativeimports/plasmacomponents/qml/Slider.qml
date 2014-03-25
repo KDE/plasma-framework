@@ -180,8 +180,8 @@ Item {
             value: 0
             stepSize: 0.0
             inverted: false
-            positionAtMinimum: 0
-            positionAtMaximum: contents.width - handle.width
+            positionAtMinimum: -handle.width/2
+            positionAtMaximum: contents.width - handle.width/2
         }
 
         PlasmaCore.Svg {
