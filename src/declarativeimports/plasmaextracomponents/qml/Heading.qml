@@ -56,6 +56,7 @@ Label {
     property int step: 2
 
     font.pointSize: headerPointSize(level)
+    font.weight: Font.Light
     wrapMode: Text.WordWrap
     opacity: 0.8
 
