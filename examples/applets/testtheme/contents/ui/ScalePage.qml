@@ -29,6 +29,9 @@ Item {
     property int cwidth: themePage.width / 1.2
     property int _m: units.gridUnit / 2 * units.devicePixelRatio
 
+    anchors {
+        margins: units.largeSpacing
+    }
     Column {
         id: col
         spacing: _m

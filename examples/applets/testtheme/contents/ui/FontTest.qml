@@ -38,6 +38,7 @@ Column {
     }
 
     Row {
+        spacing: units.gridUnit/2
         PlasmaComponents.CheckBox {
             id: boxesCheck
             text: "Show Boxes"
@@ -45,6 +46,11 @@ Column {
         PlasmaComponents.CheckBox {
             id: fontCheck
             text: checked ? "Oxygen-Sans" : "Comme"
+        }
+        PlasmaComponents.CheckBox {
+            id: lightCheck
+            //tristate: true
+            text: checked ? "Light" : "Regular"
         }
         PlasmaComponents.CheckBox {
             id: paintedHeightCheck
@@ -56,24 +62,45 @@ Column {
 
     FontGizmo {
         id: giz1
-        font.family: "Oxygen-Sans"
+        font.pointSize: theme.smallestFont.pointSize
+        //font.family: "Oxygen-Sans"
     }
 
     FontGizmo {
         id: giz2
-        font.family: "Comme"
+        font.pixelSize: units.gridUnit * 1
     }
 
     FontGizmo {
         id: giz3
-        font.family: "Oxygen Mono"
-
+        font.pixelSize: units.gridUnit * 2
     }
 
+    FontGizmo {
+        id: giz4
+        font.pixelSize: units.gridUnit * 2
+        text: "AlignTop"
+        verticalAlignment: Text.AlignTop
+    }
+
+    FontGizmo {
+        id: giz5
+        font.pixelSize: units.gridUnit * 2
+        text: "AlignVCenter"
+        verticalAlignment: Text.AlignVCenter
+    }
+
+//     FontGizmo {
+//         id: giz3
+//         font.family: "Oxygen Mono"
+//
+//     }
+//
     Rectangle {
         width: parent.width
         height: units.gridUnit * 6
 
+        color: "transparent"
         border.width: boxesCheck.checked ? 1 : 0
         border.color: "red"
 
@@ -88,8 +115,9 @@ Column {
             }
         }
 
-        PlasmaComponents.Label {
+        PlasmaExtras.Title {
 
+            font.weight: lightCheck.checked ? Font.Light : Font.Normal
             font.family: fontCheck.text
             font.pointSize: 24
             verticalAlignment: Text.AlignTop
@@ -101,7 +129,7 @@ Column {
             font.pixelSize: height
             anchors {
                 left: img.right
-                leftMargin: units.gridUnit
+                leftMargin: units.gridUnit / 2
                 top: img.top
             }
         }

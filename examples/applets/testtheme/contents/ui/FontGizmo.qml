@@ -28,13 +28,27 @@ Text {
     renderType: Text.NativeRendering
     font.pointSize: 22
 
-    font.family: theme.defaultFont.family
-    text: "Lesley. (" + font.family + ")"
+    //font.family: theme.defaultFont.family
+    font.family: fontCheck.text
+    font.weight: lightCheck.checked ? Font.Light : Font.Normal
+    text: "Lesley 40:83 - (" + font.family + ")"
     height: paintedHeightCheck.checked ? paintedHeight : 22
     //anchors.fill: parent
     //spacing: units.smallSpacing/2
     verticalAlignment: Text.AlignTop
 
+    Rectangle {
+        color: "yellow"
+        visible: boxesCheck.checked
+
+        height: 1
+        width: paintedWidth
+
+        anchors {
+            verticalCenter: parent.verticalCenter
+            left: parent.left
+        }
+    }
     Rectangle {
         color: "transparent"
         border.width: 1
