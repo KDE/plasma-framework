@@ -90,7 +90,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
         QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), this, SLOT(blurBehindChanged(bool)));
 #endif
     }
-    installEventFilter(qApp);
+    qApp->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
     KDirWatch::self()->addFile(configFile);
