@@ -65,6 +65,11 @@ find_package(KF5WidgetsAddons ${KF5_VERSION} REQUIRED)
 find_package(KF5WindowSystem ${KF5_VERSION} REQUIRED)
 find_package(KF5XmlGui ${KF5_VERSION} REQUIRED)
 
+find_package(KF5DocTools ${KF5_VERSION})
+set_package_properties(X11 PROPERTIES DESCRIPTION "Tools to generate documentation"
+                       TYPE OPTIONAL
+                      )
+
 #optional features
 find_package(X11 MODULE)
 set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
@@ -177,6 +182,9 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ################# list the subdirectories #################
+if (KF5DocTools)
+    add_subdirectory(doc)
+endif()
 add_subdirectory(src)
 add_subdirectory(desktoptheme)
 add_subdirectory(examples)
