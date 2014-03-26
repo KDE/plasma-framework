@@ -25,7 +25,6 @@ set(corebindings_SRCS
     framesvgitem.cpp
     tooltip.cpp
     tooltipdialog.cpp
-    formats.cpp
     serviceoperationstatus.cpp
     dataenginebindings.cpp
     iconitem.cpp
@@ -39,7 +38,6 @@ target_link_libraries(corebindingsplugin
         Qt5::Quick
         Qt5::Qml
         KF5::Declarative
-        KF5::CoreAddons
         KF5::IconThemes
         KF5::Service #for kplugininfo.h
         KF5::WindowSystem

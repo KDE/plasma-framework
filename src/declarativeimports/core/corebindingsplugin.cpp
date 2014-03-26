@@ -37,7 +37,6 @@
 #include "theme.h"
 #include "dialog.h"
 #include "iconitem.h"
-#include "formats.h"
 #include "serviceoperationstatus.h"
 
 #include "tooltip.h"
@@ -96,7 +95,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::Service*>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
     qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
-    qmlRegisterType<Formats>(uri, 2, 0, "Formats");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
 
