@@ -41,6 +41,11 @@ public:
         return ptr;
     }
 
+    operator bool() const
+    {
+        return !s_instance.expired();
+    }
+
 private:
     static std::weak_ptr<Target> s_instance;
 };

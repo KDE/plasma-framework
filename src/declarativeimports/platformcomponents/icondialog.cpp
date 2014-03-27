@@ -57,6 +57,14 @@ QString IconDialog::openDialog()
     return dialog->openDialog();
 }
 
+void IconDialog::closeDialog()
+{
+    if (d->dialog) {
+        auto dialog = d->dialog.instance();
+        dialog->close();
+    }
+}
+
 IconDialog::~IconDialog()
 {
 }

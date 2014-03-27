@@ -47,6 +47,7 @@ public:
     ~IconDialog();
 
     Q_INVOKABLE QString openDialog();
+    Q_INVOKABLE void closeDialog();
 
 private:
     D_PTR;
