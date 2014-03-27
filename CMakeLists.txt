@@ -76,7 +76,7 @@ set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
                        URL "http://www.x.org"
                        TYPE OPTIONAL
                       )
-find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE)
+find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE XFIXES RENDER)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
                        URL "http://xcb.freedesktop.org"
                        TYPE OPTIONAL
