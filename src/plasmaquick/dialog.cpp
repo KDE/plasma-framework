@@ -775,10 +775,6 @@ bool Dialog::hideOnWindowDeactivate() const
 
 void Dialog::setHideOnWindowDeactivate(bool hide)
 {
-    if (flags() & Qt::X11BypassWindowManagerHint) {
-        // doesn't get keyboard focus, so let's just ignore it
-        return;
-    }
     if (d->hideOnWindowDeactivate == hide) {
         return;
     }
