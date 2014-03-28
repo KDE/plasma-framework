@@ -208,14 +208,21 @@ Item {
             prefix: "groove-highlight"
             height: groove.height
             width: inverted ? groove.width - handle.x : fakeHandle.x + handle.width/4
-            x: inverted ? handle.x : handle.width/4
+            x: inverted ? handle.x + handle.width/4 : handle.width/4
             anchors.verticalCenter: parent.verticalCenter
 
             //use the same animation when resizing a slider as moving the slider this keeps it in line when using key shortcuts
             Behavior on width {
                 enabled: !mouseArea.drag.active && contents.animated
                 PropertyAnimation {
-                    duration: behavior.enabled ? 150 : 0
+                    duration: behavior.enabled ? units.shortDuration : 0
+                    easing.type: Easing.OutSine
+                }
+            }
+            Behavior on x {
+                enabled: inverted && !mouseArea.drag.active && contents.animated
+                PropertyAnimation {
+                    duration: behavior.enabled ? units.shortDuration : 0
                     easing.type: Easing.OutSine
                 }
             }
@@ -254,7 +261,7 @@ Item {
                 enabled: !mouseArea.drag.active && contents.animated
 
                 PropertyAnimation {
-                    duration: behavior.enabled ? 150 : 0
+                    duration: behavior.enabled ? units.shortDuration : 0
                     easing.type: Easing.OutSine
                 }
             }
