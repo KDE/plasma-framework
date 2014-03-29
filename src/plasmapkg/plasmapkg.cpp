@@ -24,6 +24,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kshell.h>
+#include <kconfig.h>
 #include <ksycoca.h>
 #include <klocalizedstring.h>
 
