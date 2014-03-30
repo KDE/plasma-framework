@@ -152,21 +152,22 @@ qreal Units::devicePixelRatio() const
 
 void Units::updateDisplayAspectRatio()
 {
-    QWidget *screen = QApplication::desktop()->screen();
+    QRect geometry = QGuiApplication::primaryScreen()->virtualGeometry();
 
-    m_displayAspectRatio = screen->width() / (qreal)screen->height();
+    m_displayAspectRatio = geometry.width() / geometry.height();
 
     emit displayAspectRatioChanged();
 }
 
 void Units::updateDevicePixelRatio()
 {
-    // Going through QDesktopWidget seems to be the most reliable way no
-    // to get the DPI, and thus devicePixelRatio
     // Using QGuiApplication::devicePixelRatio() gives too coarse values,
     // i.e. it directly jumps from 1.0 to 2.0. We want tighter control on
     // sizing, so we compute the exact ratio and use that.
-    qreal dpi = QApplication::desktop()->physicalDpiX();
+    // TODO: make it possible to adapt to the dpi for the current screen dpi
+    //  instead of assuming that all of them use the same dpi which applies for
+    //  X11 but not for other systems.
+    qreal dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
     // Usual "default" is 96 dpi
     // that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_devicePixelRatio = (qreal)dpi / (qreal)96;
@@ -181,7 +182,7 @@ int Units::gridUnit() const
 
 void Units::themeChanged()
 {
-    const int gridUnit = QFontMetrics(QApplication::font()).boundingRect("M").height();
+    const int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
     if (gridUnit != m_gridUnit) {
         m_gridUnit = gridUnit;
         emit gridUnitChanged();
@@ -200,7 +201,7 @@ int Units::largeSpacing() const
 
 void Units::updateSpacing()
 {
-    const int _s = QFontMetrics(QApplication::font()).boundingRect("M").size().height();
+    const int _s = QFontMetrics(QGuiApplication::font()).boundingRect("M").size().height();
     if (_s != m_largeSpacing) {
         m_smallSpacing = qMax(2, (int)(_s / 8)); // 1/8 of msize.height, at least 2
         m_largeSpacing = _s; // msize.height
