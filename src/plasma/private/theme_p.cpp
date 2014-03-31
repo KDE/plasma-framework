@@ -604,11 +604,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (colorsFile.isEmpty()) {
         colors = 0;
         if (qApp) {
-            installEventFilter(qApp);
+            qApp->installEventFilter(this);
         }
     } else {
         if (qApp) {
-            removeEventFilter(qApp);
+            qApp->removeEventFilter(this);
         }
         colors = KSharedConfig::openConfig(colorsFile);
     }

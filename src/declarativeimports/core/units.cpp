@@ -56,7 +56,7 @@ Units::Units (QObject *parent)
     themeChanged();
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
-    installEventFilter(qApp);
+    qApp->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
     KDirWatch::self()->addFile(configFile);
