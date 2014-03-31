@@ -642,10 +642,6 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             fallback = cg.readEntry("FallbackTheme", QString());
         }
 
-       /* if (!fallbackThemes.contains("oxygen")) {
-            fallbackThemes.append("oxygen");
-        }*/
-
         if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
             fallbackThemes.append(ThemePrivate::defaultTheme);
         }
