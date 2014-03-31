@@ -18,7 +18,6 @@ include(PlasmaMacros.cmake)
 
 target_link_libraries(Foo
                      Qt5::Test
-                     Qt5::Declarative
                      KF5::Plasma
                      KF5::KArchive KF5::KCoreAddons
                      KF5::KConfigGui

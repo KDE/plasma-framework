@@ -11,7 +11,6 @@ MACRO(PLASMA_UNIT_TESTS)
                add_executable(${_testname} ${_testname}.cpp)
                target_link_libraries(${_testname}
                                      Qt5::Test
-                                     Qt5::Declarative
                                      Qt5::Qml
                                      KF5::Plasma
                                      KF5::Archive KF5::CoreAddons

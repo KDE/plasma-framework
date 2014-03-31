@@ -18,7 +18,6 @@ target_link_libraries(calendarplugin
     Qt5::Quick
     Qt5::Qml
     Qt5::Gui
-    Qt5::Declarative
     ${KDEPIMLIBS_AKONADI_LIBS}
     ${KDEPIMLIBS_KCALCORE_LIBS}
     ${KDEPIMLIBS_AKONADI_CALENDAR_LIBS}
