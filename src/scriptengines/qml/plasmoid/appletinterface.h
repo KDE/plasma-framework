@@ -168,6 +168,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
 public:
     AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
+    AppletInterface(Plasma::Applet *applet, QQuickItem *parent = 0);
     ~AppletInterface();
 
 //API not intended for the QML part

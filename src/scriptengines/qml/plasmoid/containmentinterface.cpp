@@ -505,20 +505,15 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
-    if (contGraphicObject && appletGraphicObject) {
+    if (!appletGraphicObject) {
+        appletGraphicObject = new AppletInterface(applet, this);
+        applet->setProperty("_plasma_graphicObject", QVariant::fromValue(appletGraphicObject));
+        static_cast<AppletInterface *>(appletGraphicObject)->init();
+    }
+
+    if (contGraphicObject) {
         appletGraphicObject->setProperty("visible", false);
         appletGraphicObject->setProperty("parent", QVariant::fromValue(contGraphicObject));
-
-    //if an appletGraphicObject is not set, we have to display some error message
-    } else if (contGraphicObject) {
-        QObject *errorUi = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(containment()->corona()->package().filePath("appleterror")));
-
-        if (errorUi) {
-            errorUi->setProperty("visible", false);
-            errorUi->setProperty("parent", QVariant::fromValue(contGraphicObject));
-            errorUi->setProperty("reason", applet->launchErrorMessage());
-            appletGraphicObject = errorUi;
-        }
     }
 
     m_appletInterfaces << appletGraphicObject;

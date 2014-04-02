@@ -85,6 +85,39 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     }
 }
 
+AppletInterface::AppletInterface(Plasma::Applet *a, QQuickItem *parent)
+    : AppletQuickItem(a, parent),
+      m_actionSignals(0),
+      m_appletScriptEngine(0),
+      m_backgroundHints(Plasma::Types::StandardBackground),
+      m_busy(false),
+      m_hideOnDeactivate(true)
+{
+    qmlRegisterType<QAction>();
+
+    connect(this, &AppletInterface::configNeedsSaving,
+            applet(), &Plasma::Applet::configNeedsSaving);
+    connect(applet(), &Plasma::Applet::immutabilityChanged,
+            this, &AppletInterface::immutableChanged);
+    connect(applet(), &Plasma::Applet::userConfiguringChanged,
+            this, &AppletInterface::userConfiguringChanged);
+
+    connect(applet(), &Plasma::Applet::statusChanged,
+            this, &AppletInterface::statusChanged);
+
+    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
+            this, &AppletInterface::formFactorChanged);
+    connect(appletScript(), &DeclarativeAppletScript::locationChanged,
+            this, &AppletInterface::locationChanged);
+    connect(appletScript(), &DeclarativeAppletScript::contextChanged,
+            this, &AppletInterface::contextChanged);
+
+    if (applet()->containment()) {
+        connect(applet()->containment(), &Plasma::Containment::screenChanged,
+                this, &ContainmentInterface::screenChanged);
+    }
+}
+
 AppletInterface::~AppletInterface()
 {
 }

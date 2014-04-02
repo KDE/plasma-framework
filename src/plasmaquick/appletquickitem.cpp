@@ -448,22 +448,27 @@ void AppletQuickItem::init()
     //Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
 
-    PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
-    interceptor->addAllowedPath(d->coronaPackage.path());
-    engine->setUrlInterceptor(interceptor);
+    if (d->applet->package().isValid()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
+        interceptor->addAllowedPath(d->coronaPackage.path());
+        engine->setUrlInterceptor(interceptor);
+    }
 
     d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->package().filePath("mainscript")));
 
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || d->qmlObject->mainComponent()->isError()) {
         QString reason;
-        foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
-            reason += error.toString()+'\n';
+        if (d->applet->package().isValid()) {
+            foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
+                reason += error.toString()+'\n';
+            }
+            reason = i18n("Error loading QML file: %1", reason);
+        } else {
+            reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());
         }
-        reason = i18n("Error loading QML file: %1", reason);
 
         d->qmlObject->setSource(QUrl::fromLocalFile(d->coronaPackage.filePath("appleterror")));
         d->qmlObject->completeInitialization();
-
 
         //even the error message QML may fail
         if (d->qmlObject->mainComponent()->isError()) {
