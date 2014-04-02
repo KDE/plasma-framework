@@ -96,6 +96,10 @@ void DataSource::setupData()
     qDeleteAll(m_services);
     m_services.clear();
 
+    if (m_engine.isEmpty()) {
+        return;
+    }
+
     m_dataEngineConsumer = new Plasma::DataEngineConsumer();
     Plasma::DataEngine *engine = dataEngine(m_engine);
     if (!engine) {

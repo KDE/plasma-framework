@@ -121,6 +121,10 @@ Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 
 Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
+    if (name.isEmpty()) {
+        qDebug() << "Asked an engine with empty name";
+        return d->nullEngine();
+    }
     Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
 
     if (it != d->engines.constEnd()) {
@@ -131,6 +135,7 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 
     DataEngine *engine = PluginLoader::self()->loadDataEngine(name);
     if (!engine) {
+        qDebug() << "Can't find a dataengine named" << name;
         // Try installing the engine. However, it's too late for this request.
         ComponentInstaller::self()->installMissingComponent("dataengine", name);
 
