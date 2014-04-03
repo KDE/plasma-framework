@@ -123,7 +123,7 @@ Item {
      */
     function push(page, properties, immediate)
     {
-        return Engine.push(page, properties, false, immediate);
+        return Engine.push(page, properties, false, !root.animate || immediate);
     }
 
     /**
@@ -137,7 +137,7 @@ Item {
      */
     function pop(page, immediate)
     {
-        return Engine.pop(page, immediate);
+        return Engine.pop(page, !root.animate || immediate);
     }
 
     /**
@@ -157,7 +157,7 @@ Item {
      */
     function replace(page, properties, immediate)
     {
-        return Engine.push(page, properties, true, immediate);
+        return Engine.push(page, properties, true, !root.animate || immediate);
     }
 
     /** Clears the page stack of all pages. */
