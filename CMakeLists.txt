@@ -65,7 +65,7 @@ find_package(KF5WindowSystem ${KF5_VERSION} REQUIRED)
 find_package(KF5XmlGui ${KF5_VERSION} REQUIRED)
 
 find_package(KF5DocTools ${KF5_VERSION})
-set_package_properties(X11 PROPERTIES DESCRIPTION "Tools to generate documentation"
+set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
                        TYPE OPTIONAL
                       )
 
