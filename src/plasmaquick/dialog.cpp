@@ -231,6 +231,8 @@ void DialogPrivate::updateMinimumWidth()
 {
     if (mainItemLayout) {
         q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt() + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
+        //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
+        q->setWidth(qMax(q->width(), q->minimumWidth()));
     } else {
         q->setMinimumWidth(-1);
     }
@@ -240,6 +242,8 @@ void DialogPrivate::updateMinimumHeight()
 {
     if (mainItemLayout) {
         q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt() + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+        //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
+        q->setHeight(qMax(q->height(), q->minimumHeight()));
     } else {
         q->setMinimumHeight(-1);
     }
