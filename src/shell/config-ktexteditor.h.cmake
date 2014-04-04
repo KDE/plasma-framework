@@ -1,2 +1,0 @@
-#cmakedefine01 HAVE_KTEXTEDITOR
-
