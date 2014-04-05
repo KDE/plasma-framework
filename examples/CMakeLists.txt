@@ -1,3 +1,9 @@
+find_package(KF5Parts ${KF5_VERSION} REQUIRED)
+set_package_properties(KF5Parts PROPERTIES PURPOSE "Required for examples")
+
+find_package(KF5WidgetsAddons ${KF5_VERSION} REQUIRED)
+set_package_properties(KF5WidgetsAddons PROPERTIES PURPOSE "Required for examples")
+
 add_subdirectory(applets)
 add_subdirectory(containments)
 add_subdirectory(wallpapers)
