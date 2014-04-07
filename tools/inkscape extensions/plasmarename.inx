@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">>
+    <_name>PlasmaRename</_name>
+    <id>notmart.filter.plasmarename</id>
+	<dependency type="executable" location="extensions">plasmarename.py</dependency>
+    <param name="prefix" type="string" _gui-text="Svg elements prefix"></param>
+    <effect>
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu _name="Plasma"/>
+        </effects-menu>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">plasmarename.py</command>
+    </script>
+</inkscape-extension>
