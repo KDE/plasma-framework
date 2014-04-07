@@ -174,7 +174,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ################# list the subdirectories #################
-if (KF5DocTools)
+if (KF5DocTools_FOUND)
     add_subdirectory(doc)
 endif()
 add_subdirectory(src)
