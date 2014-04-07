@@ -201,13 +201,41 @@ FocusScope {
             bottomMargin: buttonsLayout.visible && !layout.isHorizontal ? buttonsLayout.height : buttonFrame.margins.bottom
         }
 
+        function syncWidth() {
+            if (layout.isHorizontal) {
+                buttonsLayout.width = buttonsLayout.implicitWidth
+                buttonsLayout.height = buttonsLayout.implicitHeight
+
+                tabBarLayout.width = (tabBarLayout.implicitWidth - tabbarScroller.width <= units.gridUnit * 4) ? tabbarScroller.width : tabBarLayout.implicitWidth;
+            } else {
+                tabBarLayout.width = units.gridUnit * 5;
+            }
+        }
+        function syncHeight() {
+            if (!layout.isHorizontal) {
+                buttonsLayout.width = buttonsLayout.implicitWidth
+                buttonsLayout.height = buttonsLayout.implicitHeight
+
+                tabBarLayout.height = (tabBarLayout.implicitHeight - tabbarScroller.height <= units.gridUnit * 4) ? tabbarScroller.height : tabBarLayout.implicitHeight;
+            } else {
+                tabBarLayout.height = units.gridUnit * 5;
+            }
+        }
+
+        onWidthChanged: syncWidth();
+        onHeightChanged: syncHeight();
+
+        Component.onCompleted: {
+            tabbarScroller.syncWidth();
+            tabbarScroller.syncHeight();
+        }
 
         Private.TabBarLayout {
             id: tabBarLayout
             //A bit of snap before scrolling the layout
-            width: layout.isHorizontal ? ((implicitWidth - parent.width < theme.mSize(theme.defaultFont).width*4) ? parent.width : implicitWidth) : root.width;
 
-            height: !layout.isHorizontal ? ((implicitHeight - parent.height < theme.mSize(theme.defaultFont).width*4) ? parent.height : implicitHeight) : root.height
+            onImplicitWidthChanged: tabbarScroller.syncWidth();
+            onImplicitHeightChanged: tabbarScroller.syncHeight();
 
             anchors {
                 top: layout.isHorizontal ? parent.top : undefined
