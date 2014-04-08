@@ -392,12 +392,13 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     d->fullRepresentationResizeTimer.setInterval(250);
     connect (&d->fullRepresentationResizeTimer, &QTimer::timeout,
              [=]() {
-                KConfigGroup cg = d->applet->config();
-                cg = KConfigGroup(&cg, "PopupApplet");
-                cg.writeEntry("DialogWidth", d->fullRepresentationItem.data()->property("width").toInt());
-                cg.writeEntry("DialogHeight", d->fullRepresentationItem.data()->property("height").toInt());
-            }
-    );
+                 if (!d->applet->isContainment()) {
+                     KConfigGroup cg = d->applet->config();
+                     cg = KConfigGroup(&cg, "PopupApplet");
+                     cg.writeEntry("DialogWidth", d->fullRepresentationItem.data()->property("width").toInt());
+                     cg.writeEntry("DialogHeight", d->fullRepresentationItem.data()->property("height").toInt());
+                 }
+            });
 
 
 
@@ -634,8 +635,12 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     if (expanded) {
-        d->createCompactRepresentationExpanderItem();
         d->createFullRepresentationItem();
+        if (!d->applet->isContainment() &&
+            (!d->preferredRepresentation ||
+             d->preferredRepresentation.data() != d->fullRepresentation.data())) {
+            d->createCompactRepresentationExpanderItem();
+        }
 
         KConfigGroup cg = d->applet->config();
         cg = KConfigGroup(&cg, "PopupApplet");
@@ -646,7 +651,11 @@ void AppletQuickItem::setExpanded(bool expanded)
             d->fullRepresentationItem.data()->setProperty("height", height);
         }
 
-        d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
+        if (d->compactRepresentationExpanderItem) {
+            d->compactRepresentationExpanderItem.data()->setProperty("fullRepresentation", QVariant::fromValue(d->createFullRepresentationItem()));
+        } else {
+            d->fullRepresentationItem.data()->setProperty("parent", QVariant::fromValue(this));
+        }
     }
 
     d->expanded = expanded;
