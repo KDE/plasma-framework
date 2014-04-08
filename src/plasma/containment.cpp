@@ -543,12 +543,9 @@ void Containment::reactToScreenChange()
         d->lastScreen = newScreen;
         c.writeEntry("lastScreen", d->lastScreen);
     }
+
     emit configNeedsSaving();
     emit screenChanged(newScreen);
-
-    if (newScreen >= 0) {
-        emit activated();
-    }
 }
 
 } // Plasma namespace
