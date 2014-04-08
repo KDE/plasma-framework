@@ -32,6 +32,10 @@ QMenuProxy::QMenuProxy (QObject *parent)
 {
     m_menu = new QMenu(0);
     connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
+    connect(m_menu, &QMenu::aboutToHide, [=]() {
+        m_status = DialogStatus::Closed;
+        emit statusChanged();
+    });
 }
 
 QMenuProxy::~QMenuProxy()
@@ -200,8 +204,6 @@ void QMenuProxy::open(int x, int y)
 void QMenuProxy::close()
 {
     m_menu->hide();
-    m_status = DialogStatus::Closed;
-    emit statusChanged();
 }
 
 #include "qmenu.moc"
