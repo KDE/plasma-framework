@@ -46,7 +46,6 @@ Units::Units (QObject *parent)
 {
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio();
-    updateDisplayAspectRatio();
     updateSpacing();
 
     //iconLoaderSettingsChanged();
@@ -140,23 +139,9 @@ int Units::devicePixelIconSize(const int size) const
     // FIXME: Add special casing for < 64 cases: align to kiconloader size
 }
 
-qreal Units::displayAspectRatio() const
-{
-    return m_displayAspectRatio;
-}
-
 qreal Units::devicePixelRatio() const
 {
     return m_devicePixelRatio;
-}
-
-void Units::updateDisplayAspectRatio()
-{
-    QRect geometry = QGuiApplication::primaryScreen()->virtualGeometry();
-
-    m_displayAspectRatio = geometry.width() / geometry.height();
-
-    emit displayAspectRatioChanged();
 }
 
 void Units::updateDevicePixelRatio()
