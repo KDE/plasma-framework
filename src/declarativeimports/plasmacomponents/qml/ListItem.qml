@@ -71,6 +71,11 @@ Item {
     //is this to be used as section delegate?
     property bool sectionDelegate: false
 
+    /**
+     * True if the list item contains mouse
+     */
+    property alias containsMouse: itemMouse.containsMouse
+
     width: parent ? parent.width : childrenRect.width
     height: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
@@ -120,16 +125,16 @@ Item {
         onPressed: if (changeBackgroundOnPress) background.prefix = "pressed"
         onReleased: if (changeBackgroundOnPress) background.prefix = "normal"
         onCanceled: if (changeBackgroundOnPress) background.prefix = "normal"
-    }
 
-    Item {
-        id: paddingItem
-        anchors {
-            fill: background
-            leftMargin: background.margins.left
-            topMargin: background.margins.top
-            rightMargin: background.margins.right
-            bottomMargin: background.margins.bottom
+        Item {
+            id: paddingItem
+            anchors {
+                fill: parent
+                leftMargin: background.margins.left
+                topMargin: background.margins.top
+                rightMargin: background.margins.right
+                bottomMargin: background.margins.bottom
+            }
         }
     }
 }
