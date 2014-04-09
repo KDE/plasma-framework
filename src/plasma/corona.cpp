@@ -198,6 +198,15 @@ Containment *Corona::createContainment(const QString &name, const QVariantList &
     return 0;
 }
 
+Containment *Corona::createContainmentDelayed(const QString &name, const QVariantList &args)
+{
+    if (d->immutability == Types::Mutable) {
+        return d->addContainment(name, args, 0, true);
+    }
+
+    return 0;
+}
+
 int Corona::screenForContainment(const Containment* containment) const
 {
     return -1;
@@ -388,7 +397,7 @@ void CoronaPrivate::syncConfig()
     emit q->configSynced();
 }
 
-Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id)
+Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
 {
     QString pluginName = name;
     Containment *containment = 0;
@@ -448,14 +457,16 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     QObject::connect(containment, SIGNAL(screenChanged(int)),
             q, SIGNAL(screenOwnerChanged(int)));
 
-    containment->init();
-    KConfigGroup cg = containment->config();
-    containment->restore(cg);
-    containment->updateConstraints(Plasma::Types::StartupCompletedConstraint);
-    containment->save(cg);
-    q->requestConfigSync();
-    containment->flushPendingConstraintsEvents();
-    emit q->containmentAdded(containment);
+    if (!delayedInit) {
+        containment->init();
+        KConfigGroup cg = containment->config();
+        containment->restore(cg);
+        containment->updateConstraints(Plasma::Types::StartupCompletedConstraint);
+        containment->save(cg);
+        q->requestConfigSync();
+        containment->flushPendingConstraintsEvents();
+        emit q->containmentAdded(containment);
+    }
 
     return containment;
 }

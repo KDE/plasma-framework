@@ -148,6 +148,10 @@ void ContainmentInterface::init()
         QQmlProperty prop(qmlObject()->rootObject(), "anchors.fill");
         prop.write(expr.evaluate());
     }
+
+    if (!containment()->wallpaper().isEmpty()) {
+        loadWallpaper();
+    }
 }
 
 QList <QObject *> ContainmentInterface::applets()

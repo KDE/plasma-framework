@@ -110,12 +110,13 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
 
 void WallpaperInterface::syncWallpaperPackage()
 {
-    if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper()) {
+    if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper() &&
+        m_qmlObject->rootObject()) {
         return;
     }
 
     m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
-    
+
     if (!m_qmlObject) {
         m_qmlObject = new KDeclarative::QmlObject(this);
         s_rootObjects[m_qmlObject->engine()] = this;
@@ -138,7 +139,6 @@ void WallpaperInterface::syncWallpaperPackage()
         m_configuration = new KDeclarative::ConfigPropertyMap(configScheme(), this);
     }
 
-    
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
     m_qmlObject->completeInitialization();
