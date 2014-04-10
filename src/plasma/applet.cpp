@@ -562,7 +562,7 @@ Types::FormFactor Applet::formFactor() const
 Containment *Applet::containment() const
 {
     Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
-    if (c) {
+    if (c && qobject_cast<Corona *>(parent())) {
         return c;
     }
 
@@ -575,20 +575,6 @@ Containment *Applet::containment() const
             break;
         }
         parent = parent->parent();
-    }
-
-    if (!c) {
-        //if the applet is an offscreen widget its parentItem will be 0, while its parent
-        //will be its parentWidget, so here we check the QObject hierarchy.
-        QObject *objParent = this->parent();
-        while (objParent) {
-            Containment *possibleC = qobject_cast<Containment*>(objParent);
-            if (possibleC) {
-                c = possibleC;
-                break;
-            }
-            objParent = objParent->parent();
-        }
     }
 
     return c;
@@ -757,7 +743,7 @@ void Applet::timerEvent(QTimerEvent *event)
 
 bool Applet::isContainment() const
 {
-    return qobject_cast<const Containment*>(this);
+    return qobject_cast<const Containment*>(this) && qobject_cast<Corona *>(parent());
 }
 
 } // Plasma namespace
