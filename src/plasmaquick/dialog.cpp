@@ -572,9 +572,9 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     if (d->location == Plasma::Types::BottomEdge) {
         dialogPos = bottomPoint;
     } else if (d->location == Plasma::Types::LeftEdge) {
-        dialogPos = leftPoint;
-    } else if (d->location == Plasma::Types::RightEdge) {
         dialogPos = rightPoint;
+    } else if (d->location == Plasma::Types::RightEdge) {
+        dialogPos = leftPoint;
     } else { // Types::TopEdge
         dialogPos = topPoint;
     }
