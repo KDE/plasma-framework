@@ -57,7 +57,7 @@ QStringList PackageUrlInterceptor::allowedPaths() const
 
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
-    //qDebug() << "Intercepted URL:" << path;
+    //qDebug() << "Intercepted URL:" << path << type;
 
     if (path.scheme() == QStringLiteral("plasmapackage")) {
         //FIXME: this is incorrect but works around a bug in qml in resolution of urls of qmldir files
@@ -73,6 +73,10 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return path;
     }
 
+    //if is just a normal string, no qml file was asked, allow it
+    if (type == QQmlAbstractUrlInterceptor::UrlString) {
+        return path;
+    }
 
     //asked a file inside a package: let's rewrite the url!
     if (path.path().startsWith(m_package.path())) {
