@@ -170,6 +170,9 @@ Q_SIGNALS:
     void activeChanged();
     void interactiveChanged();
 
+private Q_SLOTS:
+    void settingsChanged();
+
 private:
     bool m_containsMouse;
     Plasma::Types::Location m_location;

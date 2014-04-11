@@ -28,6 +28,7 @@
 
 #include "framesvgitem.h"
 #include <kwindoweffects.h>
+#include <KDirWatch>
 
 ToolTipDialog *ToolTip::s_dialog = 0;
 int ToolTip::s_dialogUsers  = 0;
@@ -46,14 +47,12 @@ ToolTip::ToolTip(QQuickItem *parent)
         showToolTip();
     });
 
-    KConfig config("plasmarc");
-    KConfigGroup cg(&config, "PlasmaToolTips");
+    settingsChanged();
 
-    m_interval = cg.readEntry("Delay", 700);
-    bool enabled = m_interval > 0;
-
-    setAcceptHoverEvents(enabled);
-    setFiltersChildMouseEvents(enabled);
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + "plasmarc";
+    KDirWatch::self()->addFile(configFile);
+    QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), this, SLOT(settingsChanged()));
+    QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(settingsChanged()));
 }
 
 ToolTip::~ToolTip()
@@ -66,6 +65,18 @@ ToolTip::~ToolTip()
         delete s_dialog;
         s_dialog = 0;
     }
+}
+
+void ToolTip::settingsChanged()
+{
+    KConfig config("plasmarc");
+    KConfigGroup cg(&config, "PlasmaToolTips");
+
+    m_interval = cg.readEntry("Delay", 700);
+    bool enabled = m_interval > 0;
+
+    setAcceptHoverEvents(enabled);
+    setFiltersChildMouseEvents(enabled);
 }
 
 QQuickItem *ToolTip::mainItem() const
