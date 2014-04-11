@@ -181,6 +181,7 @@ private:
     QVariant m_icon;
     bool m_active;
     bool m_interactive;
+    int m_interval;
 
     //ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
     //are deleted too later after some stuff in the qml runtime has already been deleted,

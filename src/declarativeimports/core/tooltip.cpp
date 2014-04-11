@@ -46,8 +46,14 @@ ToolTip::ToolTip(QQuickItem *parent)
         showToolTip();
     });
 
-    setAcceptHoverEvents(true);
-    setFiltersChildMouseEvents(true);
+    KConfig config("plasmarc");
+    KConfigGroup cg(&config, "PlasmaToolTips");
+
+    m_interval = cg.readEntry("Delay", 700);
+    bool enabled = m_interval > 0;
+
+    setAcceptHoverEvents(enabled);
+    setFiltersChildMouseEvents(enabled);
 }
 
 ToolTip::~ToolTip()
@@ -297,7 +303,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         showToolTip();
     } else if (m_mainItem ||
         (!mainText().isEmpty() && !subText().isEmpty())) {
-        m_showTimer->start(500);
+        m_showTimer->start(m_interval);
     }
 }
 
