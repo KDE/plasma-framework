@@ -210,10 +210,13 @@ void AppletPrivate::globalShortcutChanged()
     if (!activationAction) {
         return;
     }
-
     KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
-    shortcutConfig.writeEntry("global", activationAction->shortcut().toString());
-    scheduleModificationNotification();
+    QString newShortCut = activationAction->shortcut().toString();
+    QString oldShortCut = shortcutConfig.readEntry("global", QString());
+    if(newShortCut != oldShortCut) {
+        shortcutConfig.writeEntry("global", newShortCut);
+        scheduleModificationNotification();
+    }
     //qDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
