@@ -71,6 +71,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
 
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
+    connect(applet(), &Plasma::Applet::activated,
+            this, &AppletInterface::activated);
 
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);

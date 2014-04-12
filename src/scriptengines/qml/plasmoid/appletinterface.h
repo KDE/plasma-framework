@@ -287,6 +287,11 @@ Q_SIGNALS:
 
     void configNeedsSaving();
 
+    /**
+     * Emitted when the applet's activation action is triggered
+     */
+    void activated();
+
 
 //PROPERTY change notifiers--------------
     void iconChanged();
