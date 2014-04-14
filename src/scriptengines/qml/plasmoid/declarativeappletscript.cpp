@@ -83,7 +83,7 @@ bool DeclarativeAppletScript::init()
     Plasma::Applet *a = applet();
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
 
-    if (pc) {
+    if (pc && pc->isContainment()) {
         m_interface = new ContainmentInterface(this);
 
     //fail? so it's a normal Applet

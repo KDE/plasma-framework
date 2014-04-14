@@ -177,28 +177,30 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-    cfg = KConfigGroup(&cfg, QString::number(containmentType()));
+    if (isContainment()) {
+        KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+        cfg = KConfigGroup(&cfg, QString::number(containmentType()));
 
 
-    //qDebug() << cfg.keyList();
-    if (cfg.exists()) {
-        foreach (const QString &key, cfg.keyList()) {
-            //qDebug() << "loading" << key;
-            setContainmentActions(key, cfg.readEntry(key, QString()));
-        }
-    } else { //shell defaults
-        KConfigGroup defaultActionsCfg;
-        if (d->type == Plasma::Types::PanelContainment) {
-            defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
-        //Plasma::Types::DesktopContainment
-        } else {
-            defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
-        }
-        defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
+        //qDebug() << cfg.keyList();
+        if (cfg.exists()) {
+            foreach (const QString &key, cfg.keyList()) {
+                //qDebug() << "loading" << key;
+                setContainmentActions(key, cfg.readEntry(key, QString()));
+            }
+        } else { //shell defaults
+            KConfigGroup defaultActionsCfg;
+            if (d->type == Plasma::Types::PanelContainment) {
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
+            //Plasma::Types::DesktopContainment
+            } else {
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
+            }
+            defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
 
-        foreach (const QString &key, defaultActionsCfg.keyList()) {
-            setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
+            foreach (const QString &key, defaultActionsCfg.keyList()) {
+                setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
+            }
         }
     }
 

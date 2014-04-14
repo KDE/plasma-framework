@@ -562,15 +562,18 @@ Types::FormFactor Applet::formFactor() const
 Containment *Applet::containment() const
 {
     Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
-    if (c && qobject_cast<Corona *>(parent())) {
+    if (c && c->isContainment()) {
         return c;
+    } else {
+        c = 0;
     }
 
     QObject *parent = this->parent();
 
     while (parent) {
         Containment *possibleC = qobject_cast<Containment*>(parent);
-        if (possibleC) {
+
+        if (possibleC && possibleC->isContainment()) {
             c = possibleC;
             break;
         }
@@ -743,6 +746,13 @@ void Applet::timerEvent(QTimerEvent *event)
 
 bool Applet::isContainment() const
 {
+    //HACK: this is a special case for the systray
+    //containment in an applet that is not a containment
+    Applet *pa = qobject_cast<Applet *>(parent());
+    if (pa && !pa->isContainment()) {
+        return true;
+    }
+    //normal "acting as a containment" condition
     return qobject_cast<const Containment*>(this) && qobject_cast<Corona *>(parent());
 }
 
