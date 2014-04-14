@@ -11,18 +11,18 @@
 </refentryinfo>
 
 <refmeta>
-<refentrytitle><command>plasmapkg</command></refentrytitle>
+<refentrytitle><command>plasmapkg2</command></refentrytitle>
 <manvolnum>1</manvolnum>
 </refmeta>
 
 <refnamediv>
-<refname><command>plasmapkg</command></refname>
+<refname><command>plasmapkg2</command></refname>
 <refpurpose>Install, list, remove Plasma packages</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>plasmapkg</command>
+<command>plasmapkg2</command>
 
 <group choice="opt"><option>-h, --hash</option> <replaceable> path</replaceable></group>
 <group choice="opt"><option>-g, --global</option></group>
@@ -40,7 +40,7 @@
 
 <refsect1>
 <title>Description</title>
-<para><command>plasmapkg</command> is a command line tool to
+<para><command>plasmapkg2</command> is a command line tool to
 install, list, remove Plasma packages.</para>
 
 </refsect1>
@@ -100,7 +100,7 @@ url="help:/plasma-desktop">help:/plasma-desktop</ulink>
 
 <refsect1>
 <title>Authors</title>
-<para><command>plasmapkg</command> was written by
+<para><command>plasmapkg2</command> was written by
 <personname><firstname>Aaron</firstname><surname>Seigo</surname></personname> <email>aseigo@kde.org</email>.</para>
 </refsect1>
 
