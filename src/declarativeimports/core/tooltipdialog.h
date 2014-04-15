@@ -41,12 +41,12 @@ namespace KDeclarative
  *
  * Exposed as `ToolTipDialog` in QML.
  */
-class ToolTipDialog : public PlasmaQuick::Dialog
+class ToolTipDialog : public QQuickWindow
 {
     Q_OBJECT
 
 public:
-    ToolTipDialog(QQuickItem *parent = 0);
+    ToolTipDialog(QWindow *parent = 0);
     ~ToolTipDialog();
 
     QQuickItem *loadDefaultItem();
@@ -65,6 +65,17 @@ public:
     bool interactive();
     void setInteractive(bool interactive);
 
+    QQuickItem *mainItem() const;
+    void setMainItem(QQuickItem *mainItem);
+
+    Plasma::Types::Location location() const;
+    void setLocation(Plasma::Types::Location location);
+
+    virtual QPoint popupPosition(QQuickItem *item, const QSize &size);
+
+    QQuickItem *visualParent() const;
+    void setVisualParent(QQuickItem *visualParent);
+
 protected:
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
@@ -74,12 +85,19 @@ protected:
 private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
+Q_SIGNALS:
+    void locationChanged();
+    void visualParentChanged();
+
 private:
+    QWeakPointer <QQuickItem> m_mainItem;
+    QWeakPointer <QQuickItem> m_visualParent;
     KDeclarative::QmlObject *m_qmlObject;
     QTimer *m_showTimer;
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
     Plasma::Types::Direction m_direction;
+    Plasma::Types::Location m_location;
     bool m_interactive;
 };
 
