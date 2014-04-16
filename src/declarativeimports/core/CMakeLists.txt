@@ -75,5 +75,3 @@ install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma
 install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
 
 install(FILES private/DefaultToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core/private)
-
-add_subdirectory(tests)

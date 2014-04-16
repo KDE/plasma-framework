@@ -1,3 +1,6 @@
+find_package(Qt5Test 5.2.0 REQUIRED NO_MODULE)
+set_package_properties(Qt5Test PROPERTIES PURPOSE "Required for tests")
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 include(ECMMarkAsTest)
@@ -9,8 +12,9 @@ find_package(KF5CoreAddons REQUIRED)
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
-               target_link_libraries(${_testname} Qt5::Test
-                                     KF5::Plasma KF5::Archive KF5::CoreAddons
+               target_link_libraries(${_testname} Qt5::Qml Qt5::Test
+                                     KF5::Plasma KF5::PlasmaQuick
+                                     KF5::Archive KF5::CoreAddons
                                      KF5::ConfigGui
                                      KF5::I18n
                                      KF5::KIOCore
@@ -26,6 +30,7 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 PLASMA_UNIT_TESTS(
     configloadertest
     packagestructuretest
+    packageurlinterceptortest
     pluginloadertest
     #    plasmoidpackagetest
 )
@@ -34,6 +39,25 @@ add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../
 target_link_libraries(storagetest Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons )
 add_test(plasma-storagetest storagetest)
 ecm_mark_as_test(storagetest)
+
+add_executable(sortfiltermodeltest
+    sortfiltermodeltest.cpp
+    ../src/plasma/dataengineconsumer.cpp
+    ../src/declarativeimports/core/datamodel.cpp
+    ../src/declarativeimports/core/datasource.cpp
+    )
+
+target_link_libraries(sortfiltermodeltest
+    KF5::Plasma
+    Qt5::Gui
+    Qt5::Test
+    KF5::I18n
+    KF5::Service
+    Qt5::Qml
+    )
+
+add_test(plasma-sortfiltermodeltest sortfiltermodeltest)
+ecm_mark_as_test(sortfiltermodeltest)
 
 if(QT_QTOPENGL_FOUND)
   target_link_libraries(storagetest Qt5::OpenGL)

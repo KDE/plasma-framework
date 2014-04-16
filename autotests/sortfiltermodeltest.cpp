@@ -18,7 +18,7 @@
  */
 #include <sortfiltermodeltest.h>
 
-#include <datamodel.h>
+#include <declarativeimports/core/datamodel.h>
 
 // KDE
 

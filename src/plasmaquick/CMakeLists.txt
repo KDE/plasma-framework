@@ -118,5 +118,3 @@ install(FILES
 )
 
 install(EXPORT KF5PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5PlasmaQuickTargets.cmake NAMESPACE KF5:: )
-
-add_subdirectory(autotests)

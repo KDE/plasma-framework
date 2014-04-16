@@ -19,7 +19,7 @@
 
 #include "packageurlinterceptortest.h"
 
-#include <packageurlinterceptor.h>
+#include <plasmaquick/packageurlinterceptor.h>
 
 #include <qtest.h>
 #include <QDebug>
