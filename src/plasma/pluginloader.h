@@ -26,7 +26,6 @@
 
 namespace Plasma {
 
-class AbstractRunner;
 class Applet;
 class Containment;
 class ContainmentActions;
@@ -114,13 +113,6 @@ public:
      * @since 4.3
      **/
     static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
-
-    /**
-     * Load a Runner plugin
-     *
-     * @return the Runner that was loaded, or 0 on failure.
-     */
-    AbstractRunner *loadRunner(const QString &name);
 
     /**
      * Load a Service plugin.
@@ -293,18 +285,6 @@ public:
     KPluginInfo::List listDataEngineInfo(const QString &parentApp = QString());
 
     /**
-     * Returns a list of all known Runner implementations
-     *
-     * @param parentApp the application to filter applets on. Uses the
-     *                  X-KDE-ParentApp entry (if any) in the plugin info.
-     *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
-     *                  registered to an application.
-     * @return list of AbstractRunners
-     **/
-    KPluginInfo::List listRunnerInfo(const QString &parentApp = QString());
-
-    /**
      * Returns a list of all known ContainmentActions.
      *
      * @param parentApp the application to filter applets on. Uses the
@@ -345,18 +325,6 @@ protected:
      **/
     virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0,
                                        const QVariantList &args = QVariantList());
-
-    /**
-     * A re-implementable method that allows subclasses to override
-     * the default behaviour of loadRunner. If the runner requested is not recognized,
-     * then the implementation should return a NULL pointer. This method is called
-     * by loadRunner prior to attempting to load a DataEgine using the standard Plasma
-     * plugin mechanisms.
-     *
-     * @param name the name of the engine
-     * @return the data engine that was loaded, or the NullEngine on failure.
-     **/
-    virtual AbstractRunner *internalLoadRunner(const QString &name);
 
     /**
      * A re-implementable method that allows subclasses to override
@@ -446,21 +414,14 @@ protected:
     virtual KPluginInfo::List internalDataEngineInfo() const;
 
     /**
-     * Returns a list of all known Runner implementations
+     * Returns a list of all known Service implementations
      *
-     * @return list of AbstractRunners info, or an empty list if none
-     */
-    virtual KPluginInfo::List internalRunnerInfo() const;
-
-    /**
-     * Returns a list of all known Runner implementations
-     *
-     * @return list of AbstractRunners info, or an empty list if none
+     * @return list of Service info, or an empty list if none
      */
     virtual KPluginInfo::List internalServiceInfo() const;
 
     /**
-     * Returns a list of all known Runner implementations
+     * Returns a list of all known ContainmentActions implementations
      *
      * @return list of ContainmentActions info, or an empty list if none
      */
@@ -496,20 +457,9 @@ protected:
 
     /**
      * Standardized mechanism for providing internal Applets by install .desktop files
-     * in $APPPDATA/plasma/internal/runners/
-     *
-     * For applications that do this, internalRunnerInfo can be implemented as a one-liner
-     * call to this method.
-     *
-     * @return list of applets
-     */
-    KPluginInfo::List standardInternalRunnerInfo() const;
-
-    /**
-     * Standardized mechanism for providing internal Applets by install .desktop files
      * in $APPPDATA/plasma/internal/services/
      *
-     * For applications that do this, internalRunnerInfo can be implemented as a one-liner
+     * For applications that do this, internalServiceInfo can be implemented as a one-liner
      * call to this method.
      *
      * @return list of applets

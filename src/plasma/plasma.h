@@ -224,11 +224,9 @@ Q_ENUMS(ImmutabilityType)
 enum ComponentType {
     AppletComponent = 1,      /**< Plasma::Applet based plugins **/
     DataEngineComponent = 2,  /**< Plasma::DataEngine based plugins **/
-    RunnerComponent = 4,      /**< Plasma::AbstractRunner based plugsin **/
-    AnimatorComponent = 8,    /**< Plasma::Animator based plugins **/
-    ContainmentComponent = 16,/**< Plasma::Containment based plugins **/
-    WallpaperComponent = 32,   /**< Plasma::Wallpaper based plugins **/
-    GenericComponent = 64      /** Generic repositories of files, usually they keep QML files and their assets **/
+    ContainmentComponent = 4,/**< Plasma::Containment based plugins **/
+    WallpaperComponent = 8,   /**< Plasma::Wallpaper based plugins **/
+    GenericComponent = 16      /** Generic repositories of files, usually they keep QML files and their assets **/
 };
 Q_ENUMS(ComponentType)
 Q_DECLARE_FLAGS(ComponentTypes, ComponentType)

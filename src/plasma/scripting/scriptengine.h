@@ -33,12 +33,10 @@ class QPainter;
 namespace Plasma
 {
 
-class AbstractRunner;
 class Applet;
 class AppletScript;
 class DataEngine;
 class DataEngineScript;
-class RunnerScript;
 class ScriptEnginePrivate;
 
 /**

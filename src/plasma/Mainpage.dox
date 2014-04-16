@@ -4,9 +4,7 @@ libplasma is the core of the Plasma desktop.  It provides a framework of graphic
 widgets (Plasma::Applet) that can be organised into managed groupings
 (Plasma::Containment), such as a desktop or panel.  It also provides a data
 abstraction layer (Plasma::DataEngine) and a corresponding service interaction
-layer (Plasma::Service) to make implementing widgets easier and a
-system of callouts (Plasma::AbstractRunner) that provide responses to queries,
-from running an application to performing a quick calculation.
+layer (Plasma::Service) to make implementing widgets easier.
 
 The <a href="http://doc.trolltech.com/latest/graphicsview.html">Qt Graphics View
 framework</a> and the <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/">KDE
@@ -20,7 +18,7 @@ view, allowing for pluggable widgets to display and interact with the music
 collection, such as "current track" and "tag cloud" widgets.
 
 libplasma itself only provides a framework, and the widgets, containments,
-data engines and runners are all implemented as plugins.  However, the framework
+data engines are all implemented as plugins.  However, the framework
 is designed to make implementing these plugins as easy as possible, including
 providing scripting support.
 
@@ -32,7 +30,7 @@ Other important classes are:
  - Plasma::Package: provides descriptions of packages containing plugins
    for libplasma
  - Plasma::Svg and Plasma::FrameSvg: provides themable, cached SVGs
- - Plasma::AppletScript, Plasma::DataEngineScript, Plasma::RunnerScript and
+ - Plasma::AppletScript, Plasma::DataEngineScript and
    Plasma::ScriptEngine: provide scripting interfaces for plugins
 
 

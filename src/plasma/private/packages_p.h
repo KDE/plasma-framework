@@ -60,12 +60,6 @@ public:
     void initPackage(Package *package);
 };
 
-class RunnerPackage : public ChangeableMainScriptPackage
-{
-public:
-    void initPackage(Package *package);
-};
-
 class ThemePackage : public PackageStructure
 {
 public:

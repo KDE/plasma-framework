@@ -139,22 +139,6 @@ void DataEnginePackage::initPackage(Package *package)
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 }
 
-void RunnerPackage::initPackage(Package *package)
-{
-    ChangeableMainScriptPackage::initPackage(package);
-    package->setServicePrefix("plasma-runner-");
-    package->setDefaultPackageRoot("plasma/runners/");
-
-    package->addDirectoryDefinition("data", "data", i18n("Data Files"));
-
-    package->addDirectoryDefinition("scripts", "code", i18n("Executable Scripts"));
-    QStringList mimetypes;
-    mimetypes << "text/plain";
-    package->setMimeTypes("scripts", mimetypes);
-
-    package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
-}
-
 void ThemePackage::initPackage(Package *package)
 {
     package->addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));

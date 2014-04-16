@@ -310,13 +310,6 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
     return KPluginInfo::fromServices(offers);
 }
 
-AbstractRunner *PluginLoader::loadRunner(const QString &name)
-{
-    // FIXME: RunnerManager is all wrapped around runner loading; that should be sorted out
-    // and the actual plugin loading added here
-    return d->isDefaultLoader ? 0 : internalLoadRunner(name);
-}
-
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
     Service *service = d->isDefaultLoader ? 0 : internalLoadService(name, args, parent);
@@ -446,8 +439,6 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             structure = new PlasmoidPackage();
         } else if (packageFormat.endsWith("/DataEngine")) {
             structure = new DataEnginePackage();
-        } else if (packageFormat.endsWith("/Runner")) {
-            structure = new RunnerPackage();
         } else if (packageFormat.endsWith("/Theme")) {
             structure = new ThemePackage();
         } else if (packageFormat.endsWith("/ContainmentActions")) {
@@ -712,25 +703,6 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
     return list;
 }
 
-KPluginInfo::List PluginLoader::listRunnerInfo(const QString &parentApp)
-{
-    KPluginInfo::List list;
-
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
-        list = internalRunnerInfo();
-    }
-
-    QString constraint;
-    if (parentApp.isEmpty()) {
-        constraint.append("not exist [X-KDE-ParentApp]");
-    } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
-    }
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Runner", constraint);
-    return list + KPluginInfo::fromServices(offers);
-}
-
 KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
@@ -759,12 +731,6 @@ Applet* PluginLoader::internalLoadApplet(const QString &name, uint appletId, con
 }
 
 DataEngine *PluginLoader::internalLoadDataEngine(const QString &name)
-{
-    Q_UNUSED(name)
-    return 0;
-}
-
-AbstractRunner *PluginLoader::internalLoadRunner(const QString &name)
 {
     Q_UNUSED(name)
     return 0;
@@ -800,11 +766,6 @@ KPluginInfo::List PluginLoader::internalAppletInfo(const QString &category) cons
 }
 
 KPluginInfo::List PluginLoader::internalDataEngineInfo() const
-{
-    return KPluginInfo::List();
-}
-
-KPluginInfo::List PluginLoader::internalRunnerInfo() const
 {
     return KPluginInfo::List();
 }
@@ -849,11 +810,6 @@ KPluginInfo::List PluginLoader::standardInternalAppletInfo(const QString &catego
 KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
 {
     return standardInternalInfo("dataengines");
-}
-
-KPluginInfo::List PluginLoader::standardInternalRunnerInfo() const
-{
-    return standardInternalInfo("runners");
 }
 
 KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
