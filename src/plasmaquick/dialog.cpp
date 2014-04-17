@@ -392,12 +392,6 @@ Dialog::Dialog(QQuickItem *parent)
     connect(d->syncTimer, SIGNAL(timeout()),
             this, SLOT(syncToMainItemSize()));
 
-    connect(this, &QWindow::xChanged, [=]() {
-        d->requestSyncToMainItemSize(true);
-    });
-    connect(this, &QWindow::yChanged, [=]() {
-        d->requestSyncToMainItemSize(true);
-    });
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),

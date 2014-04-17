@@ -126,18 +126,17 @@ bool ToolTipDialog::event(QEvent *e)
 
 void ToolTipDialog::adjustGeometry(const QRect &geom)
 {
-    switch (m_direction) {
-    case Plasma::Types::Right:
-        setX(x() + (size().width() - geom.size().width()));
-        break;
-    case Plasma::Types::Up:
-        setY(y() + (size().height() - geom.size().height()));
-        break;
-    default:
-        break;
-    }
-
     if (isVisible()) {
+        switch (m_direction) {
+        case Plasma::Types::Left:
+            setX(x() + (size().width() - geom.size().width()));
+            break;
+        case Plasma::Types::Up:
+            setY(y() + (size().height() - geom.size().height()));
+            break;
+        default:
+            break;
+        }
 
         resize(geom.size());
         m_animation->setStartValue(position());
