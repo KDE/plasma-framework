@@ -2,6 +2,22 @@
 Encoding=UTF-8
 Keywords=
 Name=Test Package
+Name[bs]=Testni paket
+Name[cs]=Testovací balíček
+Name[de]=Test-Paket
+Name[es]=Paquete de pruebas
+Name[fi]=Testipaketti
+Name[fr]=Paquet de test
+Name[hu]=Teszt csomag
+Name[mr]=चाचणी पॅकेज
+Name[nl]=Testpakket
+Name[pl]=Pakiet testowy
+Name[pt]=Pacote de Teste
+Name[pt_BR]=Pacote de teste
+Name[sk]=Testovací balík
+Name[sv]=Testpaket
+Name[uk]=Тестовий пакунок
+Name[x-test]=xxTest Packagexx
 Type=Service
 
 X-KDE-ParentApp=

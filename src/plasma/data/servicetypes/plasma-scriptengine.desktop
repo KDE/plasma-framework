@@ -3,6 +3,23 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ScriptEngine
 
 Comment=Scripting language extension for Plasma
+Comment[bs]=Proširenje Plazme za skriptne jezike
+Comment[cs]=Rozšíření pro skriptovací jazyky Plasma
+Comment[de]=Skriptsprachen-Erweiterung für Plasma
+Comment[es]=Extensión de lenguaje de scripts para Plasma
+Comment[fi]=Skriptauskielituki Plasmalle
+Comment[fr]=Extension de langage de scriptage pour Plasma
+Comment[mr]=प्लाज्मा साठी स्क्रिप्टींग भाषा एक्सटेंशन 
+Comment[nl]=Scripttaalextensie voor Plasma
+Comment[pl]=Rozszerzenie języka skryptów dla Plazmy
+Comment[pt]=Extensão de linguagens de programação para o Plasma
+Comment[pt_BR]=Extensão de linguagem de script do Plasma
+Comment[sk]=Rozšírenie pre skriptovacie jazyky Plasma
+Comment[sv]=Skriptspråksutökning för Plasma
+Comment[tr]=Plasma için betik dili eklentisi
+Comment[ug]=Plasma نىڭ قوليازما تىل كېڭەيتىلمىسى
+Comment[uk]=Розширення скриптових мов для Плазми
+Comment[x-test]=xxScripting language extension for Plasmaxx
 
 [PropertyDef::X-Plasma-ComponentTypes]
 Type=QStringList
