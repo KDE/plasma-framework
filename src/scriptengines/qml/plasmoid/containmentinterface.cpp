@@ -541,7 +541,9 @@ void ContainmentInterface::loadWallpaper()
     }
 
     if (!containment()->wallpaper().isEmpty()) {
-        delete m_wallpaperInterface;
+        if (m_wallpaperInterface) {
+            delete m_wallpaperInterface;
+        }
 
         m_wallpaperInterface = new WallpaperInterface(this);
         m_wallpaperInterface->setZ(-1000);
