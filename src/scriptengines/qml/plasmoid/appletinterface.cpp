@@ -501,7 +501,13 @@ QStringList AppletInterface::downloadedFiles() const
 void AppletInterface::executeAction(const QString &name)
 {
     if (qmlObject()->rootObject()) {
-         QMetaObject::invokeMethod(qmlObject()->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
+         const QMetaObject *metaObj = qmlObject()->rootObject()->metaObject();
+         QString actionMethodName = QString("action_" + name);
+         if (metaObj->indexOfMethod(QMetaObject::normalizedSignature((actionMethodName + "()").toLatin1())) != -1){
+             QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.toLatin1(), Qt::DirectConnection);
+         }else{
+             QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
+         }
     }
 }
 

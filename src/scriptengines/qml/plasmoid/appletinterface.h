@@ -189,6 +189,14 @@ public:
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     Q_INVOKABLE void setActionSeparator(const QString &name);
+    /**
+     * Add an action to the Plasmoid contextual menu.
+     * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called instead.
+     * @param: action name
+     * @text: user visible displayed text
+     * @icon: user visible optional displayed icon
+     * @shortcut: shortcut to trigger this action
+     */
     Q_INVOKABLE void setAction(const QString &name, const QString &text,
                                const QString &icon = QString(), const QString &shortcut = QString());
 
