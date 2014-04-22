@@ -55,7 +55,7 @@ enum Constraint {
     ContextConstraint = 32, /**< the context (e.g. activity) has changed */
     UiReadyConstraint = 64, /** The ui has been completely loaded (FIXME: merged with StartupCompletedConstraint?) */
     AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-    ImmutableConstraint | UiReadyConstraint
+    ImmutableConstraint
 };
 Q_ENUMS(Constraint)
 Q_DECLARE_FLAGS(Constraints, Constraint)

@@ -526,7 +526,8 @@ QHash<QString, ContainmentActions*> &Containment::containmentActions()
 
 bool Containment::isUiReady() const
 {
-    return static_cast<const Applet *>(this)->d->uiReady;
+    const Applet *a = static_cast<const Applet *>(this);
+    return a->d->uiReady && a->d->started;
 }
 
 void Containment::setActivity(const QString &activityId)

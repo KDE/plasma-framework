@@ -298,20 +298,23 @@ void AppletPrivate::setUiReady()
 {
     //am i the containment?
     Containment *c = qobject_cast<Containment *>(q);
-    if (c) {
+    if (c && c->isContainment()) {
         //if we are the containment and there is still some uncomplete applet, we're still incomplete
         if (!c->d->loadingApplets.isEmpty()) {
             return;
-        } else if (!uiReady) {
+        } else if (!uiReady && started) {
             emit c->uiReadyChanged(true);
         }
     } else {
         c = q->containment();
         if (c) {
             q->containment()->d->loadingApplets.remove(q);
-            if (q->containment()->d->loadingApplets.isEmpty() && !static_cast<Applet *>(q->containment())->d->uiReady) {
-                static_cast<Applet *>(q->containment())->d->uiReady = true;
-                emit q->containment()->uiReadyChanged(true);
+            Applet *a = static_cast<Applet *>(q->containment());
+            if (q->containment()->d->loadingApplets.isEmpty() && !a->d->uiReady) {
+                a->d->uiReady = true;
+                if (a->d->started) {
+                    emit q->containment()->uiReadyChanged(true);
+                }
             }
         }
     }
@@ -362,6 +365,9 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 
     if (c & Plasma::Types::StartupCompletedConstraint) {
         started = true;
+        if (uiReady) {
+            emit q->containment()->uiReadyChanged(true);
+        }
     }
 
     pendingConstraints |= c;

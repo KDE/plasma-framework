@@ -69,6 +69,12 @@ public:
     QList<Containment*> containments() const;
 
     /**
+     * @returns true when the startup is over, and
+     * all the ui graphics has been instantiated
+     */
+    bool isStartupCompleted() const;
+
+    /**
      * Returns the config file used to store the configuration for this Corona
      */
     KSharedConfig::Ptr config() const;
@@ -264,6 +270,11 @@ Q_SIGNALS:
      * @param package the new package that defines the Corona furniture and behavior
      */
     void packageChanged(const Plasma::Package &package);
+
+    /**
+     * Emitted when the startup phase has been completed
+     */
+    void startupCompleted();
 
 protected:
     /**

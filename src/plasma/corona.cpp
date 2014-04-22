@@ -180,6 +180,11 @@ QList<Containment*> Corona::containments() const
     return d->containments;
 }
 
+bool Corona::isStartupCompleted() const
+{
+    return d->containmentsStarting <= 0;
+}
+
 KSharedConfigPtr Corona::config() const
 {
     if (!d->config) {
@@ -308,7 +313,8 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       immutability(Types::Mutable),
       config(0),
       configSyncTimer(new QTimer(corona)),
-      actions(corona)
+      actions(corona),
+      containmentsStarting(0)
 {
     //TODO: make Package path configurable
     KConfigGroup config(KSharedConfig::openConfig(), "General");
@@ -523,6 +529,22 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 #ifndef NDEBUG
 //         qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
 #endif
+    }
+
+    if (!mergeConfig) {
+        containmentsStarting = 0;
+        foreach (Containment *containment, containments) {
+            if (!containment->isUiReady() && containment->lastScreen() < q->numScreens()) {
+                ++containmentsStarting;
+                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](){
+                    --containmentsStarting;
+                    if (containmentsStarting <= 0) {
+                        qDebug() << "Corona Startup Completed";
+                        emit q->startupCompleted();
+                    }
+                });
+            }
+        }
     }
 
     return newContainments;
