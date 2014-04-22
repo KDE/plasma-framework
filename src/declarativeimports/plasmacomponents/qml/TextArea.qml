@@ -53,6 +53,14 @@ Item {
     property bool errorHighlight
 
     /**
+     * type:bool
+     * Displays widget background
+     *
+     * The default value is true.
+     */
+    property alias backgroundVisible: base.visible
+
+    /**
      * type:int
      * Current cursor position.
      */
