@@ -21,7 +21,7 @@
 
 #include <QtQuick/QQuickView>
 
-#include <plasmaquick/plasmaquick_export.h>
+#include <plasmaquick_export.h>
 #include "plasma/corona.h"
 #include "plasma/containment.h"
 
@@ -81,7 +81,7 @@ public:
      * @return the location of this View
      **/
     Plasma::Types::Location location() const;
-
+    
     /**
      * Sets the location of the View
      * @param location the location of the View

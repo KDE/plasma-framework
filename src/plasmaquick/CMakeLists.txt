@@ -85,25 +85,23 @@ set_target_properties(KF5PlasmaQuick PROPERTIES
 
 install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-generate_export_header(KF5PlasmaQuick
-    BASE_NAME PlasmaQuick
-    EXPORT_FILE_NAME plasmaquick/plasmaquick_export.h)
+generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 
-ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
-    HEADER_NAMES
-        Dialog
-    REQUIRED_HEADERS PlasmaQuick_HEADERS
-    PREFIX PlasmaQuick
+set(plasmaquick_LIB_INCLUDES
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
+    appletquickitem.h
+    view.h
+    configview.h
+    configmodel.h
+    packageurlinterceptor.h
 )
 
-install(FILES
-        ${PlasmaQuick_HEADERS}
-        ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick/plasmaquick_export.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
+#install(FILES ${plasmaquick_LIB_INCLUDES}
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
 
-install(FILES
-        ${PlasmaQuick_CamelCase_HEADERS}
-        DESTINATION ${INCLUDE_INSTALL_DIR}/PlasmaQuick COMPONENT Devel)
+#install(DIRECTORY
+#        includes/PlasmaQuick
+#        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
 
