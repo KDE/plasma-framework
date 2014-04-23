@@ -342,7 +342,7 @@ void DialogPrivate::syncToMainItemSize()
     if (!mainItem) {
         return;
     }
-    syncBorders();
+
     const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
@@ -357,6 +357,7 @@ void DialogPrivate::syncToMainItemSize()
     } else {
         q->resize(s);
     }
+    syncBorders();
 }
 
 void DialogPrivate::requestSyncToMainItemSize(bool delayed)
