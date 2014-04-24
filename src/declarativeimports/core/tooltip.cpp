@@ -43,9 +43,7 @@ ToolTip::ToolTip(QQuickItem *parent)
 {
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
-    connect(m_showTimer, &QTimer::timeout, [=]() {
-        showToolTip();
-    });
+    connect(m_showTimer, &QTimer::timeout, this, &ToolTip::showToolTip);
 
     settingsChanged();
 
