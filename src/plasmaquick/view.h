@@ -81,7 +81,7 @@ public:
      * @return the location of this View
      **/
     Plasma::Types::Location location() const;
-    
+
     /**
      * Sets the location of the View
      * @param location the location of the View
