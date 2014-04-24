@@ -199,10 +199,6 @@ private:
     Q_PRIVATE_SLOT(d, void updateMinimumHeight())
     Q_PRIVATE_SLOT(d, void updateMaximumWidth())
     Q_PRIVATE_SLOT(d, void updateMaximumHeight())
-
-    Q_PRIVATE_SLOT(d, void syncMainItemToSize())
-    Q_PRIVATE_SLOT(d, void syncToMainItemSize())
-    Q_PRIVATE_SLOT(d, void requestSyncToMainItemSize(bool delayed))
 };
 
 }

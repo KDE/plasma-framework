@@ -59,9 +59,16 @@ public:
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
-          componentComplete(dialog->parent() == 0)
+          componentComplete(dialog->parent() == 0),
+          resizeOrigin(Undefined)
     {
     }
+
+    enum ResizeOrigin {
+        Undefined,
+        MainItem,
+        Window
+    };
 
     QScreen* screenForItem(QQuickItem *item) const;
     void updateInputShape();
@@ -78,7 +85,7 @@ public:
 
     void syncMainItemToSize();
     void syncToMainItemSize();
-    void requestSyncToMainItemSize(bool delayed = false);
+    void requestSizeSync(bool delayed = false);
 
     Dialog *q;
     QTimer *syncTimer;
@@ -93,6 +100,7 @@ public:
     bool outputOnly;
     Plasma::Theme theme;
     bool componentComplete;
+    ResizeOrigin resizeOrigin;
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
@@ -233,6 +241,7 @@ void DialogPrivate::updateMinimumWidth()
     if (mainItemLayout) {
         q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt() + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
         //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
+        resizeOrigin = DialogPrivate::Window;
         q->setWidth(qMax(q->width(), q->minimumWidth()));
     } else {
         q->setMinimumWidth(-1);
@@ -244,6 +253,7 @@ void DialogPrivate::updateMinimumHeight()
     if (mainItemLayout) {
         q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt() + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
         //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
+        resizeOrigin = DialogPrivate::Window;
         q->setHeight(qMax(q->height(), q->minimumHeight()));
     } else {
         q->setMinimumHeight(-1);
@@ -254,6 +264,7 @@ void DialogPrivate::updateMaximumWidth()
 {
     if (mainItemLayout) {
         const int hint = mainItemLayout.data()->property("maximumWidth").toInt();
+        resizeOrigin = DialogPrivate::Window;
         if (hint > 0) {
             q->setMaximumWidth(hint + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
         } else {
@@ -268,6 +279,7 @@ void DialogPrivate::updateMaximumHeight()
 {
     if (mainItemLayout) {
         const int hint = mainItemLayout.data()->property("maximumHeight").toInt();
+        resizeOrigin = DialogPrivate::Window;
         if (hint > 0) {
             q->setMaximumHeight(hint + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
         } else {
@@ -344,6 +356,11 @@ void DialogPrivate::syncToMainItemSize()
         return;
     }
 
+    frameSvgItem->setX(0);
+    frameSvgItem->setY(0);
+    frameSvgItem->setWidth(q->width());
+    frameSvgItem->setHeight(q->height());
+
     const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
@@ -359,9 +376,11 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
     syncBorders();
+    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+    updateContrast();
 }
 
-void DialogPrivate::requestSyncToMainItemSize(bool delayed)
+void DialogPrivate::requestSizeSync(bool delayed)
 {
     if (!componentComplete) {
         return;
@@ -391,8 +410,15 @@ Dialog::Dialog(QQuickItem *parent)
     d->syncTimer = new QTimer(this);
     d->syncTimer->setSingleShot(true);
     d->syncTimer->setInterval(0);
-    connect(d->syncTimer, SIGNAL(timeout()),
-            this, SLOT(syncToMainItemSize()));
+    connect(d->syncTimer, &QTimer::timeout,
+            [=]() {
+                if (d->resizeOrigin == DialogPrivate::MainItem) {
+                    d->syncToMainItemSize();
+                } else {
+                    d->syncMainItemToSize();
+                }
+                d->resizeOrigin = DialogPrivate::Undefined;
+            });
 
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
@@ -437,15 +463,18 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
                 connect(mainItem, &QQuickItem::widthChanged, [=]() {
+                    d->resizeOrigin = DialogPrivate::MainItem;
                     d->syncTimer->start(0);
                 });
             }
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
                 connect(mainItem, &QQuickItem::heightChanged, [=]() {
+                    d->resizeOrigin = DialogPrivate::MainItem;
                     d->syncTimer->start(0);
                 });
             }
-            d->requestSyncToMainItemSize();
+            d->resizeOrigin = DialogPrivate::MainItem;
+            d->requestSizeSync();
 
             //Extract the representation's Layout, if any
             QObject *layout = 0;
@@ -500,7 +529,8 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
         if (visualParent->window()) {
             setTransientParent(visualParent->window());
         }
-        d->requestSyncToMainItemSize();
+        d->resizeOrigin = DialogPrivate::MainItem;
+        d->requestSizeSync();
     }
 }
 
@@ -647,7 +677,8 @@ void Dialog::setLocation(Plasma::Types::Location location)
     }
     d->location = location;
     emit locationChanged();
-    d->requestSyncToMainItemSize();
+    d->resizeOrigin = DialogPrivate::MainItem;
+    d->requestSizeSync();
 }
 
 
@@ -669,8 +700,12 @@ void Dialog::adjustGeometry(const QRect &geom)
 
 void Dialog::resizeEvent(QResizeEvent *re)
 {
-    d->syncMainItemToSize();
     QQuickWindow::resizeEvent(re);
+
+    if (d->resizeOrigin == DialogPrivate::Undefined) {
+        d->resizeOrigin = DialogPrivate::Window;
+    }
+    d->requestSizeSync(true);
 }
 
 void Dialog::setType(WindowType type)
