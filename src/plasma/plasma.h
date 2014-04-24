@@ -248,7 +248,8 @@ enum ItemStatus {
     PassiveStatus = 1, /**< The Item is passive **/
     ActiveStatus = 2, /**< The Item is active **/
     NeedsAttentionStatus = 3, /**< The Item needs attention **/
-    AcceptingInputStatus = 4 /**< The Item is accepting input **/
+    RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
+    AcceptingInputStatus = 5 /**< The Item is accepting input **/
 };
 Q_ENUMS(ItemStatus)
 
