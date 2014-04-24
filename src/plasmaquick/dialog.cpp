@@ -336,6 +336,8 @@ void DialogPrivate::syncMainItemToSize()
     frameSvgItem->setWidth(q->width());
     frameSvgItem->setHeight(q->height());
 
+    syncBorders();
+
     KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
     updateContrast();
 
@@ -420,6 +422,22 @@ Dialog::Dialog(QQuickItem *parent)
                 d->resizeOrigin = DialogPrivate::Undefined;
             });
 
+    connect(this, &QWindow::xChanged, [=]() {
+        //Tooltips always have all the borders
+        // floating windows have all borders
+        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
+            d->resizeOrigin = DialogPrivate::Window;
+            d->requestSizeSync(true);
+        }
+    });
+    connect(this, &QWindow::yChanged, [=]() {
+        //Tooltips always have all the borders
+        // floating windows have all borders
+        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
+            d->resizeOrigin = DialogPrivate::Window;
+            d->requestSizeSync(true);
+        }
+    });
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),
