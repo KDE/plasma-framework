@@ -87,9 +87,9 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
 
     /**
-     * An icon for this tooltip, accepted values are an icon name, a QIcon, QImage or QPixmap
+     * Returns whether the mouse is inside the item
      */
-    Q_PROPERTY(bool m_containsMouse READ containsMouse NOTIFY containsMouseChanged)
+    Q_PROPERTY(bool containsMouse READ containsMouse NOTIFY containsMouseChanged)
 
     /**
      * Plasma Location of the dialog window. Useful if this dialog is a popup for a panel
