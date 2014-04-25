@@ -23,61 +23,38 @@
 #include <QGraphicsSceneWheelEvent>
 
 #include <QDebug>
-#include <QMenu>
+#include <KActionCollection>
 
 #include <Plasma/Containment>
 
 ContextTest::ContextTest(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args)
 {
-    setConfigurationRequired(true);
 }
 
-void ContextTest::contextEvent(QEvent *event)
+QList<QAction*> ContextTest::contextualActions()
 {
-    switch (event->type()) {
-        case QEvent::GraphicsSceneMousePress:
-            contextEvent(static_cast<QGraphicsSceneMouseEvent*>(event));
-            break;
-        case QEvent::GraphicsSceneWheel:
-            wheelEvent(static_cast<QGraphicsSceneWheelEvent*>(event));
-            break;
-        default:
-            break;
-    }
-}
-
-void ContextTest::contextEvent(QGraphicsSceneMouseEvent *event)
-{
-    // qDebug() << "test!!!!!!!!!!!!!!!!!!!!!!!" << event->pos();
-    // qDebug() << event->buttons() << event->modifiers();
-
     Plasma::Containment *c = containment();
-    if (c) {
-        // qDebug() << c->name();
-    } else {
-        // qDebug() << "fail";
-        return;
-    }
+    Q_ASSERT(c);
+    QList<QAction*> actions;
+    actions << c->actions()->action("configure");
 
-    QMenu desktopMenu;
-    desktopMenu.addTitle(m_text);
-    desktopMenu.addAction(c->action("configure"));
-    desktopMenu.exec(event->screenPos());
-
+    return actions;
 }
 
-void ContextTest::wheelEvent(QGraphicsSceneWheelEvent *event)
+void ContextTest::performNextAction()
 {
-    // qDebug() << "test!!!!!!!!!!!!!11111111!!";
-    // qDebug() << event->orientation() << event->delta();
-    // qDebug() << event->buttons() << event->modifiers();
+    qWarning() << "Next action requested";
+}
+
+void ContextTest::performPreviousAction()
+{
+    qWarning() << "Previous action requested";
 }
 
 void ContextTest::init(const KConfigGroup &config)
 {
     m_text = config.readEntry("test-text", QString());
-    setConfigurationRequired(m_text.isEmpty());
 }
 
 QWidget* ContextTest::createConfigurationInterface(QWidget* parent)
@@ -103,4 +80,6 @@ void ContextTest::save(KConfigGroup &config)
     config.writeEntry("test-text", m_text);
 }
 
+K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(containmentactions_test, ContextTest, "plasma-containmentactions-test.desktop")
 
+#include "test.moc"

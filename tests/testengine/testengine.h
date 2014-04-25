@@ -47,7 +47,6 @@ protected:
 };
 
 
-K_EXPORT_PLASMA_DATAENGINE(testengine, TestEngine)
 
 
 #endif // __TESTDATAENGINE_H__

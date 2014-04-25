@@ -2,6 +2,9 @@ project(plasma_testengine_dataengine)
 
 add_library(plasma_engine_testengine MODULE testengine.cpp)
 
+kservice_desktop_to_json(plasma_engine_testengine plasma-dataengine-testengine.desktop)
+
+
 target_link_libraries(plasma_engine_testengine
                       KF5::KIOWidgets KF5::Plasma)
 

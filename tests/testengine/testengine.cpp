@@ -174,4 +174,6 @@ bool TestEngine::sourceRequestEvent(const QString &source)
     return true;
 } // sourceRequestEvent()
 
+K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.plasma_engine_testengine, TestEngine, "plasma-dataengine-testengine.desktop")
 
+#include "testengine.moc"

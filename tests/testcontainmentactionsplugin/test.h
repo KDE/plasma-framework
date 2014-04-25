@@ -31,10 +31,12 @@ class ContextTest : public Plasma::ContainmentActions
         ContextTest(QObject* parent, const QVariantList& args);
 
         void init(const KConfigGroup &config);
-        void contextEvent(QEvent *event);
-        void contextEvent(QGraphicsSceneMouseEvent *event);
-        void wheelEvent(QGraphicsSceneWheelEvent *event);
 
+        QList<QAction*> contextualActions();
+
+        void performNextAction();
+        void performPreviousAction();
+        
         QWidget* createConfigurationInterface(QWidget* parent);
         void configurationAccepted();
         void save(KConfigGroup &config);
@@ -44,6 +46,5 @@ class ContextTest : public Plasma::ContainmentActions
         QString m_text;
 };
 
-K_EXPORT_PLASMA_CONTAINMENTACTIONS(test, ContextTest)
 
 #endif
