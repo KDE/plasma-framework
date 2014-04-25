@@ -6,7 +6,6 @@ The plasma framework provides the following:
 - A C++ library: libplasma
 - Script engines
 - QML components
-- The `plasma-shell` executable
 
 ## libplasma
 This C++ library provides:
@@ -30,9 +29,6 @@ Graphical components for common items such as buttons, lineedits, tabbars and so
 
 ### org.kde.plasma.extras
 Extra graphical components that extend org.kde.plasma.components but are not in the standard api, see @ref plasmaextracomponents.
-
-## plasma-shell
-The `plasma-shell` executable loads the actual workspace. It is completely controlled by QML and does not itself provide any user interface.
 
 ## Links
 
