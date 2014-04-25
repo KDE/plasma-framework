@@ -5,9 +5,10 @@
 
 <refentry lang="&language;">
 <refentryinfo>
-<title>KDE User's Manual</title>
-<date>2012-12-05</date>
-<productname>K Desktop Environment</productname>
+<title>Plasma Package Manager</title>
+<date>2014-04-25</date>
+<releaseinfo>5.0</releaseinfo>
+<productname>&kde; plasmapkg2</productname>
 </refentryinfo>
 
 <refmeta>
@@ -24,7 +25,7 @@
 <cmdsynopsis>
 <command>plasmapkg2</command>
 
-<group choice="opt"><option>-h, --hash</option> <replaceable> path</replaceable></group>
+<group choice="opt"><option>--hash</option> <replaceable> path</replaceable></group>
 <group choice="opt"><option>-g, --global</option></group>
 <group choice="opt"><option>-t, --type</option> <replaceable> type</replaceable></group>
 <group choice="opt"><option>-i, --install</option> <replaceable> path</replaceable></group>
@@ -50,7 +51,7 @@ install, list, remove Plasma packages.</para>
 
 <variablelist>
 <varlistentry>
-<term><option>-h, --hash</option> <replaceable> path</replaceable></term>
+<term><option>--hash</option> <replaceable> path</replaceable></term>
 <listitem><para>Generate a SHA1 hash for the package at <quote>path</quote>.</para></listitem>
 </varlistentry>
 <varlistentry>
@@ -66,12 +67,20 @@ install, list, remove Plasma packages.</para>
 <listitem><para>Install the package at <quote>path</quote>.</para></listitem>
 </varlistentry>
 <varlistentry>
+<term><option>-s, --show</option> <replaceable> path</replaceable></term>
+<listitem><para>Show information of package <quote>name</quote>.</para></listitem>
+</varlistentry>
+<varlistentry>
 <term><option>-u, --upgrade</option> <replaceable> path</replaceable></term>
 <listitem><para>Upgrade the package at <quote>path</quote>.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><option>-l, --list</option></term>
 <listitem><para>List installed packages.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><option>--list-types</option></term>
+<listitem><para>Lists all known Package types that can be installed.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><option>-r, --remove</option> <replaceable> name</replaceable></term>
