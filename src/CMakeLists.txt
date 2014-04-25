@@ -1,3 +1,4 @@
+add_subdirectory(desktoptheme)
 add_subdirectory(plasma)
 add_subdirectory(declarativeimports)
 #add_subdirectory(kpart)
