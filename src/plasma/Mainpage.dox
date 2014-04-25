@@ -1,4 +1,4 @@
-/** @mainpage Plasma libraries
+/** @page libplasma libplasma
 
 libplasma is the core of the Plasma desktop.  It provides a framework of graphical
 widgets (Plasma::Applet) that can be organised into managed groupings
