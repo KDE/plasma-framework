@@ -168,15 +168,6 @@ Service::~Service()
     delete d;
 }
 
-KConfigGroup ServicePrivate::dummyGroup()
-{
-    if (!dummyConfig) {
-        dummyConfig = new KConfig(QString(), KConfig::SimpleConfig);
-    }
-
-    return KConfigGroup(dummyConfig, "DummyGroup");
-}
-
 void Service::setDestination(const QString &destination)
 {
     d->destination = destination;
@@ -259,9 +250,6 @@ void Service::setName(const QString &name)
     // now reset the config, which may be based on our name
     d->operationsMap.clear();
 
-    delete d->dummyConfig;
-    d->dummyConfig = 0;
-
     registerOperationsScheme();
 
     emit serviceReady(this);
@@ -290,9 +278,6 @@ bool Service::isOperationEnabled(const QString &operation) const
 void Service::setOperationsScheme(QIODevice *xml)
 {
     d->operationsMap.clear();
-
-    delete d->dummyConfig;
-    d->dummyConfig = 0;
 
     ConfigLoaderPrivate *configLoaderPrivate = new ConfigLoaderPrivate;
     configLoaderPrivate->setWriteDefaults(true);

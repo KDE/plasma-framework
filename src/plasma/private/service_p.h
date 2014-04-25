@@ -73,28 +73,23 @@ class ServicePrivate
 {
 public:
     ServicePrivate(Service *service)
-        : q(service),
-          dummyConfig(0)
+        : q(service)
     {        
     }
 
     ~ServicePrivate()
     {
-        delete dummyConfig;
     }
 
     void associatedWidgetDestroyed(QObject *obj);
 
     void associatedItemDestroyed(QObject *obj);
 
-    KConfigGroup dummyGroup();
-
     Service *q;
     QString destination;
     QString name;
     QString resourcename;
     QMap<QString, QVariantMap> operationsMap;
-    KConfig *dummyConfig;
     QSet<QString> disabledOperations;
 };
 
