@@ -170,7 +170,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ################# list the subdirectories #################
 if (KF5DocTools_FOUND)
-    add_subdirectory(doc)
+    add_subdirectory(docs)
 endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
 add_subdirectory(src)
