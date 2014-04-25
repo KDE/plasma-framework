@@ -169,7 +169,6 @@ void ToolTip::showToolTip()
         }
     }
 
-    dlg->setDirection(dir);
     dlg->setLocation(location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);

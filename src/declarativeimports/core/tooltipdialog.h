@@ -79,7 +79,6 @@ private:
     QTimer *m_showTimer;
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
-    Plasma::Types::Direction m_direction;
     bool m_interactive;
 };
 

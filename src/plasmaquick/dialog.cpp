@@ -239,10 +239,15 @@ void DialogPrivate::updateVisibility(bool visible)
 void DialogPrivate::updateMinimumWidth()
 {
     if (mainItemLayout) {
+        int oldWidth = q->width();
         q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt() + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
         //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
         resizeOrigin = DialogPrivate::Window;
         q->setWidth(qMax(q->width(), q->minimumWidth()));
+
+        if (location == Plasma::Types::RightEdge) {
+            q->setX(q->x() + (oldWidth - q->size().width()));
+        }
     } else {
         q->setMinimumWidth(-1);
     }
@@ -251,10 +256,15 @@ void DialogPrivate::updateMinimumWidth()
 void DialogPrivate::updateMinimumHeight()
 {
     if (mainItemLayout) {
+        int oldHeight = q->height();
         q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt() + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
         //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
         resizeOrigin = DialogPrivate::Window;
         q->setHeight(qMax(q->height(), q->minimumHeight()));
+
+        if (location == Plasma::Types::BottomEdge) {
+            q->setY(q->y() + (oldHeight - q->size().height()));
+        }
     } else {
         q->setMinimumHeight(-1);
     }
@@ -548,7 +558,7 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
             setTransientParent(visualParent->window());
         }
         d->resizeOrigin = DialogPrivate::MainItem;
-        d->requestSizeSync();
+        d->requestSizeSync(true);
     }
 }
 

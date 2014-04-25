@@ -33,12 +33,10 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_qmlObject(0),
       m_animation(0),
       m_hideTimeout(4000),
-      m_direction(Plasma::Types::Up),
       m_interactive(false)
 {
     setFlags(Qt::ToolTip);
     setLocation(Plasma::Types::Floating);
-    setDirection(Plasma::Types::Up);
 
     m_animation = new QPropertyAnimation(this);
     connect(m_animation, SIGNAL(valueChanged(QVariant)),
@@ -75,16 +73,6 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
     }
 
     return qobject_cast<QQuickItem *>(m_qmlObject->rootObject());
-}
-
-Plasma::Types::Direction ToolTipDialog::direction() const
-{
-    return m_direction;
-}
-
-void ToolTipDialog::setDirection(Plasma::Types::Direction dir)
-{
-    m_direction = dir;
 }
 
 void ToolTipDialog::showEvent(QShowEvent *event)
@@ -127,11 +115,11 @@ bool ToolTipDialog::event(QEvent *e)
 void ToolTipDialog::adjustGeometry(const QRect &geom)
 {
     if (isVisible()) {
-        switch (m_direction) {
-        case Plasma::Types::Left:
+        switch (location()) {
+        case Plasma::Types::RightEdge:
             setX(x() + (size().width() - geom.size().width()));
             break;
-        case Plasma::Types::Up:
+        case Plasma::Types::BottomEdge:
             setY(y() + (size().height() - geom.size().height()));
             break;
         default:
