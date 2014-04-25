@@ -121,12 +121,6 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 include(KF5PlasmaMacros.cmake)
 
-################# configure checks and create the configured files #################
-
-# now create config headers
-configure_file(config-prefix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-prefix.h )
-configure_file(config-compiler.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-compiler.h )
-
 ################ create PlasmaConfig.cmake and install it ###########################
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
