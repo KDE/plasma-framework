@@ -111,4 +111,3 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 
 #include "private/moc_dataengineconsumer_p.cpp"
 
-

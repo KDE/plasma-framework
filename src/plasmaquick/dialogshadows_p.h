@@ -2,7 +2,7 @@
 *   Copyright 2011 by Aaron Seigo <aseigo@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Library General Public License version 2, 
+*   it under the terms of the GNU Library General Public License version 2,
 *   or (at your option) any later version.
 *
 *   This program is distributed in the hope that it will be useful,
@@ -24,7 +24,6 @@
 #include "plasma/framesvg.h"
 #include "plasma/svg.h"
 
-
 class DialogShadows : public Plasma::Svg
 {
     Q_OBJECT
@@ -42,7 +41,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 
     Q_PRIVATE_SLOT(d, void updateShadows())
     Q_PRIVATE_SLOT(d, void windowDestroyed(QObject *deletedObject))

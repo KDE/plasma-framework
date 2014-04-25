@@ -2,7 +2,7 @@
  *   Copyright 2008 Aaron Seigo <aseigo@kde.org>
  *   Copyright 2010 Ryan Rix <ry@n.rix.si>
  *   Copyright 2010 Siddharth Sharma <siddharth.kde@gmail.com>
- * 
+ *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -61,7 +61,7 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
         connect(&scriptEngine, SIGNAL(print(QString)), this, SLOT(printScriptMessage(QString)));
 
         QFile file(script);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
             QString code = file.readAll();
             // qDebug() << "evaluating startup script:" << script;
             scriptEngine.evaluateScript(code);

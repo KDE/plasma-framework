@@ -38,10 +38,9 @@
 #include "dataengine.h"
 #include "storagethread_p.h"
 
-
-StorageJob::StorageJob(const QString& destination,
-                       const QString& operation,
-                       const QVariantMap& parameters,
+StorageJob::StorageJob(const QString &destination,
+                       const QString &operation,
+                       const QVariantMap &parameters,
                        QObject *parent)
     : ServiceJob(destination, operation, parameters, parent),
       m_clientName(destination)
@@ -71,7 +70,6 @@ QString StorageJob::clientName() const
     return m_clientName;
 }
 
-
 void StorageJob::start()
 {
     //FIXME: QHASH
@@ -84,13 +82,13 @@ void StorageJob::start()
 
     QWeakPointer<StorageJob> me(this);
     if (operationName() == "save") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
     } else if (operationName() == "retrieve") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
     } else if (operationName() == "delete") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
     } else if (operationName() == "expire") {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap&, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
     } else {
         setError(true);
         setResult(false);
@@ -107,7 +105,7 @@ void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
     }
 }
 
-Plasma::ServiceJob* Storage::createJob(const QString &operation, QVariantMap &parameters)
+Plasma::ServiceJob *Storage::createJob(const QString &operation, QVariantMap &parameters)
 {
     if (m_clientName.isEmpty()) {
         return 0;
@@ -117,7 +115,7 @@ Plasma::ServiceJob* Storage::createJob(const QString &operation, QVariantMap &pa
 }
 
 //Storage implementation
-Storage::Storage(QObject* parent)
+Storage::Storage(QObject *parent)
     : Plasma::Service(parent),
       m_clientName("data")
 {

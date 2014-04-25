@@ -90,7 +90,6 @@ void PlasmoidPackageTest::createTestPackage(const QString &packageName)
     file.flush();
     file.close();
 
-
     qDebug() << "THIS IS A PLASMOID SCRIPT THING";
     // Now we have a minimal plasmoid package which is valid. Let's add some
     // files to it for test purposes.
@@ -274,31 +273,29 @@ void PlasmoidPackageTest::createAndInstallPackage()
     qDebug() << "Installing " << archivePath;
     //const QString packageRoot = "plasma/plasmoids/";
     //const QString servicePrefix = "plasma-applet-";
-    KJob* job = p->install(archivePath, m_packageRoot);
+    KJob *job = p->install(archivePath, m_packageRoot);
     connect(job, SIGNAL(finished(KJob*)), SLOT(packageInstalled(KJob*)));
 
     //QVERIFY(p->isValid());
     delete p;
 }
 
-void PlasmoidPackageTest::packageInstalled(KJob* j)
+void PlasmoidPackageTest::packageInstalled(KJob *j)
 {
     qDebug() << "!!!!!!!!!!!!!!!!!!!! package installed" << (j->error() == KJob::NoError);
     QVERIFY(j->error() == KJob::NoError);
     //QVERIFY(p->path());
 
     Plasma::Package *p = new Plasma::Package(m_defaultPackageStructure);
-    KJob* jj = p->uninstall("org.kde.microblog-qml", m_packageRoot);
+    KJob *jj = p->uninstall("org.kde.microblog-qml", m_packageRoot);
     //QObject::disconnect(j, SIGNAL(finished(KJob*)), this, SLOT(packageInstalled(KJob*)));
     connect(jj, SIGNAL(finished(KJob*)), SLOT(packageInstalled(KJob*)));
 }
 
-
-void PlasmoidPackageTest::packageUninstalled(KJob* j)
+void PlasmoidPackageTest::packageUninstalled(KJob *j)
 {
     qDebug() << "!!!!!!!!!!!!!!!!!!!!! package uninstalled";
     QVERIFY(j->error() == KJob::NoError);
 }
-
 
 QTEST_MAIN(PlasmoidPackageTest)

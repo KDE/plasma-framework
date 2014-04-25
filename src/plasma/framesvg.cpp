@@ -38,7 +38,6 @@
 namespace Plasma
 {
 
-
 QHash<QString, FrameData *> FrameSvgPrivate::s_sharedFrames;
 
 // Any attempt to generate a frame whose width or height is larger than this
@@ -171,7 +170,7 @@ FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
         return NoBorder;
     }
 
-    QHash<QString, FrameData*>::const_iterator it = d->frames.constFind(d->prefix);
+    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
 
     if (it != d->frames.constEnd()) {
         return it.value()->enabledBorders;
@@ -183,21 +182,21 @@ FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
 void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 {
     switch (location) {
-        case Types::TopEdge:
-            setElementPrefix("north");
-            break;
-        case Types::BottomEdge:
-            setElementPrefix("south");
-            break;
-        case Types::LeftEdge:
-            setElementPrefix("west");
-            break;
-        case Types::RightEdge:
-            setElementPrefix("east");
-            break;
-        default:
-            setElementPrefix(QString());
-            break;
+    case Types::TopEdge:
+        setElementPrefix("north");
+        break;
+    case Types::BottomEdge:
+        setElementPrefix("south");
+        break;
+    case Types::LeftEdge:
+        setElementPrefix("west");
+        break;
+    case Types::RightEdge:
+        setElementPrefix("east");
+        break;
+    default:
+        setElementPrefix(QString());
+        break;
     }
 
     d->location = location;
@@ -272,7 +271,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
     d->location = Types::Floating;
 }
 
-bool FrameSvg::hasElementPrefix(const QString & prefix) const
+bool FrameSvg::hasElementPrefix(const QString &prefix) const
 {
     //for now it simply checks if a center element exists,
     //because it could make sense for certain themes to not have all the elements
@@ -286,21 +285,21 @@ bool FrameSvg::hasElementPrefix(const QString & prefix) const
 bool FrameSvg::hasElementPrefix(Plasma::Types::Location location) const
 {
     switch (location) {
-        case Types::TopEdge:
-            return hasElementPrefix("north");
-            break;
-        case Types::BottomEdge:
-            return hasElementPrefix("south");
-            break;
-        case Types::LeftEdge:
-            return hasElementPrefix("west");
-            break;
-        case Types::RightEdge:
-            return hasElementPrefix("east");
-            break;
-        default:
-            return hasElementPrefix(QString());
-            break;
+    case Types::TopEdge:
+        return hasElementPrefix("north");
+        break;
+    case Types::BottomEdge:
+        return hasElementPrefix("south");
+        break;
+    case Types::LeftEdge:
+        return hasElementPrefix("west");
+        break;
+    case Types::RightEdge:
+        return hasElementPrefix("east");
+        break;
+    default:
+        return hasElementPrefix(QString());
+        break;
     }
 }
 
@@ -377,7 +376,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
 
 QSizeF FrameSvg::frameSize() const
 {
-    QHash<QString, FrameData*>::const_iterator it = d->frames.constFind(d->prefix);
+    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
 
     if (it == d->frames.constEnd()) {
         return QSize(-1, -1);
@@ -395,20 +394,20 @@ qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
     switch (edge) {
     case Plasma::Types::TopMargin:
         return d->frames[d->prefix]->topMargin;
-    break;
+        break;
 
     case Plasma::Types::LeftMargin:
         return d->frames[d->prefix]->leftMargin;
-    break;
+        break;
 
     case Plasma::Types::RightMargin:
         return d->frames[d->prefix]->rightMargin;
-    break;
+        break;
 
     //Plasma::BottomMargin
     default:
         return d->frames[d->prefix]->bottomMargin;
-    break;
+        break;
     }
 }
 
@@ -421,20 +420,20 @@ qreal FrameSvg::fixedMarginSize(const Plasma::Types::MarginEdge edge) const
     switch (edge) {
     case Plasma::Types::TopMargin:
         return d->frames[d->prefix]->fixedTopMargin;
-    break;
+        break;
 
     case Plasma::Types::LeftMargin:
         return d->frames[d->prefix]->fixedLeftMargin;
-    break;
+        break;
 
     case Plasma::Types::RightMargin:
         return d->frames[d->prefix]->fixedRightMargin;
-    break;
+        break;
 
     //Plasma::BottomMargin
     default:
         return d->frames[d->prefix]->fixedBottomMargin;
-    break;
+        break;
     }
 }
 
@@ -485,7 +484,7 @@ QRectF FrameSvg::contentsRect() const
 
 QPixmap FrameSvg::alphaMask() const
 {
-    //FIXME: the distinction between overlay and 
+    //FIXME: the distinction between overlay and
     return d->alphaMask();
 }
 
@@ -522,7 +521,7 @@ void FrameSvg::clearCache()
     FrameData *frame = d->frames[d->prefix];
 
     // delete all the frames that aren't this one
-    QMutableHashIterator<QString, FrameData*> it(d->frames);
+    QMutableHashIterator<QString, FrameData *> it(d->frames);
     while (it.hasNext()) {
         FrameData *p = it.next().value();
         if (frame != p) {
@@ -632,7 +631,7 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #endif
             foreach (FrameSvg *data, it2.value()->references.keys()) {
 #ifndef NDEBUG
-                qDebug()<< "            " << (void*)data << it2.value()->references[data];
+                qDebug() << "            " << (void *)data << it2.value()->references[data];
 #endif
             }
             shares += rc - 1;
@@ -746,7 +745,7 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
             actualOverlayPos.setX(frame->frameSize.width() - overlaySize.width());
         } else if (q->hasElement(prefix % "hint-overlay-pos-bottom")) {
             actualOverlayPos.setY(frame->frameSize.height() - overlaySize.height());
-        //Stretched or Tiled?
+            //Stretched or Tiled?
         } else if (q->hasElement(prefix % "hint-overlay-stretch")) {
             overlaySize = frameSize(frame).toSize();
         } else {
@@ -763,12 +762,12 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Tiling?
         if (q->hasElement(prefix % "hint-overlay-tile-horizontal") ||
-            q->hasElement(prefix % "hint-overlay-tile-vertical")) {
+                q->hasElement(prefix % "hint-overlay-tile-vertical")) {
 
             QSize s = q->size();
             q->resize(q->elementSize(prefix % "overlay"));
 
-            overlayPainter.drawTiledPixmap(QRect(QPoint(0,0), overlaySize), q->pixmap(prefix % "overlay"));
+            overlayPainter.drawTiledPixmap(QRect(QPoint(0, 0), overlaySize), q->pixmap(prefix % "overlay"));
             q->resize(s);
         } else {
             q->paint(&overlayPainter, QRect(actualOverlayPos, overlaySize), prefix % "overlay");
@@ -796,7 +795,6 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     const int leftHeight = q->elementSize(prefix % "left").height();
     const int topOffset = 0;
     const int leftOffset = 0;
-
 
     if (!size.isValid()) {
 #ifndef NDEBUG
@@ -848,11 +846,11 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
         if (contentHeight > 0 && contentWidth > 0) {
             if (frame->composeOverBorder) {
                 q->paint(&p, QRect(QPoint(0, 0), size.toSize()),
-                               prefix % "center");
+                         prefix % "center");
             } else {
                 q->paint(&p, QRect(frame->leftWidth, frame->topHeight,
-                                contentWidth, contentHeight),
-                                prefix % "center");
+                                   contentWidth, contentHeight),
+                         prefix % "center");
             }
         }
     }
@@ -899,26 +897,26 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     if (frame->stretchBorders) {
         if (frame->enabledBorders & FrameSvg::LeftBorder || frame->enabledBorders & FrameSvg::RightBorder) {
             if (q->hasElement(prefix % "left") &&
-                frame->enabledBorders & FrameSvg::LeftBorder &&
-                contentHeight > 0) {
+                    frame->enabledBorders & FrameSvg::LeftBorder &&
+                    contentHeight > 0) {
                 q->paint(&p, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), prefix % "left");
             }
 
             if (q->hasElement(prefix % "right") &&
-                frame->enabledBorders & FrameSvg::RightBorder &&
-                contentHeight > 0) {
+                    frame->enabledBorders & FrameSvg::RightBorder &&
+                    contentHeight > 0) {
                 q->paint(&p, QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), prefix % "right");
             }
         }
 
         if (frame->enabledBorders & FrameSvg::TopBorder || frame->enabledBorders & FrameSvg::BottomBorder) {
             if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top") &&
-                contentWidth > 0) {
+                    contentWidth > 0) {
                 q->paint(&p, QRect(contentLeft, topOffset, contentWidth, frame->topHeight), prefix % "top");
             }
 
             if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom") &&
-                contentWidth > 0) {
+                    contentWidth > 0) {
                 q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight), prefix % "bottom");
             }
         }
@@ -978,7 +976,7 @@ QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) 
 {
     const QSize size = frameSize(frame).toSize();
     const QLatin1Char s('_');
-    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath(); 
+    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % prefixToSave % s % q->imagePath();
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
@@ -1024,7 +1022,6 @@ void FrameSvgPrivate::updateSizes() const
     } else {
         frame->fixedTopMargin = frame->fixedTopHeight;
     }
-
 
     //The same, but its size depends from the margin being enabled
     if (frame->enabledBorders & FrameSvg::TopBorder) {
@@ -1166,6 +1163,5 @@ int FrameData::refcount() const
 }
 
 } // Plasma namespace
-
 
 #include "moc_framesvg.cpp"

@@ -44,7 +44,7 @@ private:
     explicit TimerDrive(QObject *parent = 0);
     ~TimerDrive();
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 } // namespace Plasma

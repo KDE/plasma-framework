@@ -20,7 +20,6 @@
 #ifndef STORAGETHREAD_H
 #define STORAGETHREAD_H
 
-
 #include <QThread>
 #include <QSqlDatabase>
 #include <QWeakPointer>
@@ -50,10 +49,10 @@ public Q_SLOTS:
     void expire(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
 
 Q_SIGNALS:
-    void newResult(StorageJob* caller, const QVariant &result);
+    void newResult(StorageJob *caller, const QVariant &result);
 
 private:
-    void initializeDb(StorageJob* caller);
+    void initializeDb(StorageJob *caller);
     QSqlDatabase m_db;
 };
 

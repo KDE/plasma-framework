@@ -33,15 +33,18 @@
 // We mean it.
 //
 
-namespace Plasma {
-    class Applet;
+namespace Plasma
+{
+class Applet;
 }
 
-namespace KDeclarative {
-    class QmlObject;
+namespace KDeclarative
+{
+class QmlObject;
 }
 
-namespace PlasmaQuick {
+namespace PlasmaQuick
+{
 
 class AppletQuickItem;
 
@@ -68,7 +71,6 @@ public:
     void maximumHeightChanged();
     void fillWidthChanged();
     void fillHeightChanged();
-
 
     AppletQuickItem *q;
 

@@ -27,12 +27,12 @@
 
 namespace Plasma
 {
-    class Containment;
+class Containment;
 } // namespace Plasma
 
 class PlasmaKPartView : public Plasma::View
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     typedef Plasma::Types::ImmutabilityType ImmutabilityType;
     PlasmaKPartView(Plasma::Containment *containment, int uid, QWidget *parent = 0);
@@ -55,7 +55,7 @@ Q_SIGNALS:
     void geometryChanged();
 
 protected:
-    void resizeEvent( QResizeEvent* event );
+    void resizeEvent(QResizeEvent *event);
 
 private:
     bool m_configurationMode;

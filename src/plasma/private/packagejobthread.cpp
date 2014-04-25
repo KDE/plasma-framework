@@ -20,7 +20,6 @@
 
 #include "private/packagejobthread_p.h"
 
-
 #include "package.h"
 #include "config-plasma.h"
 
@@ -86,8 +85,9 @@ bool copyFolder(QString sourcePath, QString targetPath)
 bool removeFolder(QString folderPath)
 {
     QDir folder(folderPath);
-    if(!folder.exists())
+    if (!folder.exists()) {
         return false;
+    }
 
     foreach (const QString &fileName, folder.entryList(QDir::Files)) {
         if (!QFile::remove(folderPath + QDir::separator() + fileName)) {
@@ -106,18 +106,16 @@ bool removeFolder(QString folderPath)
     return folder.rmdir(folderName);
 }
 
-
-class PackageJobThreadPrivate {
+class PackageJobThreadPrivate
+{
 public:
     QString installPath;
     QString errorMessage;
     QString servicePrefix;
 };
 
-
-
-PackageJobThread::PackageJobThread(const QString &servicePrefix, QObject* parent) :
-QThread(parent)
+PackageJobThread::PackageJobThread(const QString &servicePrefix, QObject *parent) :
+    QThread(parent)
 {
     d = new PackageJobThreadPrivate;
     d->servicePrefix = servicePrefix;
@@ -128,7 +126,7 @@ PackageJobThread::~PackageJobThread()
     delete d;
 }
 
-bool PackageJobThread::install(const QString& src, const QString &dest)
+bool PackageJobThread::install(const QString &src, const QString &dest)
 {
     bool ok = installPackage(src, dest);
     emit installPathChanged(d->installPath);
@@ -136,7 +134,7 @@ bool PackageJobThread::install(const QString& src, const QString &dest)
     return ok;
 }
 
-bool PackageJobThread::installPackage(const QString& src, const QString &dest)
+bool PackageJobThread::installPackage(const QString &src, const QString &dest)
 {
     QString packageRoot = dest;
     QDir root(dest);
@@ -173,7 +171,7 @@ bool PackageJobThread::installPackage(const QString& src, const QString &dest)
         if (mimetype.inherits("application/zip")) {
             archive = new KZip(src);
         } else if (mimetype.inherits("application/x-compressed-tar") ||
-                   mimetype.inherits("application/x-tar")|| mimetype.inherits("application/x-bzip-compressed-tar") ||
+                   mimetype.inherits("application/x-tar") || mimetype.inherits("application/x-bzip-compressed-tar") ||
                    mimetype.inherits("application/x-xz") || mimetype.inherits("application/x-lzma")) {
             archive = new KTar(src);
         } else {
@@ -329,19 +327,20 @@ bool PackageJobThread::uninstall(const QString &packagePath)
     return ok;
 }
 
-bool PackageJobThread::uninstallPackage(const QString& packagePath)
+bool PackageJobThread::uninstallPackage(const QString &packagePath)
 {
     if (!QFile::exists(packagePath)) {
         d->errorMessage = i18n("%1 does not exist", packagePath);
         return false;
     }
     QString pkg;
-    { // FIXME: remove, pass in packageroot, type and pluginName separately?
+    {
+        // FIXME: remove, pass in packageroot, type and pluginName separately?
         QString _path = packagePath;
         QStringList ps = packagePath.split('/');
-        int ix = ps.count()-1;
+        int ix = ps.count() - 1;
         if (packagePath.endsWith('/')) {
-            ix = ps.count()-2;
+            ix = ps.count() - 2;
         }
         pkg = ps[ix];
     }
@@ -366,8 +365,6 @@ bool PackageJobThread::uninstallPackage(const QString& packagePath)
     sycoca.asyncCall("recreate");
     return true;
 }
-
-
 
 } // namespace Plasma
 

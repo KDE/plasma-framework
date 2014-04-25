@@ -96,7 +96,7 @@ bool FrameSvgItemMargins::isFixed() const
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-    m_textureChanged(false)
+      m_textureChanged(false)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -106,7 +106,6 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
     connect(&m_units, &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
 }
-
 
 FrameSvgItem::~FrameSvgItem()
 {
@@ -144,7 +143,6 @@ QString FrameSvgItem::imagePath() const
 {
     return m_frameSvg->imagePath();
 }
-
 
 void FrameSvgItem::setPrefix(const QString &prefix)
 {
@@ -190,8 +188,9 @@ FrameSvgItemMargins *FrameSvgItem::fixedMargins() const
 
 void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)
 {
-    if (m_frameSvg->enabledBorders() == borders)
+    if (m_frameSvg->enabledBorders() == borders) {
         return;
+    }
 
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
@@ -210,7 +209,7 @@ bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
 }
 
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
-                                          const QRectF &oldGeometry)
+                                   const QRectF &oldGeometry)
 {
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(newGeometry.size());
@@ -270,7 +269,7 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
     return m_frameSvg;
 }
 
-QSGNode* FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData*)
+QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
     if (!window() || !m_frameSvg || !m_frameSvg->hasElementPrefix(m_prefix)) {
         delete oldNode;
@@ -302,7 +301,6 @@ void FrameSvgItem::componentComplete()
     m_frameSvg->resizeFrame(QSize(width(), height()));
     m_textureChanged = true;
 }
-
 
 void FrameSvgItem::updateDevicePixelRatio()
 {

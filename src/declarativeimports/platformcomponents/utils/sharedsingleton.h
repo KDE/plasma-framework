@@ -22,10 +22,12 @@
 
 #include <memory>
 
-namespace utils {
+namespace utils
+{
 
 template <typename Target>
-class SharedSingleton {
+class SharedSingleton
+{
 public:
     static std::shared_ptr<Target> instance()
     {

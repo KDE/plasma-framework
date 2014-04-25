@@ -24,13 +24,13 @@
 
 #include <QDebug>
 
-Application::Private::Private(Application * parent)
+Application::Private::Private(Application *parent)
     : q(parent)
 {
     connect(
         &process, SIGNAL(stateChanged(QProcess::ProcessState)),
         this,     SLOT(stateChanged(QProcess::ProcessState))
-        );
+    );
     process.setProcessChannelMode(QProcess::MergedChannels);
 }
 
@@ -40,7 +40,7 @@ void Application::Private::stateChanged(QProcess::ProcessState newState)
     //q->runningChanged(running);
 }
 
-Application::Application(QObject * parent)
+Application::Application(QObject *parent)
     : QObject(parent), d(this)
 {
 }
@@ -60,7 +60,7 @@ QString Application::application() const
     return d->application;
 }
 
-void Application::setApplication(const QString & application)
+void Application::setApplication(const QString &application)
 {
     qDebug() << "setting the application to" << application;
 
@@ -87,10 +87,11 @@ void Application::setRunning(bool run)
     qDebug() << "running?" << run;
     d->running = run;
 
-    if (run)
+    if (run) {
         start();
-    else
+    } else {
         terminate();
+    }
 }
 
 void Application::start()
@@ -107,7 +108,7 @@ void Application::start()
     qDebug() << "Starting" << d->application;
     d->process.start(d->application);
 
-    if(!d->process.waitForStarted()) {
+    if (!d->process.waitForStarted()) {
         qWarning() << "Error" << d->process.error() << "while starting" << d->application;
     }
 

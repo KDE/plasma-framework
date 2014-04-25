@@ -40,7 +40,7 @@
 namespace Plasma
 {
 
-ContainmentActions::ContainmentActions(QObject * parentObject)
+ContainmentActions::ContainmentActions(QObject *parentObject)
     : d(new ContainmentActionsPrivate(KService::serviceByStorageId(QString()), this))
 {
     setParent(parentObject);
@@ -48,7 +48,7 @@ ContainmentActions::ContainmentActions(QObject * parentObject)
 
 ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList &args)
     : d(new ContainmentActionsPrivate(KService::serviceByStorageId(args.count() > 0 ?
-                             args[0].toString() : QString()), this))
+                                      args[0].toString() : QString()), this))
 {
     // now remove first item since those are managed by Wallpaper and subclasses shouldn't
     // need to worry about them. yes, it violates the constness of this var, but it lets us add
@@ -74,7 +74,7 @@ Containment *ContainmentActions::containment()
     if (d->containment) {
         return d->containment;
     }
-    return qobject_cast<Containment*>(parent());
+    return qobject_cast<Containment *>(parent());
 }
 
 void ContainmentActions::restore(const KConfigGroup &config)
@@ -108,9 +108,9 @@ void ContainmentActions::performPreviousAction()
     //do nothing by default, implement in subclasses
 }
 
-QList<QAction*> ContainmentActions::contextualActions()
+QList<QAction *> ContainmentActions::contextualActions()
 {
-    return QList<QAction*>();
+    return QList<QAction *>();
 }
 
 QString ContainmentActions::eventToString(QEvent *event)
@@ -119,37 +119,34 @@ QString ContainmentActions::eventToString(QEvent *event)
     Qt::KeyboardModifiers modifiers;
 
     switch (event->type()) {
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease:
-        case QEvent::MouseButtonDblClick:
-        {
-            QMouseEvent *e = static_cast<QMouseEvent*>(event);
-            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-            trigger += mouse.valueToKey(e->button());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::Wheel:
-        {
-            QWheelEvent *e = static_cast<QWheelEvent*>(event);
-            int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
-            QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-            trigger = "wheel:";
-            trigger += orient.valueToKey(e->orientation());
-            modifiers = e->modifiers();
-            break;
-        }
-        case QEvent::ContextMenu:
-        {
-            int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-            QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-            trigger = mouse.valueToKey(Qt::RightButton);
-            modifiers = Qt::NoModifier;
-            break;
-        }
-        default:
-            return QString();
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+    case QEvent::MouseButtonDblClick: {
+        QMouseEvent *e = static_cast<QMouseEvent *>(event);
+        int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+        QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+        trigger += mouse.valueToKey(e->button());
+        modifiers = e->modifiers();
+        break;
+    }
+    case QEvent::Wheel: {
+        QWheelEvent *e = static_cast<QWheelEvent *>(event);
+        int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
+        QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
+        trigger = "wheel:";
+        trigger += orient.valueToKey(e->orientation());
+        modifiers = e->modifiers();
+        break;
+    }
+    case QEvent::ContextMenu: {
+        int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
+        QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+        trigger = mouse.valueToKey(Qt::RightButton);
+        modifiers = Qt::NoModifier;
+        break;
+    }
+    default:
+        return QString();
     }
 
     int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
@@ -166,6 +163,5 @@ void ContainmentActions::setContainment(Containment *newContainment)
 }
 
 } // Plasma namespace
-
 
 #include "moc_containmentactions.cpp"

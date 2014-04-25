@@ -26,7 +26,7 @@
 namespace Plasma
 {
 
-EffectWatcher::EffectWatcher(const QString& property, QObject *parent)
+EffectWatcher::EffectWatcher(const QString &property, QObject *parent)
     : QObject(parent),
       m_property(XCB_ATOM_NONE),
       m_isX11(QX11Info::isPlatformX11())
@@ -59,17 +59,19 @@ void EffectWatcher::init(const QString &property)
     }
 }
 
-bool EffectWatcher::nativeEventFilter(const QByteArray& eventType, void *message, long *result)
+bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
 {
     Q_UNUSED(result);
-    if (eventType != "xcb_generic_event_t")
+    if (eventType != "xcb_generic_event_t") {
         return false;
-    xcb_generic_event_t* event = reinterpret_cast<xcb_generic_event_t *>(message);
+    }
+    xcb_generic_event_t *event = reinterpret_cast<xcb_generic_event_t *>(message);
     uint response_type = event->response_type & ~0x80;
-    if (response_type != XCB_PROPERTY_NOTIFY || m_property == XCB_ATOM_NONE)
+    if (response_type != XCB_PROPERTY_NOTIFY || m_property == XCB_ATOM_NONE) {
         return false;
+    }
 
-    xcb_property_notify_event_t* prop_event = reinterpret_cast<xcb_property_notify_event_t *>(event);
+    xcb_property_notify_event_t *prop_event = reinterpret_cast<xcb_property_notify_event_t *>(event);
     if (prop_event->atom == m_property) {
         bool nowEffectActive = isEffectActive();
         if (m_effectActive != nowEffectActive) {

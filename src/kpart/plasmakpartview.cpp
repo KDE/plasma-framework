@@ -26,7 +26,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 
-PlasmaKPartView::PlasmaKPartView(Plasma::Containment* containment, int uid, QWidget* parent)
+PlasmaKPartView::PlasmaKPartView(Plasma::Containment *containment, int uid, QWidget *parent)
     : Plasma::View(containment, uid, parent),
       m_configurationMode(false)
 {
@@ -41,7 +41,7 @@ PlasmaKPartView::~PlasmaKPartView()
 {
 }
 
-void PlasmaKPartView::connectContainment(Plasma::Containment* containment)
+void PlasmaKPartView::connectContainment(Plasma::Containment *containment)
 {
     if (!containment) {
         return;
@@ -51,7 +51,7 @@ void PlasmaKPartView::connectContainment(Plasma::Containment* containment)
     connect(containment, SIGNAL(toolBoxVisibilityChanged(bool)), this, SLOT(updateConfigurationMode(bool)));
 }
 
-void PlasmaKPartView::setContainment(Plasma::Containment* c)
+void PlasmaKPartView::setContainment(Plasma::Containment *c)
 {
     if (containment()) {
         disconnect(containment(), 0, this, 0);
@@ -71,7 +71,7 @@ void PlasmaKPartView::resizeEvent(QResizeEvent *event)
 
 void PlasmaKPartView::updateGeometry()
 {
-    Plasma::Containment* c = containment();
+    Plasma::Containment *c = containment();
     if (!c) {
         return;
     }
@@ -84,6 +84,5 @@ void PlasmaKPartView::updateGeometry()
         c->resize(size());
     }
 }
-
 
 #include "plasmakpartview.moc"

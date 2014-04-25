@@ -46,22 +46,20 @@ void PackageStructure::pathChanged(Package *package)
     Q_UNUSED(package)
 }
 
-KJob* PackageStructure::install(Package *package, const QString &archivePath, const QString &packageRoot)
+KJob *PackageStructure::install(Package *package, const QString &archivePath, const QString &packageRoot)
 {
-    PackageJob* j = new PackageJob(package->servicePrefix(), this);
+    PackageJob *j = new PackageJob(package->servicePrefix(), this);
     j->install(archivePath, packageRoot);
     return j;
 }
 
-KJob* PackageStructure::uninstall(Package *package, const QString &packageRoot)
+KJob *PackageStructure::uninstall(Package *package, const QString &packageRoot)
 {
-    PackageJob* j = new PackageJob(package->servicePrefix(), this);
+    PackageJob *j = new PackageJob(package->servicePrefix(), this);
     j->uninstall(packageRoot + package->metadata().pluginName());
     return j;
 }
 
 }
-
-
 
 #include "moc_packagestructure.cpp"

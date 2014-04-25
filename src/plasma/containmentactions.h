@@ -55,98 +55,98 @@ class PLASMA_EXPORT ContainmentActions : public QObject
 {
     Q_OBJECT
 
-    public:
-        /**
-         * Default constructor for an empty or null containmentactions
-         */
-        explicit ContainmentActions(QObject * parent = 0);
+public:
+    /**
+     * Default constructor for an empty or null containmentactions
+     */
+    explicit ContainmentActions(QObject *parent = 0);
 
-        ~ContainmentActions();
+    ~ContainmentActions();
 
-        /**
-         * @return the plugin info for this ContainmentActions instance,
-         *         including name, pluginName and icon
-         * @since 5.0
-         */
-        KPluginInfo pluginInfo() const;
+    /**
+     * @return the plugin info for this ContainmentActions instance,
+     *         including name, pluginName and icon
+     * @since 5.0
+     */
+    KPluginInfo pluginInfo() const;
 
-        /**
-         * This method should be called once the plugin is loaded or settings are changed.
-         * @param config Config group to load settings
-         * @see init
-         **/
-        virtual void restore(const KConfigGroup &config);
+    /**
+     * This method should be called once the plugin is loaded or settings are changed.
+     * @param config Config group to load settings
+     * @see init
+     **/
+    virtual void restore(const KConfigGroup &config);
 
-        /**
-         * This method is called when settings need to be saved.
-         * @param config Config group to save settings
-         **/
-        virtual void save(KConfigGroup &config);
+    /**
+     * This method is called when settings need to be saved.
+     * @param config Config group to save settings
+     **/
+    virtual void save(KConfigGroup &config);
 
-        /**
-         * Returns the widget used in the configuration dialog.
-         * Add the configuration interface of the containmentactions to this widget.
-         */
-        virtual QWidget *createConfigurationInterface(QWidget *parent);
+    /**
+     * Returns the widget used in the configuration dialog.
+     * Add the configuration interface of the containmentactions to this widget.
+     */
+    virtual QWidget *createConfigurationInterface(QWidget *parent);
 
-        /**
-         * This method is called when the user's configuration changes are accepted
-         */
-        virtual void configurationAccepted();
+    /**
+     * This method is called when the user's configuration changes are accepted
+     */
+    virtual void configurationAccepted();
 
-        /**
-         * Called when a "next" action is triggered (e.g. by mouse wheel scroll). This
-         * can be used to scroll through a list of items this plugin manages such as
-         * windows, virtual desktops, activities, etc.
-         * @see performPrevious
-         */
-        virtual void performNextAction();
+    /**
+     * Called when a "next" action is triggered (e.g. by mouse wheel scroll). This
+     * can be used to scroll through a list of items this plugin manages such as
+     * windows, virtual desktops, activities, etc.
+     * @see performPrevious
+     */
+    virtual void performNextAction();
 
-        /**
-         * Called when a "previous" action is triggered (e.g. by mouse wheel scroll). This
-         * can be used to scroll through a list of items this plugin manages such as
-         * windows, virtual desktops, activities, etc.
-         * @see performNext
-         */
-        virtual void performPreviousAction();
+    /**
+     * Called when a "previous" action is triggered (e.g. by mouse wheel scroll). This
+     * can be used to scroll through a list of items this plugin manages such as
+     * windows, virtual desktops, activities, etc.
+     * @see performNext
+     */
+    virtual void performPreviousAction();
 
-        /**
-         * Implement this to provide a list of actions that can be added to another menu
-         * for example, when right-clicking an applet, the "Activity Options" submenu is populated
-         * with this.
-         */
-        virtual QList<QAction*> contextualActions();
+    /**
+     * Implement this to provide a list of actions that can be added to another menu
+     * for example, when right-clicking an applet, the "Activity Options" submenu is populated
+     * with this.
+     */
+    virtual QList<QAction *> contextualActions();
 
-        /**
-         * Turns a mouse or wheel event into a string suitable for a ContainmentActions
-         * @return the string representation of the event
-         */
-        static QString eventToString(QEvent *event);
+    /**
+     * Turns a mouse or wheel event into a string suitable for a ContainmentActions
+     * @return the string representation of the event
+     */
+    static QString eventToString(QEvent *event);
 
-        /**
-         * @p newContainment the containment the plugin should be associated with.
-         * @since 4.6
-         */
-        void setContainment(Containment *newContainment);
+    /**
+     * @p newContainment the containment the plugin should be associated with.
+     * @since 4.6
+     */
+    void setContainment(Containment *newContainment);
 
-        /**
-         * @return the containment the plugin is associated with.
-         */
-        Containment *containment();
+    /**
+     * @return the containment the plugin is associated with.
+     */
+    Containment *containment();
 
-    protected:
-        /**
-         * This constructor is to be used with the plugin loading systems
-         * found in KPluginInfo and KService. The argument list is expected
-         * to have one element: the KService service ID for the desktop entry.
-         *
-         * @param parent a QObject parent; you probably want to pass in 0
-         * @param args a list of strings containing one entry: the service id
-         */
-        ContainmentActions(QObject *parent, const QVariantList &args);
+protected:
+    /**
+     * This constructor is to be used with the plugin loading systems
+     * found in KPluginInfo and KService. The argument list is expected
+     * to have one element: the KService service ID for the desktop entry.
+     *
+     * @param parent a QObject parent; you probably want to pass in 0
+     * @param args a list of strings containing one entry: the service id
+     */
+    ContainmentActions(QObject *parent, const QVariantList &args);
 
-    private:
-        ContainmentActionsPrivate *const d;
+private:
+    ContainmentActionsPrivate *const d;
 };
 
 } // Plasma namespace
@@ -156,9 +156,9 @@ class PLASMA_EXPORT ContainmentActions : public QObject
  */
 
 #define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
-K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-Q_DECLARE_METATYPE(Plasma::ContainmentActions*)
+Q_DECLARE_METATYPE(Plasma::ContainmentActions *)
 
 #endif // PLASMA_CONTAINMENTACTIONS_H

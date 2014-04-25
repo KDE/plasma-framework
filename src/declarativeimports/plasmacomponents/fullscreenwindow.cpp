@@ -41,18 +41,17 @@
 #include <Plasma/Corona>
 #include <Plasma/WindowEffects>
 
-
 uint FullScreenWindow::s_numItems = 0;
 
 class Background : public QWidget
 {
 public:
     Background(FullScreenWindow *dialog)
-        : QWidget( 0L ),
+        : QWidget(0L),
           m_dialog(dialog)
     {
-        setAttribute( Qt::WA_NoSystemBackground );
-        setAttribute( Qt::WA_TranslucentBackground );
+        setAttribute(Qt::WA_NoSystemBackground);
+        setAttribute(Qt::WA_TranslucentBackground);
 
         setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
         KWindowSystem::setOnAllDesktops(winId(), true);
@@ -63,9 +62,9 @@ public:
     ~Background()
     {}
 
-    void paintEvent( QPaintEvent *e )
+    void paintEvent(QPaintEvent *e)
     {
-        QPainter painter( this );
+        QPainter painter(this);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
         painter.fillRect(e->rect(), QColor(0, 0, 0, 80));
     }
@@ -151,7 +150,7 @@ void FullScreenWindow::init(const QString &componentName)
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
     if (component->status() == QDeclarativeComponent::Error) {
-        qWarning()<<component->errors();
+        qWarning() << component->errors();
     }
 
     if (m_rootObject) {
@@ -220,8 +219,8 @@ void FullScreenWindow::syncViewToMainItem()
                         }
                         m_declarativeItemContainer->setDeclarativeItem(di);
                     } else {
-                        m_mainItem.data()->setY(-10000*s_numItems);
-                        m_mainItem.data()->setY(10000*s_numItems);
+                        m_mainItem.data()->setY(-10000 * s_numItems);
+                        m_mainItem.data()->setY(10000 * s_numItems);
                     }
                     break;
                 }
@@ -235,7 +234,6 @@ void FullScreenWindow::syncViewToMainItem()
 
     m_view->setScene(scene);
 
-
     QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
                         QSizeF(m_mainItem.data()->boundingRect().size()));
     if (m_declarativeItemContainer) {
@@ -244,12 +242,12 @@ void FullScreenWindow::syncViewToMainItem()
 
     } else {
         QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
-                        QSizeF(m_mainItem.data()->boundingRect().size()));
+                            QSizeF(m_mainItem.data()->boundingRect().size()));
         m_view->resize(itemGeometry.size().toSize());
         m_view->setSceneRect(itemGeometry);
     }
 
-    m_view->move(QApplication::desktop()->availableGeometry().center() - QPoint(m_view->width()/2, m_view->height()/2));
+    m_view->move(QApplication::desktop()->availableGeometry().center() - QPoint(m_view->width() / 2, m_view->height() / 2));
 }
 
 void FullScreenWindow::syncMainItemToView()
@@ -266,7 +264,7 @@ void FullScreenWindow::syncMainItemToView()
         m_view->setSceneRect(m_declarativeItemContainer->geometry());
     } else {
         QRectF itemGeometry(QPointF(m_mainItem.data()->x(), m_mainItem.data()->y()),
-                        QSizeF(m_mainItem.data()->boundingRect().size()));
+                            QSizeF(m_mainItem.data()->boundingRect().size()));
         m_view->setSceneRect(itemGeometry);
     }
 }
@@ -296,7 +294,6 @@ QGraphicsView *FullScreenWindow::view() const
 {
     return m_view;
 }
-
 
 QDeclarativeListProperty<QGraphicsObject> FullScreenWindow::title()
 {
@@ -333,7 +330,6 @@ DialogStatus::Status FullScreenWindow::status() const
         return DialogStatus::Closed;
     }
 }
-
 
 void FullScreenWindow::statusHasChanged()
 {
@@ -373,22 +369,17 @@ void FullScreenWindow::close()
     }
 }
 
-
-
-
 bool FullScreenWindow::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_mainItem.data() &&
-        (event->type() == QEvent::GraphicsSceneResize)) {
+            (event->type() == QEvent::GraphicsSceneResize)) {
         syncViewToMainItem();
     } else if (watched == m_view &&
-        (event->type() == QEvent::Resize)) {
+               (event->type() == QEvent::Resize)) {
         syncMainItemToView();
     }
     return false;
 }
-
-
 
 #include "fullscreenwindow.moc"
 

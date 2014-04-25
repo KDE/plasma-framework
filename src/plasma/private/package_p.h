@@ -33,32 +33,32 @@ namespace Plasma
 
 class ContentStructure
 {
-    public:
-        ContentStructure()
-            : directory(false),
-              required(false)
-        {
-        }
+public:
+    ContentStructure()
+        : directory(false),
+          required(false)
+    {
+    }
 
-        ContentStructure(const ContentStructure &other)
-        {
-            paths = other.paths;
+    ContentStructure(const ContentStructure &other)
+    {
+        paths = other.paths;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
-            name = other.name;
-            mimeTypes = other.mimeTypes;
+        name = other.name;
+        mimeTypes = other.mimeTypes;
 #endif
-            directory = other.directory;
-            required = other.required;
-        }
+        directory = other.directory;
+        required = other.required;
+    }
 
-        QString found;
-        QStringList paths;
+    QString found;
+    QStringList paths;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
-        QString name;
-        QStringList mimeTypes;
+    QString name;
+    QStringList mimeTypes;
 #endif
-        bool directory : 1;
-        bool required : 1;
+    bool directory : 1;
+    bool required : 1;
 };
 
 class PackagePrivate : public QSharedData

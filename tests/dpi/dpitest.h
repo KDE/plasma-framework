@@ -34,15 +34,15 @@ class DPITest : public QApplication
 {
     Q_OBJECT
 
-    public:
-        DPITest(int& argc, char** argv, QCommandLineParser *parser);
-        virtual ~DPITest();
+public:
+    DPITest(int &argc, char **argv, QCommandLineParser *parser);
+    virtual ~DPITest();
 
-    public Q_SLOTS:
-        void runMain();
+public Q_SLOTS:
+    void runMain();
 
-    private:
-        DPITestPrivate* d;
+private:
+    DPITestPrivate *d;
 };
 
 }

@@ -43,7 +43,6 @@ SvgItem::SvgItem(QQuickItem *parent)
     connect(&m_units, &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
 }
 
-
 SvgItem::~SvgItem()
 {
 }
@@ -85,7 +84,6 @@ QSizeF SvgItem::naturalSize() const
     return m_svg.data()->size();
 }
 
-
 void SvgItem::setSvg(Plasma::Svg *svg)
 {
     if (m_svg) {
@@ -99,7 +97,6 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
         connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
     }
-
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(naturalSize().width());

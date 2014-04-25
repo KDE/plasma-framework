@@ -74,7 +74,7 @@ class ServicePrivate
 public:
     ServicePrivate(Service *service)
         : q(service)
-    {        
+    {
     }
 
     ~ServicePrivate()

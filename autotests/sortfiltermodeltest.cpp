@@ -43,7 +43,7 @@ void SortFilterModelTest::setModel()
     filterModel.setModel(&model);
     QCOMPARE(spy.count(), 1);
     QList<QVariant> arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).value<QObject*>(), static_cast<QObject*>(&model));
+    QCOMPARE(arguments.at(0).value<QObject *>(), static_cast<QObject *>(&model));
 
     filterModel.setModel(&model);
     QCOMPARE(spy.count(), 0);
@@ -54,9 +54,9 @@ void SortFilterModelTest::setEmptyModel()
     SortFilterModel filterModel;
     QStandardItemModel model;
     filterModel.setModel(&model);
-    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel*>(&model));
+    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel *>(&model));
     filterModel.setModel(0);
-    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel*>(0));
+    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel *>(0));
 }
 
 void SortFilterModelTest::setFilterRegExp()

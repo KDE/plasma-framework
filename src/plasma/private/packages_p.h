@@ -78,7 +78,6 @@ public:
     void initPackage(Plasma::Package *package);
 };
 
-
 } // namespace Plasma
 
 #endif // LIBS_PLASMA_PACKAGES_P_H

@@ -24,16 +24,16 @@ namespace Plasma
 {
 
 SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc, QObject *visualization,
-                                               uint pollingInterval,
-                                               Plasma::Types::IntervalAlignment align,
-                                               bool immediateUpdate)
+        uint pollingInterval,
+        Plasma::Types::IntervalAlignment align,
+        bool immediateUpdate)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.constFind(pollingInterval);
     SignalRelay *relay = 0;
 
     //FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.constEnd()) {
-        relay = new SignalRelay(const_cast<DataContainer*>(dc), this,
+        relay = new SignalRelay(const_cast<DataContainer *>(dc), this,
                                 pollingInterval, align, immediateUpdate);
         relays[pollingInterval] = relay;
     } else {
@@ -97,7 +97,7 @@ void SignalRelay::checkAlignment()
         int seconds = t.second();
         if (minutes > 1 || seconds > 10) {
             newTime = ((60 - minutes) * 1000 * 60) +
-                ((60 - seconds) * 1000) + 500;
+                      ((60 - seconds) * 1000) + 500;
         }
     }
 
@@ -165,7 +165,5 @@ void SignalRelay::timerEvent(QTimerEvent *event)
 }
 
 } // Plasma namespace
-
-
 
 #include "moc_datacontainer_p.cpp"

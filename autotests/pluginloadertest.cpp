@@ -75,6 +75,5 @@ void PluginTest::loadDataEngine()
 
 }
 
-
 #include "moc_pluginloadertest.cpp"
 

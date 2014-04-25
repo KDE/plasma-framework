@@ -29,19 +29,19 @@ TestShellPluginLoader::~TestShellPluginLoader()
 {
 }
 
-Plasma::Applet* TestShellPluginLoader::internalLoadApplet (const QString &name, uint appletId, const QVariantList &args)
+Plasma::Applet *TestShellPluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     kDebug() << "loadApplet called with" << name << appletId << args;
     return 0;
 }
 
-Plasma::DataEngine* TestShellPluginLoader::internalLoadDataEngine(const QString &name)
+Plasma::DataEngine *TestShellPluginLoader::internalLoadDataEngine(const QString &name)
 {
     kDebug() << "loadEngine called with" << name;
     return 0;
 }
 
-Plasma::Service* TestShellPluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
+Plasma::Service *TestShellPluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
 {
     kDebug() << "loadService called with" << name << args << parent;
     return 0;

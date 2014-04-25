@@ -22,8 +22,9 @@
 #include <QQuickItem>
 #include <QUrl>
 
-namespace KActivities {
-    class ResourceInstance;
+namespace KActivities
+{
+class ResourceInstance;
 }
 
 class QTimer;

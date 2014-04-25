@@ -20,7 +20,6 @@
 #ifndef CONFIGMODEL_H
 #define CONFIGMODEL_H
 
-
 #include <QQmlListProperty>
 #include <QAbstractListModel>
 
@@ -37,8 +36,9 @@
 // We mean it.
 //
 
-namespace Plasma {
-    class Applet;
+namespace Plasma
+{
+class Applet;
 }
 
 namespace PlasmaQuick
@@ -65,7 +65,7 @@ class PLASMAQUICK_EXPORT ConfigModel : public QAbstractListModel
 
 public:
     enum Roles {
-        NameRole = Qt::UserRole+1,
+        NameRole = Qt::UserRole + 1,
         IconRole,
         SourceRole,
         PluginNameRole
@@ -88,9 +88,12 @@ public:
     void setApplet(Plasma::Applet *interface);
     Plasma::Applet *applet() const;
 
-    int count() {return rowCount();}
+    int count()
+    {
+        return rowCount();
+    }
     virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex&, int) const;
+    virtual QVariant data(const QModelIndex &, int) const;
 
     /**
      * @param row the row for which the data will be returned

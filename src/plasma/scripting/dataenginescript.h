@@ -68,7 +68,7 @@ public:
      *         the default implementation provides) or not is up to the
      *         DataEngine to decide. By default, this returns dataEngine()->sources()
      */
-     virtual QStringList sources() const;
+    virtual QStringList sources() const;
 
     /**
      * Called when the script should create a source that does not currently
@@ -144,7 +144,7 @@ private:
 };
 
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 } //Plasma namespace
 

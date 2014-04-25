@@ -35,8 +35,8 @@ void PlatformStatus::findShellPackage(bool sendSignal)
     const QString package = group.readEntry("shellPackage", defaultPackage);
 
     const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                "plasma/shells/" + package + '/',
-                                                QStandardPaths::LocateDirectory);
+                         "plasma/shells/" + package + '/',
+                         QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
         if (package != defaultPackage) {
             group.deleteEntry("ShellPackage");

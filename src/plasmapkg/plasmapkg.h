@@ -35,21 +35,21 @@ class PlasmaPkg : public QCoreApplication
 {
     Q_OBJECT
 
-    public:
-        PlasmaPkg(int& argc, char** argv, QCommandLineParser *parser);
-        virtual ~PlasmaPkg();
+public:
+    PlasmaPkg(int &argc, char **argv, QCommandLineParser *parser);
+    virtual ~PlasmaPkg();
 
-        void listPackages(const QStringList &types);
-        void showPackageInfo(const QString &pluginName);
-        QString findPackageRoot(const QString &pluginName, const QString &prefix);
+    void listPackages(const QStringList &types);
+    void showPackageInfo(const QString &pluginName);
+    QString findPackageRoot(const QString &pluginName, const QString &prefix);
 
-    private Q_SLOTS:
-        void runMain();
-        void packageInstalled(KJob *job);
-        void packageUninstalled(KJob *job);
+private Q_SLOTS:
+    void runMain();
+    void packageInstalled(KJob *job);
+    void packageUninstalled(KJob *job);
 
-    private:
-        PlasmaPkgPrivate* d;
+private:
+    PlasmaPkgPrivate *d;
 };
 
 }

@@ -28,8 +28,9 @@
 
 class QPropertyAnimation;
 
-namespace Plasma {
-    class Svg;
+namespace Plasma
+{
+class Svg;
 }
 
 class IconItem : public QQuickPaintedItem
@@ -43,7 +44,7 @@ class IconItem : public QQuickPaintedItem
 
 public:
 
-    IconItem(QQuickItem *parent=0);
+    IconItem(QQuickItem *parent = 0);
     ~IconItem();
 
     void setSource(const QVariant &source);

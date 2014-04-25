@@ -22,7 +22,6 @@
 
 #include <QObject>
 
-
 class DialogStatus : public QObject
 {
     Q_OBJECT
@@ -65,6 +64,5 @@ public:
         Deactivating
     };
 };
-
 
 #endif // ENUMS_H

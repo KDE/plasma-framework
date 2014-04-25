@@ -88,14 +88,14 @@ PlasmaKPart::~PlasmaKPart()
 
 void PlasmaKPart::setThemeDefaults()
 {
-    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-kpart" );
+    KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-kpart");
     const QString themeName = cg.readEntry("name", "appdashboard");
     Plasma::Theme::defaultTheme()->setUseGlobalSettings(false);
     Plasma::Theme::defaultTheme()->setThemeName(themeName);
 
     cg = KConfigGroup(KSharedConfig::openConfig(), "General");
 
-    Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans") ));
+    Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans")));
 }
 
 void PlasmaKPart::syncConfig()
@@ -119,7 +119,7 @@ void PlasmaKPart::initCorona()
     m_view->show();
 }
 
-PlasmaKPartCorona* PlasmaKPart::corona() const
+PlasmaKPartCorona *PlasmaKPart::corona() const
 {
     Q_ASSERT(m_corona);
     return m_corona;
@@ -131,7 +131,7 @@ void PlasmaKPart::createView(Plasma::Containment *containment)
     m_view->setContainment(containment);
 }
 
-void PlasmaKPart::addApplet(const QString& name, const QVariantList& args, const QRectF& geometry )
+void PlasmaKPart::addApplet(const QString &name, const QVariantList &args, const QRectF &geometry)
 {
     Q_ASSERT(containment());
     containment()->createApplet(name, args, geometry);
@@ -155,7 +155,7 @@ void PlasmaKPart::setConfigFile(const QString &file)
     }
 }
 
-Plasma::Containment* PlasmaKPart::containment() const
+Plasma::Containment *PlasmaKPart::containment() const
 {
     Q_ASSERT(corona());
     Q_ASSERT(!corona()->containments().isEmpty());

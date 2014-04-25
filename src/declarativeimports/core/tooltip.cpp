@@ -316,7 +316,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
     } else if (m_mainItem ||
-        (!mainText().isEmpty() && !subText().isEmpty())) {
+               (!mainText().isEmpty() && !subText().isEmpty())) {
         m_showTimer->start(m_interval);
     }
 }

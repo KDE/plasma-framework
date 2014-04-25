@@ -64,12 +64,11 @@ public:
 
 class AssociatedApplicationManagerSingleton
 {
-    public:
-        AssociatedApplicationManager self;
+public:
+    AssociatedApplicationManager self;
 };
 
 Q_GLOBAL_STATIC(AssociatedApplicationManagerSingleton, privateAssociatedApplicationManagerSelf)
-
 
 AssociatedApplicationManager::AssociatedApplicationManager(QObject *parent)
     : QObject(parent),
@@ -143,7 +142,6 @@ bool AssociatedApplicationManager::appletHasValidAssociatedApplication(const Pla
 {
     return (d->applicationNames.contains(applet) || d->urlLists.contains(applet));
 }
-
 
 } // namespace Plasma
 

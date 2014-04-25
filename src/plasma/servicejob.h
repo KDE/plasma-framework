@@ -56,7 +56,6 @@ class PLASMA_EXPORT ServiceJob : public KJob
     Q_PROPERTY(QString operationName READ operationName)
     Q_PROPERTY(QVariant result READ result)
 
-
 public:
     /**
      * Default constructor
@@ -118,7 +117,7 @@ private:
     Q_PRIVATE_SLOT(d, void autoStart())
     Q_PRIVATE_SLOT(d, void preventAutoStart())
 
-    ServiceJobPrivate * const d;
+    ServiceJobPrivate *const d;
 };
 
 } // namespace Plasma

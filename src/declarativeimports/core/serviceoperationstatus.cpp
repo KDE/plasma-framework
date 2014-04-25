@@ -19,8 +19,6 @@
 
 #include "serviceoperationstatus.h"
 
-
-
 ServiceOperationStatus::ServiceOperationStatus(QObject *parent)
     : QObject(parent),
       m_enabled(false)

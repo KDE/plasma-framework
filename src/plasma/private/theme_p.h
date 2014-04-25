@@ -61,7 +61,7 @@ enum CacheType {
 };
 Q_DECLARE_FLAGS(CacheTypes, CacheType)
 Q_DECLARE_OPERATORS_FOR_FLAGS(CacheTypes)
-    
+
 class ThemePrivate : public QObject
 {
     Q_OBJECT

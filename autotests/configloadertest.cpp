@@ -54,70 +54,70 @@ void ConfigLoaderTest::cleanup()
 
 void ConfigLoaderTest::boolDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemBool*, "DefaultBoolItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemBool *, "DefaultBoolItem");
 
     QVERIFY(typeItem->isEqual(true));
 }
 
 void ConfigLoaderTest::colorDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemColor*, "DefaultColorItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemColor *, "DefaultColorItem");
 
     QVERIFY(typeItem->isEqual(QColor("#00FF00")));
 }
 
 void ConfigLoaderTest::dateTimeDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemDateTime*, "DefaultDateTimeItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemDateTime *, "DefaultDateTimeItem");
 
     QVERIFY(typeItem->isEqual(QDateTime::fromString("Thu Sep 09 2010")));
 }
 
 void ConfigLoaderTest::enumDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemEnum*, "DefaultEnumItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemEnum *, "DefaultEnumItem");
 
     QVERIFY(typeItem->isEqual(3));
 }
 
 void ConfigLoaderTest::fontDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemFont*, "DefaultFontItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemFont *, "DefaultFontItem");
 
     QVERIFY(typeItem->isEqual(QFont("DejaVu Sans")));
 }
 
 void ConfigLoaderTest::intDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemInt*, "DefaultIntItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemInt *, "DefaultIntItem");
 
     QVERIFY(typeItem->isEqual(27));
 }
 
 void ConfigLoaderTest::passwordDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemPassword*, "DefaultPasswordItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemPassword *, "DefaultPasswordItem");
 
     QVERIFY(typeItem->isEqual(QString::fromLatin1("h4x.")));
 }
 
 void ConfigLoaderTest::pathDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemPath*, "DefaultPathItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemPath *, "DefaultPathItem");
 
     QVERIFY(typeItem->isEqual(QString::fromLatin1("/dev/null")));
 }
 
 void ConfigLoaderTest::stringDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemString*, "DefaultStringItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemString *, "DefaultStringItem");
 
     QVERIFY(typeItem->isEqual(QString::fromLatin1("TestString")));
 }
 
 void ConfigLoaderTest::stringListDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemStringList*, "DefaultStringListItem");
+    GET_CONFIG_ITEM_VALUE(KConfigSkeleton::ItemStringList *, "DefaultStringListItem");
 
     // Create a string list with the expected values.
     QStringList expected;
@@ -132,28 +132,28 @@ void ConfigLoaderTest::stringListDefaultValue()
 
 void ConfigLoaderTest::uintDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemUInt*, "DefaultUIntItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemUInt *, "DefaultUIntItem");
 
     QVERIFY(typeItem->isEqual(7U));
 }
 
 void ConfigLoaderTest::urlDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemUrl*, "DefaultUrlItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemUrl *, "DefaultUrlItem");
 
     QVERIFY(typeItem->isEqual(QUrl("http://kde.org")));
 }
 
 void ConfigLoaderTest::doubleDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemDouble*, "DefaultDoubleItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemDouble *, "DefaultDoubleItem");
 
     QVERIFY(typeItem->isEqual(13.37));
 }
 
 void ConfigLoaderTest::intListDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemIntList*, "DefaultIntListItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemIntList *, "DefaultIntListItem");
 
     // Create a int list with the expected values.
     QList<int> expected;
@@ -169,21 +169,21 @@ void ConfigLoaderTest::intListDefaultValue()
 
 void ConfigLoaderTest::longLongDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemLongLong*, "DefaultLongLongItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemLongLong *, "DefaultLongLongItem");
 
     QVERIFY(typeItem->isEqual(Q_INT64_C(-9211372036854775808)));
 }
 
 void ConfigLoaderTest::pointDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemPoint*, "DefaultPointItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemPoint *, "DefaultPointItem");
 
     QVERIFY(typeItem->isEqual(QPoint(185, 857)));
 }
 
 void ConfigLoaderTest::rectDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemRect*, "DefaultRectItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemRect *, "DefaultRectItem");
 
     // Create a new QRect with the expected value.
     QRect expected;
@@ -194,19 +194,17 @@ void ConfigLoaderTest::rectDefaultValue()
 
 void ConfigLoaderTest::sizeDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemSize*, "DefaultSizeItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemSize *, "DefaultSizeItem");
 
     QVERIFY(typeItem->isEqual(QSize(640, 480)));
 }
 
 void ConfigLoaderTest::ulongLongDefaultValue()
 {
-    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemULongLong*, "DefaultULongLongItem");
+    GET_CONFIG_ITEM_VALUE(KCoreConfigSkeleton::ItemULongLong *, "DefaultULongLongItem");
 
     QVERIFY(typeItem->isEqual(Q_UINT64_C(9223372036854775806)));
 }
 
-
 QTEST_MAIN(ConfigLoaderTest)
-
 

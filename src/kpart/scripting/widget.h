@@ -26,7 +26,7 @@
 
 namespace Plasma
 {
-    class Applet;
+class Applet;
 } // namespace Plasma
 
 namespace PlasmaKPartScripting
@@ -71,7 +71,7 @@ public:
     QString type() const;
 
     /**
-FIXME: what should the index(es?) be given that we're in the newspaper containment
+    FIXME: what should the index(es?) be given that we're in the newspaper containment
     int index() const;
     void setIndex(int index);
     */
@@ -89,7 +89,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 }

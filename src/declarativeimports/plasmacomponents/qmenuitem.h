@@ -39,17 +39,17 @@ class QMenuItem : public QQuickItem
     Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
-    Q_PROPERTY(QAction* action READ action WRITE setAction NOTIFY actionChanged)
+    Q_PROPERTY(QAction *action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(bool checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
     Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY toggled)
 
 public:
     QMenuItem(QQuickItem *parent = 0);
 
-    QAction* action() const;
-    void setAction(QAction* a);
+    QAction *action() const;
+    void setAction(QAction *a);
     QVariant icon() const;
-    void setIcon(const QVariant& i);
+    void setIcon(const QVariant &i);
     bool separator() const;
     void setSeparator(bool s);
     QString text() const;
@@ -72,7 +72,7 @@ Q_SIGNALS:
     void checkableChanged();
 
 private:
-    QAction* m_action;
+    QAction *m_action;
     QVariant m_icon;
 };
 

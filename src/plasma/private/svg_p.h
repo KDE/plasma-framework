@@ -32,27 +32,27 @@ class Svg;
 
 class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {
-    public:
-        typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
+public:
+    typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
 
-        SharedSvgRenderer(QObject *parent = 0);
-        SharedSvgRenderer(
-            const QString &filename,
-            const QString &styleSheet,
-            QHash<QString, QRectF> &interestingElements,
-            QObject *parent = 0);
+    SharedSvgRenderer(QObject *parent = 0);
+    SharedSvgRenderer(
+        const QString &filename,
+        const QString &styleSheet,
+        QHash<QString, QRectF> &interestingElements,
+        QObject *parent = 0);
 
-        SharedSvgRenderer(
-            const QByteArray &contents,
-            const QString &styleSheet,
-            QHash<QString, QRectF> &interestingElements,
-            QObject *parent = 0);
+    SharedSvgRenderer(
+        const QByteArray &contents,
+        const QString &styleSheet,
+        QHash<QString, QRectF> &interestingElements,
+        QObject *parent = 0);
 
-    private:
-        bool load(
-            const QByteArray &contents,
-            const QString &styleSheet,
-            QHash<QString, QRectF> &interestingElements);
+private:
+    bool load(
+        const QByteArray &contents,
+        const QString &styleSheet,
+        QHash<QString, QRectF> &interestingElements);
 };
 
 class SvgPrivate

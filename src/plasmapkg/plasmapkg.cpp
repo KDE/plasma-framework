@@ -49,7 +49,8 @@ static QTextStream cout(stdout);
 
 namespace Plasma
 {
-class PlasmaPkgPrivate {
+class PlasmaPkgPrivate
+{
 public:
     QString packageRoot;
     QString packageFile;
@@ -62,7 +63,7 @@ public:
     QString installPath;
     void output(const QString &msg);
     void runKbuildsycoca();
-    QStringList packages(const QStringList& types);
+    QStringList packages(const QStringList &types);
     void renderTypeTable(const QMap<QString, QStringList> &plugins);
     void listTypes();
     void coutput(const QString &msg);
@@ -70,7 +71,7 @@ public:
 
 };
 
-PlasmaPkg::PlasmaPkg(int& argc, char** argv, QCommandLineParser *parser) :
+PlasmaPkg::PlasmaPkg(int &argc, char **argv, QCommandLineParser *parser) :
     QCoreApplication(argc, argv)
 {
     d = new PlasmaPkgPrivate;
@@ -85,7 +86,7 @@ PlasmaPkg::~PlasmaPkg()
 
 void PlasmaPkg::runMain()
 {
-    Plasma::PackageStructure* structure = new Plasma::PackageStructure;
+    Plasma::PackageStructure *structure = new Plasma::PackageStructure;
     if (d->parser->isSet("hash")) {
         const QString path = d->parser->value("hash");
         Plasma::Package package(structure);
@@ -133,8 +134,8 @@ void PlasmaPkg::runMain()
     }
 
     if (!d->packageFile.isEmpty() && (!d->parser->isSet("type") ||
-        type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
-        type.compare("wallpaper", Qt::CaseInsensitive) == 0)) {
+                                      type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
+                                      type.compare("wallpaper", Qt::CaseInsensitive) == 0)) {
         // Check type for common plasma packages
         Plasma::Package package(structure);
         QString serviceType;
@@ -149,8 +150,8 @@ void PlasmaPkg::runMain()
 
         if (!serviceType.isEmpty()) {
             if (serviceType.contains("Plasma/Applet") ||
-                //serviceType.contains("Plasma/PopupApplet") ||
-                serviceType.contains("Plasma/Containment")) {
+                    //serviceType.contains("Plasma/PopupApplet") ||
+                    serviceType.contains("Plasma/Containment")) {
                 type = "plasmoid";
             } else if (serviceType == "Plasma/Generic") {
                 type = "package";
@@ -187,7 +188,7 @@ void PlasmaPkg::runMain()
     }
 
     if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
-        type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
+            type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
         d->packageRoot = "plasma/plasmoids/";
         d->servicePrefix = "plasma-applet-";
         d->pluginTypes << "Plasma/Applet";
@@ -251,7 +252,7 @@ void PlasmaPkg::runMain()
         d->packageRoot = "kwin/scripts/";
         d->servicePrefix = "kwin-script-";
         d->pluginTypes << "KWin/Script";
-    } else /* if (KSycoca::isAvailable()) */ {
+    } else { /* if (KSycoca::isAvailable()) */
         const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(type);
         KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
         if (offers.isEmpty()) {
@@ -267,7 +268,7 @@ void PlasmaPkg::runMain()
 
         if (!d->installer) {
             d->coutput(i18n("Could not load installer for package of type %1. Error reported was: %2",
-                        d->parser->value("type"), error));
+                            d->parser->value("type"), error));
             return;
         }
 
@@ -388,11 +389,11 @@ void PlasmaPkgPrivate::runKbuildsycoca()
     }
 }
 
-QStringList PlasmaPkgPrivate::packages(const QStringList& types)
+QStringList PlasmaPkgPrivate::packages(const QStringList &types)
 {
     QStringList result;
 
-    foreach (const QString& type, types) {
+    foreach (const QString &type, types) {
 
         if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
             const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/packages/", QStandardPaths::LocateDirectory);
@@ -401,7 +402,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 const QStringList &entries = cd.entryList(QDir::Dirs);
                 foreach (const QString pack, entries) {
                     if ((pack != "." && pack != "..") &&
-                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+                            (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
                     }
@@ -416,7 +417,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 const QStringList &entries = cd.entryList(QDir::Dirs);
                 foreach (const QString pack, entries) {
                     if ((pack != "." && pack != "..") &&
-                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+                            (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
                     }
@@ -431,7 +432,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
                 const QStringList &entries = cd.entryList(QDir::Dirs);
                 foreach (const QString pack, entries) {
                     if ((pack != "." && pack != "..") &&
-                        (QFile::exists(ppath+'/'+pack+"/metadata.desktop"))) {
+                            (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
                     }
@@ -451,7 +452,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList& types)
     return result;
 }
 
-void PlasmaPkg::showPackageInfo(const QString& pluginName)
+void PlasmaPkg::showPackageInfo(const QString &pluginName)
 {
     QString type = QStringLiteral("Plasma/Applet");
     if (!d->pluginTypes.contains(type) && d->pluginTypes.count() > 0) {
@@ -482,7 +483,7 @@ void PlasmaPkg::showPackageInfo(const QString& pluginName)
     exit(0);
 }
 
-QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& prefix)
+QString PlasmaPkg::findPackageRoot(const QString &pluginName, const QString &prefix)
 {
     QString packageRoot;
     if (d->parser->isSet("packageroot") && d->parser->isSet("global")) {
@@ -499,11 +500,11 @@ QString PlasmaPkg::findPackageRoot(const QString& pluginName, const QString& pre
     return packageRoot;
 }
 
-void PlasmaPkg::listPackages(const QStringList& types)
+void PlasmaPkg::listPackages(const QStringList &types)
 {
     QStringList list = d->packages(types);
     list.sort();
-    foreach (const QString& package, list) {
+    foreach (const QString &package, list) {
         d->coutput(package);
     }
     exit(0);
@@ -615,7 +616,7 @@ void PlasmaPkgPrivate::listTypes()
         foreach (const QString &file, desktopFiles) {
             // extract the type
             KConfig config(file, KConfig::SimpleConfig);
-            #warning "read config here"
+#warning "read config here"
             // structure.read(&config);
             // get the name based on the rc file name, just as Plasma::PackageStructure does
             const QString name = file.left(file.length() - 2);

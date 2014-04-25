@@ -24,9 +24,7 @@
 #ifndef __TESTDATAENGINE_H__
 #define __TESTDATAENGINE_H__
 
-
 #include "plasma/dataengine.h"
-
 
 class TestEngine : public Plasma::DataEngine
 {
@@ -45,8 +43,5 @@ protected:
     void init();
     bool sourceRequestEvent(const QString &source);
 };
-
-
-
 
 #endif // __TESTDATAENGINE_H__

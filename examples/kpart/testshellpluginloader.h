@@ -26,10 +26,10 @@ class TestShellPluginLoader : public Plasma::PluginLoader
 public:
     ~TestShellPluginLoader();
 
-    Plasma::Applet* internalLoadApplet (const QString &name, uint appletId = 0,
-                               const QVariantList &args = QVariantList());
-    Plasma::DataEngine* internalLoadDataEngine(const QString &name);
-    Plasma::Service* internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+    Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0,
+                                       const QVariantList &args = QVariantList());
+    Plasma::DataEngine *internalLoadDataEngine(const QString &name);
+    Plasma::Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
 };
 
 #endif

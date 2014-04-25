@@ -94,17 +94,16 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     if (cont) {
         cont->reactToScreenChange();
         QObject::connect(cont, &Plasma::Containment::locationChanged,
-                q, &View::locationChanged);
+                         q, &View::locationChanged);
         QObject::connect(cont, &Plasma::Containment::formFactorChanged,
-                q, &View::formFactorChanged);
+                         q, &View::formFactorChanged);
         QObject::connect(cont, &Plasma::Containment::configureRequested,
-                q, &View::showConfigurationInterface);
+                         q, &View::showConfigurationInterface);
     } else {
         return;
     }
 
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("_plasma_graphicObject").value<QObject *>());
-
 
     if (graphicObject) {
         qDebug() << "using as graphic containment" << graphicObject << containment.data();
@@ -156,9 +155,6 @@ void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
     configView.data()->show();
 }
 
-
-
-
 View::View(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
       d(new ViewPrivate(corona, this))
@@ -169,9 +165,8 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     setFormat(format);
     setColor(Qt::transparent);
 
-
     QObject::connect(screen(), &QScreen::geometryChanged,
-            this, &View::screenGeometryChanged);
+                     this, &View::screenGeometryChanged);
 
     if (!corona->package().isValid()) {
         qWarning() << "Invalid home screen package";
@@ -180,7 +175,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     setResizeMode(View::SizeRootObjectToView);
 
     QObject::connect(corona, &Plasma::Corona::packageChanged,
-            this, &View::coronaPackageChanged);
+                     this, &View::coronaPackageChanged);
 }
 
 View::~View()

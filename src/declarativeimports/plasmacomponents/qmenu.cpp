@@ -26,13 +26,13 @@
 #include <QQuickItem>
 
 #include "plasmacomponentsplugin.h"
-QMenuProxy::QMenuProxy (QObject *parent)
+QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent),
       m_status(DialogStatus::Closed)
 {
     m_menu = new QMenu(0);
     connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
-    connect(m_menu, &QMenu::aboutToHide, [=]() {
+    connect(m_menu, &QMenu::aboutToHide, [ = ]() {
         m_status = DialogStatus::Closed;
         emit statusChanged();
     });
@@ -85,7 +85,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
     if (action) {
         action->setMenu(m_menu);
         m_menu->clear();
-        foreach(QMenuItem* item, m_items) {
+        foreach (QMenuItem *item, m_items) {
             m_menu->addAction(item->action());
         }
         m_menu->updateGeometry();
@@ -179,8 +179,8 @@ void QMenuProxy::open(int x, int y)
 {
     qDebug() << "opening menu at " << x << y;
     m_menu->clear();
-    foreach(QMenuItem* item, m_items) {
-        qDebug() <<"Adding action: " << item->text();
+    foreach (QMenuItem *item, m_items) {
+        qDebug() << "Adding action: " << item->text();
         m_menu->addAction(item->action());
     }
 
@@ -199,7 +199,6 @@ void QMenuProxy::open(int x, int y)
     m_status = DialogStatus::Open;
     emit statusChanged();
 }
-
 
 void QMenuProxy::close()
 {

@@ -34,7 +34,6 @@ private Q_SLOTS:
     void retrieve();
     void deleteEntry();
 
-
 private:
     QVariantMap m_data;
 };

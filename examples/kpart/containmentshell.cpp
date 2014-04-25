@@ -27,13 +27,12 @@
 #include <KStandardAction>
 #include <KActionCollection>
 
-
 #include <Plasma/Containment>
 
 #include <QApplication>
 
 ContainmentShell::ContainmentShell()
-    : KParts::MainWindow( ),
+    : KParts::MainWindow(),
       m_dialog(0)
 {
     setXMLFile("plasma-kpart-shellui.rc");
@@ -46,7 +45,7 @@ ContainmentShell::ContainmentShell()
     // this routine will find and load our Part.  it finds the Part by
     // name which is a bad idea usually.. but it's alright in this
     // case since our Part is made for this Shell
-    KService::Ptr service = KService::serviceByDesktopPath( "plasma-kpart.desktop" );
+    KService::Ptr service = KService::serviceByDesktopPath("plasma-kpart.desktop");
 
     if (service) {
         Plasma::PluginLoader *loader = new TestShellPluginLoader();
@@ -86,8 +85,8 @@ ContainmentShell::~ContainmentShell()
 void ContainmentShell::optionsPreferences()
 {
     if (!m_dialog) {
-        m_dialog = new AppletSelector( m_part );
-        connect( m_dialog, SIGNAL(addApplet(QString)), m_part, SLOT(addApplet(QString)) );
+        m_dialog = new AppletSelector(m_part);
+        connect(m_dialog, SIGNAL(addApplet(QString)), m_part, SLOT(addApplet(QString)));
     }
     m_dialog->show();
 }

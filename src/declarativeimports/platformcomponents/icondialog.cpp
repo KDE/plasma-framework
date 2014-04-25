@@ -31,13 +31,14 @@
 /**
  *
  */
-class IconDialog::Private {
+class IconDialog::Private
+{
 public:
 
     utils::SharedSingleton<KIconDialog> dialog;
 };
 
-IconDialog::IconDialog(QObject * parent)
+IconDialog::IconDialog(QObject *parent)
     : QObject(parent)
 {
 }

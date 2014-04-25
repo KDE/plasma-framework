@@ -82,7 +82,7 @@ private Q_SLOTS:
     void itemTriggered(QAction *item);
 
 private:
-    QList<QMenuItem*> m_items;
+    QList<QMenuItem *> m_items;
     QMenu *m_menu;
     DialogStatus::Status m_status;
     QWeakPointer<QObject> m_visualParent;

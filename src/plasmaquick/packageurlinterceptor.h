@@ -70,15 +70,15 @@ public:
         const QString &extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')) + 1).toLower();
 
         if (extension == QStringLiteral("svg") || extension == QStringLiteral("svgz") ||
-            extension == QStringLiteral("png") || extension == QStringLiteral("gif") ||
-            extension == QStringLiteral("jpg") || extension == QStringLiteral("jpeg")) {
+                extension == QStringLiteral("png") || extension == QStringLiteral("gif") ||
+                extension == QStringLiteral("jpg") || extension == QStringLiteral("jpeg")) {
             return QByteArray("images");
-        //FIXME: are those necessary? are they *always* catched by type?
+            //FIXME: are those necessary? are they *always* catched by type?
         } else if (extension == QStringLiteral("js")) {
             return QByteArray("scripts");
         } else if (extension == QStringLiteral("qml")) {
             return QByteArray("ui");
-        //everything else, throw it in "data"
+            //everything else, throw it in "data"
         } else {
             return QByteArray("data");
         }

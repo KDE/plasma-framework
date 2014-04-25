@@ -25,9 +25,9 @@
 
 namespace Plasma
 {
-    class Applet;
-    class Containment;
-    class Corona;
+class Applet;
+class Containment;
+class Corona;
 } // namespace Plasma
 
 namespace PlasmaKPartScripting

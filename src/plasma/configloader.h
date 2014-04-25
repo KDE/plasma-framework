@@ -146,7 +146,7 @@ protected:
 
 private:
     friend class Service;
-    ConfigLoaderPrivate * const d;
+    ConfigLoaderPrivate *const d;
 };
 
 } // Plasma namespace

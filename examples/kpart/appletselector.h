@@ -23,22 +23,25 @@
 #include <KDE/KDialog>
 
 class QModelIndex;
-namespace Ui { class AppletSelector; }
+namespace Ui
+{
+class AppletSelector;
+}
 
 class AppletSelector : public KDialog
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    explicit AppletSelector(QObject* parent = 0, const QVariantList& args = QVariantList());
+    explicit AppletSelector(QObject *parent = 0, const QVariantList &args = QVariantList());
     ~AppletSelector();
 public slots:
-    void selected(const QModelIndex& idx);
+    void selected(const QModelIndex &idx);
 
 signals:
-    void addApplet(const QString& name);
+    void addApplet(const QString &name);
 
 private:
-    Ui::AppletSelector* m_ui;
+    Ui::AppletSelector *m_ui;
 };
 
 #endif // APPLETSELECTOR_H

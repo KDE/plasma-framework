@@ -27,9 +27,10 @@
 
 #include "units.h"
 
-namespace Plasma {
+namespace Plasma
+{
 
-    class FrameSvg;
+class FrameSvg;
 
 class FrameSvgItemMargins : public QObject
 {
@@ -128,7 +129,7 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
 
 public:
-    FrameSvgItem(QQuickItem *parent=0);
+    FrameSvgItem(QQuickItem *parent = 0);
     ~FrameSvgItem();
 
     void setImagePath(const QString &path);
@@ -144,7 +145,7 @@ public:
     FrameSvgItemMargins *fixedMargins() const;
 
     void geometryChanged(const QRectF &newGeometry,
-                              const QRectF &oldGeometry);
+                         const QRectF &oldGeometry);
 
     void setImplicitWidth(qreal width);
     qreal implicitWidth() const;
@@ -162,9 +163,9 @@ public:
      * to draw a frame
      * @param prefix the given prefix we want to check if drawable
      */
-    Q_INVOKABLE bool hasElementPrefix(const QString & prefix) const;
+    Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
-    virtual QSGNode* updatePaintNode(QSGNode*, UpdatePaintNodeData*);
+    virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
 
 protected:
     virtual void componentComplete();

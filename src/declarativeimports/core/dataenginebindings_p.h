@@ -67,7 +67,7 @@ int qScriptRegisterMapMetaType(
     QScriptEngine *engine,
     const QScriptValue &prototype = QScriptValue()
 #ifndef qdoc
-    , T * /* dummy */ = 0
+                                    , T * /* dummy */ = 0
 #endif
 )
 {

@@ -149,15 +149,15 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
     ScriptEngine *engine = 0;
     foreach (const KService::Ptr &service, offers) {
         switch (type) {
-            case Types::AppletComponent:
-                engine = service->createInstance<Plasma::AppletScript>(parent, args, &error);
-                break;
-            case Types::DataEngineComponent:
-                engine = service->createInstance<Plasma::DataEngineScript>(parent, args, &error);
-                break;
-            default:
-                return 0;
-                break;
+        case Types::AppletComponent:
+            engine = service->createInstance<Plasma::AppletScript>(parent, args, &error);
+            break;
+        case Types::DataEngineComponent:
+            engine = service->createInstance<Plasma::DataEngineScript>(parent, args, &error);
+            break;
+        default:
+            return 0;
+            break;
         }
 
         if (engine) {
@@ -179,7 +179,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
 AppletScript *loadScriptEngine(const QString &language, Applet *applet)
 {
     AppletScript *engine =
-        static_cast<AppletScript*>(loadEngine(language, Types::AppletComponent, applet));
+        static_cast<AppletScript *>(loadEngine(language, Types::AppletComponent, applet));
 
     if (engine) {
         engine->setApplet(applet);
@@ -191,7 +191,7 @@ AppletScript *loadScriptEngine(const QString &language, Applet *applet)
 DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine)
 {
     DataEngineScript *engine =
-        static_cast<DataEngineScript*>(loadEngine(language, Types::DataEngineComponent, dataEngine));
+        static_cast<DataEngineScript *>(loadEngine(language, Types::DataEngineComponent, dataEngine));
 
     if (engine) {
         engine->setDataEngine(dataEngine);

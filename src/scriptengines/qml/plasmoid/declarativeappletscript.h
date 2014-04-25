@@ -38,7 +38,7 @@ public:
 
     QString filePath(const QString &type, const QString &file) const;
 
-    QList<QAction*> contextualActions();
+    QList<QAction *> contextualActions();
 
     void constraintsEvent(Plasma::Types::Constraints constraints);
 
@@ -60,6 +60,5 @@ private:
     friend class AppletInterface;
     friend class ContainmentInterface;
 };
-
 
 #endif

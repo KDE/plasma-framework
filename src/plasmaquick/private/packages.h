@@ -25,8 +25,6 @@
 #include <Plasma/PackageStructure>
 #include <Plasma/Plasma>
 
-
-
 class LookAndFeelPackage : public Plasma::PackageStructure
 {
 public:
@@ -44,6 +42,5 @@ class LayoutTemplatePackage : public Plasma::PackageStructure
 public:
     void initPackage(Plasma::Package *package);
 };
-
 
 #endif // LOOKANDFEELPACKAGE_H

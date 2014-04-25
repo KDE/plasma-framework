@@ -30,12 +30,14 @@
 class QmlObject;
 class WallpaperInterface;
 
-namespace KIO {
-    class Job;
+namespace KIO
+{
+class Job;
 }
 
-namespace KActivities {
-    class Info;
+namespace KActivities
+{
+class Info;
 }
 
 class ContainmentInterface : public AppletInterface
@@ -46,7 +48,7 @@ class ContainmentInterface : public AppletInterface
      * List of applets this containment has: the containments
      */
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
-    
+
     /**
      * Type of this containment TODO: notify
      */
@@ -65,14 +67,20 @@ class ContainmentInterface : public AppletInterface
     /**
      * Actions associated to this containment or corona
      */
-    Q_PROPERTY(QList<QObject*> actions READ actions NOTIFY actionsChanged)
+    Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
 public:
     ContainmentInterface(DeclarativeAppletScript *parent);
 //Not for QML
-    Plasma::Containment *containment() const { return static_cast<Plasma::Containment *>(appletScript()->applet()->containment()); }
+    Plasma::Containment *containment() const
+    {
+        return static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
+    }
 
-    inline WallpaperInterface *wallpaperInterface() const { return m_wallpaperInterface;}
+    inline WallpaperInterface *wallpaperInterface() const
+    {
+        return m_wallpaperInterface;
+    }
 
 //For QML use
     QList<QObject *> applets();
@@ -83,7 +91,7 @@ public:
     QString activity() const;
     QString activityName() const;
 
-    QList<QObject*> actions() const;
+    QList<QObject *> actions() const;
 
     /**
      * FIXME: either a property or not accessible at all. Lock or unlock widgets
@@ -168,8 +176,8 @@ private:
 
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;
-    QHash<KJob*, QPoint> m_dropPoints;
-    QHash<KJob*, QMenu*> m_dropMenus;
+    QHash<KJob *, QPoint> m_dropPoints;
+    QHash<KJob *, QMenu *> m_dropMenus;
     KActivities::Info *m_activityInfo;
 };
 

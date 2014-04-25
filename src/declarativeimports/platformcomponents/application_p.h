@@ -24,7 +24,8 @@
 
 #include <QProcess>
 
-class Application::Private: public QObject {
+class Application::Private: public QObject
+{
     Q_OBJECT
 public:
     Private(Application *);
@@ -37,7 +38,7 @@ private Q_SLOTS:
     void stateChanged(QProcess::ProcessState newState);
 
 private:
-    Application * const q;
+    Application *const q;
 };
 
 #endif /* APPLICATION_P_H */

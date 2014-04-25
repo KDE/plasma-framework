@@ -111,7 +111,7 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
 void WallpaperInterface::syncWallpaperPackage()
 {
     if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper() &&
-        m_qmlObject->rootObject()) {
+            m_qmlObject->rootObject()) {
         return;
     }
 
@@ -144,8 +144,8 @@ void WallpaperInterface::syncWallpaperPackage()
     m_qmlObject->completeInitialization();
 
     if (m_qmlObject->mainComponent() &&
-        m_qmlObject->rootObject() &&
-        !m_qmlObject->mainComponent()->isError()) {
+            m_qmlObject->rootObject() &&
+            !m_qmlObject->mainComponent()->isError()) {
         m_qmlObject->rootObject()->setProperty("z", -1000);
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
@@ -168,7 +168,7 @@ void WallpaperInterface::syncWallpaperPackage()
     emit configurationChanged();
 }
 
-QList<QAction*> WallpaperInterface::contextualActions() const
+QList<QAction *> WallpaperInterface::contextualActions() const
 {
     return m_actions->actions();
 }
@@ -183,7 +183,7 @@ bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 void WallpaperInterface::setUrl(const QUrl &url)
 {
     if (m_qmlObject->rootObject()) {
-         QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
+        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
     }
 }
 
@@ -243,7 +243,7 @@ QAction *WallpaperInterface::action(QString name) const
 void WallpaperInterface::executeAction(const QString &name)
 {
     if (m_qmlObject->rootObject()) {
-         QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
+        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
     }
 }
 

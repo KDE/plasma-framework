@@ -134,7 +134,7 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     }
 
     const QString constraint = QString("[X-Plasma-Shell] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
-                                      .arg(KGlobal::mainComponent().componentName(),layout);
+                               .arg(KGlobal::mainComponent().componentName(), layout);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
 
     if (offers.isEmpty()) {
@@ -145,8 +145,8 @@ QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *
     Plasma::PackageStructure::Ptr structure(new LayoutTemplatePackageStructure);
     KPluginInfo info(offers.first());
     const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                structure->defaultPackageRoot() + '/' + info.pluginName() + '/',
-                                                QStandardPaths::LocateDirectory);
+                         structure->defaultPackageRoot() + '/' + info.pluginName() + '/',
+                         QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
         // qDebug() << "script path is empty";
         return false;
@@ -189,11 +189,11 @@ void ScriptEngine::setupEngine()
     v.setProperty("widgets", newFunction(ScriptEngine::widgets));
     v.setProperty("addWidget", newFunction(ScriptEngine::addWidget));
     v.setProperty("applicationVersion", KGlobal::mainComponent().aboutData()->version(),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+                  QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
     v.setProperty("scriptingVersion", newVariant(PLASMA_KPART_SCRIPTING_VERSION),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+                  QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
     v.setProperty("platformVersion", KDE::versionString(),
-                             QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
+                  QScriptValue::PropertyGetter | QScriptValue::ReadOnly | QScriptValue::Undeletable);
 
     setGlobalObject(v);
 }
@@ -205,9 +205,9 @@ bool ScriptEngine::evaluateScript(const QString &script, const QString &path)
     if (hasUncaughtException()) {
         //qDebug() << "catch the exception!";
         QString error = QString("Error: %1 at line %2\n\nBacktrace:\n%3").arg(
-                             uncaughtException().toString(),
-                             QString::number(uncaughtExceptionLineNumber()),
-                             uncaughtExceptionBacktrace().join("\n  "));
+                            uncaughtException().toString(),
+                            QString::number(uncaughtExceptionLineNumber()),
+                            uncaughtExceptionBacktrace().join("\n  "));
         emit printError(error);
         return false;
     }
@@ -334,24 +334,24 @@ QScriptValue ScriptEngine::addWidget(QScriptContext *context, QScriptEngine *eng
     if (v.isString()) {
         // FIXME: Using QMetaObject::invokeMethod until the newspaper's API is exported... Fuuuu
         // applet = env->m_containment->addApplet(v.toString(), row, column);
-        QMetaObject::invokeMethod(env->m_containment, "addApplet", 
-                                  Qt::DirectConnection, 
-                                  Q_RETURN_ARG(Plasma::Applet*, applet), 
-                                  Q_ARG(QString, v.toString()), 
+        QMetaObject::invokeMethod(env->m_containment, "addApplet",
+                                  Qt::DirectConnection,
+                                  Q_RETURN_ARG(Plasma::Applet *, applet),
+                                  Q_ARG(QString, v.toString()),
                                   Q_ARG(int, row), Q_ARG(int, column));
         if (applet) {
             ScriptEngine *env = ScriptEngine::envFor(engine);
             return env->wrap(applet);
         }
-    } else if (Widget *widget = qobject_cast<Widget*>(v.toQObject())) {
+    } else if (Widget *widget = qobject_cast<Widget *>(v.toQObject())) {
         applet = widget->applet();
 
         // FIXME: Using QMetaObject::invokeMethod until the newspaper's API is exported... Fuuuu
         // env->m_containment->addApplet(applet, row, column);
-        QMetaObject::invokeMethod(env->m_containment, "addApplet", 
-                                  Qt::DirectConnection, 
-                                  Q_RETURN_ARG(Plasma::Applet*, applet), 
-                                  Q_ARG(QString, v.toString()), 
+        QMetaObject::invokeMethod(env->m_containment, "addApplet",
+                                  Qt::DirectConnection,
+                                  Q_RETURN_ARG(Plasma::Applet *, applet),
+                                  Q_ARG(QString, v.toString()),
                                   Q_ARG(int, row), Q_ARG(int, column));
         return v;
     }

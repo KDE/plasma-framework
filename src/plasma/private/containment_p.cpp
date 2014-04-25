@@ -22,7 +22,6 @@
 
 #include "private/containment_p.h"
 
-
 #include <kactioncollection.h>
 #include <QDebug>
 #include <kiconloader.h>
@@ -37,7 +36,6 @@
 
 #include "private/applet_p.h"
 
-
 namespace Plasma
 {
 
@@ -48,7 +46,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     actions->setConfigGroup("Shortcuts-Containment");
 
     //adjust applet actions
-    QAction *appAction = qobject_cast<QAction*>(actions->action("remove"));
+    QAction *appAction = qobject_cast<QAction *>(actions->action("remove"));
     appAction->setShortcut(QKeySequence("alt+d, alt+r"));
     if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this Panel"));
@@ -56,7 +54,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
         appAction->setText(i18n("Remove this Activity"));
     }
 
-    appAction = qobject_cast<QAction*>(actions->action("configure"));
+    appAction = qobject_cast<QAction *>(actions->action("configure"));
     if (appAction) {
         appAction->setShortcut(QKeySequence("alt+d, alt+s"));
         appAction->setText(i18n("Activity Settings"));

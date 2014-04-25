@@ -24,25 +24,25 @@
 #include "application.h"
 #include "icondialog.h"
 
-class PlatformComponentsPlugin: public QQmlExtensionPlugin {
+class PlatformComponentsPlugin: public QQmlExtensionPlugin
+{
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.kde.plasma.platformcomponents")
 
 public:
-    PlatformComponentsPlugin(QObject * parent = Q_NULLPTR)
+    PlatformComponentsPlugin(QObject *parent = Q_NULLPTR)
         : QQmlExtensionPlugin(parent)
     {
         qDebug() << "instantiated plugin object";
     }
 
-    void registerTypes(const char * uri) Q_DECL_OVERRIDE
-    {
+    void registerTypes(const char *uri) Q_DECL_OVERRIDE {
         qDebug() << "plugin loaded, registering types " << uri;
 
         Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.plasma.platformcomponents"));
 
         qmlRegisterType<Application> (uri, 2, 0, "Application");
-        qmlRegisterType<IconDialog>  (uri, 2, 0, "IconDialog");
+        qmlRegisterType<IconDialog> (uri, 2, 0, "IconDialog");
     }
 
 };

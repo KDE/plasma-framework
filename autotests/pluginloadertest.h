@@ -25,18 +25,18 @@
 class PluginTest : public QObject
 {
     Q_OBJECT
-    public:
-        PluginTest() {}
+public:
+    PluginTest() {}
 
-    private Q_SLOTS:
-        void listEngines();
-        void listAppletCategories();
-        void listContainmentActions();
-        void listContainmentsOfType();
+private Q_SLOTS:
+    void listEngines();
+    void listAppletCategories();
+    void listContainmentActions();
+    void listContainmentsOfType();
 
-        void loadDataEngine();
+    void loadDataEngine();
 
-    private:
+private:
 };
 
 #endif

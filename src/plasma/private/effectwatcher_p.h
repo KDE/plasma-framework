@@ -34,12 +34,12 @@ class EffectWatcher: public QObject, public QAbstractNativeEventFilter
     Q_OBJECT
 
 public:
-    EffectWatcher(const QString& property, QObject *parent = 0);
+    EffectWatcher(const QString &property, QObject *parent = 0);
 
 protected:
     bool isEffectActive() const;
 
-    bool nativeEventFilter(const QByteArray& eventType, void *message, long *result) Q_DECL_OVERRIDE;
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void effectChanged(bool on);

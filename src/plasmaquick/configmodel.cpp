@@ -38,7 +38,8 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
-namespace PlasmaQuick {
+namespace PlasmaQuick
+{
 
 //////////////////////////////ConfigModel
 
@@ -49,7 +50,7 @@ public:
     ~ConfigModelPrivate();
 
     ConfigModel *q;
-    QList<ConfigCategory*> categories;
+    QList<ConfigCategory *> categories;
     QWeakPointer<Plasma::Applet> appletInterface;
 
     void appendCategory(ConfigCategory *c);
@@ -153,7 +154,6 @@ QVariant ConfigModelPrivate::get(int row) const
     return value;
 }
 
-
 ConfigModel::ConfigModel(QObject *parent)
     : QAbstractListModel(parent),
       d(new ConfigModelPrivate(this))
@@ -180,7 +180,7 @@ int ConfigModel::rowCount(const QModelIndex &index) const
     return d->categories.count();
 }
 
-QVariant ConfigModel::data(const QModelIndex& index, int role) const
+QVariant ConfigModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() >= d->categories.count()) {
         return QVariant();
@@ -237,9 +237,9 @@ Plasma::Applet *ConfigModel::applet() const
 QQmlListProperty<ConfigCategory> ConfigModel::categories()
 {
     return QQmlListProperty<ConfigCategory>(this, 0, ConfigModelPrivate::categories_append,
-                                             ConfigModelPrivate::categories_count,
-                                             ConfigModelPrivate::categories_at,
-                                             ConfigModelPrivate::categories_clear);
+                                            ConfigModelPrivate::categories_count,
+                                            ConfigModelPrivate::categories_at,
+                                            ConfigModelPrivate::categories_clear);
 
 }
 

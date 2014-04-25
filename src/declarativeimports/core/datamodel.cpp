@@ -27,14 +27,14 @@
 namespace Plasma
 {
 
-SortFilterModel::SortFilterModel(QObject* parent)
+SortFilterModel::SortFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     setObjectName("SortFilterModel");
     setDynamicSortFilter(true);
-    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(modelReset()),
             this, SIGNAL(countChanged()));
@@ -70,7 +70,7 @@ int SortFilterModel::roleNameToId(const QString &name)
     return m_roleIds.value(name);
 }
 
-void SortFilterModel::setModel(QAbstractItemModel* model)
+void SortFilterModel::setModel(QAbstractItemModel *model)
 {
     if (model == sourceModel()) {
         return;
@@ -165,10 +165,10 @@ int SortFilterModel::mapRowFromSource(int row) const
     return mapFromSource(idx).row();
 }
 
-DataModel::DataModel(QObject* parent)
+DataModel::DataModel(QObject *parent)
     : QAbstractItemModel(parent),
       m_dataSource(0),
-      m_maxRoleId(Qt::UserRole+1)
+      m_maxRoleId(Qt::UserRole + 1)
 {
     //There is one reserved role name: DataEngineSource
     m_roleNames[m_maxRoleId] = "DataEngineSource";
@@ -176,9 +176,9 @@ DataModel::DataModel(QObject* parent)
     ++m_maxRoleId;
 
     setObjectName("DataModel");
-    connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(modelReset()),
             this, SIGNAL(countChanged()));
@@ -215,7 +215,7 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
     } else {
         //a key that matches the one we want exists and is a list of DataEngine::Data
         if (data.contains(m_keyRoleFilter) &&
-            data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
+                data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
             setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
         } else if (m_keyRoleFilterRE.isValid()) {
             //try to match the key we want with a regular expression if set
@@ -265,7 +265,7 @@ QObject *DataModel::dataSource() const
     return m_dataSource;
 }
 
-void DataModel::setKeyRoleFilter(const QString& key)
+void DataModel::setKeyRoleFilter(const QString &key)
 {
     // the "key role filter" can be used in one of three ways:
     //
@@ -287,7 +287,7 @@ QString DataModel::keyRoleFilter() const
     return m_keyRoleFilter;
 }
 
-void DataModel::setSourceFilter(const QString& key)
+void DataModel::setSourceFilter(const QString &key)
 {
     if (m_sourceFilter == key) {
         return;
@@ -410,7 +410,7 @@ void DataModel::removeSource(const QString &sourceName)
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.column() > 0 ||
-        index.row() < 0 || index.row() >= countItems()){
+            index.row() < 0 || index.row() >= countItems()) {
         return QVariant();
     }
 

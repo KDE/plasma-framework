@@ -190,9 +190,9 @@ QString Theme::imagePath(const QString &name) const
 
     /*
     if (path.isEmpty()) {
-#ifndef NDEBUG
+    #ifndef NDEBUG
         // qDebug() << "Theme says: bad image path " << name;
-#endif
+    #endif
     }
     */
 
@@ -322,14 +322,14 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
     return false;
 }
 
-void Theme::insertIntoCache(const QString& key, const QPixmap& pix)
+void Theme::insertIntoCache(const QString &key, const QPixmap &pix)
 {
     if (d->useCache()) {
         d->pixmapCache->insertPixmap(key, pix);
     }
 }
 
-void Theme::insertIntoCache(const QString& key, const QPixmap& pix, const QString& id)
+void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QString &id)
 {
     if (d->useCache()) {
         d->pixmapsToCache.insert(id, pix);
@@ -402,7 +402,7 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
     return keys;
 }
 
-void Theme::insertIntoRectsCache(const QString& image, const QString &element, const QRectF &rect)
+void Theme::insertIntoRectsCache(const QString &image, const QString &element, const QRectF &rect)
 {
     if (!d->useCache()) {
         return;
@@ -425,7 +425,7 @@ void Theme::insertIntoRectsCache(const QString& image, const QString &element, c
     }
 }
 
-void Theme::invalidateRectsCache(const QString& image)
+void Theme::invalidateRectsCache(const QString &image)
 {
     if (d->useCache()) {
         KConfigGroup imageGroup(d->svgElementsCache, image);
@@ -559,7 +559,6 @@ qreal Theme::backgroundSaturation() const
 {
     return d->backgroundSaturation;
 }
-
 
 }
 

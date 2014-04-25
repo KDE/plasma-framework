@@ -56,7 +56,6 @@
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
 
-
 namespace Plasma
 {
 
@@ -168,12 +167,12 @@ void Applet::restore(KConfigGroup &group)
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(QKeySequence(shortcutText));
         /*
-#ifndef NDEBUG
+        #ifndef NDEBUG
         // qDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
-#endif
-#ifndef NDEBUG
+        #endif
+        #ifndef NDEBUG
         // qDebug() << "set to" << d->activationAction->objectName()
-#endif
+        #endif
                  << d->activationAction->globalShortcut().primary();
                  */
     }
@@ -181,10 +180,10 @@ void Applet::restore(KConfigGroup &group)
     // local shortcut, if any
     //TODO: implement; the shortcut will need to be registered with the containment
     /*
-#include "accessmanager.h"
-#include "private/plasmoidservice_p.h"
-#include "authorizationmanager.h"
-#include "authorizationmanager.h"
+    #include "accessmanager.h"
+    #include "private/plasmoidservice_p.h"
+    #include "authorizationmanager.h"
+    #include "authorizationmanager.h"
     shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
     if (!shortcutText.isEmpty()) {
         //TODO: implement; the shortcut
@@ -268,7 +267,7 @@ bool Applet::destroyed() const
 ConfigLoader *Applet::configScheme() const
 {
     if (!d->configLoader) {
-        const QString xmlPath = d->package? d->package->filePath("mainconfigxml") : QString();
+        const QString xmlPath = d->package ? d->package->filePath("mainconfigxml") : QString();
         KConfigGroup cfg = config();
         if (xmlPath.isEmpty()) {
             d->configLoader = new ConfigLoader(&cfg, 0);
@@ -352,7 +351,7 @@ Types::Types::ImmutabilityType Applet::immutability() const
     Types::ImmutabilityType upperImmutability = Types::Mutable;
 
     if (isContainment()) {
-        Corona *cor = static_cast<Containment*>(const_cast<Applet*>(this))->corona();
+        Corona *cor = static_cast<Containment *>(const_cast<Applet *>(this))->corona();
         if (cor) {
             upperImmutability = cor->immutability();
         }
@@ -506,7 +505,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     // now take care of constraints in special subclass: Contaiment
-    Containment* containment = qobject_cast<Plasma::Containment*>(this);
+    Containment *containment = qobject_cast<Plasma::Containment *>(this);
     if (containment) {
         containment->d->containmentConstraintsEvent(c);
     }
@@ -534,10 +533,10 @@ void Applet::flushPendingConstraintsEvents()
     }
 }
 
-QList<QAction*> Applet::contextualActions()
+QList<QAction *> Applet::contextualActions()
 {
     //qDebug() << "empty context actions";
-    return d->script ? d->script->contextualActions() : QList<QAction*>();
+    return d->script ? d->script->contextualActions() : QList<QAction *>();
 }
 
 KActionCollection *Applet::actions() const
@@ -561,7 +560,7 @@ Types::FormFactor Applet::formFactor() const
 
 Containment *Applet::containment() const
 {
-    Containment *c = qobject_cast<Containment*>(const_cast<Applet*>(this));
+    Containment *c = qobject_cast<Containment *>(const_cast<Applet *>(this));
     if (c && c->isContainment()) {
         return c;
     } else {
@@ -571,7 +570,7 @@ Containment *Applet::containment() const
     QObject *parent = this->parent();
 
     while (parent) {
-        Containment *possibleC = qobject_cast<Containment*>(parent);
+        Containment *possibleC = qobject_cast<Containment *>(parent);
 
         if (possibleC && possibleC->isContainment()) {
             c = possibleC;
@@ -611,7 +610,6 @@ QKeySequence Applet::globalShortcut() const
             return shortcuts.first();
         }
     }
-
 
     return QKeySequence();
 }
@@ -731,7 +729,7 @@ void Applet::timerEvent(QTimerEvent *event)
 
         // Don't flushPendingConstraints if we're just starting up
         // flushPendingConstraints will be called by Corona
-        if(!(d->pendingConstraints & Plasma::Types::StartupCompletedConstraint)) {
+        if (!(d->pendingConstraints & Plasma::Types::StartupCompletedConstraint)) {
             flushPendingConstraintsEvents();
         }
     } else if (d->modificationsTimer && event->timerId() == d->modificationsTimer->timerId()) {
@@ -753,7 +751,7 @@ bool Applet::isContainment() const
         return true;
     }
     //normal "acting as a containment" condition
-    return qobject_cast<const Containment*>(this) && qobject_cast<Corona *>(parent());
+    return qobject_cast<const Containment *>(this) && qobject_cast<Corona *>(parent());
 }
 
 } // Plasma namespace

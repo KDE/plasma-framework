@@ -225,7 +225,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
         }
     } else {
 #ifndef NDEBUG
-    // qDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
+        // qDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
 #endif
     }
 
@@ -318,7 +318,5 @@ void Service::registerOperationsScheme()
 }
 
 } // namespace Plasma
-
-
 
 #include "moc_service.cpp"

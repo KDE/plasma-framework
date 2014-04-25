@@ -42,7 +42,8 @@
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
 
-namespace Plasma {
+namespace Plasma
+{
 
 static PluginLoader *s_pluginLoader = 0;
 
@@ -103,13 +104,11 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
         }
 
         return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
-                      .arg(app->applicationName());
+               .arg(app->applicationName());
     }
 
     return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
 }
-
-
 
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
@@ -127,7 +126,7 @@ PluginLoader::~PluginLoader()
     delete d;
 }
 
-void PluginLoader::setPluginLoader(PluginLoader* loader)
+void PluginLoader::setPluginLoader(PluginLoader *loader)
 {
     if (!s_pluginLoader) {
         s_pluginLoader = loader;
@@ -220,7 +219,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return 0;
     }
 
-
     QString error;
     applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
@@ -241,7 +239,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     // load the engine, add it to the engines
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
-                                                              constraint);
+                            constraint);
     QString error;
 
     if (offers.isEmpty()) {
@@ -371,7 +369,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-         qDebug() << "offers is empty for " << name;
+        qDebug() << "offers is empty for " << name;
 #endif
         return 0;
     }
@@ -596,7 +594,7 @@ QStringList PluginLoader::customAppletCategories() const
     return PluginLoaderPrivate::s_customCategories.toList();
 }
 
-QString PluginLoader::appletCategory(const QString& appletName)
+QString PluginLoader::appletCategory(const QString &appletName)
 {
     if (appletName.isEmpty()) {
         return QString();
@@ -613,15 +611,14 @@ QString PluginLoader::appletCategory(const QString& appletName)
 }
 
 KPluginInfo::List PluginLoader::listContainments(const QString &category,
-                                                const QString &parentApp)
+        const QString &parentApp)
 {
     return listContainmentsOfType(QString(), category, parentApp);
 }
 
-
 KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
-                                                      const QString &category,
-                                                      const QString &parentApp)
+        const QString &category,
+        const QString &parentApp)
 {
     QString constraint;
 
@@ -683,7 +680,6 @@ QStringList PluginLoader::listContainmentTypes()
     return types.toList();
 }
 
-
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
     KPluginInfo::List list;
@@ -722,7 +718,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
     return KPluginInfo::fromServices(offers);
 }
 
-Applet* PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
+Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     Q_UNUSED(name)
     Q_UNUSED(appletId)
@@ -783,8 +779,8 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
     QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                  "plasma/internal/" + type + "/*.desktop",
-                                                  QStandardPaths::LocateFile);
+                        "plasma/internal/" + type + "/*.desktop",
+                        QStandardPaths::LocateFile);
 
     KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
 

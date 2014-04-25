@@ -69,7 +69,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     }
 
     //TODO: security: permission for remote urls
-    if (!path.isLocalFile() ) {
+    if (!path.isLocalFile()) {
         return path;
     }
 
@@ -85,9 +85,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
         QString relativePath;
         foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
-            if (path.path().startsWith(m_package.path()+prefix)) {
+            if (path.path().startsWith(m_package.path() + prefix)) {
                 //obtain a string in the form ui/foo/bar/baz.qml
-                relativePath = path.path().mid(QString(m_package.path()+prefix).length());
+                relativePath = path.path().mid(QString(m_package.path() + prefix).length());
                 break;
             }
         }
@@ -105,7 +105,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
         return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
 
-    //forbid to load random absolute paths
+        //forbid to load random absolute paths
     } else {
         foreach (const QString &allowed, m_allowedPaths) {
             //It's a private import
@@ -128,7 +128,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                     //qDebug() << "Trying" << platform;
 
                     //search for a platformqml/ path sibling of this allowed path
-                    const QString &platformPath = allowed+QStringLiteral("/../platformqml/")+platform+path.path().mid(allowed.length());
+                    const QString &platformPath = allowed + QStringLiteral("/../platformqml/") + platform + path.path().mid(allowed.length());
                     const QFile f(platformPath);
 
                     //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
@@ -146,5 +146,4 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 }
 
 }
-
 

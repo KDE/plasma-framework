@@ -30,18 +30,19 @@
 #include <xcb/composite.h>
 #if HAVE_GLX
 #include <GL/glx.h>
-typedef void (*glXBindTexImageEXT_func)(Display* dpy, GLXDrawable drawable,
-                                        int buffer, const int* attrib_list);
-typedef void (*glXReleaseTexImageEXT_func)(Display* dpy, GLXDrawable drawable, int buffer);
+typedef void (*glXBindTexImageEXT_func)(Display *dpy, GLXDrawable drawable,
+                                        int buffer, const int *attrib_list);
+typedef void (*glXReleaseTexImageEXT_func)(Display *dpy, GLXDrawable drawable, int buffer);
 #endif
 #if HAVE_EGL
-typedef EGLImageKHR(*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint*);
+typedef EGLImageKHR(*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint *);
 typedef EGLBoolean(*eglDestroyImageKHR_func)(EGLDisplay, EGLImageKHR);
 typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 #endif // HAVE_EGL
 #endif
 
-namespace Plasma {
+namespace Plasma
+{
 
 WindowTextureNode::WindowTextureNode()
     : QSGSimpleTextureNode()
@@ -58,7 +59,7 @@ void WindowTextureNode::reset(QSGTexture *texture)
     m_texture.reset(texture);
 }
 
-WindowThumbnail::WindowThumbnail(QQuickItem* parent)
+WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     : QQuickItem(parent)
     , QAbstractNativeEventFilter()
     , m_xcb(false)
@@ -80,7 +81,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem* parent)
 #endif
 {
     setFlag(ItemHasContents);
-    connect(this, &QQuickItem::windowChanged, [this](QQuickWindow *window) {
+    connect(this, &QQuickItem::windowChanged, [this](QQuickWindow * window) {
         if (!window) {
             return;
         }
@@ -88,7 +89,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem* parent)
         stopRedirecting();
         startRedirecting();
     });
-    if (QGuiApplication *gui = dynamic_cast<QGuiApplication*>(QCoreApplication::instance())) {
+    if (QGuiApplication *gui = dynamic_cast<QGuiApplication *>(QCoreApplication::instance())) {
         m_xcb = (gui->platformName() == QStringLiteral("xcb"));
         if (m_xcb) {
             gui->installNativeEventFilter(this);
@@ -141,7 +142,7 @@ void WindowThumbnail::setWinId(uint32_t winId)
 QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData)
-    auto *node = static_cast<WindowTextureNode*>(oldNode);
+    auto *node = static_cast<WindowTextureNode *>(oldNode);
     if (!node) {
         node = new WindowTextureNode();
         node->setFiltering(QSGTexture::Linear);
@@ -153,8 +154,8 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
     }
     node->setRect(boundingRect());
     const QSize size(node->texture()->textureSize().scaled(boundingRect().size().toSize(), Qt::KeepAspectRatio));
-    const qreal x = boundingRect().x() + (boundingRect().width() - size.width())/2;
-    const qreal y = boundingRect().y() + (boundingRect().height() - size.height())/2;
+    const qreal x = boundingRect().x() + (boundingRect().width() - size.width()) / 2;
+    const qreal y = boundingRect().y() + (boundingRect().height() - size.height()) / 2;
     node->setRect(QRectF(QPointF(x, y), size));
     return node;
 }
@@ -167,15 +168,15 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
         return false;
     }
 #if HAVE_XCB_COMPOSITE
-    xcb_generic_event_t *event = static_cast<xcb_generic_event_t*>(message);
+    xcb_generic_event_t *event = static_cast<xcb_generic_event_t *>(message);
     const uint8_t responseType = event->response_type & ~0x80;
     if (responseType == m_damageEventBase + XCB_DAMAGE_NOTIFY) {
-        if (reinterpret_cast<xcb_damage_notify_event_t*>(event)->drawable == m_winId) {
+        if (reinterpret_cast<xcb_damage_notify_event_t *>(event)->drawable == m_winId) {
             m_damaged = true;
             update();
         }
     } else if (responseType == XCB_CONFIGURE_NOTIFY) {
-        if (reinterpret_cast<xcb_configure_notify_event_t*>(event)->window == m_winId) {
+        if (reinterpret_cast<xcb_configure_notify_event_t *>(event)->window == m_winId) {
             // TODO: only discard if size changes
             discardPixmap();
         }
@@ -253,8 +254,8 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
                 EGL_NONE
             };
             m_image = ((eglCreateImageKHR_func)(m_eglCreateImageKHR))(eglGetCurrentDisplay(), EGL_NO_CONTEXT,
-                                                                      EGL_NATIVE_PIXMAP_KHR,
-                                                                      (EGLClientBuffer)m_pixmap, attribs);
+                      EGL_NATIVE_PIXMAP_KHR,
+                      (EGLClientBuffer)m_pixmap, attribs);
 
             if (m_image == EGL_NO_IMAGE_KHR) {
                 qDebug() << "failed to create egl image";
@@ -402,10 +403,11 @@ bool WindowThumbnail::loadGLXTexture()
 
     XVisualInfo *vi = glXGetVisualFromFBConfig(d, fbConfigs[0]);
     int textureFormat;
-    if (window()->openglContext()->format().hasAlpha())
+    if (window()->openglContext()->format().hasAlpha()) {
         textureFormat = bindRgba ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT;
-    else
+    } else {
         textureFormat = bindRgb ? GLX_TEXTURE_FORMAT_RGB_EXT : GLX_TEXTURE_FORMAT_RGBA_EXT;
+    }
     XFree(vi);
 
     // we assume that Texture_2D is supported as we have a QtQuick OpenGL context

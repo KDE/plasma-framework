@@ -36,7 +36,8 @@
  * }
  * </code>
  */
-class Application: public QObject {
+class Application: public QObject
+{
     Q_OBJECT
 
     /**
@@ -51,14 +52,14 @@ class Application: public QObject {
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged);
 
 public:
-    Application(QObject * parent = Q_NULLPTR);
+    Application(QObject *parent = Q_NULLPTR);
     ~Application();
 
     QString application() const;
     bool running() const;
 
 public:
-    void setApplication(const QString & application);
+    void setApplication(const QString &application);
     void setRunning(bool run);
 
 public Q_SLOTS:
@@ -66,7 +67,7 @@ public Q_SLOTS:
     void terminate();
 
 Q_SIGNALS:
-    void applicationChanged(const QString & application);
+    void applicationChanged(const QString &application);
     void runningChanged(bool running);
 
 private:

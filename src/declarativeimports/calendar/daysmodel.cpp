@@ -31,8 +31,8 @@ DaysModel::DaysModel(QObject *parent) :
     roleNames.insert(isNextMonth,            "isNextMonth");
     //roleNames.insert(containsHolidayItems,   "containsHolidayItems");
     //roleNames.insert(containsEventItems,     "containsEventItems");
-   // roleNames.insert(containsTodoItems,      "containsTodoItems");
-   // roleNames.insert(containsJournalItems,   "containsJournalItems");
+    // roleNames.insert(containsTodoItems,      "containsTodoItems");
+    // roleNames.insert(containsJournalItems,   "containsJournalItems");
     roleNames.insert(dayNumber,              "dayNumber");
     roleNames.insert(monthNumber,            "monthNumber");
     roleNames.insert(yearNumber,             "yearNumber");
@@ -43,7 +43,7 @@ DaysModel::DaysModel(QObject *parent) :
 
 void DaysModel::setSourceData(QList<DayData> *data)
 {
-    if(m_data != data) {
+    if (m_data != data) {
         m_data = data;
         reset();
     }
@@ -52,7 +52,7 @@ void DaysModel::setSourceData(QList<DayData> *data)
 int DaysModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
-    if(m_data->size() <= 0) {
+    if (m_data->size() <= 0) {
         return 0;
     } else {
         return m_data->size();
@@ -65,19 +65,19 @@ QVariant DaysModel::data(const QModelIndex &index, int role) const
 
         DayData currentData = m_data->at(index.row());
 
-        switch(role) {
+        switch (role) {
         case isPreviousMonth:
             return currentData.isPreviousMonth;
         case isNextMonth:
             return currentData.isNextMonth;
-  //      case containsHolidayItems:
-  //          return currentData.containsHolidayItems;
-       /* case containsEventItems:
-            return currentData.containsEventItems;
-        case containsTodoItems:
-            return currentData.containsTodoItems;
-        case containsJournalItems:
-            return currentData.containsJournalItems;*/
+        //      case containsHolidayItems:
+        //          return currentData.containsHolidayItems;
+        /* case containsEventItems:
+             return currentData.containsEventItems;
+         case containsTodoItems:
+             return currentData.containsTodoItems;
+         case containsJournalItems:
+             return currentData.containsJournalItems;*/
         case dayNumber:
             return currentData.dayNumber;
         case monthNumber:
@@ -91,7 +91,7 @@ QVariant DaysModel::data(const QModelIndex &index, int role) const
 
 void DaysModel::update()
 {
-    if(m_data->size() <= 0) {
+    if (m_data->size() <= 0) {
         return;
     }
 

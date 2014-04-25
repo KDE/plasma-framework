@@ -43,7 +43,6 @@ class FullScreenWindow : public QDeclarativeItem
     Q_PROPERTY(QDeclarativeListProperty<QGraphicsObject> buttons READ buttons DESIGNABLE false)
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
-
 public:
     FullScreenWindow(QDeclarativeItem *parent = 0);
     ~FullScreenWindow();
@@ -72,7 +71,6 @@ Q_SIGNALS:
     void rejected();
     void clickedOutside();
     void statusChanged();
-
 
 private Q_SLOTS:
     void syncViewToMainItem();

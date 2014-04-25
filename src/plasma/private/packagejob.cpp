@@ -25,21 +25,22 @@
 
 namespace Plasma
 {
-class PackageJobPrivate {
+class PackageJobPrivate
+{
 public:
     PackageJobThread *thread;
     QString installPath;
 };
 
-PackageJob::PackageJob(const QString &servicePrefix, QObject* parent) :
+PackageJob::PackageJob(const QString &servicePrefix, QObject *parent) :
     KJob(parent)
 {
     d = new PackageJobPrivate;
     d->thread = new PackageJobThread(servicePrefix, this);
-    connect(d->thread, SIGNAL(finished(bool, const QString&)),
-            SLOT(slotFinished(bool, const QString&)), Qt::QueuedConnection);
-    connect(d->thread, SIGNAL(installPathChanged(const QString&)),
-           SIGNAL(installPathChanged(const QString&)), Qt::QueuedConnection);
+    connect(d->thread, SIGNAL(finished(bool,QString)),
+            SLOT(slotFinished(bool,QString)), Qt::QueuedConnection);
+    connect(d->thread, SIGNAL(installPathChanged(QString)),
+            SIGNAL(installPathChanged(QString)), Qt::QueuedConnection);
 }
 
 PackageJob::~PackageJob()
@@ -64,12 +65,12 @@ void PackageJob::start()
     d->thread->start();
 }
 
-void PackageJob::install(const QString& src, const QString &dest)
+void PackageJob::install(const QString &src, const QString &dest)
 {
     d->thread->install(src, dest);
 }
 
-void PackageJob::uninstall(const QString& installationPath)
+void PackageJob::uninstall(const QString &installationPath)
 {
     d->thread->uninstall(installationPath);
 }

@@ -24,7 +24,7 @@
 
 namespace Plasma
 {
-    class ConfigLoader;
+class ConfigLoader;
 }
 
 class QFile;
@@ -59,8 +59,8 @@ private Q_SLOTS:
     void ulongLongDefaultValue();
 
 private:
-    Plasma::ConfigLoader* cl;
-    QFile* configFile;
+    Plasma::ConfigLoader *cl;
+    QFile *configFile;
 };
 
 #endif

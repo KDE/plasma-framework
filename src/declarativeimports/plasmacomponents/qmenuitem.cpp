@@ -20,22 +20,21 @@
 
 #include "qmenuitem.h"
 
-
 QMenuItem::QMenuItem(QQuickItem *parent)
     : QQuickItem(parent),
-    m_action(0)
+      m_action(0)
 
 {
     setAction(new QAction(this));
     connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
 }
 
-QAction* QMenuItem::action() const
+QAction *QMenuItem::action() const
 {
     return m_action;
 }
 
-void QMenuItem::setAction(QAction* a)
+void QMenuItem::setAction(QAction *a)
 {
     if (m_action != a) {
         if (m_action) {
@@ -54,7 +53,7 @@ QVariant QMenuItem::icon() const
     return m_icon;
 }
 
-void QMenuItem::setIcon(const QVariant& i)
+void QMenuItem::setIcon(const QVariant &i)
 {
     m_icon = i;
     if (i.canConvert<QIcon>()) {
@@ -80,7 +79,7 @@ QString QMenuItem::text() const
     return m_action->text();
 }
 
-void QMenuItem::setText(const QString& t)
+void QMenuItem::setText(const QString &t)
 {
     if (m_action->text() != t) {
         m_action->setText(t);

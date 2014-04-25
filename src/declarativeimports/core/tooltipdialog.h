@@ -33,7 +33,7 @@ class QPropertyAnimation;
 
 namespace KDeclarative
 {
-    class QmlObject;
+class QmlObject;
 }
 
 /**

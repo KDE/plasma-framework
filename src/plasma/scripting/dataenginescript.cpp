@@ -197,5 +197,4 @@ void DataEngineScript::forceImmediateUpdateOfAllVisualizations()
 
 } // Plasma namespace
 
-
 #include "moc_dataenginescript.cpp"

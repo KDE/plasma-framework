@@ -26,7 +26,6 @@
 #include <KActivities/ResourceInstance>
 #include <QDebug>
 
-
 ResourceInstance::ResourceInstance(QQuickItem *parent)
     : QQuickItem(parent)
 {
@@ -56,7 +55,7 @@ void ResourceInstance::syncWid()
     } else {
 
         if (m_uri.scheme().startsWith(QLatin1String("http")) && !m_uri.hasQuery() && m_uri.path().endsWith('/')) {
-            const QString & oldPath = m_uri.path();
+            const QString &oldPath = m_uri.path();
             m_uri.setPath(oldPath.left(oldPath.length() - 1));
 
             // qDebug() << "Old and new path" << oldPath << m_uri;
@@ -128,7 +127,6 @@ void ResourceInstance::notifyFocusedIn()
     syncWid();
     m_resourceInstance->notifyFocusedIn();
 }
-
 
 void ResourceInstance::notifyFocusedOut()
 {

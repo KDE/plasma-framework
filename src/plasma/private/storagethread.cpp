@@ -30,7 +30,6 @@
 #include <QDebug>
 #include <qstandardpaths.h>
 
-
 namespace Plasma
 {
 
@@ -41,7 +40,7 @@ public:
     {
     }
 
-   StorageThread self;
+    StorageThread self;
 };
 
 Q_GLOBAL_STATIC(StorageThreadSingleton, privateStorageThreadSelf)
@@ -156,23 +155,23 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         QString field;
         bool binary = false;
         switch (QMetaType::Type(it.value().type())) {
-            case QVariant::String:
-                field = ":txt";
-                break;
-            case QVariant::Int:
-                field = ":int";
-                break;
-            case QVariant::Double:
-            case QMetaType::Float:
-                field = ":float";
-                break;
-            case QVariant::ByteArray:
-                binary = true;
-                field = ":binary";
-                break;
-            default:
-                continue;
-                break;
+        case QVariant::String:
+            field = ":txt";
+            break;
+        case QVariant::Int:
+            field = ":int";
+            break;
+        case QVariant::Double:
+        case QMetaType::Float:
+            field = ":float";
+            break;
+        case QVariant::ByteArray:
+            binary = true;
+            field = ":binary";
+            break;
+        default:
+            continue;
+            break;
         }
 
         if (binary) {

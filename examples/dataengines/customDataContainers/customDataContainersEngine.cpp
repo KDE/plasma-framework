@@ -31,7 +31,7 @@
 #include "httpContainer.h"
 
 /*
- This DataEngine shows how to use a subclass of DataContainer to create and 
+ This DataEngine shows how to use a subclass of DataContainer to create and
  manage sources. This is particularly useful when managing asynchronous requests,
  such as sources that reflect network, D-Bus, etc. results.
 */

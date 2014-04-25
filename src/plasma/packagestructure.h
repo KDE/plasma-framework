@@ -73,7 +73,7 @@ public:
      *                    installed to
      * @return KJob* to track the installation status
      **/
-    virtual KJob* install(Package *package, const QString &archivePath, const QString &packageRoot);
+    virtual KJob *install(Package *package, const QString &archivePath, const QString &packageRoot);
 
     /**
      * Uninstalls a package matching this package structure.
@@ -84,10 +84,10 @@ public:
      * @param packageRoot path to the directory where the package should be installed to
      * @return KJob* to track the installation status
      */
-    virtual KJob* uninstall(Package *package, const QString &packageRoot);
+    virtual KJob *uninstall(Package *package, const QString &packageRoot);
 
 private:
-    PackageStructurePrivate* d;
+    PackageStructurePrivate *d;
 };
 
 } // Plasma namespace
@@ -96,7 +96,7 @@ private:
  * Register a Package class when it is contained in a loadable module
  */
 #define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 #endif
 

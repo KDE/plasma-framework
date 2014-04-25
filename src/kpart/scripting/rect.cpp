@@ -19,13 +19,12 @@
 #include <QtCore/QRectF>
 #include "backportglobal.h"
 
-Q_DECLARE_METATYPE(QRectF*)
+Q_DECLARE_METATYPE(QRectF *)
 Q_DECLARE_METATYPE(QRectF)
 
 static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
 {
-    if (ctx->argumentCount() == 4)
-    {
+    if (ctx->argumentCount() == 4) {
         qreal x = ctx->argument(0).toNumber();
         qreal y = ctx->argument(1).toNumber();
         qreal width = ctx->argument(2).toNumber();
@@ -157,7 +156,6 @@ static QScriptValue moveRight(QScriptContext *ctx, QScriptEngine *)
     self->moveBottom(right);
     return QScriptValue();
 }
-
 
 static QScriptValue moveTo(QScriptContext *ctx, QScriptEngine *)
 {
@@ -321,7 +319,7 @@ QScriptValue constructQRectFClass(QScriptEngine *eng)
     proto.setProperty("y", eng->newFunction(y), getter | setter);
 
     eng->setDefaultPrototype(qMetaTypeId<QRectF>(), proto);
-    eng->setDefaultPrototype(qMetaTypeId<QRectF*>(), proto);
+    eng->setDefaultPrototype(qMetaTypeId<QRectF *>(), proto);
 
     return eng->newFunction(ctor, proto);
 }

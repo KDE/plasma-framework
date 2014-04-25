@@ -55,7 +55,7 @@ public:
     QString configName;
     KSharedConfigPtr config;
     QTimer *configSyncTimer;
-    QList<Containment*> containments;
+    QList<Containment *> containments;
     KActionCollection actions;
     int containmentsStarting;
 };

@@ -27,24 +27,23 @@
 class ContextTest : public Plasma::ContainmentActions
 {
     Q_OBJECT
-    public:
-        ContextTest(QObject* parent, const QVariantList& args);
+public:
+    ContextTest(QObject *parent, const QVariantList &args);
 
-        void init(const KConfigGroup &config);
+    void init(const KConfigGroup &config);
 
-        QList<QAction*> contextualActions();
+    QList<QAction *> contextualActions();
 
-        void performNextAction();
-        void performPreviousAction();
-        
-        QWidget* createConfigurationInterface(QWidget* parent);
-        void configurationAccepted();
-        void save(KConfigGroup &config);
+    void performNextAction();
+    void performPreviousAction();
 
-    private:
-        Ui::Config m_ui;
-        QString m_text;
+    QWidget *createConfigurationInterface(QWidget *parent);
+    void configurationAccepted();
+    void save(KConfigGroup &config);
+
+private:
+    Ui::Config m_ui;
+    QString m_text;
 };
-
 
 #endif

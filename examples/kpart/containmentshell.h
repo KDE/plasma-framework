@@ -33,7 +33,7 @@
  */
 class ContainmentShell : public KParts::MainWindow
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ContainmentShell();
     virtual ~ContainmentShell();
@@ -42,8 +42,8 @@ public Q_SLOTS:
     void optionsPreferences();
 
 private:
-    KParts::Part* m_part;
-    KDialog* m_dialog;
+    KParts::Part *m_part;
+    KDialog *m_dialog;
 };
 
 #endif // CONTAINMENTSHELL_H

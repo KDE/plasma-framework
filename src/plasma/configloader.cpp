@@ -155,7 +155,7 @@ QString ConfigLoaderHandler::defaultValue() const
 }
 
 bool ConfigLoaderHandler::endElement(const QString &namespaceURI,
-                                  const QString &localName, const QString &qName)
+                                     const QString &localName, const QString &qName)
 {
     Q_UNUSED(namespaceURI)
     Q_UNUSED(qName)
@@ -247,7 +247,7 @@ void ConfigLoaderHandler::addItem()
         item = m_config->addItemFont(m_name, *d->newFont(), QFont(m_default), m_key);
     } else if (m_type == "int") {
         KConfigSkeleton::ItemInt *intItem = m_config->addItemInt(m_name, *d->newInt(),
-                                                                 m_default.toInt(), m_key);
+                                            m_default.toInt(), m_key);
 
         if (m_haveMin) {
             intItem->setMinValue(m_min);
@@ -313,11 +313,11 @@ void ConfigLoaderHandler::addItem()
             longlongItem->setMaxValue(m_max);
         }
         item = longlongItem;
-    /* No addItemPathList in KConfigSkeleton ?
-    } else if (m_type == "PathList") {
-        //FIXME: the split() is naive and will break on lists with ,'s in them
-        item = m_config->addItemPathList(m_name, *d->newStringList(), m_default.split(","), m_key);
-    */
+        /* No addItemPathList in KConfigSkeleton ?
+        } else if (m_type == "PathList") {
+            //FIXME: the split() is naive and will break on lists with ,'s in them
+            item = m_config->addItemPathList(m_name, *d->newStringList(), m_default.split(","), m_key);
+        */
     } else if (m_type == "point") {
         QPoint defaultPoint;
         QStringList tmpList = m_default.split(',');
@@ -352,15 +352,15 @@ void ConfigLoaderHandler::addItem()
             ulonglongItem->setMaxValue(m_max);
         }
         item = ulonglongItem;
-    /* No addItemUrlList in KConfigSkeleton ?
-    } else if (m_type == "urllist") {
-        //FIXME: the split() is naive and will break on lists with ,'s in them
-        QStringList tmpList = m_default.split(",");
-        QList<QUrl> defaultList;
-        foreach (const QString& tmp, tmpList) {
-            defaultList.append(QUrl(tmp));
-        }
-        item = m_config->addItemUrlList(m_name, *d->newUrlList(), defaultList, m_key);*/
+        /* No addItemUrlList in KConfigSkeleton ?
+        } else if (m_type == "urllist") {
+            //FIXME: the split() is naive and will break on lists with ,'s in them
+            QStringList tmpList = m_default.split(",");
+            QList<QUrl> defaultList;
+            foreach (const QString& tmp, tmpList) {
+                defaultList.append(QUrl(tmp));
+            }
+            item = m_config->addItemUrlList(m_name, *d->newUrlList(), defaultList, m_key);*/
     }
 
     if (item) {
@@ -456,7 +456,7 @@ bool ConfigLoader::usrWriteConfig()
 {
     if (d->saveDefaults) {
         KConfigSkeletonItem::List itemList = items();
-        for(int i = 0; i < itemList.size(); i++) {
+        for (int i = 0; i < itemList.size(); i++) {
             KConfigGroup cg(config(), itemList.at(i)->group());
             cg.writeEntry(itemList.at(i)->key(), "");
         }

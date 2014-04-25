@@ -46,28 +46,28 @@ namespace Plasma
 {
 
 AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
-        : appletId(uniqueID),
-          q(applet),
-          immutability(Types::Mutable),
-          appletDescription(info ? *info : KPluginInfo(service)),
-          icon(appletDescription.isValid() ? appletDescription.icon() : QString()),
-          mainConfig(0),
-          pendingConstraints(Types::NoConstraint),
-          script(0),
-          package(0),
-          configLoader(0),
-          actions(AppletPrivate::defaultActions(applet)),
-          activationAction(0),
-          itemStatus(Types::UnknownStatus),
-          modificationsTimer(0),
-          hasConfigurationInterface(false),
-          failed(false),
-          transient(false),
-          needsConfig(false),
-          started(false),
-          globalShortcutEnabled(false),
-          uiReady(false),
-          userConfiguring(false)
+    : appletId(uniqueID),
+      q(applet),
+      immutability(Types::Mutable),
+      appletDescription(info ? *info : KPluginInfo(service)),
+      icon(appletDescription.isValid() ? appletDescription.icon() : QString()),
+      mainConfig(0),
+      pendingConstraints(Types::NoConstraint),
+      script(0),
+      package(0),
+      configLoader(0),
+      actions(AppletPrivate::defaultActions(applet)),
+      activationAction(0),
+      itemStatus(Types::UnknownStatus),
+      modificationsTimer(0),
+      hasConfigurationInterface(false),
+      failed(false),
+      transient(false),
+      needsConfig(false),
+      started(false),
+      globalShortcutEnabled(false),
+      uiReady(false),
+      userConfiguring(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
@@ -136,8 +136,8 @@ void AppletPrivate::init(const QString &packagePath)
         delete package;
         package = 0;
         q->setLaunchErrorMessage(i18nc("Package file, name of the widget",
-                                         "Could not open the %1 package required for the %2 widget.",
-                                         appletDescription.pluginName(), appletDescription.name()));
+                                       "Could not open the %1 package required for the %2 widget.",
+                                       appletDescription.pluginName(), appletDescription.name()));
         return;
     }
 
@@ -150,9 +150,9 @@ void AppletPrivate::init(const QString &packagePath)
         delete package;
         package = 0;
         q->setLaunchErrorMessage(
-                             i18nc("API or programming language the widget was written in, name of the widget",
-                                   "Could not create a %1 ScriptEngine for the %2 widget.",
-                                   api, appletDescription.name()));
+            i18nc("API or programming language the widget was written in, name of the widget",
+                  "Could not create a %1 ScriptEngine for the %2 widget.",
+                  api, appletDescription.name()));
     }
 }
 
@@ -188,15 +188,15 @@ void AppletPrivate::askDestroy()
     }
 
     if (q->isContainment()) {
-        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons( QMessageBox::Yes | QMessageBox::No ));
+        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
         box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
         box->open();
 
         QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
-            [=] () {
-                transient = true;
-                cleanUpAndDelete();
-            });
+        [ = ]() {
+            transient = true;
+            cleanUpAndDelete();
+        });
 
         return;
     }
@@ -213,14 +213,14 @@ void AppletPrivate::globalShortcutChanged()
     KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
     QString newShortCut = activationAction->shortcut().toString();
     QString oldShortCut = shortcutConfig.readEntry("global", QString());
-    if(newShortCut != oldShortCut) {
+    if (newShortCut != oldShortCut) {
         shortcutConfig.writeEntry("global", newShortCut);
         scheduleModificationNotification();
     }
     //qDebug() << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
-KActionCollection* AppletPrivate::defaultActions(QObject *parent)
+KActionCollection *AppletPrivate::defaultActions(QObject *parent)
 {
     KActionCollection *actions = new KActionCollection(parent);
     actions->setConfigGroup("Shortcuts-Applet");
@@ -264,7 +264,7 @@ void AppletPrivate::updateShortcuts()
         //a horrible hack to avoid clobbering corona settings
         //we pull them out, then read, then put them back
         QList<QString> names;
-        QList<QAction*> qactions;
+        QList<QAction *> qactions;
         names << "add sibling containment" << "configure shortcuts" << "lock widgets";
         foreach (const QString &name, names) {
             QAction *a = actions->action(name);
@@ -399,7 +399,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     if (q->isContainment()) {
-        Corona *corona = static_cast<Containment*>(q)->corona();
+        Corona *corona = static_cast<Containment *>(q)->corona();
         KConfigGroup containmentConfig;
         //qDebug() << "got a corona, baby?" << (QObject*)corona << (QObject*)q;
 
@@ -448,7 +448,7 @@ void AppletPrivate::resetConfigurationObject()
     if (!q->containment()) {
         return;
     }
-    Corona * corona = q->containment()->corona();
+    Corona *corona = q->containment()->corona();
     if (corona) {
         corona->requireConfigSync();
     }

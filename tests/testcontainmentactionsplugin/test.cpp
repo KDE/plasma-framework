@@ -32,11 +32,11 @@ ContextTest::ContextTest(QObject *parent, const QVariantList &args)
 {
 }
 
-QList<QAction*> ContextTest::contextualActions()
+QList<QAction *> ContextTest::contextualActions()
 {
     Plasma::Containment *c = containment();
     Q_ASSERT(c);
-    QList<QAction*> actions;
+    QList<QAction *> actions;
     actions << c->actions()->action("configure");
 
     return actions;
@@ -57,7 +57,7 @@ void ContextTest::init(const KConfigGroup &config)
     m_text = config.readEntry("test-text", QString());
 }
 
-QWidget* ContextTest::createConfigurationInterface(QWidget* parent)
+QWidget *ContextTest::createConfigurationInterface(QWidget *parent)
 {
     //m_currentText = m_text;
     QWidget *widget = new QWidget(parent);

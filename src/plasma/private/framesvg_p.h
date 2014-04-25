@@ -34,39 +34,39 @@ class FrameData
 {
 public:
     FrameData(FrameSvg *svg)
-      : enabledBorders(FrameSvg::AllBorders),
-        frameSize(-1,-1),
-        topHeight(0),
-        leftWidth(0),
-        rightWidth(0),
-        bottomHeight(0),
-        topMargin(0),
-        leftMargin(0),
-        rightMargin(0),
-        bottomMargin(0),
-        noBorderPadding(false),
-        stretchBorders(false),
-        tileCenter(false),
-        composeOverBorder(false)
+        : enabledBorders(FrameSvg::AllBorders),
+          frameSize(-1, -1),
+          topHeight(0),
+          leftWidth(0),
+          rightWidth(0),
+          bottomHeight(0),
+          topMargin(0),
+          leftMargin(0),
+          rightMargin(0),
+          bottomMargin(0),
+          noBorderPadding(false),
+          stretchBorders(false),
+          tileCenter(false),
+          composeOverBorder(false)
     {
         ref(svg);
     }
 
     FrameData(const FrameData &other, FrameSvg *svg)
-      : enabledBorders(other.enabledBorders),
-        frameSize(other.frameSize),
-        topHeight(0),
-        leftWidth(0),
-        rightWidth(0),
-        bottomHeight(0),
-        topMargin(0),
-        leftMargin(0),
-        rightMargin(0),
-        bottomMargin(0),
-        noBorderPadding(false),
-        stretchBorders(false),
-        tileCenter(false),
-        composeOverBorder(false)
+        : enabledBorders(other.enabledBorders),
+          frameSize(other.frameSize),
+          topHeight(0),
+          leftWidth(0),
+          rightWidth(0),
+          bottomHeight(0),
+          topMargin(0),
+          leftMargin(0),
+          rightMargin(0),
+          bottomMargin(0),
+          noBorderPadding(false),
+          stretchBorders(false),
+          tileCenter(false),
+          composeOverBorder(false)
     {
         ref(svg);
     }
@@ -126,10 +126,10 @@ class FrameSvgPrivate
 {
 public:
     FrameSvgPrivate(FrameSvg *psvg)
-      : q(psvg),
-        theme(new Plasma::Theme(q)),
-        cacheAll(false),
-        overlayPos(0,0)
+        : q(psvg),
+          theme(new Plasma::Theme(q)),
+          cacheAll(false),
+          overlayPos(0, 0)
     {
     }
 
@@ -155,7 +155,7 @@ public:
     bool cacheAll : 1;
     QPoint overlayPos;
 
-    QHash<QString, FrameData*> frames;
+    QHash<QString, FrameData *> frames;
 
     static QHash<QString, FrameData *> s_sharedFrames;
 };

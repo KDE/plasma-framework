@@ -21,7 +21,6 @@
 
 #include "private/packages.h"
 
-
 #include <QDebug>
 
 ShellPluginLoader::ShellPluginLoader()

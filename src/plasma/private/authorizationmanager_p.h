@@ -38,12 +38,12 @@ class QByteArray;
 
 namespace KWallet
 {
-    class Wallet;
+class Wallet;
 } // namespace KWallet
 
 namespace Jolie
 {
-    class Server;
+class Server;
 } // namespace Jolie
 
 namespace Plasma
@@ -55,37 +55,37 @@ class Credentials;
 
 class AuthorizationManagerPrivate
 {
-    public:
-        AuthorizationManagerPrivate(AuthorizationManager *manager);
-        ~AuthorizationManagerPrivate();
+public:
+    AuthorizationManagerPrivate(AuthorizationManager *manager);
+    ~AuthorizationManagerPrivate();
 
-        void prepareForServiceAccess();
-        void prepareForServicePublication();
-        void slotWalletOpened();
-        void slotLoadRules();
-        AuthorizationRule *matchingRule(const QString &serviceName, const Credentials &key) const;
-        Credentials getCredentials(const QString &id = QString());
-        void addCredentials(const Credentials &identity);
-        void saveRules();
+    void prepareForServiceAccess();
+    void prepareForServicePublication();
+    void slotWalletOpened();
+    void slotLoadRules();
+    AuthorizationRule *matchingRule(const QString &serviceName, const Credentials &key) const;
+    Credentials getCredentials(const QString &id = QString());
+    void addCredentials(const Credentials &identity);
+    void saveRules();
 
 #if ENABLE_REMOTE_WIDGETS
-        QCA::Initializer            initializer;
+    QCA::Initializer            initializer;
 #endif
 
-        AuthorizationManager        *q;
-        Jolie::Server               *server;
-        AuthorizationManager::AuthorizationPolicy
-                                    authorizationPolicy;
-        AuthorizationInterface      *authorizationInterface;
-        AuthorizationInterface      *customAuthorizationInterface;
-        KWallet::Wallet             *wallet;
+    AuthorizationManager        *q;
+    Jolie::Server               *server;
+    AuthorizationManager::AuthorizationPolicy
+    authorizationPolicy;
+    AuthorizationInterface      *authorizationInterface;
+    AuthorizationInterface      *customAuthorizationInterface;
+    KWallet::Wallet             *wallet;
 
-        Credentials                 myCredentials;
-        QMap<QString, Credentials>  identities;
-        QList<AuthorizationRule*>   rules;
-        KConfigGroup                identitiesConfig;
-        KConfigGroup                rulesConfig;
-        bool                        locked;
+    Credentials                 myCredentials;
+    QMap<QString, Credentials>  identities;
+    QList<AuthorizationRule *>   rules;
+    KConfigGroup                identitiesConfig;
+    KConfigGroup                rulesConfig;
+    bool                        locked;
 };
 
 }

@@ -35,9 +35,9 @@ class StorageJob : public Plasma::ServiceJob
     Q_PROPERTY(QVariantMap data READ data WRITE setData)
 
 public:
-    StorageJob(const QString& destination,
-               const QString& operation,
-               const QVariantMap& parameters,
+    StorageJob(const QString &destination,
+               const QString &operation,
+               const QVariantMap &parameters,
                QObject *parent = 0);
     ~StorageJob();
     void setData(const QVariantMap &data);
@@ -66,11 +66,10 @@ public:
     ~Storage();
 
 protected:
-    Plasma::ServiceJob* createJob(const QString &operation, QVariantMap &parameters);
+    Plasma::ServiceJob *createJob(const QString &operation, QVariantMap &parameters);
 
 private:
     QString m_clientName;
 };
-
 
 #endif //PLASMA_STORAGE_H

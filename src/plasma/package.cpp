@@ -233,7 +233,7 @@ KPluginInfo Package::metadata() const
     return *d->metadata;
 }
 
-QString PackagePrivate::unpack(const QString& filePath)
+QString PackagePrivate::unpack(const QString &filePath)
 {
     KArchive *archive = 0;
     QMimeDatabase db;
@@ -242,8 +242,8 @@ QString PackagePrivate::unpack(const QString& filePath)
     if (mimeType.inherits("application/zip")) {
         archive = new KZip(filePath);
     } else if (mimeType.inherits("application/x-compressed-tar") || mimeType.inherits("application/x-gzip") ||
-                mimeType.inherits("application/x-tar") || mimeType.inherits("application/x-bzip-compressed-tar") ||
-                mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
+               mimeType.inherits("application/x-tar") || mimeType.inherits("application/x-bzip-compressed-tar") ||
+               mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
         archive = new KTar(filePath);
     } else {
         qWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
@@ -256,14 +256,14 @@ QString PackagePrivate::unpack(const QString& filePath)
         tempRoot = tempdir.path() + '/';
         source->copyTo(tempRoot);
 
-        if (!QFile::exists(tempdir.path()+"/metadata.desktop")) {
+        if (!QFile::exists(tempdir.path() + "/metadata.desktop")) {
             // search metadata.desktop, the zip file might have the package contents in a subdirectory
             QDir unpackedPath(tempdir.path());
             const QStringList &entries = unpackedPath.entryList(QDir::Dirs);
             foreach (const QString &pack, entries) {
                 if ((pack != "." && pack != "..") &&
-                    (QFile::exists(unpackedPath.absolutePath()+'/'+pack+"/metadata.desktop"))) {
-                    tempRoot = unpackedPath.absolutePath()+'/'+pack+'/';
+                        (QFile::exists(unpackedPath.absolutePath() + '/' + pack + "/metadata.desktop"))) {
+                    tempRoot = unpackedPath.absolutePath() + '/' + pack + '/';
                 }
             }
         }
@@ -286,7 +286,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 
     const QString discoveryKey(fileType + filename);
     if (d->discoveries.contains(discoveryKey)) {
-    //qDebug() << "looking for" << discoveryKey << d->discoveries.value(discoveryKey);
+        //qDebug() << "looking for" << discoveryKey << d->discoveries.value(discoveryKey);
         return d->discoveries[discoveryKey];
     }
 
@@ -654,9 +654,9 @@ void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 #endif
 }
 
-QList<const char*> Package::directories() const
+QList<const char *> Package::directories() const
 {
-    QList<const char*> dirs;
+    QList<const char *> dirs;
     QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory) {
@@ -667,13 +667,13 @@ QList<const char*> Package::directories() const
     return dirs;
 }
 
-QList<const char*> Package::requiredDirectories() const
+QList<const char *> Package::requiredDirectories() const
 {
-    QList<const char*> dirs;
+    QList<const char *> dirs;
     QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (it.value().directory &&
-            it.value().required) {
+                it.value().required) {
             dirs << it.key();
         }
         ++it;
@@ -681,9 +681,9 @@ QList<const char*> Package::requiredDirectories() const
     return dirs;
 }
 
-QList<const char*> Package::files() const
+QList<const char *> Package::files() const
 {
-    QList<const char*> files;
+    QList<const char *> files;
     QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory) {
@@ -694,9 +694,9 @@ QList<const char*> Package::files() const
     return files;
 }
 
-QList<const char*> Package::requiredFiles() const
+QList<const char *> Package::requiredFiles() const
 {
-    QList<const char*> files;
+    QList<const char *> files;
     QHash<QByteArray, ContentStructure>::const_iterator it = d->contents.constBegin();
     while (it != d->contents.constEnd()) {
         if (!it.value().directory && it.value().required) {
@@ -708,7 +708,7 @@ QList<const char*> Package::requiredFiles() const
     return files;
 }
 
-KJob* Package::install(const QString &sourcePackage, const QString &packageRoot)
+KJob *Package::install(const QString &sourcePackage, const QString &packageRoot)
 {
     const QString src = sourcePackage;
     const QString dest = packageRoot.isEmpty() ? defaultPackageRoot() : packageRoot;
@@ -719,7 +719,7 @@ KJob* Package::install(const QString &sourcePackage, const QString &packageRoot)
     return j;
 }
 
-KJob* Package::uninstall(const QString &packageName, const QString &packageRoot)
+KJob *Package::uninstall(const QString &packageName, const QString &packageRoot)
 {
     //FIXME:packageName unused, name taken from metadata().pluginName() ?
     //can this become either just uninstall() otherwise maintain parameters and be static?
@@ -732,12 +732,12 @@ KJob* Package::uninstall(const QString &packageName, const QString &packageRoot)
 }
 
 PackagePrivate::PackagePrivate()
-        : QSharedData(),
-          servicePrefix("plasma-applet-"),
-          metadata(0),
-          externalPaths(false),
-          valid(false),
-          checkedValid(false)
+    : QSharedData(),
+      servicePrefix("plasma-applet-"),
+      metadata(0),
+      externalPaths(false),
+      valid(false),
+      checkedValid(false)
 {
     contentsPrefixPaths << "contents/";
 }

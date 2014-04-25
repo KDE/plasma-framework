@@ -1,6 +1,6 @@
 /*
  *   Copyright 2012 by Sebastian Kügler <sebas@kde.org>
- 
+
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
  *   published by the Free Software Foundation; either version 2, or
@@ -26,7 +26,6 @@
 #include <QtQml>
 #include <QQmlEngine>
 
-
 // #include <KSharedConfig>
 // #include <KConfigGroup>
 
@@ -42,7 +41,6 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     //qmlRegisterType<ResourceInstance>(uri, 2, 0, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }
-
 
 #include "plasmaextracomponentsplugin.moc"
 

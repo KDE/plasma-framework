@@ -24,9 +24,10 @@
 
 #include "units.h"
 
-namespace Plasma {
+namespace Plasma
+{
 
-    class Svg;
+class Svg;
 
 class SvgItem : public QQuickItem
 {
@@ -47,7 +48,7 @@ class SvgItem : public QQuickItem
      * </code>
      * Instead of a Svg declaration it can also be the id of a Svg declared elsewhere, useful to share Svg instances.
      */
-    Q_PROPERTY(Plasma::Svg * svg READ svg WRITE setSvg NOTIFY svgChanged)
+    Q_PROPERTY(Plasma::Svg *svg READ svg WRITE setSvg NOTIFY svgChanged)
 
     /**
      * The natural, unscaled size of the svg document or the element. useful if a pixel perfect rendering of outlines is needed.
@@ -70,7 +71,7 @@ class SvgItem : public QQuickItem
     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
 
 public:
-    SvgItem(QQuickItem *parent=0);
+    SvgItem(QQuickItem *parent = 0);
     ~SvgItem();
 
     void setElementId(const QString &elementID);
@@ -90,7 +91,7 @@ public:
     void setImplicitHeight(qreal height);
     qreal implicitHeight() const;
 
-    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData);
 
 Q_SIGNALS:
     void elementIdChanged();

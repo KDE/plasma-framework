@@ -38,5 +38,4 @@ public:
     void registerTypes(const char *uri);
 };
 
-
 #endif

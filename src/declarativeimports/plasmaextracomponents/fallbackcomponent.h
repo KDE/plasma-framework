@@ -20,7 +20,6 @@
 #ifndef FALLBACKCOMPONENT_H
 #define FALLBACKCOMPONENT_H
 
-
 #include <QObject>
 #include <QCache>
 #include <QStringList>
@@ -55,15 +54,13 @@ public:
     *
     * @param key the name of the file to search for
     **/
-    Q_INVOKABLE QString filePath(const QString& key = QString());
+    Q_INVOKABLE QString filePath(const QString &key = QString());
 
     QString basePath() const;
     void setBasePath(const QString &basePath);
 
-
     QStringList candidates() const;
     void setCandidates(const QStringList &candidates);
-
 
 Q_SIGNALS:
     void basePathChanged();

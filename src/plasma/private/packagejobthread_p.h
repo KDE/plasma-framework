@@ -33,23 +33,23 @@ class PackageJobThread : public QThread
 {
     Q_OBJECT
 
-    public:
-        PackageJobThread(const QString &servicePrefix, QObject* parent = 0);
-        virtual ~PackageJobThread();
+public:
+    PackageJobThread(const QString &servicePrefix, QObject *parent = 0);
+    virtual ~PackageJobThread();
 
-        bool install(const QString &src, const QString &dest);
-        bool uninstall(const QString &packagePath);
+    bool install(const QString &src, const QString &dest);
+    bool uninstall(const QString &packagePath);
 
-    Q_SIGNALS:
-        void finished(bool success, const QString &errorMessage = QString());
-        void percentChanged(int percent);
-        void error(const QString &errorMessage);
-        void installPathChanged(const QString &installPath);
+Q_SIGNALS:
+    void finished(bool success, const QString &errorMessage = QString());
+    void percentChanged(int percent);
+    void error(const QString &errorMessage);
+    void installPathChanged(const QString &installPath);
 
-    private:
-        bool installPackage(const QString &src, const QString &dest);
-        bool uninstallPackage(const QString &packagePath);
-        PackageJobThreadPrivate* d;
+private:
+    bool installPackage(const QString &src, const QString &dest);
+    bool uninstallPackage(const QString &packagePath);
+    PackageJobThreadPrivate *d;
 };
 
 }

@@ -34,7 +34,6 @@ namespace Plasma
 class DataSource;
 class DataModel;
 
-
 class SortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -71,7 +70,7 @@ class SortFilterModel : public QSortFilterProxyModel
     friend class DataModel;
 
 public:
-    SortFilterModel(QObject* parent=0);
+    SortFilterModel(QObject *parent = 0);
     ~SortFilterModel();
 
     void setModel(QAbstractItemModel *source);
@@ -87,7 +86,10 @@ public:
 
     void setSortOrder(const Qt::SortOrder order);
 
-    int count() const {return QSortFilterProxyModel::rowCount();}
+    int count() const
+    {
+        return QSortFilterProxyModel::rowCount();
+    }
 
     /**
      * Returns the item at index in the list model.
@@ -145,7 +147,7 @@ class DataModel : public QAbstractItemModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
-    DataModel(QObject* parent=0);
+    DataModel(QObject *parent = 0);
     ~DataModel();
 
     void setDataSource(QObject *source);
@@ -154,13 +156,13 @@ public:
     /**
      * Include only items with a key that matches this regexp in the model
      */
-    void setKeyRoleFilter(const QString& key);
+    void setKeyRoleFilter(const QString &key);
     QString keyRoleFilter() const;
 
     /**
      * Include only sources that matches this regexp in the model
      */
-    void setSourceFilter(const QString& key);
+    void setSourceFilter(const QString &key);
     QString sourceFilter() const;
 
     int roleNameToId(const QString &name);
@@ -175,7 +177,10 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    int count() const {return countItems();}
+    int count() const
+    {
+        return countItems();
+    }
 
     /**
      * Returns the item at index in the list model.

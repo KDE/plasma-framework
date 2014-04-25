@@ -113,7 +113,7 @@ Q_SIGNALS:
 
 protected:
     QRangeModel(QRangeModelPrivate &dd, QObject *parent);
-    QRangeModelPrivate* d_ptr;
+    QRangeModelPrivate *d_ptr;
 
 private:
     Q_DISABLE_COPY(QRangeModel)

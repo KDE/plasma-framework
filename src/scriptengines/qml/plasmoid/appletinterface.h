@@ -39,14 +39,15 @@ class QSizeF;
 
 class ConfigView;
 
-namespace KDeclarative {
-    class ConfigPropertyMap;
-    class QmlObject;
+namespace KDeclarative
+{
+class ConfigPropertyMap;
+class QmlObject;
 }
 
 namespace Plasma
 {
-    class ConfigLoader;
+class ConfigLoader;
 } // namespace Plasma
 
 class AppletInterface : public PlasmaQuick::AppletQuickItem
@@ -112,7 +113,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     /**
      * Configuration object: each config key will be a writable property of this object. property bindings work.
      */
-    Q_PROPERTY(QObject* configuration READ configuration CONSTANT)
+    Q_PROPERTY(QObject *configuration READ configuration CONSTANT)
 
     /**
      * When true the plasmoid is busy. The containment may graphically indicate that drawing for instance a spinner busy widget over it
@@ -140,7 +141,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
 
     /**
-     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type. 
+     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
      * TODO: a way to set associated application urls.
      */
     Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
@@ -175,7 +176,7 @@ public:
 
     DeclarativeAppletScript *appletScript() const;
 
-    QList<QAction*> contextualActions() const;
+    QList<QAction *> contextualActions() const;
 
     void executeAction(const QString &name);
 
@@ -259,7 +260,7 @@ public:
 
     QString currentActivity() const;
 
-    QObject* configuration() const;
+    QObject *configuration() const;
 
     bool isBusy() const;
     void setBusy(bool busy);
@@ -300,7 +301,6 @@ Q_SIGNALS:
      */
     void activated();
 
-
 //PROPERTY change notifiers--------------
     void iconChanged();
     void titleChanged();
@@ -331,7 +331,6 @@ private:
     DeclarativeAppletScript *m_appletScriptEngine;
 
 //UI-specific members ------------------
-
 
     QString m_toolTipMainText;
     QString m_toolTipSubText;

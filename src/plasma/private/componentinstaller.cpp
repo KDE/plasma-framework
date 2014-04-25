@@ -31,16 +31,16 @@ namespace Plasma
 
 class ComponentInstallerPrivate
 {
-    public:
+public:
 #ifdef PLASMA_ENABLE_PACKAGEKIT_SUPPORT
-        QSet<QString> alreadyPrompted;
+    QSet<QString> alreadyPrompted;
 #endif
 };
 
 class ComponentInstallerSingleton
 {
-    public:
-        ComponentInstaller self;
+public:
+    ComponentInstaller self;
 };
 
 Q_GLOBAL_STATIC(ComponentInstallerSingleton, privateComponentInstallerSelf)
@@ -61,8 +61,8 @@ ComponentInstaller::~ComponentInstaller()
 }
 
 void ComponentInstaller::installMissingComponent(const QString &type,
-                                                 const QString &name,
-                                                 QWidget *parent, bool force)
+        const QString &name,
+        QWidget *parent, bool force)
 {
 #ifdef PLASMA_ENABLE_PACKAGEKIT_SUPPORT
     QString searchString = type + '-' + name;

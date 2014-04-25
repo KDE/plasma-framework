@@ -42,7 +42,6 @@ public:
     }
 };
 
-
 void PackageStructureTest::initTestCase()
 {
     m_packagePath = QFINDTESTDATA("data/testpackage");
@@ -82,10 +81,10 @@ void PackageStructureTest::multiplePaths()
 
 void PackageStructureTest::directories()
 {
-    QList<const char*> dirs;
+    QList<const char *> dirs;
     dirs << "config" << "data" << "images" << "theme" << "scripts" << "translations" << "ui";
 
-    QList<const char*> psDirs = ps.directories();
+    QList<const char *> psDirs = ps.directories();
 
     QCOMPARE(dirs.count(), psDirs.count());
 
@@ -114,16 +113,16 @@ void PackageStructureTest::directories()
 
 void PackageStructureTest::requiredDirectories()
 {
-    QList<const char*> dirs;
+    QList<const char *> dirs;
     QCOMPARE(ps.requiredDirectories(), dirs);
 }
 
 void PackageStructureTest::files()
 {
-    QList<const char*> files;
+    QList<const char *> files;
     files << "mainconfigui" << "mainconfigxml" << "mainscript";
 
-    QList<const char*> psFiles = ps.files();
+    QList<const char *> psFiles = ps.files();
 
     //for (int i = 0; i < psFiles.count(); ++i) {
     //    qDebug() << psFiles[i];
@@ -142,10 +141,10 @@ void PackageStructureTest::files()
 
 void PackageStructureTest::requiredFiles()
 {
-    QList<const char*> files;
+    QList<const char *> files;
     files << "mainscript";
 
-    QList<const char*> psFiles = ps.requiredFiles();
+    QList<const char *> psFiles = ps.requiredFiles();
 
     QCOMPARE(files.count(), psFiles.count());
     for (int i = 0; i < files.count(); ++i) {
@@ -180,5 +179,4 @@ void PackageStructureTest::mimeTypes()
 }
 
 QTEST_MAIN(PackageStructureTest)
-
 

@@ -36,23 +36,23 @@ class PluginTest : public QApplication
 {
     Q_OBJECT
 
-    public:
-        PluginTest(int& argc, char** argv, QCommandLineParser *parser);
-        virtual ~PluginTest();
+public:
+    PluginTest(int &argc, char **argv, QCommandLineParser *parser);
+    virtual ~PluginTest();
 
-        void showPackageInfo(const QString &pluginName);
+    void showPackageInfo(const QString &pluginName);
 
-    public Q_SLOTS:
-        void runMain();
-        bool loadKPlugin();
-        bool loadFromKService(const QString &name = "time");
-        bool loadFromPlasma();
-        void loadKQPlugin();
-        bool loadKService(const QString &name = QString());
-        void dataUpdated(QString s, Plasma::DataEngine::Data d);
+public Q_SLOTS:
+    void runMain();
+    bool loadKPlugin();
+    bool loadFromKService(const QString &name = "time");
+    bool loadFromPlasma();
+    void loadKQPlugin();
+    bool loadKService(const QString &name = QString());
+    void dataUpdated(QString s, Plasma::DataEngine::Data d);
 
-    private:
-        PluginTestPrivate* d;
+private:
+    PluginTestPrivate *d;
 };
 
 }

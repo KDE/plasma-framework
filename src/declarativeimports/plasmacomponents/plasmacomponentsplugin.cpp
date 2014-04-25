@@ -37,7 +37,7 @@
 class BKSingleton
 {
 public:
-   EngineBookKeeping self;
+    EngineBookKeeping self;
 };
 Q_GLOBAL_STATIC(BKSingleton, privateBKSelf)
 
@@ -63,8 +63,8 @@ QQmlEngine *EngineBookKeeping::engine() const
 
 void EngineBookKeeping::insertEngine(QQmlEngine *engine)
 {
-    connect(engine, SIGNAL(destroyed(QObject *)),
-            this, SLOT(engineDestroyed(QObject *)));
+    connect(engine, SIGNAL(destroyed(QObject*)),
+            this, SLOT(engineDestroyed(QObject*)));
     m_engines.insert(engine);
 }
 
@@ -72,8 +72,6 @@ void EngineBookKeeping::engineDestroyed(QObject *deleted)
 {
     m_engines.remove(static_cast<QQmlEngine *>(deleted));
 }
-
-
 
 void PlasmaComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
@@ -91,7 +89,7 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
         qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
         qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
     } else {
-       // qmlRegisterType<FullScreenSheet>(uri, 2, 0, "Sheet");
+        // qmlRegisterType<FullScreenSheet>(uri, 2, 0, "Sheet");
     }
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 2, 0, "RangeModel");
@@ -100,7 +98,6 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", "");
     qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", "");
 }
-
 
 #include "moc_plasmacomponentsplugin.cpp"
 

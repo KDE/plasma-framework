@@ -29,12 +29,11 @@
 #include "corona.h"
 #include "containmentactions.h"
 
-
 class KJob;
 
 namespace KIO
 {
-    class Job;
+class Job;
 }
 
 namespace Plasma
@@ -75,7 +74,7 @@ public:
 
     bool isPanelContainment() const;
     void setLockToolText();
-    void appletDeleted(Applet*);
+    void appletDeleted(Applet *);
     void configChanged();
 
     Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
@@ -99,7 +98,7 @@ public:
     //Applets still considered not ready
     QSet <Applet *> loadingApplets;
     QString wallpaper;
-    QHash<QString, ContainmentActions*> localActionPlugins;
+    QHash<QString, ContainmentActions *> localActionPlugins;
     int lastScreen;
     QString activityId;
     Types::ContainmentType type;

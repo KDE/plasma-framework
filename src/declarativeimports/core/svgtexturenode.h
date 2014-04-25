@@ -22,7 +22,8 @@
 
 #include <QSGSimpleTextureNode>
 
-namespace Plasma {
+namespace Plasma
+{
 
 /**
 * This class wraps QSGSimpleTextureNode
@@ -31,18 +32,19 @@ namespace Plasma {
 
 class SVGTextureNode : public QSGSimpleTextureNode
 {
-    public:
-        SVGTextureNode() {}
-        /**
-         * Set the current texture
-         * the object takes ownership of the texture
-         */
-        void setTexture(QSGTexture *texture) {
-            m_texture.reset(texture);
-            QSGSimpleTextureNode::setTexture(texture);
-        }
-    private:
-        QScopedPointer<QSGTexture> m_texture;
+public:
+    SVGTextureNode() {}
+    /**
+     * Set the current texture
+     * the object takes ownership of the texture
+     */
+    void setTexture(QSGTexture *texture)
+    {
+        m_texture.reset(texture);
+        QSGSimpleTextureNode::setTexture(texture);
+    }
+private:
+    QScopedPointer<QSGTexture> m_texture;
 };
 
 }

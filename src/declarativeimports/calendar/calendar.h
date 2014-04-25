@@ -27,7 +27,6 @@
 #include "daydata.h"
 #include "daysmodel.h"
 
-
 class Calendar : public QObject
 {
     Q_OBJECT
@@ -111,7 +110,7 @@ class Calendar : public QObject
      * metadata about the current day. The exact metadata can be found in "daysmodel.cpp"
      * where the exact names usable in QML are being set.
      */
-    Q_PROPERTY(QAbstractListModel* daysModel READ daysModel CONSTANT)
+    Q_PROPERTY(QAbstractListModel *daysModel READ daysModel CONSTANT)
 
     Q_ENUMS(Type)
 
@@ -123,7 +122,6 @@ public:
         Journal = 8
     };
     Q_DECLARE_FLAGS(Types, Type)
-
 
     explicit Calendar(QObject *parent = 0);
 
@@ -155,18 +153,17 @@ public:
     int year() const;
 
     // Models
-    QAbstractListModel* daysModel() const;
-     QList<int> weeksModel() const;
-
+    QAbstractListModel *daysModel() const;
+    QList<int> weeksModel() const;
 
     // QML invokables
     Q_INVOKABLE void nextMonth();
     Q_INVOKABLE void previousMonth();
     Q_INVOKABLE void nextYear();
     Q_INVOKABLE void previousYear();
-    Q_INVOKABLE QString dayName(int weekday) const ;
+    Q_INVOKABLE QString dayName(int weekday) const;
     Q_INVOKABLE int currentWeek() const;
-    
+
 Q_SIGNALS:
     void startDateChanged();
     void typesChanged();
@@ -179,12 +176,12 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void updateData();
-    
+
 private:
     QDate m_startDate;
     Types m_types;
     QList<DayData> m_dayList;
-    DaysModel* m_daysModel;
+    DaysModel *m_daysModel;
     QList<int> m_weekList;
 
     int m_days;

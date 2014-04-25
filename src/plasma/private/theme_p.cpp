@@ -43,9 +43,8 @@ EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
 
 ThemePrivate *ThemePrivate::globalTheme = 0;
 QAtomicInt ThemePrivate::globalThemeRefCount = QAtomicInt();
-QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate*>();
+QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate *>();
 QHash<QString, QAtomicInt> ThemePrivate::themesRefCount = QHash<QString, QAtomicInt>();
-
 
 ThemePrivate::ThemePrivate(QObject *parent)
     : QObject(parent),
@@ -109,26 +108,25 @@ ThemePrivate::~ThemePrivate()
 }
 
 KConfigGroup &ThemePrivate::config()
-    {
-        if (!cfg.isValid()) {
-            QString groupName = QStringLiteral("Theme");
+{
+    if (!cfg.isValid()) {
+        QString groupName = QStringLiteral("Theme");
 
-            if (!useGlobal) {
-                QString app = QCoreApplication::applicationName();
+        if (!useGlobal) {
+            QString app = QCoreApplication::applicationName();
 
-                if (!app.isEmpty()) {
+            if (!app.isEmpty()) {
 #ifndef NDEBUG
-                    // qDebug() << "using theme for app" << app;
+                // qDebug() << "using theme for app" << app;
 #endif
-                    groupName.append("-").append(app);
-                }
+                groupName.append("-").append(app);
             }
-            cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
         }
-
-        return cfg;
+        cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
     }
 
+    return cfg;
+}
 
 bool ThemePrivate::useCache()
 {
@@ -149,7 +147,6 @@ bool ThemePrivate::useCache()
             KDirWatch::self()->removeFile(themeMetadataPath);
         }
         themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
-
 
         if (isRegularTheme) {
             const QString cacheFileBase = cacheFile + QStringLiteral("*.kcache");
@@ -177,7 +174,7 @@ bool ThemePrivate::useCache()
             // now we check for, and remove if necessary, old caches
             foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, cacheFileBase)) {
                 if (currentCacheFileName.isEmpty() ||
-                    !file.endsWith(currentCacheFileName)) {
+                        !file.endsWith(currentCacheFileName)) {
                     QFile::remove(file);
                 }
             }
@@ -406,7 +403,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
     QHash<QString, QString>::const_iterator itEnd = elements.constEnd();
-    for ( ; it != itEnd; ++it) {
+    for (; it != itEnd; ++it) {
         stylesheet.replace(it.key(), it.value());
     }
     return stylesheet;
@@ -464,44 +461,44 @@ void ThemePrivate::settingsChanged()
 QColor ThemePrivate::color(Theme::ColorRole role) const
 {
     switch (role) {
-        case Theme::TextColor:
-            return colorScheme.foreground(KColorScheme::NormalText).color();
+    case Theme::TextColor:
+        return colorScheme.foreground(KColorScheme::NormalText).color();
 
-        case Theme::HighlightColor:
-            return colorScheme.decoration(KColorScheme::HoverColor).color();
+    case Theme::HighlightColor:
+        return colorScheme.decoration(KColorScheme::HoverColor).color();
 
-        case Theme::BackgroundColor:
-            return colorScheme.background(KColorScheme::NormalBackground).color();
+    case Theme::BackgroundColor:
+        return colorScheme.background(KColorScheme::NormalBackground).color();
 
-        case Theme::ButtonTextColor:
-            return buttonColorScheme.foreground(KColorScheme::NormalText).color();
+    case Theme::ButtonTextColor:
+        return buttonColorScheme.foreground(KColorScheme::NormalText).color();
 
-        case Theme::ButtonBackgroundColor:
-            return buttonColorScheme.background(KColorScheme::NormalBackground).color();
+    case Theme::ButtonBackgroundColor:
+        return buttonColorScheme.background(KColorScheme::NormalBackground).color();
 
-        case Theme::ButtonHoverColor:
-            return buttonColorScheme.decoration(KColorScheme::HoverColor).color();
+    case Theme::ButtonHoverColor:
+        return buttonColorScheme.decoration(KColorScheme::HoverColor).color();
 
-        case Theme::ButtonFocusColor:
-            return buttonColorScheme.decoration(KColorScheme::FocusColor).color();
+    case Theme::ButtonFocusColor:
+        return buttonColorScheme.decoration(KColorScheme::FocusColor).color();
 
-        case Theme::ViewTextColor:
-            return viewColorScheme.foreground(KColorScheme::NormalText).color();
+    case Theme::ViewTextColor:
+        return viewColorScheme.foreground(KColorScheme::NormalText).color();
 
-        case Theme::ViewBackgroundColor:
-            return viewColorScheme.background(KColorScheme::NormalBackground).color();
+    case Theme::ViewBackgroundColor:
+        return viewColorScheme.background(KColorScheme::NormalBackground).color();
 
-        case Theme::ViewHoverColor:
-            return viewColorScheme.decoration(KColorScheme::HoverColor).color();
+    case Theme::ViewHoverColor:
+        return viewColorScheme.decoration(KColorScheme::HoverColor).color();
 
-        case Theme::ViewFocusColor:
-            return viewColorScheme.decoration(KColorScheme::FocusColor).color();
+    case Theme::ViewFocusColor:
+        return viewColorScheme.decoration(KColorScheme::FocusColor).color();
 
-        case Theme::LinkColor:
-            return viewColorScheme.foreground(KColorScheme::LinkText).color();
+    case Theme::LinkColor:
+        return viewColorScheme.foreground(KColorScheme::LinkText).color();
 
-        case Theme::VisitedLinkColor:
-            return viewColorScheme.foreground(KColorScheme::VisitedText).color();
+    case Theme::VisitedLinkColor:
+        return viewColorScheme.foreground(KColorScheme::VisitedText).color();
     }
 
     return QColor();
@@ -530,7 +527,7 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
     defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 }
 
-void ThemePrivate::processContrastSettings(KConfigBase* metadata)
+void ThemePrivate::processContrastSettings(KConfigBase *metadata)
 {
     KConfigGroup cg;
     if (metadata->hasGroup("ContrastEffect")) {
@@ -538,21 +535,21 @@ void ThemePrivate::processContrastSettings(KConfigBase* metadata)
         backgroundContrastEnabled = cg.readEntry(QStringLiteral("enabled"), false);
 
         //if (backgroundContrastEnabled) {
-            // Make up sensible default values, based on the background color
-            // This works for a light theme -- lighting up the background
-            qreal _contrast = 0.3;
-            qreal _intensity = 1.9;
-            qreal _saturation = 1.7;
+        // Make up sensible default values, based on the background color
+        // This works for a light theme -- lighting up the background
+        qreal _contrast = 0.3;
+        qreal _intensity = 1.9;
+        qreal _saturation = 1.7;
 
-            // If we're using a dark background color, darken the background
-            if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
-                _contrast = 0.45;
-                _intensity = 0.45;
-                _saturation = 1.7;
-            }
-            backgroundContrast = cg.readEntry(QStringLiteral("contrast"), _contrast);
-            backgroundIntensity = cg.readEntry(QStringLiteral("intensity"), _intensity);
-            backgroundSaturation = cg.readEntry(QStringLiteral("saturation"), _saturation);
+        // If we're using a dark background color, darken the background
+        if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
+            _contrast = 0.45;
+            _intensity = 0.45;
+            _saturation = 1.7;
+        }
+        backgroundContrast = cg.readEntry(QStringLiteral("contrast"), _contrast);
+        backgroundIntensity = cg.readEntry(QStringLiteral("intensity"), _intensity);
+        backgroundSaturation = cg.readEntry(QStringLiteral("saturation"), _saturation);
         //}
     } else {
         backgroundContrastEnabled = false;
@@ -597,7 +594,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     // load the color scheme config
     const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/colors"))
-                                         : QString();
+                               : QString();
 
     //qDebug() << "we're going for..." << colorsFile << "*******************";
 

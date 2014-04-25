@@ -30,8 +30,8 @@ class PlasmaKPartCorona;
 Q_DECLARE_METATYPE(Plasma::Containment *)
 namespace Plasma
 {
-    class Applet;
-    class PluginLoader;
+class Applet;
+class PluginLoader;
 }
 
 #include <KDE/KParts/Part>
@@ -85,14 +85,14 @@ public Q_SLOTS:
 private Q_SLOTS:
     void initCorona();
     void syncConfig();
-    void createView(Plasma::Containment* containment);
+    void createView(Plasma::Containment *containment);
     void setThemeDefaults();
 
 private:
-    PlasmaKPartCorona* m_corona;
-    PlasmaKPartView* m_view;
-    QHash<QString,Plasma::Applet*>* m_appletList;
-    QVBoxLayout* m_configLayout;
+    PlasmaKPartCorona *m_corona;
+    PlasmaKPartView *m_view;
+    QHash<QString, Plasma::Applet *> *m_appletList;
+    QVBoxLayout *m_configLayout;
     QString m_configFile;
 };
 

@@ -43,7 +43,7 @@ class PLASMA_EXPORT Corona : public QObject
     Q_OBJECT
 
 public:
-    explicit Corona(QObject * parent = 0);
+    explicit Corona(QObject *parent = 0);
     ~Corona();
 
     /**
@@ -66,7 +66,7 @@ public:
     /**
      * @return all containments on this Corona
      */
-    QList<Containment*> containments() const;
+    QList<Containment *> containments() const;
 
     /**
      * @returns true when the startup is over, and
@@ -154,7 +154,7 @@ public:
     /**
      * The actions assocated with this Corona
      */
-    KActionCollection* actions() const;
+    KActionCollection *actions() const;
 
     /**
      * Imports an applet layout from a config file. The results will be added to the
@@ -174,7 +174,7 @@ public:
      * @param containments the list of containments to save
      * @since 4.6
      */
-    void exportLayout(KConfigGroup &config, QList<Containment*> containments);
+    void exportLayout(KConfigGroup &config, QList<Containment *> containments);
 
     /**
      * @returns the id of the screen which is showing @p containment
@@ -305,7 +305,7 @@ protected:
 private:
     CoronaPrivate *const d;
 
-    Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject*))
+    Q_PRIVATE_SLOT(d, void containmentDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void syncConfig())
     Q_PRIVATE_SLOT(d, void toggleImmutability())
 

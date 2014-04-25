@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,13 +23,13 @@
 #include <plasma/applet.h>
 #include <QStandardItemModel>
 
-AppletSelector::AppletSelector(QObject* parent, const QVariantList& args)
+AppletSelector::AppletSelector(QObject *parent, const QVariantList &args)
     : KDialog()
 {
     Q_UNUSED(args);
 
     setButtons(Close);
-    QWidget* w = new QWidget(this);
+    QWidget *w = new QWidget(this);
 
     m_ui = new Ui::AppletSelector;
     m_ui->setupUi(w);
@@ -38,13 +38,13 @@ AppletSelector::AppletSelector(QObject* parent, const QVariantList& args)
 
     setMainWidget(w);
 
-    QStandardItemModel* model = new QStandardItemModel(this);
-    const KPluginInfo::List list= Plasma::Applet::listAppletInfo();
-    foreach(const KPluginInfo& info, list) {
-        QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
+    QStandardItemModel *model = new QStandardItemModel(this);
+    const KPluginInfo::List list = Plasma::Applet::listAppletInfo();
+    foreach (const KPluginInfo &info, list) {
+        QStandardItem *item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setEditable(false);
         item->setToolTip(info.comment());
-        item->setData(info.pluginName(), Qt::UserRole+1);
+        item->setData(info.pluginName(), Qt::UserRole + 1);
 
         model->appendRow(item);
     }
@@ -59,9 +59,9 @@ AppletSelector::~AppletSelector()
     delete m_ui;
 }
 
-void AppletSelector::selected(const QModelIndex& idx)
+void AppletSelector::selected(const QModelIndex &idx)
 {
-    emit addApplet(idx.data(Qt::UserRole+1).toString());
+    emit addApplet(idx.data(Qt::UserRole + 1).toString());
 }
 
 #include "appletselector.moc"

@@ -67,10 +67,10 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     foreach (QObject *child, item->children()) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-        ) {
+                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+           ) {
             layout = child;
         }
     }
@@ -97,10 +97,10 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     foreach (QObject *child, q->children()) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-            child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-            child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-            child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-        ) {
+                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+           ) {
             ownLayout = child;
         }
     }
@@ -121,24 +121,24 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 
     //Here we can't use the new connect syntax because we can't link against QtQuick layouts
     QObject::connect(layout, SIGNAL(minimumWidthChanged()),
-            q, SLOT(minimumWidthChanged()));
+                     q, SLOT(minimumWidthChanged()));
     QObject::connect(layout, SIGNAL(minimumHeightChanged()),
-            q, SLOT(minimumHeightChanged()));
+                     q, SLOT(minimumHeightChanged()));
 
     QObject::connect(layout, SIGNAL(preferredWidthChanged()),
-            q, SLOT(preferredWidthChanged()));
+                     q, SLOT(preferredWidthChanged()));
     QObject::connect(layout, SIGNAL(preferredHeightChanged()),
-            q, SLOT(preferredHeightChanged()));
+                     q, SLOT(preferredHeightChanged()));
 
     QObject::connect(layout, SIGNAL(maximumWidthChanged()),
-            q, SLOT(maximumWidthChanged()));
+                     q, SLOT(maximumWidthChanged()));
     QObject::connect(layout, SIGNAL(maximumHeightChanged()),
-            q, SLOT(maximumHeightChanged()));
+                     q, SLOT(maximumHeightChanged()));
 
     QObject::connect(layout, SIGNAL(fillWidthChanged()),
-            q, SLOT(fillWidthChanged()));
+                     q, SLOT(fillWidthChanged()));
     QObject::connect(layout, SIGNAL(fillHeightChanged()),
-            q, SLOT(fillHeightChanged()));
+                     q, SLOT(fillHeightChanged()));
 
     representationLayout = layout;
     AppletQuickItemPrivate::ownLayout = ownLayout;
@@ -191,17 +191,16 @@ QObject *AppletQuickItemPrivate::createFullRepresentationItem()
         emit q->fullRepresentationChanged(fullRepresentation.data());
     }
 
-
     if (!fullRepresentationItem) {
         return 0;
     }
 
     QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(fullRepresentationItem.data());
 
-    QObject::connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
+    QObject::connect(graphicsObj, &QQuickItem::widthChanged, [ = ]() {
         fullRepresentationResizeTimer.start();
     });
-    QObject::connect (graphicsObj, &QQuickItem::heightChanged, [=]() {
+    QObject::connect(graphicsObj, &QQuickItem::heightChanged, [ = ]() {
         fullRepresentationResizeTimer.start();
     });
 
@@ -246,20 +245,20 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
     } else {
         if (switchWidth > 0 && switchHeight > 0) {
             full = q->width() > switchWidth && q->height() > switchHeight;
-        //if a size to switch wasn't set, determine what representation to always chose
+            //if a size to switch wasn't set, determine what representation to always chose
         } else {
             //preferred representation set?
             if (preferredRepresentation) {
                 full = preferredRepresentation.data() == fullRepresentation.data();
-            //Otherwise, base on FormFactor
+                //Otherwise, base on FormFactor
             } else {
                 full = (applet->formFactor() != Plasma::Types::Horizontal && applet->formFactor() != Plasma::Types::Vertical);
             }
         }
 
         if ((full && fullRepresentationItem && fullRepresentationItem.data() == currentRepresentationItem.data()) ||
-            (!full && compactRepresentationItem && compactRepresentationItem.data() == currentRepresentationItem.data())
-        ) {
+                (!full && compactRepresentationItem && compactRepresentationItem.data() == currentRepresentationItem.data())
+           ) {
             return;
         }
     }
@@ -294,7 +293,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             emit q->expandedChanged(true);
         }
 
-    //Icon
+        //Icon
     } else {
         QQuickItem *compactItem = qobject_cast<QQuickItem *>(createCompactRepresentationItem());
         QQuickItem *compactExpanderItem = qobject_cast<QQuickItem *>(createCompactRepresentationExpanderItem());
@@ -321,7 +320,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             currentRepresentationItem = compactItem;
             connectLayoutAttached(compactItem);
-            
+
             expanded = false;
             emit q->expandedChanged(false);
         }
@@ -368,9 +367,6 @@ void AppletQuickItemPrivate::fillHeightChanged()
     propagateSizeHint("fillHeight");
 }
 
-
-
-
 AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       d(new AppletQuickItemPrivate(applet, this))
@@ -384,23 +380,21 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
     d->compactRepresentationCheckTimer.setSingleShot(true);
     d->compactRepresentationCheckTimer.setInterval(250);
-    connect (&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
-             this, SLOT(compactRepresentationCheck()));
+    connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
+            this, SLOT(compactRepresentationCheck()));
     d->compactRepresentationCheckTimer.start();
 
     d->fullRepresentationResizeTimer.setSingleShot(true);
     d->fullRepresentationResizeTimer.setInterval(250);
-    connect (&d->fullRepresentationResizeTimer, &QTimer::timeout,
-             [=]() {
-                 if (!d->applet->isContainment()) {
-                     KConfigGroup cg = d->applet->config();
-                     cg = KConfigGroup(&cg, "PopupApplet");
-                     cg.writeEntry("DialogWidth", d->fullRepresentationItem.data()->property("width").toInt());
-                     cg.writeEntry("DialogHeight", d->fullRepresentationItem.data()->property("height").toInt());
-                 }
-            });
-
-
+    connect(&d->fullRepresentationResizeTimer, &QTimer::timeout,
+    [ = ]() {
+        if (!d->applet->isContainment()) {
+            KConfigGroup cg = d->applet->config();
+            cg = KConfigGroup(&cg, "PopupApplet");
+            cg.writeEntry("DialogWidth", d->fullRepresentationItem.data()->property("width").toInt());
+            cg.writeEntry("DialogHeight", d->fullRepresentationItem.data()->property("height").toInt());
+        }
+    });
 
     d->qmlObject = new KDeclarative::QmlObject(this);
     d->qmlObject->setInitializationDelayed(true);
@@ -420,7 +414,7 @@ AppletQuickItem::~AppletQuickItem()
     AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->engine());
 }
 
- AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
+AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     //at the moment of the attached object creation, the root item is the only one that hasn't a parent
     //only way to avoid creation of this attached for everybody but the root item
@@ -461,7 +455,7 @@ void AppletQuickItem::init()
         QString reason;
         if (d->applet->package().isValid()) {
             foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
-                reason += error.toString()+'\n';
+                reason += error.toString() + '\n';
             }
             reason = i18n("Error loading QML file: %1", reason);
         } else {
@@ -496,10 +490,10 @@ void AppletQuickItem::init()
 
         if (d->qmlObject->rootObject()) {
             QQuickItem *graphicsObj = qobject_cast<QQuickItem *>(d->fullRepresentationItem.data());
-            QObject::connect (graphicsObj, &QQuickItem::widthChanged, [=]() {
+            QObject::connect(graphicsObj, &QQuickItem::widthChanged, [ = ]() {
                 d->fullRepresentationResizeTimer.start();
             });
-            QObject::connect (graphicsObj, &QQuickItem::heightChanged, [=]() {
+            QObject::connect(graphicsObj, &QQuickItem::heightChanged, [ = ]() {
                 d->fullRepresentationResizeTimer.start();
             });
         }
@@ -586,7 +580,6 @@ void AppletQuickItem::setCompactRepresentation(QQmlComponent *component)
     emit compactRepresentationChanged(component);
 }
 
-
 QQmlComponent *AppletQuickItem::fullRepresentation()
 {
     return d->fullRepresentation.data();
@@ -637,8 +630,8 @@ void AppletQuickItem::setExpanded(bool expanded)
     if (expanded) {
         d->createFullRepresentationItem();
         if (!d->applet->isContainment() &&
-            (!d->preferredRepresentation ||
-             d->preferredRepresentation.data() != d->fullRepresentation.data())) {
+                (!d->preferredRepresentation ||
+                 d->preferredRepresentation.data() != d->fullRepresentation.data())) {
             d->createCompactRepresentationExpanderItem();
         }
 
@@ -663,7 +656,6 @@ void AppletQuickItem::setExpanded(bool expanded)
 }
 
 ////////////Internals
-
 
 KDeclarative::QmlObject *AppletQuickItem::qmlObject()
 {

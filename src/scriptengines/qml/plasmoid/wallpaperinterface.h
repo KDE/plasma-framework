@@ -25,8 +25,9 @@
 
 #include <Plasma/Package>
 
-namespace Plasma {
-    class ConfigLoader;
+namespace Plasma
+{
+class ConfigLoader;
 }
 
 class KActionCollection;
@@ -34,11 +35,11 @@ class KActionCollection;
 class ContainmentInterface;
 class QSignalMapper;
 
-namespace KDeclarative {
-    class ConfigPropertyMap;
-    class QmlObject;
+namespace KDeclarative
+{
+class ConfigPropertyMap;
+class QmlObject;
 }
-
 
 class WallpaperInterface : public QQuickItem
 {
@@ -58,7 +59,7 @@ public:
     * @return list of wallpapers
     */
     static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
-                                                          const QString &formFactor = QString());
+            const QString &formFactor = QString());
 
     Plasma::Package package() const;
 
@@ -68,7 +69,7 @@ public:
 
     Plasma::ConfigLoader *configScheme();
 
-    QList<QAction*> contextualActions() const;
+    QList<QAction *> contextualActions() const;
 
     bool supportsMimetype(const QString &mimetype) const;
 

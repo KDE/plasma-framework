@@ -104,7 +104,7 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 }
 
 void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
-                                         Plasma::Types::IntervalAlignment alignment)
+        Plasma::Types::IntervalAlignment alignment)
 {
     //qDebug() << "connecting visualization" <<this<< visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();
@@ -131,8 +131,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
                 disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                            visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
                 //modelChanged is always emitted by the dataSource since there is no polling there
-                disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+                disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                           visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
                 //relay->isUnused();
             }
         } else if (pollingInterval < 1) {
@@ -144,12 +144,12 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-            disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+            disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                       visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
         }
     } else {
         connect(visualization, SIGNAL(destroyed(QObject*)),
-                this, SLOT(disconnectVisualization(QObject*)));//, Qt::QueuedConnection);
+                this, SLOT(disconnectVisualization(QObject*))); //, Qt::QueuedConnection);
     }
 
     if (pollingInterval < 1) {
@@ -157,8 +157,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         d->relayObjects[visualization] = 0;
         connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-        connect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+        connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
     } else {
         //qDebug() << "    connecting to a relay";
         // we only want to do an imediate update if this is not the first object to connect to us
@@ -170,8 +170,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
         //modelChanged is always emitted by the dataSource since there is no polling there
-        connect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+        connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
     }
 }
 
@@ -181,7 +181,7 @@ void DataContainer::setStorageEnabled(bool store)
     qsrand((uint)time.msec());
     d->enableStorage = store;
     if (store) {
-        QTimer::singleShot(qrand() % (2000 + 1) , this, SLOT(retrieve()));
+        QTimer::singleShot(qrand() % (2000 + 1), this, SLOT(retrieve()));
     }
 }
 
@@ -200,17 +200,16 @@ void DataContainer::setNeedsToBeStored(bool store)
     d->isStored = !store;
 }
 
-DataEngine* DataContainer::getDataEngine()
+DataEngine *DataContainer::getDataEngine()
 {
     QObject *o = this;
     DataEngine *de = NULL;
-    while (de == NULL)
-    {
-        o = dynamic_cast<QObject *> (o->parent());
+    while (de == NULL) {
+        o = dynamic_cast<QObject *>(o->parent());
         if (o == NULL) {
             return NULL;
         }
-        de = dynamic_cast<DataEngine *> (o);
+        de = dynamic_cast<DataEngine *>(o);
     }
     return de;
 }
@@ -221,7 +220,7 @@ void DataContainerPrivate::store()
         return;
     }
 
-    DataEngine* de = q->getDataEngine();
+    DataEngine *de = q->getDataEngine();
     if (!de) {
         return;
     }
@@ -240,7 +239,7 @@ void DataContainerPrivate::store()
     QObject::connect(job, SIGNAL(finished(KJob*)), q, SLOT(storeJobFinished(KJob*)));
 }
 
-void DataContainerPrivate::storeJobFinished(KJob* )
+void DataContainerPrivate::storeJobFinished(KJob *)
 {
     --storageCount;
     if (storageCount < 1) {
@@ -251,7 +250,7 @@ void DataContainerPrivate::storeJobFinished(KJob* )
 
 void DataContainerPrivate::retrieve()
 {
-    DataEngine* de = q->getDataEngine();
+    DataEngine *de = q->getDataEngine();
     if (de == NULL) {
         return;
     }
@@ -262,9 +261,9 @@ void DataContainerPrivate::retrieve()
 
     QVariantMap retrieveGroup = storage->operationDescription("retrieve");
     retrieveGroup["group"] = q->objectName();
-    ServiceJob* retrieveJob = storage->startOperationCall(retrieveGroup);
+    ServiceJob *retrieveJob = storage->startOperationCall(retrieveGroup);
     QObject::connect(retrieveJob, SIGNAL(result(KJob*)), q,
-            SLOT(populateFromStoredData(KJob*)));
+                     SLOT(populateFromStoredData(KJob*)));
 }
 
 void DataContainerPrivate::populateFromStoredData(KJob *job)
@@ -273,7 +272,7 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
         return;
     }
 
-    StorageJob *ret = dynamic_cast<StorageJob*>(job);
+    StorageJob *ret = dynamic_cast<StorageJob *>(job);
     if (!ret) {
         return;
     }
@@ -296,14 +295,14 @@ void DataContainer::disconnectVisualization(QObject *visualization)
 {
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     disconnect(visualization, SIGNAL(destroyed(QObject*)),
-              this, SLOT(disconnectVisualization(QObject*)));//, Qt::QueuedConnection);
+               this, SLOT(disconnectVisualization(QObject*))); //, Qt::QueuedConnection);
 
     if (objIt == d->relayObjects.end() || !objIt.value()) {
         // it is connected directly to the DataContainer itself
         disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-        disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+        disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                   visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
     } else {
         SignalRelay *relay = objIt.value();
 
@@ -314,8 +313,8 @@ void DataContainer::disconnectVisualization(QObject *visualization)
             disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
             //modelChanged is always emitted by the dataSource since there is no polling there
-            disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)),
-                           visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
+            disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                       visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
         }
     }
 
@@ -364,7 +363,7 @@ void DataContainer::setNeedsUpdate(bool update)
 bool DataContainer::isUsed() const
 {
     return !d->relays.isEmpty() ||
-           receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) > 0;
+           receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) > 0;
 }
 
 void DataContainerPrivate::checkUsage()
@@ -374,13 +373,13 @@ void DataContainerPrivate::checkUsage()
     }
 }
 
-void DataContainer::timerEvent(QTimerEvent * event)
+void DataContainer::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == d->checkUsageTimer.timerId()) {
         if (!isUsed()) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
             //qDebug() << objectName() << "is unused";
-            
+
             //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
             if (d->model) {
                 d->model.clear();
@@ -396,7 +395,5 @@ void DataContainer::timerEvent(QTimerEvent * event)
 }
 
 } // Plasma namespace
-
-
 
 #include "moc_datacontainer.cpp"

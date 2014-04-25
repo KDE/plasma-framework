@@ -39,50 +39,50 @@ namespace Plasma
 
 class NullEngine : public DataEngine
 {
-    public:
-        NullEngine(QObject *parent = 0)
-            : DataEngine(KPluginInfo(), parent)
-        {
-            setValid(false);
+public:
+    NullEngine(QObject *parent = 0)
+        : DataEngine(KPluginInfo(), parent)
+    {
+        setValid(false);
 
-            // ref() ourselves to ensure we never get deleted
-            d->ref();
-        }
+        // ref() ourselves to ensure we never get deleted
+        d->ref();
+    }
 };
 
 class DataEngineManagerPrivate
 {
-    public:
-        DataEngineManagerPrivate()
-            : nullEng(0)
-        {}
+public:
+    DataEngineManagerPrivate()
+        : nullEng(0)
+    {}
 
-        ~DataEngineManagerPrivate()
-        {
-            foreach (Plasma::DataEngine *engine, engines) {
-                delete engine;
-            }
-            engines.clear();
-            delete nullEng;
+    ~DataEngineManagerPrivate()
+    {
+        foreach (Plasma::DataEngine *engine, engines) {
+            delete engine;
+        }
+        engines.clear();
+        delete nullEng;
+    }
+
+    DataEngine *nullEngine()
+    {
+        if (!nullEng) {
+            nullEng = new NullEngine;
         }
 
-        DataEngine *nullEngine()
-        {
-            if (!nullEng) {
-                nullEng = new NullEngine;
-            }
+        return nullEng;
+    }
 
-            return nullEng;
-        }
-
-        DataEngine::Dict engines;
-        DataEngine *nullEng;
+    DataEngine::Dict engines;
+    DataEngine *nullEng;
 };
 
 class DataEngineManagerSingleton
 {
-    public:
-        DataEngineManager self;
+public:
+    DataEngineManager self;
 };
 
 Q_GLOBAL_STATIC(DataEngineManagerSingleton, privateDataEngineManagerSelf)
@@ -173,7 +173,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
 
     QTextStream out(&f);
 
-    QHashIterator<QString, DataEngine*> it(d->engines);
+    QHashIterator<QString, DataEngine *> it(d->engines);
     out << "================================== " << QLocale().toString(QDateTime::currentDateTime()) << endl;
     while (it.hasNext()) {
         it.next();
@@ -211,6 +211,5 @@ void DataEngineManager::timerEvent(QTimerEvent *)
 }
 
 } // namespace Plasma
-
 
 #include "moc_dataenginemanager_p.cpp"

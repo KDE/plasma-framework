@@ -67,7 +67,7 @@ public:
     bool hasUpdates();
 
     /**
-     * Deletes the store member of DataContainerPrivate if 
+     * Deletes the store member of DataContainerPrivate if
      * there are no more references to it.
      */
     void storeJobFinished(KJob *job);
@@ -86,7 +86,7 @@ public:
     QMap<QObject *, SignalRelay *> relayObjects;
     QMap<uint, SignalRelay *> relays;
     QTime updateTs;
-    Storage* storage;
+    Storage *storage;
     QBasicTimer storageTimer;
     QBasicTimer checkUsageTimer;
     QWeakPointer<QAbstractItemModel> model;

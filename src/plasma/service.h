@@ -215,7 +215,7 @@ protected:
     void setOperationEnabled(const QString &operation, bool enable);
 
 private:
-    ServicePrivate * const d;
+    ServicePrivate *const d;
 
     friend class DataEnginePrivate;
     friend class PluginLoader;
@@ -229,8 +229,8 @@ Q_DECLARE_METATYPE(Plasma::Service *)
  * Register a service when it is contained in a loadable module
  */
 #define K_EXPORT_PLASMA_SERVICE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard
 

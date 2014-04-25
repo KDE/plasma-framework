@@ -23,10 +23,10 @@
 
 static const char version[] = "0.1";
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     KAboutData about("plasma-kpart-shell", 0, ki18n("Plasma KPart Shell"), version, ki18n("A KDE KPart Application"), KAboutData::License_GPL, ki18n("(C) 2010 Ryan Rix"), KLocalizedString(), 0, "ry@n.rix.si");
-    about.addAuthor( ki18n("Ryan Rix"), KLocalizedString(), "ry@n.rix.si" );
+    about.addAuthor(ki18n("Ryan Rix"), KLocalizedString(), "ry@n.rix.si");
     KCmdLineArgs::init(argc, argv, &about);
 
     KApplication app;

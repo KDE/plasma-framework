@@ -60,7 +60,7 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     }
 }
 
-DataEngine::DataEngine(QObject* parent, const QVariantList &args)
+DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent),
       d(new DataEnginePrivate(this, KPluginInfo(args)))
 {
@@ -88,7 +88,7 @@ QStringList DataEngine::sources() const
 Service *DataEngine::serviceForSource(const QString &source)
 {
     if (d->script) {
-        Service * s = d->script->serviceForSource(source);
+        Service *s = d->script->serviceForSource(source);
         if (s) {
             return s;
         }
@@ -293,7 +293,7 @@ void DataEngine::setPollingInterval(uint frequency)
 
 void DataEngine::removeSource(const QString &source)
 {
-    QHash<QString, DataContainer*>::iterator it = d->sources.find(source);
+    QHash<QString, DataContainer *>::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
         s->d->store();
@@ -306,7 +306,7 @@ void DataEngine::removeSource(const QString &source)
 
 void DataEngine::removeAllSources()
 {
-    QMutableHashIterator<QString, Plasma::DataContainer*> it(d->sources);
+    QMutableHashIterator<QString, Plasma::DataContainer *> it(d->sources);
     while (it.hasNext()) {
         it.next();
         Plasma::DataContainer *s = it.value();
@@ -333,7 +333,7 @@ void DataEngine::setValid(bool valid)
     d->valid = valid;
 }
 
-QHash<QString, DataContainer*> DataEngine::containerDict() const
+QHash<QString, DataContainer *> DataEngine::containerDict() const
 {
     return d->sources;
 }
@@ -360,7 +360,7 @@ void DataEngine::timerEvent(QTimerEvent *event)
         killTimer(d->checkSourcesTimerId);
         d->checkSourcesTimerId = 0;
 
-        QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
+        QHashIterator<QString, Plasma::DataContainer *> it(d->sources);
         while (it.hasNext()) {
             it.next();
             it.value()->checkForUpdate();
@@ -372,7 +372,7 @@ void DataEngine::timerEvent(QTimerEvent *event)
 
 void DataEngine::updateAllSources()
 {
-    QHashIterator<QString, Plasma::DataContainer*> it(d->sources);
+    QHashIterator<QString, Plasma::DataContainer *> it(d->sources);
     while (it.hasNext()) {
         it.next();
         //qDebug() << "updating" << it.key();
@@ -460,7 +460,7 @@ DataEnginePrivate::~DataEnginePrivate()
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)
 {
     if (minPollingInterval > 0 &&
-        source->timeSinceLastUpdate() < (uint)minPollingInterval) {
+            source->timeSinceLastUpdate() < (uint)minPollingInterval) {
         // skip updating this source; it's been too soon
         //qDebug() << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
         //but fake an update so that the signalrelay that triggered this gets the data from the
@@ -497,7 +497,7 @@ bool DataEnginePrivate::isUsed() const
 
 DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createWhenMissing)
 {
-    QHash<QString, DataContainer*>::const_iterator it = sources.constFind(sourceName);
+    QHash<QString, DataContainer *>::const_iterator it = sources.constFind(sourceName);
     if (it != sources.constEnd()) {
         DataContainer *s = it.value();
         return s;
@@ -550,8 +550,8 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
                                   Q_ARG(Plasma::DataEngine::Data, s->data()));
         if (s->d->model) {
             QMetaObject::invokeMethod(visualization, "modelChanged",
-                                    Q_ARG(QString, s->objectName()),
-                                    Q_ARG(QAbstractItemModel *, s->d->model.data()));
+                                      Q_ARG(QString, s->objectName()),
+                                      Q_ARG(QAbstractItemModel *, s->d->model.data()));
         }
         s->d->dirty = false;
     }
@@ -559,7 +559,7 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
 
 void DataEnginePrivate::sourceDestroyed(QObject *object)
 {
-    QHash<QString, DataContainer*>::iterator it = sources.begin();
+    QHash<QString, DataContainer *>::iterator it = sources.begin();
     while (it != sources.end()) {
         if (it.value() == object) {
             sources.erase(it);
@@ -612,9 +612,9 @@ void DataEnginePrivate::setupScriptSupport()
     }
 
     /*
-#ifndef NDEBUG
+    #ifndef NDEBUG
     // qDebug() << "sletting up script support, package is in" << package->path()
-#endif
+    #endif
              << "which is a" << package->structure()->type() << "package"
              << ", main script is" << package->filePath("mainscript");
     */
@@ -636,6 +636,5 @@ void DataEnginePrivate::scheduleSourcesUpdated()
 }
 
 }
-
 
 #include "moc_dataengine.cpp"

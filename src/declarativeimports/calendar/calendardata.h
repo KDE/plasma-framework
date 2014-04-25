@@ -24,9 +24,6 @@
 #include <QFlags>
 #include <QDate>
 
-
-
-
 class QAbstractItemModel;
 
 class CalendarData : public QObject
@@ -35,10 +32,10 @@ class CalendarData : public QObject
 
     Q_PROPERTY(QDate startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
     Q_PROPERTY(QDate endDate READ endDate WRITE setEndDate NOTIFY endDateChanged)
-  //  Q_PROPERTY(int types READ types WRITE setTypes NOTIFY typesChanged)
+    //  Q_PROPERTY(int types READ types WRITE setTypes NOTIFY typesChanged)
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
-  //  Q_PROPERTY(QAbstractItemModel* model READ model CONSTANT)
+    //  Q_PROPERTY(QAbstractItemModel* model READ model CONSTANT)
 
     Q_ENUMS(Type)
 
@@ -66,20 +63,20 @@ private:
     QDate endDate() const;
     void setEndDate(const QDate &dateTime);
     int types() const;
-   // void setTypes(int types);
+    // void setTypes(int types);
     QString errorMessage() const;
     bool loading() const;
-  //  QAbstractItemModel* model() const;
+    //  QAbstractItemModel* model() const;
 
-   // void updateTypes();
+    // void updateTypes();
 
     QDate m_startDate;
     QDate m_endDate;
     Types m_types;
 
-   // Akonadi::ETMCalendar *m_etmCalendar;
-   // Akonadi::EntityMimeTypeFilterModel *m_itemList;
-   // DateTimeRangeFilterModel *m_filteredList;
+    // Akonadi::ETMCalendar *m_etmCalendar;
+    // Akonadi::EntityMimeTypeFilterModel *m_itemList;
+    // DateTimeRangeFilterModel *m_filteredList;
 };
 
 #endif // CALENDARDATA_H

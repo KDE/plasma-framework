@@ -89,7 +89,7 @@ public:
      * @return A list of actions. The default implementation returns an
      *         empty list.
      */
-    virtual QList<QAction*> contextualActions();
+    virtual QList<QAction *> contextualActions();
 
     /**
      * Sets whether or not this script has a configuration interface or not
@@ -113,17 +113,17 @@ public:
      */
     void configNeedsSaving() const;
 
-     /**
-      * @see Containment
-      * @since 4.7
-      */
-     Plasma::Types::ContainmentType containmentType() const;
+    /**
+     * @see Containment
+     * @since 4.7
+     */
+    Plasma::Types::ContainmentType containmentType() const;
 
-     /**
-      * @see Containment
-      * @since 4.7
-      */
-     void setContainmentType(Plasma::Types::ContainmentType type);
+    /**
+     * @see Containment
+     * @since 4.7
+     */
+    void setContainmentType(Plasma::Types::ContainmentType type);
 
 Q_SIGNALS:
     /**
@@ -168,7 +168,7 @@ private:
 };
 
 #define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \
-K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 } //Plasma namespace
 

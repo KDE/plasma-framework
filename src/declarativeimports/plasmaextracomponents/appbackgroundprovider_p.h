@@ -24,7 +24,7 @@
 
 namespace Plasma
 {
-    class Theme;
+class Theme;
 }
 
 class AppBackgroundProvider : public QQuickImageProvider

@@ -66,23 +66,23 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
     connect(containment(), &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
     connect(containment(), &Plasma::Containment::activityChanged,
-            [=]() {
-                delete m_activityInfo;
-                m_activityInfo = new KActivities::Info(containment()->activity(), this);
-                connect(m_activityInfo, &KActivities::Info::nameChanged,
-                        this, &ContainmentInterface::activityNameChanged);
-                emit activityNameChanged();
-            });
+    [ = ]() {
+        delete m_activityInfo;
+        m_activityInfo = new KActivities::Info(containment()->activity(), this);
+        connect(m_activityInfo, &KActivities::Info::nameChanged,
+                this, &ContainmentInterface::activityNameChanged);
+        emit activityNameChanged();
+    });
     connect(containment(), &Plasma::Containment::wallpaperChanged,
             this, &ContainmentInterface::loadWallpaper);
     connect(containment(), &Plasma::Containment::containmentTypeChanged,
             this, &ContainmentInterface::containmentTypeChanged);
 
-     if (containment()->corona()) {
-         connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
-                 this, &ContainmentInterface::availableScreenRegionChanged);
-         connect(containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
-                 this, &ContainmentInterface::availableScreenRectChanged);
+    if (containment()->corona()) {
+        connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
+                this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
+                this, &ContainmentInterface::availableScreenRectChanged);
     }
 
     if (!m_appletInterfaces.isEmpty()) {
@@ -216,7 +216,6 @@ Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVa
     blockSignals(true);
     Plasma::Applet *applet = containment()->createApplet(plugin, args);
 
-
     if (applet) {
         QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
 
@@ -224,8 +223,9 @@ Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVa
 
         emit appletAdded(appletGraphicObject, pos.x(), pos.y());
         emit appletsChanged();
-    } else
+    } else {
         blockSignals(false);
+    }
     return applet;
 }
 
@@ -278,15 +278,13 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
             KIO::MimetypeJob *job = KIO::mimetype(url, flags);
             m_dropPoints[job] = QPoint(x, y);
 
-
             QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(dropJobResult(KJob*)));
             QObject::connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
-                                this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
+                             this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
 
             QMenu *choices = new QMenu("Content dropped");
             choices->addAction(QIcon::fromTheme("process-working"), i18n("Fetching file type..."));
             choices->popup(window() ? window()->mapToGlobal(QPoint(x, y)) : QPoint(x, y));
-
 
             m_dropMenus[job] = choices;
 #endif
@@ -360,7 +358,7 @@ void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
 void ContainmentInterface::dropJobResult(KJob *job)
 {
 #ifndef PLASMA_NO_KIO
-    KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
+    KIO::TransferJob *tjob = dynamic_cast<KIO::TransferJob *>(job);
     if (!tjob) {
         qDebug() << "job is not a KIO::TransferJob, won't handle the drop...";
         clearDataForMimeJob(tjob);
@@ -379,7 +377,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 {
 #ifndef PLASMA_NO_KIO
     qDebug() << "Mimetype Job returns." << mimetype;
-    KIO::TransferJob* tjob = dynamic_cast<KIO::TransferJob*>(job);
+    KIO::TransferJob *tjob = dynamic_cast<KIO::TransferJob *>(job);
     if (!tjob) {
         qDebug() << "job should be a TransferJob, but isn't";
         clearDataForMimeJob(job);
@@ -408,7 +406,6 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             clearDataForMimeJob(job);
             return;
         }
-
 
         qDebug() << "Creating menu for:" << mimetype  << posi;
 
@@ -495,8 +492,6 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 #endif // PLASMA_NO_KIO
 }
 
-
-
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 {
     if (!applet) {
@@ -536,7 +531,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 void ContainmentInterface::loadWallpaper()
 {
     if (containment()->containmentType() != Plasma::Types::DesktopContainment &&
-        containment()->containmentType() != Plasma::Types::CustomContainment) {
+            containment()->containmentType() != Plasma::Types::CustomContainment) {
         return;
     }
 
@@ -575,12 +570,12 @@ QString ContainmentInterface::activityName() const
     return m_activityInfo->name();
 }
 
-QList<QObject*> ContainmentInterface::actions() const
+QList<QObject *> ContainmentInterface::actions() const
 {
     //FIXME: giving directly a QList<QAction*> crashes
 
     //use a multimap to sort by action type
-    QMultiMap<int, QObject*> actions;
+    QMultiMap<int, QObject *> actions;
     foreach (QAction *a, containment()->actions()->actions()) {
         if (a->isEnabled()) {
             actions.insert(a->data().toInt(), a);
@@ -601,9 +596,6 @@ QList<QObject*> ContainmentInterface::actions() const
     return actions.values();
 }
 
-
-
-
 //PROTECTED--------------------
 
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
@@ -620,7 +612,6 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
         event->setAccepted(false);
         return;
     }
-
 
     //the plugin can be a single action or a context menu
     //Don't have an action list? execute as single action
@@ -657,7 +648,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 
     //this is a workaround where Qt now creates the menu widget
     //in .exec before oxygen can polish it and set the following attribute
-    desktopMenu.setAttribute( Qt::WA_TranslucentBackground );
+    desktopMenu.setAttribute(Qt::WA_TranslucentBackground);
     //end workaround
 
     desktopMenu.exec(event->globalPos());
@@ -679,8 +670,6 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
         event->setAccepted(false);
     }
 }
-
-
 
 void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
@@ -747,7 +736,7 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
 void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *event)
 {
     if (containment()->corona()->immutability() != Plasma::Types::Mutable &&
-        !KAuthorized::authorizeKAction("plasma/containment_actions")) {
+            !KAuthorized::authorizeKAction("plasma/containment_actions")) {
         //qDebug() << "immutability";
         return;
     }
@@ -770,21 +759,19 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
         plugin->restore(pluginConfig);
     }
 
-
-    QList<QAction*> actions = plugin->contextualActions();
+    QList<QAction *> actions = plugin->contextualActions();
 
     if (actions.isEmpty()) {
         //it probably didn't bother implementing the function. give the user a chance to set
         //a better plugin.  note that if the user sets no-plugin this won't happen...
         if ((containment()->containmentType() != Plasma::Types::PanelContainment &&
-             containment()->containmentType() != Plasma::Types::CustomPanelContainment) &&
-            containment()->actions()->action("configure")) {
+                containment()->containmentType() != Plasma::Types::CustomPanelContainment) &&
+                containment()->actions()->action("configure")) {
             desktopMenu.addAction(containment()->actions()->action("configure"));
         }
     } else {
         desktopMenu.addActions(actions);
     }
-
 
     return;
 }

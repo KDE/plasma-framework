@@ -27,7 +27,7 @@
 #include <Plasma/Theme>
 
 AppBackgroundProvider::AppBackgroundProvider()
-  : QQuickImageProvider(QQuickImageProvider::Image)
+    : QQuickImageProvider(QQuickImageProvider::Image)
 {
     m_theme = new Plasma::Theme();
 }

@@ -24,7 +24,7 @@
 
 namespace Plasma
 {
-DataSource::DataSource(QObject* parent)
+DataSource::DataSource(QObject *parent)
     : QObject(parent),
       m_interval(0),
       m_dataEngine(0),
@@ -120,7 +120,7 @@ void DataSource::setupData()
          * It is due little explanation why this is a queued connection:
          * If sourceAdded arrives immediately, in the case we have a datamodel
          * with items at source level we connect too soon (before setData for
-         * all roles is done), having a dataupdated in the datamodel with only 
+         * all roles is done), having a dataupdated in the datamodel with only
          * the first role, killing off the other roles.
          * Besides causing a model reset more, unfortunately setRoleNames can be done a single time, so is not possible adding new roles after the
          * first setRoleNames() is called.
@@ -128,12 +128,12 @@ void DataSource::setupData()
          * recommendations engine.
          */
         m_dataEngine = engine;
-        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourcesChanged()), Qt::QueuedConnection);
-        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourcesChanged()));
+        connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourcesChanged()), Qt::QueuedConnection);
+        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourcesChanged()));
 
-        connect(m_dataEngine, SIGNAL(sourceAdded(const QString&)), this, SIGNAL(sourceAdded(const QString&)), Qt::QueuedConnection);
-        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SLOT(removeSource(const QString&)));
-        connect(m_dataEngine, SIGNAL(sourceRemoved(const QString&)), this, SIGNAL(sourceRemoved(const QString&)));
+        connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourceAdded(QString)), Qt::QueuedConnection);
+        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(removeSource(QString)));
+        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
     }
 
     foreach (const QString &source, m_connectedSources) {
@@ -163,7 +163,7 @@ void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *mod
 
     m_models->insert(sourceName, QVariant::fromValue(model));
     //FIXME: this will break in the case a second model is set
-    connect(model, &QObject::destroyed, [=]() {
+    connect(model, &QObject::destroyed, [ = ]() {
         m_models->clear(sourceName);
     });
 }
@@ -189,7 +189,7 @@ void DataSource::removeSource(const QString &source)
     }
 }
 
-QObject* DataSource::serviceForSource(const QString &source)
+QObject *DataSource::serviceForSource(const QString &source)
 {
     if (!m_services.contains(source)) {
         Plasma::Service *service = m_dataEngine->serviceForSource(source);

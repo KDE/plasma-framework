@@ -25,11 +25,11 @@
 class PackageUrlInterceptorTest : public QObject
 {
     Q_OBJECT
-    public:
-        PackageUrlInterceptorTest() {}
+public:
+    PackageUrlInterceptorTest() {}
 
-    private Q_SLOTS:
-        void loadAccessManager();
+private Q_SLOTS:
+    void loadAccessManager();
 };
 
 #endif

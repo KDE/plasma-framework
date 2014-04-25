@@ -47,8 +47,8 @@
 class QQuickItem;
 class QScreen;
 
-
-namespace PlasmaQuick {
+namespace PlasmaQuick
+{
 
 class DialogPrivate;
 

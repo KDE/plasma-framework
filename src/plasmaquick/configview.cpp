@@ -38,7 +38,6 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
-
 namespace PlasmaQuick
 {
 
@@ -76,13 +75,11 @@ void ConfigViewPrivate::init()
     q->setColor(Qt::transparent);
     q->setTitle(i18n("%1 Settings", applet.data()->title()));
 
-
     if (!applet.data()->containment()->corona()->package().isValid()) {
         qWarning() << "Invalid home screen package";
     }
 
     q->setResizeMode(QQuickView::SizeViewToRootObject);
-
 
     //config model local of the applet
     QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->package().filePath("configmodel")), q);
@@ -94,13 +91,11 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject*>());
+    q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
     component->completeCreate();
     delete component;
 }
-
-
 
 ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent),

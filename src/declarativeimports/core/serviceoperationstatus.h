@@ -23,8 +23,9 @@
 
 #include "plasma/service.h"
 
-namespace Plasma {
-    class Service;
+namespace Plasma
+{
+class Service;
 }
 
 class ServiceOperationStatus : public QObject
@@ -47,7 +48,7 @@ class ServiceOperationStatus : public QObject
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
 
 public:
-    ServiceOperationStatus(QObject *parent=0);
+    ServiceOperationStatus(QObject *parent = 0);
     ~ServiceOperationStatus();
 
     void setService(Plasma::Service *service);
@@ -72,6 +73,5 @@ private:
     QString m_operation;
     bool m_enabled;
 };
-
 
 #endif

@@ -29,7 +29,6 @@
 
 #include <plasma/svg.h>
 
-
 QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
 {
     if (from.isNull() && to.isNull()) {
@@ -43,7 +42,7 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     QRect startRect(from.rect());
     QRect targetRect(to.rect());
     QSize pixmapSize = startRect.size().expandedTo(targetRect.size());
-    QRect toRect = QRect(QPoint(0,0), pixmapSize);
+    QRect toRect = QRect(QPoint(0, 0), pixmapSize);
     targetRect.moveCenter(toRect.center());
     startRect.moveCenter(toRect.center());
 
@@ -54,8 +53,8 @@ QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
     // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
     QPaintEngine *paintEngine = from.paintEngine();
     if (paintEngine &&
-        paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
-        paintEngine->hasFeature(QPaintEngine::BlendModes)) {
+            paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
+            paintEngine->hasFeature(QPaintEngine::BlendModes)) {
         QPixmap startPixmap(pixmapSize);
         startPixmap.fill(Qt::transparent);
 
@@ -163,7 +162,7 @@ IconItem::IconItem(QQuickItem *parent)
 {
     m_loadPixmapTimer.setSingleShot(true);
     m_loadPixmapTimer.setInterval(150);
-    connect(&m_loadPixmapTimer, &QTimer::timeout, [=] () {
+    connect(&m_loadPixmapTimer, &QTimer::timeout, [ = ]() {
         loadPixmap();
     });
 
@@ -183,7 +182,6 @@ IconItem::IconItem(QQuickItem *parent)
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
             this, SIGNAL(implicitHeightChanged()));
 
-
     connect(this, SIGNAL(enabledChanged()),
             &m_loadPixmapTimer, SLOT(start()));
 
@@ -191,7 +189,6 @@ IconItem::IconItem(QQuickItem *parent)
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
     setImplicitHeight(KIconLoader::global()->currentSize(KIconLoader::Dialog));
 }
-
 
 IconItem::~IconItem()
 {
@@ -226,7 +223,7 @@ void IconItem::setSource(const QVariant &source)
             m_icon = QIcon();
             connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
 
-        //ok, svg not available
+            //ok, svg not available
         } else {
             m_icon = QIcon::fromTheme(source.toString());
             delete m_svgIcon;
@@ -318,7 +315,7 @@ void IconItem::paint(QPainter *painter)
 
     const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
 
-    const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
+    const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize / 2, iconSize / 2)).toPoint(),
                          QSize(iconSize, iconSize));
 
     if (m_animation->state() == QAbstractAnimation::Running) {
@@ -326,7 +323,7 @@ void IconItem::paint(QPainter *painter)
         result = transition(result,
                             m_iconPixmaps.last(), m_animValue);
         painter->drawPixmap(destRect, result);
-    //simpler logic for just paint
+        //simpler logic for just paint
     } else {
         painter->drawPixmap(destRect, m_iconPixmaps.first());
     }
@@ -349,13 +346,13 @@ void IconItem::valueChanged(const QVariant &value)
 
 int IconItem::adjustedSize(int size)
 {
-     //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
+    //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
     if (m_svgIcon && m_svgIcon->imagePath().contains("icons/") &&
-        size > KIconLoader::SizeSmallMedium &&
-        size < KIconLoader::SizeMedium) {
+            size > KIconLoader::SizeSmallMedium &&
+            size < KIconLoader::SizeMedium) {
         return 24;
 
-    //if size is less than 16, leave as is
+        //if size is less than 16, leave as is
     } else if (size < KIconLoader::SizeSmall) {
         //do nothing
     } else if (size < KIconLoader::SizeSmallMedium) {
@@ -366,7 +363,7 @@ int IconItem::adjustedSize(int size)
         return KIconLoader::SizeMedium;
     } else if (size < KIconLoader::SizeHuge) {
         return KIconLoader::SizeLarge;
-    //if size is more than 64, leave as is
+        //if size is more than 64, leave as is
     }
 
     return size;
@@ -378,7 +375,7 @@ void IconItem::loadPixmap()
 
     //final pixmap to paint
     QPixmap result;
-    if (size<=0) {
+    if (size <= 0) {
         //m_iconPixmaps.clear();
         m_animation->stop();
         update();

@@ -86,7 +86,7 @@ public:
 
         if (action) {
             QObject::connect(action, SIGNAL(changed()), this->q, SLOT(syncToAction()));
-            QObject::connect(action, SIGNAL(destroyed(QObject*)), this->q, SLOT(clearAction()));
+            QObject::connect(action, SIGNAL(destroyed(QObject *)), this->q, SLOT(clearAction()));
             QObject::connect(this->q, SIGNAL(clicked()), action, SLOT(trigger()));
             syncToAction();
         }

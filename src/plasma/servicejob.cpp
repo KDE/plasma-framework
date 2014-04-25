@@ -28,11 +28,11 @@ namespace Plasma
 
 ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
                                      const QString &op, const QVariantMap &params)
-        : q(owner),
-          destination(dest),
-          operation(op),
-          parameters(params),
-          m_allowAutoStart(true)
+    : q(owner),
+      destination(dest),
+      operation(op),
+      parameters(params),
+      m_allowAutoStart(true)
 {
 }
 
@@ -100,7 +100,5 @@ void ServiceJob::start()
 }
 
 } // namespace Plasma
-
-
 
 #include "moc_servicejob.cpp"

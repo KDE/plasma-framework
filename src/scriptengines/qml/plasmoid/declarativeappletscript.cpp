@@ -46,9 +46,7 @@
 #include <kdeclarative/qmlobject.h>
 #include <kdeclarative/configpropertymap.h>
 
-
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)
-
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
@@ -59,12 +57,12 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));*/
     qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
-                                             QLatin1String("Do not create objects of type Plasmoid"));
+            QLatin1String("Do not create objects of type Plasmoid"));
     qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
-                                             QLatin1String("Do not create objects of type Containment"));
+            QLatin1String("Do not create objects of type Containment"));
 
     qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
-                                             QLatin1String("Do not create objects of type Wallpaper"));
+            QLatin1String("Do not create objects of type Wallpaper"));
 
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
     Q_UNUSED(args);
@@ -86,7 +84,7 @@ bool DeclarativeAppletScript::init()
     if (pc && pc->isContainment()) {
         m_interface = new ContainmentInterface(this);
 
-    //fail? so it's a normal Applet
+        //fail? so it's a normal Applet
     } else {
         m_interface = new AppletInterface(this);
     }
@@ -121,7 +119,7 @@ void DeclarativeAppletScript::executeAction(const QString &name)
     m_interface->executeAction(name);
 }
 
-QList<QAction*> DeclarativeAppletScript::contextualActions()
+QList<QAction *> DeclarativeAppletScript::contextualActions()
 {
     if (!m_interface) {
         return QList<QAction *>();
@@ -129,7 +127,6 @@ QList<QAction*> DeclarativeAppletScript::contextualActions()
 
     return m_interface->contextualActions();
 }
-
 
 #include "declarativeappletscript.moc"
 

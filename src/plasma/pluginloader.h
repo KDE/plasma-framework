@@ -24,7 +24,8 @@
 #include <plasma/plasma.h>
 #include <kplugininfo.h>
 
-namespace Plasma {
+namespace Plasma
+{
 
 class Applet;
 class Containment;
@@ -39,7 +40,7 @@ class PluginLoaderPrivate;
 // * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
 
 /**
- * This is an abstract base class which defines an interface to which Plasma's 
+ * This is an abstract base class which defines an interface to which Plasma's
  * Applet Loading logic can communicate with a parent application. The plugin loader
  * must be set before any plugins are loaded, otherwise (for safety reasons), the
  * default PluginLoader implementation will be used. The reimplemented version should
@@ -52,7 +53,7 @@ class PluginLoaderPrivate;
  **/
 class PLASMA_EXPORT PluginLoader
 {
-public: 
+public:
     /**
      * Load an Applet plugin.
      *
@@ -138,7 +139,7 @@ public:
      * @return a ContaimentActions object
      **/
     ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName,
-                                              const QVariantList &args = QVariantList());
+            const QVariantList &args = QVariantList());
 
     /**
      * Load a Package plugin.
@@ -235,7 +236,7 @@ public:
      * @return list of applets
      **/
     static KPluginInfo::List listContainments(const QString &category = QString(),
-                                                const QString &parentApp = QString());
+            const QString &parentApp = QString());
 
     /**
      * Returns a list of all known Containments that match the parameters.
@@ -257,8 +258,8 @@ public:
      * @return list of applets
      **/
     static KPluginInfo::List listContainmentsOfType(const QString &type,
-                                                    const QString &category = QString(),
-                                                    const QString &parentApp = QString());
+            const QString &category = QString(),
+            const QString &parentApp = QString());
 
     /**
      * @return a list of all known types of Containments on this system
@@ -302,7 +303,7 @@ public:
      * @param loader A subclass of PluginLoader which will be supplied
      * by the application
      **/
-    static void setPluginLoader(PluginLoader* loader);
+    static void setPluginLoader(PluginLoader *loader);
 
     /**
      * Return the active plugin loader
@@ -388,7 +389,7 @@ protected:
 
     /**
      * A re-implementable method that allows subclasses to provide additional applets
-     * for listAppletInfo. If the application has no applets to give to the application, 
+     * for listAppletInfo. If the application has no applets to give to the application,
      * then the implementation should return an empty list.
      *
      * This method is called by listAppletInfo prior to generating the list of applets installed
@@ -470,11 +471,11 @@ protected:
     virtual ~PluginLoader();
 
 private:
-    PluginLoaderPrivate * const d;
+    PluginLoaderPrivate *const d;
 };
 
 }
 
-Q_DECLARE_METATYPE(Plasma::PluginLoader*)
+Q_DECLARE_METATYPE(Plasma::PluginLoader *)
 
 #endif

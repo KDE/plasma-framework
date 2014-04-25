@@ -17,7 +17,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
 #include "testengine.h"
 
 #include <QtCore/QBitArray>
@@ -34,25 +33,21 @@
 #include <QSizePolicy>
 #include <QTextFormat>
 
-
 Q_DECLARE_METATYPE(TestEngine::MyUserType)
-
 
 TestEngine::TestEngine(QObject *parent, const QVariantList &args)
     : Plasma::DataEngine(parent, args)
 {
 } // ctor()
 
-
 TestEngine::~TestEngine()
 {
 } // dtor()
 
-
 void TestEngine::init()
 {
     QString dsn("TestEngine");
-    
+
     // QVariant::Invalid
     // QVariant::BitArray
     setData(dsn, "QBitArray", QVariant(QBitArray(97, false)));
@@ -64,7 +59,7 @@ void TestEngine::init()
     setData(dsn, "QBrush", QVariant(QBrush(Qt::SolidPattern)));
     // QVariant::ByteArray
     QByteArray byteArray;
-    for (int i=0; i<256; ++i) {
+    for (int i = 0; i < 256; ++i) {
         byteArray.append(i);
     }
     setData(dsn, "QByteArray1", QVariant(byteArray));
@@ -88,7 +83,7 @@ void TestEngine::init()
     // QVariant::Image
     setData(dsn, "QImage", QVariant(QImage(56, 78, QImage::Format_Mono)));
     // QVariant::Int
-    setData(dsn, "int", QVariant((int)-4321));
+    setData(dsn, "int", QVariant((int) - 4321));
     // QVariant::KeySequence (???)
     // QVariant::Line
     setData(dsn, "QLine", QVariant(QLine(12, 34, 56, 78)));
@@ -101,10 +96,10 @@ void TestEngine::init()
     // QVariant::Locale
     setData(dsn, "QLocale", QVariant(QLocale("fr_FR")));
     // QVariant::LongLong
-    setData(dsn, "qlonglong", QVariant((qlonglong)-4321));
+    setData(dsn, "qlonglong", QVariant((qlonglong) - 4321));
     // QVariant::Map
     QMap<QString, QVariant> map;
-    for (int i=0; i<123; ++i) {
+    for (int i = 0; i < 123; ++i) {
         QString key = QString("key%1").arg(i);
         QString val = QString("value%1").arg(i);
         map[key] = val;
@@ -165,7 +160,6 @@ void TestEngine::init()
     v.setValue(userType);
     setData(dsn, "UserType", v);
 } // init()
-
 
 bool TestEngine::sourceRequestEvent(const QString &source)
 {

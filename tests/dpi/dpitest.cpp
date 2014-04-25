@@ -29,16 +29,16 @@
 #include <iostream>
 #include <iomanip>
 
-
 namespace Plasma
 {
-class DPITestPrivate {
+class DPITestPrivate
+{
 public:
     QString pluginName;
     QCommandLineParser *parser;
 };
 
-DPITest::DPITest(int& argc, char** argv, QCommandLineParser *parser) :
+DPITest::DPITest(int &argc, char **argv, QCommandLineParser *parser) :
     QApplication(argc, argv)
 {
     d = new DPITestPrivate;

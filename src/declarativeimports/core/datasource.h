@@ -30,9 +30,7 @@
 #include <Plasma/DataEngineConsumer>
 #include <Plasma/DataEngine>
 
-
 class QQmlPropertyMap;
-
 
 namespace Plasma
 {
@@ -51,19 +49,25 @@ public:
 
     typedef QMap<QString, QVariant> Data;
 
-    DataSource(QObject* parent=0);
+    DataSource(QObject *parent = 0);
 
     /**
      * true if the connection to the Plasma DataEngine is valid
      */
     Q_PROPERTY(bool valid READ valid)
-    bool valid() const {return m_dataEngine && m_dataEngine->isValid();}
+    bool valid() const
+    {
+        return m_dataEngine && m_dataEngine->isValid();
+    }
 
     /**
      * Polling interval in milliseconds when the data will be fetched again. If 0 no polling will be done.
      */
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
-    int interval() const {return m_interval;}
+    int interval() const
+    {
+        return m_interval;
+    }
     void setInterval(const int interval);
 
     /**
@@ -71,28 +75,44 @@ public:
      */
     Q_PROPERTY(QString dataEngine READ engine WRITE setEngine NOTIFY engineChanged)
     Q_PROPERTY(QString engine READ engine WRITE setEngine NOTIFY engineChanged)
-    QString engine() const {return m_engine;}
+    QString engine() const
+    {
+        return m_engine;
+    }
     void setEngine(const QString &e);
 
     /**
      * String array of all the source names connected to the DataEngine
      */
     Q_PROPERTY(QStringList connectedSources READ connectedSources WRITE setConnectedSources NOTIFY connectedSourcesChanged)
-    QStringList connectedSources() const {return m_connectedSources;}
+    QStringList connectedSources() const
+    {
+        return m_connectedSources;
+    }
     void setConnectedSources(const QStringList &s);
 
     /**
      * Read only string array of all the sources available from the DataEngine (connected or not)
      */
     Q_PROPERTY(QStringList sources READ sources NOTIFY sourcesChanged)
-    QStringList sources() const {if (m_dataEngine) return m_dataEngine->sources(); else return QStringList();}
+    QStringList sources() const
+    {
+        if (m_dataEngine) {
+            return m_dataEngine->sources();
+        } else {
+            return QStringList();
+        }
+    }
 
     /**
      * All the data fetched by this dataengine.
      * This is a map of maps. At the first level, there are the source names, at the second, they keys set by the DataEngine
      */
     Q_PROPERTY(QQmlPropertyMap *data READ data CONSTANT);
-    QQmlPropertyMap *data() const {return m_data;}
+    QQmlPropertyMap *data() const
+    {
+        return m_data;
+    }
 
     /**
      * All the models associated to this DataEngine, indexed by source.
@@ -100,13 +120,16 @@ public:
      * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
      */
     Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT);
-    QQmlPropertyMap *models()  const {return m_models;}
+    QQmlPropertyMap *models()  const
+    {
+        return m_models;
+    }
 
     /**
      * @returns a Plasma::Service given a source name
      * @arg QString source source name we want a service of
      */
-    Q_INVOKABLE QObject* serviceForSource(const QString &source);
+    Q_INVOKABLE QObject *serviceForSource(const QString &source);
 
     /**
      * Connect a new source. It adds it to connectedSources
@@ -142,8 +165,8 @@ private:
     QString m_engine;
     QQmlPropertyMap *m_data;
     QQmlPropertyMap *m_models;
-    Plasma::DataEngine* m_dataEngine;
-    Plasma::DataEngineConsumer* m_dataEngineConsumer;
+    Plasma::DataEngine *m_dataEngine;
+    Plasma::DataEngineConsumer *m_dataEngineConsumer;
     QStringList m_connectedSources;
     QStringList m_oldSources;
     QStringList m_newSources;

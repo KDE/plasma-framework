@@ -2,7 +2,7 @@
 *   Copyright 2011 by Aaron Seigo <aseigo@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Library General Public License version 2, 
+*   it under the terms of the GNU Library General Public License version 2,
 *   or (at your option) any later version.
 *
 *   This program is distributed in the hope that it will be useful,
@@ -39,8 +39,8 @@ public:
     Private(DialogShadows *shadows)
         : q(shadows)
 #if HAVE_X11
-        ,_connection( 0x0 ),
-        _gc( 0x0 )
+        , _connection(0x0),
+        _gc(0x0)
         , m_isX11(QX11Info::isPlatformX11())
 #endif
     {
@@ -56,7 +56,7 @@ public:
     void freeX11Pixmaps();
     void clearPixmaps();
     void setupPixmaps();
-    Qt::HANDLE createPixmap(const QPixmap& source);
+    Qt::HANDLE createPixmap(const QPixmap &source);
     void initPixmap(const QString &element);
     QPixmap initEmptyPixmap(const QSize &size);
     void updateShadow(const QWindow *window, Plasma::FrameSvg::EnabledBorders);
@@ -78,7 +78,7 @@ public:
 
 #if HAVE_X11
     //! xcb connection
-    xcb_connection_t* _connection;
+    xcb_connection_t *_connection;
 
     //! graphical context
     xcb_gcontext_t _gc;
@@ -96,7 +96,7 @@ public:
     {
     }
 
-   DialogShadows self;
+    DialogShadows self;
 };
 
 Q_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
@@ -164,11 +164,13 @@ void DialogShadows::Private::updateShadows()
     }
 }
 
-Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap& source)
+Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap &source)
 {
 
     // do nothing for invalid pixmaps
-    if( source.isNull() ) return 0;
+    if (source.isNull()) {
+        return 0;
+    }
 
     /*
     in some cases, pixmap handle is invalid. This is the case notably
@@ -176,51 +178,52 @@ Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap& source)
     explicitly and draw the source pixmap on it.
     */
 
-    #if HAVE_X11
+#if HAVE_X11
     if (!m_isX11) {
         return 0;
     }
-    
-    // check connection 
-    if( !_connection ) _connection = QX11Info::connection();
-    
-    const int width( source.width() );
-    const int height( source.height() );
+
+    // check connection
+    if (!_connection) {
+        _connection = QX11Info::connection();
+    }
+
+    const int width(source.width());
+    const int height(source.height());
 
     // create X11 pixmap
-    Pixmap pixmap = XCreatePixmap( QX11Info::display(), QX11Info::appRootWindow(), width, height, 32 );
+    Pixmap pixmap = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), width, height, 32);
 
     // check gc
-    if( !_gc ) 
-    {
-        _gc = xcb_generate_id( _connection );
-        xcb_create_gc( _connection, _gc, pixmap, 0, 0x0 );
+    if (!_gc) {
+        _gc = xcb_generate_id(_connection);
+        xcb_create_gc(_connection, _gc, pixmap, 0, 0x0);
     }
-    
+
 //         // create explicitly shared QPixmap from it
 //         QPixmap dest( QPixmap::fromX11Pixmap( pixmap, QPixmap::ExplicitlyShared ) );
-// 
+//
 //         // create surface for pixmap
 //         {
 //             QPainter painter( &dest );
 //             painter.setCompositionMode( QPainter::CompositionMode_Source );
 //             painter.drawPixmap( 0, 0, source );
 //         }
-// 
-// 
+//
+//
 //         return pixmap;
-    QImage image( source.toImage() );
+    QImage image(source.toImage());
     xcb_put_image(
         _connection, XCB_IMAGE_FORMAT_Z_PIXMAP, pixmap, _gc,
         image.width(), image.height(), 0, 0,
-        0, 32, 
+        0, 32,
         image.byteCount(), image.constBits());
-    
+
     return (Qt::HANDLE)pixmap;
-    
-    #else
+
+#else
     return 0;
-    #endif
+#endif
 
 }
 
@@ -258,7 +261,7 @@ void DialogShadows::Private::setupPixmaps()
     initPixmap("shadow-left");
     initPixmap("shadow-topleft");
 
-    m_emptyCornerPix = initEmptyPixmap(QSize(1,1));
+    m_emptyCornerPix = initEmptyPixmap(QSize(1, 1));
     m_emptyCornerLeftPix = initEmptyPixmap(QSize(q->elementSize("shadow-topleft").width(), 1));
     m_emptyCornerTopPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-topleft").height()));
     m_emptyCornerRightPix = initEmptyPixmap(QSize(q->elementSize("shadow-bottomright").width(), 1));
@@ -267,7 +270,6 @@ void DialogShadows::Private::setupPixmaps()
     m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize("shadow-top").width(), 1));
 
 }
-
 
 void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
@@ -284,7 +286,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     //shadow-topright
     if (enabledBorders & Plasma::FrameSvg::TopBorder &&
-        enabledBorders & Plasma::FrameSvg::RightBorder) {
+            enabledBorders & Plasma::FrameSvg::RightBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_shadowPixmaps[1]));
     } else if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_emptyCornerTopPix));
@@ -303,7 +305,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     //shadow-bottomright
     if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
-        enabledBorders & Plasma::FrameSvg::RightBorder) {
+            enabledBorders & Plasma::FrameSvg::RightBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_shadowPixmaps[3]));
     } else if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_emptyCornerBottomPix));
@@ -322,7 +324,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     //shadow-bottomleft
     if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
-        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+            enabledBorders & Plasma::FrameSvg::LeftBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_shadowPixmaps[5]));
     } else if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_emptyCornerBottomPix));
@@ -341,7 +343,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     //shadow-topleft
     if (enabledBorders & Plasma::FrameSvg::TopBorder &&
-        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+            enabledBorders & Plasma::FrameSvg::LeftBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_shadowPixmaps[7]));
     } else if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         data[enabledBorders] << reinterpret_cast<unsigned long>(createPixmap(m_emptyCornerTopPix));
@@ -500,7 +502,7 @@ void DialogShadows::Private::clearShadow(const QWindow *window)
 
 bool DialogShadows::enabled() const
 {
-     return hasElement("shadow-left");
+    return hasElement("shadow-left");
 }
 
 #include "moc_dialogshadows_p.cpp"

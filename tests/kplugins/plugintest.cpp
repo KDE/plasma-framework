@@ -48,16 +48,16 @@
 #include <iostream>
 #include <iomanip>
 
-
 namespace Plasma
 {
-class PluginTestPrivate {
+class PluginTestPrivate
+{
 public:
     QString pluginName;
     QCommandLineParser *parser;
 };
 
-PluginTest::PluginTest(int& argc, char** argv, QCommandLineParser *parser) :
+PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser) :
     QApplication(argc, argv)
 {
     d = new PluginTestPrivate;
@@ -95,7 +95,7 @@ bool PluginTest::loadKPlugin()
     QCoreApplication::addLibraryPath(pluginPath);
     //QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
     QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/plugins/kf5/kplugins/libplasma_engine_time.so", this);
-    KPluginFactory *factory = qobject_cast<KPluginFactory*>(loader.instance());
+    KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader.instance());
     //QObject *factory = loader.instance();
     if (factory) {
         qDebug() << "loaded successfully and cast";
@@ -132,7 +132,7 @@ bool PluginTest::loadFromKService(const QString &name)
     // load the engine, add it to the engines
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
-                                                              constraint);
+                            constraint);
     QString error;
 
     if (offers.isEmpty()) {
@@ -156,7 +156,6 @@ bool PluginTest::loadFromKService(const QString &name)
     return engine != 0;
 }
 
-
 bool PluginTest::loadFromPlasma()
 {
     bool ok = false;
@@ -176,7 +175,6 @@ bool PluginTest::loadFromPlasma()
     return ok;
 }
 
-
 void PluginTest::loadKQPlugin()
 {
     qDebug() << "Load KQPlugin";
@@ -185,7 +183,7 @@ void PluginTest::loadKQPlugin()
     QCoreApplication::addLibraryPath(pluginPath);
     //QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
     QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/plugins/kf5/kplugins/libplasma_engine_time.so", this);
-    KPluginFactory *factory = qobject_cast<KPluginFactory*>(loader.instance());
+    KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader.instance());
     //QObject *factory = loader.instance();
     if (factory) {
         qDebug() << "loaded successfully and cast";
@@ -224,7 +222,7 @@ bool PluginTest::loadKService(const QString &name)
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     constraint = QString();
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
-                                                              constraint);
+                            constraint);
     QString error;
 
     if (offers.isEmpty()) {

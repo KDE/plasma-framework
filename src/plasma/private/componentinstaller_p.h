@@ -44,49 +44,49 @@ class ComponentInstallerPrivate;
  */
 class ComponentInstaller
 {
-    public:
-        /**
-         * Singleton pattern accessor.
-         */
-        static ComponentInstaller *self();
+public:
+    /**
+     * Singleton pattern accessor.
+     */
+    static ComponentInstaller *self();
 
-        /**
-         * Installs a missing component asynchronously.
-         *
-         * By default, this method will cache requested components and not
-         * prompt again for the same engine in the same session. The force
-         * parameter can be used to disable this mechanism, e.g. when the user
-         * just installed a new widget written in a scripting language, and so
-         * is likely to want the script engine installed after all.
-         *
-         * In the case of on-demand installation, this will unfortunately not
-         * allow the call which triggered the missing component lookup to
-         * succeed, but we cannot afford to block all of Plasma until the
-         * mechanism is done installing the service.
-         *
-         * This function does nothing if PackageKit integration was disabled at
-         * compile time.
-         *
-         * @param type the type of the component, should be "scriptengine" or
-         *             "dataengine"
-         * @param name the name of the component
-         * @param parent a parent widget, used to set the wid for PackageKit
-         * @param force whether to always prompt, even if recently prompted
-         */
-        void installMissingComponent(const QString &type, const QString &name,
-                                     QWidget *parent = 0, bool force = false);
+    /**
+     * Installs a missing component asynchronously.
+     *
+     * By default, this method will cache requested components and not
+     * prompt again for the same engine in the same session. The force
+     * parameter can be used to disable this mechanism, e.g. when the user
+     * just installed a new widget written in a scripting language, and so
+     * is likely to want the script engine installed after all.
+     *
+     * In the case of on-demand installation, this will unfortunately not
+     * allow the call which triggered the missing component lookup to
+     * succeed, but we cannot afford to block all of Plasma until the
+     * mechanism is done installing the service.
+     *
+     * This function does nothing if PackageKit integration was disabled at
+     * compile time.
+     *
+     * @param type the type of the component, should be "scriptengine" or
+     *             "dataengine"
+     * @param name the name of the component
+     * @param parent a parent widget, used to set the wid for PackageKit
+     * @param force whether to always prompt, even if recently prompted
+     */
+    void installMissingComponent(const QString &type, const QString &name,
+                                 QWidget *parent = 0, bool force = false);
 
-    private:
-        /**
-         * Default constructor. The singleton method self() is the
-         * preferred access mechanism.
-         */
-        ComponentInstaller();
-        ~ComponentInstaller();
+private:
+    /**
+     * Default constructor. The singleton method self() is the
+     * preferred access mechanism.
+     */
+    ComponentInstaller();
+    ~ComponentInstaller();
 
-        ComponentInstallerPrivate *const d;
+    ComponentInstallerPrivate *const d;
 
-        friend class ComponentInstallerSingleton;
+    friend class ComponentInstallerSingleton;
 };
 
 } // namespace Plasma

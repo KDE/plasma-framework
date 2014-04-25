@@ -68,11 +68,10 @@ public:
     DataEngine *dataEngine(const QString &name);
 
 private:
-    DataEngineConsumerPrivate * const d;
+    DataEngineConsumerPrivate *const d;
 };
 
 } // namespace Plasma
 
 #endif
-
 

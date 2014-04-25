@@ -46,7 +46,6 @@
 
 // #include "dataenginebindings_p.h"
 
-
 #include <QDebug>
 
 void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
@@ -60,7 +59,6 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     Units *units = new Units(context);
     context->setContextProperty("units", units);
-
 
     if (!engine->rootContext()->contextObject()) {
         KDeclarative::KDeclarative kdeclarative;
@@ -92,9 +90,9 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
     qmlRegisterInterface<Plasma::Service>("Service");
-    qRegisterMetaType<Plasma::Service*>("Service");
+    qRegisterMetaType<Plasma::Service *>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
-    qRegisterMetaType<Plasma::ServiceJob*>("ServiceJob");
+    qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
 
@@ -102,11 +100,10 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
-    qRegisterMetaType<Plasma::DataSource*>("DataSource");
+    qRegisterMetaType<Plasma::DataSource *>("DataSource");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 }
-
 
 #include "corebindingsplugin.moc"
 

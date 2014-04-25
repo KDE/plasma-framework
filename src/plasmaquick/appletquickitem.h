@@ -41,16 +41,18 @@
 // We mean it.
 //
 
-namespace Plasma {
-    class Applet;
+namespace Plasma
+{
+class Applet;
 }
 
-namespace KDeclarative {
-    class QmlObject;
+namespace KDeclarative
+{
+class QmlObject;
 }
 
-
-namespace PlasmaQuick {
+namespace PlasmaQuick
+{
 
 class AppletQuickItemPrivate;
 
@@ -66,7 +68,6 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 
     Q_PROPERTY(QQmlComponent *fullRepresentation READ fullRepresentation WRITE setFullRepresentation NOTIFY fullRepresentationChanged)
     Q_PROPERTY(QObject *fullRepresentationItem READ fullRepresentationItem NOTIFY fullRepresentationItemChanged)
-
 
     /**
      * this is supposed to be either one between compactRepresentation or fullRepresentation
@@ -105,7 +106,6 @@ public:
     int switchHeight() const;
     void setSwitchHeight(int width);
 
-
     QQmlComponent *compactRepresentation();
     void setCompactRepresentation(QQmlComponent *component);
 
@@ -120,7 +120,6 @@ public:
 
 ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletQuickItem *qmlAttachedProperties(QObject *object);
-
 
 Q_SIGNALS:
 //Property signals
@@ -143,8 +142,6 @@ protected:
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
     virtual void itemChange(ItemChange change, const ItemChangeData &value);
 
-
-
 private:
     AppletQuickItemPrivate *const d;
 
@@ -162,6 +159,5 @@ private:
 }
 
 QML_DECLARE_TYPEINFO(PlasmaQuick::AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
-
 
 #endif

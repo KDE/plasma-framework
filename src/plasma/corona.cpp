@@ -89,7 +89,7 @@ void Corona::saveLayout(const QString &configName) const
     d->saveLayout(c);
 }
 
-void Corona::exportLayout(KConfigGroup &config, QList<Containment*> containments)
+void Corona::exportLayout(KConfigGroup &config, QList<Containment *> containments)
 {
     foreach (const QString &group, config.groupList()) {
         KConfigGroup cg(&config, group);
@@ -166,8 +166,8 @@ Containment *Corona::containmentForScreen(int screen) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
-            (containment->containmentType() == Plasma::Types::DesktopContainment ||
-             containment->containmentType() == Plasma::Types::CustomContainment)) {
+                (containment->containmentType() == Plasma::Types::DesktopContainment ||
+                 containment->containmentType() == Plasma::Types::CustomContainment)) {
             return containment;
         }
     }
@@ -175,7 +175,7 @@ Containment *Corona::containmentForScreen(int screen) const
     return 0;
 }
 
-QList<Containment*> Corona::containments() const
+QList<Containment *> Corona::containments() const
 {
     return d->containments;
 }
@@ -212,11 +212,10 @@ Containment *Corona::createContainmentDelayed(const QString &name, const QVarian
     return 0;
 }
 
-int Corona::screenForContainment(const Containment* containment) const
+int Corona::screenForContainment(const Containment *containment) const
 {
     return -1;
 }
-
 
 int Corona::numScreens() const
 {
@@ -295,7 +294,7 @@ QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
 
     foreach (Containment *containment, containments()) {
         if (containment->screen() == screen &&
-            freeEdges.contains(containment->location())) {
+                freeEdges.contains(containment->location())) {
             freeEdges.removeAll(containment->location());
         }
     }
@@ -384,18 +383,18 @@ void CoronaPrivate::updateContainmentImmutability()
 
 void CoronaPrivate::containmentDestroyed(QObject *obj)
 {
-        // we do a static_cast here since it really isn't an Containment by this
-        // point anymore since we are in the qobject dtor. we don't actually
-        // try and do anything with it, we just need the value of the pointer
-        // so this unsafe looking code is actually just fine.
-        Containment* containment = static_cast<Plasma::Containment*>(obj);
-        int index = containments.indexOf(containment);
+    // we do a static_cast here since it really isn't an Containment by this
+    // point anymore since we are in the qobject dtor. we don't actually
+    // try and do anything with it, we just need the value of the pointer
+    // so this unsafe looking code is actually just fine.
+    Containment *containment = static_cast<Plasma::Containment *>(obj);
+    int index = containments.indexOf(containment);
 
-        if (index > -1) {
-            containments.removeAt(index);
-            q->requestConfigSync();
-        }
+    if (index > -1) {
+        containments.removeAt(index);
+        q->requestConfigSync();
     }
+}
 
 void CoronaPrivate::syncConfig()
 {
@@ -419,7 +418,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     bool loadingNull = pluginName == "null";
     if (!loadingNull) {
         applet = PluginLoader::self()->loadApplet(pluginName, id, args);
-        containment = dynamic_cast<Containment*>(applet);
+        containment = dynamic_cast<Containment *>(applet);
         if (containment) {
             containment->setParent(q);
         }
@@ -457,11 +456,11 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     containments.append(containment);
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),
-            q, SLOT(containmentDestroyed(QObject*)));
+                     q, SLOT(containmentDestroyed(QObject*)));
     QObject::connect(containment, SIGNAL(configNeedsSaving()),
-            q, SLOT(requestConfigSync()));
+                     q, SLOT(requestConfigSync()));
     QObject::connect(containment, SIGNAL(screenChanged(int)),
-            q, SIGNAL(screenOwnerChanged(int)));
+                     q, SIGNAL(screenOwnerChanged(int)));
 
     if (!delayedInit) {
         containment->init();
@@ -536,7 +535,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         foreach (Containment *containment, containments) {
             if (!containment->isUiReady() && containment->lastScreen() < q->numScreens()) {
                 ++containmentsStarting;
-                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](){
+                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [ = ]() {
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {
                         qDebug() << "Corona Startup Completed";
@@ -551,7 +550,5 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 }
 
 } // namespace Plasma
-
-
 
 #include "moc_corona.cpp"

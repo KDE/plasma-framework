@@ -107,7 +107,7 @@ void Containment::init()
             setContainmentType(Plasma::Types::CustomContainment);
         } else if (type == "CustomPanel") {
             setContainmentType(Plasma::Types::CustomPanelContainment);
-        //default to desktop
+            //default to desktop
         } else {
             setContainmentType(Plasma::Types::DesktopContainment);
         }
@@ -157,20 +157,20 @@ bool appletConfigLessThan(const KConfigGroup &c1, const KConfigGroup &c2)
 void Containment::restore(KConfigGroup &group)
 {
     /*
-#ifndef NDEBUG
+    #ifndef NDEBUG
     // qDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
     // qDebug() << "    location:" << group.readEntry("location", (int)d->location);
     // qDebug() << "    geom:" << group.readEntry("geometry", geometry());
     // qDebug() << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
     // qDebug() << "    screen:" << group.readEntry("screen", d->screen);
-#endif
-*/
+    #endif
+    */
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
 
     setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
-    
+
     d->activityId = group.readEntry("activityId", QString());
 
     flushPendingConstraintsEvents();
@@ -180,7 +180,6 @@ void Containment::restore(KConfigGroup &group)
     if (isContainment()) {
         KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
         cfg = KConfigGroup(&cfg, QString::number(containmentType()));
-
 
         //qDebug() << cfg.keyList();
         if (cfg.exists()) {
@@ -192,7 +191,7 @@ void Containment::restore(KConfigGroup &group)
             KConfigGroup defaultActionsCfg;
             if (d->type == Plasma::Types::PanelContainment) {
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
-            //Plasma::Types::DesktopContainment
+                //Plasma::Types::DesktopContainment
             } else {
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
             }
@@ -205,9 +204,9 @@ void Containment::restore(KConfigGroup &group)
     }
 
     /*
-#ifndef NDEBUG
+    #ifndef NDEBUG
     // qDebug() << "Containment" << id() <<
-#endif
+    #endif
                 "screen" << screen() <<
                 "geometry is" << geometry() <<
                 "config entries" << group.entryMap();
@@ -293,7 +292,7 @@ void Containment::setContainmentType(Plasma::Types::ContainmentType type)
 
 Corona *Containment::corona() const
 {
-    return qobject_cast<Corona*>(parent());
+    return qobject_cast<Corona *>(parent());
 }
 
 void Containment::setFormFactor(Types::FormFactor formFactor)
@@ -444,7 +443,7 @@ int Containment::screen() const
     if (corona()) {
         return corona()->screenForContainment(this);
 
-    //case in which this containment is child of an applet, hello systray :)
+        //case in which this containment is child of an applet, hello systray :)
     } else if (Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent())) {
         if (parentApplet->containment()) {
             return parentApplet->containment()->screen();
@@ -519,7 +518,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     emit configNeedsSaving();
 }
 
-QHash<QString, ContainmentActions*> &Containment::containmentActions()
+QHash<QString, ContainmentActions *> &Containment::containmentActions()
 {
     return d->localActionPlugins;
 }
@@ -564,7 +563,5 @@ void Containment::reactToScreenChange()
 }
 
 } // Plasma namespace
-
-
 
 #include "moc_containment.cpp"

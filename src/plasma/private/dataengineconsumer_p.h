@@ -40,7 +40,7 @@ class DataEngineConsumerPrivate : public QObject
 
 public:
     QSet<QString> loadedEngines;
-    QMap<Service*, QString> engineNameForService;
+    QMap<Service *, QString> engineNameForService;
 
 public Q_SLOTS:
     void slotJobFinished(Plasma::ServiceJob *job);

@@ -286,22 +286,22 @@ public:
     /**
      * @return all directories registered as part of this Package's structure
      */
-    QList<const char*> directories() const;
+    QList<const char *> directories() const;
 
     /**
      * @return all directories registered as part of this Package's required structure
      */
-    QList<const char*> requiredDirectories() const;
+    QList<const char *> requiredDirectories() const;
 
     /**
      * @return all files registered as part of this Package's structure
      */
-    QList<const char*> files() const;
+    QList<const char *> files() const;
 
     /**
      * @return all files registered as part of this Package's required structure
      */
-    QList<const char*> requiredFiles() const;
+    QList<const char *> requiredFiles() const;
 
     /**
      * Installs a package matching this package structure. By default installs a
@@ -309,14 +309,14 @@ public:
      *
      * @return KJob to track installation progress and result
      **/
-    KJob* install(const QString &sourcePackage, const QString &packageRoot = QString());
+    KJob *install(const QString &sourcePackage, const QString &packageRoot = QString());
 
     /**
      * Uninstalls a package matching this package structure.
      *
      * @return KJob to track removal progress and result
      */
-    KJob* uninstall(const QString &packageName, const QString &packageRoot);
+    KJob *uninstall(const QString &packageName, const QString &packageRoot);
 
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;

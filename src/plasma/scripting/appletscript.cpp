@@ -62,9 +62,9 @@ void AppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
     Q_UNUSED(constraints);
 }
 
-QList<QAction*> AppletScript::contextualActions()
+QList<QAction *> AppletScript::contextualActions()
 {
-    return QList<QAction*>();
+    return QList<QAction *>();
 }
 
 void AppletScript::setHasConfigurationInterface(bool hasInterface)
@@ -138,6 +138,5 @@ void AppletScript::setContainmentType(Plasma::Types::ContainmentType type)
 }
 
 } // Plasma namespace
-
 
 #include "moc_appletscript.cpp"

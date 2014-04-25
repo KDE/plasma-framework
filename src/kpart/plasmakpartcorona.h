@@ -26,7 +26,7 @@
 
 namespace Plasma
 {
-    class Applet;
+class Applet;
 } // namespace Plasma
 
 /**
@@ -34,9 +34,9 @@ namespace Plasma
  */
 class PlasmaKPartCorona : public Plasma::Corona
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    PlasmaKPartCorona(QObject* parent);
+    PlasmaKPartCorona(QObject *parent);
 
 protected:
     void loadDefaultLayout();

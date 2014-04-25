@@ -48,9 +48,7 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 
-
-
-Q_DECLARE_METATYPE(AppletInterface*)
+Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
@@ -146,12 +144,12 @@ void AppletInterface::init()
 
     applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
     connect(applet(), &Plasma::Applet::activated,
-        [=] () {
-            setExpanded(true);
-            if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
-                i->forceActiveFocus(Qt::ShortcutFocusReason);
-            }
-        });
+    [ = ]() {
+        setExpanded(true);
+        if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
+            i->forceActiveFocus(Qt::ShortcutFocusReason);
+        }
+    });
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const
@@ -173,7 +171,7 @@ QString AppletInterface::currentActivity() const
     }
 }
 
-QObject* AppletInterface::configuration() const
+QObject *AppletInterface::configuration() const
 {
     return m_configuration;
 }
@@ -315,9 +313,9 @@ QString AppletInterface::file(const QString &fileType, const QString &filePath)
     return appletScript()->filePath(fileType, filePath);
 }
 
-QList<QAction*> AppletInterface::contextualActions() const
+QList<QAction *> AppletInterface::contextualActions() const
 {
-    QList<QAction*> actions;
+    QList<QAction *> actions;
     Plasma::Applet *a = applet();
     if (a->failedToLaunch()) {
         return actions;
@@ -426,7 +424,6 @@ int AppletInterface::apiVersion() const
     return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
 }
 
-
 void AppletInterface::setAssociatedApplication(const QString &string)
 {
     applet()->setAssociatedApplication(string);
@@ -474,7 +471,7 @@ QKeySequence AppletInterface::globalShortcut() const
     return applet()->globalShortcut();
 }
 
-void AppletInterface::setGlobalShortcut(const QKeySequence& sequence)
+void AppletInterface::setGlobalShortcut(const QKeySequence &sequence)
 {
     applet()->setGlobalShortcut(sequence);
 }
@@ -501,13 +498,13 @@ QStringList AppletInterface::downloadedFiles() const
 void AppletInterface::executeAction(const QString &name)
 {
     if (qmlObject()->rootObject()) {
-         const QMetaObject *metaObj = qmlObject()->rootObject()->metaObject();
-         QString actionMethodName = QString("action_" + name);
-         if (metaObj->indexOfMethod(QMetaObject::normalizedSignature((actionMethodName + "()").toLatin1())) != -1){
-             QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.toLatin1(), Qt::DirectConnection);
-         }else{
-             QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
-         }
+        const QMetaObject *metaObj = qmlObject()->rootObject()->metaObject();
+        QString actionMethodName = QString("action_" + name);
+        if (metaObj->indexOfMethod(QMetaObject::normalizedSignature((actionMethodName + "()").toLatin1())) != -1) {
+            QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.toLatin1(), Qt::DirectConnection);
+        } else {
+            QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
+        }
     }
 }
 

@@ -51,7 +51,8 @@
 namespace PlasmaQuick
 {
 
-class DialogPrivate {
+class DialogPrivate
+{
 public:
     DialogPrivate(Dialog *dialog)
         : q(dialog),
@@ -70,7 +71,7 @@ public:
         Window
     };
 
-    QScreen* screenForItem(QQuickItem *item) const;
+    QScreen *screenForItem(QQuickItem *item) const;
     void updateInputShape();
 
     //SLOTS
@@ -107,10 +108,10 @@ public:
 };
 
 //find the screen which contains the item
-QScreen* DialogPrivate::screenForItem(QQuickItem* item) const
+QScreen *DialogPrivate::screenForItem(QQuickItem *item) const
 {
     const QPoint globalPosition = item->window()->mapToGlobal(item->position().toPoint());
-    foreach(QScreen *screen, QGuiApplication::screens()) {
+    foreach (QScreen *screen, QGuiApplication::screens()) {
         if (screen->geometry().contains(globalPosition)) {
             return screen;
         }
@@ -128,7 +129,7 @@ void DialogPrivate::syncBorders()
     //        says it's at.
     QRect avail;
     QPoint pos = q->position();
-    Q_FOREACH(QScreen *screen, q->screen()->virtualSiblings()) {
+    Q_FOREACH (QScreen *screen, q->screen()->virtualSiblings()) {
         if (screen->availableGeometry().contains(pos)) {
             avail = screen->availableGeometry();
             break;
@@ -164,10 +165,10 @@ void DialogPrivate::syncBorders()
 void DialogPrivate::updateContrast()
 {
     KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
-                                                      theme.backgroundContrast(),
-                                                      theme.backgroundIntensity(),
-                                                      theme.backgroundSaturation(),
-                                                      frameSvgItem->frameSvg()->mask());
+            theme.backgroundContrast(),
+            theme.backgroundIntensity(),
+            theme.backgroundSaturation(),
+            frameSvgItem->frameSvg()->mask());
 }
 
 void DialogPrivate::updateVisibility(bool visible)
@@ -212,7 +213,7 @@ void DialogPrivate::updateVisibility(bool visible)
         case Plasma::Types::BottomEdge:
             slideLocation = KWindowEffects::BottomEdge;
             break;
-            //no edge, no slide
+        //no edge, no slide
         default:
             break;
         }
@@ -226,7 +227,7 @@ void DialogPrivate::updateVisibility(bool visible)
         if (type != Dialog::Normal) {
             KWindowSystem::setType(q->winId(), (NET::WindowType)type);
         } else {
-            q->setFlags(Qt::FramelessWindowHint|q->flags());
+            q->setFlags(Qt::FramelessWindowHint | q->flags());
         }
         if (type == Dialog::Dock) {
             KWindowSystem::setOnAllDesktops(q->winId(), true);
@@ -405,9 +406,6 @@ void DialogPrivate::requestSizeSync(bool delayed)
     }
 }
 
-
-
-
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
@@ -423,16 +421,16 @@ Dialog::Dialog(QQuickItem *parent)
     d->syncTimer->setSingleShot(true);
     d->syncTimer->setInterval(0);
     connect(d->syncTimer, &QTimer::timeout,
-            [=]() {
-                if (d->resizeOrigin == DialogPrivate::MainItem) {
-                    d->syncToMainItemSize();
-                } else {
-                    d->syncMainItemToSize();
-                }
-                d->resizeOrigin = DialogPrivate::Undefined;
-            });
+    [ = ]() {
+        if (d->resizeOrigin == DialogPrivate::MainItem) {
+            d->syncToMainItemSize();
+        } else {
+            d->syncMainItemToSize();
+        }
+        d->resizeOrigin = DialogPrivate::Undefined;
+    });
 
-    connect(this, &QWindow::xChanged, [=]() {
+    connect(this, &QWindow::xChanged, [ = ]() {
         //Tooltips always have all the borders
         // floating windows have all borders
         if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
@@ -440,7 +438,7 @@ Dialog::Dialog(QQuickItem *parent)
             d->requestSizeSync(true);
         }
     });
-    connect(this, &QWindow::yChanged, [=]() {
+    connect(this, &QWindow::yChanged, [ = ]() {
         //Tooltips always have all the borders
         // floating windows have all borders
         if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
@@ -490,13 +488,13 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
             if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-                connect(mainItem, &QQuickItem::widthChanged, [=]() {
+                connect(mainItem, &QQuickItem::widthChanged, [ = ]() {
                     d->resizeOrigin = DialogPrivate::MainItem;
                     d->syncTimer->start(0);
                 });
             }
             if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-                connect(mainItem, &QQuickItem::heightChanged, [=]() {
+                connect(mainItem, &QQuickItem::heightChanged, [ = ]() {
                     d->resizeOrigin = DialogPrivate::MainItem;
                     d->syncTimer->start(0);
                 });
@@ -512,10 +510,10 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             foreach (QObject *child, mainItem->children()) {
                 //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
                 if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                    child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-                    child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-                    child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-                ) {
+                        child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                        child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                        child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+                   ) {
                     layout = child;
                 }
             }
@@ -572,20 +570,20 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 
             switch (d->location) {
             case Plasma::Types::TopEdge:
-                return QPoint(screen->availableGeometry().center().x() - size.width()/2, screen->availableGeometry().y());
+                return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().y());
                 break;
             case Plasma::Types::LeftEdge:
-                return QPoint(screen->availableGeometry().x(), screen->availableGeometry().center().y() - size.height()/2);
+                return QPoint(screen->availableGeometry().x(), screen->availableGeometry().center().y() - size.height() / 2);
                 break;
             case Plasma::Types::RightEdge:
-                return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height()/2);
+                return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height() / 2);
                 break;
             case Plasma::Types::BottomEdge:
-                return QPoint(screen->availableGeometry().center().x() - size.width()/2, screen->availableGeometry().bottom() -size.height());
+                return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().bottom() - size.height());
                 break;
-                //Default center in the screen
+            //Default center in the screen
             default:
-                return screen->geometry().center() - QPoint(size.width()/2, size.height()/2);
+                return screen->geometry().center() - QPoint(size.width() / 2, size.height() / 2);
             }
         } else {
             return QPoint();
@@ -611,16 +609,16 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         parentGeometryBounds = QRect(pos.toPoint(), QSize(item->width(), item->height()));
     }
 
-    const QPoint topPoint(pos.x() + (item->boundingRect().width() - size.width())/2,
-                                   parentGeometryBounds.top() - size.height());
-    const QPoint bottomPoint(pos.x() + (item->boundingRect().width() - size.width())/2,
+    const QPoint topPoint(pos.x() + (item->boundingRect().width() - size.width()) / 2,
+                          parentGeometryBounds.top() - size.height());
+    const QPoint bottomPoint(pos.x() + (item->boundingRect().width() - size.width()) / 2,
                              parentGeometryBounds.bottom());
 
     const QPoint leftPoint(parentGeometryBounds.left() - size.width(),
-                           pos.y() + (item->boundingRect().height() - size.height())/2);
+                           pos.y() + (item->boundingRect().height() - size.height()) / 2);
 
     const QPoint rightPoint(parentGeometryBounds.right(),
-                            pos.y() + (item->boundingRect().height() - size.height())/2);
+                            pos.y() + (item->boundingRect().height() - size.height()) / 2);
 
     QPoint dialogPos;
     if (d->location == Plasma::Types::TopEdge) {
@@ -709,7 +707,6 @@ void Dialog::setLocation(Plasma::Types::Location location)
     d->requestSizeSync();
 }
 
-
 QObject *Dialog::margins() const
 {
     return d->frameSvgItem->margins();
@@ -717,7 +714,7 @@ QObject *Dialog::margins() const
 
 void Dialog::setFramelessFlags(Qt::WindowFlags flags)
 {
-    setFlags(Qt::FramelessWindowHint|flags);
+    setFlags(Qt::FramelessWindowHint | flags);
     emit flagsChanged();
 }
 
@@ -746,7 +743,7 @@ void Dialog::setType(WindowType type)
     if (d->type != Normal) {
         KWindowSystem::setType(winId(), (NET::WindowType)type);
     } else {
-        setFlags(Qt::FramelessWindowHint|flags());
+        setFlags(Qt::FramelessWindowHint | flags());
     }
 
     if (type == Tooltip) {
@@ -777,7 +774,7 @@ void Dialog::focusInEvent(QFocusEvent *ev)
 void Dialog::focusOutEvent(QFocusEvent *ev)
 {
     if (d->hideOnWindowDeactivate) {
-        qDebug( ) << "DIALOG:  hiding dialog.";
+        qDebug() << "DIALOG:  hiding dialog.";
         setVisible(false);
     }
     QQuickWindow::focusOutEvent(ev);

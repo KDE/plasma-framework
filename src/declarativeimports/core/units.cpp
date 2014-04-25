@@ -36,7 +36,7 @@ const QString plasmarc = QStringLiteral("plasmarc");
 const QString groupName = QStringLiteral("Units");
 const int defaultLongDuration = 250;
 
-Units::Units (QObject *parent)
+Units::Units(QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
       m_devicePixelRatio(-1),
@@ -193,7 +193,6 @@ void Units::updateSpacing()
         emit spacingChanged();
     }
 }
-
 
 int Units::longDuration() const
 {

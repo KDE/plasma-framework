@@ -25,7 +25,6 @@
 
 #include <QDebug>
 
-
 FallbackComponent::FallbackComponent(QObject *parent)
     : QObject(parent)
 {

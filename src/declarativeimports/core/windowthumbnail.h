@@ -37,7 +37,8 @@
 #endif // HAVE_XCB_COMPOSITE
 class KWindowInfo;
 
-namespace Plasma {
+namespace Plasma
+{
 
 class WindowTextureNode;
 

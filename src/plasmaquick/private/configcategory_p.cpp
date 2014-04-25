@@ -38,7 +38,8 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
-namespace PlasmaQuick {
+namespace PlasmaQuick
+{
 
 ///////////////////////ConfigCategory
 
@@ -65,7 +66,6 @@ void ConfigCategory::setName(const QString &name)
     emit nameChanged();
 }
 
-
 QString ConfigCategory::icon() const
 {
     return m_icon;
@@ -80,7 +80,6 @@ void ConfigCategory::setIcon(const QString &icon)
     m_icon = icon;
     emit iconChanged();
 }
-
 
 QString ConfigCategory::source() const
 {
