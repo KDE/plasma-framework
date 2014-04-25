@@ -22,11 +22,6 @@ if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DKDE_NO_DEPRECATED")
 endif()
 
-############### Load the CTest options ###############
-# CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
-# in the KDE build system, this is the same as CMAKE_BINARY_DIR.
-configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake COPYONLY)
-
 ################# Enable C++0x (still too early for -std=c++11) features for clang and gcc #################
 
 if(UNIX)
