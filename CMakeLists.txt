@@ -15,7 +15,8 @@ include(KDECompilerSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 
-set(KF5_VERSION "4.98.0")
+set(KF5_VERSION "4.98.0") # handled by release scripts # handled by release scripts
+set(KF5_DEP_VERSION "4.98.0") # handled by release scripts
 
 ecm_setup_version(${KF5_VERSION}
                   VARIABLE_PREFIX PLASMA
@@ -41,23 +42,23 @@ set (REQUIRED_QT_VERSION "5.2.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Sql Qml Widgets Svg Script Test)
 
-find_package(KF5Activities ${KF5_VERSION} REQUIRED)
-find_package(KF5Archive ${KF5_VERSION} REQUIRED)
-find_package(KF5Config ${KF5_VERSION} REQUIRED)
-find_package(KF5ConfigWidgets ${KF5_VERSION} REQUIRED)
-find_package(KF5CoreAddons ${KF5_VERSION} REQUIRED)
-find_package(KF5DBusAddons ${KF5_VERSION} REQUIRED)
-find_package(KF5Declarative ${KF5_VERSION} REQUIRED)
-find_package(KF5GlobalAccel ${KF5_VERSION} REQUIRED)
-find_package(KF5GuiAddons ${KF5_VERSION} REQUIRED)
-find_package(KF5I18n ${KF5_VERSION} REQUIRED)
-find_package(KF5IconThemes ${KF5_VERSION} REQUIRED)
-find_package(KF5KIO ${KF5_VERSION} REQUIRED)
-find_package(KF5Service ${KF5_VERSION} REQUIRED)
-find_package(KF5WindowSystem ${KF5_VERSION} REQUIRED)
-find_package(KF5XmlGui ${KF5_VERSION} REQUIRED)
+find_package(KF5Activities ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5ConfigWidgets ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5DBusAddons ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5Declarative ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5GlobalAccel ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5GuiAddons ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5I18n ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5IconThemes ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5KIO ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5Service ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5WindowSystem ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5XmlGui ${KF5_DEP_VERSION} REQUIRED)
 
-find_package(KF5DocTools ${KF5_VERSION})
+find_package(KF5DocTools ${KF5_DEP_VERSION})
 set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
                        TYPE OPTIONAL
                       )
