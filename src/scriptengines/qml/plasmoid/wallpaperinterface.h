@@ -25,11 +25,7 @@
 
 #include <Plasma/Package>
 
-namespace Plasma
-{
-class ConfigLoader;
-}
-
+class KConfigLoader;
 class KActionCollection;
 
 class ContainmentInterface;
@@ -67,7 +63,7 @@ public:
 
     KDeclarative::ConfigPropertyMap *configuration() const;
 
-    Plasma::ConfigLoader *configScheme();
+    KConfigLoader *configScheme();
 
     QList<QAction *> contextualActions() const;
 
@@ -107,7 +103,7 @@ private:
     KDeclarative::QmlObject *m_qmlObject;
     Plasma::Package m_pkg;
     KDeclarative::ConfigPropertyMap *m_configuration;
-    Plasma::ConfigLoader *m_configLoader;
+    KConfigLoader *m_configLoader;
     KActionCollection *m_actions;
     QSignalMapper *m_actionSignals;
 

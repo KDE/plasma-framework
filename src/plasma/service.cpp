@@ -30,125 +30,16 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <ksharedconfig.h>
+#include <KConfigLoader>
+#include <KConfigSkeleton>
 
 #include <qstandardpaths.h>
 
-#include "configloader.h"
 #include "version.h"
-#include "private/configloader_p.h"
-#include "private/configloaderhandler_p.h"
 #include "pluginloader.h"
 
 namespace Plasma
 {
-
-class ConfigLoaderHandlerMap : public ConfigLoaderHandler
-{
-public:
-    ConfigLoaderHandlerMap(ConfigLoader *config, ConfigLoaderPrivate *d)
-        : ConfigLoaderHandler(config, d)
-    {}
-
-    void addItem();
-    const QMap<QString, QVariantMap> &groupsMap() const;
-
-private:
-    QMap<QString, QVariantMap> m_groupsMap;
-};
-
-void ConfigLoaderHandlerMap::addItem()
-{
-    if (name().isEmpty()) {
-        if (key().isEmpty()) {
-            return;
-        }
-
-        setName(key());
-    } else if (key().isEmpty()) {
-        if (name().isEmpty()) {
-            return;
-        }
-
-        setKey(name());
-    }
-
-    if (!m_groupsMap.contains(currentGroup())) {
-        m_groupsMap[currentGroup()] = QVariantMap();
-        m_groupsMap[currentGroup()]["_name"] = currentGroup();
-    }
-
-    if (type() == "bool") {
-        bool defaultVal = defaultValue().toLower() == "true";
-        m_groupsMap[currentGroup()][key()] = defaultVal;
-    } else if (type() == "color") {
-        m_groupsMap[currentGroup()][key()] = QColor(defaultValue());
-    } else if (type() == "datetime") {
-        m_groupsMap[currentGroup()][key()] = QDateTime::fromString(defaultValue());
-    } else if (type() == "enum") {
-        key() = (key().isEmpty()) ? name() : key();
-        m_groupsMap[currentGroup()][key()] = defaultValue().toUInt();
-    } else if (type() == "font") {
-        m_groupsMap[currentGroup()][key()] = QFont(defaultValue());
-    } else if (type() == "int") {
-        m_groupsMap[currentGroup()][key()] = defaultValue().toInt();
-    } else if (type() == "password") {
-        m_groupsMap[currentGroup()][key()] = defaultValue();
-    } else if (type() == "path") {
-        m_groupsMap[currentGroup()][key()] = defaultValue();
-    } else if (type() == "string") {
-        m_groupsMap[currentGroup()][key()] = defaultValue();
-    } else if (type() == "stringlist") {
-        //FIXME: the split() is naive and will break on lists with ,'s in them
-        m_groupsMap[currentGroup()][key()] = defaultValue().split(',');
-    } else if (type() == "uint") {
-        m_groupsMap[currentGroup()][key()] = defaultValue().toUInt();
-    } else if (type() == "url") {
-        setKey((key().isEmpty()) ? name() : key());
-        m_groupsMap[currentGroup()][key()] = QUrl::fromUserInput(defaultValue());
-    } else if (type() == "double") {
-        m_groupsMap[currentGroup()][key()] = defaultValue().toDouble();
-    } else if (type() == "intlist") {
-        QStringList tmpList = defaultValue().split(',');
-        QList<int> defaultList;
-        foreach (const QString &tmp, tmpList) {
-            defaultList.append(tmp.toInt());
-        }
-        m_groupsMap[currentGroup()][key()] = QVariant::fromValue(defaultList);
-    } else if (type() == "longlong") {
-        m_groupsMap[currentGroup()][key()] = defaultValue().toLongLong();
-    } else if (type() == "point") {
-        QPoint defaultPoint;
-        QStringList tmpList = defaultValue().split(',');
-        if (tmpList.size() >= 2) {
-            defaultPoint.setX(tmpList[0].toInt());
-            defaultPoint.setY(tmpList[1].toInt());
-        }
-        m_groupsMap[currentGroup()][key()] = defaultPoint;
-    } else if (type() == "rect") {
-        QRect defaultRect;
-        QStringList tmpList = defaultValue().split(',');
-        if (tmpList.size() >= 4) {
-            defaultRect.setCoords(tmpList[0].toInt(), tmpList[1].toInt(),
-                                  tmpList[2].toInt(), tmpList[3].toInt());
-        }
-        m_groupsMap[currentGroup()][key()] = tmpList;
-    } else if (type() == "size") {
-        QSize defaultSize;
-        QStringList tmpList = defaultValue().split(',');
-        if (tmpList.size() >= 2) {
-            defaultSize.setWidth(tmpList[0].toInt());
-            defaultSize.setHeight(tmpList[1].toInt());
-        }
-        m_groupsMap[currentGroup()][key()] = tmpList;
-    } else if (type() == "ulonglong") {
-        m_groupsMap[currentGroup()][key()] = defaultValue().toULongLong();
-    }
-}
-
-const QMap<QString, QVariantMap> &ConfigLoaderHandlerMap::groupsMap() const
-{
-    return m_groupsMap;
-}
 
 Service::Service(QObject *parent)
     : QObject(parent),
@@ -279,15 +170,19 @@ void Service::setOperationsScheme(QIODevice *xml)
 {
     d->operationsMap.clear();
 
-    ConfigLoaderPrivate *configLoaderPrivate = new ConfigLoaderPrivate;
-    configLoaderPrivate->setWriteDefaults(true);
-    ConfigLoaderHandlerMap configLoaderHandler(0, configLoaderPrivate);
-    QXmlInputSource source(xml);
-    QXmlSimpleReader reader;
-    reader.setContentHandler(&configLoaderHandler);
-    reader.parse(&source, false);
-    d->operationsMap = configLoaderHandler.groupsMap();
-    delete configLoaderPrivate;
+    // /dev/null is because I need to pass a filename argument to construct a
+    //  KSharedConfig. We need a config object for the config loader even
+    //  though we dont' actually want to use any config parts from it,
+    //  we just want to share the KConfigLoader XML parsing.
+    KSharedConfigPtr config = KSharedConfig::openConfig("/dev/null");
+    KConfigLoader loader(config, xml);
+
+    foreach (const QString &group, loader.groupList()) {
+        d->operationsMap[group]["_name"] = group;
+    }
+    foreach (KConfigSkeletonItem *item,  loader.items()) {
+        d->operationsMap[item->group()][item->key()] = item->property();
+    }
 }
 
 void Service::registerOperationsScheme()

@@ -31,12 +31,8 @@
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 
-#include "plasma/configloader.h"
-
 namespace Plasma
 {
-
-class ConfigLoader;
 
 class NullServiceJob : public ServiceJob
 {

@@ -37,6 +37,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <klocalizedstring.h>
+#include <KConfigLoader>
 
 #include <Plasma/Plasma>
 #include <Plasma/Applet>

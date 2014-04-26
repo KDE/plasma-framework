@@ -39,6 +39,8 @@
 #include <kauthorized.h>
 #include <klocalizedstring.h>
 #include <kservicetypetrader.h>
+#include <KConfigSkeleton>
+#include <KConfigLoader>
 
 #if !PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags

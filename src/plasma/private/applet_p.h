@@ -92,7 +92,7 @@ public:
     // sripting and package stuff
     AppletScript *script;
     Package *package;
-    ConfigLoader *configLoader;
+    KConfigLoader *configLoader;
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions;

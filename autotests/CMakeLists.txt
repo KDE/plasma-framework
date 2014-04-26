@@ -25,7 +25,6 @@ MACRO(PLASMA_UNIT_TESTS)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
-    configloadertest
     packagestructuretest
     packageurlinterceptortest
     pluginloadertest

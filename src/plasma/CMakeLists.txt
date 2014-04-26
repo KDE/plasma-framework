@@ -44,7 +44,6 @@ set(Plasma_LIB_SRCS
 
 #applets,containments,corona
     applet.cpp
-    configloader.cpp
     containment.cpp
     containmentactions.cpp
     corona.cpp
@@ -151,7 +150,6 @@ generate_export_header(KF5Plasma
 ecm_generate_headers(Plasma_CamelCase_HEADERS
     HEADER_NAMES
         Applet
-        ConfigLoader
         Containment
         ContainmentActions
         Corona

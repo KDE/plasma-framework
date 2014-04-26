@@ -26,6 +26,7 @@
 #include <kactioncollection.h>
 #include <kservicetypetrader.h>
 #include <kdesktopfile.h>
+#include <KConfigLoader>
 
 #include <QDebug>
 #include <QQmlExpression>
@@ -33,7 +34,6 @@
 #include <QQmlProperty>
 #include <QSignalMapper>
 
-#include <Plasma/ConfigLoader>
 #include <Plasma/PluginLoader>
 
 QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
@@ -88,7 +88,7 @@ KDeclarative::ConfigPropertyMap *WallpaperInterface::configuration() const
     return m_configuration;
 }
 
-Plasma::ConfigLoader *WallpaperInterface::configScheme()
+KConfigLoader *WallpaperInterface::configScheme()
 {
     if (!m_configLoader) {
         //FIXME: do we need "mainconfigxml" in wallpaper packagestructures?
@@ -98,10 +98,10 @@ Plasma::ConfigLoader *WallpaperInterface::configScheme()
         cfg = KConfigGroup(&cfg, "Wallpaper");
 
         if (xmlPath.isEmpty()) {
-            m_configLoader = new Plasma::ConfigLoader(&cfg, 0);
+            m_configLoader = new KConfigLoader(cfg, 0);
         } else {
             QFile file(xmlPath);
-            m_configLoader = new Plasma::ConfigLoader(&cfg, &file);
+            m_configLoader = new KConfigLoader(cfg, &file);
         }
     }
 

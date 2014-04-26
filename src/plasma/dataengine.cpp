@@ -29,6 +29,8 @@
 #include <QVariant>
 
 #include <QDebug>
+#include <QStandardPaths>
+
 #include <kplugininfo.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>

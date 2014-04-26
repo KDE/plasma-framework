@@ -34,6 +34,7 @@
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
+#include <KConfigLoader>
 
 #include "containment.h"
 #include "corona.h"

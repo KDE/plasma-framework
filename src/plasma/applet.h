@@ -30,7 +30,6 @@
 #include <kconfiggroup.h>
 #include <kplugininfo.h>
 
-#include <plasma/configloader.h>
 #include <plasma/plasma.h>
 #include <plasma/version.h>
 #include <plasma/framesvg.h>
@@ -38,6 +37,7 @@
 class QWidget;
 
 class KActionCollection;
+class KConfigLoader;
 
 namespace Plasma
 {
@@ -178,7 +178,7 @@ public:
      *
      * @return config skeleton object, or 0 if none
      **/
-    ConfigLoader *configScheme() const;
+    KConfigLoader *configScheme() const;
 
     /**
      * Saves state information about this applet that will

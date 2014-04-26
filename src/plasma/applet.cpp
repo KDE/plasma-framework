@@ -43,9 +43,9 @@
 #include <klocalizedstring.h>
 #include <kservice.h>
 #include <kservicetypetrader.h>
+#include <KConfigLoader>
 #include <kwindowsystem.h>
 
-#include "configloader.h"
 #include "containment.h"
 #include "corona.h"
 #include "package.h"
@@ -264,16 +264,16 @@ bool Applet::destroyed() const
     return d->transient;
 }
 
-ConfigLoader *Applet::configScheme() const
+KConfigLoader *Applet::configScheme() const
 {
     if (!d->configLoader) {
         const QString xmlPath = d->package ? d->package->filePath("mainconfigxml") : QString();
         KConfigGroup cfg = config();
         if (xmlPath.isEmpty()) {
-            d->configLoader = new ConfigLoader(&cfg, 0);
+            d->configLoader = new KConfigLoader(cfg, 0);
         } else {
             QFile file(xmlPath);
-            d->configLoader = new ConfigLoader(&cfg, &file);
+            d->configLoader = new KConfigLoader(cfg, &file);
             QObject::connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
         }
     }
