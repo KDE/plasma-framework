@@ -1,6 +1,3 @@
-find_package(Qt5Test 5.2.0 REQUIRED NO_MODULE)
-set_package_properties(Qt5Test PROPERTIES PURPOSE "Required for tests")
-
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 
 include(ECMMarkAsTest)

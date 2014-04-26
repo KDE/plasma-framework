@@ -7,8 +7,6 @@ set(platformcomponents_SRCS
     icondialog.cpp
     )
 
-find_package(Qt5 5.2.0 REQUIRED NO_MODULE COMPONENTS Core DBus Qml)
-
 add_library(platformcomponentsplugin SHARED ${platformcomponents_SRCS})
 
 target_link_libraries(
