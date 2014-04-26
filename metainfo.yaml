@@ -1,1 +1,9 @@
+maintainer: mart
+description: Plugin based UI runtime used to write primary user interfaces
 tier: 3
+type: solution
+platforms:
+    - name: All
+portingAid: false
+deprecated: false
+release: true
