@@ -7,6 +7,7 @@ ButtonColumn 2.0 ButtonColumn.qml
 ButtonGroup 2.0 ButtonGroup.js
 ButtonRow 2.0 ButtonRow.qml
 CheckBox 2.0 CheckBox.qml
+ComboBox 2.0 ComboBox.qml
 CommonDialog 2.0 CommonDialog.qml
 ContextMenu 2.0 ContextMenu.qml
 Dialog 2.0 Dialog.qml
