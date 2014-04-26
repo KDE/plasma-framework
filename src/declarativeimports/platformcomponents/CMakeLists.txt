@@ -1,11 +1,6 @@
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(CMAKE_MODULE_PATH
-    /opt/kf5/usr/kde/share/ECM-0.0.8/find-modules/
-    ${CMAKE_MODULE_PATH}
-    )
-
 set(platformcomponents_SRCS
     platformextensionplugin.cpp
     application.cpp
