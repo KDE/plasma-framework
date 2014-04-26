@@ -2,20 +2,26 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(Plasma)
 
-# Make CPack available to easy generate binary packages
-include(CPack)
-include(FeatureSummary)
-include(GenerateExportHeader)
-
-################# set KDE specific information #################
-
+# ECM setup
 find_package(ECM 0.0.12 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
+include(FeatureSummary)
+include(GenerateExportHeader)
 include(ECMGenerateHeaders)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
+include(ECMPackageConfigHelpers)
+include(ECMSetupVersion)
+
+set(KF5_VERSION "4.98.0")
+
+ecm_setup_version(${KF5_VERSION}
+                  VARIABLE_PREFIX PLASMA
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
+                  SOVERSION 5)
 
 if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
@@ -32,7 +38,6 @@ endif()
 ################# now find all used packages #################
 
 set (QT_MIN_VERSION "5.2.0")
-set(KF5_VERSION "4.98.0")
 
 find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Quick Sql Qml Widgets Svg Script)
 
@@ -124,14 +129,6 @@ include(KF5PlasmaMacros.cmake)
 ################ create PlasmaConfig.cmake and install it ###########################
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
-include(ECMPackageConfigHelpers)
-
-include(ECMSetupVersion)
-ecm_setup_version(${KF5_VERSION}
-                  VARIABLE_PREFIX PLASMA
-                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
-                  SOVERSION 5)
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
 
@@ -172,4 +169,4 @@ add_subdirectory(examples)
 add_subdirectory(autotests)
 add_subdirectory(tests)
 
-feature_summary(WHAT ALL   FATAL_ON_MISSING_REQUIRED_PACKAGES)
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
