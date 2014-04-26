@@ -81,7 +81,7 @@ set_target_properties(KF5PlasmaQuick PROPERTIES
                                      EXPORT_NAME PlasmaQuick
                       )
 
-install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 
@@ -95,11 +95,11 @@ set(plasmaquick_LIB_INCLUDES
 )
 
 #install(FILES ${plasmaquick_LIB_INCLUDES}
-#        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
+#        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
 
 #install(DIRECTORY
 #        includes/PlasmaQuick
-#        DESTINATION ${INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
+#        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
 
@@ -107,7 +107,7 @@ ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-    PATH_VARS  INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
+    PATH_VARS  KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
 
 install(FILES

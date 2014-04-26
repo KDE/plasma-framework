@@ -135,7 +135,7 @@ target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/Plasma>"
 )
 target_include_directories(KF5Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR};${INCLUDE_INSTALL_DIR}/Plasma>"
+  "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR};${KF5_INCLUDE_INSTALL_DIR}/Plasma>"
 )
 
 set_target_properties(KF5Plasma PROPERTIES
@@ -176,18 +176,18 @@ install(FILES
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
         version.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
 
 install(DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}/Plasma
-        DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 
 install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
     scripting/scriptengine.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
 
 install(FILES
    data/servicetypes/plasma-applet.desktop
@@ -206,5 +206,5 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_IN
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
 
-install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
