@@ -282,7 +282,7 @@ bool PackageJobThread::installPackage(const QString &src, const QString &dest)
 
         const QString serviceName = d->servicePrefix + meta.pluginName() + ".desktop";
 
-        QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/");
+        QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kservices5/");
         if (!QDir().mkpath(localServiceDirectory)) {
             qDebug() << "Failed to create ... " << localServiceDirectory;
             d->errorMessage = i18n("Could not create local service directory: %1", localServiceDirectory);
@@ -348,7 +348,7 @@ bool PackageJobThread::uninstallPackage(const QString &packagePath)
 
     const QString serviceName = d->servicePrefix + packageName + ".desktop";
 
-    QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kde5/services/") + serviceName;
+    QString service = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kservices5/") + serviceName;
 
     bool ok = QFile::remove(service);
     if (!ok) {
