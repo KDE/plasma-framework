@@ -1,5 +1,3 @@
-project(plasmacomponents)
-
 #find_package(KF5Declarative REQUIRED NO_MODULE)
 
 set(plasmacomponents_SRCS

@@ -1,5 +1,3 @@
-project(calendar)
-
 set(calendar_SRCS
     calendarplugin.cpp
     #incidencemodifier.cpp

@@ -1,4 +1,3 @@
-project(corebindings)
 if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     add_definitions(-DHAVE_XCB_COMPOSITE=1)
     include_directories(

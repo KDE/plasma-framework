@@ -1,5 +1,3 @@
-project(plasma-containmentactions-test)
-
 set(test_SRCS
     test.cpp
 )

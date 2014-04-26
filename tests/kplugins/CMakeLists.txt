@@ -1,5 +1,3 @@
-project("plugintest")
-
 add_executable(plugintest
     main.cpp
     plugintest.cpp

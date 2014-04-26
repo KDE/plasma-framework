@@ -1,5 +1,3 @@
-project("dpitest")
-
 add_executable(dpitest
     main.cpp
     dpitest.cpp

@@ -1,5 +1,3 @@
-project("plasmapkg")
-
 add_executable(plasmapkg2
     main.cpp
     plasmapkg.cpp
