@@ -40,7 +40,7 @@ endif()
 
 set (REQUIRED_QT_VERSION "5.2.0")
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Sql Qml Widgets Svg Script Test)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Sql Qml Widgets Svg Script)
 
 find_package(KF5Activities ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
