@@ -1,23 +1,5 @@
 [Desktop Entry]
 Name=Test Data Engine
-Name[bs]=Probni pogon za podatke
-Name[cs]=Testovací datový nástroj
-Name[de]=Test-Datentreiber
-Name[es]=Motor de datos de pruebas
-Name[fi]=Testitietomoottori
-Name[fr]=Moteur de données pour faire des tests
-Name[hu]=Teszt adatmotor
-Name[mr]=चाचणी डेटा इंजिन
-Name[nl]=Testgegevensengine
-Name[pl]=Silnik danych próbnych
-Name[pt]=Motor de Dados de Teste
-Name[pt_BR]=Mecanismo de dados de teste
-Name[sk]=Testovací dátový nástroj
-Name[sv]=Testdatagränssnitt
-Name[tr]=Test Veri Motoru
-Name[ug]=سىناققا ئىشلىتىدىغان ماتور
-Name[uk]=Перевірка рушія даних
-Name[x-test]=xxTest Data Enginexx
 X-KDE-ServiceTypes=Plasma/DataEngine
 Type=Service
 Icon=unknown
