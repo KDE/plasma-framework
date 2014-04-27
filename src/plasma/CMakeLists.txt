@@ -200,9 +200,9 @@ install(FILES
    data/servicetypes/plasma-lookandfeel.desktop
    DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
-install(FILES data/operations/dataengineservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
-install(FILES data/operations/plasmoidservice.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
-install(FILES data/operations/storage.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
+install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
+install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 
 install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

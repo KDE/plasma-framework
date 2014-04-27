@@ -199,6 +199,11 @@ QString Theme::imagePath(const QString &name) const
     return path;
 }
 
+QString Theme::backgroundPath(const QString& image) const
+{
+    return d->imagePath(themeName(), QLatin1Literal("/appbackgrounds/"), image);
+}
+
 QString Theme::styleSheet(const QString &css) const
 {
     return d->processStyleSheet(css);

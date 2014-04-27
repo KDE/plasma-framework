@@ -3,8 +3,8 @@ project(plasma-python)
 include(PythonMacros)
 
 # install the library, .desktop, and plasma.py
-python_install(plasma_importer.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(pydataengine.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
+python_install(plasma_importer.py ${PLASMA_DATA_INSTALL_DIR}/plasma_scriptengine_python)
+python_install(pydataengine.py ${PLASMA_DATA_INSTALL_DIR}/plasma_scriptengine_python)
 
 # remove the following three lines once we branch 4.5, they are only necessary as long
 # as people update kdebase but not yet kdelibs (PYTHON_SITE_PACKAGES_INSTALL_DIR has just

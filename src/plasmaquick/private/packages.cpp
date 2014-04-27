@@ -26,12 +26,13 @@
 #include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Package>
+#include "../plasma/config-plasma.h"
 
 void LookAndFeelPackage::initPackage(Plasma::Package *package)
 {
     // http://community.kde.org/Plasma/lookAndFeelPackage#
 
-    package->setDefaultPackageRoot("plasma/look-and-feel/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/");
 
     //Defaults
     package->addFileDefinition("defaults", "defaults", i18n("Default settings for theme, etc."));
@@ -97,7 +98,7 @@ void QmlWallpaperPackage::initPackage(Plasma::Package *package)
         package->setContentsPrefixPaths(platform);
     }
 
-    package->setDefaultPackageRoot("plasma/wallpapers/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/");
 
     package->addDirectoryDefinition("images", "images", i18n("Images"));
     package->addDirectoryDefinition("theme", "theme", i18n("Themed Images"));
@@ -126,7 +127,7 @@ void QmlWallpaperPackage::initPackage(Plasma::Package *package)
 void LayoutTemplatePackage::initPackage(Plasma::Package *package)
 {
     package->setServicePrefix("plasma-layout-template");
-    package->setDefaultPackageRoot("plasma/layout-templates");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates");
     package->addFileDefinition("mainscript", "layout.js", i18n("Main Script File"));
     package->setRequired("mainscript", true);
 }

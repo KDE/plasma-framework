@@ -72,6 +72,7 @@ public:
 
     KConfigGroup &config();
 
+    QString imagePath(const QString &theme, const QString &type, const QString &image);
     QString findInTheme(const QString &image, const QString &theme, bool cache = true);
     void discardCache(CacheTypes caches);
     void scheduleThemeChangeNotification(CacheTypes caches);

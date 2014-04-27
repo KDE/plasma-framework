@@ -2,6 +2,8 @@
 find_package(ECM 0.0.9 CONFIG REQUIRED)
 include(KDEInstallDirs)
 
+set(PLASMA_RELATIVE_DATA_INSTALL_DIR "plasma")
+set(PLASMA_DATA_INSTALL_DIR "${DATA_INSTALL_DIR}/${PLASMA_RELATIVE_DATA_INSTALL_DIR}")
 
 # plasma_install_package(path componentname [root] [type])
 #
@@ -9,26 +11,25 @@ include(KDEInstallDirs)
 # @arg path The source path to install from, location of metadata.desktop
 # @arg componentname The plugin name of the component, corresponding to the
 #       X-KDE-PluginInfo-Name key in metadata.desktop
-# @arg root The subdirectory to install to, default: plasma/plasmoids
-# @arg root The subdirectory to install to, default: plasma/plasmoids
+# @arg root The subdirectory to install to, default: plasmoids
 # @arg type The type, default to applet, or applet, package, containment,
 #       wallpaper, shell, lookandfeel, etc.
 # @see Types column in plasmapkg --list-types
 #
 # Examples:
 # plasma_install_package(mywidget org.kde.plasma.mywidget) # installs an applet
-# plasma_install_package(declarativetoolbox org.kde.toolbox plasma/packages package) # installs a generic package
+# plasma_install_package(declarativetoolbox org.kde.toolbox packages package) # installs a generic package
 #
 macro(plasma_install_package dir component)
    set(root ${ARGV2})
    set(type ${ARGV3})
    if(NOT root)
-      set(root plasma/plasmoids)
+      set(root plasmoids)
    endif()
    if(NOT type)
       set(type applet)
    endif()
-   install(DIRECTORY ${dir}/ DESTINATION ${DATA_INSTALL_DIR}/${root}/${component} PATTERN .svn EXCLUDE PATTERN CMakeLists.txt EXCLUDE PATTERN Messages.sh EXCLUDE)
+   install(DIRECTORY ${dir}/ DESTINATION ${PLASMA_DATA_INSTALL_DIR}/${root}/${component} PATTERN .svn EXCLUDE PATTERN CMakeLists.txt EXCLUDE PATTERN Messages.sh EXCLUDE)
    install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 

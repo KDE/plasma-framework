@@ -79,7 +79,7 @@ void GenericPackage::initPackage(Package *package)
         package->setContentsPrefixPaths(platform);
     }
 
-    package->setDefaultPackageRoot("plasma/packages/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/");
 
     package->addDirectoryDefinition("images", "images", i18n("Images"));
     package->addDirectoryDefinition("theme", "theme", i18n("Themed Images"));
@@ -109,7 +109,7 @@ void PlasmoidPackage::initPackage(Package *package)
 {
     GenericPackage::initPackage(package);
     package->setServicePrefix("plasma-applet-");
-    package->setDefaultPackageRoot("plasma/plasmoids/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/");
 
     package->addFileDefinition("configmodel", "config/config.qml", i18n("Configuration UI pages model"));
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
@@ -124,7 +124,7 @@ void DataEnginePackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
     package->setServicePrefix("plasma-dataengine-");
-    package->setDefaultPackageRoot("plasma/dataengines/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/");
 
     package->addDirectoryDefinition("data", "data", i18n("Data Files"));
 
@@ -238,12 +238,12 @@ void ThemePackage::initPackage(Package *package)
 void ContainmentActionsPackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
-    package->setDefaultPackageRoot("plasma/containmentactions/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/containmentactions/");
 }
 
 void ShellPackage::initPackage(Plasma::Package *package)
 {
-    package->setDefaultPackageRoot("plasma/shells/");
+    package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/");
 
     //Directories
     package->addDirectoryDefinition("applet", "applet", i18n("Applets furniture"));

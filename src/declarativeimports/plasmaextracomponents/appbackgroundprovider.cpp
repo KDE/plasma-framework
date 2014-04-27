@@ -41,8 +41,6 @@ QImage AppBackgroundProvider::requestImage(const QString &id, QSize *size, const
 {
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)
-    QString search = QLatin1Literal("desktoptheme/") % m_theme->themeName() % QLatin1Literal("/appbackgrounds/") % id % ".png";
-    search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
-    return QImage(search);
+    return QImage(m_theme->backgroundPath(id % ".png"));
 }
 

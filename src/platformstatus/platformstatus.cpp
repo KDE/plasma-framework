@@ -11,6 +11,7 @@
 #include <qstandardpaths.h>
 
 #include "platformstatusadaptor.h"
+#include "../plasma/config-plasma.h"
 
 const char *defaultPackage = "org.kde.desktop";
 
@@ -35,7 +36,7 @@ void PlatformStatus::findShellPackage(bool sendSignal)
     const QString package = group.readEntry("shellPackage", defaultPackage);
 
     const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                         "plasma/shells/" + package + '/',
+                         PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/" + package + '/',
                          QStandardPaths::LocateDirectory);
     if (path.isEmpty()) {
         if (package != defaultPackage) {

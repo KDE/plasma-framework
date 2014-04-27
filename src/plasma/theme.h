@@ -487,6 +487,8 @@ public:
      */
     Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
 
+    QString backgroundPath(const QString &image) const;
+
 Q_SIGNALS:
     /**
      * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should

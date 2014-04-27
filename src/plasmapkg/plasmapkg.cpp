@@ -45,6 +45,8 @@
 #include <iostream>
 #include <iomanip>
 
+#include "config-plasma.h"
+
 static QTextStream cout(stdout);
 
 namespace Plasma
@@ -189,18 +191,18 @@ void PlasmaPkg::runMain()
 
     if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
             type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/plasmoids/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/";
         d->servicePrefix = "plasma-applet-";
         d->pluginTypes << "Plasma/Applet";
         d->pluginTypes << "Plasma/Containment";
     } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 /*||
                type.compare("theme", Qt::CaseInsensitive) == 0*/) {
-        d->packageRoot = "plasma/packages/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/";
         d->servicePrefix = "plasma-package-";
         d->pluginTypes << "Plasma/Generic";
     } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) == 0 ||
                type.compare("theme", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "desktoptheme/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/";
         d->pluginTypes << "Plasma/Theme";
     } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
@@ -209,32 +211,32 @@ void PlasmaPkg::runMain()
         d->servicePrefix = "plasma-wallpaper-";
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
                type.compare("dataengine", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/dataengines/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/";
         d->servicePrefix = "plasma-dataengine-";
         d->pluginTypes << "Plasma/DataEngine";
     } else if (type.compare(i18nc("package type", "runner"), Qt::CaseInsensitive) == 0 ||
                type.compare("runner", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/runners/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/";
         d->servicePrefix = "plasma-runner-";
         d->pluginTypes << "Plasma/Runner";
     } else if (type.compare(i18nc("package type", "wallpaperplugin"), Qt::CaseInsensitive) == 0 ||
                type.compare("wallpaperplugin", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/wallpapers/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/";
         d->servicePrefix = "plasma-wallpaper-";
         d->pluginTypes << "Plasma/Wallpaper";
     } else if (type.compare(i18nc("package type", "lookandfeel"), Qt::CaseInsensitive) == 0 ||
                type.compare("lookandfeel", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/look-and-feel/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/";
         d->servicePrefix = "plasma-lookandfeel-";
         d->pluginTypes << "Plasma/LookAndFeel";
     } else if (type.compare(i18nc("package type", "shell"), Qt::CaseInsensitive) == 0 ||
                type.compare("shell", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/shells/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/";
         d->servicePrefix = "plasma-shell-";
         d->pluginTypes << "Plasma/Shell";
     } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) == 0 ||
                type.compare("layout-template", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "plasma/layout-templates/";
+        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/";
         d->servicePrefix = "plasma-layout-";
         d->pluginTypes << "Plasma/LayoutTemplate";
     } else if (type.compare(i18nc("package type", "kwineffect"), Qt::CaseInsensitive) == 0 ||
@@ -396,7 +398,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
     foreach (const QString &type, types) {
 
         if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
-            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "plasma/packages/", QStandardPaths::LocateDirectory);
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
@@ -426,7 +428,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
         }
 
         if (type.compare("Plasma/Theme", Qt::CaseInsensitive) == 0) {
-            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "desktoptheme/", QStandardPaths::LocateDirectory);
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/", QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
@@ -567,16 +569,16 @@ void PlasmaPkgPrivate::listTypes()
     coutput(i18n("Built in:"));
 
     QMap<QString, QStringList> builtIns;
-    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << "plasma/dataengines/" << "dataengine");
-    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << "plasma/layout-templates/" << "layout-template");
-    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << "plasma/look-and-feel/" << "lookandfeel");
-    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << "plasma/packages/" << "package");
-    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << "plasma/plasmoids/" << "plasmoid");
-    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << "plasma/runners/" << "runner");
-    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << "plasma/shells/" << "shell");
-    builtIns.insert(i18n("Theme"), QStringList() << "" << "desktoptheme/" << "theme");
+    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/" << "dataengine");
+    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/" << "layout-template");
+    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/" << "lookandfeel");
+    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/" << "package");
+    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/" << "plasmoid");
+    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/" << "runner");
+    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/" << "shell");
+    builtIns.insert(i18n("Theme"), QStringList() << "" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/" << "theme");
     builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/" << "wallpaper");
-    builtIns.insert(i18n("Animated Wallpaper"), QStringList() << "Plasma/Wallpaper" << "plasma/wallpapers/" << "wallpaperplugin");
+    builtIns.insert(i18n("Animated Wallpaper"), QStringList() << "Plasma/Wallpaper" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/" << "wallpaperplugin");
     builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/" << "kwineffect");
     builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/" << "windowswitcher");
     builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
@@ -607,7 +609,7 @@ void PlasmaPkgPrivate::listTypes()
         renderTypeTable(plugins);
     }
 
-    QStringList desktopFiles = QStandardPaths::locateAll(QStandardPaths::DataLocation, "plasma/packageformats/*rc", QStandardPaths::LocateFile);
+    QStringList desktopFiles = QStandardPaths::locateAll(QStandardPaths::DataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/packageformats/*rc", QStandardPaths::LocateFile);
 
     if (!desktopFiles.isEmpty()) {
         coutput(i18n("Provided by .desktop files:"));

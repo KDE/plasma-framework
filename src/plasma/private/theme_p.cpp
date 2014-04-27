@@ -146,9 +146,10 @@ bool ThemePrivate::useCache()
         if (!themeMetadataPath.isEmpty()) {
             KDirWatch::self()->removeFile(themeMetadataPath);
         }
-        themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
-
         if (isRegularTheme) {
+            themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
+
+            Q_ASSERT(!themeMetadataPath.isEmpty() || themeName.isEmpty());
             const QString cacheFileBase = cacheFile + QStringLiteral("*.kcache");
 
             QString currentCacheFileName;
@@ -236,6 +237,12 @@ void ThemePrivate::onAppExitCleanup()
     cacheTheme = false;
 }
 
+QString ThemePrivate::imagePath(const QString& theme, const QString& type, const QString& image)
+{
+    QString subdir = QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % type % image;
+    return QStandardPaths::locate(QStandardPaths::GenericDataLocation, subdir);
+}
+
 QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bool cache)
 {
     if (cache) {
@@ -245,23 +252,20 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
         }
     }
 
-    QString search;
-
+    QString type;
     if (locolor) {
-        search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/locolor/") % image;
-        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        type = QStringLiteral("/locolor/");
     } else if (!compositingActive) {
-        search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/opaque/") % image;
-        search =  QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        type = QStringLiteral("/opaque/");
     } else if (KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)) {
-        search = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/translucent/") % image;
-        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        type = QStringLiteral("/translucent/");
     }
+
+    QString search = imagePath(theme, type, image);
 
     //not found or compositing enabled
     if (search.isEmpty()) {
-        search = QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/') % image;
-        search = QStandardPaths::locate(QStandardPaths::GenericDataLocation, search);
+        search = imagePath(theme, QStringLiteral("/"), image);
     }
 
     if (cache && !search.isEmpty()) {
@@ -567,15 +571,14 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             return;
         }
     }
-    qDebug() << tempThemeName;
 
     // we have one special theme: essentially a dummy theme used to cache things with
     // the system colors.
     bool realTheme = theme != systemColorsTheme;
     if (realTheme) {
-        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Char('/'));
+        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Char('/'));
         if (themePath.isEmpty() && themeName.isEmpty()) {
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("desktoptheme/default"), QStandardPaths::LocateDirectory);
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;
@@ -593,7 +596,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     themeName = theme;
 
     // load the color scheme config
-    const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/colors"))
+    const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/colors"))
                                : QString();
 
     //qDebug() << "we're going for..." << colorsFile << "*******************";
@@ -613,12 +616,12 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
-    const QString wallpaperPath = QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
+    const QString wallpaperPath = QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 
     // load the wallpaper settings, if any
     if (realTheme) {
-        const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+        const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
         KConfig metadata(metadataPath);
         pluginInfo = KPluginInfo(metadataPath);
 
@@ -633,7 +636,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
             fallbackThemes.append(fallback);
 
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
             KConfig metadata(metadataPath);
             KConfigGroup cg(&metadata, "Settings");
             fallback = cg.readEntry("FallbackTheme", QString());
@@ -644,7 +647,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         }
 
         foreach (const QString &theme, fallbackThemes) {
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal("desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
+            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/metadata.desktop")));
             KConfig metadata(metadataPath);
             processWallpaperSettings(&metadata);
         }

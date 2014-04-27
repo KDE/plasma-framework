@@ -45,6 +45,7 @@
 #include "private/datacontainer_p.h"
 #include "private/service_p.h"
 #include "private/storage_p.h"
+#include "config-plasma.h"
 
 namespace Plasma
 {
@@ -430,7 +431,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
         if (!api.isEmpty()) {
             const QString path =
                 QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       "plasma/dataengines/" + dataEngineDescription.pluginName() + '/',
+                                       PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/" + dataEngineDescription.pluginName() + '/',
                                        QStandardPaths::LocateDirectory);
             package = new Package(PluginLoader::self()->loadPackage("Plasma/DataEngine", api));
             package->setPath(path);
