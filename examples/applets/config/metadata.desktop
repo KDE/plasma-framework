@@ -2,21 +2,6 @@
 Encoding=UTF-8
 Keywords=
 Name=Configuration test
-Name[bs]=test konfiguracije
-Name[de]=Einrichtungstest
-Name[es]=Prueba de configuración
-Name[fi]=Asetustesti
-Name[fr]=Test de configuration
-Name[hu]=Beállításteszt
-Name[nl]=Test van instellingen
-Name[pl]=Próba konfiguracji
-Name[pt]=Teste de configuração
-Name[pt_BR]=Teste de configuração
-Name[sk]=Test nastavenia
-Name[sv]=Inställningstest
-Name[tr]=Yapılandırma Testi
-Name[uk]=Перевірка налаштувань
-Name[x-test]=xxConfiguration testxx
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet
