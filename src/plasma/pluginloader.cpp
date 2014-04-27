@@ -779,7 +779,7 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
     QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                        "plasma/internal/" + type + "/*.desktop",
+                        PLASMA_RELATIVE_DATA_INSTALL_DIR "/internal/" + type + "/*.desktop",
                         QStandardPaths::LocateFile);
 
     KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);

@@ -26,7 +26,7 @@ LayoutTemplatePackageStructure::LayoutTemplatePackageStructure(QObject *parent)
     : Plasma::PackageStructure(parent)
 {
     setServicePrefix("plasma-layout-template");
-    setDefaultPackageRoot("plasma/layout-templates");
+    setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates");
     addFileDefinition("mainscript", "layout.js", "Main Script File");
     setRequired("mainscript", true);
 }

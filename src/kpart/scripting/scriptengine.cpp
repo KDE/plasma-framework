@@ -224,7 +224,7 @@ void ScriptEngine::exception(const QScriptValue &value)
 QStringList ScriptEngine::pendingUpdateScripts()
 {
     const QString appName = KGlobal::activeComponent().aboutData()->appName();
-    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/plasma/layout/updates/*.js");
+    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "PLASMA_RELATIVE_DATA_INSTALL_DIR /layout/updates/*.js");
     QStringList scriptPaths;
 
     if (scripts.isEmpty()) {
@@ -259,7 +259,7 @@ QStringList ScriptEngine::pendingUpdateScripts()
 QStringList ScriptEngine::defaultLayoutScripts()
 {
     const QString appName = KGlobal::activeComponent().aboutData()->appName();
-    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/plasma/layout/init/*.js");
+    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout/init/*.js");
     QStringList scriptPaths;
 
     if (scripts.isEmpty()) {
