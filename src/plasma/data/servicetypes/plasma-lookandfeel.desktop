@@ -2,9 +2,27 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/LookAndFeel
 Name=Plasma Look and Feel
+Name[bs]=Plazma izgled i osjećaj
+Name[de]=Plasma-Erscheinungsbild
+Name[fi]=Plasman ulkoasu ja tuntuma
+Name[nl]=Plasma Look-and-Feel
+Name[pl]=Odczucia i wygląd Plazmy
+Name[pt]=Aparência e Comportamento do Plasma
+Name[pt_BR]=Aparência e comportamento do Plasma
+Name[sk]=Vzhľad a nastavenie Plasmy
+Name[sv]=Plasma utseende och känsla
 Name[uk]=Вигляд і поведінка Плазми
 Name[x-test]=xxPlasma Look and Feelxx
 Comment=Defines the Visual Language for Plasma Shells
+Comment[bs]=Definicija vizuelnog jezika za plazma školjke
+Comment[de]=Legt das Erscheinungsbild für Plasma fest
+Comment[fi]=Määrittää Plasma-kuoren visuaalisen kielen
+Comment[nl]=Definieert de Visual Language voor Plasma Shells
+Comment[pl]=Określa wizualny język dla powłok Plazmy
+Comment[pt]=Define a Linguagem Visual para as Consolas do Plasma
+Comment[pt_BR]=Define a linguagem visual para o Plasma Shells
+Comment[sk]=Definuje vizuálny jazyk pre shelly Plasma
+Comment[sv]=Definierar det visuella språket för Plasma skal
 Comment[uk]=Визначає візуальну мову для оболонок Плазми
 Comment[x-test]=xxDefines the Visual Language for Plasma Shellsxx
 
