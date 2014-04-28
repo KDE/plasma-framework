@@ -417,6 +417,8 @@ Dialog::Dialog(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
+    setIcon(QIcon::fromTheme("plasma"));
+
     d->syncTimer = new QTimer(this);
     d->syncTimer->setSingleShot(true);
     d->syncTimer->setInterval(0);
