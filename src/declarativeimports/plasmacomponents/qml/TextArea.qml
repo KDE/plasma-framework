@@ -365,7 +365,7 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            color: theme.viewTextColor
+            color: theme.buttonTextColor
             selectByMouse: verticalScroll.interactive
             renderType: Text.NativeRendering
 
