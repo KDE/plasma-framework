@@ -37,8 +37,6 @@ class QmlAppletScript;
 class QSignalMapper;
 class QSizeF;
 
-class ConfigView;
-
 namespace KDeclarative
 {
 class ConfigPropertyMap;
