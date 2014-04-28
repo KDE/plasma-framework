@@ -441,6 +441,9 @@ void WindowThumbnail::resetDamaged()
 {
     m_damaged = false;
 #if HAVE_XCB_COMPOSITE
+    if (m_damage == XCB_NONE) {
+        return;
+    }
     xcb_damage_subtract(QX11Info::connection(), m_damage, XCB_NONE, XCB_NONE);
 #endif
 }
@@ -477,6 +480,9 @@ void WindowThumbnail::startRedirecting()
         return;
     }
 #if HAVE_XCB_COMPOSITE
+    if (m_winId == XCB_WINDOW_NONE) {
+        return;
+    }
     xcb_connection_t *c = QX11Info::connection();
 
     // redirect the window
