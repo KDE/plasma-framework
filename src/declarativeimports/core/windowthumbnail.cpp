@@ -224,7 +224,7 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                 size.setWidth(geo->width);
                 size.setHeight(geo->height);
             }
-            textureNode->reset(window()->createTextureFromId(m_texture, size));
+            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureOwnsGLTexture));
         }
         textureNode->texture()->bind();
         bindGLXTexture();
@@ -269,7 +269,7 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
                 size.setWidth(geo->width);
                 size.setHeight(geo->height);
             }
-            textureNode->reset(window()->createTextureFromId(m_texture, size));
+            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureOwnsGLTexture));
         }
         textureNode->texture()->bind();
         bindEGLTexture();
@@ -314,6 +314,20 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
         return;
     }
 #if HAVE_XCB_COMPOSITE
+    if (!textureNode->texture()) {
+        // the texture got discarded by the scene graph, but our mapping is still valid
+        // let's discard the pixmap to have a clean state again
+#if HAVE_GLX
+        if (m_glxPixmap != XCB_PIXMAP_NONE) {
+            discardPixmap();
+        }
+#endif
+#if HAVE_EGL
+        if (m_image != EGL_NO_IMAGE_KHR) {
+            discardPixmap();
+        }
+#endif
+    }
     if (m_pixmap == XCB_PIXMAP_NONE) {
         m_pixmap = pixmapForWindow();
     }
