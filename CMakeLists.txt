@@ -127,6 +127,12 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 
 include(KF5PlasmaMacros.cmake)
 
+#########################################################################
+
+
+option(BUILD_EXAMPLES "Build and install Plasma examples." OFF)
+
+
 ################ create PlasmaConfig.cmake and install it ###########################
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
@@ -166,7 +172,11 @@ if (KF5DocTools_FOUND)
 endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
 add_subdirectory(src)
-add_subdirectory(examples)
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
 add_subdirectory(autotests)
 add_subdirectory(tests)
 
