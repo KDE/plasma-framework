@@ -113,7 +113,7 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
 {
-    d->pluginDir = "kf5/plasma/dataengine";
+    d->pluginDir = "plasma/dataengine";
     d->isDefaultLoader = false;
 }
 
