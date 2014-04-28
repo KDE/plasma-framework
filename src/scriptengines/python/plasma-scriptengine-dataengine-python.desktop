@@ -1,27 +1,8 @@
 [Desktop Entry]
 Name=Python data engine
-Name[cs]=Rozhraní v Pythonu
-Name[de]=Python-Datentreiber
-Name[fi]=Python-tietomoottori
-Name[hu]=Python adatmotor
-Name[nl]=Gegevensengine van Python
-Name[pl]=Silnik danych w Pythonie
-Name[pt]=Motor de dados em Python
-Name[pt_BR]=Mecanismo de dados Python
-Name[sk]=Python dátový nástroj
-Name[sv]=Python datagränssnitt
 Name[uk]=Рушій даних Python
 Name[x-test]=xxPython data enginexx
 Comment=Plasma data engine support for Python
-Comment[de]=Unterstützung für Plasma-Datentreiber in Python
-Comment[fi]=Plasma-tietomoottorituki Python-kielelle
-Comment[hu]=Plazma adatmotor támogatás Pythonhoz
-Comment[nl]=Ondersteuning voor Plasma-gegevensengine voor Python
-Comment[pl]=Obsługa silnika danych Plazmy w Pythonie
-Comment[pt]=Suporte para os motores de dados do Plasma em Python
-Comment[pt_BR]=Suporte aos mecanismos de dados do Plasma para Python
-Comment[sk]=Podpora dátového nástroja plasmy pre Python
-Comment[sv]=Plasma datagränssnittstöd för Python
 Comment[uk]=Підтримка Python у рушії роботи з даними Плазми
 Comment[x-test]=xxPlasma data engine support for Pythonxx
 
