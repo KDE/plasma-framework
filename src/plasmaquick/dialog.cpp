@@ -389,6 +389,8 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
     syncBorders();
+    mainItem.data()->setX(frameSvgItem->margins()->left());
+    mainItem.data()->setY(frameSvgItem->margins()->top());
     KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
     updateContrast();
 }
