@@ -58,7 +58,9 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 
 WallpaperInterface::~WallpaperInterface()
 {
-    s_rootObjects.remove(m_qmlObject->engine());
+    if (m_qmlObject) {
+        s_rootObjects.remove(m_qmlObject->engine());
+    }
 }
 
 KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
