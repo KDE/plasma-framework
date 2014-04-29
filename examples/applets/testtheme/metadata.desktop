@@ -2,6 +2,15 @@
 Encoding=UTF-8
 Keywords=
 Name=Theme Test
+Name[de]=Designtest
+Name[fi]=Teematesti
+Name[it]=Test del tema
+Name[nl]=Test van thema
+Name[pl]=Próba wystroju
+Name[pt]=Teste de Tema
+Name[pt_BR]=Teste de tema
+Name[sk]=Test témy
+Name[sv]=Tematest
 Name[uk]=Тестування теми
 Name[x-test]=xxTheme Testxx
 Type=Service
