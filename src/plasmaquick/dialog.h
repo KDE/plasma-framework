@@ -169,6 +169,11 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
     void outputOnlyChanged();
     void flagsChanged();
+    /**
+     * Emitted when the @see hideOnWindowDeactivate property is @c true and this dialog lost focus to a
+     * window that is neither a parent dialog to nor a child dialog of this dialog.
+     */
+    void windowDeactivated();
 
 protected:
     /*

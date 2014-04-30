@@ -798,6 +798,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         if (!parentHasFocus && !childHasFocus) {
             qDebug() << "DIALOG:  hiding dialog.";
             setVisible(false);
+            emit windowDeactivated();
         }
     }
 
