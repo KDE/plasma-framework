@@ -54,7 +54,6 @@ Corona::Corona(QObject *parent)
     // qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
-    //setViewport(new QGLWidget(QGLFormat(QGL::StencilBuffer | QGL::AlphaChannel)));
 }
 
 Corona::~Corona()
@@ -155,6 +154,9 @@ void Corona::loadLayout(const QString &configName)
 
     KConfigGroup conf(config(), QString());
     d->importLayout(conf, false);
+
+    KConfigGroup cg(config(), "General");
+    setImmutability((Plasma::Types::ImmutabilityType)cg.readEntry("immutability", (int)Plasma::Types::Mutable));
 }
 
 QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
