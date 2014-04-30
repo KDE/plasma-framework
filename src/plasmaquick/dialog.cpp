@@ -777,7 +777,9 @@ void Dialog::focusInEvent(QFocusEvent *ev)
 
 void Dialog::focusOutEvent(QFocusEvent *ev)
 {
-    if (d->hideOnWindowDeactivate) {
+    const QWindow *focusWindow = QGuiApplication::focusWindow();
+
+    if (d->hideOnWindowDeactivate && !(focusWindow && focusWindow->isActive() && isAncestorOf(focusWindow))) {
         qDebug() << "DIALOG:  hiding dialog.";
         setVisible(false);
     }
