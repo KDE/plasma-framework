@@ -777,12 +777,30 @@ void Dialog::focusInEvent(QFocusEvent *ev)
 
 void Dialog::focusOutEvent(QFocusEvent *ev)
 {
-    const QWindow *focusWindow = QGuiApplication::focusWindow();
+    if (d->hideOnWindowDeactivate) {
+        bool parentHasFocus = false;
 
-    if (d->hideOnWindowDeactivate && !(focusWindow && focusWindow->isActive() && isAncestorOf(focusWindow))) {
-        qDebug() << "DIALOG:  hiding dialog.";
-        setVisible(false);
+        QWindow *parentWindow = transientParent();
+
+        while (parentWindow) {
+            if (parentWindow->isActive()) {
+                parentHasFocus  = true;
+
+                break;
+            }
+
+            parentWindow = parentWindow->transientParent();
+        }
+
+        const QWindow *focusWindow = QGuiApplication::focusWindow();
+        bool childHasFocus = (focusWindow && focusWindow->isActive() && isAncestorOf(focusWindow));
+
+        if (!parentHasFocus && !childHasFocus) {
+            qDebug() << "DIALOG:  hiding dialog.";
+            setVisible(false);
+        }
     }
+
     QQuickWindow::focusOutEvent(ev);
 }
 
