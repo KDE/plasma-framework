@@ -61,8 +61,8 @@ Item {
      */
     property int orientation: Qt.Horizontal
 
-    width: units.gridUnit * (background._isVertical ? 1.6 : 10)
-    height: units.gridUnit * (background._isVertical ? 10 : 1.6)
+    width: Math.floor(units.gridUnit * (background._isVertical ? 1.6 : 10))
+    height: Math.floor(units.gridUnit * (background._isVertical ? 10 : 1.6))
     opacity: enabled ? 1.0 : 0.5
 
     PlasmaComponents.RangeModel {
