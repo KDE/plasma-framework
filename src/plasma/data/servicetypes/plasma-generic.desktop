@@ -2,9 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/Generic
 Name=Plasma Package
+Name[nl]=Plasma-pakket
 Name[uk]=Пакунок Плазми
 Name[x-test]=xxPlasma Packagexx
 Comment=Generic Plasma Package
+Comment[nl]=Algemeen plasma-pakket
 Comment[uk]=Типовий пакунок Плазми
 Comment[x-test]=xxGeneric Plasma Packagexx
 

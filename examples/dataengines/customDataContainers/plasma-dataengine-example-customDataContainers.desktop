@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Custom DataContainers
+Name[nl]=Aangepaste gegevenscontainers
 Name[uk]=Нетипові контейнери даних
 Name[x-test]=xxCustom DataContainersxx
 Comment=A demonstration of how to subclass DataContainer
+Comment[nl]=Een demonstratie van hoe een subklasse toe te kennen aan een gegevenscontainer
 Comment[uk]=Демонстрація створення підкласу DataContainer
 Comment[x-test]=xxA demonstration of how to subclass DataContainerxx
 Type=Service

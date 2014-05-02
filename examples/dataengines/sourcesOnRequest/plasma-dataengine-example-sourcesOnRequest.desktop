@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Sources On Request
+Name[nl]=Bronnen op verzoek
 Name[uk]=Джерела за запитом
 Name[x-test]=xxSources On Requestxx
 Comment=A DataEngine example showing how to respond to requests for source creation and updates
+Comment[nl]=Een voorbeeld van een gegevens-engine die toont hoe te antwoorden op verzoeken voor aanmaken van een bron en bijwerken
 Comment[uk]=Приклад рушія даних, який демонструє способи відповіді на запити щодо створення джерела і оновлень
 Comment[x-test]=xxA DataEngine example showing how to respond to requests for source creation and updatesxx
 Type=Service

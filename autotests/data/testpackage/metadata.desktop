@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Keywords=
 Name=Test Package
+Name[nl]=Testpakket
 Name[uk]=Тестовий пакунок
 Name[x-test]=xxTest Packagexx
 Type=Service

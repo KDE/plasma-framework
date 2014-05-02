@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Wallpaper
 
 Comment=Plasma wallpaper
+Comment[nl]=Plasma-bureaubladachtergrond
 Comment[uk]=Тло стільниці Плазми
 Comment[x-test]=xxPlasma wallpaperxx
 

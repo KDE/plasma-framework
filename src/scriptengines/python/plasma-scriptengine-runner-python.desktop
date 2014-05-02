@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Python Runner
+Name[nl]=Python-starter
 Name[uk]=Засіб запуску Python
 Name[x-test]=xxPython Runnerxx
 Comment=Plasma Runner support for Python
+Comment[nl]=Ondersteuning voor Plasma-starter voor Python
 Comment[uk]=Підтримка Python у інструментах запуску
 Comment[x-test]=xxPlasma Runner support for Pythonxx
 

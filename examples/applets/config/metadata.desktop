@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Keywords=
 Name=Configuration test
+Name[nl]=Test van instellingen
 Name[uk]=Перевірка налаштувань
 Name[x-test]=xxConfiguration testxx
 Type=Service

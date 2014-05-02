@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Package metadata test file
+Name[nl]=Testbestand voor pakketmetadata
 Name[uk]=Файл перевірки метаданих пакунка
 Name[x-test]=xxPackage metadata test filexx
 Comment=A test desktop file to test the PackageMetaData class.
+Comment[nl]=Een desktop-bestand voor het testen van de PackageMetaData-klasse.
 Comment[uk]=Тестовий стільничний файл для перевірки класу PackageMetaData.
 Comment[x-test]=xxA test desktop file to test the PackageMetaData class.xx
 

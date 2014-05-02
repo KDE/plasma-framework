@@ -1,12 +1,15 @@
 [Desktop Entry]
 Comment=Report a bug in Plasma
+Comment[nl]=Een bug in Plasma rapporteren
 Comment[uk]=Повідомити про ваду у Плазмі
 Comment[x-test]=xxReport a bug in Plasmaxx
 Encoding=UTF-8
 Keywords=plasma,bugzilla,bug,development,support
+Keywords[nl]=plasma,bugzilla,bug,ontwikkeling,ondersteuning
 Keywords[uk]=plasma,bugzilla,bug,development,support,плазма,багзілла,вада,баг,розробка,підтримка,супровід
 Keywords[x-test]=xxplasma,bugzilla,bug,development,supportxx
 Name=Bug
+Name[nl]=Bug
 Name[uk]=Вада
 Name[x-test]=xxBugxx
 Type=Service

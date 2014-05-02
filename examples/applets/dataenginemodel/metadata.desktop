@@ -1,10 +1,12 @@
 [Desktop Entry]
 Comment=Example applet that shows how to use Models embedded in DataEngines
+Comment[nl]=Voorbeeld van applet dat toont hoe modellen ingebed in gegevensengines zijn te gebruiken
 Comment[uk]=Приклад аплету, який демонструє використання моделей, вбудованих до рушіїв даних
 Comment[x-test]=xxExample applet that shows how to use Models embedded in DataEnginesxx
 Encoding=UTF-8
 Keywords=
 Name=Dataengine model
+Name[nl]=Model van gegevensengine
 Name[uk]=Модель рушія даних
 Name[x-test]=xxDataengine modelxx
 Type=Service

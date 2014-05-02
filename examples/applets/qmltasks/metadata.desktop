@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
+Name[nl]=Taken van 'Poor Man'
 Name[uk]=Задачі для початківців
 Name[x-test]=xxPoor Man's Tasksxx
 Comment=Example showing how to write your own tasks Widget
+Comment[nl]=Voorbeeld die toont hoe u uw eigen taak-widget schrijft
 Comment[uk]=Приклад, який демонструє створення власного віджета задач
 Comment[x-test]=xxExample showing how to write your own tasks Widgetxx
 Icon=preferences-system-windows

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Example window thumbnails list
+Name[nl]=Voorbeeld van lijst met miniaturen van vensters
 Name[uk]=Приклад списку мініатюр вікон
 Name[x-test]=xxExample window thumbnails listxx
 Comment=Example showing how to display window thumbnails
+Comment[nl]=Voorbeeld van hoe miniaturen van vensters te tonen
 Comment[uk]=Приклад, який демонструє показ мініатюр вікон
 Comment[x-test]=xxExample showing how to display window thumbnailsxx
 Icon=preferences-system-windows

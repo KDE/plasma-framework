@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ScriptEngine
 
 Comment=Scripting language extension for Plasma
+Comment[nl]=Scripttaalextensie voor Plasma
 Comment[uk]=Розширення скриптових мов для Плазми
 Comment[x-test]=xxScripting language extension for Plasmaxx
 

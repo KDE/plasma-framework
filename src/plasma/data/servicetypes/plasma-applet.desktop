@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[nl]=Plasma-applet
 Comment[uk]=Аплет Плазми
 Comment[x-test]=xxPlasma appletxx
 

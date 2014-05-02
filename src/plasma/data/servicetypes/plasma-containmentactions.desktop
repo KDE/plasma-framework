@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ContainmentActions
 
 Comment=Plasma ContainmentActions
+Comment[nl]=Plasma Containeracties
 Comment[uk]=Дії контейнерів Плазми
 Comment[x-test]=xxPlasma ContainmentActionsxx
 

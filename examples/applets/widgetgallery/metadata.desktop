@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Widgets gallery
+Name[nl]=Galerij van widgets
 Name[uk]=Галерея віджетів
 Name[x-test]=xxWidgets galleryxx
 Comment=gallery of widgets done with Plasma QtComponents
+Comment[nl]=galerij van widgets gemaakt met Plasma QtComponents
 Comment[uk]=Галерея віджетів, створених за допомогою QtComponent-ів Плазми
 Comment[x-test]=xxgallery of widgets done with Plasma QtComponentsxx
 Type=Service

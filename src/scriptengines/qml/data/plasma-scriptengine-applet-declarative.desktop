@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[nl]=Widget voor declaratie
 Name[uk]=Декларативний віджет
 Name[x-test]=xxDeclarative widgetxx
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[nl]=Hier thuishorend Plasma-widget geschreven in QML en JavaScript
 Comment[uk]=Віджет Плазми, написаний на QML та JavaScript
 Comment[x-test]=xxNative Plasma widget written in QML and JavaScriptxx
 Type=Service

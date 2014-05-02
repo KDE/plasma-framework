@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Keywords=
 Name=Applet Test
+Name[nl]=Test van applet
 Name[uk]=Тест аплету
 Name[x-test]=xxApplet Testxx
 Type=Service

@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Python data engine
+Name[nl]=Gegevensengine van Python
 Name[uk]=Рушій даних Python
 Name[x-test]=xxPython data enginexx
 Comment=Plasma data engine support for Python
+Comment[nl]=Ondersteuning voor Plasma-gegevensengine voor Python
 Comment[uk]=Підтримка Python у рушії роботи з даними Плазми
 Comment[x-test]=xxPlasma data engine support for Pythonxx
 

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=plasma-kpart-shell
+Name[nl]=plasma-kpart-shell
 Name[uk]=plasma-kpart-shell
 Name[x-test]=xxplasma-kpart-shellxx
 Exec=plasma-example-kpart-shell %i -caption "%c"
@@ -7,6 +8,7 @@ Icon=plasma-example-kpart-shell
 Type=Application
 X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
+GenericName[nl]=Een KPart-shell voor Plasma
 GenericName[uk]=Оболонка модулів для Плазми
 GenericName[x-test]=xxA KPart shell for Plasmaxx
 Terminal=false

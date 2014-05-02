@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Test Data Engine
+Name[nl]=Testgegevensengine
 Name[uk]=Перевірка рушія даних
 Name[x-test]=xxTest Data Enginexx
 X-KDE-ServiceTypes=Plasma/DataEngine

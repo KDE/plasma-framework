@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=JavaScript File Operations
+Name[nl]=Bestandsbewerkingen in JavaScript
 Name[uk]=Дії з файлами за допомогою JavaScript
 Name[x-test]=xxJavaScript File Operationsxx
 Comment=Demonstrates accessing data via HTTP in JavaScript
+Comment[nl]=Demonstreert toegang tot gegevens via HTTP in JavaScript
 Comment[uk]=Демонстрації доступу до даних за допомогою HTTP мовою JavaScript
 Comment[x-test]=xxDemonstrates accessing data via HTTP in JavaScriptxx
 Icon=text-x-generic

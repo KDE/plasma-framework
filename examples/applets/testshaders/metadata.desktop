@@ -2,9 +2,11 @@
 Encoding=UTF-8
 Keywords=
 Name=Shader Test
+Name[nl]=Test van schaduw
 Name[uk]=Тестування підпрограм побудови тіней
 Name[x-test]=xxShader Testxx
 Comment=Futzing with Visual Effects
+Comment[nl]=Tijd verspillen met visuele effecten
 Comment[uk]=Маніпулювання візуальними ефектами
 Comment[x-test]=xxFutzing with Visual Effectsxx
 Type=Service

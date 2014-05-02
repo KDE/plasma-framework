@@ -3,6 +3,7 @@ Comment=
 Encoding=UTF-8
 Keywords=
 Name=hello world
+Name[nl]=hallo wereld
 Name[uk]=Привіт, світе
 Name[x-test]=xxhello worldxx
 Type=Service

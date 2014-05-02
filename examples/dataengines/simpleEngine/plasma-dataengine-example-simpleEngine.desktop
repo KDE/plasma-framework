@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Simple DataEngine Example
+Name[nl]=Eenvoudig voorbeeld voor gegevensengine
 Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
 Comment=A very basic DataEngine implementation
+Comment[nl]=Een erge basisimplementatie van een gegevens-engine
 Comment[uk]=Базова реалізація рушія даних
 Comment[x-test]=xxA very basic DataEngine implementationxx
 Type=Service

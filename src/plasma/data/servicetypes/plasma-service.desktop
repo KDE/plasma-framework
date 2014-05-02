@@ -3,5 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Service
 
 Comment=Plasma service
+Comment[nl]=Plasma-service
 Comment[uk]=Служба Плазми
 Comment[x-test]=xxPlasma servicexx

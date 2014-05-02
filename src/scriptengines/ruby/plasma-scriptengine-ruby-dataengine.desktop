@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Ruby Widget
+Name[nl]=Ruby-widget
 Name[uk]=Віджет на Ruby
 Name[x-test]=xxRuby Widgetxx
 Comment=Native Plasma widget written in Ruby
+Comment[nl]=Plasma-widget geschreven in Ruby
 Comment[uk]=Віджет Плазми, написаний на Ruby
 Comment[x-test]=xxNative Plasma widget written in Rubyxx
 X-KDE-ServiceTypes=Plasma/ScriptEngine

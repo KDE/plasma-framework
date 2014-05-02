@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Now playing (QML)
+Name[nl]=Speelt nu (QML)
 Name[uk]=Зараз відтворюється (QML)
 Name[x-test]=xxNow playing (QML)xx
 Comment=A proof of concept media player controller qml
+Comment[nl]=Een 'proof of concept' qml voor besturing van een mediaspeler
 Comment[uk]=Тестова програма для спостереження за відтворенням мультимедійних даних, написана мовою qml
 Comment[x-test]=xxA proof of concept media player controller qmlxx
 Encoding=UTF-8

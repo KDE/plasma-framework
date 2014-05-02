@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Test
+Name[nl]=Test
 Name[uk]=Тест
 Name[x-test]=xxTestxx
 Comment=A dummy plugin for testing
+Comment[nl]=Een dummy plugin voor testen
 Comment[uk]=Додаток для тестування
 Comment[x-test]=xxA dummy plugin for testingxx
 Type=Service
