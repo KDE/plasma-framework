@@ -44,23 +44,10 @@ class Containment;
 class ContainmentPrivate
 {
 public:
-    ContainmentPrivate(Containment *c)
-        : q(c),
-          formFactor(Types::Planar),
-          location(Types::Floating),
-          lastScreen(-1), // never had a screen
-          type(Plasma::Types::NoContainmentType)
-    {
-    }
+    ContainmentPrivate(Containment *c);
 
-    ~ContainmentPrivate()
-    {
-        // qDeleteAll is broken with Qt4.8, delete it by hand
-        while (!applets.isEmpty()) {
-            delete applets.first();
-        }
-        applets.clear();
-    }
+
+    ~ContainmentPrivate();
 
     void triggerShowAddWidgets();
     void checkStatus(Plasma::Types::ItemStatus status);

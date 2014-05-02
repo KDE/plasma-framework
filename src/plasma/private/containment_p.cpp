@@ -41,6 +41,28 @@ namespace Plasma
 
 const char ContainmentPrivate::defaultWallpaper[] = "org.kde.image";
 
+ContainmentPrivate::ContainmentPrivate(Containment *c):
+    q(c),
+    formFactor(Types::Planar),
+    location(Types::Floating),
+    lastScreen(-1), // never had a screen
+    type(Plasma::Types::NoContainmentType)
+{
+    //if the parent is an applet (i.e we are the systray)
+    //we want to follow screen changed signals from the parent's containment
+    auto appletParent = qobject_cast<Plasma::Applet *>(c->parent());
+    if (appletParent) {
+        QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
+    }
+}
+
+Plasma::ContainmentPrivate::~ContainmentPrivate()
+{
+    qDeleteAll(applets);
+    applets.clear();
+}
+
+
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
     actions->setConfigGroup("Shortcuts-Containment");
