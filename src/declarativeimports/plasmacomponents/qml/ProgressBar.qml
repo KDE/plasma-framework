@@ -74,109 +74,60 @@ Item {
         value: 0
 
         positionAtMinimum: 0
-        positionAtMaximum: backgroundPixmapItem.width
+        positionAtMaximum: background._isVertical ? background.height : background.width
     }
 
-    Item {
-        id: contents
-
+    PlasmaCore.FrameSvgItem {
+        id: background
+        anchors.fill: parent
+        imagePath: _isVertical ? "widgets/bar_meter_vertical" : "widgets/bar_meter_horizontal"
+        prefix: "bar-inactive"
         property bool _isVertical: orientation == Qt.Vertical
-        property int _tileWidth: width
 
-        width: _isVertical ? progressBar.height : progressBar.width
-        height: _isVertical ? progressBar.width : progressBar.height
-        rotation: _isVertical ? 90 : 0
-        anchors.centerIn: parent
+        PlasmaCore.FrameSvgItem {
+            id: bar
+            anchors {
+                left: indeterminate && !background._isVertical ? undefined : parent.left
+                bottom: indeterminate && background._isVertical ? undefined : parent.bottom
+                right: background._isVertical ? parent.right : undefined
+                top: background._isVertical ? undefined : parent.top
+            }
+            imagePath: background.imagePath
+            prefix: "bar-active"
 
-        Timer {
-            id: resizeTimer
-            repeat: false
-            interval: 0
-            running: false
-            onTriggered: {
-                contents._tileWidth = Math.floor(contents.width/(Math.floor(contents.width/(contents.height/1.6))))
+            width: indeterminate ? units.gridUnit*2 : range.position
+            height: indeterminate ? units.gridUnit*2 : range.position
+        }
+    }
 
+    PlasmaCore.Svg {
+        id: barSvg
+        imagePath: background.imagePath
+    }
 
-                if (barFrameSvg.hasElement("hint-bar-stretch")) {
-                    barFrameSvg.resizeFrame(Qt.size(barPixmapItem.width, barPixmapItem.height))
-                } else {
-                    barFrameSvg.resizeFrame(Qt.size(contents._tileWidth, contents.height))
-                }
-                barPixmapItem.pixmap = barFrameSvg.framePixmap()
+    SequentialAnimation {
+        id: indeterminateAnimation
 
-                if (backgroundFrameSvg.hasElement("hint-bar-stretch")) {
-                    backgroundFrameSvg.resizeFrame(Qt.size(backgroundPixmapItem.width, backgroundPixmapItem.height))
-                } else {
-                    backgroundFrameSvg.resizeFrame(Qt.size(contents._tileWidth, contents.height))
-                }
-                backgroundPixmapItem.pixmap = backgroundFrameSvg.framePixmap()
+        loops: Animation.Infinite
+
+        onRunningChanged: {
+            if (!running) {
+                barPixmapItem.x = 0
+                barPixmapItem.y = 0
             }
         }
-        PlasmaCore.SvgItem {
-            visible: false
-            svg: PlasmaCore.FrameSvg {
-                id: barFrameSvg
-                Component.onCompleted: {
-                    barFrameSvg.setImagePath("widgets/bar_meter_horizontal")
-                    barFrameSvg.setElementPrefix("bar-active")
-                    resizeTimer.restart()
-                }
-            }
+
+        PropertyAnimation {
+            target: bar
+            property: background._isVertical ? "y" : "x"
+            duration: 800
+            to: 0
         }
-        PlasmaCore.SvgItem {
-            visible: false
-            svg: PlasmaCore.FrameSvg {
-                id: backgroundFrameSvg
-                Component.onCompleted: {
-                    backgroundFrameSvg.setImagePath("widgets/bar_meter_horizontal")
-                    backgroundFrameSvg.setElementPrefix("bar-inactive")
-                    resizeTimer.restart()
-                }
-            }
-        }
-        QPixmapItem {
-            id: backgroundPixmapItem
-            anchors.fill: parent
-            fillMode: QPixmapItem.TileHorizontally
-            onWidthChanged: resizeTimer.restart()
-            onHeightChanged: resizeTimer.restart()
-        }
-
-
-        QPixmapItem {
-            id: barPixmapItem
-            fillMode: QPixmapItem.TileHorizontally
-            width: indeterminate ? contents._tileWidth*2 : range.position
-            height: contents.height
-
-            visible: indeterminate || value > 0
-            onWidthChanged: resizeTimer.restart()
-            onHeightChanged: resizeTimer.restart()
-
-            SequentialAnimation {
-                id: indeterminateAnimation
-
-                loops: Animation.Infinite
-
-                onRunningChanged: {
-                    if (!running) {
-                        barPixmapItem.x = 0
-                    }
-                }
-
-                PropertyAnimation {
-                    target: barPixmapItem
-                    property: "x"
-                    duration: 800
-                    to: 0
-                }
-                PropertyAnimation {
-                    target: barPixmapItem
-                    property: "x"
-                    duration: 800
-                    to: backgroundPixmapItem.width - barPixmapItem.width
-                }
-            }
+        PropertyAnimation {
+            target: bar
+            property: background._isVertical ? "y" : "x"
+            duration: 800
+            to: background._isVertical ? background.height - bar.height : background.width - bar.width
         }
     }
 }
