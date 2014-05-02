@@ -61,8 +61,8 @@ Item {
      */
     property int orientation: Qt.Horizontal
 
-    width: 100
-    height: 20 * Math.max(1.0, Math.floor(units.devicePixelRatio))
+    width: units.gridUnit * (background._isVertical ? 1.6 : 10)
+    height: units.gridUnit * (background._isVertical ? 10 : 1.6)
     opacity: enabled ? 1.0 : 0.5
 
     PlasmaComponents.RangeModel {
@@ -79,8 +79,12 @@ Item {
 
     PlasmaCore.FrameSvgItem {
         id: background
-        anchors.fill: parent
-        imagePath: _isVertical ? "widgets/bar_meter_vertical" : "widgets/bar_meter_horizontal"
+
+        anchors.centerIn: parent
+        width: _isVertical ? barSvg.elementSize("hint-bar-size").width : parent.width
+        height: _isVertical ? parent.height : barSvg.elementSize("hint-bar-size").height
+
+        imagePath: barSvg.imagePath
         prefix: "bar-inactive"
         property bool _isVertical: orientation == Qt.Vertical
 
@@ -98,12 +102,14 @@ Item {
             width: indeterminate ? units.gridUnit*2 : range.position
             height: indeterminate ? units.gridUnit*2 : range.position
         }
+        //this can't reference its parent because needs to be loaded before it,
+        //so never bind background to anything here
+        PlasmaCore.Svg {
+            id: barSvg
+            imagePath: orientation == Qt.Vertical ? "widgets/bar_meter_vertical" : "widgets/bar_meter_horizontal"
+        }
     }
 
-    PlasmaCore.Svg {
-        id: barSvg
-        imagePath: background.imagePath
-    }
 
     SequentialAnimation {
         id: indeterminateAnimation
