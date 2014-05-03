@@ -3,7 +3,21 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Wallpaper
 
 Comment=Plasma wallpaper
+Comment[bs]=Plazma tapeta
+Comment[ca]=Fons d'escriptori del Plasma
+Comment[cs]=Tapeta Plasmy
+Comment[de]=Plasma-Hintergrundbild
+Comment[fi]=Plasma-taustakuva
+Comment[hu]=Plasma háttérkép
+Comment[ia]=Tapete de papiro de Plasma
+Comment[it]=Sfondo di plasma
 Comment[nl]=Plasma-bureaubladachtergrond
+Comment[pl]=Tapeta Plazmy
+Comment[pt]=Papel de parede do Plasma
+Comment[pt_BR]=Papel de parede do Plasma
+Comment[sk]=Tapeta Plasma
+Comment[sv]=Plasma skrivbordsunderlägg
+Comment[tr]=Plasma duvar kağıdı
 Comment[uk]=Тло стільниці Плазми
 Comment[x-test]=xxPlasma wallpaperxx
 
