@@ -29,6 +29,7 @@
 <group choice="opt"><option>-g, --global</option></group>
 <group choice="opt"><option>-t, --type</option> <replaceable> type</replaceable></group>
 <group choice="opt"><option>-i, --install</option> <replaceable> path</replaceable></group>
+<group choice="opt"><option>-s, --show</option> <replaceable> name</replaceable></group>
 <group choice="opt"><option>-u, --upgrade</option> <replaceable> path</replaceable></group>
 <group choice="opt"><option>-l, --list</option></group>
 <group choice="opt"><option>--list-types</option></group>
@@ -67,7 +68,7 @@ install, list, remove Plasma packages.</para>
 <listitem><para>Install the package at <quote>path</quote>.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><option>-s, --show</option> <replaceable> path</replaceable></term>
+<term><option>-s, --show</option> <replaceable> name</replaceable></term>
 <listitem><para>Show information of package <quote>name</quote>.</para></listitem>
 </varlistentry>
 <varlistentry>
