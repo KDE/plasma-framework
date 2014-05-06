@@ -173,6 +173,7 @@ void SvgItem::updateNeeded()
     if (implicitHeight() <= 0) {
         setImplicitHeight(naturalSize().height());
     }
+    m_textureChanged = true;
     update();
 }
 
