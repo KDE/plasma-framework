@@ -92,7 +92,7 @@ PLASMA_EXPORT QStringList knownLanguages(Types::ComponentTypes types);
  * @return pointer to the AppletScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the Applet
  **/
-PLASMA_EXPORT AppletScript *loadScriptEngine(const QString &language, Applet *applet);
+PLASMA_EXPORT AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QVariantList &args);
 
 /**
  * Loads an DataEngine script engine for the given language.
@@ -102,7 +102,7 @@ PLASMA_EXPORT AppletScript *loadScriptEngine(const QString &language, Applet *ap
  * @return pointer to the DataEngineScript or 0 on failure; the caller is responsible
  *         for the return object which will be parented to the DataEngine
  **/
-PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine);
+PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine, const QVariantList &args);
 
 } // namespace Plasma
 

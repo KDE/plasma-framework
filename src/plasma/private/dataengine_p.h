@@ -34,7 +34,7 @@ class Service;
 class DataEnginePrivate
 {
 public:
-    DataEnginePrivate(DataEngine *e, const KPluginInfo &info);
+    DataEnginePrivate(DataEngine *e, const KPluginInfo &info, const QVariantList &args = QVariantList());
     ~DataEnginePrivate();
     DataContainer *source(const QString &sourceName, bool createWhenMissing = true);
     void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval,

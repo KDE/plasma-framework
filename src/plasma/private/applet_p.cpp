@@ -97,7 +97,7 @@ AppletPrivate::~AppletPrivate()
     delete modificationsTimer;
 }
 
-void AppletPrivate::init(const QString &packagePath)
+void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a Corona, which is not available at this point
@@ -145,7 +145,7 @@ void AppletPrivate::init(const QString &packagePath)
     // now we try and set up the script engine.
     // it will be parented to this applet and so will get
     // deleted when the applet does
-    script = Plasma::loadScriptEngine(api, q);
+    script = Plasma::loadScriptEngine(api, q, args);
 
     if (!script) {
         delete package;

@@ -90,7 +90,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    d->init();
+    d->init(QString(), args.mid(2));
     d->setupPackage();
 }
 

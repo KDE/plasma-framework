@@ -65,7 +65,7 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new DataEnginePrivate(this, KPluginInfo(args)))
+      d(new DataEnginePrivate(this, KPluginInfo(args), args))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -406,7 +406,7 @@ void DataEngine::setStorageEnabled(const QString &source, bool store)
 }
 
 // Private class implementations
-DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
+DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, const QVariantList &args)
     : q(e),
       dataEngineDescription(info),
       refCount(-1), // first ref
@@ -437,7 +437,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info)
             package->setPath(path);
 
             if (package->isValid()) {
-                script = Plasma::loadScriptEngine(api, q);
+                script = Plasma::loadScriptEngine(api, q, args);
             }
 
             if (!script) {

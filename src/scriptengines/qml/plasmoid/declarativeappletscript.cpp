@@ -53,6 +53,10 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_interface(0),
       m_args(args)
 {
+    // Chop off list entry added by KService::createInstance() before we
+    // hand this to the applet via externalData() later.
+    m_args.removeLast();
+
     //qmlRegisterType<AppletInterface>();
     //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
     /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",

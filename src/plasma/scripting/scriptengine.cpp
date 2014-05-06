@@ -139,11 +139,11 @@ KService::List engineOffers(const QString &language, Types::ComponentType type)
     return offers;
 }
 
-ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent)
+ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent,
+    const QVariantList &args = QVariantList())
 {
     KService::List offers = engineOffers(language, type);
 
-    QVariantList args;
     QString error;
 
     ScriptEngine *engine = 0;
@@ -176,10 +176,10 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
     return 0;
 }
 
-AppletScript *loadScriptEngine(const QString &language, Applet *applet)
+AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QVariantList &args)
 {
     AppletScript *engine =
-        static_cast<AppletScript *>(loadEngine(language, Types::AppletComponent, applet));
+        static_cast<AppletScript *>(loadEngine(language, Types::AppletComponent, applet, args));
 
     if (engine) {
         engine->setApplet(applet);
@@ -188,10 +188,10 @@ AppletScript *loadScriptEngine(const QString &language, Applet *applet)
     return engine;
 }
 
-DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine)
+DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine, const QVariantList &args)
 {
     DataEngineScript *engine =
-        static_cast<DataEngineScript *>(loadEngine(language, Types::DataEngineComponent, dataEngine));
+        static_cast<DataEngineScript *>(loadEngine(language, Types::DataEngineComponent, dataEngine, args));
 
     if (engine) {
         engine->setDataEngine(dataEngine);

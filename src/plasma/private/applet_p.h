@@ -46,7 +46,7 @@ public:
     AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
     virtual ~AppletPrivate();
 
-    void init(const QString &packagePath = QString());
+    void init(const QString &packagePath = QString(), const QVariantList &args = QVariantList());
 
     // the interface
     virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
