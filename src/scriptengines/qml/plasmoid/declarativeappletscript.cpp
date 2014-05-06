@@ -50,7 +50,8 @@ K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScr
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
-      m_interface(0)
+      m_interface(0),
+      m_args(args)
 {
     //qmlRegisterType<AppletInterface>();
     //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
@@ -65,7 +66,6 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
             QLatin1String("Do not create objects of type Wallpaper"));
 
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
-    Q_UNUSED(args);
 }
 
 DeclarativeAppletScript::~DeclarativeAppletScript()
@@ -90,6 +90,11 @@ bool DeclarativeAppletScript::init()
     }
 
     m_interface->setParent(this);
+    if (m_args.count() == 1) {
+        emit m_interface->externalData(QString(), m_args.first());
+    } else if (m_args.count() > 0) {
+        emit m_interface->externalData(QString(), m_args);
+    }
 
     return true;
 }

@@ -56,6 +56,7 @@ Q_SIGNALS:
 
 private:
     AppletInterface *m_interface;
+    QVariantList m_args;
     friend class AppletLoader;
     friend class AppletInterface;
     friend class ContainmentInterface;
