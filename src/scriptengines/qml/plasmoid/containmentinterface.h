@@ -70,7 +70,8 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
 public:
-    ContainmentInterface(DeclarativeAppletScript *parent);
+    ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
+
 //Not for QML
     Plasma::Containment *containment() const
     {

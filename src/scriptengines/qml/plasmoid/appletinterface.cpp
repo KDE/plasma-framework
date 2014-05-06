@@ -51,8 +51,9 @@
 
 Q_DECLARE_METATYPE(AppletInterface *)
 
-AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent)
+AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
+      m_args(args),
       m_actionSignals(0),
       m_appletScriptEngine(script),
       m_backgroundHints(Plasma::Types::StandardBackground),
@@ -86,8 +87,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, QQuickItem *pa
     }
 }
 
-AppletInterface::AppletInterface(Plasma::Applet *a, QQuickItem *parent)
+AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(a, parent),
+      m_args(args),
       m_actionSignals(0),
       m_appletScriptEngine(0),
       m_backgroundHints(Plasma::Types::StandardBackground),
@@ -151,6 +153,12 @@ void AppletInterface::init()
             i->forceActiveFocus(Qt::ShortcutFocusReason);
         }
     });
+
+    if (m_args.count() == 1) {
+        emit externalData(QString(), m_args.first());
+    } else if (m_args.count() > 0) {
+        emit externalData(QString(), m_args);
+    }
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const

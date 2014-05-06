@@ -52,8 +52,8 @@
 #include "kdeclarative/configpropertymap.h"
 #include <packageurlinterceptor.h>
 
-ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent)
-    : AppletInterface(parent),
+ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args)
+    : AppletInterface(parent, args),
       m_wallpaperInterface(0),
       m_activityInfo(0)
 {
@@ -505,7 +505,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
     if (!appletGraphicObject) {
-        appletGraphicObject = new AppletInterface(applet, this);
+        appletGraphicObject = new AppletInterface(applet, QVariantList(), this);
         applet->setProperty("_plasma_graphicObject", QVariant::fromValue(appletGraphicObject));
         static_cast<AppletInterface *>(appletGraphicObject)->init();
     }

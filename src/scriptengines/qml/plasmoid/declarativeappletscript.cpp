@@ -82,19 +82,14 @@ bool DeclarativeAppletScript::init()
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
 
     if (pc && pc->isContainment()) {
-        m_interface = new ContainmentInterface(this);
+        m_interface = new ContainmentInterface(this, m_args);
 
         //fail? so it's a normal Applet
     } else {
-        m_interface = new AppletInterface(this);
+        m_interface = new AppletInterface(this, m_args);
     }
 
     m_interface->setParent(this);
-    if (m_args.count() == 1) {
-        emit m_interface->externalData(QString(), m_args.first());
-    } else if (m_args.count() > 0) {
-        emit m_interface->externalData(QString(), m_args);
-    }
 
     return true;
 }

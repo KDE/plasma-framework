@@ -166,8 +166,8 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut NOTIFY globalShortcutChanged)
 
 public:
-    AppletInterface(DeclarativeAppletScript *script, QQuickItem *parent = 0);
-    AppletInterface(Plasma::Applet *applet, QQuickItem *parent = 0);
+    AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
+    AppletInterface(Plasma::Applet *applet, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
     ~AppletInterface();
 
 //API not intended for the QML part
@@ -332,6 +332,7 @@ private:
 
     QString m_toolTipMainText;
     QString m_toolTipSubText;
+    QVariantList m_args;
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_hideOnDeactivate : 1;
