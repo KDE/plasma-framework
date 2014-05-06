@@ -383,7 +383,7 @@ void IconItem::loadPixmap()
     } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
         result = m_svgIcon->pixmap(m_source.toString());
-    } else if (!m_source.isNull()) {
+    } else if (!m_icon.isNull()) {
         result = m_icon.pixmap(QSize(size, size));
     } else if (!m_pixmapIcon.isNull()) {
         result = m_pixmapIcon;
