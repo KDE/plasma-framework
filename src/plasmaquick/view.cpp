@@ -105,7 +105,6 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
 
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("_plasma_graphicObject").value<QObject *>());
 
-    Q_ASSERT(graphicObject);
     if (graphicObject) {
         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
