@@ -62,16 +62,12 @@ QString Application::application() const
 
 void Application::setApplication(const QString &application)
 {
-    qDebug() << "setting the application to" << application;
-
     // TODO: make an application whitelist
     // and ensure those are invoked from the system
     // prefix (plasma's)
     if (d->process.state() != QProcess::NotRunning) {
         return;
     }
-
-    qDebug() << "setting the application to" << application;
 
     d->application = application;
 
@@ -84,7 +80,6 @@ void Application::setApplication(const QString &application)
 
 void Application::setRunning(bool run)
 {
-    qDebug() << "running?" << run;
     d->running = run;
 
     if (run) {
@@ -105,7 +100,6 @@ void Application::start()
         return;
     }
 
-    qDebug() << "Starting" << d->application;
     d->process.start(d->application);
 
     if (!d->process.waitForStarted()) {

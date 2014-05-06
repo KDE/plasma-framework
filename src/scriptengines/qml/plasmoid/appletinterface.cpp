@@ -140,8 +140,6 @@ void AppletInterface::init()
 
     AppletQuickItem::init();
 
-    qDebug() << "Graphic object created:" << applet() << this;
-
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
 

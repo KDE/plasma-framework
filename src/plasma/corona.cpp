@@ -540,7 +540,6 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
                 QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [ = ]() {
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {
-                        qDebug() << "Corona Startup Completed";
                         emit q->startupCompleted();
                     }
                 });

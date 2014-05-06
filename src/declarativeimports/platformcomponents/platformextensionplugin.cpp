@@ -33,12 +33,9 @@ public:
     PlatformComponentsPlugin(QObject *parent = Q_NULLPTR)
         : QQmlExtensionPlugin(parent)
     {
-        qDebug() << "instantiated plugin object";
     }
 
     void registerTypes(const char *uri) Q_DECL_OVERRIDE {
-        qDebug() << "plugin loaded, registering types " << uri;
-
         Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.plasma.platformcomponents"));
 
         qmlRegisterType<Application> (uri, 2, 0, "Application");

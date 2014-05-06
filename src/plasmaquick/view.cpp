@@ -72,7 +72,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment.data(), 0, q, 0);
         QObject *oldGraphicObject = containment.data()->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
-            qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
+//             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
             //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
             oldGraphicObject->setParent(containment.data());
@@ -106,7 +106,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("_plasma_graphicObject").value<QObject *>());
 
     if (graphicObject) {
-        qDebug() << "using as graphic containment" << graphicObject << containment.data();
+//         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
         //by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setProperty("width", q->width());

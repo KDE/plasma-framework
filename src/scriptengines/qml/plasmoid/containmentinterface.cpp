@@ -131,7 +131,6 @@ void ContainmentInterface::init()
                 if (toolBoxObject) {
                     containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
                 }
-                qDebug() << "Loaded toolbox package" << pkg.path();
             }
         } else {
             qWarning() << "Could not load toolbox package." << pkg.path();
@@ -501,8 +500,8 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
     QObject *contGraphicObject = containment()->property("_plasma_graphicObject").value<QObject *>();
 
-    qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
-             << "Applet: " << applet << applet->title() << appletGraphicObject;
+//     qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
+//              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
     if (!appletGraphicObject) {
         appletGraphicObject = new AppletInterface(applet, QVariantList(), this);

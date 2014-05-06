@@ -375,10 +375,10 @@ void WindowThumbnail::resolveGLXFunctions()
     auto *context = window()->openglContext();
     QList<QByteArray> extensions = QByteArray(glXQueryExtensionsString(QX11Info::display(), QX11Info::appScreen())).split(' ');
     if (extensions.contains(QByteArrayLiteral("GLX_EXT_texture_from_pixmap"))) {
-        qDebug() << "Have texture from pixmap";
         m_bindTexImage = context->getProcAddress(QByteArrayLiteral("glXBindTexImageEXT"));
         m_releaseTexImage = context->getProcAddress(QByteArrayLiteral("glXReleaseTexImageEXT"));
-    }
+    } else
+        qWarning() << "couldn't resolve GLX_EXT_texture_from_pixmap functions";
     m_openGLFunctionsResolved = true;
 }
 
