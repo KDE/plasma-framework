@@ -69,6 +69,18 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
+    /**
+     * screen area free of panels: the coordinates are relative to the containment,
+     * it's independent from the screen position
+     * For more precise available geometry use availableScreenRegion()
+     */
+    Q_PROPERTY(QRect availableScreenRect READ availableScreenRect NOTIFY availableScreenRectChanged)
+
+    /**
+     * The available region of this screen, panels excluded. It's a list of rectangles
+     */
+    Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
+
 public:
     ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
 
@@ -99,21 +111,9 @@ public:
      */
     Q_INVOKABLE void lockWidgets(bool locked);
 
-    /**
-     * Geometry of this screen
-     */
-    Q_INVOKABLE QRectF screenGeometry(int id) const;
+    QVariantList availableScreenRegion() const;
 
-    /**
-     * The available region of this screen, panels excluded. It's a list of rectangles
-     */
-    Q_INVOKABLE QVariantList availableScreenRegion(int id) const;
-
-    /**
-     * The available rect of this screen, panels excluded. A simple rect area
-     * For more precise available geometry use availableScreenRegion()
-     */
-    Q_INVOKABLE QRect availableScreenRect(int id) const;
+    QRect availableScreenRect() const;
 
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button

@@ -174,35 +174,32 @@ void ContainmentInterface::lockWidgets(bool locked)
     emit immutableChanged();
 }
 
-QRectF ContainmentInterface::screenGeometry(int id) const
+QVariantList ContainmentInterface::availableScreenRegion() const
 {
-    QRectF rect;
-    if (containment()->corona()) {
-        rect = QRectF(containment()->corona()->screenGeometry(id));
-    }
-
-    return rect;
-}
-
-QVariantList ContainmentInterface::availableScreenRegion(int id) const
-{
-    QRegion reg;
-    if (containment()->corona()) {
-        reg = containment()->corona()->availableScreenRegion(id);
+    QRegion reg = QRect(0, 0, width(), height());
+    if (containment()->screen() > -1 && containment()->corona()) {
+        reg = containment()->corona()->availableScreenRegion(containment()->screen());
     }
 
     QVariantList regVal;
     foreach (QRect rect, reg.rects()) {
+        //make it relative
+        rect.setX(rect.x() - containment()->corona()->screenGeometry(containment()->screen()).x());
+        rect.setY(rect.y() - containment()->corona()->screenGeometry(containment()->screen()).y());
         regVal << QVariant::fromValue(QRectF(rect));
     }
     return regVal;
 }
 
-QRect ContainmentInterface::availableScreenRect(int id) const
+QRect ContainmentInterface::availableScreenRect() const
 {
-    QRect rect;
-    if (containment()->corona()) {
-        rect = containment()->corona()->availableScreenRect(id);
+    QRect rect(0, 0, width(), height());
+
+    if (containment()->screen() > -1 && containment()->corona()) {
+        rect = containment()->corona()->availableScreenRect(containment()->screen());
+        //make it relative
+        rect.setX(rect.x() - containment()->corona()->screenGeometry(containment()->screen()).x());
+        rect.setY(rect.y() - containment()->corona()->screenGeometry(containment()->screen()).y());
     }
 
     return rect;
