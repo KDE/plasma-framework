@@ -53,11 +53,13 @@ public:
     ConfigView *q;
     QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
+    Plasma::Corona *corona;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     : q(view),
-      applet(appl)
+      applet(appl),
+      corona(0)
 {
 }
 
@@ -75,8 +77,16 @@ void ConfigViewPrivate::init()
     q->setColor(Qt::transparent);
     q->setTitle(i18n("%1 Settings", applet.data()->title()));
 
-    if (!applet.data()->containment()->corona()->package().isValid()) {
+    //systray case
+    if (!applet.data()->containment()->corona()) {
+        Plasma::Applet *a = qobject_cast<Plasma::Applet *>(applet.data()->containment()->parent());
+        if (a) {
+            corona = a->containment()->corona();
+        }
+    } else if (!applet.data()->containment()->corona()->package().isValid()) {
         qWarning() << "Invalid home screen package";
+    } else {
+        corona = applet.data()->containment()->corona();
     }
 
     q->setResizeMode(QQuickView::SizeViewToRootObject);
@@ -116,7 +126,7 @@ ConfigView::~ConfigView()
 
 void ConfigView::init()
 {
-    setSource(QUrl::fromLocalFile(d->applet.data()->containment()->corona()->package().filePath("appletconfigurationui")));
+    setSource(QUrl::fromLocalFile(d->corona->package().filePath("appletconfigurationui")));
 }
 
 ConfigModel *ConfigView::configModel() const

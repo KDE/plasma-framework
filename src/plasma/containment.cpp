@@ -145,6 +145,13 @@ void Containment::init()
             actions()->addAction("lock widgets", lockDesktopAction);
         }
     }
+
+    //HACK: this is valid only in the systray case
+    connect(this, &Containment::configureRequested, [=] (Plasma::Applet *a) {
+        if (Plasma::Applet *p = qobject_cast<Plasma::Applet *>(parent())) {
+            emit p->containment()->configureRequested(a);
+        }
+    });
 }
 
 // helper function for sorting the list of applets
