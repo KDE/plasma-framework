@@ -232,6 +232,10 @@ QObject *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
 {
+    if (!qmlObject->mainComponent() || qmlObject->mainComponent()->status() != QQmlComponent::Ready) {
+        return;
+    }
+
     //ignore 0,0 sizes;
     if (q->width() <= 0 && q->height() <= 0) {
         return;
@@ -367,6 +371,9 @@ void AppletQuickItemPrivate::fillHeightChanged()
     propagateSizeHint("fillHeight");
 }
 
+
+
+
 AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       d(new AppletQuickItemPrivate(applet, this))
@@ -483,6 +490,7 @@ void AppletQuickItem::init()
     initialProperties["height"] = height();
     d->qmlObject->completeInitialization(initialProperties);
 
+
     //default fullrepresentation is our root main component, if none specified
     if (!d->fullRepresentation) {
         d->fullRepresentation = d->qmlObject->mainComponent();
@@ -500,20 +508,20 @@ void AppletQuickItem::init()
         emit fullRepresentationChanged(d->fullRepresentation.data());
     }
 
-    //default d->compactRepresentation is a simple icon provided by the shell package
+    //default compactRepresentation is a simple icon provided by the shell package
     if (!d->compactRepresentation) {
         d->compactRepresentation = new QQmlComponent(engine, this);
         d->compactRepresentation.data()->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("defaultcompactrepresentation")));
         emit compactRepresentationChanged(d->compactRepresentation.data());
     }
 
-    //default d->compactRepresentationExpander is the popup in which fullRepresentation goes
+    //default compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         d->compactRepresentationExpander.data()->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("compactapplet")));
     }
-
 }
+
 
 Plasma::Package AppletQuickItem::appletPackage() const
 {
