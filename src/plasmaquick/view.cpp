@@ -65,7 +65,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    Plasma::Types::Location oldLoc = (Plasma::Types::Location)location();
+    Plasma::Types::Location oldLoc = location();
     Plasma::Types::FormFactor oldForm = formFactor();
 
     if (containment) {
@@ -83,7 +83,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     containment = cont;
 
     if (oldLoc != location()) {
-        emit q->locationChanged((Plasma::Types::Location)location());
+        emit q->locationChanged(location());
     }
     if (oldForm != formFactor()) {
         emit q->formFactorChanged(formFactor());
