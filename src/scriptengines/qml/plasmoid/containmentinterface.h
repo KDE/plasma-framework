@@ -153,7 +153,6 @@ Q_SIGNALS:
     void appletsChanged();
     void drawWallpaperChanged();
     void containmentTypeChanged();
-    ///void immutableChanged();
     void actionsChanged();
 
 protected Q_SLOTS:
