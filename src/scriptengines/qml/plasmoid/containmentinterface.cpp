@@ -167,12 +167,6 @@ void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType typ
     appletScript()->setContainmentType(type);
 }
 
-void ContainmentInterface::lockWidgets(bool locked)
-{
-    containment()->setImmutability(!locked ? Plasma::Types::Mutable : Plasma::Types::UserImmutable);
-    emit immutableChanged();
-}
-
 QVariantList ContainmentInterface::availableScreenRegion() const
 {
     QRegion reg = QRect(0, 0, width(), height());

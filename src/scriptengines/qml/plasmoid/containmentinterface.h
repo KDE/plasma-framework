@@ -106,11 +106,6 @@ public:
 
     QList<QObject *> actions() const;
 
-    /**
-     * FIXME: either a property or not accessible at all. Lock or unlock widgets
-     */
-    Q_INVOKABLE void lockWidgets(bool locked);
-
     QVariantList availableScreenRegion() const;
 
     QRect availableScreenRect() const;
