@@ -80,6 +80,12 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
      */
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
 
+    /**
+     * the applet root QML item: sometimes is the same as fullRepresentationItem
+     * if a fullrepresentation was not declared explicitly
+     */
+    Q_PROPERTY(QObject *rootItem READ rootItem CONSTANT)
+
 public:
     AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = 0);
     ~AppletQuickItem();
@@ -98,6 +104,7 @@ public:
 
     QObject *compactRepresentationItem();
     QObject *fullRepresentationItem();
+    QObject *rootItem();
 
 ////PROPERTY ACCESSORS
     int switchWidth() const;

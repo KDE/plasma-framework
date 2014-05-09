@@ -680,6 +680,11 @@ QObject *AppletQuickItem::fullRepresentationItem()
     return d->fullRepresentationItem.data();
 }
 
+QObject *AppletQuickItem::rootItem()
+{
+    return d->qmlObject->rootObject();
+}
+
 void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     Q_UNUSED(oldGeometry)
