@@ -122,18 +122,18 @@ Item {
 
         PlasmaComponents.Label {
             text: "◀"
-            //x: spacing / 2
+            //x: units.largeSpacing / 2
             opacity: leftmouse.containsMouse ? 1 : 0.4
             Behavior on opacity { NumberAnimation {} }
             anchors {
                 top: parent.top
                 left: parent.left
-                leftMargin: spacing / 2
+                leftMargin: units.largeSpacing / 2
             }
             MouseArea {
                 id: leftmouse
                 anchors.fill: parent
-                anchors.margins: -spacing / 3
+                anchors.margins: -units.largeSpacing / 3
                 hoverEnabled: true
                 onClicked: {
                     monthCalendar.previousMonth()
@@ -147,12 +147,12 @@ Item {
             anchors {
                 top: parent.top
                 right: parent.right
-                rightMargin: spacing / 2
+                rightMargin: units.largeSpacing / 2 + calendarGrid.rightMargin
             }
             MouseArea {
                 id: rightmouse
                 anchors.fill: parent
-                anchors.margins: -spacing / 3
+                anchors.margins: -units.largeSpacing / 3
                 hoverEnabled: true
                 onClicked: {
                     monthCalendar.nextMonth()

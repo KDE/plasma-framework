@@ -25,6 +25,11 @@ Item {
 
     property real borderOpacity: 1.0
 
+    property int leftMargin: frameTop.x
+    property int topMargin: rameTop.y
+    property int rightMargin: width - frameTop.width
+    property int bottomMargin: height - frameLeft.height
+
     Rectangle {
         id: frameTop
         height: borderWidth
