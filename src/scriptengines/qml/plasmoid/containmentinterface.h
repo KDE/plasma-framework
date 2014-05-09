@@ -115,6 +115,8 @@ public:
      */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
 
+    Q_INVOKABLE QObject *containmentAt(int x, int y);
+
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));

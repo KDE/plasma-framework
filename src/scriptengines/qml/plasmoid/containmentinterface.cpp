@@ -230,6 +230,21 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
     }
 }
 
+QObject *ContainmentInterface::containmentAt(int x, int y)
+{
+    foreach (Plasma::Containment *c, containment()->corona()->containments()) {
+        ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
+
+        if (contInterface) {
+            QWindow *w = contInterface->window();
+            if (w && w->geometry().contains(QPoint(window()->x(), window()->y()) + QPoint(x, y))) {
+                return contInterface;
+            }
+        }
+    }
+    return 0;
+}
+
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 {
     if (!mimeData) {
