@@ -594,6 +594,13 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
+    //even if the menu is executed synchronously, other events may be processed
+    //by the qml incubator when plasma is loading, so we need to guard there
+    if (m_contextMenu) {
+        m_contextMenu.data()->close();
+        return;
+    }
+
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
     Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
 
@@ -625,9 +632,11 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
             }
         }
     }
-    qDebug() << "Invoking menu for applet" << applet;
+    //qDebug() << "Invoking menu for applet" << applet;
 
     QMenu desktopMenu;
+
+    m_contextMenu = &desktopMenu;
 
     if (applet) {
         addAppletActions(desktopMenu, applet, event);

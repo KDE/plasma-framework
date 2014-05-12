@@ -174,6 +174,7 @@ private:
     QHash<KJob *, QPoint> m_dropPoints;
     QHash<KJob *, QMenu *> m_dropMenus;
     KActivities::Info *m_activityInfo;
+    QWeakPointer<QMenu> m_contextMenu;
 };
 
 QML_DECLARE_TYPEINFO(ContainmentInterface, QML_HAS_ATTACHED_PROPERTIES)
