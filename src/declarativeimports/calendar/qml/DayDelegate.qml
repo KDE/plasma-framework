@@ -36,9 +36,13 @@ Item {
         width: parent.width - (borderWidth)
         height: parent.height - (borderWidth)
         opacity: {
-            if (calendarDays.selectedItem == dayStyle && today) 0.6
-                else if (today) 0.4
-                    else 0
+            if (calendarDays.selectedItem == dayStyle && today) {
+                0.6
+            } else if (today) {
+                0.4
+            } else {
+                0
+            }
         }
         Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
         color: theme.textColor
@@ -50,9 +54,13 @@ Item {
             fill: todayRect
         }
         opacity: {
-            if (calendarDays.selectedItem == dayStyle) 0.6
-                else if (dateMouse.containsMouse) 0.4
-                    else 0
+            if (calendarDays.selectedItem == dayStyle) {
+                0.6
+            } else if (dateMouse.containsMouse) {
+                0.4
+            } else {
+                0
+            }
         }
         visible: !today
         Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
