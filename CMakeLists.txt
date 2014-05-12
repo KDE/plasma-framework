@@ -88,14 +88,6 @@ set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma wi
                        TYPE OPTIONAL
                       )
 
-#find_package(DBusMenuQt MODULE)
-#set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
-#URL "https://launchpad.net/libdbusmenu-qt"
-#TYPE REQUIRED
-#)
-
-
-
 find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        URL "http://www.opengl.org"
