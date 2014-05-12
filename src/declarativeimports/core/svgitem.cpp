@@ -31,6 +31,8 @@
 
 #include "svgtexturenode.h"
 
+#include <cmath> //floor()
+
 namespace Plasma
 {
 
