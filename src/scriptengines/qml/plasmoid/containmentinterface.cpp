@@ -245,6 +245,18 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
     return 0;
 }
 
+void ContainmentInterface::addApplet(AppletInterface *applet)
+{
+    if (!applet || applet->applet()->containment() == containment()) {
+        return;
+    }
+
+    blockSignals(true);
+    containment()->addApplet(applet->applet());
+    blockSignals(false);
+    emit appletAdded(applet, QCursor::pos().x(), QCursor::pos().y());
+}
+
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 {
     if (!mimeData) {

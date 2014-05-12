@@ -117,6 +117,8 @@ public:
 
     Q_INVOKABLE QObject *containmentAt(int x, int y);
 
+    Q_INVOKABLE void addApplet(AppletInterface *applet);
+
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
