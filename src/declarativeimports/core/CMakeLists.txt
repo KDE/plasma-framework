@@ -21,6 +21,7 @@ set(corebindings_SRCS
     datasource.cpp
     #    runnermodel.cpp
     svgitem.cpp
+    fadingnode.cpp
     framesvgitem.cpp
     tooltip.cpp
     tooltipdialog.cpp

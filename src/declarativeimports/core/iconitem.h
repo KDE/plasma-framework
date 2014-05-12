@@ -1,5 +1,6 @@
 /*
  *   Copyright 2012 Marco Martin <mart@kde.org>
+ *   Copyright 2014 David Edmundson <davidedmudnson@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -21,7 +22,7 @@
 #define ICONITEM_H
 
 #include <QIcon>
-#include <QQuickPaintedItem>
+#include <QQuickItem>
 #include <QPixmap>
 #include <QVariant>
 #include <QTimer>
@@ -33,7 +34,7 @@ namespace Plasma
 class Svg;
 }
 
-class IconItem : public QQuickPaintedItem
+class IconItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -58,7 +59,7 @@ public:
 
     bool isValid() const;
 
-    void paint(QPainter *painter);
+    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
 
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry);
@@ -90,9 +91,12 @@ private:
     bool m_smooth;
     bool m_active;
 
-    //This list contains at most 2 sources, when a pixmap transition is due,
-    //a new pixmap is queued, the old one is removed when the animation finishes
-    QList<QPixmap> m_iconPixmaps;
+    bool m_textureChanged;
+    bool m_sizeChanged;
+
+    QPixmap m_iconPixmap;
+    QPixmap m_oldIconPixmap;
+
 
     //animation on pixmap change
     QPropertyAnimation *m_animation;

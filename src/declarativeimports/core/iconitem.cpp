@@ -1,5 +1,6 @@
 /*
  *   Copyright 2012 Marco Martin <mart@kde.org>
+ *   Copyright 2014 David Edmundson <davidedmudnson@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -23,138 +24,21 @@
 #include <QPaintEngine>
 #include <QPainter>
 #include <QPropertyAnimation>
+#include <QPixmap>
+#include <QSGSimpleTextureNode>
+#include <QQuickWindow>
+#include <QPixmap>
 
 #include <kiconloader.h>
 #include <kiconeffect.h>
 
 #include <plasma/svg.h>
 
-QPixmap transition(const QPixmap &from, const QPixmap &to, qreal amount)
-{
-    if (from.isNull() && to.isNull()) {
-        return from;
-    }
-
-    if (qFuzzyCompare(amount + 1, qreal(1.0))) {
-        return from;
-    }
-
-    QRect startRect(from.rect());
-    QRect targetRect(to.rect());
-    QSize pixmapSize = startRect.size().expandedTo(targetRect.size());
-    QRect toRect = QRect(QPoint(0, 0), pixmapSize);
-    targetRect.moveCenter(toRect.center());
-    startRect.moveCenter(toRect.center());
-
-    //paint to in the center of from
-    QColor color;
-    color.setAlphaF(amount);
-
-    // If the native paint engine supports Porter/Duff compositing and CompositionMode_Plus
-    QPaintEngine *paintEngine = from.paintEngine();
-    if (paintEngine &&
-            paintEngine->hasFeature(QPaintEngine::PorterDuff) &&
-            paintEngine->hasFeature(QPaintEngine::BlendModes)) {
-        QPixmap startPixmap(pixmapSize);
-        startPixmap.fill(Qt::transparent);
-
-        QPixmap targetPixmap(pixmapSize);
-        targetPixmap.fill(Qt::transparent);
-
-        QPainter p;
-        p.begin(&targetPixmap);
-        p.drawPixmap(targetRect, to);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(targetRect, color);
-        p.end();
-
-        p.begin(&startPixmap);
-        p.drawPixmap(startRect, from);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        p.fillRect(startRect, color);
-        p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawPixmap(targetRect, targetPixmap);
-        p.end();
-
-        return startPixmap;
-    }
-#warning Cannot use XRender with QPixmap anymore. Find equivalent with Qt API.
-#if 0 // HAVE_X11 && defined(HAVE_XRENDER)
-    // We have Xrender support
-    else if (paintEngine && paintEngine->hasFeature(QPaintEngine::PorterDuff)) {
-        // QX11PaintEngine doesn't implement CompositionMode_Plus in Qt 4.3,
-        // which we need to be able to do a transition from one pixmap to
-        // another.
-        //
-        // In order to avoid the overhead of converting the pixmaps to images
-        // and doing the operation entirely in software, this function has a
-        // specialized path for X11 that uses Xrender directly to do the
-        // transition. This operation can be fully accelerated in HW.
-        //
-        // This specialization can be removed when QX11PaintEngine supports
-        // CompositionMode_Plus.
-        QPixmap source(targetPixmap), destination(startPixmap);
-
-        source.detach();
-        destination.detach();
-
-        Display *dpy = QX11Info::display();
-
-        XRenderPictFormat *format = XRenderFindStandardFormat(dpy, PictStandardA8);
-        XRenderPictureAttributes pa;
-        pa.repeat = 1; // RepeatNormal
-
-        // Create a 1x1 8 bit repeating alpha picture
-        Pixmap pixmap = XCreatePixmap(dpy, destination.handle(), 1, 1, 8);
-        Picture alpha = XRenderCreatePicture(dpy, pixmap, format, CPRepeat, &pa);
-        XFreePixmap(dpy, pixmap);
-
-        // Fill the alpha picture with the opacity value
-        XRenderColor xcolor;
-        xcolor.alpha = quint16(0xffff * amount);
-        XRenderFillRectangle(dpy, PictOpSrc, alpha, &xcolor, 0, 0, 1, 1);
-
-        // Reduce the alpha of the destination with 1 - opacity
-        XRenderComposite(dpy, PictOpOutReverse, alpha, None, destination.x11PictureHandle(),
-                         0, 0, 0, 0, 0, 0, destination.width(), destination.height());
-
-        // Add source * opacity to the destination
-        XRenderComposite(dpy, PictOpAdd, source.x11PictureHandle(), alpha,
-                         destination.x11PictureHandle(),
-                         toRect.x(), toRect.y(), 0, 0, 0, 0, destination.width(), destination.height());
-
-        XRenderFreePicture(dpy, alpha);
-        return destination;
-    }
-#endif
-    else {
-        // Fall back to using QRasterPaintEngine to do the transition.
-        QImage under(pixmapSize, QImage::Format_ARGB32_Premultiplied);
-        under.fill(Qt::transparent);
-        QImage over(pixmapSize, QImage::Format_ARGB32_Premultiplied);
-        over.fill(Qt::transparent);
-
-        QPainter p;
-        p.begin(&over);
-        p.drawPixmap(targetRect, to);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.fillRect(over.rect(), color);
-        p.end();
-
-        p.begin(&under);
-        p.drawPixmap(startRect, from);
-        p.setCompositionMode(QPainter::CompositionMode_DestinationOut);
-        p.fillRect(startRect, color);
-        p.setCompositionMode(QPainter::CompositionMode_Plus);
-        p.drawImage(toRect.topLeft(), over);
-        p.end();
-
-        return QPixmap::fromImage(under);
-    }
-}
+#include "fadingnode_p.h"
+#include "svgtexturenode.h"
 
 IconItem::IconItem(QQuickItem *parent)
-    : QQuickPaintedItem(parent),
+    : QQuickItem(parent),
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
@@ -173,7 +57,7 @@ IconItem::IconItem(QQuickItem *parent)
             this, SLOT(animationFinished()));
     m_animation->setTargetObject(this);
     m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-    m_animation->setDuration(250);
+    m_animation->setDuration(250); //FIXME from theme
 
     setFlag(ItemHasContents, true);
 
@@ -303,38 +187,60 @@ bool IconItem::isValid() const
     return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
 }
 
-void IconItem::paint(QPainter *painter)
+QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
-    if (m_iconPixmaps.isEmpty()) {
-        return;
+    Q_UNUSED(updatePaintNodeData)
+
+    if (m_iconPixmap.isNull()) {
+        delete oldNode;
+        return Q_NULLPTR;
     }
-
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, m_smooth);
-    painter->setRenderHint(QPainter::SmoothPixmapTransform, m_smooth);
-
-    const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
-
-    const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize / 2, iconSize / 2)).toPoint(),
-                         QSize(iconSize, iconSize));
 
     if (m_animation->state() == QAbstractAnimation::Running) {
-        QPixmap result = m_iconPixmaps.first();
-        result = transition(result,
-                            m_iconPixmaps.last(), m_animValue);
-        painter->drawPixmap(destRect, result);
-        //simpler logic for just paint
+        FadingNode *animatingNode = static_cast<FadingNode*>(oldNode);
+
+        if (!animatingNode || m_textureChanged) {
+            delete oldNode;
+
+            QSGTexture *source = window()->createTextureFromImage(m_iconPixmap.toImage());
+            QSGTexture *target = window()->createTextureFromImage(m_oldIconPixmap.toImage());
+            animatingNode = new FadingNode(source, target);
+            m_sizeChanged = true;
+            m_textureChanged = false;
+        }
+
+        animatingNode->setProgress(m_animValue);
+
+        if (m_sizeChanged) {
+            const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+            const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
+                                 QSize(iconSize, iconSize));
+
+            animatingNode->setRect(destRect);
+            m_sizeChanged = false;
+        }
+
+        return animatingNode;
     } else {
-        painter->drawPixmap(destRect, m_iconPixmaps.first());
-    }
+        Plasma::SVGTextureNode *textureNode = static_cast<Plasma::SVGTextureNode*>(oldNode);
 
-    painter->restore();
-}
+        if (!textureNode || m_textureChanged) {
+            delete oldNode;
+            textureNode = new Plasma::SVGTextureNode;
+            textureNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+            m_sizeChanged = true;
+            m_textureChanged = false;
+        }
 
-void IconItem::animationFinished()
-{
-    while (m_iconPixmaps.count() > 1) {
-        m_iconPixmaps.pop_front();
+        if (m_sizeChanged) {
+            const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+            const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
+                                 QSize(iconSize, iconSize));
+
+            textureNode->setRect(destRect);
+            m_sizeChanged = false;
+        }
+        return textureNode;
     }
 }
 
@@ -342,6 +248,12 @@ void IconItem::valueChanged(const QVariant &value)
 {
     m_animValue = value.toReal();
     update();
+}
+
+void IconItem::animationFinished()
+{
+    m_oldIconPixmap = QPixmap();
+    m_textureChanged = true;
 }
 
 int IconItem::adjustedSize(int size)
@@ -390,7 +302,7 @@ void IconItem::loadPixmap()
     } else if (!m_imageIcon.isNull()) {
         result = QPixmap::fromImage(m_imageIcon);
     } else {
-        m_iconPixmaps.clear();
+        m_iconPixmap = QPixmap();
         m_animation->stop();
         update();
         return;
@@ -402,28 +314,17 @@ void IconItem::loadPixmap()
         result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
     }
 
-    //this happen only when loadPixmap has been called when an anim is running
-    while (m_iconPixmaps.count() > 1) {
-        m_iconPixmaps.pop_front();
-    }
+    m_oldIconPixmap = m_iconPixmap;
+    m_iconPixmap = result;
+    m_textureChanged = true;
 
-    m_iconPixmaps << result;
-    //if there is only one image, don't animate
-    //if an animation was already running, immediate transition, to not overload
-    if (m_iconPixmaps.first().size() != result.size()) {
-        m_animation->stop();
-        if (m_iconPixmaps.count() > 1) {
-            m_iconPixmaps.pop_front();
-        }
-
-    } else if (m_animation->state() == QAbstractAnimation::Running) {
-        m_animation->stop();
-        m_iconPixmaps.pop_front();
-
-    } else if (m_iconPixmaps.count() > 1) {
+    //don't animate initial setting
+    if (!m_oldIconPixmap.isNull()) {
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
         m_animation->start();
+    } else {
+        m_animValue = 1.0;
     }
     update();
 }
@@ -433,7 +334,10 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
 {
     if (newGeometry.size() != oldGeometry.size()) {
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
-            m_loadPixmapTimer.start();
+            m_sizeChanged = true;
+            if (!m_loadPixmapTimer.isActive()) {
+                m_loadPixmapTimer.start();
+            }
             update();
         }
     }
