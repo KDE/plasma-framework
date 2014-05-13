@@ -177,8 +177,8 @@ QVariantList ContainmentInterface::availableScreenRegion() const
     QVariantList regVal;
     foreach (QRect rect, reg.rects()) {
         //make it relative
-        rect.moveTo(rect.x() - containment()->corona()->screenGeometry(containment()->screen()).x(),
-                    rect.y() - containment()->corona()->screenGeometry(containment()->screen()).y());
+        QRect geometry = containment()->corona()->screenGeometry(containment()->screen());
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
         regVal << QVariant::fromValue(QRectF(rect));
     }
     return regVal;
@@ -191,8 +191,8 @@ QRect ContainmentInterface::availableScreenRect() const
     if (containment()->screen() > -1 && containment()->corona()) {
         rect = containment()->corona()->availableScreenRect(containment()->screen());
         //make it relative
-        rect.moveTo(rect.x() - containment()->corona()->screenGeometry(containment()->screen()).x(),
-                    rect.y() - containment()->corona()->screenGeometry(containment()->screen()).y());
+        QRect geometry = containment()->corona()->screenGeometry(containment()->screen());
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
     }
 
     return rect;
