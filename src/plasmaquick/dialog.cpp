@@ -369,11 +369,6 @@ void DialogPrivate::syncToMainItemSize()
         return;
     }
 
-    frameSvgItem->setX(0);
-    frameSvgItem->setY(0);
-    frameSvgItem->setWidth(q->width());
-    frameSvgItem->setHeight(q->height());
-
     const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
@@ -388,6 +383,12 @@ void DialogPrivate::syncToMainItemSize()
     } else {
         q->resize(s);
     }
+
+    frameSvgItem->setX(0);
+    frameSvgItem->setY(0);
+    frameSvgItem->setWidth(s.width());
+    frameSvgItem->setHeight(s.height());
+
     syncBorders();
     mainItem.data()->setX(frameSvgItem->margins()->left());
     mainItem.data()->setY(frameSvgItem->margins()->top());
