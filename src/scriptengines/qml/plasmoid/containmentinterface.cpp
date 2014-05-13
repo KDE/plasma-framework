@@ -198,7 +198,7 @@ QRect ContainmentInterface::availableScreenRect() const
     return rect;
 }
 
-Plasma::Applet *ContainmentInterface::addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
 {
     //HACK
     //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
@@ -245,7 +245,7 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
     return 0;
 }
 
-void ContainmentInterface::addApplet(AppletInterface *applet)
+void ContainmentInterface::addApplet(AppletInterface *applet, int x, int y)
 {
     if (!applet || applet->applet()->containment() == containment()) {
         return;
@@ -254,7 +254,35 @@ void ContainmentInterface::addApplet(AppletInterface *applet)
     blockSignals(true);
     containment()->addApplet(applet->applet());
     blockSignals(false);
-    emit appletAdded(applet, QCursor::pos().x(), QCursor::pos().y());
+    emit appletAdded(applet, x, y);
+}
+
+QPointF ContainmentInterface::mapFromApplet(AppletInterface *applet, int x, int y)
+{
+    if (!applet->window() || !window()) {
+        return QPointF();
+    }
+
+    //x,y in absolute screen coordinates of current view
+    QPointF pos = applet->mapToScene(QPointF(x, y));
+    pos = QPointF(pos + applet->window()->geometry().topLeft());
+    //return the coordinate in the relative view's coords
+    return pos - window()->geometry().topLeft();
+}
+
+QPointF ContainmentInterface::mapToApplet(AppletInterface *applet, int x, int y)
+{
+    if (!applet->window() || !window()) {
+        return QPointF();
+    }
+
+    //x,y in absolute screen coordinates of current view
+    QPointF pos(x, y);
+    pos = QPointF(pos + window()->geometry().topLeft());
+    //the coordinate in the relative view's coords
+    pos = pos - applet->window()->geometry().topLeft();
+    //make it relative to applet coords
+    return pos - applet->mapToScene(QPointF(0, 0));
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
@@ -353,7 +381,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
         if (!selectedPlugin.isEmpty()) {
 
-            Plasma::Applet *applet = addApplet(selectedPlugin, QVariantList(), QPoint(x, y));
+            Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QPoint(x, y));
             setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
 
         }
@@ -490,7 +518,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         m_wallpaperInterface->setUrl(tjob->url());
                     }
                 } else {
-                    Plasma::Applet *applet = addApplet(actionsToApplets[choice], QVariantList(), posi);
+                    Plasma::Applet *applet = createApplet(actionsToApplets[choice], QVariantList(), posi);
                     setAppletArgs(applet, mimetype, tjob->url().toString());
                 }
 
@@ -499,7 +527,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            Plasma::Applet *applet = addApplet("org.kde.plasma.icon", QVariantList(), posi);
+            Plasma::Applet *applet = createApplet("org.kde.plasma.icon", QVariantList(), posi);
             setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
