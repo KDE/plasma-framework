@@ -49,11 +49,6 @@ Item {
     property int cellWidth: prefCellWidth()
     property int cellHeight: prefCellHeight()
 
-//     property int miniumWidth: implicitWidth
-//     property int miniumHeight: implicitHeight
-//     property int implicitWidth: theme.mSize(theme.defaultFont).width * 6 * 8
-//     property int implicitHeight: theme.mSize(theme.defaultFont).height * 2 * 9
-
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
@@ -106,10 +101,6 @@ Item {
         startDate: today();
     }
 
-//     CalendarToolbar {
-//
-//     }
-
     DaysCalendar {
         id: calendarGrid
 
@@ -122,7 +113,6 @@ Item {
 
         PlasmaComponents.Label {
             text: "◀"
-            //x: units.largeSpacing / 2
             opacity: leftmouse.containsMouse ? 1 : 0.4
             Behavior on opacity { NumberAnimation {} }
             anchors {

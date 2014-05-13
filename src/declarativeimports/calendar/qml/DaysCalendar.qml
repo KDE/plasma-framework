@@ -26,7 +26,7 @@ Item {
     property real borderOpacity: 1.0
 
     property int leftMargin: frameTop.x
-    property int topMargin: rameTop.y
+    property int topMargin: frameTop.y
     property int rightMargin: width - frameTop.width
     property int bottomMargin: height - frameLeft.height
 
@@ -36,12 +36,10 @@ Item {
         width: root.columns * root.cellWidth
         color: theme.textColor
         opacity: borderOpacity
-//         visible: showtop
 
         anchors {
             top: parent.top
             left: calendarDays.left
-            //right: calendarDays.right
         }
     }
 
@@ -51,12 +49,10 @@ Item {
         height: root.cellHeight * root.columns
         color: theme.textColor
         opacity: borderOpacity
-        //         visible: showtop
 
         anchors {
             right: calendarDays.left
             top: calendarDays.top
-            //bottom: calendarDays.bottom
         }
     }
 
@@ -66,12 +62,10 @@ Item {
         height: root.cellHeight
         color: theme.textColor
         opacity: borderOpacity
-        //         visible: showtop
 
         anchors {
             right: frameTop.right
             top: calendarDays.top
-            //bottom: calendarDays.bottom
         }
     }
 
@@ -80,10 +74,8 @@ Item {
         height: borderWidth
         color: theme.textColor
         opacity: borderOpacity
-// //         visible: /*showtop*/
         y: cellHeight - borderWidth
         anchors {
-            //top: parent.top
             left: calendarDays.left
             right: frameTop.right
         }
@@ -104,8 +96,8 @@ Item {
             id: days
             model: monthCalendar.days
             Item {
-                width: cellWidth
-                height: cellHeight
+                width: root.cellWidth
+                height: root.cellHeight
                 Components.Label {
                     text: Qt.locale().dayName(monthCalendar.firstDayOfWeek + index, Locale.ShortFormat)
                     font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)

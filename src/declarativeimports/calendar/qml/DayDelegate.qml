@@ -117,17 +117,15 @@ Item {
         //z: label.z + 1
         hoverEnabled: true
         onClicked: {
-            print("date change:" + dayNumber + monthNumber)
-            var rowNumber = Math.floor ( index / 7)   ;
+            var rowNumber = Math.floor(index / 7);
             week = 1+monthCalendar.weeksModel[rowNumber];
-            root.date = model
-            calendarDays.selectedItem = dayStyle
+            root.date = model;
+            calendarDays.selectedItem = dayStyle;
         }
     }
 
     Component.onCompleted: {
-        var t = isToday(new Date(yearNumber, monthNumber - 1, dayNumber))
-        if (t) {
+        if (today) {
             root.date = model;
         }
     }
