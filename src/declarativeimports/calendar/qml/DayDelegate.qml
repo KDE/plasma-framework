@@ -23,11 +23,18 @@ import org.kde.plasma.components 2.0 as Components
 
 Item {
     id: dayStyle
-    width: cellWidth
-    height: cellHeight
+    width: root.cellWidth
+    height: root.cellHeight
 
     property real borderOpacity: daysCalendar.borderOpacity
     property bool today: isToday(new Date(yearNumber, monthNumber - 1, dayNumber))
+
+    onHeightChanged: {
+        // this is needed here as the text is first rendered, counting with the default root.cellHeight
+        // then root.cellHeight actually changes to whatever it should be, but the Label does not pick
+        // it up after that, so we need to change it explicitly after the cell size changes
+        label.font.pixelSize = Math.max(theme.smallestFont.pixelSize, Math.floor(root.cellHeight / 3))
+    }
 
     Rectangle {
         id: todayRect
@@ -97,7 +104,6 @@ Item {
     Components.Label {
         id: label
         anchors.centerIn: parent
-        font.pixelSize: Math.max(theme.defaultFont.pixelSize, cellHeight / 3)
         text: dayNumber
         opacity: (isPreviousMonth || isNextMonth) ? 0.5: 1.0
         color: today ? theme.backgroundColor : theme.textColor
