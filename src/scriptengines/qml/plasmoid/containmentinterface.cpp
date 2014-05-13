@@ -170,14 +170,15 @@ void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType typ
 QVariantList ContainmentInterface::availableScreenRegion() const
 {
     QRegion reg = QRect(0, 0, width(), height());
-    if (containment()->screen() > -1 && containment()->corona()) {
-        reg = containment()->corona()->availableScreenRegion(containment()->screen());
+    int screenId = screen();
+    if (screenId > -1 && containment()->corona()) {
+        reg = containment()->corona()->availableScreenRegion(screenId);
     }
 
     QVariantList regVal;
     foreach (QRect rect, reg.rects()) {
         //make it relative
-        QRect geometry = containment()->corona()->screenGeometry(containment()->screen());
+        QRect geometry = containment()->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
         regVal << QVariant::fromValue(QRectF(rect));
     }
@@ -188,10 +189,12 @@ QRect ContainmentInterface::availableScreenRect() const
 {
     QRect rect(0, 0, width(), height());
 
-    if (containment()->screen() > -1 && containment()->corona()) {
-        rect = containment()->corona()->availableScreenRect(containment()->screen());
+    int screenId = screen();
+
+    if (screenId > -1 && containment()->corona()) {
+        rect = containment()->corona()->availableScreenRect(screenId);
         //make it relative
-        QRect geometry = containment()->corona()->screenGeometry(containment()->screen());
+        QRect geometry = containment()->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
     }
 
