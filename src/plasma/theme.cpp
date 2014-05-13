@@ -36,7 +36,6 @@
 #include <QDebug>
 #include <kdirwatch.h>
 #include <kiconloader.h>
-#include <kmanagerselection.h>
 #include <kimagecache.h>
 #include <ksharedconfig.h>
 #include <kwindoweffects.h>
