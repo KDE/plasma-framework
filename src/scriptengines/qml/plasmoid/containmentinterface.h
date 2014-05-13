@@ -115,6 +115,28 @@ public:
      */
     Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
 
+    /**
+     * Search for a containment at those coordinates.
+     * the coordinates are passed as local coordinates of *this* containment
+     */
+    Q_INVOKABLE QObject *containmentAt(int x, int y);
+
+    /**
+     * Add an existing applet to this containment.
+     * The coordinates are passed as local coordinates of this containment
+     */
+    Q_INVOKABLE void addApplet(AppletInterface *applet, int x, int y);
+
+    /**
+     * Map coordinates from relative to the given applet to relative to this containment
+     */
+    Q_INVOKABLE QPointF mapFromApplet(AppletInterface *applet, int x, int y);
+
+    /**
+     *Map coordinates from relative to this containment to relative to the given applet
+     */
+    Q_INVOKABLE QPointF mapToApplet(AppletInterface *applet, int x, int y);
+
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
@@ -163,7 +185,7 @@ protected Q_SLOTS:
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
 
 private Q_SLOTS:
-    Plasma::Applet *addApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+    Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
 
 private:
     void clearDataForMimeJob(KIO::Job *job);
