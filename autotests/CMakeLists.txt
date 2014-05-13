@@ -41,7 +41,6 @@ ecm_mark_as_test(storagetest)
 
 add_executable(sortfiltermodeltest
     sortfiltermodeltest.cpp
-    ../src/plasma/dataengineconsumer.cpp
     ../src/declarativeimports/core/datamodel.cpp
     ../src/declarativeimports/core/datasource.cpp
     )
