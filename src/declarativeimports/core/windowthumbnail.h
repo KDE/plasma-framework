@@ -95,6 +95,7 @@ private:
     bool m_xcb;
     uint32_t m_winId;
     bool m_damaged;
+    int m_depth;
 #if HAVE_XCB_COMPOSITE
     xcb_pixmap_t pixmapForWindow();
     bool m_openGLFunctionsResolved;

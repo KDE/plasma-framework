@@ -65,6 +65,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_xcb(false)
     , m_winId(0)
     , m_damaged(false)
+    , m_depth(0)
 #if HAVE_XCB_COMPOSITE
     , m_openGLFunctionsResolved(false)
     , m_damageEventBase(0)
@@ -213,18 +214,18 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
             xcb_connection_t *c = QX11Info::connection();
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
+            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
+
+            if (geo.isNull()) {
+                return false;
+            }
+            m_depth = geo->depth;
 
             if (!loadGLXTexture()) {
                 return false;
             }
 
-            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
-            QSize size;
-            if (!geo.isNull()) {
-                size.setWidth(geo->width);
-                size.setHeight(geo->height);
-            }
-            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureOwnsGLTexture));
+            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureOwnsGLTexture));
         }
         textureNode->texture()->bind();
         bindGLXTexture();
@@ -390,47 +391,110 @@ void WindowThumbnail::bindGLXTexture()
     resetDamaged();
 }
 
+GLXFBConfig *getConfig(int depth, int *index)
+{
+    const int attribs[] = {
+        GLX_RENDER_TYPE,              GLX_RGBA_BIT,
+        GLX_DRAWABLE_TYPE,            GLX_WINDOW_BIT | GLX_PIXMAP_BIT,
+        GLX_X_VISUAL_TYPE,            GLX_TRUE_COLOR,
+        GLX_X_RENDERABLE,             1,
+        GLX_CONFIG_CAVEAT,            int(GLX_DONT_CARE),
+        GLX_RED_SIZE,                 5,
+        GLX_GREEN_SIZE,               5,
+        GLX_BLUE_SIZE,                5,
+        GLX_ALPHA_SIZE,               0,
+        GLX_STENCIL_SIZE,             0,
+        GLX_DEPTH_SIZE,               0, // note: this is depth buffer and has nothing to do with the X depth
+        GLX_BIND_TO_TEXTURE_RGB_EXT,  (depth == 32) ? int(GLX_DONT_CARE) : 1,
+        GLX_BIND_TO_TEXTURE_RGBA_EXT, (depth == 32) ? 1 : int(GLX_DONT_CARE),
+        0
+    };
+
+    int count = 0;
+    GLXFBConfig *fbConfigs = glXChooseFBConfig(QX11Info::display(), QX11Info::appScreen(), attribs, &count);
+    if (count < 1) {
+        return Q_NULLPTR;
+    }
+
+    for (int i = 0; i < count; ++i) {
+        int alphaSize = 0;
+        int bufferSize = 0;
+        glXGetFBConfigAttrib(QX11Info::display(), fbConfigs[i], GLX_BUFFER_SIZE, &bufferSize);
+        glXGetFBConfigAttrib(QX11Info::display(), fbConfigs[i], GLX_ALPHA_SIZE, &alphaSize);
+        if (bufferSize != depth && (bufferSize - alphaSize) != depth) {
+            continue;
+        }
+        XVisualInfo *vi = glXGetVisualFromFBConfig(QX11Info::display(), fbConfigs[i]);
+        if (!vi) {
+            // no visual for the fb config - skip
+            continue;
+        }
+        const int visualDepth = vi->depth;
+        XFree(vi);
+
+        if (visualDepth != depth) {
+            // depth of the visual doesn't match our wanted depth - skip
+            continue;
+        }
+        *index = i;
+        break;
+    }
+
+    return fbConfigs;
+}
+
 bool WindowThumbnail::loadGLXTexture()
 {
     GLXContext glxContext = glXGetCurrentContext();
     if (!glxContext) {
         return false;
     }
-    Display *d = QX11Info::display();
+
+    // this is a cache of the GLXFBConfig per depth
+    // it's kept as a method static to have it shared between multiple
+    // window thumbnails.
+    // As the GLXFBConfig might be context specific and we cannot be sure
+    // that the code might be entered from different contexts, the cache
+    // also maps the cached configs against the context.
+    static QMap<GLXContext, QMap<int, GLXFBConfig> > s_fbConfigs;
+    auto it = s_fbConfigs.find(glxContext);
+    if (it == s_fbConfigs.end()) {
+        // create a map entry for the current context
+        s_fbConfigs.insert(glxContext, QMap<int, GLXFBConfig>());
+        it = s_fbConfigs.find(glxContext);
+        if (it == s_fbConfigs.end()) {
+            // just for safety, should never ever happen
+            return false;
+        }
+    }
+    auto &configMap = it.value();
+    auto configIt = configMap.constFind(m_depth);
+    if (configIt == configMap.constEnd()) {
+        // try getting a new fbconfig for the current depth
+        int index = 0;
+        GLXFBConfig *fbConfigs = getConfig(m_depth, &index);
+        if (!fbConfigs) {
+            return false;
+        }
+        configMap.insert(m_depth, fbConfigs[index]);
+        XFree(fbConfigs);
+
+        configIt = configMap.constFind(m_depth);
+        if (configIt == configMap.constEnd()) {
+            // just for safety, should never ever happen
+            return false;
+        }
+    }
+
     glGenTextures(1, &m_texture);
-    int fbConfig = 0;
-    glXQueryContext(d, glxContext, GLX_FBCONFIG_ID, &fbConfig);
-
-    int fbAttribs[] = {
-        GLX_FBCONFIG_ID, fbConfig, XCB_NONE
-    };
-    int count = 0;
-    GLXFBConfig *fbConfigs = glXChooseFBConfig(d, QX11Info::appScreen(), fbAttribs, &count);
-    if (count == 0) {
-        qDebug() << "Didn't get our FBConfig";
-        return false;
-    }
-
-    int bindRgb, bindRgba;
-    glXGetFBConfigAttrib(d, fbConfigs[0], GLX_BIND_TO_TEXTURE_RGBA_EXT, &bindRgba);
-    glXGetFBConfigAttrib(d, fbConfigs[0], GLX_BIND_TO_TEXTURE_RGB_EXT,  &bindRgb);
-
-    XVisualInfo *vi = glXGetVisualFromFBConfig(d, fbConfigs[0]);
-    int textureFormat;
-    if (window()->openglContext()->format().hasAlpha()) {
-        textureFormat = bindRgba ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT;
-    } else {
-        textureFormat = bindRgb ? GLX_TEXTURE_FORMAT_RGB_EXT : GLX_TEXTURE_FORMAT_RGBA_EXT;
-    }
-    XFree(vi);
 
     // we assume that Texture_2D is supported as we have a QtQuick OpenGL context
     int attrs[] = {
-        GLX_TEXTURE_FORMAT_EXT, textureFormat,
+        GLX_TEXTURE_FORMAT_EXT, (m_depth == 32) ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT,
         GLX_MIPMAP_TEXTURE_EXT, false,
         GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT, XCB_NONE
     };
-    m_glxPixmap = glXCreatePixmap(d, fbConfigs[0], m_pixmap, attrs);
+    m_glxPixmap = glXCreatePixmap(QX11Info::display(), configIt.value(), m_pixmap, attrs);
     return true;
 }
 #endif
