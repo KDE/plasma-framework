@@ -58,7 +58,11 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
 
 Plasma::ContainmentPrivate::~ContainmentPrivate()
 {
-    qDeleteAll(applets);
+    //FIXME: For some reason, qDeleteAll crashes, while deleting applets one by one is fine
+    foreach (Plasma::Applet *applet, applets) {
+        delete applet;
+    }
+    //qDeleteAll(applets);
     applets.clear();
 }
 
