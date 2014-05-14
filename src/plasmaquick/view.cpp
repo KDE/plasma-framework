@@ -45,8 +45,8 @@ public:
     View *q;
     friend class View;
     Plasma::Corona *corona;
-    QWeakPointer<Plasma::Containment> containment;
-    QWeakPointer<ConfigView> configView;
+    QPointer<Plasma::Containment> containment;
+    QPointer<ConfigView> configView;
 };
 
 ViewPrivate::ViewPrivate(Plasma::Corona *cor, View *view)
@@ -61,7 +61,7 @@ ViewPrivate::~ViewPrivate()
 
 void ViewPrivate::setContainment(Plasma::Containment *cont)
 {
-    if (containment.data() == cont) {
+    if (containment == cont) {
         return;
     }
 
@@ -69,15 +69,15 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     Plasma::Types::FormFactor oldForm = formFactor();
 
     if (containment) {
-        QObject::disconnect(containment.data(), 0, q, 0);
-        QObject *oldGraphicObject = containment.data()->property("_plasma_graphicObject").value<QObject *>();
+        QObject::disconnect(containment, 0, q, 0);
+        QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
 //             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
             //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
-            oldGraphicObject->setParent(containment.data());
+            oldGraphicObject->setParent(containment);
         }
-        containment.data()->reactToScreenChange();
+        containment->reactToScreenChange();
     }
 
     containment = cont;
@@ -103,7 +103,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment.data()->property("_plasma_graphicObject").value<QObject *>());
+    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
 
     if (graphicObject) {
 //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
@@ -127,7 +127,7 @@ Plasma::Types::Location ViewPrivate::location() const
     if (!containment) {
         return Plasma::Types::Desktop;
     }
-    return containment.data()->location();
+    return containment->location();
 }
 
 Plasma::Types::FormFactor ViewPrivate::formFactor() const
@@ -135,14 +135,14 @@ Plasma::Types::FormFactor ViewPrivate::formFactor() const
     if (!containment) {
         return Plasma::Types::Planar;
     }
-    return containment.data()->formFactor();
+    return containment->formFactor();
 }
 
 void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 {
     if (configView) {
-        configView.data()->hide();
-        configView.data()->deleteLater();
+        configView->hide();
+        configView->deleteLater();
     }
 
     if (!applet || !applet->containment()) {
@@ -151,8 +151,8 @@ void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 
     configView = new ConfigView(applet);
 
-    configView.data()->init();
-    configView.data()->show();
+    configView->init();
+    configView->show();
 }
 
 View::View(Plasma::Corona *corona, QWindow *parent)
@@ -200,12 +200,12 @@ void View::setContainment(Plasma::Containment *cont)
 
 Plasma::Containment *View::containment() const
 {
-    return d->containment.data();
+    return d->containment;
 }
 
 void View::setLocation(Plasma::Types::Location location)
 {
-    d->containment.data()->setLocation(location);
+    d->containment->setLocation(location);
 }
 
 Plasma::Types::Location View::location() const
