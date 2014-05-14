@@ -413,9 +413,6 @@ Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
 {
-    QSurfaceFormat format;
-    format.setAlphaBufferSize(8);
-    setFormat(format);
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);

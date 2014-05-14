@@ -159,10 +159,6 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     : QQuickView(parent),
       d(new ViewPrivate(corona, this))
 {
-    QSurfaceFormat format;
-    format.setAlphaBufferSize(8);
-
-    setFormat(format);
     setColor(Qt::transparent);
 
     QObject::connect(screen(), &QScreen::geometryChanged,
