@@ -22,6 +22,7 @@
 #include "dialog.h"
 #include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
+#include "view.h"
 
 #include <QApplication>
 #include <QQuickItem>
@@ -793,7 +794,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = (focusWindow && focusWindow->isActive() && isAncestorOf(focusWindow));
 
-        if (!parentHasFocus && !childHasFocus) {
+        if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
             qDebug() << "DIALOG:  hiding dialog.";
             setVisible(false);
             emit windowDeactivated();
