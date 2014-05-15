@@ -468,9 +468,6 @@ void WindowThumbnail::stopRedirecting()
     }
     xcb_damage_destroy(c, m_damage);
     m_damage = XCB_NONE;
-
-    const uint32_t values[] = {XCB_EVENT_MASK_NO_EVENT};
-    xcb_change_window_attributes(c, m_winId, XCB_CW_EVENT_MASK, values);
 #endif
 }
 
@@ -485,6 +482,9 @@ void WindowThumbnail::startRedirecting()
     }
     xcb_connection_t *c = QX11Info::connection();
 
+    // need to get the window attributes for the existing event mask
+    const auto attribsCookie = xcb_get_window_attributes_unchecked(c, m_winId);
+
     // redirect the window
     xcb_composite_redirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
 
@@ -492,8 +492,14 @@ void WindowThumbnail::startRedirecting()
     m_damage = xcb_generate_id(c);
     xcb_damage_create(c, m_damage, m_winId, XCB_DAMAGE_REPORT_LEVEL_NON_EMPTY);
 
-    const uint32_t values[] = {XCB_EVENT_MASK_STRUCTURE_NOTIFY};
-    xcb_change_window_attributes(c, m_winId, XCB_CW_EVENT_MASK, values);
+    QScopedPointer<xcb_get_window_attributes_reply_t, QScopedPointerPodDeleter> attr(xcb_get_window_attributes_reply(c, attribsCookie, Q_NULLPTR));
+    uint32_t events = XCB_EVENT_MASK_STRUCTURE_NOTIFY;
+    if (!attr.isNull()) {
+        events = events | attr->your_event_mask;
+    }
+    // the event mask will not be removed again. We cannot track whether another component also needs STRUCTURE_NOTIFY (e.g. KWindowSystem).
+    // if we would remove the event mask again, other areas will break.
+    xcb_change_window_attributes(c, m_winId, XCB_CW_EVENT_MASK, &events);
     // force to update the texture
     m_damaged = true;
 #endif
