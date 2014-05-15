@@ -20,8 +20,8 @@
 #include "fadingnode_p.h"
 
 #include <QSGSimpleMaterialShader>
-#include <QtOpenGL/QGLContext>
-#include <QtOpenGL/QGLFunctions>
+#include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 struct FadingMaterialState
 {
