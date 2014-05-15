@@ -782,7 +782,8 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         QWindow *parentWindow = transientParent();
 
         while (parentWindow) {
-            if (parentWindow->isActive()) {
+            if (parentWindow->isActive() &&
+                !(parentWindow->flags() & Qt::WindowDoesNotAcceptFocus)) {
                 parentHasFocus  = true;
 
                 break;
