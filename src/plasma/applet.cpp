@@ -595,6 +595,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
         return;
     }
 
+    d->activationAction->setShortcut(shortcut);
     d->globalShortcutEnabled = true;
     QList<QKeySequence> seqs;
     seqs << shortcut;
