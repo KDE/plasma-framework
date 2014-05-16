@@ -133,8 +133,8 @@ void WallpaperInterface::syncWallpaperPackage()
     }
     m_pkg.setPath(m_wallpaperPlugin);
 
-    m_configLoader->deleteLater();
-    m_configuration->deleteLater();
+    if (m_configLoader) m_configLoader->deleteLater();
+    if (m_configuration) m_configuration->deleteLater();
     m_configLoader = 0;
     m_configuration = 0;
     if (configScheme()) {
