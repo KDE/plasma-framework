@@ -191,7 +191,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 {
     Q_UNUSED(updatePaintNodeData)
 
-    if (m_iconPixmap.isNull()) {
+    if (m_iconPixmap.isNull() || width() == 0 || height() == 0) {
         delete oldNode;
         return Q_NULLPTR;
     }
