@@ -36,6 +36,7 @@ target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURR
 
 target_link_libraries(KF5PlasmaQuick
     PUBLIC
+        Qt5::Gui
         Qt5::Quick
         Qt5::Qml
         KF5::Plasma

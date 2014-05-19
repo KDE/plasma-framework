@@ -58,7 +58,7 @@ public:
 };
 
 PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser) :
-    QApplication(argc, argv)
+    QGuiApplication(argc, argv)
 {
     d = new PluginTestPrivate;
     d->parser = parser;
