@@ -7,6 +7,7 @@ add_library(plasma_dataengine_example_simpleEngine MODULE ${simpleEngine_SRCS})
 kservice_desktop_to_json(plasma_dataengine_example_simpleEngine plasma-dataengine-example-simpleEngine.desktop)
 
 target_link_libraries(plasma_dataengine_example_simpleEngine
+  Qt5::Gui
   KF5::Plasma
   KF5::Service
   KF5::I18n

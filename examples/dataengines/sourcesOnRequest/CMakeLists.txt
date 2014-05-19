@@ -7,6 +7,7 @@ add_library(plasma_dataengine_example_sourcesOnRequest MODULE ${sourcesOnRequest
 kservice_desktop_to_json(plasma_dataengine_example_sourcesOnRequest plasma-dataengine-example-sourcesOnRequest.desktop)
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
+  Qt5::Gui
   KF5::Plasma
   KF5::Service
 )
