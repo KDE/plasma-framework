@@ -115,17 +115,15 @@ PRIVATE
     Qt5::Sql
     Qt5::Svg
     Qt5::DBus
-    #Qt5::Xml
     KF5::Archive
     KF5::GuiAddons #kimagecache
-    #KF5::IconThemes
     KF5::I18n
-    KF5::KIOCore
-    KF5::KIOWidgets
-    KF5::WindowSystem
-    KF5::Declarative
-    KF5::XmlGui
-    KF5::GlobalAccel
+    KF5::KIOCore    #ServiceJob
+    KF5::KIOWidgets  #KRun
+    KF5::WindowSystem #compositingActive
+    KF5::Declarative #runtimePlatform
+    KF5::XmlGui   #KActionCollection
+    KF5::GlobalAccel #Applet::setGlobalShortcut
     ${PLASMA_EXTRA_LIBS}
 )
 
