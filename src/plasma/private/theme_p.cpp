@@ -26,7 +26,6 @@
 #include <QFontDatabase>
 
 #include <kdirwatch.h>
-#include <kiconloader.h>
 #include <kwindoweffects.h>
 
 namespace Plasma

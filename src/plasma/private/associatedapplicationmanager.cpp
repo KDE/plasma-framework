@@ -26,7 +26,6 @@
 
 #include <qstandardpaths.h>
 #include <klocalizedstring.h>
-#include <kiconloader.h>
 
 #if !PLASMA_NO_KIO
 #include <krun.h>

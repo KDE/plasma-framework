@@ -24,7 +24,6 @@
 
 #include <kactioncollection.h>
 #include <QDebug>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
 

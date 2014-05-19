@@ -35,7 +35,6 @@
 #include <kconfiggroup.h>
 #include <QDebug>
 #include <kfilterdev.h>
-#include <kiconeffect.h>
 
 #include "applet.h"
 #include "package.h"
@@ -368,13 +367,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     renderPainter.end();
 
-    // Apply current color scheme if the svg asks for it
-    if (applyColors) {
-        QImage itmp = p.toImage();
-        KIconEffect::colorize(itmp, cacheAndColorsTheme()->color(Theme::BackgroundColor), 1.0);
-        p = p.fromImage(itmp);
-    }
-
     if (cacheRendering) {
         cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
     }
@@ -533,10 +525,7 @@ QMatrix SvgPrivate::matrixForElement(const QString &elementId)
 
 void SvgPrivate::checkColorHints()
 {
-    if (elementRect("hint-apply-color-scheme").isValid()) {
-        applyColors = true;
-        usesColors = true;
-    } else if (elementRect("current-color-scheme").isValid()) {
+    if (elementRect("current-color-scheme").isValid()) {
         applyColors = false;
         usesColors = true;
     } else {

@@ -30,7 +30,6 @@
 
 #include <QDebug>
 #include <QMessageBox>
-#include <kiconloader.h>
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
