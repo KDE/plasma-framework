@@ -39,7 +39,7 @@ public:
 };
 
 DPITest::DPITest(int &argc, char **argv, QCommandLineParser *parser) :
-    QApplication(argc, argv)
+    QGuiApplication(argc, argv)
 {
     d = new DPITestPrivate;
     d->parser = parser;
