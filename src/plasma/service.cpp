@@ -24,7 +24,6 @@
 
 #include <QFile>
 #include <QTimer>
-#include <QQuickItem>
 
 #include <QDebug>
 #include <kservice.h>

@@ -113,7 +113,6 @@ PUBLIC
 PRIVATE
     Qt5::Gui
     Qt5::Sql
-    Qt5::Quick # needed in service.cpp, remove?
     Qt5::Svg
     Qt5::DBus
     Qt5::Xml
