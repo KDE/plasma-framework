@@ -193,6 +193,9 @@ void AppletPrivate::askDestroy()
         box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
         box->open();
 
+        QObject::connect(q, &Applet::immutabilityChanged, [=] () {
+            box->close();
+        });
         QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
         [ = ]() {
             transient = true;
