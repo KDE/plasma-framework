@@ -21,7 +21,7 @@
 #define PLUGINTEST_H
 
 #include <QCoreApplication>
-#include <QApplication>
+#include <QtGui/QGuiApplication>
 
 #include <Plasma/DataEngine>
 
@@ -32,7 +32,7 @@ namespace Plasma
 
 class PluginTestPrivate;
 
-class PluginTest : public QApplication
+class PluginTest : public QGuiApplication
 {
     Q_OBJECT
 

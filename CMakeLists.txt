@@ -14,6 +14,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
+include(KDEFrameworkCompilerSettings)
 
 set(KF5_VERSION "4.99.0") # handled by release scripts
 set(KF5_DEP_VERSION "4.99.0") # handled by release scripts

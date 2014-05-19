@@ -21,7 +21,7 @@
 #ifndef PLASMA_THEME_H
 #define PLASMA_THEME_H
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QFont>
 #include <QtCore/QObject>
 
@@ -485,7 +485,7 @@ public:
      * @return The size of the letter "M" as rendered on the screen with the given font.
      * @since 5.0
      */
-    Q_INVOKABLE QSizeF mSize(const QFont &font = QApplication::font()) const;
+    Q_INVOKABLE QSizeF mSize(const QFont &font = QGuiApplication::font()) const;
 
     QString backgroundPath(const QString &image) const;
 

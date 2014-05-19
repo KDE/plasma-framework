@@ -109,9 +109,9 @@ endif()
 
 target_link_libraries(KF5Plasma
 PUBLIC
-    KF5::ConfigWidgets # KConfigSkeleton
     KF5::Service # For kplugininfo.h and kservice.h
 PRIVATE
+    Qt5::Gui
     Qt5::Sql
     Qt5::Quick # needed in service.cpp, remove?
     Qt5::Svg

@@ -21,7 +21,7 @@
 #define PLUGINTEST_H
 
 #include <QCoreApplication>
-#include <QApplication>
+#include <QGuiApplication>
 
 class QCommandLineParser;
 
@@ -30,7 +30,7 @@ namespace Plasma
 
 class DPITestPrivate;
 
-class DPITest : public QApplication
+class DPITest : public QGuiApplication
 {
     Q_OBJECT
 

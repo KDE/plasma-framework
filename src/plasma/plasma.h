@@ -22,7 +22,7 @@
 
 /** @header plasma/plasma.h <Plasma/Plasma> */
 
-#include <QPainterPath>
+#include <QObject>
 
 #include <plasma/plasma_export.h>
 

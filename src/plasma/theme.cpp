@@ -464,7 +464,7 @@ KPluginInfo Theme::pluginInfo() const
 
 QFont Theme::defaultFont() const
 {
-    return QApplication::font();
+    return QGuiApplication::font();
 }
 
 QFont Theme::smallestFont() const
