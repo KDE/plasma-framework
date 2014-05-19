@@ -174,6 +174,7 @@ private Q_SLOTS:
     void settingsChanged();
 
 private:
+    bool m_tooltipsEnabledGlobally;
     bool m_containsMouse;
     Plasma::Types::Location m_location;
     QWeakPointer<QQuickItem> m_mainItem;

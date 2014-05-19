@@ -35,12 +35,16 @@ int ToolTip::s_dialogUsers  = 0;
 
 ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
+      m_tooltipsEnabledGlobally(false),
       m_containsMouse(false),
       m_location(Plasma::Types::Floating),
       m_active(true),
       m_interactive(false),
       m_usingDialog(false)
 {
+    setAcceptHoverEvents(true);
+    setFiltersChildMouseEvents(true);
+
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, this, &ToolTip::showToolTip);
@@ -71,10 +75,7 @@ void ToolTip::settingsChanged()
     KConfigGroup cg(&config, "PlasmaToolTips");
 
     m_interval = cg.readEntry("Delay", 700);
-    bool enabled = m_interval > 0;
-
-    setAcceptHoverEvents(enabled);
-    setFiltersChildMouseEvents(enabled);
+    m_tooltipsEnabledGlobally = (m_interval > 0);
 }
 
 QQuickItem *ToolTip::mainItem() const
@@ -306,7 +307,11 @@ void ToolTip::setContainsMouse(bool contains)
 void ToolTip::hoverEnterEvent(QHoverEvent *event)
 {
     setContainsMouse(true);
-    //m_showTimer->stop();
+
+    if (!m_tooltipsEnabledGlobally) {
+        return;
+    }
+
     if (tooltipDialogInstance()->isVisible()) {
         // We signal the tooltipmanager that we're "potentially interested,
         // and ask to keep it open for a bit, so other items get the chance
