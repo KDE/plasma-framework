@@ -196,6 +196,9 @@ void AppletPrivate::askDestroy()
         QObject::connect(q, &Applet::immutabilityChanged, [=] () {
             box->close();
         });
+        QObject::connect(q, &QObject::destroyed, [=] () {
+            box->close();
+        });
         QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
         [ = ]() {
             transient = true;
