@@ -80,7 +80,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     // turn off caching so we don't accidently trigger unnecessary disk activity at this point
     bool useCache = d->cacheTheme;
     d->cacheTheme = false;
-    d->setThemeName(themeName, true);
+    d->setThemeName(themeName, false);
     d->cacheTheme = useCache;
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
