@@ -724,10 +724,10 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     const bool overlayAvailable = !prefix.startsWith(QLatin1String("mask-")) && q->hasElement(prefix % "overlay");
     QPixmap overlay;
     if (q->isUsingRenderingCache()) {
-        frameCached = theme->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
+        frameCached = q->theme()->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
 
         if (overlayAvailable) {
-            overlayCached = theme->findInCache("overlay_" % id, overlay) && !overlay.isNull();
+            overlayCached = q->theme()->findInCache("overlay_" % id, overlay) && !overlay.isNull();
         }
     }
 
@@ -996,11 +996,11 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
 
     //qDebug()<<"Saving to cache frame"<<id;
 
-    theme->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
+    q->theme()->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
 
     if (!overlay.isNull()) {
         //insert overlay
-        theme->insertIntoCache("overlay_" % id, overlay, QString::number((qint64)q, 16) % prefixToSave % "overlay");
+        q->theme()->insertIntoCache("overlay_" % id, overlay, QString::number((qint64)q, 16) % prefixToSave % "overlay");
     }
 }
 
