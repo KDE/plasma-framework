@@ -840,7 +840,7 @@ void Svg::setTheme(Plasma::Theme *theme)
 
 Theme *Svg::theme() const
 {
-    return d->theme.data();
+    return d->actualTheme();
 }
 
 } // Plasma namespace
