@@ -23,7 +23,6 @@
 #define PLASMA_APPLET_H
 
 #include <QObject>
-#include <QIcon>
 #include <QKeySequence>
 #include <QUrl>
 
@@ -33,8 +32,6 @@
 #include <plasma/plasma.h>
 #include <plasma/version.h>
 #include <plasma/framesvg.h>
-
-class QWidget;
 
 class KActionCollection;
 class KConfigLoader;
