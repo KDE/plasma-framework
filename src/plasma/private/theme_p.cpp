@@ -63,6 +63,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       isDefault(true),
       useGlobal(true),
       hasWallpapers(false),
+      fixedName(false),
       backgroundContrastEnabled(true)
 {
     ThemeConfig config;
@@ -456,6 +457,9 @@ void ThemePrivate::settingsFileChanged(const QString &file)
 
 void ThemePrivate::settingsChanged()
 {
+    if (fixedName) {
+        return;
+    }
     //qDebug() << "Settings Changed!";
     KConfigGroup cg = config();
     setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
@@ -575,7 +579,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     // the system colors.
     bool realTheme = theme != systemColorsTheme;
     if (realTheme) {
-        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Char('/'));
+        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % "/metadata.desktop");
+
         if (themePath.isEmpty() && themeName.isEmpty()) {
             themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
 

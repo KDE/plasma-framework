@@ -81,6 +81,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->cacheTheme = false;
     d->setThemeName(themeName, false);
     d->cacheTheme = useCache;
+    d->fixedName = true;
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                 d, SLOT(onAppExitCleanup()));
