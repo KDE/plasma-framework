@@ -94,6 +94,8 @@ Item {
      */
     property real minimumHeight: Math.max(units.iconSizes.small, label.paintedHeight) + delegate.margins.top + delegate.margins.top
 
+    LayoutMirroring.enabled: (Qt.application.layoutDirection === Qt.RightToLeft)
+    LayoutMirroring.childrenInherit: true
     implicitWidth: {
         if (label.text.length == 0) {
             height;

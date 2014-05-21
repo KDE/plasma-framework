@@ -114,6 +114,8 @@ Item {
         }
     }
 
+    LayoutMirroring.enabled: (Qt.application.layoutDirection === Qt.RightToLeft)
+    LayoutMirroring.childrenInherit: true
     implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, minimumHeight))
 
     // TODO: needs to define if there will be specific graphics for
