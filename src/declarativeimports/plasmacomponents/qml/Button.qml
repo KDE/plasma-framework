@@ -94,12 +94,12 @@ Item {
     /**
      * Smallest width this button can be to show all the contents
      */
-    property real minimumWidth: icon.width + label.paintedWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumWidth: icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
 
     /**
      * Smallest height this button can be to show all the contents
      */
-    property real minimumHeight: Math.max(units.iconSizes.small, label.paintedHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+    property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
     /**
      * This signal is emitted when the button is clicked.
@@ -243,7 +243,6 @@ Item {
 
         Label {
             id: label
-
             width: parent.width - icon.width - parent.spacing
             height: parent.height
             color: theme.buttonTextColor
@@ -251,6 +250,8 @@ Item {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
+
+        
     }
 
     MouseArea {
