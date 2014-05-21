@@ -249,6 +249,7 @@ Item {
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
         }
     }
 
