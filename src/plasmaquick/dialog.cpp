@@ -359,6 +359,10 @@ void DialogPrivate::syncMainItemToSize()
         mainItem.data()->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
         mainItem.data()->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
     }
+
+    if (q->visualParent()) {
+        q->setPosition(q->popupPosition(q->visualParent(), q->size()));
+    }
 }
 
 void DialogPrivate::syncToMainItemSize()
