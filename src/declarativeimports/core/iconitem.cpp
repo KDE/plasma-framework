@@ -333,7 +333,7 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
                                const QRectF &oldGeometry)
 {
     if (newGeometry.size() != oldGeometry.size()) {
-        m_sizechanged = true;
+        m_sizeChanged = true;
         update();
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
             if (!m_loadPixmapTimer.isActive()) {
