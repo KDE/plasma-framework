@@ -368,7 +368,6 @@ Item {
 
             color: mouse.containsMouse || !button.flat ? theme.buttonTextColor : theme.textColor
             Behavior on color { ColorAnimation { duration: units.shortDuration * 2 } }
-            elide: Text.ElideRight
 
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
