@@ -258,15 +258,19 @@ void IconItem::animationFinished()
 
 int IconItem::adjustedSize(int size)
 {
-    //FIXME: Heuristic: allow 24x24 for icons/ that are in the systray(ugly)
-    if (m_svgIcon && m_svgIcon->imagePath().contains("icons/") &&
-            size > KIconLoader::SizeSmallMedium &&
-            size < KIconLoader::SizeMedium) {
-        return 24;
+    if (m_svgIcon) {
+        m_svgIcon->resize();
+    }
 
-        //if size is less than 16, leave as is
+    if (m_svgIcon &&
+        size > KIconLoader::SizeSmallMedium &&
+        size < KIconLoader::SizeMedium &&
+        m_svgIcon->elementSize(m_source.toString()).width() > KIconLoader::SizeSmallMedium &&
+        m_svgIcon->elementSize(m_source.toString()).width() < KIconLoader::SizeMedium) {
+        return m_svgIcon->elementSize(m_source.toString()).width();
     } else if (size < KIconLoader::SizeSmall) {
         //do nothing
+        return size;
     } else if (size < KIconLoader::SizeSmallMedium) {
         return KIconLoader::SizeSmall;
     } else if (size < KIconLoader::SizeMedium) {
