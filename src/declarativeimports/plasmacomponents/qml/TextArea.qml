@@ -365,7 +365,7 @@ Item {
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
-            color: theme.buttonTextColor
+            color: theme.viewTextColor
             selectByMouse: verticalScroll.interactive
             renderType: Text.NativeRendering
 
@@ -404,7 +404,7 @@ Item {
                 anchors.fill: parent
                 text: textArea.placeholderText
                 visible: textEdit.text == "" && !textArea.activeFocus
-                color: theme.buttonTextColor
+                color: theme.viewTextColor
                 opacity: 0.5
             }
         }
