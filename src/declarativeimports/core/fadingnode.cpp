@@ -37,7 +37,8 @@ public:
     virtual const char* fragmentShader() const;
     virtual const char* vertexShader() const;
 
-    virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState);
+    using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
+    virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
     virtual QList<QByteArray> attributes() const;
 
     virtual void initialize();
@@ -73,8 +74,8 @@ const char* FadingMaterialShader::fragmentShader() const
     "void main() {"
         "lowp vec4 tex1 = texture2D(u_target, v_coord);"
         "lowp vec4 tex2 = texture2D(u_src, v_coord);"
-        "gl_FragColor.rgb = mix(tex1.rgb, tex2.rgb, u_transitionProgress);"
-        "gl_FragColor.a = mix(tex1.a, tex2.a, u_transitionProgress) * qt_Opacity;"
+        "gl_FragColor.rgb = mix(tex2.rgb, tex1.rgb, u_transitionProgress);"
+        "gl_FragColor.a = mix(tex2.a, tex1.a, u_transitionProgress) * qt_Opacity;"
     "}";
 }
 
@@ -83,14 +84,14 @@ void FadingMaterialShader::updateState(const FadingMaterialState* newState, cons
 {
     if (!oldState || oldState->source != newState->source) {
         glFuncs->glActiveTexture(GL_TEXTURE1);
-        newState->target->bind();
+        newState->source->bind();
         // reset the active texture back to 0 after we changed it to something else
         glFuncs->glActiveTexture(GL_TEXTURE0);
     }
 
     if (!oldState || oldState->target != newState->target) {
         glFuncs->glActiveTexture(GL_TEXTURE0);
-        newState->source->bind();
+        newState->target->bind();
     }
 
     if (!oldState || oldState->progress != newState->progress) {

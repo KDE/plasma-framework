@@ -45,9 +45,7 @@ IconItem::IconItem(QQuickItem *parent)
 {
     m_loadPixmapTimer.setSingleShot(true);
     m_loadPixmapTimer.setInterval(150);
-    connect(&m_loadPixmapTimer, &QTimer::timeout, [ = ]() {
-        loadPixmap();
-    });
+    connect(&m_loadPixmapTimer, &QTimer::timeout, this, &IconItem::loadPixmap);
 
     m_animation = new QPropertyAnimation(this);
     connect(m_animation, SIGNAL(valueChanged(QVariant)),
@@ -217,7 +215,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
     }
 
     if (m_animation->state() == QAbstractAnimation::Running) {
-        FadingNode *animatingNode = static_cast<FadingNode*>(oldNode);
+        FadingNode *animatingNode = dynamic_cast<FadingNode*>(oldNode);
 
         if (!animatingNode || m_textureChanged) {
             delete oldNode;
@@ -242,7 +240,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 
         return animatingNode;
     } else {
-        Plasma::SVGTextureNode *textureNode = static_cast<Plasma::SVGTextureNode*>(oldNode);
+        Plasma::SVGTextureNode *textureNode = dynamic_cast<Plasma::SVGTextureNode*>(oldNode);
 
         if (!textureNode || m_textureChanged) {
             delete oldNode;
@@ -274,6 +272,7 @@ void IconItem::animationFinished()
 {
     m_oldIconPixmap = QPixmap();
     m_textureChanged = true;
+    update();
 }
 
 int IconItem::adjustedSize(int size)
