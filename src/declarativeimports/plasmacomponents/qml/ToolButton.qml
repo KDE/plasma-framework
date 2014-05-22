@@ -20,6 +20,8 @@
 
 import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Controls.Private 1.0
+import QtQuick.Controls 1.0
 import "private" as Private
 
 /**
@@ -55,6 +57,9 @@ Item {
      * The text of the button
      */
     property alias text: label.text
+
+    /*! This property holds the button tooltip. */
+    property string tooltip
 
     /**
      * type:variant
@@ -386,6 +391,7 @@ Item {
         onCanceled: {
             internal.userPressed = false
             delegate.shadowState = "shadow"
+            Tooltip.hideText()
         }
         onClicked: internal.clickButton()
 
@@ -406,6 +412,13 @@ Item {
                 }
             }
             button.z -= 2
+            Tooltip.hideText()
+        }
+
+        Timer {
+            interval: 1000
+            running: mouse.containsMouse && !pressed && tooltip.length
+            onTriggered: Tooltip.showText(mouse, Qt.point(mouse.mouseX, mouse.mouseY), tooltip)
         }
     }
 }

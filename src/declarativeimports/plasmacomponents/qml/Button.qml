@@ -30,6 +30,8 @@
  */
 import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Controls.Private 1.0
+import QtQuick.Controls 1.0
 import "private" as Private
 
 
@@ -69,6 +71,9 @@ Item {
      * This property holds the text label for the button.
      */
     property alias text: label.text
+
+    /*! This property holds the button tooltip. */
+    property string tooltip
 
     /**
      * type:string
@@ -261,7 +266,17 @@ Item {
         hoverEnabled: true
         onPressed: internal.userPressed = true
         onReleased: internal.userPressed = false
-        onCanceled: internal.userPressed = false
+        onCanceled: {
+            internal.userPressed = false
+            Tooltip.hideText()
+        }
         onClicked: internal.clickButton()
+        onExited: Tooltip.hideText()
+
+        Timer {
+            interval: 1000
+            running: mouse.containsMouse && !pressed && tooltip.length
+            onTriggered: Tooltip.showText(mouse, Qt.point(mouse.mouseX, mouse.mouseY), tooltip)
+        }
     }
 }
