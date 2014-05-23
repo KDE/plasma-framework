@@ -113,7 +113,7 @@ bool Package::isValid() const
         }
 
         if (failed) {
-            qWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key() << "for package" << path();
+            //qWarning() << "Could not find required" << (it.value().directory ? "directory" : "file") << it.key() << "for package" << path();
             d->valid = false;
             break;
         }
@@ -246,7 +246,7 @@ QString PackagePrivate::unpack(const QString &filePath)
                mimeType.inherits("application/x-xz") || mimeType.inherits("application/x-lzma")) {
         archive = new KTar(filePath);
     } else {
-        qWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
+        //qWarning() << "Could not open package file, unsupported archive format:" << filePath << mimeType.name();
     }
     QString tempRoot;
     if (archive && archive->open(QIODevice::ReadOnly)) {
@@ -270,7 +270,7 @@ QString PackagePrivate::unpack(const QString &filePath)
 
         createPackageMetadata(tempRoot);
     } else {
-        qWarning() << "Could not open package file:" << path;
+        //qWarning() << "Could not open package file:" << path;
     }
 
     delete archive;
