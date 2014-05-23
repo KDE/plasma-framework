@@ -103,10 +103,19 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         const QString &filename = components.join("/");
 
         //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
-        return QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+
+        QUrl ret = QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+
+        if (ret.path().isEmpty()) {
+            return path;
+        }
+        return ret;
 
         //forbid to load random absolute paths
     } else {
+        if (m_package.allowExternalPaths()) {
+            return path;
+        }
         foreach (const QString &allowed, m_allowedPaths) {
             //It's a private import
             if (path.path().contains("org/kde/plasma/private")) {

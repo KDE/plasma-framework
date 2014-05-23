@@ -24,8 +24,10 @@
 #include <QQmlContext>
 #include <QTimer>
 #include <QScreen>
+#include <QQmlEngine>
 
 #include "plasma/pluginloader.h"
+#include <packageurlinterceptor.h>
 
 namespace PlasmaQuick
 {
@@ -164,7 +166,10 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     QObject::connect(screen(), &QScreen::geometryChanged,
                      this, &View::screenGeometryChanged);
 
-    if (!corona->package().isValid()) {
+    if (corona->package().isValid()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine(), corona->package());
+        engine()->setUrlInterceptor(interceptor);
+    } else {
         qWarning() << "Invalid home screen package";
     }
 
