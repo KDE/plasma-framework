@@ -167,7 +167,10 @@ int Units::gridUnit() const
 
 void Units::themeChanged()
 {
-    const int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+    if (gridUnit % 2 != 0) {
+        gridUnit++;
+    }
     if (gridUnit != m_gridUnit) {
         m_gridUnit = gridUnit;
         emit gridUnitChanged();
