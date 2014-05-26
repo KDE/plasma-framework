@@ -93,6 +93,40 @@ Item {
         return Qt.formatDate(d, "dddd dd MMM yyyy");
     }
 
+    PlasmaExtras.Heading {
+        id: monthHeading
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        level: 1
+        text: root.startDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
+        elide: Text.ElideRight
+
+        Loader {
+            id: menuLoader
+            property QtObject monthCalendar: monthView.calendar
+        }
+        MouseArea {
+            id: monthMouse
+            width: monthHeading.paintedWidth
+            anchors {
+                left: parent.left
+                top: parent.top
+                bottom: parent.bottom
+            }
+            onClicked: {
+                if (menuLoader.source == "") {
+                    menuLoader.source = "MonthMenu.qml"
+                }
+                menuLoader.item.open(0, height);
+            }
+        }
+    }
+
     Calendar {
         id: monthCalendar
 
@@ -106,7 +140,10 @@ Item {
         id: calendarGrid
 
         anchors {
-            fill: parent
+            top: monthHeading.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
             leftMargin: borderWidth
         }
 
