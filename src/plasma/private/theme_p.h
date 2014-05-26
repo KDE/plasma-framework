@@ -94,6 +94,7 @@ public Q_SLOTS:
     void onAppExitCleanup();
     void notifyOfChanged();
     void settingsChanged(bool emitChanges);
+    void saveSvgElementsCache();
 
 Q_SIGNALS:
     void themeChanged();
@@ -134,7 +135,8 @@ public:
     QHash<QString, QString> idsToCache;
     QHash<styles, QString> cachedStyleSheets;
     QHash<QString, QString> discoveries;
-    QTimer *saveTimer;
+    QTimer *pixmapSaveTimer;
+    QTimer *rectSaveTimer;
     QTimer *updateNotificationTimer;
     unsigned cacheSize;
     CacheTypes cachesToDiscard;

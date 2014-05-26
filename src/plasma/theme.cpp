@@ -91,17 +91,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
 
 Theme::~Theme()
 {
-    if (d->svgElementsCache) {
-        QHashIterator<QString, QSet<QString> > it(d->invalidElements);
-        while (it.hasNext()) {
-            it.next();
-            KConfigGroup imageGroup(d->svgElementsCache, it.key());
-            imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
-        }
-
-        //The application is probably dying, last occasion to write to disk
-        d->svgElementsCache->sync();
-    }
+    d->saveSvgElementsCache();
 
     if (d == ThemePrivate::globalTheme) {
         if (!ThemePrivate::globalThemeRefCount.deref()) {
@@ -346,8 +336,8 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QStrin
         d->keysToCache.insert(key, id);
         d->idsToCache.insert(id, key);
 
-        //always start timer in d->saveTimer's thread
-        QMetaObject::invokeMethod(d->saveTimer, "start", Qt::QueuedConnection);
+        //always start timer in d->pixmapSaveTimer's thread
+        QMetaObject::invokeMethod(d->pixmapSaveTimer, "start", Qt::QueuedConnection);
     }
 }
 
@@ -428,6 +418,8 @@ void Theme::insertIntoRectsCache(const QString &image, const QString &element, c
             it.value().insert(element);
         }
     }
+
+    d->rectSaveTimer->start();
 }
 
 void Theme::invalidateRectsCache(const QString &image)

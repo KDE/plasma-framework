@@ -69,10 +69,16 @@ ThemePrivate::ThemePrivate(QObject *parent)
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
 
-    saveTimer = new QTimer(this);
-    saveTimer->setSingleShot(true);
-    saveTimer->setInterval(600);
-    QObject::connect(saveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
+    pixmapSaveTimer = new QTimer(this);
+    pixmapSaveTimer->setSingleShot(true);
+    pixmapSaveTimer->setInterval(600);
+    QObject::connect(pixmapSaveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
+
+    rectSaveTimer = new QTimer(this);
+    rectSaveTimer->setSingleShot(true);
+    //2 minutes
+    rectSaveTimer->setInterval(2 * 60 * 1000);
+    QObject::connect(rectSaveTimer, SIGNAL(timeout()), this, SLOT(saveSvgElementsCache()));
 
     updateNotificationTimer = new QTimer(this);
     updateNotificationTimer->setSingleShot(true);
@@ -290,7 +296,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
 {
     if (caches & PixmapCache) {
         pixmapsToCache.clear();
-        saveTimer->stop();
+        pixmapSaveTimer->stop();
         if (pixmapCache) {
             pixmapCache->clear();
         }
@@ -463,6 +469,21 @@ void ThemePrivate::settingsChanged(bool emitChanges)
     //qDebug() << "Settings Changed!";
     KConfigGroup cg = config();
     setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false, emitChanges);
+}
+
+void ThemePrivate::saveSvgElementsCache()
+{
+    if (svgElementsCache) {
+        QHashIterator<QString, QSet<QString> > it(invalidElements);
+        while (it.hasNext()) {
+            it.next();
+            KConfigGroup imageGroup(svgElementsCache, it.key());
+            imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
+        }
+
+        //Pretty drastic, but this is executed only very rarely
+        svgElementsCache->sync();
+    }
 }
 
 QColor ThemePrivate::color(Theme::ColorRole role) const
