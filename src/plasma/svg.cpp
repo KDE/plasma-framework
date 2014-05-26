@@ -169,12 +169,17 @@ QString SvgPrivate::cachePath(const QString &path, const QSize &size)
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
 {
-    const bool isThemed = !QDir::isAbsolutePath(imagePath);
+    QString actualPath = imagePath;
+    if (imagePath.startsWith("file://")) {
+        //length of file://
+        actualPath = actualPath.mid(7);
+    }
+    const bool isThemed = !QDir::isAbsolutePath(actualPath);
 
     // lets check to see if we're already set to this file
     if (isThemed == themed &&
-            ((themed && themePath == imagePath) ||
-             (!themed && path == imagePath))) {
+            ((themed && themePath == actualPath) ||
+             (!themed && path == actualPath))) {
         return false;
     }
 
@@ -198,12 +203,12 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     elementsWithSizeHints.clear();
 
     if (themed) {
-        themePath = imagePath;
+        themePath = actualPath;
         themeFailed = false;
         QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-    } else if (QFile::exists(imagePath)) {
+    } else if (QFile::exists(actualPath)) {
         QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
-        path = imagePath;
+        path = actualPath;
     } else {
 #ifndef NDEBUG
         // qDebug() << "file '" << path << "' does not exist!";
@@ -215,7 +220,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
-    if (themed || QFile::exists(imagePath)) {
+    if (themed || QFile::exists(actualPath)) {
         QRectF rect;
         if (cacheAndColorsTheme()->findInRectsCache(path, "_Natural", rect)) {
             naturalSize = rect.size();
@@ -229,7 +234,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     }
 
     if (!themed) {
-        QFile f(imagePath);
+        QFile f(actualPath);
         QFileInfo info(f);
         lastModified = info.lastModified().toTime_t();
     }
