@@ -22,12 +22,7 @@
 #ifndef PLASMA_CONTAINMENT_H
 #define PLASMA_CONTAINMENT_H
 
-#include <QObject>
-#include <QtWidgets/QWidget>
-
-#include <kplugininfo.h>
 #include <ksharedconfig.h>
-
 #include <plasma/applet.h>
 
 namespace Plasma
