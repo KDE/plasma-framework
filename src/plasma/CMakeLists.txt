@@ -110,8 +110,8 @@ endif()
 target_link_libraries(KF5Plasma
 PUBLIC
     KF5::Service # For kplugininfo.h and kservice.h
-PRIVATE
     Qt5::Gui
+PRIVATE
     Qt5::Sql
     Qt5::Svg
     Qt5::DBus
