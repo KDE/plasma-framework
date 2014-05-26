@@ -52,6 +52,7 @@ Item {
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
+    property date today
 
     anchors.margins: borderWidth
 
@@ -98,7 +99,7 @@ Item {
         days: 7
         weeks: 6
         firstDayOfWeek: Qt.locale().firstDayOfWeek
-        startDate: today();
+        startDate: today;
     }
 
     DaysCalendar {

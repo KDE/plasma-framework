@@ -27,7 +27,7 @@ Item {
     height: root.cellHeight
 
     property real borderOpacity: daysCalendar.borderOpacity
-    property bool today: isToday(new Date(yearNumber, monthNumber - 1, dayNumber))
+    property bool today: root.today.toDateString() == new Date(yearNumber, monthNumber - 1, dayNumber).toDateString() // for some reason the comparison doesn't work without toDateString()
 
     onHeightChanged: {
         // this is needed here as the text is first rendered, counting with the default root.cellHeight

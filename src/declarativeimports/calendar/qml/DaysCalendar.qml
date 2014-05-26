@@ -92,6 +92,14 @@ Item {
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
 
+        property QtObject selectedDate: root.date
+        onSelectedDateChanged: {
+            // clear the selection if the root.date is null
+            if (calendarDays.selectedDate == null) {
+                calendarDays.selectedItem = null;
+            }
+        }
+
         Repeater {
             id: days
             model: monthCalendar.days
