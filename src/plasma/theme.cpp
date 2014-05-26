@@ -55,7 +55,7 @@ Theme::Theme(QObject *parent)
     ThemePrivate::globalThemeRefCount.ref();
     d = ThemePrivate::globalTheme;
 
-    d->settingsChanged();
+    d->settingsChanged(false);
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
                 d, SLOT(onAppExitCleanup()));
@@ -79,7 +79,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     // turn off caching so we don't accidently trigger unnecessary disk activity at this point
     bool useCache = d->cacheTheme;
     d->cacheTheme = false;
-    d->setThemeName(themeName, false);
+    d->setThemeName(themeName, false, false);
     d->cacheTheme = useCache;
     d->fixedName = true;
     if (QCoreApplication::instance()) {
@@ -144,7 +144,7 @@ void Theme::setThemeName(const QString &themeName)
         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
 
-    d->setThemeName(themeName, true);
+    d->setThemeName(themeName, true, true);
 }
 
 QString Theme::themeName() const
@@ -293,7 +293,7 @@ void Theme::setUseGlobalSettings(bool useGlobal)
     d->useGlobal = useGlobal;
     d->cfg = KConfigGroup();
     d->themeName.clear();
-    d->settingsChanged();
+    d->settingsChanged(true);
 }
 
 bool Theme::useGlobalSettings() const

@@ -451,18 +451,18 @@ void ThemePrivate::settingsFileChanged(const QString &file)
         }
     } else if (file.endsWith(themeRcFile)) {
         config().config()->reparseConfiguration();
-        settingsChanged();
+        settingsChanged(true);
     }
 }
 
-void ThemePrivate::settingsChanged()
+void ThemePrivate::settingsChanged(bool emitChanges)
 {
     if (fixedName) {
         return;
     }
     //qDebug() << "Settings Changed!";
     KConfigGroup cg = config();
-    setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false);
+    setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false, emitChanges);
 }
 
 QColor ThemePrivate::color(Theme::ColorRole role) const
@@ -563,7 +563,7 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     }
 }
 
-void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings)
+void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings, bool emitChanged)
 {
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
@@ -668,7 +668,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    scheduleThemeChangeNotification(SvgElementsCache);
+    if(emitChanged)
+        scheduleThemeChangeNotification(SvgElementsCache);
 }
 
 bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)

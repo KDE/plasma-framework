@@ -77,7 +77,7 @@ public:
     void discardCache(CacheTypes caches);
     void scheduleThemeChangeNotification(CacheTypes caches);
     bool useCache();
-    void setThemeName(const QString &themeName, bool writeSettings);
+    void setThemeName(const QString &themeName, bool writeSettings, bool emitChanged);
     void processWallpaperSettings(KConfigBase *metadata);
     void processContrastSettings(KConfigBase *metadata);
 
@@ -93,7 +93,7 @@ public Q_SLOTS:
     void scheduledCacheUpdate();
     void onAppExitCleanup();
     void notifyOfChanged();
-    void settingsChanged();
+    void settingsChanged(bool emitChanges);
 
 Q_SIGNALS:
     void themeChanged();
