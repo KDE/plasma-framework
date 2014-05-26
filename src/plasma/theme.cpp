@@ -98,6 +98,9 @@ Theme::~Theme()
             KConfigGroup imageGroup(d->svgElementsCache, it.key());
             imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
         }
+
+        //The application is probably dying, last occasion to write to disk
+        d->svgElementsCache->sync();
     }
 
     if (d == ThemePrivate::globalTheme) {

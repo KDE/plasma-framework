@@ -173,7 +173,7 @@ bool ThemePrivate::useCache()
             }
 
             // now we check for, and remove if necessary, old caches
-            foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, cacheFileBase)) {
+            foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::GenericCacheLocation, cacheFileBase)) {
                 if (currentCacheFileName.isEmpty() ||
                         !file.endsWith(currentCacheFileName)) {
                     QFile::remove(file);
@@ -192,11 +192,11 @@ bool ThemePrivate::useCache()
             // the cache should be dropped; we need a way to detect system color change when the
             // application is not running.
             // check for expired cache
-            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + '/' + cacheFile;
+            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + cacheFile + ".kcache";
             if (!cacheFilePath.isEmpty()) {
                 const QFileInfo cacheFileInfo(cacheFilePath);
                 const QFileInfo metadataFileInfo(themeMetadataPath);
-                cachesTooOld = cacheFileInfo.lastModified().toTime_t() > metadataFileInfo.lastModified().toTime_t();
+                cachesTooOld = cacheFileInfo.lastModified().toTime_t() < metadataFileInfo.lastModified().toTime_t();
             }
         }
 
@@ -216,13 +216,13 @@ bool ThemePrivate::useCache()
         }
 
         // now we check for (and remove) old caches
-        foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::CacheLocation, svgElementsFileNameBase + QLatin1Char('*'))) {
+        foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::GenericCacheLocation, svgElementsFileNameBase + QLatin1Char('*'))) {
             if (cachesTooOld || !file.endsWith(svgElementsFileName)) {
                 QFile::remove(file);
             }
         }
 
-        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + '/' + svgElementsFileName;
+        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + svgElementsFileName;
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
     }
 
@@ -668,8 +668,9 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    if(emitChanged)
+    if(emitChanged) {
         scheduleThemeChangeNotification(SvgElementsCache);
+    }
 }
 
 bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)

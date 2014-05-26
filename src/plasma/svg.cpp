@@ -204,7 +204,8 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     if (themed) {
         themePath = actualPath;
-        themeFailed = false;
+        path = actualTheme()->imagePath(themePath);
+        themeFailed = path.isEmpty();
         QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     } else if (QFile::exists(actualPath)) {
         QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
@@ -220,8 +221,9 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
-    if (themed || QFile::exists(actualPath)) {
+    if ((themed && QFile::exists(path)) || QFile::exists(actualPath)) {
         QRectF rect;
+
         if (cacheAndColorsTheme()->findInRectsCache(path, "_Natural", rect)) {
             naturalSize = rect.size();
         } else {
@@ -482,6 +484,10 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
         }
     }
 
+    if (path.isEmpty()) {
+        return QRectF();
+    }
+
     QString id = cacheId(elementId);
 
     if (localRectCache.contains(id)) {
@@ -489,7 +495,12 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     }
 
     QRectF rect;
-    if (cacheAndColorsTheme()->findInRectsCache(path, id, rect)) {
+    bool found = cacheAndColorsTheme()->findInRectsCache(path, id, rect);
+
+    //This is a corner case where we are *sure* the element is not valid
+    if (found && rect == QRectF()) {
+        return rect;
+    } else if (found) {
         localRectCache.insert(id, rect);
     } else {
         rect = findAndCacheElementRect(elementId);
@@ -519,6 +530,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
                          elementRect.width() * dx * devicePixelRatio, elementRect.height() * dy * devicePixelRatio);
 
     cacheAndColorsTheme()->insertIntoRectsCache(path, id, elementRect);
+
     return elementRect;
 }
 
@@ -777,6 +789,16 @@ bool Svg::hasElement(const QString &elementId) const
 bool Svg::isValid() const
 {
     if (d->path.isNull() && d->themePath.isNull()) {
+        return false;
+    }
+
+    //try very hard to avoid creation of a parser
+    QRectF rect;
+    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, "_Natural", rect)) {
+        return true;
+    }
+
+    if (!QFile::exists(d->path)) {
         return false;
     }
 
