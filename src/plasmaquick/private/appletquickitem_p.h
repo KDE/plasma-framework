@@ -21,6 +21,7 @@
 #define APPLETQUICKITEM_P_H
 
 #include <QQmlComponent>
+#include <qquickitem.h>
 
 //
 //  W A R N I N G
@@ -53,9 +54,9 @@ class AppletQuickItemPrivate
 public:
     AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);
 
-    QObject *createCompactRepresentationItem();
-    QObject *createFullRepresentationItem();
-    QObject *createCompactRepresentationExpanderItem();
+    QQuickItem *createCompactRepresentationItem();
+    QQuickItem *createFullRepresentationItem();
+    QQuickItem *createCompactRepresentationExpanderItem();
 
     //look into item, and return the Layout attached property, if found
     void connectLayoutAttached(QObject *item);
@@ -82,10 +83,10 @@ public:
     QWeakPointer<QQmlComponent> preferredRepresentation;
     QWeakPointer<QQmlComponent> compactRepresentationExpander;
 
-    QWeakPointer<QObject> compactRepresentationItem;
-    QWeakPointer<QObject> fullRepresentationItem;
-    QWeakPointer<QObject> compactRepresentationExpanderItem;
-    QWeakPointer<QObject> currentRepresentationItem;
+    QWeakPointer<QQuickItem> compactRepresentationItem;
+    QWeakPointer<QQuickItem> fullRepresentationItem;
+    QWeakPointer<QQuickItem> compactRepresentationExpanderItem;
+    QWeakPointer<QQuickItem> currentRepresentationItem;
 
     //Attached layout objects: own and the representation's one
     QWeakPointer<QObject> representationLayout;

@@ -64,10 +64,10 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(int switchHeight READ switchHeight WRITE setSwitchHeight NOTIFY switchHeightChanged)
 
     Q_PROPERTY(QQmlComponent *compactRepresentation READ compactRepresentation WRITE setCompactRepresentation NOTIFY compactRepresentationChanged)
-    Q_PROPERTY(QObject *compactRepresentationItem READ compactRepresentationItem NOTIFY compactRepresentationItemChanged)
+    Q_PROPERTY(QQuickItem *compactRepresentationItem READ compactRepresentationItem NOTIFY compactRepresentationItemChanged)
 
     Q_PROPERTY(QQmlComponent *fullRepresentation READ fullRepresentation WRITE setFullRepresentation NOTIFY fullRepresentationChanged)
-    Q_PROPERTY(QObject *fullRepresentationItem READ fullRepresentationItem NOTIFY fullRepresentationItemChanged)
+    Q_PROPERTY(QQuickItem *fullRepresentationItem READ fullRepresentationItem NOTIFY fullRepresentationItemChanged)
 
     /**
      * this is supposed to be either one between compactRepresentation or fullRepresentation
@@ -102,8 +102,8 @@ public:
     Plasma::Package coronaPackage() const;
     void setCoronaPackage(const Plasma::Package &package);
 
-    QObject *compactRepresentationItem();
-    QObject *fullRepresentationItem();
+    QQuickItem *compactRepresentationItem();
+    QQuickItem *fullRepresentationItem();
     QObject *rootItem();
 
 ////PROPERTY ACCESSORS
