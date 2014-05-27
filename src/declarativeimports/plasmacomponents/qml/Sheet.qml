@@ -128,10 +128,6 @@ Item {
      */
     function open()
     {
-        var pos = dialog.popupPosition(null, Qt.AlignCenter)
-        dialog.x = pos.x
-        dialog.y = pos.y
-
         dialog.visible = true
         dialog.requestActivate()
     }
@@ -174,8 +170,8 @@ Item {
 
     PlasmaCore.Dialog {
         id: dialog
-        windowFlags: Qt.Dialog
-        location: 4 //FIXME: replace with BottomEdge when we have an enum reachable from everywhere in core
+        flags: Qt.Dialog
+        location: PlasmaCore.Types.BottomEdge
 
 
         //onFaderClicked: root.clickedOutside()
@@ -185,9 +181,9 @@ Item {
         visible: false
         onVisibleChanged: {
             if (visible) {
-                status = DialogStatus.Open
+                status = PlasmaComponents.DialogStatus.Open
             } else {
-                status = DialogStatus.Closed
+                status = PlasmaComponents.DialogStatus.Closed
             }
         }
 
