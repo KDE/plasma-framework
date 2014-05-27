@@ -35,7 +35,7 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_hideTimeout(4000),
       m_interactive(false)
 {
-    setFlags(Qt::ToolTip | Qt::X11BypassWindowManagerHint);
+    setFlags(Qt::ToolTip | Qt::BypassWindowManagerHint);
     setLocation(Plasma::Types::Floating);
 
     m_animation = new QPropertyAnimation(this);
@@ -108,7 +108,7 @@ bool ToolTipDialog::event(QEvent *e)
     }
 
     bool ret = Dialog::event(e);
-    setFlags(Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+    setFlags(Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint | Qt::BypassWindowManagerHint);
     return ret;
 }
 
