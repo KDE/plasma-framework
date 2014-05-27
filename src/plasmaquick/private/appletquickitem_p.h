@@ -101,6 +101,7 @@ public:
     Plasma::Package coronaPackage;
 
     bool expanded : 1;
+    bool creatingFullRepresentation : 1;
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };

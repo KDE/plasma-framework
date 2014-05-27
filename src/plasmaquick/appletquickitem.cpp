@@ -48,7 +48,8 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       switchWidth(-1),
       switchHeight(-1),
       applet(a),
-      expanded(false)
+      expanded(false),
+      creatingFullRepresentation(false)
 {
 }
 
@@ -184,7 +185,9 @@ QObject *AppletQuickItemPrivate::createFullRepresentationItem()
     }
 
     if (fullRepresentation && fullRepresentation.data() != qmlObject->mainComponent()) {
+        creatingFullRepresentation = true;
         fullRepresentationItem = qmlObject->createObjectFromComponent(fullRepresentation.data(), QtQml::qmlContext(qmlObject->rootObject()));
+        creatingFullRepresentation = false;
     } else {
         fullRepresentation = qmlObject->mainComponent();
         fullRepresentationItem = qmlObject->rootObject();
@@ -625,6 +628,10 @@ bool AppletQuickItem::isExpanded() const
 
 void AppletQuickItem::setExpanded(bool expanded)
 {
+    if (d->creatingFullRepresentation) {
+        return;
+    }
+
     if (d->applet->isContainment()) {
         expanded = true;
     }
