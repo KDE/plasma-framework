@@ -141,9 +141,11 @@ public:
      */
     Q_INVOKABLE void disconnectSource(const QString &source);
 
-protected Q_SLOTS:
+public Q_SLOTS:
     void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
     void modelChanged(const QString &sourceName, QAbstractItemModel *model);
+
+protected Q_SLOTS:
     void removeSource(const QString &source);
     void setupData();
 

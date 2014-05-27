@@ -155,10 +155,14 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
     if (pollingInterval < 1) {
         //qDebug() << "    connecting directly";
         d->relayObjects[visualization] = 0;
-        connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-        connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
-                visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+        if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+            connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        }
+        if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
+            connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                    visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+        }
     } else {
         //qDebug() << "    connecting to a relay";
         // we only want to do an imediate update if this is not the first object to connect to us
