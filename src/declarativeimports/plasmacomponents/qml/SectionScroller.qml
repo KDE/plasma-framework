@@ -101,7 +101,12 @@ Item {
         positionAtMinimum: root.width*2
         positionAtMaximum: root.height - root.width*2
         value: listView.contentY
-        onPositionChanged: sectionLabel.text = Sections.closestSection(position/listView.height)
+        onPositionChanged: {
+            var section = Sections.closestSection(position/listView.height);
+            if (section) {
+                sectionLabel.text = section;
+            }
+        }
 
     }
 
@@ -172,8 +177,6 @@ Item {
 
             if (listView.model.itemsRemoved)
                 listView.model.itemsRemoved.connect(dirtyObserver);
-
-            sectionsRepeater.model = Sections._sections.length
         }
     }
 }
