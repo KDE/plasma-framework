@@ -108,7 +108,7 @@ Item {
 
         Loader {
             id: menuLoader
-            property QtObject monthCalendar: monthView.calendar
+            property QtObject monthCalendar: root.calendar
         }
         MouseArea {
             id: monthMouse
