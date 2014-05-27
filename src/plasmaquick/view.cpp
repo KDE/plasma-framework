@@ -174,9 +174,6 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     }
 
     setResizeMode(View::SizeRootObjectToView);
-
-    QObject::connect(corona, &Plasma::Corona::packageChanged,
-                     this, &View::coronaPackageChanged);
 }
 
 View::~View()
@@ -231,12 +228,6 @@ QRectF View::screenGeometry()
 void View::showConfigurationInterface(Plasma::Applet *applet)
 {
     d->showConfigurationInterface(applet);
-}
-
-void View::coronaPackageChanged(const Plasma::Package &package)
-{
-    setContainment(0);
-    setSource(QUrl::fromLocalFile(package.filePath("views", "Desktop.qml")));
 }
 
 }
