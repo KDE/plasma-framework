@@ -78,19 +78,19 @@ public:
     int switchWidth;
     int switchHeight;
 
-    QWeakPointer<QQmlComponent> compactRepresentation;
-    QWeakPointer<QQmlComponent> fullRepresentation;
-    QWeakPointer<QQmlComponent> preferredRepresentation;
-    QWeakPointer<QQmlComponent> compactRepresentationExpander;
+    QPointer<QQmlComponent> compactRepresentation;
+    QPointer<QQmlComponent> fullRepresentation;
+    QPointer<QQmlComponent> preferredRepresentation;
+    QPointer<QQmlComponent> compactRepresentationExpander;
 
-    QWeakPointer<QQuickItem> compactRepresentationItem;
-    QWeakPointer<QQuickItem> fullRepresentationItem;
-    QWeakPointer<QQuickItem> compactRepresentationExpanderItem;
-    QWeakPointer<QQuickItem> currentRepresentationItem;
+    QPointer<QQuickItem> compactRepresentationItem;
+    QPointer<QQuickItem> fullRepresentationItem;
+    QPointer<QQuickItem> compactRepresentationExpanderItem;
+    QPointer<QQuickItem> currentRepresentationItem;
 
     //Attached layout objects: own and the representation's one
-    QWeakPointer<QObject> representationLayout;
-    QWeakPointer<QObject> ownLayout;
+    QPointer<QObject> representationLayout;
+    QPointer<QObject> ownLayout;
 
     QTimer compactRepresentationCheckTimer;
     QTimer fullRepresentationResizeTimer;
