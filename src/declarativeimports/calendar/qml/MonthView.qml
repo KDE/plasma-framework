@@ -145,6 +145,7 @@ Item {
             right: parent.right
             bottom: parent.bottom
             leftMargin: borderWidth
+            rightMargin: borderWidth
         }
 
         borderOpacity: root.borderOpacity
