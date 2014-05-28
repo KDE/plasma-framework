@@ -19,6 +19,8 @@
  */
 
 #include "theme_p.h"
+#include "framesvg.h"
+#include "framesvg_p.h"
 
 #include <QApplication>
 #include <QFile>
@@ -110,6 +112,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
 
 ThemePrivate::~ThemePrivate()
 {
+    FrameSvgPrivate::s_sharedFrames.remove(this);
     delete pixmapCache;
 }
 

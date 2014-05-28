@@ -30,11 +30,13 @@
 
 namespace Plasma
 {
+
 class FrameData
 {
 public:
-    FrameData(FrameSvg *svg)
-        : enabledBorders(FrameSvg::AllBorders),
+    FrameData(FrameSvg *svg, const QString &p)
+        : prefix(p),
+          enabledBorders(FrameSvg::AllBorders),
           frameSize(-1, -1),
           topHeight(0),
           leftWidth(0),
@@ -53,7 +55,8 @@ public:
     }
 
     FrameData(const FrameData &other, FrameSvg *svg)
-        : enabledBorders(other.enabledBorders),
+        : prefix(other.prefix),
+          enabledBorders(other.enabledBorders),
           frameSize(other.frameSize),
           topHeight(0),
           leftWidth(0),
@@ -71,9 +74,7 @@ public:
         ref(svg);
     }
 
-    ~FrameData()
-    {
-    }
+    ~FrameData();
 
     void ref(FrameSvg *svg);
     bool deref(FrameSvg *svg);
@@ -81,6 +82,7 @@ public:
     bool isUsed() const;
     int refcount() const;
 
+    QString prefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
     QHash<QString, QRegion> cachedMasks;
@@ -155,7 +157,7 @@ public:
 
     QHash<QString, FrameData *> frames;
 
-    static QHash<QString, FrameData *> s_sharedFrames;
+    static QHash<ThemePrivate *, QHash<QString, FrameData *> > s_sharedFrames;
 };
 
 }

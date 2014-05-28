@@ -507,6 +507,8 @@ Q_SIGNALS:
 
 private:
     friend class SvgPrivate;
+    friend class FrameSvg;
+    friend class FrameSvgPrivate;
     friend class ThemePrivate;
     ThemePrivate *d;
 };
