@@ -71,18 +71,10 @@ Row {
         x: _s
         y: _s
 
-        //This instance is purely for metrics
-        PlasmaExtras.Heading {
-            id: tooltipMaintextPlaceholder
-            visible: false
-            level: 3
-            text: toolTip ? toolTip.mainText : ""
-        }
         PlasmaExtras.Heading {
             id: tooltipMaintext
             level: 3
-            width: Math.min(tooltipMaintextPlaceholder.width, preferredTextWidth)
-            //width: 400
+            width: Math.min(tooltipMaintext.implicitWidth, preferredTextWidth)
             elide: Text.ElideRight
             text: toolTip ? toolTip.mainText : ""
         }
