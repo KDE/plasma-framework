@@ -61,7 +61,7 @@ Item {
     /**
      * True if the button is checked, false otherwise.
      */
-    property bool checked: (internal.tabGroup == null) ? (internal.tabBar.currentTab == root) : (internal.tabGroup.currentTab == tab)
+    property bool checked: (internal.tabGroup == null) ? (internal.tabBar && internal.tabBar.currentTab == root) : (internal.tabGroup.currentTab == tab)
 
     /**
      * True if the button is being pressed, false otherwise.
