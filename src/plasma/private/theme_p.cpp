@@ -112,7 +112,12 @@ ThemePrivate::ThemePrivate(QObject *parent)
 
 ThemePrivate::~ThemePrivate()
 {
-    FrameSvgPrivate::s_sharedFrames.remove(this);
+    if (FrameSvgPrivate::s_sharedFrames.contains(this)) { 
+        foreach (FrameData *data, FrameSvgPrivate::s_sharedFrames[this].values()) {
+            delete data;
+        }
+        FrameSvgPrivate::s_sharedFrames.remove(this);
+    }
     delete pixmapCache;
 }
 
