@@ -80,7 +80,7 @@ Row {
         }
         PlasmaComponents.Label {
             id: tooltipSubtext
-            width: parent.preferredTextWidth
+            width: Math.min(tooltipSubtext.implicitWidth, preferredTextWidth)
             wrapMode: Text.WordWrap
             text: toolTip ? toolTip.subText : ""
             opacity: 0.5
