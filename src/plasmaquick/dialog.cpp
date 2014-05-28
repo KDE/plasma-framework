@@ -797,7 +797,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         }
 
         const QWindow *focusWindow = QGuiApplication::focusWindow();
-        bool childHasFocus = (focusWindow && focusWindow->isActive() && isAncestorOf(focusWindow));
+        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->objectName() == QLatin1String("QMenuClassWindow"));
 
         if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
             qDebug() << "DIALOG:  hiding dialog.";
