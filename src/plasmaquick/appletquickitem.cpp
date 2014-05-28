@@ -672,12 +672,12 @@ KDeclarative::QmlObject *AppletQuickItem::qmlObject()
 
 QQuickItem *AppletQuickItem::compactRepresentationItem()
 {
-    return d->compactRepresentationItem;
+    return d->createCompactRepresentationItem();
 }
 
 QQuickItem *AppletQuickItem::fullRepresentationItem()
 {
-    return d->fullRepresentationItem;
+    return d->createFullRepresentationItem();
 }
 
 QObject *AppletQuickItem::rootItem()
