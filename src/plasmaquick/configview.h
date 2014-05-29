@@ -80,6 +80,11 @@ protected:
 
 private:
     ConfigViewPrivate *const d;
+
+    Q_PRIVATE_SLOT(d, void updateMinimumWidth())
+    Q_PRIVATE_SLOT(d, void updateMinimumHeight())
+    Q_PRIVATE_SLOT(d, void updateMaximumWidth())
+    Q_PRIVATE_SLOT(d, void updateMaximumHeight())
 };
 
 }

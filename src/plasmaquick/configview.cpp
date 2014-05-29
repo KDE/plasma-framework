@@ -38,6 +38,9 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
+//Unfortunately QWINDOWSIZE_MAX is not exported
+#define DIALOGSIZE_MAX ((1<<24)-1)
+
 namespace PlasmaQuick
 {
 
@@ -50,10 +53,20 @@ public:
     ~ConfigViewPrivate();
 
     void init();
+
+    void updateMinimumWidth();
+    void updateMinimumHeight();
+    void updateMaximumWidth();
+    void updateMaximumHeight();
+    void mainItemLoaded();
+
     ConfigView *q;
     QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
     Plasma::Corona *corona;
+
+    //Attached Layout property of mainItem, if any
+    QWeakPointer <QObject> mainItemLayout;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
@@ -107,6 +120,99 @@ void ConfigViewPrivate::init()
     delete component;
 }
 
+void ConfigViewPrivate::updateMinimumWidth()
+{
+    if (mainItemLayout) {
+        q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt());
+        //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
+
+        q->setWidth(qMax(q->width(), q->minimumWidth()));
+    } else {
+        q->setMinimumWidth(-1);
+    }
+}
+
+void ConfigViewPrivate::updateMinimumHeight()
+{
+    if (mainItemLayout) {
+        q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt());
+        //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
+
+        q->setHeight(qMax(q->height(), q->minimumHeight()));
+    } else {
+        q->setMinimumHeight(-1);
+    }
+}
+
+void ConfigViewPrivate::updateMaximumWidth()
+{
+    if (mainItemLayout) {
+        const int hint = mainItemLayout.data()->property("maximumWidth").toInt();
+
+        if (hint > 0) {
+            q->setMaximumWidth(hint);
+        } else {
+            q->setMaximumWidth(DIALOGSIZE_MAX);
+        }
+    } else {
+        q->setMaximumWidth(DIALOGSIZE_MAX);
+    }
+}
+
+void ConfigViewPrivate::updateMaximumHeight()
+{
+    if (mainItemLayout) {
+        const int hint = mainItemLayout.data()->property("maximumHeight").toInt();
+
+        if (hint > 0) {
+            q->setMaximumHeight(hint);
+        } else {
+            q->setMaximumHeight(DIALOGSIZE_MAX);
+        }
+    } else {
+        q->setMaximumHeight(DIALOGSIZE_MAX);
+    }
+}
+
+void ConfigViewPrivate::mainItemLoaded()
+{
+    if (applet) {
+        KConfigGroup cg = applet.data()->config();
+        cg = KConfigGroup(&cg, "ConfigDialog");
+        q->resize(cg.readEntry("DialogWidth", q->width()), cg.readEntry("DialogHeight", q->height()));
+    }
+
+    //Extract the representation's Layout, if any
+    QObject *layout = 0;
+
+    //Search a child that has the needed Layout properties
+    //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+    foreach (QObject *child, q->rootObject()->children()) {
+        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
+                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
+                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
+            ) {
+            layout = child;
+        }
+    }
+    mainItemLayout = layout;
+
+    if (layout) {
+        QObject::connect(layout, SIGNAL(minimumWidthChanged()), q, SLOT(updateMinimumWidth()));
+        QObject::connect(layout, SIGNAL(minimumHeightChanged()), q, SLOT(updateMinimumHeight()));
+        QObject::connect(layout, SIGNAL(maximumWidthChanged()), q, SLOT(updateMaximumWidth()));
+        QObject::connect(layout, SIGNAL(maximumHeightChanged()), q, SLOT(updateMaximumHeight()));
+
+        updateMinimumWidth();
+        updateMinimumHeight();
+        updateMaximumWidth();
+        updateMaximumHeight();
+    }
+}
+
+
 ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent),
       d(new ConfigViewPrivate(applet, this))
@@ -115,6 +221,11 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
     connect(applet, &QObject::destroyed, this, &ConfigView::close);
+    connect(this, &QQuickView::statusChanged, [=](QQuickView::Status status) {
+        if (status == QQuickView::Ready) {
+            d->mainItemLoaded();
+        }
+    });
 }
 
 ConfigView::~ConfigView()
@@ -130,12 +241,6 @@ ConfigView::~ConfigView()
 void ConfigView::init()
 {
     setSource(QUrl::fromLocalFile(d->corona->package().filePath("appletconfigurationui")));
-
-    if (d->applet) {
-        KConfigGroup cg = d->applet.data()->config();
-        cg = KConfigGroup(&cg, "ConfigDialog");
-        resize(cg.readEntry("DialogWidth", width()), cg.readEntry("DialogHeight", height()));
-    }
 }
 
 ConfigModel *ConfigView::configModel() const
