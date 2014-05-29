@@ -197,7 +197,7 @@ Item {
                 id: surface
 
                 enabledBorders: {
-                    if (flat ||
+                    if (flat || !button.parent ||
                         button.parent.width < button.parent.implicitWidth ||
                         button.parent.checkedButton === undefined ||
                         !bordersSvg.hasElement("pressed-hint-compose-over-border")) {
