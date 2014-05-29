@@ -92,12 +92,12 @@ Item {
     //icon + label + left margin + right margin + spacing between icon and text
     //here it assumesleft margin = right top = bottom, why?
     // because the right and bottom margins can be disabled, so they would return 0, but their actual size is still needed for size hints
-    property real minimumWidth: Math.max(units.iconSizes.small, height) + label.implicitWidth + delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)
+    property real minimumWidth: Math.max(units.iconSizes.small, height) + label.implicitWidth + (delegate.margins ? (delegate.margins.left + delegate.margins.left + ((icon.valid) ? delegate.margins.left : 0)) : 0)
 
     /**
      * The smallest height this button can be to show all the contents
      */
-    property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + delegate.margins.top + delegate.margins.top
+    property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + (delegate.margins ? (delegate.margins.top + delegate.margins.top) : 0)
 
     LayoutMirroring.enabled: (Qt.application.layoutDirection === Qt.RightToLeft)
     LayoutMirroring.childrenInherit: true
@@ -349,13 +349,13 @@ Item {
     Row {
         anchors {
             fill: parent
-            leftMargin: delegate.margins.left
-            topMargin: delegate.margins.top
-            rightMargin: delegate.margins.right
-            bottomMargin: delegate.margins.bottom
+            leftMargin: delegate.margins ? delegate.margins.left : 0
+            topMargin: delegate.margins ? delegate.margins.top : 0
+            rightMargin: delegate.margins ? delegate.margins.right : 0
+            bottomMargin: delegate.margins ? delegate.margins.bottom : 0
         }
 
-        spacing: icon.valid ? delegate.margins.left : 0
+        spacing: icon.valid && delegate.margins ? delegate.margins.left : 0
 
         PlasmaCore.IconItem {
             id: icon
