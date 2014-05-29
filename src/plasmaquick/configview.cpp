@@ -121,12 +121,21 @@ ConfigView::~ConfigView()
 {
     if (d->applet) {
         d->applet.data()->setUserConfiguring(false);
+        if (d->applet.data()->containment() && d->applet.data()->containment()->corona()) {
+            d->applet.data()->containment()->corona()->requestConfigSync();
+        }
     }
 }
 
 void ConfigView::init()
 {
     setSource(QUrl::fromLocalFile(d->corona->package().filePath("appletconfigurationui")));
+
+    if (d->applet) {
+        KConfigGroup cg = d->applet.data()->config();
+        cg = KConfigGroup(&cg, "ConfigDialog");
+        resize(cg.readEntry("DialogWidth", width()), cg.readEntry("DialogHeight", height()));
+    }
 }
 
 ConfigModel *ConfigView::configModel() const
@@ -167,6 +176,14 @@ void ConfigView::resizeEvent(QResizeEvent *re)
     }
     rootObject()->setWidth(re->size().width());
     rootObject()->setHeight(re->size().height());
+
+    if (d->applet) {
+        KConfigGroup cg = d->applet.data()->config();
+        cg = KConfigGroup(&cg, "ConfigDialog");
+        cg.writeEntry("DialogWidth", re->size().width());
+        cg.writeEntry("DialogHeight", re->size().height());
+    }
+
     QQuickWindow::resizeEvent(re);
 }
 
