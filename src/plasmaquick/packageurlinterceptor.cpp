@@ -33,7 +33,7 @@ PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::P
       m_package(p),
       m_engine(engine)
 {
-    m_allowedPaths << m_engine->importPathList();
+    //m_allowedPaths << m_engine->importPathList();
 }
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
@@ -116,7 +116,14 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         if (m_package.allowExternalPaths()) {
             return path;
         }
-        foreach (const QString &allowed, m_allowedPaths) {
+
+        //NOTE: It's needed to build this on the fly because importPathList
+        //can change at runtime
+        QStringList allowedPaths;
+        allowedPaths << m_engine->importPathList();
+        allowedPaths << m_allowedPaths;
+
+        foreach (const QString &allowed, allowedPaths) {
             //It's a private import
             if (path.path().contains("org/kde/plasma/private")) {
                 QString pathCheck(path.path());
@@ -131,20 +138,6 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             //it's from an allowed, good
             if (path.path().startsWith(allowed)) {
                 //qDebug() << "Found allowed, access granted" << path;
-
-                //check if there is a platform specific file that overrides this allowed
-                foreach (const QString &platform, KDeclarative::KDeclarative::runtimePlatform()) {
-                    //qDebug() << "Trying" << platform;
-
-                    //search for a platformqml/ path sibling of this allowed path
-                    const QString &platformPath = allowed + QStringLiteral("/../platformqml/") + platform + path.path().mid(allowed.length());
-                    const QFile f(platformPath);
-
-                    //qDebug() << "Found a platform specific file:" << QUrl::fromLocalFile(platformPath)<<f.exists();
-                    if (f.exists()) {
-                        return QUrl::fromLocalFile(platformPath);
-                    }
-                }
                 return path;
             }
         }
