@@ -10,6 +10,9 @@ qt5_add_dbus_adaptor (
    )
 
 add_library(kded_platformstatus MODULE ${kded_platformstatus_SRCS} )
+set_target_properties(kded_platformstatus PROPERTIES
+    OUTPUT_NAME platformstatus
+)
 
 target_link_libraries(
    kded_platformstatus
@@ -22,7 +25,7 @@ target_link_libraries(
    Qt5::Quick
 )
 
-install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR}/kf5/kded )
 install( FILES kded_platformstatus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )
 install( FILES org.kde.platformstatus.xml   DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
 
