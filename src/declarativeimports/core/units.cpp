@@ -20,7 +20,7 @@
 
 #include "units.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QDebug>
 #include <QDesktopWidget>
 #include <QtGlobal>
@@ -55,7 +55,7 @@ Units::Units(QObject *parent)
     themeChanged();
     connect(&m_theme, SIGNAL(themeChanged()),
             this, SLOT(themeChanged()));
-    qApp->installEventFilter(this);
+    QCoreApplication::instance()->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
     KDirWatch::self()->addFile(configFile);

@@ -22,7 +22,7 @@
 #include "framesvg.h"
 #include "framesvg_p.h"
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QFontDatabase>
@@ -97,7 +97,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
         QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), this, SLOT(blurBehindChanged(bool)));
 #endif
     }
-    qApp->installEventFilter(this);
+    QCoreApplication::instance()->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
     KDirWatch::self()->addFile(configFile);
@@ -414,7 +414,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::ViewHoverColor).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::ViewFocusColor).name();
 
-    QFont font = QApplication::font();
+    QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
     elements[QStringLiteral("%fontfamily")] = font.family().split('[').first();
     elements[QStringLiteral("%smallfontsize")] = QString("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
