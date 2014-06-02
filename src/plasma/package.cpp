@@ -721,13 +721,7 @@ KJob *Package::install(const QString &sourcePackage, const QString &packageRoot)
 
 KJob *Package::uninstall(const QString &packageName, const QString &packageRoot)
 {
-    //FIXME:packageName unused, name taken from metadata().pluginName() ?
-    //can this become either just uninstall() otherwise maintain parameters and be static?
-
-    const QString pname = metadata().pluginName();
-
-    QString proot = path();
-    proot.replace(pname, "");
+    d->createPackageMetadata(packageRoot + packageName);
     return d->structure.data()->uninstall(this, packageRoot);
 }
 
