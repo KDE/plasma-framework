@@ -88,6 +88,12 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
+
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+            [=]() {
+                disconnect(containment(), &Plasma::Containment::appletRemoved,
+                this, &ContainmentInterface::appletRemovedForward);
+        });
 }
 
 void ContainmentInterface::init()
