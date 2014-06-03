@@ -97,11 +97,11 @@ FocusScope {
         PlasmaCore.FrameSvgItem {
             id: buttonFrame
 
-            visible: currentTab !== null
+            visible: currentTab && currentTab !== null
             x: layout.isHorizontal ? tabBarLayout.x + currentTab.x : 0
             y: layout.isHorizontal ? 0 : tabBarLayout.y + currentTab.y
-            width: layout.isHorizontal ? currentTab.width + margins.left + margins.right -1 : parent.width
-            height: layout.isHorizontal ? parent.height : currentTab.height + margins.top + margins.bottom
+            width: currentTab && layout.isHorizontal ? currentTab.width + margins.left + margins.right -1 : parent.width
+            height: !currentTab || layout.isHorizontal ? parent.height : currentTab.height + margins.top + margins.bottom
             imagePath: "widgets/tabbar"
             prefix: {
                 var prefix;
