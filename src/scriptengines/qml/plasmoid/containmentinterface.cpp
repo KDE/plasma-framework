@@ -781,7 +781,8 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
         }
     }
 
-    if (containment()->immutability() == Plasma::Types::Mutable) {
+    if (containment()->immutability() == Plasma::Types::Mutable &&
+        (containment()->containmentType() != Plasma::Types::PanelContainment || containment()->isUserConfiguring())) {
         QAction *closeApplet = applet->actions()->action("remove");
         //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
