@@ -98,8 +98,8 @@ FocusScope {
             id: buttonFrame
 
             visible: currentTab && currentTab !== null
-            x: layout.isHorizontal ? tabBarLayout.x + currentTab.x : 0
-            y: layout.isHorizontal ? 0 : tabBarLayout.y + currentTab.y
+            x: currentTab && layout.isHorizontal ? tabBarLayout.x + currentTab.x : 0
+            y: !currentTab || layout.isHorizontal ? 0 : tabBarLayout.y + currentTab.y
             width: currentTab && layout.isHorizontal ? currentTab.width + margins.left + margins.right -1 : parent.width
             height: !currentTab || layout.isHorizontal ? parent.height : currentTab.height + margins.top + margins.bottom
             imagePath: "widgets/tabbar"
@@ -172,6 +172,9 @@ FocusScope {
     }
 
     onCurrentTabChanged: {
+        if (!currentTab) {
+            return;
+        }
         if (layout.isHorizontal) {
             tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width);
         } else {
