@@ -446,17 +446,26 @@ void AppletPrivate::resetConfigurationObject()
 {
     // make sure mainConfigGroup exists in all cases
     mainConfigGroup();
-
+    mainConfig->deleteEntry("plugin");
+    mainConfig->deleteEntry("formfactor");
+    mainConfig->deleteEntry("immutability");
+    mainConfig->deleteEntry("location");
     mainConfig->deleteGroup();
     delete mainConfig;
     mainConfig = 0;
 
-    if (!q->containment()) {
-        return;
-    }
-    Corona *corona = q->containment()->corona();
-    if (corona) {
-        corona->requireConfigSync();
+    Containment *cont = qobject_cast<Containment *>(q);
+
+    if (cont && cont->corona()) {
+        cont->corona()->requireConfigSync();
+    } else {
+        if (!q->containment()) {
+            return;
+        }
+        Corona *corona = q->containment()->corona();
+        if (corona) {
+            corona->requireConfigSync();
+        }
     }
 }
 
