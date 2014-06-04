@@ -22,11 +22,11 @@
 
 #include <QGuiApplication>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QtGlobal>
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QScreen>
+#include <QFontMetrics>
 #include <cmath>
 
 #include <KDirWatch>
