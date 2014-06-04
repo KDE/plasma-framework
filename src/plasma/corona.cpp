@@ -23,11 +23,12 @@
 #include "corona.h"
 #include "private/corona_p.h"
 
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QGuiApplication>
 #include <QMimeData>
 #include <QPainter>
 #include <QTimer>
+#include <QScreen>
+#include <QScreen>
 
 #include <cmath>
 
@@ -225,7 +226,10 @@ int Corona::numScreens() const
 
 QRect Corona::screenGeometry(int id) const
 {
-    return qApp->desktop()->screenGeometry(id);
+    if (QGuiApplication::screens().size() >= id) {
+        QGuiApplication::screens().at(id)->geometry();
+    }
+    return QRect();
 }
 
 QRegion Corona::availableScreenRegion(int id) const
