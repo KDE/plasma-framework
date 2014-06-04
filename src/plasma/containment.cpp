@@ -25,7 +25,6 @@
 
 #include "config-plasma.h"
 
-#include <QApplication>
 #include <QClipboard>
 #include <QDebug>
 #include <QFile>

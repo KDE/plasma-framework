@@ -20,7 +20,6 @@
 
 #include "svgitem.h"
 
-#include <QApplication>
 #include <QQuickWindow>
 #include <QSGTexture>
 #include <QRectF>
