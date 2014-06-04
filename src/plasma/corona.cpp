@@ -224,14 +224,6 @@ int Corona::numScreens() const
     return 1;
 }
 
-QRect Corona::screenGeometry(int id) const
-{
-    if (QGuiApplication::screens().size() >= id) {
-        QGuiApplication::screens().at(id)->geometry();
-    }
-    return QRect();
-}
-
 QRegion Corona::availableScreenRegion(int id) const
 {
     return QRegion(screenGeometry(id));

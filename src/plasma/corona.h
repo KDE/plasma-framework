@@ -118,7 +118,7 @@ public:
      * Subclasses should override this method as the default
      * implementation returns a meaningless value.
      */
-    virtual QRect screenGeometry(int id) const;
+    virtual QRect screenGeometry(int id) const = 0;
 
     /**
      * Returns the available region for a given screen.
