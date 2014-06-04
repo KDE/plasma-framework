@@ -24,9 +24,7 @@
 #include "dialogshadows_p.h"
 #include "view.h"
 
-#include <QApplication>
 #include <QQuickItem>
-#include <QDesktopWidget>
 #include <QTimer>
 #include <QLayout>
 #include <QScreen>
@@ -480,7 +478,7 @@ Dialog::Dialog(QQuickItem *parent)
 
 Dialog::~Dialog()
 {
-    if (!qApp->closingDown()) {
+    if (!QCoreApplication::instance()->closingDown()) {
         DialogShadows::self()->removeWindow(this);
     }
 }
