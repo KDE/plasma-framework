@@ -156,7 +156,16 @@ void DialogPrivate::syncBorders()
         }
     }
 
-    frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+    if (frameSvgItem->enabledBorders() != (Plasma::FrameSvg::EnabledBorder)borders) {
+        frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+
+        if (mainItemLayout) {
+            updateMinimumWidth();
+            updateMinimumHeight();
+            updateMaximumWidth();
+            updateMaximumHeight();
+        }
+    }
 
     if (q->isVisible()) {
         DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
