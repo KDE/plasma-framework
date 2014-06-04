@@ -19,9 +19,7 @@
 
 #include "qmenu.h"
 
-#include <QApplication>
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QQuickWindow>
 #include <QQuickItem>
 
