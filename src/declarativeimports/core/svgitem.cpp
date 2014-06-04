@@ -21,7 +21,6 @@
 #include "svgitem.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QQuickWindow>
 #include <QSGTexture>
 #include <QRectF>
