@@ -179,38 +179,6 @@ void SvgItem::updateNeeded()
     update();
 }
 
-void SvgItem::setImplicitWidth(qreal width)
-{
-    if (implicitWidth() == width) {
-        return;
-    }
-
-    QQuickItem::setImplicitWidth(width);
-
-    emit implicitWidthChanged();
-}
-
-qreal SvgItem::implicitWidth() const
-{
-    return QQuickItem::implicitWidth();
-}
-
-void SvgItem::setImplicitHeight(qreal height)
-{
-    if (implicitHeight() == height) {
-        return;
-    }
-
-    QQuickItem::setImplicitHeight(height);
-
-    emit implicitHeightChanged();
-}
-
-qreal SvgItem::implicitHeight() const
-{
-    return QQuickItem::implicitHeight();
-}
-
 void SvgItem::updateDevicePixelRatio()
 {
     if (m_svg) {
