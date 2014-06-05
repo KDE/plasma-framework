@@ -60,3 +60,9 @@ ecm_mark_as_test(sortfiltermodeltest)
 if(QT_QTOPENGL_FOUND)
   target_link_libraries(storagetest Qt5::OpenGL)
 endif()
+
+
+#Add a test that i18n is not used directly in any import.
+# It should /always/ be i18nd
+find_program(SH bash)
+add_test(i18ndcheck ${SH} ${CMAKE_CURRENT_SOURCE_DIR}/i18ndcheck.sh ${CMAKE_SOURCE_DIR}/src/declarativeimports)
