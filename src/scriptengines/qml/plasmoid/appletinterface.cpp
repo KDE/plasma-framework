@@ -460,6 +460,11 @@ int AppletInterface::screen() const
     return -1;
 }
 
+QRect AppletInterface::screenGeometry() const
+{
+    return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
+}
+
 void AppletInterface::setHideOnWindowDeactivate(bool hide)
 {
     if (m_hideOnDeactivate != hide) {
