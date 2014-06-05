@@ -34,6 +34,7 @@
 
 #include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
+#include <packageurlinterceptor.h>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
@@ -102,6 +103,17 @@ void ConfigViewPrivate::init()
         corona = applet.data()->containment()->corona();
     }
 
+    if (corona->package().isValid()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
+        q->engine()->setUrlInterceptor(interceptor);
+
+        KDeclarative::KDeclarative kdeclarative;
+        kdeclarative.setDeclarativeEngine(q->engine());
+        //binds things like kconfig and icons
+        kdeclarative.setupBindings();
+        kdeclarative.setTranslationDomain(corona->package().metadata().pluginName());
+    }
+    
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
