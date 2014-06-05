@@ -404,6 +404,7 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     });
 
     d->qmlObject = new KDeclarative::QmlObject(this);
+    d->qmlObject->setTranslationDomain(applet->pluginInfo().pluginName());
     d->qmlObject->setInitializationDelayed(true);
 
     // set the graphicObject dynamic property on applet
