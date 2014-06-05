@@ -79,10 +79,16 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
 
 void ConfigViewPrivate::init()
 {
+    if (!applet) {
+        qWarning() << "Null applet passed to constructor";
+        return;
+    }
+
     applet.data()->setUserConfiguring(true);
 
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(q->engine());
+    kdeclarative.setTranslationDomain(applet.data()->pluginInfo().pluginName());
     kdeclarative.setupBindings();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
@@ -106,14 +112,8 @@ void ConfigViewPrivate::init()
     if (corona->package().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
         q->engine()->setUrlInterceptor(interceptor);
-
-        KDeclarative::KDeclarative kdeclarative;
-        kdeclarative.setDeclarativeEngine(q->engine());
-        //binds things like kconfig and icons
-        kdeclarative.setupBindings();
-        kdeclarative.setTranslationDomain(corona->package().metadata().pluginName());
     }
-    
+   
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
