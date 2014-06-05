@@ -115,19 +115,22 @@ bool ToolTipDialog::event(QEvent *e)
 void ToolTipDialog::adjustGeometry(const QRect &geom)
 {
     if (isVisible()) {
+        QRect startGeom(geometry());
+
         switch (location()) {
         case Plasma::Types::RightEdge:
-            setX(x() + (size().width() - geom.size().width()));
+            startGeom.moveLeft(geom.left());
             break;
         case Plasma::Types::BottomEdge:
-            setY(y() + (size().height() - geom.size().height()));
+            startGeom.moveTop(geom.top());
             break;
         default:
             break;
         }
+        
+        startGeom.setSize(geom.size());
 
-        resize(geom.size());
-        m_animation->setStartValue(position());
+        m_animation->setStartValue(startGeom.topLeft());
         m_animation->setEndValue(geom.topLeft());
         m_animation->start();
     } else {
