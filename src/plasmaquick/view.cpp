@@ -28,6 +28,7 @@
 
 #include "plasma/pluginloader.h"
 #include <packageurlinterceptor.h>
+#include <kdeclarative/kdeclarative.h>
 
 namespace PlasmaQuick
 {
@@ -169,6 +170,13 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     if (corona->package().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine(), corona->package());
         engine()->setUrlInterceptor(interceptor);
+
+        KDeclarative::KDeclarative kdeclarative;
+        kdeclarative.setDeclarativeEngine(engine());
+        //binds things like kconfig and icons
+        kdeclarative.setupBindings();
+        qWarning()<<"AAA"<<corona->package().metadata().pluginName();
+        kdeclarative.setTranslationDomain(corona->package().metadata().pluginName());
     } else {
         qWarning() << "Invalid home screen package";
     }
