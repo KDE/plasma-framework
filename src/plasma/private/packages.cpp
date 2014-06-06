@@ -141,6 +141,10 @@ void DataEnginePackage::initPackage(Package *package)
 
 void ThemePackage::initPackage(Package *package)
 {
+    // by default the packages have "contents/" as contentsPrefixPaths
+    // but for the themes we don't want that, so unset it.
+    package->setContentsPrefixPaths(QStringList());
+
     package->addDirectoryDefinition("dialogs", "dialogs/", i18n("Images for dialogs"));
     package->addFileDefinition("dialogs/background", "dialogs/background.svg",
                                i18n("Generic dialog background"));
