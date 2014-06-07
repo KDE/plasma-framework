@@ -30,6 +30,7 @@ Comment=Tracks the current shell package and the platform definition strings.
 Comment[bs]=Prati  trenutni paket školjke i definicijone nizove platforme
 Comment[ca]=Segueix el paquet d'intèrpret d'ordres actual i les cadenes de definició de la plataforma.
 Comment[de]=Überwacht das aktuelle Shell-Paket und die Plattformdefinitionen.
+Comment[es]=Rastrea las cadenas de definición del paquete de intérprete actual y de la plataforma.
 Comment[fi]=Seuraa nykyistä kuoripakettia ja alustan määrittelyn merkkijonoja.
 Comment[gl]=Fai seguimento do paquete da shell e do texto de definición da plataforma.
 Comment[nds]=Kiekt op dat aktuelle Konsoolpaket un de Ünnerbuu-Definitschonen
