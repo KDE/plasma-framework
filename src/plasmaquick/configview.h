@@ -63,6 +63,8 @@ public:
 
     virtual void init();
 
+    Plasma::Applet *applet();
+
     QString appletGlobalShortcut() const;
     void setAppletGlobalShortcut(const QString &shortcut);
 

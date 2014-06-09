@@ -255,6 +255,11 @@ void ConfigView::init()
     setSource(QUrl::fromLocalFile(d->corona->package().filePath("appletconfigurationui")));
 }
 
+Plasma::Applet *ConfigView::applet()
+{
+    return d->applet.data();
+}
+
 ConfigModel *ConfigView::configModel() const
 {
     return d->configModel;
