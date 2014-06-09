@@ -101,7 +101,18 @@ public:
      */
     qreal devicePixelRatio();
 
+    /**
+     * Set a color group for the Svg.
+     * if the Svg uses stylesheets and has elements
+     * that are eithe TextColor or BackgroundColor class,
+     * make them use ButtonTextColor/ButtonBackgroundColor
+     * or ViewTextColor/ViewBackgroundColor
+     */
     void setColorGroup(ColorGroup group);
+
+    /**
+     * @return the color group for this Svg
+     */
     ColorGroup colorGroup() const;
 
     /**
