@@ -427,14 +427,29 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet()
-{
-    QString stylesheet = cachedStyleSheets.value(SVGSTYLE);
+const QString ThemePrivate::svgStyleSheet(Plasma::Svg::StyleHints hints)
+{qWarning()<<"BBBBB"<<hints<<(SVGSTYLE+(int)hints);
+    QString stylesheet = cachedStyleSheets.value(SVGSTYLE+(int)hints);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
-        stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
-        stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
+        if ((hints & Svg::Highlighted) && (hints & Svg::Inverted)) {
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%highlightcolor"));
+        } else if ((hints & Svg::Inverted) || (hints & Svg::Highlighted)) {
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%backgroundcolor"));
+        //Normal
+        } else {
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
+        }
+
+        if ((hints & Svg::Highlighted) && !(hints & Svg::Inverted)) {
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%highlightcolor"));
+        } else if (hints & Svg::Inverted) {
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%textcolor"));
+        //Normal
+        } else {
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
+        }
 
         stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
 
@@ -449,7 +464,7 @@ const QString ThemePrivate::svgStyleSheet()
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
 
         stylesheet = processStyleSheet(stylesheet);
-        cachedStyleSheets.insert(SVGSTYLE, stylesheet);
+        cachedStyleSheets.insert(SVGSTYLE+(int)hints, stylesheet);
     }
 
     return stylesheet;
@@ -501,7 +516,7 @@ QColor ThemePrivate::color(Theme::ColorRole role) const
         return colorScheme.foreground(KColorScheme::NormalText).color();
 
     case Theme::HighlightColor:
-        return colorScheme.decoration(KColorScheme::HoverColor).color();
+        return colorScheme.decoration(KColorScheme::FocusColor).color();
 
     case Theme::BackgroundColor:
         return colorScheme.background(KColorScheme::NormalBackground).color();

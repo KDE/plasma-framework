@@ -61,8 +61,16 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
+    Q_PROPERTY(StyleHints styleHints READ styleHints WRITE setStyleHints NOTIFY styleHintsChanged);
 
 public:
+    enum StyleHint{
+        Normal = 0,
+        Inverted = 1,
+        Highlighted = 2
+    };
+    Q_DECLARE_FLAGS(StyleHints, StyleHint)
+
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
      *
@@ -92,6 +100,9 @@ public:
      * @return the device pixel ratio for this Svg.
      */
     qreal devicePixelRatio();
+
+    void setStyleHints(StyleHints hint);
+    StyleHints styleHints() const;
 
     /**
      * Returns a pixmap of the SVG represented by this object.
@@ -398,6 +409,11 @@ Q_SIGNALS:
      */
     void imagePathChanged();
 
+    /**
+     * Emitted whenever the style hints are changed.
+     */
+    void styleHintsChanged();
+
 private:
     SvgPrivate *const d;
     bool eventFilter(QObject *watched, QEvent *event);
@@ -411,6 +427,8 @@ private:
 };
 
 } // Plasma namespace
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Svg::StyleHints)
 
 #endif // multiple inclusion guard
 

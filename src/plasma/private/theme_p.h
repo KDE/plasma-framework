@@ -22,6 +22,7 @@
 #define PLASMA_THEME_P_H
 
 #include "theme.h"
+#include "svg.h"
 #include <QHash>
 
 #include <QDebug>
@@ -82,7 +83,7 @@ public:
     void processContrastSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
-    const QString svgStyleSheet();
+    const QString svgStyleSheet(Plasma::Svg::StyleHints hints);
     QColor color(Theme::ColorRole role) const;
 
 public Q_SLOTS:
@@ -133,7 +134,7 @@ public:
     QHash<QString, QPixmap> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
-    QHash<styles, QString> cachedStyleSheets;
+    QHash<int, QString> cachedStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *pixmapSaveTimer;
     QTimer *rectSaveTimer;

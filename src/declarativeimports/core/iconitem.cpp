@@ -163,6 +163,13 @@ void IconItem::setActive(bool active)
         return;
     }
 
+    if (m_svgIcon) {
+        if (active) {
+            m_svgIcon->setStyleHints(Plasma::Svg::Inverted|Plasma::Svg::Highlighted);
+        } else {
+            m_svgIcon->setStyleHints(Plasma::Svg::Normal);
+        }
+    }
     m_active = active;
     m_loadPixmapTimer.start();
     emit activeChanged();

@@ -106,6 +106,7 @@ public:
     QSizeF size;
     QSizeF naturalSize;
     QChar styleCrc;
+    Svg::StyleHints styleHints;
     unsigned int lastModified;
     qreal devicePixelRatio;
     bool multipleImages : 1;
