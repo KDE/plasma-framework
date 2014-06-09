@@ -61,15 +61,15 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
-    Q_PROPERTY(StyleHints styleHints READ styleHints WRITE setStyleHints NOTIFY styleHintsChanged);
+    Q_PROPERTY(ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
 
 public:
-    enum StyleHint{
-        Normal = 0,
-        Inverted = 1,
-        Highlighted = 2
+    enum ColorGroup {
+        NormalColorGroup = 0,
+        ButtonColorGroup = 1,
+        ViewColorGroup = 2
     };
-    Q_DECLARE_FLAGS(StyleHints, StyleHint)
+    Q_ENUMS(ColorGroup)
 
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
@@ -101,8 +101,8 @@ public:
      */
     qreal devicePixelRatio();
 
-    void setStyleHints(StyleHints hint);
-    StyleHints styleHints() const;
+    void setColorGroup(ColorGroup group);
+    ColorGroup colorGroup() const;
 
     /**
      * Returns a pixmap of the SVG represented by this object.
@@ -410,9 +410,14 @@ Q_SIGNALS:
     void imagePathChanged();
 
     /**
-     * Emitted whenever the style hints are changed.
+     * Emitted whenever the color hint has changed.
      */
-    void styleHintsChanged();
+    void colorHintChanged();
+
+    /**
+     * Emitted whenever the color group has changed.
+     */
+    void colorGroupChanged();
 
 private:
     SvgPrivate *const d;
@@ -427,8 +432,6 @@ private:
 };
 
 } // Plasma namespace
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Svg::StyleHints)
 
 #endif // multiple inclusion guard
 

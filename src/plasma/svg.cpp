@@ -128,14 +128,14 @@ bool SharedSvgRenderer::load(
 }
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, devicePixelRatio, styleHints) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(int(devicePixelRatio)) % QLSEP % QString::number(styleHints)
-#define CACHE_ID_NATURAL_SIZE(id, devicePixelRatio, styleHints) QLatin1Literal("Natural") % QLSEP % id % QLSEP % QString::number(int(devicePixelRatio)) % QLSEP % QString::number(styleHints)
+#define CACHE_ID_WITH_SIZE(size, id, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_NATURAL_SIZE(id, devicePixelRatio) QLatin1Literal("Natural") % QLSEP % id % QLSEP % QString::number(int(devicePixelRatio))
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
       renderer(0),
       styleCrc(0),
-      styleHints(Plasma::Svg::Normal),
+      colorGroup(Plasma::Svg::NormalColorGroup),
       lastModified(0),
       devicePixelRatio(1.0),
       multipleImages(false),
@@ -156,17 +156,16 @@ SvgPrivate::~SvgPrivate()
 QString SvgPrivate::cacheId(const QString &elementId)
 {
     if (size.isValid() && size != naturalSize) {
-        //the size won't change with another style
-        return CACHE_ID_WITH_SIZE(size, elementId, devicePixelRatio, 0);
+        return CACHE_ID_WITH_SIZE(size, elementId, devicePixelRatio);
     } else {
-        return CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio, 0);
+        return CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio);
     }
 }
 
 //This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &path, const QSize &size)
 {
-    return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio, styleHints);
+    return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio) % QLSEP % QString::number(colorGroup);
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -280,7 +279,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", devicePixelRatio, 0));
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", devicePixelRatio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
@@ -417,7 +416,7 @@ void SvgPrivate::createRenderer()
     //qDebug() << "FAIL! **************************";
     //qDebug() << path << "**";
 
-    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(styleHints);
+    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup);
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
@@ -440,7 +439,7 @@ void SvgPrivate::createRenderer()
                 const QString &elementId = i.key();
                 const QRectF &elementRect = i.value();
 
-                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio, styleHints);
+                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio);
                 localRectCache.insert(cacheId, elementRect);
                 cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId, elementRect);
             }
@@ -687,20 +686,20 @@ qreal Svg::devicePixelRatio()
     return d->devicePixelRatio;
 }
 
-void Svg::setStyleHints(Svg::StyleHints hints)
+void Svg::setColorGroup(Svg::ColorGroup group)
 {
-    if (d->styleHints == hints) {
+    if (d->colorGroup == group) {
         return;
     }
 
-    d->styleHints = hints;
+    d->colorGroup = group;
     d->renderer = 0;
-    emit styleHintsChanged();
+    emit colorGroupChanged();
 }
 
-Svg::StyleHints Svg::styleHints() const
+Svg::ColorGroup Svg::colorGroup() const
 {
-    return d->styleHints;
+    return d->colorGroup;
 }
 
 QPixmap Svg::pixmap(const QString &elementID)

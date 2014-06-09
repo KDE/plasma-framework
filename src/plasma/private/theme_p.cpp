@@ -314,7 +314,8 @@ void ThemePrivate::discardCache(CacheTypes caches)
         pixmapCache = 0;
     }
 
-    cachedStyleSheets.clear();
+    cachedDefaultStyleSheet = QString();
+    cachedSvgStyleSheets.clear();
 
     if (caches & SvgElementsCache) {
         discoveries.clear();
@@ -373,7 +374,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 {
     QString stylesheet;
     if (css.isEmpty()) {
-        stylesheet = cachedStyleSheets.value(DEFAULTSTYLE);
+        stylesheet = cachedDefaultStyleSheet;
         if (stylesheet.isEmpty()) {
             stylesheet = QStringLiteral("\n\
                         body {\n\
@@ -386,8 +387,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
                         a:visited { color: %visitedlink; }\n\
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
-            stylesheet = processStyleSheet(stylesheet);
-            cachedStyleSheets.insert(DEFAULTSTYLE, stylesheet);
+            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet);
         }
 
         return stylesheet;
@@ -427,31 +427,32 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet(Plasma::Svg::StyleHints hints)
-{qWarning()<<"BBBBB"<<hints<<(SVGSTYLE+(int)hints);
-    QString stylesheet = cachedStyleSheets.value(SVGSTYLE+(int)hints);
+const QString ThemePrivate::svgStyleSheet(Plasma::Svg::ColorGroup group)
+{
+    QString stylesheet = cachedSvgStyleSheets.value(group);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
-        if ((hints & Svg::Highlighted) && (hints & Svg::Inverted)) {
-            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%highlightcolor"));
-        } else if ((hints & Svg::Inverted) || (hints & Svg::Highlighted)) {
-            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%backgroundcolor"));
-        //Normal
-        } else {
+        switch (group) {
+        case Svg::ButtonColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%buttontextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%buttonbackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%buttonhovercolor"));
+            break;
+        case Svg::ViewColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%viewtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%viewbackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
+            break;
+        default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
-        }
-
-        if ((hints & Svg::Highlighted) && !(hints & Svg::Inverted)) {
-            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%highlightcolor"));
-        } else if (hints & Svg::Inverted) {
-            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%textcolor"));
-        //Normal
-        } else {
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
         }
 
-        stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
 
         stylesheet += skel.arg(QStringLiteral("ButtonText"), QStringLiteral("%buttontextcolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonBackground"), QStringLiteral("%buttonbackgroundcolor"));
@@ -464,7 +465,7 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Svg::StyleHints hints)
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
 
         stylesheet = processStyleSheet(stylesheet);
-        cachedStyleSheets.insert(SVGSTYLE+(int)hints, stylesheet);
+        cachedSvgStyleSheets.insert(group, stylesheet);
     }
 
     return stylesheet;
@@ -516,7 +517,7 @@ QColor ThemePrivate::color(Theme::ColorRole role) const
         return colorScheme.foreground(KColorScheme::NormalText).color();
 
     case Theme::HighlightColor:
-        return colorScheme.decoration(KColorScheme::FocusColor).color();
+        return colorScheme.decoration(KColorScheme::HoverColor).color();
 
     case Theme::BackgroundColor:
         return colorScheme.background(KColorScheme::NormalBackground).color();

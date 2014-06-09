@@ -32,8 +32,6 @@
 #include <kiconloader.h>
 #include <kiconeffect.h>
 
-#include <plasma/svg.h>
-
 #include "fadingnode_p.h"
 #include "svgtexturenode.h"
 
@@ -42,6 +40,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
+      m_svgColorGroup(Plasma::Svg::NormalColorGroup),
       m_animValue(0)
 {
     m_loadPixmapTimer.setSingleShot(true);
@@ -96,6 +95,7 @@ void IconItem::setSource(const QVariant &source)
     } else if (source.canConvert<QString>()) {
         if (!m_svgIcon) {
             m_svgIcon = new Plasma::Svg(this);
+            m_svgIcon->setColorGroup(m_svgColorGroup);
         }
         //try as a svg icon
         m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
@@ -152,6 +152,26 @@ QVariant IconItem::source() const
     return m_source;
 }
 
+void IconItem::setSvgColorGroup(Plasma::Svg::ColorGroup group)
+{
+    if (m_svgColorGroup == group) {
+        return;
+    }
+
+    m_svgColorGroup = group;
+
+    if (m_svgIcon) {
+        m_svgIcon->setColorGroup(group);
+    }
+
+    emit svgColorGroupChanged();
+}
+
+Plasma::Svg::ColorGroup IconItem::svgColorGroup() const
+{
+    return m_svgColorGroup;
+}
+
 bool IconItem::isActive() const
 {
     return m_active;
@@ -163,13 +183,6 @@ void IconItem::setActive(bool active)
         return;
     }
 
-    if (m_svgIcon) {
-        if (active) {
-            m_svgIcon->setStyleHints(Plasma::Svg::Inverted|Plasma::Svg::Highlighted);
-        } else {
-            m_svgIcon->setStyleHints(Plasma::Svg::Normal);
-        }
-    }
     m_active = active;
     m_loadPixmapTimer.start();
     emit activeChanged();

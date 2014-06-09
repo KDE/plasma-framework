@@ -27,18 +27,16 @@
 #include <QVariant>
 #include <QTimer>
 
-class QPropertyAnimation;
+#include <plasma/svg.h>
 
-namespace Plasma
-{
-class Svg;
-}
+class QPropertyAnimation;
 
 class IconItem : public QQuickItem
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariant source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(Plasma::Svg::ColorGroup svgColorGroup READ svgColorGroup WRITE setSvgColorGroup NOTIFY svgColorGroupChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
@@ -50,6 +48,9 @@ public:
 
     void setSource(const QVariant &source);
     QVariant source() const;
+
+    void setSvgColorGroup(Plasma::Svg::ColorGroup group);
+    Plasma::Svg::ColorGroup svgColorGroup() const;
 
     bool isActive() const;
     void setActive(bool active);
@@ -69,6 +70,7 @@ Q_SIGNALS:
     void sourceChanged();
     void smoothChanged();
     void validChanged();
+    void svgColorGroupChanged();
 
 private Q_SLOTS:
     void loadPixmap();
@@ -97,6 +99,7 @@ private:
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
 
+    Plasma::Svg::ColorGroup m_svgColorGroup;
 
     //animation on pixmap change
     QPropertyAnimation *m_animation;

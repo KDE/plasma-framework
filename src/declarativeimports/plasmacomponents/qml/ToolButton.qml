@@ -363,6 +363,7 @@ Item {
             width: valid ? Math.min(parent.width, parent.height): 0
             height: width
             active: delegate.item.hasOverState && mouse.containsMouse
+            svgColorGroup: mouse.containsMouse || !button.flat ? PlasmaCore.Svg.ButtonColorGroup : PlasmaCore.Svg.NormalColorGroup
         }
 
         Label {
