@@ -314,7 +314,8 @@ void ThemePrivate::discardCache(CacheTypes caches)
         pixmapCache = 0;
     }
 
-    cachedStyleSheets.clear();
+    cachedDefaultStyleSheet = QString();
+    cachedSvgStyleSheets.clear();
 
     if (caches & SvgElementsCache) {
         discoveries.clear();
@@ -373,7 +374,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
 {
     QString stylesheet;
     if (css.isEmpty()) {
-        stylesheet = cachedStyleSheets.value(DEFAULTSTYLE);
+        stylesheet = cachedDefaultStyleSheet;
         if (stylesheet.isEmpty()) {
             stylesheet = QStringLiteral("\n\
                         body {\n\
@@ -386,8 +387,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
                         a:visited { color: %visitedlink; }\n\
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
-            stylesheet = processStyleSheet(stylesheet);
-            cachedStyleSheets.insert(DEFAULTSTYLE, stylesheet);
+            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet);
         }
 
         return stylesheet;
@@ -427,16 +427,32 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet()
+const QString ThemePrivate::svgStyleSheet(Plasma::Svg::ColorGroup group)
 {
-    QString stylesheet = cachedStyleSheets.value(SVGSTYLE);
+    QString stylesheet = cachedSvgStyleSheets.value(group);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
-        stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
-        stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
+        switch (group) {
+        case Svg::ButtonColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%buttontextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%buttonbackgroundcolor"));
 
-        stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%buttonhovercolor"));
+            break;
+        case Svg::ViewColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%viewtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%viewbackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
+            break;
+        default:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
+        }
+
 
         stylesheet += skel.arg(QStringLiteral("ButtonText"), QStringLiteral("%buttontextcolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonBackground"), QStringLiteral("%buttonbackgroundcolor"));
@@ -449,7 +465,7 @@ const QString ThemePrivate::svgStyleSheet()
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
 
         stylesheet = processStyleSheet(stylesheet);
-        cachedStyleSheets.insert(SVGSTYLE, stylesheet);
+        cachedSvgStyleSheets.insert(group, stylesheet);
     }
 
     return stylesheet;

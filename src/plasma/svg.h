@@ -61,8 +61,16 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
+    Q_PROPERTY(ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
 
 public:
+    enum ColorGroup {
+        NormalColorGroup = 0,
+        ButtonColorGroup = 1,
+        ViewColorGroup = 2
+    };
+    Q_ENUMS(ColorGroup)
+
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
      *
@@ -92,6 +100,20 @@ public:
      * @return the device pixel ratio for this Svg.
      */
     qreal devicePixelRatio();
+
+    /**
+     * Set a color group for the Svg.
+     * if the Svg uses stylesheets and has elements
+     * that are eithe TextColor or BackgroundColor class,
+     * make them use ButtonTextColor/ButtonBackgroundColor
+     * or ViewTextColor/ViewBackgroundColor
+     */
+    void setColorGroup(ColorGroup group);
+
+    /**
+     * @return the color group for this Svg
+     */
+    ColorGroup colorGroup() const;
 
     /**
      * Returns a pixmap of the SVG represented by this object.
@@ -397,6 +419,16 @@ Q_SIGNALS:
      * Emitted whenever the image path of the Svg is changed.
      */
     void imagePathChanged();
+
+    /**
+     * Emitted whenever the color hint has changed.
+     */
+    void colorHintChanged();
+
+    /**
+     * Emitted whenever the color group has changed.
+     */
+    void colorGroupChanged();
 
 private:
     SvgPrivate *const d;

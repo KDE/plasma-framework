@@ -244,6 +244,7 @@ Item {
             width: valid? parent.height: 0
             height: width
             active: shadow.hasOverState && mouse.containsMouse
+            svgColorGroup: PlasmaCore.Svg.ButtonColorGroup
         }
 
         Label {
@@ -255,8 +256,6 @@ Item {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
-
-        
     }
 
     MouseArea {

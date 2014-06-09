@@ -22,6 +22,7 @@
 #define PLASMA_THEME_P_H
 
 #include "theme.h"
+#include "svg.h"
 #include <QHash>
 
 #include <QDebug>
@@ -48,11 +49,6 @@ class Theme;
 #define DEFAULT_WALLPAPER_SUFFIX ".png"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
 static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
-
-enum styles {
-    DEFAULTSTYLE,
-    SVGSTYLE
-};
 
 enum CacheType {
     NoCache = 0,
@@ -82,7 +78,7 @@ public:
     void processContrastSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
-    const QString svgStyleSheet();
+    const QString svgStyleSheet(Plasma::Svg::ColorGroup group);
     QColor color(Theme::ColorRole role) const;
 
 public Q_SLOTS:
@@ -129,11 +125,12 @@ public:
     int defaultWallpaperHeight;
     KImageCache *pixmapCache;
     KSharedConfigPtr svgElementsCache;
+    QString cachedDefaultStyleSheet;
     QHash<QString, QSet<QString> > invalidElements;
     QHash<QString, QPixmap> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
-    QHash<styles, QString> cachedStyleSheets;
+    QHash<Svg::ColorGroup, QString> cachedSvgStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *pixmapSaveTimer;
     QTimer *rectSaveTimer;

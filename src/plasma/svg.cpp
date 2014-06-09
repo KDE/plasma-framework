@@ -135,6 +135,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
       renderer(0),
       styleCrc(0),
+      colorGroup(Plasma::Svg::NormalColorGroup),
       lastModified(0),
       devicePixelRatio(1.0),
       multipleImages(false),
@@ -164,7 +165,7 @@ QString SvgPrivate::cacheId(const QString &elementId)
 //This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &path, const QSize &size)
 {
-    return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio);
+    return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio) % QLSEP % QString::number(colorGroup);
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -415,7 +416,7 @@ void SvgPrivate::createRenderer()
     //qDebug() << "FAIL! **************************";
     //qDebug() << path << "**";
 
-    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet();
+    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup);
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
@@ -683,6 +684,22 @@ void Svg::setDevicePixelRatio(qreal ratio)
 qreal Svg::devicePixelRatio()
 {
     return d->devicePixelRatio;
+}
+
+void Svg::setColorGroup(Svg::ColorGroup group)
+{
+    if (d->colorGroup == group) {
+        return;
+    }
+
+    d->colorGroup = group;
+    d->renderer = 0;
+    emit colorGroupChanged();
+}
+
+Svg::ColorGroup Svg::colorGroup() const
+{
+    return d->colorGroup;
 }
 
 QPixmap Svg::pixmap(const QString &elementID)
