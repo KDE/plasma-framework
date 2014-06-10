@@ -286,6 +286,7 @@ void DialogPrivate::updateMaximumWidth()
         resizeOrigin = DialogPrivate::Window;
         if (hint > 0) {
             q->setMaximumWidth(hint + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
+            q->setWidth(qMin(q->width(), q->maximumWidth()));
         } else {
             q->setMaximumWidth(DIALOGSIZE_MAX);
         }
@@ -301,6 +302,7 @@ void DialogPrivate::updateMaximumHeight()
         resizeOrigin = DialogPrivate::Window;
         if (hint > 0) {
             q->setMaximumHeight(hint + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+            q->setHeight(qMin(q->height(), q->maximumHeight()));
         } else {
             q->setMaximumHeight(DIALOGSIZE_MAX);
         }
