@@ -75,7 +75,7 @@ public:
 
     //SLOTS
     void syncBorders();
-    void updateContrast();
+    void updateTheme();
     void updateVisibility(bool visible);
 
     void updateMinimumWidth();
@@ -170,13 +170,19 @@ void DialogPrivate::syncBorders()
     }
 }
 
-void DialogPrivate::updateContrast()
+void DialogPrivate::updateTheme()
 {
     KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
             theme.backgroundContrast(),
             theme.backgroundIntensity(),
             theme.backgroundSaturation(),
             frameSvgItem->frameSvg()->mask());
+
+    if (KWindowSystem::compositingActive()) {
+        q->setMask(QRegion());
+    } else {
+        q->setMask(frameSvgItem->frameSvg()->mask());
+    }
 }
 
 void DialogPrivate::updateVisibility(bool visible)
@@ -355,7 +361,7 @@ void DialogPrivate::syncMainItemToSize()
     syncBorders();
 
     KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
-    updateContrast();
+    updateTheme();
 
     if (mainItem) {
         mainItem.data()->setX(frameSvgItem->margins()->left());
@@ -402,7 +408,7 @@ void DialogPrivate::syncToMainItemSize()
     mainItem.data()->setX(frameSvgItem->margins()->left());
     mainItem.data()->setY(frameSvgItem->margins()->top());
     KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
-    updateContrast();
+    updateTheme();
 }
 
 void DialogPrivate::requestSizeSync(bool delayed)
@@ -469,7 +475,7 @@ Dialog::Dialog(QQuickItem *parent)
     d->frameSvgItem->setImagePath("dialogs/background");
 
     connect(&d->theme, SIGNAL(themeChanged()),
-            this, SLOT(updateContrast()));
+            this, SLOT(updateTheme()));
 
 }
 
