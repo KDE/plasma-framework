@@ -350,11 +350,6 @@ void DialogPrivate::updateInputShape()
 
 void DialogPrivate::syncMainItemToSize()
 {
-    frameSvgItem->setX(0);
-    frameSvgItem->setY(0);
-    frameSvgItem->setWidth(q->width());
-    frameSvgItem->setHeight(q->height());
-
     syncBorders();
 
     KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
@@ -385,6 +380,11 @@ void DialogPrivate::syncToMainItemSize()
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
 
+    frameSvgItem->setX(0);
+    frameSvgItem->setY(0);
+    frameSvgItem->setWidth(s.width());
+    frameSvgItem->setHeight(s.height());
+
     if (q->visualParent()) {
         const QRect geom(q->popupPosition(q->visualParent(), s), s);
 
@@ -395,11 +395,6 @@ void DialogPrivate::syncToMainItemSize()
     } else {
         q->resize(s);
     }
-
-    frameSvgItem->setX(0);
-    frameSvgItem->setY(0);
-    frameSvgItem->setWidth(s.width());
-    frameSvgItem->setHeight(s.height());
 
     syncBorders();
     mainItem.data()->setX(frameSvgItem->margins()->left());
@@ -739,6 +734,11 @@ void Dialog::adjustGeometry(const QRect &geom)
 
 void Dialog::resizeEvent(QResizeEvent *re)
 {
+    d->frameSvgItem->setX(0);
+    d->frameSvgItem->setY(0);
+    d->frameSvgItem->setWidth(re->size().width());
+    d->frameSvgItem->setHeight(re->size().height());
+
     QQuickWindow::resizeEvent(re);
 
     if (d->resizeOrigin == DialogPrivate::Undefined) {
