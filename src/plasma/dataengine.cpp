@@ -379,7 +379,9 @@ void DataEngine::updateAllSources()
     while (it.hasNext()) {
         it.next();
         //qDebug() << "updating" << it.key();
-        updateSourceEvent(it.key());
+        if (it.value()->isUsed()) {
+            updateSourceEvent(it.key());
+        }
     }
 
     d->scheduleSourcesUpdated();
@@ -388,7 +390,9 @@ void DataEngine::updateAllSources()
 void DataEngine::forceImmediateUpdateOfAllVisualizations()
 {
     foreach (DataContainer *source, d->sources) {
-        source->forceImmediateUpdate();
+        if (source->isUsed()) {
+            source->forceImmediateUpdate();
+        }
     }
 }
 
