@@ -100,6 +100,8 @@ Item {
             top: parent.top
             left: parent.left
             right: parent.right
+            leftMargin: borderWidth
+            rightMargin: borderWidth
         }
 
         level: 1
