@@ -29,7 +29,12 @@ macro(plasma_install_package dir component)
    if(NOT type)
       set(type applet)
    endif()
-   install(DIRECTORY ${dir}/ DESTINATION ${PLASMA_DATA_INSTALL_DIR}/${root}/${component} PATTERN .svn EXCLUDE PATTERN CMakeLists.txt EXCLUDE PATTERN Messages.sh EXCLUDE)
+   install(DIRECTORY ${dir}/ DESTINATION ${PLASMA_DATA_INSTALL_DIR}/${root}/${component}
+           PATTERN .svn EXCLUDE
+           PATTERN CMakeLists.txt EXCLUDE
+           PATTERN Messages.sh EXCLUDE
+           PATTERN dummydata EXCLUDE)
+
    install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
