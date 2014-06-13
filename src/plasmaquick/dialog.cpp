@@ -682,7 +682,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     if (dialogPos.x() + size.width() > avail.right()) {
         // popup hits rhs
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
-            dialogPos.setX(avail.right() - size.width());
+            dialogPos.setX(avail.right() - size.width() + 1);
         } else {
             dialogPos.setX(leftPoint.x());
         }
@@ -701,7 +701,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
         } else {
-            dialogPos.setY(avail.bottom() - size.height());
+            dialogPos.setY(avail.bottom() - size.height() + 1);
         }
     }
 
