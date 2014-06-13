@@ -69,8 +69,8 @@ X-KDE-PluginInfo-EnabledByDefault=true
 [Wallpaper]
 defaultWallpaperTheme=Next
 defaultFileSuffix=.png
-defaultWidth=2560
-defaultHeight=1600
+defaultWidth=1920
+defaultHeight=1080
 
 [ContrastEffect]
 enabled=true
