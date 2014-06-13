@@ -25,7 +25,7 @@ X-KDE-PluginInfo-License=LGPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Elarun
+defaultWallpaperTheme=Next
 defaultFileSuffix=.png
 defaultWidth=2560
 defaultHeight=1600
