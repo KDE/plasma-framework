@@ -55,6 +55,7 @@ Label {
 
     property int step: 2
 
+    height: Math.round(paintedHeight * 1.2)
     font.pointSize: headerPointSize(level)
     font.weight: Font.Light
     wrapMode: Text.WordWrap
