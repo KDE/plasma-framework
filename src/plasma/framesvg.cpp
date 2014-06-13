@@ -691,12 +691,14 @@ QPixmap FrameSvgPrivate::alphaMask()
                 maskFrame = new FrameData(*frame, q);
                 s_sharedFrames[q->theme()->d].insert(key, maskFrame);
             }
+            maskFrame->enabledBorders = frame->enabledBorders;
 
             frames.insert(prefix, maskFrame);
             updateSizes();
         }
 
         FrameData *maskFrame = frames[prefix];
+        maskFrame->enabledBorders = frame->enabledBorders;
         if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
             const QString oldKey = cacheId(maskFrame, prefix);
             maskFrame->frameSize = frameSize(frame).toSize();
