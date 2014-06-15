@@ -18,7 +18,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.1
+import QtQuick 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
@@ -58,7 +58,7 @@ Item {
         rotationAnimation.to = rotation + 360;
     }
 
-    RotationAnimation on rotation {
+    RotationAnimator on rotation {
         id: rotationAnimation
 
         from: 0
