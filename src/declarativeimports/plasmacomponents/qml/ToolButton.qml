@@ -210,15 +210,27 @@ Item {
                     var borders = new Array()
                     if (button.x == 0) {
                         borders.push("LeftBorder")
+                        shadow.anchors.leftMargin = 0;
+                    } else {
+                        shadow.anchors.leftMargin = -1;
                     }
                     if (button.y == 0) {
                         borders.push("TopBorder")
+                        shadow.anchors.topMargin = 0;
+                    } else {
+                        shadow.anchors.topMargin = -1;
                     }
                     if (button.x + button.width >= button.parent.width) {
                         borders.push("RightBorder")
+                        shadow.anchors.rightMargin = 0;
+                    } else {
+                        shadow.anchors.rightMargin = -1;
                     }
                     if (button.y + button.height >= button.parent.height) {
                         borders.push("BottomBorder")
+                        shadow.anchors.bottomMargin = 0;
+                    } else {
+                        shadow.anchors.bottomMargin = -1;
                     }
 
                     if (shadows === null) {
