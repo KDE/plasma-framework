@@ -347,7 +347,7 @@ Item {
                 id: buttonItem
                 svg: buttonSvg
                 elementId: (internal.userPressed || checked) ? "pressed" : "normal"
-                width: parent.height
+                width: Math.floor(parent.height/2) * 2
                 height: width
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
                 opacity: (internal.userPressed || checked || !flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
@@ -372,7 +372,7 @@ Item {
         PlasmaCore.IconItem {
             id: icon
             anchors.verticalCenter: parent.verticalCenter
-            width: valid ? Math.min(parent.width, parent.height): 0
+            width: valid ? Math.min(Math.floor(parent.width/2) * 2, Math.floor(parent.height/2) * 2): 0
             height: width
             active: delegate.item.hasOverState && mouse.containsMouse
             colorGroup: mouse.containsMouse || !button.flat ? PlasmaCore.Svg.ButtonColorGroup : PlasmaCore.Svg.NormalColorGroup
