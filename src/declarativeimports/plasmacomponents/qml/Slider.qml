@@ -299,6 +299,17 @@ Item {
 
                 slider.forceActiveFocus()
             }
+            onWheel: {
+                // horizontal scrolling (angleDelta.x) is "inverted"
+                // this matches QSlider's behavior
+                var delta = wheel.angleDelta.x ? -wheel.angleDelta.x : wheel.angleDelta.y
+                if (delta > 0) { // up/right
+                    slider.value += (slider.inverted ? -slider.stepSize : slider.stepSize)
+                } else if (delta < 0) {
+                    slider.value += (slider.inverted ? slider.stepSize : -slider.stepSize)
+                }
+                slider.forceActiveFocus()
+            }
         }
     }
 
