@@ -389,7 +389,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     d->compactRepresentationCheckTimer.setInterval(250);
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
-    d->compactRepresentationCheckTimer.start();
 
     d->fullRepresentationResizeTimer.setSingleShot(true);
     d->fullRepresentationResizeTimer.setInterval(250);
@@ -487,9 +486,18 @@ void AppletQuickItem::init()
 
     //initialize size, so an useless resize less
     QVariantHash initialProperties;
-    initialProperties["width"] = width();
-    initialProperties["height"] = height();
+    //initialize with our size only if valid
+    if (width() > 0 && height() > 0) {
+        initialProperties["width"] = width();
+        initialProperties["height"] = height();
+    }
     d->qmlObject->completeInitialization(initialProperties);
+
+    //otherwise, initialize our size to root object's size
+    if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
+        setWidth(d->qmlObject->rootObject()->property("width").value<qreal>());
+        setHeight(d->qmlObject->rootObject()->property("height").value<qreal>());
+    }
 
 
     //default fullrepresentation is our root main component, if none specified
@@ -521,6 +529,8 @@ void AppletQuickItem::init()
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("compactapplet")));
     }
+
+    d->compactRepresentationCheckTimer.start();
 }
 
 
