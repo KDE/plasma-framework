@@ -91,6 +91,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
             [=]() {
+                if (!containment()) {
+                    return;
+                }
                 disconnect(containment(), &Plasma::Containment::appletRemoved,
                 this, &ContainmentInterface::appletRemovedForward);
         });
