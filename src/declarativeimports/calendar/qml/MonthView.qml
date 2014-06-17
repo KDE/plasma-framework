@@ -191,9 +191,6 @@ Item {
         }
     }
 
-        today: root.today;
-
-
 /*
     Item {
         id: calendarToolbar
