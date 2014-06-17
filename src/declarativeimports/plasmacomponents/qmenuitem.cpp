@@ -44,6 +44,10 @@ void QMenuItem::setAction(QAction *a)
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
         connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
         connect(m_action, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
+
+        connect(this, &QQuickItem::visibleChanged, this, &QMenuItem::updateAction);
+        connect(this, &QQuickItem::enabledChanged, this, &QMenuItem::updateAction);
+
         emit actionChanged();
     }
 }
@@ -106,6 +110,13 @@ void QMenuItem::setChecked(bool checked)
 {
     m_action->setChecked(checked);
 }
+
+void QMenuItem::updateAction()
+{
+    m_action->setVisible(isVisible());
+    m_action->setEnabled(isEnabled());
+}
+
 
 #include "qmenuitem.moc"
 

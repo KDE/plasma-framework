@@ -72,6 +72,7 @@ Q_SIGNALS:
     void checkableChanged();
 
 private:
+    void updateAction();
     QAction *m_action;
     QVariant m_icon;
 };
