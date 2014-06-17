@@ -127,8 +127,9 @@ void ToolTipDialog::adjustGeometry(const QRect &geom)
         default:
             break;
         }
-        
+
         startGeom.setSize(geom.size());
+        setGeometry(startGeom);
 
         m_animation->setStartValue(startGeom.topLeft());
         m_animation->setEndValue(geom.topLeft());

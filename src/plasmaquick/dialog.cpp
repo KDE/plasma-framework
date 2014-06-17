@@ -521,6 +521,8 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
             //Extract the representation's Layout, if any
             QObject *layout = 0;
+            setMinimumSize(QSize(0, 0));
+            setMaximumSize(QSize(DIALOGSIZE_MAX, DIALOGSIZE_MAX));
 
             //Search a child that has the needed Layout properties
             //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
@@ -533,6 +535,9 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                    ) {
                     layout = child;
                 }
+            }
+            if (d->mainItemLayout) {
+                disconnect(d->mainItemLayout.data(), 0, this, 0);
             }
             d->mainItemLayout = layout;
 
