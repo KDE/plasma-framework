@@ -31,11 +31,16 @@ class Calendar : public QObject
 {
     Q_OBJECT
     /**
-     * This property is used to determine which data from which month to show. One should
-     * set it's Year, Month and Day although the Day is of less importance. Set it using
-     * YYYY-MM-DD format.
+     * This property is used to determine which data from which month to show, it ensures
+     * the day passed in the QDate is visible
      */
-    Q_PROPERTY(QDate startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
+    Q_PROPERTY(QDate displayedDate READ displayedDate WRITE setDisplayedDate NOTIFY displayedDateChanged)
+
+    /**
+     * This property is used to determine which data from which month to show, it ensures
+     * the day passed in the QDate is visible
+     */
+    Q_PROPERTY(QDate today READ today WRITE setToday NOTIFY todayChanged)
 
     /**
      * This determines which kind of data types should be contained in
@@ -125,9 +130,13 @@ public:
 
     explicit Calendar(QObject *parent = 0);
 
-    // Start date
-    QDate startDate() const;
-    void setStartDate(const QDate &dateTime);
+    // Displayed date
+    QDate displayedDate() const;
+    void setDisplayedDate(const QDate &dateTime);
+
+    // The day that represents "today"
+    QDate today() const;
+    void setToday(const QDate &dateTime);
 
     // Types
     int types() const;
@@ -163,9 +172,11 @@ public:
     Q_INVOKABLE void previousYear();
     Q_INVOKABLE QString dayName(int weekday) const;
     Q_INVOKABLE int currentWeek() const;
+    Q_INVOKABLE void resetToToday();
 
 Q_SIGNALS:
-    void startDateChanged();
+    void displayedDateChanged();
+    void todayChanged();
     void typesChanged();
     void daysChanged();
     void weeksChanged();
@@ -178,7 +189,8 @@ public Q_SLOTS:
     void updateData();
 
 private:
-    QDate m_startDate;
+    QDate m_displayedDate;
+    QDate m_today;
     Types m_types;
     QList<DayData> m_dayList;
     DaysModel *m_daysModel;

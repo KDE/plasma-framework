@@ -41,7 +41,6 @@ Item {
     property int mHeight: theme.mSize(theme.defaultFont).height
     property int borderWidth: 1
 
-    property alias startDate: monthCalendar.startDate
 
     property int columns: monthCalendar.days
     property int rows: monthCalendar.weeks
@@ -93,6 +92,10 @@ Item {
         return Qt.formatDate(d, "dddd dd MMM yyyy");
     }
 
+    function resetToToday() {
+        monthCalendar.resetToToday();
+    }
+
     PlasmaExtras.Heading {
         id: monthHeading
 
@@ -105,7 +108,7 @@ Item {
         }
 
         level: 1
-        text: root.startDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
+        text: monthCalendar.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
         elide: Text.ElideRight
 
         Loader {
@@ -135,7 +138,6 @@ Item {
         days: 7
         weeks: 6
         firstDayOfWeek: Qt.locale().firstDayOfWeek
-        startDate: today;
     }
 
     DaysCalendar {
@@ -192,6 +194,7 @@ Item {
         }
     }
 
+        today: root.today;
 
 
 /*
