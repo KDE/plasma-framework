@@ -453,8 +453,8 @@ Plasma::Types::ItemStatus AppletInterface::status() const
 
 int AppletInterface::screen() const
 {
-    if (applet()->containment()) {
-        return applet()->containment()->screen();
+    if (Plasma::Containment* c = applet()->containment()) {
+        return c->screen();
     }
 
     return -1;
