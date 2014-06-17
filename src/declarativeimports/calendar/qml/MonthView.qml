@@ -83,10 +83,6 @@ Item {
         return false;
     }
 
-    function today() {
-        return Qt.formatDateTime(new Date(), "yyyy-MM-dd")
-    }
-
     function eventDate(yearNumber,monthNumber,dayNumber) {
         var d = new Date(yearNumber, monthNumber-1, dayNumber);
         return Qt.formatDate(d, "dddd dd MMM yyyy");
