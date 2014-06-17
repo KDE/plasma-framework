@@ -300,7 +300,17 @@ void Containment::setContainmentType(Plasma::Types::ContainmentType type)
 
 Corona *Containment::corona() const
 {
-    return qobject_cast<Corona *>(parent());
+    if(Plasma::Corona* corona = qobject_cast<Corona *>(parent())) {
+        return corona;
+    //case in which this containment is child of an applet, hello systray :)
+    } else {
+        Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent());
+        if (parentApplet) {
+            return parentApplet->containment()->corona();
+        }
+    }
+
+    return nullptr;
 }
 
 void Containment::setFormFactor(Types::FormFactor formFactor)
@@ -448,16 +458,9 @@ QList<Applet *> Containment::applets() const
 
 int Containment::screen() const
 {
-    if (corona()) {
-        return corona()->screenForContainment(this);
-
-        //case in which this containment is child of an applet, hello systray :)
-    } else if (Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent())) {
-        if (parentApplet->containment()) {
-            return parentApplet->containment()->screen();
-        } else {
-            return -1;
-        }
+    Q_ASSERT(corona());
+    if (Corona* c = corona()) {
+        return c->screenForContainment(this);
     } else {
         return -1;
     }
