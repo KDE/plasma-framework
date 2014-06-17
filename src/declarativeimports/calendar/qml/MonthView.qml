@@ -41,7 +41,6 @@ Item {
     property int mHeight: theme.mSize(theme.defaultFont).height
     property int borderWidth: 1
 
-
     property int columns: monthCalendar.days
     property int rows: monthCalendar.weeks
 
@@ -106,6 +105,7 @@ Item {
         level: 1
         text: monthCalendar.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
         elide: Text.ElideRight
+        font.capitalization: Font.Capitalize
 
         Loader {
             id: menuLoader

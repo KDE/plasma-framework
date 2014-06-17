@@ -172,13 +172,7 @@ QString Calendar::dayName(int weekday) const
 
 QString Calendar::monthName() const
 {
-    // Some CLDR (locale) data used by Qt have standalone months names
-    // starting with lower-case letters. So if we want to provide consistent
-    // look across locales, we need to capitalize it ourselves
-    //
-    // see https://bugreports.qt-project.org/browse/QTBUG-35100
-    QString tmp = QDate::longMonthName(m_displayedDate.month(), QDate::StandaloneFormat);
-    return tmp.left(1).toUpper() + tmp.mid(1);
+    return QDate::longMonthName(m_displayedDate.month(), QDate::StandaloneFormat);
 }
 
 int Calendar::year() const
