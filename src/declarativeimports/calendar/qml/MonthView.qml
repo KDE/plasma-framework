@@ -134,6 +134,7 @@ Item {
         days: 7
         weeks: 6
         firstDayOfWeek: Qt.locale().firstDayOfWeek
+        today: root.today
     }
 
     DaysCalendar {
