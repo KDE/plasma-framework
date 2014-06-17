@@ -93,6 +93,7 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
 
     // The following icon sizes are fully scaled to dpi
+    m_iconSizes->insert("tiny", devicePixelIconSize(KIconLoader::SizeSmall) / 2);
     m_iconSizes->insert("small", devicePixelIconSize(KIconLoader::SizeSmall));
     m_iconSizes->insert("smallMedium", devicePixelIconSize(KIconLoader::SizeSmallMedium));
     m_iconSizes->insert("medium", devicePixelIconSize(KIconLoader::SizeMedium));
