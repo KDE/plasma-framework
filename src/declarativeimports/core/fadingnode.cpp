@@ -101,6 +101,10 @@ void FadingMaterialShader::updateState(const FadingMaterialState* newState, cons
 
 void FadingMaterialShader::initialize()
 {
+    if (!program()->isLinked()) {
+        // shader not linked, exit otherwise we crash, BUG: 336272
+        return;
+    }
     QSGSimpleMaterialShader< FadingMaterialState >::initialize();
     glFuncs = QOpenGLContext::currentContext()->functions();
     program()->bind();
