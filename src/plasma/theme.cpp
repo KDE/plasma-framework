@@ -532,6 +532,26 @@ QColor Theme::viewFocusColor() const
     return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
 }
 
+QColor Theme::complementaryTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ComplementaryTextColor);
+}
+
+QColor Theme::complementaryBackgroundColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ComplementaryBackgroundColor);
+}
+
+QColor Theme::complementaryHoverColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ComplementaryHoverColor);
+}
+
+QColor Theme::complementaryFocusColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::ComplementaryFocusColor);
+}
+
 QSizeF Theme::mSize(const QFont &font) const
 {
     return QFontMetrics(font).boundingRect("M").size();

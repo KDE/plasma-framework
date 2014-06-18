@@ -67,7 +67,8 @@ public:
     enum ColorGroup {
         NormalColorGroup = 0,
         ButtonColorGroup = 1,
-        ViewColorGroup = 2
+        ViewColorGroup = 2,
+        ComplementaryColorGroup = 3
     };
     Q_ENUMS(ColorGroup)
 

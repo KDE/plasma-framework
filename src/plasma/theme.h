@@ -81,6 +81,11 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChanged)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChanged)
 
+    Q_PROPERTY(QColor complementaryTextColor READ complementaryTextColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor complementaryBackgroundColor READ complementaryBackgroundColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor complementaryHoverColor READ viewHoverColor NOTIFY themeChanged)
+    Q_PROPERTY(QColor complementaryFocusColor READ viewFocusColor NOTIFY themeChanged)
+
 public:
     enum ColorRole {
         TextColor = 0, /**<  the text color to be used by items resting on the background */
@@ -93,10 +98,16 @@ public:
         VisitedLinkColor = 32, /** color visited clickable links */
         ButtonHoverColor = 64, /** color for hover effect on buttons */
         ButtonFocusColor = 128, /** color for focus effect on buttons */
+
         ViewTextColor = 256, /** text color for views */
         ViewBackgroundColor = 512, /** background color for views */
         ViewHoverColor = 1024, /** color for hover effect on view */
-        ViewFocusColor = 2048 /** color for focus effect on view */
+        ViewFocusColor = 2048, /** color for focus effect on view */
+
+        ComplementaryTextColor = 4096, /** text color for "complementary" areas */
+        ComplementaryBackgroundColor = 8192, /** background color for "complementary" areas */
+        ComplementaryHoverColor = 16384, /** text color for "complementary" areas */
+        ComplementaryFocusColor = 32768 /** background color for "complementary" areas */
     };
 
     /**
@@ -418,6 +429,30 @@ public:
      * @since 5.0
      */
     QColor viewFocusColor() const;
+
+    /**
+     * @return The theme's colorscheme's text color of "complementary" areas
+     * @since 5.0
+     */
+    QColor complementaryTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's background color of "complementary" areas
+     * @since 5.0
+     */
+    QColor complementaryBackgroundColor() const;
+
+    /**
+     * @return The theme's colorscheme's color of hovered "complementary" areas
+     * @since 5.0
+     */
+    QColor complementaryHoverColor() const;
+
+    /**
+     * @return The theme's colorscheme's color of focused "complementary" areas
+     * @since 5.0
+     */
+    QColor complementaryFocusColor() const;
 
     /** This method allows Plasma to enable and disable the background
      * contrast effect for a given theme, improving readability. The

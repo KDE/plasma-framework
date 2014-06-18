@@ -414,6 +414,11 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::ViewHoverColor).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::ViewFocusColor).name();
 
+    elements[QStringLiteral("%complementarytextcolor")] = color(Theme::ComplementaryTextColor).name();
+    elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::ComplementaryBackgroundColor).name();
+    elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::ComplementaryHoverColor).name();
+    elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::ComplementaryFocusColor).name();
+
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
     elements[QStringLiteral("%fontfamily")] = font.family().split('[').first();
@@ -446,6 +451,12 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Svg::ColorGroup group)
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
             break;
+        case Svg::ComplementaryColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%complementarytextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%complementarybackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%complementaryhovercolor"));
+            break;
         default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
@@ -463,6 +474,11 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Svg::ColorGroup group)
         stylesheet += skel.arg(QStringLiteral("ViewBackground"), QStringLiteral("%viewbackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ViewHover"), QStringLiteral("%viewhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
+
+        stylesheet += skel.arg(QStringLiteral("ComplementaryText"), QStringLiteral("%complementarytextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryBackground"), QStringLiteral("%complementarybackgroundcolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryHover"), QStringLiteral("%complementaryhovercolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryFocus"), QStringLiteral("%complementaryfocuscolor"));
 
         stylesheet = processStyleSheet(stylesheet);
         cachedSvgStyleSheets.insert(group, stylesheet);
@@ -546,6 +562,38 @@ QColor ThemePrivate::color(Theme::ColorRole role) const
     case Theme::ViewFocusColor:
         return viewColorScheme.decoration(KColorScheme::FocusColor).color();
 
+    case Theme::ComplementaryTextColor: {
+        KConfigGroup cg(colors, "Colors:Complementary");
+        if (cg.isValid()) {
+            return cg.readEntry("ForegroundNormal", colorScheme.foreground(KColorScheme::NormalText).color());
+        } else {
+            return colorScheme.foreground(KColorScheme::NormalText).color();
+        }
+    }
+    case Theme::ComplementaryBackgroundColor: {
+        KConfigGroup cg(colors, "Colors:Complementary");
+        if (cg.isValid()) {
+            return cg.readEntry("BackgroundNormal", colorScheme.background(KColorScheme::NormalBackground).color());
+        } else {
+            return colorScheme.background(KColorScheme::NormalBackground).color();
+        }
+    }
+    case Theme::ComplementaryHoverColor: {
+        KConfigGroup cg(colors, "Colors:Complementary");
+        if (cg.isValid()) {
+            return cg.readEntry("DecorationFocus", colorScheme.decoration(KColorScheme::HoverColor).color());
+        } else {
+            return colorScheme.decoration(KColorScheme::HoverColor).color();
+        }
+    }
+    case Theme::ComplementaryFocusColor: {
+        KConfigGroup cg(colors, "Colors:Complementary");
+        if (cg.isValid()) {
+            return cg.readEntry("DecorationHover", colorScheme.decoration(KColorScheme::FocusColor).color());
+        } else {
+            return colorScheme.decoration(KColorScheme::FocusColor).color();
+        }
+    }
     case Theme::LinkColor:
         return viewColorScheme.foreground(KColorScheme::LinkText).color();
 
