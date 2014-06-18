@@ -89,25 +89,26 @@ class PLASMA_EXPORT Theme : public QObject
 public:
     enum ColorRole {
         TextColor = 0, /**<  the text color to be used by items resting on the background */
-        HighlightColor = 1, /**<  the text highlight color to be used by items resting
+        BackgroundColor = 1, /**< the default background color */
+        HighlightColor = 2, /**<  the text highlight color to be used by items resting
                                    on the background */
-        BackgroundColor = 2, /**< the default background color */
-        ButtonTextColor = 4, /** text color for buttons */
-        ButtonBackgroundColor = 8, /** background color for buttons*/
-        LinkColor = 16, /** color for clickable links */
-        VisitedLinkColor = 32, /** color visited clickable links */
-        ButtonHoverColor = 64, /** color for hover effect on buttons */
-        ButtonFocusColor = 128, /** color for focus effect on buttons */
+        LinkColor = 3, /** color for clickable links */
+        VisitedLinkColor = 4, /** color visited clickable links */
 
-        ViewTextColor = 256, /** text color for views */
-        ViewBackgroundColor = 512, /** background color for views */
-        ViewHoverColor = 1024, /** color for hover effect on view */
-        ViewFocusColor = 2048, /** color for focus effect on view */
+        ButtonTextColor = 100, /** text color for buttons */
+        ButtonBackgroundColor = 101, /** background color for buttons*/
+        ButtonHoverColor = 102, /** color for hover effect on buttons */
+        ButtonFocusColor = 103, /** color for focus effect on buttons */
 
-        ComplementaryTextColor = 4096, /** text color for "complementary" areas */
-        ComplementaryBackgroundColor = 8192, /** background color for "complementary" areas */
-        ComplementaryHoverColor = 16384, /** text color for "complementary" areas */
-        ComplementaryFocusColor = 32768 /** background color for "complementary" areas */
+        ViewTextColor = 200, /** text color for views */
+        ViewBackgroundColor = 201, /** background color for views */
+        ViewHoverColor = 202, /** color for hover effect on view */
+        ViewFocusColor = 203, /** color for focus effect on view */
+
+        ComplementaryTextColor = 300, /** text color for "complementary" areas */
+        ComplementaryBackgroundColor = 301, /** background color for "complementary" areas */
+        ComplementaryHoverColor = 302, /** text color for "complementary" areas */
+        ComplementaryFocusColor = 303 /** background color for "complementary" areas */
     };
 
     /**
