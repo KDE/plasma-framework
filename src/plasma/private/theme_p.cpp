@@ -432,26 +432,26 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet(Plasma::Svg::ColorGroup group)
+const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 {
     QString stylesheet = cachedSvgStyleSheets.value(group);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
         switch (group) {
-        case Svg::ButtonColorGroup:
+        case Theme::ButtonColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%buttontextcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%buttonbackgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%buttonhovercolor"));
             break;
-        case Svg::ViewColorGroup:
+        case Theme::ViewColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%viewtextcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%viewbackgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
             break;
-        case Svg::ComplementaryColorGroup:
+        case Theme::ComplementaryColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%complementarytextcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%complementarybackgroundcolor"));
 

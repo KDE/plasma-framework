@@ -24,6 +24,7 @@
 #include <QPixmap>
 
 #include <plasma/plasma_export.h>
+#include <plasma/theme.h>
 
 class QPainter;
 class QPoint;
@@ -39,7 +40,6 @@ namespace Plasma
 
 class FrameSvgPrivate;
 class SvgPrivate;
-class Theme;
 
 /**
  * @class Svg plasma/svg.h <Plasma/Svg>
@@ -61,17 +61,9 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
-    Q_PROPERTY(ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
+    Q_PROPERTY(Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
 
 public:
-    enum ColorGroup {
-        NormalColorGroup = 0,
-        ButtonColorGroup = 1,
-        ViewColorGroup = 2,
-        ComplementaryColorGroup = 3
-    };
-    Q_ENUMS(ColorGroup)
-
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
      *
@@ -109,12 +101,12 @@ public:
      * make them use ButtonTextColor/ButtonBackgroundColor
      * or ViewTextColor/ViewBackgroundColor
      */
-    void setColorGroup(ColorGroup group);
+    void setColorGroup(Theme::ColorGroup group);
 
     /**
      * @return the color group for this Svg
      */
-    ColorGroup colorGroup() const;
+    Theme::ColorGroup colorGroup() const;
 
     /**
      * Returns a pixmap of the SVG represented by this object.

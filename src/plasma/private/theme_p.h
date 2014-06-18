@@ -78,7 +78,7 @@ public:
     void processContrastSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css);
-    const QString svgStyleSheet(Plasma::Svg::ColorGroup group);
+    const QString svgStyleSheet(Plasma::Theme::ColorGroup group);
     QColor color(Theme::ColorRole role) const;
 
 public Q_SLOTS:
@@ -130,7 +130,7 @@ public:
     QHash<QString, QPixmap> pixmapsToCache;
     QHash<QString, QString> keysToCache;
     QHash<QString, QString> idsToCache;
-    QHash<Svg::ColorGroup, QString> cachedSvgStyleSheets;
+    QHash<Theme::ColorGroup, QString> cachedSvgStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *pixmapSaveTimer;
     QTimer *rectSaveTimer;

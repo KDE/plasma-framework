@@ -80,7 +80,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
     //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
-    qmlRegisterType<Plasma::Theme>();
+    qmlRegisterUncreatableType<Plasma::Theme>(uri, 2, 0, "Theme", "It is not possible to instantiate Theme directly.");
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");

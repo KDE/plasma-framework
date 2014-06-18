@@ -375,7 +375,7 @@ Item {
             width: valid ? Math.min(Math.floor(parent.width/2) * 2, Math.floor(parent.height/2) * 2): 0
             height: width
             active: delegate.item.hasOverState && mouse.containsMouse
-            colorGroup: mouse.containsMouse || !button.flat ? PlasmaCore.Svg.ButtonColorGroup : PlasmaCore.Svg.NormalColorGroup
+            colorGroup: mouse.containsMouse || !button.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
         }
 
         Label {

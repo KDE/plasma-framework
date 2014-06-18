@@ -40,7 +40,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
-      m_colorGroup(Plasma::Svg::NormalColorGroup),
+      m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
     m_loadPixmapTimer.setSingleShot(true);
@@ -150,7 +150,7 @@ QVariant IconItem::source() const
     return m_source;
 }
 
-void IconItem::setColorGroup(Plasma::Svg::ColorGroup group)
+void IconItem::setColorGroup(Plasma::Theme::ColorGroup group)
 {
     if (m_colorGroup == group) {
         return;
@@ -165,7 +165,7 @@ void IconItem::setColorGroup(Plasma::Svg::ColorGroup group)
     emit colorGroupChanged();
 }
 
-Plasma::Svg::ColorGroup IconItem::colorGroup() const
+Plasma::Theme::ColorGroup IconItem::colorGroup() const
 {
     return m_colorGroup;
 }

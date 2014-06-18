@@ -244,7 +244,7 @@ Item {
             width: valid? parent.height: 0
             height: width
             active: shadow.hasOverState && mouse.containsMouse
-            colorGroup: PlasmaCore.Svg.ButtonColorGroup
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
 
         Label {

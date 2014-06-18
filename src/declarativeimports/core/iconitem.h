@@ -36,7 +36,7 @@ class IconItem : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QVariant source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(Plasma::Svg::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
@@ -49,8 +49,8 @@ public:
     void setSource(const QVariant &source);
     QVariant source() const;
 
-    void setColorGroup(Plasma::Svg::ColorGroup group);
-    Plasma::Svg::ColorGroup colorGroup() const;
+    void setColorGroup(Plasma::Theme::ColorGroup group);
+    Plasma::Theme::ColorGroup colorGroup() const;
 
     bool isActive() const;
     void setActive(bool active);
@@ -99,7 +99,7 @@ private:
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
 
-    Plasma::Svg::ColorGroup m_colorGroup;
+    Plasma::Theme::ColorGroup m_colorGroup;
 
     //animation on pixmap change
     QPropertyAnimation *m_animation;

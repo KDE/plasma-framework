@@ -111,6 +111,14 @@ public:
         ComplementaryFocusColor = 303 /** background color for "complementary" areas */
     };
 
+    enum ColorGroup {
+        NormalColorGroup = 0,
+        ButtonColorGroup = 1,
+        ViewColorGroup = 2,
+        ComplementaryColorGroup = 3
+    };
+    Q_ENUMS(ColorGroup)
+
     /**
      * Default constructor. It will be the global theme configured in plasmarc
      * @param parent the parent object

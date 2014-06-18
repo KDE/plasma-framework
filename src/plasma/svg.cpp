@@ -135,7 +135,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
       renderer(0),
       styleCrc(0),
-      colorGroup(Plasma::Svg::NormalColorGroup),
+      colorGroup(Plasma::Theme::NormalColorGroup),
       lastModified(0),
       devicePixelRatio(1.0),
       multipleImages(false),
@@ -686,7 +686,7 @@ qreal Svg::devicePixelRatio()
     return d->devicePixelRatio;
 }
 
-void Svg::setColorGroup(Svg::ColorGroup group)
+void Svg::setColorGroup(Theme::ColorGroup group)
 {
     if (d->colorGroup == group) {
         return;
@@ -697,7 +697,7 @@ void Svg::setColorGroup(Svg::ColorGroup group)
     emit colorGroupChanged();
 }
 
-Svg::ColorGroup Svg::colorGroup() const
+Theme::ColorGroup Svg::colorGroup() const
 {
     return d->colorGroup;
 }
