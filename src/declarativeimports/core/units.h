@@ -60,8 +60,8 @@ class Units : public QObject
     // layout hints
 
     /**
-     * units.smallSpacing is the amount of spacing that should be used around bigger UI elements,
-     * for example between the content and the border. Internally, this size depends on the size of
+     * units.smallSpacing is the amount of spacing that should be used around smaller UI elements,
+     * for example as spacing in Columns. Internally, this size depends on the size of
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
      */
@@ -90,7 +90,7 @@ class Units : public QObject
     Q_PROPERTY(int longDuration READ longDuration NOTIFY durationChanged)
 
     /**
-     * units.longDuration should be used for short animations, such as accentuating a UI event,
+     * units.shortDuration should be used for short animations, such as accentuating a UI event,
      * hover events, etc..
      */
     Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
@@ -148,7 +148,6 @@ Q_SIGNALS:
     void durationChanged();
 
 private Q_SLOTS:
-    void themeChanged();
     void iconLoaderSettingsChanged();
     void settingsFileChanged(const QString &settings);
 
