@@ -180,8 +180,8 @@ Item {
             value: 0
             stepSize: 0.0
             inverted: false
-            positionAtMinimum: 0
-            positionAtMaximum: contents.width - handle.width
+            positionAtMinimum: -handle.width/8
+            positionAtMaximum: contents.width - (handle.width/8) * 7
         }
 
         PlasmaCore.Svg {
@@ -198,8 +198,6 @@ Item {
                 left: parent.left
                 right: parent.right
                 verticalCenter: parent.verticalCenter
-                leftMargin: handle.width/4
-                rightMargin: handle.width/4
             }
         }
         PlasmaCore.FrameSvgItem {
@@ -207,8 +205,9 @@ Item {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             height: groove.height
-            width: inverted ? groove.width - handle.x : fakeHandle.x + handle.width/4
-            x: inverted ? handle.x + handle.width/4 : handle.width/4
+
+            width: inverted ? groove.width - handle.x - handle.width/4 : fakeHandle.x + handle.width/4
+            x: inverted ? handle.x + handle.width/4 : 0
             anchors.verticalCenter: parent.verticalCenter
 
             //use the same animation when resizing a slider as moving the slider this keeps it in line when using key shortcuts
