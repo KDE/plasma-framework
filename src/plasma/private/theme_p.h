@@ -79,7 +79,7 @@ public:
 
     const QString processStyleSheet(const QString &css);
     const QString svgStyleSheet(Plasma::Theme::ColorGroup group);
-    QColor color(Theme::ColorRole role) const;
+    QColor color(Theme::ColorRole role, Theme::ColorGroup group = Theme::NormalColorGroup) const;
 
 public Q_SLOTS:
     void compositingChanged(bool active);

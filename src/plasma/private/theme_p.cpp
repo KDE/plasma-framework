@@ -526,17 +526,47 @@ void ThemePrivate::saveSvgElementsCache()
     }
 }
 
-QColor ThemePrivate::color(Theme::ColorRole role) const
+QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 {
     switch (role) {
-    case Theme::TextColor:
-        return colorScheme.foreground(KColorScheme::NormalText).color();
+    case Theme::TextColor: {
+        switch (group) {
+        case Theme::ButtonColorGroup:
+            return buttonColorScheme.foreground(KColorScheme::NormalText).color();
+        case Theme::ViewColorGroup:
+            return viewColorScheme.foreground(KColorScheme::NormalText).color();
+        case Theme::ComplementaryColorGroup:
+            return color(Theme::ComplementaryTextColor, group);
+        default:
+            return colorScheme.foreground(KColorScheme::NormalText).color();
+        }
+    }
 
-    case Theme::HighlightColor:
-        return colorScheme.decoration(KColorScheme::HoverColor).color();
+    case Theme::HighlightColor: {
+        switch (group) {
+        case Theme::ButtonColorGroup:
+            return buttonColorScheme.decoration(KColorScheme::HoverColor).color();
+        case Theme::ViewColorGroup:
+            return viewColorScheme.decoration(KColorScheme::HoverColor).color();
+        case Theme::ComplementaryColorGroup:
+            return color(Theme::ComplementaryHoverColor, group);
+        default:
+            return colorScheme.decoration(KColorScheme::HoverColor).color();
+        }
+    }
 
-    case Theme::BackgroundColor:
-        return colorScheme.background(KColorScheme::NormalBackground).color();
+    case Theme::BackgroundColor: {
+        switch (group) {
+        case Theme::ButtonColorGroup:
+            return buttonColorScheme.background(KColorScheme::NormalBackground).color();
+        case Theme::ViewColorGroup:
+            return viewColorScheme.background(KColorScheme::NormalBackground).color();
+        case Theme::ComplementaryColorGroup:
+            return color(Theme::ComplementaryBackgroundColor, group);
+        default:
+            return colorScheme.background(KColorScheme::NormalBackground).color();
+        }
+    }
 
     case Theme::ButtonTextColor:
         return buttonColorScheme.foreground(KColorScheme::NormalText).color();

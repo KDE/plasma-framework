@@ -61,7 +61,7 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
-    Q_PROPERTY(Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
+    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
 
 public:
     /**
@@ -101,12 +101,12 @@ public:
      * make them use ButtonTextColor/ButtonBackgroundColor
      * or ViewTextColor/ViewBackgroundColor
      */
-    void setColorGroup(Theme::ColorGroup group);
+    void setColorGroup(Plasma::Theme::ColorGroup group);
 
     /**
      * @return the color group for this Svg
      */
-    Theme::ColorGroup colorGroup() const;
+    Plasma::Theme::ColorGroup colorGroup() const;
 
     /**
      * Returns a pixmap of the SVG represented by this object.

@@ -17,6 +17,7 @@ endif()
 
 set(corebindings_SRCS
     corebindingsplugin.cpp
+    colorscope.cpp
     datamodel.cpp
     datasource.cpp
     #    runnermodel.cpp

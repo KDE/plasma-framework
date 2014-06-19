@@ -38,6 +38,7 @@
 #include "dialog.h"
 #include "iconitem.h"
 #include "serviceoperationstatus.h"
+#include "colorscope.h"
 
 #include "tooltip.h"
 #include "units.h"
@@ -81,6 +82,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
     qmlRegisterUncreatableType<Plasma::Theme>(uri, 2, 0, "Theme", "It is not possible to instantiate Theme directly.");
+    qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");

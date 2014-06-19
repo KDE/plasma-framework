@@ -686,7 +686,7 @@ qreal Svg::devicePixelRatio()
     return d->devicePixelRatio;
 }
 
-void Svg::setColorGroup(Theme::ColorGroup group)
+void Svg::setColorGroup(Plasma::Theme::ColorGroup group)
 {
     if (d->colorGroup == group) {
         return;
@@ -695,9 +695,10 @@ void Svg::setColorGroup(Theme::ColorGroup group)
     d->colorGroup = group;
     d->renderer = 0;
     emit colorGroupChanged();
+    emit repaintNeeded();
 }
 
-Theme::ColorGroup Svg::colorGroup() const
+Plasma::Theme::ColorGroup Svg::colorGroup() const
 {
     return d->colorGroup;
 }

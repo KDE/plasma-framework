@@ -272,9 +272,9 @@ KSharedConfigPtr Theme::colorScheme() const
     return d->colors;
 }
 
-QColor Theme::color(ColorRole role) const
+QColor Theme::color(ColorRole role, ColorGroup group) const
 {
-    return d->color(role);
+    return d->color(role, group);
 }
 
 void Theme::setUseGlobalSettings(bool useGlobal)
