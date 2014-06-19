@@ -192,7 +192,7 @@ void Units::updateSpacing()
 {
     const int _s = QFontMetrics(QGuiApplication::font()).boundingRect("M").size().height();
     if (_s != m_largeSpacing) {
-        m_smallSpacing = qMax(2, (int)(_s / 8)); // 1/8 of msize.height, at least 2
+        m_smallSpacing = qMax(2, (int)(_s / 4)); // 1/4 of gridUnit, at least 2
         m_largeSpacing = _s; // msize.height
         emit spacingChanged();
     }
