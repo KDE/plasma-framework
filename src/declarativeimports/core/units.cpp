@@ -45,16 +45,11 @@ Units::Units(QObject *parent)
       m_longDuration(defaultLongDuration) // default base value for animations
 {
     m_iconSizes = new QQmlPropertyMap(this);
-    updateDevicePixelRatio();
-    updateSpacing();
-
-    //iconLoaderSettingsChanged();
+    updateDevicePixelRatio(); // also updates icon sizes
+    updateSpacing(); // updates gridUnit and *Spacing properties
 
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
-
-    themeChanged();
-    connect(&m_theme, SIGNAL(themeChanged()),
-            this, SLOT(themeChanged()));
+    connect(&m_theme, &Plasma::Theme::themeChanged, this, &Units::updateSpacing);
     QCoreApplication::instance()->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
@@ -166,18 +161,6 @@ int Units::gridUnit() const
     return m_gridUnit;
 }
 
-void Units::themeChanged()
-{
-    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
-    if (gridUnit % 2 != 0) {
-        gridUnit++;
-    }
-    if (gridUnit != m_gridUnit) {
-        m_gridUnit = gridUnit;
-        emit gridUnitChanged();
-    }
-}
-
 int Units::smallSpacing() const
 {
     return m_smallSpacing;
@@ -190,10 +173,18 @@ int Units::largeSpacing() const
 
 void Units::updateSpacing()
 {
-    const int _s = QFontMetrics(QGuiApplication::font()).boundingRect("M").size().height();
-    if (_s != m_largeSpacing) {
-        m_smallSpacing = qMax(2, (int)(_s / 4)); // 1/4 of gridUnit, at least 2
-        m_largeSpacing = _s; // msize.height
+    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();;
+    if (gridUnit % 2 != 0) {
+        gridUnit++;
+    }
+    if (gridUnit != m_gridUnit) {
+        m_gridUnit = gridUnit;
+        emit gridUnitChanged();
+    }
+
+    if (gridUnit != m_largeSpacing) {
+        m_smallSpacing = qMax(2, (int)(gridUnit / 4)); // 1/4 of gridUnit, at least 2
+        m_largeSpacing = gridUnit; // msize.height
         emit spacingChanged();
     }
 }
