@@ -202,7 +202,7 @@ void ConfigViewPrivate::mainItemLoaded()
     foreach (QObject *child, q->rootObject()->children()) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
+                child->property("preferredWidth").isValid() && child->property("preferredHeig/ht").isValid() &&
                 child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
             ) {
@@ -229,6 +229,7 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent),
       d(new ConfigViewPrivate(applet, this))
 {
+    setIcon(QIcon::fromTheme("configure"));
     d->init();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
