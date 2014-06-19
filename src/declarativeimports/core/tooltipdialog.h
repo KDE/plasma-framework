@@ -37,9 +37,7 @@ class QmlObject;
 }
 
 /**
- * QML wrapper for kdelibs Plasma::ToolTipDialog
- *
- * Exposed as `ToolTipDialog` in QML.
+ * Internally used by Tooltip
  */
 class ToolTipDialog : public PlasmaQuick::Dialog
 {
