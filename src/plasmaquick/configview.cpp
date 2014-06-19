@@ -202,7 +202,7 @@ void ConfigViewPrivate::mainItemLoaded()
     foreach (QObject *child, q->rootObject()->children()) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                child->property("preferredWidth").isValid() && child->property("preferredHeig/ht").isValid() &&
+                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
                 child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
             ) {
