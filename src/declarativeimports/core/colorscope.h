@@ -32,7 +32,7 @@ class QQuickItem;
 class ColorScope : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup)
+    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
     Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged)
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
