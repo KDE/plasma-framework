@@ -398,26 +398,28 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements[QStringLiteral("%textcolor")] = color(Theme::TextColor).name();
-    elements[QStringLiteral("%backgroundcolor")] = color(Theme::BackgroundColor).name();
-    elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor).name();
-    elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor).name();
-    elements[QStringLiteral("%activatedlink")] = color(Theme::HighlightColor).name();
-    elements[QStringLiteral("%hoveredlink")] = color(Theme::HighlightColor).name();
-    elements[QStringLiteral("%link")] = color(Theme::LinkColor).name();
-    elements[QStringLiteral("%buttontextcolor")] = color(Theme::ButtonTextColor).name();
-    elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::ButtonBackgroundColor).name();
-    elements[QStringLiteral("%buttonhovercolor")] = color(Theme::ButtonHoverColor).name();
-    elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::ButtonFocusColor).name();
-    elements[QStringLiteral("%viewtextcolor")] = color(Theme::ViewTextColor).name();
-    elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::ViewBackgroundColor).name();
-    elements[QStringLiteral("%viewhovercolor")] = color(Theme::ViewHoverColor).name();
-    elements[QStringLiteral("%viewfocuscolor")] = color(Theme::ViewFocusColor).name();
+    elements[QStringLiteral("%textcolor")] = color(Theme::TextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%backgroundcolor")] = color(Theme::BackgroundColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%activatedlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%hoveredlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%link")] = color(Theme::LinkColor, Theme::NormalColorGroup).name();
 
-    elements[QStringLiteral("%complementarytextcolor")] = color(Theme::ComplementaryTextColor).name();
-    elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::ComplementaryBackgroundColor).name();
-    elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::ComplementaryHoverColor).name();
-    elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::ComplementaryFocusColor).name();
+    elements[QStringLiteral("%buttontextcolor")] = color(Theme::TextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
+
+    elements[QStringLiteral("%viewtextcolor")] = color(Theme::TextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
+
+    elements[QStringLiteral("%complementarytextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
 
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
@@ -528,107 +530,104 @@ void ThemePrivate::saveSvgElementsCache()
 
 QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 {
+    const KColorScheme *scheme = 0;
+
+    switch (group) {
+    case Theme::ButtonColorGroup: {
+        scheme = &buttonColorScheme;
+        break;
+    }
+
+    case Theme::ViewColorGroup: {
+        scheme = &viewColorScheme;
+        break;
+    }
+
+    //this doesn't have a real kcolorscheme
+    case Theme::ComplementaryColorGroup: {
+        switch (role) {
+        case Theme::TextColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("ForegroundNormal", colorScheme.foreground(KColorScheme::NormalText).color());
+            } else {
+                return colorScheme.foreground(KColorScheme::NormalText).color();
+            }
+        }
+        case Theme::BackgroundColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("BackgroundNormal", colorScheme.background(KColorScheme::NormalBackground).color());
+            } else {
+                return colorScheme.background(KColorScheme::NormalBackground).color();
+            }
+        }
+        case Theme::HighlightColor:
+        case Theme::HoverColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("DecorationFocus", colorScheme.decoration(KColorScheme::HoverColor).color());
+            } else {
+                return colorScheme.decoration(KColorScheme::HoverColor).color();
+            }
+        }
+        case Theme::FocusColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("DecorationHover", colorScheme.decoration(KColorScheme::FocusColor).color());
+            } else {
+                return colorScheme.decoration(KColorScheme::FocusColor).color();
+            }
+        }
+        case Theme::LinkColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("ForegroundLink", viewColorScheme.foreground(KColorScheme::LinkText).color());
+            } else {
+                return viewColorScheme.foreground(KColorScheme::LinkText).color();
+            }
+        }
+        case Theme::VisitedLinkColor: {
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("ForegroundVisited", viewColorScheme.foreground(KColorScheme::VisitedText).color());
+            } else {
+                return viewColorScheme.foreground(KColorScheme::VisitedText).color();
+            }
+        }
+        }
+        break;
+    }
+
+    case Theme::NormalColorGroup:
+    default: {
+        scheme = &colorScheme;
+        break;
+    }
+    }
+    
+
+
     switch (role) {
-    case Theme::TextColor: {
-        switch (group) {
-        case Theme::ButtonColorGroup:
-            return buttonColorScheme.foreground(KColorScheme::NormalText).color();
-        case Theme::ViewColorGroup:
-            return viewColorScheme.foreground(KColorScheme::NormalText).color();
-        case Theme::ComplementaryColorGroup:
-            return color(Theme::ComplementaryTextColor, group);
-        default:
-            return colorScheme.foreground(KColorScheme::NormalText).color();
-        }
-    }
 
-    case Theme::HighlightColor: {
-        switch (group) {
-        case Theme::ButtonColorGroup:
-            return buttonColorScheme.decoration(KColorScheme::HoverColor).color();
-        case Theme::ViewColorGroup:
-            return viewColorScheme.decoration(KColorScheme::HoverColor).color();
-        case Theme::ComplementaryColorGroup:
-            return color(Theme::ComplementaryHoverColor, group);
-        default:
-            return colorScheme.decoration(KColorScheme::HoverColor).color();
-        }
-    }
+    case Theme::TextColor:
+        return scheme->foreground(KColorScheme::NormalText).color();
 
-    case Theme::BackgroundColor: {
-        switch (group) {
-        case Theme::ButtonColorGroup:
-            return buttonColorScheme.background(KColorScheme::NormalBackground).color();
-        case Theme::ViewColorGroup:
-            return viewColorScheme.background(KColorScheme::NormalBackground).color();
-        case Theme::ComplementaryColorGroup:
-            return color(Theme::ComplementaryBackgroundColor, group);
-        default:
-            return colorScheme.background(KColorScheme::NormalBackground).color();
-        }
-    }
+    case Theme::BackgroundColor:
+        return scheme->background(KColorScheme::NormalBackground).color();
 
-    case Theme::ButtonTextColor:
-        return buttonColorScheme.foreground(KColorScheme::NormalText).color();
+    case Theme::HighlightColor:
+    case Theme::HoverColor:
+        return scheme->decoration(KColorScheme::HoverColor).color();
 
-    case Theme::ButtonBackgroundColor:
-        return buttonColorScheme.background(KColorScheme::NormalBackground).color();
+    case Theme::FocusColor:
+        return scheme->decoration(KColorScheme::FocusColor).color();
 
-    case Theme::ButtonHoverColor:
-        return buttonColorScheme.decoration(KColorScheme::HoverColor).color();
-
-    case Theme::ButtonFocusColor:
-        return buttonColorScheme.decoration(KColorScheme::FocusColor).color();
-
-    case Theme::ViewTextColor:
-        return viewColorScheme.foreground(KColorScheme::NormalText).color();
-
-    case Theme::ViewBackgroundColor:
-        return viewColorScheme.background(KColorScheme::NormalBackground).color();
-
-    case Theme::ViewHoverColor:
-        return viewColorScheme.decoration(KColorScheme::HoverColor).color();
-
-    case Theme::ViewFocusColor:
-        return viewColorScheme.decoration(KColorScheme::FocusColor).color();
-
-    case Theme::ComplementaryTextColor: {
-        KConfigGroup cg(colors, "Colors:Complementary");
-        if (cg.isValid()) {
-            return cg.readEntry("ForegroundNormal", colorScheme.foreground(KColorScheme::NormalText).color());
-        } else {
-            return colorScheme.foreground(KColorScheme::NormalText).color();
-        }
-    }
-    case Theme::ComplementaryBackgroundColor: {
-        KConfigGroup cg(colors, "Colors:Complementary");
-        if (cg.isValid()) {
-            return cg.readEntry("BackgroundNormal", colorScheme.background(KColorScheme::NormalBackground).color());
-        } else {
-            return colorScheme.background(KColorScheme::NormalBackground).color();
-        }
-    }
-    case Theme::ComplementaryHoverColor: {
-        KConfigGroup cg(colors, "Colors:Complementary");
-        if (cg.isValid()) {
-            return cg.readEntry("DecorationFocus", colorScheme.decoration(KColorScheme::HoverColor).color());
-        } else {
-            return colorScheme.decoration(KColorScheme::HoverColor).color();
-        }
-    }
-    case Theme::ComplementaryFocusColor: {
-        KConfigGroup cg(colors, "Colors:Complementary");
-        if (cg.isValid()) {
-            return cg.readEntry("DecorationHover", colorScheme.decoration(KColorScheme::FocusColor).color());
-        } else {
-            return colorScheme.decoration(KColorScheme::FocusColor).color();
-        }
-    }
     case Theme::LinkColor:
-        return viewColorScheme.foreground(KColorScheme::LinkText).color();
+        return scheme->foreground(KColorScheme::LinkText).color();
 
     case Theme::VisitedLinkColor:
-        return viewColorScheme.foreground(KColorScheme::VisitedText).color();
+        return scheme->foreground(KColorScheme::VisitedText).color();
     }
 
     return QColor();

@@ -484,12 +484,12 @@ QColor Theme::backgroundColor() const
 
 QColor Theme::buttonTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ButtonTextColor);
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ButtonColorGroup);
 }
 
 QColor Theme::buttonBackgroundColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ButtonBackgroundColor);
+    return Plasma::Theme::color(Plasma::Theme::BackgroundColor, Plasma::Theme::ButtonColorGroup);
 }
 
 QColor Theme::linkColor() const
@@ -504,52 +504,52 @@ QColor Theme::visitedLinkColor() const
 
 QColor Theme::buttonHoverColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ButtonHoverColor);
+    return Plasma::Theme::color(Plasma::Theme::HoverColor, Plasma::Theme::ButtonColorGroup);
 }
 
 QColor Theme::buttonFocusColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ButtonFocusColor);
+    return Plasma::Theme::color(Plasma::Theme::FocusColor, Plasma::Theme::ButtonColorGroup);
 }
 
 QColor Theme::viewTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ViewTextColor);
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ViewColorGroup);
 }
 
 QColor Theme::viewBackgroundColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ViewBackgroundColor);
+    return Plasma::Theme::color(Plasma::Theme::BackgroundColor, Plasma::Theme::ViewColorGroup);
 }
 
 QColor Theme::viewHoverColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ViewHoverColor);
+    return Plasma::Theme::color(Plasma::Theme::HoverColor, Plasma::Theme::ViewColorGroup);
 }
 
 QColor Theme::viewFocusColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ViewFocusColor);
+    return Plasma::Theme::color(Plasma::Theme::FocusColor, Plasma::Theme::ViewColorGroup);
 }
 
 QColor Theme::complementaryTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ComplementaryTextColor);
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
 }
 
 QColor Theme::complementaryBackgroundColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ComplementaryBackgroundColor);
+    return Plasma::Theme::color(Plasma::Theme::BackgroundColor, Plasma::Theme::ComplementaryColorGroup);
 }
 
 QColor Theme::complementaryHoverColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ComplementaryHoverColor);
+    return Plasma::Theme::color(Plasma::Theme::HoverColor, Plasma::Theme::ComplementaryColorGroup);
 }
 
 QColor Theme::complementaryFocusColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::ComplementaryFocusColor);
+    return Plasma::Theme::color(Plasma::Theme::FocusColor, Plasma::Theme::ComplementaryColorGroup);
 }
 
 QSizeF Theme::mSize(const QFont &font) const

@@ -92,23 +92,10 @@ public:
         BackgroundColor = 1, /**< the default background color */
         HighlightColor = 2, /**<  the text highlight color to be used by items resting
                                    on the background */
-        LinkColor = 3, /** color for clickable links */
-        VisitedLinkColor = 4, /** color visited clickable links */
-
-        ButtonTextColor = 100, /** text color for buttons */
-        ButtonBackgroundColor = 101, /** background color for buttons*/
-        ButtonHoverColor = 102, /** color for hover effect on buttons */
-        ButtonFocusColor = 103, /** color for focus effect on buttons */
-
-        ViewTextColor = 200, /** text color for views */
-        ViewBackgroundColor = 201, /** background color for views */
-        ViewHoverColor = 202, /** color for hover effect on view */
-        ViewFocusColor = 203, /** color for focus effect on view */
-
-        ComplementaryTextColor = 300, /** text color for "complementary" areas */
-        ComplementaryBackgroundColor = 301, /** background color for "complementary" areas */
-        ComplementaryHoverColor = 302, /** text color for "complementary" areas */
-        ComplementaryFocusColor = 303 /** background color for "complementary" areas */
+        HoverColor = 3, /** color for hover effect on view */
+        FocusColor = 4, /** color for focus effect on view */
+        LinkColor = 5, /** color for clickable links */
+        VisitedLinkColor = 6, /** color visited clickable links */
     };
 
     enum ColorGroup {
