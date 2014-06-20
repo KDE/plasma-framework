@@ -93,7 +93,6 @@ public:
     QPointer<QObject> ownLayout;
 
     QTimer compactRepresentationCheckTimer;
-    QTimer fullRepresentationResizeTimer;
 
     Plasma::Applet *applet;
     KDeclarative::QmlObject *qmlObject;

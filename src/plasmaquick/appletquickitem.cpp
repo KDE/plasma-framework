@@ -195,15 +195,6 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
         return 0;
     }
 
-    QQuickItem *graphicsObj = fullRepresentationItem;
-
-    QObject::connect(graphicsObj, &QQuickItem::widthChanged, [ = ]() {
-        fullRepresentationResizeTimer.start();
-    });
-    QObject::connect(graphicsObj, &QQuickItem::heightChanged, [ = ]() {
-        fullRepresentationResizeTimer.start();
-    });
-
     emit q->fullRepresentationItemChanged(fullRepresentationItem);
 
     return fullRepresentationItem;
@@ -390,18 +381,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
 
-    d->fullRepresentationResizeTimer.setSingleShot(true);
-    d->fullRepresentationResizeTimer.setInterval(250);
-    connect(&d->fullRepresentationResizeTimer, &QTimer::timeout,
-    [ = ]() {
-        if (!d->applet->isContainment()) {
-            KConfigGroup cg = d->applet->config();
-            cg = KConfigGroup(&cg, "PopupApplet");
-            cg.writeEntry("DialogWidth", d->fullRepresentationItem->width());
-            cg.writeEntry("DialogHeight", d->fullRepresentationItem->height());
-        }
-    });
-
     d->qmlObject = new KDeclarative::QmlObject(this);
     d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
     d->qmlObject->setInitializationDelayed(true);
@@ -505,15 +484,6 @@ void AppletQuickItem::init()
         d->fullRepresentation = d->qmlObject->mainComponent();
         d->fullRepresentationItem = qobject_cast<QQuickItem*>(d->qmlObject->rootObject());
 
-        if (d->qmlObject->rootObject()) {
-            QQuickItem *graphicsObj = d->fullRepresentationItem;
-            QObject::connect(graphicsObj, &QQuickItem::widthChanged, [ = ]() {
-                d->fullRepresentationResizeTimer.start();
-            });
-            QObject::connect(graphicsObj, &QQuickItem::heightChanged, [ = ]() {
-                d->fullRepresentationResizeTimer.start();
-            });
-        }
         emit fullRepresentationChanged(d->fullRepresentation);
     }
 
@@ -652,15 +622,6 @@ void AppletQuickItem::setExpanded(bool expanded)
                 (!d->preferredRepresentation ||
                  d->preferredRepresentation != d->fullRepresentation)) {
             d->createCompactRepresentationExpanderItem();
-        }
-
-        KConfigGroup cg = d->applet->config();
-        cg = KConfigGroup(&cg, "PopupApplet");
-        const int width = cg.readEntry("DialogWidth", -1);
-        const int height = cg.readEntry("DialogHeight", -1);
-        if (width > 0  && height > 0) {
-            d->fullRepresentationItem->setWidth(width);
-            d->fullRepresentationItem->setHeight(height);
         }
 
         if (d->compactRepresentationExpanderItem) {
