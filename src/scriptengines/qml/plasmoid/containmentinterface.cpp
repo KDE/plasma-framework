@@ -101,6 +101,10 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
 void ContainmentInterface::init()
 {
+    if (qmlObject()->rootObject()) {
+        return;
+    }
+
     m_activityInfo = new KActivities::Info(containment()->activity(), this);
     connect(m_activityInfo, &KActivities::Info::nameChanged,
             this, &ContainmentInterface::activityNameChanged);
@@ -247,7 +251,7 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
     foreach (Plasma::Containment *c, containment()->corona()->containments()) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
-        if (contInterface) {
+        if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
             if (w && w->geometry().contains(QPoint(window()->x(), window()->y()) + QPoint(x, y))) {
                 return contInterface;
