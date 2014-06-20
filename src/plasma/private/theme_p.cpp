@@ -547,6 +547,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
     case Theme::ComplementaryColorGroup: {
         switch (role) {
         case Theme::TextColor: {
+            if (!colors) {
+                return colorScheme.foreground(KColorScheme::NormalText).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("ForegroundNormal", colorScheme.foreground(KColorScheme::NormalText).color());
@@ -555,6 +558,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
             }
         }
         case Theme::BackgroundColor: {
+            if (!colors) {
+                return colorScheme.background(KColorScheme::NormalBackground).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("BackgroundNormal", colorScheme.background(KColorScheme::NormalBackground).color());
@@ -564,6 +570,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         }
         case Theme::HighlightColor:
         case Theme::HoverColor: {
+            if (!colors) {
+                return colorScheme.decoration(KColorScheme::HoverColor).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("DecorationFocus", colorScheme.decoration(KColorScheme::HoverColor).color());
@@ -572,6 +581,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
             }
         }
         case Theme::FocusColor: {
+            if (!colors) {
+                return colorScheme.decoration(KColorScheme::FocusColor).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("DecorationHover", colorScheme.decoration(KColorScheme::FocusColor).color());
@@ -580,6 +592,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
             }
         }
         case Theme::LinkColor: {
+            if (!colors) {
+                return viewColorScheme.foreground(KColorScheme::LinkText).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("ForegroundLink", viewColorScheme.foreground(KColorScheme::LinkText).color());
@@ -588,6 +603,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
             }
         }
         case Theme::VisitedLinkColor: {
+            if (!colors) {
+                return viewColorScheme.foreground(KColorScheme::VisitedText).color();
+            }
             KConfigGroup cg(colors, "Colors:Complementary");
             if (cg.isValid()) {
                 return cg.readEntry("ForegroundVisited", viewColorScheme.foreground(KColorScheme::VisitedText).color());
