@@ -117,6 +117,10 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
             q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
+            QObject *wpGraphicObject = containment->property("wallpaperGraphicsObject").value<QObject *>();
+            if (wpGraphicObject) {
+                q->rootObject()->setProperty("wallpaper", QVariant::fromValue(wpGraphicObject));
+            }
         } else {
             qWarning() << "Could not set containment property on rootObject";
         }
