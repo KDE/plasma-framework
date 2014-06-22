@@ -316,14 +316,12 @@ void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &
     QSqlQuery query(m_db);
     if (valueGroup.isEmpty()) {
         query.prepare("delete from " + caller->clientName() + " where accessTime < :date");
-        QDateTime time(QDateTime::currentDateTime());
-        time.addSecs(-params["age"].toUInt());
+        QDateTime time(QDateTime::currentDateTime().addSecs(-params["age"].toUInt()));
         query.bindValue(":date", time.toTime_t());
     } else {
         query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup and accessTime < :date");
         query.bindValue(":valueGroup", valueGroup);
-        QDateTime time(QDateTime::currentDateTime());
-        time.addSecs(-params["age"].toUInt());
+        QDateTime time(QDateTime::currentDateTime().addSecs(-params["age"].toUInt()));
         query.bindValue(":date", time.toTime_t());
     }
 
