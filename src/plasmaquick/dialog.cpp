@@ -139,7 +139,7 @@ void DialogPrivate::syncBorders()
 
     //Tooltips always have all the borders
     // floating windows have all borders
-    if (!(q->flags() & Qt::ToolTip) && location != Plasma::Types::Floating) {
+    if ((q->flags() & Qt::ToolTip) != Qt::ToolTip && location != Plasma::Types::Floating) {
         if (q->x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
