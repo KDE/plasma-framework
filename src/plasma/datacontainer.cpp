@@ -53,7 +53,7 @@ void DataContainer::setData(const QString &key, const QVariant &value)
     }
 
     d->dirty = true;
-    d->updateTs.start();
+    d->updateTimer.start();
 
     //check if storage is enabled and if storage is needed.
     //If it is not set to be stored,then this is the first
@@ -95,7 +95,7 @@ void DataContainer::removeAllData()
 
     d->data.clear();
     d->dirty = true;
-    d->updateTs.start();
+    d->updateTimer.start();
 }
 
 bool DataContainer::visualizationIsConnected(QObject *visualization) const
@@ -354,9 +354,7 @@ void DataContainer::forceImmediateUpdate()
 
 uint DataContainer::timeSinceLastUpdate() const
 {
-    //FIXME: we still assume it's been <24h
-    //and ignore possible daylight savings changes
-    return d->updateTs.elapsed();
+    return d->updateTimer.elapsed();
 }
 
 void DataContainer::setNeedsUpdate(bool update)

@@ -20,11 +20,9 @@
 #ifndef DATAENGINE_P_H
 #define DATAENGINE_P_H
 
-#include <QTime>
+#include <QElapsedTimer>
 
 #include <kplugininfo.h>
-
-class QTime;
 
 namespace Plasma
 {
@@ -97,7 +95,7 @@ public:
     int checkSourcesTimerId;
     int updateTimerId;
     int minPollingInterval;
-    QTime updateTimestamp;
+    QElapsedTimer updateTimer;
     DataEngine::SourceDict sources;
     bool valid;
     DataEngineScript *script;
