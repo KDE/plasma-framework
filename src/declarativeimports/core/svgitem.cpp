@@ -152,7 +152,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
-        QSGTexture *texture = window()->createTextureFromImage(image);
+        QSGTexture *texture = window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas);
         if (m_smooth) {
             texture->setFiltering(QSGTexture::Linear);
         }
