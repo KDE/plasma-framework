@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Example window thumbnails list
 Name[bs]=Primjer prozor liste sličica
-Name[ca]=Exemple de llista de miniatures de finestres
+Name[ca]=Exemple de llista de miniatures de les finestres
 Name[de]=Beispiel einer Liste mit Fenstervorschaubilden
 Name[es]=Ejemplo de lista de miniaturas de ventanas
 Name[fi]=Esimerkki ikkunoiden pikkukuvien luettelosta
@@ -23,7 +23,7 @@ Name[uk]=Приклад списку мініатюр вікон
 Name[x-test]=xxExample window thumbnails listxx
 Comment=Example showing how to display window thumbnails
 Comment[bs]=Primjer prikazuje kako prikazati prozor sličica
-Comment[ca]=Exemple que mostra com visualitzar miniatures de finestres
+Comment[ca]=Exemple que mostra com visualitzar miniatures de les finestres
 Comment[de]=Beispiel zur Anzeige einer Liste mit Fenstervorschaubilden
 Comment[es]=Ejemplo que muestra cómo mostrar miniaturas de ventanas
 Comment[fi]=Esimerkki ikkunoiden pikkukuvien näyttämisestä

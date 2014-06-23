@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Package metadata test file
 Name[bs]=Test datoteka paketa metapodataka
-Name[ca]=Fitxer de proves de metadades de paquet
+Name[ca]=Fitxer de proves per a les metadades del paquet
 Name[de]=Testdatei für Paket-Metadaten
 Name[es]=Archivo de pruebas de metadatos de paquete
 Name[fi]=Pakettimetatietojen testitiedosto
@@ -26,7 +26,7 @@ Name[uk]=Файл перевірки метаданих пакунка
 Name[x-test]=xxPackage metadata test filexx
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[bs]=Probna .desktop datoteka za klasu PackageMetaData.
-Comment[ca]=Un fitxer d'escriptori de proves per provar la classe PackageMetaData.
+Comment[ca]=Un fitxer d'escriptori de proves per provar la classe «PackageMetaData».
 Comment[de]=Eine Test-Desktop-Datei zum Testen der Klasse „PackageMetaData“.
 Comment[es]=Un archivo de escritorio para probar la clase PackageMetaData.
 Comment[fi]=Kokeellinen desktop-tiedosto PackageMetaData-luokan testaamiseen.
