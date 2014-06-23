@@ -36,6 +36,7 @@ public:
 
 private Q_SLOTS:
     void stateChanged(QProcess::ProcessState newState);
+    void errorFound(QProcess::ProcessError error);
 
 private:
     Application *const q;
