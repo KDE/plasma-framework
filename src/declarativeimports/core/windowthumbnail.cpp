@@ -64,6 +64,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , QAbstractNativeEventFilter()
     , m_xcb(false)
     , m_winId(0)
+    , m_paintedSize(QSizeF())
     , m_damaged(false)
     , m_depth(0)
 #if HAVE_XCB_COMPOSITE
@@ -140,6 +141,16 @@ void WindowThumbnail::setWinId(uint32_t winId)
     emit winIdChanged();
 }
 
+qreal WindowThumbnail::paintedWidth() const
+{
+    return m_paintedSize.width();
+}
+
+qreal WindowThumbnail::paintedHeight() const
+{
+    return m_paintedSize.height();
+}
+
 QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData)
@@ -154,7 +165,11 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
         windowToTexture(node);
     }
     node->setRect(boundingRect());
-    const QSize size(node->texture()->textureSize().scaled(boundingRect().size().toSize(), Qt::KeepAspectRatio));
+    const QSizeF size(node->texture()->textureSize().scaled(boundingRect().size().toSize(), Qt::KeepAspectRatio));
+    if (size != m_paintedSize) {
+        m_paintedSize = size;
+        emit paintedSizeChanged();
+    }
     const qreal x = boundingRect().x() + (boundingRect().width() - size.width()) / 2;
     const qreal y = boundingRect().y() + (boundingRect().height() - size.height()) / 2;
     node->setRect(QRectF(QPointF(x, y), size));
