@@ -65,6 +65,9 @@ Item {
 
     property bool isHorizontal: (tabPosition != Qt.LeftEdge && tabPosition != Qt.RightEdge)
 
+    property int minimumWidth: 0
+    property int minimumHeight: 0
+
     Component.onCompleted: layoutTimer.restart()
     onChildrenChanged: layoutTimer.restart()
     onWidthChanged: layoutTimer.restart()
@@ -164,7 +167,7 @@ Item {
             if (tabGroup) {
                 tabGroup.currentTab = root.children[index].tab
             }
-            
+
             priv.tabBar.currentTab = root.children[index]
         }
 
@@ -231,6 +234,8 @@ Item {
             }
             root.implicitWidth = contentWidth
             root.implicitHeight = contentHeight
+            root.minimumWidth = itemWidth * visibleChildCount
+            root.minimumHeight = itemHeight * visibleChildCount
             if ( priv.tabBar.currentTab === null) {
                 //99% of the cases this loop will be length 1 but a tabbar can also have other children, such as Repeater
                 for (var i = 0; i < tabBarLayout.children.length; ++i) {

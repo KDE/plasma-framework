@@ -82,7 +82,6 @@ FocusScope {
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
-
     Item {
         id: buttonCutter
         anchors {
@@ -267,15 +266,13 @@ FocusScope {
         rows: 1
         columns: 1
         flow: layout.isHorizontal ? GridLayout.TopToBottom : GridLayout.LeftToRight
-        visible: layout.isHorizontal ? tabBarLayout.width > root.width : tabBarLayout.height > root.height
+        visible: layout.isHorizontal ? tabBarLayout.minimumWidth >= root.width : tabBarLayout.height >= root.minimumHeight
 
         anchors {
             right: layout.isHorizontal ? parent.right : undefined
             verticalCenter: layout.isHorizontal ? parent.verticalCenter : undefined
             bottom: !layout.isHorizontal ? parent.bottom : undefined
             horizontalCenter: !layout.isHorizontal ? parent.horizontalCenter : undefined
-            rightMargin: y
-            bottomMargin: y
         }
         ToolButton {
             height: Math.min(parent.height, parent.width)
