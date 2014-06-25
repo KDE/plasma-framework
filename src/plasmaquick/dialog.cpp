@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QLayout>
 #include <QScreen>
+#include <QMenu>
 
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
@@ -817,7 +818,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         }
 
         const QWindow *focusWindow = QGuiApplication::focusWindow();
-        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->objectName() == QLatin1String("QMenuClassWindow"));
+        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
         if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
             qDebug() << "DIALOG:  hiding dialog.";
