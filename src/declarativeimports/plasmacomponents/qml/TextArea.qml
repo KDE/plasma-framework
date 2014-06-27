@@ -366,6 +366,8 @@ Item {
             font.weight: theme.defaultFont.weight
             font.wordSpacing: theme.defaultFont.wordSpacing
             color: theme.viewTextColor
+            selectedTextColor: theme.viewBackgroundColor
+            selectionColor: theme.viewFocusColor
             selectByMouse: verticalScroll.interactive
             renderType: Text.NativeRendering
 

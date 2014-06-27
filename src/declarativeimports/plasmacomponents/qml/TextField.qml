@@ -350,6 +350,8 @@ FocusScope {
         passwordCharacter: "•"
         selectByMouse: true
         color: theme.viewTextColor
+        selectedTextColor: theme.viewBackgroundColor
+        selectionColor: theme.viewFocusColor
         enabled: textField.enabled
         clip: true
         focus: true
