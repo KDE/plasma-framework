@@ -2,6 +2,7 @@
 Comment=Example applet that shows how to use Models embedded in DataEngines
 Comment[ca]=Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»
 Comment[de]=Miniprogramm-Beispiel, das die Anwendung von Modellen eingebettet in Datenquellen zeigt
+Comment[en_GB]=Example applet that shows how to use Models embedded in DataEngines
 Comment[es]=Miniaplicación de ejemplo que muestra cómo usar modelos empotrados en motores de datos
 Comment[fi]=Esimerkkisovelma, joka näyttää, miten tietomoottoreihin upotettuja malleja käytetään
 Comment[gl]=Unha applet de exemplo que mostra como usar os modelos incorporados nos DataEngines
@@ -25,6 +26,7 @@ Keywords=
 Name=Dataengine model
 Name[ca]=Model de «DataEngine»
 Name[de]=Datenquellen-Modell
+Name[en_GB]=Dataengine model
 Name[es]=Modelo de motor de datos
 Name[fi]=Tietomoottorimalli
 Name[gl]=Modelo de Dataengine
