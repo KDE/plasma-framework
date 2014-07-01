@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Ruby Widget
+Name[ar]=ودجة روبي
 Name[ca]=Estri en Ruby
 Name[cs]=Ruby widget
 Name[de]=Ruby-Miniprogramm
@@ -26,6 +27,7 @@ Name[sv]=Grafisk Ruby-komponent
 Name[uk]=Віджет на Ruby
 Name[x-test]=xxRuby Widgetxx
 Comment=Native Plasma widget written in Ruby
+Comment[ar]=ودجة پلازما أصيلة مكتوبة بِروبي
 Comment[ca]=Estri nadiu del Plasma escrit en Ruby
 Comment[cs]=Nativní plasmoid napsaný v Ruby
 Comment[de]=Echtes Plasma-Programm, geschrieben in Ruby

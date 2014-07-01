@@ -24,6 +24,7 @@ Comment[x-test]=xxExample applet that shows how to use Models embedded in DataEn
 Encoding=UTF-8
 Keywords=
 Name=Dataengine model
+Name[ar]=نموذج محرّك بيانات (Dataengine)
 Name[ca]=Model de «DataEngine»
 Name[de]=Datenquellen-Modell
 Name[en_GB]=Dataengine model

@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/LookAndFeel
 Name=Plasma Look and Feel
+Name[ar]=مظهر وَإحساس پلازما
 Name[bs]=Plazma izgled i osjećaj
 Name[ca]=Aspecte i comportament del Plasma
 Name[de]=Plasma-Erscheinungsbild

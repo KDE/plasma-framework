@@ -6,6 +6,7 @@ X-KDE-DBus-ModuleName=plaformstatus
 X-KDE-Kded-autoload=true
 X-KDE-Kded-load-on-demand=false
 Name=Platform Status
+Name[ar]=حالة المنصّة
 Name[bs]=Status platforme
 Name[ca]=Estat de la plataforma
 Name[de]=Plattform-Status

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Python data engine
+Name[ar]=محرّك بيانات بايثون
 Name[ca]=Motor de dades en Python
 Name[cs]=Rozhraní v Pythonu
 Name[de]=Python-Datentreiber
@@ -25,6 +26,7 @@ Name[sv]=Python datagränssnitt
 Name[uk]=Рушій даних Python
 Name[x-test]=xxPython data enginexx
 Comment=Plasma data engine support for Python
+Comment[ar]=دعم محرّك بيانات پلازما لِبايثون
 Comment[ca]=Implementació d'un motor de dades del Plasma per a Python
 Comment[cs]=Podpora datového rozhraní Plasmy v Pythonu
 Comment[de]=Unterstützung für Plasma-Datentreiber in Python

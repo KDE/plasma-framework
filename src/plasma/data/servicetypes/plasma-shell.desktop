@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/Shell
 Name=Plasma Shell
+Name[ar]=صَدفة پلازما
 Name[bs]=Plazma školjka
 Name[ca]=Intèrpret d'ordres del Plasma
 Name[de]=Plasma-Umgebung
@@ -26,6 +27,7 @@ Name[sv]=Plasma skal
 Name[uk]=Оболонка Плазми
 Name[x-test]=xxPlasma Shellxx
 Comment=Plasma Shell Components
+Comment[ar]=مكوّنات صَدفة پلازما
 Comment[bs]=Komponente plazma školjke
 Comment[ca]=Components de l'intèrpret d'ordres del Plasma
 Comment[de]=Plasma-Shell-Komponenten
