@@ -136,7 +136,6 @@ void ConfigViewPrivate::init()
 
     QMap<QString, KPluginInfo> sortedApplets;
     foreach (const KPluginInfo &info, applets) {
-        qWarning() << "AAAA" << info.pluginName();
         alternativesConfigModel->appendCategory(info.icon(), info.name(), QString(), info.pluginName());
     }
 

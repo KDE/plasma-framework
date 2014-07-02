@@ -77,7 +77,7 @@ public:
      * add a new category in the model
      * @param ConfigCategory the new category
      **/
-    void appendCategory(const QString &iconName, const QString &name,
+    Q_INVOKABLE void appendCategory(const QString &iconName, const QString &name,
                         const QString &path, const QString &pluginName);
 
     /**
