@@ -472,6 +472,10 @@ void AppletQuickItem::init()
     }
     d->qmlObject->completeInitialization(initialProperties);
 
+    if (d->qmlObject->rootObject()) {
+      //  d->qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+    }
+
     //otherwise, initialize our size to root object's size
     if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
         setWidth(d->qmlObject->rootObject()->property("width").value<qreal>());

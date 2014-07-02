@@ -24,6 +24,7 @@
 #include "Plasma/Containment"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
+#include <kservicetypetrader.h>
 
 #include <QDebug>
 #include <QDir>
@@ -64,6 +65,7 @@ public:
     ConfigView *q;
     QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
+    ConfigModel *alternativesConfigModel;
     Plasma::Corona *corona;
 
     //Attached Layout property of mainItem, if any
@@ -113,7 +115,7 @@ void ConfigViewPrivate::init()
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
         q->engine()->setUrlInterceptor(interceptor);
     }
-   
+
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
@@ -124,6 +126,18 @@ void ConfigViewPrivate::init()
         configModel->setApplet(applet.data());
     } else {
         delete object;
+    }
+
+    alternativesConfigModel = new ConfigModel(q);
+
+    const QString constraint = QString("[X-Plasma-Provides] == '" + applet.data()->pluginInfo().property("X-Plasma-Provides").toString() + "'");
+
+    KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
+
+    QMap<QString, KPluginInfo> sortedApplets;
+    foreach (const KPluginInfo &info, applets) {
+        qWarning() << "AAAA" << info.pluginName();
+        alternativesConfigModel->appendCategory(info.icon(), info.name(), QString(), info.pluginName());
     }
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());
@@ -264,6 +278,11 @@ Plasma::Applet *ConfigView::applet()
 ConfigModel *ConfigView::configModel() const
 {
     return d->configModel;
+}
+
+PlasmaQuick::ConfigModel *ConfigView::alternativesConfigModel() const
+{
+    return d->alternativesConfigModel;
 }
 
 QString ConfigView::appletGlobalShortcut() const

@@ -51,6 +51,7 @@ class PLASMAQUICK_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(PlasmaQuick::ConfigModel *configModel READ configModel CONSTANT)
+    Q_PROPERTY(PlasmaQuick::ConfigModel *alternativesConfigModel READ alternativesConfigModel CONSTANT)
     Q_PROPERTY(QString appletGlobalShortcut READ appletGlobalShortcut WRITE setAppletGlobalShortcut NOTIFY appletGlobalShortcutChanged)
 
 public:
@@ -72,6 +73,11 @@ public:
      * @return the ConfigModel of the ConfigView
      **/
     PlasmaQuick::ConfigModel *configModel() const;
+
+    /**
+     * @return the ConfigModel of the ConfigView
+     **/
+    PlasmaQuick::ConfigModel *alternativesConfigModel() const;
 
 Q_SIGNALS:
     void appletGlobalShortcutChanged();
