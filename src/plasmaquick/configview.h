@@ -79,6 +79,8 @@ public:
      **/
     PlasmaQuick::ConfigModel *alternativesConfigModel() const;
 
+    Q_INVOKABLE void loadAlternative(const QString &plugin);
+
 Q_SIGNALS:
     void appletGlobalShortcutChanged();
 

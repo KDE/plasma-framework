@@ -284,6 +284,28 @@ PlasmaQuick::ConfigModel *ConfigView::alternativesConfigModel() const
     return d->alternativesConfigModel;
 }
 
+void ConfigView::loadAlternative(const QString &plugin)
+{
+    if (plugin == applet()->pluginInfo().pluginName() || applet()->isContainment()) {
+        return;
+    }
+
+    Plasma::Containment *cont = applet()->containment();
+    if (!cont) {
+        return;
+    }
+
+    QQuickItem *appletItem = applet()->property("_plasma_graphicObject").value<QQuickItem *>();
+    QQuickItem *contItem = cont->property("_plasma_graphicObject").value<QQuickItem *>();
+    if (!appletItem || !contItem) {
+        return;
+    }
+
+    QMetaObject::invokeMethod(contItem, "createApplet", Q_ARG(QString, plugin), Q_ARG(QVariantList, QVariantList()), Q_ARG(QPoint, QPoint(appletItem->x(), appletItem->y())));
+
+    applet()->destroy();
+}
+
 QString ConfigView::appletGlobalShortcut() const
 {
     if (!d->applet) {
