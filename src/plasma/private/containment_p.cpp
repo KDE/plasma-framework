@@ -157,7 +157,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
 
         // tell the applets too
         foreach (Applet *a, applets) {
-            a->setImmutability(q->immutability());
+            /*Why qMin?
+             * the applets immutability() is the maximum between internal applet immutability
+             * and the immutability of its containment.
+             * so not set higher immutability in the internal member of Applet
+             * or the applet will not be able to be unlocked properly
+             */
+            a->setImmutability(qMin(q->immutability(), a->d->immutability));
             a->updateConstraints(Types::ImmutableConstraint);
         }
     }
