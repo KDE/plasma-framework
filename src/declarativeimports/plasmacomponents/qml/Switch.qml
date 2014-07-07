@@ -63,4 +63,5 @@ Private.DualStateButton {
     }
 
     shadow: Private.ButtonShadow {}
+    Accessible.role: Accessible.CheckBox
 }

@@ -437,4 +437,7 @@ Item {
         orientation: Qt.Vertical
         stepSize: textEdit.font.pixelSize
     }
+
+    Accessible.role: EditableText
+    Accessible.readOnly: readOnly
 }

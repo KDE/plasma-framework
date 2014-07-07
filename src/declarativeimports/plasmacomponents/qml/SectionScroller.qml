@@ -179,4 +179,5 @@ Item {
                 listView.model.itemsRemoved.connect(dirtyObserver);
         }
     }
+    Accessible.role: Accessible.ScrollBar
 }

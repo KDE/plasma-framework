@@ -70,6 +70,8 @@ PlasmaComponents.Dialog {
      */
     signal buttonClicked(int index)
 
+    Accessible.role: Accessible.Dialog
+
     onButtonTextsChanged: {
         print("btex6tchanged:"  + buttonTexts);
         for (var i = buttonRow.children.length; i > 0; --i) {

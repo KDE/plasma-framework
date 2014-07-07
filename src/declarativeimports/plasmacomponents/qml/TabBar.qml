@@ -82,6 +82,8 @@ FocusScope {
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
+    Accessible.role: Accessible.PageTabList
+
     Item {
         id: buttonCutter
         anchors {

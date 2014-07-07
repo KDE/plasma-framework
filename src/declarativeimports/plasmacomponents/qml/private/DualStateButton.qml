@@ -112,7 +112,14 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
 
-        onReleased: dualButton.released();
         onPressed: dualButton.forceActiveFocus();
+        onReleased: dualButton.released();
+    }
+    Accessible.name: text
+    Accessible.checkable: checkable
+    Accessible.checked: checked
+    function accessiblePressAction() {
+        dualButton.forceActiveFocus()
+        dualButton.released()
     }
 }

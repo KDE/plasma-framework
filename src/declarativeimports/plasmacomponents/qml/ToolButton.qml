@@ -434,5 +434,12 @@ Item {
             onTriggered: Tooltip.showText(mouse, Qt.point(mouse.mouseX, mouse.mouseY), tooltip)
         }
     }
+
+    Accessible.role: Accessible.Button
+    Accessible.name: text
+    Accessible.description: tooltip
+    function accessiblePressAction() {
+        internal.clickButton()
+    }
 }
 

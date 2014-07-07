@@ -87,6 +87,11 @@ Item {
      */
     signal clicked
 
+    Accessible.role: Accessible.PageTab
+    Accessible.checkable: true
+    Accessible.checked: checked
+    Accessible.name: text
+
     implicitWidth: Math.max(label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? units.iconSizes.small : 0)), height)
     implicitHeight: 20//label.implicitHeight + (internal.portrait ? (iconSource != null ? units.iconSizes.small : 0) : 0)
 

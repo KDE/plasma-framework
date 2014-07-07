@@ -51,4 +51,7 @@ Text {
     color: theme.textColor
 
     opacity: enabled? 1 : 0.6
+
+    Accessible.role: Accessible.StaticText
+    Accessible.name: text
 }
