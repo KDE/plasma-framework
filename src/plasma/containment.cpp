@@ -563,13 +563,13 @@ void Containment::reactToScreenChange()
 {
     int newScreen = screen();
 
-    KConfigGroup c = config();
     if (newScreen >= 0) {
         d->lastScreen = newScreen;
+        KConfigGroup c = config();
         c.writeEntry("lastScreen", d->lastScreen);
+        emit configNeedsSaving();
     }
 
-    emit configNeedsSaving();
     emit screenChanged(newScreen);
 }
 
