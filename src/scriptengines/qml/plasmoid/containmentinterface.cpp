@@ -637,21 +637,17 @@ QList<QObject *> ContainmentInterface::actions() const
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     foreach (QAction *a, containment()->actions()->actions()) {
-        if (a->isEnabled()) {
-            actions.insert(a->data().toInt(), a);
-        }
+        actions.insert(a->data().toInt(), a);
     }
     foreach (QAction *a, containment()->corona()->actions()->actions()) {
-        if (a->isEnabled()) {
-            if (a->objectName() == QStringLiteral("lock widgets")) {
-                //It is up to the Containment to decide if the user is allowed or not
-                //to lock/unluck the widgets, so corona should not add one when there is none
-                //(user is not allow) and it shouldn't add another one when there is already
-                //one
-                continue;
-            }
-            actions.insert(a->data().toInt(), a);
+        if (a->objectName() == QStringLiteral("lock widgets")) {
+            //It is up to the Containment to decide if the user is allowed or not
+            //to lock/unluck the widgets, so corona should not add one when there is none
+            //(user is not allow) and it shouldn't add another one when there is already
+            //one
+            continue;
         }
+        actions.insert(a->data().toInt(), a);
     }
     return actions.values();
 }
