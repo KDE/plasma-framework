@@ -90,6 +90,15 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
+
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+            [=]() {
+                if (!m_containment) {
+                    return;
+                }
+                disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
+                this, &ContainmentInterface::appletRemovedForward);
+        });
 }
 
 void ContainmentInterface::init()
@@ -574,10 +583,6 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
-    if (QCoreApplication::closingDown()) {
-        return;
-    }
-
     QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
     m_appletInterfaces.removeAll(appletGraphicObject);
     emit appletRemoved(appletGraphicObject);
