@@ -87,7 +87,7 @@ public:
 //Not for QML
     Plasma::Containment *containment() const
     {
-        return static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
+        return m_containment.data();
     }
 
     inline WallpaperInterface *wallpaperInterface() const
@@ -196,6 +196,7 @@ private:
     QHash<KJob *, QPoint> m_dropPoints;
     QHash<KJob *, QMenu *> m_dropMenus;
     KActivities::Info *m_activityInfo;
+    QPointer<Plasma::Containment> m_containment;
     QWeakPointer<QMenu> m_contextMenu;
 };
 
