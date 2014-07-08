@@ -438,6 +438,6 @@ Item {
         stepSize: textEdit.font.pixelSize
     }
 
-    Accessible.role: EditableText
+    Accessible.role: Accessible.EditableText
     Accessible.readOnly: readOnly
 }
