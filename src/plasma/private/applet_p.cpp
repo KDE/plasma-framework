@@ -315,11 +315,10 @@ void AppletPrivate::setUiReady()
         c = q->containment();
         if (c) {
             c->d->loadingApplets.remove(q);
-            Applet *a = qobject_cast<Applet *>(c);
-            Q_ASSERT(a);
-            if (c->d->loadingApplets.isEmpty() && a && !a->d->uiReady) {
-                a->d->uiReady = true;
-                if (a->d->started) {
+
+            if (c->d->loadingApplets.isEmpty() && !Applet::d->uiReady) {
+                c->Applet::d->uiReady = true;
+                if (Applet::d->started) {
                     emit c->uiReadyChanged(true);
                 }
             }

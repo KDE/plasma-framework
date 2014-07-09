@@ -411,8 +411,8 @@ void Containment::addApplet(Applet *applet)
 
     if (!applet->d->uiReady) {
         d->loadingApplets << applet;
-        if (static_cast<Applet *>(this)->d->uiReady) {
-            static_cast<Applet *>(this)->d->uiReady = false;
+        if (Applet::d->uiReady) {
+            Applet::d->uiReady = false;
             emit uiReadyChanged(false);
         }
     }
@@ -536,8 +536,7 @@ QHash<QString, ContainmentActions *> &Containment::containmentActions()
 
 bool Containment::isUiReady() const
 {
-    const Applet *a = static_cast<const Applet *>(this);
-    return a->d->uiReady && a->d->started;
+    return Applet::d->uiReady && Applet::d->started;
 }
 
 void Containment::setActivity(const QString &activityId)
