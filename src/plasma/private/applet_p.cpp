@@ -316,9 +316,9 @@ void AppletPrivate::setUiReady()
         if (c) {
             c->d->loadingApplets.remove(q);
 
-            if (c->d->loadingApplets.isEmpty() && !Applet::d->uiReady) {
+            if (c->d->loadingApplets.isEmpty() && !c->Applet::d->uiReady) {
                 c->Applet::d->uiReady = true;
-                if (Applet::d->started) {
+                if (c->Applet::d->started) {
                     emit c->uiReadyChanged(true);
                 }
             }
