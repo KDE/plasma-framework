@@ -385,9 +385,8 @@ FocusScope {
         }
     }
 
-    Accessible.name: text
+    Accessible.name: placeholderText
     Accessible.role: Accessible.EditableText
     Accessible.readOnly: readOnly
     Accessible.passwordEdit: echoMode == TextInput.Password || echoMode === TextInput.PasswordEchoOnEdit
-    Accessible.description: placeholderText
 }
