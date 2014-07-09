@@ -314,12 +314,13 @@ void AppletPrivate::setUiReady()
     } else {
         c = q->containment();
         if (c) {
-            q->containment()->d->loadingApplets.remove(q);
-            Applet *a = static_cast<Applet *>(q->containment());
-            if (q->containment()->d->loadingApplets.isEmpty() && !a->d->uiReady) {
+            c->d->loadingApplets.remove(q);
+            Applet *a = qobject_cast<Applet *>(c);
+            Q_ASSERT(a);
+            if (c->d->loadingApplets.isEmpty() && a && !a->d->uiReady) {
                 a->d->uiReady = true;
                 if (a->d->started) {
-                    emit q->containment()->uiReadyChanged(true);
+                    emit c->uiReadyChanged(true);
                 }
             }
         }
