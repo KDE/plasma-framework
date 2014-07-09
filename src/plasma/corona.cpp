@@ -214,7 +214,7 @@ Containment *Corona::createContainmentDelayed(const QString &name, const QVarian
     return 0;
 }
 
-int Corona::screenForContainment(const Containment *containment) const
+int Corona::screenForContainment(const Containment *) const
 {
     return -1;
 }
