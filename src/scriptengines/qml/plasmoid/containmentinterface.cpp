@@ -146,7 +146,7 @@ void ContainmentInterface::init()
 
     connect(m_containment, &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
-    connect(m_containment, &Plasma::Containment::activityChanged,
+    connect(m_containment.data(), &Plasma::Containment::activityChanged,
             [ = ]() {
                 delete m_activityInfo;
                 m_activityInfo = new KActivities::Info(m_containment->activity(), this);
