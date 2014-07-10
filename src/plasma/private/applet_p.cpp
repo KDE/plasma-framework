@@ -41,6 +41,7 @@
 #include "scripting/scriptengine.h"
 #include "scripting/appletscript.h"
 #include "private/containment_p.h"
+#include "timetracker.h"
 
 namespace Plasma
 {
@@ -76,6 +77,9 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     }
     QObject::connect(actions->action("configure"), SIGNAL(triggered()),
                      q, SLOT(requestConfiguration()));
+#ifndef NDEBUG
+    new TimeTracker(q);
+#endif
 }
 
 AppletPrivate::~AppletPrivate()

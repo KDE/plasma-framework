@@ -34,6 +34,7 @@
 #include "pluginloader.h"
 
 #include "private/applet_p.h"
+#include "timetracker.h"
 
 namespace Plasma
 {
@@ -53,6 +54,10 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     if (appletParent) {
         QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
     }
+
+#ifndef NDEBUG
+    new TimeTracker(q);
+#endif
 }
 
 Plasma::ContainmentPrivate::~ContainmentPrivate()

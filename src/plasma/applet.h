@@ -65,6 +65,12 @@ class Package;
 class PLASMA_EXPORT Applet : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
+    Q_PROPERTY(Types::ImmutabilityType immutability READ immutability WRITE setImmutability NOTIFY immutabilityChanged)
+    Q_PROPERTY(Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
+    Q_PROPERTY(Types::Location location READ location NOTIFY locationChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle FINAL)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon FINAL)
 
 public:
 //CONSTRUCTORS

@@ -50,6 +50,7 @@ set(Plasma_LIB_SRCS
     private/applet_p.cpp
     private/associatedapplicationmanager.cpp
     private/containment_p.cpp
+    private/timetracker.cpp
 
 #Dataengines, services
     datacontainer.cpp

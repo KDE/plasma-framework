@@ -59,6 +59,7 @@ class PLASMA_EXPORT Containment : public Applet
 {
     Q_OBJECT
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+    Q_PROPERTY(bool isUiReady READ isUiReady NOTIFY uiReadyChanged)
 
 public:
     /**
