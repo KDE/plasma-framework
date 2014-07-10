@@ -26,6 +26,7 @@ Name[sr@latin]=Python datomotor
 Name[sv]=Python datagränssnitt
 Name[uk]=Рушій даних Python
 Name[x-test]=xxPython data enginexx
+Name[zh_TW]=Python 資料引擎
 Comment=Plasma data engine support for Python
 Comment[ar]=دعم محرّك بيانات پلازما لِبايثون
 Comment[ca]=Implementació d'un motor de dades del Plasma per a Python
@@ -53,6 +54,7 @@ Comment[sr@latin]=Podrška plasma datomotora za Python
 Comment[sv]=Plasma datagränssnittstöd för Python
 Comment[uk]=Підтримка Python у рушії роботи з даними Плазми
 Comment[x-test]=xxPlasma data engine support for Pythonxx
+Comment[zh_TW]=支援 Python 的 Plasma 資料引擎
 
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service

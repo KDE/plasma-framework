@@ -25,6 +25,7 @@ Name[sr@latin]=JavaScript operacije nad fajlovima
 Name[sv]=Filåtgärder för Javascript
 Name[uk]=Дії з файлами за допомогою JavaScript
 Name[x-test]=xxJavaScript File Operationsxx
+Name[zh_TW]=JavaScript 檔案操作
 Comment=Demonstrates accessing data via HTTP in JavaScript
 Comment[bs]=Demonstrira pristupanje padacima preko HTTP u JavaScript
 Comment[ca]=Demostra l'accés a dades via HTTP en JavaScript
@@ -49,6 +50,7 @@ Comment[sr@latin]=Demonstrira pristupanje podacima preko HTTP‑a u JavaScriptu
 Comment[sv]=Förevisar åtkomst av data via HTTP i Javascript
 Comment[uk]=Демонстрації доступу до даних за допомогою HTTP мовою JavaScript
 Comment[x-test]=xxDemonstrates accessing data via HTTP in JavaScriptxx
+Comment[zh_TW]=展示如何在 JavaScript 中透過 HTTP 存取資料
 Icon=text-x-generic
 
 Type=Service

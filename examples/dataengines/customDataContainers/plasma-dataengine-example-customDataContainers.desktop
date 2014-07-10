@@ -22,6 +22,7 @@ Name[sr@latin]=Posebni sadržaoci podataka
 Name[sv]=Egen DataContainer
 Name[uk]=Нетипові контейнери даних
 Name[x-test]=xxCustom DataContainersxx
+Name[zh_TW]=自訂資料容器
 Comment=A demonstration of how to subclass DataContainer
 Comment[bs]=Demonstracija kako se podklasira kontejner podataka
 Comment[ca]=Una demostració de com usar la subclasse «DataContainer»
@@ -45,6 +46,7 @@ Comment[sr@latin]=Demonstracija izvođenja iz klase DataContainer
 Comment[sv]=En demonstration av hur en delklass av DataContainer skapas
 Comment[uk]=Демонстрація створення підкласу DataContainer
 Comment[x-test]=xxA demonstration of how to subclass DataContainerxx
+Comment[zh_TW]=DataContainer 子類別的範例
 Type=Service
 Icon=plasma
 

@@ -27,6 +27,7 @@ Name[sr@latin]=Plasma paket
 Name[sv]=Plasma-paket
 Name[uk]=Пакунок Плазми
 Name[x-test]=xxPlasma Packagexx
+Name[zh_TW]=Plasma 套件
 Comment=Generic Plasma Package
 Comment[bs]=Generički plazma paket
 Comment[ca]=Paquet genèric del Plasma
@@ -52,4 +53,5 @@ Comment[sr@latin]=Generički plasma paket
 Comment[sv]=Generellt Plasma-paket
 Comment[uk]=Типовий пакунок Плазми
 Comment[x-test]=xxGeneric Plasma Packagexx
+Comment[zh_TW]=一般 Plasma 套件
 

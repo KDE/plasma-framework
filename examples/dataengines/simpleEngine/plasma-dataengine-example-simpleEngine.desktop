@@ -24,6 +24,7 @@ Name[sr@latin]=Jednostavan primer datomotora
 Name[sv]=Enkelt exempel på DataEngine
 Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
+Name[zh_TW]=簡單資料引擎範例
 Comment=A very basic DataEngine implementation
 Comment[bs]=Veoma jednostavna implementacija pogona podataka
 Comment[ca]=Una implementació molt bàsica de «DataEngine»
@@ -48,6 +49,7 @@ Comment[sr@latin]=Vrlo osnovna izvedba datomotora
 Comment[sv]=En mycket grundläggande implementering av DataEngine
 Comment[uk]=Базова реалізація рушія даних
 Comment[x-test]=xxA very basic DataEngine implementationxx
+Comment[zh_TW]=非常基本的 DataEngine 實作
 Type=Service
 Icon=plasma
 

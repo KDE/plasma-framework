@@ -27,6 +27,7 @@ Name[tr]=Paket metadata test dosyası
 Name[ug]=بوغچا مېتا سانلىق-مەلۇمات سىناق ھۆججەت
 Name[uk]=Файл перевірки метаданих пакунка
 Name[x-test]=xxPackage metadata test filexx
+Name[zh_TW]=套件中繼資料測試檔
 Comment=A test desktop file to test the PackageMetaData class.
 Comment[ar]=ملف سطح مكتب اختباري لاختبار صنف بيانات الحزمة الوصفية (PackageMetaData).
 Comment[bs]=Probna .desktop datoteka za klasu PackageMetaData.
@@ -55,6 +56,7 @@ Comment[tr]=PackageMetaData sınıfını test etmek için bir desktop dosyası.
 Comment[ug]=PackageMetaData خىلىدىكى سىناشقا ئىشلىتىدىغان desktop تىپىدىكى ھۆججەت.
 Comment[uk]=Тестовий стільничний файл для перевірки класу PackageMetaData.
 Comment[x-test]=xxA test desktop file to test the PackageMetaData class.xx
+Comment[zh_TW]=測試 PackageMetaData 類別的桌面檔
 
 Icon=test
 Type=Service

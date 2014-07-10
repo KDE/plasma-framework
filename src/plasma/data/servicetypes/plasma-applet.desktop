@@ -33,6 +33,7 @@ Comment[tr]=Plasma programcığı
 Comment[ug]=Plasma قوللانچاق
 Comment[uk]=Аплет Плазми
 Comment[x-test]=xxPlasma appletxx
+Comment[zh_TW]=Plasma 小程式
 
 [PropertyDef::X-Plasma-API]
 Type=QString

@@ -27,6 +27,7 @@ Name[sr@latin]=Plasma izgled i osećaj
 Name[sv]=Plasma utseende och känsla
 Name[uk]=Вигляд і поведінка Плазми
 Name[x-test]=xxPlasma Look and Feelxx
+Name[zh_TW]=Plasma 外觀與感覺
 Comment=Defines the Visual Language for Plasma Shells
 Comment[bs]=Definicija vizuelnog jezika za plazma školjke
 Comment[ca]=Defineix el llenguatge visual pels intèrprets d'ordres del Plasma
@@ -51,5 +52,6 @@ Comment[sr@latin]=Definiše vizuelni jezik za plasma školjke
 Comment[sv]=Definierar det visuella språket för Plasma skal
 Comment[uk]=Визначає візуальну мову для оболонок Плазми
 Comment[x-test]=xxDefines the Visual Language for Plasma Shellsxx
+Comment[zh_TW]=定義 Plasma Shells 的視覺語言
 
 

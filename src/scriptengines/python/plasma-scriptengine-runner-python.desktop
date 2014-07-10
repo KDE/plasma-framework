@@ -26,6 +26,7 @@ Name[sr@latin]=Python izvođač
 Name[sv]=Python körningsprogram
 Name[uk]=Засіб запуску Python
 Name[x-test]=xxPython Runnerxx
+Name[zh_TW]=Python 執行器
 Comment=Plasma Runner support for Python
 Comment[ar]=دعم مشغِّل پلازما لِبايثون
 Comment[ca]=Implementació d'un executor del Plasma per a Python
@@ -53,6 +54,7 @@ Comment[sr@latin]=Podrška plasma izvođača za Python
 Comment[sv]=Plasma körningsstöd för Python
 Comment[uk]=Підтримка Python у інструментах запуску
 Comment[x-test]=xxPlasma Runner support for Pythonxx
+Comment[zh_TW]=支援 Python 的執行器
 
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service

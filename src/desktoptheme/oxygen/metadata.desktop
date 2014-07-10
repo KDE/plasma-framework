@@ -31,6 +31,7 @@ Name[tr]=Oxygen
 Name[ug]=ئوكسېگىن
 Name[uk]=Oxygen
 Name[x-test]=xxOxygenxx
+Name[zh_TW]=Oxygen
 Comment=Theme done in the Oxygen style
 Comment[ar]=سمة مُصمَّمة بِنمط أوكسجين
 Comment[bs]=Tema urađena u stilu Kiseonika
@@ -62,6 +63,7 @@ Comment[tr]=Oxygen biçimi ile yapılmış tema
 Comment[ug]=ئوكسېگىن ئۇسلۇبىدىكى ئۆرنەك
 Comment[uk]=Тема в стилі Oxygen
 Comment[x-test]=xxTheme done in the Oxygen stylexx
+Comment[zh_TW]=以 Oxygen 樣式完成的外觀主題
 
 X-KDE-PluginInfo-Author=The Oxygen Project
 X-KDE-PluginInfo-Email=kde-artists@kde.org

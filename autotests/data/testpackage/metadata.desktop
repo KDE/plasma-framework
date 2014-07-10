@@ -29,6 +29,7 @@ Name[sr@latin]=Probni paket
 Name[sv]=Testpaket
 Name[uk]=Тестовий пакунок
 Name[x-test]=xxTest Packagexx
+Name[zh_TW]=測試套件
 Type=Service
 
 X-KDE-ParentApp=

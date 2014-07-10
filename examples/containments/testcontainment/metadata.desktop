@@ -25,6 +25,7 @@ Name[sr@latin]=Proba sadržalaca
 Name[sv]=Omgivningstest
 Name[uk]=Тестування контейнера
 Name[x-test]=xxContainment Testxx
+Name[zh_TW]=容器測試
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet,Plasma/Containment

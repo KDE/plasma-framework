@@ -28,6 +28,7 @@ Name[sr@latin]=Proba apleta
 Name[sv]=Miniprogramtest
 Name[uk]=Тест аплету
 Name[x-test]=xxApplet Testxx
+Name[zh_TW]=小程式測試
 Type=Service
 
 X-KDE-ServiceTypes=Plasma/Applet
