@@ -61,31 +61,10 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    connect(m_containment.data(), &Plasma::Containment::appletRemoved,
+    connect(m_containment, &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
-    connect(m_containment.data(), &Plasma::Containment::appletAdded,
+    connect(m_containment, &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
-    connect(m_containment.data(), &Plasma::Containment::activityChanged,
-            this, &ContainmentInterface::activityChanged);
-    connect(m_containment.data(), &Plasma::Containment::activityChanged,
-    [ = ]() {
-        delete m_activityInfo;
-        m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-        connect(m_activityInfo, &KActivities::Info::nameChanged,
-                this, &ContainmentInterface::activityNameChanged);
-        emit activityNameChanged();
-    });
-    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged,
-            this, &ContainmentInterface::loadWallpaper);
-    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
-            this, &ContainmentInterface::containmentTypeChanged);
-
-    if (m_containment->corona()) {
-        connect(m_containment->corona(), &Plasma::Corona::availableScreenRegionChanged,
-                this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(m_containment->corona(), &Plasma::Corona::availableScreenRectChanged,
-                this, &ContainmentInterface::availableScreenRectChanged);
-    }
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
@@ -96,9 +75,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
                 if (!m_containment) {
                     return;
                 }
-                disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
-                this, &ContainmentInterface::appletRemovedForward);
-        });
+                disconnect(m_containment, &Plasma::Containment::appletRemoved,
+                           this, &ContainmentInterface::appletRemovedForward);
+            });
 }
 
 void ContainmentInterface::init()
@@ -163,6 +142,28 @@ void ContainmentInterface::init()
 
     if (!m_containment->wallpaper().isEmpty()) {
         loadWallpaper();
+    }
+
+    connect(m_containment, &Plasma::Containment::activityChanged,
+            this, &ContainmentInterface::activityChanged);
+    connect(m_containment, &Plasma::Containment::activityChanged,
+            [ = ]() {
+                delete m_activityInfo;
+                m_activityInfo = new KActivities::Info(m_containment->activity(), this);
+                connect(m_activityInfo, &KActivities::Info::nameChanged,
+                        this, &ContainmentInterface::activityNameChanged);
+                emit activityNameChanged();
+            });
+    connect(m_containment, &Plasma::Containment::wallpaperChanged,
+            this, &ContainmentInterface::loadWallpaper);
+    connect(m_containment, &Plasma::Containment::containmentTypeChanged,
+            this, &ContainmentInterface::containmentTypeChanged);
+
+    if (m_containment->corona()) {
+        connect(m_containment->corona(), &Plasma::Corona::availableScreenRegionChanged,
+                this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(m_containment->corona(), &Plasma::Corona::availableScreenRectChanged,
+                this, &ContainmentInterface::availableScreenRectChanged);
     }
 }
 
