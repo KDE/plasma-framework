@@ -23,6 +23,7 @@
 
 #include <QHash>
 #include <QFile>
+#include <QDebug>
 
 #include <qstandardpaths.h>
 #include <klocalizedstring.h>
@@ -116,6 +117,9 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
     if (d->applicationNames.contains(applet)) {
 #if !PLASMA_NO_KIO
         bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), 0);
+        if (!success) {
+            qWarning() << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
+        }
 #else
         QString execCommand = d->applicationNames.value(applet);
 
