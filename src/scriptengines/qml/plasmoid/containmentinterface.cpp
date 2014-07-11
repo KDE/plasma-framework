@@ -61,9 +61,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    connect(m_containment, &Plasma::Containment::appletRemoved,
+    connect(m_containment.data(), &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
-    connect(m_containment, &Plasma::Containment::appletAdded,
+    connect(m_containment.data(), &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
 
     if (!m_appletInterfaces.isEmpty()) {
@@ -75,7 +75,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
                 if (!m_containment) {
                     return;
                 }
-                disconnect(m_containment, &Plasma::Containment::appletRemoved,
+                disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
                            this, &ContainmentInterface::appletRemovedForward);
             });
 }
@@ -144,7 +144,7 @@ void ContainmentInterface::init()
         loadWallpaper();
     }
 
-    connect(m_containment, &Plasma::Containment::activityChanged,
+    connect(m_containment.data(), &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
     connect(m_containment.data(), &Plasma::Containment::activityChanged,
             [ = ]() {
@@ -154,9 +154,9 @@ void ContainmentInterface::init()
                         this, &ContainmentInterface::activityNameChanged);
                 emit activityNameChanged();
             });
-    connect(m_containment, &Plasma::Containment::wallpaperChanged,
+    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged,
             this, &ContainmentInterface::loadWallpaper);
-    connect(m_containment, &Plasma::Containment::containmentTypeChanged,
+    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
             this, &ContainmentInterface::containmentTypeChanged);
 
     if (m_containment->corona()) {
