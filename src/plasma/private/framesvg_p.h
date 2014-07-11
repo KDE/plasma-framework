@@ -22,6 +22,7 @@
 #define PLASMA_FRAMESVG_P_H
 
 #include <QHash>
+#include <QCache>
 #include <QStringBuilder>
 
 #include <QDebug>
@@ -57,6 +58,7 @@ public:
     FrameData(const FrameData &other, FrameSvg *svg)
         : prefix(other.prefix),
           enabledBorders(other.enabledBorders),
+          cachedMasks(MAX_CACHED_MASKS),
           frameSize(other.frameSize),
           topHeight(0),
           leftWidth(0),
@@ -85,7 +87,7 @@ public:
     QString prefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QHash<QString, QRegion> cachedMasks;
+    QCache<QString, QRegion> cachedMasks;
     static const int MAX_CACHED_MASKS = 10;
 
     QSize frameSize;
