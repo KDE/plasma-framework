@@ -127,11 +127,15 @@ void TimeTracker::propertyChanged()
         QMetaProperty prop = mo->property(i);
         if (prop.notifySignalIndex() == senderSignalIndex()) {
             QString val;
-            QVariant var = prop.read(parent());
-            if(var.canConvert<QString>()) {
-                val = var.toString();
-            } else {
-                val = QString("<unknown %1>").arg(var.typeName());
+            if (prop.type() < QVariant::UserType) {
+                QVariant var = prop.read(parent());
+                if(var.canConvert<QString>()) {
+                    val = var.toString();
+                }
+            }
+
+            if (val.isEmpty()) {
+                val = QString("<unknown %1>").arg(prop.typeName());
             }
             m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QString("property %1 changed to %2").arg(prop.name()).arg(val)});
             break;
