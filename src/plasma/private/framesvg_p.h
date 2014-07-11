@@ -149,6 +149,9 @@ public:
 
     Types::Location location;
     QString prefix;
+    //sometimes the prefix we requested is not available, so prefix will be emoty
+    //keep track of the requested one anyways, we'll try again when the theme changes
+    QString requestedPrefix;
 
     FrameSvg *q;
 

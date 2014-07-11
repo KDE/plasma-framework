@@ -222,6 +222,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
             d->prefix += '-';
         }
     }
+    d->requestedPrefix = prefix;
 
     FrameData *oldFrameData = d->frames.value(oldPrefix);
     if (oldPrefix == d->prefix && oldFrameData) {
@@ -1119,6 +1120,7 @@ void FrameSvgPrivate::updateSizes() const
 
 void FrameSvgPrivate::updateNeeded()
 {
+    q->setElementPrefix(requestedPrefix);
     q->clearCache();
     updateSizes();
 }
