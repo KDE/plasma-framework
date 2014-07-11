@@ -388,10 +388,6 @@ void AppletPrivate::scheduleModificationNotification()
     // modificationsTimer is not allocated until we get our notice of being started
     if (modificationsTimer) {
         // schedule a save
-        if (modificationsTimer->isActive()) {
-            modificationsTimer->stop();
-        }
-
         modificationsTimer->start(1000, q);
     }
 }
