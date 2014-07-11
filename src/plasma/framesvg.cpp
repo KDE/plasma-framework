@@ -314,11 +314,7 @@ bool FrameSvg::hasElementPrefix(Plasma::Types::Location location) const
 
 QString FrameSvg::prefix()
 {
-    if (d->prefix.isEmpty()) {
-        return d->prefix;
-    }
-
-    return d->prefix.left(d->prefix.size() - 1);
+    return d->requestedPrefix;
 }
 
 void FrameSvg::resizeFrame(const QSizeF &size)
