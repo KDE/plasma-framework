@@ -65,17 +65,18 @@ public:
     ConfigView *q;
     QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
-    ConfigModel *alternativesConfigModel;
     Plasma::Corona *corona;
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
+    bool appletHasAlternatives : 1;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     : q(view),
       applet(appl),
-      corona(0)
+      corona(0),
+      appletHasAlternatives(false)
 {
 }
 
@@ -128,16 +129,20 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    alternativesConfigModel = new ConfigModel(q);
-
-    const QString constraint = QString("[X-Plasma-Provides] == '" + applet.data()->pluginInfo().property("X-Plasma-Provides").toString() + "'");
-
-    KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
-
-    QMap<QString, KPluginInfo> sortedApplets;
-    foreach (const KPluginInfo &info, applets) {
-        alternativesConfigModel->appendCategory(info.icon(), info.name(), QString(), info.pluginName());
+    QString constraint;
+    bool first = true;
+    foreach (const QString prov, applet.data()->pluginInfo().property("X-Plasma-Provides").value<QStringList>()) {
+        if (!first) {
+            constraint += " or ";
+            first = false;
+        }
+        constraint += "'" + prov + "' in [X-Plasma-Provides]";
     }
+
+    
+    KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
+    appletHasAlternatives = !applets.isEmpty();
+    emit q->appletHasAlternativesChanged();
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
@@ -279,11 +284,6 @@ ConfigModel *ConfigView::configModel() const
     return d->configModel;
 }
 
-PlasmaQuick::ConfigModel *ConfigView::alternativesConfigModel() const
-{
-    return d->alternativesConfigModel;
-}
-
 void ConfigView::loadAlternative(const QString &plugin)
 {
     if (plugin == applet()->pluginInfo().pluginName() || applet()->isContainment()) {
@@ -323,6 +323,16 @@ void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
 
     d->applet.data()->setGlobalShortcut(shortcut);
     emit appletGlobalShortcutChanged();
+}
+
+QStringList ConfigView::appletProvides() const
+{
+    return d->applet.data()->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
+}
+
+bool ConfigView::appletHasAlternatives() const
+{
+    return d->appletHasAlternatives;
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have

@@ -46,4 +46,4 @@ Type=bool
 Type=QString
 
 [PropertyDef::X-Plasma-Provides]
-Type=QString
+Type=QStringList
