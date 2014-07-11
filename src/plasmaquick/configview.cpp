@@ -301,6 +301,7 @@ void ConfigView::loadAlternative(const QString &plugin)
         return;
     }
 
+    //TODO: map the position to containment coordinates
     QMetaObject::invokeMethod(contItem, "createApplet", Q_ARG(QString, plugin), Q_ARG(QVariantList, QVariantList()), Q_ARG(QPoint, QPoint(appletItem->x(), appletItem->y())));
 
     applet()->destroy();
