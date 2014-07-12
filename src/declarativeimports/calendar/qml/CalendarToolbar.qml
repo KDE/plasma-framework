@@ -39,7 +39,7 @@ Row {
         anchors.left: parent.left
         anchors.rightMargin: 20
         onClicked: {
-            monthCalendar.previousMonth()
+            calendarBackend.previousMonth()
         }
     }
 
@@ -59,12 +59,12 @@ Row {
 //             }
 //             menuLoader.item.open(0, height);
 //         }
-//         text: monthCalendar.monthName
+//         text: calendarBackend.monthName
 //     }
 
     Components.ToolButton {
         id: monthYear
-        text: monthCalendar.year
+        text: calendarBackend.year
         anchors.leftMargin: 20
         anchors.left: month.right
         Components.ToolButton {
@@ -73,7 +73,7 @@ Row {
             width: 12
             height: 12
             anchors.left: monthYear.right
-            onClicked: monthCalendar.nextYear()
+            onClicked: calendarBackend.nextYear()
         }
         Components.ToolButton {
             id: decrease
@@ -82,7 +82,7 @@ Row {
             height: 12
             anchors.left: monthYear.right
             anchors.top: increase.bottom
-            onClicked: monthCalendar.previousYear()
+            onClicked: calendarBackend.previousYear()
         }
     }
 
@@ -93,7 +93,7 @@ Row {
         width: height;
         anchors.right: parent.right
         onClicked: {
-            monthCalendar.nextMonth()
+            calendarBackend.nextMonth()
         }
     }
 }

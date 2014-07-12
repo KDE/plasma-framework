@@ -23,71 +23,67 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 Item {
     id: daysCalendar
 
+    // This is to ensure that the inner grid.width is always aligned to be divisible by 7,
+    // fixes wrong side margins because of the rounding of cell size
+    // (consider the parent.width to be 404, the cell width would be 56,
+    // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
+    // wrong alignment)
+    anchors {
+        leftMargin: Math.floor(((parent.width + borderWidth) % 7) / 2);
+        rightMargin: anchors.leftMargin
+        bottomMargin: anchors.leftMargin
+    }
+
     property real borderOpacity: 1.0
 
-    property int leftMargin: frameTop.x
-    property int topMargin: frameTop.y
-    property int rightMargin: width - frameTop.width
-    property int bottomMargin: height - frameLeft.height
-
     Rectangle {
-        id: frameTop
-        height: borderWidth
-        width: root.columns * root.cellWidth
-        color: theme.textColor
+        id: allAroundFrame
+        color: "transparent"
+        border.width: borderWidth
+        border.color: theme.textColor
         opacity: borderOpacity
+        width: (root.cellWidth + borderWidth) * calendarGrid.rows
+        height: (root.cellHeight + borderWidth) * calendarGrid.columns
+    }
 
-        anchors {
-            top: parent.top
-            left: calendarDays.left
+    Repeater {
+        id: verticalGridLineRepeater
+        model: calendarGrid.columns - 1
+        delegate: Rectangle {
+            x: root.cellWidth + (index * (root.cellWidth + borderWidth))
+            // The first grid row does not have any columns, so start at cellHeight and add borderWidth
+            // to not create conjuction points which looks bad as the lines are semi-transparent
+            y: root.cellHeight + borderWidth
+            width: borderWidth
+            // Subtract the most bottom border width to avoid conjuction points
+            height: (root.cellHeight + borderWidth) * (calendarGrid.columns - 1) - borderWidth
+            color: theme.textColor
+            opacity: borderOpacity
         }
     }
 
-    Rectangle {
-        id: frameLeft
-        width: borderWidth
-        height: root.cellHeight * root.columns
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            right: calendarDays.left
-            top: calendarDays.top
+    Repeater {
+        id: horizontalGridLineRepeater
+        model: calendarGrid.rows - 1
+        delegate: Rectangle {
+            // Start the horizontal line so that it does not cross the leftmost vertical borderline
+            // but is rathar adjacent to it
+            x: borderWidth
+            y: root.cellHeight + (index * (root.cellHeight + borderWidth))
+            // To each cell add one border width and then subtract the outer border widths
+            // so the lines do not cross
+            width: (root.cellWidth + borderWidth) * calendarGrid.rows - (borderWidth * 2)
+            height: borderWidth
+            color: theme.textColor
+            opacity: borderOpacity
         }
     }
-
-    Rectangle {
-        id: frameRight
-        width: borderWidth
-        height: root.cellHeight
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            right: frameTop.right
-            top: calendarDays.top
-        }
-    }
-
-    Rectangle {
-        id: frameSecond
-        height: borderWidth
-        color: theme.textColor
-        opacity: borderOpacity
-        y: cellHeight - borderWidth
-        anchors {
-            left: calendarDays.left
-            right: frameTop.right
-        }
-    }
-
 
     Grid {
-        id: calendarDays
-        anchors.fill: parent
-        columns: monthCalendar.days
-        rows: 1 + monthCalendar.weeks
-        spacing: 0
+        id: calendarGrid
+        columns: calendarBackend.days
+        rows: calendarBackend.weeks + 1
+        spacing: 1
         property Item selectedItem
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
@@ -95,19 +91,19 @@ Item {
         property QtObject selectedDate: root.date
         onSelectedDateChanged: {
             // clear the selection if the root.date is null
-            if (calendarDays.selectedDate == null) {
-                calendarDays.selectedItem = null;
+            if (calendarGrid.selectedDate == null) {
+                calendarGrid.selectedItem = null;
             }
         }
 
         Repeater {
             id: days
-            model: monthCalendar.days
+            model: calendarBackend.days
             Item {
                 width: root.cellWidth
                 height: root.cellHeight
                 Components.Label {
-                    text: Qt.locale().dayName(monthCalendar.firstDayOfWeek + index, Locale.ShortFormat)
+                    text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
                     font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
@@ -120,7 +116,7 @@ Item {
 
         Repeater {
             id: repeater
-            model: monthCalendar.daysModel
+            model: calendarBackend.daysModel
 
             DayDelegate {
                 borderOpacity: daysCalendar.borderOpacity
