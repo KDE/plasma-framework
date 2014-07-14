@@ -47,7 +47,16 @@ QRect SimpleCorona::screenGeometry(int screen) const
 SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
     : Plasma::Applet(parent, serviceId, appletId)
 {
-    updateConstraints(Plasma::Types::UiReadyConstraint);
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+
+    //updateConstraints(Plasma::Types::UiReadyConstraint);
+    m_timer.setSingleShot(true);
+    m_timer.setInterval(qrand() % ((500 + 1) - 100) + 100);
+    m_timer.start();
+    connect(&m_timer, &QTimer::timeout, [=]() {
+        updateConstraints(Plasma::Types::UiReadyConstraint);
+    });
 }
 
 
@@ -103,10 +112,13 @@ void CoronaTest::restore()
 
 void CoronaTest::startupCompletion()
 {
-    //startup completion signals
-    //QEXPECT_FAIL("", "TODO: complete startup", Continue);
+    QVERIFY(!m_corona->isStartupCompleted());
+    QVERIFY(!m_corona->containments().first()->isUiReady());
+
+    QSignalSpy spy(m_corona, SIGNAL(startupCompleted()));
+    QVERIFY(spy.wait(1000));
+
     QVERIFY(m_corona->isStartupCompleted());
-    //QEXPECT_FAIL("", "TODO: complete uiReady signals", Continue);
     QVERIFY(m_corona->containments().first()->isUiReady());
 
     //TODO: applet creation and deletion

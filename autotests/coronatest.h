@@ -21,6 +21,8 @@
 
 #include <QtTest/QtTest>
 
+#include <QTimer>
+
 #include "plasma/corona.h"
 #include "plasma/pluginloader.h"
 
@@ -49,6 +51,8 @@ class SimpleApplet : public Plasma::Applet
 
 public:
     explicit SimpleApplet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+private:
+    QTimer m_timer;
 };
 
 class CoronaTest : public QObject
