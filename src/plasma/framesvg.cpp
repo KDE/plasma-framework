@@ -866,32 +866,19 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     }
 
     // Corners
-    if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top")) {
+    if (frame->enabledBorders & FrameSvg::TopBorder) {
         contentTop = frame->topHeight;
         bottomOffset += frame->topHeight;
-
-        if (q->hasElement(prefix % "topleft") && frame->enabledBorders & FrameSvg::LeftBorder) {
-            q->paint(&p, QRect(leftOffset, topOffset, frame->leftWidth, frame->topHeight), prefix % "topleft");
-
-            contentLeft = frame->leftWidth;
-        }
-
-        if (q->hasElement(prefix % "topright") && frame->enabledBorders & FrameSvg::RightBorder) {
-            q->paint(&p, QRect(rightOffset, topOffset, frame->rightWidth, frame->topHeight), prefix % "topright");
-        }
     }
 
-    if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom")) {
-        if (q->hasElement(prefix % "bottomleft") && frame->enabledBorders & FrameSvg::LeftBorder) {
-            q->paint(&p, QRect(leftOffset, bottomOffset, frame->leftWidth, frame->bottomHeight), prefix % "bottomleft");
-
-            contentLeft = frame->leftWidth;
-        }
-
-        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix % "bottomright")) {
-            q->paint(&p, QRect(rightOffset, bottomOffset, frame->rightWidth, frame->bottomHeight), prefix % "bottomright");
-        }
+    if (frame->enabledBorders & FrameSvg::LeftBorder) {
+        contentLeft = frame->leftWidth;
     }
+
+    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::TopBorder, QRect(leftOffset, topOffset, frame->leftWidth, frame->topHeight));
+    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::TopBorder, QRect(rightOffset, topOffset, frame->rightWidth, frame->topHeight));
+    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::BottomBorder, QRect(leftOffset, bottomOffset, frame->leftWidth, frame->bottomHeight));
+    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::BottomBorder, QRect(rightOffset, bottomOffset, frame->rightWidth, frame->bottomHeight));
 
     // Sides
     const int leftHeight = q->elementSize(prefix % "left").height();
@@ -919,6 +906,14 @@ void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg:
 
             p.drawTiledPixmap(output, px);
         }
+    }
+}
+
+void FrameSvgPrivate::paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const
+{
+    QString corner = prefix % borderToElementId(border);
+    if (frame->enabledBorders & border && q->hasElement(corner)) {
+        q->paint(&p, output, corner);
     }
 }
 
