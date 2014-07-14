@@ -148,6 +148,8 @@ public:
     void updateNeeded();
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
+    void paintBorder(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, int length, int thickness, const QRect& output) const;
+    static QString borderToElementId(Plasma::FrameSvg::EnabledBorders borders);
 
     Types::Location location;
     QString prefix;

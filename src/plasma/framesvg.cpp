@@ -798,8 +798,6 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 {
     //qDebug() << "generating background";
     const QSizeF size = frameSize(frame);
-    const int topWidth = q->elementSize(prefix % "top").width();
-    const int leftHeight = q->elementSize(prefix % "left").height();
     const int topOffset = 0;
     const int leftOffset = 0;
 
@@ -901,82 +899,60 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     }
 
     // Sides
-    if (frame->stretchBorders) {
-        if (frame->enabledBorders & FrameSvg::LeftBorder || frame->enabledBorders & FrameSvg::RightBorder) {
-            if (q->hasElement(prefix % "left") &&
-                    frame->enabledBorders & FrameSvg::LeftBorder &&
-                    contentHeight > 0) {
-                q->paint(&p, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), prefix % "left");
-            }
+    const int leftHeight = q->elementSize(prefix % "left").height();
+    paintBorder(p, frame, FrameSvg::LeftBorder, frame->leftWidth, leftHeight, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight));
+    paintBorder(p, frame, FrameSvg::RightBorder, frame->rightWidth, leftHeight, QRect(rightOffset, contentTop, frame->rightWidth, contentHeight));
 
-            if (q->hasElement(prefix % "right") &&
-                    frame->enabledBorders & FrameSvg::RightBorder &&
-                    contentHeight > 0) {
-                q->paint(&p, QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), prefix % "right");
-            }
-        }
 
-        if (frame->enabledBorders & FrameSvg::TopBorder || frame->enabledBorders & FrameSvg::BottomBorder) {
-            if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top") &&
-                    contentWidth > 0) {
-                q->paint(&p, QRect(contentLeft, topOffset, contentWidth, frame->topHeight), prefix % "top");
-            }
+    const int topWidth = q->elementSize(prefix % "top").width();
+    paintBorder(p, frame, FrameSvg::TopBorder, topWidth, frame->topHeight, QRect(contentLeft, topOffset, contentWidth, frame->topHeight));
+    paintBorder(p, frame, FrameSvg::BottomBorder, topWidth, frame->bottomHeight, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight));
+}
 
-            if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom") &&
-                    contentWidth > 0) {
-                q->paint(&p, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight), prefix % "bottom");
-            }
-        }
-    } else {
-        if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix % "left")
-                && leftHeight > 0 && frame->leftWidth > 0) {
-            QPixmap left(frame->leftWidth, leftHeight);
-            left.fill(Qt::transparent);
+void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, int length, int thickness, const QRect& output) const
+{
+    QString side = borderToElementId(borders);
+    if (frame->enabledBorders & borders && q->hasElement(prefix % side) && length > 0 && thickness > 0) {
+        if (frame->stretchBorders) {
+            q->paint(&p, output, prefix % side);
+        } else {
+            QPixmap px(length, thickness);
+            px.fill(Qt::transparent);
 
-            QPainter sidePainter(&left);
+            QPainter sidePainter(&px);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QRect(QPoint(0, 0), left.size()), prefix % "left");
+            q->paint(&sidePainter, QRect(QPoint(0, 0), px.size()), prefix % side);
 
-            p.drawTiledPixmap(QRect(leftOffset, contentTop, frame->leftWidth, contentHeight), left);
-        }
-
-        if (frame->enabledBorders & FrameSvg::RightBorder && q->hasElement(prefix % "right") &&
-                leftHeight > 0 && frame->rightWidth > 0) {
-            QPixmap right(frame->rightWidth, leftHeight);
-            right.fill(Qt::transparent);
-
-            QPainter sidePainter(&right);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QRect(QPoint(0, 0), right.size()), prefix % "right");
-
-            p.drawTiledPixmap(QRect(rightOffset, contentTop, frame->rightWidth, contentHeight), right);
-        }
-
-        if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top")
-                && topWidth > 0 && frame->topHeight > 0) {
-            QPixmap top(topWidth, frame->topHeight);
-            top.fill(Qt::transparent);
-
-            QPainter sidePainter(&top);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QRect(QPoint(0, 0), top.size()), prefix % "top");
-
-            p.drawTiledPixmap(QRect(contentLeft, topOffset, contentWidth, frame->topHeight), top);
-        }
-
-        if (frame->enabledBorders & FrameSvg::BottomBorder && q->hasElement(prefix % "bottom")
-                && topWidth > 0 && frame->bottomHeight > 0) {
-            QPixmap bottom(topWidth, frame->bottomHeight);
-            bottom.fill(Qt::transparent);
-
-            QPainter sidePainter(&bottom);
-            sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QRect(QPoint(0, 0), bottom.size()), prefix % "bottom");
-
-            p.drawTiledPixmap(QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight), bottom);
+            p.drawTiledPixmap(output, px);
         }
     }
+}
 
+QString FrameSvgPrivate::borderToElementId(FrameSvg::EnabledBorders borders)
+{
+    switch(borders) {
+        case FrameSvg::NoBorder:
+            return QString();
+        case FrameSvg::TopBorder:
+            return QStringLiteral("top");
+        case FrameSvg::BottomBorder:
+            return QStringLiteral("bottom");
+        case FrameSvg::LeftBorder:
+            return QStringLiteral("left");
+        case FrameSvg::RightBorder:
+            return QStringLiteral("right");
+        case FrameSvg::TopBorder | FrameSvg::LeftBorder:
+            return QStringLiteral("topleft");
+        case FrameSvg::TopBorder | FrameSvg::RightBorder:
+            return QStringLiteral("topright");
+        case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
+            return QStringLiteral("bottomleft");
+        case FrameSvg::BottomBorder | FrameSvg::RightBorder:
+            return QStringLiteral("bottomright");
+        default:
+            qWarning() << "unrecognized border" << borders;
+    }
+    return QString();
 }
 
 QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) const
