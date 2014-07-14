@@ -125,8 +125,6 @@ void CoronaTest::startupCompletion()
 
     QVERIFY(m_corona->isStartupCompleted());
     QVERIFY(m_corona->containments().first()->isUiReady());
-
-    //TODO: applet creation and deletion
 }
 
 void CoronaTest::addRemoveApplets()
