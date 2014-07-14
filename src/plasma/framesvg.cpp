@@ -807,49 +807,43 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
         return;
     }
 
-    const QSize contentSize(size.width() - frame->leftWidth  - frame->rightWidth, size.height() - frame->topHeight  - frame->bottomHeight);
-
     frame->cachedBackground = QPixmap(size);
     frame->cachedBackground.fill(Qt::transparent);
     QPainter p(&frame->cachedBackground);
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    paintCenter(p, frame, contentSize, size);
+    QRect contentRect = contentGeometry(frame, size);
+    paintCenter(p, frame, contentRect.size(), size);
 
-    int contentTop = 0;
-    int contentLeft = 0;
-    int rightOffset = contentSize.width();
-    int bottomOffset = contentSize.height();
-    if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix % "left")) {
-        rightOffset += frame->leftWidth;
-    }
-
-    // Corners
-    if (frame->enabledBorders & FrameSvg::TopBorder) {
-        contentTop = frame->topHeight;
-        bottomOffset += frame->topHeight;
-    }
-
-    if (frame->enabledBorders & FrameSvg::LeftBorder) {
-        contentLeft = frame->leftWidth;
-    }
-
-    const int topOffset = 0;
-    const int leftOffset = 0;
-    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::TopBorder, QRect(leftOffset, topOffset, frame->leftWidth, frame->topHeight));
-    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::TopBorder, QRect(rightOffset, topOffset, frame->rightWidth, frame->topHeight));
-    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::BottomBorder, QRect(leftOffset, bottomOffset, frame->leftWidth, frame->bottomHeight));
-    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::BottomBorder, QRect(rightOffset, bottomOffset, frame->rightWidth, frame->bottomHeight));
+    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::TopBorder, QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight)));
+    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::TopBorder, QRect(QPoint(contentRect.right(), 0), QSize(frame->rightWidth, frame->topHeight)));
+    paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::BottomBorder, QRect(QPoint(0, contentRect.bottom()), QSize(frame->leftWidth, frame->bottomHeight)));
+    paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::BottomBorder, QRect(contentRect.bottomRight(), QSize(frame->rightWidth, frame->bottomHeight)));
 
     // Sides
     const int leftHeight = q->elementSize(prefix % "left").height();
-    paintBorder(p, frame, FrameSvg::LeftBorder, QSize(frame->leftWidth, leftHeight), QRect(leftOffset, contentTop, frame->leftWidth, contentSize.height()));
-    paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, leftHeight), QRect(rightOffset, contentTop, frame->rightWidth, contentSize.height()));
+    paintBorder(p, frame, FrameSvg::LeftBorder, QSize(frame->leftWidth, leftHeight), QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height())));
+    paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, leftHeight), QRect(contentRect.topRight(), QSize(frame->rightWidth, contentRect.height())));
 
     const int topWidth = q->elementSize(prefix % "top").width();
-    paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight), QRect(contentLeft, topOffset, contentSize.width(), frame->topHeight));
-    paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight), QRect(contentLeft, bottomOffset, contentSize.width(), frame->bottomHeight));
+    paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight), QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight)));
+    paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight), QRect(contentRect.bottomLeft(), QSize(contentRect.width(), frame->bottomHeight)));
+}
+
+QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) const
+{
+    const QSize contentSize(size.width() - frame->leftWidth  - frame->rightWidth, size.height() - frame->topHeight  - frame->bottomHeight);
+    QRect contentRect(QPoint(0,0), contentSize);
+    if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix % "left")) {
+        contentRect.translate(frame->leftWidth, 0);
+    }
+
+    // Corners
+    if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % "top")) {
+        contentRect.translate(0, frame->topHeight);
+    }
+    return contentRect;
 }
 
 void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize)
