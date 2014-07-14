@@ -32,7 +32,7 @@
 namespace Plasma
 {
 
-class FrameData
+class PLASMA_EXPORT FrameData
 {
 public:
     FrameData(FrameSvg *svg, const QString &p)
@@ -126,7 +126,7 @@ public:
     QHash<FrameSvg *, int> references;
 };
 
-class FrameSvgPrivate
+class PLASMA_EXPORT FrameSvgPrivate
 {
 public:
     FrameSvgPrivate(FrameSvg *psvg)
@@ -152,6 +152,7 @@ public:
     void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
     void paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize);
     static QString borderToElementId(Plasma::FrameSvg::EnabledBorders borders);
+    static QRect sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect);
     QRect contentGeometry(FrameData* frame, const QSize& size) const;
 
     Types::Location location;
