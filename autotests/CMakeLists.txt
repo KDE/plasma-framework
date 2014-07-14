@@ -7,6 +7,7 @@ include(ECMMarkAsTest)
 include(ECMAddTests)
 
 find_package(KF5CoreAddons REQUIRED)
+find_package(KF5XmlGui REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
 # add_definitions( -DKDESRCDIR=${CMAKE_CURRENT_SOURCE_DIR} )
@@ -37,12 +38,12 @@ PLASMA_UNIT_TESTS(
 )
 
 add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp)
-target_link_libraries(storagetest Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons )
+target_link_libraries(storagetest Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons)
 
 
 set(coronatest_srcs coronatest.cpp)
 qt5_add_resources(coronatest_srcs coronatestresources.qrc)
-ecm_add_test(${coronatest_srcs} TEST_NAME coronatest LINK_LIBRARIES Qt5::Gui Qt5::Widgets Qt5::Test KF5::KIOCore KF5::Plasma KF5::CoreAddons)
+ecm_add_test(${coronatest_srcs} TEST_NAME coronatest LINK_LIBRARIES Qt5::Gui Qt5::Widgets Qt5::Test KF5::KIOCore KF5::Plasma KF5::CoreAddons KF5::XmlGui)
 
 add_test(plasma-storagetest storagetest)
 ecm_mark_as_test(storagetest)

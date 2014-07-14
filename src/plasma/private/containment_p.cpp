@@ -209,6 +209,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         qWarning() << "Applet" << name << "could not be loaded.";
         applet = new Applet(0, QString(), id);
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
     }
 
     q->addApplet(applet);

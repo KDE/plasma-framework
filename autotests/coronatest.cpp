@@ -19,13 +19,19 @@
 
 #include "coronatest.h"
 #include <ksycoca.h>
+#include <kactioncollection.h>
 #include <QStandardPaths>
+#include <QAction>
 #include <QApplication>
 
 Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
                                    const QVariantList &args)
 {
-    return new SimpleApplet();
+    if (name == "simpleapplet") {
+        return new SimpleApplet();
+    } else {
+        return 0;
+    }
 }
 
 SimpleCorona::SimpleCorona(QObject *parent)
@@ -122,6 +128,21 @@ void CoronaTest::startupCompletion()
     QVERIFY(m_corona->containments().first()->isUiReady());
 
     //TODO: applet creation and deletion
+}
+
+void CoronaTest::addRemoveApplets()
+{
+    m_corona->containments().first()->createApplet("invalid");
+    QCOMPARE(m_corona->containments().first()->applets().count(), 3);
+
+    //remove action present
+    QVERIFY(m_corona->containments().first()->applets().first()->actions()->action("remove"));
+    //kill an applet
+    m_corona->containments().first()->applets().first()->actions()->action("remove")->trigger();
+
+    QSignalSpy spy(m_corona->containments().first()->applets().first(), SIGNAL(destroyed()));
+    QVERIFY(spy.wait(1000));
+    QCOMPARE(m_corona->containments().first()->applets().count(), 2);
 }
 
 //this test has to be the last, since systemimmutability

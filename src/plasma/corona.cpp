@@ -437,6 +437,8 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             delete applet;
         }
         applet = containment = new Containment(q, 0, id);
+        //if it's a dummy containment, just say its ui is ready, not blocking the corona
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
 
         // we want to provide something and don't care about the failure to launch
         containment->setFormFactor(Plasma::Types::Planar);
