@@ -46,7 +46,8 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     formFactor(Types::Planar),
     location(Types::Floating),
     lastScreen(-1), // never had a screen
-    type(Plasma::Types::NoContainmentType)
+    type(Plasma::Types::NoContainmentType),
+    uiReady(false)
 {
     //if the parent is an applet (i.e we are the systray)
     //we want to follow screen changed signals from the parent's containment
@@ -226,6 +227,38 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 bool ContainmentPrivate::isPanelContainment() const
 {
     return type == Plasma::Types::PanelContainment || type == Plasma::Types::CustomPanelContainment;
+}
+
+void ContainmentPrivate::setStarted()
+{
+    if (!q->Applet::d->started) {
+        q->Applet::d->started = true;
+
+        if (uiReady)
+            emit q->uiReadyChanged(true);
+    }
+}
+
+void ContainmentPrivate::setUiReady()
+{
+    //if we are the containment and there is still some uncomplete applet, we're still incomplete
+    if (!uiReady && loadingApplets.isEmpty()) {
+        uiReady = true;
+        if (q->Applet::d->started)
+            emit q->uiReadyChanged(true);
+    }
+}
+
+void ContainmentPrivate::appletLoaded(Applet* applet)
+{
+    loadingApplets.remove(q);
+
+    if (loadingApplets.isEmpty() && !uiReady) {
+        uiReady = true;
+        if (q->Applet::d->started) {
+            emit q->uiReadyChanged(true);
+        }
+    }
 }
 
 }

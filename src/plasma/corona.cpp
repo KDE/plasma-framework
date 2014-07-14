@@ -40,6 +40,7 @@
 #include "pluginloader.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
+#include "private/timetracker.h"
 
 using namespace Plasma;
 
@@ -54,6 +55,10 @@ Corona::Corona(QObject *parent)
     // qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
+
+#ifndef NDEBUG
+    new Plasma::TimeTracker(this);
+#endif
 }
 
 Corona::~Corona()
@@ -542,6 +547,10 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
                     }
                 });
             }
+        }
+
+        if (containmentsStarting <= 0) {
+            emit q->startupCompleted();
         }
     }
 

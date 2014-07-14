@@ -67,7 +67,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       needsConfig(false),
       started(false),
       globalShortcutEnabled(false),
-      uiReady(false),
       userConfiguring(false)
 {
     if (appletId == 0) {
@@ -309,27 +308,10 @@ void AppletPrivate::setUiReady()
     //am i the containment?
     Containment *c = qobject_cast<Containment *>(q);
     if (c && c->isContainment()) {
-        //if we are the containment and there is still some uncomplete applet, we're still incomplete
-        if (!c->d->loadingApplets.isEmpty()) {
-            return;
-        } else if (!uiReady && started) {
-            emit c->uiReadyChanged(true);
-        }
-    } else {
-        c = q->containment();
-        if (c) {
-            c->d->loadingApplets.remove(q);
-
-            if (c->d->loadingApplets.isEmpty() && !c->Applet::d->uiReady) {
-                c->Applet::d->uiReady = true;
-                if (c->Applet::d->started) {
-                    emit c->uiReadyChanged(true);
-                }
-            }
-        }
+        c->d->setUiReady();
+    } else if (Containment* cc = q->containment()) {
+        cc->d->appletLoaded(q);
     }
-
-    uiReady = true;
 }
 
 // put all setup routines for script here. at this point we can assume that
@@ -375,9 +357,8 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 
     if (c & Plasma::Types::StartupCompletedConstraint) {
         started = true;
-        if (uiReady) {
-            emit q->containment()->uiReadyChanged(true);
-        }
+        if (q->isContainment())
+            qobject_cast<Containment*>(q)->d->setStarted();
     }
 
     pendingConstraints |= c;

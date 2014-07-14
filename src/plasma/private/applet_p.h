@@ -111,7 +111,6 @@ public:
     bool needsConfig : 1;
     bool started : 1;
     bool globalShortcutEnabled : 1;
-    bool uiReady : 1;
     bool userConfiguring : 1;
 };
 
