@@ -895,28 +895,27 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
     // Sides
     const int leftHeight = q->elementSize(prefix % "left").height();
-    paintBorder(p, frame, FrameSvg::LeftBorder, frame->leftWidth, leftHeight, QRect(leftOffset, contentTop, frame->leftWidth, contentHeight));
-    paintBorder(p, frame, FrameSvg::RightBorder, frame->rightWidth, leftHeight, QRect(rightOffset, contentTop, frame->rightWidth, contentHeight));
-
+    paintBorder(p, frame, FrameSvg::LeftBorder, QSize(frame->leftWidth, leftHeight), QRect(leftOffset, contentTop, frame->leftWidth, contentHeight));
+    paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, leftHeight), QRect(rightOffset, contentTop, frame->rightWidth, contentHeight));
 
     const int topWidth = q->elementSize(prefix % "top").width();
-    paintBorder(p, frame, FrameSvg::TopBorder, topWidth, frame->topHeight, QRect(contentLeft, topOffset, contentWidth, frame->topHeight));
-    paintBorder(p, frame, FrameSvg::BottomBorder, topWidth, frame->bottomHeight, QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight));
+    paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight), QRect(contentLeft, topOffset, contentWidth, frame->topHeight));
+    paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight), QRect(contentLeft, bottomOffset, contentWidth, frame->bottomHeight));
 }
 
-void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, int length, int thickness, const QRect& output) const
+void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, const QSize& size, const QRect& output) const
 {
-    QString side = borderToElementId(borders);
-    if (frame->enabledBorders & borders && q->hasElement(prefix % side) && length > 0 && thickness > 0) {
+    QString side = prefix % borderToElementId(borders);
+    if (frame->enabledBorders & borders && q->hasElement(side) && !size.isEmpty()) {
         if (frame->stretchBorders) {
-            q->paint(&p, output, prefix % side);
+            q->paint(&p, output, side);
         } else {
-            QPixmap px(length, thickness);
+            QPixmap px(size);
             px.fill(Qt::transparent);
 
             QPainter sidePainter(&px);
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&sidePainter, QRect(QPoint(0, 0), px.size()), prefix % side);
+            q->paint(&sidePainter, QRect(QPoint(0, 0), size), side);
 
             p.drawTiledPixmap(output, px);
         }
