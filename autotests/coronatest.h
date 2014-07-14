@@ -22,21 +22,33 @@
 #include <QtTest/QtTest>
 
 #include "plasma/corona.h"
+#include "plasma/pluginloader.h"
 
-/*class SimpleLoader : public Plasma::PluginLoader
+class SimpleLoader : public Plasma::PluginLoader
 {
-    Q_OBJECT
 protected:
-    virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0,
+    virtual Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0,
                                        const QVariantList &args = QVariantList());
-};*/
+};
+
 
 class SimpleCorona : public Plasma::Corona
 {
     Q_OBJECT
+
 public:
+    explicit SimpleCorona(QObject * parent = 0);
+    ~SimpleCorona();
+
     QRect screenGeometry(int) const;
-    
+};
+
+class SimpleApplet : public Plasma::Applet
+{
+    Q_OBJECT
+
+public:
+    explicit SimpleApplet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 };
 
 class CoronaTest : public QObject

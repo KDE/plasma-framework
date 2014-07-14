@@ -22,17 +22,35 @@
 #include <QStandardPaths>
 #include <QApplication>
 
-/*virtual Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId = 0,
-                                   const QVariantList &args = QVariantList())
+Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
+                                   const QVariantList &args)
 {
-    returh new Plasma::Applet();
-}*/
+    return new SimpleApplet();
+}
+
+SimpleCorona::SimpleCorona(QObject *parent)
+    : Plasma::Corona(parent)
+{
+    Plasma::PluginLoader::setPluginLoader(new SimpleLoader);
+}
+
+SimpleCorona::~SimpleCorona()
+{}
+
 
 QRect SimpleCorona::screenGeometry(int screen) const
 {
     //completely arbitrary, still not tested
     return QRect(100*screen, 100, 100, 100);
 }
+
+SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
+    : Plasma::Applet(parent, serviceId, appletId)
+{
+    updateConstraints(Plasma::Types::UiReadyConstraint);
+}
+
+
 
 static void runKBuildSycoca()
 {
@@ -86,9 +104,9 @@ void CoronaTest::restore()
 void CoronaTest::startupCompletion()
 {
     //startup completion signals
-    QEXPECT_FAIL("", "TODO: complete startup", Continue);
+    //QEXPECT_FAIL("", "TODO: complete startup", Continue);
     QVERIFY(m_corona->isStartupCompleted());
-    QEXPECT_FAIL("", "TODO: complete uiReady signals", Continue);
+    //QEXPECT_FAIL("", "TODO: complete uiReady signals", Continue);
     QVERIFY(m_corona->containments().first()->isUiReady());
 
     //TODO: applet creation and deletion
