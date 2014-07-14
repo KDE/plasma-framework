@@ -31,6 +31,7 @@ namespace Plasma
 {
 
 class FrameSvg;
+class SVGTextureNode;
 
 class FrameSvgItemMargins : public QObject
 {
@@ -182,6 +183,8 @@ private Q_SLOTS:
     void updateDevicePixelRatio();
 
 private:
+    SVGTextureNode *createNode(QImage image);
+
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
