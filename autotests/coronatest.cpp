@@ -1,5 +1,5 @@
 /********************************************************************************
-*   Copyright 2010 by Martin Blumenstingl <darklight.xdarklight@googlemail.com> *
+*   Copyright 2014 Marco Martin <mart@kde.org>                                  *
 *                                                                               *
 *   This library is free software; you can redistribute it and/or               *
 *   modify it under the terms of the GNU Library General Public                 *
