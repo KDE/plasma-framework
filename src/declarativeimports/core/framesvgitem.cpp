@@ -271,6 +271,15 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
     return m_frameSvg;
 }
 
+SVGTextureNode* FrameSvgItem::createNode(QImage image)
+{
+    auto node = new SVGTextureNode;
+    auto texture = window()->createTextureFromImage(image);
+    texture->setFiltering(QSGTexture::Nearest);
+    node->setTexture(texture);
+    return node;
+}
+
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
     if (!window() || !m_frameSvg || !m_frameSvg->hasElementPrefix(m_prefix)) {
@@ -278,23 +287,77 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return Q_NULLPTR;
     }
 
-    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
-    if (!textureNode) {
-        textureNode = new SVGTextureNode;
-        textureNode->setFiltering(QSGTexture::Nearest);
-        m_textureChanged = true; //force updating the texture on our newly created node
+    if(!oldNode) { //FIXME or theme changed or enabled borders changed
+        delete oldNode;
+        oldNode = new QSGNode;
+        //we're abusing transformOrigin enum here to get access to values
+        //these MUST be uploaded in the same order
+
+        auto topLeft = createNode(m_frameSvg->image(QSize(5,5), "topleft"));
+        oldNode->appendChildNode(topLeft);
+
+        auto top = createNode(m_frameSvg->image(QSize(5,5), "top"));
+        oldNode->appendChildNode(top);
+
+        auto topRight = createNode(m_frameSvg->image(QSize(5,5), "topright"));
+        oldNode->appendChildNode(topRight);
+
+        auto left = createNode(m_frameSvg->image(QSize(5,5), "left"));
+        oldNode->appendChildNode(left);
+
+        auto center = createNode(m_frameSvg->image(QSize(5,5), "center"));
+        oldNode->appendChildNode(center);
+
+        auto right = createNode(m_frameSvg->image(QSize(5,5), "right"));
+        oldNode->appendChildNode(right);
+
+        auto bottomLeft = createNode(m_frameSvg->image(QSize(5,5), "bottomleft"));
+        oldNode->appendChildNode(bottomLeft);
+
+        auto bottom = createNode(m_frameSvg->image(QSize(5,5), "bottom"));
+        oldNode->appendChildNode(bottom);
+
+        auto bottomRight = createNode(m_frameSvg->image(QSize(5,5), "bottomright"));
+        oldNode->appendChildNode(bottomRight);
+        //set sizeDirty=true
     }
 
-    if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
-        const QImage image = m_frameSvg->framePixmap().toImage();
-        QSGTexture *texture = window()->createTextureFromImage(image);
-        texture->setFiltering(QSGTexture::Nearest);
-        textureNode->setTexture(texture);
-        m_textureChanged = false;
-        textureNode->setRect(0, 0, width(), height());
+
+    //FIXME if (m_sizeDirty)
+    {
+        //TODO cast root node add a convenience method on it?
+
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Top))->setRect(5,0,width()-10, 5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Left))->setRect(0,5, 5,height()-10);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Right))->setRect(width()-5,5,5,height()-10);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Bottom))->setRect(5,height()-5,width()-10,5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(TopLeft))->setRect(0,0,5,5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(TopRight))->setRect(width()-5,0,5,5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(BottomLeft))->setRect(0,height()-5, 5,5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(BottomRight))->setRect(width()-5,height()-5, 5, 5);
+        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Center))->setRect(5,5, width()-10, height()-10);
+
+
+        //TODO sizeDirty = false
     }
 
-    return textureNode;
+//     SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
+//     if (!textureNode) {
+//         textureNode = new SVGTextureNode;
+//         textureNode->setFiltering(QSGTexture::Nearest);
+//         m_textureChanged = true; //force updating the texture on our newly created node
+//     }
+//
+//     if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
+//         const QImage image = m_frameSvg->framePixmap().toImage();
+//         QSGTexture *texture = window()->createTextureFromImage(image);
+//         texture->setFiltering(QSGTexture::Nearest);
+//         textureNode->setTexture(texture);
+//         m_textureChanged = false;
+//         textureNode->setRect(0, 0, width(), height());
+//     }
+
+    return oldNode;
 }
 
 void FrameSvgItem::componentComplete()
