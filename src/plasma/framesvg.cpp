@@ -815,39 +815,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
-    //CENTER
-    if (!contentSize.isEmpty()) {
-        const QString centerElementId = prefix % "center";
-        if (frame->tileCenter) {
-            QSize centerTileSize = q->elementSize(centerElementId);
-            QPixmap center(centerTileSize);
-            center.fill(Qt::transparent);
-
-            QPainter centerPainter(&center);
-            centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
-            q->paint(&centerPainter, QRect(QPoint(0, 0), centerTileSize),centerElementId);
-
-            if (frame->composeOverBorder) {
-                p.drawTiledPixmap(QRect(QPoint(0, 0), size), center);
-            } else {
-                p.drawTiledPixmap(QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize), center);
-            }
-        } else {
-            if (frame->composeOverBorder) {
-                q->paint(&p, QRect(QPoint(0, 0), size),
-                         centerElementId);
-            } else {
-                q->paint(&p, QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize),
-                         centerElementId);
-            }
-        }
-    }
-
-    if (frame->composeOverBorder) {
-        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-        p.drawPixmap(QRect(QPoint(0, 0), size), alphaMask());
-        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    }
+    paintCenter(p, frame, contentSize, size);
 
     int contentTop = 0;
     int contentLeft = 0;
@@ -882,6 +850,42 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     const int topWidth = q->elementSize(prefix % "top").width();
     paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight), QRect(contentLeft, topOffset, contentSize.width(), frame->topHeight));
     paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight), QRect(contentLeft, bottomOffset, contentSize.width(), frame->bottomHeight));
+}
+
+void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize)
+{
+    if (!contentSize.isEmpty()) {
+        const QString centerElementId = prefix % "center";
+        if (frame->tileCenter) {
+            QSize centerTileSize = q->elementSize(centerElementId);
+            QPixmap center(centerTileSize);
+            center.fill(Qt::transparent);
+
+            QPainter centerPainter(&center);
+            centerPainter.setCompositionMode(QPainter::CompositionMode_Source);
+            q->paint(&centerPainter, QRect(QPoint(0, 0), centerTileSize),centerElementId);
+
+            if (frame->composeOverBorder) {
+                p.drawTiledPixmap(QRect(QPoint(0, 0), fullSize), center);
+            } else {
+                p.drawTiledPixmap(QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize), center);
+            }
+        } else {
+            if (frame->composeOverBorder) {
+                q->paint(&p, QRect(QPoint(0, 0), fullSize),
+                         centerElementId);
+            } else {
+                q->paint(&p, QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize),
+                         centerElementId);
+            }
+        }
+    }
+
+    if (frame->composeOverBorder) {
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawPixmap(QRect(QPoint(0, 0), fullSize), alphaMask());
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    }
 }
 
 void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, const QSize& size, const QRect& output) const

@@ -149,7 +149,8 @@ public:
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
     void paintBorder(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QSize& originalSize, const QRect& output) const;
-    void paintCorner(QPainter& p, Plasma::FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
+    void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
+    void paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize);
     static QString borderToElementId(Plasma::FrameSvg::EnabledBorders borders);
 
     Types::Location location;
