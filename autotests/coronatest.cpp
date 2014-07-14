@@ -107,6 +107,7 @@ void CoronaTest::initTestCase()
 void CoronaTest::cleanupTestCase()
 {
     m_configDir.removeRecursively();
+    delete m_corona;
 }
 
 void CoronaTest::restore()
