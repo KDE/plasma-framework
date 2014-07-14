@@ -77,10 +77,8 @@ static void runKBuildSycoca()
     proc.setProcessChannelMode(QProcess::MergedChannels); // silence kbuildsycoca output
     proc.start(kbuildsycoca, args);
 
-    //qDebug() << "waiting for signal";
-    //QSignalSpy spy(KSycoca::self(), SIGNAL(databaseChanged(QStringList)));
-    //QVERIFY(spy.wait(10000));
-    //qDebug() << "got signal";
+    QSignalSpy spy(KSycoca::self(), SIGNAL(databaseChanged(QStringList)));
+    QVERIFY(spy.wait(10000));
 
     proc.waitForFinished();
     QCOMPARE(proc.exitStatus(), QProcess::NormalExit);
