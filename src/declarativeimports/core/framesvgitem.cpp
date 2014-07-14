@@ -24,12 +24,49 @@
 #include <QSGTexture>
 #include <QDebug>
 
+#include <plasma/private/framesvg_p.h>
+
 #include "svgtexturenode.h"
 
 #include <cmath> //floor()
 
 namespace Plasma
 {
+class FrameItemNode : public SVGTextureNode
+{
+public:
+    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, const QString& prefix)
+        : SVGTextureNode()
+        , m_frameSvg(frameSvg)
+        , m_border(borders)
+    {
+        setPrefix(prefix);
+    }
+
+    void setPrefix(const QString& prefix)
+    {
+        QString elementId = prefix % FrameSvgPrivate::borderToElementId(m_border);
+        QSize someSize = m_frameSvg->frameSvg()->elementSize(elementId);
+
+        QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
+        auto texture = m_frameSvg->window()->createTextureFromImage(image);
+        texture->setFiltering(QSGTexture::Nearest);
+        setTexture(texture);
+    }
+
+    void reposition(const QRect& geometry) {
+        FrameData* frameData = m_frameSvg->frameData();
+
+        QRect newGeometry = FrameSvgPrivate::sectionRect(frameData, m_border, geometry);
+        qDebug() << "repositioning" << newGeometry << m_border;
+        setRect(newGeometry);
+    }
+
+private:
+    FrameSvgItem* m_frameSvg;
+    FrameSvg::EnabledBorders m_border;
+};
+
 
 FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent)
     : QObject(parent),
@@ -271,15 +308,6 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
     return m_frameSvg;
 }
 
-SVGTextureNode* FrameSvgItem::createNode(QImage image)
-{
-    auto node = new SVGTextureNode;
-    auto texture = window()->createTextureFromImage(image);
-    texture->setFiltering(QSGTexture::Nearest);
-    node->setTexture(texture);
-    return node;
-}
-
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
     if (!window() || !m_frameSvg || !m_frameSvg->hasElementPrefix(m_prefix)) {
@@ -293,49 +321,28 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         //we're abusing transformOrigin enum here to get access to values
         //these MUST be uploaded in the same order
 
-        auto topLeft = createNode(m_frameSvg->image(QSize(5,5), "topleft"));
-        oldNode->appendChildNode(topLeft);
-
-        auto top = createNode(m_frameSvg->image(QSize(5,5), "top"));
-        oldNode->appendChildNode(top);
-
-        auto topRight = createNode(m_frameSvg->image(QSize(5,5), "topright"));
-        oldNode->appendChildNode(topRight);
-
-        auto left = createNode(m_frameSvg->image(QSize(5,5), "left"));
-        oldNode->appendChildNode(left);
-
-        auto center = createNode(m_frameSvg->image(QSize(5,5), "center"));
-        oldNode->appendChildNode(center);
-
-        auto right = createNode(m_frameSvg->image(QSize(5,5), "right"));
-        oldNode->appendChildNode(right);
-
-        auto bottomLeft = createNode(m_frameSvg->image(QSize(5,5), "bottomleft"));
-        oldNode->appendChildNode(bottomLeft);
-
-        auto bottom = createNode(m_frameSvg->image(QSize(5,5), "bottom"));
-        oldNode->appendChildNode(bottom);
-
-        auto bottomRight = createNode(m_frameSvg->image(QSize(5,5), "bottomright"));
-        oldNode->appendChildNode(bottomRight);
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::LeftBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::RightBorder, m_prefix));
+        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::NoBorder, m_prefix));
         //set sizeDirty=true
     }
 
 
     //FIXME if (m_sizeDirty)
     {
+//         QRect geometry = m_frameSvg->contentsRect().toRect();
+        QRect geometry = m_frameSvg->d->contentGeometry(frameData(), QSize(width(), height()));
         //TODO cast root node add a convenience method on it?
-
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Top))->setRect(5,0,width()-10, 5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Left))->setRect(0,5, 5,height()-10);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Right))->setRect(width()-5,5,5,height()-10);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Bottom))->setRect(5,height()-5,width()-10,5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(TopLeft))->setRect(0,0,5,5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(TopRight))->setRect(width()-5,0,5,5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(BottomLeft))->setRect(0,height()-5, 5,5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(BottomRight))->setRect(width()-5,height()-5, 5, 5);
-        static_cast<SVGTextureNode*>(oldNode->childAtIndex(Center))->setRect(5,5, width()-10, height()-10);
+        for(int i = 0; i<oldNode->childCount(); ++i) {
+            FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
+            it->reposition(geometry);
+        }
 
 
         //TODO sizeDirty = false
@@ -373,6 +380,11 @@ void FrameSvgItem::updateDevicePixelRatio()
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
     m_textureChanged = true;
+}
+
+FrameData* FrameSvgItem::frameData() const
+{
+    return m_frameSvg->d->frames.value(m_prefix);
 }
 
 } // Plasma namespace

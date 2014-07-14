@@ -287,9 +287,10 @@ public:
      */
     Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
-private:
+protected:
     FrameSvgPrivate *const d;
     friend class FrameData;
+    friend class FrameSvgItem;
 
     Q_PRIVATE_SLOT(d, void updateSizes())
     Q_PRIVATE_SLOT(d, void updateNeeded())
