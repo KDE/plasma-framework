@@ -153,14 +153,43 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::UserImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::UserImmutable);
 
+    for (Plasma::Containment *cont : m_corona->containments()) {
+        QCOMPARE(cont->immutability(), Plasma::Types::UserImmutable);
+        for (Plasma::Applet *app : cont->applets()) {
+            QCOMPARE(app->immutability(), Plasma::Types::UserImmutable);
+        }
+    }
+
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::Mutable);
 
+    for (Plasma::Containment *cont : m_corona->containments()) {
+        QCOMPARE(cont->immutability(), Plasma::Types::Mutable);
+        for (Plasma::Applet *app : cont->applets()) {
+            QCOMPARE(app->immutability(), Plasma::Types::Mutable);
+        }
+    }
+
     m_corona->setImmutability(Plasma::Types::SystemImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
+
+    for (Plasma::Containment *cont : m_corona->containments()) {
+        QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
+        for (Plasma::Applet *app : cont->applets()) {
+            QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
+        }
+    }
+
     //can't unlock systemimmutable
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
+
+    for (Plasma::Containment *cont : m_corona->containments()) {
+        QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
+        for (Plasma::Applet *app : cont->applets()) {
+            QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
+        }
+    }
 }
 
 QTEST_MAIN(CoronaTest)
