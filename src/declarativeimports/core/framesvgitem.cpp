@@ -369,6 +369,8 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         }
 
         m_sizeChanged = false;
+    } else if(!frame) {
+        qWarning() << "no frame for" << imagePath() << prefix();
     }
 
     return oldNode;
