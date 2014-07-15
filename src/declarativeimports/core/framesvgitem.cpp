@@ -395,7 +395,7 @@ void FrameSvgItem::updateDevicePixelRatio()
 
 FrameData* FrameSvgItem::frameData() const
 {
-    return m_frameSvg->d->frames.value(m_prefix);
+    return m_frameSvg->d->frames.value(m_frameSvg->d->prefix);
 }
 
 } // Plasma namespace
