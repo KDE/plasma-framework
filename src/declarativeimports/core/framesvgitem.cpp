@@ -35,36 +35,61 @@ namespace Plasma
 class FrameItemNode : public SVGTextureNode
 {
 public:
-    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, const QString& prefix)
+    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, QSGNode* parent)
         : SVGTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
+        , m_lastParent(parent)
     {
-        setPrefix(prefix);
+        m_lastParent->appendChildNode(this);
+        fetchPrefix();
     }
 
-    void setPrefix(const QString& prefix)
+    void fetchPrefix()
     {
-        QString elementId = prefix % FrameSvgPrivate::borderToElementId(m_border);
+        QString prefix = m_frameSvg->prefix();
+
+        QString elementId = FrameSvgPrivate::borderToElementId(m_border);
+        if (!prefix.isEmpty())
+            elementId.prepend(prefix + '-');
+
         QSize someSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
         QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
-        auto texture = m_frameSvg->window()->createTextureFromImage(image);
-        texture->setFiltering(QSGTexture::Nearest);
-        setTexture(texture);
+        setVisible(!image.isNull());
+        if(!image.isNull()) {
+            QSGTexture* texture = m_frameSvg->window()->createTextureFromImage(image);
+            setTexture(texture);
+        } else {
+            qDebug() << "not painting " << elementId;
+        }
     }
 
-    void reposition(const QRect& geometry) {
+    void reposition(const QRect& geometry)
+    {
         FrameData* frameData = m_frameSvg->frameData();
+        if (!frameData)
+            return;
 
-        QRect newGeometry = FrameSvgPrivate::sectionRect(frameData, m_border, geometry);
-        qDebug() << "repositioning" << newGeometry << m_border;
-        setRect(newGeometry);
+        setRect(FrameSvgPrivate::sectionRect(frameData, m_border, geometry));
+    }
+
+    void setVisible(bool visible)
+    {
+        if (visible == bool(parent()))
+            return;
+
+        if (visible) {
+            m_lastParent->appendChildNode(this);
+        } else {
+            m_lastParent->removeChildNode(this);
+        }
     }
 
 private:
     FrameSvgItem* m_frameSvg;
     FrameSvg::EnabledBorders m_border;
+    QSGNode *m_lastParent;
 };
 
 
@@ -135,7 +160,8 @@ bool FrameSvgItemMargins::isFixed() const
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_textureChanged(false)
+      m_textureChanged(false),
+      m_sizeChanged(false)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -252,7 +278,7 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 {
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(newGeometry.size());
-        m_textureChanged = true;
+        m_sizeChanged = true;
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
@@ -267,7 +293,7 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    m_textureChanged = true;
+    m_sizeChanged = true;
     update();
 }
 
@@ -315,54 +341,39 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return Q_NULLPTR;
     }
 
-    if(!oldNode) { //FIXME or theme changed or enabled borders changed
+    if (m_textureChanged) {
         delete oldNode;
-        oldNode = new QSGNode;
-        //we're abusing transformOrigin enum here to get access to values
-        //these MUST be uploaded in the same order
-
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::TopBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::LeftBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::RightBorder, m_prefix));
-        oldNode->appendChildNode(new FrameItemNode(this, FrameSvg::NoBorder, m_prefix));
-        //set sizeDirty=true
+        oldNode = 0;
     }
 
+    if (!oldNode) {
+        oldNode = new QSGNode;
 
-    //FIXME if (m_sizeDirty)
+        new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
+        new FrameItemNode(this, FrameSvg::NoBorder, oldNode);
+
+        m_sizeChanged = true;
+        m_textureChanged = false;
+    }
+
+    FrameData* frame = frameData();
+    if (frame && m_sizeChanged)
     {
-//         QRect geometry = m_frameSvg->contentsRect().toRect();
-        QRect geometry = m_frameSvg->d->contentGeometry(frameData(), QSize(width(), height()));
-        //TODO cast root node add a convenience method on it?
+        QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
         for(int i = 0; i<oldNode->childCount(); ++i) {
             FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
             it->reposition(geometry);
         }
 
-
-        //TODO sizeDirty = false
+        m_sizeChanged = false;
     }
-
-//     SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
-//     if (!textureNode) {
-//         textureNode = new SVGTextureNode;
-//         textureNode->setFiltering(QSGTexture::Nearest);
-//         m_textureChanged = true; //force updating the texture on our newly created node
-//     }
-//
-//     if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
-//         const QImage image = m_frameSvg->framePixmap().toImage();
-//         QSGTexture *texture = window()->createTextureFromImage(image);
-//         texture->setFiltering(QSGTexture::Nearest);
-//         textureNode->setTexture(texture);
-//         m_textureChanged = false;
-//         textureNode->setRect(0, 0, width(), height());
-//     }
 
     return oldNode;
 }
