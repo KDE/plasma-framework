@@ -837,13 +837,13 @@ QRect FrameSvgPrivate::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBo
         case FrameSvg::NoBorder:
             return contentRect;
         case FrameSvg::TopBorder:
-            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight));
+            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width()-1, frame->topHeight));
         case FrameSvg::BottomBorder:
-            return QRect(contentRect.bottomLeft(), QSize(contentRect.width(), frame->bottomHeight));
+            return QRect(contentRect.bottomLeft(), QSize(contentRect.width()-1, frame->bottomHeight));
         case FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()));
+            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()-1));
         case FrameSvg::RightBorder:
-            return QRect(contentRect.topRight(), QSize(frame->rightWidth, contentRect.height()));
+            return QRect(contentRect.topRight(), QSize(frame->rightWidth, contentRect.height()-1));
         case FrameSvg::TopBorder | FrameSvg::LeftBorder:
             return QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight));
         case FrameSvg::TopBorder | FrameSvg::RightBorder:
