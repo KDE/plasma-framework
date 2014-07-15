@@ -345,6 +345,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (!oldNode) {
         oldNode = new QSGNode;
 
+        new FrameItemNode(this, FrameSvg::NoBorder, oldNode); //needs to be de first, in case of composeOverBorder
         new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
         new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
         new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
@@ -353,7 +354,6 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
         new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
         new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::NoBorder, oldNode);
 
         m_sizeChanged = true;
         m_textureChanged = false;
