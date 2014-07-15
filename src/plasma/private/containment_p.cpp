@@ -47,7 +47,8 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     location(Types::Floating),
     lastScreen(-1), // never had a screen
     type(Plasma::Types::NoContainmentType),
-    uiReady(false)
+    uiReady(false),
+    appletsUiReady(false)
 {
     //if the parent is an applet (i.e we are the systray)
     //we want to follow screen changed signals from the parent's containment
@@ -210,7 +211,6 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         qWarning() << "Applet" << name << "could not be loaded.";
         applet = new Applet(0, QString(), id);
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
-        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
     }
 
     q->addApplet(applet);
@@ -235,28 +235,30 @@ void ContainmentPrivate::setStarted()
     if (!q->Applet::d->started) {
         q->Applet::d->started = true;
 
-        if (uiReady)
+        if (uiReady) {
             emit q->uiReadyChanged(true);
+        }
     }
 }
 
 void ContainmentPrivate::setUiReady()
 {
     //if we are the containment and there is still some uncomplete applet, we're still incomplete
-    if (!uiReady && loadingApplets.isEmpty()) {
+    if (!uiReady) {
         uiReady = true;
-        if (q->Applet::d->started)
+        if (q->Applet::d->started && appletsUiReady && loadingApplets.isEmpty()) {
             emit q->uiReadyChanged(true);
+        }
     }
 }
 
 void ContainmentPrivate::appletLoaded(Applet* applet)
 {
-    loadingApplets.remove(q);
+    loadingApplets.remove(applet);
 
-    if (loadingApplets.isEmpty() && !uiReady) {
-        uiReady = true;
-        if (q->Applet::d->started) {
+    if (loadingApplets.isEmpty() && !appletsUiReady) {
+        appletsUiReady = true;
+        if (q->Applet::d->started && uiReady) {
             emit q->uiReadyChanged(true);
         }
     }

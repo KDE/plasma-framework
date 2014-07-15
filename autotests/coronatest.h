@@ -55,6 +55,16 @@ private:
     QTimer m_timer;
 };
 
+class SimpleContainment : public Plasma::Containment
+{
+    Q_OBJECT
+
+public:
+    explicit SimpleContainment(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+private:
+    QTimer m_timer;
+};
+
 class CoronaTest : public QObject
 {
     Q_OBJECT

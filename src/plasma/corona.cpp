@@ -540,8 +540,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
             if (!containment->isUiReady() && containment->lastScreen() < q->numScreens()) {
                 ++containmentsStarting;
                 QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](bool ready) {
-                    if (!ready)
+                    if (!ready) {
                         return;
+                    }
 
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {

@@ -4,7 +4,7 @@ formfactor=0
 immutability=1
 lastScreen=0
 location=0
-plugin=simpleapplet
+plugin=simplecontainment
 
 [Containments][1][Applets][2]
 immutability=1

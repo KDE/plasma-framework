@@ -91,6 +91,7 @@ public:
     QString activityId;
     Types::ContainmentType type;
     bool uiReady : 1;
+    bool appletsUiReady : 1;
 
     static const char defaultWallpaper[];
 };

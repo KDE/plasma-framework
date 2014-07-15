@@ -28,7 +28,9 @@ Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint apple
                                    const QVariantList &args)
 {
     if (name == "simpleapplet") {
-        return new SimpleApplet();
+        return new SimpleApplet(0, QString(), appletId);
+    } else if (name == "simplecontainment") {
+        return new SimpleContainment(0, QString(), appletId);
     } else {
         return 0;
     }
@@ -52,6 +54,22 @@ QRect SimpleCorona::screenGeometry(int screen) const
 
 SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
     : Plasma::Applet(parent, serviceId, appletId)
+{
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+
+    //updateConstraints(Plasma::Types::UiReadyConstraint);
+    m_timer.setSingleShot(true);
+    m_timer.setInterval(qrand() % ((500 + 1) - 100) + 100);
+    m_timer.start();
+    connect(&m_timer, &QTimer::timeout, [=]() {
+        updateConstraints(Plasma::Types::UiReadyConstraint);
+    });
+}
+
+
+SimpleContainment::SimpleContainment(QObject *parent , const QString &serviceId, uint appletId)
+    : Plasma::Containment(parent, serviceId, appletId)
 {
     QTime time = QTime::currentTime();
     qsrand((uint)time.msec());
@@ -117,13 +135,10 @@ void CoronaTest::restore()
 
 void CoronaTest::startupCompletion()
 {
-    QEXPECT_FAIL("", "Uiready behavior broken in master.", Continue);
     QVERIFY(!m_corona->isStartupCompleted());
-    QEXPECT_FAIL("", "Uiready behavior broken in master.", Continue);
     QVERIFY(!m_corona->containments().first()->isUiReady());
 
     QSignalSpy spy(m_corona, SIGNAL(startupCompleted()));
-    QEXPECT_FAIL("", "Uiready behavior broken in master.", Continue);
     QVERIFY(spy.wait(1000));
 
     QVERIFY(m_corona->isStartupCompleted());
