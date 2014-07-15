@@ -47,11 +47,7 @@ public:
 
     void fetchPrefix()
     {
-        QString prefix = m_frameSvg->prefix();
-
-        QString elementId = FrameSvgPrivate::borderToElementId(m_border);
-        if (!prefix.isEmpty())
-            elementId.prepend(prefix + '-');
+        QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
 
         QSize someSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
@@ -395,7 +391,13 @@ void FrameSvgItem::updateDevicePixelRatio()
 
 FrameData* FrameSvgItem::frameData() const
 {
-    return m_frameSvg->d->frames.value(m_frameSvg->d->prefix);
+    //We need to do that prefix, otherwise we are fetching the requested prefix, which might be different
+    return m_frameSvg->d->frames.value(actualPrefix());
+}
+
+QString FrameSvgItem::actualPrefix() const
+{
+    return m_frameSvg->d->prefix;
 }
 
 } // Plasma namespace
