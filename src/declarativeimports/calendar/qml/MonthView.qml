@@ -52,8 +52,8 @@ Item {
         return Math.min(
             Math.max(
                 mWidth * 3,
-                // Take the calendar width, subtract the inner spacings and divide by number of columns (==days in week)
-                Math.floor((calendar.width - (root.columns - 1) * borderWidth) / root.columns)
+                // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
+                Math.floor((calendar.width - (root.columns + 1) * borderWidth) / root.columns)
             ),
             mWidth * 100
         )
@@ -64,7 +64,7 @@ Item {
             Math.max(
                 mHeight * 1.5,
                 // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
-                Math.floor((calendar.height - (root.rows - 1) * borderWidth) / (root.rows + 1))
+                Math.floor((calendar.height - (root.rows + 1) * borderWidth) / (root.rows + 1))
             ),
             mHeight * 40
         )
@@ -140,8 +140,6 @@ Item {
             right: parent.right
             bottom: parent.bottom
         }
-
-        borderOpacity: root.borderOpacity
 
         PlasmaComponents.Label {
             text: "◀"
