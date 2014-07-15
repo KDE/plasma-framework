@@ -835,7 +835,7 @@ QRect FrameSvgPrivate::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBo
 {
     switch(borders) {
         case FrameSvg::NoBorder:
-            return contentRect;
+            return frame->composeOverBorder ? QRect(0,0, contentRect.width()+frame->leftWidth+frame->rightWidth, contentRect.height()+frame->topHeight+frame->bottomHeight) : contentRect;
         case FrameSvg::TopBorder:
             return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width()-1, frame->topHeight));
         case FrameSvg::BottomBorder:
