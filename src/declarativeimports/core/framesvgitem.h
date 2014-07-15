@@ -192,6 +192,7 @@ private:
     QString m_prefix;
     Units m_units;
     bool m_textureChanged;
+    bool m_sizeChanged;
 };
 
 }
