@@ -169,6 +169,7 @@ public:
 
     virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
     FrameData* frameData() const;
+    QString actualPrefix() const;
 
 protected:
     virtual void componentComplete();
