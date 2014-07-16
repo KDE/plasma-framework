@@ -289,7 +289,7 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    m_sizeChanged = true;
+    m_textureChanged = true;
     update();
 }
 
