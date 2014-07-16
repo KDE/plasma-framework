@@ -69,7 +69,7 @@ Page {
                     text: title
                 }
             }
-            onClicked: pageStack.push(Qt.createComponent(plasmoid.file("ui", page)))
+            onClicked: pageStack.push(Qt.createComponent(page))
         }
     }
     ScrollBar {

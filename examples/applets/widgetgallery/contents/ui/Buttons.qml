@@ -64,7 +64,7 @@ PlasmaComponents.Page {
 
                     onClicked: {
                         console.log("Clicked");
-                        pageStack.push(Qt.createComponent(plasmoid.file("ui", "Scrollers.qml")))
+                        pageStack.push(Qt.createComponent("Scrollers.qml"))
                     }
 
                     Keys.onTabPressed: bt2.forceActiveFocus();
