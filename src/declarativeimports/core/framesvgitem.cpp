@@ -51,25 +51,11 @@ public:
         , m_fitMode(fitMode)
     {
         m_lastParent->appendChildNode(this);
-        fetchPrefix();
-    }
-
-    void fetchPrefix()
-    {
-        QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
-
-        m_elementSize = m_frameSvg->frameSvg()->elementSize(elementId);
-
-        QImage image = m_frameSvg->frameSvg()->image(m_elementSize, elementId);
-        setVisible(!image.isNull());
-        if(!image.isNull()) {
-            QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
-            setTexture(texture);
-        } else {
-            qDebug() << "not painting " << elementId;
-        }
-
         if (m_fitMode == Tile) {
+            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
+            m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
+
+            updateTexture(m_elementNativeSize, elementId);
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
                 static_cast<QSGTextureMaterial*>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
                 static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
@@ -81,23 +67,45 @@ public:
         }
     }
 
-    void reposition(const QRect& geom)
+    void updateTexture(const QSize &size, const QString &elementId)
+    {
+        QImage image = m_frameSvg->frameSvg()->image(size, elementId);
+        setVisible(!image.isNull());
+        if(!image.isNull()) {
+            QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
+            setTexture(texture);
+        }
+    }
+
+    void reposition(const QRect& frameGeometry)
     {
         FrameData* frameData = m_frameSvg->frameData();
-        if (!frameData)
+        if (!frameData) {
             return;
+        }
 
-        QRectF frameRect = FrameSvgPrivate::sectionRect(frameData, m_border, geom);
+        QRect nodeRect = FrameSvgPrivate::sectionRect(frameData, m_border, frameGeometry);
         QRectF textureRect = QRectF(0,0,1,1);
         if (m_fitMode == Tile) {
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
-                textureRect.setWidth(frameRect.width() / m_elementSize.width());
+                textureRect.setWidth(nodeRect.width() / m_elementNativeSize.width());
             }
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
-                textureRect.setHeight(frameRect.height() / m_elementSize.height());
+                textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
             }
+        } else {
+            //stretched, we need to re-load the SVG at a different res
+            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
+            updateTexture(nodeRect.size(), elementId);
         }
-        QSGGeometry::updateTexturedRectGeometry(geometry(), frameRect, textureRect);
+        Q_ASSERT(texture() || !isVisible());
+
+        QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
+        markDirty(QSGNode::DirtyGeometry);
+    }
+
+    bool isVisible() const {
+        return bool(parent());
     }
 
     void setVisible(bool visible)
@@ -116,7 +124,7 @@ private:
     FrameSvgItem* m_frameSvg;
     FrameSvg::EnabledBorders m_border;
     QSGNode *m_lastParent;
-    QSize m_elementSize;
+    QSize m_elementNativeSize;
     FitMode m_fitMode;
 };
 
@@ -391,12 +399,12 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameItemNode::FitMode centerFitMode = frame->tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
             new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode); //needs to be de first, in case of composeOverBorder
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::Stretch, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::Stretch, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::Tile, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::Tile, oldNode);
             new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
             new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::Stretch, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::Stretch, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::Tile, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::Tile, oldNode);
             new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
             new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
 
@@ -404,8 +412,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             m_textureChanged = false;
         }
 
-        if (m_sizeChanged)
-        {
+        if (m_sizeChanged) {
             QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
             for(int i = 0; i<oldNode->childCount(); ++i) {
                 FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
