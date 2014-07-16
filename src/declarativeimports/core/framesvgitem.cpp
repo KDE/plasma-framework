@@ -51,6 +51,7 @@ public:
         , m_fitMode(fitMode)
     {
         m_lastParent->appendChildNode(this);
+
         if (m_fitMode == Tile) {
             QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
             m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
@@ -70,19 +71,13 @@ public:
     void updateTexture(const QSize &size, const QString &elementId)
     {
         QImage image = m_frameSvg->frameSvg()->image(size, elementId);
-        setVisible(!image.isNull());
-        if(!image.isNull()) {
-            QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
-            setTexture(texture);
-        }
+        QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
+        setTexture(texture);
     }
 
     void reposition(const QRect& frameGeometry)
     {
         FrameData* frameData = m_frameSvg->frameData();
-        if (!frameData) {
-            return;
-        }
 
         QRect nodeRect = FrameSvgPrivate::sectionRect(frameData, m_border, frameGeometry);
         QRectF textureRect = QRectF(0,0,1,1);
@@ -98,26 +93,9 @@ public:
             QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
             updateTexture(nodeRect.size(), elementId);
         }
-        Q_ASSERT(texture() || !isVisible());
 
         QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
         markDirty(QSGNode::DirtyGeometry);
-    }
-
-    bool isVisible() const {
-        return bool(parent());
-    }
-
-    void setVisible(bool visible)
-    {
-        if (visible == bool(parent()))
-            return;
-
-        if (visible) {
-            m_lastParent->appendChildNode(this);
-        } else {
-            m_lastParent->removeChildNode(this);
-        }
     }
 
 private:
