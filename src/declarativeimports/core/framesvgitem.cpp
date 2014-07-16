@@ -157,7 +157,8 @@ bool FrameSvgItemMargins::isFixed() const
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_textureChanged(false),
-      m_sizeChanged(false)
+      m_sizeChanged(false),
+      m_fastPath(true)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -289,6 +290,8 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
+    bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
+    m_fastPath = !hasOverlay;
     m_textureChanged = true;
     update();
 }
@@ -337,40 +340,62 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return Q_NULLPTR;
     }
 
-    if (m_textureChanged) {
-        delete oldNode;
-        oldNode = 0;
-    }
-
-    if (!oldNode) {
-        oldNode = new QSGNode;
-
-        new FrameItemNode(this, FrameSvg::NoBorder, oldNode); //needs to be de first, in case of composeOverBorder
-        new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
-        new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
-
-        m_sizeChanged = true;
-        m_textureChanged = false;
-    }
-
-    FrameData* frame = frameData();
-    if (frame && m_sizeChanged)
-    {
-        QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
-        for(int i = 0; i<oldNode->childCount(); ++i) {
-            FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
-            it->reposition(geometry);
+    if (m_fastPath) {
+        if (m_textureChanged) {
+            delete oldNode;
+            oldNode = 0;
         }
 
-        m_sizeChanged = false;
-    } else if(!frame) {
-        qWarning() << "no frame for" << imagePath() << prefix();
+        if (!oldNode) {
+            oldNode = new QSGNode;
+
+            new FrameItemNode(this, FrameSvg::NoBorder, oldNode); //needs to be de first, in case of composeOverBorder
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
+
+            m_sizeChanged = true;
+            m_textureChanged = false;
+        }
+
+        FrameData* frame = frameData();
+        if (frame && m_sizeChanged)
+        {
+            QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
+            for(int i = 0; i<oldNode->childCount(); ++i) {
+                FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
+                it->reposition(geometry);
+            }
+
+            m_sizeChanged = false;
+        } else if(!frame) {
+            qWarning() << "no frame for" << imagePath() << prefix();
+        }
+    } else {
+        SVGTextureNode *textureNode = dynamic_cast<SVGTextureNode *>(oldNode);
+        if (!textureNode) {
+            delete oldNode;
+            textureNode = new SVGTextureNode;
+            textureNode->setFiltering(QSGTexture::Nearest);
+            m_textureChanged = true; //force updating the texture on our newly created node
+            oldNode = textureNode;
+        }
+
+        if ((m_textureChanged || m_sizeChanged) || textureNode->texture()->textureSize() != m_frameSvg->size()) {
+            QImage image = m_frameSvg->framePixmap().toImage();
+            QSGTexture *texture = window()->createTextureFromImage(image);
+            texture->setFiltering(QSGTexture::Nearest);
+            textureNode->setTexture(texture);
+            textureNode->setRect(0, 0, width(), height());
+
+            m_textureChanged = false;
+            m_sizeChanged = false;
+        }
     }
 
     return oldNode;
