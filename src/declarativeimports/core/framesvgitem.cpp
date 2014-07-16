@@ -39,6 +39,9 @@ class FrameItemNode : public SVGTextureNode
 {
 public:
     enum FitMode {
+        //render SVG at native resolution then stretch it in openGL
+        FastStretch,
+        //on resize re-render the part of the frame from the SVG
         Stretch,
         Tile
     };
@@ -53,10 +56,6 @@ public:
         m_lastParent->appendChildNode(this);
 
         if (m_fitMode == Tile) {
-            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
-            m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
-
-            updateTexture(m_elementNativeSize, elementId);
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
                 static_cast<QSGTextureMaterial*>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
                 static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
@@ -65,6 +64,13 @@ public:
                 static_cast<QSGTextureMaterial*>(material())->setVerticalWrapMode(QSGTexture::Repeat);
                 static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setVerticalWrapMode(QSGTexture::Repeat);
             }
+        }
+
+        if (m_fitMode == Tile || m_fitMode == FastStretch) {
+            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
+            m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
+
+            updateTexture(m_elementNativeSize, elementId);
         }
     }
 
@@ -88,11 +94,11 @@ public:
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
                 textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
             }
-        } else {
-            //stretched, we need to re-load the SVG at a different res
+        } else if (m_fitMode == Stretch) {
+            //re-render the SVG at new size
             QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
             updateTexture(nodeRect.size(), elementId);
-        }
+        } // for fast stretch, we don't have to do anything
 
         QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
         markDirty(QSGNode::DirtyGeometry);
@@ -377,12 +383,12 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameItemNode::FitMode centerFitMode = frame->tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
             new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode); //needs to be de first, in case of composeOverBorder
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::Tile, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::Tile, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
             new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
             new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::Tile, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::Tile, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
             new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
             new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
 
