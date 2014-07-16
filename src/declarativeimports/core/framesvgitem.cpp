@@ -23,6 +23,7 @@
 #include <QQuickWindow>
 #include <QSGTexture>
 #include <QDebug>
+#include <QPainter>
 
 #include <plasma/private/framesvg_p.h>
 
@@ -49,9 +50,18 @@ public:
     {
         QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
 
-        QSize someSize = m_frameSvg->frameSvg()->elementSize(elementId);
+        FrameData* frameData = m_frameSvg->frameData();
+        QSize someSize = m_frameSvg->sectionRect(frameData, m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
 
-        QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
+        //QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
+        QImage image(someSize, QImage::Format_ARGB32_Premultiplied);
+        QPainter p(&image);
+        p.setCompositionMode(QPainter::CompositionMode_Source);
+
+        p.drawPixmap(image.rect(), m_frameSvg->frameSvg()->framePixmap(), m_frameSvg->sectionRect(frameData, m_border, m_frameSvg->frameSvg()->frameSize().toSize()));
+
+        p.end();
+
         setVisible(!image.isNull());
         if(!image.isNull()) {
             QSGTexture* texture = m_frameSvg->window()->createTextureFromImage(image);
@@ -67,7 +77,7 @@ public:
         if (!frameData)
             return;
 
-        setRect(FrameSvgPrivate::sectionRect(frameData, m_border, geometry));
+        setRect(m_frameSvg->sectionRect(frameData, m_border, QSize(m_frameSvg->width(), m_frameSvg->height())));
     }
 
     void setVisible(bool visible)
@@ -160,6 +170,14 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
       m_sizeChanged(false),
       m_fastPath(true)
 {
+    m_updateTexTimer.setSingleShot(true);
+    m_updateTexTimer.setInterval(500);
+    connect(&m_updateTexTimer, &QTimer::timeout, [=] {
+        qDebug()<<"Updating the texture of" << m_frameSvg->imagePath();
+        m_frameSvg->resizeFrame(QSize(width(), height()));
+        doUpdate();
+    });
+
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
     m_fixedMargins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -274,7 +292,8 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
                                    const QRectF &oldGeometry)
 {
     if (isComponentComplete()) {
-        m_frameSvg->resizeFrame(newGeometry.size());
+        //m_frameSvg->resizeFrame(newGeometry.size());
+        m_updateTexTimer.start();
         m_sizeChanged = true;
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
@@ -340,7 +359,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return Q_NULLPTR;
     }
 
-    if (m_fastPath) {
+    if (1||m_fastPath) {
         if (m_textureChanged) {
             delete oldNode;
             oldNode = 0;
@@ -425,6 +444,36 @@ FrameData* FrameSvgItem::frameData() const
 QString FrameSvgItem::actualPrefix() const
 {
     return m_frameSvg->d->prefix;
+}
+
+QRect FrameSvgItem::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QSize &size)
+{
+    QRect contentRect = QRect(QPoint(0, 0), size).adjusted(frame->leftWidth, frame->topHeight, -frame->rightWidth, -frame->bottomHeight);
+
+    switch(borders) {
+        case FrameSvg::NoBorder:
+            return contentRect;
+        case FrameSvg::TopBorder:
+            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight));
+        case FrameSvg::BottomBorder:
+            return QRect(contentRect.bottomLeft()+QPoint(0, 1), QSize(contentRect.width(), frame->bottomHeight));
+        case FrameSvg::LeftBorder:
+            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()));
+        case FrameSvg::RightBorder:
+            return QRect(contentRect.topRight()+QPoint(1,0), QSize(frame->rightWidth, contentRect.height()));
+        case FrameSvg::TopBorder | FrameSvg::LeftBorder:
+            return QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight));
+        case FrameSvg::TopBorder | FrameSvg::RightBorder:
+            return QRect(QPoint(contentRect.right()+1, 0), QSize(frame->rightWidth, frame->topHeight));
+        case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
+            return QRect(QPoint(0, contentRect.bottom()+1), QSize(frame->leftWidth, frame->bottomHeight));
+        case FrameSvg::BottomBorder | FrameSvg::RightBorder:
+            return QRect(contentRect.bottomRight()+QPoint(1,1), QSize(frame->rightWidth, frame->bottomHeight));
+        default:
+            qWarning() << "unrecognized border" << borders;
+            return QRect();
+    }
+    return QRect();
 }
 
 } // Plasma namespace

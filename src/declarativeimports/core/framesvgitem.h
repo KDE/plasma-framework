@@ -22,6 +22,7 @@
 #define FRAMESVGITEM_P
 
 #include <QQuickItem>
+#include <QTimer>
 
 #include <Plasma/FrameSvg>
 
@@ -171,6 +172,8 @@ public:
     FrameData* frameData() const;
     QString actualPrefix() const;
 
+    QRect sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QSize &size);
+
 protected:
     virtual void componentComplete();
 
@@ -191,6 +194,7 @@ private:
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
     QString m_prefix;
+    QTimer m_updateTexTimer;
     Units m_units;
     bool m_textureChanged;
     bool m_sizeChanged;
