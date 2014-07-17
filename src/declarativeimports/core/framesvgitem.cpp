@@ -82,7 +82,7 @@ public:
         //in compose over border we paint the center over the full size
         //then blend in an alpha mask generated from the corners to
         //remove the garbage left in the corners
-        if (m_border == FrameSvg::NoBorder && m_frameSvg->frameData()->composeOverBorder) {
+        if (m_border == FrameSvg::NoBorder && m_fitMode == Stretch && m_frameSvg->frameData()->composeOverBorder) {
             QPixmap pixmap = QPixmap::fromImage(image);
             QPainter p(&pixmap);
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
