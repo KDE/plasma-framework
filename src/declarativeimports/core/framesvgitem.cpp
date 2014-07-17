@@ -95,7 +95,13 @@ public:
 
     void reposition()
     {
-        setRect(m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height())));
+        const QRect newRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
+        setVisible(!newRect.isEmpty());
+
+        if (newRect.isEmpty()) {
+            return;
+        }
+        setRect(newRect);
 
         QRectF frameRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
         QRectF textureRect = QRectF(0,0,1,1);
