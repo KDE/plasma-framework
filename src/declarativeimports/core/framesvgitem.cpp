@@ -25,6 +25,7 @@
 #include <QSGGeometry>
 
 #include <QDebug>
+#include <QPainter>
 
 #include <plasma/private/framesvg_p.h>
 
@@ -77,6 +78,18 @@ public:
     void updateTexture(const QSize &size, const QString &elementId)
     {
         QImage image = m_frameSvg->frameSvg()->image(size, elementId);
+
+        //in compose over border we paint the center over the full size
+        //then blend in an alpha mask generated from the corners to
+        //remove the garbage left in the corners
+        if (m_border == FrameSvg::NoBorder && m_frameSvg->frameData()->composeOverBorder) {
+            QPixmap pixmap = QPixmap::fromImage(image);
+            QPainter p(&pixmap);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            p.drawPixmap(QRect(QPoint(0, 0), size), m_frameSvg->frameSvg()->alphaMask());
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            image = pixmap.toImage();
+        }
         QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
         setTexture(texture);
     }
@@ -319,7 +332,7 @@ void FrameSvgItem::doUpdate()
     }
 
     bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
-    m_fastPath = !hasOverlay && !frame->composeOverBorder;
+    m_fastPath = !hasOverlay;
     m_textureChanged = true;
     update();
 }
