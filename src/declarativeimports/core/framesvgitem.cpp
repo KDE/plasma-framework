@@ -48,7 +48,7 @@ public:
 
     void fetchPrefix()
     {
-        QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
+        //QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
 
         QSize someSize = m_frameSvg->sectionRect(m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
 
@@ -69,7 +69,8 @@ public:
             QSGTexture* texture = m_frameSvg->window()->createTextureFromImage(image);
             setTexture(texture);
         } else {
-            qDebug() << "not painting " << elementId;
+            qWarning() << "this should never happen";
+            //qDebug() << "not painting " << elementId;
         }
     }
 
@@ -310,8 +311,8 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
-    m_fastPath = !hasOverlay;
+    //bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
+    m_fastPath = true;//!hasOverlay;
     m_textureChanged = true;
     update();
 }
@@ -455,17 +456,14 @@ void FrameSvgItem::updateDevicePixelRatio()
     m_textureChanged = true;
 }
 
-QString FrameSvgItem::actualPrefix() const
-{
-    return m_frameSvg->d->prefix;
-}
-
 void FrameSvgItem::updateBorderSizes()
 {
-    m_leftWidth = m_frameSvg->elementSize(actualPrefix()%"left").width();
-    m_topHeight = m_frameSvg->elementSize(actualPrefix()%"top").height();
-    m_rightWidth = m_frameSvg->elementSize(actualPrefix()%"right").width();
-    m_bottomHeight = m_frameSvg->elementSize(actualPrefix()%"bottom").height();
+    const QString actualPrefix = !m_frameSvg->prefix().isEmpty() && m_frameSvg->hasElementPrefix(m_frameSvg->prefix()) ? m_frameSvg->prefix() % "-" : QString();
+
+    m_leftWidth = m_frameSvg->elementSize(actualPrefix % "left").width();
+    m_topHeight = m_frameSvg->elementSize(actualPrefix % "top").height();
+    m_rightWidth = m_frameSvg->elementSize(actualPrefix % "right").width();
+    m_bottomHeight = m_frameSvg->elementSize(actualPrefix % "bottom").height();
 }
 
 QRect FrameSvgItem::sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QSize &size)

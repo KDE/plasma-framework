@@ -168,7 +168,6 @@ public:
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
     virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
-    QString actualPrefix() const;
 
     QRect sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QSize &size);
 
