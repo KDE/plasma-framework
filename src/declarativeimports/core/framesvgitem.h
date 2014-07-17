@@ -202,7 +202,6 @@ private:
 
     bool m_textureChanged;
     bool m_sizeChanged;
-    bool m_fastPath;
 };
 
 }
