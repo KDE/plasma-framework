@@ -32,6 +32,7 @@ Name[sr@latin]=Stanje platforme
 Name[sv]=Plattformstatus
 Name[uk]=Стан платформи
 Name[x-test]=xxPlatform Statusxx
+Name[zh_CN]=平台状态
 Name[zh_TW]=平台狀態
 Comment=Tracks the current shell package and the platform definition strings.
 Comment[bs]=Prati  trenutni paket školjke i definicijone nizove platforme
