@@ -71,7 +71,7 @@ public:
 
         p.end();
 
-       // setVisible(!image.isNull());
+        setVisible(!image.isNull());
         if(!image.isNull()) {
             QSGTexture* texture = m_frameSvg->window()->createTextureFromImage(image);
             setTexture(texture);
