@@ -281,6 +281,12 @@ void Containment::restoreContents(KConfigGroup &group)
 
         d->createApplet(plugin, QVariantList(), appId);
     }
+
+    for (Applet *applet : Containment::applets()) {
+        if (!applet->pluginInfo().isValid()) {
+            applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        }
+    }
 }
 
 Plasma::Types::ContainmentType Containment::containmentType() const
@@ -536,7 +542,7 @@ QHash<QString, ContainmentActions *> &Containment::containmentActions()
 
 bool Containment::isUiReady() const
 {
-    return d->uiReady && Applet::d->started;
+    return d->uiReady && d->appletsUiReady && Applet::d->started;
 }
 
 void Containment::setActivity(const QString &activityId)

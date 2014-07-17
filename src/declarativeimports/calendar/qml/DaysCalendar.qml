@@ -29,58 +29,66 @@ Item {
     // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
     // wrong alignment)
     anchors {
-        leftMargin: Math.floor(((parent.width + borderWidth) % 7) / 2);
+        leftMargin: Math.floor(((parent.width - (root.columns + 1) * borderWidth) % root.columns) / 2)
         rightMargin: anchors.leftMargin
         bottomMargin: anchors.leftMargin
     }
 
-    property real borderOpacity: 1.0
+    // Paints the inner grid and the outer frame
+    Canvas {
+        id: canvas
+        anchors.fill: parent
+        opacity: root.borderOpacity
+        antialiasing: false
+        clip: false
+        onPaint: {
+            var ctx = getContext("2d");
+            // this is needed as otherwise the canvas seems to have some sort of
+            // inner clip region which does not update on size changes
+            ctx.reset();
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = theme.textColor;
+            ctx.lineWidth = root.borderWidth
+            ctx.globalAlpha = 1.0;
 
-    Rectangle {
-        id: allAroundFrame
-        color: "transparent"
-        border.width: borderWidth
-        border.color: theme.textColor
-        opacity: borderOpacity
-        width: (root.cellWidth + borderWidth) * calendarGrid.rows
-        height: (root.cellHeight + borderWidth) * calendarGrid.columns
-    }
+            ctx.beginPath();
 
-    Repeater {
-        id: verticalGridLineRepeater
-        model: calendarGrid.columns - 1
-        delegate: Rectangle {
-            x: root.cellWidth + (index * (root.cellWidth + borderWidth))
-            // The first grid row does not have any columns, so start at cellHeight and add borderWidth
-            // to not create conjuction points which looks bad as the lines are semi-transparent
-            y: root.cellHeight + borderWidth
-            width: borderWidth
-            // Subtract the most bottom border width to avoid conjuction points
-            height: (root.cellHeight + borderWidth) * (calendarGrid.columns - 1) - borderWidth
-            color: theme.textColor
-            opacity: borderOpacity
-        }
-    }
+            // This isn't the real width/height, but rather the X coord where the line will stop
+            // and as the coord system starts from (0,0), we need to do "-1" to not get off-by-1 errors
+            var rectWidth = (root.cellWidth + root.borderWidth) * calendarGrid.columns + root.borderWidth - 1
+            var rectHeight = (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
 
-    Repeater {
-        id: horizontalGridLineRepeater
-        model: calendarGrid.rows - 1
-        delegate: Rectangle {
-            // Start the horizontal line so that it does not cross the leftmost vertical borderline
-            // but is rathar adjacent to it
-            x: borderWidth
-            y: root.cellHeight + (index * (root.cellHeight + borderWidth))
-            // To each cell add one border width and then subtract the outer border widths
-            // so the lines do not cross
-            width: (root.cellWidth + borderWidth) * calendarGrid.rows - (borderWidth * 2)
-            height: borderWidth
-            color: theme.textColor
-            opacity: borderOpacity
+            // the outer frame
+            ctx.strokeRect(0, 0, rectWidth, rectHeight);
+
+            // horizontal lines
+            for (var i = 0; i < calendarGrid.rows - 1; i++) {
+                var lineY = (rectHeight / calendarGrid.columns) * (i + 1);
+
+                ctx.moveTo(0, lineY);
+                ctx.lineTo(rectWidth, lineY);
+            }
+
+            // vertical lines
+            for (var i = 0; i < calendarGrid.columns - 1; i++) {
+                var lineX = (rectWidth / calendarGrid.rows) * (i + 1);
+
+                ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
+                ctx.lineTo(lineX, rectHeight);
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
         }
     }
 
     Grid {
         id: calendarGrid
+        // Pad the grid to not overlap with the top and left frame
+        x: root.borderWidth
+        y: root.borderWidth
         columns: calendarBackend.days
         rows: calendarBackend.weeks + 1
         spacing: 1
@@ -118,9 +126,7 @@ Item {
             id: repeater
             model: calendarBackend.daysModel
 
-            DayDelegate {
-                borderOpacity: daysCalendar.borderOpacity
-            }
+            DayDelegate {}
         }
     }
 }

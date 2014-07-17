@@ -442,6 +442,8 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             delete applet;
         }
         applet = containment = new Containment(q, 0, id);
+        //if it's a dummy containment, just say its ui is ready, not blocking the corona
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
 
         // we want to provide something and don't care about the failure to launch
         containment->setFormFactor(Plasma::Types::Planar);
@@ -538,8 +540,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
             if (!containment->isUiReady() && containment->lastScreen() < q->numScreens()) {
                 ++containmentsStarting;
                 QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](bool ready) {
-                    if (!ready)
+                    if (!ready) {
                         return;
+                    }
 
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {

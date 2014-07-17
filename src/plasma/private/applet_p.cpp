@@ -357,8 +357,9 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 
     if (c & Plasma::Types::StartupCompletedConstraint) {
         started = true;
-        if (q->isContainment())
+        if (q->isContainment()) {
             qobject_cast<Containment*>(q)->d->setStarted();
+        }
     }
 
     pendingConstraints |= c;
