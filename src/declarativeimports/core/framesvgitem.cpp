@@ -71,7 +71,7 @@ public:
 
         p.end();
 
-        setVisible(!image.isNull());
+       // setVisible(!image.isNull());
         if(!image.isNull()) {
             QSGTexture* texture = m_frameSvg->window()->createTextureFromImage(image);
             setTexture(texture);
@@ -95,15 +95,15 @@ public:
 
     void reposition()
     {
-        const QRect newRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
-        setVisible(!newRect.isEmpty());
+        const QRect frameRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
+        //to reconsider how setVisible works, since it's breaking the iterator over reposition
+        //setVisible(!frameRect.isEmpty());
 
-        if (newRect.isEmpty()) {
+        if (frameRect.isEmpty()) {
             return;
         }
-        setRect(newRect);
+        setRect(frameRect);
 
-        QRectF frameRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
         QRectF textureRect = QRectF(0,0,1,1);
         if (m_fitMode == Tile) {
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
@@ -212,7 +212,8 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     connect(&m_updateTexTimer, &QTimer::timeout, [=] {
         qDebug()<<"Updating the texture of" << m_frameSvg->imagePath();
         m_frameSvg->resizeFrame(QSize(width(), height()));
-        doUpdate();
+        m_textureChanged = true;
+        update();
     });
 
     m_frameSvg = new Plasma::FrameSvg(this);
@@ -250,8 +251,13 @@ void FrameSvgItem::setImagePath(const QString &path)
     m_margins->update();
 
     if (isComponentComplete()) {
-        m_frameSvg->resizeFrame(QSizeF(width(), height()));
         updateBorderSizes();
+        if (m_fastPath) {
+            m_frameSvg->resizeFrame(QSizeF(256, 256));
+        } else {
+            m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        }
+
         m_textureChanged = true;
         update();
     }
@@ -283,8 +289,13 @@ void FrameSvgItem::setPrefix(const QString &prefix)
     m_margins->update();
 
     if (isComponentComplete()) {
-        m_frameSvg->resizeFrame(QSizeF(width(), height()));
         updateBorderSizes();
+        if (m_fastPath) {
+            m_frameSvg->resizeFrame(QSizeF(256, 256));
+        } else {
+            m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        }
+
         m_textureChanged = true;
         update();
     }
@@ -333,7 +344,9 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 {
     if (isComponentComplete()) {
         //m_frameSvg->resizeFrame(newGeometry.size());
-        m_updateTexTimer.start();
+        if (!m_fastPath) {
+            m_updateTexTimer.start();
+        }
         m_sizeChanged = true;
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
@@ -461,8 +474,13 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
 void FrameSvgItem::componentComplete()
 {
     QQuickItem::componentComplete();
-    m_frameSvg->resizeFrame(QSize(width(), height()));
     updateBorderSizes();
+    if (m_fastPath) {
+        m_frameSvg->resizeFrame(QSizeF(256, 256));
+    } else {
+        m_frameSvg->resizeFrame(QSizeF(width(), height()));
+    }
+
     m_textureChanged = true;
 }
 
@@ -479,6 +497,8 @@ void FrameSvgItem::updateBorderSizes()
 {
     const QString actualPrefix = !m_frameSvg->prefix().isEmpty() && m_frameSvg->hasElementPrefix(m_frameSvg->prefix()) ? m_frameSvg->prefix() % "-" : QString();
 
+    m_fastPath = !m_frameSvg->hasElement(actualPrefix % "overlay") && !m_frameSvg->hasElement("mask-" % actualPrefix % "center");
+
     m_leftWidth = m_frameSvg->elementSize(actualPrefix % "left").width();
     m_topHeight = m_frameSvg->elementSize(actualPrefix % "top").height();
     m_rightWidth = m_frameSvg->elementSize(actualPrefix % "right").width();
@@ -488,7 +508,6 @@ void FrameSvgItem::updateBorderSizes()
 QRect FrameSvgItem::sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QSize &size)
 {
     QRect contentRect = QRect(QPoint(0, 0), size).adjusted(m_leftWidth, m_topHeight, -m_rightWidth, -m_bottomHeight);
-    updateBorderSizes();
 
     switch(borders) {
         case FrameSvg::NoBorder:
