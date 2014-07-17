@@ -50,9 +50,9 @@ public:
     {
         QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
 
-        FrameData* frameData = m_frameSvg->frameData();
-        QSize someSize = m_frameSvg->sectionRect(frameData, m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
+        QSize someSize = m_frameSvg->sectionRect(m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
 
+        //FIXME: we should be sure the texture has a valid size at this point
         // Q_ASSERT(!someSize.isEmpty());
 
         //QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
@@ -60,7 +60,7 @@ public:
         QPainter p(&image);
         p.setCompositionMode(QPainter::CompositionMode_Source);
 
-        p.drawPixmap(image.rect(), m_frameSvg->frameSvg()->framePixmap(), m_frameSvg->sectionRect(frameData, m_border, m_frameSvg->frameSvg()->frameSize().toSize()));
+        p.drawPixmap(image.rect(), m_frameSvg->frameSvg()->framePixmap(), m_frameSvg->sectionRect(m_border, m_frameSvg->frameSvg()->frameSize().toSize()));
 
         p.end();
 
@@ -75,11 +75,7 @@ public:
 
     void reposition()
     {
-        FrameData* frameData = m_frameSvg->frameData();
-        if (!frameData)
-            return;
-
-        setRect(m_frameSvg->sectionRect(frameData, m_border, QSize(m_frameSvg->width(), m_frameSvg->height())));
+        setRect(m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height())));
     }
 
     void setVisible(bool visible)
@@ -408,18 +404,15 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             m_textureChanged = false;
         }
 
-        FrameData* frame = frameData();
-        if (frame && m_sizeChanged)
-        {
+        if (m_sizeChanged) {
             for(int i = 0; i<oldNode->childCount(); ++i) {
                 FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
                 it->reposition();
             }
 
             m_sizeChanged = false;
-        } else if(!frame) {
-            qWarning() << "no frame for" << imagePath() << prefix();
         }
+
     } else {
         SVGTextureNode *textureNode = dynamic_cast<SVGTextureNode *>(oldNode);
         if (!textureNode) {
@@ -462,12 +455,6 @@ void FrameSvgItem::updateDevicePixelRatio()
     m_textureChanged = true;
 }
 
-FrameData* FrameSvgItem::frameData() const
-{
-    //We need to do that prefix, otherwise we are fetching the requested prefix, which might be different
-    return m_frameSvg->d->frames.value(actualPrefix());
-}
-
 QString FrameSvgItem::actualPrefix() const
 {
     return m_frameSvg->d->prefix;
@@ -481,7 +468,7 @@ void FrameSvgItem::updateBorderSizes()
     m_bottomHeight = m_frameSvg->elementSize(actualPrefix()%"bottom").height();
 }
 
-QRect FrameSvgItem::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QSize &size)
+QRect FrameSvgItem::sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QSize &size)
 {
     QRect contentRect = QRect(QPoint(0, 0), size).adjusted(m_leftWidth, m_topHeight, -m_rightWidth, -m_bottomHeight);
     updateBorderSizes();

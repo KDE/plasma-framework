@@ -32,7 +32,6 @@ namespace Plasma
 {
 
 class FrameSvg;
-class FrameData;
 class SVGTextureNode;
 
 class FrameSvgItemMargins : public QObject
@@ -169,10 +168,9 @@ public:
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
     virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
-    FrameData* frameData() const;
     QString actualPrefix() const;
 
-    QRect sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QSize &size);
+    QRect sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QSize &size);
 
 protected:
     virtual void componentComplete();
