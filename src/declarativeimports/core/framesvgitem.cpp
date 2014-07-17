@@ -53,6 +53,8 @@ public:
         FrameData* frameData = m_frameSvg->frameData();
         QSize someSize = m_frameSvg->sectionRect(frameData, m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
 
+        // Q_ASSERT(!someSize.isEmpty());
+
         //QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
         QImage image(someSize, QImage::Format_ARGB32_Premultiplied);
         QPainter p(&image);
@@ -71,7 +73,7 @@ public:
         }
     }
 
-    void reposition(const QRect& geometry)
+    void reposition()
     {
         FrameData* frameData = m_frameSvg->frameData();
         if (!frameData)
@@ -214,6 +216,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        updateBorderSizes();
         m_textureChanged = true;
         update();
     }
@@ -246,6 +249,7 @@ void FrameSvgItem::setPrefix(const QString &prefix)
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        updateBorderSizes();
         m_textureChanged = true;
         update();
     }
@@ -274,6 +278,7 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
 
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
+    updateBorderSizes();
     m_textureChanged = true;
     update();
 }
@@ -368,15 +373,36 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         if (!oldNode) {
             oldNode = new QSGNode;
 
-            new FrameItemNode(this, FrameSvg::NoBorder, oldNode); //needs to be de first, in case of composeOverBorder
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
-            new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::NoBorder, oldNode);
+
+            if (m_topHeight) {
+                new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
+
+                if (m_leftWidth) {
+                    new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
+                }
+                if (m_rightWidth) {
+                    new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
+                }
+            }
+
+            if (m_bottomHeight) {
+                new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
+
+                if (m_leftWidth) {
+                    new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
+                }
+                if (m_rightWidth) {
+                    new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
+                }
+            }
+
+            if (m_leftWidth) {
+                new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
+            }
+            if (m_rightWidth) {
+                new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
+            }
 
             m_sizeChanged = true;
             m_textureChanged = false;
@@ -385,10 +411,9 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         FrameData* frame = frameData();
         if (frame && m_sizeChanged)
         {
-            QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
             for(int i = 0; i<oldNode->childCount(); ++i) {
                 FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
-                it->reposition(geometry);
+                it->reposition();
             }
 
             m_sizeChanged = false;
@@ -401,7 +426,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             delete oldNode;
             textureNode = new SVGTextureNode;
             textureNode->setFiltering(QSGTexture::Nearest);
-            m_textureChanged = true; //force updating the texture on our newly created node
+             //force updating the texture on our newly created node
             oldNode = textureNode;
         }
 
@@ -424,6 +449,7 @@ void FrameSvgItem::componentComplete()
 {
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
+    updateBorderSizes();
     m_textureChanged = true;
 }
 
@@ -432,6 +458,7 @@ void FrameSvgItem::updateDevicePixelRatio()
     //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
+    updateBorderSizes();
     m_textureChanged = true;
 }
 
@@ -446,29 +473,38 @@ QString FrameSvgItem::actualPrefix() const
     return m_frameSvg->d->prefix;
 }
 
+void FrameSvgItem::updateBorderSizes()
+{
+    m_leftWidth = m_frameSvg->elementSize(actualPrefix()%"left").width();
+    m_topHeight = m_frameSvg->elementSize(actualPrefix()%"top").height();
+    m_rightWidth = m_frameSvg->elementSize(actualPrefix()%"right").width();
+    m_bottomHeight = m_frameSvg->elementSize(actualPrefix()%"bottom").height();
+}
+
 QRect FrameSvgItem::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QSize &size)
 {
-    QRect contentRect = QRect(QPoint(0, 0), size).adjusted(frame->leftWidth, frame->topHeight, -frame->rightWidth, -frame->bottomHeight);
+    QRect contentRect = QRect(QPoint(0, 0), size).adjusted(m_leftWidth, m_topHeight, -m_rightWidth, -m_bottomHeight);
+    updateBorderSizes();
 
     switch(borders) {
         case FrameSvg::NoBorder:
             return contentRect;
         case FrameSvg::TopBorder:
-            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight));
+            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), m_topHeight));
         case FrameSvg::BottomBorder:
-            return QRect(contentRect.bottomLeft()+QPoint(0, 1), QSize(contentRect.width(), frame->bottomHeight));
+            return QRect(contentRect.bottomLeft()+QPoint(0, 1), QSize(contentRect.width(), m_bottomHeight));
         case FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()));
+            return QRect(QPoint(0, contentRect.top()), QSize(m_leftWidth, contentRect.height()));
         case FrameSvg::RightBorder:
-            return QRect(contentRect.topRight()+QPoint(1,0), QSize(frame->rightWidth, contentRect.height()));
+            return QRect(contentRect.topRight()+QPoint(1,0), QSize(m_rightWidth, contentRect.height()));
         case FrameSvg::TopBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight));
+            return QRect(QPoint(0, 0), QSize(m_leftWidth, m_topHeight));
         case FrameSvg::TopBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, 0), QSize(frame->rightWidth, frame->topHeight));
+            return QRect(QPoint(contentRect.right()+1, 0), QSize(m_rightWidth, m_topHeight));
         case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.bottom()+1), QSize(frame->leftWidth, frame->bottomHeight));
+            return QRect(QPoint(0, contentRect.bottom()+1), QSize(m_leftWidth, m_bottomHeight));
         case FrameSvg::BottomBorder | FrameSvg::RightBorder:
-            return QRect(contentRect.bottomRight()+QPoint(1,1), QSize(frame->rightWidth, frame->bottomHeight));
+            return QRect(contentRect.bottomRight()+QPoint(1,1), QSize(m_rightWidth, m_bottomHeight));
         default:
             qWarning() << "unrecognized border" << borders;
             return QRect();

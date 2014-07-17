@@ -189,6 +189,7 @@ private Q_SLOTS:
     void updateDevicePixelRatio();
 
 private:
+    void updateBorderSizes();
 
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
@@ -196,6 +197,12 @@ private:
     QString m_prefix;
     QTimer m_updateTexTimer;
     Units m_units;
+
+    int m_leftWidth;
+    int m_topHeight;
+    int m_rightWidth;
+    int m_bottomHeight;
+
     bool m_textureChanged;
     bool m_sizeChanged;
     bool m_fastPath;
