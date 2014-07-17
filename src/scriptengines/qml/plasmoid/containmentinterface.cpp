@@ -123,7 +123,7 @@ void ContainmentInterface::init()
             QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), 0, toolboxProperties);
             if (toolBoxObject && containmentGraphicObject) {
                 containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
-                toolBoxObject->setParent(containmentGraphicObject);
+                connect(containmentGraphicObject, &QObject::destroyed, toolBoxObject, &QObject::deleteLater);
             }
         } else {
             qWarning() << "Could not load toolbox package." << pkg.path();
