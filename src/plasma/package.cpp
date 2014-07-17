@@ -78,6 +78,12 @@ bool Package::isValid() const
         return false;
     }
 
+    //Minimal packages with no metadata *are* supposed to be possible
+    //so if !metadata().isValid() go ahead
+    if (metadata().isValid() && metadata().isHidden()) {
+        return false;
+    }
+
     if (d->checkedValid) {
         return d->valid;
     }

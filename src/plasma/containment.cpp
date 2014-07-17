@@ -90,6 +90,7 @@ Containment::Containment(const QString &packagePath, uint appletId)
 
 Containment::~Containment()
 {
+    qDeleteAll(d->localActionPlugins);
     delete d;
 }
 
