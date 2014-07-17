@@ -24,6 +24,7 @@
 #include <QSGTexture>
 #include <QDebug>
 #include <QPainter>
+#include <QSGGeometry>
 
 #include <plasma/private/framesvg_p.h>
 
@@ -36,11 +37,17 @@ namespace Plasma
 class FrameItemNode : public SVGTextureNode
 {
 public:
-    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, QSGNode* parent)
+    enum FitMode {
+        Stretch,
+        Tile
+    };
+
+    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)
         : SVGTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
         , m_lastParent(parent)
+        , m_fitMode(fitMode)
     {
         m_lastParent->appendChildNode(this);
         fetchPrefix();
@@ -50,13 +57,13 @@ public:
     {
         //QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
 
-        QSize someSize = m_frameSvg->sectionRect(m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
+        m_elementSize = m_frameSvg->sectionRect(m_border, m_frameSvg->frameSvg()->frameSize().toSize()).size();
 
         //FIXME: we should be sure the texture has a valid size at this point
-        // Q_ASSERT(!someSize.isEmpty());
+        // Q_ASSERT(!m_elementSize.isEmpty());
 
-        //QImage image = m_frameSvg->frameSvg()->image(someSize, elementId);
-        QImage image(someSize, QImage::Format_ARGB32_Premultiplied);
+        //QImage image = m_frameSvg->frameSvg()->image(m_elementSize, elementId);
+        QImage image(m_elementSize, QImage::Format_ARGB32_Premultiplied);
         QPainter p(&image);
         p.setCompositionMode(QPainter::CompositionMode_Source);
 
@@ -72,11 +79,35 @@ public:
             qWarning() << "this should never happen";
             //qDebug() << "not painting " << elementId;
         }
+
+        if (m_fitMode == Tile) {
+            if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
+                static_cast<QSGTextureMaterial*>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
+            }
+
+            if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
+                static_cast<QSGTextureMaterial*>(material())->setVerticalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setVerticalWrapMode(QSGTexture::Repeat);
+            }
+        }
     }
 
     void reposition()
     {
         setRect(m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height())));
+
+        QRectF frameRect = m_frameSvg->sectionRect(m_border, QSize(m_frameSvg->width(), m_frameSvg->height()));
+        QRectF textureRect = QRectF(0,0,1,1);
+        if (m_fitMode == Tile) {
+            if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
+                textureRect.setWidth(frameRect.width() / m_elementSize.width());
+            }
+            if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
+                textureRect.setHeight(frameRect.height() / m_elementSize.height());
+            }
+        }
+        QSGGeometry::updateTexturedRectGeometry(geometry(), frameRect, textureRect);
     }
 
     void setVisible(bool visible)
@@ -95,6 +126,8 @@ private:
     FrameSvgItem* m_frameSvg;
     FrameSvg::EnabledBorders m_border;
     QSGNode *m_lastParent;
+    QSize m_elementSize;
+    FitMode m_fitMode;
 };
 
 
@@ -366,35 +399,41 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (!oldNode) {
         oldNode = new QSGNode;
 
-        new FrameItemNode(this, FrameSvg::NoBorder, oldNode);
+        const QString actualPrefix = !m_frameSvg->prefix().isEmpty() && m_frameSvg->hasElementPrefix(m_frameSvg->prefix()) ? m_frameSvg->prefix() % "-" : QString();
+
+
+        FrameItemNode::FitMode borderFitMode = (m_frameSvg->hasElement("hint-stretch-borders") || m_frameSvg->hasElement(actualPrefix % "hint-stretch-borders")) ? FrameItemNode::Stretch : FrameItemNode::Tile;
+        FrameItemNode::FitMode centerFitMode = (m_frameSvg->hasElement("hint-tile-center") || m_frameSvg->hasElement(actualPrefix % "hint-tile-center")) ? FrameItemNode::Tile: FrameItemNode::Stretch;
+
+        new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode);
 
         if (m_topHeight) {
-            new FrameItemNode(this, FrameSvg::TopBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
 
             if (m_leftWidth) {
-                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, oldNode);
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::Stretch, oldNode);
             }
             if (m_rightWidth) {
-                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, oldNode);
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::Stretch, oldNode);
             }
         }
 
         if (m_bottomHeight) {
-            new FrameItemNode(this, FrameSvg::BottomBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
 
             if (m_leftWidth) {
-                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, oldNode);
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::Stretch, oldNode);
             }
             if (m_rightWidth) {
-                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, oldNode);
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::Stretch, oldNode);
             }
         }
 
         if (m_leftWidth) {
-            new FrameItemNode(this, FrameSvg::LeftBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::LeftBorder, borderFitMode, oldNode);
         }
         if (m_rightWidth) {
-            new FrameItemNode(this, FrameSvg::RightBorder, oldNode);
+            new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
         }
 
         m_sizeChanged = true;
