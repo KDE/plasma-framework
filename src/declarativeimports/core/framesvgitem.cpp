@@ -305,6 +305,11 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
+    FrameData *frame = frameData();
+    if (!frame) {
+        return;
+    }
+
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
@@ -314,7 +319,7 @@ void FrameSvgItem::doUpdate()
     }
 
     bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
-    m_fastPath = !hasOverlay;
+    m_fastPath = !hasOverlay && !frame->composeOverBorder;
     m_textureChanged = true;
     update();
 }
