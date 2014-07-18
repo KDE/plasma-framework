@@ -833,25 +833,29 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 
 QRect FrameSvgPrivate::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect)
 {
+    //don't use QRect corner methods here, they have semantics that might come as unexpected.
+    //prefer constructing the points explicitly. e.g. from QRect::topRight docs:
+    //Note that for historical reasons this function returns QPoint(left() + width() -1, top()).
+
     switch(borders) {
         case FrameSvg::NoBorder:
-            return frame->composeOverBorder ? QRect(0,0, contentRect.width()+frame->leftWidth+frame->rightWidth, contentRect.height()+frame->topHeight+frame->bottomHeight) : contentRect.adjusted(0,0, -1,-1);
+            return frame->composeOverBorder ? QRect(0,0, contentRect.width()+frame->leftWidth+frame->rightWidth, contentRect.height()+frame->topHeight+frame->bottomHeight) : contentRect;
         case FrameSvg::TopBorder:
-            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width()-1, frame->topHeight));
+            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight));
         case FrameSvg::BottomBorder:
-            return QRect(contentRect.bottomLeft(), QSize(contentRect.width()-1, frame->bottomHeight));
+            return QRect(QPoint(contentRect.left(), contentRect.bottom()+1), QSize(contentRect.width(), frame->bottomHeight));
         case FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()-1));
+            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()));
         case FrameSvg::RightBorder:
-            return QRect(contentRect.topRight(), QSize(frame->rightWidth, contentRect.height()-1));
+            return QRect(QPoint(contentRect.right()+1, contentRect.top()), QSize(frame->rightWidth, contentRect.height()));
         case FrameSvg::TopBorder | FrameSvg::LeftBorder:
             return QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight));
         case FrameSvg::TopBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right(), 0), QSize(frame->rightWidth, frame->topHeight));
+            return QRect(QPoint(contentRect.right()+1, 0), QSize(frame->rightWidth, frame->topHeight));
         case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.bottom()), QSize(frame->leftWidth, frame->bottomHeight));
+            return QRect(QPoint(0, contentRect.bottom()+1), QSize(frame->leftWidth, frame->bottomHeight));
         case FrameSvg::BottomBorder | FrameSvg::RightBorder:
-            return QRect(contentRect.bottomRight(), QSize(frame->rightWidth, frame->bottomHeight));
+            return QRect(QPoint(contentRect.right()+1, contentRect.bottom()+1), QSize(frame->rightWidth, frame->bottomHeight));
         default:
             qWarning() << "unrecognized border" << borders;
             return QRect();
