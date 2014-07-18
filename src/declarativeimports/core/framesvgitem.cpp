@@ -99,6 +99,11 @@ public:
         FrameData* frameData = m_frameSvg->frameData();
 
         QRect nodeRect = FrameSvgPrivate::sectionRect(frameData, m_border, frameGeometry);
+
+        //ensure we're not passing a weird rectangle to updateTexturedRectGeometry
+        if(!nodeRect.isValid() || nodeRect.isEmpty())
+            nodeRect = QRect();
+
         QRectF textureRect = QRectF(0,0,1,1);
         if (m_fitMode == Tile) {
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
