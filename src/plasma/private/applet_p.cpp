@@ -112,7 +112,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 
     QAction *configAction = actions->action("configure");
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title()));
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title().replace('&', "&&")));
     }
 
     if (!appletDescription.isValid()) {
