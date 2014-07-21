@@ -287,6 +287,11 @@ public:
      */
     Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
+    /**
+     * @returns the prefix that is actually used
+     */
+    QString actualPrefix() const;
+
 private:
     FrameSvgPrivate *const d;
     friend class FrameData;

@@ -31,6 +31,7 @@ namespace Plasma
 {
 
 class FrameSvg;
+class SVGTextureNode;
 
 class FrameSvgItemMargins : public QObject
 {
@@ -188,6 +189,8 @@ private:
     QString m_prefix;
     Units m_units;
     bool m_textureChanged;
+    bool m_sizeChanged;
+    bool m_fastPath;
 };
 
 }

@@ -22,7 +22,13 @@
 
 #include <QQuickWindow>
 #include <QSGTexture>
+#include <QSGGeometry>
+
 #include <QDebug>
+#include <QPainter>
+
+#include <plasma/private/framesvg_p.h>
+#include <plasma/private/framesvg_helpers.h>
 
 #include "svgtexturenode.h"
 
@@ -30,6 +36,109 @@
 
 namespace Plasma
 {
+
+class FrameItemNode : public SVGTextureNode
+{
+public:
+    enum FitMode {
+        //render SVG at native resolution then stretch it in openGL
+        FastStretch,
+        //on resize re-render the part of the frame from the SVG
+        Stretch,
+        Tile
+    };
+
+    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)
+        : SVGTextureNode()
+        , m_frameSvg(frameSvg)
+        , m_border(borders)
+        , m_lastParent(parent)
+        , m_fitMode(fitMode)
+    {
+        m_lastParent->appendChildNode(this);
+
+        if (m_fitMode == Tile) {
+            if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
+                static_cast<QSGTextureMaterial*>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
+            }
+            if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
+                static_cast<QSGTextureMaterial*>(material())->setVerticalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setVerticalWrapMode(QSGTexture::Repeat);
+            }
+        }
+
+        if (m_fitMode == Tile || m_fitMode == FastStretch) {
+            QString elementId = m_frameSvg->frameSvg()->actualPrefix() + FrameSvgHelpers::borderToElementId(m_border);
+            m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
+
+            updateTexture(m_elementNativeSize, elementId, false);
+        }
+    }
+
+    void updateTexture(const QSize &size, const QString &elementId, bool composeOverBorder)
+    {
+        QImage image = m_frameSvg->frameSvg()->image(size, elementId);
+
+        QString prefix = m_frameSvg->frameSvg()->actualPrefix();
+
+        //in compose over border we paint the center over the full size
+        //then blend in an alpha mask generated from the corners to
+        //remove the garbage left in the corners
+        if (m_border == FrameSvg::NoBorder && m_fitMode == Stretch && composeOverBorder) {
+            QPixmap pixmap = QPixmap::fromImage(image);
+            QPainter p(&pixmap);
+            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+            p.drawPixmap(QRect(QPoint(0, 0), size), m_frameSvg->frameSvg()->alphaMask());
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            image = pixmap.toImage();
+        }
+        QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
+        setTexture(texture);
+    }
+
+    void reposition(const QRect& frameGeometry, QSize& fullSize)
+    {
+        QRect nodeRect = FrameSvgHelpers::sectionRect(m_border, frameGeometry, fullSize);
+
+        //ensure we're not passing a weird rectangle to updateTexturedRectGeometry
+        if(!nodeRect.isValid() || nodeRect.isEmpty())
+            nodeRect = QRect();
+
+        QRectF textureRect = QRectF(0,0,1,1);
+        if (m_fitMode == Tile) {
+            if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
+                textureRect.setWidth(nodeRect.width() / m_elementNativeSize.width());
+            }
+            if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
+                textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
+            }
+        } else if (m_fitMode == Stretch) {
+            QString prefix = m_frameSvg->frameSvg()->actualPrefix();
+            bool composeOverBorder = (m_border == FrameSvg::NoBorder) && (m_frameSvg->frameSvg()->hasElement(prefix % "hint-compose-over-border") &&
+                m_frameSvg->frameSvg()->hasElement("mask-" % prefix % "center"));
+
+            QString elementId = prefix + FrameSvgHelpers::borderToElementId(m_border);
+
+            if (composeOverBorder) {
+                nodeRect = QRect(QPoint(0,0), fullSize);
+            }
+
+            //re-render the SVG at new size
+            updateTexture(nodeRect.size(), elementId, composeOverBorder);
+        } // for fast stretch, we don't have to do anything
+
+        QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
+        markDirty(QSGNode::DirtyGeometry);
+    }
+
+private:
+    FrameSvgItem* m_frameSvg;
+    FrameSvg::EnabledBorders m_border;
+    QSGNode *m_lastParent;
+    QSize m_elementNativeSize;
+    FitMode m_fitMode;
+};
 
 FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent)
     : QObject(parent),
@@ -98,7 +207,9 @@ bool FrameSvgItemMargins::isFixed() const
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_textureChanged(false)
+      m_textureChanged(false),
+      m_sizeChanged(false),
+      m_fastPath(true)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     m_margins = new FrameSvgItemMargins(m_frameSvg, this);
@@ -215,7 +326,7 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 {
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(newGeometry.size());
-        m_textureChanged = true;
+        m_sizeChanged = true;
     }
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
@@ -230,6 +341,9 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
+    QString prefix = m_frameSvg->actualPrefix();
+    bool hasOverlay = !prefix.startsWith(QStringLiteral("mask-")) && m_frameSvg->hasElement(prefix % "overlay");
+    m_fastPath = !hasOverlay;
     m_textureChanged = true;
     update();
 }
@@ -278,23 +392,68 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return Q_NULLPTR;
     }
 
-    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
-    if (!textureNode) {
-        textureNode = new SVGTextureNode;
-        textureNode->setFiltering(QSGTexture::Nearest);
-        m_textureChanged = true; //force updating the texture on our newly created node
+    if (m_fastPath) {
+        if (m_textureChanged) {
+            delete oldNode;
+            oldNode = 0;
+        }
+
+        if (!oldNode) {
+            oldNode = new QSGNode;
+
+            QString prefix = m_frameSvg->actualPrefix();
+            bool tileCenter = (m_frameSvg->hasElement("hint-tile-center") || m_frameSvg->hasElement(prefix % "hint-tile-center"));
+            bool stretchBorders = (m_frameSvg->hasElement("hint-stretch-borders") || m_frameSvg->hasElement(prefix % "hint-stretch-borders"));
+            FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
+            FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
+
+            new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode); //needs to be de first, in case of composeOverBorder
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+            new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
+            new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
+
+            m_sizeChanged = true;
+            m_textureChanged = false;
+        }
+
+        if (m_sizeChanged) {
+            QSize frameSize(width(), height());
+            QRect geometry = m_frameSvg->contentsRect().toRect();
+            for(int i = 0; i<oldNode->childCount(); ++i) {
+                FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
+                it->reposition(geometry, frameSize);
+            }
+
+            m_sizeChanged = false;
+        }
+    } else {
+        SVGTextureNode *textureNode = dynamic_cast<SVGTextureNode *>(oldNode);
+        if (!textureNode) {
+            delete oldNode;
+            textureNode = new SVGTextureNode;
+            textureNode->setFiltering(QSGTexture::Nearest);
+            m_textureChanged = true; //force updating the texture on our newly created node
+            oldNode = textureNode;
+        }
+
+        if ((m_textureChanged || m_sizeChanged) || textureNode->texture()->textureSize() != m_frameSvg->size()) {
+            QImage image = m_frameSvg->framePixmap().toImage();
+            QSGTexture *texture = window()->createTextureFromImage(image);
+            texture->setFiltering(QSGTexture::Nearest);
+            textureNode->setTexture(texture);
+            textureNode->setRect(0, 0, width(), height());
+
+            m_textureChanged = false;
+            m_sizeChanged = false;
+        }
     }
 
-    if (m_textureChanged || textureNode->texture()->textureSize() != m_frameSvg->size()) {
-        const QImage image = m_frameSvg->framePixmap().toImage();
-        QSGTexture *texture = window()->createTextureFromImage(image);
-        texture->setFiltering(QSGTexture::Nearest);
-        textureNode->setTexture(texture);
-        m_textureChanged = false;
-        textureNode->setRect(0, 0, width(), height());
-    }
-
-    return textureNode;
+    return oldNode;
 }
 
 void FrameSvgItem::componentComplete()
