@@ -137,4 +137,6 @@ Item {
             }
         }
     }
+
+    Accessible.role: Accessible.ListItem
 }

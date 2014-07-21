@@ -26,7 +26,6 @@ Item {
     width: root.cellWidth
     height: root.cellHeight
 
-    property real borderOpacity: daysCalendar.borderOpacity
     property bool today: root.today.toDateString() == new Date(yearNumber, monthNumber - 1, dayNumber).toDateString() // for some reason the comparison doesn't work without toDateString()
 
     onHeightChanged: {
@@ -38,12 +37,9 @@ Item {
 
     Rectangle {
         id: todayRect
-        x: 0
-        y: 0
-        width: parent.width - (borderWidth)
-        height: parent.height - (borderWidth)
+        anchors.fill: parent
         opacity: {
-            if (calendarDays.selectedItem == dayStyle && today) {
+            if (calendarGrid.selectedItem == dayStyle && today) {
                 0.6
             } else if (today) {
                 0.4
@@ -57,11 +53,9 @@ Item {
 
     Rectangle {
         id: highlightDate
-        anchors {
-            fill: todayRect
-        }
+        anchors.fill: todayRect
         opacity: {
-            if (calendarDays.selectedItem == dayStyle) {
+            if (calendarGrid.selectedItem == dayStyle) {
                 0.6
             } else if (dateMouse.containsMouse) {
                 0.4
@@ -75,32 +69,6 @@ Item {
         z: todayRect.z - 1
     }
 
-    Rectangle {
-        id: frameRight
-        width: borderWidth
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            right: parent.right
-        }
-    }
-
-    Rectangle {
-        id: frameBottom
-        height: borderWidth
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            right: parent.right
-        }
-    }
-
     Components.Label {
         id: label
         anchors.centerIn: parent
@@ -109,8 +77,6 @@ Item {
         color: today ? theme.backgroundColor : theme.textColor
     }
 
-
-
     MouseArea {
         id: dateMouse
         anchors.fill: parent
@@ -118,9 +84,9 @@ Item {
         hoverEnabled: true
         onClicked: {
             var rowNumber = Math.floor(index / 7);
-            week = 1+monthCalendar.weeksModel[rowNumber];
+            week = 1+calendarBackend.weeksModel[rowNumber];
             root.date = model;
-            calendarDays.selectedItem = dayStyle;
+            calendarGrid.selectedItem = dayStyle;
         }
     }
 

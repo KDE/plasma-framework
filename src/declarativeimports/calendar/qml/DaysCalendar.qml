@@ -23,71 +23,75 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 Item {
     id: daysCalendar
 
-    property real borderOpacity: 1.0
-
-    property int leftMargin: frameTop.x
-    property int topMargin: frameTop.y
-    property int rightMargin: width - frameTop.width
-    property int bottomMargin: height - frameLeft.height
-
-    Rectangle {
-        id: frameTop
-        height: borderWidth
-        width: root.columns * root.cellWidth
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            top: parent.top
-            left: calendarDays.left
-        }
+    // This is to ensure that the inner grid.width is always aligned to be divisible by 7,
+    // fixes wrong side margins because of the rounding of cell size
+    // (consider the parent.width to be 404, the cell width would be 56,
+    // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
+    // wrong alignment)
+    anchors {
+        leftMargin: Math.floor(((parent.width - (root.columns + 1) * borderWidth) % root.columns) / 2)
+        rightMargin: anchors.leftMargin
+        bottomMargin: anchors.leftMargin
     }
 
-    Rectangle {
-        id: frameLeft
-        width: borderWidth
-        height: root.cellHeight * root.columns
-        color: theme.textColor
-        opacity: borderOpacity
+    // Paints the inner grid and the outer frame
+    Canvas {
+        id: canvas
+        anchors.fill: parent
+        opacity: root.borderOpacity
+        antialiasing: false
+        clip: false
+        onPaint: {
+            var ctx = getContext("2d");
+            // this is needed as otherwise the canvas seems to have some sort of
+            // inner clip region which does not update on size changes
+            ctx.reset();
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = theme.textColor;
+            ctx.lineWidth = root.borderWidth
+            ctx.globalAlpha = 1.0;
 
-        anchors {
-            right: calendarDays.left
-            top: calendarDays.top
+            ctx.beginPath();
+
+            // This isn't the real width/height, but rather the X coord where the line will stop
+            // and as the coord system starts from (0,0), we need to do "-1" to not get off-by-1 errors
+            var rectWidth = (root.cellWidth + root.borderWidth) * calendarGrid.columns + root.borderWidth - 1
+            var rectHeight = (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
+
+            // the outer frame
+            ctx.strokeRect(0, 0, rectWidth, rectHeight);
+
+            // horizontal lines
+            for (var i = 0; i < calendarGrid.rows - 1; i++) {
+                var lineY = (rectHeight / calendarGrid.columns) * (i + 1);
+
+                ctx.moveTo(0, lineY);
+                ctx.lineTo(rectWidth, lineY);
+            }
+
+            // vertical lines
+            for (var i = 0; i < calendarGrid.columns - 1; i++) {
+                var lineX = (rectWidth / calendarGrid.rows) * (i + 1);
+
+                ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
+                ctx.lineTo(lineX, rectHeight);
+            }
+
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
         }
     }
-
-    Rectangle {
-        id: frameRight
-        width: borderWidth
-        height: root.cellHeight
-        color: theme.textColor
-        opacity: borderOpacity
-
-        anchors {
-            right: frameTop.right
-            top: calendarDays.top
-        }
-    }
-
-    Rectangle {
-        id: frameSecond
-        height: borderWidth
-        color: theme.textColor
-        opacity: borderOpacity
-        y: cellHeight - borderWidth
-        anchors {
-            left: calendarDays.left
-            right: frameTop.right
-        }
-    }
-
 
     Grid {
-        id: calendarDays
-        anchors.fill: parent
-        columns: monthCalendar.days
-        rows: 1 + monthCalendar.weeks
-        spacing: 0
+        id: calendarGrid
+        // Pad the grid to not overlap with the top and left frame
+        x: root.borderWidth
+        y: root.borderWidth
+        columns: calendarBackend.days
+        rows: calendarBackend.weeks + 1
+        spacing: 1
         property Item selectedItem
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
@@ -95,19 +99,19 @@ Item {
         property QtObject selectedDate: root.date
         onSelectedDateChanged: {
             // clear the selection if the root.date is null
-            if (calendarDays.selectedDate == null) {
-                calendarDays.selectedItem = null;
+            if (calendarGrid.selectedDate == null) {
+                calendarGrid.selectedItem = null;
             }
         }
 
         Repeater {
             id: days
-            model: monthCalendar.days
+            model: calendarBackend.days
             Item {
                 width: root.cellWidth
                 height: root.cellHeight
                 Components.Label {
-                    text: Qt.locale().dayName(monthCalendar.firstDayOfWeek + index, Locale.ShortFormat)
+                    text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
                     font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
@@ -120,11 +124,9 @@ Item {
 
         Repeater {
             id: repeater
-            model: monthCalendar.daysModel
+            model: calendarBackend.daysModel
 
-            DayDelegate {
-                borderOpacity: daysCalendar.borderOpacity
-            }
+            DayDelegate {}
         }
     }
 }

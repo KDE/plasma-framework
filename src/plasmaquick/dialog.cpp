@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QLayout>
 #include <QScreen>
+#include <QMenu>
 
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
@@ -139,7 +140,7 @@ void DialogPrivate::syncBorders()
 
     //Tooltips always have all the borders
     // floating windows have all borders
-    if (!(q->flags() & Qt::ToolTip) && location != Plasma::Types::Floating) {
+    if ((q->flags() & Qt::ToolTip) != Qt::ToolTip && location != Plasma::Types::Floating) {
         if (q->x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
@@ -676,7 +677,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 
     if (dialogPos.x() < avail.left()) {
         // popup hits lhs
-        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
+        if (d->location != Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
             // move it
             dialogPos.setX(avail.left());
         } else {
@@ -817,7 +818,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         }
 
         const QWindow *focusWindow = QGuiApplication::focusWindow();
-        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->objectName() == QLatin1String("QMenuClassWindow"));
+        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
         if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
             qDebug() << "DIALOG:  hiding dialog.";

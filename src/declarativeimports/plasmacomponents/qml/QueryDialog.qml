@@ -49,7 +49,7 @@ PlasmaComponents.CommonDialog {
     objectName: "root"
 
     property string message
-    property string acceptButtonText: i18nd("libplasma5", "Ok")
+    property string acceptButtonText: i18nd("libplasma5", "OK")
     property string rejectButtonText: i18nd("libplasma5", "Cancel")
 
     onAcceptButtonTextChanged: internal.updateButtonTexts()

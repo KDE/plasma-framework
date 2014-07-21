@@ -22,6 +22,7 @@
 #define PLASMA_FRAMESVG_P_H
 
 #include <QHash>
+#include <QCache>
 #include <QStringBuilder>
 
 #include <QDebug>
@@ -57,6 +58,7 @@ public:
     FrameData(const FrameData &other, FrameSvg *svg)
         : prefix(other.prefix),
           enabledBorders(other.enabledBorders),
+          cachedMasks(MAX_CACHED_MASKS),
           frameSize(other.frameSize),
           topHeight(0),
           leftWidth(0),
@@ -85,7 +87,7 @@ public:
     QString prefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QHash<QString, QRegion> cachedMasks;
+    QCache<QString, QRegion> cachedMasks;
     static const int MAX_CACHED_MASKS = 10;
 
     QSize frameSize;
@@ -146,9 +148,17 @@ public:
     void updateNeeded();
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
+    void paintBorder(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QSize& originalSize, const QRect& output) const;
+    void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
+    void paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize);
+    static QString borderToElementId(Plasma::FrameSvg::EnabledBorders borders);
+    QRect contentGeometry(FrameData* frame, const QSize& size) const;
 
     Types::Location location;
     QString prefix;
+    //sometimes the prefix we requested is not available, so prefix will be emoty
+    //keep track of the requested one anyways, we'll try again when the theme changes
+    QString requestedPrefix;
 
     FrameSvg *q;
 

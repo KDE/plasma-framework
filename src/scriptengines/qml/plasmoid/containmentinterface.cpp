@@ -57,33 +57,14 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
       m_wallpaperInterface(0),
       m_activityInfo(0)
 {
+    m_containment = static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
+
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    connect(containment(), &Plasma::Containment::appletRemoved,
+    connect(m_containment.data(), &Plasma::Containment::appletRemoved,
             this, &ContainmentInterface::appletRemovedForward);
-    connect(containment(), &Plasma::Containment::appletAdded,
+    connect(m_containment.data(), &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
-    connect(containment(), &Plasma::Containment::activityChanged,
-            this, &ContainmentInterface::activityChanged);
-    connect(containment(), &Plasma::Containment::activityChanged,
-    [ = ]() {
-        delete m_activityInfo;
-        m_activityInfo = new KActivities::Info(containment()->activity(), this);
-        connect(m_activityInfo, &KActivities::Info::nameChanged,
-                this, &ContainmentInterface::activityNameChanged);
-        emit activityNameChanged();
-    });
-    connect(containment(), &Plasma::Containment::wallpaperChanged,
-            this, &ContainmentInterface::loadWallpaper);
-    connect(containment(), &Plasma::Containment::containmentTypeChanged,
-            this, &ContainmentInterface::containmentTypeChanged);
-
-    if (containment()->corona()) {
-        connect(containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
-                this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
-                this, &ContainmentInterface::availableScreenRectChanged);
-    }
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
@@ -91,12 +72,12 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
             [=]() {
-                if (!containment()) {
+                if (!m_containment) {
                     return;
                 }
-                disconnect(containment(), &Plasma::Containment::appletRemoved,
-                this, &ContainmentInterface::appletRemovedForward);
-        });
+                disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
+                           this, &ContainmentInterface::appletRemovedForward);
+            });
 }
 
 void ContainmentInterface::init()
@@ -105,7 +86,7 @@ void ContainmentInterface::init()
         return;
     }
 
-    m_activityInfo = new KActivities::Info(containment()->activity(), this);
+    m_activityInfo = new KActivities::Info(m_containment->activity(), this);
     connect(m_activityInfo, &KActivities::Info::nameChanged,
             this, &ContainmentInterface::activityNameChanged);
     emit activityNameChanged();
@@ -113,13 +94,12 @@ void ContainmentInterface::init()
     AppletInterface::init();
 
     //Create the ToolBox
-    Plasma::Containment *pc = containment();
-    if (pc) {
+    if (m_containment) {
         KConfigGroup defaults;
-        if (pc->containmentType() == Plasma::Types::DesktopContainment) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Desktop");
-        } else if (pc->containmentType() == Plasma::Types::PanelContainment) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(pc->corona()->package().filePath("defaults")), "Panel");
+        if (m_containment->containmentType() == Plasma::Types::DesktopContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Desktop");
+        } else if (m_containment->containmentType() == Plasma::Types::PanelContainment) {
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Panel");
         }
 
         Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
@@ -160,8 +140,30 @@ void ContainmentInterface::init()
         prop.write(expr.evaluate());
     }
 
-    if (!containment()->wallpaper().isEmpty()) {
+    if (!m_containment->wallpaper().isEmpty()) {
         loadWallpaper();
+    }
+
+    connect(m_containment.data(), &Plasma::Containment::activityChanged,
+            this, &ContainmentInterface::activityChanged);
+    connect(m_containment.data(), &Plasma::Containment::activityChanged,
+            [ = ]() {
+                delete m_activityInfo;
+                m_activityInfo = new KActivities::Info(m_containment->activity(), this);
+                connect(m_activityInfo, &KActivities::Info::nameChanged,
+                        this, &ContainmentInterface::activityNameChanged);
+                emit activityNameChanged();
+            });
+    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged,
+            this, &ContainmentInterface::loadWallpaper);
+    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
+            this, &ContainmentInterface::containmentTypeChanged);
+
+    if (m_containment->corona()) {
+        connect(m_containment->corona(), &Plasma::Corona::availableScreenRegionChanged,
+                this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(m_containment->corona(), &Plasma::Corona::availableScreenRectChanged,
+                this, &ContainmentInterface::availableScreenRectChanged);
     }
 }
 
@@ -184,14 +186,14 @@ QVariantList ContainmentInterface::availableScreenRegion() const
 {
     QRegion reg = QRect(0, 0, width(), height());
     int screenId = screen();
-    if (screenId > -1 && containment()->corona()) {
-        reg = containment()->corona()->availableScreenRegion(screenId);
+    if (screenId > -1 && m_containment->corona()) {
+        reg = m_containment->corona()->availableScreenRegion(screenId);
     }
 
     QVariantList regVal;
     foreach (QRect rect, reg.rects()) {
         //make it relative
-        QRect geometry = containment()->corona()->screenGeometry(screenId);
+        QRect geometry = m_containment->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
         regVal << QVariant::fromValue(QRectF(rect));
     }
@@ -204,10 +206,10 @@ QRect ContainmentInterface::availableScreenRect() const
 
     int screenId = screen();
 
-    if (screenId > -1 && containment()->corona()) {
-        rect = containment()->corona()->availableScreenRect(screenId);
+    if (screenId > -1 && m_containment->corona()) {
+        rect = m_containment->corona()->availableScreenRect(screenId);
         //make it relative
-        QRect geometry = containment()->corona()->screenGeometry(screenId);
+        QRect geometry = m_containment->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
     }
 
@@ -219,7 +221,7 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
     //HACK
     //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
     blockSignals(true);
-    Plasma::Applet *applet = containment()->createApplet(plugin, args);
+    Plasma::Applet *applet = m_containment->createApplet(plugin, args);
 
     if (applet) {
         QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
@@ -248,7 +250,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 
 QObject *ContainmentInterface::containmentAt(int x, int y)
 {
-    foreach (Plasma::Containment *c, containment()->corona()->containments()) {
+    foreach (Plasma::Containment *c, m_containment->corona()->containments()) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
         if (contInterface && contInterface->isVisible()) {
@@ -263,12 +265,12 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
 
 void ContainmentInterface::addApplet(AppletInterface *applet, int x, int y)
 {
-    if (!applet || applet->applet()->containment() == containment()) {
+    if (!applet || applet->applet()->containment() == m_containment) {
         return;
     }
 
     blockSignals(true);
-    containment()->addApplet(applet->applet());
+    m_containment->addApplet(applet->applet());
     blockSignals(false);
     emit appletAdded(applet, x, y);
 }
@@ -559,9 +561,9 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
-    QObject *contGraphicObject = containment()->property("_plasma_graphicObject").value<QObject *>();
+    QObject *contGraphicObject = m_containment->property("_plasma_graphicObject").value<QObject *>();
 
-//     qDebug() << "Applet added on containment:" << containment()->title() << contGraphicObject
+//     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
 //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
     if (!appletGraphicObject) {
@@ -590,12 +592,12 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (containment()->containmentType() != Plasma::Types::DesktopContainment &&
-            containment()->containmentType() != Plasma::Types::CustomContainment) {
+    if (m_containment->containmentType() != Plasma::Types::DesktopContainment &&
+            m_containment->containmentType() != Plasma::Types::CustomContainment) {
         return;
     }
 
-    if (!containment()->wallpaper().isEmpty()) {
+    if (!m_containment->wallpaper().isEmpty()) {
         delete m_wallpaperInterface;
 
         m_wallpaperInterface = new WallpaperInterface(this);
@@ -608,7 +610,7 @@ void ContainmentInterface::loadWallpaper()
         QQmlProperty prop(m_wallpaperInterface, "anchors.fill");
         prop.write(expr.evaluate());
 
-        containment()->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
+        m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
     } else {
         if (m_wallpaperInterface) {
             m_wallpaperInterface->deleteLater();
@@ -619,7 +621,7 @@ void ContainmentInterface::loadWallpaper()
 
 QString ContainmentInterface::activity() const
 {
-    return containment()->activity();
+    return m_containment->activity();
 }
 
 QString ContainmentInterface::activityName() const
@@ -636,22 +638,18 @@ QList<QObject *> ContainmentInterface::actions() const
 
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
-    foreach (QAction *a, containment()->actions()->actions()) {
-        if (a->isEnabled()) {
-            actions.insert(a->data().toInt(), a);
-        }
+    foreach (QAction *a, m_containment->actions()->actions()) {
+        actions.insert(a->data().toInt(), a);
     }
-    foreach (QAction *a, containment()->corona()->actions()->actions()) {
-        if (a->isEnabled()) {
-            if (a->objectName() == QStringLiteral("lock widgets")) {
-                //It is up to the Containment to decide if the user is allowed or not
-                //to lock/unluck the widgets, so corona should not add one when there is none
-                //(user is not allow) and it shouldn't add another one when there is already
-                //one
-                continue;
-            }
-            actions.insert(a->data().toInt(), a);
+    foreach (QAction *a, m_containment->corona()->actions()->actions()) {
+        if (a->objectName() == QStringLiteral("lock widgets")) {
+            //It is up to the Containment to decide if the user is allowed or not
+            //to lock/unluck the widgets, so corona should not add one when there is none
+            //(user is not allow) and it shouldn't add another one when there is already
+            //one
+            continue;
         }
+        actions.insert(a->data().toInt(), a);
     }
     return actions.values();
 }
@@ -660,7 +658,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 {
-    event->setAccepted(containment()->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
+    event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
 }
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
@@ -673,7 +671,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     }
 
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
-    Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
+    Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
 
     if (!plugin || plugin->contextualActions().isEmpty()) {
         event->setAccepted(false);
@@ -727,7 +725,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 void ContainmentInterface::wheelEvent(QWheelEvent *event)
 {
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
-    Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
+    Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
 
     if (plugin) {
         if (event->delta() < 0) {
@@ -760,7 +758,7 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
         }
     }
 
-    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", containment()->title()), &desktopMenu);
+    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", m_containment->title()), &desktopMenu);
     addContainmentActions(*containmentMenu, event);
 
     if (!containmentMenu->isEmpty()) {
@@ -788,8 +786,8 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
         }
     }
 
-    if (containment()->immutability() == Plasma::Types::Mutable &&
-        (containment()->containmentType() != Plasma::Types::PanelContainment || containment()->isUserConfiguring())) {
+    if (m_containment->immutability() == Plasma::Types::Mutable &&
+        (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
         QAction *closeApplet = applet->actions()->action("remove");
         //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
@@ -805,7 +803,7 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
 
 void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *event)
 {
-    if (containment()->corona()->immutability() != Plasma::Types::Mutable &&
+    if (m_containment->corona()->immutability() != Plasma::Types::Mutable &&
             !KAuthorized::authorizeKAction("plasma/containment_actions")) {
         //qDebug() << "immutability";
         return;
@@ -813,18 +811,18 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
 
     //this is what ContainmentPrivate::prepareContainmentActions was
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
-    Plasma::ContainmentActions *plugin = containment()->containmentActions().value(trigger);
+    Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
 
     if (!plugin) {
         return;
     }
 
-    if (plugin->containment() != containment()) {
-        plugin->setContainment(containment());
+    if (plugin->containment() != m_containment) {
+        plugin->setContainment(m_containment);
 
         // now configure it
-        KConfigGroup cfg(containment()->corona()->config(), "ActionPlugins");
-        cfg = KConfigGroup(&cfg, QString::number(containment()->containmentType()));
+        KConfigGroup cfg(m_containment->corona()->config(), "ActionPlugins");
+        cfg = KConfigGroup(&cfg, QString::number(m_containment->containmentType()));
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
     }
@@ -834,10 +832,10 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
     if (actions.isEmpty()) {
         //it probably didn't bother implementing the function. give the user a chance to set
         //a better plugin.  note that if the user sets no-plugin this won't happen...
-        if ((containment()->containmentType() != Plasma::Types::PanelContainment &&
-                containment()->containmentType() != Plasma::Types::CustomPanelContainment) &&
-                containment()->actions()->action("configure")) {
-            desktopMenu.addAction(containment()->actions()->action("configure"));
+        if ((m_containment->containmentType() != Plasma::Types::PanelContainment &&
+                m_containment->containmentType() != Plasma::Types::CustomPanelContainment) &&
+                m_containment->actions()->action("configure")) {
+            desktopMenu.addAction(m_containment->actions()->action("configure"));
         }
     } else {
         desktopMenu.addActions(actions);

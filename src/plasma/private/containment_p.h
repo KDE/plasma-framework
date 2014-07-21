@@ -45,8 +45,6 @@ class ContainmentPrivate
 {
 public:
     ContainmentPrivate(Containment *c);
-
-
     ~ContainmentPrivate();
 
     void triggerShowAddWidgets();
@@ -60,7 +58,6 @@ public:
     void containmentConstraintsEvent(Plasma::Types::Constraints constraints);
 
     bool isPanelContainment() const;
-    void setLockToolText();
     void appletDeleted(Applet *);
     void configChanged();
 
@@ -78,6 +75,10 @@ public:
      */
     static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
 
+    void setUiReady();
+    void setStarted();
+    void appletLoaded(Applet* applet);
+
     Containment *q;
     Types::FormFactor formFactor;
     Types::Location location;
@@ -89,6 +90,8 @@ public:
     int lastScreen;
     QString activityId;
     Types::ContainmentType type;
+    bool uiReady : 1;
+    bool appletsUiReady : 1;
 
     static const char defaultWallpaper[];
 };

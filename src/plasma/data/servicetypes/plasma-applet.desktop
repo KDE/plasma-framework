@@ -3,10 +3,12 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Applet
 
 Comment=Plasma applet
+Comment[ar]=بُريمِج پلازما
 Comment[bs]=Plazma aplet
 Comment[ca]=Miniaplicació del Plasma
 Comment[cs]=Aplet Plasma
 Comment[de]=Plasma-Miniprogramm
+Comment[en_GB]=Plasma applet
 Comment[es]=Miniaplicación para Plasma
 Comment[fi]=Plasma-sovelma
 Comment[gl]=Applet de Plasma
@@ -15,9 +17,11 @@ Comment[ia]=Applet Plasma
 Comment[mr]=प्लाज्मा एप्लेट
 Comment[nds]=Plasma-Lüttprogramm
 Comment[nl]=Plasma-applet
+Comment[pa]=ਪਾਲਜ਼ਮਾ ਐਪਲਿਟ
 Comment[pl]=Aplet Plazmy
 Comment[pt]='Applet' do Plasma
 Comment[pt_BR]=Miniaplicativo do Plasma
+Comment[ru]=Виджет Plasma
 Comment[sk]=Plasma aplet
 Comment[sl]=Plasma aplet
 Comment[sr]=Плазма аплет
@@ -29,6 +33,7 @@ Comment[tr]=Plasma programcığı
 Comment[ug]=Plasma قوللانچاق
 Comment[uk]=Аплет Плазми
 Comment[x-test]=xxPlasma appletxx
+Comment[zh_TW]=Plasma 小程式
 
 [PropertyDef::X-Plasma-API]
 Type=QString

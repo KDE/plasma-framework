@@ -215,4 +215,5 @@ Item {
 
         source: interactive ? "private/ScrollBarDelegate.qml" : "private/ScrollDecoratorDelegate.qml"
     }
+    Accessible.role: Accessible.ScrollBar
 }

@@ -39,6 +39,7 @@
 #include "iconitem.h"
 #include "serviceoperationstatus.h"
 #include "colorscope.h"
+#include "quicktheme.h"
 
 #include "tooltip.h"
 #include "units.h"
@@ -55,7 +56,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
     QQmlContext *context = engine->rootContext();
 
-    Plasma::Theme *theme = new Plasma::Theme(engine);
+    Plasma::QuickTheme *theme = new Plasma::QuickTheme(engine);
     context->setContextProperty("theme", theme);
 
     Units *units = new Units(context);
@@ -81,7 +82,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
     //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
-    qmlRegisterUncreatableType<Plasma::Theme>(uri, 2, 0, "Theme", "It is not possible to instantiate Theme directly.");
+    qmlRegisterUncreatableType<Plasma::QuickTheme>(uri, 2, 0, "Theme", "It is not possible to instantiate Theme directly.");
     qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");

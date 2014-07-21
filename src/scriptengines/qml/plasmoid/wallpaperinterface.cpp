@@ -100,10 +100,10 @@ KConfigLoader *WallpaperInterface::configScheme()
         cfg = KConfigGroup(&cfg, "Wallpaper");
 
         if (xmlPath.isEmpty()) {
-            m_configLoader = new KConfigLoader(cfg, 0);
+            m_configLoader = new KConfigLoader(cfg, 0, this);
         } else {
             QFile file(xmlPath);
-            m_configLoader = new KConfigLoader(cfg, &file);
+            m_configLoader = new KConfigLoader(cfg, &file, this);
         }
     }
 

@@ -41,6 +41,7 @@
 #include "scripting/scriptengine.h"
 #include "scripting/appletscript.h"
 #include "private/containment_p.h"
+#include "timetracker.h"
 
 namespace Plasma
 {
@@ -66,7 +67,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       needsConfig(false),
       started(false),
       globalShortcutEnabled(false),
-      uiReady(false),
       userConfiguring(false)
 {
     if (appletId == 0) {
@@ -76,6 +76,9 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     }
     QObject::connect(actions->action("configure"), SIGNAL(triggered()),
                      q, SLOT(requestConfiguration()));
+#ifndef NDEBUG
+    new TimeTracker(q);
+#endif
 }
 
 AppletPrivate::~AppletPrivate()
@@ -109,7 +112,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 
     QAction *configAction = actions->action("configure");
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title()));
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", q->title().replace('&', "&&")));
     }
 
     if (!appletDescription.isValid()) {
@@ -305,27 +308,10 @@ void AppletPrivate::setUiReady()
     //am i the containment?
     Containment *c = qobject_cast<Containment *>(q);
     if (c && c->isContainment()) {
-        //if we are the containment and there is still some uncomplete applet, we're still incomplete
-        if (!c->d->loadingApplets.isEmpty()) {
-            return;
-        } else if (!uiReady && started) {
-            emit c->uiReadyChanged(true);
-        }
-    } else {
-        c = q->containment();
-        if (c) {
-            q->containment()->d->loadingApplets.remove(q);
-            Applet *a = static_cast<Applet *>(q->containment());
-            if (q->containment()->d->loadingApplets.isEmpty() && !a->d->uiReady) {
-                a->d->uiReady = true;
-                if (a->d->started) {
-                    emit q->containment()->uiReadyChanged(true);
-                }
-            }
-        }
+        c->d->setUiReady();
+    } else if (Containment* cc = q->containment()) {
+        cc->d->appletLoaded(q);
     }
-
-    uiReady = true;
 }
 
 // put all setup routines for script here. at this point we can assume that
@@ -371,8 +357,8 @@ void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
 
     if (c & Plasma::Types::StartupCompletedConstraint) {
         started = true;
-        if (uiReady) {
-            emit q->containment()->uiReadyChanged(true);
+        if (q->isContainment()) {
+            qobject_cast<Containment*>(q)->d->setStarted();
         }
     }
 
@@ -384,10 +370,6 @@ void AppletPrivate::scheduleModificationNotification()
     // modificationsTimer is not allocated until we get our notice of being started
     if (modificationsTimer) {
         // schedule a save
-        if (modificationsTimer->isActive()) {
-            modificationsTimer->stop();
-        }
-
         modificationsTimer->start(1000, q);
     }
 }
@@ -436,7 +418,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
     if (configLoader) {
         configLoader->setSharedConfig(KSharedConfig::openConfig(mainConfig->config()->name()));
-        configLoader->readConfig();
+        configLoader->load();
     }
 
     return mainConfig;

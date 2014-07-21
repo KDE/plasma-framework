@@ -136,4 +136,6 @@ Item {
             to: background._isVertical ? background.height - bar.height : background.width - bar.width
         }
     }
+
+    Accessible.role: Accessible.ProgressBar
 }

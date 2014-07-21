@@ -63,4 +63,5 @@ Private.DualStateButton {
     activeFocusOnTab: true
 
     shadow: Private.RoundShadow {}
+    Accessible.role: Accessible.RadioButton
 }

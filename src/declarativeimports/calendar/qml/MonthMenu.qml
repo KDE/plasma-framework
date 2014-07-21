@@ -26,53 +26,53 @@ PlasmaComponents.Menu {
 
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(0))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 0, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 0, 1)
     }
 
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(1))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 1, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 1, 1)
     }
 
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(2))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 2, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 2, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(3))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 3, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 3, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(4))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 4, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 4, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(5))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 5, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 5, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(6))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 6, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 6, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(7))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 7, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 7, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(8))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 8, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 8, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(9))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 9, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 9, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(10))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 10, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 10, 1)
     }
     PlasmaComponents.MenuItem {
         text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(11))
-        onClicked: monthCalendar.displayedDate = new Date(today.getFullYear(), 11, 1)
+        onClicked: calendarBackend.displayedDate = new Date(today.getFullYear(), 11, 1)
     }
 
     // Because some locales don't have it in standaloneMonthNames,

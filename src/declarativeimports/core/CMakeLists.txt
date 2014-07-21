@@ -24,6 +24,7 @@ set(corebindings_SRCS
     svgitem.cpp
     fadingnode.cpp
     framesvgitem.cpp
+    quicktheme.cpp
     tooltip.cpp
     tooltipdialog.cpp
     serviceoperationstatus.cpp

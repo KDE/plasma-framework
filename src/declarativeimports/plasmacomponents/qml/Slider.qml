@@ -112,43 +112,24 @@ Item {
 
     activeFocusOnTab: true
 
-    Keys.onUpPressed: {
-        if (!enabled || !contents.isVertical)
+    Keys.onUpPressed: { if (contents.isVertical) decrease() }
+    Keys.onDownPressed: { if (contents.isVertical) increase() }
+    Keys.onLeftPressed: { if (!contents.isVertical) increase() }
+    Keys.onRightPressed: { if (!contents.isVertical) decrease() }
+    function accessibleIncreaseAction() { increase() }
+    function accessibleDecreaseAction() { decrease() }
+
+    function increase() {
+        if (!enabled)
             return;
-
-        if (inverted)
-            value -= stepSize;
-        else
-            value += stepSize;
-    }
-
-    Keys.onDownPressed: {
-        if (!enabled || !enabled)
-            return;
-
-        if (!contents.isVertical)
-            return;
-
         if (inverted)
             value += stepSize;
         else
             value -= stepSize;
     }
-
-    Keys.onLeftPressed: {
-        if (!enabled || contents.isVertical)
+    function decrease() {
+        if (!enabled)
             return;
-
-        if (inverted)
-            value += stepSize;
-        else
-            value -= stepSize;
-    }
-
-    Keys.onRightPressed: {
-        if (!enabled || contents.isVertical)
-            return;
-
         if (inverted)
             value -= stepSize;
         else
@@ -327,4 +308,5 @@ Item {
         property: "x"
         value: range.position
     }
+    Accessible.role: Accessible.Slider
 }

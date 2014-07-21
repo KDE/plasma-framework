@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Breeze Dark
+Name[ar]=نسيم داكن
 Name[ca]=Brisa fosca
 Name[de]=Dunkle Brise
+Name[en_GB]=Breeze Dark
 Name[es]=Brisa oscuro
 Name[fi]=Breeze Dark
 Name[gl]=Breeze escuro
@@ -11,8 +13,9 @@ Name[nl]=Breeze Dark
 Name[pl]=Ciemna bryza
 Name[pt]=Brisa Escura
 Name[pt_BR]=Breeze Dark
+Name[ru]=Breeze, тёмный вариант
 Name[sk]=Tmavý vánok
-Name[sl]=Vetrič (temna)
+Name[sl]=Sapica (temna)
 Name[sr]=Поветарац тамни
 Name[sr@ijekavian]=Поветарац тамни
 Name[sr@ijekavianlatin]=Povetarac tamni
@@ -20,6 +23,7 @@ Name[sr@latin]=Povetarac tamni
 Name[sv]=Breeze mörk
 Name[uk]=Темна Breeze
 Name[x-test]=xxBreeze Darkxx
+Name[zh_TW]=Breeze Dark
 
 
 X-KDE-PluginInfo-Author=KDE Visual Design Group

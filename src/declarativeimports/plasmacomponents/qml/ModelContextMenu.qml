@@ -80,4 +80,5 @@ PlasmaComponents.ContextMenu {
             }
         }
     }
+    Accessible.role: Accessible.PopupMenu
 }

@@ -17,6 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
+import QtQuick 2.2
 import QtQuick.Controls 1.1 as QtQuickControls
 import "styles" as Styles
 
@@ -33,4 +34,19 @@ QtQuickControls.ScrollView {
     id: root
 
     style: Styles.ScrollViewStyle{}
+
+    //START HACK
+    //The following is a workaround for https://bugreports.qt-project.org/browse/QTBUG-31976
+    //Scrollview disables interactive property on the listview for non-touch screen devices
+    //which would make sense except this also breaks keyboard interaction which is a worse problem
+
+    //this is planned to be fixed for 5.4 where interactive is split into two properties
+    //https://bugreports.qt-project.org/browse/QTBUG-17051
+    //hopefully this can be removed then
+
+    onContentItemChanged: {
+        contentItem.interactive = true;
+        contentItem.focus = true
+    }
+    //end hack
 }

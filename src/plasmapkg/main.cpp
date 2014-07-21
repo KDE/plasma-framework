@@ -65,7 +65,7 @@ int main(int argc, char **argv)
     parser.addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show information of package <name>"), "name"));
     parser.addOption(QCommandLineOption(QStringList() << "u" << "upgrade", i18nc("Do not translate <path>", "Upgrade the package at <path>"), "path"));
     parser.addOption(QCommandLineOption(QStringList() << "l" << "list", i18n("List installed packages")));
-    parser.addOption(QCommandLineOption(QStringList() << "list-types", i18n("lists all known Package types that can be installed")));
+    parser.addOption(QCommandLineOption(QStringList() << "list-types", i18n("List all known package types that can be installed")));
     parser.addOption(QCommandLineOption(QStringList() << "r" << "remove", i18nc("Do not translate <name>", "Remove the package named <name>"), "name"));
     parser.addOption(QCommandLineOption(QStringList() << "p" << "packageroot", i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), "path"));
 

@@ -40,6 +40,7 @@
 #include "pluginloader.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
+#include "private/timetracker.h"
 
 using namespace Plasma;
 
@@ -54,6 +55,10 @@ Corona::Corona(QObject *parent)
     // qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
+
+#ifndef NDEBUG
+    new Plasma::TimeTracker(this);
+#endif
 }
 
 Corona::~Corona()
@@ -214,7 +219,7 @@ Containment *Corona::createContainmentDelayed(const QString &name, const QVarian
     return 0;
 }
 
-int Corona::screenForContainment(const Containment *containment) const
+int Corona::screenForContainment(const Containment *) const
 {
     return -1;
 }
@@ -437,6 +442,8 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             delete applet;
         }
         applet = containment = new Containment(q, 0, id);
+        //if it's a dummy containment, just say its ui is ready, not blocking the corona
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
 
         // we want to provide something and don't care about the failure to launch
         containment->setFormFactor(Plasma::Types::Planar);
@@ -532,13 +539,21 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         foreach (Containment *containment, containments) {
             if (!containment->isUiReady() && containment->lastScreen() < q->numScreens()) {
                 ++containmentsStarting;
-                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [ = ]() {
+                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](bool ready) {
+                    if (!ready) {
+                        return;
+                    }
+
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {
                         emit q->startupCompleted();
                     }
                 });
             }
+        }
+
+        if (containmentsStarting <= 0) {
+            emit q->startupCompleted();
         }
     }
 

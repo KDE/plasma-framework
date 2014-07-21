@@ -5,6 +5,7 @@ Name=Components Test
 Name[bs]=Test komponenti
 Name[ca]=Prova els components
 Name[de]=Komponententest
+Name[en_GB]=Components Test
 Name[es]=Prueba de componentes
 Name[fi]=Komponenttitesti
 Name[gl]=Proba dos compoñentes
@@ -24,6 +25,8 @@ Name[sr@latin]=Proba komponenata
 Name[sv]=Komponenttest
 Name[uk]=Тестування компонентів
 Name[x-test]=xxComponents Testxx
+Name[zh_CN]=组件测试
+Name[zh_TW]=組件測試
 Type=Service
 Icon=plasma
 

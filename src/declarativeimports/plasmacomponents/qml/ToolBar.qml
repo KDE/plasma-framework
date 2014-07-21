@@ -239,4 +239,6 @@ Item{
             }
         }
     }
+
+    Accessible.role: Accessible.ToolBar
 }

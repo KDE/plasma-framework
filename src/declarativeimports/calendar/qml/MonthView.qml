@@ -29,20 +29,16 @@ Item {
     property QtObject date
     property date showDate: new Date()
 
-    property real borderOpacity: 0.4
+    property alias selectedMonth: calendarBackend.monthName
+    property alias selectedYear: calendarBackend.year
 
-    property alias calendar: monthCalendar
-
-    property alias selectedMonth: monthCalendar.monthName
-    property alias selectedYear: monthCalendar.year
-  
-    property alias calendarGrid: calendarGrid
     property int mWidth: theme.mSize(theme.defaultFont).width
     property int mHeight: theme.mSize(theme.defaultFont).height
     property int borderWidth: 1
+    property real borderOpacity: 0.4
 
-    property int columns: monthCalendar.days
-    property int rows: monthCalendar.weeks
+    property int columns: calendarBackend.days
+    property int rows: calendarBackend.weeks
 
     property int cellWidth: prefCellWidth()
     property int cellHeight: prefCellHeight()
@@ -52,13 +48,12 @@ Item {
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
     property date today
 
-    anchors.margins: borderWidth
-
     function prefCellWidth() {
         return Math.min(
             Math.max(
                 mWidth * 3,
-                calendarGrid.width / (root.columns)
+                // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
+                Math.floor((calendar.width - (root.columns + 1) * borderWidth) / root.columns)
             ),
             mWidth * 100
         )
@@ -68,7 +63,8 @@ Item {
         return Math.min(
             Math.max(
                 mHeight * 1.5,
-                calendarGrid.height / (root.rows + 1)
+                // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
+                Math.floor((calendar.height - (root.rows + 1) * borderWidth) / (root.rows + 1))
             ),
             mHeight * 40
         )
@@ -88,7 +84,7 @@ Item {
     }
 
     function resetToToday() {
-        monthCalendar.resetToToday();
+        calendarBackend.resetToToday();
     }
 
     PlasmaExtras.Heading {
@@ -98,18 +94,16 @@ Item {
             top: parent.top
             left: parent.left
             right: parent.right
-            leftMargin: borderWidth
-            rightMargin: borderWidth
         }
 
         level: 1
-        text: monthCalendar.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
+        text: calendarBackend.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
         elide: Text.ElideRight
         font.capitalization: Font.Capitalize
 
         Loader {
             id: menuLoader
-            property QtObject monthCalendar: root.calendar
+            property QtObject calendarBackend: calendarBackend
         }
         MouseArea {
             id: monthMouse
@@ -129,7 +123,7 @@ Item {
     }
 
     Calendar {
-        id: monthCalendar
+        id: calendarBackend
 
         days: 7
         weeks: 6
@@ -138,18 +132,14 @@ Item {
     }
 
     DaysCalendar {
-        id: calendarGrid
+        id: calendar
 
         anchors {
             top: monthHeading.bottom
             left: parent.left
             right: parent.right
             bottom: parent.bottom
-            leftMargin: borderWidth
-            rightMargin: borderWidth
         }
-
-        borderOpacity: root.borderOpacity
 
         PlasmaComponents.Label {
             text: "◀"
@@ -158,7 +148,7 @@ Item {
             anchors {
                 top: parent.top
                 left: parent.left
-                leftMargin: units.largeSpacing / 2
+                leftMargin: Math.floor(units.largeSpacing / 2)
             }
             MouseArea {
                 id: leftmouse
@@ -166,7 +156,7 @@ Item {
                 anchors.margins: -units.largeSpacing / 3
                 hoverEnabled: true
                 onClicked: {
-                    monthCalendar.previousMonth()
+                    calendarBackend.previousMonth()
                 }
             }
         }
@@ -177,7 +167,7 @@ Item {
             anchors {
                 top: parent.top
                 right: parent.right
-                rightMargin: units.largeSpacing / 2 + calendarGrid.rightMargin
+                rightMargin: Math.floor(units.largeSpacing / 2)
             }
             MouseArea {
                 id: rightmouse
@@ -185,7 +175,7 @@ Item {
                 anchors.margins: -units.largeSpacing / 3
                 hoverEnabled: true
                 onClicked: {
-                    monthCalendar.nextMonth()
+                    calendarBackend.nextMonth()
                 }
             }
         }
@@ -207,7 +197,7 @@ Item {
             iconSource: "view-pim-calendar"
             width: height
             onClicked: {
-                monthCalendar.startDate = today();
+                calendarBackend.startDate = today();
             }
             PlasmaCore.ToolTipArea {
                 id: tool
@@ -233,7 +223,7 @@ Item {
 
         PlasmaComponents.TextField {
             id: weekField
-            text: week == 0 ? monthCalendar.currentWeek(): week
+            text: week == 0 ? calendarBackend.currentWeek(): week
             width: calendarOperations.width/10
             anchors {
                 right: parent.right

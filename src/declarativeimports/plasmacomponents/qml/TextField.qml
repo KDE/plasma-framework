@@ -350,6 +350,8 @@ FocusScope {
         passwordCharacter: "•"
         selectByMouse: true
         color: theme.viewTextColor
+        selectedTextColor: theme.viewBackgroundColor
+        selectionColor: theme.viewFocusColor
         enabled: textField.enabled
         clip: true
         focus: true
@@ -382,4 +384,9 @@ FocusScope {
             }
         }
     }
+
+    Accessible.name: placeholderText
+    Accessible.role: Accessible.EditableText
+    Accessible.readOnly: readOnly
+    Accessible.passwordEdit: echoMode == TextInput.Password || echoMode === TextInput.PasswordEchoOnEdit
 }

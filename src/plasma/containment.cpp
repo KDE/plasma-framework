@@ -90,6 +90,7 @@ Containment::Containment(const QString &packagePath, uint appletId)
 
 Containment::~Containment()
 {
+    qDeleteAll(d->localActionPlugins);
     delete d;
 }
 
@@ -281,6 +282,12 @@ void Containment::restoreContents(KConfigGroup &group)
 
         d->createApplet(plugin, QVariantList(), appId);
     }
+
+    for (Applet *applet : Containment::applets()) {
+        if (!applet->pluginInfo().isValid()) {
+            applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        }
+    }
 }
 
 Plasma::Types::ContainmentType Containment::containmentType() const
@@ -409,10 +416,10 @@ void Containment::addApplet(Applet *applet)
 
     d->applets << applet;
 
-    if (!applet->d->uiReady) {
+    if (!d->uiReady) {
         d->loadingApplets << applet;
-        if (static_cast<Applet *>(this)->d->uiReady) {
-            static_cast<Applet *>(this)->d->uiReady = false;
+        if (d->uiReady) {
+            d->uiReady = false;
             emit uiReadyChanged(false);
         }
     }
@@ -536,8 +543,7 @@ QHash<QString, ContainmentActions *> &Containment::containmentActions()
 
 bool Containment::isUiReady() const
 {
-    const Applet *a = static_cast<const Applet *>(this);
-    return a->d->uiReady && a->d->started;
+    return d->uiReady && d->appletsUiReady && Applet::d->started;
 }
 
 void Containment::setActivity(const QString &activityId)
@@ -563,13 +569,13 @@ void Containment::reactToScreenChange()
 {
     int newScreen = screen();
 
-    KConfigGroup c = config();
     if (newScreen >= 0) {
         d->lastScreen = newScreen;
+        KConfigGroup c = config();
         c.writeEntry("lastScreen", d->lastScreen);
+        emit configNeedsSaving();
     }
 
-    emit configNeedsSaving();
     emit screenChanged(newScreen);
 }
 

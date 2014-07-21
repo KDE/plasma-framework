@@ -34,6 +34,7 @@
 #include "pluginloader.h"
 
 #include "private/applet_p.h"
+#include "timetracker.h"
 
 namespace Plasma
 {
@@ -45,7 +46,9 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     formFactor(Types::Planar),
     location(Types::Floating),
     lastScreen(-1), // never had a screen
-    type(Plasma::Types::NoContainmentType)
+    type(Plasma::Types::NoContainmentType),
+    uiReady(false),
+    appletsUiReady(false)
 {
     //if the parent is an applet (i.e we are the systray)
     //we want to follow screen changed signals from the parent's containment
@@ -53,6 +56,10 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     if (appletParent) {
         QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
     }
+
+#ifndef NDEBUG
+    new TimeTracker(q);
+#endif
 }
 
 Plasma::ContainmentPrivate::~ContainmentPrivate()
@@ -157,7 +164,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
 
         // tell the applets too
         foreach (Applet *a, applets) {
-            a->setImmutability(q->immutability());
+            /*Why qMin?
+             * the applets immutability() is the maximum between internal applet immutability
+             * and the immutability of its containment.
+             * so not set higher immutability in the internal member of Applet
+             * or the applet will not be able to be unlocked properly
+             */
+            a->setImmutability(qMin(q->immutability(), a->d->immutability));
             a->updateConstraints(Types::ImmutableConstraint);
         }
     }
@@ -215,6 +228,40 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 bool ContainmentPrivate::isPanelContainment() const
 {
     return type == Plasma::Types::PanelContainment || type == Plasma::Types::CustomPanelContainment;
+}
+
+void ContainmentPrivate::setStarted()
+{
+    if (!q->Applet::d->started) {
+        q->Applet::d->started = true;
+
+        if (uiReady) {
+            emit q->uiReadyChanged(true);
+        }
+    }
+}
+
+void ContainmentPrivate::setUiReady()
+{
+    //if we are the containment and there is still some uncomplete applet, we're still incomplete
+    if (!uiReady) {
+        uiReady = true;
+        if (q->Applet::d->started && appletsUiReady && loadingApplets.isEmpty()) {
+            emit q->uiReadyChanged(true);
+        }
+    }
+}
+
+void ContainmentPrivate::appletLoaded(Applet* applet)
+{
+    loadingApplets.remove(applet);
+
+    if (loadingApplets.isEmpty() && !appletsUiReady) {
+        appletsUiReady = true;
+        if (q->Applet::d->started && uiReady) {
+            emit q->uiReadyChanged(true);
+        }
+    }
 }
 
 }
