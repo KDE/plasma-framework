@@ -68,21 +68,23 @@ public:
         }
 
         if (m_fitMode == Tile || m_fitMode == FastStretch) {
-            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
+            QString elementId = m_frameSvg->frameSvg()->actualPrefix() + FrameSvg::borderToElementId(m_border);
             m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
-            updateTexture(m_elementNativeSize, elementId);
+            updateTexture(m_elementNativeSize, elementId, false);
         }
     }
 
-    void updateTexture(const QSize &size, const QString &elementId)
+    void updateTexture(const QSize &size, const QString &elementId, bool composeOverBorder)
     {
         QImage image = m_frameSvg->frameSvg()->image(size, elementId);
+
+        QString prefix = m_frameSvg->frameSvg()->actualPrefix();
 
         //in compose over border we paint the center over the full size
         //then blend in an alpha mask generated from the corners to
         //remove the garbage left in the corners
-        if (m_border == FrameSvg::NoBorder && m_fitMode == Stretch && m_frameSvg->frameData()->composeOverBorder) {
+        if (m_border == FrameSvg::NoBorder && m_fitMode == Stretch && composeOverBorder) {
             QPixmap pixmap = QPixmap::fromImage(image);
             QPainter p(&pixmap);
             p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
@@ -94,11 +96,9 @@ public:
         setTexture(texture);
     }
 
-    void reposition(const QRect& frameGeometry)
+    void reposition(const QRect& frameGeometry, QSize& fullSize)
     {
-        FrameData* frameData = m_frameSvg->frameData();
-
-        QRect nodeRect = FrameSvgPrivate::sectionRect(frameData, m_border, frameGeometry);
+        QRect nodeRect = FrameSvg::sectionRect(m_border, frameGeometry, fullSize);
 
         //ensure we're not passing a weird rectangle to updateTexturedRectGeometry
         if(!nodeRect.isValid() || nodeRect.isEmpty())
@@ -113,9 +113,18 @@ public:
                 textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
             }
         } else if (m_fitMode == Stretch) {
+            QString prefix = m_frameSvg->frameSvg()->actualPrefix();
+            bool composeOverBorder = (m_border == FrameSvg::NoBorder) && (m_frameSvg->frameSvg()->hasElement(prefix % "hint-compose-over-border") &&
+                m_frameSvg->frameSvg()->hasElement("mask-" % prefix % "center"));
+
+            QString elementId = prefix + FrameSvg::borderToElementId(m_border);
+
+            if (composeOverBorder) {
+                nodeRect = QRect(QPoint(0,0), fullSize);
+            }
+
             //re-render the SVG at new size
-            QString elementId = m_frameSvg->actualPrefix() + FrameSvgPrivate::borderToElementId(m_border);
-            updateTexture(nodeRect.size(), elementId);
+            updateTexture(nodeRect.size(), elementId, composeOverBorder);
         } // for fast stretch, we don't have to do anything
 
         QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
@@ -323,11 +332,6 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
-    FrameData *frame = frameData();
-    if (!frame) {
-        return;
-    }
-
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
@@ -336,7 +340,8 @@ void FrameSvgItem::doUpdate()
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    bool hasOverlay = !actualPrefix().startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(actualPrefix() % "overlay");
+    QString prefix = m_frameSvg->actualPrefix();
+    bool hasOverlay = !prefix.startsWith(QStringLiteral("mask-")) && m_frameSvg->hasElement(prefix % "overlay");
     m_fastPath = !hasOverlay;
     m_textureChanged = true;
     update();
@@ -392,18 +397,14 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             oldNode = 0;
         }
 
-        FrameData* frame = frameData();
-        if (!frame) {
-            qWarning() << "no frame for" << imagePath() << prefix();
-            delete oldNode;
-            return 0;
-        }
-
         if (!oldNode) {
             oldNode = new QSGNode;
 
-            FrameItemNode::FitMode borderFitMode = frame->stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
-            FrameItemNode::FitMode centerFitMode = frame->tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
+            QString prefix = m_frameSvg->actualPrefix();
+            bool tileCenter = (m_frameSvg->hasElement("hint-tile-center") || m_frameSvg->hasElement(prefix % "hint-tile-center"));
+            bool stretchBorders = (m_frameSvg->hasElement("hint-stretch-borders") || m_frameSvg->hasElement(prefix % "hint-stretch-borders"));
+            FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
+            FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
             new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode); //needs to be de first, in case of composeOverBorder
             new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
@@ -420,10 +421,11 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         }
 
         if (m_sizeChanged) {
-            QRect geometry = m_frameSvg->d->contentGeometry(frame, QSize(width(), height()));
+            QSize frameSize(width(), height());
+            QRect geometry = m_frameSvg->contentsRect().toRect();
             for(int i = 0; i<oldNode->childCount(); ++i) {
                 FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
-                it->reposition(geometry);
+                it->reposition(geometry, frameSize);
             }
 
             m_sizeChanged = false;
@@ -466,17 +468,6 @@ void FrameSvgItem::updateDevicePixelRatio()
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
     m_textureChanged = true;
-}
-
-FrameData* FrameSvgItem::frameData() const
-{
-    //We need to do that prefix, otherwise we are fetching the requested prefix, which might be different
-    return m_frameSvg->d->frames.value(actualPrefix());
-}
-
-QString FrameSvgItem::actualPrefix() const
-{
-    return m_frameSvg->d->prefix;
 }
 
 } // Plasma namespace

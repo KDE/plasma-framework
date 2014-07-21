@@ -24,8 +24,6 @@
 #include <QDebug>
 #include <QPropertyAnimation>
 
-#include "framesvgitem.h"
-
 #include <kdeclarative/qmlobject.h>
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)

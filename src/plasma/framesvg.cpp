@@ -474,14 +474,9 @@ void FrameSvg::getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bot
 
 QRectF FrameSvg::contentsRect() const
 {
-    QSizeF size(frameSize());
-
-    if (size.isValid()) {
-        QRectF rect(QPointF(0, 0), size);
-        FrameData *frame = d->frames[d->prefix];
-
-        return rect.adjusted(frame->leftMargin, frame->topMargin,
-                             -frame->rightMargin, -frame->bottomMargin);
+    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
+    if (it != d->frames.constEnd()) {
+        return d->contentGeometry(*it, (*it)->frameSize);
     } else {
         return QRectF();
     }
@@ -814,7 +809,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     p.setRenderHint(QPainter::SmoothPixmapTransform);
 
     QRect contentRect = contentGeometry(frame, size);
-    paintCenter(p, frame, contentRect.size(), size);
+    paintCenter(p, frame, contentRect, size);
 
     paintCorner(p, frame, FrameSvg::LeftBorder|FrameSvg::TopBorder, contentRect);
     paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::TopBorder, contentRect);
@@ -831,7 +826,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight), contentRect);
 }
 
-QRect FrameSvgPrivate::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect)
+QRect FrameSvg::sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect, const QSize& fullSize)
 {
     //don't use QRect corner methods here, they have semantics that might come as unexpected.
     //prefer constructing the points explicitly. e.g. from QRect::topRight docs:
@@ -839,23 +834,23 @@ QRect FrameSvgPrivate::sectionRect(FrameData* frame, Plasma::FrameSvg::EnabledBo
 
     switch(borders) {
         case FrameSvg::NoBorder:
-            return frame->composeOverBorder ? QRect(0,0, contentRect.width()+frame->leftWidth+frame->rightWidth, contentRect.height()+frame->topHeight+frame->bottomHeight) : contentRect;
+            return contentRect;
         case FrameSvg::TopBorder:
-            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), frame->topHeight));
+            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), contentRect.top()));
         case FrameSvg::BottomBorder:
-            return QRect(QPoint(contentRect.left(), contentRect.bottom()+1), QSize(contentRect.width(), frame->bottomHeight));
+            return QRect(QPoint(contentRect.left(), contentRect.bottom()+1), QSize(contentRect.width(), fullSize.height()-contentRect.bottom()-1));
         case FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.top()), QSize(frame->leftWidth, contentRect.height()));
+            return QRect(QPoint(0, contentRect.top()), QSize(contentRect.left(), contentRect.height()));
         case FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, contentRect.top()), QSize(frame->rightWidth, contentRect.height()));
+            return QRect(QPoint(contentRect.right()+1, contentRect.top()), QSize(fullSize.width()-contentRect.right()-1, contentRect.height()));
         case FrameSvg::TopBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, 0), QSize(frame->leftWidth, frame->topHeight));
+            return QRect(QPoint(0, 0), QSize(contentRect.left(), contentRect.top()));
         case FrameSvg::TopBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, 0), QSize(frame->rightWidth, frame->topHeight));
+            return QRect(QPoint(contentRect.right()+1, 0), QSize(fullSize.width()-contentRect.right()-1, contentRect.top()));
         case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.bottom()+1), QSize(frame->leftWidth, frame->bottomHeight));
+            return QRect(QPoint(0, contentRect.bottom()+1), QSize(contentRect.left(), fullSize.height()-contentRect.bottom()-1));
         case FrameSvg::BottomBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, contentRect.bottom()+1), QSize(frame->rightWidth, frame->bottomHeight));
+            return QRect(QPoint(contentRect.right()+1, contentRect.bottom()+1), QSize(fullSize.width()-contentRect.right()-1, fullSize.height()-contentRect.bottom()-1));
         default:
             qWarning() << "unrecognized border" << borders;
             return QRect();
@@ -878,9 +873,9 @@ QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) cons
     return contentRect;
 }
 
-void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QSize& contentSize, const QSize& fullSize)
+void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize)
 {
-    if (!contentSize.isEmpty()) {
+    if (!contentRect.isEmpty()) {
         const QString centerElementId = prefix % "center";
         if (frame->tileCenter) {
             QSize centerTileSize = q->elementSize(centerElementId);
@@ -894,15 +889,14 @@ void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QSize& co
             if (frame->composeOverBorder) {
                 p.drawTiledPixmap(QRect(QPoint(0, 0), fullSize), center);
             } else {
-                p.drawTiledPixmap(QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize), center);
+                p.drawTiledPixmap(FrameSvg::sectionRect(FrameSvg::NoBorder, contentRect, fullSize), center);
             }
         } else {
             if (frame->composeOverBorder) {
                 q->paint(&p, QRect(QPoint(0, 0), fullSize),
                          centerElementId);
             } else {
-                q->paint(&p, QRect(QPoint(frame->leftWidth, frame->topHeight), contentSize),
-                         centerElementId);
+                q->paint(&p, FrameSvg::sectionRect(FrameSvg::NoBorder, contentRect, fullSize), centerElementId);
             }
         }
     }
@@ -916,10 +910,10 @@ void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QSize& co
 
 void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, const QSize& size, const QRect& contentRect) const
 {
-    QString side = prefix % borderToElementId(borders);
+    QString side = prefix % FrameSvg::borderToElementId(borders);
     if (frame->enabledBorders & borders && q->hasElement(side) && !size.isEmpty()) {
         if (frame->stretchBorders) {
-            q->paint(&p, sectionRect(frame, borders, contentRect), side);
+            q->paint(&p, FrameSvg::sectionRect(borders, contentRect, frame->frameSize), side);
         } else {
             QPixmap px(size);
             px.fill(Qt::transparent);
@@ -928,20 +922,20 @@ void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg:
             sidePainter.setCompositionMode(QPainter::CompositionMode_Source);
             q->paint(&sidePainter, QRect(QPoint(0, 0), size), side);
 
-            p.drawTiledPixmap(sectionRect(frame, borders, contentRect), px);
+            p.drawTiledPixmap(FrameSvg::sectionRect(borders, contentRect, frame->frameSize), px);
         }
     }
 }
 
 void FrameSvgPrivate::paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& contentRect) const
 {
-    QString corner = prefix % borderToElementId(border);
+    QString corner = prefix % FrameSvg::borderToElementId(border);
     if (frame->enabledBorders & border && q->hasElement(corner)) {
-        q->paint(&p, sectionRect(frame, border, contentRect), corner);
+        q->paint(&p, FrameSvg::sectionRect(border, contentRect, frame->frameSize), corner);
     }
 }
 
-QString FrameSvgPrivate::borderToElementId(FrameSvg::EnabledBorders borders)
+QString FrameSvg::borderToElementId(FrameSvg::EnabledBorders borders)
 {
     switch(borders) {
         case FrameSvg::NoBorder:
@@ -1157,6 +1151,11 @@ bool FrameData::isUsed() const
 int FrameData::refcount() const
 {
     return references.count();
+}
+
+QString FrameSvg::actualPrefix() const
+{
+    return d->prefix;
 }
 
 } // Plasma namespace

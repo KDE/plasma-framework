@@ -31,7 +31,6 @@ namespace Plasma
 {
 
 class FrameSvg;
-class FrameData;
 class SVGTextureNode;
 
 class FrameSvgItemMargins : public QObject
@@ -168,8 +167,6 @@ public:
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
     virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
-    FrameData* frameData() const;
-    QString actualPrefix() const;
 
 protected:
     virtual void componentComplete();
@@ -186,7 +183,6 @@ private Q_SLOTS:
     void updateDevicePixelRatio();
 
 private:
-
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;

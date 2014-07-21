@@ -287,10 +287,13 @@ public:
      */
     Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
+    QString actualPrefix() const;
+    static QString borderToElementId(FrameSvg::EnabledBorders borders);
+    static QRect sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect, const QSize& fullSize);
+
 protected:
     FrameSvgPrivate *const d;
     friend class FrameData;
-    friend class FrameSvgItem;
 
     Q_PRIVATE_SLOT(d, void updateSizes())
     Q_PRIVATE_SLOT(d, void updateNeeded())
