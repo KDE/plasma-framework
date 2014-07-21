@@ -287,8 +287,19 @@ public:
      */
     Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
+    /**
+     * @returns the prefix that is actually used
+     */
     QString actualPrefix() const;
+
+    /**
+     * @returns the element id name for said @p borders
+     */
     static QString borderToElementId(FrameSvg::EnabledBorders borders);
+
+    /**
+     * @returns the suggested geometry for the @p borders given a @p fullSize frame size and a @p contentRect
+     */
     static QRect sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QRect& contentRect, const QSize& fullSize);
 
 protected:
