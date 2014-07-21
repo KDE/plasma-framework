@@ -36,6 +36,7 @@ class QAction;
 class QmlAppletScript;
 class QSignalMapper;
 class QSizeF;
+class AlternativesDialog;
 
 namespace KDeclarative
 {
@@ -327,6 +328,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
     virtual void init();
 
+private Q_SLOTS:
+    void showAlternatives();
+
 private:
 
     QStringList m_actions;
@@ -337,6 +341,7 @@ private:
 
 //UI-specific members ------------------
 
+    AlternativesDialog *m_alternativesDialog;
     QString m_toolTipMainText;
     QString m_toolTipSubText;
     QVariantList m_args;

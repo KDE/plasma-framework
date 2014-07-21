@@ -10,6 +10,7 @@ endif()
 set(declarative_appletscript_SRCS
     plasmoid/declarativeappletscript.cpp
 
+    plasmoid/alternativesdialog.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/declarativeappletscript.cpp
@@ -31,6 +32,7 @@ target_link_libraries(plasma_appletscript_declarative
     KF5::XmlGui # KActionCollection
     KF5::Plasma
     KF5::PlasmaQuick
+    KF5::WindowSystem
 )
 
 

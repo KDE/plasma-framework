@@ -19,6 +19,7 @@
  */
 
 #include "appletinterface.h"
+#include "alternativesdialog.h"
 
 #include <QAction>
 #include <QDir>
@@ -53,6 +54,7 @@ Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
+      m_alternativesDialog(0),
       m_args(args),
       m_actionSignals(0),
       m_appletScriptEngine(script),
@@ -134,6 +136,29 @@ void AppletInterface::init()
 {
     if (qmlObject()->rootObject() && m_configuration) {
         return;
+    }
+
+    if (!applet()->isContainment()) {
+        QString constraint;
+        QStringList provides = applet()->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
+        if (!provides.isEmpty()) {
+            bool first = true;
+            foreach (const QString prov, provides) {
+                if (!first) {
+                    constraint += " or ";
+                    first = false;
+                }
+                constraint += "'" + prov + "' in [X-Plasma-Provides]";
+            }
+
+            KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
+            if (applets.count() > 1) {
+                m_actions << "alternatives";
+                QAction *a = new QAction(QIcon::fromTheme("preferences-desktop-default-applications"), i18n("Alternatives..."), applet());
+                applet()->actions()->addAction("alternatives", a);
+                connect(a, &QAction::triggered, this, &AppletInterface::showAlternatives);
+            }
+        }
     }
 
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
@@ -521,6 +546,16 @@ void AppletInterface::executeAction(const QString &name)
             QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
         }
     }
+}
+
+void AppletInterface::showAlternatives()
+{
+    if (!m_alternativesDialog) {
+        m_alternativesDialog = new AlternativesDialog(applet());
+    }
+
+    m_alternativesDialog->setPosition(QCursor::pos());
+    m_alternativesDialog->show();
 }
 
 #include "moc_appletinterface.cpp"
