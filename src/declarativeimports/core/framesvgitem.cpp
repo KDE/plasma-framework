@@ -28,6 +28,7 @@
 #include <QPainter>
 
 #include <plasma/private/framesvg_p.h>
+#include <plasma/private/framesvg_helpers.h>
 
 #include "svgtexturenode.h"
 
@@ -68,7 +69,7 @@ public:
         }
 
         if (m_fitMode == Tile || m_fitMode == FastStretch) {
-            QString elementId = m_frameSvg->frameSvg()->actualPrefix() + FrameSvg::borderToElementId(m_border);
+            QString elementId = m_frameSvg->frameSvg()->actualPrefix() + FrameSvgHelpers::borderToElementId(m_border);
             m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
             updateTexture(m_elementNativeSize, elementId, false);
@@ -98,7 +99,7 @@ public:
 
     void reposition(const QRect& frameGeometry, QSize& fullSize)
     {
-        QRect nodeRect = FrameSvg::sectionRect(m_border, frameGeometry, fullSize);
+        QRect nodeRect = FrameSvgHelpers::sectionRect(m_border, frameGeometry, fullSize);
 
         //ensure we're not passing a weird rectangle to updateTexturedRectGeometry
         if(!nodeRect.isValid() || nodeRect.isEmpty())
@@ -117,7 +118,7 @@ public:
             bool composeOverBorder = (m_border == FrameSvg::NoBorder) && (m_frameSvg->frameSvg()->hasElement(prefix % "hint-compose-over-border") &&
                 m_frameSvg->frameSvg()->hasElement("mask-" % prefix % "center"));
 
-            QString elementId = prefix + FrameSvg::borderToElementId(m_border);
+            QString elementId = prefix + FrameSvgHelpers::borderToElementId(m_border);
 
             if (composeOverBorder) {
                 nodeRect = QRect(QPoint(0,0), fullSize);
