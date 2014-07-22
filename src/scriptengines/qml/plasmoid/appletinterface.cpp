@@ -141,7 +141,7 @@ void AppletInterface::init()
         QStringList provides = applet()->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
         if (!provides.isEmpty()) {
             bool first = true;
-            foreach (const QString prov, provides) {
+            foreach (const QString &prov, provides) {
                 if (!first) {
                     constraint += " or ";
                     first = false;
