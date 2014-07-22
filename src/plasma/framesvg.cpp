@@ -475,9 +475,10 @@ void FrameSvg::getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bot
 
 QRectF FrameSvg::contentsRect() const
 {
-    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
-    if (it != d->frames.constEnd()) {
-        return d->contentGeometry(*it, (*it)->frameSize);
+    FrameData* frame = d->frames.value(d->prefix);
+    if (frame) {
+        QRectF rect(QPoint(0,0), frame->frameSize);
+        return rect.adjusted(frame->leftMargin, frame->topMargin, -frame->rightMargin, -frame->bottomMargin);
     } else {
         return QRectF();
     }
