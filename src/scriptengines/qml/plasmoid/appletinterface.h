@@ -36,7 +36,6 @@ class QAction;
 class QmlAppletScript;
 class QSignalMapper;
 class QSizeF;
-class AlternativesDialog;
 
 namespace KDeclarative
 {
@@ -341,7 +340,6 @@ private:
 
 //UI-specific members ------------------
 
-    AlternativesDialog *m_alternativesDialog;
     QString m_toolTipMainText;
     QString m_toolTipSubText;
     QVariantList m_args;

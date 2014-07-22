@@ -19,7 +19,6 @@
  */
 
 #include "appletinterface.h"
-#include "alternativesdialog.h"
 
 #include <QAction>
 #include <QDir>
@@ -54,7 +53,6 @@ Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
-      m_alternativesDialog(0),
       m_args(args),
       m_actionSignals(0),
       m_appletScriptEngine(script),
@@ -550,11 +548,11 @@ void AppletInterface::executeAction(const QString &name)
 
 void AppletInterface::showAlternatives()
 {
-    if (!m_alternativesDialog) {
-        m_alternativesDialog = new AlternativesDialog(applet());
+    if (!applet() || !applet()->containment() || !applet()->containment()->corona()) {
+        return;
     }
 
-    m_alternativesDialog->show();
+    QMetaObject::invokeMethod(applet()->containment()->corona(), "showAlternativesForApplet", Q_ARG(Plasma::Applet *, applet()));
 }
 
 #include "moc_appletinterface.cpp"
