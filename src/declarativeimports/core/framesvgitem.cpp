@@ -106,6 +106,12 @@ public:
             QString elementId = m_frameSvg->frameSvg()->actualPrefix() + FrameSvgHelpers::borderToElementId(m_border);
             m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
+            if (m_elementNativeSize.isEmpty()) {
+                //if the default element is empty, we can avoid the slower tiling path
+                //this also avoids a divide by 0 error
+                m_fitMode = FastStretch;
+            }
+
             updateTexture(m_elementNativeSize, elementId, false);
         }
     }
