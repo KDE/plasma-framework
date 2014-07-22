@@ -24,19 +24,32 @@
 
 #include <dialog.h>
 
+namespace KDeclarative {
+    class QmlObject;
+}
+
 //FIXME: this thing really ought to be in the shell
 class AlternativesDialog : public PlasmaQuick::Dialog
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList appletProvides READ appletProvides CONSTANT)
+    Q_PROPERTY(QString currentPlugin READ currentPlugin CONSTANT)
 
 public:
     AlternativesDialog(Plasma::Applet *applet, QQuickItem *parent = 0);
     ~AlternativesDialog();
 
+    QStringList appletProvides() const;
+    QString currentPlugin() const;
+
+    Q_INVOKABLE void loadAlternative(const QString &plugin);
+
+protected:
+    void hideEvent(QHideEvent *ev);
 
 private:
     Plasma::Applet *m_applet;
-
+    KDeclarative::QmlObject *m_qmlObj;
 };
 
 #endif
