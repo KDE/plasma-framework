@@ -51,8 +51,6 @@ class PLASMAQUICK_EXPORT ConfigView : public QQuickView
 {
     Q_OBJECT
     Q_PROPERTY(PlasmaQuick::ConfigModel *configModel READ configModel CONSTANT)
-    Q_PROPERTY(QStringList appletProvides READ appletProvides CONSTANT)
-    Q_PROPERTY(bool appletHasAlternatives READ appletHasAlternatives NOTIFY appletHasAlternativesChanged)
     Q_PROPERTY(QString appletGlobalShortcut READ appletGlobalShortcut WRITE setAppletGlobalShortcut NOTIFY appletGlobalShortcutChanged)
 
 public:
@@ -70,19 +68,13 @@ public:
     QString appletGlobalShortcut() const;
     void setAppletGlobalShortcut(const QString &shortcut);
 
-    QStringList appletProvides() const;
-    bool appletHasAlternatives() const;
-
     /**
      * @return the ConfigModel of the ConfigView
      **/
     PlasmaQuick::ConfigModel *configModel() const;
 
-    Q_INVOKABLE void loadAlternative(const QString &plugin);
-
 Q_SIGNALS:
     void appletGlobalShortcutChanged();
-    void appletHasAlternativesChanged();
 
 protected:
     void hideEvent(QHideEvent *ev);

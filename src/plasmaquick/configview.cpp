@@ -24,7 +24,6 @@
 #include "Plasma/Containment"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
-#include <kservicetypetrader.h>
 
 #include <QDebug>
 #include <QDir>
@@ -69,14 +68,12 @@ public:
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
-    bool appletHasAlternatives : 1;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     : q(view),
       applet(appl),
-      corona(0),
-      appletHasAlternatives(false)
+      corona(0)
 {
 }
 
@@ -116,7 +113,7 @@ void ConfigViewPrivate::init()
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
         q->engine()->setUrlInterceptor(interceptor);
     }
-
+   
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
@@ -128,21 +125,6 @@ void ConfigViewPrivate::init()
     } else {
         delete object;
     }
-
-    QString constraint;
-    bool first = true;
-    foreach (const QString prov, applet.data()->pluginInfo().property("X-Plasma-Provides").value<QStringList>()) {
-        if (!first) {
-            constraint += " or ";
-            first = false;
-        }
-        constraint += "'" + prov + "' in [X-Plasma-Provides]";
-    }
-
-    
-    KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
-    appletHasAlternatives = !applets.isEmpty();
-    emit q->appletHasAlternativesChanged();
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());
     q->engine()->rootContext()->setContextProperty("configDialog", q);
@@ -284,29 +266,6 @@ ConfigModel *ConfigView::configModel() const
     return d->configModel;
 }
 
-void ConfigView::loadAlternative(const QString &plugin)
-{
-    if (plugin == applet()->pluginInfo().pluginName() || applet()->isContainment()) {
-        return;
-    }
-
-    Plasma::Containment *cont = applet()->containment();
-    if (!cont) {
-        return;
-    }
-
-    QQuickItem *appletItem = applet()->property("_plasma_graphicObject").value<QQuickItem *>();
-    QQuickItem *contItem = cont->property("_plasma_graphicObject").value<QQuickItem *>();
-    if (!appletItem || !contItem) {
-        return;
-    }
-
-    //TODO: map the position to containment coordinates
-    QMetaObject::invokeMethod(contItem, "createApplet", Q_ARG(QString, plugin), Q_ARG(QVariantList, QVariantList()), Q_ARG(QPoint, appletItem->mapToItem(contItem, QPointF(0,0)).toPoint()));
-
-    applet()->destroy();
-}
-
 QString ConfigView::appletGlobalShortcut() const
 {
     if (!d->applet) {
@@ -324,16 +283,6 @@ void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
 
     d->applet.data()->setGlobalShortcut(shortcut);
     emit appletGlobalShortcutChanged();
-}
-
-QStringList ConfigView::appletProvides() const
-{
-    return d->applet.data()->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
-}
-
-bool ConfigView::appletHasAlternatives() const
-{
-    return d->appletHasAlternatives;
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
