@@ -37,6 +37,40 @@
 namespace Plasma
 {
 
+class FrameNode : public QSGNode
+{
+public:
+    FrameNode(const QString& prefix, FrameSvg* svg)
+        : QSGNode()
+        , leftWidth(0)
+        , rightWidth(0)
+        , topHeight(0)
+        , bottomHeight(0)
+    {
+        if (svg->enabledBorders() & FrameSvg::LeftBorder)
+            leftWidth = svg->elementSize(prefix % "left").width();
+        if (svg->enabledBorders() & FrameSvg::RightBorder)
+            rightWidth = svg->elementSize(prefix % "right").width();
+        if (svg->enabledBorders() & FrameSvg::TopBorder)
+            topHeight = svg->elementSize(prefix % "top").height();
+        if (svg->enabledBorders() & FrameSvg::BottomBorder)
+            bottomHeight = svg->elementSize(prefix % "bottom").height();
+    }
+
+    QRect contentsRect(const QSize& size)
+    {
+        const QSize contentSize(size.width() - leftWidth  - rightWidth, size.height() - topHeight  - bottomHeight);
+
+        return QRect(QPoint(leftWidth, topHeight), contentSize);
+    }
+
+private:
+    int leftWidth;
+    int rightWidth;
+    int topHeight;
+    int bottomHeight;
+};
+
 class FrameItemNode : public SVGTextureNode
 {
 public:
@@ -399,9 +433,9 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         }
 
         if (!oldNode) {
-            oldNode = new QSGNode;
-
             QString prefix = m_frameSvg->actualPrefix();
+            oldNode = new FrameNode(prefix, m_frameSvg);
+
             bool tileCenter = (m_frameSvg->hasElement("hint-tile-center") || m_frameSvg->hasElement(prefix % "hint-tile-center"));
             bool stretchBorders = (m_frameSvg->hasElement("hint-stretch-borders") || m_frameSvg->hasElement(prefix % "hint-stretch-borders"));
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
@@ -422,8 +456,9 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         }
 
         if (m_sizeChanged) {
+            FrameNode* frameNode = static_cast<FrameNode*>(oldNode);
             QSize frameSize(width(), height());
-            QRect geometry = m_frameSvg->contentsRect().toRect();
+            QRect geometry = frameNode->contentsRect(frameSize);
             for(int i = 0; i<oldNode->childCount(); ++i) {
                 FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
                 it->reposition(geometry, frameSize);

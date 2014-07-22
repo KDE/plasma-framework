@@ -45,9 +45,7 @@ void FrameSvgTest::margins()
 void FrameSvgTest::contentsRect()
 {
     m_frameSvg->resizeFrame(QSize(100,100));
-    QEXPECT_FAIL("", "contentsRect() is broken in master right now.", Continue);
     QCOMPARE(m_frameSvg->contentsRect(), QRectF(26, 26, 48, 48));
 }
 
 QTEST_MAIN(FrameSvgTest)
-
