@@ -57,7 +57,7 @@ public:
             bottomHeight = svg->elementSize(prefix % "bottom").height();
     }
 
-    QRect contentsRect(const QSize& size)
+    QRect contentsRect(const QSize& size) const
     {
         const QSize contentSize(size.width() - leftWidth  - rightWidth, size.height() - topHeight  - bottomHeight);
 
@@ -112,27 +112,14 @@ public:
                 m_fitMode = FastStretch;
             }
 
-            updateTexture(m_elementNativeSize, elementId, false);
+            updateTexture(m_elementNativeSize, elementId);
         }
     }
 
-    void updateTexture(const QSize &size, const QString &elementId, bool composeOverBorder)
+    void updateTexture(const QSize &size, const QString &elementId)
     {
         QImage image = m_frameSvg->frameSvg()->image(size, elementId);
 
-        QString prefix = m_frameSvg->frameSvg()->actualPrefix();
-
-        //in compose over border we paint the center over the full size
-        //then blend in an alpha mask generated from the corners to
-        //remove the garbage left in the corners
-        if (m_border == FrameSvg::NoBorder && m_fitMode == Stretch && composeOverBorder) {
-            QPixmap pixmap = QPixmap::fromImage(image);
-            QPainter p(&pixmap);
-            p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            p.drawPixmap(QRect(QPoint(0, 0), size), m_frameSvg->frameSvg()->alphaMask());
-            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-            image = pixmap.toImage();
-        }
         QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
         setTexture(texture);
     }
@@ -165,7 +152,7 @@ public:
             }
 
             //re-render the SVG at new size
-            updateTexture(nodeRect.size(), elementId, composeOverBorder);
+            updateTexture(nodeRect.size(), elementId);
         } // for fast stretch, we don't have to do anything
 
         QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
@@ -383,7 +370,9 @@ void FrameSvgItem::doUpdate()
 
     QString prefix = m_frameSvg->actualPrefix();
     bool hasOverlay = !prefix.startsWith(QStringLiteral("mask-")) && m_frameSvg->hasElement(prefix % "overlay");
-    m_fastPath = !hasOverlay;
+    bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % "hint-compose-over-border") &&
+                m_frameSvg->hasElement("mask-" % prefix % "center");
+    m_fastPath = !hasOverlay && !hasComposeOverBorder;
     m_textureChanged = true;
     update();
 }
@@ -447,7 +436,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
             FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
-            new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode); //needs to be de first, in case of composeOverBorder
+            new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode);
             new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
             new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
             new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
