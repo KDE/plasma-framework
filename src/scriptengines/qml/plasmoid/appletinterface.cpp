@@ -554,7 +554,6 @@ void AppletInterface::showAlternatives()
         m_alternativesDialog = new AlternativesDialog(applet());
     }
 
-    m_alternativesDialog->setPosition(QCursor::pos());
     m_alternativesDialog->show();
 }
 

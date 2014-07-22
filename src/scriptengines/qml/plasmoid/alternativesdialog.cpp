@@ -32,8 +32,10 @@ AlternativesDialog::AlternativesDialog(Plasma::Applet *applet, QQuickItem *paren
     : PlasmaQuick::Dialog(parent),
       m_applet(applet)
 {
+    setVisualParent(applet->property("_plasma_graphicObject").value<QQuickItem *>());
     connect(applet, &QObject::destroyed, this, &AlternativesDialog::close);
-    setLocation(Plasma::Types::Floating);
+    setLocation(applet->location());
+    setFlags(flags()|Qt::WindowStaysOnTopHint);
     //We already have the proper shellpluginloader
     Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
     //TODO: use the proper package: we must be in the corona
