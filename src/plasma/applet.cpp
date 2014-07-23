@@ -494,6 +494,12 @@ void Applet::flushPendingConstraintsEvents()
             action->setEnabled(unlocked);
         }
 
+        action = d->actions->action("alternatives");
+        if (action) {
+            action->setVisible(unlocked);
+            action->setEnabled(unlocked);
+        }
+
         action = d->actions->action("configure");
         if (action && d->hasConfigurationInterface) {
             bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");

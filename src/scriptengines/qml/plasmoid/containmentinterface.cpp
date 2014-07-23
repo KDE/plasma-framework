@@ -751,6 +751,10 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu.addAction(configureApplet);
         }
+        QAction *appletAlternatives = applet->actions()->action("alternatives");
+        if (appletAlternatives && appletAlternatives->isEnabled()) {
+            desktopMenu.addAction(appletAlternatives);
+        }
 
         QAction *runAssociatedApplication = applet->actions()->action("run associated application");
         if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {

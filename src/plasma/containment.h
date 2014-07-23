@@ -236,6 +236,11 @@ Q_SIGNALS:
     void configureRequested(Plasma::Applet *applet);
 
     /**
+     * Emitted when the user wants to chose an alternative for this applet or containment.
+     */
+    void appletAlternativesRequested(Plasma::Applet *applet);
+
+    /**
      * Emitted when the wallpaper plugin is changed
      */
     void wallpaperChanged();

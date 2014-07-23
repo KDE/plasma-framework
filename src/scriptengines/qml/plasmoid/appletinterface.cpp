@@ -136,29 +136,6 @@ void AppletInterface::init()
         return;
     }
 
-    if (!applet()->isContainment()) {
-        QString constraint;
-        QStringList provides = applet()->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
-        if (!provides.isEmpty()) {
-            bool first = true;
-            foreach (const QString &prov, provides) {
-                if (!first) {
-                    constraint += " or ";
-                    first = false;
-                }
-                constraint += "'" + prov + "' in [X-Plasma-Provides]";
-            }
-
-            KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
-            if (applets.count() > 1) {
-                m_actions << "alternatives";
-                QAction *a = new QAction(QIcon::fromTheme("preferences-desktop-default-applications"), i18n("Alternatives..."), applet());
-                applet()->actions()->addAction("alternatives", a);
-                connect(a, &QAction::triggered, this, &AppletInterface::showAlternatives);
-            }
-        }
-    }
-
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
 
     AppletQuickItem::init();
@@ -544,15 +521,6 @@ void AppletInterface::executeAction(const QString &name)
             QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
         }
     }
-}
-
-void AppletInterface::showAlternatives()
-{
-    if (!applet() || !applet()->containment() || !applet()->containment()->corona()) {
-        return;
-    }
-
-    QMetaObject::invokeMethod(applet()->containment()->corona(), "showAlternativesForApplet", Q_ARG(Plasma::Applet *, applet()));
 }
 
 #include "moc_appletinterface.cpp"

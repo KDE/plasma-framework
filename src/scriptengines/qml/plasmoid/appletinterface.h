@@ -327,9 +327,6 @@ Q_SIGNALS:
 protected Q_SLOTS:
     virtual void init();
 
-private Q_SLOTS:
-    void showAlternatives();
-
 private:
 
     QStringList m_actions;
