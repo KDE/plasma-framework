@@ -34,6 +34,7 @@
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
 #include <KConfigLoader>
+#include <KServiceTypeTrader>
 
 #include "containment.h"
 #include "corona.h"
@@ -156,6 +157,32 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
             i18nc("API or programming language the widget was written in, name of the widget",
                   "Could not create a %1 ScriptEngine for the %2 widget.",
                   api, appletDescription.name()));
+    }
+
+    if (!q->isContainment() && q->pluginInfo().isValid()) {
+        QString constraint;
+        QStringList provides = q->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
+        if (!provides.isEmpty()) {
+            bool first = true;
+            foreach (const QString &prov, provides) {
+                if (!first) {
+                    constraint += " or ";
+                    first = false;
+                }
+                constraint += "'" + prov + "' in [X-Plasma-Provides]";
+            }
+
+            KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
+            if (applets.count() > 1) {
+                QAction *a = new QAction(QIcon::fromTheme("preferences-desktop-default-applications"), i18n("Alternatives..."), q);
+                q->actions()->addAction("alternatives", a);
+                QObject::connect(a, &QAction::triggered,[=] {
+                    if (q->containment()) {
+                        emit q->containment()->appletAlternativesRequested(q);
+                    }
+                });
+            }
+        }
     }
 }
 
