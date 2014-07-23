@@ -124,7 +124,12 @@ include(KF5PlasmaMacros.cmake)
 
 
 option(BUILD_EXAMPLES "Build and install Plasma examples." OFF)
+option(BUILD_COVERAGE "Build Plasma Frameworks with gcov support" OFF)
 
+if(BUILD_COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov")
+endif()
 
 ################ create PlasmaConfig.cmake and install it ###########################
 
