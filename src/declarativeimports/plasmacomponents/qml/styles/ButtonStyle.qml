@@ -47,7 +47,7 @@ QtQuickControlStyle.ButtonStyle {
             }
         }
 
-        property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + style.padding.top + style.padding.bottom
+        property real minimumHeight: Layout.preferredHeight + style.padding.top + style.padding.bottom
         onMinimumHeightChanged: {
             if (control.minimumHeight !== undefined) {
                 style.minimumHeight = minimumHeight;
