@@ -42,6 +42,7 @@ import "styles" as Styles
  * @see http://qt-project.org/doc/qt-5/qml-qtquick-controls-button.html
  */
 QtControls.Button {
+    id: root
     /**
      * type:font
      *
@@ -50,6 +51,11 @@ QtControls.Button {
      * See also Qt documentation for font type.
      */
     property font font: theme.defaultFont
+
+    /*
+     * overrides iconsource for compatibility
+     */
+    property alias iconSource: root.iconName
 
     /**
      * Smallest width this button can be to show all the contents.
