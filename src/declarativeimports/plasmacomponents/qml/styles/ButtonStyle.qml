@@ -148,7 +148,7 @@ QtQuickControlStyle.ButtonStyle {
             opacity: 0
         }
 
-        state: control.pressed ? "pressed" : "normal"
+        state: control.pressed || control.checked ? "pressed" : "normal"
 
         states: [
             State { name: "normal" },
