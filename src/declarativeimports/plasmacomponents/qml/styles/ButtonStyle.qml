@@ -20,6 +20,7 @@
 
 import QtQuick 2.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
+import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
@@ -33,9 +34,10 @@ QtQuickControlStyle.ButtonStyle {
     property int minimumWidth
     property int minimumHeight
 
-    label: Row {
+    label: RowLayout {
         id: buttonContent
         spacing: units.smallSpacing
+        Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
 
         property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0) + (arrow.visible ? arrow.width : 0)
         onMinimumWidthChanged: {
@@ -60,9 +62,11 @@ QtQuickControlStyle.ButtonStyle {
             //in order to work also with upstream controls, grossly parse the url
             source: control.iconName || control.iconSource
             anchors.verticalCenter: parent.verticalCenter
-            width: valid ? parent.height: 0
+            Layout.minimumWidth: valid ? parent.height: 0
+            Layout.maximumWidth: Layout.minimumWidth
             visible: valid
-            height: width
+            Layout.minimumHeight: Layout.minimumWidth
+            Layout.maximumHeight: Layout.minimumWidth
             active: control.hovered
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
@@ -71,21 +75,21 @@ QtQuickControlStyle.ButtonStyle {
             id: label
             text: control.text
             font: control.font
-            width: parent.width - icon.width - parent.spacing - (arrow.visible ? arrow.width + parent.spacing : 0)
+            visible: control.text != ""
+            Layout.fillWidth: true
             height: parent.height
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-            onImplicitHeightChanged: style.labelImplicitHeight = implicitHeight
-            onImplicitWidthChanged: style.labelImplicitWidth = implicitWidth
         }
 
         PlasmaExtras.ConditionalLoader {
             id: arrow
             when: control.menu !== null
             visible: when
-            width: units.iconSizes.small
+            Layout.minimumWidth: units.iconSizes.small
+            Layout.maximumWidth: Layout.minimumWidth
             height: width
             anchors.verticalCenter: parent.verticalCenter
 
