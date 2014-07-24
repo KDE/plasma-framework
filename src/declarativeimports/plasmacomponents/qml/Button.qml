@@ -56,12 +56,12 @@ QtControls.Button {
     /**
      * Smallest width this button can be to show all the contents
      */
-    property real minimumWidth: icon.width + style.label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumWidth: 0//__style.minimumWidth
 
     /**
      * Smallest height this button can be to show all the contents
      */
-    property real minimumHeight: Math.max(units.iconSizes.small, style.label.implicitHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+    property real minimumHeight: 0//__style.minimumHeight
 
     style: Styles.ButtonStyle {}
 }

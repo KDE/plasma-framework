@@ -33,6 +33,20 @@ QtQuickControlStyle.ButtonStyle {
         id: buttonContent
         spacing: icon.valid ? units.smallSpacing : 0
 
+        property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0)
+        onMinimumWidthChanged: {
+            if (control.minimumWidth !== undefined) {
+                control.minimumWidth = minimumWidth;
+            }
+        }
+
+        property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + style.padding.top + style.padding.bottom
+        onMinimumHeightChanged: {
+            if (control.minimumHeight !== undefined) {
+                control.minimumHeight = minimumHeight
+            }
+        }
+
         PlasmaCore.IconItem {
             id: icon
             source: control.iconSource
@@ -40,7 +54,7 @@ QtQuickControlStyle.ButtonStyle {
             width: valid ? parent.height: 0
             visible: valid
             height: width
-            active: shadow.hasOverState && mouse.containsMouse
+            active: control.hovered
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
 
@@ -54,11 +68,12 @@ QtQuickControlStyle.ButtonStyle {
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+            onImplicitHeightChanged: style.labelImplicitHeight = implicitHeight
+            onImplicitWidthChanged: style.labelImplicitWidth = implicitWidth
         }
     }
 
     background: Item {
-
 
         implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, control.minimumHeight))
 
@@ -133,8 +148,8 @@ QtQuickControlStyle.ButtonStyle {
         //TODO: create on demand?
         PlasmaCore.SvgItem {
             visible: control.menu !== null
-            width: drowDownButtonWidth
-            height: drowDownButtonWidth
+            width: units.iconSizes.small
+            height: width
             anchors {
                 right: parent.right
                 rightMargin: surfaceNormal.margins.right
@@ -142,6 +157,12 @@ QtQuickControlStyle.ButtonStyle {
             }
             svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
             elementId: "down-arrow"
+        }
+        Component.onCompleted: {
+            padding.top = surfaceNormal.margins.top
+            padding.left = surfaceNormal.margins.left
+            padding.right = surfaceNormal.margins.right
+            padding.bottom = surfaceNormal.margins.bottom
         }
     }
 }
