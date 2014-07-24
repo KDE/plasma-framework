@@ -29,6 +29,9 @@ import "../private" as Private
 QtQuickControlStyle.ButtonStyle {
     id: style
 
+    property int minimumWidth
+    property int minimumHeight
+
     label: Row {
         id: buttonContent
         spacing: icon.valid ? units.smallSpacing : 0
@@ -36,6 +39,7 @@ QtQuickControlStyle.ButtonStyle {
         property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0)
         onMinimumWidthChanged: {
             if (control.minimumWidth !== undefined) {
+                style.minimumWidth = minimumWidth;
                 control.minimumWidth = minimumWidth;
             }
         }
@@ -43,7 +47,8 @@ QtQuickControlStyle.ButtonStyle {
         property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + style.padding.top + style.padding.bottom
         onMinimumHeightChanged: {
             if (control.minimumHeight !== undefined) {
-                control.minimumHeight = minimumHeight
+                style.minimumHeight = minimumHeight;
+                control.minimumHeight = minimumHeight;
             }
         }
 
@@ -81,13 +86,13 @@ QtQuickControlStyle.ButtonStyle {
 
     background: Item {
 
-        implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, control.minimumHeight))
+        implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
 
         implicitWidth: {
             if (control.text.length == 0) {
                 height;
             } else {
-                Math.max(theme.mSize(theme.defaultFont).width*12, control.minimumWidth);
+                Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
             }
         }
 

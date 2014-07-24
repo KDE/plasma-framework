@@ -52,14 +52,18 @@ QtControls.Button {
     property font font: theme.defaultFont
 
     /**
-     * Smallest width this button can be to show all the contents
+     * Smallest width this button can be to show all the contents.
+     * Compatibility with old Button control.
+     * The plasma style will update this property
      */
-    property real minimumWidth: 0//__style.minimumWidth
+    property real minimumWidth: 0
 
     /**
      * Smallest height this button can be to show all the contents
+     * Compatibility with old Button control.
+     * The plasma style will update this property
      */
-    property real minimumHeight: 0//__style.minimumHeight
+    property real minimumHeight: 0
 
     style: Styles.ButtonStyle {}
 }
