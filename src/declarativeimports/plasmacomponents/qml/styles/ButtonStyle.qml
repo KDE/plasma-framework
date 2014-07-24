@@ -22,6 +22,7 @@ import QtQuick 2.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "../private" as Private
@@ -34,9 +35,9 @@ QtQuickControlStyle.ButtonStyle {
 
     label: Row {
         id: buttonContent
-        spacing: icon.valid ? units.smallSpacing : 0
+        spacing: units.smallSpacing
 
-        property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0)
+        property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0) + (arrow.visible ? arrow.width : 0)
         onMinimumWidthChanged: {
             if (control.minimumWidth !== undefined) {
                 style.minimumWidth = minimumWidth;
@@ -73,7 +74,7 @@ QtQuickControlStyle.ButtonStyle {
             id: label
             text: control.text
             font: control.font
-            width: parent.width - icon.width - parent.spacing
+            width: parent.width - icon.width - parent.spacing - (arrow.visible ? arrow.width + parent.spacing : 0)
             height: parent.height
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
@@ -81,6 +82,24 @@ QtQuickControlStyle.ButtonStyle {
             elide: Text.ElideRight
             onImplicitHeightChanged: style.labelImplicitHeight = implicitHeight
             onImplicitWidthChanged: style.labelImplicitWidth = implicitWidth
+        }
+
+        PlasmaExtras.ConditionalLoader {
+            id: arrow
+            when: control.menu !== null
+            visible: when
+            width: units.iconSizes.small
+            height: width
+            anchors.verticalCenter: parent.verticalCenter
+
+            source: Component {
+                PlasmaCore.SvgItem {
+                    visible: control.menu !== null
+                    anchors.fill: parent
+                    svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
+                    elementId: "down-arrow"
+                }
+            }
         }
     }
 
@@ -156,19 +175,6 @@ QtQuickControlStyle.ButtonStyle {
             }
         ]
 
-        //TODO: create on demand?
-        PlasmaCore.SvgItem {
-            visible: control.menu !== null
-            width: units.iconSizes.small
-            height: width
-            anchors {
-                right: parent.right
-                rightMargin: surfaceNormal.margins.right
-                verticalCenter: parent.verticalCenter
-            }
-            svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
-            elementId: "down-arrow"
-        }
         Component.onCompleted: {
             padding.top = surfaceNormal.margins.top
             padding.left = surfaceNormal.margins.left
