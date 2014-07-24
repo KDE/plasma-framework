@@ -49,7 +49,13 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaCore.IconItem {
             id: icon
-            source: control.iconSource
+            //control.iconSource is an url: you pass a freedesktop icon,
+            //and it inteprets it as an url in the local qml file filesystem path
+            //in order to work also with upstream controls, grossly parse the url
+            source: {
+                var url = String(control.iconSource);
+                return url.substring(url.lastIndexOf("/") + 1);
+            }
             anchors.verticalCenter: parent.verticalCenter
             width: valid ? parent.height: 0
             visible: valid

@@ -51,8 +51,6 @@ QtControls.Button {
      */
     property font font: theme.defaultFont
 
-    property string iconSource: ""
-
     /**
      * Smallest width this button can be to show all the contents
      */
