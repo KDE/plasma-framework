@@ -249,6 +249,18 @@ void ShellPackage::initPackage(Plasma::Package *package)
 {
     package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/");
 
+    QStringList platform = KDeclarative::KDeclarative::runtimePlatform();
+    if (!platform.isEmpty()) {
+        QMutableStringListIterator it(platform);
+        while (it.hasNext()) {
+            it.next();
+            it.setValue("platformcontents/" + it.value());
+        }
+
+        platform.append("contents");
+        package->setContentsPrefixPaths(platform);
+    }
+
     //Directories
     package->addDirectoryDefinition("applet", "applet", i18n("Applets furniture"));
     package->addDirectoryDefinition("configuration", "configuration", i18n("Applets furniture"));
