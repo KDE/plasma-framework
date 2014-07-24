@@ -29,63 +29,19 @@
  * theme.
  */
 import QtQuick 2.1
-import org.kde.plasma.core 2.0 as PlasmaCore
-import QtQuick.Controls.Private 1.0
-import QtQuick.Controls 1.0
-import "private" as Private
+import QtQuick.Controls 1.2 as QtControls
+import "styles" as Styles
 
-
-Item {
-    id: button
-
-
-    // Commmon API
-    /**
-     * This property holds whether this button is checked or not.
-     * The button must be in the checkable state to enable users to check or
-     * uncheck it.
-     *
-     * The default value is false.
-     *
-     * @see checkable
-     */
-    property bool checked: false
-
-    /**
-     * This property holds if the button is acting like a checkable button or
-     * not.
-     *
-     * The default value is false.
-     */
-    property bool checkable: false
-
-    /**
-     * type:bool
-     * This property holds if the button is pressed or not.
-     * Read-only.
-     */
-    property alias pressed: mouse.pressed
-
-    /**
-     * type:string
-     * This property holds the text label for the button.
-     */
-    property alias text: label.text
-
-    /*! This property holds the button tooltip. */
-    property string tooltip
-
-    /**
-     * type:string
-     *
-     * This property holds the source url for the Button's icon.
-     * It can be any image from any protocol supported by the Image element, or
-     * a freedesktop-compatible icon name
-     *
-     * The default value is an empty url, which displays no icon.
-     */
-    property alias iconSource: icon.source
-
+/**
+ * The push button is perhaps the most commonly used widget in any graphical user interface.
+ * Pushing (or clicking) a button commands the computer to perform some action
+ * or answer a question. Common examples of buttons are OK, Apply, Cancel,
+ * Close, Yes, No, and Help buttons.
+ *
+ * Properties and signals are the same as QtQuickControls Button
+ * @see http://qt-project.org/doc/qt-5/qml-qtquick-controls-button.html
+ */
+QtControls.Button {
     /**
      * type:font
      *
@@ -93,198 +49,19 @@ Item {
      *
      * See also Qt documentation for font type.
      */
-    property alias font: label.font
+    property font font: theme.defaultFont
 
-    //icon + label + left margin + right margin + spacing between icon and text
+    property string iconSource: ""
+
     /**
      * Smallest width this button can be to show all the contents
      */
-    property real minimumWidth: icon.width + label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
+    property real minimumWidth: icon.width + style.label.implicitWidth + surfaceNormal.margins.left + surfaceNormal.margins.right + ((icon.valid) ? surfaceNormal.margins.left : 0)
 
     /**
      * Smallest height this button can be to show all the contents
      */
-    property real minimumHeight: Math.max(units.iconSizes.small, label.implicitHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
+    property real minimumHeight: Math.max(units.iconSizes.small, style.label.implicitHeight) + surfaceNormal.margins.top + surfaceNormal.margins.bottom
 
-    /**
-     * This signal is emitted when the button is clicked.
-     */
-    signal clicked()
-
-    implicitWidth: {
-        if (label.text.length == 0) {
-            height;
-        } else {
-            Math.max(theme.mSize(theme.defaultFont).width*12, minimumWidth);
-        }
-    }
-
-    LayoutMirroring.enabled: (Qt.application.layoutDirection === Qt.RightToLeft)
-    LayoutMirroring.childrenInherit: true
-    implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, minimumHeight))
-
-    // TODO: needs to define if there will be specific graphics for
-    //     disabled buttons
-    opacity: enabled ? 1.0 : 0.5
-
-    activeFocusOnTab: true
-
-
-    QtObject {
-        id: internal
-        property bool userPressed: false
-
-        function belongsToButtonGroup()
-        {
-            return button.parent
-                   && button.parent.hasOwnProperty("checkedButton")
-                   && button.parent.exclusive
-        }
-
-        function clickButton()
-        {
-            userPressed = false
-            if (!button.enabled) {
-                return
-            }
-
-            if ((!belongsToButtonGroup() || !button.checked) && button.checkable) {
-                button.checked = !button.checked
-            }
-
-            button.forceActiveFocus()
-            button.clicked()
-        }
-    }
-
-    Keys.onSpacePressed: internal.userPressed = true
-    Keys.onReturnPressed: internal.userPressed = true
-    Keys.onReleased: {
-        internal.userPressed = false
-        if (event.key == Qt.Key_Space ||
-            event.key == Qt.Key_Return)
-            internal.clickButton();
-    }
-
-    Private.ButtonShadow {
-        id: shadow
-        anchors.fill: parent
-        state: {
-            if (internal.userPressed || checked) {
-                return "hidden"
-            } else if (mouse.containsMouse) {
-                return "hover"
-            } else if (button.activeFocus) {
-                return "focus"
-            } else {
-                return "shadow"
-            }
-        }
-    }
-
-    // The normal button state
-    PlasmaCore.FrameSvgItem {
-        id: surfaceNormal
-
-        anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: "normal"
-    }
-
-    // The pressed state
-    PlasmaCore.FrameSvgItem {
-        id: surfacePressed
-
-        anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: "pressed"
-        opacity: 0
-    }
-
-    Row {
-        id: buttonContent
-        state: (internal.userPressed || checked) ? "pressed" : "normal"
-        spacing: icon.valid ? surfaceNormal.margins.left : 0
-
-        states: [
-            State { name: "normal" },
-            State { name: "pressed"
-                    PropertyChanges {
-                        target: surfaceNormal
-                        opacity: 0
-                    }
-                    PropertyChanges {
-                        target: surfacePressed
-                        opacity: 1
-                    }
-            }
-        ]
-        transitions: [
-            Transition {
-                to: "normal"
-                // Cross fade from pressed to normal
-                ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: units.shortDuration * 2 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: units.shortDuration * 2 }
-                }
-            }
-        ]
-
-        anchors {
-            fill: parent
-            leftMargin: surfaceNormal.margins.left
-            topMargin: surfaceNormal.margins.top
-            rightMargin: surfaceNormal.margins.right
-            bottomMargin: surfaceNormal.margins.bottom
-        }
-
-        PlasmaCore.IconItem {
-            id: icon
-            anchors.verticalCenter: parent.verticalCenter
-            width: valid? parent.height: 0
-            height: width
-            active: shadow.hasOverState && mouse.containsMouse
-            colorGroup: PlasmaCore.Theme.ButtonColorGroup
-        }
-
-        Label {
-            id: label
-            width: parent.width - icon.width - parent.spacing
-            height: parent.height
-            color: theme.buttonTextColor
-            horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
-    }
-
-    MouseArea {
-        id: mouse
-
-        anchors.fill: parent
-        hoverEnabled: true
-        onPressed: internal.userPressed = true
-        onReleased: internal.userPressed = false
-        onCanceled: {
-            internal.userPressed = false
-            Tooltip.hideText()
-        }
-        onClicked: internal.clickButton()
-        onExited: Tooltip.hideText()
-
-        Timer {
-            interval: 1000
-            running: mouse.containsMouse && !pressed && tooltip.length
-            onTriggered: Tooltip.showText(mouse, Qt.point(mouse.mouseX, mouse.mouseY), tooltip)
-        }
-    }
-
-    Accessible.role: Accessible.Button
-    Accessible.name: text
-    Accessible.description: tooltip
-    Accessible.checkable: checkable
-    Accessible.checked: checked
-    function accessiblePressAction() {
-        internal.clickButton()
-    }
+    style: Styles.ButtonStyle {}
 }
