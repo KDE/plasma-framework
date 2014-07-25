@@ -159,7 +159,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
 
-        QSGTexture *texture = window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas);
+        QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
         if (m_smooth) {
             texture->setFiltering(QSGTexture::Linear);
         }

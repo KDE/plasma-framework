@@ -245,7 +245,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         if (!textureNode || m_textureChanged) {
             delete oldNode;
             textureNode = new Plasma::SVGTextureNode;
-            textureNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+            textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage())));
             m_sizeChanged = true;
             m_textureChanged = false;
         }

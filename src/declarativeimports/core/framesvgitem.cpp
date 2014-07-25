@@ -37,6 +37,21 @@
 namespace Plasma
 {
 
+typedef QHash<qint64, QWeakPointer<QSGTexture> > TexturesCache;
+Q_GLOBAL_STATIC(TexturesCache, s_cache)
+
+QSharedPointer<QSGTexture> loadTexture(QQuickWindow *window, const QImage &image)
+{
+    qint64 id = image.cacheKey();
+    QSharedPointer<QSGTexture> texture = s_cache->value(id).toStrongRef();
+    if (!texture) {
+        auto cleanAndDelete = [id](QSGTexture* texture) { s_cache->remove(id); delete texture; };
+        texture = QSharedPointer<QSGTexture>(window->createTextureFromImage(image), cleanAndDelete);
+        s_cache->insert(id, texture.toWeakRef());
+    }
+    return texture;
+}
+
 class FrameNode : public QSGNode
 {
 public:
@@ -118,10 +133,7 @@ public:
 
     void updateTexture(const QSize &size, const QString &elementId)
     {
-        QImage image = m_frameSvg->frameSvg()->image(size, elementId);
-
-        QSGTexture *texture = m_frameSvg->window()->createTextureFromImage(image);
-        setTexture(texture);
+        setTexture(loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId)));
     }
 
     void reposition(const QRect& frameGeometry, QSize& fullSize)
@@ -475,7 +487,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             QImage image = m_frameSvg->framePixmap().toImage();
             QSGTexture *texture = window()->createTextureFromImage(image);
             texture->setFiltering(QSGTexture::Nearest);
-            textureNode->setTexture(texture);
+            textureNode->setTexture(QSharedPointer<QSGTexture>(texture));
             textureNode->setRect(0, 0, width(), height());
 
             m_textureChanged = false;

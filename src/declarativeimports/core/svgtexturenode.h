@@ -38,13 +38,13 @@ public:
      * Set the current texture
      * the object takes ownership of the texture
      */
-    void setTexture(QSGTexture *texture)
+    void setTexture(QSharedPointer<QSGTexture> texture)
     {
-        m_texture.reset(texture);
-        QSGSimpleTextureNode::setTexture(texture);
+        m_texture = texture;
+        QSGSimpleTextureNode::setTexture(texture.data());
     }
 private:
-    QScopedPointer<QSGTexture> m_texture;
+    QSharedPointer<QSGTexture> m_texture;
 };
 
 }
