@@ -57,9 +57,6 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaCore.IconItem {
             id: icon
-            //control.iconSource is an url: you pass a freedesktop icon,
-            //and it inteprets it as an url in the local qml file filesystem path
-            //in order to work also with upstream controls, grossly parse the url
             source: control.iconName || control.iconSource
             anchors.verticalCenter: parent.verticalCenter
             Layout.minimumWidth: valid ? parent.height: 0
@@ -73,7 +70,7 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaComponents.Label {
             id: label
-            Layout.minimumWidth: Math.min(implicitWidth, theme.mSize(theme.defaultFont).width * 10)
+            Layout.minimumWidth: implicitWidth
             text: control.text
             font: control.font
             visible: control.text != ""
