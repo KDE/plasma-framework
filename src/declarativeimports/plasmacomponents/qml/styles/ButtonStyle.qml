@@ -90,8 +90,8 @@ QtQuickControlStyle.ButtonStyle {
             visible: when
             Layout.minimumWidth: units.iconSizes.small
             Layout.maximumWidth: Layout.minimumWidth
+            Layout.alignment: Qt.AlignVCenter
             height: width
-            anchors.verticalCenter: parent.verticalCenter
 
             source: Component {
                 PlasmaCore.SvgItem {

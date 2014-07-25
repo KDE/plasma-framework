@@ -94,6 +94,7 @@ void IconItem::setSource(const QVariant &source)
         if (source.toString().isEmpty()) {
             delete m_svgIcon;
             m_svgIcon = 0;
+            m_loadPixmapTimer.start();
             emit validChanged();
             return;
         }
