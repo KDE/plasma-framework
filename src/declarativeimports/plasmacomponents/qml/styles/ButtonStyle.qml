@@ -95,7 +95,10 @@ QtQuickControlStyle.ButtonStyle {
                 PlasmaCore.SvgItem {
                     visible: control.menu !== null
                     anchors.fill: parent
-                    svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
+                    svg: PlasmaCore.Svg {
+                        imagePath: "widgets/arrows"
+                        colorGroup: PlasmaCore.Theme.ButtonColorGroup
+                    }
                     elementId: "down-arrow"
                 }
             }

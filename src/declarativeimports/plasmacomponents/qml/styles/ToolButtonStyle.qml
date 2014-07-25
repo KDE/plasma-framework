@@ -65,7 +65,7 @@ QtQuickControlStyle.ButtonStyle {
             Layout.minimumHeight: Layout.minimumWidth
             Layout.maximumHeight: Layout.minimumWidth
             active: control.hovered
-            colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
         }
 
         PlasmaComponents.Label {
@@ -76,7 +76,7 @@ QtQuickControlStyle.ButtonStyle {
             visible: control.text != ""
             Layout.fillWidth: true
             height: parent.height
-            color: theme.buttonTextColor
+            color: control.hovered || !control.flat ? theme.buttonTextColor : theme.textColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
@@ -95,7 +95,10 @@ QtQuickControlStyle.ButtonStyle {
                 PlasmaCore.SvgItem {
                     visible: control.menu !== null
                     anchors.fill: parent
-                    svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
+                    svg: PlasmaCore.Svg {
+                        imagePath: "widgets/arrows"
+                        colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                    }
                     elementId: "down-arrow"
                 }
             }
