@@ -114,8 +114,6 @@ QtQuickControlStyle.ButtonStyle {
             }
         }
 
-        opacity: enabled ? 1.0 : 0.5
-
         Private.ButtonShadow {
             anchors.fill: parent
             state: {
@@ -149,10 +147,29 @@ QtQuickControlStyle.ButtonStyle {
             opacity: 0
         }
 
-        state: control.pressed || control.checked ? "pressed" : "normal"
+        state: (control.pressed || control.checked ? "pressed" : (control.hovered ? "hover" : "normal"))
 
         states: [
-            State { name: "normal" },
+            State { name: "normal"
+                PropertyChanges {
+                    target: surfaceNormal
+                    opacity: control.flat ? 0 : 1
+                }
+                PropertyChanges {
+                    target: surfacePressed
+                    opacity: 0
+                }
+            },
+            State { name: "hover"
+                PropertyChanges {
+                    target: surfaceNormal
+                    opacity: 1
+                }
+                PropertyChanges {
+                    target: surfacePressed
+                    opacity: 0
+                }
+            },
             State { name: "pressed"
                     PropertyChanges {
                         target: surfaceNormal
@@ -167,11 +184,10 @@ QtQuickControlStyle.ButtonStyle {
 
         transitions: [
             Transition {
-                to: "normal"
                 //Cross fade from pressed to normal
                 ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; duration: 100 }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; duration: 100 }
                 }
             }
         ]
