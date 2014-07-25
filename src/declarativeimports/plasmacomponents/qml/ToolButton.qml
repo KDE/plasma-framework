@@ -25,16 +25,38 @@ import "styles" as Styles
 /**
  * A plasma theme based toolbutton.
  */
-Button {
+QtControls.ToolButton {
     id: button
 
-    // Plasma extensiuons
-    property QtObject defaultAction
+    /**
+     * type:font
+     *
+     * This property holds the font used by the button label.
+     *
+     * See also Qt documentation for font type.
+     */
+    property font font: theme.defaultFont
 
-    
+    /*
+     * overrides iconsource for compatibility
+     */
+    property alias iconSource: button.iconName
+
+    /**
+     * Smallest width this button can be to show all the contents.
+     * Compatibility with old Button control.
+     * The plasma style will update this property
+     */
+    property real minimumWidth: 0
+
+    /**
+     * Smallest height this button can be to show all the contents
+     * Compatibility with old Button control.
+     * The plasma style will update this property
+     */
+    property real minimumHeight: 0
+
     property bool flat: true
-
-    enabled: defaultAction == undefined || defaultAction.enabled
 
     style: Styles.ToolButtonStyle {}
 }
