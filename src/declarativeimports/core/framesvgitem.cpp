@@ -154,14 +154,8 @@ public:
             }
         } else if (m_fitMode == Stretch) {
             QString prefix = m_frameSvg->frameSvg()->actualPrefix();
-            bool composeOverBorder = (m_border == FrameSvg::NoBorder) && (m_frameSvg->frameSvg()->hasElement(prefix % "hint-compose-over-border") &&
-                m_frameSvg->frameSvg()->hasElement("mask-" % prefix % "center"));
 
             QString elementId = prefix + FrameSvgHelpers::borderToElementId(m_border);
-
-            if (composeOverBorder) {
-                nodeRect = QRect(QPoint(0,0), fullSize);
-            }
 
             //re-render the SVG at new size
             updateTexture(nodeRect.size(), elementId);
@@ -386,6 +380,7 @@ void FrameSvgItem::doUpdate()
                 m_frameSvg->hasElement("mask-" % prefix % "center");
     m_fastPath = !hasOverlay && !hasComposeOverBorder;
     m_textureChanged = true;
+
     update();
 }
 
