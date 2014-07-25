@@ -39,7 +39,7 @@ QtQuickControlStyle.ButtonStyle {
         spacing: units.smallSpacing
         Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
 
-        property real minimumWidth: icon.width + label.implicitWidth + style.padding.left + style.padding.right + ((icon.valid) ? style.padding.left : 0) + (arrow.visible ? arrow.width : 0)
+        property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
         onMinimumWidthChanged: {
             if (control.minimumWidth !== undefined) {
                 style.minimumWidth = minimumWidth;
@@ -73,6 +73,7 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaComponents.Label {
             id: label
+            Layout.minimumWidth: Math.min(implicitWidth, theme.mSize(theme.defaultFont).width * 10)
             text: control.text
             font: control.font
             visible: control.text != ""
