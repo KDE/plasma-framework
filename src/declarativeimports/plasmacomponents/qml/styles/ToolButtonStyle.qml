@@ -116,10 +116,10 @@ QtQuickControlStyle.ButtonStyle {
             id: roundButtonDelegate
             anchors.fill: parent
             property QtObject margins: QtObject {
-                property int left: delegate.width/8
-                property int top: delegate.width/8
-                property int right: delegate.width/8
-                property int bottom: delegate.width/8
+                property int left: control.width/8
+                property int top: control.width/8
+                property int right: control.width/8
+                property int bottom: control.width/8
             }
             property alias hasOverState: roundShadow.hasOverState
             Private.RoundShadow {
@@ -162,6 +162,7 @@ QtQuickControlStyle.ButtonStyle {
     Component {
         id: buttonComponent
         Item {
+            id: buttonSurface
             implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
 
             implicitWidth: {
@@ -171,8 +172,19 @@ QtQuickControlStyle.ButtonStyle {
                     Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
                 }
             }
+            Connections {
+                target: control
+                onHoveredChanged: {
+                    if (control.hovered) {
+                        button.z += 2
+                    } else {
+                        button.z -= 2
+                    }
+                }
+            }
 
             Private.ButtonShadow {
+                id: shadow
                 anchors.fill: parent
                 state: {
                     if (control.pressed) {
@@ -195,6 +207,56 @@ QtQuickControlStyle.ButtonStyle {
                 anchors.fill: parent
                 imagePath: "widgets/button"
                 prefix: "normal"
+
+                enabledBorders: {
+                    if (control.flat || !control.parent ||
+                        control.parent.width < control.parent.implicitWidth ||
+                        control.parent.checkedButton === undefined ||
+                        !bordersSvg.hasElement("pressed-hint-compose-over-border")) {
+                        if (shadows !== null) {
+                            shadows.destroy()
+                        }
+                        return "AllBorders"
+                    }
+
+                    var borders = new Array()
+                    if (control.x == 0) {
+                        borders.push("LeftBorder")
+                        shadow.anchors.leftMargin = 0;
+                    } else {
+                        shadow.anchors.leftMargin = -1;
+                    }
+                    if (control.y == 0) {
+                        borders.push("TopBorder")
+                        shadow.anchors.topMargin = 0;
+                    } else {
+                        shadow.anchors.topMargin = -1;
+                    }
+                    if (control.x + control.width >= control.parent.width) {
+                        borders.push("RightBorder")
+                        shadow.anchors.rightMargin = 0;
+                    } else {
+                        shadow.anchors.rightMargin = -1;
+                    }
+                    if (control.y + control.height >= control.parent.height) {
+                        borders.push("BottomBorder")
+                        shadow.anchors.bottomMargin = 0;
+                    } else {
+                        shadow.anchors.bottomMargin = -1;
+                    }
+
+                    if (shadows === null) {
+                        shadows = shadowsComponent.createObject(buttonSurface)
+                    }
+
+                    return borders.join("|")
+                }
+
+                PlasmaCore.Svg {
+                    id: bordersSvg
+                    imagePath: "widgets/button"
+                }
+
             }
 
             PlasmaCore.FrameSvgItem {
@@ -202,7 +264,69 @@ QtQuickControlStyle.ButtonStyle {
                 anchors.fill: parent
                 imagePath: "widgets/button"
                 prefix: "pressed"
+                enabledBorders: surfaceNormal.enabledBorders
                 opacity: 0
+            }
+
+            property Item shadows
+            Component {
+                id: shadowsComponent
+                Item {
+                    anchors.fill: parent
+
+                    PlasmaCore.SvgItem {
+                        svg: bordersSvg
+                        width: naturalSize.width
+                        elementId: (buttonSurface.state == "pressed" ? surfacePressed.prefix : surfaceNormal.prefix) + "-left"
+                        visible: button.x > 0
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: 1
+                            leftMargin: -1
+                        }
+                    }
+                    PlasmaCore.SvgItem {
+                        svg: bordersSvg
+                        width: naturalSize.width
+                        elementId: (buttonSurface.state == "pressed" ? surfacePressed.prefix : surfaceNormal.prefix) + "-right"
+                        visible: button.x + button.width < button.parent.width
+                        anchors {
+                            right: parent.right
+                            top: parent.top
+                            bottom: parent.bottom
+                            margins: 1
+                            rightMargin: -1
+                        }
+                    }
+                    PlasmaCore.SvgItem {
+                        svg: bordersSvg
+                        height: naturalSize.height
+                        elementId: (buttonSurface.state == "pressed" ? surfacePressed.prefix : surfaceNormal.prefix) + "-top"
+                        visible: button.y > 0
+                        anchors {
+                            left: parent.left
+                            top: parent.top
+                            right: parent.right
+                            margins: 1
+                            topMargin: -1
+                        }
+                    }
+                    PlasmaCore.SvgItem {
+                        svg: bordersSvg
+                        height: naturalSize.height
+                        elementId: (buttonSurface.state == "pressed" ? surfacePressed.prefix : surfaceNormal.prefix) + "-bottom"
+                        visible: button.y + button.height < button.parent.height
+                        anchors {
+                            left: parent.left
+                            right: parent.right
+                            bottom: parent.bottom
+                            margins: 1
+                            bottomMargin: -1
+                        }
+                    }
+                }
             }
 
             state: (control.pressed || control.checked ? "pressed" : (control.hovered ? "hover" : "normal"))
