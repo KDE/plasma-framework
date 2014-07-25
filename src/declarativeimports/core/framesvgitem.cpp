@@ -480,9 +480,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
 
         if ((m_textureChanged || m_sizeChanged) || textureNode->texture()->textureSize() != m_frameSvg->size()) {
             QImage image = m_frameSvg->framePixmap().toImage();
-            QSGTexture *texture = window()->createTextureFromImage(image);
-            texture->setFiltering(QSGTexture::Nearest);
-            textureNode->setTexture(QSharedPointer<QSGTexture>(texture));
+            textureNode->setTexture(loadTexture(window(), image));
             textureNode->setRect(0, 0, width(), height());
 
             m_textureChanged = false;
