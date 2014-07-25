@@ -91,6 +91,14 @@ void IconItem::setSource(const QVariant &source)
         m_svgIcon = 0;
 
     } else if (source.canConvert<QString>()) {
+        if (source.toString().isEmpty()) {
+            delete m_svgIcon;
+            m_svgIcon = 0;
+            m_loadPixmapTimer.start();
+            emit validChanged();
+            return;
+        }
+
         if (!m_svgIcon) {
             m_svgIcon = new Plasma::Svg(this);
             m_svgIcon->setColorGroup(m_colorGroup);
