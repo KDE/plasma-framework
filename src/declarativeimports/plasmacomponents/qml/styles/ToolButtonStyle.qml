@@ -102,101 +102,160 @@ QtQuickControlStyle.ButtonStyle {
         }
     }
 
-    background: Item {
+    background: {
+        if (control.text.length == 0 && control.width == control.height && (control.parent && control.parent.checkedButton === undefined) && !control.flat) {
+            return roundButtonComponent
+        } else {
+            return buttonComponent
+        }
+    }
 
-        implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
+    Component {
+        id: roundButtonComponent
+        Item {
+            id: roundButtonDelegate
+            anchors.fill: parent
+            property QtObject margins: QtObject {
+                property int left: delegate.width/8
+                property int top: delegate.width/8
+                property int right: delegate.width/8
+                property int bottom: delegate.width/8
+            }
+            property alias hasOverState: roundShadow.hasOverState
+            Private.RoundShadow {
+                id: roundShadow
+                visible: !flat
+                anchors.fill: parent
+                state: {
+                    if (control.pressed) {
+                        return "hidden"
+                    } else if (control.hovered) {
+                        return "hover"
+                    } else if (control.activeFocus) {
+                        return "focus"
+                    } else {
+                        return "shadow"
+                    }
+                }
+            }
 
-        implicitWidth: {
-            if (control.text.length == 0) {
-                height;
-            } else {
-                Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
+            PlasmaCore.Svg {
+                id: buttonSvg
+                imagePath: "widgets/actionbutton"
+            }
+
+            PlasmaCore.SvgItem {
+                id: buttonItem
+                svg: buttonSvg
+                elementId: (control.pressed || control.checked) ? "pressed" : "normal"
+                width: Math.floor(parent.height/2) * 2
+                height: width
+                //internal: if there is no hover status, don't paint on mouse over in touchscreens
+                opacity: (control.pressed || control.checked || !control.flat || (roundShadow.hasOverState && mouse.containsMouse)) ? 1 : 0
+                Behavior on opacity {
+                    PropertyAnimation { duration: units.longDuration }
+                }
             }
         }
+    }
 
-        Private.ButtonShadow {
-            anchors.fill: parent
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (control.activeFocus) {
-                    return "focus"
+    Component {
+        id: buttonComponent
+        Item {
+            implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
+
+            implicitWidth: {
+                if (control.text.length == 0) {
+                    height;
                 } else {
-                    return "shadow"
+                    Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
                 }
             }
-        }
 
-
-        //This code is duplicated here and Button and ToolButton
-        //maybe we can make an AbstractButton class?
-        PlasmaCore.FrameSvgItem {
-            id: surfaceNormal
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: "normal"
-        }
-
-        PlasmaCore.FrameSvgItem {
-            id: surfacePressed
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: "pressed"
-            opacity: 0
-        }
-
-        state: (control.pressed || control.checked ? "pressed" : (control.hovered ? "hover" : "normal"))
-
-        states: [
-            State { name: "normal"
-                PropertyChanges {
-                    target: surfaceNormal
-                    opacity: control.flat ? 0 : 1
+            Private.ButtonShadow {
+                anchors.fill: parent
+                state: {
+                    if (control.pressed) {
+                        return "hidden"
+                    } else if (control.hovered) {
+                        return "hover"
+                    } else if (control.activeFocus) {
+                        return "focus"
+                    } else {
+                        return "shadow"
+                    }
                 }
-                PropertyChanges {
-                    target: surfacePressed
-                    opacity: 0
-                }
-            },
-            State { name: "hover"
-                PropertyChanges {
-                    target: surfaceNormal
-                    opacity: 1
-                }
-                PropertyChanges {
-                    target: surfacePressed
-                    opacity: 0
-                }
-            },
-            State { name: "pressed"
+            }
+
+
+            //This code is duplicated here and Button and ToolButton
+            //maybe we can make an AbstractButton class?
+            PlasmaCore.FrameSvgItem {
+                id: surfaceNormal
+                anchors.fill: parent
+                imagePath: "widgets/button"
+                prefix: "normal"
+            }
+
+            PlasmaCore.FrameSvgItem {
+                id: surfacePressed
+                anchors.fill: parent
+                imagePath: "widgets/button"
+                prefix: "pressed"
+                opacity: 0
+            }
+
+            state: (control.pressed || control.checked ? "pressed" : (control.hovered ? "hover" : "normal"))
+
+            states: [
+                State { name: "normal"
                     PropertyChanges {
                         target: surfaceNormal
-                        opacity: 0
+                        opacity: control.flat ? 0 : 1
                     }
                     PropertyChanges {
                         target: surfacePressed
+                        opacity: 0
+                    }
+                },
+                State { name: "hover"
+                    PropertyChanges {
+                        target: surfaceNormal
                         opacity: 1
                     }
-            }
-        ]
-
-        transitions: [
-            Transition {
-                //Cross fade from pressed to normal
-                ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; duration: 100 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; duration: 100 }
+                    PropertyChanges {
+                        target: surfacePressed
+                        opacity: 0
+                    }
+                },
+                State { name: "pressed"
+                        PropertyChanges {
+                            target: surfaceNormal
+                            opacity: 0
+                        }
+                        PropertyChanges {
+                            target: surfacePressed
+                            opacity: 1
+                        }
                 }
-            }
-        ]
+            ]
 
-        Component.onCompleted: {
-            padding.top = surfaceNormal.margins.top
-            padding.left = surfaceNormal.margins.left
-            padding.right = surfaceNormal.margins.right
-            padding.bottom = surfaceNormal.margins.bottom
+            transitions: [
+                Transition {
+                    //Cross fade from pressed to normal
+                    ParallelAnimation {
+                        NumberAnimation { target: surfaceNormal; property: "opacity"; duration: 100 }
+                        NumberAnimation { target: surfacePressed; property: "opacity"; duration: 100 }
+                    }
+                }
+            ]
+
+            Component.onCompleted: {
+                padding.top = surfaceNormal.margins.top
+                padding.left = surfaceNormal.margins.left
+                padding.right = surfaceNormal.margins.right
+                padding.bottom = surfaceNormal.margins.bottom
+            }
         }
     }
 }
