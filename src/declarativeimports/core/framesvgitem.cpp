@@ -37,17 +37,23 @@
 namespace Plasma
 {
 
-typedef QHash<qint64, QWeakPointer<QSGTexture> > TexturesCache;
+typedef QHash<qint64, QHash<QWindow*, QWeakPointer<QSGTexture> > > TexturesCache;
 Q_GLOBAL_STATIC(TexturesCache, s_cache)
 
 QSharedPointer<QSGTexture> loadTexture(QQuickWindow *window, const QImage &image)
 {
     qint64 id = image.cacheKey();
-    QSharedPointer<QSGTexture> texture = s_cache->value(id).toStrongRef();
+    QSharedPointer<QSGTexture> texture = s_cache->value(id).value(window).toStrongRef();
     if (!texture) {
-        auto cleanAndDelete = [id](QSGTexture* texture) { s_cache->remove(id); delete texture; };
+        auto cleanAndDelete = [window, id](QSGTexture* texture) {
+            QHash<QWindow*, QWeakPointer<QSGTexture> >& textures = (*s_cache)[id];
+            textures.remove(window);
+            if (textures.isEmpty())
+                s_cache->remove(id);
+            delete texture;
+        };
         texture = QSharedPointer<QSGTexture>(window->createTextureFromImage(image), cleanAndDelete);
-        s_cache->insert(id, texture.toWeakRef());
+        (*s_cache)[id][window] = texture.toWeakRef();
     }
     return texture;
 }
