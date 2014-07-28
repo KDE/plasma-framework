@@ -95,7 +95,10 @@ QtQuickControlStyle.ButtonStyle {
                 PlasmaCore.SvgItem {
                     visible: control.menu !== null
                     anchors.fill: parent
-                    svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
+                    svg: PlasmaCore.Svg {
+                        imagePath: "widgets/arrows"
+                        colorGroup: PlasmaCore.Theme.ButtonColorGroup
+                    }
                     elementId: "down-arrow"
                 }
             }
@@ -113,6 +116,8 @@ QtQuickControlStyle.ButtonStyle {
                 Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
             }
         }
+
+        opacity: enabled ? 1.0 : 0.5
 
         Private.ButtonShadow {
             anchors.fill: parent

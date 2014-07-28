@@ -117,7 +117,10 @@ QtQuickControlStyle.ComboBoxStyle {
                     rightMargin: surfaceNormal.margins.right
                     verticalCenter: parent.verticalCenter
                 }
-                svg: PlasmaCore.Svg { imagePath: "widgets/arrows" }
+                svg: PlasmaCore.Svg {
+                    imagePath: "widgets/arrows"
+                    colorGroup: PlasmaCore.Theme.ButtonColorGroup
+                }
                 elementId: "down-arrow"
             }
 
