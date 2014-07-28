@@ -182,6 +182,26 @@ Containment *Corona::containmentForScreen(int screen) const
     return 0;
 }
 
+Containment *Corona::containmentForScreen(int screen,
+                                          const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
+{
+    Containment *containment = containmentForScreen(screen);
+    if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
+        // screen requests are allowed to bypass immutability
+        if (screen >= 0 && screen < numScreens()) {
+            Plasma::Types::ImmutabilityType imm = d->immutability;
+            d->immutability = Types::Mutable;
+            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
+            if (containment) {
+               // containment->setScreen(screen);
+            }
+            d->immutability = imm;
+        }
+    }
+
+    return containment;
+}
+
 QList<Containment *> Corona::containments() const
 {
     return d->containments;
