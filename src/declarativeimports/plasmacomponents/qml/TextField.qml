@@ -33,18 +33,43 @@ QtControls.TextField {
 
 
     //Plasma api
-    /**
-     * type: string
-     *
-     * Allows to set a custom character for password fields
-     */
-    property string passwordCharacter//: textField.passwordCharacter
 
     /**
      * Whether the button to clear the text from TextField is visible.
      */
     property bool clearButtonShown: false
 
+    //Deprecated/unsupported api
+    /**
+     * type: string
+     *
+     * Allows to set a custom character for password fields
+     * @warning Not implemented in Plasma components.
+     */
+    property string passwordCharacter
+
+    /**
+     * Whether the text field is highlighted or not
+     *
+     * If it is true then the problematic lines will be highlighted.
+     *
+     * @warning Not implemented in Plasma components.
+     */
+    property bool errorHighlight: false // TODO
+
+    /**
+     * DEPRECATED
+     */
+    function positionAt(pos) {
+        print("DEPRECATED function");
+    }
+
+    /**
+     * DEPRECATED
+     */
+    function positionToRectangle(pos) {
+        print("DEPRECATED function");
+    }
 
 
     style: Styles.TextFieldStyle {}
