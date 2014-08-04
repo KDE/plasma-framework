@@ -49,7 +49,8 @@ QtQuickControlStyle.TextFieldStyle {
         Component.onCompleted: {
             root.padding.left = base.margins.left
             root.padding.top = base.margins.top
-            root.padding.right = base.margins.right
+            //TODO: if QtControls gets a component for this, use it instead of this hardcoded heuristic
+            root.padding.right = base.margins.right + (control.clearButtonShown ? Math.max(control.parent.height*0.8, units.iconSizes.small)+units.smallSpacing : 0)
             root.padding.bottom = base.margins.bottom
         }
     }
