@@ -306,6 +306,13 @@ Q_SIGNALS:
      */
     void activated();
 
+    /**
+     * Emitted just before the contextual actions are about to show
+     * For instance just before the context menu containing the actions
+     * added with setAction() is shown
+     */
+    void contextualActionsAboutToShow();
+
 //PROPERTY change notifiers--------------
     void iconChanged();
     void titleChanged();

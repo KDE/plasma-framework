@@ -695,6 +695,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
             if (ai->contains(ai->mapFromItem(this, event->posF()))) {
                 applet = ai->applet();
+                emit ai->contextualActionsAboutToShow();
                 break;
             } else {
                 ai = 0;
@@ -710,6 +711,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     if (applet) {
         addAppletActions(desktopMenu, applet, event);
     } else {
+        emit contextualActionsAboutToShow();
         addContainmentActions(desktopMenu, event);
     }
 
