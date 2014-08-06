@@ -198,6 +198,7 @@ private:
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QWeakPointer<QMenu> m_contextMenu;
+    friend class AppletInterface;
 };
 
 QML_DECLARE_TYPEINFO(ContainmentInterface, QML_HAS_ATTACHED_PROPERTIES)

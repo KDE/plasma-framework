@@ -656,12 +656,14 @@ QList<QObject *> ContainmentInterface::actions() const
 
 //PROTECTED--------------------
 
-void ContainmentInterface::mousePressEvent(QMouseEvent *event)
+void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
-    event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
+    //event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
+    event->setAccepted(false);
 }
 
-void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
+void ContainmentInterface::mousePressEvent(QMouseEvent *event)
+
 {
     //even if the menu is executed synchronously, other events may be processed
     //by the qml incubator when plasma is loading, so we need to guard there
@@ -721,7 +723,7 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
     //end workaround
 
     desktopMenu.exec(event->globalPos());
-    event->accept();
+    event->setAccepted(false);
 }
 
 void ContainmentInterface::wheelEvent(QWheelEvent *event)

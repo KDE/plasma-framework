@@ -44,6 +44,7 @@
 #include <Plasma/Corona>
 #include <Plasma/Package>
 #include <Plasma/PluginLoader>
+#include <Plasma/ContainmentActions>
 
 #include "containmentinterface.h"
 #include <kdeclarative/configpropertymap.h>
@@ -85,6 +86,15 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
                 this, &ContainmentInterface::screenChanged);
     }
+
+    connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
+        //FIXME: this is obviously wrong: the filter should be installed when the
+        //applet goes popup and removed when it goes normal,
+        //this is a not really working heuristic
+        if (fullRepresentationItem() && fullRepresentationItem()->parentItem()) {
+            fullRepresentationItem()->parentItem()->installEventFilter(this);
+        }
+    });
 }
 
 AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQuickItem *parent)
@@ -522,5 +532,36 @@ void AppletInterface::executeAction(const QString &name)
         }
     }
 }
+
+bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        //pass it up to the applet
+        //well, actually we have to pass it to the *containment*
+        //because all the code for showing an applet's contextmenu is actually in Containment.
+        Plasma::Containment *c = applet()->containment();
+        if (c) {
+            const QString trigger = Plasma::ContainmentActions::eventToString(event);
+            Plasma::ContainmentActions *plugin = c->containmentActions().value(trigger);
+            if (!plugin) {
+                return false;
+            }
+            ContainmentInterface *ci = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
+
+            QMenu desktopMenu;
+            ci->addAppletActions(desktopMenu, applet(), event);
+
+            if (!desktopMenu.isEmpty()) {
+                desktopMenu.exec(static_cast<QMouseEvent*>(event)->globalPos());
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    return AppletQuickItem::eventFilter(watched, event);
+}
+
 
 #include "moc_appletinterface.cpp"

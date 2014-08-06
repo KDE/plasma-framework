@@ -334,6 +334,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
     virtual void init();
 
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
+
 private:
 
     QStringList m_actions;
