@@ -636,6 +636,8 @@ void Package::setRequired(const char *key, bool required)
     }
 
     d.detach();
+    // have to find the item again after detaching: d->contents is a different object now
+    it = d->contents.find(key);
     it.value().required = required;
 }
 
@@ -656,6 +658,8 @@ void Package::setMimeTypes(const char *key, QStringList mimeTypes)
     }
 
     d.detach();
+    // have to find the item again after detaching: d->contents is a different object now
+    it = d->contents.find(key);
     it.value().mimeTypes = mimeTypes;
 #endif
 }
