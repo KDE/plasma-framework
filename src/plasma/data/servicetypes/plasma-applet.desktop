@@ -38,6 +38,9 @@ Comment[zh_TW]=Plasma 小程式
 [PropertyDef::X-Plasma-API]
 Type=QString
 
+[PropertyDef::X-Plasma-RootPath]
+Type=QString
+
 [PropertyDef::X-Plasma-DropMimeTypes]
 Type=QStringList
 
