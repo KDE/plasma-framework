@@ -140,9 +140,13 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
     /**
      * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
-     * TODO: a way to set associated application urls.
      */
-    Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication)
+    Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication NOTIFY associatedApplicationChanged)
+
+    /**
+     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
+     */
+    Q_PROPERTY(QList<QUrl> associatedApplicationUrls WRITE setAssociatedApplicationUrls READ associatedApplicationUrls NOTIFY associatedApplicationUrlsChanged)
 
     // TODO: This was moved up from ContainmentInterface because it is required by the
     // Task Manager applet (for "Show only tasks from this screen") and no Qt API exposes
@@ -275,6 +279,9 @@ public:
     void setAssociatedApplication(const QString &string);
     QString associatedApplication() const;
 
+    void setAssociatedApplicationUrls(const QList<QUrl> &urls);
+    QList<QUrl> associatedApplicationUrls() const;
+
     void setStatus(const Plasma::Types::ItemStatus &status);
     Plasma::Types::ItemStatus status() const;
 
@@ -327,6 +334,8 @@ Q_SIGNALS:
     void busyChanged();
     void screenChanged();
     void hideOnWindowDeactivateChanged();
+    void associatedApplicationChanged();
+    void associatedApplicationUrlsChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();

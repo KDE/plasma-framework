@@ -449,12 +449,32 @@ int AppletInterface::apiVersion() const
 
 void AppletInterface::setAssociatedApplication(const QString &string)
 {
+    if (applet()->associatedApplication() == string) {
+        return;
+    }
+
     applet()->setAssociatedApplication(string);
+    emit associatedApplicationChanged();
 }
 
 QString AppletInterface::associatedApplication() const
 {
     return applet()->associatedApplication();
+}
+
+void AppletInterface::setAssociatedApplicationUrls(const QList<QUrl> &urls)
+{
+    if (applet()->associatedApplicationUrls() == urls) {
+        return;
+    }
+
+    applet()->setAssociatedApplicationUrls(urls);
+    emit associatedApplicationUrlsChanged();
+}
+
+QList<QUrl> AppletInterface::associatedApplicationUrls() const
+{
+    return applet()->associatedApplicationUrls();
 }
 
 void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)

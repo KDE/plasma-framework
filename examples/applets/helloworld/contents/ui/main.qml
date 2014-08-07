@@ -31,4 +31,6 @@ Item {
     PlasmaComponents.Label {
         text: i18n("Hello world")
     }
+
+    Plasmoid.associatedApplicationUrls: "file:///home"
 }
