@@ -658,8 +658,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
-    //event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
-    event->setAccepted(false);
+    event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
 }
 
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
@@ -723,7 +722,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     //end workaround
 
     desktopMenu.exec(event->globalPos());
-    event->setAccepted(false);
+    event->setAccepted(true);
 }
 
 void ContainmentInterface::wheelEvent(QWheelEvent *event)

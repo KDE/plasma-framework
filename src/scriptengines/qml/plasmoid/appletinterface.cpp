@@ -88,11 +88,17 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
-        //FIXME: this is obviously wrong: the filter should be installed when the
-        //applet goes popup and removed when it goes normal,
-        //this is a not really working heuristic
-        if (fullRepresentationItem() && fullRepresentationItem()->parentItem()) {
-            fullRepresentationItem()->parentItem()->installEventFilter(this);
+        //if both compactRepresentationItem and fullRepresentationItem exist,
+        //the applet is in a popup
+        if (expanded) {
+            if (compactRepresentationItem() && fullRepresentationItem() &&
+                fullRepresentationItem()->window() && compactRepresentationItem()->window() &&
+                fullRepresentationItem()->window() != compactRepresentationItem()->window() &&
+                fullRepresentationItem()->parentItem()) {
+                fullRepresentationItem()->parentItem()->installEventFilter(this);
+            } else if (fullRepresentationItem() && fullRepresentationItem()->parentItem()) {
+                fullRepresentationItem()->parentItem()->removeEventFilter(this);
+            }
         }
     });
 }
