@@ -83,8 +83,7 @@ void LookAndFeelPackage::initPackage(Plasma::Package *package)
 void QmlWallpaperPackage::initPackage(Plasma::Package *package)
 {
     package->addFileDefinition("mainscript", "ui/main.qml", i18n("Main Script File"));
-    //FIXME: why setting it required doesn't work?
-    //package->setRequired("mainscript", true);
+    package->setRequired("mainscript", true);
 
     QStringList platform = KDeclarative::KDeclarative::runtimePlatform();
     if (!platform.isEmpty()) {
