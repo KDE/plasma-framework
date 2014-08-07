@@ -141,8 +141,8 @@ Item {
 
         // Plasma API
         property bool animated: units.longDuration > 0
-        property real handleWidth: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").width : grooveSvg.elementSize("horizontal-slider-handle").width
-        property real handleHeight: contents.isVertical ? grooveSvg.elementSize("vertical-slider-handle").height : grooveSvg.elementSize("horizontal-slider-handle").height
+        property real handleWidth: handle.naturalSize.width
+        property real handleHeight: handle.naturalSize.height
 
         // Convenience API
         property bool isVertical: orientation == Qt.Vertical
