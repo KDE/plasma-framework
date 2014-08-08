@@ -420,8 +420,8 @@ void Package::setPath(const QString &path)
         return;
     }
 
-    // our dptr is shared, and it is almost certainly doing to change.
-    // hold onto the old pointer just incase!
+    // our dptr is shared, and it is almost certainly going to change.
+    // hold onto the old pointer just in case it does not, however!
     QExplicitlySharedDataPointer<PackagePrivate> oldD(d);
     d.detach();
 
