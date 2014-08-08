@@ -94,10 +94,8 @@ bool Package::isValid() const
     //even if it's a big nested loop, usually there is one prefix and one location
     //so shouldn't cause too much disk access
     QHashIterator<QByteArray, ContentStructure> it(d->contents);
-    QString p = d->path;
-    if (!d->tempRoot.isEmpty()) {
-        p = d->tempRoot;
-    }
+    const QString rootPath = d->tempRoot.isEmpty() ? d->path : d->tempRoot;
+
     while (it.hasNext()) {
         it.next();
         if (!it.value().required) {
@@ -107,7 +105,7 @@ bool Package::isValid() const
         bool failed = true;
         foreach (const QString &path, it.value().paths) {
             foreach (const QString &prefix, d->contentsPrefixPaths) {
-                if (QFile::exists(p + prefix + path)) {
+                if (QFile::exists(rootPath + prefix + path)) {
                     failed = false;
                     break;
                 }
