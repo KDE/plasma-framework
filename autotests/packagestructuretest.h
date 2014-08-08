@@ -29,6 +29,8 @@ class PackageStructureTest : public QObject
 
 private Q_SLOTS:
     void initTestCase();
+    void validStructures();
+    void validPackages();
     void copyPerformance();
     void mutateAfterCopy();
     void emptyContentsPrefix();

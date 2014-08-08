@@ -49,6 +49,28 @@ void PackageStructureTest::initTestCase()
     ps.setPath(m_packagePath);
 }
 
+void PackageStructureTest::validStructures()
+{
+    QVERIFY(ps.hasValidStructure());
+    QVERIFY(!Plasma::Package().hasValidStructure());
+    QVERIFY(!Plasma::PluginLoader::self()->loadPackage("doesNotExist").hasValidStructure());
+}
+
+void PackageStructureTest::validPackages()
+{
+    QVERIFY(ps.isValid());
+    QVERIFY(!Plasma::Package().isValid());
+    QVERIFY(!Plasma::PluginLoader::self()->loadPackage("doesNotExist").isValid());
+    QVERIFY(NoPrefixes().isValid());
+
+    Plasma::Package p = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    QVERIFY(!p.isValid());
+    p.setPath("/does/not/exist");
+    QVERIFY(!p.isValid());
+    p.setPath(ps.path());
+    QVERIFY(p.isValid());
+}
+
 void PackageStructureTest::copyPerformance()
 {
     // seed the cache first
