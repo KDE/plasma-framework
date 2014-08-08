@@ -30,6 +30,7 @@ class PackageStructureTest : public QObject
 private Q_SLOTS:
     void initTestCase();
     void copyPerformance();
+    void mutateAfterCopy();
     void emptyContentsPrefix();
     void multiplePaths();
     void directories();

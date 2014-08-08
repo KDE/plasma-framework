@@ -65,6 +65,27 @@ void PackageStructureTest::copyPerformance()
     QVERIFY(t.elapsed() < 400);
 }
 
+void PackageStructureTest::mutateAfterCopy()
+{
+    const bool mainscriptRequired = ps.isRequired("mainscript");
+    const QStringList imageMimeTypes = ps.mimeTypes("images");
+
+    Plasma::Package copy(ps);
+
+    copy.setRequired("mainscript", !mainscriptRequired);
+    QVERIFY(ps.isRequired("mainscript") == mainscriptRequired);
+    QVERIFY(ps.isRequired("mainscript") != copy.isRequired("mainscript"));
+
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    QVERIFY(!imageMimeTypes.isEmpty());
+    QStringList copyMimeTypes;
+    copyMimeTypes << imageMimeTypes.first();
+    copy.setMimeTypes("images", copyMimeTypes);
+    QCOMPARE(ps.mimeTypes("images"), imageMimeTypes);
+    QCOMPARE(copy.mimeTypes("images"), copyMimeTypes);
+#endif
+}
+
 void PackageStructureTest::emptyContentsPrefix()
 {
     NoPrefixes package;
