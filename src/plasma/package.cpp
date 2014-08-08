@@ -585,7 +585,16 @@ void Package::addDirectoryDefinition(const char *key, const QString &path, const
 
     if (d->contents.contains(key)) {
         s = d->contents[key];
+        if (s.paths.contains(path) && s.directory == true
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+            && s.name == name
+#endif
+        ) {
+            return;
+        }
     }
+
+    d.detach();
 
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     if (!name.isEmpty()) {
@@ -607,8 +616,16 @@ void Package::addFileDefinition(const char *key, const QString &path, const QStr
 
     if (d->contents.contains(key)) {
         s = d->contents[key];
+        if (s.paths.contains(path) && s.directory == false
+#ifndef PLASMA_NO_PACKAGE_EXTRADATA
+            && s.name == name
+#endif
+        ) {
+            return;
+        }
     }
 
+    d.detach();
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     if (!name.isEmpty()) {
         s.name = name;
@@ -625,7 +642,10 @@ void Package::addFileDefinition(const char *key, const QString &path, const QStr
 
 void Package::removeDefinition(const char *key)
 {
-    d->contents.remove(key);
+    if (d->contents.contains(key)) {
+        d.detach();
+        d->contents.remove(key);
+    }
 }
 
 void Package::setRequired(const char *key, bool required)
