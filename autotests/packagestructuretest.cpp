@@ -69,20 +69,58 @@ void PackageStructureTest::mutateAfterCopy()
 {
     const bool mainscriptRequired = ps.isRequired("mainscript");
     const QStringList imageMimeTypes = ps.mimeTypes("images");
+    const QStringList defaultMimeTypes = ps.mimeTypes("translations");
+    const QString packageRoot = ps.defaultPackageRoot();
+    const bool externalPaths = ps.allowExternalPaths();
+    const QString servicePrefix = ps.servicePrefix();
+    const QStringList contentsPrefixPaths = ps.contentsPrefixPaths();
 
     Plasma::Package copy(ps);
 
     copy.setRequired("mainscript", !mainscriptRequired);
-    QVERIFY(ps.isRequired("mainscript") == mainscriptRequired);
-    QVERIFY(ps.isRequired("mainscript") != copy.isRequired("mainscript"));
+    QCOMPARE(ps.isRequired("mainscript"), mainscriptRequired);
+    QCOMPARE(copy.isRequired("mainscript"), !mainscriptRequired);
+
+    copy = ps;
+    const QString copyPackageRoot = packageRoot + "more/";
+    copy.setDefaultPackageRoot(copyPackageRoot);
+    QCOMPARE(ps.defaultPackageRoot(), packageRoot);
+    QCOMPARE(copy.defaultPackageRoot(), copyPackageRoot);
+
+    copy = ps;
+    copy.setAllowExternalPaths(!externalPaths);
+    QCOMPARE(ps.allowExternalPaths(), externalPaths);
+    QCOMPARE(copy.allowExternalPaths(), !externalPaths);
+
+    copy = ps;
+    const QString copyServicePrefix = packageRoot + "more/";
+    copy.setServicePrefix(copyServicePrefix);
+    QCOMPARE(ps.servicePrefix(), servicePrefix);
+    QCOMPARE(copy.servicePrefix(), copyServicePrefix);
+
+    copy = ps;
+    QStringList copyContentsPrefixPaths = contentsPrefixPaths;
+    copyContentsPrefixPaths << "more/";
+    copy.setContentsPrefixPaths(copyContentsPrefixPaths);
+    QCOMPARE(ps.contentsPrefixPaths(), contentsPrefixPaths);
+    QCOMPARE(copy.contentsPrefixPaths(), copyContentsPrefixPaths);
 
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
+    copy = ps;
     QVERIFY(!imageMimeTypes.isEmpty());
     QStringList copyMimeTypes;
     copyMimeTypes << imageMimeTypes.first();
     copy.setMimeTypes("images", copyMimeTypes);
     QCOMPARE(ps.mimeTypes("images"), imageMimeTypes);
     QCOMPARE(copy.mimeTypes("images"), copyMimeTypes);
+
+
+    copy = ps;
+    QStringList copyDefaultMimeTypes = defaultMimeTypes;
+    copyDefaultMimeTypes << "rubbish";
+    copy.setDefaultMimeTypes(copyDefaultMimeTypes);
+    QCOMPARE(ps.mimeTypes("translations"), defaultMimeTypes);
+    QCOMPARE(copy.mimeTypes("translations"), copyDefaultMimeTypes);
 #endif
 }
 
