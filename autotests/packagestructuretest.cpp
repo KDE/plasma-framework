@@ -74,6 +74,8 @@ void PackageStructureTest::mutateAfterCopy()
     const bool externalPaths = ps.allowExternalPaths();
     const QString servicePrefix = ps.servicePrefix();
     const QStringList contentsPrefixPaths = ps.contentsPrefixPaths();
+    const QList<const char *> files = ps.files();
+    const QList<const char *> dirs = ps.directories();
 
     Plasma::Package copy(ps);
 
@@ -104,6 +106,16 @@ void PackageStructureTest::mutateAfterCopy()
     copy.setContentsPrefixPaths(copyContentsPrefixPaths);
     QCOMPARE(ps.contentsPrefixPaths(), contentsPrefixPaths);
     QCOMPARE(copy.contentsPrefixPaths(), copyContentsPrefixPaths);
+
+    copy = ps;
+    copy.addFileDefinition("nonsense", "foobar", QString());
+    QCOMPARE(ps.files(), files);
+    QVERIFY(ps.files() != copy.files());
+
+    copy = ps;
+    copy.addDirectoryDefinition("nonsense", "foobar", QString());
+    QCOMPARE(ps.directories(), dirs);
+    QVERIFY(ps.directories() != copy.directories());
 
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     copy = ps;
