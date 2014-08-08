@@ -72,6 +72,11 @@ Package &Package::operator=(const Package &rhs)
     return *this;
 }
 
+bool Package::hasValidStructure() const
+{
+    return d->structure;
+}
+
 bool Package::isValid() const
 {
     if (!d->structure) {

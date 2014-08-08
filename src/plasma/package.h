@@ -102,6 +102,14 @@ public:
     Package &operator=(const Package &rhs);
 
     /**
+     * @return true if this package has a valid PackageStructure associatedw it with it.
+     * A package may not be valid, but have a valid structure. Useful when dealing with
+     * Package objects in a semi-initialized state (e.g. before calling setPath())
+     * @since 5.1
+     */
+    bool hasValidStructure() const;
+
+    /**
      * @return true if all the required components exist
      **/
     bool isValid() const;
