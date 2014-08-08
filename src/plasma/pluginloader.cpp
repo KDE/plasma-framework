@@ -399,7 +399,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 {
     if (!d->isDefaultLoader) {
         Package p = internalLoadPackage(packageFormat, specialization);
-        if (p.isValid()) {
+        if (p.isValid() || !p.files().isEmpty()) {
             return p;
         }
     }
