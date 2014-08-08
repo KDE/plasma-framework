@@ -21,12 +21,16 @@
 
 #include "config-plasma.h"
 
+#include <QAction>
 #include <QHash>
 #include <QFile>
 #include <QDebug>
+#include <QMimeDatabase>
 
 #include <qstandardpaths.h>
 #include <klocalizedstring.h>
+#include <kactioncollection.h>
+#include <kfileitemactions.h>
 
 #if !PLASMA_NO_KIO
 #include <krun.h>
@@ -93,6 +97,12 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
         d->applicationNames[applet] = application;
         if (!d->urlLists.contains(applet)) {
             connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+        } else {
+            QAction *a = applet->actions()->action("run associated application");
+            if (a) {
+                a->setIcon(QIcon::fromTheme("system-run"));
+                a->setText(i18n("Run the Associated Application"));
+            }
         }
     }
 }
@@ -105,6 +115,17 @@ QString AssociatedApplicationManager::application(const Plasma::Applet *applet) 
 void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<QUrl> &urls)
 {
     d->urlLists[applet] = urls;
+    if (!d->applicationNames.contains(applet)) {
+        QAction *a = applet->actions()->action("run associated application");
+        if (a) {
+            QMimeDatabase mimeDb;
+            KService::List apps = KFileItemActions::associatedApplications(mimeDb.mimeTypeForUrl(urls.first()).aliases(), QString());
+            if (!apps.isEmpty()) {
+                a->setIcon(QIcon::fromTheme(apps.first()->icon()));
+                a->setText(i18n("Open with %1", apps.first()->genericName()));
+            }
+        }
+    }
 }
 
 QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
