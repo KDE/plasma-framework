@@ -122,7 +122,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
             KService::List apps = KFileItemActions::associatedApplications(mimeDb.mimeTypeForUrl(urls.first()).aliases(), QString());
             if (!apps.isEmpty()) {
                 a->setIcon(QIcon::fromTheme(apps.first()->icon()));
-                a->setText(i18n("Open in %1", apps.first()->genericName()));
+                a->setText(i18n("Open in %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
             }
         }
     }
