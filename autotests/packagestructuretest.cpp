@@ -117,6 +117,11 @@ void PackageStructureTest::mutateAfterCopy()
     QCOMPARE(ps.directories(), dirs);
     QVERIFY(ps.directories() != copy.directories());
 
+    copy = ps;
+    copy.removeDefinition("mainscript");
+    QCOMPARE(ps.files(), files);
+    QVERIFY(ps.files() != copy.files());
+
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     copy = ps;
     QVERIFY(!imageMimeTypes.isEmpty());
