@@ -23,13 +23,27 @@
 
 #include <QDebug>
 
+// when BC can be broken, these should become class members
+static Plasma::PackageStructure *m_lnfPackage = 0;
+static Plasma::PackageStructure *m_qmlPackage = 0;
+static Plasma::PackageStructure *m_layoutPackage = 0;
+
 ShellPluginLoader::ShellPluginLoader()
-    : Plasma::PluginLoader()
+    : Plasma::PluginLoader()/*, when BC can be broken, these should become class members
+      m_lnfPackage(0),
+      m_qmlPackage(0),
+      m_layoutPackage(0)*/
 {
 }
 
 ShellPluginLoader::~ShellPluginLoader()
 {
+    delete m_lnfPackage;
+    m_lnfPackage = 0;
+    delete m_qmlPackage;
+    m_qmlPackage = 0;
+    delete m_layoutPackage;
+    m_layoutPackage = 0;
 }
 
 Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFormat, const QString &specialization)
@@ -37,14 +51,23 @@ Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFor
     Q_UNUSED(specialization)
 
     if (packageFormat == "Plasma/LookAndFeel") {
-        Plasma::PackageStructure *structure = new LookAndFeelPackage();
-        return Plasma::Package(structure);
+        if (!m_lnfPackage) {
+            m_lnfPackage = new LookAndFeelPackage();
+        }
+
+        return Plasma::Package(m_lnfPackage);
     } else if (packageFormat == "Plasma/Wallpaper") {
-        Plasma::PackageStructure *structure = new QmlWallpaperPackage();
-        return Plasma::Package(structure);
+        if (!m_qmlPackage) {
+            m_qmlPackage = new QmlWallpaperPackage();
+        }
+
+        return Plasma::Package(m_qmlPackage);
     } else if (packageFormat == "Plasma/LayoutTemplate") {
-        Plasma::PackageStructure *structure = new LayoutTemplatePackage();
-        return Plasma::Package(structure);
+        if (!m_layoutPackage) {
+            m_layoutPackage = new LayoutTemplatePackage();
+        }
+
+        return Plasma::Package(m_layoutPackage);
     } else {
         return Plasma::Package();
     }
