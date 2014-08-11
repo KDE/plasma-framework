@@ -127,7 +127,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
         }
     }
 }
-TODO: updateAction slot, called on setting of url or app, and on sycoca change
+//TODO: updateAction slot, called on setting of url or app, and on sycoca change
 QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
 {
     return d->urlLists.value(applet);
