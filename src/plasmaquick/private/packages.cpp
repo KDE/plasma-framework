@@ -37,6 +37,8 @@ void LookAndFeelPackage::initPackage(Plasma::Package *package)
 
     //Defaults
     package->addFileDefinition("defaults", "defaults", i18n("Default settings for theme, etc."));
+    //Colors
+    package->addFileDefinition("colors", "colors", i18n("Color scheme to use for applications."));
 
     //Directories
     package->addDirectoryDefinition("previews", "previews", i18n("Preview Images"));
