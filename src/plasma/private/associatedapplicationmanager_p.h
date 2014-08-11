@@ -59,6 +59,7 @@ private:
     friend class AssociatedApplicationManagerSingleton;
 
     Q_PRIVATE_SLOT(d, void cleanupApplet(QObject *obj))
+    Q_PRIVATE_SLOT(d, void updateActionNames())
 };
 
 } // namespace Plasma

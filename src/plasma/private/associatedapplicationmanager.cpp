@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QMimeDatabase>
+#include <KSycoca>
 
 #include <qstandardpaths.h>
 #include <klocalizedstring.h>
@@ -62,6 +63,27 @@ public:
         urlLists.remove(applet);
     }
 
+    void updateActionNames()
+    {
+        QMimeDatabase mimeDb;
+        KService::List apps;
+
+        QHash<const Plasma::Applet *, QList<QUrl> >::iterator i;
+        for (i = urlLists.begin(); i != urlLists.end(); ++i) {
+            QAction *a = i.key()->actions()->action("run associated application");
+            if (a) {
+                apps = KFileItemActions::associatedApplications(mimeDb.mimeTypeForUrl(i.value().first()).aliases(), QString());
+                if (!apps.isEmpty()) {
+                    a->setIcon(QIcon::fromTheme(apps.first()->icon()));
+                    a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
+                } else {
+                    a->setIcon(QIcon::fromTheme("system-run"));
+                    a->setText(i18n("Run the Associated Application"));
+                }
+            }
+        }
+    }
+
     QHash<const Plasma::Applet *, QString> applicationNames;
     QHash<const Plasma::Applet *, QList<QUrl> > urlLists;
 };
@@ -78,6 +100,7 @@ AssociatedApplicationManager::AssociatedApplicationManager(QObject *parent)
     : QObject(parent),
       d(new AssociatedApplicationManagerPrivate())
 {
+    connect(KSycoca::self(), SIGNAL(databaseChanged()), this, SLOT(updateActionNames()));
 }
 
 AssociatedApplicationManager::~AssociatedApplicationManager()
@@ -123,6 +146,9 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
             if (!apps.isEmpty()) {
                 a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                 a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
+            } else {
+                a->setIcon(QIcon::fromTheme("system-run"));
+                a->setText(i18n("Run the Associated Application"));
             }
         }
     }
