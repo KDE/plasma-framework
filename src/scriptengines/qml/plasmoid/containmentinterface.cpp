@@ -845,10 +845,6 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
             desktopMenu.addAction(m_containment->actions()->action("configure"));
         }
     } else {
-        QAction *runAssociatedApplication = m_containment->actions()->action("run associated application");
-        if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
-            desktopMenu.addAction(runAssociatedApplication);
-        }
         desktopMenu.addActions(actions);
     }
 
