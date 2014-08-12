@@ -15,11 +15,6 @@
 - IconItem
 - ColorScope
 
-Elements from kdelibs which are exposed by PlasmaCore:
-
-- <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/plasma/html/classPlasma_1_1Svg.html">Plasma::Svg</a>
-- <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/plasma/html/classPlasma_1_1FrameSvg.html">Plasma::FrameSvg</a>
-
 */
 
 // DOXYGEN_SET_PROJECT_NAME = PlasmaCore
