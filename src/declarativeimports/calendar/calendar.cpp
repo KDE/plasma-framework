@@ -200,8 +200,8 @@ void Calendar::updateData()
 
     int totalDays = m_days * m_weeks;
 
-    int daysBeforeCurrentMonth;
-    int daysAfterCurrentMonth;
+    int daysBeforeCurrentMonth = 0;
+    int daysAfterCurrentMonth = 0;
 
     QDate firstDay(m_displayedDate.year(), m_displayedDate.month(), 1);
 
