@@ -28,6 +28,11 @@
 
 class QQuickItem;
 
+
+/**
+ * @class Units
+ * @short Expose sizes to QML
+ */
 class Units : public QObject
 {
     Q_OBJECT

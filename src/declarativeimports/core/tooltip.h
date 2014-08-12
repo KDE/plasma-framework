@@ -32,6 +32,8 @@ class QGraphicsWidget;
 class ToolTipDialog;
 
 /**
+ * @class ToolTip
+ *
  * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
  * You can either specify iconSource, mainText and subText, or a custom Component
  * that will be put inside the tooltip. By specifying the target property, you

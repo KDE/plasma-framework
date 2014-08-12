@@ -31,6 +31,10 @@
 
 class QPropertyAnimation;
 
+/**
+ * @class IconItem
+ * @short Displays an icon, either from the standard QIcon system or where applicable from the theme SVG files
+ */
 class IconItem : public QQuickItem
 {
     Q_OBJECT

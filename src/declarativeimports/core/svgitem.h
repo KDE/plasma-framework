@@ -29,6 +29,9 @@ namespace Plasma
 
 class Svg;
 
+/**
+ * @class SvgItem
+ */
 class SvgItem : public QQuickItem
 {
     Q_OBJECT

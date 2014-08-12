@@ -53,7 +53,8 @@ namespace PlasmaQuick
 class DialogPrivate;
 
 /**
- * QML wrapper for dialogs
+ * @class Dialog
+ * @short QML wrapper for dialogs
  *
  * Exposed as `PlasmaCore.Dialog` in QML.
  */

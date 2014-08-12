@@ -36,6 +36,10 @@ namespace Plasma
 {
 class DataEngine;
 
+/**
+ * @class DataSource
+ * @short Provides data from a range of plugins
+ */
 class DataSource : public QObject, DataEngineConsumer
 {
     Q_OBJECT

@@ -34,6 +34,10 @@ namespace Plasma
 class DataSource;
 class DataModel;
 
+/**
+ * @class SortFilterModel
+ * @short Filter and sort an existing QAbstractItemModel
+ */
 class SortFilterModel : public QSortFilterProxyModel
 {
     Q_OBJECT
@@ -121,6 +125,10 @@ private:
     QHash<QString, int> m_roleIds;
 };
 
+/**
+ * @class DataModel
+ * @short DataSource data as a model
+ */
 class DataModel : public QAbstractItemModel
 {
     Q_OBJECT
