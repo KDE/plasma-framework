@@ -143,6 +143,14 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
 
 public:
+    /**
+     * @return true if the svg has the necessary elements with the given prefix
+     * to draw a frame
+     * @param prefix the given prefix we want to check if drawable
+     */
+    Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
+
+    /// @cond INTERNAL_DOCS
     FrameSvgItem(QQuickItem *parent = 0);
     ~FrameSvgItem();
 
@@ -172,17 +180,14 @@ public:
      */
     Plasma::FrameSvg *frameSvg() const;
 
-    /**
-     * @return true if the svg has the necessary elements with the given prefix
-     * to draw a frame
-     * @param prefix the given prefix we want to check if drawable
-     */
-    Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
-
     virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+
+
 
 protected:
     virtual void componentComplete();
+
+/// @endcond
 
 Q_SIGNALS:
     void imagePathChanged();
