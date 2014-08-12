@@ -31,6 +31,7 @@ class Svg;
 
 /**
  * @class SvgItem
+ * @short Displays an SVG or an element from an SVG file
  */
 class SvgItem : public QQuickItem
 {

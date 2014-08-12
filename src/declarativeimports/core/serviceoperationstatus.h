@@ -28,6 +28,10 @@ namespace Plasma
 class Service;
 }
 
+/**
+ * @class ServiceOperationStatus
+ * @short Monitors services
+ */
 class ServiceOperationStatus : public QObject
 {
     Q_OBJECT
