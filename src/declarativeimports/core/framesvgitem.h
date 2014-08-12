@@ -33,6 +33,11 @@ namespace Plasma
 class FrameSvg;
 class SVGTextureNode;
 
+/**
+ * @class FrameSvgItemMargins
+ *
+ * @short The size of margins for a frame.
+ */
 class FrameSvgItemMargins : public QObject
 {
     Q_OBJECT
@@ -79,6 +84,14 @@ private:
     bool m_fixed;
 };
 
+
+/**
+ * @class FrameSvgItem
+ *
+ * @short Provides an SVG with borders.
+ *
+ * It is exposed as org.kde.plasma.core.FrameSvgItem
+ */
 class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT

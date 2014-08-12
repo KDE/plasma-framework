@@ -2,6 +2,7 @@
 
 <h2>import org.kde.plasma.core</h2>
 
+- Main
 - Plasma::DataModel
 - Plasma::DataSource
 - Plasma::FrameSvgItem
@@ -12,6 +13,7 @@
 - ToolTipProxy
 - RunnerModel
 - IconItem
+- ColorScope
 
 Elements from kdelibs which are exposed by PlasmaCore:
 
