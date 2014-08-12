@@ -132,7 +132,10 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         return;
     }
 
-    const QString path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
+    QString path = appletDescription.property("X-Plasma-RootPath").toString();
+    if (path.isEmpty()) {
+        path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
+    }
     package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
     package->setPath(path);
 
