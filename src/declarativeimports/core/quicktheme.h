@@ -29,7 +29,7 @@ namespace Plasma
 {
 
 /**
- * @class Theme plasma/theme.h <Plasma/Theme>
+ * @class QuickTheme plasma/theme.h <Plasma/Theme>
  *
  * @short Interface to the Plasma theme
  *

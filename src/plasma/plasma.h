@@ -33,7 +33,11 @@ class QAction;
  */
 namespace Plasma
 {
-
+/**
+ * @class Types
+ * @short Enums and constants used in Plasma
+ *
+ */
 class PLASMA_EXPORT Types : public QObject
 {
     Q_OBJECT
