@@ -129,7 +129,8 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 QString pathCheck(path.path());
                 pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
 
-                if (pathCheck == m_package.metadata().pluginName()) {
+                if (pathCheck == m_package.metadata().pluginName() ||
+                    pathCheck == m_package.metadata().property("X-Plasma-RootPath").toString()) {
                     return path;
                 } else {
                     return QUrl("file://" + allowed + "/org/kde/plasma/accessdenied/qmldir");
