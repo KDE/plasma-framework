@@ -117,6 +117,7 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(bool interactive MEMBER m_interactive WRITE setInteractive NOTIFY interactiveChanged)
 
 public:
+/// @cond INTERNAL_DOCS
     ToolTip(QQuickItem *parent = 0);
     ~ToolTip();
 
@@ -146,6 +147,7 @@ public:
     void setActive(bool active);
 
     void setInteractive(bool interactive);
+/// @endcond
 
 public Q_SLOTS:
     /**
@@ -154,11 +156,13 @@ public Q_SLOTS:
     void hideToolTip();
 
 protected:
+/// @cond INTERNAL_DOCS
     bool childMouseEventFilter(QQuickItem *item, QEvent *event);
     void hoverEnterEvent(QHoverEvent *event);
     void hoverLeaveEvent(QHoverEvent *event);
 
     ToolTipDialog *tooltipDialogInstance();
+/// @endcond
 
 Q_SIGNALS:
     void mainItemChanged();

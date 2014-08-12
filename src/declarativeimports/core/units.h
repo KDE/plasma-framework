@@ -28,7 +28,6 @@
 
 class QQuickItem;
 
-
 /**
  * @class Units
  * @short Expose sizes to QML
@@ -101,6 +100,8 @@ class Units : public QObject
     Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
 
 public:
+/// @cond INTERNAL_DOCS
+
     Units(QObject *parent = 0);
     ~Units();
 
@@ -144,6 +145,7 @@ public:
      * @since 5.0
      */
     int shortDuration() const;
+/// @endcond
 
 Q_SIGNALS:
     void devicePixelRatioChanged();

@@ -44,6 +44,7 @@ class ColorScope : public QQuickItem
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
 
 public:
+/// @cond INTERNAL_DOCS
     ColorScope(QQuickItem *parent = 0);
     ~ColorScope();
 
@@ -56,6 +57,8 @@ public:
     
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static ColorScope *qmlAttachedProperties(QObject *object);
+
+/// @endcond
 
 Q_SIGNALS:
     void colorGroupChanged();

@@ -65,6 +65,8 @@ class SvgItem : public QQuickItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
 public:
+/// @cond INTERNAL_DOCS
+
     SvgItem(QQuickItem *parent = 0);
     ~SvgItem();
 
@@ -80,6 +82,7 @@ public:
     QSizeF naturalSize() const;
 
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData);
+/// @endcond
 
 Q_SIGNALS:
     void elementIdChanged();
@@ -88,8 +91,10 @@ Q_SIGNALS:
     void smoothChanged();
 
 protected Q_SLOTS:
+/// @cond INTERNAL_DOCS
     void updateNeeded();
     void updateDevicePixelRatio();
+/// @endcond
 
 private:
     QWeakPointer<Plasma::Svg> m_svg;
