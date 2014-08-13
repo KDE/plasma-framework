@@ -56,6 +56,8 @@ import "private/PageStack.js" as Engine
  * deeper into the application page hierarchy. The user can then go back to the
  * previous page (or several pages back) by popping a page (or several pages)
  * off the top of the stack.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

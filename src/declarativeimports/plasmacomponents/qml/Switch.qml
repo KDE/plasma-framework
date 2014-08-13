@@ -33,6 +33,7 @@ import "private" as Private
  * clicked signal.
  *
  * All elements of this component are defined in DualStateButton, its base component.
+ *
  */
 Private.DualStateButton {
     id: checkBox

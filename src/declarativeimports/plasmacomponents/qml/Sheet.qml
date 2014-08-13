@@ -53,6 +53,8 @@ import "." 2.0 as PlasmaComponents
  * than Dialog. On the desktop its looks is almost identical to Dialog, on
  * touch interfaces it is an almost fullscreen sliding Sheet. It is provided
  * mostly for compatibility with mobile implementations.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

@@ -23,6 +23,7 @@ import QtQuick 2.1
 /**
  * ToolBarLayout is a container for items on a toolbar that automatically
  * implements an appropriate layout for its children.
+ * @inherit QtQuick.Row
  */
 Row {
     id: root

@@ -25,6 +25,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  * A simple busy indicator,
  * It is used to indicate a task whose duration is unknown. If the task
  * duration/number of steps is known, a ProgressBar should be used instead.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: busy

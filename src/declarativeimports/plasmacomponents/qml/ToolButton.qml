@@ -24,6 +24,7 @@ import "styles" as Styles
 
 /**
  * A plasma theme based toolbutton.
+ * @inherit QtQuick.Controls.ToolButton
  */
 QtControls.ToolButton {
     id: button

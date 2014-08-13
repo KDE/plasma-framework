@@ -25,6 +25,8 @@ import "private" as Private
 // TODO: create a value indicator for plasma?
 /**
  * An interactive slider component with Plasma look and feel.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: slider

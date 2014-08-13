@@ -53,6 +53,8 @@ import "private" as Private
  * overlapping the area reserved for the application content. Normally, a
  * dialog provides information and gives warnings to the user, or asks the user
  * to answer a question or select an option.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

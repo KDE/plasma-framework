@@ -23,6 +23,7 @@ import "private" as Private
 
 /**
  * A plasma theme based text area.
+ * @inherit QtQuick.Item
  */
 Item {
     id: textArea

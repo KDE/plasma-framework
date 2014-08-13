@@ -53,6 +53,8 @@ import "." 2.0 as PlasmaComponents
  * things like address books or things sorted by date. Don't use with models
  * too big (thousands of items) because it implies loading all the items to
  * memory, as well loses precision.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

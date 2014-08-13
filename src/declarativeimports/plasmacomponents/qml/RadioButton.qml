@@ -29,6 +29,7 @@ import "private" as Private
  * selection.
  *
  * All elements of this component are defined in DualStateButton, its base component.
+ *
  */
 //FIXME: this should be round, DualStateButton shouldn't draw the shadow
 Private.DualStateButton {

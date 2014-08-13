@@ -47,6 +47,8 @@ import "." 2.0 as PlasmaComponents
  * loaded by a PageStack or TabGroup element.  The typical use can be in small
  * plasmoids or  mobile devices where the whole screen is a series of
  * interchangeable and flickable pages, of which the user navigates across.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

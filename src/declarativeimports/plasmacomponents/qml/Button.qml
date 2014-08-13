@@ -38,8 +38,7 @@ import "styles" as Styles
  * or answer a question. Common examples of buttons are OK, Apply, Cancel,
  * Close, Yes, No, and Help buttons.
  *
- * Properties and signals are the same as QtQuickControls Button
- * @see http://qt-project.org/doc/qt-5/qml-qtquick-controls-button.html
+ * @inherit QtQuick.Controls.Button
  */
 QtControls.Button {
     id: root

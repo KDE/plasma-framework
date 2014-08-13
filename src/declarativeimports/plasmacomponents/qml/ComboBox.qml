@@ -24,6 +24,8 @@ import "styles" as Styles
  * This is a combobox which uses the plasma theme.
  *
  * Properties are the same as the QtQuick Controls ComboBox component
+ *
+ * @inherit QtQuick.Controls.ComboBox
  */
 ComboBox {
     activeFocusOnPress: true

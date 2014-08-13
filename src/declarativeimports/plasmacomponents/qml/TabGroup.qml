@@ -58,6 +58,8 @@ import "." 2.0 as PlasmaComponents
  * PageStatus.Inactive. During page transitions, PageStatus.Activating (for the
  * page that is becoming the current page) and PageStatus.Deactivating (for the
  * page that was the current page) statuses are also set.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

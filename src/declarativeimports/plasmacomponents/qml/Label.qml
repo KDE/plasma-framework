@@ -29,6 +29,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  *
  * You can use all elements of the QML Text component, in particular the "text"
  * property to define the label text.
+ *
+ * @inherit QtQuick.Text
  */
 Text {
     id: root

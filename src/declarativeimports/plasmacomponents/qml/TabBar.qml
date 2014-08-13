@@ -48,6 +48,8 @@ import "private" as Private
 /**
  * TabBar is a plasma-themed component that you can use as a container for
  * tab buttons.
+ *
+ * @inherit QtQuick.Item
  */
 FocusScope {
     id: root

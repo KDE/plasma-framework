@@ -22,6 +22,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
  * A plasma theme based toolbar.
+ * @inherit QtQuick.Item
  */
 Item{
     id: toolBar

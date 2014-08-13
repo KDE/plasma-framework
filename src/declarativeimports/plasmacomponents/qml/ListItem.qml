@@ -25,6 +25,8 @@ import "private/Config.js" as Config
  * An item delegate for the primitive ListView component.
  *
  * It's intended to make all listviews look coherent.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: listItem

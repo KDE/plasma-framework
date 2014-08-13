@@ -47,6 +47,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 /**
  * A simple tab button which is using the plasma theme.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: root

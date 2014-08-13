@@ -58,6 +58,8 @@ import "ButtonGroup.js" as Behavior
  *     Button { text: "Bottom" }
  * }
  * @endcode
+ *
+ * @inherit QtQuick.Column
  */
 Column {
     id: root

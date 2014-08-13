@@ -57,6 +57,8 @@ import "ButtonGroup.js" as Behavior
  *     Button { text: "Right" }
  * }
  * @endcode
+ *
+ * @inherit QtQuick.Row
  */
 Row {
     id: root

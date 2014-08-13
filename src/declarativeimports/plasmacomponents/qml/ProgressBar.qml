@@ -30,6 +30,8 @@ import org.kde.kquickcontrolsaddons 2.0
  * any confirmation, they might suspect that they did something wrong or that
  * the device has broken. A progress bar is one of the available mechanisms for
  * providing this reassurance to the user.
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: progressBar

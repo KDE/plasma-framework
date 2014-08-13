@@ -26,6 +26,7 @@ import "styles" as Styles
 
 /**
  * A plasma theme based text field widget.
+ * @inherit QtQuick.Controls.TextField
  */
 QtControls.TextField {
     id: textField

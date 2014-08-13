@@ -29,6 +29,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  * duration of 250 (defined in units.longDuration).
  *
  * (TODO, make optional? e.g. animate: false)
+ *
+ * @inherit QtQuick.Item
  */
 Item {
     id: highlight

@@ -32,6 +32,8 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
  *
  * By default, this component looks and behaves like a scroll decorator
  * on touchscreens.
+ * 
+ * @inherit QtQuick.Item
  */
 // TODO: add support mouse wheel events
 Item {
