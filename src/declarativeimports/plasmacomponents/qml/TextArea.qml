@@ -23,8 +23,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import "styles" as Styles
 
 /**
- * A plasma theme based text area.
- */
+   @class TextArea
+   @short A scrollable text area
+   @inherit QtControls.TextArea
+*/
 QtControls.TextArea {
     id: textArea
 
