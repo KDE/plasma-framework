@@ -7,3 +7,7 @@ platforms:
 portingAid: false
 deprecated: false
 release: true
+libraries:
+ - cmake: KF5::Plasma
+ - cmake: KF5::PlasmaQuick
+cmakename: KF5Plasma

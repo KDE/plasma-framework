@@ -30,9 +30,3 @@ Graphical components for common items such as buttons, lineedits, tabbars and so
 ### org.kde.plasma.extras
 Extra graphical components that extend org.kde.plasma.components but are not in the standard api, see @ref plasmaextracomponents.
 
-## Links
-
-- Wiki: <http://community.kde.org/Plasma#Plasma_Workspaces_2>
-- Mailing list: <https://mail.kde.org/mailman/listinfo/plasma-devel>
-- IRC channel: #plasma on Freenode
-- Git repository: <https://projects.kde.org/projects/playground/libs/plasma-framework/repository>
