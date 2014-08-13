@@ -18,30 +18,15 @@
 */
 
 import QtQuick 2.1
+import QtQuick.Controls 1.2 as QtControls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private" as Private
+import "styles" as Styles
 
 /**
  * A plasma theme based text area.
  */
-Item {
+QtControls.TextArea {
     id: textArea
-
-    // Common API
-    /**
-     * type:font
-     * Font used in the text field.
-     *
-     * The default font value is the font from plasma desktop theme.
-     */
-    property alias font: textEdit.font
-
-    /**
-     * The currently supported input method hints for the text field.
-     *
-     * The default values is Qt.ImhNone.
-     */
-    property int inputMethodHints
 
     /**
      * Whether the text field is highlighted or not.
@@ -53,222 +38,12 @@ Item {
     property bool errorHighlight
 
     /**
-     * type:bool
-     * Displays widget background
-     *
-     * The default value is true.
-     */
-    property alias backgroundVisible: base.visible
-
-    /**
-     * type:int
-     * Current cursor position.
-     */
-    property alias cursorPosition: textEdit.cursorPosition
-
-    /**
-     * type:enum
-     * Sets the horizontal alignment of the text within the TextArea item's
-     * width and height.
-     *
-     * By default, the text alignment follows the natural alignment of the
-     * text, for example text that is read from left to right will be aligned
-     * to the left.
-     *
-     * Valid values:
-     *
-     * - TextEdit.AlignLeft (default)
-     * - TextEdit.AlignRight
-     * - TextEdit.AlignHCenter
-     * - TextEdit.AlignJustify
-     */
-    property alias horizontalAlignment: textEdit.horizontalAlignment
-
-    /**
-     * type:enum
-     * Sets the vertical alignment of the text within the TextArea item's width
-     * and height.
-     *
-     * Valid values:
-     *
-     * - TextEdit.AlignTop (default)
-     * - TextEdit.AlignBottom
-     * - TextEdit.AlignVCenter
-     */
-    property alias verticalAlignment: textEdit.verticalAlignment
-
-    /**
-     * type:bool
-     * Whether the TextArea is in read-only mode, and cannot be modified by the
-     * user.
-     *
-     * The default value is false.
-     */
-    property alias readOnly: textEdit.readOnly
-
-    /**
-     * type:string
-     * The text selected by the user.  If no text is selected it holds an empty
-     * string.
-     *
-     * This property is read-only.
-     */
-    property alias selectedText: textEdit.selectedText
-
-    /**
-     * type:int
-     * The cursor position after the last character in the current selection.
-     *
-     * This property is read-only.
-     */
-    property alias selectionEnd: textEdit.selectionEnd
-
-    /**
-     * type:int
-     * The cursor position before the first character in the current selection.
-     *
-     * This property is read-only.
-     */
-    property alias selectionStart: textEdit.selectionStart
-
-
-    /**
-     * type:string
-     * The text in the TextArea.
-     */
-    property alias text: textEdit.text
-
-    /**
-     * type:enum
-     * The way the text property should be displayed.
-     *
-     * Valid values:
-     *
-     * - TextEdit.AutoText
-     * - TextEdit.PlainText
-     * - TextEdit.RichText
-     * - TextEdit.StyledText
-     *
-     * The default is TextEdit.AutoText. If the text format is
-     * TextEdit.AutoText the text edit will automatically determine whether the
-     * text should be treated as rich text. This determination is made using
-     * Qt::mightBeRichText().
-     */
-    property alias textFormat: textEdit.textFormat
-
-    /**
-     * type:enum
-     * Set this property to wrap the text to the TextArea item's width. The
-     * text will only wrap if an explicit width has been set.
-     *
-     * Valid values:
-     *
-     * - TextEdit.NoWrap: no wrapping will be performed.  If the text contains
-     *   insufficient newlines, then implicitWidth will exceed a set width.
-     * - TextEdit.WordWrap: wrapping is done on word boundaries only.  If a
-     *   word is too long, implicitWidth will exceed a set width.
-     * - TextEdit.WrapAnywhere: wrapping is done at any point on a line, even
-     *   if it occurs in the middle of a word.
-     * - TextEdit.Wrap: if possible, wrapping occurs at a word boundary;
-     *   otherwise it will occur at the appropriate point on the line, even in
-     *   the middle of a word.
-     *
-     * The default is TextEdit.NoWrap. If you set a width, consider using
-     * TextEdit.Wrap.
-     */
-    property alias wrapMode: textEdit.wrapMode
-
-    /**
      * The text displayed when the text property is empty.
      *
      * The default value is an empty string, meaning no placeholderText shown.
      */
     property string placeholderText
 
-    activeFocusOnTab: true
-
-    // functions
-    /**
-     * Copies the currently selected text to the system clipboard.
-     */
-    function copy() {
-        textEdit.copy();
-    }
-    /**
-     * Replaces the currently selected text by the contents of the system
-     * clipboard.
-     */
-    function paste() {
-        textEdit.paste();
-    }
-
-    /**
-     * Moves the currently selected text to the system clipboard.
-     */
-    function cut() {
-        textEdit.cut();
-    }
-
-    /**
-     * Causes the text from start to end to be selected.
-     *
-     * If either start or end is out of range, the selection is not changed.
-     * After calling this, selectionStart will become the lesser and
-     * selectionEnd will become the greater (regardless of the order passed to
-     * this method).
-     *
-     * @param int start Start of selection
-     * @param int end End of selection
-     */
-    function select(start, end) {
-        textEdit.select(start, end);
-    }
-
-    /**
-     * Causes all text to be selected.
-     */
-    function selectAll() {
-        textEdit.selectAll();
-    }
-
-    /**
-     * Causes the word closest to the current cursor position to be selected.
-     */
-    function selectWord() {
-        textEdit.selectWord();
-    }
-
-    /**
-     * This function returns the character position at x pixels from the left
-     * of the TextArea.
-     *
-     * Position 0 is before the first character, position 1 is after the first
-     * character but before the second, and so on until position text.length,
-     * which is after all characters.  This means that for all x values before
-     * the first character this function returns 0, and for all x values after
-     * the last character this function returns text.length.
-     *
-     * @param int pos x-coordinate we are interested in.
-     * @return int the character position
-     */
-    // Does this work at all? doc for TextEdit says positionAt() accepts two
-    // ints: x and y
-    function positionAt(pos) {
-        return textEdit.positionAt(pos);
-    }
-
-    /**
-     * Returns the rectangle at the given position in the text.
-     *
-     * The x, y, and height properties correspond to the cursor that would
-     * describe that position.
-     *
-     * @param int pos the text position
-     * @param type:rectangle the cursor rectangle
-     */
-    function positionToRectangle(pos) {
-        return textEdit.positionToRectangle(pos);
-    }
 
     // Plasma API
     /**
@@ -278,25 +53,19 @@ Item {
      * interactive. This property is useful for temporarily disabling
      * flicking.
      */
-    property alias interactive: flickArea.interactive
+    property bool interactive
 
     /**
      * type:int
      * Maximum width that the text content can have.
      */
-    property alias contentMaxWidth: textEdit.width
+    property int contentMaxWidth
 
     /**
      * type:int
      * Maximum height that the text content can have.
      */
-    property alias contentMaxHeight: textEdit.height
-
-    // Set active focus to it's internal textInput.
-    // Overriding QtQuick.Item forceActiveFocus function.
-    function forceActiveFocus() {
-        textEdit.forceActiveFocus();
-    }
+    property int contentMaxHeight
 
     // Overriding QtQuick.Item activeFocus property.
     //property alias activeFocus: textEdit.activeFocus
@@ -305,139 +74,14 @@ Item {
 
     opacity: enabled ? 1.0 : 0.5
 
-    Private.TextFieldFocus {
-        id: hover
-        state: textArea.activeFocus ? "focus" : (mouseWatcher.containsMouse ? "hover" : "hidden")
-        anchors.fill: base
+    Label {
+        anchors.centerIn: parent
+        width: Math.min(implicitWidth, parent.width)
+        text: textArea.placeholderText
+        visible: textArea.text == "" && !textArea.activeFocus
+        color: theme.viewTextColor
+        opacity: 0.5
     }
-
-    MouseArea {
-        id: mouseWatcher
-        anchors.fill: hover
-        hoverEnabled: true
-    }
-
-    PlasmaCore.FrameSvgItem {
-        id: base
-
-        // TODO: see what is the best policy for margins
-        anchors {
-            fill: parent
-        }
-        imagePath: "widgets/lineedit"
-        prefix: "base"
-        property real internalPadding: theme.mSize(theme.defaultFont).height*0.3
-    }
-
-    Flickable {
-        id: flickArea
-        anchors {
-            fill: parent
-            leftMargin: 2 * base.margins.left
-            rightMargin: 2 * base.margins.right + (verticalScroll.visible ? verticalScroll.width : 0)
-            topMargin: 2 * base.margins.top
-            bottomMargin: 2 * base.margins.bottom + (horizontalScroll.visible ? verticalScroll.width : 0)
-        }
-        interactive: !verticalScroll.interactive //textArea.activeFocus
-        contentWidth: {
-            if (textEdit.wrapMode == TextEdit.NoWrap)
-                return textEdit.paintedWidth;
-
-            return Math.min(textEdit.paintedWidth, textEdit.width);
-        }
-        contentHeight: Math.min(textEdit.paintedHeight, textEdit.height)
-        clip: true
-
-        TextEdit {
-            id: textEdit
-
-            width: flickArea.width
-            height: flickArea.height
-            clip: true
-            wrapMode: TextEdit.Wrap
-            enabled: textArea.enabled
-            font.capitalization: theme.defaultFont.capitalization
-            font.family: theme.defaultFont.family
-            font.italic: theme.defaultFont.italic
-            font.letterSpacing: theme.defaultFont.letterSpacing
-            font.pointSize: theme.defaultFont.pointSize
-            font.strikeout: theme.defaultFont.strikeout
-            font.underline: theme.defaultFont.underline
-            font.weight: theme.defaultFont.weight
-            font.wordSpacing: theme.defaultFont.wordSpacing
-            color: theme.viewTextColor
-            selectedTextColor: theme.viewBackgroundColor
-            selectionColor: theme.viewFocusColor
-            selectByMouse: verticalScroll.interactive
-            renderType: Text.NativeRendering
-
-            onCursorPositionChanged: {
-                if (cursorRectangle.x < flickArea.contentX) {
-                    flickArea.contentX = cursorRectangle.x;
-                    return;
-                }
-
-                if (cursorRectangle.x > flickArea.contentX +
-                    flickArea.width - cursorRectangle.width) {
-                    flickArea.contentX = cursorRectangle.x -
-                        cursorRectangle.width;
-                    return;
-                }
-
-                if (cursorRectangle.y < flickArea.contentY) {
-                    flickArea.contentY = cursorRectangle.y;
-                    return;
-                }
-
-                if (cursorRectangle.y > flickArea.contentY +
-                    flickArea.height - cursorRectangle.height) {
-                    flickArea.contentY = cursorRectangle.y -
-                        cursorRectangle.height;
-                    return;
-                }
-            }
-
-            // Proxying keys events  is not required by the
-            //     common API but is desired in the plasma API.
-            Keys.onPressed: textArea.Keys.pressed(event);
-            Keys.onReleased: textArea.Keys.released(event);
-
-            Text {
-                anchors.fill: parent
-                text: textArea.placeholderText
-                visible: textEdit.text == "" && !textArea.activeFocus
-                color: theme.viewTextColor
-                opacity: 0.5
-            }
-        }
-    }
-
-    ScrollBar {
-        id: horizontalScroll
-        anchors {
-            bottom: parent.bottom
-            left: parent.left
-            right: flickArea.right
-        }
-        enabled: parent.enabled
-        flickableItem: flickArea
-        orientation: Qt.Horizontal
-        stepSize: textEdit.font.pixelSize
-    }
-
-    ScrollBar {
-        id: verticalScroll
-        anchors {
-            right: parent.right
-            top: parent.top
-            bottom: flickArea.bottom
-        }
-        enabled: parent.enabled
-        flickableItem: flickArea
-        orientation: Qt.Vertical
-        stepSize: textEdit.font.pixelSize
-    }
-
-    Accessible.role: Accessible.EditableText
-    Accessible.readOnly: readOnly
+    
+    style: Styles.TextAreaStyle {}
 }
