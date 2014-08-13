@@ -34,13 +34,7 @@ QtQuickControlStyle.ScrollViewStyle {
             id: borderSvg
             imagePath: "widgets/scrollwidget"
         }
-        PlasmaCore.FrameSvgItem {
-            id: base
-            anchors.fill: parent
-            visible: control.backgroundVisible
-            imagePath: "widgets/lineedit"
-            prefix: "base"
-        }
+
         PlasmaCore.SvgItem {
             svg: borderSvg
             z: 1000

@@ -42,6 +42,13 @@ ScrollViewStyle {
 
     property real textMargin: 4
 
+    frame: PlasmaCore.FrameSvgItem {
+        id: base
+        anchors.fill: parent
+        visible: control.backgroundVisible
+        imagePath: "widgets/lineedit"
+        prefix: "base"
+    }
     property Component cursorHandle
     property Component selectionHandle
 }
