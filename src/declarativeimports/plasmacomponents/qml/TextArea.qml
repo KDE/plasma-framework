@@ -53,26 +53,25 @@ QtControls.TextArea {
      * interactive. This property is useful for temporarily disabling
      * flicking.
      */
-    property bool interactive
+    property bool interactive: !selectByMouse
+    onInteractiveChanged: selectByMouse = !interactive
 
     /**
      * type:int
      * Maximum width that the text content can have.
      */
-    property int contentMaxWidth
+    property int contentMaxWidth: contentItem.width
 
     /**
      * type:int
      * Maximum height that the text content can have.
      */
-    property int contentMaxHeight
+    property int contentMaxHeight: contentItem.height
 
     // Overriding QtQuick.Item activeFocus property.
     //property alias activeFocus: textEdit.activeFocus
-    implicitWidth: theme.mSize(theme.defaultFont).width*25 + base.internalPadding*2
-    implicitHeight: theme.mSize(theme.defaultFont).height*8 + base.internalPadding*2
-
-    opacity: enabled ? 1.0 : 0.5
+    implicitWidth: theme.mSize(theme.defaultFont).width*25 + style.textMargin
+    implicitHeight: theme.mSize(theme.defaultFont).height*8 + style.textMargin
 
     Label {
         anchors.centerIn: parent
@@ -80,6 +79,7 @@ QtControls.TextArea {
         text: textArea.placeholderText
         visible: textArea.text == "" && !textArea.activeFocus
         color: theme.viewTextColor
+        horizontalAlignment: Text.AlignHCenter
         opacity: 0.5
     }
     
