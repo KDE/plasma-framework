@@ -159,6 +159,14 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
 
+        //despite having a valid size sometimes we still get a null QImage from Plasma::Svg
+        //loading a null texture to an atlas fatals
+        //Dave E fixed this in Qt in 5.3.something onwards but we need this for now
+        if (image.isNull()) {
+            delete textureNode;
+            return Q_NULLPTR;
+        }
+
         QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
         if (m_smooth) {
             texture->setFiltering(QSGTexture::Linear);
