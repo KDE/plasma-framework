@@ -48,6 +48,11 @@ ScrollViewStyle {
         visible: control.backgroundVisible
         imagePath: "widgets/lineedit"
         prefix: "base"
+        Private.TextFieldFocus {
+            id: hover
+            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
+            anchors.fill: base
+        }
     }
     property Component cursorHandle
     property Component selectionHandle
