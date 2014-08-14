@@ -41,7 +41,7 @@ endif()
 
 set (REQUIRED_QT_VERSION "5.2.0")
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg Script)
+find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg Script QuickWidgets)
 
 find_package(KF5Activities ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
@@ -58,6 +58,7 @@ find_package(KF5KIO ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5Service ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5WindowSystem ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5XmlGui ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5Parts ${KF5_DEP_VERSION} REQUIRED)
 
 find_package(KF5DocTools ${KF5_DEP_VERSION})
 set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"

@@ -38,6 +38,7 @@ class PlasmaKPartCorona : public Plasma::Corona
 public:
     PlasmaKPartCorona(QObject *parent);
 
+    QRect screenGeometry(int id) const;
 protected:
     void loadDefaultLayout();
     void evaluateScripts(const QStringList &scripts);

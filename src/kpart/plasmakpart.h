@@ -34,7 +34,8 @@ class Applet;
 class PluginLoader;
 }
 
-#include <KDE/KParts/Part>
+#include <KParts/Part>
+#include <kparts/readonlypart.h>
 
 #include <QtCore/QHash>
 class QVariant;
@@ -43,7 +44,7 @@ class QVBoxLayout;
 class PlasmaKPart : public KParts::ReadOnlyPart
 {
     Q_OBJECT
-    Q_PROPERTY(Plasma::Applet::List activeApplets READ listActiveApplets)
+    Q_PROPERTY(QList<Plasma::Applet *> activeApplets READ listActiveApplets)
     Q_PROPERTY(QString configFile READ configFile WRITE setConfigFile)
 
 public:
@@ -67,7 +68,7 @@ public:
      *
      * @return A list of the containment's Applets
      **/
-    Plasma::Applet::List listActiveApplets() const;
+    QList<Plasma::Applet *> listActiveApplets() const;
 
     QString configFile() const;
     void setConfigFile(const QString &file);
@@ -90,7 +91,7 @@ private Q_SLOTS:
 
 private:
     PlasmaKPartCorona *m_corona;
-    PlasmaKPartView *m_view;
+    //PlasmaKPartView *m_view;
     QHash<QString, Plasma::Applet *> *m_appletList;
     QVBoxLayout *m_configLayout;
     QString m_configFile;

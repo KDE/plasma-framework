@@ -27,14 +27,11 @@
 #include <Plasma/Containment>
 
 PlasmaKPartView::PlasmaKPartView(Plasma::Containment *containment, int uid, QWidget *parent)
-    : Plasma::View(containment, uid, parent),
+    : QQuickWidget(parent),
       m_configurationMode(false)
 {
     setFocusPolicy(Qt::NoFocus);
     connectContainment(containment);
-    setWallpaperEnabled(false);
-    viewport()->setAutoFillBackground(false);
-    setAutoFillBackground(false);
 }
 
 PlasmaKPartView::~PlasmaKPartView()

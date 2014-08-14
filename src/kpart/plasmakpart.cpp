@@ -30,12 +30,10 @@
 #include <QTimer>
 
 #include <QDebug>
-#include <KStandardDirs>
 
 #include <Plasma/Containment>
 #include <Plasma/Theme>
 #include <Plasma/Applet>
-#include <Plasma/Wallpaper>
 #include <plasma/pluginloader.h>
 
 #include "plasmakpartcorona.h"
@@ -45,18 +43,13 @@ K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
 
 PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
     : KParts::ReadOnlyPart(parent),
-      m_corona(0),
-      m_view(new PlasmaKPartView(0, 1))
+      m_corona(0)
+      //m_view(new PlasmaKPartView(0, 1))
 {
-    setComponentData(plasmaKPartFactory::componentData());
-
-    KGlobal::locale()->insertCatalog("libplasma");
-    KGlobal::locale()->insertCatalog("plasmagenericshell");
-    KGlobal::locale()->insertCatalog("plasma-kpart");
 
     setThemeDefaults();
 
-    setWidget(m_view);
+    //setWidget(m_view);
 
     // initialize the plugin loader
     if (args.length() > 0) {
@@ -72,8 +65,8 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
 
 PlasmaKPart::~PlasmaKPart()
 {
-    delete m_view;
-    m_view = 0;
+    //delete m_view;
+    //m_view = 0;
 
     if (!m_configFile.isEmpty()) {
         m_corona->saveLayout();
@@ -89,13 +82,13 @@ PlasmaKPart::~PlasmaKPart()
 void PlasmaKPart::setThemeDefaults()
 {
     KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-kpart");
-    const QString themeName = cg.readEntry("name", "appdashboard");
+    /*const QString themeName = cg.readEntry("name", "appdashboard");
     Plasma::Theme::defaultTheme()->setUseGlobalSettings(false);
-    Plasma::Theme::defaultTheme()->setThemeName(themeName);
+    Plasma::Theme::defaultTheme()->setThemeName(themeName);*/
 
     cg = KConfigGroup(KSharedConfig::openConfig(), "General");
 
-    Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans")));
+   // Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", QFont("Sans")));
 }
 
 void PlasmaKPart::syncConfig()
@@ -113,10 +106,9 @@ void PlasmaKPart::initCorona()
     connect(m_corona, SIGNAL(containmentAdded(Plasma::Containment*)), this, SLOT(createView(Plasma::Containment*)));
     connect(m_corona, SIGNAL(configSynced()), this, SLOT(syncConfig()));
 
-    m_corona->setItemIndexMethod(QGraphicsScene::NoIndex);
-    m_corona->initializeLayout(m_configFile);
+    //m_corona->initializeLayout(m_configFile);
 
-    m_view->show();
+   // m_view->show();
 }
 
 PlasmaKPartCorona *PlasmaKPart::corona() const
@@ -128,16 +120,16 @@ PlasmaKPartCorona *PlasmaKPart::corona() const
 void PlasmaKPart::createView(Plasma::Containment *containment)
 {
     Q_ASSERT(containment);
-    m_view->setContainment(containment);
+   // m_view->setContainment(containment);
 }
 
 void PlasmaKPart::addApplet(const QString &name, const QVariantList &args, const QRectF &geometry)
 {
     Q_ASSERT(containment());
-    containment()->createApplet(name, args, geometry);
+    containment()->createApplet(name, args);
 }
 
-Plasma::Applet::List PlasmaKPart::listActiveApplets() const
+QList <Plasma::Applet *> PlasmaKPart::listActiveApplets() const
 {
     return containment()->applets();
 }
@@ -151,7 +143,7 @@ void PlasmaKPart::setConfigFile(const QString &file)
 {
     m_configFile = file;
     if (m_corona && QFile::exists(m_configFile)) {
-        m_corona->initializeLayout(m_configFile);
+//        m_corona->initializeLayout(m_configFile);
     }
 }
 

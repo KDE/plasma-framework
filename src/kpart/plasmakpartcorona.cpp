@@ -34,9 +34,9 @@
 PlasmaKPartCorona::PlasmaKPartCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
-    enableAction("Lock Widgets", false);
-    enableAction("Shortcut Settings", false);
-    setDefaultContainmentPlugin("newspaper");
+//    enableAction("Lock Widgets", false);
+ //   enableAction("Shortcut Settings", false);
+ //   setDefaultContainmentPlugin("newspaper");
 }
 
 void PlasmaKPartCorona::loadDefaultLayout()
@@ -49,13 +49,13 @@ void PlasmaKPartCorona::loadDefaultLayout()
         return;
     }
 
-    evaluateScripts(PlasmaKPartScripting::ScriptEngine::defaultLayoutScripts());
+    //evaluateScripts(PlasmaKPartScripting::ScriptEngine::defaultLayoutScripts());
     requestConfigSync();
 }
 
 void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
 {
-    foreach (const QString &script, scripts) {
+   /* foreach (const QString &script, scripts) {
         PlasmaKPartScripting::ScriptEngine scriptEngine(this);
         connect(&scriptEngine, SIGNAL(printError(QString)), this, SLOT(printScriptError(QString)));
         connect(&scriptEngine, SIGNAL(print(QString)), this, SLOT(printScriptMessage(QString)));
@@ -66,7 +66,18 @@ void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
             // qDebug() << "evaluating startup script:" << script;
             scriptEngine.evaluateScript(code);
         }
-    }
+    }*/
+}
+
+QRect PlasmaKPartCorona::screenGeometry(int id) const
+{
+    Q_UNUSED(id);
+    return QRect();
+    /*if (m_view) {
+        return m_view->geometry();
+    } else {
+        return QRect();
+    }*/
 }
 
 void PlasmaKPartCorona::printScriptError(const QString &error)

@@ -23,14 +23,14 @@
 #define PLASMAKPARTVIEW_H
 
 #include <Plasma/Plasma>
-#include <Plasma/View>
+#include <QQuickWidget>
 
 namespace Plasma
 {
 class Containment;
 } // namespace Plasma
 
-class PlasmaKPartView : public Plasma::View
+class PlasmaKPartView : public QQuickWidget
 {
     Q_OBJECT
 public:
