@@ -25,7 +25,7 @@ import "styles" as Styles
 /**
    @class TextArea
    @short A scrollable text area
-   @inherit QtControls.TextArea
+   @inherit QtQuick.Controls.TextArea
 */
 QtControls.TextArea {
     id: textArea

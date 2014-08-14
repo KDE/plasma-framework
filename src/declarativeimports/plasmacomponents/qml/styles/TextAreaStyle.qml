@@ -27,6 +27,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "../private" as Private
 
+/*It inherits the local ScrollViewStyle, not the one from qtcontrols*/
 ScrollViewStyle {
     id: style
 
