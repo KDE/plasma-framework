@@ -79,10 +79,10 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Next
+defaultWallpaperTheme=Elarun
 defaultFileSuffix=.png
-defaultWidth=1920
-defaultHeight=1080
+defaultWidth=2560
+defaultHeight=1600
 
 [ContrastEffect]
 enabled=true
