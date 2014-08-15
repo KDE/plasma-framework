@@ -31,8 +31,6 @@
 void LookAndFeelPackage::initPackage(Plasma::Package *package)
 {
     // http://community.kde.org/Plasma/lookAndFeelPackage#
-    package->addFileDefinition("screenshot", "screenshot.png", i18n("Theme preview thumbnail"));
-
     package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/");
 
     //Defaults
