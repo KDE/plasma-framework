@@ -34,6 +34,7 @@ QtQuickControlStyle.ScrollViewStyle {
             id: borderSvg
             imagePath: "widgets/scrollwidget"
         }
+
         PlasmaCore.SvgItem {
             svg: borderSvg
             z: 1000

@@ -19,7 +19,7 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 1.1 as QtQuickControls
-import "styles" as Styles
+import "../components/styles" as Styles
 
 /**
  * This item takes a Flickable and automatically puts scrollbars in adjusting
