@@ -59,9 +59,9 @@ import "." 2.0 as PlasmaComponents
  * page that is becoming the current page) and PageStatus.Deactivating (for the
  * page that was the current page) statuses are also set.
  *
- * @inherit QtQuick.Item
+ * @inherit QtQuick.FocusScope
  */
-Item {
+FocusScope {
     id: root
 
     /**
