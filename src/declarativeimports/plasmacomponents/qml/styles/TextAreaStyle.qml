@@ -27,9 +27,12 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "../private" as Private
 
-/*It inherits the local ScrollViewStyle, not the one from qtcontrols*/
-ScrollViewStyle {
+QtQuickControlStyle.TextAreaStyle {
     id: style
+
+    ScrollViewStyle {
+       id: svs
+    }
 
     readonly property TextArea control: __control
 
@@ -62,6 +65,12 @@ ScrollViewStyle {
             style.padding.bottom = base.margins.bottom
         }
     }
+
+    scrollBarBackground: svs.scrollBarBackground
+    handle: svs.handle
+    incrementControl: svs.incrementControl
+    decrementControl: svs.decrementControl
+
     property Component cursorHandle
     property Component selectionHandle
 }
