@@ -34,17 +34,13 @@ QtQuickControlStyle.TextAreaStyle {
        id: svs
     }
 
-    readonly property TextArea control: __control
+    font: theme.defaultFont
+    backgroundColor: "transparent"
+    textColor: theme.viewTextColor
+    selectionColor: theme.viewFocusColor
+    selectedTextColor: theme.viewBackgroundColor
 
-    property font font: theme.defaultFont
-    property color backgroundColor: "transparent"
-    property color textColor: theme.viewTextColor
-    property color selectionColor: theme.viewFocusColor
-    property color selectedTextColor: theme.viewBackgroundColor
-
-    property int renderType: Text.NativeRendering
-
-    property real textMargin: 4
+    renderType: Text.NativeRendering
 
     frame: PlasmaCore.FrameSvgItem {
         id: base
@@ -71,6 +67,4 @@ QtQuickControlStyle.TextAreaStyle {
     incrementControl: svs.incrementControl
     decrementControl: svs.decrementControl
 
-    property Component cursorHandle
-    property Component selectionHandle
 }
