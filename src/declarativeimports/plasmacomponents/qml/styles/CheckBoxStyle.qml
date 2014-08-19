@@ -33,7 +33,32 @@ QtQuickControlStyle.CheckBoxStyle {
     //Not needed?
     background: Item {}
 
-    spacing: Math.round(units.mSize(theme.defaultFont).height/4)
+    spacing: units.smallSpacing
 
-    //indicator:
+    indicator: PlasmaCore.FrameSvgItem {
+        imagePath: "widgets/button"
+        prefix: "normal"
+        width: units.gridUnit
+        height: units.gridUnit
+        opacity: control.enabled ? 1 : 0.6
+
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {
+                id: checkmarkSvg
+                imagePath: "widgets/checkmarks"
+            }
+            elementId: "checkbox"
+            opacity: control.checked ? 1 : 0
+            anchors {
+                fill: parent
+                margins: parent.margins.left/2
+            }
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+    }
 }
