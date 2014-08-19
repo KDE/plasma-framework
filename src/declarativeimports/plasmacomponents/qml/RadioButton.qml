@@ -1,25 +1,27 @@
 /*
-*   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
-*
-*   This program is free software; you can redistribute it and/or modify
-*   it under the terms of the GNU Library General Public License as
-*   published by the Free Software Foundation; either version 2, or
-*   (at your option) any later version.
-*
-*   This program is distributed in the hope that it will be useful,
-*   but WITHOUT ANY WARRANTY; without even the implied warranty of
-*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*   GNU General Public License for more details
-*
-*   You should have received a copy of the GNU Library General Public
-*   License along with this program; if not, write to the
-*   Free Software Foundation, Inc.,
-*   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
-*/
+ *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+ *   Copyright 2014 Marco Martin <mart@kde.org>
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU Library General Public License as
+ *   published by the Free Software Foundation; either version 2, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details
+ *
+ *   You should have received a copy of the GNU Library General Public
+ *   License along with this program; if not, write to the
+ *   Free Software Foundation, Inc.,
+ *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
+ */
 
 import QtQuick 2.1
+import QtQuick.Controls 1.2 as QtControls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private" as Private
+import "styles" as Styles
 
 /**
  * A radio button component consists of a radio button and a line of text. Only
@@ -28,41 +30,14 @@ import "private" as Private
  * be set at the list creation. If not set, the list is shown without a
  * selection.
  *
- * All elements of this component are defined in DualStateButton, its base component.
+ * When a check box has the focus, its state can be toggled using the
+ * Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the
+ * clicked signal.
  *
+ * @inherit QtQuick.Controls.RadioButton
  */
-//FIXME: this should be round, DualStateButton shouldn't draw the shadow
-Private.DualStateButton {
+QtControls.RadioButton {
     id: radioButton
-    view: PlasmaCore.SvgItem {
-        svg: PlasmaCore.Svg {
-            id: buttonSvg
-            imagePath: "widgets/actionbutton"
-        }
-        elementId: "normal"
-        width: theme.mSize(theme.defaultFont).height + 6
-        height: width
 
-        PlasmaCore.SvgItem {
-            svg: PlasmaCore.Svg {
-                id: checkmarkSvg
-                imagePath: "widgets/checkmarks"
-            }
-            elementId: "radiobutton"
-            opacity: checked ? 1 : 0
-            anchors {
-                fill: parent
-            }
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
-    }
-    activeFocusOnTab: true
-
-    shadow: Private.RoundShadow {}
-    Accessible.role: Accessible.RadioButton
+    style: Styles.RadioButtonStyle {}
 }
