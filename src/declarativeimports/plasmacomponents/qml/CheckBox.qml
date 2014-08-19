@@ -18,8 +18,9 @@
 */
 
 import QtQuick 2.1
+import QtQuick.Controls 1.2 as QtControls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private" as Private
+import "styles" as Styles
 
 /**
  * A check box is a component that can be switched on (checked) or off
@@ -32,37 +33,10 @@ import "private" as Private
  * Qt.Key_Select, Qt.Key_Return, and Qt.Key_Enter hardware keys that send the
  * clicked signal.
  *
- * All elements of this component are defined in DualStateButton, its base component.
+ * @inherit QtQuick.Controls.CheckBox
  */
-Private.DualStateButton {
+QtControls.CheckBox {
     id: checkBox
-    view: PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/button"
-        prefix: "normal"
-        width: theme.mSize(theme.defaultFont).height + margins.left
-        height: theme.mSize(theme.defaultFont).height + margins.top
 
-        PlasmaCore.SvgItem {
-            svg: PlasmaCore.Svg {
-                id: checkmarkSvg
-                imagePath: "widgets/checkmarks"
-            }
-            elementId: "checkbox"
-            opacity: checked ? 1 : 0
-            anchors {
-                fill: parent
-                margins: parent.margins.left/2
-            }
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
-    }
-
-    activeFocusOnTab: true
-
-    shadow: Private.ButtonShadow {}
+    style: Styles.CheckBoxStyle {}
 }
