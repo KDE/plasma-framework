@@ -22,3 +22,6 @@ install( FILES ${translucent_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/des
 FILE(GLOB icons icons/*.svgz)
 install( FILES ${icons} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/icons/ )
 
+FILE(GLOB appbackgrounds appbackgrounds/*.png)
+install( FILES ${appbackgrounds} DESTINATION ${DATA_INSTALL_DIR}/desktoptheme/air-mobile/appbackgrounds/ )
+
