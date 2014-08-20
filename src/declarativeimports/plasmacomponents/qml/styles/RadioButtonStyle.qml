@@ -22,7 +22,7 @@ import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
-
+import "../private" as Private
 
 QtQuickControlStyle.RadioButtonStyle {
     id: radiobuttonStyle
@@ -62,6 +62,11 @@ QtQuickControlStyle.RadioButtonStyle {
                     easing.type: Easing.InOutQuad
                 }
             }
+        }
+        Private.RoundShadow {
+            anchors.fill: parent
+            z: -1
+            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
         }
     }
 }
