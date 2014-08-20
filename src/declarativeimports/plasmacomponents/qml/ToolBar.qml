@@ -114,8 +114,7 @@ Item{
             if (tools) {
                 tools.parent = newContainer
                 tools.visible = true
-                tools.anchors.left = newContainer.left
-                tools.anchors.right = newContainer.right
+                tools.anchors.fill = newContainer
             }
 
             switch (transition) {
