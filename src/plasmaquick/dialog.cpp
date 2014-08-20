@@ -61,7 +61,8 @@ public:
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0),
-          resizeOrigin(Undefined)
+          resizeOrigin(Undefined),
+          backgroundHints(Dialog::StandardBackground)
     {
     }
 
@@ -101,6 +102,7 @@ public:
     Plasma::Theme theme;
     bool componentComplete;
     ResizeOrigin resizeOrigin;
+    Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
@@ -460,7 +462,7 @@ Dialog::Dialog(QQuickItem *parent)
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    d->frameSvgItem->setImagePath("dialogs/background");
+    //d->frameSvgItem->setImagePath("dialogs/background");
 
     connect(&d->theme, SIGNAL(themeChanged()),
             this, SLOT(updateTheme()));
@@ -761,10 +763,14 @@ void Dialog::setType(WindowType type)
         setFlags(Qt::FramelessWindowHint | flags());
     }
 
-    if (type == Tooltip) {
-        d->frameSvgItem->setImagePath("widgets/tooltip");
+    if (d->backgroundHints == Dialog::NoBackground) {
+        d->frameSvgItem->setImagePath(QString());
     } else {
-        d->frameSvgItem->setImagePath("dialogs/background");
+        if (d->type == Tooltip) {
+            d->frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            d->frameSvgItem->setImagePath("dialogs/background");
+        }
     }
 
     if (type == Dock) {
@@ -850,6 +856,15 @@ void Dialog::classBegin()
 
 void Dialog::componentComplete()
 {
+    if (d->backgroundHints == NoBackground) {
+        d->frameSvgItem->setImagePath(QString());
+    } else {
+        if (d->type == Tooltip) {
+            d->frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            d->frameSvgItem->setImagePath("dialogs/background");
+        }
+    }
     d->componentComplete = true;
     d->syncToMainItemSize();
 }
@@ -880,6 +895,30 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     emit outputOnlyChanged();
+}
+
+Dialog::BackgroundHints Dialog::backgroundHints() const
+{
+    return d->backgroundHints;
+}
+
+void Dialog::setBackgroundHints(Dialog::BackgroundHints hints)
+{
+    if (d->backgroundHints == hints) {
+        return;
+    }
+
+    d->backgroundHints = hints;
+    if (hints == NoBackground) {
+        d->frameSvgItem->setImagePath(QString());
+    } else {
+        if (d->type == Tooltip) {
+            d->frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            d->frameSvgItem->setImagePath("dialogs/background");
+        }
+    }
+    emit backgroundHintsChanged();
 }
 
 }

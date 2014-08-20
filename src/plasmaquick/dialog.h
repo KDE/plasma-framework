@@ -116,6 +116,13 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
      */
     Q_PROPERTY(Qt::WindowFlags flags READ flags WRITE setFramelessFlags NOTIFY flagsChanged)
 
+    /**
+     * This property holds how (and if at all) the dialog should draw its own background
+     * or if it complete responsibility of the content to render a background.
+     * Note that in this case it loses kwin side shadows and blur
+     */
+    Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints NOTIFY backgroundHintsChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -128,6 +135,12 @@ public:
         Notification = NET::Notification
     };
     Q_ENUMS(WindowType)
+
+    enum BackgroundHints {
+        NoBackground = 0,         /**< Not drawing a background under the applet, the dialog has its own implementation */
+        StandardBackground = 1   /**< The standard background from the theme is drawn */
+    };
+    Q_ENUMS(BackgroundHints)
 
     Dialog(QQuickItem *parent = 0);
     ~Dialog();
@@ -155,6 +168,9 @@ public:
     void setOutputOnly(bool outputOnly);
     bool isOutputOnly() const;
 
+    BackgroundHints backgroundHints() const;
+    void setBackgroundHints(BackgroundHints hints);
+
     /**
      * @returns The suggested screen position for the popup
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
@@ -170,6 +186,7 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
     void outputOnlyChanged();
     void flagsChanged();
+    void backgroundHintsChanged();
     /**
      * Emitted when the @see hideOnWindowDeactivate property is @c true and this dialog lost focus to a
      * window that is neither a parent dialog to nor a child dialog of this dialog.
