@@ -41,13 +41,12 @@ QtQuickControlStyle.RadioButtonStyle {
             imagePath: "widgets/actionbutton"
         }
         elementId: "normal"
-        //slightly bigger then the checkbox: being round its apparent size is smaller
-        //making it slightly bigger seems to make it more balanced giving
-        //it roughly the same area
-        width: units.gridUnit * 1.2
+
+        width: units.gridUnit
         height: width
 
         PlasmaCore.SvgItem {
+            id: checkmark
             svg: PlasmaCore.Svg {
                 id: checkmarkSvg
                 imagePath: "widgets/checkmarks"
