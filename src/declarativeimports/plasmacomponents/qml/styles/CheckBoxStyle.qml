@@ -30,7 +30,6 @@ QtQuickControlStyle.CheckBoxStyle {
     label: PlasmaComponents.Label {
         text: control.text
     }
-    //Not needed?
     background: Item {}
 
     spacing: units.smallSpacing
@@ -48,7 +47,16 @@ QtQuickControlStyle.CheckBoxStyle {
                 imagePath: "widgets/checkmarks"
             }
             elementId: "checkbox"
-            opacity: control.checked ? 1 : 0
+            opacity: {
+                switch (control.checkedState) {
+                case Qt.Checked:
+                    return 1;
+                case Qt.PartiallyChecked:
+                    return 0.5;
+                default:
+                    return 0;
+                }
+            }
             anchors {
                 fill: parent
                 margins: parent.margins.left/2
