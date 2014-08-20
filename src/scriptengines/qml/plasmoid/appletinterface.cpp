@@ -164,7 +164,7 @@ void AppletInterface::init()
     [ = ]() {
         setExpanded(true);
         if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
-            i->forceActiveFocus(Qt::ShortcutFocusReason);
+            i->setFocus(true, Qt::ShortcutFocusReason);
         }
     });
 
