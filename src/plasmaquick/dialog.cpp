@@ -155,7 +155,7 @@ void DialogPrivate::syncBorders()
         }
     }
 
-    if (q->isVisible()) {
+    if (q->isVisible() && backgroundHints != Dialog::NoBackground) {
         DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
     }
 }
@@ -167,6 +167,7 @@ void DialogPrivate::updateTheme()
         KWindowEffects::enableBlurBehind(q->winId(), false);
         KWindowEffects::enableBackgroundContrast(q->winId(), false);
         q->setMask(QRegion());
+        DialogShadows::self()->removeWindow(q);
     } else {
         if (type == Dialog::Tooltip) {
             frameSvgItem->setImagePath("widgets/tooltip");
@@ -186,6 +187,9 @@ void DialogPrivate::updateTheme()
             q->setMask(QRegion());
         } else {
             q->setMask(frameSvgItem->frameSvg()->mask());
+        }
+        if (q->isVisible()) {
+            DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
         }
     }
     updateInputShape();
@@ -845,7 +849,9 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
 
 void Dialog::showEvent(QShowEvent *event)
 {
-    DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
+    if (d->backgroundHints != Dialog::NoBackground) {
+        DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
+    }
     QQuickWindow::showEvent(event);
 }
 
