@@ -162,17 +162,33 @@ void DialogPrivate::syncBorders()
 
 void DialogPrivate::updateTheme()
 {
-    KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
-            theme.backgroundContrast(),
-            theme.backgroundIntensity(),
-            theme.backgroundSaturation(),
-            frameSvgItem->frameSvg()->mask());
-
-    if (KWindowSystem::compositingActive()) {
+    if (backgroundHints == Dialog::NoBackground) {
+        frameSvgItem->setImagePath(QString());
+        KWindowEffects::enableBlurBehind(q->winId(), false);
+        KWindowEffects::enableBackgroundContrast(q->winId(), false);
         q->setMask(QRegion());
     } else {
-        q->setMask(frameSvgItem->frameSvg()->mask());
+        if (type == Dialog::Tooltip) {
+            frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            frameSvgItem->setImagePath("dialogs/background");
+        }
+
+        KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+
+        KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
+                theme.backgroundContrast(),
+                theme.backgroundIntensity(),
+                theme.backgroundSaturation(),
+                frameSvgItem->frameSvg()->mask());
+
+        if (KWindowSystem::compositingActive()) {
+            q->setMask(QRegion());
+        } else {
+            q->setMask(frameSvgItem->frameSvg()->mask());
+        }
     }
+    updateInputShape();
 }
 
 void DialogPrivate::updateVisibility(bool visible)
@@ -312,7 +328,12 @@ void DialogPrivate::updateInputShape()
     if (!q->isVisible()) {
         return;
     }
+
 #if HAVE_XCB_SHAPE
+    if (backgroundHints == Dialog::NoBackground) {
+        return;
+    }
+
     if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
         xcb_connection_t *c = QX11Info::connection();
         static bool s_shapeExtensionChecked = false;
@@ -350,7 +371,6 @@ void DialogPrivate::syncMainItemToSize()
 {
     syncBorders();
 
-    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
     updateTheme();
 
     if (mainItem) {
@@ -397,7 +417,7 @@ void DialogPrivate::syncToMainItemSize()
     syncBorders();
     mainItem.data()->setX(frameSvgItem->margins()->left());
     mainItem.data()->setY(frameSvgItem->margins()->top());
-    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+
     updateTheme();
 }
 
@@ -856,15 +876,7 @@ void Dialog::classBegin()
 
 void Dialog::componentComplete()
 {
-    if (d->backgroundHints == NoBackground) {
-        d->frameSvgItem->setImagePath(QString());
-    } else {
-        if (d->type == Tooltip) {
-            d->frameSvgItem->setImagePath("widgets/tooltip");
-        } else {
-            d->frameSvgItem->setImagePath("dialogs/background");
-        }
-    }
+    d->updateTheme();
     d->componentComplete = true;
     d->syncToMainItemSize();
 }
@@ -909,15 +921,7 @@ void Dialog::setBackgroundHints(Dialog::BackgroundHints hints)
     }
 
     d->backgroundHints = hints;
-    if (hints == NoBackground) {
-        d->frameSvgItem->setImagePath(QString());
-    } else {
-        if (d->type == Tooltip) {
-            d->frameSvgItem->setImagePath("widgets/tooltip");
-        } else {
-            d->frameSvgItem->setImagePath("dialogs/background");
-        }
-    }
+    d->updateTheme();
     emit backgroundHintsChanged();
 }
 
