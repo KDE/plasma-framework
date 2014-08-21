@@ -29,13 +29,12 @@
 
 #include "plasmakpartview.h"
 
-PlasmaKPartView::PlasmaKPartView(PlasmaKPartCorona *pmccorona, QWindow *parent)
-    : PlasmaQuick::View(pmccorona, parent)
+PlasmaKPartView::PlasmaKPartView(PlasmaKPartCorona *corona, QWindow *parent)
+    : PlasmaQuick::View(corona, parent)
 {
-    setTitle(i18n("Plasma Mediacenter"));
-    pmccorona->setView(this);
+    corona->setView(this);
     engine()->rootContext()->setContextProperty("desktop", this);
-    setSource(QUrl::fromLocalFile(pmccorona->package().filePath("views", "Desktop.qml")));
+    setSource(QUrl::fromLocalFile(corona->package().filePath("views", "Desktop.qml")));
 }
 
 PlasmaKPartView::~PlasmaKPartView()

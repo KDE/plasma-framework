@@ -45,17 +45,9 @@ K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
 PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
     : KParts::ReadOnlyPart(parent),
       m_corona(0),
-      m_view(new PlasmaKPartView(m_corona, 0))
+      m_view(0)
 {
-
     setThemeDefaults();
-
-    //setWidget(m_view);
-    QWidget *widget = new QWidget;
-    QVBoxLayout *lay = new QVBoxLayout(widget);
-    QWidget *cont = widget->createWindowContainer(m_view, widget);
-    lay->addWidget(cont);
-    setWidget(widget);
 
     // initialize the plugin loader
     if (args.length() > 0) {
@@ -66,7 +58,7 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
     }
 
     setAutoDeletePart(false);
-    QTimer::singleShot(0, this, SLOT(initCorona()));
+    initCorona();
 }
 
 PlasmaKPart::~PlasmaKPart()
@@ -109,12 +101,16 @@ void PlasmaKPart::initCorona()
     }
 
     m_corona = new PlasmaKPartCorona(this);
+    m_view = new PlasmaKPartView(m_corona, 0);
+
+    QWidget *cont = QWidget::createWindowContainer(m_view);
+    setWidget(cont);
+
     connect(m_corona, SIGNAL(containmentAdded(Plasma::Containment*)), this, SLOT(createView(Plasma::Containment*)));
     connect(m_corona, SIGNAL(configSynced()), this, SLOT(syncConfig()));
 
-//    m_corona->initializeLayout(m_configFile);
+    m_corona->loadLayout(m_configFile);
 
-   // m_view->show();
 }
 
 PlasmaKPartCorona *PlasmaKPart::corona() const
@@ -149,7 +145,7 @@ void PlasmaKPart::setConfigFile(const QString &file)
 {
     m_configFile = file;
     if (m_corona && QFile::exists(m_configFile)) {
-//        m_corona->initializeLayout(m_configFile);
+        m_corona->loadLayout(m_configFile);
     }
 }
 

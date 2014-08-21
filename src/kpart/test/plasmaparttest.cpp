@@ -43,10 +43,6 @@ PlasmaPartTest::PlasmaPartTest()
     m_part = factory->create<KParts::ReadOnlyPart>(this);
     setCentralWidget(m_part->widget());
     setupGUI();
-
-    // apply the saved mainwindow settings, if any, and ask the mainwindow
-    // to automatically save settings if changed: window size, toolbar
-    // position, icon size, etc.
     setAutoSaveSettings();
 }
 
