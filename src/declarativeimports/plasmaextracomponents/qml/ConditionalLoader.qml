@@ -25,7 +25,7 @@ import QtQuick 2.0
  * condition is satisfied.  For instance the contents of the tabs of a TabBar
  * can be loaded only when they become the current page.
  */
-Item {
+FocusScope {
     id: root
 
     /**
@@ -56,6 +56,7 @@ Item {
     Loader {
         id: loader
         anchors.fill: parent
+        focus: true
 
         property bool when: false
         property variant conditionalSource
