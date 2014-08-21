@@ -118,8 +118,8 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
 
     /**
      * This property holds how (and if at all) the dialog should draw its own background
-     * or if it complete responsibility of the content to render a background.
-     * Note that in this case it loses kwin side shadows and blur
+     * or if it is complete responsibility of the content item to render a background.
+     * Note that in case of NoBackground it loses kwin side shadows and blur
      */
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints NOTIFY backgroundHintsChanged)
 
