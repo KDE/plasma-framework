@@ -639,7 +639,11 @@ QList<QObject *> ContainmentInterface::actions() const
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     foreach (QAction *a, m_containment->actions()->actions()) {
-        actions.insert(a->data().toInt(), a);
+        //FIXME QML visualizations don't support menus for now, *and* there is no way to
+        //distinguish them on QML side
+        if (!a->menu()) {
+            actions.insert(a->data().toInt(), a);
+        }
     }
     foreach (QAction *a, m_containment->corona()->actions()->actions()) {
         if (a->objectName() == QStringLiteral("lock widgets")) {
