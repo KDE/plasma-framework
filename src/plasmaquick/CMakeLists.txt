@@ -111,8 +111,13 @@ ecm_configure_package_config_file(
     PATH_VARS  KF5_INCLUDE_INSTALL_DIR CMAKE_INSTALL_PREFIX
 )
 
+ecm_setup_version(${KF5_VERSION}
+                  VARIABLE_PREFIX PLASMAQUICK
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfigVersion.cmake" )
+
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfigVersion.cmake"
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}" COMPONENT Devel
 )
 
