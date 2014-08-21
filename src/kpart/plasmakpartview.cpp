@@ -1,85 +1,45 @@
 /*
- *   Copyright 2007-2008 Aaron Seigo <aseigo@kde.org>
- *   Copyright 2010 Ryan Rix <ry@n.rix.si>
- *   Copyright 2010 Siddharth Sharma <siddharth.kde@gmail.com>
+ * Copyright 2014  Bhushan Shah <bhush94@gmail.com>
+ * Copyright 2014  Marco Martin <mart@kde.org>
  *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License version 2 as
- *   published by the Free Software Foundation
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License or (at your option) version 3 or any later version
+ * accepted by the membership of KDE e.V. (or its successor approved
+ * by the membership of KDE e.V.), which shall act as a proxy
+ * defined in Section 14 of version 3 of the license.
  *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#include "plasmakpartview.h"
-#include "plasmakpartcorona.h"
+#include <QUrl>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include <QDebug>
+#include <Plasma/Package>
+#include <KLocalizedString>
 
-#include <Plasma/Applet>
-#include <Plasma/Containment>
+#include "plasmakpartview.h"
 
-PlasmaKPartView::PlasmaKPartView(Plasma::Containment *containment, int uid, QWidget *parent)
-    : QQuickWidget(parent),
-      m_configurationMode(false)
+PlasmaKPartView::PlasmaKPartView(PlasmaKPartCorona *pmccorona, QWindow *parent)
+    : PlasmaQuick::View(pmccorona, parent)
 {
-    setFocusPolicy(Qt::NoFocus);
-    connectContainment(containment);
+    setTitle(i18n("Plasma Mediacenter"));
+    pmccorona->setView(this);
+    engine()->rootContext()->setContextProperty("desktop", this);
+    setSource(QUrl::fromLocalFile(pmccorona->package().filePath("views", "Desktop.qml")));
 }
 
 PlasmaKPartView::~PlasmaKPartView()
 {
-}
-
-void PlasmaKPartView::connectContainment(Plasma::Containment *containment)
-{
-    if (!containment) {
-        return;
-    }
-
-    connect(this, SIGNAL(sceneRectAboutToChange()), this, SLOT(updateGeometry()));
-    connect(containment, SIGNAL(toolBoxVisibilityChanged(bool)), this, SLOT(updateConfigurationMode(bool)));
-}
-
-void PlasmaKPartView::setContainment(Plasma::Containment *c)
-{
-    if (containment()) {
-        disconnect(containment(), 0, this, 0);
-    }
-
-    Plasma::View::setContainment(c);
-    connectContainment(c);
-    updateGeometry();
-}
-
-void PlasmaKPartView::resizeEvent(QResizeEvent *event)
-{
-    Q_UNUSED(event)
-    updateGeometry();
-    emit geometryChanged();
-}
-
-void PlasmaKPartView::updateGeometry()
-{
-    Plasma::Containment *c = containment();
-    if (!c) {
-        return;
-    }
-
-    // qDebug() << "New containment geometry is" << c->geometry();
-
-    if (c->size().toSize() != size()) {
-        c->setMaximumSize(size());
-        c->setMinimumSize(size());
-        c->resize(size());
-    }
 }
 
 #include "plasmakpartview.moc"

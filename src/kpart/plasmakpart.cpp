@@ -30,6 +30,7 @@
 #include <QTimer>
 
 #include <QDebug>
+#include <QVBoxLayout>
 
 #include <Plasma/Containment>
 #include <Plasma/Theme>
@@ -43,13 +44,18 @@ K_PLUGIN_FACTORY(plasmaKPartFactory, registerPlugin<PlasmaKPart>();)
 
 PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args)
     : KParts::ReadOnlyPart(parent),
-      m_corona(0)
-      //m_view(new PlasmaKPartView(0, 1))
+      m_corona(0),
+      m_view(new PlasmaKPartView(m_corona, 0))
 {
 
     setThemeDefaults();
 
     //setWidget(m_view);
+    QWidget *widget = new QWidget;
+    QVBoxLayout *lay = new QVBoxLayout(widget);
+    QWidget *cont = widget->createWindowContainer(m_view, widget);
+    lay->addWidget(cont);
+    setWidget(widget);
 
     // initialize the plugin loader
     if (args.length() > 0) {
@@ -65,8 +71,8 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
 
 PlasmaKPart::~PlasmaKPart()
 {
-    //delete m_view;
-    //m_view = 0;
+    delete m_view;
+    m_view = 0;
 
     if (!m_configFile.isEmpty()) {
         m_corona->saveLayout();
@@ -106,7 +112,7 @@ void PlasmaKPart::initCorona()
     connect(m_corona, SIGNAL(containmentAdded(Plasma::Containment*)), this, SLOT(createView(Plasma::Containment*)));
     connect(m_corona, SIGNAL(configSynced()), this, SLOT(syncConfig()));
 
-    //m_corona->initializeLayout(m_configFile);
+//    m_corona->initializeLayout(m_configFile);
 
    // m_view->show();
 }
@@ -120,7 +126,7 @@ PlasmaKPartCorona *PlasmaKPart::corona() const
 void PlasmaKPart::createView(Plasma::Containment *containment)
 {
     Q_ASSERT(containment);
-   // m_view->setContainment(containment);
+    m_view->setContainment(containment);
 }
 
 void PlasmaKPart::addApplet(const QString &name, const QVariantList &args, const QRectF &geometry)

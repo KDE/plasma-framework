@@ -26,17 +26,22 @@
 #include <QDebug>
 
 #include <Plasma/Containment>
+#include <Plasma/Package>
+#include <Plasma/PluginLoader>
 
 #include <qaction.h>
 #include <qfile.h>
 #include "scripting/scriptengine.h"
+#include "plasmaquick/view.h"
 
 PlasmaKPartCorona::PlasmaKPartCorona(QObject *parent)
-    : Plasma::Corona(parent)
+    : Plasma::Corona(parent),
+      m_view(0)
 {
-//    enableAction("Lock Widgets", false);
- //   enableAction("Shortcut Settings", false);
- //   setDefaultContainmentPlugin("newspaper");
+    Plasma::Package package = Plasma::PluginLoader::self()->loadPackage("Plasma/Shell");
+    //TODO: own package
+    package.setPath("org.kde.plasma.desktop");
+    setPackage(package);
 }
 
 void PlasmaKPartCorona::loadDefaultLayout()
@@ -73,11 +78,11 @@ QRect PlasmaKPartCorona::screenGeometry(int id) const
 {
     Q_UNUSED(id);
     return QRect();
-    /*if (m_view) {
+    if (m_view) {
         return m_view->geometry();
     } else {
         return QRect();
-    }*/
+    }
 }
 
 void PlasmaKPartCorona::printScriptError(const QString &error)
@@ -88,6 +93,11 @@ void PlasmaKPartCorona::printScriptError(const QString &error)
 void PlasmaKPartCorona::printScriptMessage(const QString &error)
 {
     // qDebug() << "Startup script: " << error;
+}
+
+void PlasmaKPartCorona::setView(PlasmaQuick::View *view)
+{
+    m_view = view;
 }
 
 #include "plasmakpartcorona.moc"

@@ -29,6 +29,11 @@ namespace Plasma
 class Applet;
 } // namespace Plasma
 
+namespace PlasmaQuick
+{
+    class View;
+}
+
 /**
  * @short A Corona with dashboard-y considerations
  */
@@ -37,6 +42,7 @@ class PlasmaKPartCorona : public Plasma::Corona
     Q_OBJECT
 public:
     PlasmaKPartCorona(QObject *parent);
+    void setView(PlasmaQuick::View *view);
 
     QRect screenGeometry(int id) const;
 protected:
@@ -49,6 +55,8 @@ private Q_SLOTS:
 
 private:
     Plasma::Applet *loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
+
+    PlasmaQuick::View *m_view;
 };
 
 #endif

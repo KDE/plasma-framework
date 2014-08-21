@@ -91,7 +91,7 @@ private Q_SLOTS:
 
 private:
     PlasmaKPartCorona *m_corona;
-    //PlasmaKPartView *m_view;
+    PlasmaKPartView *m_view;
     QHash<QString, Plasma::Applet *> *m_appletList;
     QVBoxLayout *m_configLayout;
     QString m_configFile;
