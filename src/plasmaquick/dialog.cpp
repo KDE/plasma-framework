@@ -877,7 +877,6 @@ void Dialog::classBegin()
 
 void Dialog::componentComplete()
 {
-    d->updateTheme();
     d->componentComplete = true;
     d->syncToMainItemSize();
 }
