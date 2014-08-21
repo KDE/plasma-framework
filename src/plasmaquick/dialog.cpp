@@ -154,10 +154,6 @@ void DialogPrivate::syncBorders()
             updateMaximumHeight();
         }
     }
-
-    if (q->isVisible() && backgroundHints != Dialog::NoBackground) {
-        DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
-    }
 }
 
 void DialogPrivate::updateTheme()
@@ -486,7 +482,6 @@ Dialog::Dialog(QQuickItem *parent)
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    //d->frameSvgItem->setImagePath("dialogs/background");
 
     connect(&d->theme, SIGNAL(themeChanged()),
             this, SLOT(updateTheme()));
