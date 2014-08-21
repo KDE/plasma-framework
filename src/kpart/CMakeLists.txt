@@ -28,3 +28,4 @@ target_link_libraries(plasma-kpart
 install(TARGETS plasma-kpart DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-kpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
+add_subdirectory(test)
