@@ -49,6 +49,7 @@ Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
 {
     d->structure = structure;
+    d->fallbackPackage = Package(structure);
     if (d->structure) {
         d->structure.data()->initPackage(this);
     }
@@ -290,7 +291,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 {
     if (!d->valid) {
         //qDebug() << "package is not valid";
-        return QString();
+        return d->fallbackFilePath(fileType, filename);
     }
 
     const QString discoveryKey(fileType + filename);
@@ -305,7 +306,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         //qDebug()<<d->contents.keys();
         if (!d->contents.contains(fileType)) {
             //qDebug() << "package does not contain" << fileType << filename;
-            return QString();
+            return d->fallbackFilePath(fileType, filename);
         }
 
         paths = d->contents[fileType].paths;
@@ -313,7 +314,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         if (paths.isEmpty()) {
             //qDebug() << "no matching path came of it, while looking for" << fileType << filename;
             d->discoveries.insert(discoveryKey, QString());
-            return QString();
+            return d->fallbackFilePath(fileType, filename);
         }
     } else {
         //when filetype is empty paths is always empty, so try with an empty string
@@ -356,7 +357,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //qDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
-    return QString();
+    return d->fallbackFilePath(fileType, filename);
 }
 
 QStringList Package::entryList(const char *key) const
@@ -792,6 +793,7 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     }
 
     structure = rhs.structure;
+    fallbackPackage = Package(structure.data());
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
@@ -869,6 +871,15 @@ void PackagePrivate::createPackageMetadata(const QString &path)
     }
 
     metadata = new KPluginInfo(metadataPath);
+}
+
+QString PackagePrivate::fallbackFilePath(const char *key, const QString &filename) const
+{
+    if (fallbackPackage.isValid()) {
+        return fallbackPackage.filePath(key, filename);
+    } else {
+        return QString();
+    }
 }
 
 } // Namespace
