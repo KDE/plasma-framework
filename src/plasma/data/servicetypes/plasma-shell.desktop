@@ -57,3 +57,5 @@ Comment[uk]=Компоненти оболонки Плазми
 Comment[x-test]=xxPlasma Shell Componentsxx
 Comment[zh_TW]=Plasma Shell 組件
 
+[PropertyDef::X-KDE-fallbackPackage]
+Type=QString

@@ -49,7 +49,7 @@ Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
 {
     d->structure = structure;
-    d->fallbackPackage = Package(structure);
+
     if (d->structure) {
         d->structure.data()->initPackage(this);
     }
@@ -498,6 +498,7 @@ void Package::setPath(const QString &path)
         }
     }
 
+
     // if nothing did change, then we go back to the old dptr
     if (d->path == previousPath) {
         d = oldD;
@@ -508,6 +509,21 @@ void Package::setPath(const QString &path)
     d->discoveries.clear();
     delete d->metadata;
     d->metadata = 0;
+
+    QString fallback;
+
+    if (metadata().isValid()) {
+        fallback = metadata().property("X-KDE-fallbackPackage").toString();
+    }
+    if (!fallback.isEmpty()) {
+        if (!d->fallbackPackage) {
+            d->fallbackPackage = new Package(d->structure.data());
+        }
+        d->fallbackPackage->setPath(fallback);
+    } else {
+        delete d->fallbackPackage;
+        d->fallbackPackage = 0;
+    }
 
     // uh-oh, but we didn't end up with anything valid, so we sadly reset ourselves
     // to futility.
@@ -762,6 +778,7 @@ KJob *Package::uninstall(const QString &packageName, const QString &packageRoot)
 PackagePrivate::PackagePrivate()
     : QSharedData(),
       servicePrefix("plasma-applet-"),
+      fallbackPackage(0),
       metadata(0),
       externalPaths(false),
       valid(false),
@@ -793,7 +810,7 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     }
 
     structure = rhs.structure;
-    fallbackPackage = Package(structure.data());
+    fallbackPackage = rhs.fallbackPackage;
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
@@ -875,8 +892,9 @@ void PackagePrivate::createPackageMetadata(const QString &path)
 
 QString PackagePrivate::fallbackFilePath(const char *key, const QString &filename) const
 {
-    if (fallbackPackage.isValid()) {
-        return fallbackPackage.filePath(key, filename);
+    //don't fallback if the package isn't valid and never fallback the metadata file
+    if (fallbackPackage && fallbackPackage->isValid() && key != "metadata") {
+        return fallbackPackage->filePath(key, filename);
     } else {
         return QString();
     }

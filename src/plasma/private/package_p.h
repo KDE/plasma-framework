@@ -83,7 +83,7 @@ public:
     QString servicePrefix;
     QHash<QString, QString> discoveries;
     QHash<QByteArray, ContentStructure> contents;
-    Package fallbackPackage;
+    Package *fallbackPackage;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QStringList mimeTypes;
 #endif
