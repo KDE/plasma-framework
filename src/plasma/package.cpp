@@ -801,6 +801,7 @@ PackagePrivate::~PackagePrivate()
         dir.removeRecursively();
     }
     delete metadata;
+    delete fallbackPackage;
 }
 
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
