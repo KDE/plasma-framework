@@ -61,7 +61,8 @@ public:
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0),
-          resizeOrigin(Undefined)
+          resizeOrigin(Undefined),
+          backgroundHints(Dialog::StandardBackground)
     {
     }
 
@@ -101,6 +102,7 @@ public:
     Plasma::Theme theme;
     bool componentComplete;
     ResizeOrigin resizeOrigin;
+    Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
     QWeakPointer <QObject> mainItemLayout;
@@ -152,25 +154,41 @@ void DialogPrivate::syncBorders()
             updateMaximumHeight();
         }
     }
-
-    if (q->isVisible()) {
-        DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
-    }
 }
 
 void DialogPrivate::updateTheme()
 {
-    KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
-            theme.backgroundContrast(),
-            theme.backgroundIntensity(),
-            theme.backgroundSaturation(),
-            frameSvgItem->frameSvg()->mask());
-
-    if (KWindowSystem::compositingActive()) {
+    if (backgroundHints == Dialog::NoBackground) {
+        frameSvgItem->setImagePath(QString());
+        KWindowEffects::enableBlurBehind(q->winId(), false);
+        KWindowEffects::enableBackgroundContrast(q->winId(), false);
         q->setMask(QRegion());
+        DialogShadows::self()->removeWindow(q);
     } else {
-        q->setMask(frameSvgItem->frameSvg()->mask());
+        if (type == Dialog::Tooltip) {
+            frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            frameSvgItem->setImagePath("dialogs/background");
+        }
+
+        KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+
+        KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
+                theme.backgroundContrast(),
+                theme.backgroundIntensity(),
+                theme.backgroundSaturation(),
+                frameSvgItem->frameSvg()->mask());
+
+        if (KWindowSystem::compositingActive()) {
+            q->setMask(QRegion());
+        } else {
+            q->setMask(frameSvgItem->frameSvg()->mask());
+        }
+        if (q->isVisible()) {
+            DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
+        }
     }
+    updateInputShape();
 }
 
 void DialogPrivate::updateVisibility(bool visible)
@@ -310,7 +328,12 @@ void DialogPrivate::updateInputShape()
     if (!q->isVisible()) {
         return;
     }
+
 #if HAVE_XCB_SHAPE
+    if (backgroundHints == Dialog::NoBackground) {
+        return;
+    }
+
     if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
         xcb_connection_t *c = QX11Info::connection();
         static bool s_shapeExtensionChecked = false;
@@ -348,7 +371,6 @@ void DialogPrivate::syncMainItemToSize()
 {
     syncBorders();
 
-    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
     updateTheme();
 
     if (mainItem) {
@@ -395,7 +417,7 @@ void DialogPrivate::syncToMainItemSize()
     syncBorders();
     mainItem.data()->setX(frameSvgItem->margins()->left());
     mainItem.data()->setY(frameSvgItem->margins()->top());
-    KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+
     updateTheme();
 }
 
@@ -460,7 +482,6 @@ Dialog::Dialog(QQuickItem *parent)
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    d->frameSvgItem->setImagePath("dialogs/background");
 
     connect(&d->theme, SIGNAL(themeChanged()),
             this, SLOT(updateTheme()));
@@ -761,10 +782,14 @@ void Dialog::setType(WindowType type)
         setFlags(Qt::FramelessWindowHint | flags());
     }
 
-    if (type == Tooltip) {
-        d->frameSvgItem->setImagePath("widgets/tooltip");
+    if (d->backgroundHints == Dialog::NoBackground) {
+        d->frameSvgItem->setImagePath(QString());
     } else {
-        d->frameSvgItem->setImagePath("dialogs/background");
+        if (d->type == Tooltip) {
+            d->frameSvgItem->setImagePath("widgets/tooltip");
+        } else {
+            d->frameSvgItem->setImagePath("dialogs/background");
+        }
     }
 
     if (type == Dock) {
@@ -819,7 +844,9 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
 
 void Dialog::showEvent(QShowEvent *event)
 {
-    DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
+    if (d->backgroundHints != Dialog::NoBackground) {
+        DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
+    }
     QQuickWindow::showEvent(event);
 }
 
@@ -880,6 +907,22 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     emit outputOnlyChanged();
+}
+
+Dialog::BackgroundHints Dialog::backgroundHints() const
+{
+    return d->backgroundHints;
+}
+
+void Dialog::setBackgroundHints(Dialog::BackgroundHints hints)
+{
+    if (d->backgroundHints == hints) {
+        return;
+    }
+
+    d->backgroundHints = hints;
+    d->updateTheme();
+    emit backgroundHintsChanged();
 }
 
 }
