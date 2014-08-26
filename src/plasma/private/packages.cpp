@@ -275,6 +275,7 @@ void ShellPackage::initPackage(Plasma::Package *package)
     package->addFileDefinition("appletconfigurationui", "configuration/AppletConfiguration.qml", i18n("QML component for the configuration dialog for applets"));
     package->addFileDefinition("containmentconfigurationui", "configuration/ContainmentConfiguration.qml", i18n("QML component for the configuration dialog for containments"));
     package->addFileDefinition("panelconfigurationui", "configuration/PanelConfiguration.qml", i18n("Panel configuration UI"));
+    package->addFileDefinition("appletalternativesui", "explorer/AppletAlternatives.qml", i18n("QML component for choosing an alternate applet"));
 
     //Widget explorer
     package->addFileDefinition("widgetexplorer", "explorer/WidgetExplorer.qml", i18n("Widgets explorer UI"));
