@@ -111,6 +111,7 @@ void ConfigViewPrivate::init()
 
     if (corona->package().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
+        interceptor->addAllowedPath(applet.data()->package().path());
         q->engine()->setUrlInterceptor(interceptor);
     }
    
