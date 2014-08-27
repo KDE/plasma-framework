@@ -30,6 +30,7 @@
 #include <QLayout>
 #include <QScreen>
 #include <QMenu>
+#include <QPointer>
 
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
@@ -101,8 +102,8 @@ public:
     QTimer *syncTimer;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
-    QWeakPointer<QQuickItem> mainItem;
-    QWeakPointer<QQuickItem> visualParent;
+    QPointer<QQuickItem> mainItem;
+    QPointer<QQuickItem> visualParent;
 
     QRect cachedGeometry;
     Dialog::WindowType type;
@@ -114,7 +115,7 @@ public:
     Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
-    QWeakPointer <QObject> mainItemLayout;
+    QPointer <QObject> mainItemLayout;
 };
 
 void DialogPrivate::syncBorders()
@@ -196,8 +197,8 @@ void DialogPrivate::updateTheme()
 void DialogPrivate::updateVisibility(bool visible)
 {
     if (visible) {
-        if (visualParent && visualParent.data()->window()) {
-            q->setTransientParent(visualParent.data()->window());
+        if (visualParent && visualParent->window()) {
+            q->setTransientParent(visualParent->window());
         }
 
         if (q->location() == Plasma::Types::FullScreen) {
@@ -264,12 +265,12 @@ void DialogPrivate::updateMinimumWidth()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    mainItem.data()->disconnect(q);
+    mainItem->disconnect(q);
 
     syncBorders();
     updateTheme();
 
-    int minimumWidth = mainItemLayout.data()->property("minimumWidth").toInt();
+    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
     auto margin = frameSvgItem->margins();
 
     int oldWidth = q->width();
@@ -277,7 +278,7 @@ void DialogPrivate::updateMinimumWidth()
     q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
     q->setWidth(qMax(q->width(), q->minimumWidth()));
 
-    mainItem.data()->setWidth(q->width() - margin->left() - margin->right());
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
     frameSvgItem->setWidth(q->width());
 
     if (location == Plasma::Types::RightEdge) {
@@ -285,8 +286,8 @@ void DialogPrivate::updateMinimumWidth()
     }
     repositionIfOffScreen();
 
-    QObject::connect(mainItem.data(), SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem.data(), SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMinimumHeight()
@@ -294,20 +295,20 @@ void DialogPrivate::updateMinimumHeight()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    mainItem.data()->disconnect(q);
+    mainItem->disconnect(q);
 
     syncBorders();
     updateTheme();
 
-    int minimumHeight = mainItemLayout.data()->property("minimumHeight").toInt();
+    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     auto margin = frameSvgItem->margins();
 
-    int oldHeight = mainItem.data()->height();
+    int oldHeight = mainItem->height();
 
     q->setMinimumHeight(minimumHeight + margin->left() + margin->right());
     q->setHeight(qMax(q->height(), q->minimumHeight()));
 
-    mainItem.data()->setHeight(q->height() - margin->top() - margin->bottom());
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
     frameSvgItem->setHeight(q->height());
 
     if (location == Plasma::Types::BottomEdge) {
@@ -315,8 +316,8 @@ void DialogPrivate::updateMinimumHeight()
     }
     repositionIfOffScreen();
 
-    QObject::connect(mainItem.data(), SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem.data(), SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMaximumWidth()
@@ -324,25 +325,25 @@ void DialogPrivate::updateMaximumWidth()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    mainItem.data()->disconnect(q);
+    mainItem->disconnect(q);
 
     syncBorders();
     updateTheme();
 
-    int maximumWidth = mainItemLayout.data()->property("maximumWidth").toInt();
+    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
     maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
     auto margin = frameSvgItem->margins();
 
     q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
     q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
 
-    mainItem.data()->setWidth(q->width() - margin->left() - margin->right());
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
     frameSvgItem->setWidth(q->width());
 
     repositionIfOffScreen();
 
-    QObject::connect(mainItem.data(), SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem.data(), SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMaximumHeight()
@@ -350,25 +351,25 @@ void DialogPrivate::updateMaximumHeight()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    mainItem.data()->disconnect(q);
+    mainItem->disconnect(q);
 
     syncBorders();
     updateTheme();
 
-    int maximumHeight = mainItemLayout.data()->property("maximumHeight").toInt();
+    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
     auto margin = frameSvgItem->margins();
 
     q->setMaximumHeight(maximumHeight + margin->left() + margin->right());
     q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
 
-    mainItem.data()->setHeight(q->height() - margin->top() - margin->bottom());
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
     frameSvgItem->setHeight(q->height());
 
     repositionIfOffScreen();
 
-    QObject::connect(mainItem.data(), SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem.data(), SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::repositionIfOffScreen()
@@ -445,10 +446,10 @@ void DialogPrivate::syncMainItemToSize()
     updateTheme();
 
     if (mainItem) {
-        mainItem.data()->setX(frameSvgItem->margins()->left());
-        mainItem.data()->setY(frameSvgItem->margins()->top());
-        mainItem.data()->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
-        mainItem.data()->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
+        mainItem->setX(frameSvgItem->margins()->left());
+        mainItem->setY(frameSvgItem->margins()->top());
+        mainItem->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
+        mainItem->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
     }
 
     if (q->visualParent()) {
@@ -467,7 +468,7 @@ void DialogPrivate::syncToMainItemSize()
 
     syncBorders();
 
-    const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
+    const QSize s = QSize(mainItem->width(), mainItem->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
 
@@ -487,8 +488,8 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
 
-    mainItem.data()->setX(frameSvgItem->margins()->left());
-    mainItem.data()->setY(frameSvgItem->margins()->top());
+    mainItem->setX(frameSvgItem->margins()->left());
+    mainItem->setY(frameSvgItem->margins()->top());
 
     updateTheme();
 }
@@ -569,14 +570,14 @@ Dialog::~Dialog()
 
 QQuickItem *Dialog::mainItem() const
 {
-    return d->mainItem.data();
+    return d->mainItem;
 }
 
 void Dialog::setMainItem(QQuickItem *mainItem)
 {
-    if (d->mainItem.data() != mainItem) {
+    if (d->mainItem != mainItem) {
         if (d->mainItem) {
-            d->mainItem.data()->setParent(parent());
+            d->mainItem->setParent(parent());
         }
 
         d->mainItem = mainItem;
@@ -607,7 +608,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 }
             }
             if (d->mainItemLayout) {
-                disconnect(d->mainItemLayout.data(), 0, this, 0);
+                disconnect(d->mainItemLayout, 0, this, 0);
             }
             d->mainItemLayout = layout;
 
@@ -638,12 +639,12 @@ void DialogPrivate::slotMainItemSizeChanged()
 
 QQuickItem *Dialog::visualParent() const
 {
-    return d->visualParent.data();
+    return d->visualParent;
 }
 
 void Dialog::setVisualParent(QQuickItem *visualParent)
 {
-    if (d->visualParent.data() == visualParent) {
+    if (d->visualParent == visualParent) {
         return;
     }
 

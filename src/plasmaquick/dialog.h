@@ -22,7 +22,6 @@
 
 #include <QQuickItem>
 #include <QQuickWindow>
-#include <QWeakPointer>
 #include <QPoint>
 #include <QQmlParserStatus>
 
