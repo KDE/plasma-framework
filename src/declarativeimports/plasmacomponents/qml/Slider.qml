@@ -19,65 +19,20 @@
 
 import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
 import "private" as Private
+import QtQuick.Controls 1.2 as QtControls
+import "styles" as Styles
 
-// TODO: create a value indicator for plasma?
+
 /**
  * An interactive slider component with Plasma look and feel.
  *
- * @inherit QtQuick.Item
+ * @inherit QtControls.Button
  */
-Item {
+QtControls.Slider {
     id: slider
 
     // Common API
-    /**
-     * type:real
-     * How many steps the slider value can be selected within its range value.
-     */
-    property alias stepSize: range.stepSize
-
-    /**
-     * type:real
-     * Minimum value that the slider's value can assume.
-     *
-     * The default value is 0.
-     */
-    property alias minimumValue: range.minimumValue
-
-    /**
-     * type:real
-     * Maximum value that the slider's value can assume.
-     *
-     * The default value is 1.
-     */
-    property alias maximumValue: range.maximumValue
-
-    /**
-     * type:real
-     * This property holds the value selected inside the minimum to maximum
-     * range of value.
-     *
-     * The default value is 0.
-     */
-    property alias value: range.value
-
-    /**
-     * Orientation for this component.
-     *
-     * The orientation can be either Qt.Horizontal or Qt.Vertical.
-     *
-     * The default is Qt.Horizontal.
-     */
-    property int orientation: Qt.Horizontal
-
-    /**
-     * type:bool
-     *
-     * True if the Slider is being pressed.
-     */
-    property alias pressed: mouseArea.pressed
 
     /**
      * This property holds if a value indicator element will be shown while is
@@ -104,7 +59,7 @@ Item {
      *
      * The default value is false.
      */
-    property alias inverted: range.inverted
+    property bool inverted: false
 
     width: contents.isVertical ? theme.mSize(theme.defaultFont).height*1.6 : 200
     height: contents.isVertical ? 200 : theme.mSize(theme.defaultFont).height*1.6
@@ -114,10 +69,6 @@ Item {
 
     activeFocusOnTab: true
 
-    Keys.onUpPressed: { if (contents.isVertical) decrease() }
-    Keys.onDownPressed: { if (contents.isVertical) increase() }
-    Keys.onLeftPressed: { if (!contents.isVertical) increase() }
-    Keys.onRightPressed: { if (!contents.isVertical) decrease() }
     function accessibleIncreaseAction() { increase() }
     function accessibleDecreaseAction() { decrease() }
 
@@ -138,177 +89,5 @@ Item {
             value += stepSize;
     }
 
-    Item {
-        id: contents
-
-        // Plasma API
-        property bool animated: units.longDuration > 0
-        property real handleWidth: handle.naturalSize.width
-        property real handleHeight: handle.naturalSize.height
-
-        // Convenience API
-        property bool isVertical: orientation == Qt.Vertical
-
-        width: contents.isVertical ? slider.height : slider.width
-        height: contents.isVertical ? slider.width : slider.height
-        rotation: contents.isVertical ? -90 : 0
-
-        anchors.centerIn: parent
-
-        PlasmaComponents.RangeModel {
-            id: range
-
-            minimumValue: 0.0
-            maximumValue: 1.0
-            value: 0
-            stepSize: 0.0
-            inverted: false
-            positionAtMinimum: -handle.width/8
-            positionAtMaximum: contents.width - (handle.width/8) * 7
-        }
-
-        PlasmaCore.Svg {
-            id: grooveSvg
-            imagePath: "widgets/slider"
-        }
-        PlasmaCore.FrameSvgItem {
-            id: groove
-            imagePath: "widgets/slider"
-            prefix: "groove"
-            //FIXME: frameSvg should have a minimumSize attribute, could be added to kdelibs 4.7(maybe just the qml binding is enough)?
-            height: margins.top + margins.bottom
-            anchors {
-                left: parent.left
-                right: parent.right
-                verticalCenter: parent.verticalCenter
-            }
-        }
-        PlasmaCore.FrameSvgItem {
-            id: highlight
-            imagePath: "widgets/slider"
-            prefix: "groove-highlight"
-            height: groove.height
-
-            width: inverted ? groove.width - handle.x - handle.width/4 : fakeHandle.x + handle.width/4
-            x: inverted ? handle.x + handle.width/4 : 0
-            anchors.verticalCenter: parent.verticalCenter
-
-            //use the same animation when resizing a slider as moving the slider this keeps it in line when using key shortcuts
-            Behavior on width {
-                enabled: !mouseArea.drag.active && contents.animated
-                PropertyAnimation {
-                    duration: behavior.enabled ? units.shortDuration : 0
-                    easing.type: Easing.OutSine
-                }
-            }
-            Behavior on x {
-                enabled: inverted && !mouseArea.drag.active && contents.animated
-                PropertyAnimation {
-                    duration: behavior.enabled ? units.shortDuration : 0
-                    easing.type: Easing.OutSine
-                }
-            }
-
-            visible: range.position > 0 && slider.enabled
-        }
-
-        Private.RoundShadow {
-            id: shadow
-            imagePath: "widgets/slider"
-            focusElement: contents.isVertical ? "vertical-slider-focus" : "horizontal-slider-focus"
-            hoverElement: contents.isVertical ? "vertical-slider-hover" : "horizontal-slider-hover"
-            shadowElement: contents.isVertical ? "vertical-slider-shadow" : "horizontal-slider-shadow"
-            state: slider.activeFocus ? "focus" : (mouseArea.containsMouse ? "hover" : "shadow")
-            anchors.fill: handle
-            //We rotate the handle below, we need to rotate the shadow back as well
-            rotation: contents.isVertical ? 90 : 0
-        }
-
-        PlasmaCore.SvgItem {
-            id: handle
-
-            x: fakeHandle.x
-            anchors {
-                verticalCenter: groove.verticalCenter
-            }
-            width: contents.handleWidth
-            height: contents.handleHeight
-            //Rotate the handle back for vertical slider so all the handles have the same shadow effect
-            rotation: contents.isVertical ? 90 : 0
-            svg: grooveSvg
-            elementId: contents.isVertical ?  "vertical-slider-handle" : "horizontal-slider-handle"
-
-            Behavior on x {
-                id: behavior
-                enabled: !mouseArea.drag.active && contents.animated
-
-                PropertyAnimation {
-                    duration: behavior.enabled ? units.shortDuration : 0
-                    easing.type: Easing.OutSine
-                }
-            }
-        }
-
-        Item {
-            id: fakeHandle
-            width: handle.width
-            height: handle.height
-        }
-
-        MouseArea {
-            id: mouseArea
-
-            anchors.fill: parent
-            enabled: slider.enabled
-            drag {
-                target: fakeHandle
-                axis: Drag.XAxis
-                minimumX: range.positionAtMinimum
-                maximumX: range.positionAtMaximum
-            }
-            hoverEnabled: true
-
-            onPressed: {
-                // Clamp the value
-                var newX = Math.max(mouse.x, drag.minimumX)
-                newX = Math.min(newX, drag.maximumX)
-
-                // Debounce the press: a press event inside the handler will not
-                // change its position, the user needs to drag it.
-                if (Math.abs(newX - fakeHandle.x) > handle.width / 2) {
-                    range.position = newX - handle.width / 2
-                }
-
-                slider.forceActiveFocus()
-            }
-            onWheel: {
-                // horizontal scrolling (angleDelta.x) is "inverted"
-                // this matches QSlider's behavior
-                var delta = wheel.angleDelta.x ? -wheel.angleDelta.x : wheel.angleDelta.y
-                if (delta > 0) { // up/right
-                    slider.value += (slider.inverted ? -slider.stepSize : slider.stepSize)
-                } else if (delta < 0) {
-                    slider.value += (slider.inverted ? slider.stepSize : -slider.stepSize)
-                }
-                slider.forceActiveFocus()
-            }
-        }
-    }
-
-    Binding {
-        target: range
-        property: "position"
-        value: fakeHandle.x
-    }
-
-    // During the drag, we simply ignore position set from the range, this
-    // means that setting a value while dragging will not "interrupt" the
-    // dragging activity.
-    Binding {
-        when: !mouseArea.drag.active
-        target: fakeHandle
-        property: "x"
-        value: range.position
-    }
-    Accessible.role: Accessible.Slider
+    style: Styles.SliderStyle {}
 }
