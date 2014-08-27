@@ -280,6 +280,9 @@ void ShellPackage::initPackage(Plasma::Package *package)
     //Widget explorer
     package->addFileDefinition("widgetexplorer", "explorer/WidgetExplorer.qml", i18n("Widgets explorer UI"));
 
+    package->addFileDefinition("interactiveconsole", "InteractiveConsole.qml",
+                               i18n("A UI for writing, loading and running desktop scripts in the current live session"));
+
     //package->setRequired("mainscript", true);
 }
 
