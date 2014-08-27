@@ -129,10 +129,10 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 QString pathCheck(path.path());
                 pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
 
-                if (pathCheck == m_package.metadata().pluginName()) {
+                if (pathCheck == m_package.metadata().pluginName() || allowed.contains(pathCheck)) {
                     return path;
                 } else {
-                    return QUrl("file://" + allowed + "/org/kde/plasma/accessdenied/qmldir");
+                    continue;
                 }
             }
             //it's from an allowed, good
@@ -141,6 +141,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 return path;
             }
         }
+        return QUrl("file://" + allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
     }
 
     qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
