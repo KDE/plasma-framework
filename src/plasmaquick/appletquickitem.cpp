@@ -89,8 +89,6 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillWidth");
     propagateSizeHint("fillHeight");
 
-    //HACK: check the Layout properties we wrote
-    QQmlProperty p(q, "Layout.minimumWidth", QtQml::qmlContext(qmlObject->rootObject()));
 
     QObject *ownLayout = 0;
 
@@ -499,6 +497,9 @@ void AppletQuickItem::init()
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("compactapplet")));
     }
+
+    //HACK: check the Layout properties we wrote
+    QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(d->qmlObject->rootObject()));
 
     d->compactRepresentationCheckTimer.start();
 }
