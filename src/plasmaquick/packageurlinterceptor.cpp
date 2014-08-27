@@ -141,7 +141,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 return path;
             }
         }
-        return QUrl("file://" + allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
+        return QUrl::fromLocalFile( allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
     }
 
     qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
