@@ -63,15 +63,9 @@ public:
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0),
-          resizeOrigin(Undefined),
           backgroundHints(Dialog::StandardBackground)
     {
     }
-
-    enum ResizeOrigin {
-        Undefined,
-        MainItem
-    };
 
     void updateInputShape();
 
@@ -95,7 +89,6 @@ public:
     void slotWindowPositionChanged();
 
     void syncToMainItemSize();
-    void requestSizeSync(bool delayed = false);
 
     Dialog *q;
     QTimer *syncTimer;
@@ -110,7 +103,6 @@ public:
     bool outputOnly;
     Plasma::Theme theme;
     bool componentComplete;
-    ResizeOrigin resizeOrigin;
     Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
@@ -443,10 +435,7 @@ void DialogPrivate::updateInputShape()
 
 void DialogPrivate::syncToMainItemSize()
 {
-    //if manually sync a sync timer was running cancel it so we don't get called twice
-    syncTimer->stop();
-
-    if (!mainItem) {
+    if (!componentComplete || !mainItem) {
         return;
     }
 
@@ -478,19 +467,6 @@ void DialogPrivate::syncToMainItemSize()
     updateTheme();
 }
 
-void DialogPrivate::requestSizeSync(bool delayed)
-{
-    if (!componentComplete) {
-        return;
-    }
-
-    if (delayed && !syncTimer->isActive()) {
-        syncTimer->start(150);
-    } else {
-        syncTimer->start(0);
-    }
-}
-
 void DialogPrivate::slotWindowPositionChanged()
 {
     // Tooltips always have all the borders
@@ -520,17 +496,6 @@ Dialog::Dialog(QQuickItem *parent)
     setFlags(Qt::FramelessWindowHint);
 
     setIcon(QIcon::fromTheme("plasma"));
-
-    d->syncTimer = new QTimer(this);
-    d->syncTimer->setSingleShot(true);
-    d->syncTimer->setInterval(0);
-    connect(d->syncTimer, &QTimer::timeout,
-    [ = ]() {
-        if (d->resizeOrigin == DialogPrivate::MainItem) {
-            d->syncToMainItemSize();
-        }
-        d->resizeOrigin = DialogPrivate::Undefined;
-    });
 
     connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
     connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
@@ -611,6 +576,10 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 d->updateMinimumHeight();
                 d->updateMaximumWidth();
                 d->updateMaximumHeight();
+
+                if (visualParent()) {
+                    setPosition(popupPosition(visualParent(), size()));
+                }
             }
 
         }
@@ -622,8 +591,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
 void DialogPrivate::slotMainItemSizeChanged()
 {
-    resizeOrigin = DialogPrivate::MainItem;
-    syncTimer->start(0);
+    syncToMainItemSize();
 }
 
 QQuickItem *Dialog::visualParent() const
@@ -643,8 +611,7 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
         if (visualParent->window()) {
             setTransientParent(visualParent->window());
         }
-        d->resizeOrigin = DialogPrivate::MainItem;
-        d->requestSizeSync(true);
+        d->syncToMainItemSize();
     }
 }
 
@@ -791,8 +758,8 @@ void Dialog::setLocation(Plasma::Types::Location location)
     }
     d->location = location;
     emit locationChanged();
-    d->resizeOrigin = DialogPrivate::MainItem;
-    d->requestSizeSync();
+
+    d->syncToMainItemSize();
 }
 
 QObject *Dialog::margins() const
