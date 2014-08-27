@@ -514,12 +514,27 @@ void Package::setPath(const QString &path)
 
     if (metadata().isValid()) {
         fallback = metadata().property("X-KDE-fallbackPackage").toString();
+        if (fallback == metadata().pluginName()) {
+            fallback = QString();
+        }
     }
     if (!fallback.isEmpty()) {
         if (!d->fallbackPackage) {
             d->fallbackPackage = new Package(d->structure.data());
         }
         d->fallbackPackage->setPath(fallback);
+        Plasma::Package *pkg = d->fallbackPackage;
+        int depth = 0;
+        while (pkg->d->fallbackPackage) {
+            //cycle or too deep?
+            if (depth > 10 || pkg->d->fallbackPackage->metadata().pluginName() == metadata().pluginName()) {
+                delete pkg->d->fallbackPackage;
+                pkg->d->fallbackPackage = 0;
+                break;
+            }
+            pkg = pkg->d->fallbackPackage;
+            ++depth;
+        }
     } else {
         delete d->fallbackPackage;
         d->fallbackPackage = 0;
