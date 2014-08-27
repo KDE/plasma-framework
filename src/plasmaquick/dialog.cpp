@@ -70,8 +70,7 @@ public:
 
     enum ResizeOrigin {
         Undefined,
-        MainItem,
-        Window
+        MainItem
     };
 
     void updateInputShape();
@@ -93,8 +92,8 @@ public:
     void repositionIfOffScreen();
 
     void slotMainItemSizeChanged();
+    void slotWindowPositionChanged();
 
-    void syncMainItemToSize();
     void syncToMainItemSize();
     void requestSizeSync(bool delayed = false);
 
@@ -213,7 +212,10 @@ void DialogPrivate::updateVisibility(bool visible)
         } else {
             if (!cachedGeometry.isNull()) {
                 q->resize(cachedGeometry.size());
-                syncMainItemToSize();
+                slotWindowPositionChanged();
+                if (visualParent) {
+                    q->setPosition(q->popupPosition(visualParent, q->size()));
+                }
                 cachedGeometry = QRect();
             }
             syncToMainItemSize();
@@ -439,24 +441,6 @@ void DialogPrivate::updateInputShape()
 #endif
 }
 
-void DialogPrivate::syncMainItemToSize()
-{
-    syncBorders();
-
-    updateTheme();
-
-    if (mainItem) {
-        mainItem->setX(frameSvgItem->margins()->left());
-        mainItem->setY(frameSvgItem->margins()->top());
-        mainItem->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
-        mainItem->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
-    }
-
-    if (q->visualParent()) {
-        q->setPosition(q->popupPosition(q->visualParent(), q->size()));
-    }
-}
-
 void DialogPrivate::syncToMainItemSize()
 {
     //if manually sync a sync timer was running cancel it so we don't get called twice
@@ -507,6 +491,26 @@ void DialogPrivate::requestSizeSync(bool delayed)
     }
 }
 
+void DialogPrivate::slotWindowPositionChanged()
+{
+    // Tooltips always have all the borders
+    // floating windows have all borders
+    if ((q->flags() & Qt::ToolTip) || location == Plasma::Types::Floating) {
+        return;
+    }
+
+    syncBorders();
+    updateTheme();
+
+    if (mainItem) {
+        auto margin = frameSvgItem->margins();
+        mainItem->setX(margin->left());
+        mainItem->setY(margin->top());
+        mainItem->setWidth(q->width() - margin->left() - margin->right());
+        mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+    }
+}
+
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
@@ -524,28 +528,13 @@ Dialog::Dialog(QQuickItem *parent)
     [ = ]() {
         if (d->resizeOrigin == DialogPrivate::MainItem) {
             d->syncToMainItemSize();
-        } else {
-            d->syncMainItemToSize();
         }
         d->resizeOrigin = DialogPrivate::Undefined;
     });
 
-    connect(this, &QWindow::xChanged, [ = ]() {
-        //Tooltips always have all the borders
-        // floating windows have all borders
-        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
-            d->resizeOrigin = DialogPrivate::Window;
-            d->requestSizeSync(true);
-        }
-    });
-    connect(this, &QWindow::yChanged, [ = ]() {
-        //Tooltips always have all the borders
-        // floating windows have all borders
-        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
-            d->resizeOrigin = DialogPrivate::Window;
-            d->requestSizeSync(true);
-        }
-    });
+    connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
+    connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
+
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),
