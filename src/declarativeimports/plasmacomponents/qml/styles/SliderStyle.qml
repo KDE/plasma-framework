@@ -28,13 +28,53 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import "../private" as Private
 
 QtQuickControlStyle.SliderStyle {
-    id: styleitem
+    id: styleItem
 
+    property Item handleItem
     padding { top: 0 ; left: 0 ; right: 0 ; bottom: 0 }
 
-   // handle: 
+    PlasmaCore.Svg {
+        id: grooveSvg
+        imagePath: "widgets/slider"
+    }
+    handle: Item {
+        width: handle.naturalSize.width
+        height: handle.naturalSize.height
+        Private.RoundShadow {
+            id: shadow
+            anchors.fill: parent
+            imagePath: "widgets/slider"
+            focusElement: "horizontal-slider-focus"
+            hoverElement: "horizontal-slider-hover"
+            shadowElement: "horizontal-slider-shadow"
+            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
+        }
+        PlasmaCore.SvgItem {
+            id: handle
+            anchors.fill: parent
+            svg: grooveSvg
+            elementId: "horizontal-slider-handle"
+        }
+    }
+    
 
-   // groove: 
+    groove: PlasmaCore.FrameSvgItem {
+        id: groove
+        imagePath: "widgets/slider"
+        prefix: "groove"
+        PlasmaCore.FrameSvgItem {
+            id: highlight
+            imagePath: "widgets/slider"
+            prefix: "groove-highlight"
+            height: groove.height
+
+            width: styleData.handlePosition
+            x: 0
+            anchors.verticalCenter: parent.verticalCenter
+
+            visible: value > 0 && slider.enabled
+        }
+    }
 
 
    // tickmarks: 
