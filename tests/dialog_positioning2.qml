@@ -26,15 +26,18 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-Item {
-    width: 400
-    height: 400
-
+ColumnLayout
+{
+    Controls.Label {
+        text: "Press the buttom and make sure the popup is on the correct place"
+        wrapMode: Text.WordWrap
+    }
     PlasmaComponents.Button {
         id: settingsButton
         iconSource: "configure"
-        text: "More Settings..."
-        Layout.preferredWidth: 100
+        text: "Press Me"
+        Layout.alignment: Qt.AlignHCenter
+
         onClicked: {
             contextMenu.visible = !contextMenu.visible;
         }
@@ -44,7 +47,7 @@ Item {
         id: contextMenu
         visualParent: settingsButton
 
-        //location: plasmoid.location
+        location: PlasmaCore.Types.BottomEdge
         type: PlasmaCore.Dialog.PopupMenu
         flags: Qt.Popup | Qt.FramelessWindowHint | Qt.WindowDoesNotAcceptFocus
 
@@ -80,39 +83,6 @@ Item {
                     checkable: true
                     flat: false
                 }
-            }
-
-            PlasmaExtras.Heading {
-                level: 3
-                text: "Visibility"
-            }
-
-            PlasmaComponents.ButtonColumn {
-                spacing: 0
-                Layout.fillWidth: true
-                PlasmaComponents.ToolButton {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-                    text: "Always Visible"
-                    checkable: true
-                    flat: false
-                }
-                PlasmaComponents.ToolButton {
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                    }
-                    text: "Auto Hide"
-                    checkable: true
-                    flat: false
-                }
-            }
-            PlasmaComponents.ToolButton {
-                Layout.fillWidth: true
-                text: "Maximize Panel"
-                iconSource: "zoom-fit-height"
             }
         }
     }
