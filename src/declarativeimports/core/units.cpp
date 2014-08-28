@@ -116,10 +116,14 @@ int Units::devicePixelIconSize(const int size) const
         SizeEnormous=128
     };
     */
-    // Scale the icon sizes up using the devicePixelRatio
     // This function returns the next stepping icon size
     // and multiplies the global settings with the dpi ratio.
-    const qreal ratio = devicePixelRatio();
+
+    // Scale the icon sizes up using the font pixel ratio
+    // devicePixelRatio() is unreliable on some monitors (those which report broken physical sizes).
+    // We use the ratio between the font-as-rendered and the font's pointSize, so essentially we
+    // rely on the font metrics, instead of QScreen.
+    const qreal ratio = m_fontPixelRatio;
 
     if (ratio < 1.5) {
         return size;
@@ -186,6 +190,13 @@ void Units::updateSpacing()
         m_smallSpacing = qMax(2, (int)(gridUnit / 4)); // 1/4 of gridUnit, at least 2
         m_largeSpacing = gridUnit; // msize.height
         emit spacingChanged();
+    }
+
+    const qreal pointSize = QGuiApplication::font().pointSize();
+    const qreal fontPixelRatio = m_gridUnit / pointSize;
+    if (fontPixelRatio != m_fontPixelRatio) {
+        m_fontPixelRatio = fontPixelRatio;
+        iconLoaderSettingsChanged();
     }
 }
 
