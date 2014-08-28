@@ -69,7 +69,6 @@ QtQuickControlStyle.SliderStyle {
             height: groove.height
 
             width: styleData.handlePosition
-            x: 0
             anchors.verticalCenter: parent.verticalCenter
 
             visible: value > 0 && slider.enabled
@@ -84,6 +83,8 @@ QtQuickControlStyle.SliderStyle {
             color: theme.textColor
             width: 1 ; height: 3
             y: repeater.height
+            //Position ticklines from styleData.handleWidth to width - styleData.handleWidth/2
+            //position them at an handle width increment
             x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count-1))
         }
     }

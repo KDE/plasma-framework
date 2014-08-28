@@ -28,7 +28,7 @@ import "styles" as Styles
 /**
  * An interactive slider component with Plasma look and feel.
  *
- * @inherit QtControls.Button
+ * @inherit QtControls.Slider
  */
 QtControls.Slider {
     id: slider
