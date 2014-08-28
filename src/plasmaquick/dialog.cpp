@@ -92,6 +92,14 @@ public:
     void updateMaximumHeight();
 
     /**
+     * This function is an optimized version of updateMaximumHeight,
+     * updateMaximumWidth,updateMinimumWidth and updateMinimumHeight.
+     * It should be called when you need to call all 4 of these functions
+     * AND you have called syncToMainItemSize before.
+     */
+    void updateLayoutParameters();
+
+    /**
      * This function checks the current position of the dialog and repositions
      * it so that no part of it is not on the screen
      */
@@ -298,6 +306,9 @@ void DialogPrivate::updateMinimumWidth()
 
 void DialogPrivate::updateMinimumHeight()
 {
+    if (!componentComplete) {
+        return;
+    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
@@ -310,7 +321,7 @@ void DialogPrivate::updateMinimumHeight()
 
     int oldHeight = mainItem->height();
 
-    q->setMinimumHeight(minimumHeight + margin->left() + margin->right());
+    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
     q->setHeight(qMax(q->height(), q->minimumHeight()));
 
     mainItem->setHeight(q->height() - margin->top() - margin->bottom());
@@ -328,6 +339,9 @@ void DialogPrivate::updateMinimumHeight()
 
 void DialogPrivate::updateMaximumWidth()
 {
+    if (!componentComplete) {
+        return;
+    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
@@ -354,6 +368,9 @@ void DialogPrivate::updateMaximumWidth()
 
 void DialogPrivate::updateMaximumHeight()
 {
+    if (!componentComplete) {
+        return;
+    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
@@ -365,7 +382,7 @@ void DialogPrivate::updateMaximumHeight()
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
     auto margin = frameSvgItem->margins();
 
-    q->setMaximumHeight(maximumHeight + margin->left() + margin->right());
+    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
     q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
 
     mainItem->setHeight(q->height() - margin->top() - margin->bottom());
@@ -378,8 +395,54 @@ void DialogPrivate::updateMaximumHeight()
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
+void DialogPrivate::updateLayoutParameters()
+{
+    if (!componentComplete) {
+        return;
+    }
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
+
+    mainItem->disconnect(q);
+
+    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
+    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
+    maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
+
+    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
+    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
+    maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
+
+    auto margin = frameSvgItem->margins();
+
+    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
+    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
+    q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
+
+    q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
+    q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
+    q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
+
+    mainItem->setX(margin->left());
+    mainItem->setY(margin->top());
+    mainItem->setWidth(q->width() - margin->left() + margin->right());
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+
+    frameSvgItem->setWidth(q->width());
+    frameSvgItem->setHeight(q->height());
+
+    repositionIfOffScreen();
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+}
+
 void DialogPrivate::repositionIfOffScreen()
 {
+    if (!componentComplete) {
+        return;
+    }
     const QRect avail = q->screen()->availableGeometry();
 
     int x = q->x();
@@ -604,10 +667,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
                 connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updateMaximumHeight()));
 
-                d->updateMinimumWidth();
-                d->updateMinimumHeight();
-                d->updateMaximumWidth();
-                d->updateMaximumHeight();
+                d->updateLayoutParameters();
             }
 
         }
@@ -921,6 +981,10 @@ void Dialog::componentComplete()
 {
     d->componentComplete = true;
     d->syncToMainItemSize();
+
+    if (d->mainItemLayout) {
+        d->updateLayoutParameters();
+    }
 }
 
 bool Dialog::hideOnWindowDeactivate() const
