@@ -32,8 +32,6 @@ import "styles" as Styles
 QtControls.Slider {
     id: slider
 
-    // Common API
-
     /**
      * This property holds if a value indicator element will be shown while is
      * dragged or not.
@@ -51,13 +49,12 @@ QtControls.Slider {
      */
     property string valueIndicatorText: value
 
-    // Plasma API
     /**
      * type:bool
      * This property holds if the slider visualizations has an inverted
      * direction.
      *
-     * The default value is false.
+     * @warning: deprecated and not supported, here for retrocompatibility
      */
     property bool inverted: false
 
