@@ -67,6 +67,7 @@ QtControls.Slider {
 
     activeFocusOnTab: true
 
+    //FIXME: remove those 2 functions once we can depend from 5.4*/
     function accessibleIncreaseAction() { increase() }
     function accessibleDecreaseAction() { decrease() }
 
