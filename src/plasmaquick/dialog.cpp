@@ -70,7 +70,19 @@ public:
     void updateInputShape();
 
     //SLOTS
+    /**
+     * Sync Borders updates the enabled borders of the frameSvgItem depending
+     * on the geometry of the window.
+     * Make sure the window is in the correct position + size before calling
+     * this function
+     */
     void syncBorders();
+
+    /**
+     * This function sets the blurBehind, background contrast and shadows. It
+     * does so wrt the frameSvgItem. So make sure the frameSvgItem is the
+     * correct size before calling this function.
+     */
     void updateTheme();
     void updateVisibility(bool visible);
 
@@ -262,7 +274,6 @@ void DialogPrivate::updateMinimumWidth()
     mainItem->disconnect(q);
 
     syncBorders();
-    updateTheme();
 
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
     auto margin = frameSvgItem->margins();
@@ -279,6 +290,7 @@ void DialogPrivate::updateMinimumWidth()
         q->setX(q->x() + (oldWidth - q->size().width()));
     }
     repositionIfOffScreen();
+    updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -292,7 +304,6 @@ void DialogPrivate::updateMinimumHeight()
     mainItem->disconnect(q);
 
     syncBorders();
-    updateTheme();
 
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     auto margin = frameSvgItem->margins();
@@ -309,6 +320,7 @@ void DialogPrivate::updateMinimumHeight()
         q->setY(q->y() + (oldHeight - q->size().height()));
     }
     repositionIfOffScreen();
+    updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -322,7 +334,6 @@ void DialogPrivate::updateMaximumWidth()
     mainItem->disconnect(q);
 
     syncBorders();
-    updateTheme();
 
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
     maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
@@ -335,6 +346,7 @@ void DialogPrivate::updateMaximumWidth()
     frameSvgItem->setWidth(q->width());
 
     repositionIfOffScreen();
+    updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -348,7 +360,6 @@ void DialogPrivate::updateMaximumHeight()
     mainItem->disconnect(q);
 
     syncBorders();
-    updateTheme();
 
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
@@ -361,6 +372,7 @@ void DialogPrivate::updateMaximumHeight()
     frameSvgItem->setHeight(q->height());
 
     repositionIfOffScreen();
+    updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -435,8 +447,28 @@ void DialogPrivate::updateInputShape()
 
 void DialogPrivate::syncToMainItemSize()
 {
-    if (!componentComplete || !mainItem) {
+    if (!componentComplete || !mainItem || !q->isVisible()) {
         return;
+    }
+
+    if (visualParent) {
+        // Get the full size with ALL the borders
+        frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
+        auto margins = frameSvgItem->margins();
+
+        const QSize fullSize = QSize(mainItem->width(), mainItem->height()) +
+                               QSize(margins->left() + margins->right(),
+                                     margins->top() + margins->bottom());
+
+        // We get the popup position with the fullsize as we need the popup
+        // position in order to determine our actual size, as the position
+        // determines which borders will be shown.
+        const QRect geom(q->popupPosition(visualParent, fullSize), fullSize);
+
+        // We're then moving the window to where we think we would be with all
+        // the borders. This way when syncBorders is caleld, it has a geometry
+        // to work with.
+        q->adjustGeometry(geom);
     }
 
     syncBorders();
@@ -450,8 +482,8 @@ void DialogPrivate::syncToMainItemSize()
     frameSvgItem->setWidth(s.width());
     frameSvgItem->setHeight(s.height());
 
-    if (q->visualParent()) {
-        const QRect geom(q->popupPosition(q->visualParent(), s), s);
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, s), s);
 
         if (geom == q->geometry()) {
             return;
@@ -576,10 +608,6 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 d->updateMinimumHeight();
                 d->updateMaximumWidth();
                 d->updateMaximumHeight();
-
-                if (visualParent()) {
-                    setPosition(popupPosition(visualParent(), size()));
-                }
             }
 
         }
