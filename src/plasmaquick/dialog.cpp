@@ -886,7 +886,7 @@ void Dialog::hideEvent(QHideEvent *event)
 
 void Dialog::classBegin()
 {
-
+    d->componentComplete = false;
 }
 
 void Dialog::componentComplete()
