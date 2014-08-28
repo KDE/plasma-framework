@@ -77,5 +77,14 @@ QtQuickControlStyle.SliderStyle {
     }
 
 
-   // tickmarks: 
+   tickmarks: Repeater {
+        id: repeater
+        model: control.stepSize > 0 ? 1 + (control.maximumValue - control.minimumValue) / control.stepSize : 0
+        Rectangle {
+            color: theme.textColor
+            width: 1 ; height: 3
+            y: repeater.height
+            x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count-1))
+        }
+    }
 }
