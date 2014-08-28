@@ -73,10 +73,11 @@ public:
     /**
      * Sync Borders updates the enabled borders of the frameSvgItem depending
      * on the geometry of the window.
-     * Make sure the window is in the correct position + size before calling
-     * this function
+     *
+     * \param windowGeometry The window geometry which should be taken into
+     * consideration when activating/deactivating certain borders
      */
-    void syncBorders();
+    void syncBorders(const QRect& windowGeometry);
 
     /**
      * This function sets the blurBehind, background contrast and shadows. It
@@ -150,24 +151,24 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     return avail;
 }
 
-void DialogPrivate::syncBorders()
+void DialogPrivate::syncBorders(const QRect& geom)
 {
-    QRect avail = availableScreenGeometryForPosition(q->position());
+    QRect avail = availableScreenGeometryForPosition(geom.topLeft());
     int borders = Plasma::FrameSvg::AllBorders;
 
     //Tooltips always have all the borders
     // floating windows have all borders
     if ((q->flags() & Qt::ToolTip) != Qt::ToolTip && location != Plasma::Types::Floating) {
-        if (q->x() <= avail.x() || location == Plasma::Types::LeftEdge) {
+        if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
-        if (q->y() <= avail.y() || location == Plasma::Types::TopEdge) {
+        if (geom.y() <= avail.y() || location == Plasma::Types::TopEdge) {
             borders = borders & ~Plasma::FrameSvg::TopBorder;
         }
-        if (avail.right() <= q->x() + q->width() || location == Plasma::Types::RightEdge) {
+        if (avail.right() <= geom.x() + geom.width() || location == Plasma::Types::RightEdge) {
             borders = borders & ~Plasma::FrameSvg::RightBorder;
         }
-        if (avail.bottom() <= q->y() + q->height() || location == Plasma::Types::BottomEdge) {
+        if (avail.bottom() <= geom.y() + geom.height() || location == Plasma::Types::BottomEdge) {
             borders = borders & ~Plasma::FrameSvg::BottomBorder;
         }
     }
@@ -288,7 +289,7 @@ void DialogPrivate::updateMinimumWidth()
 
     mainItem->disconnect(q);
 
-    syncBorders();
+    syncBorders(q->geometry());
 
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
     auto margin = frameSvgItem->margins();
@@ -326,7 +327,7 @@ void DialogPrivate::updateMinimumHeight()
 
     mainItem->disconnect(q);
 
-    syncBorders();
+    syncBorders(q->geometry());
 
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     auto margin = frameSvgItem->margins();
@@ -364,7 +365,7 @@ void DialogPrivate::updateMaximumWidth()
 
     mainItem->disconnect(q);
 
-    syncBorders();
+    syncBorders(q->geometry());
 
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
     maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
@@ -397,7 +398,7 @@ void DialogPrivate::updateMaximumHeight()
 
     mainItem->disconnect(q);
 
-    syncBorders();
+    syncBorders(q->geometry());
 
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
@@ -555,12 +556,13 @@ void DialogPrivate::syncToMainItemSize()
         const QRect geom(q->popupPosition(visualParent, fullSize), fullSize);
 
         // We're then moving the window to where we think we would be with all
-        // the borders. This way when syncBorders is caleld, it has a geometry
+        // the borders. This way when syncBorders is called, it has a geometry
         // to work with.
-        q->adjustGeometry(geom);
+        syncBorders(geom);
     }
-
-    syncBorders();
+    else {
+        syncBorders(q->geometry());
+    }
 
     const QSize s = QSize(mainItem->width(), mainItem->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
@@ -578,6 +580,9 @@ void DialogPrivate::syncToMainItemSize()
             return;
         }
         q->adjustGeometry(geom);
+        // The borders will instantly be updated but the geometry might take a
+        // while as sub-classes can reimplement adjustGeometry and animate it.
+        syncBorders(geom);
     } else {
         q->resize(s);
     }
@@ -596,7 +601,7 @@ void DialogPrivate::slotWindowPositionChanged()
         return;
     }
 
-    syncBorders();
+    syncBorders(q->geometry());
     updateTheme();
 
     if (mainItem) {
@@ -961,7 +966,6 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
         if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
-            qDebug() << "DIALOG:  hiding dialog.";
             setVisible(false);
             emit windowDeactivated();
         }
