@@ -24,6 +24,8 @@
 #include <plasma/theme.h>
 
 #include <qcommandlineparser.h>
+#include <QFontMetrics>
+#include <QScreen>
 #include <QStringList>
 #include <QTimer>
 #include <iostream>
@@ -54,6 +56,23 @@ DPITest::~DPITest()
 void DPITest::runMain()
 {
     qDebug() << "DPI test runs: ";
+
+    qreal pointSize = QGuiApplication::font().pointSize();
+    int pixelSize = QGuiApplication::font().pixelSize();
+    qDebug() << "font.pixelSize: " << QGuiApplication::font().pixelSize();
+    qDebug() << "font.pointSize: " << QGuiApplication::font().pointSize();
+    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+
+    qreal dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
+    // Usual "default" is 96 dpi
+    // that magic ratio follows the definition of "device independent pixel" by Microsoft
+    qreal devicePixelRatio = (qreal)dpi / (qreal)96;
+    qDebug() << "devicePixelRatio: " << devicePixelRatio;
+    qDebug() << "pointSize * devicePixelRatio: " << (devicePixelRatio * pointSize);
+    qDebug() << "dpi: " << dpi;
+    qDebug() << "gridUnit: " << gridUnit;
+    qDebug() << "gridUnit / pointSize : " << ((qreal)gridUnit / (qreal)pointSize);
+
     exit(0);
     return;
 }
