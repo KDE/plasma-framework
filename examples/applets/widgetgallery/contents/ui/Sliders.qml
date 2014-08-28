@@ -89,6 +89,7 @@ PlasmaComponents.Page {
                         orientation: Qt.Horizontal
                         minimumValue: 0
                         maximumValue: 255
+                        tickmarksEnabled: true
                         stepSize: 10
                         Keys.onTabPressed: blueSlider.forceActiveFocus()
                     }
