@@ -612,7 +612,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     //if there is no compact representation it means it's always expanded
-    //Containnments are always expanded
+    //Containments are always expanded
     if (d->expanded == expanded) {
         return;
     }
