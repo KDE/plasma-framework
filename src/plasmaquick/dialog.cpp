@@ -298,6 +298,11 @@ void DialogPrivate::updateMinimumWidth()
         q->setX(q->x() + (oldWidth - q->size().width()));
     }
     repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
     updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -331,6 +336,11 @@ void DialogPrivate::updateMinimumHeight()
         q->setY(q->y() + (oldHeight - q->size().height()));
     }
     repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
     updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -355,11 +365,15 @@ void DialogPrivate::updateMaximumWidth()
 
     q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
     q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
-
     mainItem->setWidth(q->width() - margin->left() - margin->right());
     frameSvgItem->setWidth(q->width());
 
     repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
     updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -389,6 +403,11 @@ void DialogPrivate::updateMaximumHeight()
     frameSvgItem->setHeight(q->height());
 
     repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
     updateTheme();
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
