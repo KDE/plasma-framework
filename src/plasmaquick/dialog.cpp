@@ -99,6 +99,8 @@ public:
      */
     void updateLayoutParameters();
 
+    QRect availableScreenGeometryForPosition(const QPoint& pos) const;
+
     /**
      * This function checks the current position of the dialog and repositions
      * it so that no part of it is not on the screen
@@ -129,7 +131,7 @@ public:
     QPointer <QObject> mainItemLayout;
 };
 
-void DialogPrivate::syncBorders()
+QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
 {
     // FIXME: QWindow::screen() never ever changes if the window is moved across
     //        virtual screens (normal two screens with X), this seems to be intentional
@@ -138,7 +140,6 @@ void DialogPrivate::syncBorders()
     //        we simply iterate over the virtual screens and pick the one our QWindow
     //        says it's at.
     QRect avail;
-    QPoint pos = q->position();
     Q_FOREACH (QScreen *screen, q->screen()->virtualSiblings()) {
         if (screen->availableGeometry().contains(pos)) {
             avail = screen->availableGeometry();
@@ -146,6 +147,12 @@ void DialogPrivate::syncBorders()
         }
     }
 
+    return avail;
+}
+
+void DialogPrivate::syncBorders()
+{
+    QRect avail = availableScreenGeometryForPosition(q->position());
     int borders = Plasma::FrameSvg::AllBorders;
 
     //Tooltips always have all the borders
@@ -462,7 +469,7 @@ void DialogPrivate::repositionIfOffScreen()
     if (!componentComplete) {
         return;
     }
-    const QRect avail = q->screen()->availableGeometry();
+    const QRect avail = availableScreenGeometryForPosition(q->position());
 
     int x = q->x();
     int y = q->y();
