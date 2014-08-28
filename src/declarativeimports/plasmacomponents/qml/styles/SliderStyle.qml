@@ -84,8 +84,8 @@ QtQuickControlStyle.SliderStyle {
             width: 1 ; height: 3
             y: repeater.height
             //Position ticklines from styleData.handleWidth to width - styleData.handleWidth/2
-            //position them at an handle width increment
-            x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count-1))
+            //position them at an half handle width increment
+            x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count>1 ? repeater.count-1 : 1))
         }
     }
 }
