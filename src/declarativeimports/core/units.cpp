@@ -1,6 +1,6 @@
 /***************************************************************************
  *   Copyright 2013 Marco Martin <mart@kde.org>                            *
- *   Copyright 2014 Sebastian Kugler <sebas@kde.org>                       *
+ *   Copyright 2014 Sebastian Kügler <sebas@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,7 +48,7 @@ Units::Units(QObject *parent)
     updateDevicePixelRatio(); // also updates icon sizes
     updateSpacing(); // updates gridUnit and *Spacing properties
 
-    connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(iconLoaderSettingsChanged()));
+    connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &Units::updateSpacing);
     QCoreApplication::instance()->installEventFilter(this);
 
@@ -173,7 +173,7 @@ int Units::largeSpacing() const
 
 void Units::updateSpacing()
 {
-    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();;
+    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
     if (gridUnit % 2 != 0) {
         gridUnit++;
     }
