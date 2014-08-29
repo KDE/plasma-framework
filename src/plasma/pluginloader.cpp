@@ -53,6 +53,7 @@ public:
     PluginLoaderPrivate()
         : isDefaultLoader(false),
           dataEnginePluginDir("plasma/dataengine"),
+          packageStructurePluginDir("plasma/packagestructure"),
           packageRE("[^a-zA-Z0-9\\-_]")
     {
     }
@@ -64,6 +65,7 @@ public:
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
     QString dataEnginePluginDir;
+    QString packageStructurePluginDir;
     QRegExp packageRE;
 };
 
@@ -443,23 +445,16 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     }
 
     // first we check for plugins in sycoca
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
-
-    QVariantList args;
-    QString error;
-    foreach (const KService::Ptr &offer, offers) {
-        structure = qobject_cast<PackageStructure *>(offer->createInstance<PackageStructure>(0, args, &error));
-
-        if (structure) {
-            d->structures.insert(hashkey, structure);
-            return Package(structure);
-        }
+    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+    structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(d->packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
+    if (structure) {
+        d->structures.insert(hashkey, structure);
+        return Package(structure);
+    }
 
 #ifndef NDEBUG
         // qDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
 #endif
-    }
 
     return Package();
 }

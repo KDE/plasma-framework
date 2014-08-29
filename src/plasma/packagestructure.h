@@ -27,6 +27,7 @@
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
 #include <plasma/package.h>
+#include <plasma/version.h>
 
 namespace Plasma
 {
@@ -98,5 +99,9 @@ private:
 #define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
-#endif
 
+#define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile) \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
+#endif
