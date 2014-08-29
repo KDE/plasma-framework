@@ -118,9 +118,7 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
     KService::Ptr service = KService::serviceByDesktopName(application);
     if (service || !QStandardPaths::findExecutable(application).isNull() || QFile::exists(application)) {
         d->applicationNames[applet] = application;
-        if (!d->urlLists.contains(applet)) {
-            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
-        } else {
+        if (d->urlLists.contains(applet)) {
             QAction *a = applet->actions()->action("run associated application");
             if (a) {
                 a->setIcon(QIcon::fromTheme("system-run"));
@@ -128,6 +126,7 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
             }
         }
     }
+    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
 }
 
 QString AssociatedApplicationManager::application(const Plasma::Applet *applet) const
@@ -152,6 +151,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
             }
         }
     }
+    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
 }
 //TODO: updateAction slot, called on setting of url or app, and on sycoca change
 QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
