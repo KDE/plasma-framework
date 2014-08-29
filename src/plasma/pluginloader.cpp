@@ -51,7 +51,9 @@ class PluginLoaderPrivate
 {
 public:
     PluginLoaderPrivate()
-        : packageRE("[^a-zA-Z0-9\\-_]")
+        : isDefaultLoader(false),
+          dataEnginePluginDir("plasma/dataengine"),
+          packageRE("[^a-zA-Z0-9\\-_]")
     {
     }
 
@@ -61,7 +63,7 @@ public:
     static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
-    QString pluginDir;
+    QString dataEnginePluginDir;
     QRegExp packageRE;
 };
 
@@ -113,8 +115,6 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
 {
-    d->pluginDir = "plasma/dataengine";
-    d->isDefaultLoader = false;
 }
 
 PluginLoader::~PluginLoader()
@@ -236,31 +236,20 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
-    // load the engine, add it to the engines
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine",
-                            constraint);
-    QString error;
 
-    if (offers.isEmpty()) {
-#ifndef NDEBUG
-        // qDebug() << "offers are empty for " << name << " with constraint " << constraint;
-#endif
-    } else {
-        QVariantList allArgs;
-        allArgs << offers.first()->storageId();
-        QString api = offers.first()->property("X-Plasma-API").toString();
+    // First check with KServiceTypeTrader as that is where scripted engines will be
+    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+
+    if (!offers.isEmpty()) {
+        const QString api = offers.first()->property("X-Plasma-API").toString();
         if (api.isEmpty()) {
-            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>(d->pluginDir, "Plasma/DataEngine", constraint, 0);
+            // it is a C++ plugin, fetch it with KPluginTrader
+            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>(d->dataEnginePluginDir, "Plasma/DataEngine", constraint, 0);
         } else {
+            // it is a scripted plugin, load it via a package
             engine = new DataEngine(KPluginInfo(offers.first()), 0);
         }
-    }
-
-    if (!engine) {
-#ifndef NDEBUG
-        // qDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
-#endif
     }
 
     return engine;
@@ -695,7 +684,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
-    list.append(KPluginTrader::self()->query(d->pluginDir, "Plasma/DataEngine", constraint));
+    list.append(KPluginTrader::self()->query(d->dataEnginePluginDir, "Plasma/DataEngine", constraint));
     return list;
 }
 
