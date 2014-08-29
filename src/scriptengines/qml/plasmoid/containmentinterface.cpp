@@ -636,20 +636,27 @@ QList<QObject *> ContainmentInterface::actions() const
 {
     //FIXME: giving directly a QList<QAction*> crashes
 
+    QStringList actionOrder;
+    actionOrder << "add widgets" << "manage activities" << "remove" << "lock widgets" << "run associated application" << "configure";
+    QHash<QString, QAction *> orderedActions;
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     int i = 0;
     foreach (QAction *a, m_containment->actions()->actions()) {
-        //FIXME QML visualizations don't support menus for now, *and* there is no way to
-        //distinguish them on QML side
-        if (!a->menu()) {
-            actions.insert(a->data().toInt()*100 + i, a);
-            ++i;
+        if (!actionOrder.contains(a->objectName())) {
+            //FIXME QML visualizations don't support menus for now, *and* there is no way to
+            //distinguish them on QML side
+            if (!a->menu()) {
+                actions.insert(a->data().toInt()*100 + i, a);
+                ++i;
+            }
+        } else {
+            orderedActions[a->objectName()] = a;
         }
     }
 
     i = 0;
-    foreach (QAction *a, m_containment->corona()->actions()->actions()) {
+    foreach (QAction *a, m_containment->corona()->actions()->actions()) {        
         if (a->objectName() == QStringLiteral("lock widgets") || a->menu()) {
             //It is up to the Containment to decide if the user is allowed or not
             //to lock/unluck the widgets, so corona should not add one when there is none
@@ -657,10 +664,25 @@ QList<QObject *> ContainmentInterface::actions() const
             //one
             continue;
         }
-        actions.insert(a->data().toInt()*100 + i, a);
+
+        if (!actionOrder.contains(a->objectName())) {
+            actions.insert(a->data().toInt()*100 + i, a);
+        } else {
+            orderedActions[a->objectName()] = a;
+        }
         ++i;
     }
-    return actions.values();
+    QList<QObject *> actionList = actions.values();
+
+    foreach (const QString &name, actionOrder) {
+        QAction *a = orderedActions.value(name);
+        if (a && a->isVisible() && !a->menu()) {
+            actionList << a;
+        }
+        ++i;
+    }
+
+    return actionList;
 }
 
 //PROTECTED--------------------
