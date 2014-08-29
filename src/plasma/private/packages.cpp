@@ -115,11 +115,6 @@ void PlasmoidPackage::initPackage(Package *package)
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
 }
 
-QString ContainmentPackage::mainScriptConfigKey() const
-{
-    return QLatin1String("X-Plasma-Containment-MainScript");
-}
-
 void DataEnginePackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
