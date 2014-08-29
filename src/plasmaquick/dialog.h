@@ -212,6 +212,8 @@ private:
     friend class DialogPrivate;
     DialogPrivate *const d;
 
+    Q_PRIVATE_SLOT(d, void updateInputShape())
+    Q_PRIVATE_SLOT(d, void updateTheme())
     Q_PRIVATE_SLOT(d, void updateVisibility(bool visible))
 
     Q_PRIVATE_SLOT(d, void updateMinimumWidth())
