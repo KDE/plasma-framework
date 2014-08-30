@@ -19,6 +19,9 @@
 #ifndef PLASMA_WINDOWTHUMBNAIL_H
 #define PLASMA_WINDOWTHUMBNAIL_H
 #include <config-plasma.h>
+
+#include <cstdint>
+
 // Qt
 #include <QAbstractNativeEventFilter>
 #include <QSGSimpleTextureNode>
