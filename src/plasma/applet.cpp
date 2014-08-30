@@ -338,7 +338,7 @@ KPluginInfo Applet::pluginInfo() const
     return d->appletDescription;
 }
 
-Types::Types::ImmutabilityType Applet::immutability() const
+Types::ImmutabilityType Applet::immutability() const
 {
     // if this object is itself system immutable, then just return that; it's the most
     // restrictive setting possible and will override anything that might be happening above it
@@ -375,7 +375,7 @@ Types::Types::ImmutabilityType Applet::immutability() const
     }
 }
 
-void Applet::setImmutability(const Types::Types::ImmutabilityType immutable)
+void Applet::setImmutability(const Types::ImmutabilityType immutable)
 {
     if (d->immutability == immutable || immutable == Types::SystemImmutable) {
         // we do not store system immutability in d->immutability since that gets saved
