@@ -618,7 +618,7 @@ void PlasmaPkgPrivate::listTypes()
         foreach (const QString &file, desktopFiles) {
             // extract the type
             KConfig config(file, KConfig::SimpleConfig);
-#warning "read config here"
+#pragma message("read config here")
             // structure.read(&config);
             // get the name based on the rc file name, just as Plasma::PackageStructure does
             const QString name = file.left(file.length() - 2);
