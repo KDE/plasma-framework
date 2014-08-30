@@ -722,7 +722,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % "/metadata.desktop");
 
         if (themePath.isEmpty() && themeName.isEmpty()) {
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
+            // note: can't use QStringLiteral("foo" "bar") on Windows
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;
