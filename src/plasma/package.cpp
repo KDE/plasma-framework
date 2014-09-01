@@ -198,7 +198,7 @@ void Package::setFallbackPackage(const Plasma::Package &package)
         return;
     }
 
-    (*d->fallbackPackage) = package;
+    d->fallbackPackage = new Package(package);
 }
 
 Plasma::Package Package::fallbackPackage() const
@@ -819,7 +819,9 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     }
 
     structure = rhs.structure;
-    (*fallbackPackage) = (*rhs.fallbackPackage);
+    if (rhs.fallbackPackage) {
+        (*fallbackPackage) = (*rhs.fallbackPackage);
+    }
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
@@ -923,7 +925,7 @@ bool PackagePrivate::hasCycle(const Plasma::Package &package)
     while (fastPackage && fastPackage->d->fallbackPackage) {
         //consider two packages the same if they have the same metadata
         if ((fastPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->metadata() == slowPackage->metadata()) ||
-            (fastPackage->d->fallbackPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata() == slowPackage->metadata())) {
+            (fastPackage->d->fallbackPackage->d->fallbackPackage && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata() == slowPackage->metadata())) {
             return true;
         }
         fastPackage = fastPackage->d->fallbackPackage->d->fallbackPackage;
