@@ -193,7 +193,8 @@ void Package::setFallbackPackage(const Plasma::Package &package)
 {
     if ((d->fallbackPackage && d->fallbackPackage->path() == package.path() && d->fallbackPackage->metadata() == package.metadata()) ||
         //can't be fallback of itself
-        (package.path() == path() && package.metadata() == metadata())) {
+        (package.path() == path() && package.metadata() == metadata()) ||
+        d->hasCycle(package)) {
         return;
     }
 
@@ -906,6 +907,29 @@ QString PackagePrivate::fallbackFilePath(const char *key, const QString &filenam
     } else {
         return QString();
     }
+}
+
+bool PackagePrivate::hasCycle(const Plasma::Package &package)
+{
+    if (!package.d->fallbackPackage) {
+        return false;
+    }
+
+    //This is the Floyd cycle detection algorithm
+    //http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
+    const Plasma::Package *slowPackage = &package;
+    const Plasma::Package *fastPackage = &package;
+
+    while (fastPackage && fastPackage->d->fallbackPackage) {
+        //consider two packages the same if they have the same metadata
+        if ((fastPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->metadata() == slowPackage->metadata()) ||
+            (fastPackage->d->fallbackPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata() == slowPackage->metadata())) {
+            return true;
+        }
+        fastPackage = fastPackage->d->fallbackPackage->d->fallbackPackage;
+        slowPackage = slowPackage->d->fallbackPackage;
+    }
+    return false;
 }
 
 } // Namespace

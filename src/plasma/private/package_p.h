@@ -74,6 +74,7 @@ public:
     QString unpack(const QString &filePath);
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
     QString fallbackFilePath(const char *key, const QString &filename = QString()) const;
+    bool hasCycle(const Plasma::Package &package);
 
     QWeakPointer<PackageStructure> structure;
     QString path;
