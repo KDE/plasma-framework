@@ -29,8 +29,8 @@
 void FallbackPackageTest::initTestCase()
 {
     m_fallPackagePath = QFINDTESTDATA("data/testpackage");
-    m_fallPkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
-    m_fallPkg.setPath(m_fallPackagePath);
+    m_fallbackPkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    m_fallbackPkg.setPath(m_fallPackagePath);
 
     m_packagePath = QFINDTESTDATA("data/testfallbackpackage");
     m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
@@ -39,32 +39,32 @@ void FallbackPackageTest::initTestCase()
 
 void FallbackPackageTest::beforeFallback()
 {
-    QVERIFY(m_fallPkg.hasValidStructure());
+    QVERIFY(m_fallbackPkg.hasValidStructure());
     QVERIFY(m_pkg.hasValidStructure());
 
-    //m_fallPkg should have otherfile.qml, m_pkg shouldn't
-    QVERIFY(!m_fallPkg.filePath("ui", "otherfile.qml").isEmpty());
+    //m_fallbackPkg should have otherfile.qml, m_pkg shouldn't
+    QVERIFY(!m_fallbackPkg.filePath("ui", "otherfile.qml").isEmpty());
     QVERIFY(m_pkg.filePath("ui", "otherfile.qml").isEmpty());
 }
 
 void FallbackPackageTest::afterFallback()
 {
-    m_pkg.setFallbackPackage(m_fallPkg);
+    m_pkg.setFallbackPackage(m_fallbackPkg);
 
-    //after setting the fallback, m_pkg should resolve the exact same file as m_fallPkg
+    //after setting the fallback, m_pkg should resolve the exact same file as m_fallbackPkg
     // for otherfile.qml
     QVERIFY(!m_pkg.filePath("ui", "otherfile.qml").isEmpty());
-    QCOMPARE(m_fallPkg.filePath("ui", "otherfile.qml"), m_pkg.filePath("ui", "otherfile.qml"));
-    QVERIFY(m_fallPkg.filePath("mainscript") != m_pkg.filePath("mainscript"));
+    QCOMPARE(m_fallbackPkg.filePath("ui", "otherfile.qml"), m_pkg.filePath("ui", "otherfile.qml"));
+    QVERIFY(m_fallbackPkg.filePath("mainscript") != m_pkg.filePath("mainscript"));
 }
 
 void FallbackPackageTest::cycle()
 {
-    m_fallPkg.setFallbackPackage(m_pkg);
-    m_pkg.setFallbackPackage(m_fallPkg);
+    m_fallbackPkg.setFallbackPackage(m_pkg);
+    m_pkg.setFallbackPackage(m_fallbackPkg);
 
     //The cycle should have been detected and filePath should take a not infinite time
-    QTRY_COMPARE_WITH_TIMEOUT(m_fallPkg.filePath("ui", "otherfile.qml"), m_pkg.filePath("ui", "otherfile.qml"), 1000);
+    QTRY_COMPARE_WITH_TIMEOUT(m_fallbackPkg.filePath("ui", "otherfile.qml"), m_pkg.filePath("ui", "otherfile.qml"), 1000);
 }
 
 QTEST_MAIN(FallbackPackageTest)
