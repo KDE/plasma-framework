@@ -64,7 +64,7 @@ void FallbackPackageTest::cycle()
     m_fallPkg.setFallbackPackage(m_pkg);
 
     //The cycle should have been detected and filePath should take a not infinite tiume
-    QCOMPARE(m_pkg.filePath("ui", "otherfile.qml"), m_fallPkg.filePath("ui", "otherfile.qml"));
+    QTRY_COMPARE_WITH_TIMEOUT(m_pkg.filePath("ui", "otherfile.qml"), m_fallPkg.filePath("ui", "otherfile.qml"), 1000);
 }
 
 QTEST_MAIN(FallbackPackageTest)
