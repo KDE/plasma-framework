@@ -206,7 +206,7 @@ uint AppletInterface::id() const
 
 QString AppletInterface::pluginName() const
 {
-    return applet()->pluginInfo().pluginName();
+    return applet()->pluginInfo().isValid() ? applet()->pluginInfo().pluginName() : QString();
 }
 
 QString AppletInterface::icon() const
