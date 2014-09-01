@@ -189,6 +189,21 @@ void Package::setDefaultPackageRoot(const QString &packageRoot)
     }
 }
 
+void Package::setFallbackPackagePath(const QString &path)
+{
+    if (d->fallbackPackagePath == path) {
+        return;
+    }
+
+    d->fallbackPackagePath = path;
+    d->updateFallbackPackage();
+}
+
+QString Package::fallbackPackagePath() const
+{
+    return d->fallbackPackagePath;
+}
+
 QString Package::servicePrefix() const
 {
     return d->servicePrefix;
@@ -512,33 +527,7 @@ void Package::setPath(const QString &path)
 
     QString fallback;
 
-    if (metadata().isValid()) {
-        fallback = metadata().property("X-KDE-fallbackPackage").toString();
-        if (fallback == metadata().pluginName()) {
-            fallback = QString();
-        }
-    }
-    if (!fallback.isEmpty()) {
-        if (!d->fallbackPackage) {
-            d->fallbackPackage = new Package(d->structure.data());
-        }
-        d->fallbackPackage->setPath(fallback);
-        Plasma::Package *pkg = d->fallbackPackage;
-        int depth = 0;
-        while (pkg->d->fallbackPackage) {
-            //cycle or too deep?
-            if (depth > 10 || pkg->d->fallbackPackage->metadata().pluginName() == metadata().pluginName()) {
-                delete pkg->d->fallbackPackage;
-                pkg->d->fallbackPackage = 0;
-                break;
-            }
-            pkg = pkg->d->fallbackPackage;
-            ++depth;
-        }
-    } else {
-        delete d->fallbackPackage;
-        d->fallbackPackage = 0;
-    }
+    d->updateFallbackPackage();
 
     // uh-oh, but we didn't end up with anything valid, so we sadly reset ourselves
     // to futility.
@@ -819,6 +808,31 @@ PackagePrivate::~PackagePrivate()
     delete fallbackPackage;
 }
 
+void PackagePrivate::updateFallbackPackage()
+{
+    if (!fallbackPackagePath.isEmpty() && fallbackPackagePath != path) {
+        if (!fallbackPackage) {
+            fallbackPackage = new Package(structure.data());
+        }
+        fallbackPackage->setPath(fallbackPackagePath);
+        Plasma::Package *pkg = fallbackPackage;
+        int depth = 0;
+        while (pkg->d->fallbackPackage) {
+            //cycle or too deep?
+            if (depth > 10 || (metadata && metadata->isValid() && pkg->d->fallbackPackage->metadata().pluginName() == metadata->pluginName())) {
+                delete pkg->d->fallbackPackage;
+                pkg->d->fallbackPackage = 0;
+                break;
+            }
+            pkg = pkg->d->fallbackPackage;
+            ++depth;
+        }
+    } else {
+        delete fallbackPackage;
+        fallbackPackage = 0;
+    }
+}
+
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 {
     if (&rhs == this) {
@@ -909,7 +923,7 @@ void PackagePrivate::createPackageMetadata(const QString &path)
 QString PackagePrivate::fallbackFilePath(const char *key, const QString &filename) const
 {
     //don't fallback if the package isn't valid and never fallback the metadata file
-    if (fallbackPackage && fallbackPackage->isValid() && key != "metadata") {
+    if (fallbackPackage && fallbackPackage->isValid() && strcmp(key, "metadata") != 0) {
         return fallbackPackage->filePath(key, filename);
     } else {
         return QString();

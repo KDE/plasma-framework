@@ -290,6 +290,20 @@ public:
      */
     void setDefaultPackageRoot(const QString &packageRoot);
 
+    /**
+     * Sets the fallback package root path
+     * If a file won't be found in this package, it will search it in the package
+     * with the same structure identified by path
+     * It is intended to be used by the packageStructure
+     * @param path package root path @see setPath
+     */
+    void setFallbackPackagePath(const QString &path);
+
+    /**
+     * @return The fallback package root path
+     */
+    QString fallbackPackagePath() const;
+
     // Content structure description methods
     /**
      * @return all directories registered as part of this Package's structure
@@ -328,6 +342,7 @@ public:
 
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;
+    friend class PackagePrivate;
 };
 
 }

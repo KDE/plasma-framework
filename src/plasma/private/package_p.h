@@ -74,6 +74,7 @@ public:
     QString unpack(const QString &filePath);
     void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
     QString fallbackFilePath(const char *key, const QString &filename = QString()) const;
+    void updateFallbackPackage();
 
     QWeakPointer<PackageStructure> structure;
     QString path;
@@ -83,6 +84,7 @@ public:
     QString servicePrefix;
     QHash<QString, QString> discoveries;
     QHash<QByteArray, ContentStructure> contents;
+    QString fallbackPackagePath;
     Package *fallbackPackage;
 #ifndef PLASMA_NO_PACKAGE_EXTRADATA
     QStringList mimeTypes;
