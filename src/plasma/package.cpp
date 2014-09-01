@@ -189,19 +189,24 @@ void Package::setDefaultPackageRoot(const QString &packageRoot)
     }
 }
 
-void Package::setFallbackPackagePath(const QString &path)
+void Package::setFallbackPackage(const Plasma::Package &package)
 {
-    if (d->fallbackPackagePath == path) {
+    if ((d->fallbackPackage && d->fallbackPackage->path() == package.path() && d->fallbackPackage->metadata() == package.metadata()) ||
+        //can't be fallback of itself
+        (package.path() == path() && package.metadata() == metadata())) {
         return;
     }
 
-    d->fallbackPackagePath = path;
-    d->updateFallbackPackage();
+    (*d->fallbackPackage) = package;
 }
 
-QString Package::fallbackPackagePath() const
+Plasma::Package Package::fallbackPackage() const
 {
-    return d->fallbackPackagePath;
+    if (d->fallbackPackage) {
+        return (*d->fallbackPackage);
+    } else {
+        return Package();
+    }
 }
 
 QString Package::servicePrefix() const
@@ -527,8 +532,6 @@ void Package::setPath(const QString &path)
 
     QString fallback;
 
-    d->updateFallbackPackage();
-
     // uh-oh, but we didn't end up with anything valid, so we sadly reset ourselves
     // to futility.
     if (!d->valid) {
@@ -808,31 +811,6 @@ PackagePrivate::~PackagePrivate()
     delete fallbackPackage;
 }
 
-void PackagePrivate::updateFallbackPackage()
-{
-    if (!fallbackPackagePath.isEmpty() && fallbackPackagePath != path) {
-        if (!fallbackPackage) {
-            fallbackPackage = new Package(structure.data());
-        }
-        fallbackPackage->setPath(fallbackPackagePath);
-        Plasma::Package *pkg = fallbackPackage;
-        int depth = 0;
-        while (pkg->d->fallbackPackage) {
-            //cycle or too deep?
-            if (depth > 10 || (metadata && metadata->isValid() && pkg->d->fallbackPackage->metadata().pluginName() == metadata->pluginName())) {
-                delete pkg->d->fallbackPackage;
-                pkg->d->fallbackPackage = 0;
-                break;
-            }
-            pkg = pkg->d->fallbackPackage;
-            ++depth;
-        }
-    } else {
-        delete fallbackPackage;
-        fallbackPackage = 0;
-    }
-}
-
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 {
     if (&rhs == this) {
@@ -840,7 +818,7 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     }
 
     structure = rhs.structure;
-    fallbackPackage = rhs.fallbackPackage;
+    (*fallbackPackage) = (*rhs.fallbackPackage);
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;

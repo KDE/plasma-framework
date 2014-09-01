@@ -297,12 +297,12 @@ public:
      * It is intended to be used by the packageStructure
      * @param path package root path @see setPath
      */
-    void setFallbackPackagePath(const QString &path);
+    void setFallbackPackage(const Plasma::Package &package);
 
     /**
      * @return The fallback package root path
      */
-    QString fallbackPackagePath() const;
+    Plasma::Package fallbackPackage() const;
 
     // Content structure description methods
     /**
