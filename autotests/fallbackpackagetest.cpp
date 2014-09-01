@@ -42,6 +42,7 @@ void FallbackPackageTest::beforeFallback()
     QVERIFY(m_pkg.hasValidStructure());
     QVERIFY(m_fallPkg.hasValidStructure());
 
+    //m_pkg should have otherfile.qml, m_fallPkg shouldn't
     QVERIFY(!m_pkg.filePath("ui", "otherfile.qml").isEmpty());
     QVERIFY(m_fallPkg.filePath("ui", "otherfile.qml").isEmpty());
 }
@@ -50,6 +51,8 @@ void FallbackPackageTest::afterFallback()
 {
     m_fallPkg.setFallbackPackage(m_pkg);
 
+    //afetr setting the fallback, m_fallPkg should resolve the exact same file as m_pkg
+    // for otherfile.qml
     QVERIFY(!m_fallPkg.filePath("ui", "otherfile.qml").isEmpty());
     QCOMPARE(m_pkg.filePath("ui", "otherfile.qml"), m_fallPkg.filePath("ui", "otherfile.qml"));
     QVERIFY(m_pkg.filePath("mainscript") != m_fallPkg.filePath("mainscript"));
