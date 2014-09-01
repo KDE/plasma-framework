@@ -820,7 +820,9 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
 
     structure = rhs.structure;
     if (rhs.fallbackPackage) {
-        (*fallbackPackage) = (*rhs.fallbackPackage);
+        fallbackPackage = new Package(*rhs.fallbackPackage);
+    } else {
+        fallbackPackage = 0;
     }
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
@@ -904,7 +906,7 @@ void PackagePrivate::createPackageMetadata(const QString &path)
 QString PackagePrivate::fallbackFilePath(const char *key, const QString &filename) const
 {
     //don't fallback if the package isn't valid and never fallback the metadata file
-    if (fallbackPackage && fallbackPackage->isValid() && strcmp(key, "metadata") != 0) {
+    if (qstrcmp(key, "metadata") != 0 && fallbackPackage && fallbackPackage->isValid()) {
         return fallbackPackage->filePath(key, filename);
     } else {
         return QString();
