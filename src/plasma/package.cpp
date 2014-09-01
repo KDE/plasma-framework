@@ -921,13 +921,14 @@ bool PackagePrivate::hasCycle(const Plasma::Package &package)
 
     //This is the Floyd cycle detection algorithm
     //http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
-    const Plasma::Package *slowPackage = &package;
-    const Plasma::Package *fastPackage = &package;
+    Plasma::Package *slowPackage = const_cast<Plasma::Package *>(&package);
+    Plasma::Package *fastPackage = const_cast<Plasma::Package *>(&package);
 
     while (fastPackage && fastPackage->d->fallbackPackage) {
         //consider two packages the same if they have the same metadata
         if ((fastPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->metadata() == slowPackage->metadata()) ||
             (fastPackage->d->fallbackPackage->d->fallbackPackage && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata() == slowPackage->metadata())) {
+            qWarning() << "Warning: the fallback chain of " << package.metadata().pluginName() << "contains a cyclical dependency.";
             return true;
         }
         fastPackage = fastPackage->d->fallbackPackage->d->fallbackPackage;
