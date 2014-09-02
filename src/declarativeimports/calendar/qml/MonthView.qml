@@ -107,6 +107,8 @@ Item {
         }
         MouseArea {
             id: monthMouse
+            property int previousPixelDelta
+
             width: monthHeading.paintedWidth
             anchors {
                 left: parent.left
@@ -118,6 +120,29 @@ Item {
                     menuLoader.source = "MonthMenu.qml"
                 }
                 menuLoader.item.open(0, height);
+            }
+            onExited: previousPixelDelta = 0
+            onWheel: {
+                var delta = wheel.angleDelta.y || wheel.angleDelta.x
+                var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
+
+                // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
+                // finger movement. To prevent the view from suddenly ending up in the next century, we
+                // cumulate all the pixel deltas until they're larger than the label and then only change
+                // the month. Standard mouse wheel scrolling is unaffected since it's fine.
+                if (pixelDelta) {
+                    if (Math.abs(previousPixelDelta) < monthMouse.height) {
+                        previousPixelDelta += pixelDelta
+                        return
+                    }
+                }
+
+                if (delta >= 15) {
+                    calendarBackend.previousMonth()
+                } else if (delta <= -15) {
+                    calendarBackend.nextMonth()
+                }
+                previousPixelDelta = 0
             }
         }
     }
