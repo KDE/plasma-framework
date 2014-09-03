@@ -98,6 +98,7 @@ KConfigLoader *WallpaperInterface::configScheme()
 
         KConfigGroup cfg = m_containmentInterface->containment()->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
+        cfg = KConfigGroup(&cfg, m_wallpaperPlugin);
 
         if (xmlPath.isEmpty()) {
             m_configLoader = new KConfigLoader(cfg, 0, this);
