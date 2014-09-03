@@ -13,7 +13,7 @@
 #include "platformstatusadaptor.h"
 #include "../plasma/config-plasma.h"
 
-const char *defaultPackage = "org.kde.desktop";
+const char *defaultPackage = "org.kde.plasma.desktop";
 
 K_PLUGIN_FACTORY(PlatformStatusFactory, registerPlugin<PlatformStatus>();)
 
