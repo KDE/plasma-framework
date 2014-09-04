@@ -42,6 +42,7 @@ Comment[en_GB]=Tracks the current shell package and the platform definition stri
 Comment[es]=Rastrea las cadenas de definición del paquete de intérprete actual y de la plataforma.
 Comment[fi]=Seuraa nykyistä kuoripakettia ja alustan määrittelyn merkkijonoja.
 Comment[gl]=Fai seguimento do paquete da shell e do texto de definición da plataforma.
+Comment[hu]=A jelenlegi felületcsomag és platformdefiníciós sztringek követése.
 Comment[ia]=Il tracia le pacchetto de shell currente e le catenas de definition de platteforma.
 Comment[nds]=Kiekt op dat aktuelle Konsoolpaket un de Ünnerbuu-Definitschonen
 Comment[nl]=Volgt het huidige shell-pakket en de definitietekenreeksen van platform.
