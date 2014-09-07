@@ -10,9 +10,14 @@ Name[pt]=Pacote de Teste
 Name[pt_BR]=Pacote de teste secundário
 Name[sk]=Testovací záchranný balík
 Name[sl]=Preizkusni zasilni paket
+Name[sr]=Пробни одступни пакет
+Name[sr@ijekavian]=Пробни одступни пакет
+Name[sr@ijekavianlatin]=Probni odstupni paket
+Name[sr@latin]=Probni odstupni paket
 Name[sv]=Reservtestpaket
 Name[uk]=Тестовий резервний пакунок
 Name[x-test]=xxTest Fallback Packagexx
+Name[zh_TW]=測試預設套件
 Type=Service
 
 X-KDE-ParentApp=
