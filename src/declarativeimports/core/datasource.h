@@ -54,7 +54,6 @@ public:
     typedef QMap<QString, QVariant> Data;
 
     DataSource(QObject *parent = 0);
-
     /**
      * true if the connection to the Plasma DataEngine is valid
      */
