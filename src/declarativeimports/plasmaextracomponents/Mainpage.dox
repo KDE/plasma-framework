@@ -2,22 +2,22 @@
 
 <h2>import org.kde.plasma.extras</h2>
 
-- App
-- PageRow
-- ScrollArea
-- FallbackComponent
-- ResourceInstance
+- \link org::kde::plasma::plasmaextracomponents::App App \endlink
+- \link org::kde::plasma::plasmaextracomponents::PageRow PageRow \endlink
+- \link org::kde::plasma::plasmaextracomponents::ScrollArea ScrollArea \endlink
+- \link org::kde::plasma::plasmaextracomponents::FallbackComponent FallbackComponent \endlink
+- \link org::kde::plasma::plasmaextracomponents::ResourceInstance ResourceInstance \endlink
 
 Text formatting
-- Heading
-- Paragraph
-- Title
+- \link org::kde::plasma::plasmaextracomponents::Heading Heading \endlink
+- \link org::kde::plasma::plasmaextracomponents::Paragraph Paragraph \endlink
+- \link org::kde::plasma::plasmaextracomponents::Title Title \endlink
 
 Animations
-- ActivateAnimation
-- AppearAnimation
-- PressedAnimation
-- ReleasedAnimation
+- \link org::kde::plasma::plasmaextracomponents::ActivateAnimation ActivateAnimation \endlink
+- \link org::kde::plasma::plasmaextracomponents::AppearAnimation AppearAnimation \endlink
+- \link org::kde::plasma::plasmaextracomponents::PressedAnimation PressedAnimation \endlink
+- \link org::kde::plasma::plasmaextracomponents::ReleasedAnimation ReleasedAnimation \endlink
 
 */
 
