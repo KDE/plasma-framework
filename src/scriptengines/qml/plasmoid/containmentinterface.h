@@ -40,6 +40,14 @@ namespace KActivities
 class Info;
 }
 
+
+/**
+ * @class ContainmentInterface
+ *
+ * @brief This class is exposed to containments QML as the attached property Plasmoid
+ *
+ *
+ */
 class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
