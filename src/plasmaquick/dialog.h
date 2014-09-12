@@ -56,7 +56,28 @@ class DialogPrivate;
  * @class Dialog
  * @short QML wrapper for dialogs
  *
- * Exposed as `PlasmaCore.Dialog` in QML.
+ * Exposed as `Dialog` inside org.kde.plasma.core 2.0
+ *
+ * @code{.qml}
+ *  import QtQuick 2.0
+ *  import org.kde.plasma.core 2.0 as PlasmaCore
+ *  Item {
+ *     PlasmaCore.Dialog {
+ *          visible: true
+ *          mainItem: Item {
+ *              width: 500
+ *              height: 500
+ *
+ *              Text {
+ *                  anchors.centerIn: parent
+ *                  color: "red"
+ *                  text: "text"
+ *              }
+ *          }
+ *      }
+ * }
+ * @endcode
+ *
  */
 class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
 {
