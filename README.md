@@ -3,21 +3,9 @@ The plasma framework provides the foundations that can be used to build a primar
 
 ## Introduction
 The plasma framework provides the following:
+- QML components
 - A C++ library: libplasma
 - Script engines
-- QML components
-
-## libplasma
-This C++ library provides:
-- rendering of SVG themes
-- loading of files from a certain filesystem structure: packages
-- data access through data engines
-- loading of the plugin structure of the workspace: containments and applets
-
-See @ref libplasma.
-
-## Script engines
-Provides support to create applets or containments in various scripting languages.
 
 ## QML components
 ### org.kde.plasma.core
@@ -32,3 +20,16 @@ Extra graphical components that extend org.kde.plasma.components but are not in 
 
 ### org.kde.plasma.plasmoid
 Attached properties for manipulating the current applet or containment, see @ref libplasmaquick
+
+## libplasma
+This C++ library provides:
+- rendering of SVG themes
+- loading of files from a certain filesystem structure: packages
+- data access through data engines
+- loading of the plugin structure of the workspace: containments and applets
+
+See @ref libplasma.
+
+## Script engines
+Provides support to create applets or containments in various scripting languages.
+
