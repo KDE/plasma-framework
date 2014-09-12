@@ -170,7 +170,7 @@ QtQuickControlStyle.ButtonStyle {
 
             implicitWidth: {
                 if (control.text.length == 0) {
-                    height;
+                    implicitHeight;
                 } else {
                     Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
                 }
