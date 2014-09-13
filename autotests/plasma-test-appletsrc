@@ -22,5 +22,15 @@ lastScreen=0
 location=4
 plugin=simplecontainment
 
+#this is a desktop containment that even if has lastScreen=0
+#its screen will be -1: this is the case of a containment of
+#another activity, not the current one
+[Containments][5]
+formfactor=0
+immutability=1
+lastScreen=0
+location=0
+plugin=simplenoscreencontainment
+
 [General]
 immutability=1

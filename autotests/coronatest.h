@@ -43,6 +43,7 @@ public:
     ~SimpleCorona();
 
     QRect screenGeometry(int) const;
+    int screenForContainment(const Plasma::Containment *) const;
 };
 
 class SimpleApplet : public Plasma::Applet
@@ -63,6 +64,14 @@ public:
     explicit SimpleContainment(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 private:
     QTimer m_timer;
+};
+
+class SimpleNoScreenContainment : public Plasma::Containment
+{
+    Q_OBJECT
+
+public:
+    explicit SimpleNoScreenContainment(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
 };
 
 class CoronaTest : public QObject
