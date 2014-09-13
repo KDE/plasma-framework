@@ -31,6 +31,8 @@ Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint apple
         return new SimpleApplet(0, QString(), appletId);
     } else if (name == "simplecontainment") {
         return new SimpleContainment(0, QString(), appletId);
+    } else if (name == "simplenoscreencontainment") {
+        return new SimpleNoScreenContainment(0, QString(), appletId);
     } else {
         return 0;
     }
@@ -50,6 +52,14 @@ QRect SimpleCorona::screenGeometry(int screen) const
 {
     //completely arbitrary, still not tested
     return QRect(100*screen, 100, 100, 100);
+}
+
+int SimpleCorona::screenForContainment(const Plasma::Containment *c) const
+{
+    if (qobject_cast<const SimpleNoScreenContainment *>(c)) {
+        return -1;
+    }
+    return 0;
 }
 
 SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
@@ -83,7 +93,11 @@ SimpleContainment::SimpleContainment(QObject *parent , const QString &serviceId,
     });
 }
 
-
+SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parent , const QString &serviceId, uint appletId)
+    : Plasma::Containment(parent, serviceId, appletId)
+{
+    //This containment will *never* be isUiReady()
+}
 
 static void runKBuildSycoca()
 {
@@ -129,8 +143,20 @@ void CoronaTest::cleanupTestCase()
 void CoronaTest::restore()
 {
     m_corona->loadLayout("plasma-test-appletsrc");
-    QCOMPARE(m_corona->containments().count(), 2);
-    QCOMPARE(m_corona->containments().first()->applets().count(), 2);
+    QCOMPARE(m_corona->containments().count(), 3);
+    //TODO: check the order of m_corona->containments() is stable:
+    //at the moment the ordering seems pretty random
+    //same thing for the order of containment->applets()
+    for (auto cont : m_corona->containments()) {
+        switch (cont->id()) {
+        case 1:
+            QCOMPARE(cont->applets().count(), 2);
+            break;
+        default:
+            QCOMPARE(cont->applets().count(), 0);
+            break;
+        }
+    }
 }
 
 void CoronaTest::startupCompletion()
