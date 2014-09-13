@@ -14,5 +14,13 @@ plugin=invalid
 immutability=1
 plugin=simpleapplet
 
+#empty panel: should emit complete even if empty
+[Containments][4]
+formfactor=2
+immutability=1
+lastScreen=0
+location=4
+plugin=simplecontainment
+
 [General]
 immutability=1

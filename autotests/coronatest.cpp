@@ -129,7 +129,7 @@ void CoronaTest::cleanupTestCase()
 void CoronaTest::restore()
 {
     m_corona->loadLayout("plasma-test-appletsrc");
-    QCOMPARE(m_corona->containments().count(), 1);
+    QCOMPARE(m_corona->containments().count(), 2);
     QCOMPARE(m_corona->containments().first()->applets().count(), 2);
 }
 
