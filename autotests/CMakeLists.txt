@@ -41,6 +41,7 @@ PLASMA_UNIT_TESTS(
     packagestructuretest
     packageurlinterceptortest
     pluginloadertest
+    plugintradertest
     framesvgtest
     #    plasmoidpackagetest
 )
