@@ -179,14 +179,14 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "offers is empty for " << name;
+        qDebug() << "offers is empty for " << name;
 #endif
         return 0;
     }
 
 #ifndef NDEBUG
     if (offers.count() > 1) {
-        // qDebug() << "hey! we got more than one! let's blindly take the first one";
+        qDebug() << "hey! we got more than one! let's blindly take the first one";
     }
 #endif
 
@@ -201,8 +201,8 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (!offer->property("X-Plasma-API").toString().isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "we have a script using the"
-        //         << offer->property("X-Plasma-API").toString() << "API";
+        qDebug() << "we have a script using the"
+                 << offer->property("X-Plasma-API").toString() << "API";
 #endif
         if (isContainment) {
             return new Containment(0, allArgs);
@@ -318,7 +318,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "offers is empty for " << name;
+        qDebug() << "offers is empty for " << name;
 #endif
         return new NullService(name, parent);
     }
@@ -332,7 +332,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
     if (!service) {
 #ifndef NDEBUG
-        // qDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
+        qDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
 #endif
         return new NullService(name, parent);
     }
@@ -379,7 +379,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (!actions) {
 #ifndef NDEBUG
-        // qDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
+        qDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
 #endif
     }
 
@@ -451,7 +451,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     }
 
 #ifndef NDEBUG
-        // qDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
+        qDebug() << "Couldn't load Package for" << packageFormat << "!";
 #endif
 
     return Package();
@@ -512,7 +512,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
 #ifndef NDEBUG
-                // qDebug() << info.name() << "matches" << glob << url;
+                qDebug() << info.name() << "matches" << glob << url;
 #endif
                 filtered << info;
             }
@@ -547,8 +547,8 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
         //qDebug() << "   and we have " << appletCategory;
         if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
 #ifndef NDEBUG
-            // qDebug() << "Unknown category: " << applet->name() << "says it is in the"
-            //         << appletCategory << "category which is unknown to us";
+            qDebug() << "Unknown category: " << applet->name() << "says it is in the"
+                     << appletCategory << "category which is unknown to us";
 #endif
             appletCategory.clear();
         }
