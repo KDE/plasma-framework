@@ -22,6 +22,8 @@
 
 #include <QCoreApplication>
 
+#include <KPluginInfo>
+
 class PluginTraderTest : public QObject
 {
     Q_OBJECT
@@ -29,8 +31,17 @@ public:
     PluginTraderTest() {}
 
 private Q_SLOTS:
+    void initTestCase();
     void listPackages();
+    void listPackagesRecursive();
+    void cleanupTestCase();
+
 private:
+    KPluginInfo::List listPlugins(const QString &servicetype);
+    KPluginInfo::List queryPackages(const QString &plugindir, const QString &servicetype);
+
+    QHash<QString, QString> m_pluginDirs;
+    bool m_recursive;
 };
 
 #endif
