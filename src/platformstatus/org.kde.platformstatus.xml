@@ -2,14 +2,21 @@
 <node>
   <interface name="org.kde.PlatformStatus">
     <property name="shellPackage" type="s" access="read"/>
+    <property name="lookAndFeelPackage" type="s" access="read"/>
     <property name="runtimePlatform" type="as" access="read"/>
     <signal name="shellPackageChanged">
+      <arg name="package" type="s" direction="out"/>
+    </signal>
+    <signal name="lookAndFeelPackageChanged">
       <arg name="package" type="s" direction="out"/>
     </signal>
     <signal name="runtimePlatformChanged">
       <arg name="runtimePlatform" type="as" direction="out"/>
     </signal>
     <method name="shellPackage">
+      <arg type="s" direction="out"/>
+    </method>
+    <method name="lookAndFeelPackage">
       <arg type="s" direction="out"/>
     </method>
     <method name="runtimePlatform">

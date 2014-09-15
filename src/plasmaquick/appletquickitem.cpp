@@ -380,7 +380,9 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
             this, SLOT(compactRepresentationCheck()));
 
     d->qmlObject = new KDeclarative::QmlObject(this);
-    d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
+    if (applet->pluginInfo().isValid()) {
+        d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
+    }
     d->qmlObject->setInitializationDelayed(true);
 
     // set the graphicObject dynamic property on applet
@@ -612,7 +614,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     //if there is no compact representation it means it's always expanded
-    //Containnments are always expanded
+    //Containments are always expanded
     if (d->expanded == expanded) {
         return;
     }

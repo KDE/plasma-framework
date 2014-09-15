@@ -170,8 +170,8 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
             foreach (const QString &prov, provides) {
                 if (!first) {
                     constraint += " or ";
-                    first = false;
                 }
+                first = false;
                 constraint += "'" + prov + "' in [X-Plasma-Provides]";
             }
 

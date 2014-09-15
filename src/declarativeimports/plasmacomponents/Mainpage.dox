@@ -4,60 +4,60 @@
 
 ## Widgets
 Input:
-- TextArea
-- TextField
-- CheckBox
-- RadioButton
-- Switch
-- Slider
+- \link org::kde::plasma::components::TextArea TextArea \endlink
+- \link org::kde::plasma::components::TextField TextField \endlink
+- \link org::kde::plasma::components::CheckBox CheckBox \endlink
+- \link org::kde::plasma::components::RadioButton RadioButton \endlink
+- \link org::kde::plasma::components::Switch Switch \endlink
+- \link org::kde::plasma::components::Slider Slider \endlink
 
 Buttons:
-- Button
-- ButtonColumn
-- ButtonRow
-- ToolButton
+- \link org::kde::plasma::components::Button Button \endlink
+- \link org::kde::plasma::components::ButtonColumn ButtonColumn \endlink
+- \link org::kde::plasma::components::ButtonRow ButtonRow \endlink
+- \link org::kde::plasma::components::ToolButton ToolButton \endlink
 
 Misc:
-- BusyIndicator
-- ProgressBar
-- Label
+- \link org::kde::plasma::components::BusyIndicator BusyIndicator \endlink
+- \link org::kde::plasma::components::ProgressBar ProgressBar \endlink
+- \link org::kde::plasma::components::Label Label \endlink
 
 ## Containers
 Pages:
-- Page
-- PageOrientation
-- PageStatus
-- PageStack
+- \link org::kde::plasma::components::Page Page \endlink
+- \link org::kde::plasma::components::PageOrientation PageOrientation \endlink
+- \link org::kde::plasma::components::PageStatus PageStatus \endlink
+- \link org::kde::plasma::components::PageStack PageStack \endlink
 
 Dialogs:
-- Dialog
-- DialogStatus
-- CommonDialog
-- QueryDialog
-- SelectionDialog
+- \link org::kde::plasma::components::Dialog Dialog \endlink
+- \link org::kde::plasma::components::DialogStatus DialogStatus \endlink
+- \link org::kde::plasma::components::CommonDialog CommonDialog \endlink
+- \link org::kde::plasma::components::QueryDialog QueryDialog \endlink
+- \link org::kde::plasma::components::SelectionDialog SelectionDialog \endlink
 
 Tab bars:
-- TabBar
-- TabButton
-- TabGroup
+- \link org::kde::plasma::components::TabBar TabBar \endlink
+- \link org::kde::plasma::components::TabButton TabButton \endlink
+- \link org::kde::plasma::components::TabGroup TabGroup \endlink
 
 Misc:
-- Sheet
-- ScrollBar
+- \link org::kde::plasma::components::Sheet Sheet \endlink
+- \link org::kde::plasma::components::ScrollBar ScrollBar \endlink
 
 ## Menus
-- Menu
-- MenuItem
-- ContextMenu
+- \link org::kde::plasma::components::Menu Menu \endlink
+- \link org::kde::plasma::components::MenuItem MenuItem \endlink
+- \link org::kde::plasma::components::ContextMenu ContextMenu \endlink
 
 ## Lists
-- ListItem
-- Highlight
-- SectionScroller
+- \link org::kde::plasma::components::ListItem ListItem \endlink
+- \link org::kde::plasma::components::Highlight Highlight \endlink
+- \link org::kde::plasma::components::SectionScroller SectionScroller \endlink
 
 ## Toolbar
-- ToolBar
-- ToolBarLayout
+- \link org::kde::plasma::components::ToolBar ToolBar \endlink
+- \link org::kde::plasma::components::ToolBarLayout ToolBarLayout \endlink
 */
 
 // DOXYGEN_SET_PROJECT_NAME = PlasmaComponents

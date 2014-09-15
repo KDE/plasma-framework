@@ -49,6 +49,7 @@ Package::Package(PackageStructure *structure)
     : d(new PackagePrivate())
 {
     d->structure = structure;
+
     if (d->structure) {
         d->structure.data()->initPackage(this);
     }
@@ -188,6 +189,27 @@ void Package::setDefaultPackageRoot(const QString &packageRoot)
     }
 }
 
+void Package::setFallbackPackage(const Plasma::Package &package)
+{
+    if ((d->fallbackPackage && d->fallbackPackage->path() == package.path() && d->fallbackPackage->metadata() == package.metadata()) ||
+        //can't be fallback of itself
+        (package.path() == path() && package.metadata() == metadata()) ||
+        d->hasCycle(package)) {
+        return;
+    }
+
+    d->fallbackPackage = new Package(package);
+}
+
+Plasma::Package Package::fallbackPackage() const
+{
+    if (d->fallbackPackage) {
+        return (*d->fallbackPackage);
+    } else {
+        return Package();
+    }
+}
+
 QString Package::servicePrefix() const
 {
     return d->servicePrefix;
@@ -290,7 +312,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
 {
     if (!d->valid) {
         //qDebug() << "package is not valid";
-        return QString();
+        return d->fallbackFilePath(fileType, filename);
     }
 
     const QString discoveryKey(fileType + filename);
@@ -305,7 +327,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         //qDebug()<<d->contents.keys();
         if (!d->contents.contains(fileType)) {
             //qDebug() << "package does not contain" << fileType << filename;
-            return QString();
+            return d->fallbackFilePath(fileType, filename);
         }
 
         paths = d->contents[fileType].paths;
@@ -313,7 +335,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
         if (paths.isEmpty()) {
             //qDebug() << "no matching path came of it, while looking for" << fileType << filename;
             d->discoveries.insert(discoveryKey, QString());
-            return QString();
+            return d->fallbackFilePath(fileType, filename);
         }
     } else {
         //when filetype is empty paths is always empty, so try with an empty string
@@ -356,7 +378,7 @@ QString Package::filePath(const char *fileType, const QString &filename) const
     }
 
     //qDebug() << fileType << filename << "does not exist in" << prefixes << "at root" << d->path;
-    return QString();
+    return d->fallbackFilePath(fileType, filename);
 }
 
 QStringList Package::entryList(const char *key) const
@@ -451,11 +473,13 @@ void Package::setPath(const QString &path)
     QStringList paths;
     if (QDir::isRelativePath(path)) {
         QString p;
+
         if (d->defaultPackageRoot.isEmpty()) {
             p = path % "/";
         } else {
             p = d->defaultPackageRoot % path % "/";
         }
+
         if (QDir::isRelativePath(p)) {
             paths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, p, QStandardPaths::LocateDirectory);
         } else {
@@ -464,6 +488,7 @@ void Package::setPath(const QString &path)
                 paths << p;
             }
         }
+
         //qDebug() << "paths:" << p << paths << d->defaultPackageRoot;
     } else {
         const QDir dir(path);
@@ -497,6 +522,7 @@ void Package::setPath(const QString &path)
         }
     }
 
+
     // if nothing did change, then we go back to the old dptr
     if (d->path == previousPath) {
         d = oldD;
@@ -507,6 +533,8 @@ void Package::setPath(const QString &path)
     d->discoveries.clear();
     delete d->metadata;
     d->metadata = 0;
+
+    QString fallback;
 
     // uh-oh, but we didn't end up with anything valid, so we sadly reset ourselves
     // to futility.
@@ -761,6 +789,7 @@ KJob *Package::uninstall(const QString &packageName, const QString &packageRoot)
 PackagePrivate::PackagePrivate()
     : QSharedData(),
       servicePrefix("plasma-applet-"),
+      fallbackPackage(0),
       metadata(0),
       externalPaths(false),
       valid(false),
@@ -783,6 +812,7 @@ PackagePrivate::~PackagePrivate()
         dir.removeRecursively();
     }
     delete metadata;
+    delete fallbackPackage;
 }
 
 PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
@@ -792,6 +822,11 @@ PackagePrivate &PackagePrivate::operator=(const PackagePrivate &rhs)
     }
 
     structure = rhs.structure;
+    if (rhs.fallbackPackage) {
+        fallbackPackage = new Package(*rhs.fallbackPackage);
+    } else {
+        fallbackPackage = 0;
+    }
     path = rhs.path;
     contentsPrefixPaths = rhs.contentsPrefixPaths;
     servicePrefix = rhs.servicePrefix;
@@ -869,6 +904,40 @@ void PackagePrivate::createPackageMetadata(const QString &path)
     }
 
     metadata = new KPluginInfo(metadataPath);
+}
+
+QString PackagePrivate::fallbackFilePath(const char *key, const QString &filename) const
+{
+    //don't fallback if the package isn't valid and never fallback the metadata file
+    if (qstrcmp(key, "metadata") != 0 && fallbackPackage && fallbackPackage->isValid()) {
+        return fallbackPackage->filePath(key, filename);
+    } else {
+        return QString();
+    }
+}
+
+bool PackagePrivate::hasCycle(const Plasma::Package &package)
+{
+    if (!package.d->fallbackPackage) {
+        return false;
+    }
+
+    //This is the Floyd cycle detection algorithm
+    //http://en.wikipedia.org/wiki/Cycle_detection#Tortoise_and_hare
+    Plasma::Package *slowPackage = const_cast<Plasma::Package *>(&package);
+    Plasma::Package *fastPackage = const_cast<Plasma::Package *>(&package);
+
+    while (fastPackage && fastPackage->d->fallbackPackage) {
+        //consider two packages the same if they have the same metadata
+        if ((fastPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->metadata() == slowPackage->metadata()) ||
+            (fastPackage->d->fallbackPackage->d->fallbackPackage && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata().isValid() && fastPackage->d->fallbackPackage->d->fallbackPackage->metadata() == slowPackage->metadata())) {
+            qWarning() << "Warning: the fallback chain of " << package.metadata().pluginName() << "contains a cyclical dependency.";
+            return true;
+        }
+        fastPackage = fastPackage->d->fallbackPackage->d->fallbackPackage;
+        slowPackage = slowPackage->d->fallbackPackage;
+    }
+    return false;
 }
 
 } // Namespace

@@ -206,7 +206,7 @@ uint AppletInterface::id() const
 
 QString AppletInterface::pluginName() const
 {
-    return applet()->pluginInfo().pluginName();
+    return applet()->pluginInfo().isValid() ? applet()->pluginInfo().pluginName() : QString();
 }
 
 QString AppletInterface::icon() const
@@ -268,7 +268,7 @@ void AppletInterface::setToolTipMainText(const QString &text)
 
 QString AppletInterface::toolTipSubText() const
 {
-    if (m_toolTipSubText.isNull()) {
+    if (m_toolTipSubText.isNull() && applet()->pluginInfo().isValid()) {
         return applet()->pluginInfo().comment();
     } else {
         return m_toolTipSubText;

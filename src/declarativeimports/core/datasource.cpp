@@ -163,7 +163,7 @@ void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *mod
 
     m_models->insert(sourceName, QVariant::fromValue(model));
     //FIXME: this will break in the case a second model is set
-    connect(model, &QObject::destroyed, [ = ]() {
+    connect(model, &QObject::destroyed, m_models, [ = ]() {
         m_models->clear(sourceName);
     });
 }

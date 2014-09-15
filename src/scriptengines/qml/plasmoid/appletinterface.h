@@ -48,6 +48,13 @@ namespace Plasma
 class ConfigLoader;
 } // namespace Plasma
 
+/**
+ * @class AppletInterface
+ *
+ * @short This class is exposed to applets in QML as the attached property Plasmoid
+ *
+ * \@import org.kde.plasma.Plasmoid
+ */
 class AppletInterface : public PlasmaQuick::AppletQuickItem
 {
     Q_OBJECT

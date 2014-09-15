@@ -42,8 +42,8 @@ QtQuickControlStyle.RadioButtonStyle {
         }
         elementId: "normal"
 
-        width: units.gridUnit
-        height: width
+        width: theme.mSize(theme.defaultFont).height + margins.left
+        height: theme.mSize(theme.defaultFont).height + margins.top
 
         PlasmaCore.SvgItem {
             id: checkmark

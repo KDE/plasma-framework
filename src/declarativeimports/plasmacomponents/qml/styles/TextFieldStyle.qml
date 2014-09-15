@@ -33,6 +33,9 @@ QtQuickControlStyle.TextFieldStyle {
     selectedTextColor: theme.viewBackgroundColor
 
     background: Item {
+        implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
+        implicitWidth: theme.mSize(theme.defaultFont).width * 12
+
         Private.TextFieldFocus {
             id: hover
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")

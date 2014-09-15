@@ -246,7 +246,7 @@ void ContainmentPrivate::setUiReady()
     //if we are the containment and there is still some uncomplete applet, we're still incomplete
     if (!uiReady) {
         uiReady = true;
-        if (q->Applet::d->started && appletsUiReady && loadingApplets.isEmpty()) {
+        if (q->Applet::d->started && (appletsUiReady || applets.isEmpty()) && loadingApplets.isEmpty()) {
             emit q->uiReadyChanged(true);
         }
     }

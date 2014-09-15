@@ -563,7 +563,6 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
                     if (!ready) {
                         return;
                     }
-
                     --containmentsStarting;
                     if (containmentsStarting <= 0) {
                         emit q->startupCompleted();

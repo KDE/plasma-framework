@@ -27,7 +27,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 Item{
     id: toolBar
     width: parent.width
-    height: (tools && enabled) ? tools.height + frameSvg.margins.top + frameSvg.margins.bottom : 0
+    height: (tools && enabled) ? tools.implicitHeight + frameSvg.margins.top + frameSvg.margins.bottom : 0
     visible: height > 0
 
     /**

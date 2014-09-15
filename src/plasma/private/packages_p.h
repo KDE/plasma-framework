@@ -48,12 +48,6 @@ public:
     void initPackage(Package *package);
 };
 
-class ContainmentPackage : public PlasmoidPackage
-{
-public:
-    QString mainScriptConfigKey() const;
-};
-
 class DataEnginePackage : public ChangeableMainScriptPackage
 {
 public:

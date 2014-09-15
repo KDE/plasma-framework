@@ -115,11 +115,6 @@ void PlasmoidPackage::initPackage(Package *package)
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
 }
 
-QString ContainmentPackage::mainScriptConfigKey() const
-{
-    return QLatin1String("X-Plasma-Containment-MainScript");
-}
-
 void DataEnginePackage::initPackage(Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
@@ -279,6 +274,9 @@ void ShellPackage::initPackage(Plasma::Package *package)
 
     //Widget explorer
     package->addFileDefinition("widgetexplorer", "explorer/WidgetExplorer.qml", i18n("Widgets explorer UI"));
+
+    package->addFileDefinition("interactiveconsole", "InteractiveConsole.qml",
+                               i18n("A UI for writing, loading and running desktop scripts in the current live session"));
 
     //package->setRequired("mainscript", true);
 }

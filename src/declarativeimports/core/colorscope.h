@@ -38,9 +38,25 @@ class QQuickItem;
 class ColorScope : public QQuickItem
 {
     Q_OBJECT
+
+    /**
+     * Specifies the color group to use for this ColorScope
+     */
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+
+    /**
+     * The main foreground color within this colorscope
+     */
     Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged)
+
+    /**
+     * The highlight color within this colorscope
+     */
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged)
+
+    /**
+     * The background color that should be used within this colorscope
+     */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
 
 public:
