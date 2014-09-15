@@ -144,9 +144,7 @@ void CoronaTest::restore()
 {
     m_corona->loadLayout("plasma-test-appletsrc");
     QCOMPARE(m_corona->containments().count(), 3);
-    //TODO: check the order of m_corona->containments() is stable:
-    //at the moment the ordering seems pretty random
-    //same thing for the order of containment->applets()
+
     for (auto cont : m_corona->containments()) {
         switch (cont->id()) {
         case 1:
@@ -157,6 +155,21 @@ void CoronaTest::restore()
             break;
         }
     }
+
+
+}
+
+
+void CoronaTest::checkOrder()
+{
+    QCOMPARE(m_corona->containments().count(), 3);
+
+    //check containments order
+    QCOMPARE(m_corona->containments()[0]->id(), (uint)1);
+    QCOMPARE(m_corona->containments()[1]->id(), (uint)4);
+    QCOMPARE(m_corona->containments()[2]->id(), (uint)5);
+
+    //TODO: Containment::applets() order check
 }
 
 void CoronaTest::startupCompletion()
