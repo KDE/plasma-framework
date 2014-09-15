@@ -432,6 +432,8 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             structure = new ThemePackage();
         } else if (packageFormat.endsWith("/ContainmentActions")) {
             structure = new ContainmentActionsPackage();
+        } else if (packageFormat.endsWith("/Shell")) {
+            structure = new ShellPackage();
         } else if (packageFormat.endsWith("/Generic")) {
             structure = new GenericPackage();
         }
