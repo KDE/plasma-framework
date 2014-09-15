@@ -477,7 +477,11 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         conf.deleteGroup();
     }
 
-    containments.append(containment);
+    //make sure the containments are sorted by id
+    auto position = std::lower_bound(containments.begin(), containments.end(), containment, [](Plasma::Containment *c1,  Plasma::Containment *c2) {
+        return c1->id() < c2->id();
+    });
+    containments.insert(position, containment);
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),
                      q, SLOT(containmentDestroyed(QObject*)));
@@ -514,8 +518,10 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
     }
 
     KConfigGroup containmentsGroup(&conf, "Containments");
+    QStringList groups = containmentsGroup.groupList();
+    qSort(groups.begin(), groups.end());
 
-    foreach (const QString &group, containmentsGroup.groupList()) {
+    foreach (const QString &group, groups) {
         KConfigGroup containmentConfig(&containmentsGroup, group);
 
         if (containmentConfig.entryMap().isEmpty()) {

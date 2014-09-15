@@ -84,6 +84,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void restore();
+    void checkOrder();
     void startupCompletion();
     void addRemoveApplets();
     void immutability();
