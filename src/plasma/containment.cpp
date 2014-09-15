@@ -260,10 +260,14 @@ void Containment::restoreContents(KConfigGroup &group)
 {
     KConfigGroup applets(&group, "Applets");
 
+    //restore the applets ordered by id
+    QStringList groups = applets.groupList();
+    qSort(groups.begin(), groups.end());
+
     // Sort the applet configs in order of geometry to ensure that applets
     // are added from left to right or top to bottom for a panel containment
     QList<KConfigGroup> appletConfigs;
-    foreach (const QString &appletGroup, applets.groupList()) {
+    foreach (const QString &appletGroup, groups) {
         //qDebug() << "reading from applet group" << appletGroup;
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
@@ -414,7 +418,11 @@ void Containment::addApplet(Applet *applet)
         applet->setParent(this);
     }
 
-    d->applets << applet;
+    //make sure the applets are sorted by id
+    auto position = std::lower_bound(d->applets.begin(), d->applets.end(), applet, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
+        return a1->id() < a2->id();
+    });
+    d->applets.insert(position, applet);
 
     if (!d->uiReady) {
         d->loadingApplets << applet;

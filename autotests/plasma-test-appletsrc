@@ -6,13 +6,15 @@ lastScreen=0
 location=0
 plugin=simplecontainment
 
-[Containments][1][Applets][2]
-immutability=1
-plugin=invalid
-
+#those two applets are not ordered by id
+#but applets() should be ordered anyways
 [Containments][1][Applets][3]
 immutability=1
 plugin=simpleapplet
+
+[Containments][1][Applets][2]
+immutability=1
+plugin=invalid
 
 #empty panel: should emit complete even if empty
 [Containments][4]

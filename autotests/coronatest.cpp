@@ -169,7 +169,10 @@ void CoronaTest::checkOrder()
     QCOMPARE(m_corona->containments()[1]->id(), (uint)4);
     QCOMPARE(m_corona->containments()[2]->id(), (uint)5);
 
-    //TODO: Containment::applets() order check
+    //check applets order
+    QCOMPARE(m_corona->containments()[0]->applets().count(), 2);
+    QCOMPARE(m_corona->containments()[0]->applets()[0]->id(), (uint)2);
+    QCOMPARE(m_corona->containments()[0]->applets()[1]->id(), (uint)3);
 }
 
 void CoronaTest::startupCompletion()
