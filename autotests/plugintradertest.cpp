@@ -65,11 +65,12 @@ void PluginTraderTest::listPackages()
     m_recursive = true;
 
     QElapsedTimer timer;
+    QElapsedTimer innertimer;
+
     timer.start();
 
 
     foreach (const QString &servicetype, m_pluginDirs.keys()) {
-        QElapsedTimer innertimer;
         innertimer.start();
 
         KPluginInfo::List lst;
@@ -152,6 +153,22 @@ KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, cons
     KPluginTrader::applyConstraints(lst, constraint);
     return lst;
 
+}
+
+void PluginTraderTest::listPackagesFromTestData()
+{
+    const QString testdatadir = QFINDTESTDATA("data/plasma");
+    qDebug() << "Test data: " << testdatadir;
+    QElapsedTimer innertimer;
+    foreach (const QString &servicetype, m_pluginDirs.keys()) {
+        innertimer.start();
+        KPluginInfo::List lst = queryPackages(testdatadir, servicetype);
+
+        int ms = innertimer.elapsed();
+        qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << ms << "milliseconds";
+        //QVERIFY(lst.count() > 0 || buildonly);
+
+    }
 }
 
 //#include "plugintradertest.moc"

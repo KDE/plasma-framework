@@ -34,6 +34,7 @@ private Q_SLOTS:
     void initTestCase();
     void listPackages();
     void listPackagesRecursive();
+    void listPackagesFromTestData();
     void cleanupTestCase();
 
 private:
