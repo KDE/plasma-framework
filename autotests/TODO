@@ -8,7 +8,6 @@ packagestructure
 
 // No tests written atm.
 abstractrunner
-animator
 appletbrowser
 applet
 configxml
@@ -20,7 +19,6 @@ dataengine
 dataenginemanager
 glapplet
 packages_p
-phase
 plasma_export
 plasma
 scriptengine
