@@ -39,7 +39,7 @@ private Q_SLOTS:
 
 private:
     KPluginInfo::List listPlugins(const QString &servicetype);
-    KPluginInfo::List queryPackages(const QString &plugindir, const QString &servicetype);
+    KPluginInfo::List queryPackages(const QString &plugindir, const QString &servicetype = QString(), const QString &constraint = QString());
 
     QHash<QString, QString> m_pluginDirs;
     bool m_recursive;

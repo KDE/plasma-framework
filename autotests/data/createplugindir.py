@@ -12,7 +12,7 @@ The script creates pnum packages
 import os
 
 debug = False # actually do something
-pnum = 1000 # number of packages per servicetype to create
+pnum = 500 # number of packages per servicetype to create
 
 datadirs = os.popen("kf5-config --path data").readlines()[0][:-1].split(":")
 cwd = os.popen("pwd").readlines()[0][:-1]
@@ -49,13 +49,16 @@ def writePackage(servicetype, index):
 
     if not debug:
         try: os.makedirs(packagepath+"contents ")
-        except: print(0) # no worries
+        except: print(""), # no worries
 
         metadata = open(packagepath+"metadata.desktop", "w")
         metadata.write(output)
         metadata.close()
-    print("Wrote package: " + packagepath)
+    #print("Wrote package: " + packagepath)
 
+if not debug:
+    print("recreating " + cwd+"/plasma from scratch...")
+    os.system("rm -rf "+cwd+"/plasma")
 
 for servicetype in pluginDirs.keys():
     for n in range(pnum):
@@ -63,5 +66,8 @@ for servicetype in pluginDirs.keys():
         writePackage(servicetype, N)
 
 if not debug:
-    os.system("zip -r plasmaplugins.zip plasma")
-    os.system("rm -rf plasma")
+    #os.system("zip -r plasmaplugins.zip plasma")
+    #os.system("rm -rf plasma")
+    print("")
+
+print("Wrote " + str(pnum*len(pluginDirs.keys())) + " fake packages for " + str(len(pluginDirs.keys())) + " servicetypes." );

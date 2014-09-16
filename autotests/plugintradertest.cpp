@@ -79,15 +79,12 @@ void PluginTraderTest::listPackages()
         const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, packageLocation, QStandardPaths::LocateDirectory);
 
         Q_FOREACH (const QString &plugindir, paths) {
-            //const QString pluginsubdirectory = plugindir + QDir::separator() + m_pluginDirs[servicetype];
-            //qDebug() << " subdir: " << plugindir << packageLocation;
             if (QDir(plugindir).exists()) {
-                qDebug() << " subdir: " << plugindir << packageLocation;
                 lst << queryPackages(plugindir, servicetype);
             }
         }
 
-        qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << innertimer.elapsed() << "milliseconds";;
+        //qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << innertimer.elapsed() << "milliseconds";;
         //QVERIFY(lst.count() > 0 || buildonly);
 
     }
@@ -107,7 +104,7 @@ void PluginTraderTest::listPackagesRecursive()
         innertimer.start();
         KPluginInfo::List lst = listPlugins(servicetype);
 
-        qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << innertimer.elapsed() << "milliseconds";;
+        //qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << innertimer.elapsed() << "milliseconds";;
         //QVERIFY(lst.count() > 0 || buildonly);
 
     }
@@ -125,10 +122,9 @@ KPluginInfo::List PluginTraderTest::listPlugins(const QString& servicetype)
     return lst;
 }
 
-KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, const QString& servicetype)
+KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, const QString& servicetype, const QString &constraint)
 {
     const QDirIterator::IteratorFlags flags = (m_recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags);
-    const QString constraint;
     const QStringList nameFilters = QStringList(QStringLiteral("metadata.desktop"));
 
     KPluginInfo::List lst;
@@ -159,7 +155,9 @@ void PluginTraderTest::listPackagesFromTestData()
 {
     const QString testdatadir = QFINDTESTDATA("data/plasma");
     qDebug() << "Test data: " << testdatadir;
+    QElapsedTimer timer;
     QElapsedTimer innertimer;
+    timer.start();
     foreach (const QString &servicetype, m_pluginDirs.keys()) {
         innertimer.start();
         KPluginInfo::List lst = queryPackages(testdatadir, servicetype);
@@ -167,8 +165,8 @@ void PluginTraderTest::listPackagesFromTestData()
         int ms = innertimer.elapsed();
         qDebug() << " Found " << servicetype << " : " << lst.count() << " Packages in " << ms << "milliseconds";
         //QVERIFY(lst.count() > 0 || buildonly);
-
     }
+    qDebug() << "Querying testdata takes" << (int)(timer.elapsed()/m_pluginDirs.count()) << "msec";
 }
 
 //#include "plugintradertest.moc"
