@@ -48,6 +48,8 @@ PLASMA_UNIT_TESTS(
 add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp)
 target_link_libraries(storagetest Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons)
 
+set(dialogtest_srcs dialogtest.cpp)
+ecm_add_test(${dialogtest_srcs} TEST_NAME dialogtest LINK_LIBRARIES Qt5::Gui Qt5::Test Qt5::Qml Qt5::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick)
 
 set(coronatest_srcs coronatest.cpp)
 qt5_add_resources(coronatest_srcs coronatestresources.qrc)
