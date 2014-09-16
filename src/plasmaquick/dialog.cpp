@@ -63,9 +63,16 @@ public:
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0),
+          resizeOrigin(Undefined),
           backgroundHints(Dialog::StandardBackground)
     {
     }
+
+    enum ResizeOrigin {
+        Undefined,
+        MainItem,
+        Window
+    };
 
     void updateInputShape();
 
@@ -114,7 +121,6 @@ public:
     void syncToMainItemSize();
 
     Dialog *q;
-    QTimer *syncTimer;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
@@ -126,6 +132,7 @@ public:
     bool outputOnly;
     Plasma::Theme theme;
     bool componentComplete;
+    ResizeOrigin resizeOrigin;
     Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
@@ -142,7 +149,10 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     //        says it's at.
     QRect avail;
     Q_FOREACH (QScreen *screen, q->screen()->virtualSiblings()) {
-        if (screen->availableGeometry().contains(pos)) {
+        //we check geometry() but then take availableGeometry()
+        //to reliably check in what screen a position is, we need the full
+        //geometry, included areas for panels
+        if (screen->geometry().contains(pos)) {
             avail = screen->availableGeometry();
             break;
         }
@@ -431,16 +441,17 @@ void DialogPrivate::updateLayoutParameters()
         return;
     }
     Q_ASSERT(mainItem);
-    Q_ASSERT(mainItemLayout);
+    //Not all main items define a Layout internally, this depends from the QML
+    //Q_ASSERT(mainItemLayout);
 
     mainItem->disconnect(q);
 
-    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
-    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
+    int minimumHeight = mainItemLayout ? mainItemLayout->property("minimumHeight").toInt() : 0;
+    int maximumHeight = mainItemLayout ? mainItemLayout->property("maximumHeight").toInt() : 0;
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
 
-    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
-    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
+    int minimumWidth = mainItemLayout ? mainItemLayout->property("minimumWidth").toInt() : 0;
+    int maximumWidth = mainItemLayout ? mainItemLayout->property("maximumWidth").toInt() : 0;
     maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
 
     auto margin = frameSvgItem->margins();
@@ -540,14 +551,15 @@ void DialogPrivate::updateInputShape()
 
 void DialogPrivate::syncToMainItemSize()
 {
-    if (!componentComplete || !mainItem || !q->isVisible()) {
+    if (resizeOrigin == Window || !componentComplete || !mainItem || !q->isVisible()) {
         return;
     }
 
+    resizeOrigin = MainItem;
+
     if (visualParent) {
-        // Get the full size with ALL the borders
-        frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-        auto margins = frameSvgItem->margins();
+        // fixedMargins will get all the borders, no matter if they are enabled
+        auto margins = frameSvgItem->fixedMargins();
 
         const QSize fullSize = QSize(mainItem->width(), mainItem->height()) +
                                QSize(margins->left() + margins->right(),
@@ -594,6 +606,8 @@ void DialogPrivate::syncToMainItemSize()
     mainItem->setY(frameSvgItem->margins()->top());
 
     updateTheme();
+
+    resizeOrigin = Undefined;
 }
 
 void DialogPrivate::slotWindowPositionChanged()
@@ -903,6 +917,14 @@ void Dialog::adjustGeometry(const QRect &geom)
 void Dialog::resizeEvent(QResizeEvent* re)
 {
     QQuickWindow::resizeEvent(re);
+
+    if (d->resizeOrigin == DialogPrivate::MainItem) {
+        return;
+    }
+
+    d->resizeOrigin = DialogPrivate::Window;
+    d->updateLayoutParameters();
+    d->resizeOrigin = DialogPrivate::Undefined;
 }
 
 void Dialog::setType(WindowType type)
