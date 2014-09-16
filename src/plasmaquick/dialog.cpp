@@ -455,7 +455,7 @@ void DialogPrivate::updateLayoutParameters()
 
     mainItem->setX(margin->left());
     mainItem->setY(margin->top());
-    mainItem->setWidth(q->width() - margin->left() + margin->right());
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
     mainItem->setHeight(q->height() - margin->top() - margin->bottom());
 
     frameSvgItem->setWidth(q->width());
