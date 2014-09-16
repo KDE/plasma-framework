@@ -239,6 +239,9 @@ void DialogPrivate::updateVisibility(bool visible)
                 cachedGeometry = QRect();
             }
             syncToMainItemSize();
+            if (mainItemLayout) {
+                updateLayoutParameters();
+            }
         }
     }
 
@@ -424,7 +427,7 @@ void DialogPrivate::updateMaximumHeight()
 
 void DialogPrivate::updateLayoutParameters()
 {
-    if (!componentComplete) {
+    if (!componentComplete || !mainItem || !q->isVisible()) {
         return;
     }
     Q_ASSERT(mainItem);
