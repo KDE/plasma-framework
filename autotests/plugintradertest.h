@@ -32,12 +32,19 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
-    void listPackages();
-    void listPackagesRecursive();
-    void listPackagesFromTestData();
+    void queryPackage();
+
     void cleanupTestCase();
 
 private:
+
+    void listPackagesFromTestData();
+    void listPackages();
+    void listPackagesRecursive();
+
+    KPluginInfo::List queryType(const QString &servicetype);
+
+
     KPluginInfo::List listPlugins(const QString &servicetype);
     KPluginInfo::List queryPackages(const QString &plugindir, const QString &servicetype = QString(), const QString &constraint = QString());
 
