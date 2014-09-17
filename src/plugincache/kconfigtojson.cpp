@@ -62,6 +62,22 @@ int KConfigToJson::runMain()
         return 1;
     }
 
+    if (m_packageDir.endsWith("plasma/")) {
+        QDirIterator it(m_packageDir,
+                        QStringList(),
+                        QDir::Dirs,
+                        QDirIterator::NoIteratorFlags);
+
+        qDebug() << "package dir:" << m_packageDir;
+        bool ok;
+        while (it.hasNext()) {
+            it.next();
+            const QString _f = it.fileInfo().absoluteFilePath();
+            qDebug() << "Creating cache file for " << _f;
+            convertDirectory(_f, _f+"/plasma-packagecache.json");
+        }
+        return true;
+    }
     return convertDirectory(m_packageDir, m_outFile) ? 0 : 1;
 }
 
@@ -104,7 +120,7 @@ bool KConfigToJson::convertDirectory(const QString& dir, const QString& dest)
                     QStringList(),
                     QDir::Dirs,
                     QDirIterator::NoIteratorFlags);
-
+    qDebug() << "dest";
     qDebug() << "package dir:" << m_packageDir;
     while (it.hasNext()) {
         it.next();
