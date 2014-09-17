@@ -273,13 +273,9 @@ void FrameSvgItem::setImagePath(const QString &path)
     m_frameSvg->setElementPrefix(m_prefix);
     updateDevicePixelRatio();
 
-    if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
-    }
+    setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
 
-    if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
-    }
+    setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
 
     emit imagePathChanged();
     m_margins->update();
@@ -305,13 +301,9 @@ void FrameSvgItem::setPrefix(const QString &prefix)
     m_frameSvg->setElementPrefix(prefix);
     m_prefix = prefix;
 
-    if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
-    }
+    setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
 
-    if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
-    }
+    setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
 
     emit prefixChanged();
     m_margins->update();
@@ -372,13 +364,9 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
-    if (implicitWidth() <= 0) {
-        setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
-    }
+    setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
 
-    if (implicitHeight() <= 0) {
-        setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
-    }
+    setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
 
     QString prefix = m_frameSvg->actualPrefix();
     bool hasOverlay = !prefix.startsWith(QStringLiteral("mask-")) && m_frameSvg->hasElement(prefix % "overlay");
