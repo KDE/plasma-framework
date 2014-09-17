@@ -132,16 +132,6 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders NOTIFY enabledBordersChanged)
 
-    /**
-     * suggested default size hint for width
-     */
-    Q_PROPERTY(qreal implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
-
-    /**
-     * suggested default size hint for height
-     */
-    Q_PROPERTY(qreal implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
-
 public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
@@ -169,12 +159,6 @@ public:
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry);
 
-    void setImplicitWidth(qreal width);
-    qreal implicitWidth() const;
-
-    void setImplicitHeight(qreal height);
-    qreal implicitHeight() const;
-
     /**
      * Only to be used from inside this library, is not intended to be invokable
      */
@@ -193,8 +177,6 @@ Q_SIGNALS:
     void imagePathChanged();
     void prefixChanged();
     void enabledBordersChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
 
 private Q_SLOTS:
     void doUpdate();

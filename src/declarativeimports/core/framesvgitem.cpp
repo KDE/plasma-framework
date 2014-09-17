@@ -390,38 +390,6 @@ void FrameSvgItem::doUpdate()
     update();
 }
 
-void FrameSvgItem::setImplicitWidth(qreal width)
-{
-    if (implicitWidth() == width) {
-        return;
-    }
-
-    QQuickItem::setImplicitWidth(width);
-
-    emit implicitWidthChanged();
-}
-
-qreal FrameSvgItem::implicitWidth() const
-{
-    return QQuickItem::implicitWidth();
-}
-
-void FrameSvgItem::setImplicitHeight(qreal height)
-{
-    if (implicitHeight() == height) {
-        return;
-    }
-
-    QQuickItem::setImplicitHeight(height);
-
-    emit implicitHeightChanged();
-}
-
-qreal FrameSvgItem::implicitHeight() const
-{
-    return QQuickItem::implicitHeight();
-}
-
 Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 {
     return m_frameSvg;
