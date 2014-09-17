@@ -32,17 +32,18 @@ class QCommandLineParser;
 class KConfigToJson
 {
 public:
-    KConfigToJson(QCommandLineParser *parser, const QCommandLineOption &i, const QCommandLineOption &o);
+    KConfigToJson(QCommandLineParser *parser, const QCommandLineOption &p, const QCommandLineOption &o);
     int runMain();
 
 private:
-    bool convert(const QString &src, const QString &dest);
+    QVariantMap convert(const QString &src);
+    bool convertDirectory(const QString &dir, const QString &dest);
     bool resolveFiles();
 
     QCommandLineParser *m_parser;
-    QCommandLineOption input;
+    QCommandLineOption packagedir;
     QCommandLineOption output;
-    QString m_inFile;
+    QString m_packageDir;
     QString m_outFile;
 };
 

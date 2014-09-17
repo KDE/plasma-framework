@@ -30,17 +30,17 @@ int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
 
-    const QString description = QStringLiteral("Converts desktop files to json");
+    const QString description = QStringLiteral("Updates the cache of a package directory");
     const char version[] = "1.0";
 
     app.setApplicationVersion(version);
 
-    const static QString _i = QStringLiteral("input");
+    const static QString _p = QStringLiteral("packagedir");
     const static QString _o = QStringLiteral("output");
     const static QString _n = QStringLiteral("name");
 
-    QCommandLineOption input = QCommandLineOption(QStringList() << QStringLiteral("i") << _i,
-                               QStringLiteral("Read input from file"), _n);
+    QCommandLineOption packagedir = QCommandLineOption(QStringList() << QStringLiteral("p") << _p,
+                               QStringLiteral("Generate cache of packagedir"), _n);
     QCommandLineOption output = QCommandLineOption(QStringList() << QStringLiteral("o") << _o,
                                 QStringLiteral("Write output to file"), _n);
 
@@ -48,10 +48,10 @@ int main(int argc, char **argv)
     parser.addVersionOption();
     parser.setApplicationDescription(description);
     parser.addHelpOption();
-    parser.addOption(input);
+    parser.addOption(packagedir);
     parser.addOption(output);
 
-    KConfigToJson dtj(&parser, input, output);
+    KConfigToJson dtj(&parser, packagedir, output);
 
     parser.process(app);
     return dtj.runMain();
