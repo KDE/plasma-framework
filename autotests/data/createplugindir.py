@@ -12,7 +12,7 @@ The script creates pnum packages
 import os
 
 debug = False # actually do something
-pnum = 1000 # number of packages per servicetype to create
+pnum = 100 # number of packages per servicetype to create
 
 datadirs = os.popen("kf5-config --path data").readlines()[0][:-1].split(":")
 cwd = os.popen("pwd").readlines()[0][:-1]

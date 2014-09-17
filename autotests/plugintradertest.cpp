@@ -130,24 +130,26 @@ KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, cons
     QFile cachefile(plugindir+"/plasma-packagecache.json");
     KPluginInfo::List lst;
     if (cachefile.exists()) {
-        QElapsedTimer t2;
-        qDebug() << "Cache file: " << cachefile.fileName();
-        t2.start();
+//         QElapsedTimer t2;
+//         //qDebug() << "Cache file: " << cachefile.fileName().remove(plugindir);
+//         t2.start();
         cachefile.open(QIODevice::ReadOnly);
         QJsonDocument jdoc = QJsonDocument::fromBinaryData(cachefile.readAll());
         cachefile.close();
-        qDebug() << "Reading cache :   " << t2.elapsed() << "msec";
-        t2.start();
+//         qDebug() << "Reading cache :   " << t2.elapsed() << "msec";
+//         t2.start();
         QJsonObject obj = jdoc.object();
-        QVariantMap mainVm = obj.toVariantMap();
+        const QVariantMap &mainVm = obj.toVariantMap();
 //         qDebug() << "Version: " << mainVm["Version"].toString();
 //         qDebug() << "Timestamp: " << mainVm["Timestamp"].toDouble();
-        QVariantMap packagesVm = mainVm["Packages"].toMap();
-        qDebug() << "decoding:         " << t2.elapsed() << "msec";
-        t2.start();
-        foreach (const QString &pluginname, packagesVm.keys()) {
+        const QVariantMap &packagesVm = mainVm["Packages"].toMap();
+//         qDebug() << "decoding:         " << t2.elapsed() << "msec";
+//         t2.start();
+        //foreach (const QString &pluginname, packagesVm.keys()) {
+        for(QVariantMap::const_iterator iter = packagesVm.begin(); iter != packagesVm.end(); ++iter) {
+            //qDebug() << iter.key() << iter.value();
             QVariantList pluginArgs;
-            pluginArgs << packagesVm[pluginname].toMap();
+            pluginArgs << iter.value().toMap();
             KPluginInfo info(pluginArgs);
             if (!info.isValid()) {
                 continue;
@@ -157,11 +159,11 @@ KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, cons
                 lst << info;
             }
         }
-        qDebug() << "creating KPI:     " << t2.elapsed() << "msec";
-        t2.start();
+//         qDebug() << "creating KPI:     " << t2.elapsed() << "msec";
+//         t2.start();
 
     } else {
-        qDebug() << "Not cached";
+//         qDebug() << "Not cached";
         // If there's no cache file, fall back to listing the directory
         const QDirIterator::IteratorFlags flags = (m_recursive ? QDirIterator::Subdirectories : QDirIterator::NoIteratorFlags);
         const QStringList nameFilters;// = QStringList(QStringLiteral("metadata.desktop"));
@@ -172,13 +174,12 @@ KPluginInfo::List PluginTraderTest::queryPackages(const QString& plugindir, cons
                         flags);
         while (it.hasNext()) {
             it.next();
-            const QString _f = it.fileInfo().absoluteFilePath() + "/metadata.desktop";
+            const QString _f = it.fileInfo().absoluteFilePath() + QStringLiteral("/metadata.desktop");
             //loader.setFileName(_f);
             //const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
             //qDebug() << "found metadata: " << it.fileInfo().absoluteFilePath().remove(plugindir);
             KPluginInfo info(_f);
             if (!info.isValid()) {
-
                 continue;
             }
             if (servicetype.isEmpty() || info.serviceTypes().contains(servicetype)) {
@@ -221,9 +222,8 @@ KPluginInfo::List PluginTraderTest::queryType(const QString &servicetype)
     QElapsedTimer t;
     t.start();
     const QString testdatadir = QFINDTESTDATA("data/plasma") + "/" + m_pluginDirs[servicetype];
-    qDebug() << "TEstdatadir: " << testdatadir;
     KPluginInfo::List lst = queryPackages(testdatadir, servicetype);
-    qDebug() << servicetype << lst.count() <<  t.elapsed();
+    qDebug() << "Query for " << servicetype << " returned " << lst.count() << "hits in " << t.elapsed() << "msec";
     return lst;
 }
 
