@@ -114,7 +114,6 @@ public:
     void syncToMainItemSize();
 
     Dialog *q;
-    QTimer *syncTimer;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
@@ -238,7 +237,9 @@ void DialogPrivate::updateVisibility(bool visible)
                 }
                 cachedGeometry = QRect();
             }
-            syncToMainItemSize();
+            if (mainItem) {
+                syncToMainItemSize();
+            }
             if (mainItemLayout) {
                 updateLayoutParameters();
             }
@@ -540,7 +541,9 @@ void DialogPrivate::updateInputShape()
 
 void DialogPrivate::syncToMainItemSize()
 {
-    if (!componentComplete || !mainItem || !q->isVisible()) {
+    Q_ASSERT(mainItem);
+
+    if (!componentComplete || !q->isVisible()) {
         return;
     }
 
@@ -733,7 +736,9 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
         if (visualParent->window()) {
             setTransientParent(visualParent->window());
         }
-        d->syncToMainItemSize();
+        if (d->mainItem) {
+            d->syncToMainItemSize();
+        }
     }
 }
 
@@ -881,7 +886,9 @@ void Dialog::setLocation(Plasma::Types::Location location)
     d->location = location;
     emit locationChanged();
 
-    d->syncToMainItemSize();
+    if (d->mainItem) {
+        d->syncToMainItemSize();
+    }
 }
 
 QObject *Dialog::margins() const
@@ -903,6 +910,19 @@ void Dialog::adjustGeometry(const QRect &geom)
 void Dialog::resizeEvent(QResizeEvent* re)
 {
     QQuickWindow::resizeEvent(re);
+
+    d->mainItem->disconnect(this);
+
+    d->frameSvgItem->setWidth(re->size().width());
+    d->frameSvgItem->setHeight(re->size().height());
+    auto margin = d->frameSvgItem->margins();
+    d->mainItem->setX(margin->left());
+    d->mainItem->setY(margin->top());
+    d->mainItem->setWidth(re->size().width() - margin->left() - margin->right());
+    d->mainItem->setHeight(re->size().height() - margin->top() - margin->bottom());
+
+    QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
 }
 
 void Dialog::setType(WindowType type)
@@ -1013,7 +1033,12 @@ void Dialog::classBegin()
 void Dialog::componentComplete()
 {
     d->componentComplete = true;
-    d->syncToMainItemSize();
+
+    d->updateTheme();
+
+    if (d->mainItem) {
+        d->syncToMainItemSize();
+    }
 
     if (d->mainItemLayout) {
         d->updateLayoutParameters();
