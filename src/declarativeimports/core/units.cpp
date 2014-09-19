@@ -104,6 +104,23 @@ QQmlPropertyMap *Units::iconSizes() const
     return m_iconSizes;
 }
 
+int Units::roundToIconSize(int size) const
+{
+    if (size < devicePixelIconSize(KIconLoader::SizeSmall)) {
+        return devicePixelIconSize(KIconLoader::SizeSmall/2);
+    } else if (size < devicePixelIconSize(KIconLoader::SizeSmallMedium)) {
+        return devicePixelIconSize(KIconLoader::SizeSmall);
+    } else if (size < devicePixelIconSize(KIconLoader::SizeMedium)) {
+        return devicePixelIconSize(KIconLoader::SizeSmallMedium);
+    } else if (size < devicePixelIconSize(KIconLoader::SizeLarge)) {
+        return devicePixelIconSize(KIconLoader::SizeMedium);
+    } else if (size < devicePixelIconSize(KIconLoader::SizeEnormous)) {
+        return devicePixelIconSize(KIconLoader::SizeHuge);
+    } else {
+        return size;
+    }
+}
+
 int Units::devicePixelIconSize(const int size) const
 {
     /* in kiconloader.h

@@ -123,6 +123,14 @@ public:
     QQmlPropertyMap *iconSizes() const;
 
     /**
+     * @return a size rounded tothe nearest inferior standard icon size.
+     *           sizes larger than iconSizes.huge, it will be returned unmodified
+     * @param int size the size we want to be rounded down
+     * @see iconSizes
+     */
+    Q_INVOKABLE int roundToIconSize(int size) const;
+
+    /**
      * @return Pixel value for large spacing between elements.
      * @since 5.0
      */
