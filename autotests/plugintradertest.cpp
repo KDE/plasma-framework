@@ -227,5 +227,19 @@ KPluginInfo::List PluginTraderTest::queryType(const QString &servicetype)
     return lst;
 }
 
+void PluginTraderTest::queryDataEngines()
+{
+    QStringList allEngines = Plasma::PluginLoader::self()->listAllEngines();
+    qDebug() << "All engines: " << allEngines.count();
+    QVERIFY(allEngines.count() > 0);
+
+    QString constraint;
+    KPluginInfo::List offers = KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
+    qDebug() << "Trader found : " << offers.count() << "engines";
+
+    KPluginInfo::List cats = Plasma::PluginLoader::self()->listEngineInfoByCategory("Date and Time"); // time engine!
+    qDebug() << "in Category Date and Time: " << cats.count();
+}
+
 
 //#include "plugintradertest.moc"

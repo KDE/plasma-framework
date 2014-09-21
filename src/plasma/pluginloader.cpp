@@ -294,9 +294,8 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
     } else {
         constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
-    return KPluginInfo::fromServices(offers);
+    // This query looks for binary plugins only. Do we support scripted dataengines?
+    return KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
 }
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)

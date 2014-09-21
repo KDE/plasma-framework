@@ -33,6 +33,7 @@ public:
 private Q_SLOTS:
     void initTestCase();
     void queryPackage();
+    void queryDataEngines();
 
     void cleanupTestCase();
 
