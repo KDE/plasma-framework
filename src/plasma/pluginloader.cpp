@@ -267,11 +267,11 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+    const KPluginInfo::List &offers = KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
 
     QStringList engines;
-    foreach (const KService::Ptr &service, offers) {
-        QString name = service->property("X-KDE-PluginInfo-Name").toString();
+    foreach (const KPluginInfo &info, offers) {
+        const QString &name = info.pluginName();
         if (!name.isEmpty()) {
             engines.append(name);
         }
