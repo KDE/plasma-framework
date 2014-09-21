@@ -28,6 +28,7 @@
 #include <QStandardPaths>
 
 #include <kplugintrader.h>
+#include <KServiceTypeTrader>
 
 #include <plasma/pluginloader.h>
 
@@ -229,16 +230,70 @@ KPluginInfo::List PluginTraderTest::queryType(const QString &servicetype)
 
 void PluginTraderTest::queryDataEngines()
 {
+
+}
+
+void PluginTraderTest::listEngineInfoByCategory()
+{
     QStringList allEngines = Plasma::PluginLoader::self()->listAllEngines();
     qDebug() << "All engines: " << allEngines.count();
     QVERIFY(allEngines.count() > 0);
 
-    QString constraint;
+    QString constraint = "(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')";
     KPluginInfo::List offers = KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
     qDebug() << "Trader found : " << offers.count() << "engines";
 
     KPluginInfo::List cats = Plasma::PluginLoader::self()->listEngineInfoByCategory("Date and Time"); // time engine!
     qDebug() << "in Category Date and Time: " << cats.count();
+
+}
+
+void PluginTraderTest::countAllEngines()
+{
+    // Look up engines in both, KServiceTypeTrader and KPluginTrader, compare the values
+    QString constraint = "(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')";
+
+    QStringList pes = Plasma::PluginLoader::self()->listAllEngines();
+    qDebug() << "Plasma::PluginLoader: " << pes.count();
+
+
+    KPluginInfo::List es = KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
+
+    QStringList engines;
+    foreach (const KPluginInfo &info, es) {
+        const QString name = info.pluginName();
+        if (!name.isEmpty()) {
+            engines.append(name);
+        }
+    }
+
+    qDebug() << "KPlugin: " << engines.count();
+
+    KService::List ss = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+    QStringList serviceengines;
+    foreach (const KService::Ptr &service, ss) {
+        QString name = service->property("X-KDE-PluginInfo-Name").toString();
+        if (!name.isEmpty()) {
+            if (!pes.contains(name)) {
+                qWarning() << "Engine not found with Plasma::PluginLoader, but exists in KService! " << name;
+            }
+            if (!engines.contains(name)) {
+                qWarning() << "Engine not found with KPluginTrader, but exists in KService! " << name;
+                qWarning() << "This likely means that the engine's json metadata is missing,";
+                qWarning() << "or that the plugin isn't installed into $PLUGINS/plasma/dataengines!";
+            }
+            serviceengines.append(name);
+        } else {
+            qDebug() << "empty" << name;
+        }
+
+    }
+    qDebug() << "KService: " << serviceengines.count();
+
+
+    QVERIFY(pes.count() == serviceengines.count());
+    QVERIFY(engines.count() == serviceengines.count());
+
 }
 
 

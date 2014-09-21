@@ -34,7 +34,8 @@ private Q_SLOTS:
     void initTestCase();
     void queryPackage();
     void queryDataEngines();
-
+    void listEngineInfoByCategory();
+    void countAllEngines();
     void cleanupTestCase();
 
 private:
