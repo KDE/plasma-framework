@@ -250,12 +250,15 @@ void PluginTraderTest::listEngineInfoByCategory()
 
 void PluginTraderTest::countAllEngines()
 {
+    QElapsedTimer t;
+    t.start();
+
     // Look up engines in both, KServiceTypeTrader and KPluginTrader, compare the values
     QString constraint = "(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')";
 
     QStringList pes = Plasma::PluginLoader::self()->listAllEngines();
-    qDebug() << "Plasma::PluginLoader: " << pes.count();
-
+    qDebug() << "Plasma::PluginLoader: " << pes.count() << t.elapsed() << "msec";
+    t.start();
 
     KPluginInfo::List es = KPluginTrader::self()->query("plasma/dataengine", "Plasma/DataEngine", constraint);
 
@@ -267,7 +270,8 @@ void PluginTraderTest::countAllEngines()
         }
     }
 
-    qDebug() << "KPlugin: " << engines.count();
+    qDebug() << "KPlugin: " << engines.count() << t.elapsed() << "msec";
+    t.start();
 
     KService::List ss = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
     QStringList serviceengines;
@@ -288,11 +292,51 @@ void PluginTraderTest::countAllEngines()
         }
 
     }
-    qDebug() << "KService: " << serviceengines.count();
+    qDebug() << "KService: " << serviceengines.count() << t.elapsed() << "msec";
+    t.start();
 
 
-    QVERIFY(pes.count() == serviceengines.count());
-    QVERIFY(engines.count() == serviceengines.count());
+
+    QVERIFY(pes.count() >= serviceengines.count());
+    QVERIFY(engines.count() >= serviceengines.count());
+
+}
+
+void PluginTraderTest::listApplets()
+{
+
+    QElapsedTimer t;
+    t.start();
+
+    // list from cache or read plugin directory's metadata
+    KPluginInfo::List lst;
+    const QString packageLocation = QStringLiteral("plasma/plasmoids");
+
+    const QStringList paths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, packageLocation, QStandardPaths::LocateDirectory);
+
+    Q_FOREACH (const QString &plugindir, paths) {
+        //qDebug() << "PluginDir: " << plugindir;
+        if (QDir(plugindir).exists()) {
+            lst << queryPackages(plugindir, QStringLiteral("Plasma/Applet"));
+        }
+    }
+    QString constraint = "(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')";
+    KPluginTrader::applyConstraints(lst, constraint);
+
+    int tpackage = t.nsecsElapsed();
+    qDebug() << "Indexed: " << lst.count() << QString::number(tpackage/1000000.0, 'f', 1) << "msec";
+    t.start();
+
+    // Plasma::PluginLoader
+    lst = Plasma::PluginLoader::self()->listAppletInfo(QString());
+    int tplugin = t.nsecsElapsed();
+    qDebug() << "PluginLoader: " << lst.count() << QString::number(tplugin/1000000.0, 'f', 1) << "msec";
+    t.start();
+
+    qDebug() << "tplugin / tpackage " << (tpackage / (qreal)(tplugin));
+    qDebug() << "Speedup is : " << QString::number(tplugin / (qreal)(tpackage)*100, 'f', 0) << "%";
+    QVERIFY(tpackage < tplugin); // make sure we're always faster than KService
+    QVERIFY(tpackage < 6000000); // make sure we can query in less than one frame
 
 }
 

@@ -32,6 +32,7 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void listApplets();
     void queryPackage();
     void queryDataEngines();
     void listEngineInfoByCategory();
