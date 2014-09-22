@@ -34,72 +34,84 @@ QtQuickControlStyle.ButtonStyle {
     property int minimumWidth
     property int minimumHeight
 
-    label: RowLayout {
-        id: buttonContent
-        spacing: units.smallSpacing
-        Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
+    label: Item {
+        //wrapper is needed as we are adjusting the preferredHeight of the layout from the default
+        //and the implicitHeight is implicitly read only
+        implicitHeight: buttonContent.Layout.preferredHeight
+        implicitWidth: buttonContent.implicitWidth
+        RowLayout {
+            id: buttonContent
+            anchors.fill: parent
+            spacing: units.smallSpacing
 
-        property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
-        onMinimumWidthChanged: {
-            if (control.minimumWidth !== undefined) {
-                style.minimumWidth = minimumWidth;
-                control.minimumWidth = minimumWidth;
+            Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
+
+            property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
+            onMinimumWidthChanged: {
+                if (control.minimumWidth !== undefined) {
+                    style.minimumWidth = minimumWidth;
+                    control.minimumWidth = minimumWidth;
+                }
             }
-        }
 
-        property real minimumHeight: Layout.preferredHeight + style.padding.top + style.padding.bottom
-        onMinimumHeightChanged: {
-            if (control.minimumHeight !== undefined) {
-                style.minimumHeight = minimumHeight;
-                control.minimumHeight = minimumHeight;
+            property real minimumHeight: Layout.preferredHeight + style.padding.top + style.padding.bottom
+            onMinimumHeightChanged: {
+                if (control.minimumHeight !== undefined) {
+                    style.minimumHeight = minimumHeight;
+                    control.minimumHeight = minimumHeight;
+                }
             }
-        }
 
-        PlasmaCore.IconItem {
-            id: icon
-            source: control.iconName || control.iconSource
-            anchors.verticalCenter: parent.verticalCenter
-            Layout.minimumWidth: valid ? parent.height: 0
-            Layout.maximumWidth: Layout.minimumWidth
-            visible: valid
-            Layout.minimumHeight: Layout.minimumWidth
-            Layout.maximumHeight: Layout.minimumWidth
-            active: control.hovered
-            colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
-        }
+            PlasmaCore.IconItem {
+                id: icon
+                source: control.iconName || control.iconSource
+                anchors.verticalCenter: parent.verticalCenter
 
-        PlasmaComponents.Label {
-            id: label
-            Layout.minimumWidth: implicitWidth
-            text: control.text
-            font: control.font
-            visible: control.text != ""
-            Layout.fillWidth: true
-            height: parent.height
-            color: control.hovered || !control.flat ? theme.buttonTextColor : theme.textColor
-            horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
+                implicitHeight: label.implicitHeight
+                implicitWidth: implicitHeight
 
-        PlasmaExtras.ConditionalLoader {
-            id: arrow
-            when: control.menu !== null
-            visible: when
-            Layout.minimumWidth: units.iconSizes.small
-            Layout.maximumWidth: Layout.minimumWidth
-            Layout.alignment: Qt.AlignVCenter
-            height: width
+                Layout.minimumWidth: valid ? parent.height: 0
+                Layout.maximumWidth: Layout.minimumWidth
+                visible: valid
+                Layout.minimumHeight: Layout.minimumWidth
+                Layout.maximumHeight: Layout.minimumWidth
+                active: control.hovered
+                colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+            }
 
-            source: Component {
-                PlasmaCore.SvgItem {
-                    visible: control.menu !== null
-                    anchors.fill: parent
-                    svg: PlasmaCore.Svg {
-                        imagePath: "widgets/arrows"
-                        colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+            PlasmaComponents.Label {
+                id: label
+                Layout.minimumWidth: implicitWidth
+                text: control.text
+                font: control.font
+                visible: control.text != ""
+                Layout.fillWidth: true
+                height: parent.height
+                color: control.hovered || !control.flat ? theme.buttonTextColor : theme.textColor
+                horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
+
+            PlasmaExtras.ConditionalLoader {
+                id: arrow
+                when: control.menu !== null
+                visible: when
+                Layout.minimumWidth: units.iconSizes.small
+                Layout.maximumWidth: Layout.minimumWidth
+                Layout.alignment: Qt.AlignVCenter
+                height: width
+
+                source: Component {
+                    PlasmaCore.SvgItem {
+                        visible: control.menu !== null
+                        anchors.fill: parent
+                        svg: PlasmaCore.Svg {
+                            imagePath: "widgets/arrows"
+                            colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                        }
+                        elementId: "down-arrow"
                     }
-                    elementId: "down-arrow"
                 }
             }
         }
@@ -117,7 +129,9 @@ QtQuickControlStyle.ButtonStyle {
         id: roundButtonComponent
         Item {
             id: roundButtonDelegate
-            anchors.fill: parent
+            implicitHeight: Math.floor(theme.mSize(theme.defaultFont).height*1.6)
+            implicitWidth: implicitHeight
+
             property QtObject margins: QtObject {
                 property int left: control.width/8
                 property int top: control.width/8
@@ -166,13 +180,13 @@ QtQuickControlStyle.ButtonStyle {
         id: buttonComponent
         Item {
             id: buttonSurface
-            implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
+            implicitHeight: Math.floor(theme.mSize(theme.defaultFont).height*1.6)
 
             implicitWidth: {
                 if (control.text.length == 0) {
                     implicitHeight;
                 } else {
-                    Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
+                    Math.floor(theme.mSize(theme.defaultFont).width*12);
                 }
             }
             Connections {
