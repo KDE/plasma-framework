@@ -2,6 +2,7 @@
  *   Copyright 2011 Marco Martin <mart@kde.org>                            *
  *   Copyright 2013 Sebastian Kügler <sebas@kde.org>                       *
  *   Copyright 2014 Martin Gräßlin <mgraesslin@kde.org>                    *
+ *   Copyright 2014 Vishesh Handa <vhanda@kde.org>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +30,7 @@
 #include <QLayout>
 #include <QScreen>
 #include <QMenu>
+#include <QPointer>
 
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
@@ -61,21 +63,27 @@ public:
           hideOnWindowDeactivate(false),
           outputOnly(false),
           componentComplete(dialog->parent() == 0),
-          resizeOrigin(Undefined),
           backgroundHints(Dialog::StandardBackground)
     {
     }
 
-    enum ResizeOrigin {
-        Undefined,
-        MainItem,
-        Window
-    };
-
     void updateInputShape();
 
     //SLOTS
-    void syncBorders();
+    /**
+     * Sync Borders updates the enabled borders of the frameSvgItem depending
+     * on the geometry of the window.
+     *
+     * \param windowGeometry The window geometry which should be taken into
+     * consideration when activating/deactivating certain borders
+     */
+    void syncBorders(const QRect& windowGeometry);
+
+    /**
+     * This function sets the blurBehind, background contrast and shadows. It
+     * does so wrt the frameSvgItem. So make sure the frameSvgItem is the
+     * correct size before calling this function.
+     */
     void updateTheme();
     void updateVisibility(bool visible);
 
@@ -84,16 +92,32 @@ public:
     void updateMaximumWidth();
     void updateMaximumHeight();
 
-    void syncMainItemToSize();
+    /**
+     * This function is an optimized version of updateMaximumHeight,
+     * updateMaximumWidth,updateMinimumWidth and updateMinimumHeight.
+     * It should be called when you need to call all 4 of these functions
+     * AND you have called syncToMainItemSize before.
+     */
+    void updateLayoutParameters();
+
+    QRect availableScreenGeometryForPosition(const QPoint& pos) const;
+
+    /**
+     * This function checks the current position of the dialog and repositions
+     * it so that no part of it is not on the screen
+     */
+    void repositionIfOffScreen();
+
+    void slotMainItemSizeChanged();
+    void slotWindowPositionChanged();
+
     void syncToMainItemSize();
-    void requestSizeSync(bool delayed = false);
 
     Dialog *q;
-    QTimer *syncTimer;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
-    QWeakPointer<QQuickItem> mainItem;
-    QWeakPointer<QQuickItem> visualParent;
+    QPointer<QQuickItem> mainItem;
+    QPointer<QQuickItem> visualParent;
 
     QRect cachedGeometry;
     Dialog::WindowType type;
@@ -101,14 +125,13 @@ public:
     bool outputOnly;
     Plasma::Theme theme;
     bool componentComplete;
-    ResizeOrigin resizeOrigin;
     Dialog::BackgroundHints backgroundHints;
 
     //Attached Layout property of mainItem, if any
-    QWeakPointer <QObject> mainItemLayout;
+    QPointer <QObject> mainItemLayout;
 };
 
-void DialogPrivate::syncBorders()
+QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
 {
     // FIXME: QWindow::screen() never ever changes if the window is moved across
     //        virtual screens (normal two screens with X), this seems to be intentional
@@ -117,42 +140,43 @@ void DialogPrivate::syncBorders()
     //        we simply iterate over the virtual screens and pick the one our QWindow
     //        says it's at.
     QRect avail;
-    QPoint pos = q->position();
     Q_FOREACH (QScreen *screen, q->screen()->virtualSiblings()) {
-        if (screen->availableGeometry().contains(pos)) {
+        //we check geometry() but then take availableGeometry()
+        //to reliably check in which screen a position is, we need the full
+        //geometry, including areas for panels
+        if (screen->geometry().contains(pos)) {
             avail = screen->availableGeometry();
             break;
         }
     }
 
+    return avail;
+}
+
+void DialogPrivate::syncBorders(const QRect& geom)
+{
+    QRect avail = availableScreenGeometryForPosition(geom.topLeft());
     int borders = Plasma::FrameSvg::AllBorders;
 
     //Tooltips always have all the borders
     // floating windows have all borders
     if ((q->flags() & Qt::ToolTip) != Qt::ToolTip && location != Plasma::Types::Floating) {
-        if (q->x() <= avail.x() || location == Plasma::Types::LeftEdge) {
+        if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
-        if (q->y() <= avail.y() || location == Plasma::Types::TopEdge) {
+        if (geom.y() <= avail.y() || location == Plasma::Types::TopEdge) {
             borders = borders & ~Plasma::FrameSvg::TopBorder;
         }
-        if (avail.right() <= q->x() + q->width() || location == Plasma::Types::RightEdge) {
+        if (avail.right() <= geom.x() + geom.width() || location == Plasma::Types::RightEdge) {
             borders = borders & ~Plasma::FrameSvg::RightBorder;
         }
-        if (avail.bottom() <= q->y() + q->height() || location == Plasma::Types::BottomEdge) {
+        if (avail.bottom() <= geom.y() + geom.height() || location == Plasma::Types::BottomEdge) {
             borders = borders & ~Plasma::FrameSvg::BottomBorder;
         }
     }
 
     if (frameSvgItem->enabledBorders() != (Plasma::FrameSvg::EnabledBorder)borders) {
         frameSvgItem->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
-
-        if (mainItemLayout) {
-            updateMinimumWidth();
-            updateMinimumHeight();
-            updateMaximumWidth();
-            updateMaximumHeight();
-        }
     }
 }
 
@@ -194,8 +218,8 @@ void DialogPrivate::updateTheme()
 void DialogPrivate::updateVisibility(bool visible)
 {
     if (visible) {
-        if (visualParent && visualParent.data()->window()) {
-            q->setTransientParent(visualParent.data()->window());
+        if (visualParent && visualParent->window()) {
+            q->setTransientParent(visualParent->window());
         }
 
         if (q->location() == Plasma::Types::FullScreen) {
@@ -210,10 +234,18 @@ void DialogPrivate::updateVisibility(bool visible)
         } else {
             if (!cachedGeometry.isNull()) {
                 q->resize(cachedGeometry.size());
-                syncMainItemToSize();
+                slotWindowPositionChanged();
+                if (visualParent) {
+                    q->setPosition(q->popupPosition(visualParent, q->size()));
+                }
                 cachedGeometry = QRect();
             }
-            syncToMainItemSize();
+            if (mainItem) {
+                syncToMainItemSize();
+            }
+            if (mainItemLayout) {
+                updateLayoutParameters();
+            }
         }
     }
 
@@ -259,68 +291,211 @@ void DialogPrivate::updateVisibility(bool visible)
 
 void DialogPrivate::updateMinimumWidth()
 {
-    if (mainItemLayout) {
-        int oldWidth = q->width();
-        q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt() + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
-        //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
-        resizeOrigin = DialogPrivate::Window;
-        q->setWidth(qMax(q->width(), q->minimumWidth()));
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
 
-        if (location == Plasma::Types::RightEdge) {
-            q->setX(q->x() + (oldWidth - q->size().width()));
-        }
-    } else {
-        q->setMinimumWidth(-1);
+    mainItem->disconnect(q);
+
+    syncBorders(q->geometry());
+
+    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
+    auto margin = frameSvgItem->margins();
+
+    int oldWidth = q->width();
+
+    q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
+    q->setWidth(qMax(q->width(), q->minimumWidth()));
+
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
+    frameSvgItem->setWidth(q->width());
+
+    if (location == Plasma::Types::RightEdge) {
+        q->setX(q->x() + (oldWidth - q->size().width()));
     }
+    repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMinimumHeight()
 {
-    if (mainItemLayout) {
-        int oldHeight = q->height();
-        q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt() + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
-        //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
-        resizeOrigin = DialogPrivate::Window;
-        q->setHeight(qMax(q->height(), q->minimumHeight()));
-
-        if (location == Plasma::Types::BottomEdge) {
-            q->setY(q->y() + (oldHeight - q->size().height()));
-        }
-    } else {
-        q->setMinimumHeight(-1);
+    if (!componentComplete) {
+        return;
     }
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
+
+    mainItem->disconnect(q);
+
+    syncBorders(q->geometry());
+
+    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
+    auto margin = frameSvgItem->margins();
+
+    int oldHeight = mainItem->height();
+
+    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
+    q->setHeight(qMax(q->height(), q->minimumHeight()));
+
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+    frameSvgItem->setHeight(q->height());
+
+    if (location == Plasma::Types::BottomEdge) {
+        q->setY(q->y() + (oldHeight - q->size().height()));
+    }
+    repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMaximumWidth()
 {
-    if (mainItemLayout) {
-        const int hint = mainItemLayout.data()->property("maximumWidth").toInt();
-        resizeOrigin = DialogPrivate::Window;
-        if (hint > 0) {
-            q->setMaximumWidth(hint + frameSvgItem->margins()->left() + frameSvgItem->margins()->right());
-            q->setWidth(qMin(q->width(), q->maximumWidth()));
-        } else {
-            q->setMaximumWidth(DIALOGSIZE_MAX);
-        }
-    } else {
-        q->setMaximumWidth(DIALOGSIZE_MAX);
+    if (!componentComplete) {
+        return;
     }
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
+
+    mainItem->disconnect(q);
+
+    syncBorders(q->geometry());
+
+    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
+    maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
+    auto margin = frameSvgItem->margins();
+
+    q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
+    q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
+    frameSvgItem->setWidth(q->width());
+
+    repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
 }
 
 void DialogPrivate::updateMaximumHeight()
 {
-    if (mainItemLayout) {
-        const int hint = mainItemLayout.data()->property("maximumHeight").toInt();
-        resizeOrigin = DialogPrivate::Window;
-        if (hint > 0) {
-            q->setMaximumHeight(hint + frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
-            q->setHeight(qMin(q->height(), q->maximumHeight()));
-        } else {
-            q->setMaximumHeight(DIALOGSIZE_MAX);
-        }
-    } else {
-        q->setMaximumHeight(DIALOGSIZE_MAX);
+    if (!componentComplete) {
+        return;
     }
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
+
+    mainItem->disconnect(q);
+
+    syncBorders(q->geometry());
+
+    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
+    maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
+    auto margin = frameSvgItem->margins();
+
+    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
+    q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
+
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+    frameSvgItem->setHeight(q->height());
+
+    repositionIfOffScreen();
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
+        q->setGeometry(geom);
+    }
+
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+}
+
+void DialogPrivate::updateLayoutParameters()
+{
+    if (!componentComplete || !mainItem || !q->isVisible()) {
+        return;
+    }
+    Q_ASSERT(mainItem);
+    Q_ASSERT(mainItemLayout);
+
+    mainItem->disconnect(q);
+
+    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
+    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
+    maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
+
+    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
+    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
+    maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
+
+    auto margin = frameSvgItem->margins();
+
+    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
+    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
+    q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
+
+    q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
+    q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
+    q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
+
+    mainItem->setX(margin->left());
+    mainItem->setY(margin->top());
+    mainItem->setWidth(q->width() - margin->left() - margin->right());
+    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+
+    frameSvgItem->setWidth(q->width());
+    frameSvgItem->setHeight(q->height());
+
+    repositionIfOffScreen();
+    updateTheme();
+
+    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+}
+
+void DialogPrivate::repositionIfOffScreen()
+{
+    if (!componentComplete) {
+        return;
+    }
+    const QRect avail = availableScreenGeometryForPosition(q->position());
+
+    int x = q->x();
+    int y = q->y();
+
+    if (x < avail.left()) {
+        x = avail.left();
+    } else if (x + q->width() > avail.right()) {
+        x = avail.right() - q->width() + 1;
+    }
+
+    if (y < avail.top()) {
+        y = avail.top();
+    } else if (y + q->height() > avail.bottom()) {
+        y = avail.bottom() - q->height() + 1;
+    }
+
+    q->setX(x);
+    q->setY(y);
 }
 
 void DialogPrivate::updateInputShape()
@@ -367,34 +542,38 @@ void DialogPrivate::updateInputShape()
 #endif
 }
 
-void DialogPrivate::syncMainItemToSize()
-{
-    syncBorders();
-
-    updateTheme();
-
-    if (mainItem) {
-        mainItem.data()->setX(frameSvgItem->margins()->left());
-        mainItem.data()->setY(frameSvgItem->margins()->top());
-        mainItem.data()->setWidth(q->width() - frameSvgItem->margins()->left() - frameSvgItem->margins()->right());
-        mainItem.data()->setHeight(q->height() - frameSvgItem->margins()->top() - frameSvgItem->margins()->bottom());
-    }
-
-    if (q->visualParent()) {
-        q->setPosition(q->popupPosition(q->visualParent(), q->size()));
-    }
-}
-
 void DialogPrivate::syncToMainItemSize()
 {
-    //if manually sync a sync timer was running cancel it so we don't get called twice
-    syncTimer->stop();
+    Q_ASSERT(mainItem);
 
-    if (!mainItem) {
+    if (!componentComplete || !q->isVisible()) {
         return;
     }
 
-    const QSize s = QSize(mainItem.data()->width(), mainItem.data()->height()) +
+    if (visualParent) {
+        // Get the full size with ALL the borders
+        frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
+        auto margins = frameSvgItem->margins();
+
+        const QSize fullSize = QSize(mainItem->width(), mainItem->height()) +
+                               QSize(margins->left() + margins->right(),
+                                     margins->top() + margins->bottom());
+
+        // We get the popup position with the fullsize as we need the popup
+        // position in order to determine our actual size, as the position
+        // determines which borders will be shown.
+        const QRect geom(q->popupPosition(visualParent, fullSize), fullSize);
+
+        // We're then moving the window to where we think we would be with all
+        // the borders. This way when syncBorders is called, it has a geometry
+        // to work with.
+        syncBorders(geom);
+    }
+    else {
+        syncBorders(q->geometry());
+    }
+
+    const QSize s = QSize(mainItem->width(), mainItem->height()) +
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
 
@@ -403,34 +582,43 @@ void DialogPrivate::syncToMainItemSize()
     frameSvgItem->setWidth(s.width());
     frameSvgItem->setHeight(s.height());
 
-    if (q->visualParent()) {
-        const QRect geom(q->popupPosition(q->visualParent(), s), s);
+    if (visualParent) {
+        const QRect geom(q->popupPosition(visualParent, s), s);
 
         if (geom == q->geometry()) {
             return;
         }
         q->adjustGeometry(geom);
+        // The borders will instantly be updated but the geometry might take a
+        // while as sub-classes can reimplement adjustGeometry and animate it.
+        syncBorders(geom);
     } else {
         q->resize(s);
     }
 
-    syncBorders();
-    mainItem.data()->setX(frameSvgItem->margins()->left());
-    mainItem.data()->setY(frameSvgItem->margins()->top());
+    mainItem->setX(frameSvgItem->margins()->left());
+    mainItem->setY(frameSvgItem->margins()->top());
 
     updateTheme();
 }
 
-void DialogPrivate::requestSizeSync(bool delayed)
+void DialogPrivate::slotWindowPositionChanged()
 {
-    if (!componentComplete) {
+    // Tooltips always have all the borders
+    // floating windows have all borders
+    if ((q->flags() & Qt::ToolTip) || location == Plasma::Types::Floating) {
         return;
     }
 
-    if (delayed && !syncTimer->isActive()) {
-        syncTimer->start(150);
-    } else {
-        syncTimer->start(0);
+    syncBorders(q->geometry());
+    updateTheme();
+
+    if (mainItem) {
+        auto margin = frameSvgItem->margins();
+        mainItem->setX(margin->left());
+        mainItem->setY(margin->top());
+        mainItem->setWidth(q->width() - margin->left() - margin->right());
+        mainItem->setHeight(q->height() - margin->top() - margin->bottom());
     }
 }
 
@@ -444,35 +632,9 @@ Dialog::Dialog(QQuickItem *parent)
 
     setIcon(QIcon::fromTheme("plasma"));
 
-    d->syncTimer = new QTimer(this);
-    d->syncTimer->setSingleShot(true);
-    d->syncTimer->setInterval(0);
-    connect(d->syncTimer, &QTimer::timeout,
-    [ = ]() {
-        if (d->resizeOrigin == DialogPrivate::MainItem) {
-            d->syncToMainItemSize();
-        } else {
-            d->syncMainItemToSize();
-        }
-        d->resizeOrigin = DialogPrivate::Undefined;
-    });
+    connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
+    connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
 
-    connect(this, &QWindow::xChanged, [ = ]() {
-        //Tooltips always have all the borders
-        // floating windows have all borders
-        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
-            d->resizeOrigin = DialogPrivate::Window;
-            d->requestSizeSync(true);
-        }
-    });
-    connect(this, &QWindow::yChanged, [ = ]() {
-        //Tooltips always have all the borders
-        // floating windows have all borders
-        if (!(flags() & Qt::ToolTip) && d->location != Plasma::Types::Floating) {
-            d->resizeOrigin = DialogPrivate::Window;
-            d->requestSizeSync(true);
-        }
-    });
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),
@@ -497,14 +659,14 @@ Dialog::~Dialog()
 
 QQuickItem *Dialog::mainItem() const
 {
-    return d->mainItem.data();
+    return d->mainItem;
 }
 
 void Dialog::setMainItem(QQuickItem *mainItem)
 {
-    if (d->mainItem.data() != mainItem) {
+    if (d->mainItem != mainItem) {
         if (d->mainItem) {
-            d->mainItem.data()->setParent(parent());
+            d->mainItem->setParent(parent());
         }
 
         d->mainItem = mainItem;
@@ -513,20 +675,9 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             mainItem->setParent(contentItem());
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
-            if (mainItem->metaObject()->indexOfSignal("widthChanged")) {
-                connect(mainItem, &QQuickItem::widthChanged, [ = ]() {
-                    d->resizeOrigin = DialogPrivate::MainItem;
-                    d->syncTimer->start(0);
-                });
-            }
-            if (mainItem->metaObject()->indexOfSignal("heightChanged")) {
-                connect(mainItem, &QQuickItem::heightChanged, [ = ]() {
-                    d->resizeOrigin = DialogPrivate::MainItem;
-                    d->syncTimer->start(0);
-                });
-            }
-            d->resizeOrigin = DialogPrivate::MainItem;
-            d->requestSizeSync();
+            connect(mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
+            connect(mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
+            d->slotMainItemSizeChanged();
 
             //Extract the representation's Layout, if any
             QObject *layout = 0;
@@ -546,7 +697,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 }
             }
             if (d->mainItemLayout) {
-                disconnect(d->mainItemLayout.data(), 0, this, 0);
+                disconnect(d->mainItemLayout, 0, this, 0);
             }
             d->mainItemLayout = layout;
 
@@ -556,10 +707,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
                 connect(layout, SIGNAL(maximumHeightChanged()), this, SLOT(updateMaximumHeight()));
 
-                d->updateMinimumWidth();
-                d->updateMinimumHeight();
-                d->updateMaximumWidth();
-                d->updateMaximumHeight();
+                d->updateLayoutParameters();
             }
 
         }
@@ -569,14 +717,19 @@ void Dialog::setMainItem(QQuickItem *mainItem)
     }
 }
 
+void DialogPrivate::slotMainItemSizeChanged()
+{
+    syncToMainItemSize();
+}
+
 QQuickItem *Dialog::visualParent() const
 {
-    return d->visualParent.data();
+    return d->visualParent;
 }
 
 void Dialog::setVisualParent(QQuickItem *visualParent)
 {
-    if (d->visualParent.data() == visualParent) {
+    if (d->visualParent == visualParent) {
         return;
     }
 
@@ -586,8 +739,9 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
         if (visualParent->window()) {
             setTransientParent(visualParent->window());
         }
-        d->resizeOrigin = DialogPrivate::MainItem;
-        d->requestSizeSync(true);
+        if (d->mainItem) {
+            d->syncToMainItemSize();
+        }
     }
 }
 
@@ -734,8 +888,10 @@ void Dialog::setLocation(Plasma::Types::Location location)
     }
     d->location = location;
     emit locationChanged();
-    d->resizeOrigin = DialogPrivate::MainItem;
-    d->requestSizeSync();
+
+    if (d->mainItem) {
+        d->syncToMainItemSize();
+    }
 }
 
 QObject *Dialog::margins() const
@@ -754,19 +910,22 @@ void Dialog::adjustGeometry(const QRect &geom)
     setGeometry(geom);
 }
 
-void Dialog::resizeEvent(QResizeEvent *re)
+void Dialog::resizeEvent(QResizeEvent* re)
 {
-    d->frameSvgItem->setX(0);
-    d->frameSvgItem->setY(0);
-    d->frameSvgItem->setWidth(re->size().width());
-    d->frameSvgItem->setHeight(re->size().height());
-
     QQuickWindow::resizeEvent(re);
 
-    if (d->resizeOrigin == DialogPrivate::Undefined) {
-        d->resizeOrigin = DialogPrivate::Window;
-    }
-    d->requestSizeSync(true);
+    d->mainItem->disconnect(this);
+
+    d->frameSvgItem->setWidth(re->size().width());
+    d->frameSvgItem->setHeight(re->size().height());
+    auto margin = d->frameSvgItem->margins();
+    d->mainItem->setX(margin->left());
+    d->mainItem->setY(margin->top());
+    d->mainItem->setWidth(re->size().width() - margin->left() - margin->right());
+    d->mainItem->setHeight(re->size().height() - margin->top() - margin->bottom());
+
+    QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
+    QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
 }
 
 void Dialog::setType(WindowType type)
@@ -833,7 +992,6 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
         if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
-            qDebug() << "DIALOG:  hiding dialog.";
             setVisible(false);
             emit windowDeactivated();
         }
@@ -872,13 +1030,22 @@ void Dialog::hideEvent(QHideEvent *event)
 
 void Dialog::classBegin()
 {
-
+    d->componentComplete = false;
 }
 
 void Dialog::componentComplete()
 {
     d->componentComplete = true;
-    d->syncToMainItemSize();
+
+    d->updateTheme();
+
+    if (d->mainItem) {
+        d->syncToMainItemSize();
+    }
+
+    if (d->mainItemLayout) {
+        d->updateLayoutParameters();
+    }
 }
 
 bool Dialog::hideOnWindowDeactivate() const

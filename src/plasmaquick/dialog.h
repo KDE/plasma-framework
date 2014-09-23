@@ -22,7 +22,6 @@
 
 #include <QQuickItem>
 #include <QQuickWindow>
-#include <QWeakPointer>
 #include <QPoint>
 #include <QQmlParserStatus>
 
@@ -236,15 +235,16 @@ private:
     friend class DialogPrivate;
     DialogPrivate *const d;
 
-    Q_PRIVATE_SLOT(d, void syncBorders())
+    Q_PRIVATE_SLOT(d, void updateInputShape())
     Q_PRIVATE_SLOT(d, void updateTheme())
     Q_PRIVATE_SLOT(d, void updateVisibility(bool visible))
-    Q_PRIVATE_SLOT(d, void updateInputShape())
 
     Q_PRIVATE_SLOT(d, void updateMinimumWidth())
     Q_PRIVATE_SLOT(d, void updateMinimumHeight())
     Q_PRIVATE_SLOT(d, void updateMaximumWidth())
     Q_PRIVATE_SLOT(d, void updateMaximumHeight())
+
+    Q_PRIVATE_SLOT(d, void slotMainItemSizeChanged())
 };
 
 }

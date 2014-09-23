@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 PlasmaCore.Dialog {
+    id: root
     location: PlasmaCore.Types.Floating
 
     Rectangle {
@@ -34,6 +35,10 @@ PlasmaCore.Dialog {
 
         color: "red"
 
+        Rectangle {
+            width: rect.Layout.minimumWidth
+            height: rect.Layout.minimumHeight
+        }
         ColumnLayout {
             anchors.top: parent.top
             Controls.Label {
@@ -51,6 +56,18 @@ PlasmaCore.Dialog {
                 text: "Increase MinHeight"
                 onClicked: {
                     rect.Layout.minimumHeight = rect.Layout.minimumHeight + 10
+                }
+            }
+            Controls.Button {
+                text: "Increase dialog width"
+                onClicked: {
+                    root.width = root.width + 10
+                }
+            }
+            Controls.Button {
+                text: "Increase dialog height"
+                onClicked: {
+                    root.height = root.height + 10
                 }
             }
         }

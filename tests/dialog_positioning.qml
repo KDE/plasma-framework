@@ -45,10 +45,11 @@ PlasmaCore.Dialog {
             id: innerRect
             color: "#ddffdd"
             width: 200
-            height: 200
+            height: layout.height
             anchors.centerIn: parent
 
             ColumnLayout {
+                id: layout
                 anchors.margins: 5
                 anchors.top: parent.top
                 anchors.left:parent.left
