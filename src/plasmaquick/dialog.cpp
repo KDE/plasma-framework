@@ -294,6 +294,10 @@ void DialogPrivate::updateMinimumWidth()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
+    if (!componentComplete || !q->isVisible()) {
+        return;
+    }
+
     mainItem->disconnect(q);
 
     syncBorders(q->geometry());
@@ -326,11 +330,12 @@ void DialogPrivate::updateMinimumWidth()
 
 void DialogPrivate::updateMinimumHeight()
 {
-    if (!componentComplete) {
-        return;
-    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
+
+    if (!componentComplete || !q->isVisible()) {
+        return;
+    }
 
     mainItem->disconnect(q);
 
@@ -364,11 +369,12 @@ void DialogPrivate::updateMinimumHeight()
 
 void DialogPrivate::updateMaximumWidth()
 {
-    if (!componentComplete) {
-        return;
-    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
+
+    if (!componentComplete || !q->isVisible()) {
+        return;
+    }
 
     mainItem->disconnect(q);
 
@@ -397,11 +403,12 @@ void DialogPrivate::updateMaximumWidth()
 
 void DialogPrivate::updateMaximumHeight()
 {
-    if (!componentComplete) {
-        return;
-    }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
+
+    if (!componentComplete || !q->isVisible()) {
+        return;
+    }
 
     mainItem->disconnect(q);
 
@@ -551,9 +558,8 @@ void DialogPrivate::syncToMainItemSize()
     }
 
     if (visualParent) {
-        // Get the full size with ALL the borders
-        frameSvgItem->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-        auto margins = frameSvgItem->margins();
+        // fixedMargins will get all the borders, no matter if they are enabled
+        auto margins = frameSvgItem->fixedMargins();
 
         const QSize fullSize = QSize(mainItem->width(), mainItem->height()) +
                                QSize(margins->left() + margins->right(),
