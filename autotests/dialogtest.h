@@ -40,6 +40,7 @@ private Q_SLOTS:
 
 private:
     QQuickView *m_panel;
+    QQuickView *m_panel2;
     QQuickItem *m_content;
     PlasmaQuick::Dialog *m_dialog;
 };

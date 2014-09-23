@@ -319,7 +319,7 @@ void DialogPrivate::updateMinimumWidth()
     repositionIfOffScreen();
     if (visualParent) {
         const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->setGeometry(geom);
+        q->adjustGeometry(geom);
     }
 
     updateTheme();
@@ -358,7 +358,7 @@ void DialogPrivate::updateMinimumHeight()
     repositionIfOffScreen();
     if (visualParent) {
         const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->setGeometry(geom);
+        q->adjustGeometry(geom);
     }
 
     updateTheme();
@@ -392,7 +392,7 @@ void DialogPrivate::updateMaximumWidth()
     repositionIfOffScreen();
     if (visualParent) {
         const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->setGeometry(geom);
+        q->adjustGeometry(geom);
     }
 
     updateTheme();
@@ -427,7 +427,7 @@ void DialogPrivate::updateMaximumHeight()
     repositionIfOffScreen();
     if (visualParent) {
         const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->setGeometry(geom);
+        q->adjustGeometry(geom);
     }
 
     updateTheme();
@@ -856,7 +856,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     if (dialogPos.x() + size.width() > avail.right()) {
         // popup hits rhs
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
-            dialogPos.setX(avail.right() - size.width() + 1);
+            dialogPos.setX(qMax(avail.left(), (avail.right() - size.width() + 1)));
         } else {
             dialogPos.setX(leftPoint.x());
         }
@@ -875,7 +875,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
         } else {
-            dialogPos.setY(avail.bottom() - size.height() + 1);
+            dialogPos.setY(qMax(avail.top(), (avail.bottom() - size.height() + 1)));
         }
     }
 

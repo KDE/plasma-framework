@@ -29,12 +29,17 @@ void DialogTest::initTestCase()
     m_panel->setGeometry(0, 0, 50, 50);
     m_panel->setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
 
+    m_panel2 = new QQuickView;
+    m_panel2->setGeometry(100, 0, 50, 50);
+    m_panel2->setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
+
     m_content = new QQuickItem;
     m_content->setWidth(100);
     m_content->setHeight(100);
     m_dialog->setMainItem(m_content);
 
     m_panel->show();
+    m_panel2->show();
     KWindowSystem::setType(m_panel->winId(), NET::Dock);
     m_dialog->setVisualParent(m_panel->contentItem());
     m_dialog->show();
@@ -44,6 +49,7 @@ void DialogTest::cleanupTestCase()
 {
     delete m_dialog;
     delete m_panel;
+    delete m_panel2;
 }
 
 void DialogTest::position()
@@ -51,6 +57,10 @@ void DialogTest::position()
     QTest::qWaitForWindowExposed(m_dialog);
 
     QCOMPARE(m_dialog->x(), 0);
+    QCOMPARE(m_dialog->y(), 49);
+
+    m_dialog->setVisualParent(m_panel2->contentItem());
+    QCOMPARE(m_dialog->x(), 73);
     QCOMPARE(m_dialog->y(), 49);
 }
 
