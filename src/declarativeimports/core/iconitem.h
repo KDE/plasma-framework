@@ -82,7 +82,6 @@ private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
 private:
-    int adjustedSize(int size);
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;

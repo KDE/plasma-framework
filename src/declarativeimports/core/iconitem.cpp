@@ -34,6 +34,7 @@
 
 #include "fadingnode_p.h"
 #include "svgtexturenode.h"
+#include "units.h"
 
 IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
@@ -238,7 +239,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         animatingNode->setProgress(m_animValue);
 
         if (m_sizeChanged) {
-            const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+            const int iconSize = Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
             const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
                                  QSize(iconSize, iconSize));
 
@@ -259,7 +260,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         }
 
         if (m_sizeChanged) {
-            const int iconSize = adjustedSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+            const int iconSize = Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
             const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
                                  QSize(iconSize, iconSize));
 
@@ -283,38 +284,9 @@ void IconItem::animationFinished()
     update();
 }
 
-int IconItem::adjustedSize(int size)
-{
-    if (m_svgIcon) {
-        m_svgIcon->resize();
-    }
-
-    if (m_svgIcon &&
-        size > KIconLoader::SizeSmallMedium &&
-        size < KIconLoader::SizeMedium &&
-        m_svgIcon->elementSize(m_source.toString()).width() > KIconLoader::SizeSmallMedium &&
-        m_svgIcon->elementSize(m_source.toString()).width() < KIconLoader::SizeMedium) {
-        return m_svgIcon->elementSize(m_source.toString()).width();
-    } else if (size < KIconLoader::SizeSmall) {
-        //do nothing
-        return size;
-    } else if (size < KIconLoader::SizeSmallMedium) {
-        return KIconLoader::SizeSmall;
-    } else if (size < KIconLoader::SizeMedium) {
-        return KIconLoader::SizeSmallMedium;
-    } else if (size < KIconLoader::SizeLarge) {
-        return KIconLoader::SizeMedium;
-    } else if (size < KIconLoader::SizeHuge) {
-        return KIconLoader::SizeLarge;
-        //if size is more than 64, leave as is
-    }
-
-    return size;
-}
-
 void IconItem::loadPixmap()
 {
-    const int size = adjustedSize(qMin(width(), height()));
+    const int size = Units::roundToIconSize(qMin(width(), height()));
 
     //final pixmap to paint
     QPixmap result;

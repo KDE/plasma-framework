@@ -104,18 +104,24 @@ QQmlPropertyMap *Units::iconSizes() const
     return m_iconSizes;
 }
 
-int Units::roundToIconSize(int size) const
+int Units::roundToIconSize(int size)
 {
-    if (size < devicePixelIconSize(KIconLoader::SizeSmall)) {
-        return devicePixelIconSize(KIconLoader::SizeSmall/2);
-    } else if (size < devicePixelIconSize(KIconLoader::SizeSmallMedium)) {
-        return devicePixelIconSize(KIconLoader::SizeSmall);
-    } else if (size < devicePixelIconSize(KIconLoader::SizeMedium)) {
-        return devicePixelIconSize(KIconLoader::SizeSmallMedium);
-    } else if (size < devicePixelIconSize(KIconLoader::SizeLarge)) {
-        return devicePixelIconSize(KIconLoader::SizeMedium);
-    } else if (size < devicePixelIconSize(KIconLoader::SizeEnormous)) {
-        return devicePixelIconSize(KIconLoader::SizeHuge);
+    /*Do *not* use devicePixelIconSize here, we want to use the sizes of the pixmaps of the smallest icons on the disk. And those are unaffected by dpi*/
+    if (size < KIconLoader::SizeSmall) {
+        return KIconLoader::SizeSmall/2;
+
+    } else if (size < KIconLoader::SizeSmallMedium) {
+        return KIconLoader::SizeSmall;
+
+    } else if (size < KIconLoader::SizeMedium) {
+        return KIconLoader::SizeSmallMedium;
+
+    } else if (size < KIconLoader::SizeLarge) {
+        return KIconLoader::SizeMedium;
+
+    } else if (size < KIconLoader::SizeHuge) {
+        return KIconLoader::SizeLarge;
+
     } else {
         return size;
     }

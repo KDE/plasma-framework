@@ -128,7 +128,7 @@ public:
      * @param int size the size we want to be rounded down
      * @see iconSizes
      */
-    Q_INVOKABLE int roundToIconSize(int size) const;
+    Q_INVOKABLE static int roundToIconSize(int size);
 
     /**
      * @return Pixel value for large spacing between elements.
