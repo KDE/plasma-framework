@@ -101,8 +101,8 @@ Item {
             imagePath: background.imagePath
             prefix: "bar-active"
 
-            width: indeterminate ? units.gridUnit*2 : range.position
-            height: indeterminate ? units.gridUnit*2 : range.position
+            width: Math.max(margins.left + margins.right, (indeterminate ? units.gridUnit*2 : range.position))
+            height: Math.max(margins.top + margins.bottom, (indeterminate ? units.gridUnit*2 : range.position))
         }
         //this can't reference its parent because needs to be loaded before it,
         //so never bind background to anything here
