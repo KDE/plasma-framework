@@ -32,6 +32,7 @@ macro(plasma_install_package dir component)
    install(DIRECTORY ${dir}/ DESTINATION ${PLASMA_DATA_INSTALL_DIR}/${root}/${component}
            PATTERN .svn EXCLUDE
            PATTERN CMakeLists.txt EXCLUDE
+           PATTERN README.txt EXCLUDE
            PATTERN Messages.sh EXCLUDE
            PATTERN dummydata EXCLUDE)
 
