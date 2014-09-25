@@ -62,6 +62,7 @@ public:
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
+          visible(false),
           componentComplete(dialog->parent() == 0),
           backgroundHints(Dialog::StandardBackground)
     {
@@ -123,6 +124,7 @@ public:
     Dialog::WindowType type;
     bool hideOnWindowDeactivate;
     bool outputOnly;
+    bool visible;
     Plasma::Theme theme;
     bool componentComplete;
     Dialog::BackgroundHints backgroundHints;
@@ -642,6 +644,8 @@ Dialog::Dialog(QQuickItem *parent)
     connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
 
     connect(this, SIGNAL(visibleChanged(bool)),
+            this, SIGNAL(visibleChangedProxy()));
+    connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),
             this, SLOT(updateInputShape()));
@@ -1042,6 +1046,7 @@ void Dialog::classBegin()
 void Dialog::componentComplete()
 {
     d->componentComplete = true;
+    QQuickWindow::setVisible(d->visible);
 
     d->updateTheme();
 
@@ -1080,6 +1085,28 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     emit outputOnlyChanged();
+}
+
+void Dialog::setVisible(bool visible)
+{
+    //only update real visibility when we have finished component completion
+    //and all flags have been set
+
+    d->visible = visible;
+    if (d->componentComplete) {
+        QQuickWindow::setVisible(visible);
+        //signal will be emitted and proxied from the QQuickWindow code
+    } else {
+        emit visibleChangedProxy();
+    }
+}
+
+bool Dialog::isVisible() const
+{
+    if (d->componentComplete) {
+        return QQuickWindow::isVisible();
+    }
+    return d->visible;
 }
 
 Dialog::BackgroundHints Dialog::backgroundHints() const

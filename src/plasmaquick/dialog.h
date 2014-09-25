@@ -145,6 +145,8 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
      */
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints NOTIFY backgroundHintsChanged)
 
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChangedProxy)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -193,6 +195,9 @@ public:
     BackgroundHints backgroundHints() const;
     void setBackgroundHints(BackgroundHints hints);
 
+    bool isVisible() const;
+    void setVisible(bool visible);
+
     /**
      * @returns The suggested screen position for the popup
      * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
@@ -209,6 +214,7 @@ Q_SIGNALS:
     void outputOnlyChanged();
     void flagsChanged();
     void backgroundHintsChanged();
+    void visibleChangedProxy(); //redeclaration of QQuickWindow::visibleChanged
     /**
      * Emitted when the @see hideOnWindowDeactivate property is @c true and this dialog lost focus to a
      * window that is neither a parent dialog to nor a child dialog of this dialog.
