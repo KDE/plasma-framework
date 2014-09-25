@@ -221,7 +221,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
 {
-    if (!qmlObject->rootObject() || !qmlObject->mainComponent() || qmlObject->mainComponent()->status() != QQmlComponent::Ready) {
+    if (!qmlObject->rootObject()) {
         return;
     }
 
