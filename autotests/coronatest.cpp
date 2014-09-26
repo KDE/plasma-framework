@@ -27,6 +27,7 @@
 Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
                                    const QVariantList &args)
 {
+    Q_UNUSED(args)
     if (name == "simpleapplet") {
         return new SimpleApplet(0, QString(), appletId);
     } else if (name == "simplecontainment") {
