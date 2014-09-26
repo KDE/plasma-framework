@@ -132,6 +132,7 @@ bool SvgItem::smooth() const
 
 QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
+    Q_UNUSED(updatePaintNodeData);
     if (!window() || !m_svg) {
         delete oldNode;
         return Q_NULLPTR;
