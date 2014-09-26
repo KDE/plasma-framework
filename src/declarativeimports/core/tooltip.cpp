@@ -306,6 +306,7 @@ void ToolTip::setContainsMouse(bool contains)
 
 void ToolTip::hoverEnterEvent(QHoverEvent *event)
 {
+    Q_UNUSED(event)
     setContainsMouse(true);
 
     if (!m_tooltipsEnabledGlobally) {
@@ -327,6 +328,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
 
 void ToolTip::hoverLeaveEvent(QHoverEvent *event)
 {
+    Q_UNUSED(event)
     setContainsMouse(false);
     m_showTimer->stop();
 }
