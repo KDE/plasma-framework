@@ -17,11 +17,11 @@
 *   Boston, MA 02110-1301, USA.                                                 *
 *********************************************************************************/
 
-#include "dialogtest.h"
+#include "dialognativetest.h"
 #include <KWindowSystem>
 
 
-void DialogTest::initTestCase()
+void DialogNativeTest::initTestCase()
 {
     m_dialog = new PlasmaQuick::Dialog;
 
@@ -45,14 +45,14 @@ void DialogTest::initTestCase()
     m_dialog->show();
 }
 
-void DialogTest::cleanupTestCase()
+void DialogNativeTest::cleanupTestCase()
 {
     delete m_dialog;
     delete m_panel;
     delete m_panel2;
 }
 
-void DialogTest::position()
+void DialogNativeTest::position()
 {
     QTest::qWaitForWindowExposed(m_dialog);
 
@@ -64,4 +64,4 @@ void DialogTest::position()
     QCOMPARE(m_dialog->y(), 49);
 }
 
-QTEST_MAIN(DialogTest)
+QTEST_MAIN(DialogNativeTest)

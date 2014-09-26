@@ -37,6 +37,7 @@ MACRO(PLASMA_UNIT_TESTS)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
+    dialogqmltest
     fallbackpackagetest
     packagestructuretest
     packageurlinterceptortest
@@ -48,7 +49,7 @@ PLASMA_UNIT_TESTS(
 add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp)
 target_link_libraries(storagetest Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons)
 
-set(dialogtest_srcs dialogtest.cpp)
+set(dialogtest_srcs dialognativetest.cpp)
 ecm_add_test(${dialogtest_srcs} TEST_NAME dialogtest LINK_LIBRARIES Qt5::Gui Qt5::Test Qt5::Qml Qt5::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick)
 
 set(coronatest_srcs coronatest.cpp)

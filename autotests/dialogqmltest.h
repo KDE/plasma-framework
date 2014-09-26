@@ -16,33 +16,24 @@
 *   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
-#ifndef DIALOGTEST_H
-#define DIALOGTEST_H
+#ifndef DIALOLOADGTEST_H
+#define DIALOLOADGTEST_H
 
 #include <QtTest/QtTest>
-#include <QQuickView>
-#include <QQuickItem>
 
 #include "plasmaquick/dialog.h"
 
 
 
-class DialogTest : public QObject
+class DialogQmlTest : public QObject
 {
     Q_OBJECT
 
-public Q_SLOTS:
-    void initTestCase();
-    void cleanupTestCase();
-
 private Q_SLOTS:
-    void position();
-
+    void loadAndShow();
 private:
-    QQuickView *m_panel;
-    QQuickView *m_panel2;
-    QQuickItem *m_content;
-    PlasmaQuick::Dialog *m_dialog;
+    bool m_dialogShown;
+
 };
 
 #endif
