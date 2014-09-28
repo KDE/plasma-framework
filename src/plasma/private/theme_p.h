@@ -98,9 +98,9 @@ Q_SIGNALS:
     void smallestFontChanged();
 
 public:
-    static const char *defaultTheme;
-    static const char *systemColorsTheme;
-    static const char *themeRcFile;
+    static const char defaultTheme[];
+    static const char systemColorsTheme[];
+    static const char themeRcFile[];
 #if HAVE_X11
     static EffectWatcher *s_blurEffectWatcher;
 #endif
