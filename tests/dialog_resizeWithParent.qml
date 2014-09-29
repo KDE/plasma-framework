@@ -56,13 +56,19 @@ Item {
             width: 500
             height: fixedHeight
 
-            color: "white"
+            color: "red"
+            border {
+                color: "blue"
+                width: 3
+            }
 
             Controls.Button {
                 text: "Resize"
                 anchors.centerIn: parent
                 onClicked: {
                     rect.fixedHeight = rect.Layout.minimumHeight = rect.Layout.maximumHeight = (rect.fixedHeight == 500 ? rect.fixedHeight = 100 : rect.fixedHeight = 500)
+
+                    //subDialog.height = (subDialog.height == 500 ? subDialog.height = 100 : subDialog.height = 500)
                 }
             }
         }
