@@ -23,6 +23,10 @@
 
 void DialogNativeTest::initTestCase()
 {
+    QStandardPaths::enableTestMode(true);
+    m_cacheDir = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    m_cacheDir.removeRecursively();
+
     m_dialog = new PlasmaQuick::Dialog;
 
     m_panel = new QQuickView;
@@ -50,6 +54,8 @@ void DialogNativeTest::cleanupTestCase()
     delete m_dialog;
     delete m_panel;
     delete m_panel2;
+
+    m_cacheDir.removeRecursively();
 }
 
 void DialogNativeTest::position()

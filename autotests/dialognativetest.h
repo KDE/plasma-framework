@@ -43,6 +43,7 @@ private:
     QQuickView *m_panel2;
     QQuickItem *m_content;
     PlasmaQuick::Dialog *m_dialog;
+    QDir m_cacheDir;
 };
 
 #endif

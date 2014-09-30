@@ -40,6 +40,7 @@ private Q_SLOTS:
 
 private:
     Plasma::FrameSvg *m_frameSvg;
+    QDir m_cacheDir;
 };
 
 #endif

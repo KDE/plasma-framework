@@ -24,6 +24,10 @@
 
 void FrameSvgTest::initTestCase()
 {
+    QStandardPaths::enableTestMode(true);
+    m_cacheDir = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
+    m_cacheDir.removeRecursively();
+
     m_frameSvg = new Plasma::FrameSvg;
     m_frameSvg->setImagePath(QFINDTESTDATA("data/background.svgz"));
     QVERIFY(m_frameSvg->isValid());
@@ -32,6 +36,8 @@ void FrameSvgTest::initTestCase()
 void FrameSvgTest::cleanupTestCase()
 {
     delete m_frameSvg;
+
+    m_cacheDir.removeRecursively();
 }
 
 void FrameSvgTest::margins()
