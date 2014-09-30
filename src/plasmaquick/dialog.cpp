@@ -66,6 +66,9 @@ public:
           componentComplete(dialog->parent() == 0),
           backgroundHints(Dialog::StandardBackground)
     {
+        hintsCommitTimer.setSingleShot(true);
+        hintsCommitTimer.setInterval(0);
+        QObject::connect(&hintsCommitTimer, SIGNAL(timeout()), q, SLOT(updateLayoutParameters()));
     }
 
     void updateInputShape();
@@ -119,6 +122,7 @@ public:
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
+    QTimer hintsCommitTimer;
 
     QRect cachedGeometry;
     Dialog::WindowType type;
@@ -300,34 +304,18 @@ void DialogPrivate::updateMinimumWidth()
         return;
     }
 
-    mainItem->disconnect(q);
+    q->setMinimumWidth(0);
 
-    syncBorders(q->geometry());
-
-    int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
+    //this is to try to get the internal item resized a tad before, but
+    //the flicker almost always happen anyways, so is *probably* useless
+    //this other kind of flicker is the view not being always focused exactly
+    //on the scene
     auto margin = frameSvgItem->margins();
+    int minimumWidth = mainItemLayout->property("minimumWidth").toInt() + margin->left() + margin->right();
+    q->contentItem()->setHeight(qMax(q->width(), minimumWidth));
+    q->setHeight(qMax(q->width(), minimumWidth));
 
-    int oldWidth = q->width();
-
-    q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
-    q->setWidth(qMax(q->width(), q->minimumWidth()));
-
-    mainItem->setWidth(q->width() - margin->left() - margin->right());
-    frameSvgItem->setWidth(q->width());
-
-    if (location == Plasma::Types::RightEdge) {
-        q->setX(q->x() + (oldWidth - q->size().width()));
-    }
-    repositionIfOffScreen();
-    if (visualParent) {
-        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->adjustGeometry(geom);
-    }
-
-    updateTheme();
-
-    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    hintsCommitTimer.start();
 }
 
 void DialogPrivate::updateMinimumHeight()
@@ -339,34 +327,18 @@ void DialogPrivate::updateMinimumHeight()
         return;
     }
 
-    mainItem->disconnect(q);
+    q->setMinimumHeight(0);
 
-    syncBorders(q->geometry());
-
-    int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
+    //this is to try to get the internal item resized a tad before, but
+    //the flicker almost always happen anyways, so is *probably* useless
+    //this other kind of flicker is the view not being always focused exactly
+    //on the scene
     auto margin = frameSvgItem->margins();
+    int minimumHeight = mainItemLayout->property("minimumHeight").toInt() + margin->top() + margin->bottom();
+    q->contentItem()->setHeight(qMax(q->height(), minimumHeight));
+    q->setHeight(qMax(q->height(), minimumHeight));
 
-    int oldHeight = mainItem->height();
-
-    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
-    q->setHeight(qMax(q->height(), q->minimumHeight()));
-
-    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
-    frameSvgItem->setHeight(q->height());
-
-    if (location == Plasma::Types::BottomEdge) {
-        q->setY(q->y() + (oldHeight - q->size().height()));
-    }
-    repositionIfOffScreen();
-    if (visualParent) {
-        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->adjustGeometry(geom);
-    }
-
-    updateTheme();
-
-    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    hintsCommitTimer.start();
 }
 
 void DialogPrivate::updateMaximumWidth()
@@ -378,29 +350,14 @@ void DialogPrivate::updateMaximumWidth()
         return;
     }
 
-    mainItem->disconnect(q);
+    q->setMaximumWidth(DIALOGSIZE_MAX);
 
-    syncBorders(q->geometry());
-
-    int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
-    maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
     auto margin = frameSvgItem->margins();
+    int maximumWidth = mainItemLayout->property("maximumWidth").toInt() + margin->left() + margin->right();
+    q->contentItem()->setHeight(qMax(q->width(), maximumWidth));
+    q->setHeight(qMax(q->width(), maximumWidth));
 
-    q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
-    q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
-    mainItem->setWidth(q->width() - margin->left() - margin->right());
-    frameSvgItem->setWidth(q->width());
-
-    repositionIfOffScreen();
-    if (visualParent) {
-        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->adjustGeometry(geom);
-    }
-
-    updateTheme();
-
-    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    hintsCommitTimer.start();
 }
 
 void DialogPrivate::updateMaximumHeight()
@@ -412,30 +369,14 @@ void DialogPrivate::updateMaximumHeight()
         return;
     }
 
-    mainItem->disconnect(q);
+    q->setMaximumHeight(DIALOGSIZE_MAX);
 
-    syncBorders(q->geometry());
-
-    int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
-    maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
     auto margin = frameSvgItem->margins();
+    int maximumHeight = mainItemLayout->property("maximumHeight").toInt() + margin->top() + margin->bottom();
+    q->contentItem()->setHeight(qMax(q->height(), maximumHeight));
+    q->setHeight(qMin(q->height(), maximumHeight));
 
-    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
-    q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
-
-    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
-    frameSvgItem->setHeight(q->height());
-
-    repositionIfOffScreen();
-    if (visualParent) {
-        const QRect geom(q->popupPosition(visualParent, q->size()), q->size());
-        q->adjustGeometry(geom);
-    }
-
-    updateTheme();
-
-    QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
-    QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
+    hintsCommitTimer.start();
 }
 
 void DialogPrivate::updateLayoutParameters()
@@ -448,6 +389,8 @@ void DialogPrivate::updateLayoutParameters()
 
     mainItem->disconnect(q);
 
+    auto margin = frameSvgItem->margins();
+
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
     maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
@@ -456,26 +399,39 @@ void DialogPrivate::updateLayoutParameters()
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
     maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
 
-    auto margin = frameSvgItem->margins();
+    minimumHeight += margin->top() + margin->bottom();
+    maximumHeight += margin->top() + margin->bottom();
+    minimumWidth += margin->left() + margin->right();
+    maximumWidth += margin->left() + margin->right();
 
-    q->setMinimumHeight(minimumHeight + margin->top() + margin->bottom());
-    q->setMaximumHeight(maximumHeight + margin->top() + margin->bottom());
-    q->setHeight(qBound(q->minimumHeight(), q->height(), q->maximumHeight()));
 
-    q->setMinimumWidth(minimumWidth + margin->left() + margin->right());
-    q->setMaximumWidth(maximumWidth + margin->left() + margin->right());
-    q->setWidth(qBound(q->minimumWidth(), q->width(), q->maximumWidth()));
+    const QSize finalSize(qBound(minimumWidth, q->width(), maximumWidth),
+                          qBound(minimumHeight, q->height(), maximumHeight));
 
-    mainItem->setX(margin->left());
-    mainItem->setY(margin->top());
-    mainItem->setWidth(q->width() - margin->left() - margin->right());
-    mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+    if (visualParent) {
+        //it's important here that we're using re->size() as size, we don't want to do recursive resizeEvents
+        const QRect geom(q->popupPosition(visualParent, finalSize), finalSize);
+        q->adjustGeometry(geom);
+    } else {
+        q->resize(finalSize);
+    }
 
-    frameSvgItem->setWidth(q->width());
-    frameSvgItem->setHeight(q->height());
+    mainItem->setPosition(QPointF(margin->left(),
+                        margin->top()));
+    mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(),
+                        q->height() - margin->top() - margin->bottom()));
+
+    frameSvgItem->setSize(QSizeF(q->width(),
+                            q->height()));
 
     repositionIfOffScreen();
     updateTheme();
+
+    //FIXME: this seems to interfere with the geometry change that
+    //sometimes is still going on, causing flicker (this one is two repositions happening in quick succession).
+    //it may have to be delayed further
+    q->setMinimumSize(QSize(minimumWidth, minimumHeight));
+    q->setMaximumSize(QSize(maximumWidth, maximumHeight));
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -585,10 +541,9 @@ void DialogPrivate::syncToMainItemSize()
                     QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
                           frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
 
-    frameSvgItem->setX(0);
-    frameSvgItem->setY(0);
-    frameSvgItem->setWidth(s.width());
-    frameSvgItem->setHeight(s.height());
+    q->contentItem()->setSize(s);
+
+    frameSvgItem->setSize(s);
 
     if (visualParent) {
         const QRect geom(q->popupPosition(visualParent, s), s);
@@ -600,12 +555,13 @@ void DialogPrivate::syncToMainItemSize()
         // The borders will instantly be updated but the geometry might take a
         // while as sub-classes can reimplement adjustGeometry and animate it.
         syncBorders(geom);
+
     } else {
         q->resize(s);
     }
 
-    mainItem->setX(frameSvgItem->margins()->left());
-    mainItem->setY(frameSvgItem->margins()->top());
+    mainItem->setPosition(QPointF(frameSvgItem->margins()->left(),
+                            frameSvgItem->margins()->top()));
 
     updateTheme();
 }
@@ -676,13 +632,14 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 {
     if (d->mainItem != mainItem) {
         if (d->mainItem) {
+            d->mainItem->setParentItem(0);
             d->mainItem->setParent(parent());
         }
 
         d->mainItem = mainItem;
 
         if (mainItem) {
-            mainItem->setParent(contentItem());
+            mainItem->setParentItem(contentItem());
             mainItem->setProperty("parent", QVariant::fromValue(contentItem()));
 
             connect(mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
@@ -712,6 +669,9 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             d->mainItemLayout = layout;
 
             if (layout) {
+                //Why queued connections?
+                //we need to be sure that the properties are
+                //already *all* updated when we call the management code
                 connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
                 connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
@@ -926,13 +886,13 @@ void Dialog::resizeEvent(QResizeEvent* re)
 
     d->mainItem->disconnect(this);
 
-    d->frameSvgItem->setWidth(re->size().width());
-    d->frameSvgItem->setHeight(re->size().height());
+    d->frameSvgItem->setSize(QSizeF(re->size().width(),
+                                re->size().height()));
     auto margin = d->frameSvgItem->margins();
-    d->mainItem->setX(margin->left());
-    d->mainItem->setY(margin->top());
-    d->mainItem->setWidth(re->size().width() - margin->left() - margin->right());
-    d->mainItem->setHeight(re->size().height() - margin->top() - margin->bottom());
+    d->mainItem->setPosition(QPointF(margin->left(),
+                                margin->top()));
+    d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(),
+            re->size().height() - margin->top() - margin->bottom()));
 
     QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
     QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
