@@ -83,8 +83,8 @@ Item {
         id: background
 
         anchors.centerIn: parent
-        width: _isVertical ? Math.round(barSvg.elementSize("hint-bar-size").width * units.devicePixelRatio) : parent.width
-        height: _isVertical ? parent.height : Math.round(barSvg.elementSize("hint-bar-size").height * units.devicePixelRatio)
+        width: _isVertical ? barSvg.elementSize("hint-bar-size").width * Math.floor(units.devicePixelRatio) : parent.width
+        height: _isVertical ? parent.height : barSvg.elementSize("hint-bar-size").height * Math.floor(units.devicePixelRatio)
 
         imagePath: barSvg.imagePath
         prefix: "bar-inactive"
