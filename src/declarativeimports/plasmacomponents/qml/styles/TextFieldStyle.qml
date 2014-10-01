@@ -31,6 +31,7 @@ QtQuickControlStyle.TextFieldStyle {
     textColor: theme.viewTextColor
     selectionColor: theme.viewFocusColor
     selectedTextColor: theme.viewBackgroundColor
+    placeholderTextColor: Qt.tint(theme.viewTextColor, "#80000000")
 
     background: Item {
         implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
