@@ -515,6 +515,7 @@ void DialogPrivate::syncToMainItemSize()
         return;
     }
 
+    updateTheme();
     if (visualParent) {
         // fixedMargins will get all the borders, no matter if they are enabled
         auto margins = frameSvgItem->fixedMargins();
