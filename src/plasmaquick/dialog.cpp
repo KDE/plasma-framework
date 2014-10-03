@@ -632,6 +632,7 @@ QQuickItem *Dialog::mainItem() const
 void Dialog::setMainItem(QQuickItem *mainItem)
 {
     if (d->mainItem != mainItem) {
+        d->hintsCommitTimer.stop();
         if (d->mainItem) {
             d->mainItem->setParentItem(0);
             d->mainItem->setParent(parent());
