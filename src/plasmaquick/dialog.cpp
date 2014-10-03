@@ -885,6 +885,11 @@ void Dialog::resizeEvent(QResizeEvent* re)
 {
     QQuickWindow::resizeEvent(re);
 
+    //A dialog can be resized even if no mainItem has ever been set
+    if (!d->mainItem) {
+        return;
+    }
+
     d->mainItem->disconnect(this);
 
     d->frameSvgItem->setSize(QSizeF(re->size().width(),
