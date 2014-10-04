@@ -6,7 +6,7 @@ Rectangle {
     id: root
     color: "white"
     width: 800
-    height: 300
+    height: 500
 
     Flow {
         anchors.fill: parent
@@ -97,6 +97,26 @@ Rectangle {
             }
         }
 
+        Column {
+            Text {
+                text: "should be a continuous movement,<br>from one end to the other and back"
+            }
+            PlasmaComponents.ProgressBar {
+                indeterminate: indeterminateCheckBox.checked
+                value: 0.5
+            }
+        }
+
+        Column {
+            Text {
+                text: "Checking and unchecking should not break the layout,<br>should look like 50% if unchecked"
+            }
+            PlasmaComponents.CheckBox {
+                id: indeterminateCheckBox
+                text: "Indeterminate"
+                checked: true
+            }
+        }
 
     }
 }
