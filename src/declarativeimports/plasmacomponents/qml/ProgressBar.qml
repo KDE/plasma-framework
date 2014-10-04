@@ -103,6 +103,7 @@ Item {
 
             width: Math.max(margins.left + margins.right, (indeterminate ? units.gridUnit*2 : range.position))
             height: Math.max(margins.top + margins.bottom, (indeterminate ? units.gridUnit*2 : range.position))
+            visible: indeterminate || range.position > 0
         }
         //this can't reference its parent because needs to be loaded before it,
         //so never bind background to anything here
