@@ -122,7 +122,6 @@ public:
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
-    QPointer<QQuickItem> oldMainItemParent;
     QTimer hintsCommitTimer;
 
     QRect cachedGeometry;
@@ -635,13 +634,13 @@ void Dialog::setMainItem(QQuickItem *mainItem)
     if (d->mainItem != mainItem) {
         d->hintsCommitTimer.stop();
         if (d->mainItem) {
-            d->mainItem->setParentItem(d->oldMainItemParent);
+            d->mainItem->setVisible(false);
         }
 
         d->mainItem = mainItem;
 
         if (mainItem) {
-            d->oldMainItemParent = mainItem->parentItem();
+            d->mainItem->setVisible(true);
             mainItem->setParentItem(contentItem());
 
             connect(mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
