@@ -930,10 +930,8 @@ void Dialog::setType(WindowType type)
 
     if (type == Dock) {
         KWindowSystem::setOnAllDesktops(winId(), true);
-        KWindowSystem::setState(winId(), NET::KeepAbove);
     } else {
         KWindowSystem::setOnAllDesktops(winId(), false);
-        KWindowSystem::clearState(winId(), NET::KeepAbove);
     }
 
     emit typeChanged();
@@ -993,19 +991,6 @@ bool Dialog::event(QEvent *event)
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
-    }
-
-    if (event->type() == QEvent::Expose) {
-        KWindowSystem::setType(winId(), (NET::WindowType)d->type);
-
-        if (d->type == Dock) {
-            KWindowSystem::setOnAllDesktops(winId(), true);
-            KWindowSystem::setState(winId(), NET::KeepAbove);
-            raise();
-        } else {
-            KWindowSystem::setOnAllDesktops(winId(), false);
-            KWindowSystem::clearState(winId(), NET::KeepAbove);
-        }
     }
 
     const bool retval = QQuickWindow::event(event);
