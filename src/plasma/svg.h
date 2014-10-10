@@ -61,6 +61,7 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
+    Q_PROPERTY(bool fromCurrentTheme READ fromCurrentTheme NOTIFY fromCurrentThemeChanged)
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged);
 
 public:
@@ -369,6 +370,15 @@ public:
     bool isUsingRenderingCache() const;
 
     /**
+     * Wether the current theme has this Svg, without any fallback
+     * to the default theme involved
+     *
+     * @return true if the svg is loaded from the current theme
+     * @see Theme::currentThemeHasImage
+     */
+    bool fromCurrentTheme() const;
+
+    /**
      * Sets the Plasma::Theme to use with this Svg object.
      *
      * By default, Svg objects use Plasma::Theme::default().
@@ -422,6 +432,11 @@ Q_SIGNALS:
      * Emitted whenever the color group has changed.
      */
     void colorGroupChanged();
+
+    /**
+     * Emitted when fromCurrentTheme() value has changed
+     */
+    void fromCurrentThemeChanged(bool fromCurrentTheme);
 
 private:
     SvgPrivate *const d;

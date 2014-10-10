@@ -140,6 +140,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
       devicePixelRatio(1.0),
       multipleImages(false),
       themed(false),
+      fromCurrentTheme(false),
       applyColors(false),
       usesColors(false),
       cacheRendering(true),
@@ -202,6 +203,12 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     themePath.clear();
     localRectCache.clear();
     elementsWithSizeHints.clear();
+    bool oldFromCurrentTheme = fromCurrentTheme;
+    fromCurrentTheme = actualTheme()->currentThemeHasImage(imagePath);
+
+    if (fromCurrentTheme != oldFromCurrentTheme) {
+        emit q->fromCurrentThemeChanged(fromCurrentTheme);
+    }
 
     if (themed) {
         themePath = actualPath;
@@ -855,6 +862,11 @@ void Svg::setUsingRenderingCache(bool useCache)
 bool Svg::isUsingRenderingCache() const
 {
     return d->cacheRendering;
+}
+
+bool Svg::fromCurrentTheme() const
+{
+    return d->fromCurrentTheme;
 }
 
 void Svg::setTheme(Plasma::Theme *theme)

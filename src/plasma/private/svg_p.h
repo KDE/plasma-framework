@@ -111,6 +111,7 @@ public:
     qreal devicePixelRatio;
     bool multipleImages : 1;
     bool themed : 1;
+    bool fromCurrentTheme : 1;
     bool applyColors : 1;
     bool usesColors : 1;
     bool cacheRendering : 1;

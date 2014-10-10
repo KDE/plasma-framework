@@ -132,6 +132,11 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(Plasma::FrameSvg::EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders NOTIFY enabledBordersChanged)
 
+    /**
+     * Holds whether the current svg is present in the current theme and NO fallback is involved
+     */
+    Q_PROPERTY(bool fromCurrentTheme READ fromCurrentTheme NOTIFY fromCurrentThemeChanged)
+
 public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
@@ -156,6 +161,8 @@ public:
     FrameSvgItemMargins *margins() const;
     FrameSvgItemMargins *fixedMargins() const;
 
+    bool fromCurrentTheme() const;
+
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry);
 
@@ -177,6 +184,7 @@ Q_SIGNALS:
     void imagePathChanged();
     void prefixChanged();
     void enabledBordersChanged();
+    void fromCurrentThemeChanged();
 
 private Q_SLOTS:
     void doUpdate();
