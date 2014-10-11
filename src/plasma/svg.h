@@ -370,7 +370,7 @@ public:
     bool isUsingRenderingCache() const;
 
     /**
-     * Wether the current theme has this Svg, without any fallback
+     * Whether the current theme has this Svg, without any fallback
      * to the default theme involved
      *
      * @return true if the svg is loaded from the current theme
