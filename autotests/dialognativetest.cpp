@@ -28,6 +28,7 @@ void DialogNativeTest::initTestCase()
     m_cacheDir.removeRecursively();
 
     m_dialog = new PlasmaQuick::Dialog;
+    m_dialog->setLocation(Plasma::Types::TopEdge);
 
     m_panel = new QQuickView;
     m_panel->setGeometry(0, 0, 50, 50);
@@ -58,6 +59,21 @@ void DialogNativeTest::cleanupTestCase()
     m_cacheDir.removeRecursively();
 }
 
+void DialogNativeTest::size()
+{
+    QTest::qWaitForWindowExposed(m_dialog);
+
+    QCOMPARE(m_content->width(), (qreal)100);
+    QCOMPARE(m_content->height(), (qreal)100);
+    QCOMPARE(m_dialog->width(), 104);
+    QCOMPARE(m_dialog->height(), 104);
+
+    QCOMPARE(m_dialog->margins()->property("left").value<qreal>(), (qreal)0.0);
+    QCOMPARE(m_dialog->margins()->property("top").value<qreal>(), (qreal)0.0);
+    QCOMPARE(m_dialog->margins()->property("right").value<qreal>(), (qreal)4.0);
+    QCOMPARE(m_dialog->margins()->property("bottom").value<qreal>(), (qreal)4.0);
+}
+
 void DialogNativeTest::position()
 {
     QTest::qWaitForWindowExposed(m_dialog);
@@ -66,7 +82,7 @@ void DialogNativeTest::position()
     QCOMPARE(m_dialog->y(), 49);
 
     m_dialog->setVisualParent(m_panel2->contentItem());
-    QCOMPARE(m_dialog->x(), 73);
+    QCOMPARE(m_dialog->x(), 71);
     QCOMPARE(m_dialog->y(), 49);
 }
 

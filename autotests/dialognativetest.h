@@ -36,6 +36,7 @@ public Q_SLOTS:
     void cleanupTestCase();
 
 private Q_SLOTS:
+    void size();
     void position();
 
 private:
