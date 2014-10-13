@@ -224,6 +224,16 @@ qreal FrameSvgItemMargins::bottom() const
     }
 }
 
+qreal FrameSvgItemMargins::horizontal() const
+{
+    return left() + right();
+}
+
+qreal FrameSvgItemMargins::vertical() const
+{
+    return top() + bottom();
+}
+
 void FrameSvgItemMargins::update()
 {
     emit marginsChanged();

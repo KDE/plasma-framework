@@ -36,31 +36,42 @@ class SVGTextureNode;
 /**
  * @class FrameSvgItemMargins
  *
- * @short The size of margins for a frame.
+ * @short The sizes of a frame's margins.
  */
 class FrameSvgItemMargins : public QObject
 {
     Q_OBJECT
 
     /**
-     * width in pixels of the left margin
+     * Width in pixels of the left margin.
      */
     Q_PROPERTY(qreal left READ left NOTIFY marginsChanged)
 
     /**
-     * height in pixels of the top margin
+     * Height in pixels of the top margin.
      */
     Q_PROPERTY(qreal top READ top NOTIFY marginsChanged)
 
     /**
-     * width in pixels of the right margin
+     * Width in pixels of the right margin.
      */
     Q_PROPERTY(qreal right READ right NOTIFY marginsChanged)
 
     /**
-     * height in pixels of the bottom margin
+     * Height in pixels of the bottom margin.
      */
     Q_PROPERTY(qreal bottom READ bottom NOTIFY marginsChanged)
+
+    /**
+     * Width in pixels of the left and right margins combined.
+     */
+    Q_PROPERTY(qreal horizontal READ horizontal NOTIFY marginsChanged)
+
+    /**
+     * Height in pixels of the top and bottom margins combined.
+     */
+    Q_PROPERTY(qreal vertical READ vertical NOTIFY marginsChanged)
+
 
 public:
     FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent = 0);
@@ -69,6 +80,8 @@ public:
     qreal top() const;
     qreal right() const;
     qreal bottom() const;
+    qreal horizontal() const;
+    qreal vertical() const;
 
     void setFixed(bool fixed);
     bool isFixed() const;
