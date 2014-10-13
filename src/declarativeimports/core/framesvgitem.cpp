@@ -403,7 +403,8 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
-    if (!window() || !m_frameSvg || !m_frameSvg->hasElementPrefix(m_prefix)) {
+    if (!window() || !m_frameSvg ||
+        (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_prefix))) {
         delete oldNode;
         return Q_NULLPTR;
     }
