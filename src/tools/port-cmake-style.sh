@@ -1,4 +1,4 @@
-for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
+for FS in `find $PWD -type f -name 'CMakeLists.txt' -name '*.cmake'`; do
     #all commands should be lowercase
     #http://techbase.kde.org/Policies/CMake_Coding_Style#Upper.2Flower_casing
     perl -p -i -e 's/^( *)([0-9A-Z_]*)( *)\(/$1.lc($2).$3."("/ge' $FS
