@@ -437,7 +437,7 @@ void AppletQuickItem::init()
 
     d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->package().filePath("mainscript")));
 
-    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || d->qmlObject->mainComponent()->isError()) {
+    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()) {
         QString reason;
         if (d->applet->package().isValid()) {
             foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
