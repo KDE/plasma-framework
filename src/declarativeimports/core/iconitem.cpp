@@ -33,7 +33,7 @@
 #include <kiconeffect.h>
 
 #include "fadingnode_p.h"
-#include "svgtexturenode.h"
+#include <QuickAddons/ManagedTextureNode>
 #include "units.h"
 
 IconItem::IconItem(QQuickItem *parent)
@@ -249,11 +249,11 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 
         return animatingNode;
     } else {
-        Plasma::SVGTextureNode *textureNode = dynamic_cast<Plasma::SVGTextureNode*>(oldNode);
+        ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode*>(oldNode);
 
         if (!textureNode || m_textureChanged) {
             delete oldNode;
-            textureNode = new Plasma::SVGTextureNode;
+            textureNode = new ManagedTextureNode;
             textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage())));
             m_sizeChanged = true;
             m_textureChanged = false;

@@ -49,6 +49,7 @@ target_link_libraries(KF5PlasmaQuick
         KF5::CoreAddons
         KF5::XmlGui
         KF5::Declarative
+        KF5::QuickAddons
 )
 
 if(HAVE_X11)

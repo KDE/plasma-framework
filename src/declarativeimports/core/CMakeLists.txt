@@ -44,7 +44,9 @@ target_link_libraries(corebindingsplugin
         KF5::Service #for kplugininfo.h
         KF5::WindowSystem
         KF5::Plasma
-        KF5::PlasmaQuick)
+        KF5::PlasmaQuick
+        KF5::QuickAddons
+)
 
 if(HAVE_X11)
   target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )

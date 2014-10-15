@@ -30,33 +30,15 @@
 #include <plasma/private/framesvg_p.h>
 #include <plasma/private/framesvg_helpers.h>
 
-#include "svgtexturenode.h"
+#include <QuickAddons/ManagedTextureNode>
+#include <QuickAddons/ImageTexturesCache>
 
 #include <cmath> //floor()
 
 namespace Plasma
 {
 
-typedef QHash<qint64, QHash<QWindow*, QWeakPointer<QSGTexture> > > TexturesCache;
-Q_GLOBAL_STATIC(TexturesCache, s_cache)
-
-QSharedPointer<QSGTexture> loadTexture(QQuickWindow *window, const QImage &image)
-{
-    qint64 id = image.cacheKey();
-    QSharedPointer<QSGTexture> texture = s_cache->value(id).value(window).toStrongRef();
-    if (!texture) {
-        auto cleanAndDelete = [window, id](QSGTexture* texture) {
-            QHash<QWindow*, QWeakPointer<QSGTexture> >& textures = (*s_cache)[id];
-            textures.remove(window);
-            if (textures.isEmpty())
-                s_cache->remove(id);
-            delete texture;
-        };
-        texture = QSharedPointer<QSGTexture>(window->createTextureFromImage(image), cleanAndDelete);
-        (*s_cache)[id][window] = texture.toWeakRef();
-    }
-    return texture;
-}
+Q_GLOBAL_STATIC(ImageTexturesCache, s_cache)
 
 class FrameNode : public QSGNode
 {
@@ -92,7 +74,7 @@ private:
     int bottomHeight;
 };
 
-class FrameItemNode : public SVGTextureNode
+class FrameItemNode : public ManagedTextureNode
 {
 public:
     enum FitMode {
@@ -104,7 +86,7 @@ public:
     };
 
     FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)
-        : SVGTextureNode()
+        : ManagedTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
         , m_lastParent(parent)
@@ -139,7 +121,7 @@ public:
 
     void updateTexture(const QSize &size, const QString &elementId)
     {
-        setTexture(loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId)));
+        setTexture(s_cache->loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId)));
     }
 
     void reposition(const QRect& frameGeometry, QSize& fullSize)
@@ -460,10 +442,10 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             m_sizeChanged = false;
         }
     } else {
-        SVGTextureNode *textureNode = dynamic_cast<SVGTextureNode *>(oldNode);
+        ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode *>(oldNode);
         if (!textureNode) {
             delete oldNode;
-            textureNode = new SVGTextureNode;
+            textureNode = new ManagedTextureNode;
             textureNode->setFiltering(QSGTexture::Nearest);
             m_textureChanged = true; //force updating the texture on our newly created node
             oldNode = textureNode;
@@ -471,7 +453,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
 
         if ((m_textureChanged || m_sizeChanged) || textureNode->texture()->textureSize() != m_frameSvg->size()) {
             QImage image = m_frameSvg->framePixmap().toImage();
-            textureNode->setTexture(loadTexture(window(), image));
+            textureNode->setTexture(s_cache->loadTexture(window(), image));
             textureNode->setRect(0, 0, width(), height());
 
             m_textureChanged = false;

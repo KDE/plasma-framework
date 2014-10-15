@@ -31,7 +31,6 @@ namespace Plasma
 {
 
 class FrameSvg;
-class SVGTextureNode;
 
 /**
  * @class FrameSvgItemMargins

@@ -27,7 +27,7 @@
 
 #include "plasma/svg.h"
 
-#include "svgtexturenode.h"
+#include <QuickAddons/ManagedTextureNode>
 
 #include <cmath> //floor()
 
@@ -144,9 +144,9 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         return Q_NULLPTR;
     }
 
-    SVGTextureNode *textureNode = static_cast<SVGTextureNode *>(oldNode);
+    ManagedTextureNode *textureNode = static_cast<ManagedTextureNode *>(oldNode);
     if (!textureNode) {
-        textureNode = new SVGTextureNode;
+        textureNode = new ManagedTextureNode;
         textureNode->setFiltering(QSGTexture::Linear);
         m_textureChanged = true;
     }
