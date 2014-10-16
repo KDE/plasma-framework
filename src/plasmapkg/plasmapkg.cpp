@@ -146,7 +146,7 @@ void PlasmaPkg::runMain()
         } else {
             package.setPath(d->packageFile);
         }
-        if (package.isValid()) {
+        if (package.isValid() && package.metadata().isValid()) {
             serviceType = package.metadata().property("X-Plasma-ServiceType").toString();
         }
 
