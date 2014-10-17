@@ -19,21 +19,41 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Item {
+    id: root
+
     Layout.minimumWidth: 200
     Layout.minimumHeight: 300
+    Plasmoid.switchWidth: 300
+    Plasmoid.switchHeight: 300
     Plasmoid.compactRepresentation: Component {
         PlasmaComponents.Button {
             text: i18n("Click me")
             onClicked: plasmoid.expanded = !plasmoid.expanded
         }
     }
-
+    Rectangle {
+        id: rect
+        width: 100
+        height: 100
+        anchors {
+            fill: parent
+            leftMargin: VisualMargins.left
+            topMargin: VisualMargins.top
+            rightMargin: VisualMargins.right
+            bottomMargin: VisualMargins.bottom
+        }
+    }
     PlasmaComponents.Label {
-        text: i18n("Hello world")
+        text: i18n("Hello world"+tex.VisualMargins.left)
+    }
+    Text {
+        id:tex
+        text: VisualMargins.left
     }
 }
