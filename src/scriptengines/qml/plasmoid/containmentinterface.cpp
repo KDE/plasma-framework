@@ -420,14 +420,8 @@ void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
 void ContainmentInterface::dropJobResult(KJob *job)
 {
 #ifndef PLASMA_NO_KIO
-    KIO::TransferJob *tjob = dynamic_cast<KIO::TransferJob *>(job);
-    if (!tjob) {
-        qDebug() << "job is not a KIO::TransferJob, won't handle the drop...";
-        clearDataForMimeJob(tjob);
-        return;
-    }
     if (job->error()) {
-        qDebug() << "ERROR" << tjob->error() << ' ' << tjob->errorString();
+        qDebug() << "ERROR" << job->error() << ' ' << job->errorString();
     }
     // We call mimetypeRetrieved since there might be other mechanisms
     // for finding suitable applets. Cleanup happens there as well.
@@ -656,7 +650,7 @@ QList<QObject *> ContainmentInterface::actions() const
     }
 
     i = 0;
-    foreach (QAction *a, m_containment->corona()->actions()->actions()) {        
+    foreach (QAction *a, m_containment->corona()->actions()->actions()) {
         if (a->objectName() == QStringLiteral("lock widgets") || a->menu()) {
             //It is up to the Containment to decide if the user is allowed or not
             //to lock/unluck the widgets, so corona should not add one when there is none
