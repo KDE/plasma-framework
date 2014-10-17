@@ -140,36 +140,6 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
-    //heuristics for knowing the diration
-    Plasma::Types::Direction dir;
-    QPoint pos = mapToScene(QPoint(0, 0)).toPoint();
-
-    if (window() && window()->screen()) {
-        pos = window()->mapToGlobal(pos);
-    }
-    QPoint popupPos = dlg->popupPosition(this, dlg->size());
-
-    if (location == Plasma::Types::Floating) {
-        dir = Plasma::Types::Up;
-
-        if (pos.y() + height() <= popupPos.y()) {
-            dir = Plasma::Types::Down;
-        } else if (pos.x() + width() <= popupPos.x()) {
-            dir = Plasma::Types::Right;
-        } else if (pos.y() >= popupPos.y() + dlg->height()) {
-            dir = Plasma::Types::Up;
-        } else if (pos.x() >= popupPos.x() + dlg->width()) {
-            dir = Plasma::Types::Left;
-        }
-    } else {
-        dir = Plasma::locationToDirection(location);
-        if (dir == Plasma::Types::Left && (pos.x() + width() <= popupPos.x())) {
-            dir = Plasma::Types::Right;
-        } else if (dir == Plasma::Types::Up && (pos.y() + height() <= popupPos.y())) {
-            dir = Plasma::Types::Down;
-        }
-    }
-
     dlg->setLocation(location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
