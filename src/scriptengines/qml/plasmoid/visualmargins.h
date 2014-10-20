@@ -77,7 +77,7 @@ private Q_SLOTS:
 
 private:
 
-    QPointer<QQuickWindow> m_window;
+    QPointer<QObject> m_marginsObject;
 };
 
 QML_DECLARE_TYPEINFO(VisualMargins, QML_HAS_ATTACHED_PROPERTIES)

@@ -36,23 +36,30 @@ VisualMargins::~VisualMargins()
 
 void VisualMargins::connectMarginObject(QQuickWindow *window)
 {
-    m_window = window;
+    if (m_marginsObject) {
+        disconnect(m_marginsObject, SIGNAL(marginsChanged()), this, SIGNAL(marginsChanged()));
+    }
 
-    //TODO: connect to changed of the margins object
+    if (!window) {
+        return;
+    }
+
+    m_marginsObject = window->property("margins").value<QObject *>();
+
+    if (m_marginsObject) {
+        connect(m_marginsObject, SIGNAL(marginsChanged()), this, SIGNAL(marginsChanged()));
+    }
+
     emit marginsChanged();
 }
 
 qreal VisualMargins::marginProperty(const QString &prop) const
 {
-    if (!m_window) {
+    if (!m_marginsObject) {
         return 0;
     }
 
-    QObject *marginProperty = m_window->property("margins").value<QObject *>();
-    if (!marginProperty) {
-        return 0;
-    }
-    return marginProperty->property(prop.toLatin1()).value<qreal>();
+    return m_marginsObject->property(prop.toLatin1()).value<qreal>();
 }
 
 qreal VisualMargins::left() const
