@@ -117,6 +117,9 @@ public:
 
     void syncToMainItemSize();
 
+    bool mainItemContainsPosition(const QPointF &point) const;
+    QPointF positionAdjustedForMainItem(const QPointF &point) const;
+
     Dialog *q;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
@@ -310,7 +313,7 @@ void DialogPrivate::updateMinimumWidth()
     //the flicker almost always happen anyways, so is *probably* useless
     //this other kind of flicker is the view not being always focused exactly
     //on the scene
-    auto margin = frameSvgItem->margins();
+    auto margin = frameSvgItem->fixedMargins();
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt() + margin->left() + margin->right();
     q->contentItem()->setHeight(qMax(q->width(), minimumWidth));
     q->setHeight(qMax(q->width(), minimumWidth));
@@ -333,7 +336,7 @@ void DialogPrivate::updateMinimumHeight()
     //the flicker almost always happen anyways, so is *probably* useless
     //this other kind of flicker is the view not being always focused exactly
     //on the scene
-    auto margin = frameSvgItem->margins();
+    auto margin = frameSvgItem->fixedMargins();
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt() + margin->top() + margin->bottom();
     q->contentItem()->setHeight(qMax(q->height(), minimumHeight));
     q->setHeight(qMax(q->height(), minimumHeight));
@@ -352,7 +355,7 @@ void DialogPrivate::updateMaximumWidth()
 
     q->setMaximumWidth(DIALOGSIZE_MAX);
 
-    auto margin = frameSvgItem->margins();
+    auto margin = frameSvgItem->fixedMargins();
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt() + margin->left() + margin->right();
     q->contentItem()->setHeight(qMax(q->width(), maximumWidth));
     q->setHeight(qMax(q->width(), maximumWidth));
@@ -371,7 +374,7 @@ void DialogPrivate::updateMaximumHeight()
 
     q->setMaximumHeight(DIALOGSIZE_MAX);
 
-    auto margin = frameSvgItem->margins();
+    auto margin = frameSvgItem->fixedMargins();
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt() + margin->top() + margin->bottom();
     q->contentItem()->setHeight(qMax(q->height(), maximumHeight));
     q->setHeight(qMin(q->height(), maximumHeight));
@@ -389,7 +392,7 @@ void DialogPrivate::updateLayoutParameters()
 
     mainItem->disconnect(q);
 
-    auto margin = frameSvgItem->margins();
+    auto margin = frameSvgItem->fixedMargins();
 
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
@@ -539,8 +542,8 @@ void DialogPrivate::syncToMainItemSize()
     }
 
     const QSize s = QSize(mainItem->width(), mainItem->height()) +
-                    QSize(frameSvgItem->margins()->left() + frameSvgItem->margins()->right(),
-                          frameSvgItem->margins()->top() + frameSvgItem->margins()->bottom());
+                    QSize(frameSvgItem->fixedMargins()->left() + frameSvgItem->fixedMargins()->right(),
+                          frameSvgItem->fixedMargins()->top() + frameSvgItem->fixedMargins()->bottom());
 
     q->contentItem()->setSize(s);
 
@@ -561,8 +564,8 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
 
-    mainItem->setPosition(QPointF(frameSvgItem->margins()->left(),
-                            frameSvgItem->margins()->top()));
+    mainItem->setPosition(QPointF(frameSvgItem->fixedMargins()->left(),
+                            frameSvgItem->fixedMargins()->top()));
 
     updateTheme();
 }
@@ -579,12 +582,33 @@ void DialogPrivate::slotWindowPositionChanged()
     updateTheme();
 
     if (mainItem) {
-        auto margin = frameSvgItem->margins();
+        auto margin = frameSvgItem->fixedMargins();
         mainItem->setX(margin->left());
         mainItem->setY(margin->top());
         mainItem->setWidth(q->width() - margin->left() - margin->right());
         mainItem->setHeight(q->height() - margin->top() - margin->bottom());
     }
+}
+
+bool DialogPrivate::mainItemContainsPosition(const QPointF &point) const
+{
+    if (!mainItem) {
+        return false;
+    }
+
+    return QRectF(mainItem->mapToScene(QPoint(0,0)), QSizeF(mainItem->width(), mainItem->height())).contains(point);
+}
+
+QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
+{
+    if (!mainItem) {
+        return point;
+    }
+
+    QRectF itemRect(mainItem->mapToScene(QPoint(0,0)), QSizeF(mainItem->width(), mainItem->height()));
+
+    return QPointF(qBound(itemRect.left(), point.x(), itemRect.right()),
+                   qBound(itemRect.top(), point.y(), itemRect.bottom()));
 }
 
 Dialog::Dialog(QQuickItem *parent)
@@ -867,7 +891,7 @@ void Dialog::setLocation(Plasma::Types::Location location)
 
 QObject *Dialog::margins() const
 {
-    return d->frameSvgItem->margins();
+    return d->frameSvgItem->fixedMargins();
 }
 
 void Dialog::setFramelessFlags(Qt::WindowFlags flags)
@@ -894,7 +918,7 @@ void Dialog::resizeEvent(QResizeEvent* re)
 
     d->frameSvgItem->setSize(QSizeF(re->size().width(),
                                 re->size().height()));
-    auto margin = d->frameSvgItem->margins();
+    auto margin = d->frameSvgItem->fixedMargins();
     d->mainItem->setPosition(QPointF(margin->left(),
                                 margin->top()));
     d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(),
@@ -990,6 +1014,69 @@ bool Dialog::event(QEvent *event)
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
+    }
+
+    /*Fitt's law: if the containment has margins, and the mouse cursor clicked
+     * on the mouse edge, forward the click in the containment boundaries
+     */
+    switch (event->type()) {
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease: {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+            if (!d->mainItemContainsPosition(me->windowPos())) {
+                QMouseEvent me2(me->type(),
+                                d->positionAdjustedForMainItem(me->windowPos()),
+                                d->positionAdjustedForMainItem(me->windowPos()),
+                                d->positionAdjustedForMainItem(me->windowPos()) + position(),
+                                me->button(), me->buttons(), me->modifiers());
+
+                QCoreApplication::sendEvent(this, &me2);
+                return true;
+            }
+            break;
+        }
+
+        case QEvent::DragEnter: {
+            QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                    de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+
+                QCoreApplication::sendEvent(this, &de2);
+                return true;
+            }
+            break;
+        }
+        //DragLeave just works
+        case QEvent::DragLeave:
+            break;
+        case QEvent::DragMove: {
+            QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                   de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+
+                QCoreApplication::sendEvent(this, &de2);
+                return true;
+            }
+            break;
+        }
+        case QEvent::Drop: {
+            QDropEvent *de = static_cast<QDropEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                               de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+
+                QCoreApplication::sendEvent(this, &de2);
+                return true;
+            }
+            break;
+        }
+
+        default:
+            break;
     }
 
     const bool retval = QQuickWindow::event(event);
