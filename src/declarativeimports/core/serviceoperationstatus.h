@@ -20,6 +20,7 @@
 #define SERVICEOPERATIONSTATUS_P
 
 #include <QObject>
+#include <QSharedPointer>
 
 #include "plasma/service.h"
 
