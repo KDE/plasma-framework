@@ -40,6 +40,7 @@
 #include "serviceoperationstatus.h"
 #include "colorscope.h"
 #include "quicktheme.h"
+#include "visualmargins.h"
 
 #include "tooltip.h"
 #include "units.h"
@@ -98,6 +99,9 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
+
+    qmlRegisterUncreatableType<VisualMargins>(uri, 2, 0, "VisualMargins",
+            QLatin1String("Do not create objects of type VisualMargins"));
 
     qmlRegisterType<QQmlPropertyMap>();
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");

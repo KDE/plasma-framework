@@ -404,7 +404,7 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     //at the moment of the attached object creation, the root item is the only one that hasn't a parent
     //only way to avoid creation of this attached for everybody but the root item
-    if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
+    if (AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
         return AppletQuickItemPrivate::s_rootObjects.value(QtQml::qmlEngine(object));
     } else {
         return 0;

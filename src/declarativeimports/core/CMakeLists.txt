@@ -31,6 +31,7 @@ set(corebindings_SRCS
     dataenginebindings.cpp
     iconitem.cpp
     units.cpp
+    visualmargins.cpp
     windowthumbnail.cpp
     )
 

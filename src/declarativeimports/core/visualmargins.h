@@ -33,51 +33,56 @@ class VisualMargins : public QObject
     /**
      * Width in pixels of the left margin.
      */
-    Q_PROPERTY(qreal left READ left NOTIFY marginsChanged)
+    Q_PROPERTY(qreal left READ left WRITE setLeft NOTIFY marginsChanged)
 
     /**
      * Height in pixels of the top margin.
      */
-    Q_PROPERTY(qreal top READ top NOTIFY marginsChanged)
+    Q_PROPERTY(qreal top READ top WRITE setTop NOTIFY marginsChanged)
 
     /**
      * Width in pixels of the right margin.
      */
-    Q_PROPERTY(qreal right READ right NOTIFY marginsChanged)
+    Q_PROPERTY(qreal right READ right WRITE setRight NOTIFY marginsChanged)
 
     /**
      * Height in pixels of the bottom margin.
      */
-    Q_PROPERTY(qreal bottom READ bottom NOTIFY marginsChanged)
+    Q_PROPERTY(qreal bottom READ bottom WRITE setBottom NOTIFY marginsChanged)
 
-    qreal marginProperty(const QString &prop) const;
+    Q_PROPERTY(QObject *other READ binded WRITE bindTo)
 
 public:
     VisualMargins(QObject *parent = 0);
     ~VisualMargins();
 
     qreal left() const;
+    void setLeft(qreal left);
     qreal top() const;
+    void setTop(qreal top);
     qreal right() const;
+    void setRight(qreal right);
     qreal bottom() const;
-    qreal horizontal() const;
-    qreal vertical() const;
+    void setBottom(qreal bottom);
 
-    static VisualMargins *qmlAttachedProperties(QObject *object)
-    {
-        return new VisualMargins(object);
-    }
+    Q_INVOKABLE void bindTo(QObject *other);
+    QObject *binded() const {return m_other.data();}
 
+    static VisualMargins *qmlAttachedProperties(QObject *object);
 
 Q_SIGNALS:
     void marginsChanged();
 
 private Q_SLOTS:
-    void connectMarginObject(QQuickWindow *window);
+    void updateMarginsFromOther();
 
 private:
+    qreal m_left;
+    qreal m_top;
+    qreal m_right;
+    qreal m_bottom;
 
-    QPointer<QObject> m_marginsObject;
+    QPointer<VisualMargins> m_other;
 };
 
 QML_DECLARE_TYPEINFO(VisualMargins, QML_HAS_ATTACHED_PROPERTIES)
