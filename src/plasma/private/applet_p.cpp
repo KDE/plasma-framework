@@ -220,6 +220,13 @@ void AppletPrivate::askDestroy()
         return; //don't double delete
     }
 
+    if (itemStatus == Types::AwaitingDeletionStatus) {
+        transient = true;
+        cleanUpAndDelete();
+    } else {
+        q->setStatus(Types::AwaitingDeletionStatus);
+    }
+    /*
     if (q->isContainment()) {
         QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
         box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
@@ -238,10 +245,9 @@ void AppletPrivate::askDestroy()
         });
 
         return;
-    }
+    }*/
 
-    transient = true;
-    cleanUpAndDelete();
+    
 }
 
 void AppletPrivate::globalShortcutChanged()
