@@ -115,6 +115,9 @@ void ContainmentPrivate::configChanged()
 
 void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
+    if (appletStatus == Types::AwaitingDeletionStatus) {
+        return;
+    }
     //qDebug() << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
         emit q->statusChanged(appletStatus);
