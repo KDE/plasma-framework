@@ -1025,7 +1025,9 @@ bool Dialog::event(QEvent *event)
         case QEvent::MouseButtonRelease: {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-            if (!d->mainItemContainsPosition(me->windowPos())) {
+            //don't mess with position if the cursor is actually outside the view:
+            //somebody is doing a click and drag that must not break when the cursor i outside
+            if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
                 QMouseEvent me2(me->type(),
                                 d->positionAdjustedForMainItem(me->windowPos()),
                                 d->positionAdjustedForMainItem(me->windowPos()),
