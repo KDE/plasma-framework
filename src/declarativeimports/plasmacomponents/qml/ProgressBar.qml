@@ -83,8 +83,8 @@ Item {
         id: background
 
         anchors.centerIn: parent
-        width: _isVertical ? barSvg.elementSize("hint-bar-size").width * Math.floor(units.devicePixelRatio) : parent.width
-        height: _isVertical ? parent.height : barSvg.elementSize("hint-bar-size").height * Math.floor(units.devicePixelRatio)
+        width: _isVertical ? barSvg.implicitWidth * Math.floor(units.devicePixelRatio) : parent.width
+        height: _isVertical ? parent.height : barSvg.implicitHeight * Math.floor(units.devicePixelRatio)
 
         imagePath: barSvg.imagePath
         prefix: "bar-inactive"
@@ -110,6 +110,12 @@ Item {
         PlasmaCore.Svg {
             id: barSvg
             imagePath: orientation == Qt.Vertical ? "widgets/bar_meter_vertical" : "widgets/bar_meter_horizontal"
+            property int preferredWidth
+            property int preferredHeight
+            onRepaintNeeded: {
+                preferredWidth = barSvg.elementSize("hint-bar-size").width 
+                preferredHeight = barSvg.elementSize("hint-bar-size").height
+            }
         }
     }
 
