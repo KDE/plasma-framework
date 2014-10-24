@@ -159,6 +159,17 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
         }
     }
 
+    /*
+     * if the heuristic fails (because the topleft of the dialog is offscreen)
+     * use at least our screen()
+     * the screen should be correctly updated now on Qt 5.3+ so should be
+     * more reliable anyways (could be tried to remove the whole Q_FOREACH
+     * at this point)
+     */
+    if (avail.isEmpty()) {
+        avail = q->screen()->availableGeometry();
+    }
+
     return avail;
 }
 
