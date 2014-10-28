@@ -719,7 +719,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     Plasma::Applet *applet = 0;
     foreach (QObject *appletObject, m_appletInterfaces) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
-            if (ai->contains(ai->mapFromItem(this, event->posF()))) {
+            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->posF()))) {
                 applet = ai->applet();
                 emit ai->contextualActionsAboutToShow();
                 break;
