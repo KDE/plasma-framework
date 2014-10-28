@@ -35,6 +35,7 @@
 #include <kglobalaccel.h>
 #include <KConfigLoader>
 #include <KServiceTypeTrader>
+#include <knotification.h>
 
 #include "containment.h"
 #include "corona.h"
@@ -225,6 +226,17 @@ void AppletPrivate::askDestroy()
         cleanUpAndDelete();
     } else {
         q->setStatus(Types::AwaitingDeletionStatus);
+        KNotification *notification = new KNotification("plasmoidDeleted", KNotification::Persistent |
+                                                        KNotification::CloseWhenWidgetActivated, q);
+        QStringList actions;
+        notification->setText(i18n("The widget \"%1\" has been deleted.", q->title()));
+        actions.append(i18n("Undo"));
+        notification->setActions(actions);
+        QObject::connect(notification, &KNotification::action1Activated,
+                [=]() {
+                    q->setStatus(Types::PassiveStatus);
+                });
+        notification->sendEvent();
     }
     /*
     if (q->isContainment()) {
@@ -246,8 +258,6 @@ void AppletPrivate::askDestroy()
 
         return;
     }*/
-
-    
 }
 
 void AppletPrivate::globalShortcutChanged()

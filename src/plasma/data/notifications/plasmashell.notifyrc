@@ -1,0 +1,9 @@
+[Global]
+IconName=plasma
+Comment=Plasma
+Name=plasmashell
+
+[Event/plasmoidDeleted]
+Name=Plasmoid deleted
+Comment=A plasmoid has been deleted
+Action=Popup
