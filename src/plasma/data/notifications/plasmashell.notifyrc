@@ -1,7 +1,7 @@
 [Global]
 IconName=plasma
-Comment=Plasma
-Name=plasmashell
+Comment=Plasma Workspace
+Name=Plasma
 
 [Event/plasmoidDeleted]
 Name=Plasmoid deleted
