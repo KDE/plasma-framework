@@ -251,6 +251,15 @@ void AppletPrivate::askDestroy()
                         deleteNotificationTimer = 0;
                     }
                 });
+        QObject::connect(deleteNotification.data(), &KNotification::closed,
+                [=]() {
+                    //If the timer still exists, it meand the undo action was NOT triggered
+                    if (deleteNotificationTimer) {
+                        transient = true;
+                        cleanUpAndDelete();
+                    }
+                });
+
         deleteNotification->sendEvent();
         if (!deleteNotificationTimer) {
             deleteNotificationTimer = new QTimer(q);
