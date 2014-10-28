@@ -230,6 +230,8 @@ void AppletPrivate::askDestroy()
         transient = true;
         cleanUpAndDelete();
     } else {
+        //There is no confirmation anymore for panels removal:
+        //this needs users feedback
         q->setStatus(Types::AwaitingDeletionStatus);
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
@@ -266,26 +268,6 @@ void AppletPrivate::askDestroy()
             deleteNotificationTimer->start();
         }
     }
-    /*
-    if (q->isContainment()) {
-        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
-        box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
-        box->open();
-
-        QObject::connect(q, &Applet::immutabilityChanged, [=] () {
-            box->close();
-        });
-        QObject::connect(q, &QObject::destroyed, [=] () {
-            box->close();
-        });
-        QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
-        [ = ]() {
-            transient = true;
-            cleanUpAndDelete();
-        });
-
-        return;
-    }*/
 }
 
 void AppletPrivate::globalShortcutChanged()
