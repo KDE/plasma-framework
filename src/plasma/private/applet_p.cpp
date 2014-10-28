@@ -27,6 +27,7 @@
 
 #include <QFile>
 #include <qstandardpaths.h>
+#include <QTimer>
 
 #include <QDebug>
 #include <QMessageBox>
@@ -35,7 +36,6 @@
 #include <kglobalaccel.h>
 #include <KConfigLoader>
 #include <KServiceTypeTrader>
-#include <knotification.h>
 
 #include "containment.h"
 #include "corona.h"
@@ -63,6 +63,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       activationAction(0),
       itemStatus(Types::UnknownStatus),
       modificationsTimer(0),
+      deleteNotificationTimer(0),
       hasConfigurationInterface(false),
       failed(false),
       transient(false),
@@ -88,6 +89,10 @@ AppletPrivate::~AppletPrivate()
     if (activationAction && globalShortcutEnabled) {
         //qDebug() << "resetting global action for" << q->title() << activationAction->objectName();
         KGlobalAccel::self()->removeAllShortcuts(activationAction);
+    }
+
+    if (deleteNotification) {
+        deleteNotification->close();
     }
 
     delete script;
@@ -226,17 +231,40 @@ void AppletPrivate::askDestroy()
         cleanUpAndDelete();
     } else {
         q->setStatus(Types::AwaitingDeletionStatus);
-        KNotification *notification = new KNotification("plasmoidDeleted", KNotification::Persistent |
-                                                        KNotification::CloseWhenWidgetActivated, q);
+        //no parent, but it won't leak, since it will be closed both in case of timeout
+        //or direct action
+        deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
         QStringList actions;
-        notification->setText(i18n("The widget \"%1\" has been deleted.", q->title()));
+        deleteNotification->setText(i18n("The widget \"%1\" has been deleted.", q->title()));
         actions.append(i18n("Undo"));
-        notification->setActions(actions);
-        QObject::connect(notification, &KNotification::action1Activated,
+        deleteNotification->setActions(actions);
+        QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
                     q->setStatus(Types::PassiveStatus);
+                    if (deleteNotification) {
+                        deleteNotification->close();
+                    }
+                    if (deleteNotificationTimer) {
+                        delete deleteNotificationTimer;
+                        deleteNotificationTimer = 0;
+                    }
                 });
-        notification->sendEvent();
+        deleteNotification->sendEvent();
+        if (!deleteNotificationTimer) {
+            deleteNotificationTimer = new QTimer(q);
+            //really delete after 2 minutes
+            deleteNotificationTimer->setInterval(2 * 60 * 1000);
+            deleteNotificationTimer->setSingleShot(true);
+            QObject::connect(deleteNotificationTimer, &QTimer::timeout,
+                [=]() {
+                    if (deleteNotification) {
+                        deleteNotification->close();
+                    }
+                    transient = true;
+                    cleanUpAndDelete();
+                });
+            deleteNotificationTimer->start();
+        }
     }
     /*
     if (q->isContainment()) {

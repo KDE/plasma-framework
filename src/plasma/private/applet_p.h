@@ -29,6 +29,7 @@
 #include <kconfigskeleton.h>
 #include <kservice.h>
 #include <kplugininfo.h>
+#include <knotification.h>
 
 #include "plasma/applet.h"
 
@@ -103,6 +104,9 @@ public:
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;
     QBasicTimer *modificationsTimer;
+
+    QPointer <KNotification> deleteNotification;
+    QTimer *deleteNotificationTimer;
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;
