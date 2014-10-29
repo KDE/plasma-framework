@@ -29,7 +29,7 @@
 #include <kconfigskeleton.h>
 #include <kservice.h>
 #include <kplugininfo.h>
-#include <knotification.h>
+#include <KNotification>
 
 #include "plasma/applet.h"
 
