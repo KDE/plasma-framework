@@ -100,6 +100,7 @@ public:
     QAction *activationAction;
 
     Types::ItemStatus itemStatus;
+    Types::ItemStatus oldItemStatus;
 
     // timerEvent bookkeeping
     QBasicTimer constraintsTimer;

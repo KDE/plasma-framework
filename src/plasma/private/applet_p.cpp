@@ -62,6 +62,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       actions(AppletPrivate::defaultActions(applet)),
       activationAction(0),
       itemStatus(Types::UnknownStatus),
+      oldItemStatus(Types::UnknownStatus),
       modificationsTimer(0),
       deleteNotificationTimer(0),
       hasConfigurationInterface(false),
@@ -232,6 +233,7 @@ void AppletPrivate::askDestroy()
     } else {
         //There is no confirmation anymore for panels removal:
         //this needs users feedback
+        oldItemStatus = itemStatus;
         q->setStatus(Types::AwaitingDeletionStatus);
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
@@ -242,7 +244,7 @@ void AppletPrivate::askDestroy()
         deleteNotification->setActions(actions);
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
-                    q->setStatus(Types::PassiveStatus);
+                    q->setStatus(qMax(oldItemStatus, Types::UnknownStatus));
                     if (deleteNotification) {
                         deleteNotification->close();
                     }
