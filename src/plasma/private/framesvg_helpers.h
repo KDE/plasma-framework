@@ -33,27 +33,26 @@ namespace FrameSvgHelpers
  */
 QString borderToElementId(FrameSvg::EnabledBorders borders)
 {
-    switch(borders) {
-        case FrameSvg::NoBorder:
-            return QStringLiteral("center");
-        case FrameSvg::TopBorder:
-            return QStringLiteral("top");
-        case FrameSvg::BottomBorder:
-            return QStringLiteral("bottom");
-        case FrameSvg::LeftBorder:
-            return QStringLiteral("left");
-        case FrameSvg::RightBorder:
-            return QStringLiteral("right");
-        case FrameSvg::TopBorder | FrameSvg::LeftBorder:
-            return QStringLiteral("topleft");
-        case FrameSvg::TopBorder | FrameSvg::RightBorder:
-            return QStringLiteral("topright");
-        case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
-            return QStringLiteral("bottomleft");
-        case FrameSvg::BottomBorder | FrameSvg::RightBorder:
-            return QStringLiteral("bottomright");
-        default:
-            qWarning() << "unrecognized border" << borders;
+    if (borders == FrameSvg::NoBorder) {
+        return QStringLiteral("center");
+    } else if (borders == FrameSvg::TopBorder) {
+        return QStringLiteral("top");
+    } else if (borders == FrameSvg::BottomBorder) {
+        return QStringLiteral("bottom");
+    } else if (borders == FrameSvg::LeftBorder) {
+        return QStringLiteral("left");
+    } else if (borders == FrameSvg::RightBorder) {
+        return QStringLiteral("right");
+    } else if (borders == (FrameSvg::TopBorder | FrameSvg::LeftBorder)) {
+        return QStringLiteral("topleft");
+    } else if (borders == (FrameSvg::TopBorder | FrameSvg::RightBorder)) {
+        return QStringLiteral("topright");
+    } else if (borders == (FrameSvg::BottomBorder | FrameSvg::LeftBorder)) {
+        return QStringLiteral("bottomleft");
+    } else if (borders == (FrameSvg::BottomBorder | FrameSvg::RightBorder)) {
+        return QStringLiteral("bottomright");
+    } else {
+        qWarning() << "unrecognized border" << borders;
     }
     return QString();
 }
@@ -67,28 +66,26 @@ QRect sectionRect(Plasma::FrameSvg::EnabledBorders borders, const QRect& content
     //prefer constructing the points explicitly. e.g. from QRect::topRight docs:
     //Note that for historical reasons this function returns QPoint(left() + width() -1, top()).
 
-    switch(borders) {
-        case FrameSvg::NoBorder:
-            return contentRect;
-        case FrameSvg::TopBorder:
-            return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), contentRect.top()));
-        case FrameSvg::BottomBorder:
-            return QRect(QPoint(contentRect.left(), contentRect.bottom()+1), QSize(contentRect.width(), fullSize.height()-contentRect.bottom()-1));
-        case FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.top()), QSize(contentRect.left(), contentRect.height()));
-        case FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, contentRect.top()), QSize(fullSize.width()-contentRect.right()-1, contentRect.height()));
-        case FrameSvg::TopBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, 0), QSize(contentRect.left(), contentRect.top()));
-        case FrameSvg::TopBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, 0), QSize(fullSize.width()-contentRect.right()-1, contentRect.top()));
-        case FrameSvg::BottomBorder | FrameSvg::LeftBorder:
-            return QRect(QPoint(0, contentRect.bottom()+1), QSize(contentRect.left(), fullSize.height()-contentRect.bottom()-1));
-        case FrameSvg::BottomBorder | FrameSvg::RightBorder:
-            return QRect(QPoint(contentRect.right()+1, contentRect.bottom()+1), QSize(fullSize.width()-contentRect.right()-1, fullSize.height()-contentRect.bottom()-1));
-        default:
-            qWarning() << "unrecognized border" << borders;
-            return QRect();
+    if (borders == FrameSvg::NoBorder) {
+        return contentRect;
+    } else if (borders == FrameSvg::TopBorder) {
+        return QRect(QPoint(contentRect.left(), 0), QSize(contentRect.width(), contentRect.top()));
+    } else if (borders == FrameSvg::BottomBorder) {
+        return QRect(QPoint(contentRect.left(), contentRect.bottom()+1), QSize(contentRect.width(), fullSize.height()-contentRect.bottom()-1));
+    } else if (borders == FrameSvg::LeftBorder) {
+        return QRect(QPoint(0, contentRect.top()), QSize(contentRect.left(), contentRect.height()));
+    } else if (borders == FrameSvg::RightBorder) {
+        return QRect(QPoint(contentRect.right()+1, contentRect.top()), QSize(fullSize.width()-contentRect.right()-1, contentRect.height()));
+    } else if (borders == (FrameSvg::TopBorder | FrameSvg::LeftBorder)) {
+        return QRect(QPoint(0, 0), QSize(contentRect.left(), contentRect.top()));
+    } else if (borders == (FrameSvg::TopBorder | FrameSvg::RightBorder)) {
+        return QRect(QPoint(contentRect.right()+1, 0), QSize(fullSize.width()-contentRect.right()-1, contentRect.top()));
+    } else if (borders == (FrameSvg::BottomBorder | FrameSvg::LeftBorder)) {
+        return QRect(QPoint(0, contentRect.bottom()+1), QSize(contentRect.left(), fullSize.height()-contentRect.bottom()-1));
+    } else if (borders == (FrameSvg::BottomBorder | FrameSvg::RightBorder)) {
+        return QRect(QPoint(contentRect.right()+1, contentRect.bottom()+1), QSize(fullSize.width()-contentRect.right()-1, fullSize.height()-contentRect.bottom()-1));
+    } else {
+        qWarning() << "unrecognized border" << borders;
     }
     return QRect();
 }
