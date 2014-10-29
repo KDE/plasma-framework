@@ -4,6 +4,6 @@ Comment=Plasma Workspace
 Name=Plasma
 
 [Event/plasmoidDeleted]
-Name=Plasmoid deleted
-Comment=A plasmoid has been deleted
+Name=Widget deleted
+Comment=A widget has been deleted
 Action=Popup
