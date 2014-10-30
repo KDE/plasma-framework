@@ -73,6 +73,11 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 
+    connect(applet(), &Plasma::Applet::destroyedChanged,
+            [=] () {
+                setVisible(!applet()->destroyed());
+            });
+
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
 
@@ -124,6 +129,11 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
 
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
+
+    connect(applet(), &Plasma::Applet::destroyedChanged,
+            [=] () {
+                setVisible(!applet()->destroyed());
+            });
 
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);

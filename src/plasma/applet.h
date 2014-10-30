@@ -383,6 +383,13 @@ Q_SIGNALS:
      */
     void statusChanged(Plasma::Types::ItemStatus status);
 
+    /**
+     * Emitted when the applet has been scheduled for destruction
+     * or the destruction has been undone
+     * @since 5.4
+     */
+    void destroyedChanged(bool destroyed);
+
 //CONFIGURATION
     /**
      * Emitted when an applet has changed values in its configuration

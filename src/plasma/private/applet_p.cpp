@@ -232,6 +232,7 @@ void AppletPrivate::askDestroy()
         //There is no confirmation anymore for panels removal:
         //this needs users feedback
         transient = true;
+        emit q->destroyedChanged(true);
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
@@ -242,6 +243,7 @@ void AppletPrivate::askDestroy()
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
                     transient = false;
+                    emit q->destroyedChanged(false);
                     if (!q->isContainment() && q->containment()) {
                         //make sure the applets are sorted by id
                         auto position = std::lower_bound(q->containment()->d->applets.begin(), q->containment()->d->applets.end(), q, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
@@ -263,6 +265,7 @@ void AppletPrivate::askDestroy()
                     //If the timer still exists, it meand the undo action was NOT triggered
                     if (deleteNotificationTimer) {
                         transient = true;
+                        emit q->destroyedChanged(true);
                         cleanUpAndDelete();
                     }
                 });
@@ -279,6 +282,7 @@ void AppletPrivate::askDestroy()
                         deleteNotification->close();
                     }
                     transient = true;
+                    emit q->destroyedChanged(true);
                     cleanUpAndDelete();
                 });
             deleteNotificationTimer->start();
