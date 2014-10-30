@@ -1051,6 +1051,21 @@ bool Dialog::event(QEvent *event)
             break;
         }
 
+    case QEvent::Wheel: {
+        QWheelEvent *we = static_cast<QWheelEvent *>(event);
+
+        if (!d->mainItemContainsPosition(we->pos())) {
+            QWheelEvent we2(d->positionAdjustedForMainItem(we->pos()),
+                            d->positionAdjustedForMainItem(we->pos()) + position(),
+                            we->pixelDelta(), we->angleDelta(), we->delta(),
+                            we->orientation(), we->buttons(), we->modifiers(), we->phase());
+
+            QCoreApplication::sendEvent(this, &we2);
+            return true;
+        }
+        break;
+    }
+
         case QEvent::DragEnter: {
             QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
             if (!d->mainItemContainsPosition(de->pos())) {
