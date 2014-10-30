@@ -237,6 +237,7 @@ void AppletPrivate::askDestroy()
         //or direct action
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
         QStringList actions;
+        deleteNotification->setIconName(q->icon());
         deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
         actions.append(i18n("Undo"));
         deleteNotification->setActions(actions);
