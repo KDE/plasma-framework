@@ -104,8 +104,7 @@ Applet::Applet(const QString &packagePath, uint appletId)
 
 Applet::~Applet()
 {
-    if (status() == Types::AwaitingDeletionStatus) {
-        d->transient = true;
+    if (d->transient) {
         d->resetConfigurationObject();
     }
     //let people know that i will die

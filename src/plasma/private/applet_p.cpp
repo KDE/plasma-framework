@@ -62,7 +62,6 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       actions(AppletPrivate::defaultActions(applet)),
       activationAction(0),
       itemStatus(Types::UnknownStatus),
-      oldItemStatus(Types::UnknownStatus),
       modificationsTimer(Q_NULLPTR),
       deleteNotificationTimer(Q_NULLPTR),
       hasConfigurationInterface(false),
@@ -227,14 +226,12 @@ void AppletPrivate::askDestroy()
         return; //don't double delete
     }
 
-    if (itemStatus == Types::AwaitingDeletionStatus) {
-        transient = true;
+    if (transient) {
         cleanUpAndDelete();
     } else {
         //There is no confirmation anymore for panels removal:
         //this needs users feedback
-        oldItemStatus = itemStatus;
-        q->setStatus(Types::AwaitingDeletionStatus);
+        transient = true;
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
@@ -244,7 +241,15 @@ void AppletPrivate::askDestroy()
         deleteNotification->setActions(actions);
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
-                    q->setStatus(qMax(oldItemStatus, Types::UnknownStatus));
+                    transient = false;
+                    if (!q->isContainment() && q->containment()) {
+                        //make sure the applets are sorted by id
+                        auto position = std::lower_bound(q->containment()->d->applets.begin(), q->containment()->d->applets.end(), q, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
+                            return a1->id() < a2->id();
+                        });
+                        q->containment()->d->applets.insert(position, q);
+                        emit q->containment()->appletAdded(q);
+                    }
                     if (deleteNotification) {
                         deleteNotification->close();
                     }
@@ -277,6 +282,10 @@ void AppletPrivate::askDestroy()
                     cleanUpAndDelete();
                 });
             deleteNotificationTimer->start();
+        }
+        if (!q->isContainment() && q->containment()) {
+            q->containment()->d->applets.removeAll(q);
+            emit q->containment()->appletRemoved(q);
         }
     }
 }
