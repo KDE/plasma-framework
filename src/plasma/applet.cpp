@@ -104,6 +104,9 @@ Applet::Applet(const QString &packagePath, uint appletId)
 
 Applet::~Applet()
 {
+    if (d->transient) {
+        d->resetConfigurationObject();
+    }
     //let people know that i will die
     emit appletDeleted(this);
 
@@ -255,6 +258,7 @@ void Applet::destroy()
     }
 
     d->transient = true;
+    emit destroyedChanged(true);
     //FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
     d->cleanUpAndDelete();
 }

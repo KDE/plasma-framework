@@ -1,0 +1,9 @@
+[Global]
+IconName=plasma
+Comment=Plasma Workspace
+Name=Plasma
+
+[Event/plasmoidDeleted]
+Name=Widget deleted
+Comment=A widget has been deleted
+Action=Popup

@@ -369,7 +369,10 @@ private:
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_hideOnDeactivate : 1;
+
     friend class ContainmentInterface;
+    //This is used by ContainmentInterface
+    QPointF m_positionBeforeRemoval;
 };
 
 QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)

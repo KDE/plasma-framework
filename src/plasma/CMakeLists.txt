@@ -125,6 +125,7 @@ PRIVATE
     KF5::Declarative #runtimePlatform
     KF5::XmlGui   #KActionCollection
     KF5::GlobalAccel #Applet::setGlobalShortcut
+    KF5::Notifications
     ${PLASMA_EXTRA_LIBS}
 )
 
@@ -201,6 +202,7 @@ install(FILES
 install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
+install(FILES data/notifications/plasmashell.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
 
 install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

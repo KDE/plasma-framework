@@ -27,6 +27,7 @@
 
 #include <QFile>
 #include <qstandardpaths.h>
+#include <QTimer>
 
 #include <QDebug>
 #include <QMessageBox>
@@ -61,7 +62,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       actions(AppletPrivate::defaultActions(applet)),
       activationAction(0),
       itemStatus(Types::UnknownStatus),
-      modificationsTimer(0),
+      modificationsTimer(Q_NULLPTR),
+      deleteNotificationTimer(Q_NULLPTR),
       hasConfigurationInterface(false),
       failed(false),
       transient(false),
@@ -87,6 +89,10 @@ AppletPrivate::~AppletPrivate()
     if (activationAction && globalShortcutEnabled) {
         //qDebug() << "resetting global action for" << q->title() << activationAction->objectName();
         KGlobalAccel::self()->removeAllShortcuts(activationAction);
+    }
+
+    if (deleteNotification) {
+        deleteNotification->close();
     }
 
     delete script;
@@ -220,28 +226,83 @@ void AppletPrivate::askDestroy()
         return; //don't double delete
     }
 
-    if (q->isContainment()) {
-        QMessageBox *box = new QMessageBox(QMessageBox::Warning, i18nc("@title:window %1 is the name of the containment", "Remove %1", q->title()), i18nc("%1 is the name of the containment", "Do you really want to remove this %1?", q->title()), QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
-        box->setWindowFlags((Qt::WindowFlags)(box->windowFlags() | Qt::WA_DeleteOnClose));
-        box->open();
+    if (transient) {
+        cleanUpAndDelete();
+    } else {
+        //There is no confirmation anymore for panels removal:
+        //this needs users feedback
+        transient = true;
+        emit q->destroyedChanged(true);
+        //no parent, but it won't leak, since it will be closed both in case of timeout
+        //or direct action
+        deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
+        QStringList actions;
+        deleteNotification->setIconName(q->icon());
+        Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
 
-        QObject::connect(q, &Applet::immutabilityChanged, [=] () {
-            box->close();
-        });
-        QObject::connect(q, &QObject::destroyed, [=] () {
-            box->close();
-        });
-        QObject::connect(box->button(QMessageBox::Yes), &QAbstractButton::clicked,
-        [ = ]() {
-            transient = true;
-            cleanUpAndDelete();
-        });
+        if (!q->isContainment()) {
+            deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
+        } else if (asContainment && (asContainment->containmentType() == Types::PanelContainment || asContainment->containmentType() == Types::CustomPanelContainment)) {
+            deleteNotification->setText(i18n("A Panel has been removed."));
+        //This will never happen with our current shell, but could with a custom one
+        } else {
+            deleteNotification->setText(i18n("A Desktop has been removed."));
+        }
 
-        return;
+        actions.append(i18n("Undo"));
+        deleteNotification->setActions(actions);
+        QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
+                [=]() {
+                    transient = false;
+                    emit q->destroyedChanged(false);
+                    if (!q->isContainment() && q->containment()) {
+                        //make sure the applets are sorted by id
+                        auto position = std::lower_bound(q->containment()->d->applets.begin(), q->containment()->d->applets.end(), q, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
+                            return a1->id() < a2->id();
+                        });
+                        q->containment()->d->applets.insert(position, q);
+                        emit q->containment()->appletAdded(q);
+                    }
+                    if (deleteNotification) {
+                        deleteNotification->close();
+                    }
+                    if (deleteNotificationTimer) {
+                        delete deleteNotificationTimer;
+                        deleteNotificationTimer = 0;
+                    }
+                });
+        QObject::connect(deleteNotification.data(), &KNotification::closed,
+                [=]() {
+                    //If the timer still exists, it means the undo action was NOT triggered
+                    if (deleteNotificationTimer) {
+                        transient = true;
+                        emit q->destroyedChanged(true);
+                        cleanUpAndDelete();
+                    }
+                });
+
+        deleteNotification->sendEvent();
+        if (!deleteNotificationTimer) {
+            deleteNotificationTimer = new QTimer(q);
+            //really delete after a minute
+            deleteNotificationTimer->setInterval(60 * 1000);
+            deleteNotificationTimer->setSingleShot(true);
+            QObject::connect(deleteNotificationTimer, &QTimer::timeout,
+                [=]() {
+                    if (deleteNotification) {
+                        deleteNotification->close();
+                    }
+                    transient = true;
+                    emit q->destroyedChanged(true);
+                    cleanUpAndDelete();
+                });
+            deleteNotificationTimer->start();
+        }
+        if (!q->isContainment() && q->containment()) {
+            q->containment()->d->applets.removeAll(q);
+            emit q->containment()->appletRemoved(q);
+        }
     }
-
-    transient = true;
-    cleanUpAndDelete();
 }
 
 void AppletPrivate::globalShortcutChanged()
