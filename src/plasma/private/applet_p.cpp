@@ -238,7 +238,17 @@ void AppletPrivate::askDestroy()
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
         QStringList actions;
         deleteNotification->setIconName(q->icon());
-        deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
+        Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
+
+        if (!q->isContainment()) {
+            deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
+        } else if (asContainment && (asContainment->containmentType() == Types::PanelContainment || asContainment->containmentType() == Types::CustomPanelContainment)) {
+            deleteNotification->setText(i18n("A Panel has been removed."));
+        //This will never happen with our current shell, but could with a custom one
+        } else {
+            deleteNotification->setText(i18n("A Desktop has been removed."));
+        }
+
         actions.append(i18n("Undo"));
         deleteNotification->setActions(actions);
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
@@ -263,7 +273,7 @@ void AppletPrivate::askDestroy()
                 });
         QObject::connect(deleteNotification.data(), &KNotification::closed,
                 [=]() {
-                    //If the timer still exists, it meand the undo action was NOT triggered
+                    //If the timer still exists, it means the undo action was NOT triggered
                     if (deleteNotificationTimer) {
                         transient = true;
                         emit q->destroyedChanged(true);

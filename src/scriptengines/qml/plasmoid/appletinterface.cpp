@@ -59,7 +59,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_appletScriptEngine(script),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
-      m_hideOnDeactivate(true)
+      m_hideOnDeactivate(true),
+      m_positionBeforeRemoval(QPointF(-1, -1))
 {
     qmlRegisterType<QAction>();
 
@@ -74,7 +75,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
             this, &AppletInterface::statusChanged);
 
     connect(applet(), &Plasma::Applet::destroyedChanged,
-            [=] () {
+            this, [=] () {
                 setVisible(!applet()->destroyed());
             });
 
