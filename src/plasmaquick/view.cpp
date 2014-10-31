@@ -44,6 +44,7 @@ public:
     Plasma::Types::FormFactor formFactor() const;
     Plasma::Types::Location location() const;
     void showConfigurationInterface(Plasma::Applet *applet);
+    void updateDestroyed(bool destroyed);
 
     View *q;
     friend class View;
@@ -102,6 +103,9 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
                          q, &View::formFactorChanged);
         QObject::connect(cont, &Plasma::Containment::configureRequested,
                          q, &View::showConfigurationInterface);
+        QObject::connect(cont, SIGNAL(destroyedChanged(bool)),
+                         q, SLOT(updateDestroyed(bool)));
+        q->setVisible(!cont->destroyed() && cont->isUiReady());
     } else {
         return;
     }
@@ -160,6 +164,11 @@ void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 
     configView->init();
     configView->show();
+}
+
+void ViewPrivate::updateDestroyed(bool destroyed)
+{
+    q->setVisible(!destroyed);
 }
 
 View::View(Plasma::Corona *corona, QWindow *parent)

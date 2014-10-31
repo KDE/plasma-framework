@@ -127,6 +127,7 @@ Q_SIGNALS:
 
 private:
     ViewPrivate *const d;
+    Q_PRIVATE_SLOT(d, void updateDestroyed(bool))
     friend class ViewPrivate;
 };
 
