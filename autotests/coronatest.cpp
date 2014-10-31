@@ -196,7 +196,7 @@ void CoronaTest::addRemoveApplets()
     //remove action present
     QVERIFY(m_corona->containments().first()->applets().first()->actions()->action("remove"));
     //kill an applet
-    m_corona->containments().first()->applets().first()->actions()->action("remove")->trigger();
+    m_corona->containments().first()->applets().first()->destroy();
 
     QSignalSpy spy(m_corona->containments().first()->applets().first(), SIGNAL(destroyed()));
     QVERIFY(spy.wait(1000));

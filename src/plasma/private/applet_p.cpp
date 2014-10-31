@@ -222,7 +222,7 @@ void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &r
 
 void AppletPrivate::askDestroy()
 {
-    if (q->immutability() != Types::Mutable || transient || !started) {
+    if (q->immutability() != Types::Mutable || !started) {
         return; //don't double delete
     }
 
