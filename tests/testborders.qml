@@ -20,6 +20,7 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
+import QtQuick.Controls 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -38,7 +39,7 @@ Item
             margins: 10
         }
 
-        PlasmaComponents.Button {
+        Button {
             text: "left"
             checkable: true
             checked: true
@@ -53,7 +54,7 @@ Item
                     theItem.enabledBorders &=~PlasmaCore.FrameSvg.LeftBorder;
             }
         }
-        PlasmaComponents.Button {
+        Button {
             text: "right"
             checkable: true
             checked: true
@@ -69,7 +70,7 @@ Item
                     theItem.enabledBorders &=~PlasmaCore.FrameSvg.RightBorder;
             }
         }
-        PlasmaComponents.Button {
+        Button {
             text: "top"
             checkable: true
             checked: true
@@ -85,7 +86,7 @@ Item
                     theItem.enabledBorders &=~PlasmaCore.FrameSvg.TopBorder;
             }
         }
-        PlasmaComponents.Button {
+        Button {
             text: "bottom"
             checkable: true
             checked: true
