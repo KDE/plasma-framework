@@ -1,6 +1,8 @@
 [Global]
 IconName=plasma
 Comment=Plasma Workspace
+Comment[es]=Espacio de trabajo Plasma
+Comment[nl]=Plasma Workspace
 Comment[pl]=Przestrzeń robocza Plazmy
 Comment[pt]=Área de Trabalho do Plasma
 Comment[pt_BR]=Plasma Workspace
@@ -8,6 +10,9 @@ Comment[sk]=KDE pracovná plocha Plasma
 Comment[uk]=Робочий простір Плазми
 Comment[x-test]=xxPlasma Workspacexx
 Name=Plasma
+Name[de]=Plasma
+Name[es]=Plasma
+Name[nl]=Plasma
 Name[pl]=Plazma
 Name[pt]=Plasma
 Name[pt_BR]=Plasma
@@ -17,6 +22,8 @@ Name[x-test]=xxPlasmaxx
 
 [Event/plasmoidDeleted]
 Name=Widget deleted
+Name[es]=Elemento gráfico borrado
+Name[nl]=Widget verwijderd
 Name[pl]=Usunięto element interfejsu
 Name[pt]=Elemento removido
 Name[pt_BR]=Widget excluído
@@ -24,6 +31,8 @@ Name[sk]=Widget vymazaný
 Name[uk]=Вилучено віджет
 Name[x-test]=xxWidget deletedxx
 Comment=A widget has been deleted
+Comment[es]=Se ha borrado un elemento gráfico
+Comment[nl]=Er is een widget verwijderd
 Comment[pl]=Element interfejsu został usunięty
 Comment[pt]=Foi removido um elemento
 Comment[pt_BR]=Um widget foi excluído
