@@ -78,6 +78,7 @@ class WindowThumbnail : public QQuickItem, public QAbstractNativeEventFilter
     Q_PROPERTY(uint winId READ winId WRITE setWinId NOTIFY winIdChanged)
     Q_PROPERTY(qreal paintedWidth READ paintedWidth NOTIFY paintedSizeChanged)
     Q_PROPERTY(qreal paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
+    Q_PROPERTY(bool thumbnailAvailable READ thumbnailAvailable NOTIFY thumbnailAvailableChanged)
 
 public:
     WindowThumbnail(QQuickItem *parent = 0);
@@ -90,10 +91,12 @@ public:
 
     qreal paintedWidth() const;
     qreal paintedHeight() const;
+    bool thumbnailAvailable() const;
 
 Q_SIGNALS:
     void winIdChanged();
     void paintedSizeChanged();
+    void thumbnailAvailableChanged();
 
 private:
     void iconToTexture(WindowTextureNode *textureNode);
@@ -102,9 +105,12 @@ private:
     void stopRedirecting();
     void resetDamaged();
     void discardPixmap();
+    void setThumbnailAvailable(bool thumbnailAvailable);
+
     bool m_xcb;
     uint32_t m_winId;
     QSizeF m_paintedSize;
+    bool m_thumbnailAvailable;
     bool m_damaged;
     int m_depth;
 #if HAVE_XCB_COMPOSITE

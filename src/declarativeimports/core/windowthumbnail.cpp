@@ -65,6 +65,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_xcb(false)
     , m_winId(0)
     , m_paintedSize(QSizeF())
+    , m_thumbnailAvailable(false)
     , m_damaged(false)
     , m_depth(0)
 #if HAVE_XCB_COMPOSITE
@@ -149,6 +150,11 @@ qreal WindowThumbnail::paintedWidth() const
 qreal WindowThumbnail::paintedHeight() const
 {
     return m_paintedSize.height();
+}
+
+bool WindowThumbnail::thumbnailAvailable() const
+{
+    return m_thumbnailAvailable;
 }
 
 QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
@@ -350,6 +356,7 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
     if (m_pixmap == XCB_PIXMAP_NONE) {
         // create above failed
         iconToTexture(textureNode);
+        setThumbnailAvailable(false);
         return;
     }
     bool fallbackToIcon = true;
@@ -366,6 +373,7 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
         // just for safety to not crash
         iconToTexture(textureNode);
     }
+    setThumbnailAvailable(!fallbackToIcon);
     textureNode->markDirty(QSGNode::DirtyForceUpdate);
 #else
     iconToTexture(textureNode);
@@ -613,6 +621,14 @@ void WindowThumbnail::discardPixmap()
     m_damaged = true;
     update();
 #endif
+}
+
+void WindowThumbnail::setThumbnailAvailable(bool thumbnailAvailable)
+{
+    if (m_thumbnailAvailable != thumbnailAvailable) {
+        m_thumbnailAvailable = thumbnailAvailable;
+        emit thumbnailAvailableChanged();
+    }
 }
 
 } // namespace
