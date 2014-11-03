@@ -1030,81 +1030,83 @@ bool Dialog::event(QEvent *event)
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked
      * on the mouse edge, forward the click in the containment boundaries
      */
-    switch (event->type()) {
-        case QEvent::MouseMove:
-        case QEvent::MouseButtonPress:
-        case QEvent::MouseButtonRelease: {
-            QMouseEvent *me = static_cast<QMouseEvent *>(event);
+    id (d->mainItem) {
+        switch (event->type()) {
+            case QEvent::MouseMove:
+            case QEvent::MouseButtonPress:
+            case QEvent::MouseButtonRelease: {
+                QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-            //don't mess with position if the cursor is actually outside the view:
-            //somebody is doing a click and drag that must not break when the cursor i outside
-            if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
-                QMouseEvent me2(me->type(),
-                                d->positionAdjustedForMainItem(me->windowPos()),
-                                d->positionAdjustedForMainItem(me->windowPos()),
-                                d->positionAdjustedForMainItem(me->windowPos()) + position(),
-                                me->button(), me->buttons(), me->modifiers());
+                //don't mess with position if the cursor is actually outside the view:
+                //somebody is doing a click and drag that must not break when the cursor i outside
+                if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
+                    QMouseEvent me2(me->type(),
+                                    d->positionAdjustedForMainItem(me->windowPos()),
+                                    d->positionAdjustedForMainItem(me->windowPos()),
+                                    d->positionAdjustedForMainItem(me->windowPos()) + position(),
+                                    me->button(), me->buttons(), me->modifiers());
 
-                QCoreApplication::sendEvent(this, &me2);
+                    QCoreApplication::sendEvent(this, &me2);
+                    return true;
+                }
+                break;
+            }
+
+        case QEvent::Wheel: {
+            QWheelEvent *we = static_cast<QWheelEvent *>(event);
+
+            if (!d->mainItemContainsPosition(we->pos())) {
+                QWheelEvent we2(d->positionAdjustedForMainItem(we->pos()),
+                                d->positionAdjustedForMainItem(we->pos()) + position(),
+                                we->pixelDelta(), we->angleDelta(), we->delta(),
+                                we->orientation(), we->buttons(), we->modifiers(), we->phase());
+
+                QCoreApplication::sendEvent(this, &we2);
                 return true;
             }
             break;
         }
 
-    case QEvent::Wheel: {
-        QWheelEvent *we = static_cast<QWheelEvent *>(event);
+            case QEvent::DragEnter: {
+                QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
+                if (!d->mainItemContainsPosition(de->pos())) {
+                    QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                        de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-        if (!d->mainItemContainsPosition(we->pos())) {
-            QWheelEvent we2(d->positionAdjustedForMainItem(we->pos()),
-                            d->positionAdjustedForMainItem(we->pos()) + position(),
-                            we->pixelDelta(), we->angleDelta(), we->delta(),
-                            we->orientation(), we->buttons(), we->modifiers(), we->phase());
-
-            QCoreApplication::sendEvent(this, &we2);
-            return true;
-        }
-        break;
-    }
-
-        case QEvent::DragEnter: {
-            QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                    QCoreApplication::sendEvent(this, &de2);
+                    return true;
+                }
+                break;
+            }
+            //DragLeave just works
+            case QEvent::DragLeave:
+                break;
+            case QEvent::DragMove: {
+                QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
+                if (!d->mainItemContainsPosition(de->pos())) {
+                    QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
                                     de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                QCoreApplication::sendEvent(this, &de2);
-                return true;
+                    QCoreApplication::sendEvent(this, &de2);
+                    return true;
+                }
+                break;
             }
-            break;
-        }
-        //DragLeave just works
-        case QEvent::DragLeave:
-            break;
-        case QEvent::DragMove: {
-            QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                                   de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+            case QEvent::Drop: {
+                QDropEvent *de = static_cast<QDropEvent *>(event);
+                if (!d->mainItemContainsPosition(de->pos())) {
+                    QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                QCoreApplication::sendEvent(this, &de2);
-                return true;
+                    QCoreApplication::sendEvent(this, &de2);
+                    return true;
+                }
+                break;
             }
-            break;
-        }
-        case QEvent::Drop: {
-            QDropEvent *de = static_cast<QDropEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                               de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                QCoreApplication::sendEvent(this, &de2);
-                return true;
-            }
-            break;
+            default:
+                break;
         }
-
-        default:
-            break;
     }
 
     const bool retval = QQuickWindow::event(event);
