@@ -75,9 +75,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
             this, &AppletInterface::statusChanged);
 
     connect(applet(), &Plasma::Applet::destroyedChanged,
-            this, [=] () {
-                setVisible(!applet()->destroyed());
-            });
+            this, &AppletInterface::destroyedChanged);
 
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
@@ -132,9 +130,7 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
             this, &AppletInterface::statusChanged);
 
     connect(applet(), &Plasma::Applet::destroyedChanged,
-            [=] () {
-                setVisible(!applet()->destroyed());
-            });
+            this, &AppletInterface::destroyedChanged);
 
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
@@ -185,6 +181,36 @@ void AppletInterface::init()
     } else if (m_args.count() > 0) {
         emit externalData(QString(), m_args);
     }
+}
+
+void AppletInterface::destroyedChanged(bool destroyed)
+{
+    //if an item loses its scene before losing the focus, will never
+    //be able to gain focus again
+    if (destroyed && window() && window()->activeFocusItem()) {
+        QQuickItem *focus = window()->activeFocusItem();
+        QQuickItem *candidate = focus;
+        bool isAncestor = false;
+
+        //search if the current focus item is a child or granchild of the applet
+        while (candidate) {
+            if (candidate == this) {
+                isAncestor = true;
+                break;
+            }
+            candidate = candidate->parentItem();
+        }
+
+        //Found? remove focus for the whole hyerarchy
+        candidate = focus;
+
+        while (candidate && candidate != this) {
+            candidate->setFocus(false);
+            candidate = candidate->parentItem();
+        }
+    }
+
+    setVisible(!destroyed);
 }
 
 Plasma::Types::FormFactor AppletInterface::formFactor() const

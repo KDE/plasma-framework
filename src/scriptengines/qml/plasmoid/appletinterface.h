@@ -353,6 +353,9 @@ protected Q_SLOTS:
 protected:
     bool eventFilter(QObject *watched, QEvent *event);
 
+private Q_SLOTS:
+    void destroyedChanged(bool destroyed);
+
 private:
 
     QStringList m_actions;
