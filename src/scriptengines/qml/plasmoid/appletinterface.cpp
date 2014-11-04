@@ -201,12 +201,14 @@ void AppletInterface::destroyedChanged(bool destroyed)
             candidate = candidate->parentItem();
         }
 
-        //Found? remove focus for the whole hyerarchy
-        candidate = focus;
+        if (isAncestor) {
+            //Found? remove focus for the whole hyerarchy
+            candidate = focus;
 
-        while (candidate && candidate != this) {
-            candidate->setFocus(false);
-            candidate = candidate->parentItem();
+            while (candidate && candidate != this) {
+                candidate->setFocus(false);
+                candidate = candidate->parentItem();
+            }
         }
     }
 
