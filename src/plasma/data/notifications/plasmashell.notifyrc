@@ -1,7 +1,9 @@
 [Global]
 IconName=plasma
 Comment=Plasma Workspace
+Comment[de]=Plasma-Arbeitsbereich
 Comment[es]=Espacio de trabajo Plasma
+Comment[lt]=Plasma darbastalio erdvė
 Comment[nl]=Plasma Workspace
 Comment[pl]=Przestrzeń robocza Plazmy
 Comment[pt]=Área de Trabalho do Plasma
@@ -12,6 +14,7 @@ Comment[x-test]=xxPlasma Workspacexx
 Name=Plasma
 Name[de]=Plasma
 Name[es]=Plasma
+Name[lt]=Plasma
 Name[nl]=Plasma
 Name[pl]=Plazma
 Name[pt]=Plasma
@@ -22,6 +25,7 @@ Name[x-test]=xxPlasmaxx
 
 [Event/plasmoidDeleted]
 Name=Widget deleted
+Name[de]=Miniprogramm wurde gelöscht
 Name[es]=Elemento gráfico borrado
 Name[nl]=Widget verwijderd
 Name[pl]=Usunięto element interfejsu
@@ -31,6 +35,7 @@ Name[sk]=Widget vymazaný
 Name[uk]=Вилучено віджет
 Name[x-test]=xxWidget deletedxx
 Comment=A widget has been deleted
+Comment[de]=Ein Miniprogramm wurde gelöscht
 Comment[es]=Se ha borrado un elemento gráfico
 Comment[nl]=Er is een widget verwijderd
 Comment[pl]=Element interfejsu został usunięty
