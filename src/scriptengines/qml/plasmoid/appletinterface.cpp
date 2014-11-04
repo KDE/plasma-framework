@@ -192,7 +192,7 @@ void AppletInterface::destroyedChanged(bool destroyed)
         QQuickItem *candidate = focus;
         bool isAncestor = false;
 
-        //search if the current focus item is a child or granchild of the applet
+        //search if the current focus item is a child or grandchild of the applet
         while (candidate) {
             if (candidate == this) {
                 isAncestor = true;
@@ -202,7 +202,7 @@ void AppletInterface::destroyedChanged(bool destroyed)
         }
 
         if (isAncestor) {
-            //Found? remove focus for the whole hyerarchy
+            //Found? remove focus for the whole hierachy
             candidate = focus;
 
             while (candidate && candidate != this) {
