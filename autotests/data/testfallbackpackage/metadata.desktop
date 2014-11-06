@@ -3,6 +3,7 @@ Encoding=UTF-8
 Keywords=
 Name=Test Fallback Package
 Name[ca]=Paquet de proves alternatiu
+Name[de]=Test-Ausweichpaket
 Name[en_GB]=Test Fallback Package
 Name[es]=Probar el paquete al que recurrir
 Name[fi]=Testivarapaketti
