@@ -1,6 +1,7 @@
 /*
 *   Copyright (C) 2010 by Artur Duque de Souza <asouzakde.org>
 *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   Copyright (C) 2014 by Kai Uwe Broulik <kde@privat.broulik.de>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -19,26 +20,17 @@
 */
 
 import QtQuick 2.2
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick.Controls 1.2
+import "styles" as Styles
 
 /**
  * A simple busy indicator,
  * It is used to indicate a task whose duration is unknown. If the task
  * duration/number of steps is known, a ProgressBar should be used instead.
  *
- * @inherit QtQuick.Item
+ * @inherit QtQuick.Controls.BusyIndicator
  */
-Item {
-    id: busy
-
-    /**
-     * This property holds whether the busy animation is running.
-     *
-     * The default value is false.
-     */
-    property bool running: false
-
-    // Plasma API
+BusyIndicator {
     /**
      * Set this property if you don't want to apply a filter to smooth
      * the busy icon while animating.
@@ -51,33 +43,6 @@ Item {
     implicitWidth: 52
     implicitHeight: 52
 
-    // Should use animation's pause to keep the
-    // rotation smooth when running changes but
-    // it has lot's of side effects on
-    // initialization.
-    onRunningChanged: {
-        rotationAnimation.from = rotation;
-        rotationAnimation.to = rotation + 360;
-    }
+    style: Styles.BusyIndicatorStyle {}
 
-    RotationAnimator on rotation {
-        id: rotationAnimation
-
-        from: 0
-        to: 360
-        duration: 1500
-        running: busy.running
-        loops: Animation.Infinite
-    }
-
-    PlasmaCore.SvgItem {
-        id: widget
-        svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
-        elementId: "busywidget"
-
-        anchors.centerIn: parent
-        width:  Math.min(busy.width, busy.height)
-        height: width
-        smooth: !running || smoothAnimation
-    }
 }
