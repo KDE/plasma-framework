@@ -78,6 +78,18 @@ Rectangle {
 
         Column {
             Text {
+                text: "Make sure the bar does\nnot leak outside"
+            }
+            PlasmaComponents.ProgressBar {
+                minimumValue: 0
+                maximumValue: 200
+                value: 1
+                orientation: root.orientation
+            }
+        }
+
+        Column {
+            Text {
                 text: "should look like 100%"
             }
             PlasmaComponents.ProgressBar {
