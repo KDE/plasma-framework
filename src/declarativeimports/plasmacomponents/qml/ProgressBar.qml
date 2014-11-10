@@ -1,5 +1,6 @@
 /*
 *   Copyright (C) 2011 by Daker Fernandes Pinheiro <dakerfp@gmail.com>
+*   Copyright (C) 2014 by Kai Uwe Broulik <kde@privat.broulik.de>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -18,9 +19,11 @@
 */
 
 import QtQuick 2.1
+import QtQuick.Controls 1.1
+
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.kquickcontrolsaddons 2.0
+
+import "styles" as Styles
 
 /**
  * Simple progressBar using the plasma theme.
@@ -31,120 +34,12 @@ import org.kde.kquickcontrolsaddons 2.0
  * the device has broken. A progress bar is one of the available mechanisms for
  * providing this reassurance to the user.
  *
- * @inherit QtQuick.Item
+ * @inherit QtQuick.Controls.ProgressBar
  */
-Item {
-    id: progressBar
-
-    // Common API
-    /** type:real Minimum value for the progressBar */
-    property alias minimumValue: range.minimumValue
-    /** type:real Maximum value for the progressBar */
-    property alias maximumValue: range.maximumValue
-    /** type:real Current value of the progressBar */
-    property alias value: range.value
-    /**
-     * type:bool
-     * Indicates whether the operation's duration is known or not. The property
-     * can have the following values:
-     *
-     * - true: the operation's duration is unknown, so the progress bar is
-     *   animated. The value, minimum, and maximum properties are ignored.
-     * - false: the operation's duration is known, so the progress bar is drawn
-     *   to indicate progress between the minimum and maximum values.
-     *
-     * The default value is false.
-     */
-    property alias indeterminate: indeterminateAnimation.running
-
-    // Plasma API
-    /**
-     * Orientation of the progressBar: Qt.Horizontal or Qt.Vertical
-     */
-    property int orientation: Qt.Horizontal
-
-    width: Math.floor(units.gridUnit * (background._isVertical ? 1.6 : 10))
-    height: Math.floor(units.gridUnit * (background._isVertical ? 10 : 1.6))
+ProgressBar {
+    width: Math.floor(units.gridUnit * (orientation === Qt.Vertical ? 1.6 : 10))
+    height: Math.floor(units.gridUnit * (orientation === Qt.Vertical ? 10 : 1.6))
     opacity: enabled ? 1.0 : 0.5
 
-    PlasmaComponents.RangeModel {
-        id: range
-
-        // default values
-        minimumValue: 0.0
-        maximumValue: 1.0
-        value: 0
-
-        positionAtMinimum: 0
-        positionAtMaximum: background._isVertical ? background.height : background.width
-    }
-
-    PlasmaCore.FrameSvgItem {
-        id: background
-
-        anchors.centerIn: parent
-        width: _isVertical ? barSvg.implicitWidth * Math.floor(units.devicePixelRatio) : parent.width
-        height: _isVertical ? parent.height : barSvg.implicitHeight * Math.floor(units.devicePixelRatio)
-
-        imagePath: barSvg.imagePath
-        prefix: "bar-inactive"
-        property bool _isVertical: orientation == Qt.Vertical
-
-        PlasmaCore.FrameSvgItem {
-            id: bar
-            anchors {
-                left: indeterminate && !background._isVertical ? undefined : parent.left
-                bottom: indeterminate && background._isVertical ? undefined : parent.bottom
-                right: background._isVertical ? parent.right : undefined
-                top: background._isVertical ? undefined : parent.top
-            }
-            imagePath: background.imagePath
-            prefix: "bar-active"
-
-            width: Math.max(margins.left + margins.right, (indeterminate ? units.gridUnit*2 : range.position))
-            height: Math.max(margins.top + margins.bottom, (indeterminate ? units.gridUnit*2 : range.position))
-            visible: indeterminate || range.position > 0
-        }
-        //this can't reference its parent because needs to be loaded before it,
-        //so never bind background to anything here
-        PlasmaCore.Svg {
-            id: barSvg
-            imagePath: orientation == Qt.Vertical ? "widgets/bar_meter_vertical" : "widgets/bar_meter_horizontal"
-            property int preferredWidth
-            property int preferredHeight
-            onRepaintNeeded: {
-                preferredWidth = barSvg.elementSize("hint-bar-size").width 
-                preferredHeight = barSvg.elementSize("hint-bar-size").height
-            }
-        }
-    }
-
-
-    SequentialAnimation {
-        id: indeterminateAnimation
-
-        loops: Animation.Infinite
-
-        onRunningChanged: {
-            if (!running) {
-                barPixmapItem.x = 0
-                barPixmapItem.y = 0
-            }
-        }
-
-        PropertyAnimation {
-            target: bar
-            property: background._isVertical ? "y" : "x"
-            duration: 800
-            to: 0
-        }
-        PropertyAnimation {
-            target: bar
-            property: background._isVertical ? "y" : "x"
-            duration: 800
-            to: background._isVertical ? background.height - bar.height : background.width - bar.width
-        }
-    }
-
-    Accessible.role: Accessible.ProgressBar
+    style: Styles.ProgressBarStyle {}
 }

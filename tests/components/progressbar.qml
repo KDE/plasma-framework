@@ -4,9 +4,12 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Rectangle {
     id: root
+
+    property int orientation: orientationCombo.model[orientationCombo.currentIndex].value
+
     color: "white"
-    width: 800
-    height: 500
+    width: 900
+    height: 600
 
     Flow {
         anchors.fill: parent
@@ -21,6 +24,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 value: 0
+                orientation: root.orientation
             }
         }
 
@@ -32,6 +36,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 value: 50
+                orientation: root.orientation
             }
         }
 
@@ -43,6 +48,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 value: 100
+                orientation: root.orientation
             }
         }
 
@@ -50,17 +56,23 @@ Rectangle {
             Text {
                 text: "these main bars should look the same width"
             }
-            PlasmaComponents.ProgressBar {
-                width:100
-                minimumValue: 0
-                maximumValue: 100
-                value: 50
-            }
-            PlasmaComponents.Slider {
-                width: 100
-                minimumValue: 0
-                maximumValue: 100
-                value: 50
+            Flow {
+                PlasmaComponents.ProgressBar {
+                    width: orientation === Qt.Vertical ? undefined : 100
+                    height: orientation === Qt.Vertical ? 100 : undefined
+                    minimumValue: 0
+                    maximumValue: 100
+                    value: 50
+                    orientation: root.orientation
+                }
+                PlasmaComponents.Slider {
+                    width: orientation === Qt.Vertical ? undefined : 100
+                    height: orientation === Qt.Vertical ? 100 : undefined
+                    minimumValue: 0
+                    maximumValue: 100
+                    value: 50
+                    orientation: root.orientation
+                }
             }
         }
 
@@ -72,6 +84,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 value: 110
+                orientation: root.orientation
             }
         }
 
@@ -83,6 +96,7 @@ Rectangle {
                 minimumValue: -100
                 maximumValue: 100
                 value: 0
+                orientation: root.orientation
             }
         }
 
@@ -94,6 +108,7 @@ Rectangle {
                 minimumValue: 0
                 maximumValue: 100
                 value: -10
+                orientation: root.orientation
             }
         }
 
@@ -104,6 +119,7 @@ Rectangle {
             PlasmaComponents.ProgressBar {
                 indeterminate: indeterminateCheckBox.checked
                 value: 0.5
+                orientation: root.orientation
             }
         }
 
@@ -118,5 +134,17 @@ Rectangle {
             }
         }
 
+        Column {
+            Text {
+                text: "Slider orientation"
+            }
+            PlasmaComponents.ComboBox {
+                id: orientationCombo
+                model: [
+                    {text: "Horizontal", value: Qt.Horizontal},
+                    {text: "Vertical", value: Qt.Vertical}
+                ]
+            }
+        }
     }
 }
