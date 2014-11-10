@@ -1,7 +1,7 @@
 set(test_SRCS
     test.cpp
 )
-qt5_wrap_ui(test_SRCS config.ui)
+ki18n_wrap_ui(test_SRCS config.ui)
 
 add_library(plasma_containmentactions_test MODULE ${test_SRCS})
 target_link_libraries(plasma_containmentactions_test KF5::Plasma KF5::KIOWidgets KF5::XmlGui)

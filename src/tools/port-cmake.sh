@@ -13,7 +13,7 @@
 for FS in `find $PWD -type f -name 'CMakeLists.txt'`; do
     perl -p -i -e 's/plasma_add_plugin\(([a-zA-Z_\-]+) /add_library(\1 MODULE /g' $FS
     perl -p -i -e 's/kde4_add_plugin *\( *([a-zA-Z_\-]+) /add_library(\1 MODULE /g' $FS
-    perl -p -i -e 's/kde4_add_ui_files/qt5_wrap_ui/g' $FS
+    perl -p -i -e 's/kde4_add_ui_files/ki18n_wrap_ui/g' $FS
     perl -p -i -e 's/qt4_wrap_ui/qt5_wrap_ui/g' $FS
     perl -p -i -e 's/kde4_add_kdeinit_executable/kf5_add_kdeinit_executable/g' $FS
     perl -p -i -e 's/kde4_add_library/add_library/g' $FS
