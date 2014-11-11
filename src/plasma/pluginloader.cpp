@@ -25,6 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kplugintrader.h>
+#include <kpackage/packagetrader.h>
 
 #include "config-plasma.h"
 
@@ -41,6 +42,8 @@
 #include "private/packages_p.h"
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
+#include "private/package_p.h"
+#include "private/packagestructure_p.h"
 
 namespace Plasma
 {
@@ -401,50 +404,35 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
     const QString hashkey = packageFormat + '%' + specialization;
     PackageStructure *structure = d->structures.value(hashkey).data();
+    KPackage::PackageStructure *internalStructure = 0;
     if (structure) {
         return Package(structure);
     }
 
-    if (!specialization.isEmpty()) {
-        // check that the provided strings are safe to use in a ServiceType query
-        if (d->packageRE.indexIn(specialization) == -1 && d->packageRE.indexIn(packageFormat) == -1) {
-            // FIXME: The query below is rather spepcific to script engines. generify if possible
-            const QString component = packageFormat.right(packageFormat.size() - packageFormat.lastIndexOf('/') - 1);
-            const QString constraint = QString("[X-Plasma-API] == '%1' and " "'%2' in [X-Plasma-ComponentTypes]").arg(specialization, component);
-            KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-
-            if (!offers.isEmpty()) {
-                KService::Ptr offer = offers.first();
-                QString packageFormat = offer->property("X-Plasma-PackageFormat").toString();
-                if (!packageFormat.isEmpty()) {
-                    return loadPackage(packageFormat);
-                }
-            }
-        }
-    }
-
     if (packageFormat.startsWith("Plasma")) {
         if (packageFormat.endsWith("/Applet")) {
-            structure = new PlasmoidPackage();
+            internalStructure = new PlasmoidPackage();
         } else if (packageFormat.endsWith("/DataEngine")) {
-            structure = new DataEnginePackage();
+            internalStructure = new DataEnginePackage();
         } else if (packageFormat.endsWith("/Theme")) {
-            structure = new ThemePackage();
+            internalStructure = new ThemePackage();
         } else if (packageFormat.endsWith("/ContainmentActions")) {
-            structure = new ContainmentActionsPackage();
+            internalStructure = new ContainmentActionsPackage();
         } else if (packageFormat.endsWith("/Generic")) {
-            structure = new GenericPackage();
+            internalStructure = new GenericPackage();
         }
 
-        if (structure) {
+        if (internalStructure) {
+            structure = new PackageStructure();
+            structure->d->internalStructure = internalStructure;
             d->structures.insert(hashkey, structure);
             return Package(structure);
         }
     }
 
-    // first we check for plugins in sycoca
-    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-    structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(d->packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
+    internalStructure = KPackage::PackageTrader::self()->loadPackageStructure(packageFormat);
+    structure = new PackageStructure();
+    structure->d->internalStructure = internalStructure;
     if (structure) {
         d->structures.insert(hashkey, structure);
         return Package(structure);

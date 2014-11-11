@@ -89,6 +89,8 @@ public:
 
 private:
     PackageStructurePrivate *d;
+    friend class Package;
+    friend class PluginLoader;
 };
 
 } // Plasma namespace

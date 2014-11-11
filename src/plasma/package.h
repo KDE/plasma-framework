@@ -343,6 +343,7 @@ public:
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;
     friend class PackagePrivate;
+    friend class PackageStructure;
 };
 
 }

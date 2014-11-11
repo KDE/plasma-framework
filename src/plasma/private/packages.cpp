@@ -24,6 +24,7 @@
 
 #include <QCoreApplication>
 #include <QFileInfo>
+#include <QDebug>
 
 #include <kconfiggroup.h>
 #include <kdesktopfile.h>
@@ -34,10 +35,12 @@
 #include "package.h"
 #include "config-plasma.h"
 
+#include <kpackage/package.h>
+
 namespace Plasma
 {
 
-void ChangeableMainScriptPackage::initPackage(Package *package)
+void ChangeableMainScriptPackage::initPackage(KPackage::Package *package)
 {
     package->addFileDefinition("mainscript", "ui/main.qml", i18n("Main Script File"));
     package->setRequired("mainscript", true);
@@ -63,7 +66,7 @@ void ChangeableMainScriptPackage::pathChanged(Package *package)
     }
 }
 
-void GenericPackage::initPackage(Package *package)
+void GenericPackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
 
@@ -105,7 +108,7 @@ void GenericPackage::initPackage(Package *package)
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 }
 
-void PlasmoidPackage::initPackage(Package *package)
+void PlasmoidPackage::initPackage(KPackage::Package *package)
 {
     GenericPackage::initPackage(package);
     package->setServicePrefix("plasma-applet-");
@@ -115,7 +118,7 @@ void PlasmoidPackage::initPackage(Package *package)
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
 }
 
-void DataEnginePackage::initPackage(Package *package)
+void DataEnginePackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
     package->setServicePrefix("plasma-dataengine-");
@@ -134,7 +137,7 @@ void DataEnginePackage::initPackage(Package *package)
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 }
 
-void ThemePackage::initPackage(Package *package)
+void ThemePackage::initPackage(KPackage::Package *package)
 {
     // by default the packages have "contents/" as contentsPrefixPaths
     // but for the themes we don't want that, so unset it.
@@ -234,7 +237,7 @@ void ThemePackage::initPackage(Package *package)
     package->setDefaultMimeTypes(mimetypes);
 }
 
-void ContainmentActionsPackage::initPackage(Package *package)
+void ContainmentActionsPackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
     package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/containmentactions/");

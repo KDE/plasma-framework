@@ -17,26 +17,26 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMA_PACKAGE_P_H
-#define PLASMA_PACKAGE_P_H
+#ifndef PLASMA_PACKAGESTRUCTURE_P_H
+#define PLASMA_PACKAGESTRUCTURE_P_H
 
-#include "../package.h"
-
-#include <QExplicitlySharedDataPointer>
+#include "../packagestructure.h"
 
 #include <kpackage/package.h>
 
 namespace Plasma
 {
 
-class PackagePrivate : public QSharedData
+class PackageStructurePrivate
 {
 public:
-    PackagePrivate();
-    ~PackagePrivate();
+    PackageStructurePrivate()
+        : internalStructure(0)
+    {}
+    ~PackageStructurePrivate()
+    {}
 
-    KPackage::Package *internalPackage;
-    Package *fallbackPackage;
+    KPackage::PackageStructure *internalStructure;
 };
 
 }

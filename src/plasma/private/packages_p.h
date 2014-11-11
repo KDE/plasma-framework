@@ -23,13 +23,16 @@
 #include "packagestructure.h"
 #include "plasma.h"
 
+#include <kpackage/package.h>
+#include <kpackage/packagestructure.h>
+
 namespace Plasma
 {
 
-class ChangeableMainScriptPackage : public PackageStructure
+class ChangeableMainScriptPackage : public KPackage::PackageStructure
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 
 protected:
     virtual QString mainScriptConfigKey() const;
@@ -39,31 +42,31 @@ protected:
 class GenericPackage : public ChangeableMainScriptPackage
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class PlasmoidPackage : public GenericPackage
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
-class ThemePackage : public PackageStructure
+class ThemePackage : public KPackage::PackageStructure
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class ContainmentActionsPackage : public ChangeableMainScriptPackage
 {
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 } // namespace Plasma
