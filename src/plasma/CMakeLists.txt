@@ -66,8 +66,6 @@ set(Plasma_LIB_SRCS
 #packages
     package.cpp
     packagestructure.cpp
-    private/packagejob.cpp
-    private/packagejobthread.cpp
     private/packages.cpp
 
 #graphics
@@ -112,6 +110,7 @@ target_link_libraries(KF5Plasma
 PUBLIC
     KF5::Service # For kplugininfo.h and kservice.h
     Qt5::Gui
+    KF5::Package
 PRIVATE
     Qt5::Sql
     Qt5::Svg

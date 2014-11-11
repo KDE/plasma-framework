@@ -20,50 +20,58 @@
 #ifndef LIBS_PLASMA_PACKAGES_P_H
 #define LIBS_PLASMA_PACKAGES_P_H
 
-#include "packagestructure.h"
 #include "plasma.h"
+
+#include <kpackage/package.h>
+#include <kpackage/packagestructure.h>
 
 namespace Plasma
 {
 
-class ChangeableMainScriptPackage : public PackageStructure
+class ChangeableMainScriptPackage : public KPackage::PackageStructure
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
+    void pathChanged(KPackage::Package *package);
 
 protected:
     virtual QString mainScriptConfigKey() const;
-    void pathChanged(Package *package);
 };
 
 class GenericPackage : public ChangeableMainScriptPackage
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class PlasmoidPackage : public GenericPackage
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
-class ThemePackage : public PackageStructure
+class ThemePackage : public KPackage::PackageStructure
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 class ContainmentActionsPackage : public ChangeableMainScriptPackage
 {
+    Q_OBJECT
 public:
-    void initPackage(Package *package);
+    void initPackage(KPackage::Package *package);
 };
 
 } // namespace Plasma

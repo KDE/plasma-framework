@@ -29,6 +29,8 @@
 
 class KJob;
 
+#ifndef PLASMA_NO_DEPRECATED
+
 namespace Plasma
 {
 
@@ -37,6 +39,7 @@ namespace Plasma
  *
  * @short object representing an installed Plasma package
  *
+ * @deprecated USe KPackage::Package instead
  * Package defines what is in a package and provides easy access to the contents.
  *
  * To define a package, one might write the following code:
@@ -85,13 +88,13 @@ public:
      * otherwise the structure is allowed to set up the Package's initial layout
      * @since 4.6
      */
-    explicit Package(PackageStructure *structure = 0);
+    PLASMA_DEPRECATED explicit Package(PackageStructure *structure = 0);
 
     /**
      * Copy constructore
      * @since 4.6
      */
-    Package(const Package &other);
+    PLASMA_DEPRECATED Package(const Package &other);
 
     ~Package();
 
@@ -99,7 +102,7 @@ public:
      * Assignment operator
      * @since 4.6
      */
-    Package &operator=(const Package &rhs);
+    PLASMA_DEPRECATED Package &operator=(const Package &rhs);
 
     /**
      * @return true if this package has a valid PackageStructure associatedw it with it.
@@ -107,24 +110,24 @@ public:
      * Package objects in a semi-initialized state (e.g. before calling setPath())
      * @since 5.1
      */
-    bool hasValidStructure() const;
+    PLASMA_DEPRECATED bool hasValidStructure() const;
 
     /**
      * @return true if all the required components exist
      **/
-    bool isValid() const;
+    PLASMA_DEPRECATED bool isValid() const;
 
     /**
      * Sets the path to the root of this package
      * @param path an absolute path, or a relative path to the default package root
      * @since 4.3
      */
-    void setPath(const QString &path);
+    PLASMA_DEPRECATED void setPath(const QString &path);
 
     /**
      * @return the path to the root of this particular package
      */
-    const QString path() const;
+    PLASMA_DEPRECATED const QString path() const;
 
     /**
      * Get the path to a given file based on the key and an optional filename.
@@ -138,7 +141,7 @@ public:
      * @param filename optional name of the file to locate within the package
      * @return path to the file on disk. QString() if not found.
      **/
-    QString filePath(const char *key, const QString &filename = QString()) const;
+    PLASMA_DEPRECATED QString filePath(const char *key, const QString &filename = QString()) const;
 
     /**
      * Get the list of files of a given type.
@@ -147,56 +150,56 @@ public:
      *               package structure.
      * @return list of files by name, suitable for passing to filePath
      **/
-    QStringList entryList(const char *key) const;
+    PLASMA_DEPRECATED QStringList entryList(const char *key) const;
 
     /**
      * @return user visible name for the given entry
      **/
-    QString name(const char *key) const;
+    PLASMA_DEPRECATED QString name(const char *key) const;
 
     /**
      * @return true if the item at path exists and is required
      **/
-    bool isRequired(const char *key) const;
+    PLASMA_DEPRECATED bool isRequired(const char *key) const;
 
     /**
      * @return the mimeTypes associated with the path, if any
      **/
-    QStringList mimeTypes(const char *key) const;
+    PLASMA_DEPRECATED QStringList mimeTypes(const char *key) const;
 
     /**
      * @return the prefix paths inserted between the base path and content entries, in order of priority.
      *         When searching for a file, all paths will be tried in order.
      * @since 4.6
      */
-    QStringList contentsPrefixPaths() const;
+    PLASMA_DEPRECATED QStringList contentsPrefixPaths() const;
 
     /**
      * @return preferred package root. This defaults to plasma/plasmoids/
      */
-    QString defaultPackageRoot() const;
+    PLASMA_DEPRECATED QString defaultPackageRoot() const;
 
     /**
      * @return service prefix used in desktop files. This defaults to plasma-applet-
      */
-    QString servicePrefix() const;
+    PLASMA_DEPRECATED QString servicePrefix() const;
 
     /**
      * @return true if paths/symlinks outside the package itself should be followed.
      * By default this is set to false for security reasons.
      */
-    bool allowExternalPaths() const;
+    PLASMA_DEPRECATED bool allowExternalPaths() const;
 
     /**
       * @return the package metadata object.
       */
-    KPluginInfo metadata() const;
+    PLASMA_DEPRECATED KPluginInfo metadata() const;
 
     /**
      * @return a SHA1 hash digest of the contents of the package in hexadecimal form
      * @since 4.4
      */
-    QString contentsHash() const;
+    PLASMA_DEPRECATED QString contentsHash() const;
 
     /**
      * Adds a directory to the structure of the package. It is added as
@@ -209,7 +212,7 @@ public:
      * @param path the path within the package for this directory
      * @param name the user visible (translated) name for the directory
      **/
-    void addDirectoryDefinition(const char *key, const QString &path, const QString &name);
+    PLASMA_DEPRECATED void addDirectoryDefinition(const char *key, const QString &path, const QString &name);
 
     /**
      * Adds a file to the structure of the package. It is added as
@@ -222,14 +225,14 @@ public:
      * @param path the path within the package for this file
      * @param name the user visible (translated) name for the file
      **/
-    void addFileDefinition(const char *key, const QString &path, const QString &name);
+    PLASMA_DEPRECATED void addFileDefinition(const char *key, const QString &path, const QString &name);
 
     /**
      * Removes a definition from the structure of the package.
      * @since 4.6
      * @param key the internal label of the file or directory to remove
      */
-    void removeDefinition(const char *key);
+    PLASMA_DEPRECATED void removeDefinition(const char *key);
 
     /**
      * Sets whether or not a given part of the structure is required or not.
@@ -239,7 +242,7 @@ public:
      * @param key the entry within the package
      * @param required true if this entry is required, false if not
      */
-    void setRequired(const char *key, bool required);
+    PLASMA_DEPRECATED void setRequired(const char *key, bool required);
 
     /**
      * Defines the default mimeTypes for any definitions that do not have
@@ -248,7 +251,7 @@ public:
      *
      * @param mimeTypes a list of mimeTypes
      **/
-    void setDefaultMimeTypes(QStringList mimeTypes);
+    PLASMA_DEPRECATED void setDefaultMimeTypes(QStringList mimeTypes);
 
     /**
      * Define mimeTypes for a given part of the structure
@@ -258,7 +261,7 @@ public:
      * @param key the entry within the package
      * @param mimeTypes a list of mimeTypes
      **/
-    void setMimeTypes(const char *key, QStringList mimeTypes);
+    PLASMA_DEPRECATED void setMimeTypes(const char *key, QStringList mimeTypes);
 
     /**
      * Sets the prefixes that all the contents in this package should
@@ -271,24 +274,24 @@ public:
      * @param prefix paths the directory prefix to use
      * @since 4.6
      */
-    void setContentsPrefixPaths(const QStringList &prefixPaths);
+    PLASMA_DEPRECATED void setContentsPrefixPaths(const QStringList &prefixPaths);
 
     /**
      * Sets service prefix.
      */
-    void setServicePrefix(const QString &servicePrefix);
+    PLASMA_DEPRECATED void setServicePrefix(const QString &servicePrefix);
 
     /**
      * Sets whether or not external paths/symlinks can be followed by a package
      * @param allow true if paths/symlinks outside of the package should be followed,
      *             false if they should be rejected.
      */
-    void setAllowExternalPaths(bool allow);
+    PLASMA_DEPRECATED void setAllowExternalPaths(bool allow);
 
     /**
      * Sets preferred package root.
      */
-    void setDefaultPackageRoot(const QString &packageRoot);
+    PLASMA_DEPRECATED void setDefaultPackageRoot(const QString &packageRoot);
 
     /**
      * Sets the fallback package root path
@@ -297,33 +300,33 @@ public:
      * It is intended to be used by the packageStructure
      * @param path package root path @see setPath
      */
-    void setFallbackPackage(const Plasma::Package &package);
+    PLASMA_DEPRECATED void setFallbackPackage(const Plasma::Package &package);
 
     /**
      * @return The fallback package root path
      */
-    Plasma::Package fallbackPackage() const;
+    PLASMA_DEPRECATED Plasma::Package fallbackPackage() const;
 
     // Content structure description methods
     /**
      * @return all directories registered as part of this Package's structure
      */
-    QList<const char *> directories() const;
+    PLASMA_DEPRECATED QList<const char *> directories() const;
 
     /**
      * @return all directories registered as part of this Package's required structure
      */
-    QList<const char *> requiredDirectories() const;
+    PLASMA_DEPRECATED QList<const char *> requiredDirectories() const;
 
     /**
      * @return all files registered as part of this Package's structure
      */
-    QList<const char *> files() const;
+    PLASMA_DEPRECATED QList<const char *> files() const;
 
     /**
      * @return all files registered as part of this Package's required structure
      */
-    QList<const char *> requiredFiles() const;
+    PLASMA_DEPRECATED QList<const char *> requiredFiles() const;
 
     /**
      * Installs a package matching this package structure. By default installs a
@@ -331,22 +334,26 @@ public:
      *
      * @return KJob to track installation progress and result
      **/
-    KJob *install(const QString &sourcePackage, const QString &packageRoot = QString());
+    PLASMA_DEPRECATED KJob *install(const QString &sourcePackage, const QString &packageRoot = QString());
 
     /**
      * Uninstalls a package matching this package structure.
      *
      * @return KJob to track removal progress and result
      */
-    KJob *uninstall(const QString &packageName, const QString &packageRoot);
+    PLASMA_DEPRECATED KJob *uninstall(const QString &packageName, const QString &packageRoot);
 
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;
     friend class PackagePrivate;
+    friend class PackageStructure;
+    friend class AppletPrivate;
+    friend class Applet;
+    friend class Corona;
 };
 
 }
-
+#endif
 Q_DECLARE_METATYPE(Plasma::Package)
 #endif
 

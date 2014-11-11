@@ -38,8 +38,10 @@
 
 #include "containment.h"
 #include "pluginloader.h"
+#include "packagestructure.h"
 #include "private/applet_p.h"
 #include "private/containment_p.h"
+#include "private/package_p.h"
 #include "private/timetracker.h"
 
 using namespace Plasma;
@@ -71,13 +73,26 @@ Corona::~Corona()
 
 Plasma::Package Corona::package() const
 {
-    return d->package;
+    Package p;
+    p.d->internalPackage = new KPackage::Package(d->package);
+    return p;
 }
 
 void Corona::setPackage(const Plasma::Package &package)
 {
-    d->package = package;
+    setKPackage(*package.d->internalPackage);
     emit packageChanged(package);
+}
+
+KPackage::Package Corona::kPackage() const
+{
+    return d->package;
+}
+
+void Corona::setKPackage(const KPackage::Package &package)
+{
+    d->package = package;
+    emit kPackageChanged(package);
 }
 
 void Corona::saveLayout(const QString &configName) const

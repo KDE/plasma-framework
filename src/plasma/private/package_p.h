@@ -1,5 +1,6 @@
 /*
  *   Copyright © 2009 Rob Scheepmaker <r.scheepmaker@student.utwente.nl>
+ *   Copyright 2014 Marco Martin <mart@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License version 2 as
@@ -19,79 +20,28 @@
 #ifndef PLASMA_PACKAGE_P_H
 #define PLASMA_PACKAGE_P_H
 
-#include "../plasma.h"
 #include "../package.h"
-#include "../service.h"
 
-#include <QCryptographicHash>
-#include <QDir>
-#include <QString>
-#include <QSharedData>
+#include <QExplicitlySharedDataPointer>
+
+#include <kpackage/package.h>
 
 namespace Plasma
 {
-
-class ContentStructure
-{
-public:
-    ContentStructure()
-        : directory(false),
-          required(false)
-    {
-    }
-
-    ContentStructure(const ContentStructure &other)
-    {
-        paths = other.paths;
-#ifndef PLASMA_NO_PACKAGE_EXTRADATA
-        name = other.name;
-        mimeTypes = other.mimeTypes;
-#endif
-        directory = other.directory;
-        required = other.required;
-    }
-
-    QString found;
-    QStringList paths;
-#ifndef PLASMA_NO_PACKAGE_EXTRADATA
-    QString name;
-    QStringList mimeTypes;
-#endif
-    bool directory : 1;
-    bool required : 1;
-};
 
 class PackagePrivate : public QSharedData
 {
 public:
     PackagePrivate();
-    PackagePrivate(const PackagePrivate &other);
     ~PackagePrivate();
 
-    PackagePrivate &operator=(const PackagePrivate &rhs);
+    void installFinished(KJob *job);
+    void uninstallFinished(KJob *job);
 
-    void createPackageMetadata(const QString &path);
-    QString unpack(const QString &filePath);
-    void updateHash(const QString &basePath, const QString &subPath, const QDir &dir, QCryptographicHash &hash);
-    QString fallbackFilePath(const char *key, const QString &filename = QString()) const;
-    bool hasCycle(const Plasma::Package &package);
-
-    QWeakPointer<PackageStructure> structure;
-    QString path;
-    QString tempRoot;
-    QStringList contentsPrefixPaths;
-    QString defaultPackageRoot;
     QString servicePrefix;
-    QHash<QString, QString> discoveries;
-    QHash<QByteArray, ContentStructure> contents;
+    KPackage::Package *internalPackage;
     Package *fallbackPackage;
-#ifndef PLASMA_NO_PACKAGE_EXTRADATA
-    QStringList mimeTypes;
-#endif
-    KPluginInfo *metadata;
-    bool externalPaths : 1;
-    bool valid : 1;
-    bool checkedValid : 1;
+    PackageStructure *structure;
 };
 
 }
