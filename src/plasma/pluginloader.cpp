@@ -404,6 +404,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
     const QString hashkey = packageFormat + '%' + specialization;
     PackageStructure *structure = d->structures.value(hashkey).data();
+
     KPackage::PackageStructure *internalStructure = 0;
     if (structure) {
         return Package(structure);
@@ -431,8 +432,17 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     }
 
     internalStructure = KPackage::PackageTrader::self()->loadPackageStructure(packageFormat);
-    structure = new PackageStructure();
-    structure->d->internalStructure = internalStructure;
+
+    if (internalStructure) {
+        structure = new PackageStructure();
+        structure->d->internalStructure = internalStructure;
+    //fallback to old structures
+    } else {
+        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(d->packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
+    }
+
+
     if (structure) {
         d->structures.insert(hashkey, structure);
         return Package(structure);

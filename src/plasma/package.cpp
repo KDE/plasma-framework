@@ -48,7 +48,8 @@ namespace Plasma
 
 PackagePrivate::PackagePrivate()
     : internalPackage(0),
-      fallbackPackage(0)
+      fallbackPackage(0),
+      structure(0)
 {
 }
 
@@ -60,10 +61,16 @@ PackagePrivate::~PackagePrivate()
 Package::Package(PackageStructure *structure)
     : d(new Plasma::PackagePrivate())
 {
+    d->structure = structure;
+
     if (structure && structure->d->internalStructure) {
         d->internalPackage = new KPackage::Package(structure->d->internalStructure);
     } else {
-        d->internalPackage = new KPackage::Package();
+        d->internalPackage = new KPackage::Package(new KPackage::PackageStructure);
+        //for retrocompatibility
+        if (structure) {
+            structure->initPackage(this);
+        }
     }
 }
 
@@ -174,6 +181,13 @@ QStringList Package::entryList(const char *key) const
 
 void Package::setPath(const QString &path)
 {
+    if (path == d->internalPackage->path()) {
+        return;
+    }
+
+    if (d->structure && !d->structure->d->internalStructure) {
+        d->structure->pathChanged(this);
+    }
     d->internalPackage->setPath(path);
 }
 

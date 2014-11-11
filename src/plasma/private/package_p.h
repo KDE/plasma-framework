@@ -37,6 +37,7 @@ public:
 
     KPackage::Package *internalPackage;
     Package *fallbackPackage;
+    PackageStructure *structure;
 };
 
 }

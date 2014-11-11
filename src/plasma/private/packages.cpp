@@ -51,7 +51,7 @@ QString ChangeableMainScriptPackage::mainScriptConfigKey() const
     return QLatin1String("X-Plasma-MainScript");
 }
 
-void ChangeableMainScriptPackage::pathChanged(Package *package)
+void ChangeableMainScriptPackage::pathChanged(KPackage::Package *package)
 {
     if (package->path().isEmpty()) {
         return;
