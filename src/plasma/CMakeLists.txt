@@ -66,8 +66,6 @@ set(Plasma_LIB_SRCS
 #packages
     package.cpp
     packagestructure.cpp
-    private/packagejob.cpp
-    private/packagejobthread.cpp
     private/packages.cpp
 
 #graphics
