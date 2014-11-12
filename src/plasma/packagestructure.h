@@ -29,6 +29,8 @@
 #include <plasma/package.h>
 #include <plasma/version.h>
 
+#ifndef PLASMA_NO_DEPRECATED
+
 namespace Plasma
 {
 
@@ -40,7 +42,7 @@ class PLASMA_EXPORT PackageStructure : public QObject
 
 public:
 
-    explicit PackageStructure(QObject *parent = 0, const QVariantList &args = QVariantList());
+    PLASMA_DEPRECATED explicit PackageStructure(QObject *parent = 0, const QVariantList &args = QVariantList());
 
     ~PackageStructure();
 
@@ -55,13 +57,13 @@ public:
      * @arg package the Package to set up. The object is empty of all definition when
      *      first passed in.
      */
-    virtual void initPackage(Package *package);
+    PLASMA_DEPRECATED virtual void initPackage(Package *package);
 
     /**
      * Called whenever the path changes so that subclasses may take
      * package specific actions.
      */
-    virtual void pathChanged(Package *package);
+    PLASMA_DEPRECATED virtual void pathChanged(Package *package);
 
     /**
      * Installs a package matching this package structure. By default installs a
@@ -74,7 +76,7 @@ public:
      *                    installed to
      * @return KJob* to track the installation status
      **/
-    virtual KJob *install(Package *package, const QString &archivePath, const QString &packageRoot);
+    PLASMA_DEPRECATED virtual KJob *install(Package *package, const QString &archivePath, const QString &packageRoot);
 
     /**
      * Uninstalls a package matching this package structure.
@@ -85,7 +87,7 @@ public:
      * @param packageRoot path to the directory where the package should be installed to
      * @return KJob* to track the installation status
      */
-    virtual KJob *uninstall(Package *package, const QString &packageRoot);
+    PLASMA_DEPRECATED virtual KJob *uninstall(Package *package, const QString &packageRoot);
 
 private:
     PackageStructurePrivate *d;
@@ -105,5 +107,7 @@ private:
 #define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile) \
     K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
+#endif
 
 #endif

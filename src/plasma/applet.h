@@ -226,20 +226,24 @@ public:
     void setUserConfiguring(bool configuring);
 
 //UTILS
+#ifndef PLASMA_NO_DEPRECATED
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
      * Deprecated: please use kPackage()
      *
+     * @deprecated use kPackage() instead
      * @return the Package object, or an invalid one if none
      **/
-    Package package() const;
+    PLASMA_DEPRECATED Package package() const;
+#endif
 
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
      *
      * @return the Package object, or an invalid one if none
+     * @since 5.5
      **/
     KPackage::Package kPackage() const;
 

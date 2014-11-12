@@ -49,6 +49,7 @@ public:
     explicit Corona(QObject *parent = 0);
     ~Corona();
 
+#ifndef PLASMA_NO_DEPRECATED
     /**
      * Accessor for the associated Package object if any.
      * A Corona package defines how Containments are laid out in a View,
@@ -56,15 +57,18 @@ public:
      * and in genelal all the furniture specific of a particular
      * device form factor.
      *
+     * @deprecated use kPackage instead
      * @return the Package object, or an invalid one if none
      * @since 5.0
      **/
-    Plasma::Package package() const;
+    PLASMA_DEPRECATED Plasma::Package package() const;
 
     /**
      * Setting the package name
+     * @deprecated use setKPackage instead
      */
-    void setPackage(const Plasma::Package &package);
+    PLASMA_DEPRECATED void setPackage(const Plasma::Package &package);
+#endif
 
     /**
      * Accessor for the associated Package object if any.
@@ -297,13 +301,16 @@ Q_SIGNALS:
      */
     void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
 
+#ifndef PLASMA_NO_DEPRECATED
     /**
      * Emitted when the package for this corona has been changed.
      * Shells must support changing the shell package on the fly (for instance due to device form factor changing)
      *
+     * @deprecated use kPackageChanged instead
      * @param package the new package that defines the Corona furniture and behavior
      */
-    void packageChanged(const Plasma::Package &package);
+    PLASMA_DEPRECATED void packageChanged(const Plasma::Package &package);
+#endif
 
     /**
      * Emitted when the package for this corona has been changed.
