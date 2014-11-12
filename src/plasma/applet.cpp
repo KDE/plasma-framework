@@ -287,7 +287,12 @@ KConfigLoader *Applet::configScheme() const
 
 Package Applet::package() const
 {
-    return d->package ? *d->package : Package();
+    return d->legacyPackage ? *d->legacyPackage : Package();
+}
+
+KPackage::Package Applet::kPackage() const
+{
+    return d->package ? *d->package : KPackage::Package();
 }
 
 void Applet::updateConstraints(Plasma::Types::Constraints constraints)

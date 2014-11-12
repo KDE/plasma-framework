@@ -33,6 +33,8 @@
 #include <plasma/version.h>
 #include <plasma/framesvg.h>
 
+#include <KPackage/Package>
+
 class KActionCollection;
 class KConfigLoader;
 
@@ -227,10 +229,19 @@ public:
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
+     * Deprecated: please use kPackage()
      *
      * @return the Package object, or an invalid one if none
      **/
     Package package() const;
+
+    /**
+     * Accessor for the associated Package object if any.
+     * Generally, only Plasmoids come in a Package.
+     *
+     * @return the Package object, or an invalid one if none
+     **/
+    KPackage::Package kPackage() const;
 
     /**
      * Called when any of the geometry constraints have been updated.
