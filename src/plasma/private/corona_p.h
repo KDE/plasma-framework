@@ -49,7 +49,8 @@ public:
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
     Corona *q;
-    Package package;
+    KPackage::Package package;
+    Package legacyPackage;
     KConfigGroup desktopDefaultsConfig;
     Types::ImmutabilityType immutability;
     QString configName;

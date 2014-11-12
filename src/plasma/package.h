@@ -345,6 +345,7 @@ private:
     friend class PackagePrivate;
     friend class PackageStructure;
     friend class AppletPrivate;
+    friend class Corona;
 };
 
 }

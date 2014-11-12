@@ -42,7 +42,8 @@ class PLASMA_EXPORT Corona : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isStartupCompleted READ isStartupCompleted NOTIFY startupCompleted)
-    Q_PROPERTY(Plasma::Package package READ package NOTIFY packageChanged)
+    //FIXME: is changing properties signature OK?
+    Q_PROPERTY(KPackage::Package package READ kPackage NOTIFY kPackageChanged)
 
 public:
     explicit Corona(QObject *parent = 0);
@@ -64,6 +65,24 @@ public:
      * Setting the package name
      */
     void setPackage(const Plasma::Package &package);
+
+    /**
+     * Accessor for the associated Package object if any.
+     * A Corona package defines how Containments are laid out in a View,
+     * ToolBoxes, default layout, error messages
+     * and in genelal all the furniture specific of a particular
+     * device form factor.
+     *
+     * @return the Package object, or an invalid one if none
+     * @since 5.5
+     **/
+    KPackage::Package kPackage() const;
+
+    /**
+     * Setting the package for the corona
+     * @since 5.5
+     */
+    void setKPackage(const KPackage::Package &package);
 
     /**
      * @return all containments on this Corona
@@ -285,6 +304,14 @@ Q_SIGNALS:
      * @param package the new package that defines the Corona furniture and behavior
      */
     void packageChanged(const Plasma::Package &package);
+
+    /**
+     * Emitted when the package for this corona has been changed.
+     * Shells must support changing the shell package on the fly (for instance due to device form factor changing)
+     *
+     * @param package the new package that defines the Corona furniture and behavior
+     */
+    void kPackageChanged(const KPackage::Package &package);
 
     /**
      * Emitted when the startup phase has been completed
