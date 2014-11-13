@@ -105,7 +105,10 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
                          q, &View::showConfigurationInterface);
         QObject::connect(cont, SIGNAL(destroyedChanged(bool)),
                          q, SLOT(updateDestroyed(bool)));
-        q->setVisible(!cont->destroyed() && cont->isUiReady());
+        if (cont->containmentType() == Plasma::Types::PanelContainment ||
+            cont->containmentType() == Plasma::Types::CustomPanelContainment) {
+            q->setVisible(!cont->destroyed() && cont->isUiReady());
+        }
     } else {
         return;
     }
