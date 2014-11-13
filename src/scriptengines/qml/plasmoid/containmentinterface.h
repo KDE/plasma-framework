@@ -27,7 +27,6 @@
 
 #include "appletinterface.h"
 
-class QmlObject;
 class WallpaperInterface;
 
 namespace KIO
