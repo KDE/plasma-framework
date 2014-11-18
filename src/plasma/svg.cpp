@@ -355,6 +355,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
+        //p.setDevicePixelRatio(devicePixelRatio);
         //qDebug() << "found cached version of " << id << p.size();
         return p;
     }
@@ -371,6 +372,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
     //makeUniform should never change the size so much that it gains or loses a whole pixel
     p = QPixmap(size);
+    //p.setDevicePixelRatio(devicePixelRatio);
 
     p.fill(Qt::transparent);
     QPainter renderPainter(&p);
@@ -736,7 +738,7 @@ Plasma::Theme::ColorGroup Svg::colorGroup() const
 QPixmap Svg::pixmap(const QString &elementID)
 {
     if (elementID.isNull() || d->multipleImages) {
-        return d->findInCache(elementID, size());
+        return d->findInCache(elementID, size() * d->devicePixelRatio);
     } else {
         return d->findInCache(elementID);
     }
@@ -744,7 +746,7 @@ QPixmap Svg::pixmap(const QString &elementID)
 
 QImage Svg::image(const QSize &size, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, size));
+    QPixmap pix(d->findInCache(elementID, size * d->devicePixelRatio));
     return pix.toImage();
 }
 
