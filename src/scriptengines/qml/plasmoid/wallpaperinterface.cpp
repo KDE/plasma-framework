@@ -124,6 +124,7 @@ void WallpaperInterface::syncWallpaperPackage()
         m_qmlObject = new KDeclarative::QmlObject(this);
         s_rootObjects[m_qmlObject->engine()] = this;
         m_qmlObject->setInitializationDelayed(true);
+        connect(m_qmlObject, &KDeclarative::QmlObject::finished, this, &WallpaperInterface::loadFinished);
     }
 
     m_actions->clear();
@@ -145,7 +146,10 @@ void WallpaperInterface::syncWallpaperPackage()
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
     m_qmlObject->completeInitialization();
+}
 
+void WallpaperInterface::loadFinished()
+{
     if (m_qmlObject->mainComponent() &&
             m_qmlObject->rootObject() &&
             !m_qmlObject->mainComponent()->isError()) {

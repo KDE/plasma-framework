@@ -96,6 +96,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void syncWallpaperPackage();
     void executeAction(const QString &name);
+    void loadFinished();
 
 private:
     QString m_wallpaperPlugin;
