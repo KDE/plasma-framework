@@ -196,6 +196,18 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         qWarning() << "Invalid home screen package";
     }
 
+    QQmlComponent c(engine());
+    c.setData("import QtQuick 2.1\n\
+        import QtQuick.Controls 1.0\n\
+        import QtQuick.Controls.Private 1.0\n \
+        Item {\
+          Component.onCompleted: {\
+            Settings.styleName = \"Base\";\
+          }\
+        }", QUrl());
+    QObject *o = c.create();
+    o->deleteLater();
+
     setResizeMode(View::SizeRootObjectToView);
 }
 
