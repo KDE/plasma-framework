@@ -22,7 +22,7 @@
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
 
-#include <kpackage/packagetrader.h>
+#include <kpackage/packageloader.h>
 #include <kpackage/packagestructure.h>
 
 #include <QVariantMap>
@@ -35,7 +35,7 @@ PackageStructure::PackageStructure(QObject *parent, const QVariantList &args)
       d(new PackageStructurePrivate)
 {
     if (!args.isEmpty() && args.first().canConvert<QString>()) {
-        d->internalStructure = KPackage::PackageTrader::self()->loadPackageStructure(args.first().toString());
+        d->internalStructure = KPackage::PackageLoader::self()->loadPackageStructure(args.first().toString());
     }
 
     Q_UNUSED(args)

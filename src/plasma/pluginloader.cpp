@@ -25,7 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kplugintrader.h>
-#include <kpackage/packagetrader.h>
+#include <kpackage/packageloader.h>
 
 #include "config-plasma.h"
 
@@ -431,7 +431,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         }
     }
 
-    internalStructure = KPackage::PackageTrader::self()->loadPackageStructure(packageFormat);
+    internalStructure = KPackage::PackageLoader::self()->loadPackageStructure(packageFormat);
 
     if (internalStructure) {
         structure = new PackageStructure();
