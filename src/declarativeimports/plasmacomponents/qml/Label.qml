@@ -50,7 +50,7 @@ Text {
     font.underline: theme.defaultFont.underline
     font.weight: theme.defaultFont.weight
     font.wordSpacing: theme.defaultFont.wordSpacing
-    color: theme.textColor
+    color: PlasmaCore.ColorScope.textColor
 
     opacity: enabled? 1 : 0.6
 
