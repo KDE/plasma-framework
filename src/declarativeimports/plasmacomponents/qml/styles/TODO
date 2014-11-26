@@ -4,10 +4,10 @@
 * TabViewStyle
 * ToolBarStyle
 * SpinBoxStyle
+* FocusFrameStyle
+* StatusBarStyle
 
 CalendarStyle
-FocusFrameStyle
-StatusBarStyle
 SwitchStyle
 TableViewStyle
 
