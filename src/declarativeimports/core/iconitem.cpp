@@ -101,29 +101,39 @@ void IconItem::setSource(const QVariant &source)
             return;
         }
 
-        if (!m_svgIcon) {
-            m_svgIcon = new Plasma::Svg(this);
-            m_svgIcon->setColorGroup(m_colorGroup);
-        }
-        //try as a svg icon
-        m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
-
-        m_svgIcon->setContainsMultipleImages(true);
-
-        //success?
-        if (m_svgIcon->isValid() && m_svgIcon->hasElement(m_source.toString())) {
+        //If a url in the form file:// is passed, take the image pointed by that from disk
+        QUrl url = QUrl(source.toString());
+        if (url.isLocalFile()) {
             m_icon = QIcon();
-            connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
-
-            //ok, svg not available
-        } else {
-            m_icon = QIcon::fromTheme(source.toString());
+            m_imageIcon = QImage(url.path());
+            m_pixmapIcon = QPixmap();
             delete m_svgIcon;
             m_svgIcon = 0;
-        }
+        } else {
+            if (!m_svgIcon) {
+                m_svgIcon = new Plasma::Svg(this);
+                m_svgIcon->setColorGroup(m_colorGroup);
+            }
+            //try as a svg icon
+            m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
 
-        m_imageIcon = QImage();
-        m_pixmapIcon = QPixmap();
+            m_svgIcon->setContainsMultipleImages(true);
+
+            //success?
+            if (m_svgIcon->isValid() && m_svgIcon->hasElement(m_source.toString())) {
+                m_icon = QIcon();
+                connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
+
+                //ok, svg not available
+            } else {
+                m_icon = QIcon::fromTheme(source.toString());
+                delete m_svgIcon;
+                m_svgIcon = 0;
+                m_imageIcon = QImage();
+                m_pixmapIcon = QPixmap();
+
+            }
+        }
 
     } else if (source.canConvert<QPixmap>()) {
         m_icon = QIcon();

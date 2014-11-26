@@ -23,7 +23,7 @@ import QtQuick.Controls 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 
-import "styles" as Styles
+import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
 /**
  * Simple progressBar using the plasma theme.
