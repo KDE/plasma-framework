@@ -87,7 +87,7 @@ QtQuickControlStyle.ButtonStyle {
                 visible: control.text != ""
                 Layout.fillWidth: true
                 height: parent.height
-                color: control.hovered || !control.flat ? theme.buttonTextColor : theme.textColor
+                color: control.hovered || !control.flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
