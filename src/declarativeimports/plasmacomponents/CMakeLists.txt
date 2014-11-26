@@ -76,3 +76,6 @@ install(FILES qml/private/TextFieldFocus.qml DESTINATION ${QML_INSTALL_DIR}/../p
 
 #install platform overrides
 install(DIRECTORY platformcomponents/touch/ DESTINATION ${QML_INSTALL_DIR}/../platformqml/touch/org/kde/plasma/components)
+
+install(DIRECTORY qml/styles/ DESTINATION ${QML_INSTALL_DIR}/QtQuick/Controls/Styles/Plasma)
+install(DIRECTORY qml/private DESTINATION ${QML_INSTALL_DIR}/QtQuick/Controls/Styles/)
