@@ -27,6 +27,3 @@ install(TARGETS plasmacomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/pl
 
 install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
 
-install(DIRECTORY qml/styles/ DESTINATION ${QML_INSTALL_DIR}/QtQuick/Controls/Styles/Plasma)
-#FIXME: hack
-install(DIRECTORY qml/private DESTINATION ${QML_INSTALL_DIR}/QtQuick/Controls/Styles/)
