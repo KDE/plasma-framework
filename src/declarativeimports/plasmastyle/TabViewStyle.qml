@@ -47,9 +47,14 @@ QtQuickControlStyle.TabViewStyle {
 
         PlasmaCore.FrameSvgItem {
             anchors.fill: parent
-            visible: styleData.selected
+            opacity: styleData.selected ? 1 : (styleData.hovered ? 0.4 : 0)
             imagePath: "widgets/tabbar"
             prefix: control.tabPosition === Qt.TopEdge ? "north-active-tab" : "south-active-tab"
+            Behavior on opacity {
+                PropertyAnimation {
+                    duration: units.longDuration
+                }
+            }
         }
 
         PlasmaComponents.Label {
