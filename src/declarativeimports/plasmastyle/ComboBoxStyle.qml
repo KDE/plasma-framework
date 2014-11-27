@@ -26,109 +26,109 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import "private" as Private
 
 QtQuickControlStyle.ComboBoxStyle {
-        drowDownButtonWidth: units.iconSizes.small
+    drowDownButtonWidth: units.iconSizes.small
 
-        label: PlasmaComponents.Label {
-            text: control.currentText
-            elide: Text.ElideRight
-            verticalAlignment: Text.AlignTop
+    label: PlasmaComponents.Label {
+        text: control.currentText
+        elide: Text.ElideRight
+        verticalAlignment: Text.AlignTop
+    }
+
+    background: Item {
+
+        //size copied from Plasma Button
+        //for some reason the logic there is:
+        // maximum of
+        //   the calculated height + frame margins
+        //   Or 1.6 letters tall no matter how big the margins are
+
+        //QtQuickControls tries to be helpful and adds on the margin sizes for us
+        //to compensate, we have to subtract our margins here in order to do the  max 1.6 lines high tall feature
+        implicitHeight: Math.max(theme.mSize(theme.defaultFont).height*1.6 - surfaceNormal.margins.top - surfaceNormal.margins.bottom,
+                                    theme.mSize(theme.defaultFont).height)
+
+        implicitWidth: theme.mSize(theme.defaultFont).width*12
+
+        Private.ButtonShadow {
+            anchors.fill: parent
+            state: {
+                if (control.pressed) {
+                    return "hidden"
+                } else if (control.hovered) {
+                    return "hover"
+                } else if (control.activeFocus) {
+                    return "focus"
+                } else {
+                    return "shadow"
+                }
+            }
         }
 
-        background: Item {
 
-            //size copied from Plasma Button
-            //for some reason the logic there is:
-            // maximum of
-            //   the calculated height + frame margins
-            //   Or 1.6 letters tall no matter how big the margins are
+        //This code is duplicated here and Button and ToolButton
+        //maybe we can make an AbstractButton class?
+        PlasmaCore.FrameSvgItem {
+            id: surfaceNormal
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "normal"
+        }
 
-            //QtQuickControls tries to be helpful and adds on the margin sizes for us
-            //to compensate, we have to subtract our margins here in order to do the  max 1.6 lines high tall feature
-            implicitHeight: Math.max(theme.mSize(theme.defaultFont).height*1.6 - surfaceNormal.margins.top - surfaceNormal.margins.bottom,
-                                        theme.mSize(theme.defaultFont).height)
+        PlasmaCore.FrameSvgItem {
+            id: surfacePressed
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "pressed"
+            opacity: 0
+        }
 
-            implicitWidth: theme.mSize(theme.defaultFont).width*12
+        state: control.pressed ? "pressed" : "normal"
 
-            Private.ButtonShadow {
-                anchors.fill: parent
-                state: {
-                    if (control.pressed) {
-                        return "hidden"
-                    } else if (control.hovered) {
-                        return "hover"
-                    } else if (control.activeFocus) {
-                        return "focus"
-                    } else {
-                        return "shadow"
+        states: [
+            State { name: "normal" },
+            State { name: "pressed"
+                    PropertyChanges {
+                        target: surfaceNormal
+                        opacity: 0
                     }
-                }
-            }
-
-
-            //This code is duplicated here and Button and ToolButton
-            //maybe we can make an AbstractButton class?
-            PlasmaCore.FrameSvgItem {
-                id: surfaceNormal
-                anchors.fill: parent
-                imagePath: "widgets/button"
-                prefix: "normal"
-            }
-
-            PlasmaCore.FrameSvgItem {
-                id: surfacePressed
-                anchors.fill: parent
-                imagePath: "widgets/button"
-                prefix: "pressed"
-                opacity: 0
-            }
-
-            state: control.pressed ? "pressed" : "normal"
-
-            states: [
-                State { name: "normal" },
-                State { name: "pressed"
-                        PropertyChanges {
-                            target: surfaceNormal
-                            opacity: 0
-                        }
-                        PropertyChanges {
-                            target: surfacePressed
-                            opacity: 1
-                        }
-                }
-            ]
-
-            transitions: [
-                Transition {
-                    to: "normal"
-                    //Cross fade from pressed to normal
-                    ParallelAnimation {
-                        NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
-                        NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                    PropertyChanges {
+                        target: surfacePressed
+                        opacity: 1
                     }
-                }
-            ]
-
-            PlasmaCore.SvgItem {
-                width: drowDownButtonWidth
-                height: drowDownButtonWidth
-                anchors {
-                    right: parent.right
-                    rightMargin: surfaceNormal.margins.right
-                    verticalCenter: parent.verticalCenter
-                }
-                svg: PlasmaCore.Svg {
-                    imagePath: "widgets/arrows"
-                    colorGroup: PlasmaCore.Theme.ButtonColorGroup
-                }
-                elementId: "down-arrow"
             }
+        ]
 
-            Component.onCompleted: {
-                padding.top = surfaceNormal.margins.top
-                padding.left = surfaceNormal.margins.left
-                padding.right = surfaceNormal.margins.right
-                padding.bottom = surfaceNormal.margins.bottom
+        transitions: [
+            Transition {
+                to: "normal"
+                //Cross fade from pressed to normal
+                ParallelAnimation {
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                }
             }
+        ]
+
+        PlasmaCore.SvgItem {
+            width: drowDownButtonWidth
+            height: drowDownButtonWidth
+            anchors {
+                right: parent.right
+                rightMargin: surfaceNormal.margins.right
+                verticalCenter: parent.verticalCenter
+            }
+            svg: PlasmaCore.Svg {
+                imagePath: "widgets/arrows"
+                colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            }
+            elementId: "down-arrow"
+        }
+
+        Component.onCompleted: {
+            padding.top = surfaceNormal.margins.top
+            padding.left = surfaceNormal.margins.left
+            padding.right = surfaceNormal.margins.right
+            padding.bottom = surfaceNormal.margins.bottom
         }
     }
+}

@@ -40,8 +40,8 @@ QtQuickControlStyle.MenuBarStyle {
         imagePath: "widgets/tabbar"
         prefix: styleData.open || styleData.selected ? "north-active-tab" : ""
         property string plainText: QtQuickControlsPrivate.StyleHelpers.removeMnemonics(styleData.text)
-        implicitWidth: text.implicitWidth + units.smallSpacing * 2
-        implicitHeight: text.implicitHeight + units.smallSpacing
+        implicitWidth: text.implicitWidth + units.smallSpacing * 3
+        implicitHeight: text.implicitHeight + units.smallSpacing * 2
         enabled: styleData.enabled
 
         Accessible.role: Accessible.MenuItem
