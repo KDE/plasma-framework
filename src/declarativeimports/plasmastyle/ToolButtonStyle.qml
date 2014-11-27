@@ -21,6 +21,7 @@
 import QtQuick 2.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
@@ -82,7 +83,7 @@ QtQuickControlStyle.ButtonStyle {
             PlasmaComponents.Label {
                 id: label
                 Layout.minimumWidth: implicitWidth
-                text: control.text
+                text: QtQuickControlsPrivate.StyleHelpers.stylizeMnemonics(control.text)
                 font: control.font
                 visible: control.text != ""
                 Layout.fillWidth: true
