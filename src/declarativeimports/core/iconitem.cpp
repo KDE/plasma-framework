@@ -117,13 +117,21 @@ void IconItem::setSource(const QVariant &source)
 
             //ok, svg not available
         } else {
-            m_icon = QIcon::fromTheme(source.toString());
-            delete m_svgIcon;
-            m_svgIcon = 0;
+            QUrl url = QUrl(source.toString());
+            if (url.isLocalFile()) {
+                m_icon = QIcon();
+                m_imageIcon = QImage(url.path());
+                m_pixmapIcon = QPixmap();
+                delete m_svgIcon;
+                m_svgIcon = 0;
+            } else {
+                m_icon = QIcon::fromTheme(source.toString());
+                delete m_svgIcon;
+                m_svgIcon = 0;
+                m_imageIcon = QImage();
+                m_pixmapIcon = QPixmap();
+            }
         }
-
-        m_imageIcon = QImage();
-        m_pixmapIcon = QPixmap();
 
     } else if (source.canConvert<QPixmap>()) {
         m_icon = QIcon();
