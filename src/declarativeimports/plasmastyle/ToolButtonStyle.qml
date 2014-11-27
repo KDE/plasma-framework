@@ -33,7 +33,7 @@ QtQuickControlStyle.ButtonStyle {
 
     property int minimumWidth
     property int minimumHeight
-
+    property bool flat: control.flat !== undefined ? control.flat : !(control.pressed || (control.checkable && control.checked))
     label: Item {
         //wrapper is needed as we are adjusting the preferredHeight of the layout from the default
         //and the implicitHeight is implicitly read only
@@ -76,7 +76,7 @@ QtQuickControlStyle.ButtonStyle {
                 Layout.minimumHeight: Layout.minimumWidth
                 Layout.maximumHeight: Layout.minimumWidth
                 active: control.hovered
-                colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                colorGroup: control.hovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
             }
 
             PlasmaComponents.Label {
@@ -87,7 +87,7 @@ QtQuickControlStyle.ButtonStyle {
                 visible: control.text != ""
                 Layout.fillWidth: true
                 height: parent.height
-                color: control.hovered || !control.flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
+                color: control.hovered || !style.flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
@@ -108,7 +108,7 @@ QtQuickControlStyle.ButtonStyle {
                         anchors.fill: parent
                         svg: PlasmaCore.Svg {
                             imagePath: "widgets/arrows"
-                            colorGroup: control.hovered || !control.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                            colorGroup: control.hovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
                         }
                         elementId: "down-arrow"
                     }
@@ -118,7 +118,7 @@ QtQuickControlStyle.ButtonStyle {
     }
 
     background: {
-        if (control.text.length == 0 && control.width == control.height && (control.parent && control.parent.checkedButton === undefined) && !control.flat) {
+        if (control.text.length == 0 && control.width == control.height && (control.parent && control.parent.checkedButton === undefined) && !style.flat) {
             return roundButtonComponent
         } else {
             return buttonComponent
@@ -141,7 +141,7 @@ QtQuickControlStyle.ButtonStyle {
             property alias hasOverState: roundShadow.hasOverState
             Private.RoundShadow {
                 id: roundShadow
-                visible: !flat
+                visible: !style.flat
                 anchors.fill: parent
                 state: {
                     if (control.pressed) {
@@ -168,7 +168,7 @@ QtQuickControlStyle.ButtonStyle {
                 width: Math.floor(parent.height/2) * 2
                 height: width
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
-                opacity: (control.pressed || control.checked || !control.flat || (roundShadow.hasOverState && control.hovered)) ? 1 : 0
+                opacity: (control.pressed || control.checked || !style.flat || (roundShadow.hasOverState && control.hovered)) ? 1 : 0
                 Behavior on opacity {
                     PropertyAnimation { duration: units.longDuration }
                 }
@@ -226,7 +226,7 @@ QtQuickControlStyle.ButtonStyle {
                 prefix: "normal"
 
                 enabledBorders: {
-                    if (control.flat || !control.parent ||
+                    if (style.flat || !control.parent ||
                         control.parent.width < control.parent.implicitWidth ||
                         control.parent.checkedButton === undefined ||
                         !bordersSvg.hasElement("pressed-hint-compose-over-border")) {
@@ -352,7 +352,7 @@ QtQuickControlStyle.ButtonStyle {
                 State { name: "normal"
                     PropertyChanges {
                         target: surfaceNormal
-                        opacity: control.flat ? 0 : 1
+                        opacity: style.flat ? 0 : 1
                     }
                     PropertyChanges {
                         target: surfacePressed
