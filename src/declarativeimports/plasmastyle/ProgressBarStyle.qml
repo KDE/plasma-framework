@@ -43,10 +43,12 @@ ProgressBarStyle {
     }
 
     background: Item {
+        implicitWidth: units.gridUnit * 14
+        implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
         PlasmaCore.FrameSvgItem {
             anchors.centerIn: parent
             width: parent.width
-            height: style.implicitHeight
+            height: naturalSize.height
             imagePath: style.imagePath
             prefix: "bar-inactive"
         }
@@ -60,7 +62,7 @@ ProgressBarStyle {
             prefix: "bar-active"
 
             width: control.indeterminate ? units.gridUnit * 2 : Math.max(margins.left + margins.right, parent.width)
-            height: style.implicitHeight
+            height: naturalSize.height
             visible: control.indeterminate || currentProgress > 0
 
             SequentialAnimation {
