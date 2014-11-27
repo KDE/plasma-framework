@@ -21,7 +21,7 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 1.2
-import "styles" as Styles
+import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
 /**
  * A simple busy indicator,
