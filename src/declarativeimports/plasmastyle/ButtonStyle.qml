@@ -73,7 +73,7 @@ QtQuickControlStyle.ButtonStyle {
             id: label
             Layout.minimumWidth: implicitWidth
             text: QtQuickControlsPrivate.StyleHelpers.stylizeMnemonics(control.text)
-            font: control.font
+            font: control.font === undefined ? theme.defaultFont : control.font
             visible: control.text != ""
             Layout.fillWidth: true
             height: parent.height

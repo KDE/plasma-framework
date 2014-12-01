@@ -30,7 +30,7 @@ BusyIndicatorStyle {
         anchors.centerIn: parent
         width:  Math.min(control.width, control.height)
         height: width
-        smooth: !control.running || control.smoothAnimation
+        smooth: !control.running || (control.smoothAnimation === true)
 
         Connections {
             target: control
