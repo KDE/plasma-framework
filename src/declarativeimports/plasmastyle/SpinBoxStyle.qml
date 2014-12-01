@@ -46,17 +46,6 @@ QtQuickControlStyle.SpinBoxStyle {
         colorGroup: PlasmaCore.Theme.ButtonColorGroup
     }
 
-   /* property Component incrementControl: Item {
-        implicitWidth: padding.right
-        Image {
-            source: "images/arrow-up.png"
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: 1
-            opacity: control.enabled ? (styleData.upPressed ? 1 : 0.6) : 0.5
-        }
-    }*/
-
-
     incrementControl: PlasmaCore.SvgItem {
         anchors {
             fill: parent
@@ -96,12 +85,6 @@ QtQuickControlStyle.SpinBoxStyle {
             anchors.fill: parent
             imagePath: "widgets/lineedit"
             prefix: "base"
-        }
-        Component.onCompleted: {
-            root.padding.left = base.margins.left
-            root.padding.top = base.margins.top
-            root.padding.right = base.margins.right + (control.clearButtonShown ? Math.max(control.parent.height*0.8, units.iconSizes.small)+units.smallSpacing : 0)
-            root.padding.bottom = base.margins.bottom
         }
     }
 }
