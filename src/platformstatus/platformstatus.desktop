@@ -2,7 +2,7 @@
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-Library=kf5/kded/platformstatus
-X-KDE-DBus-ModuleName=plaformstatus
+X-KDE-DBus-ModuleName=platformstatus
 X-KDE-Kded-autoload=true
 X-KDE-Kded-load-on-demand=false
 Name=Platform Status

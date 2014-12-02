@@ -26,6 +26,6 @@ target_link_libraries(
 )
 
 install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR}/kf5/kded )
-install( FILES kded_platformstatus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )
+install( FILES platformstatus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )
 install( FILES org.kde.platformstatus.xml   DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
 
