@@ -153,6 +153,11 @@ public:
     qreal backgroundIntensity;
     qreal backgroundSaturation;
     bool backgroundContrastEnabled;
+
+    //Version number of Plasma the Theme has been designed for
+    int apiMajor;
+    int apiMinor;
+    int apiRevision;
 };
 
 }
