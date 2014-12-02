@@ -48,6 +48,12 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 {
     m_actions = new KActionCollection(this);
 
+    //resize at the beginning to avoid as much resize events as possible
+    if (parent) {
+        setWidth(parent->width());
+        setHeight(parent->height());
+    }
+
     if (!m_containmentInterface->containment()->wallpaper().isEmpty()) {
         syncWallpaperPackage();
     }
@@ -145,7 +151,12 @@ void WallpaperInterface::syncWallpaperPackage()
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
-    m_qmlObject->completeInitialization();
+
+    //initialize with our size to avoid as much resize events as possible
+    QVariantHash props;
+    props["width"] = width();
+    props["height"] = height();
+    m_qmlObject->completeInitialization(props);
 }
 
 void WallpaperInterface::loadFinished()
