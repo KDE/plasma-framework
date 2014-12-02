@@ -168,18 +168,18 @@ PlasmaComponents.CommonDialog {
     }
     onStatusChanged: {
         //FIXME: why needs focus deactivation then activation?
-        if (status == DialogStatus.Open) {
+        if (status == PlasmaComponents.DialogStatus.Open) {
             filterField.focus = false
             focusTimer.running = true
         }
 
-        if (status == DialogStatus.Opening) {
+        if (status == PlasmaComponents.DialogStatus.Opening) {
             if (listView.currentItem != null) {
                 listView.currentItem.focus = false
             }
             listView.currentIndex = -1
             listView.positionViewAtIndex(0, ListView.Beginning)
-        } else if (status == DialogStatus.Open) {
+        } else if (status == PlasmaComponents.DialogStatus.Open) {
             listView.focus = true
         }
     }
