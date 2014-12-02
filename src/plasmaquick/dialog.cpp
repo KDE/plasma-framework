@@ -326,8 +326,8 @@ void DialogPrivate::updateMinimumWidth()
     //on the scene
     auto margin = frameSvgItem->fixedMargins();
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt() + margin->left() + margin->right();
-    q->contentItem()->setHeight(qMax(q->width(), minimumWidth));
-    q->setHeight(qMax(q->width(), minimumWidth));
+    q->contentItem()->setWidth(qMax(q->width(), minimumWidth));
+    q->setWidth(qMax(q->width(), minimumWidth));
 
     hintsCommitTimer.start();
 }
@@ -368,8 +368,8 @@ void DialogPrivate::updateMaximumWidth()
 
     auto margin = frameSvgItem->fixedMargins();
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt() + margin->left() + margin->right();
-    q->contentItem()->setHeight(qMax(q->width(), maximumWidth));
-    q->setHeight(qMax(q->width(), maximumWidth));
+    q->contentItem()->setWidth(qMax(q->width(), maximumWidth));
+    q->setWidth(qMax(q->width(), maximumWidth));
 
     hintsCommitTimer.start();
 }
