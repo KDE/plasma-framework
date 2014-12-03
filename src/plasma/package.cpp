@@ -145,12 +145,12 @@ Plasma::Package Package::fallbackPackage() const
 
 QString Package::servicePrefix() const
 {
-    return d->internalPackage->servicePrefix();
+    return QString();
 }
 
 void Package::setServicePrefix(const QString &servicePrefix)
 {
-    d->internalPackage->setServicePrefix(servicePrefix);
+    d->servicePrefix = servicePrefix;
 }
 
 bool Package::allowExternalPaths() const

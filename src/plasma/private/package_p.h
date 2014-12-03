@@ -35,6 +35,7 @@ public:
     PackagePrivate();
     ~PackagePrivate();
 
+    QString servicePrefix;
     KPackage::Package *internalPackage;
     Package *fallbackPackage;
     PackageStructure *structure;

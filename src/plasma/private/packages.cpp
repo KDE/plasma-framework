@@ -111,7 +111,6 @@ void GenericPackage::initPackage(KPackage::Package *package)
 void PlasmoidPackage::initPackage(KPackage::Package *package)
 {
     GenericPackage::initPackage(package);
-    package->setServicePrefix("plasma-applet-");
     package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/");
 
     package->addFileDefinition("configmodel", "config/config.qml", i18n("Configuration UI pages model"));
@@ -121,7 +120,6 @@ void PlasmoidPackage::initPackage(KPackage::Package *package)
 void DataEnginePackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
-    package->setServicePrefix("plasma-dataengine-");
     package->setDefaultPackageRoot(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/");
 
     package->addDirectoryDefinition("data", "data", i18n("Data Files"));
