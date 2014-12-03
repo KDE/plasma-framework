@@ -42,7 +42,7 @@ class PLASMA_EXPORT Corona : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool isStartupCompleted READ isStartupCompleted NOTIFY startupCompleted)
-    Q_PROPERTY(Plasma::Package package READ package NOTIFY packageChanged)
+    Q_PROPERTY(Package package READ package NOTIFY packageChanged)
 
 public:
     explicit Corona(QObject *parent = 0);
