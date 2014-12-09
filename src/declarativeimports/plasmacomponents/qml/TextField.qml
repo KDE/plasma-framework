@@ -21,7 +21,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.2 as QtControls
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "styles" as Styles
+import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
 
 /**

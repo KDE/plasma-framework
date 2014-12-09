@@ -18,7 +18,7 @@
 */
 
 import QtQuick.Controls 1.1
-import "styles" as Styles
+import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
 /**
  * This is a combobox which uses the plasma theme.
