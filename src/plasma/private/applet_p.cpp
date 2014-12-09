@@ -241,11 +241,14 @@ void AppletPrivate::askDestroy()
         Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
 
         if (!q->isContainment()) {
+            deleteNotification->setTitle(i18n("Widget Removed"));
             deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
         } else if (asContainment && (asContainment->containmentType() == Types::PanelContainment || asContainment->containmentType() == Types::CustomPanelContainment)) {
+            deleteNotification->setTitle(i18n("Panel Removed"));
             deleteNotification->setText(i18n("A Panel has been removed."));
         //This will never happen with our current shell, but could with a custom one
         } else {
+            deleteNotification->setTitle(i18n("Desktop Removed"));
             deleteNotification->setText(i18n("A Desktop has been removed."));
         }
 
