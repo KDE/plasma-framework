@@ -36,6 +36,7 @@ QtQuickControlStyle.SliderStyle {
     PlasmaCore.Svg {
         id: grooveSvg
         imagePath: "widgets/slider"
+
     }
     handle: Item {
         width: handle.naturalSize.width
@@ -62,6 +63,8 @@ QtQuickControlStyle.SliderStyle {
         id: groove
         imagePath: "widgets/slider"
         prefix: "groove"
+        height: implicitHeight * Math.floor(units.devicePixelRatio)
+
         PlasmaCore.FrameSvgItem {
             id: highlight
             imagePath: "widgets/slider"
