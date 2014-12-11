@@ -10,6 +10,7 @@ set(plasmaextracomponents_SRCS
     #resourceinstance.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
+    plotter.cpp
     )
 
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
@@ -19,7 +20,8 @@ target_link_libraries(plasmaextracomponentsplugin
         Qt5::Qml
         ${KACTIVITIES_LIBRARY}
         KF5::Service
-        KF5::Plasma)
+        KF5::Plasma
+        ${epoxy_LIBRARY})
 
 
 install(TARGETS plasmaextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)

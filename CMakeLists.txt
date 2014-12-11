@@ -4,7 +4,7 @@ project(Plasma)
 
 # ECM setup
 find_package(ECM 1.4.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 include(FeatureSummary)
 include(GenerateExportHeader)
@@ -109,6 +109,13 @@ else()
     set(HAVE_GLX 0)
 endif()
 
+find_package(epoxy)
+set_package_properties(epoxy PROPERTIES DESCRIPTION "libepoxy"
+                       URL "http://github.com/anholt/libepoxy"
+                       TYPE REQUIRED
+                       PURPOSE "OpenGL dispatch library"
+                      )
+
 #########################################################################
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
@@ -164,6 +171,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
 
 # make plasma_version.h available
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${epoxy_INCLUDE_DIR})
 
 ################# list the subdirectories #################
 if (KF5DocTools_FOUND)
