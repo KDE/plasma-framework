@@ -175,8 +175,6 @@ private:
      */
     int devicePixelIconSize(const int size) const;
 
-    Plasma::Theme m_theme;
-
     int m_gridUnit;
     qreal m_devicePixelRatio;
     qreal m_dpi;

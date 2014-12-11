@@ -50,7 +50,6 @@ Units::Units(QObject *parent)
     updateSpacing(); // updates gridUnit and *Spacing properties
 
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
-    connect(&m_theme, &Plasma::Theme::themeChanged, this, &Units::updateSpacing);
     QCoreApplication::instance()->installEventFilter(this);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
