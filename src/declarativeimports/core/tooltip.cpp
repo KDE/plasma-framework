@@ -49,7 +49,7 @@ ToolTip::ToolTip(QQuickItem *parent)
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, this, &ToolTip::showToolTip);
 
-    settingsChanged();
+    loadSettings();
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + "plasmarc";
     KDirWatch::self()->addFile(configFile);
@@ -70,6 +70,11 @@ ToolTip::~ToolTip()
 }
 
 void ToolTip::settingsChanged()
+{
+    KSharedConfig::openConfig("plasmarc")->reparseConfiguration();
+}
+
+void ToolTip::loadSettings()
 {
     KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), "PlasmaToolTips");
     m_interval = cfg.readEntry("Delay", 700);
