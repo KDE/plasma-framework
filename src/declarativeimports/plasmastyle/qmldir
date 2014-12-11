@@ -21,4 +21,5 @@ TextFieldStyle 2.0 TextFieldStyle.qml
 ToolBarStyle 2.0 ToolBarStyle.qml
 ToolButtonStyle 2.0 ToolButtonStyle.qml
 GroupBoxStyle 2.0 GroupBoxStyle.qml
+FocusFrameStyle 2.0 FocusFrameStyle.qml
 
