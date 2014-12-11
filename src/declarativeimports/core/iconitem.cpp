@@ -333,12 +333,13 @@ void IconItem::loadPixmap()
     m_textureChanged = true;
 
     //don't animate initial setting
-    if (!m_oldIconPixmap.isNull()) {
+    if (!m_oldIconPixmap.isNull() && !m_sizeChanged) {
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
         m_animation->start();
     } else {
         m_animValue = 1.0;
+        m_animation->stop();
     }
     update();
 }
