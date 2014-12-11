@@ -31,6 +31,7 @@ QtQuickControlStyle.ComboBoxStyle {
     label: PlasmaComponents.Label {
         text: control.currentText
         elide: Text.ElideRight
+        color: theme.buttonTextColor
         verticalAlignment: Text.AlignTop
     }
 
