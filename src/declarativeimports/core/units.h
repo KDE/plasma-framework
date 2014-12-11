@@ -164,11 +164,12 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
-    void settingsFileChanged(const QString &settings);
+    void settingsFileChanged(const QString &file);
 
 private:
     void updateDevicePixelRatio();
     void updateSpacing();
+    void updatePlasmaRCSettings();
     /**
      * @return The dpi-adjusted size for a given icon size
      */

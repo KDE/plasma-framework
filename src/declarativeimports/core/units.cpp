@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2013 Marco Martin <mart@kde.org>                            *
  *   Copyright 2014 Sebastian Kügler <sebas@kde.org>                       *
+ *   Copyright 2014 David Edmundson <davidedmunsdon@kde.org>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,8 +60,8 @@ Units::Units(QObject *parent)
     connect(KDirWatch::self(), &KDirWatch::dirty, this, &Units::settingsFileChanged);
     // ... but also remove/recreate cycles, like KConfig does it
     connect(KDirWatch::self(), &KDirWatch::created, this, &Units::settingsFileChanged);
-    // Trigger configuration read
-    settingsFileChanged(plasmarc);
+    // read configuration
+    updatePlasmaRCSettings();
 }
 
 Units::~Units()
@@ -70,17 +71,23 @@ Units::~Units()
 void Units::settingsFileChanged(const QString &file)
 {
     if (file.endsWith(plasmarc)) {
-
-        KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
-        cfg.config()->reparseConfiguration();
-        const int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
-
-        if (longDuration != m_longDuration) {
-            m_longDuration = longDuration;
-            emit durationChanged();
-        }
+        KSharedConfigPtr cfg = KSharedConfig::openConfig(plasmarc);
+        cfg->reparseConfiguration();
+        updatePlasmaRCSettings();
     }
 }
+
+void Units::updatePlasmaRCSettings()
+{
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
+    const int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
+
+    if (longDuration != m_longDuration) {
+        m_longDuration = longDuration;
+        emit durationChanged();
+    }
+}
+
 
 void Units::iconLoaderSettingsChanged()
 {
