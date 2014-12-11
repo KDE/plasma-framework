@@ -115,7 +115,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
 
 ThemePrivate::~ThemePrivate()
 {
-    if (FrameSvgPrivate::s_sharedFrames.contains(this)) { 
+    saveSvgElementsCache();
+    if (FrameSvgPrivate::s_sharedFrames.contains(this)) {
         foreach (FrameData *data, FrameSvgPrivate::s_sharedFrames[this].values()) {
             delete data;
         }
@@ -633,7 +634,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         break;
     }
     }
-    
+
 
 
     switch (role) {

@@ -180,6 +180,7 @@ private Q_SLOTS:
     void settingsChanged();
 
 private:
+    void loadSettings();
     bool m_tooltipsEnabledGlobally;
     bool m_containsMouse;
     Plasma::Types::Location m_location;
