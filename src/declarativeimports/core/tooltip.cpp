@@ -71,10 +71,8 @@ ToolTip::~ToolTip()
 
 void ToolTip::settingsChanged()
 {
-    KConfig config("plasmarc");
-    KConfigGroup cg(&config, "PlasmaToolTips");
-
-    m_interval = cg.readEntry("Delay", 700);
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), "PlasmaToolTips");
+    m_interval = cfg.readEntry("Delay", 700);
     m_tooltipsEnabledGlobally = (m_interval > 0);
 }
 
