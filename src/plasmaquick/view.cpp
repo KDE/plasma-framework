@@ -196,6 +196,21 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         qWarning() << "Invalid home screen package";
     }
 
+    //Force QtQuickControls to use the "Plasma" style for this engine.
+    //this way is possible to mix QtQuickControls and plasma components in applets
+    //while still having the desktop style in configuration dialogs
+    QQmlComponent c(engine());
+    c.setData("import QtQuick 2.1\n\
+        import QtQuick.Controls 1.0\n\
+        import QtQuick.Controls.Private 1.0\n \
+        Item {\
+          Component.onCompleted: {\
+            Settings.styleName = \"Plasma\";\
+          }\
+        }", QUrl());
+    QObject *o = c.create();
+    o->deleteLater();
+
     setResizeMode(View::SizeRootObjectToView);
 }
 
