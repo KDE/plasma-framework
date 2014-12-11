@@ -91,8 +91,6 @@ Theme::Theme(const QString &themeName, QObject *parent)
 
 Theme::~Theme()
 {
-    d->saveSvgElementsCache();
-
     if (d == ThemePrivate::globalTheme) {
         if (!ThemePrivate::globalThemeRefCount.deref()) {
             disconnect(ThemePrivate::globalTheme, 0, this, 0);
