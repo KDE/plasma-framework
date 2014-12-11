@@ -44,6 +44,60 @@
 
 #include <QDebug>
 
+
+PlotData::PlotData(QObject *parent)
+    : QObject(parent),
+      m_min(0),
+      m_max(0)
+{
+}
+
+void PlotData::setColor(const QColor &color)
+{
+    if (m_color == color) {
+        return;
+    }
+
+    m_color = color;
+
+    emit colorChanged();
+}
+
+QColor PlotData::color() const
+{
+    return m_color;
+}
+
+void PlotData::setValues(const QVariantList &values)
+{
+    if (m_values == values) {
+        return;
+    }
+
+    m_values = values;
+
+    if (values.isEmpty()) {
+        return;
+    }
+
+    m_max = values.first().value<qreal>();
+    m_min = values.first().value<qreal>();
+    for (const QVariant &v : values) {
+        if (v.value<qreal>() > m_max) {
+            m_max = v.value<qreal>();
+        } else if (v.value<qreal>() < m_min) {
+            m_min = v.value<qreal>();
+        }
+    }
+
+    emit valuesChanged();
+}
+
+QVariantList PlotData::values() const
+{
+    return m_values;
+}
+
 const char *vs_source =
     "attribute vec4 vertex;\n"
     "varying float gradient;\n"
@@ -241,6 +295,38 @@ void Plotter::addValue(qreal value)
     if (window())
         window()->update();
 }
+
+void Plotter::dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item)
+{
+    Plotter *p = static_cast<Plotter *>(list->object);
+    return p->m_plotData.append(item);
+}
+
+int Plotter::dataSet_count(QQmlListProperty<PlotData> *list)
+{
+    Plotter *p = static_cast<Plotter *>(list->object);
+    return p->m_plotData.count();
+}
+
+PlotData *Plotter::dataSet_at(QQmlListProperty<PlotData> *list, int index)
+{
+    Plotter *p = static_cast<Plotter *>(list->object);
+    return p->m_plotData.at(index);
+}
+
+void Plotter::dataSet_clear(QQmlListProperty<PlotData> *list)
+{
+    Plotter *p = static_cast<Plotter *>(list->object);
+    return p->m_plotData.clear();
+}
+
+
+QQmlListProperty<PlotData> Plotter::dataSets()
+{
+    return QQmlListProperty<PlotData>(this, &m_plotData, Plotter::dataSet_append, Plotter::dataSet_count, Plotter::dataSet_at, Plotter::dataSet_clear);
+}
+
+
 
 // Catmull-Rom interpolation
 QPainterPath Plotter::interpolate(const QVector<float> &p, float x0, float x1) const

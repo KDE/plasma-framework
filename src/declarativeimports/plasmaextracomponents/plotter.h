@@ -11,7 +11,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#include < * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public License
@@ -26,13 +26,42 @@
 #include <QSGTexture>
 #include <QSGSimpleTextureNode>
 #include <QQuickItem>
+#include <QQmlListProperty>
 
+class PlotData : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged USER true)
+    Q_PROPERTY(QVariantList values READ values WRITE setValues NOTIFY valuesChanged USER true)
+
+public:
+    PlotData(QObject *parent = 0);
+
+    void setColor(const QColor &color);
+    QColor color() const;
+
+    void setValues(const QVariantList &values);
+    QVariantList values() const;
+
+Q_SIGNALS:
+    void colorChanged();
+    void valuesChanged();
+
+private:
+    QColor m_color;
+    QVariantList m_values;
+    qreal m_min;
+    qreal m_max;
+};
 
 class Plotter : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor USER true)
     Q_PROPERTY(QVariantList values READ values WRITE setValues USER true)
+    Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
+
+    //Q_CLASSINFO("DefaultProperty", "dataSets")
 
 public:
     Plotter(QQuickItem *parent = 0);
@@ -44,6 +73,12 @@ public:
     void setValues(const QVariantList &values);
     QVariantList values() const;
 
+    QQmlListProperty<PlotData> dataSets();
+    static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
+    static int dataSet_count(QQmlListProperty<PlotData> *list);
+    static PlotData *dataSet_at(QQmlListProperty<PlotData> *list, int pos);
+    static void dataSet_clear(QQmlListProperty<PlotData> *list);
+
     Q_INVOKABLE void addValue(qreal value);
 private:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override final;
@@ -53,6 +88,8 @@ private Q_SLOTS:
     void render();
 
 private:
+    QList<PlotData *> m_plotData;
+
     GLuint m_fbo = 0;
     QSGSimpleTextureNode *m_node = nullptr;
     QColor m_color = QColor::fromRgbF(0.30, 0.7, 1.0);

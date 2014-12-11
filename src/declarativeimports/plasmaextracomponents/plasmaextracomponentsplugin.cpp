@@ -40,6 +40,7 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
     //qmlRegisterType<ResourceInstance>(uri, 2, 0, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
+    qmlRegisterType<Plotter>(uri, 2, 0, "PlotData");
     qmlRegisterType<Plotter>(uri, 2, 0, "Plotter");
 }
 
