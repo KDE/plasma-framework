@@ -60,7 +60,6 @@ private:
 class Plotter : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList values READ values WRITE setValues USER true)
     Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
 
     //Q_CLASSINFO("DefaultProperty", "dataSets")
@@ -68,9 +67,6 @@ class Plotter : public QQuickItem
 public:
     Plotter(QQuickItem *parent = 0);
     ~Plotter();
-
-    void setValues(const QVariantList &values);
-    QVariantList values() const;
 
     QQmlListProperty<PlotData> dataSets();
     static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
@@ -91,10 +87,6 @@ private:
 
     GLuint m_fbo = 0;
     QSGSimpleTextureNode *m_node = nullptr;
-    struct {
-        QVariantList values;
-        bool dirty = true;
-    } properties;
     QVector<float> m_data;
     qreal m_min;
     qreal m_max;

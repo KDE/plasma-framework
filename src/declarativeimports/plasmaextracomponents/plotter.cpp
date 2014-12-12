@@ -228,57 +228,9 @@ Plotter::~Plotter()
         glDeleteFramebuffers(1, &m_fbo);
 }
 
-void Plotter::setValues(const QVariantList &values)
-{
-    properties.values = values;
-    properties.dirty = true;
-
-    if (values.isEmpty()) {
-        return;
-    }
-
-    m_max = properties.values.first().value<qreal>();
-    m_min = properties.values.first().value<qreal>();
-    for (const QVariant &v : properties.values) {
-        if (v.value<qreal>() > m_max) {
-            m_max = v.value<qreal>();
-        } else if (v.value<qreal>() < m_min) {
-            m_min = v.value<qreal>();
-        }
-    }
-
-    update();
-    if (window())
-        window()->update();
-}
-
-QVariantList Plotter::values() const
-{
-    return properties.values;
-}
-
 void Plotter::addValue(qreal value)
 {
-    properties.values.push_back(value);
-    properties.dirty = true;
-
-    if (properties.values.count() > 10) {
-        properties.values.pop_front();
-    }
-
-    m_max = properties.values.first().value<qreal>();
-    m_min = properties.values.first().value<qreal>();
-    for (const QVariant &v : properties.values) {
-        if (v.value<qreal>() > m_max) {
-            m_max = v.value<qreal>();
-        } else if (v.value<qreal>() < m_min) {
-            m_min = v.value<qreal>();
-        }
-    }
-
-    update();
-    if (window())
-        window()->update();
+    
 }
 
 void Plotter::dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item)
