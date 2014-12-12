@@ -323,7 +323,7 @@ void Plotter::dataSet_clear(QQmlListProperty<PlotData> *list)
 
 QQmlListProperty<PlotData> Plotter::dataSets()
 {
-    return QQmlListProperty<PlotData>(this, &m_plotData, Plotter::dataSet_append, Plotter::dataSet_count, Plotter::dataSet_at, Plotter::dataSet_clear);
+    return QQmlListProperty<PlotData>(this, 0, Plotter::dataSet_append, Plotter::dataSet_count, Plotter::dataSet_at, Plotter::dataSet_clear);
 }
 
 
