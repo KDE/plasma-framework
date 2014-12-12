@@ -43,6 +43,8 @@ public:
     void setValues(const QList<qreal> &values);
     QList<qreal> values() const;
 
+    QVector<qreal> m_normalizedValues;
+
 Q_SIGNALS:
     void colorChanged();
     void valuesChanged();
@@ -50,6 +52,7 @@ Q_SIGNALS:
 private:
     QColor m_color;
     QList<qreal> m_values;
+    
     qreal m_min;
     qreal m_max;
 };

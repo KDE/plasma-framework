@@ -341,7 +341,7 @@ QPainterPath Plotter::interpolate(const QVector<qreal> &p, qreal x0, qreal x1) c
     const qreal xDelta = (x1 - x0) / (p.count() - 3);
     qreal x = x0 - xDelta;
 
-    path.moveTo(x0, p[1]);
+    path.moveTo(x0, p[0]);
 
     for (int i = 1; i < p.count() - 2; i++) {
         const QMatrix4x4 points(x,              p[i-1], 0, 0,
@@ -399,7 +399,7 @@ void Plotter::render()
     QHash<PlotData *, int> verticesCounts;
     for (auto data : m_plotData) {
         // Interpolate the data set
-        const QPainterPath path = interpolate(data->values().toVector(), 0, width());
+        const QPainterPath path = interpolate(data->m_normalizedValues, 0, width());
 
         // Flatten the path
         const QList<QPolygonF> polygons = path.toSubpathPolygons();
@@ -577,6 +577,24 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         m_color = properties.color;
         properties.dirty = false;
     }
+
+    //normalize data
+    PlotData *previousData = 0;
+    QList<PlotData *>::const_iterator i = m_plotData.constEnd();
+    do {
+        --i;
+        PlotData *data = *i;
+        data->m_normalizedValues.clear();
+        data->m_normalizedValues.resize(data->values().count());
+        if (previousData) {
+            for (int i = 0; i < data->values().count(); ++i) {
+                data->m_normalizedValues[i] = data->values().value(i) + previousData->m_normalizedValues.value(i);
+            }
+        } else {
+            data->m_normalizedValues = data->values().toVector();
+        }
+        previousData = data;
+    } while (i != m_plotData.constBegin());
 
     window()->update();
 
