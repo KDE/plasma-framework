@@ -87,7 +87,6 @@ private:
 
     GLuint m_fbo = 0;
     QSGSimpleTextureNode *m_node = nullptr;
-    QVector<float> m_data;
     qreal m_min;
     qreal m_max;
     QMatrix4x4 m_matrix;
