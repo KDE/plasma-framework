@@ -228,21 +228,6 @@ Plotter::~Plotter()
         glDeleteFramebuffers(1, &m_fbo);
 }
 
-void Plotter::setColor(const QColor &color)
-{
-    properties.color = color;
-    properties.dirty = true;
-
-    update();
-    if (window())
-        window()->update();
-}
-
-QColor Plotter::color() const
-{
-    return properties.color;
-}
-
 void Plotter::setValues(const QVariantList &values)
 {
     properties.values = values;
@@ -557,25 +542,6 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         static_cast<Texture *>(n->texture())->recreate(boundingRect().size().toSize());
         m_matrix = QMatrix4x4();
         m_matrix.ortho(0, width(), 0, height(), -1, 1);
-    }
-
-    if (1||properties.dirty) {
-        m_data.clear();
-
-        for (auto plotData : m_plotData) {
-            for (const QVariant &v : plotData->values()) {
-                qreal adjust;
-                if (qFuzzyCompare(m_max - m_min, 0)) {
-                    adjust = 1;
-                } else {
-                    adjust = (height() / (m_max - m_min));
-                }
-                m_data << (v.value<float>() - m_min) * adjust;
-            }
-        }
-
-        m_color = properties.color;
-        properties.dirty = false;
     }
 
     //normalize data

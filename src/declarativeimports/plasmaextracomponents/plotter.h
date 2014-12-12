@@ -60,7 +60,6 @@ private:
 class Plotter : public QQuickItem
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor USER true)
     Q_PROPERTY(QVariantList values READ values WRITE setValues USER true)
     Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
 
@@ -69,9 +68,6 @@ class Plotter : public QQuickItem
 public:
     Plotter(QQuickItem *parent = 0);
     ~Plotter();
-
-    void setColor(const QColor &color);
-    QColor color() const;
 
     void setValues(const QVariantList &values);
     QVariantList values() const;
@@ -95,10 +91,8 @@ private:
 
     GLuint m_fbo = 0;
     QSGSimpleTextureNode *m_node = nullptr;
-    QColor m_color = QColor::fromRgbF(0.30, 0.7, 1.0);
     struct {
         QVariantList values;
-        QColor color;
         bool dirty = true;
     } properties;
     QVector<float> m_data;

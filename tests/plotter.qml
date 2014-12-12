@@ -12,7 +12,6 @@ Item {
         id: renderer
         anchors.fill: parent
         anchors.margins: 0
-        color: "#4cb2ff"
         values: [ 80, 40, 80, 50, 100 ]
 
         dataSets: [
