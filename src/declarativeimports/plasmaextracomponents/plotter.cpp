@@ -68,7 +68,7 @@ QColor PlotData::color() const
     return m_color;
 }
 
-void PlotData::setValues(const QVariantList &values)
+void PlotData::setValues(const QList<qreal> &values)
 {
     if (m_values == values) {
         return;
@@ -80,20 +80,20 @@ void PlotData::setValues(const QVariantList &values)
         return;
     }
 
-    m_max = values.first().value<qreal>();
-    m_min = values.first().value<qreal>();
-    for (const QVariant &v : values) {
-        if (v.value<qreal>() > m_max) {
-            m_max = v.value<qreal>();
-        } else if (v.value<qreal>() < m_min) {
-            m_min = v.value<qreal>();
+    m_max = values.first();
+    m_min = values.first();
+    for (auto v : values) {
+        if (v > m_max) {
+            m_max = v;
+        } else if (v < m_min) {
+            m_min = v;
         }
     }
 
     emit valuesChanged();
 }
 
-QVariantList PlotData::values() const
+QList<qreal> PlotData::values() const
 {
     return m_values;
 }
@@ -329,7 +329,7 @@ QQmlListProperty<PlotData> Plotter::dataSets()
 
 
 // Catmull-Rom interpolation
-QPainterPath Plotter::interpolate(const QVector<float> &p, float x0, float x1) const
+QPainterPath Plotter::interpolate(const QVector<qreal> &p, qreal x0, qreal x1) const
 {
     QPainterPath path;
 
@@ -338,8 +338,8 @@ QPainterPath Plotter::interpolate(const QVector<float> &p, float x0, float x1) c
                              0,    1/6., 1,    -1/6.,
                              0,    0,    1,     0);
 
-    const float xDelta = (x1 - x0) / (p.count() - 3);
-    float x = x0 - xDelta;
+    const qreal xDelta = (x1 - x0) / (p.count() - 3);
+    qreal x = x0 - xDelta;
 
     path.moveTo(x0, p[1]);
 
@@ -392,29 +392,36 @@ void Plotter::render()
     for (int i = 0; i < lineCount; i++)
         vertices << QVector2D(0, i * 20) << QVector2D(width(), i * 20);
 
-
-    // Interpolate the data set
-    const QPainterPath path = interpolate(m_data, 0, width());
-
-    // Flatten the path
-    const QList<QPolygonF> polygons = path.toSubpathPolygons();
-
     // Tessellate
     float min = height();
     float max = height();
 
-    for (const QPolygonF &p : polygons) {
-        vertices << QVector2D(p.first().x(), height());
+    QHash<PlotData *, int> verticesCounts;
+    for (auto data : m_plotData) {
+        // Interpolate the data set
+        const QPainterPath path = interpolate(data->values().toVector(), 0, width());
 
-        for (int i = 0; i < p.count()-1; i++) {
-            min = qMin<float>(min, height() - p[i].y());
-            vertices << QVector2D(p[i].x(), height() - p[i].y());
-            vertices << QVector2D((p[i].x() + p[i+1].x()) / 2.0, height());
+        // Flatten the path
+        const QList<QPolygonF> polygons = path.toSubpathPolygons();
+
+        
+
+        for (const QPolygonF &p : polygons) {
+            verticesCounts[data] = 0;
+            vertices << QVector2D(p.first().x(), height());
+
+            for (int i = 0; i < p.count()-1; i++) {
+                min = qMin<float>(min, height() - p[i].y());
+                vertices << QVector2D(p[i].x(), height() - p[i].y());
+                vertices << QVector2D((p[i].x() + p[i+1].x()) / 2.0, height());
+                verticesCounts[data] += 2;
+            }
+
+            min = qMin<float>(min, height() - p.last().y());
+            vertices << QVector2D(p.last().x(), height() - p.last().y());
+            vertices << QVector2D(p.last().x(), height());
+            verticesCounts[data] += 3;
         }
-
-        min = qMin<float>(min, height() - p.last().y());
-        vertices << QVector2D(p.last().x(), height() - p.last().y());
-        vertices << QVector2D(p.last().x(), height());
     }
 
     // Upload vertices
@@ -444,16 +451,19 @@ void Plotter::render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    QColor color2 = m_color;
-    color2.setAlphaF(.33);
+    int oldCount = 0;
+    for (auto data : m_plotData) {
+        QColor color2 = data->color();
+        color2.setAlphaF(.33);
+        // Draw the graph
+        s_program->setUniformValue(u_yMin, min);
+        s_program->setUniformValue(u_yMax, max);
+        s_program->setUniformValue(u_color1, data->color());
+        s_program->setUniformValue(u_color2, color2);
 
-    // Draw the graph
-    s_program->setUniformValue(u_yMin, min);
-    s_program->setUniformValue(u_yMax, max);
-    s_program->setUniformValue(u_color1, m_color);
-    s_program->setUniformValue(u_color2, color2);
-
-    glDrawArrays(GL_TRIANGLE_STRIP, lineCount * 2, vertices.count() - lineCount * 2);
+        glDrawArrays(GL_TRIANGLE_STRIP, lineCount * 2 + oldCount, verticesCounts[data]);
+        oldCount = verticesCounts[data];
+    }
 
     glDisable(GL_BLEND);
 
@@ -552,14 +562,16 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     if (1||properties.dirty) {
         m_data.clear();
 
-        for (const QVariant &v : properties.values) {
-            qreal adjust;
-            if (qFuzzyCompare(m_max - m_min, 0)) {
-                adjust = 1;
-            } else {
-                adjust = (height() / (m_max - m_min));
+        for (auto plotData : m_plotData) {
+            for (const QVariant &v : plotData->values()) {
+                qreal adjust;
+                if (qFuzzyCompare(m_max - m_min, 0)) {
+                    adjust = 1;
+                } else {
+                    adjust = (height() / (m_max - m_min));
+                }
+                m_data << (v.value<float>() - m_min) * adjust;
             }
-            m_data << (v.value<float>() - m_min) * adjust;
         }
 
         m_color = properties.color;

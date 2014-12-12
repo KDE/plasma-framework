@@ -32,7 +32,7 @@ class PlotData : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged USER true)
-    Q_PROPERTY(QVariantList values READ values WRITE setValues NOTIFY valuesChanged USER true)
+    Q_PROPERTY(QList<qreal> values READ values WRITE setValues NOTIFY valuesChanged USER true)
 
 public:
     PlotData(QObject *parent = 0);
@@ -40,8 +40,8 @@ public:
     void setColor(const QColor &color);
     QColor color() const;
 
-    void setValues(const QVariantList &values);
-    QVariantList values() const;
+    void setValues(const QList<qreal> &values);
+    QList<qreal> values() const;
 
 Q_SIGNALS:
     void colorChanged();
@@ -49,7 +49,7 @@ Q_SIGNALS:
 
 private:
     QColor m_color;
-    QVariantList m_values;
+    QList<qreal> m_values;
     qreal m_min;
     qreal m_max;
 };
@@ -82,7 +82,7 @@ public:
     Q_INVOKABLE void addValue(qreal value);
 private:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override final;
-    QPainterPath interpolate(const QVector<float> &p, float x0, float x1) const;
+    QPainterPath interpolate(const QVector<qreal> &p, qreal x0, qreal x1) const;
 
 private Q_SLOTS:
     void render();
