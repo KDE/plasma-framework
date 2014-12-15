@@ -44,11 +44,14 @@
 
 #include <QDebug>
 
+//completely arbitrary
+static int s_defaultSampleSize = 40;
 
 PlotData::PlotData(QObject *parent)
     : QObject(parent),
-      m_min(0),
-      m_max(0)
+      m_min(std::numeric_limits<qreal>::max()),
+      m_max(std::numeric_limits<qreal>::min()),
+      m_sampleSize(s_defaultSampleSize)
 {
 }
 
@@ -78,8 +81,28 @@ qreal PlotData::min() const
     return m_min;
 }
 
+void PlotData::setSampleSize(int size)
+{
+    if (m_sampleSize != size) {
+        return;
+    }
+
+    if (m_values.size() > size) {
+        for (int i = 0; i < (m_values.size() - m_sampleSize); ++i) {
+            m_values.pop_front();
+        }
+    }
+
+    m_sampleSize = size;
+}
+
 void PlotData::addValue(qreal value)
 {
+
+    //assume at this point we'll have to pop a single time to stay in size
+    if (m_values.size() >= m_sampleSize) {
+        m_values.pop_front();
+    }
 
     m_values.push_back(value);
 
@@ -220,7 +243,8 @@ int Plotter::u_yMax;
 Plotter::Plotter(QQuickItem *parent)
     : QQuickItem(parent),
       m_min(0),
-      m_max(0)
+      m_max(0),
+      m_sampleSize(s_defaultSampleSize)
 {
     setFlag(ItemHasContents);
 }
@@ -239,6 +263,27 @@ qreal Plotter::max() const
 qreal Plotter::min() const
 {
     return m_min;
+}
+
+int Plotter::sampleSize() const
+{
+    return m_sampleSize;
+}
+
+void Plotter::setSampleSize(int size)
+{
+    if (m_sampleSize != size) {
+        return;
+    }
+
+    m_sampleSize = size;
+
+    for (auto data : m_plotData) {
+        data->setSampleSize(size);
+    }
+
+    update();
+    emit sampleSizeChanged();
 }
 
 void Plotter::addValue(const QList<qreal> &value)
@@ -364,8 +409,6 @@ void Plotter::render()
 
         // Flatten the path
         const QList<QPolygonF> polygons = path.toSubpathPolygons();
-
-        
 
         for (const QPolygonF &p : polygons) {
             verticesCounts[data] = 0;

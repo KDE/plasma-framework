@@ -51,6 +51,8 @@ public:
     qreal max() const;
     qreal min() const;
 
+    void setSampleSize(int size);
+
 Q_SIGNALS:
     void colorChanged();
     void valuesChanged();
@@ -63,6 +65,7 @@ private:
 
     qreal m_min;
     qreal m_max;
+    int m_sampleSize;
 };
 
 class Plotter : public QQuickItem
@@ -71,6 +74,7 @@ class Plotter : public QQuickItem
     Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
     Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
     Q_PROPERTY(qreal min READ min NOTIFY minChanged)
+    Q_PROPERTY(int sampleSize READ sampleSize WRITE setSampleSize NOTIFY sampleSizeChanged)
 
     //Q_CLASSINFO("DefaultProperty", "dataSets")
 
@@ -80,6 +84,8 @@ public:
 
     qreal max() const;
     qreal min() const;
+    int sampleSize() const;
+    void setSampleSize(int size);
 
     QQmlListProperty<PlotData> dataSets();
     static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
@@ -95,6 +101,7 @@ private:
 Q_SIGNALS:
     void maxChanged();
     void minChanged();
+    void sampleSizeChanged();
 
 private Q_SLOTS:
     void render();
@@ -106,8 +113,9 @@ private:
     QSGSimpleTextureNode *m_node = nullptr;
     qreal m_min;
     qreal m_max;
+    int m_sampleSize;
+
     QMatrix4x4 m_matrix;
-    bool m_valuesDirty = true;
     bool m_initialized = false;
     bool m_haveMSAA;
     bool m_haveFramebufferBlit;
