@@ -176,7 +176,7 @@ public:
     ~Texture();
 
     void bind() override final;
-    bool hasAlphaChannel() const override final { return false; }
+    bool hasAlphaChannel() const override final { return true; }
     bool hasMipmaps() const override final { return false; }
     int textureId() const override final { return m_texture; }
     QSize textureSize() const override final { return m_size; }
@@ -439,7 +439,7 @@ void Plotter::render()
     glViewport(0, 0, width(), height());
 
     // Clear the color buffer
-    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Add horizontal lines
