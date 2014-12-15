@@ -72,10 +72,31 @@ class Plotter : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
+
+    /**
+     * maximum value among all graphs
+     */
     Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
+
+    /**
+     * minimum value among all graphs
+     */
     Q_PROPERTY(qreal min READ min NOTIFY minChanged)
+
+    /**
+     * draw at most n samples, if new samples are pushed old values are started to be thrown away
+     */
     Q_PROPERTY(int sampleSize READ sampleSize WRITE setSampleSize NOTIFY sampleSizeChanged)
+
+    /**
+     * if true stack the graphs one on top of each other instead of just painting one on top of each other
+     */
     Q_PROPERTY(bool stacked READ isStacked WRITE setStacked NOTIFY stackedChanged)
+
+    /**
+     * If true, the graph is automatically scaled to always fit in the Plotter area
+     */
+    Q_PROPERTY(bool autoRange READ isAutoRange WRITE setAutoRange NOTIFY autoRangeChanged)
 
     //Q_CLASSINFO("DefaultProperty", "dataSets")
 
@@ -91,6 +112,9 @@ public:
 
     bool isStacked() const;
     void setStacked(bool stacked);
+
+    bool isAutoRange() const;
+    void setAutoRange(bool autorange);
 
     QQmlListProperty<PlotData> dataSets();
     static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
@@ -108,6 +132,7 @@ Q_SIGNALS:
     void minChanged();
     void sampleSizeChanged();
     void stackedChanged();
+    void autoRangeChanged();
 
 private Q_SLOTS:
     void render();
@@ -121,6 +146,7 @@ private:
     qreal m_max;
     int m_sampleSize;
     bool m_stacked;
+    bool m_autoRange;
 
     QMatrix4x4 m_matrix;
     bool m_initialized = false;

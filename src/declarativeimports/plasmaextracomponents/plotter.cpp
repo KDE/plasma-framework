@@ -245,7 +245,8 @@ Plotter::Plotter(QQuickItem *parent)
       m_min(0),
       m_max(0),
       m_sampleSize(s_defaultSampleSize),
-      m_stacked(true)
+      m_stacked(true),
+      m_autoRange(true)
 {
     setFlag(ItemHasContents);
 }
@@ -301,6 +302,23 @@ void Plotter::setStacked(bool stacked)
     m_stacked = stacked;
 
     emit stackedChanged();
+    update();
+}
+
+bool Plotter::isAutoRange() const
+{
+    return m_autoRange;
+}
+
+void Plotter::setAutoRange(bool autoRange)
+{
+    if (m_autoRange == autoRange) {
+        return;
+    }
+
+    m_autoRange = autoRange;
+
+    emit autoRangeChanged();
     update();
 }
 
@@ -639,16 +657,18 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         }
     }
 
-    qreal adjust;
-    if (qFuzzyCompare(adjustedMax - adjustedMin, 0)) {
-        adjust = 1;
-    } else {
-        adjust = (height() / (adjustedMax - adjustedMin));
-    }
-    //normalizebased on global max and min
-    for (auto data : m_plotData) {
-        for (int i = 0; i < data->values().count(); ++i) {
-            data->m_normalizedValues[i] = (data->m_normalizedValues.value(i) - adjustedMin) * adjust;
+    if (m_autoRange) {
+        qreal adjust;
+        if (qFuzzyCompare(adjustedMax - adjustedMin, 0)) {
+            adjust = 1;
+        } else {
+            adjust = (height() / (adjustedMax - adjustedMin));
+        }
+        //normalizebased on global max and min
+        for (auto data : m_plotData) {
+            for (int i = 0; i < data->values().count(); ++i) {
+                data->m_normalizedValues[i] = (data->m_normalizedValues.value(i) - adjustedMin) * adjust;
+            }
         }
     }
 

@@ -13,6 +13,7 @@ Item {
         anchors.fill: parent
         anchors.margins: 0
         stacked: stackedButton.checked
+        autoRange: autoRangeButton.checked
 
         dataSets: [
             PlotData {
@@ -34,6 +35,12 @@ Item {
         ToolButton {
             id: stackedButton
             text: "Stacked"
+            checkable: true
+            checked: true
+        }
+        ToolButton {
+            id: autoRangeButton
+            text: "Auto Range"
             checkable: true
             checked: true
         }
