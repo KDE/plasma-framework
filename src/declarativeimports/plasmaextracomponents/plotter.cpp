@@ -93,9 +93,37 @@ void PlotData::setValues(const QList<qreal> &values)
     emit valuesChanged();
 }
 
+void PlotData::addValue(qreal value)
+{
+
+    m_values.push_back(value);
+
+    m_max = std::numeric_limits<qreal>::min();
+    m_min = std::numeric_limits<qreal>::max();
+    for (auto v : m_values) {
+        if (v > m_max) {
+            m_max = v;
+        } else if (v < m_min) {
+            m_min = v;
+        }
+    }
+
+    emit valuesChanged();
+}
+
 QList<qreal> PlotData::values() const
 {
     return m_values;
+}
+
+qreal PlotData::max() const
+{
+    return m_max;
+}
+
+qreal PlotData::min() const
+{
+    return m_min;
 }
 
 const char *vs_source =
@@ -228,9 +256,20 @@ Plotter::~Plotter()
         glDeleteFramebuffers(1, &m_fbo);
 }
 
-void Plotter::addValue(qreal value)
+void Plotter::addValue(const QList<qreal> &value)
 {
-    
+    if (value.count() != m_plotData.count()) {
+        qWarning() << "Must add a new value per data set";
+        return;
+    }
+
+    int i = 0;
+    for (auto data : m_plotData) {
+        data->addValue(value.value(i));
+        ++i;
+    }
+
+    update();
 }
 
 void Plotter::dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item)
@@ -497,6 +536,10 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     }
 
     //normalize data
+    m_max = std::numeric_limits<qreal>::min();
+    m_min = std::numeric_limits<qreal>::max();
+    qreal adjustedMax = m_max;
+    qreal adjustedMin = m_min;
     PlotData *previousData = 0;
     QList<PlotData *>::const_iterator i = m_plotData.constEnd();
     do {
@@ -507,14 +550,49 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         if (previousData) {
             for (int i = 0; i < data->values().count(); ++i) {
                 data->m_normalizedValues[i] = data->values().value(i) + previousData->m_normalizedValues.value(i);
+
+                if (data->m_normalizedValues[i] > adjustedMax) {
+                    adjustedMax = data->m_normalizedValues[i];
+                }
+                if (data->m_normalizedValues[i] < adjustedMin) {
+                    adjustedMin = data->m_normalizedValues[i];
+                }
             }
         } else {
             data->m_normalizedValues = data->values().toVector();
+            if (data->max() > adjustedMax) {
+                adjustedMax = data->max();
+            }
+            if (data->min() < adjustedMin) {
+                adjustedMin = data->min();
+            }
         }
         previousData = data;
+
+        //global max and global min
+        if (data->max() > m_max) {
+            m_max = data->max();
+        }
+        if (data->min() < m_min) {
+            m_min = data->min();
+        }
     } while (i != m_plotData.constBegin());
 
-    window()->update();
+    qreal adjust;
+    if (qFuzzyCompare(adjustedMax - adjustedMin, 0)) {
+        adjust = 1;
+    } else {
+        adjust = (height() / (adjustedMax - adjustedMin));
+    }
+    //normalizebased on global max and min
+    for (auto data : m_plotData) {
+        for (int i = 0; i < data->values().count(); ++i) {
+            data->m_normalizedValues[i] = (data->m_normalizedValues.value(i) - adjustedMin) * adjust;
+        }
+    }
+
+    if (window())
+        window()->update();
 
     n->setRect(boundingRect());
     return n;

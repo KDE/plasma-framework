@@ -40,19 +40,26 @@ public:
     void setColor(const QColor &color);
     QColor color() const;
 
+    void addValue(qreal value);
+
     void setValues(const QList<qreal> &values);
     QList<qreal> values() const;
 
     QVector<qreal> m_normalizedValues;
 
+    qreal max() const;
+    qreal min() const;
+
 Q_SIGNALS:
     void colorChanged();
     void valuesChanged();
+    void maxChanged();
+    void minChanged();
 
 private:
     QColor m_color;
     QList<qreal> m_values;
-    
+
     qreal m_min;
     qreal m_max;
 };
@@ -74,7 +81,7 @@ public:
     static PlotData *dataSet_at(QQmlListProperty<PlotData> *list, int pos);
     static void dataSet_clear(QQmlListProperty<PlotData> *list);
 
-    Q_INVOKABLE void addValue(qreal value);
+    Q_INVOKABLE void addValue(const QList<qreal> &value);
 private:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override final;
     QPainterPath interpolate(const QVector<qreal> &p, qreal x0, qreal x1) const;
