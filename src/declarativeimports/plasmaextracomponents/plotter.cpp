@@ -96,6 +96,21 @@ void PlotData::setSampleSize(int size)
     m_sampleSize = size;
 }
 
+QString PlotData::label() const
+{
+    return m_label;
+}
+
+void PlotData::setLabel(const QString &label)
+{
+    if (m_label == label) {
+        return;
+    }
+
+    m_label = label;
+    emit labelChanged();
+}
+
 void PlotData::addValue(qreal value)
 {
 

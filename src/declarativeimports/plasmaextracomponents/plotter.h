@@ -31,9 +31,29 @@
 class PlotData : public QObject
 {
     Q_OBJECT
+    /**
+     * text Label of the data set: note this is purely a model, it will need a Label somewhere to be actually painted
+     */
+    Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
+
+    /**
+     * Color to plot this data set
+     */
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+
+    /**
+     * All the values currently in this data set
+     */
     Q_PROPERTY(QList<qreal> values READ values NOTIFY valuesChanged)
+
+    /**
+     * Maximum value of this data set
+     */
     Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
+
+    /**
+     * Minimum value of this data set
+     */
     Q_PROPERTY(qreal min READ min NOTIFY minChanged)
 
 public:
@@ -53,13 +73,18 @@ public:
 
     void setSampleSize(int size);
 
+    QString label() const;
+    void setLabel(const QString &label);
+
 Q_SIGNALS:
     void colorChanged();
     void valuesChanged();
     void maxChanged();
     void minChanged();
+    void labelChanged();
 
 private:
+    QString m_label;
     QColor m_color;
     QList<qreal> m_values;
 
