@@ -673,7 +673,11 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     }
 
     if (m_autoRange) {
+        //leave some empty space (of a line) top and bottom
+        adjustedMax += height()/20;
+        adjustedMin -= height()/20;
         qreal adjust;
+        //this should never happen, remove?
         if (qFuzzyCompare(adjustedMax - adjustedMin, 0)) {
             adjust = 1;
         } else {
@@ -687,8 +691,9 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         }
     }
 
-    if (window())
+    if (window()) {
         window()->update();
+    }
 
     n->setRect(boundingRect());
     return n;
