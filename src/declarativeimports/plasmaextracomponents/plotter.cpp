@@ -244,7 +244,8 @@ Plotter::Plotter(QQuickItem *parent)
     : QQuickItem(parent),
       m_min(0),
       m_max(0),
-      m_sampleSize(s_defaultSampleSize)
+      m_sampleSize(s_defaultSampleSize),
+      m_stacked(true)
 {
     setFlag(ItemHasContents);
 }
@@ -284,6 +285,23 @@ void Plotter::setSampleSize(int size)
 
     update();
     emit sampleSizeChanged();
+}
+
+bool Plotter::isStacked() const
+{
+    return m_stacked;
+}
+
+void Plotter::setStacked(bool stacked)
+{
+    if (m_stacked == stacked) {
+        return;
+    }
+
+    m_stacked = stacked;
+
+    emit stackedChanged();
+    update();
 }
 
 void Plotter::addValue(const QList<qreal> &value)
@@ -568,43 +586,58 @@ QSGNode *Plotter::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     m_min = std::numeric_limits<qreal>::max();
     qreal adjustedMax = m_max;
     qreal adjustedMin = m_min;
-    PlotData *previousData = 0;
-    QList<PlotData *>::const_iterator i = m_plotData.constEnd();
-    do {
-        --i;
-        PlotData *data = *i;
-        data->m_normalizedValues.clear();
-        data->m_normalizedValues.resize(data->values().count());
-        if (previousData) {
-            for (int i = 0; i < data->values().count(); ++i) {
-                data->m_normalizedValues[i] = data->values().value(i) + previousData->m_normalizedValues.value(i);
+    if (m_stacked) {
+        PlotData *previousData = 0;
+        QList<PlotData *>::const_iterator i = m_plotData.constEnd();
+        do {
+            --i;
+            PlotData *data = *i;
+            data->m_normalizedValues.clear();
+            data->m_normalizedValues.resize(data->values().count());
+            if (previousData) {
+                for (int i = 0; i < data->values().count(); ++i) {
+                    data->m_normalizedValues[i] = data->values().value(i) + previousData->m_normalizedValues.value(i);
 
-                if (data->m_normalizedValues[i] > adjustedMax) {
-                    adjustedMax = data->m_normalizedValues[i];
+                    if (data->m_normalizedValues[i] > adjustedMax) {
+                        adjustedMax = data->m_normalizedValues[i];
+                    }
+                    if (data->m_normalizedValues[i] < adjustedMin) {
+                        adjustedMin = data->m_normalizedValues[i];
+                    }
                 }
-                if (data->m_normalizedValues[i] < adjustedMin) {
-                    adjustedMin = data->m_normalizedValues[i];
+            } else {
+                data->m_normalizedValues = data->values().toVector();
+                if (data->max() > adjustedMax) {
+                    adjustedMax = data->max();
+                }
+                if (data->min() < adjustedMin) {
+                    adjustedMin = data->min();
                 }
             }
-        } else {
+            previousData = data;
+
+            //global max and global min
+            if (data->max() > m_max) {
+                m_max = data->max();
+            }
+            if (data->min() < m_min) {
+                m_min = data->min();
+            }
+        } while (i != m_plotData.constBegin());
+
+    } else {
+        for (auto data : m_plotData) {
+            data->m_normalizedValues.clear();
             data->m_normalizedValues = data->values().toVector();
-            if (data->max() > adjustedMax) {
-                adjustedMax = data->max();
+            //global max and global min
+            if (data->max() > m_max) {
+                adjustedMax = m_max = data->max();
             }
-            if (data->min() < adjustedMin) {
-                adjustedMin = data->min();
+            if (data->min() < m_min) {
+                adjustedMin = m_min = data->min();
             }
         }
-        previousData = data;
-
-        //global max and global min
-        if (data->max() > m_max) {
-            m_max = data->max();
-        }
-        if (data->min() < m_min) {
-            m_min = data->min();
-        }
-    } while (i != m_plotData.constBegin());
+    }
 
     qreal adjust;
     if (qFuzzyCompare(adjustedMax - adjustedMin, 0)) {

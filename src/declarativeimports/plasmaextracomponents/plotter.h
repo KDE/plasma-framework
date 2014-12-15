@@ -75,6 +75,7 @@ class Plotter : public QQuickItem
     Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
     Q_PROPERTY(qreal min READ min NOTIFY minChanged)
     Q_PROPERTY(int sampleSize READ sampleSize WRITE setSampleSize NOTIFY sampleSizeChanged)
+    Q_PROPERTY(bool stacked READ isStacked WRITE setStacked NOTIFY stackedChanged)
 
     //Q_CLASSINFO("DefaultProperty", "dataSets")
 
@@ -84,8 +85,12 @@ public:
 
     qreal max() const;
     qreal min() const;
+
     int sampleSize() const;
     void setSampleSize(int size);
+
+    bool isStacked() const;
+    void setStacked(bool stacked);
 
     QQmlListProperty<PlotData> dataSets();
     static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
@@ -102,6 +107,7 @@ Q_SIGNALS:
     void maxChanged();
     void minChanged();
     void sampleSizeChanged();
+    void stackedChanged();
 
 private Q_SLOTS:
     void render();
@@ -114,6 +120,7 @@ private:
     qreal m_min;
     qreal m_max;
     int m_sampleSize;
+    bool m_stacked;
 
     QMatrix4x4 m_matrix;
     bool m_initialized = false;

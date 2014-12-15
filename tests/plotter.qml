@@ -12,6 +12,7 @@ Item {
         id: renderer
         anchors.fill: parent
         anchors.margins: 0
+        stacked: stackedButton.checked
 
         dataSets: [
             PlotData {
@@ -23,10 +24,18 @@ Item {
         ]
 
     }
-    Button {
-        text: "Add value"
-        onClicked: {
-            renderer.addValue([Math.random() * 40, Math.random() * 40])
+    Row {
+        Button {
+            text: "Add value"
+            onClicked: {
+                renderer.addValue([Math.random() * 40, Math.random() * 40])
+            }
+        }
+        ToolButton {
+            id: stackedButton
+            text: "Stacked"
+            checkable: true
+            checked: true
         }
     }
 }
