@@ -69,6 +69,8 @@ public:
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry);
 
+    void componentComplete() Q_DECL_OVERRIDE;
+
 Q_SIGNALS:
     void activeChanged();
     void sourceChanged();
@@ -107,6 +109,7 @@ private:
     //animation on pixmap change
     QPropertyAnimation *m_animation;
     qreal m_animValue;
+
 };
 
 #endif

@@ -84,6 +84,8 @@ void IconItem::setSource(const QVariant &source)
 
     m_source = source;
 
+    const bool oldValid = isValid();
+
     if (source.canConvert<QIcon>()) {
         m_icon = source.value<QIcon>();
         m_imageIcon = QImage();
@@ -96,8 +98,8 @@ void IconItem::setSource(const QVariant &source)
             delete m_svgIcon;
             m_svgIcon = 0;
             m_icon = QIcon();
-            m_loadPixmapTimer.start();
             emit validChanged();
+            loadPixmap();
             return;
         }
 
@@ -158,7 +160,11 @@ void IconItem::setSource(const QVariant &source)
     }
 
     if (width() > 0 && height() > 0) {
-        m_loadPixmapTimer.start();
+        if (!oldValid) {
+            loadPixmap();
+        } else {
+            m_loadPixmapTimer.start();
+        }
     }
 
     emit sourceChanged();
@@ -202,7 +208,9 @@ void IconItem::setActive(bool active)
     }
 
     m_active = active;
-    m_loadPixmapTimer.start();
+    if (isComponentComplete()) {
+        m_loadPixmapTimer.start();
+    }
     emit activeChanged();
 }
 
@@ -297,6 +305,10 @@ void IconItem::animationFinished()
 
 void IconItem::loadPixmap()
 {
+    if (!isComponentComplete()) {
+        return;
+    }
+
     const int size = Units::roundToIconSize(qMin(width(), height()));
 
     //final pixmap to paint
@@ -351,13 +363,19 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
         m_sizeChanged = true;
         update();
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
-            if (!m_loadPixmapTimer.isActive()) {
+            if (!m_loadPixmapTimer.isActive() && isComponentComplete()) {
                 m_loadPixmapTimer.start();
             }
         }
     }
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+}
+
+void IconItem::componentComplete()
+{
+    QQuickItem::componentComplete();
+    loadPixmap();
 }
 
 #include "iconitem.moc"
