@@ -68,29 +68,14 @@ QColor PlotData::color() const
     return m_color;
 }
 
-void PlotData::setValues(const QList<qreal> &values)
+qreal PlotData::max() const
 {
-    if (m_values == values) {
-        return;
-    }
+    return m_max;
+}
 
-    m_values = values;
-
-    if (values.isEmpty()) {
-        return;
-    }
-
-    m_max = values.first();
-    m_min = values.first();
-    for (auto v : values) {
-        if (v > m_max) {
-            m_max = v;
-        } else if (v < m_min) {
-            m_min = v;
-        }
-    }
-
-    emit valuesChanged();
+qreal PlotData::min() const
+{
+    return m_min;
 }
 
 void PlotData::addValue(qreal value)
@@ -114,16 +99,6 @@ void PlotData::addValue(qreal value)
 QList<qreal> PlotData::values() const
 {
     return m_values;
-}
-
-qreal PlotData::max() const
-{
-    return m_max;
-}
-
-qreal PlotData::min() const
-{
-    return m_min;
 }
 
 const char *vs_source =
@@ -254,6 +229,16 @@ Plotter::~Plotter()
 {
     if (m_fbo)
         glDeleteFramebuffers(1, &m_fbo);
+}
+
+qreal Plotter::max() const
+{
+    return m_max;
+}
+
+qreal Plotter::min() const
+{
+    return m_min;
 }
 
 void Plotter::addValue(const QList<qreal> &value)

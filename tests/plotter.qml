@@ -16,11 +16,9 @@ Item {
         dataSets: [
             PlotData {
                 color: "#4cb2ff"
-                values: [ 20, 180, 20, 80, 70, 12, 180, 60]
             },
             PlotData {
                 color: "#00b200"
-                values: [ 30, 60, 20, 80, 12, 180, 20, 40]
             }
         ]
 

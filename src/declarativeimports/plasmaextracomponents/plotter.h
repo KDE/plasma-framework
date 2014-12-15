@@ -31,8 +31,10 @@
 class PlotData : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged USER true)
-    Q_PROPERTY(QList<qreal> values READ values WRITE setValues NOTIFY valuesChanged USER true)
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
+    Q_PROPERTY(QList<qreal> values READ values NOTIFY valuesChanged)
+    Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
+    Q_PROPERTY(qreal min READ min NOTIFY minChanged)
 
 public:
     PlotData(QObject *parent = 0);
@@ -42,7 +44,6 @@ public:
 
     void addValue(qreal value);
 
-    void setValues(const QList<qreal> &values);
     QList<qreal> values() const;
 
     QVector<qreal> m_normalizedValues;
@@ -68,12 +69,17 @@ class Plotter : public QQuickItem
 {
     Q_OBJECT
     Q_PROPERTY(QQmlListProperty<PlotData> dataSets READ dataSets)
+    Q_PROPERTY(qreal max READ max NOTIFY maxChanged)
+    Q_PROPERTY(qreal min READ min NOTIFY minChanged)
 
     //Q_CLASSINFO("DefaultProperty", "dataSets")
 
 public:
     Plotter(QQuickItem *parent = 0);
     ~Plotter();
+
+    qreal max() const;
+    qreal min() const;
 
     QQmlListProperty<PlotData> dataSets();
     static void dataSet_append(QQmlListProperty<PlotData> *list, PlotData *item);
@@ -85,6 +91,10 @@ public:
 private:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override final;
     QPainterPath interpolate(const QVector<qreal> &p, qreal x0, qreal x1) const;
+
+Q_SIGNALS:
+    void maxChanged();
+    void minChanged();
 
 private Q_SLOTS:
     void render();
