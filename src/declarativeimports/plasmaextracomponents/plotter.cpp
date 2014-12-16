@@ -268,8 +268,7 @@ Plotter::Plotter(QQuickItem *parent)
 
 Plotter::~Plotter()
 {
-    if (m_fbo)
-        glDeleteFramebuffers(1, &m_fbo);
+    delete m_node;
 }
 
 qreal Plotter::max() const
