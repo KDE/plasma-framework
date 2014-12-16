@@ -53,6 +53,10 @@ PlotData::PlotData(QObject *parent)
       m_max(std::numeric_limits<qreal>::min()),
       m_sampleSize(s_defaultSampleSize)
 {
+    m_values.reserve(s_defaultSampleSize);
+    for (int i = 0; i < s_defaultSampleSize; ++i) {
+        m_values << 0.0;
+    }
 }
 
 void PlotData::setColor(const QColor &color)
@@ -87,9 +91,14 @@ void PlotData::setSampleSize(int size)
         return;
     }
 
+    m_values.reserve(size);
     if (m_values.size() > size) {
-        for (int i = 0; i < (m_values.size() - m_sampleSize); ++i) {
+        for (int i = 0; i < (m_values.size() - size); ++i) {
             m_values.pop_front();
+        }
+    } else if (m_values.size() < size) {
+        for (int i = 0; i < (size - m_values.size()); ++i) {
+            m_values.prepend(0.0);
         }
     }
 
