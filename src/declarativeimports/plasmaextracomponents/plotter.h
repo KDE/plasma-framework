@@ -62,7 +62,7 @@ public:
     void setColor(const QColor &color);
     QColor color() const;
 
-    void addValue(qreal value);
+    void addSample(qreal value);
 
     QList<qreal> values() const;
 
@@ -147,7 +147,7 @@ public:
     static PlotData *dataSet_at(QQmlListProperty<PlotData> *list, int pos);
     static void dataSet_clear(QQmlListProperty<PlotData> *list);
 
-    Q_INVOKABLE void addValue(const QList<qreal> &value);
+    Q_INVOKABLE void addSample(const QList<qreal> &value);
 private:
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override final;
     QPainterPath interpolate(const QVector<qreal> &p, qreal x0, qreal x1) const;

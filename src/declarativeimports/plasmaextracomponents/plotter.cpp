@@ -120,7 +120,7 @@ void PlotData::setLabel(const QString &label)
     emit labelChanged();
 }
 
-void PlotData::addValue(qreal value)
+void PlotData::addSample(qreal value)
 {
 
     //assume at this point we'll have to pop a single time to stay in size
@@ -345,7 +345,7 @@ void Plotter::setAutoRange(bool autoRange)
     update();
 }
 
-void Plotter::addValue(const QList<qreal> &value)
+void Plotter::addSample(const QList<qreal> &value)
 {
     if (value.count() != m_plotData.count()) {
         qWarning() << "Must add a new value per data set";
@@ -354,7 +354,7 @@ void Plotter::addValue(const QList<qreal> &value)
 
     int i = 0;
     for (auto data : m_plotData) {
-        data->addValue(value.value(i));
+        data->addSample(value.value(i));
         ++i;
     }
 

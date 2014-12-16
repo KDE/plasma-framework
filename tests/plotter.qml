@@ -29,7 +29,7 @@ Item {
         Button {
             text: "Add value"
             onClicked: {
-                renderer.addValue([Math.random() * 40, Math.random() * 40])
+                renderer.addSample([Math.random() * 40, Math.random() * 40])
             }
         }
         ToolButton {
