@@ -24,6 +24,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 BusyIndicatorStyle {
     indicator: PlasmaCore.SvgItem {
+        id: indicatorItem
         svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
         elementId: "busywidget"
 
@@ -45,7 +46,7 @@ BusyIndicatorStyle {
             from: 0
             to: 360
             duration: 1500
-            running: control.running
+            running: control.running && indicatorItem.visible && indicatorItem.opacity > 0;
             loops: Animation.Infinite
         }
     }
