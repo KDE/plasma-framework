@@ -517,7 +517,7 @@ void Plotter::render()
     int oldCount = 0;
     for (auto data : m_plotData) {
         QColor color2 = data->color();
-        color2.setAlphaF(.33);
+        color2.setAlphaF(0.60);
         // Draw the graph
         s_program->setUniformValue(u_yMin, min);
         s_program->setUniformValue(u_yMax, max);
