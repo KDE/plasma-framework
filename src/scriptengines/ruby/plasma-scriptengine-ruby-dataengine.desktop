@@ -69,6 +69,7 @@ Comment[sv]=Inbyggd grafisk Plasma-komponent skriven i Ruby
 Comment[tr]=Ruby ile yazılmış gerçek Plasma gereci
 Comment[uk]=Віджет Плазми, написаний на Ruby
 Comment[x-test]=xxNative Plasma widget written in Rubyxx
+Comment[zh_CN]=使用 Ruby 编写的原生 Plasma 部件
 Comment[zh_TW]=用 Ruby 寫的原始 Plasma 元件
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
