@@ -37,6 +37,13 @@ class ConfigPropertyMap;
 class QmlObject;
 }
 
+/**
+ * @class WallpaperInterface
+ *
+ * @brief This class is exposed to wallpapers as the attached property "wallpaper"
+ *
+ *
+ */
 class WallpaperInterface : public QQuickItem
 {
     Q_OBJECT
