@@ -149,7 +149,7 @@ Plasma::Package Package::fallbackPackage() const
 
 QString Package::servicePrefix() const
 {
-    return QString();
+    return d->servicePrefix;
 }
 
 void Package::setServicePrefix(const QString &servicePrefix)
