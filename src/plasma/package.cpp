@@ -242,22 +242,43 @@ void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 
 QList<const char *> Package::directories() const
 {
-    return d->internalPackage->directories();
+    QList<const char *> dirs;
+    for (auto data : d->internalPackage->directories()) {
+        dirs << data.constData();
+    }
+
+    return dirs;
 }
 
 QList<const char *> Package::requiredDirectories() const
 {
-    return d->internalPackage->requiredDirectories();
+   
+    QList<const char *> dirs;
+    for (auto data : d->internalPackage->requiredDirectories()) {
+        dirs << data.constData();
+    }
+
+    return dirs;
 }
 
 QList<const char *> Package::files() const
 {
-    return d->internalPackage->files();
+    QList<const char *> files;
+    for (auto data : d->internalPackage->files()) {
+        files << data.constData();
+    }
+
+    return files;
 }
 
 QList<const char *> Package::requiredFiles() const
 {
-    return d->internalPackage->requiredFiles();
+    QList<const char *> files;
+    for (auto data : d->internalPackage->requiredFiles()) {
+        files << data.constData();
+    }
+
+    return files;
 }
 
 KJob *Package::install(const QString &sourcePackage, const QString &packageRoot)
