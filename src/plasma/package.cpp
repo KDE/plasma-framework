@@ -62,19 +62,17 @@ Package::Package(PackageStructure *structure)
 {
     d->structure = structure;
 
-    if (structure && structure->d->internalStructure) {
-        d->internalPackage = new KPackage::Package(structure->d->internalStructure);
-    } else {
-        if (!structure) {
-            d->internalPackage = new KPackage::Package();
-        } else {
-            d->structure->d->internalStructure = new KPackage::PackageStructure;
-            d->internalPackage = new KPackage::Package(d->structure->d->internalStructure);
-            //for retrocompatibility, a Plasma::Packagestructure that doesn't have a 
-            //KPackage::PackageStructure has been passed
-            structure->initPackage(this);
-        }
+    if (!structure) {
+        d->internalPackage = new KPackage::Package();
+        return;
     }
+
+    if (!structure->d->internalStructure) {
+        d->structure->d->internalStructure = new KPackage::PackageStructure;
+    }
+
+    d->internalPackage = new KPackage::Package(structure->d->internalStructure);
+    structure->initPackage(this);
 }
 
 Package::Package(const Package &other)
