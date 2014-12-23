@@ -221,7 +221,7 @@ void Package::addDirectoryDefinition(const char *key, const QString &path, const
 
 void Package::addFileDefinition(const char *key, const QString &path, const QString &name)
 {
-    d->internalPackage->addDirectoryDefinition(key, path, name);
+    d->internalPackage->addFileDefinition(key, path, name);
 }
 
 void Package::removeDefinition(const char *key)
