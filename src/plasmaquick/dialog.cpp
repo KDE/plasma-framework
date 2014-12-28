@@ -237,6 +237,10 @@ void DialogPrivate::updateTheme()
 
 void DialogPrivate::updateVisibility(bool visible)
 {
+    if (mainItem) {
+        mainItem->setVisible(visible);
+    }
+
     if (visible) {
         if (visualParent && visualParent->window()) {
             q->setTransientParent(visualParent->window());
@@ -268,6 +272,7 @@ void DialogPrivate::updateVisibility(bool visible)
             }
         }
     }
+
 
     if (!(q->flags() & Qt::ToolTip)) {
         KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
@@ -675,7 +680,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
         d->mainItem = mainItem;
 
         if (mainItem) {
-            d->mainItem->setVisible(true);
+            d->mainItem->setVisible(isVisible());
             mainItem->setParentItem(contentItem());
 
             connect(mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
