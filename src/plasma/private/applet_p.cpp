@@ -43,6 +43,7 @@
 #include "scripting/scriptengine.h"
 #include "scripting/appletscript.h"
 #include "private/containment_p.h"
+#include "private/package_p.h"
 #include "timetracker.h"
 
 namespace Plasma
@@ -142,8 +143,10 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     if (path.isEmpty()) {
         path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
     }
-    package = new Package(PluginLoader::self()->loadPackage("Plasma/Applet", api));
-    package->setPath(path);
+    Plasma::Package p = PluginLoader::self()->loadPackage("Plasma/Applet", api);
+    p.setPath(path);
+
+    package = new KPackage::Package(*p.d->internalPackage);
 
     if (!package->isValid()) {
         delete package;

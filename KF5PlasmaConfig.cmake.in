@@ -4,6 +4,8 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaTargets.cmake")
 
+find_dependency(KF5Package "@KF5_DEP_VERSION@")
+
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 set_and_check(Plasma_INCLUDE_DIR    "@PACKAGE_KF5_INCLUDE_INSTALL_DIR@")
 

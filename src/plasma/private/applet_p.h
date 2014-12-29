@@ -31,6 +31,8 @@
 #include <kplugininfo.h>
 #include <KNotification>
 
+#include <KPackage/Package>
+
 #include "plasma/applet.h"
 
 class KKeySequenceWidget;
@@ -92,7 +94,7 @@ public:
 
     // sripting and package stuff
     AppletScript *script;
-    Package *package;
+    KPackage::Package *package;
     KConfigLoader *configLoader;
 
     // actions stuff; put activationAction into actions?

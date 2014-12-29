@@ -55,6 +55,7 @@
 
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
+#include "private/package_p.h"
 
 namespace Plasma
 {
@@ -287,7 +288,16 @@ KConfigLoader *Applet::configScheme() const
 
 Package Applet::package() const
 {
-    return d->package ? *d->package : Package();
+    Package p;
+    if (d->package) {
+        p.d->internalPackage = new KPackage::Package(*d->package);
+    }
+    return p;
+}
+
+KPackage::Package Applet::kPackage() const
+{
+    return d->package ? *d->package : KPackage::Package();
 }
 
 void Applet::updateConstraints(Plasma::Types::Constraints constraints)

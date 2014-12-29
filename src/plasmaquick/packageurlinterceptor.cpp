@@ -91,6 +91,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 break;
             }
         }
+
         //should never happen
         Q_ASSERT(!relativePath.isEmpty());
 
