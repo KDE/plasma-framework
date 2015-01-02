@@ -156,7 +156,8 @@ public:
         DialogWindow = NET::Dialog,
         PopupMenu = NET::PopupMenu,
         Tooltip = NET::Tooltip,
-        Notification = NET::Notification
+        Notification = NET::Notification,
+        OnScreenDisplay = NET::OnScreenDisplay
     };
     Q_ENUMS(WindowType)
 
