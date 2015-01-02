@@ -119,6 +119,7 @@ Item {
                 if (menuLoader.source == "") {
                     menuLoader.source = "MonthMenu.qml"
                 }
+                menuLoader.item.year = selectedYear
                 menuLoader.item.open(0, height);
             }
             onExited: previousPixelDelta = 0
