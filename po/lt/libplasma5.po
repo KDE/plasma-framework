@@ -1,0 +1,917 @@
+# Lithuanian translations for l package.
+# Copyright (C) 2014 This_file_is_part_of_KDE
+# This file is distributed under the same license as the l package.
+#
+# Automatically generated, 2014.
+# Liudas Ališauskas <liudas@aksioma.lt>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: l 10n\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2014-12-30 09:44+0000\n"
+"PO-Revision-Date: 2014-12-18 20:28+0200\n"
+"Last-Translator: Liudas Ališauskas <liudas@akmc.lt>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
+"%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr "Gerai"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr "Atšaukti"
+
+#: plasma/applet.cpp:121
+msgid "Script initialization failed"
+msgstr "Scenarijaus inicijavimas nepavyko"
+
+#: plasma/applet.cpp:332
+msgid "Unknown"
+msgstr "Nežinoma"
+
+#: plasma/applet.cpp:609
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktyvuoti %1 valdiklį"
+
+#: plasma/containment.cpp:126 plasma/private/applet_p.cpp:118
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "Pašalinti šį %1|/|Pašalinti šį $[get-case galininkas %1]"
+
+#: plasma/containment.cpp:131
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "Nustatymai: %1|/|$[get-case Kilmininkas %1] nustatymai"
+
+#: plasma/corona.cpp:309 plasma/corona.cpp:382
+msgid "Lock Widgets"
+msgstr "Užrakinti valdiklius"
+
+#: plasma/corona.cpp:309
+msgid "Unlock Widgets"
+msgstr "Atrakinti valdiklius"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+#: plasma/pluginloader.cpp:82
+msgid "Accessibility"
+msgstr "Prieinamumas"
+
+#: plasma/pluginloader.cpp:83
+msgid "Application Launchers"
+msgstr "Programų paleidikliai"
+
+#: plasma/pluginloader.cpp:84
+msgid "Astronomy"
+msgstr "Astronomija"
+
+#: plasma/pluginloader.cpp:85
+msgid "Date and Time"
+msgstr "Data ir laikas"
+
+#: plasma/pluginloader.cpp:86
+msgid "Development Tools"
+msgstr "Programavimo įrankiai"
+
+#: plasma/pluginloader.cpp:87
+msgid "Education"
+msgstr "Švietimas"
+
+#: plasma/pluginloader.cpp:88
+msgid "Environment and Weather"
+msgstr "Aplinka ir orai"
+
+#: plasma/pluginloader.cpp:89
+msgid "Examples"
+msgstr "Pavyzdžiai"
+
+#: plasma/pluginloader.cpp:90
+msgid "File System"
+msgstr "Failų sistema"
+
+#: plasma/pluginloader.cpp:91
+msgid "Fun and Games"
+msgstr "Linksmybės ir žaidimai"
+
+#: plasma/pluginloader.cpp:92
+msgid "Graphics"
+msgstr "Grafika"
+
+#: plasma/pluginloader.cpp:93
+msgid "Language"
+msgstr "Kalba"
+
+#: plasma/pluginloader.cpp:94
+msgid "Mapping"
+msgstr "Žemėlapiai"
+
+#: plasma/pluginloader.cpp:95
+msgid "Miscellaneous"
+msgstr "Įvairūs"
+
+#: plasma/pluginloader.cpp:96
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#: plasma/pluginloader.cpp:97
+msgid "Online Services"
+msgstr "Internetinės paslaugos"
+
+#: plasma/pluginloader.cpp:98
+msgid "Productivity"
+msgstr "Produktyvumas"
+
+#: plasma/pluginloader.cpp:99
+msgid "System Information"
+msgstr "Sistemos informacija"
+
+#: plasma/pluginloader.cpp:100
+msgid "Utilities"
+msgstr "Pagalbininkai"
+
+#: plasma/pluginloader.cpp:101
+msgid "Windows and Tasks"
+msgstr "Langai ir užduotys"
+
+#: plasma/pluginloader.cpp:558 plasma/pluginloader.cpp:559
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Įvairūs"
+
+#: plasma/private/applet_p.cpp:123
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "%1 Nustatymai..."
+
+#: plasma/private/applet_p.cpp:138
+#, kde-format
+msgid "The %2 widget did not define which ScriptEngine to use."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:155
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Nepavyko atverti %1 paketo, reikalingo %2 valdikliui."
+
+#: plasma/private/applet_p.cpp:170
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Nepavyko sukurti %1 scenarijaus variklio %2 valdikliui."
+
+#: plasma/private/applet_p.cpp:189
+msgid "Alternatives..."
+msgstr "Alternatyvos..."
+
+#: plasma/private/applet_p.cpp:247
+msgid "Widget Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:248
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:250
+msgid "Panel Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:251
+msgid "A panel has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:254
+msgid "Desktop Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:255
+msgid "A desktop has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:258
+msgid "Undo"
+msgstr "Atšaukti"
+
+#: plasma/private/applet_p.cpp:336
+msgid "Widget Settings"
+msgstr "Valdiklių nustatymai"
+
+#: plasma/private/applet_p.cpp:343
+msgid "Remove this Widget"
+msgstr "Pašalinti šį valdiklį"
+
+#: plasma/private/applet_p.cpp:350
+#: plasma/private/associatedapplicationmanager.cpp:81
+#: plasma/private/associatedapplicationmanager.cpp:125
+#: plasma/private/associatedapplicationmanager.cpp:150
+msgid "Run the Associated Application"
+msgstr "Paleisti susietą programą"
+
+#: plasma/private/associatedapplicationmanager.cpp:78
+#: plasma/private/associatedapplicationmanager.cpp:147
+#, kde-format
+msgid "Open with %1"
+msgstr "Atverti su %1"
+
+#: plasma/private/containment_p.cpp:84
+msgid "Remove this Panel"
+msgstr "Pašalinti šį skydelį"
+
+#: plasma/private/containment_p.cpp:86
+msgid "Remove this Activity"
+msgstr "Pašalinti šią veiklą"
+
+#: plasma/private/containment_p.cpp:92
+msgid "Activity Settings"
+msgstr "Veiklos nustatymai"
+
+#: plasma/private/containment_p.cpp:98
+msgid "Add Widgets..."
+msgstr "Pridėti valdiklių..."
+
+#: plasma/private/containment_p.cpp:213
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Nepavyko rasti pareikalauto komponento: %1"
+
+#: plasma/private/packages.cpp:45 plasma/private/packages.cpp:65
+#: plasmaquick/private/packages.cpp:86 plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "Pagrindinis scenarijaus failas"
+
+#: plasma/private/packages.cpp:87 plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "Paveikslėliai"
+
+#: plasma/private/packages.cpp:88 plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr ""
+
+#: plasma/private/packages.cpp:94 plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "Konfigūravimo apibrėžimai"
+
+#: plasma/private/packages.cpp:99 plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "Naudotojo sąsaja"
+
+#: plasma/private/packages.cpp:101 plasma/private/packages.cpp:125
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "Duomenų failai"
+
+#: plasma/private/packages.cpp:103 plasma/private/packages.cpp:127
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "Vykdomieji scenarijai"
+
+#: plasma/private/packages.cpp:108 plasma/private/packages.cpp:135
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "Vertimai"
+
+#: plasma/private/packages.cpp:116
+msgid "Configuration UI pages model"
+msgstr ""
+
+#: plasma/private/packages.cpp:117
+msgid "Configuration XML file"
+msgstr "Konfigūracijos XML failas"
+
+#: plasma/private/packages.cpp:132
+msgid "Service Descriptions"
+msgstr "Paslaugos aprašymas"
+
+#: plasma/private/packages.cpp:144
+msgid "Images for dialogs"
+msgstr "Paveikslėliai dialogams"
+
+#: plasma/private/packages.cpp:146 plasma/private/packages.cpp:148
+msgid "Generic dialog background"
+msgstr "Bendras dialogo fonas"
+
+#: plasma/private/packages.cpp:150 plasma/private/packages.cpp:152
+msgid "Theme for the logout dialog"
+msgstr "Atsijungimo dialogo tema"
+
+#: plasma/private/packages.cpp:154
+msgid "Wallpaper packages"
+msgstr "Apmušalų paketai"
+
+#: plasma/private/packages.cpp:156 plasma/private/packages.cpp:209
+msgid "Images for widgets"
+msgstr "Paveikslėliai valdikliams"
+
+#: plasma/private/packages.cpp:158 plasma/private/packages.cpp:160
+msgid "Background image for widgets"
+msgstr "Fono paveikslėlis valdikliams"
+
+#: plasma/private/packages.cpp:162 plasma/private/packages.cpp:164
+msgid "Analog clock face"
+msgstr "Analoginio laikrodžio ciferblatas"
+
+#: plasma/private/packages.cpp:166 plasma/private/packages.cpp:168
+msgid "Background image for panels"
+msgstr "Fono paveikslėlis skydeliams"
+
+#: plasma/private/packages.cpp:170 plasma/private/packages.cpp:172
+msgid "Background for graphing widgets"
+msgstr "Fonas grafikų valdikliams"
+
+#: plasma/private/packages.cpp:174 plasma/private/packages.cpp:176
+msgid "Background image for tooltips"
+msgstr "Fono paveikslėlis patarimams"
+
+#: plasma/private/packages.cpp:178
+msgid "Opaque images for dialogs"
+msgstr "Neskaidrūs paveikslėliai dialogams"
+
+#: plasma/private/packages.cpp:180 plasma/private/packages.cpp:182
+msgid "Opaque generic dialog background"
+msgstr "Neskaidrus bendras dialogo fonas"
+
+#: plasma/private/packages.cpp:184 plasma/private/packages.cpp:186
+msgid "Opaque theme for the logout dialog"
+msgstr "Neskaidri atsijungimo dialogo tema"
+
+#: plasma/private/packages.cpp:188
+msgid "Opaque images for widgets"
+msgstr "Neskaidrūs paveikslėliai valdikliams"
+
+#: plasma/private/packages.cpp:190 plasma/private/packages.cpp:192
+msgid "Opaque background image for panels"
+msgstr "Neskaidrus fono paveikslėlis skydeliams"
+
+#: plasma/private/packages.cpp:194 plasma/private/packages.cpp:196
+msgid "Opaque background image for tooltips"
+msgstr "Neskaidrus fono paveikslėlis patarimams"
+
+#: plasma/private/packages.cpp:199
+msgid "Low color images for dialogs"
+msgstr "Mažo spalvingumo paveikslėliai dialogams"
+
+#: plasma/private/packages.cpp:201 plasma/private/packages.cpp:203
+msgid "Low color generic dialog background"
+msgstr "Mažo spalvingumo bendras dialogo fonas"
+
+#: plasma/private/packages.cpp:205 plasma/private/packages.cpp:207
+msgid "Low color theme for the logout dialog"
+msgstr "Mažo spalvingumo atsijungimo dialogo tema"
+
+#: plasma/private/packages.cpp:211 plasma/private/packages.cpp:213
+msgid "Low color background image for widgets"
+msgstr "Mažo spalvingumo fono paveikslėlis valdikliams"
+
+#: plasma/private/packages.cpp:215 plasma/private/packages.cpp:217
+msgid "Low color analog clock face"
+msgstr "Mažo spalvingumo analoginio laikrodžio ciferblatas"
+
+#: plasma/private/packages.cpp:219 plasma/private/packages.cpp:221
+msgid "Low color background image for panels"
+msgstr "Mažo spalvingumo fono paveikslėlis skydeliams"
+
+#: plasma/private/packages.cpp:223 plasma/private/packages.cpp:225
+msgid "Low color background for graphing widgets"
+msgstr "Mažo spalvingumo grafikų valdikliams"
+
+#: plasma/private/packages.cpp:227 plasma/private/packages.cpp:229
+msgid "Low color background image for tooltips"
+msgstr "Mažo spalvingumo fono paveikslėlis patarimams"
+
+#: plasma/private/packages.cpp:231
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme konfigūravimo failas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Bendram naudojimui skirtą valdiklį tinkle galima pasiekti iš kito  "
+"kompiuterio ir naudoti kaip nuotolinio valdymo įrenginį."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "Skirti bendram naudojimui tinkle"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "Leisti visiems laisvai pasiekti valdiklį"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Klaidinga (null) tarnyba, operacijų atlikti neis."
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Plazmos paketų tvarkyklė"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr ""
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr ""
+"Diegimui bei šalinimui, dirba su visiems naudotojams įdiegtais paketais"
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"Paketo tipas, pvz. tema, darbastalio fonas, plazmoidas, dataengine, runner, "
+"ir t.t."
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "Diegti paketą į <path>"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr ""
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "Atnaujinti paketą į <path>"
+
+#: plasmapkg/main.cpp:67
+msgid "List installed packages"
+msgstr "Įdiegtų paketų sąrašas"
+
+#: plasmapkg/main.cpp:68
+msgid "List all known package types that can be installed"
+msgstr ""
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "Pašalinti paketą pavadinimu <name>"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"Absoliutus kelias iki paketo šakninio aplanko. Jei nenurodyta, bus ieškoma "
+"šios KDE sesijos standartinių duomenų kataloguose."
+
+#: plasmapkg/plasmapkg.cpp:98
+#, kde-format
+msgid "Failed to generate a Package hash for %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:101
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:139 plasmapkg/plasmapkg.cpp:186
+#: plasmapkg/plasmapkg.cpp:207
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "darbastalio fonas"
+
+#: plasmapkg/plasmapkg.cpp:192
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "plazmoidas"
+
+#: plasmapkg/plasmapkg.cpp:198
+msgctxt "package type"
+msgid "package"
+msgstr "paketas"
+
+#: plasmapkg/plasmapkg.cpp:203
+msgctxt "package type"
+msgid "theme"
+msgstr "tema"
+
+#: plasmapkg/plasmapkg.cpp:212
+msgctxt "package type"
+msgid "dataengine"
+msgstr "duomenų variklis"
+
+#: plasmapkg/plasmapkg.cpp:217
+msgctxt "package type"
+msgid "runner"
+msgstr "paleidiklis"
+
+#: plasmapkg/plasmapkg.cpp:222
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "darbastalio fono priedas"
+
+#: plasmapkg/plasmapkg.cpp:227
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:232
+msgctxt "package type"
+msgid "shell"
+msgstr "apvalkalas"
+
+#: plasmapkg/plasmapkg.cpp:237
+msgctxt "package type"
+msgid "layout-template"
+msgstr "išdėstymo-šablonas"
+
+#: plasmapkg/plasmapkg.cpp:242
+msgctxt "package type"
+msgid "kwineffect"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:247
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:252
+msgctxt "package type"
+msgid "kwinscript"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:261
+#, kde-format
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "Paketo tipui %1 nepavyksta rasti tinkamos diegimo programos"
+
+#: plasmapkg/plasmapkg.cpp:272
+#, kde-format
+msgid "Could not load installer for package of type %1. Error reported was: %2"
+msgstr "Diegimo programą, paketo tipui %1, įkelti nepavyko. Įvykusi klaida: %2"
+
+#: plasmapkg/plasmapkg.cpp:288
+#, kde-format
+msgid "Listing service types: %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:361
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:371
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr "Reikia nurodyti diegimą, šalinimą, atnaujinimą arba sąrašo rodymą."
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:478
+#, kde-format
+msgid "Showing info for package: %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:479
+#, kde-format
+msgid "      Name : %1"
+msgstr "      Pavadinimas : %1"
+
+#: plasmapkg/plasmapkg.cpp:480
+#, kde-format
+msgid "   Comment : %1"
+msgstr "   Komentaras : %1"
+
+#: plasmapkg/plasmapkg.cpp:481
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "    Priedas : %1"
+
+#: plasmapkg/plasmapkg.cpp:482
+#, kde-format
+msgid "    Author : %1"
+msgstr "    Autorius : %1"
+
+#: plasmapkg/plasmapkg.cpp:483
+#, kde-format
+msgid "      Path : %1"
+msgstr "   Kelias : %1"
+
+#: plasmapkg/plasmapkg.cpp:492
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr ""
+"Packageroot ir globalūs nustatymai prieštarauja vieni kitiems, pasirinkite "
+"tik vieną."
+
+#: plasmapkg/plasmapkg.cpp:517
+msgid "Addon Name"
+msgstr "Įskiepio pavadinimas"
+
+#: plasmapkg/plasmapkg.cpp:518
+msgid "Service Type"
+msgstr "Paslaugos tipas"
+
+#: plasmapkg/plasmapkg.cpp:519
+msgid "Path"
+msgstr "Kelias"
+
+#: plasmapkg/plasmapkg.cpp:520
+msgid "Type Argument"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Package types that are installable with this tool:"
+msgstr "Tipai paketų, kuriuos galima įdiegti šiuo įrankiu:"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Built in:"
+msgstr "Įtaisyta:"
+
+#: plasmapkg/plasmapkg.cpp:572
+msgid "DataEngine"
+msgstr "Duomenų Variklis"
+
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Layout Template"
+msgstr "Išdėstymo šablonas"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Look and Feel"
+msgstr "Išvaizda ir pojūtis"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Package"
+msgstr "Paketas"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "Plasmoid"
+msgstr "Plazmoidas"
+
+#: plasmapkg/plasmapkg.cpp:577
+msgid "Runner"
+msgstr "Paleidiklis"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "Shell"
+msgstr "Apvalkalas"
+
+#: plasmapkg/plasmapkg.cpp:579
+msgid "Theme"
+msgstr "Tema"
+
+#: plasmapkg/plasmapkg.cpp:580
+msgid "Wallpaper Images"
+msgstr "Darbastalio paveiksliukai"
+
+#: plasmapkg/plasmapkg.cpp:581
+msgid "Animated Wallpaper"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:582
+msgid "KWin Effect"
+msgstr "KWin efektas"
+
+#: plasmapkg/plasmapkg.cpp:583
+msgid "KWin Window Switcher"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:584
+msgid "KWin Script"
+msgstr "KWin scenarijaus failas"
+
+#: plasmapkg/plasmapkg.cpp:593
+msgid "Provided by plugins:"
+msgstr "Teikiami priedai:"
+
+#: plasmapkg/plasmapkg.cpp:615
+msgid "Provided by .desktop files:"
+msgstr "Teikiami .desktop failų:"
+
+#: plasmapkg/plasmapkg.cpp:636
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:638
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "%1 sėkmingai įdiegtas"
+
+#: plasmapkg/plasmapkg.cpp:641
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:653
+#, kde-format
+msgid "Upgrading package from file: %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:658
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:660
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:461
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:463
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr ""
+
+#: plasmaquick/configview.cpp:98
+#, kde-format
+msgid "%1 Settings"
+msgstr "Nustatymai: %1|/|$[get-case Kilmininkas %1] nustatymai"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:42
+msgid "Preview Images"
+msgstr "Peržiūrėti paveikslėlius"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:53
+msgid "Main Script for Login Manager"
+msgstr "Pagrindinis scenarijus prisijungimo tvarkytuvei"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:56
+msgid "Main Script for Logout Dialog"
+msgstr "Pagrindinis scenarijus atsijungimo langui"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:59
+msgid "Main Script for Lock Screen"
+msgstr "Pagrindinis scenarijus ekrano užraktui"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:62
+msgid "Main Script for User Switcher"
+msgstr "Pagrindinis scenarijus naudotojo perjungimui"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr "Virtualaus darbastalio perjungėjas"
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr "Pasveikinimo ekranas"
+
+#: plasmaquick/private/packages.cpp:71
+msgid "Main Script for Splash Screen"
+msgstr "Pagrindinis scenarijus pasisveikinimo langui"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:74
+msgid "Main Script KRunner"
+msgstr "Pagrindinis scenarijus KRunner programai"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:348
+msgid "Fetching file type..."
+msgstr "Gaunamas failo tipas..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:480
+msgid "Widgets"
+msgstr "Valdikliai"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:493
+msgid "Icon"
+msgstr "Ženkliukas"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:497
+msgid "Wallpaper"
+msgstr "Apmušalas"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:794
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "%1 parinktys|/|$[get-case Kilmininkas %1] parinktys"
