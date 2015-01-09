@@ -4,7 +4,7 @@ set(sourcesOnRequest_SRCS
 
 add_library(plasma_dataengine_example_sourcesOnRequest MODULE ${sourcesOnRequest_SRCS})
 
-kservice_desktop_to_json(plasma_dataengine_example_sourcesOnRequest plasma-dataengine-example-sourcesOnRequest.desktop)
+kcoreaddons_desktop_to_json(plasma_dataengine_example_sourcesOnRequest plasma-dataengine-example-sourcesOnRequest.desktop)
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
   Qt5::Gui

@@ -5,7 +5,7 @@ set(customDataContainers_SRCS
 
 add_library(plasma_dataengine_example_customDataContainers MODULE ${customDataContainers_SRCS})
 
-kservice_desktop_to_json(plasma_dataengine_example_customDataContainers plasma-dataengine-example-customDataContainers.desktop)
+kcoreaddons_desktop_to_json(plasma_dataengine_example_customDataContainers plasma-dataengine-example-customDataContainers.desktop)
 
 target_link_libraries(plasma_dataengine_example_customDataContainers
   KF5::Plasma
