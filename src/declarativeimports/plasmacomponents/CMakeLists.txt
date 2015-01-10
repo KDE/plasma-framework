@@ -23,7 +23,7 @@ target_link_libraries(plasmacomponentsplugin
 )
 
 
-install(TARGETS plasmacomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
+install(TARGETS plasmacomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components)
 
-install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/components)
+install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components)
 

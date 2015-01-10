@@ -137,7 +137,7 @@ endif()
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5Plasma")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Plasma")
 
 ecm_configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
@@ -161,7 +161,7 @@ install(EXPORT KF5PlasmaTargets
         COMPONENT Devel)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR} COMPONENT Devel )
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel )
 
 # make plasma_version.h available
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

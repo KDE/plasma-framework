@@ -18,6 +18,6 @@ target_link_libraries(
     KF5::IconThemes
 )
 
-install(TARGETS platformcomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/platformcomponents)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/platformcomponents)
+install(TARGETS platformcomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/platformcomponents)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/platformcomponents)
 

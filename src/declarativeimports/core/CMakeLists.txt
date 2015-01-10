@@ -75,7 +75,7 @@ if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")
     target_link_libraries(corebindingsplugin Qt5::Gui_GLESv2)
 endif()
 
-install(TARGETS corebindingsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core)
+install(TARGETS corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
 
-install(FILES private/DefaultToolTip.qml DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/core/private)
+install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core/private)

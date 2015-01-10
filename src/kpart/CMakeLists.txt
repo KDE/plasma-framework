@@ -17,6 +17,6 @@ add_library(plasma-kpart MODULE ${plasma_kpart_SRCS})
 
 target_link_libraries(plasma-kpart Qt5::Script KF5::Plasma KF5::KIOCore KF5::KIOWidgets ${X11_LIBRARIES} KF5::Parts )
 
-install(TARGETS plasma-kpart DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-kpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS plasma-kpart DESTINATION ${KDE_INSTALL_PLUGINDIR})
+install(FILES plasma-kpart.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 

@@ -13,5 +13,5 @@ target_link_libraries(plasma_dataengine_example_simpleEngine
   KF5::I18n
 )
 
-install(TARGETS plasma_dataengine_example_simpleEngine DESTINATION ${PLUGIN_INSTALL_DIR}/plasma/dataengine)
-install(FILES plasma-dataengine-example-simpleEngine.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(TARGETS plasma_dataengine_example_simpleEngine DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/dataengine)
+install(FILES plasma-dataengine-example-simpleEngine.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )

@@ -97,13 +97,13 @@ set(plasmaquick_LIB_INCLUDES
 )
 
 #install(FILES ${plasmaquick_LIB_INCLUDES}
-#        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasmaquick COMPONENT Devel)
+#        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasmaquick COMPONENT Devel)
 
 #install(DIRECTORY
 #        includes/PlasmaQuick
-#        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KDE COMPONENT Devel)
+#        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDE COMPONENT Devel)
 
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5PlasmaQuick")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5PlasmaQuick")
 
 ecm_configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"

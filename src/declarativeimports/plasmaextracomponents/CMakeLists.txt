@@ -22,9 +22,9 @@ target_link_libraries(plasmaextracomponentsplugin
         KF5::Plasma)
 
 
-install(TARGETS plasmaextracomponentsplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)
+install(TARGETS plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/extras)
 
-install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)
+install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/extras)
 
 
 # The platform specific stuff, overwrites a copy of the desktop one
@@ -32,16 +32,16 @@ install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)
 # file by file since if some component from the generic set is more
 # recent than the specifc ones, it wouldn't be overwritten
 
-#install(TARGETS plasmaextracomponentsplugin DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
-#install(FILES qml/qmldir DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
+#install(TARGETS plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
+#install(FILES qml/qmldir DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 
-# install(FILES qml/App.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
-# install(FILES qml/Heading.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
-# install(FILES qml/Paragraph.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
-# install(FILES qml/Title.qml DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
-# install(DIRECTORY qml/animations/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
+# install(FILES qml/App.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
+# install(FILES qml/Heading.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
+# install(FILES qml/Paragraph.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
+# install(FILES qml/Title.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
+# install(DIRECTORY qml/animations/ DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 
-#install(DIRECTORY qml/animations/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/extras)
+#install(DIRECTORY qml/animations/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/extras)
 
 #install platform overrides -- enable as we use this feature for plasmaextras
-#install(DIRECTORY platformcomponents/touch/ DESTINATION ${PLUGIN_INSTALL_DIR}/platformimports/touch/org/kde/plasma/extras)
+#install(DIRECTORY platformcomponents/touch/ DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)

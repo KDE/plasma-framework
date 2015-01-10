@@ -25,7 +25,7 @@ target_link_libraries(
    Qt5::Quick
 )
 
-install( TARGETS kded_platformstatus        DESTINATION ${PLUGIN_INSTALL_DIR}/kf5/kded )
-install( FILES platformstatus.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded )
-install( FILES org.kde.platformstatus.xml   DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
+install( TARGETS kded_platformstatus        DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kded )
+install( FILES platformstatus.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/kded )
+install( FILES org.kde.platformstatus.xml   DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR} )
 

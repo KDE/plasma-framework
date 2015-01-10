@@ -132,7 +132,7 @@ target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/Plasma>"
 )
 target_include_directories(KF5Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR};${KF5_INCLUDE_INSTALL_DIR}/Plasma>"
+  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5};${KF5_INCLUDE_INSTALL_DIR}/Plasma>"
 )
 
 set_target_properties(KF5Plasma PROPERTIES
@@ -172,18 +172,18 @@ install(FILES
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
         version.h
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasma COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma COMPONENT Devel)
 
 install(DIRECTORY
         ${CMAKE_CURRENT_BINARY_DIR}/Plasma
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR} COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel)
 
 
 install(FILES
     scripting/appletscript.h
     scripting/dataenginescript.h
     scripting/scriptengine.h
-    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/plasma/scripting COMPONENT Devel)
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma/scripting COMPONENT Devel)
 
 install(FILES
    data/servicetypes/plasma-applet.desktop
@@ -196,12 +196,12 @@ install(FILES
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop
    data/servicetypes/plasma-lookandfeel.desktop
-   DESTINATION ${SERVICETYPES_INSTALL_DIR})
+   DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
 
 install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
-install(FILES data/notifications/plasmashell.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
+install(FILES data/notifications/plasmashell.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR})
 
 install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

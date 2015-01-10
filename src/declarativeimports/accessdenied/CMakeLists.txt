@@ -1,2 +1,2 @@
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/accessdenied)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/accessdenied)
 

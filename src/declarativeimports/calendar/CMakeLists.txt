@@ -21,6 +21,6 @@ target_link_libraries(calendarplugin
     ${KDEPIMLIBS_AKONADI_CALENDAR_LIBS}
 )
 
-install(TARGETS calendarplugin DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/calendar)
-install(DIRECTORY qml/ DESTINATION ${QML_INSTALL_DIR}/org/kde/plasma/calendar)
+install(TARGETS calendarplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
+install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
 

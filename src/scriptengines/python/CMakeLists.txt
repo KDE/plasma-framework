@@ -16,5 +16,5 @@ endif()
 python_install(plasmascript.py ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/PyKDE4)
 
 install(FILES plasma-scriptengine-dataengine-python.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
+        DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 

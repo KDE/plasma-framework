@@ -5,4 +5,4 @@ add_subdirectory(plasmaextracomponents)
 add_subdirectory(platformcomponents)
 add_subdirectory(calendar)
 
-install(DIRECTORY plasmastyle/ DESTINATION ${QML_INSTALL_DIR}/QtQuick/Controls/Styles/Plasma)
+install(DIRECTORY plasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls/Styles/Plasma)
