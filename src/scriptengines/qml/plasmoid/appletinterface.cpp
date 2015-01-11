@@ -602,6 +602,8 @@ void AppletInterface::executeAction(const QString &name)
 bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *e = static_cast<QMouseEvent *>(event);
+
         //pass it up to the applet
         //well, actually we have to pass it to the *containment*
         //because all the code for showing an applet's contextmenu is actually in Containment.
@@ -612,13 +614,24 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
             if (!plugin) {
                 return false;
             }
+
+            //the plugin can be a single action or a context menu
+            //Don't have an action list? execute as single action
+            //and set the event position as action data
+            if (plugin->contextualActions().length() == 1) {
+                QAction *action = plugin->contextualActions().first();
+                action->setData(e->globalPos());
+                action->trigger();
+                return true;
+            }
+
             ContainmentInterface *ci = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
             QMenu desktopMenu;
             ci->addAppletActions(desktopMenu, applet(), event);
 
             if (!desktopMenu.isEmpty()) {
-                desktopMenu.exec(static_cast<QMouseEvent*>(event)->globalPos());
+                desktopMenu.exec(e->globalPos());
                 return true;
             }
 
