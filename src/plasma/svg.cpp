@@ -644,6 +644,7 @@ void SvgPrivate::themeChanged()
     themePath.clear();
     eraseRenderer();
     setImagePath(currentPath);
+    q->resize();
 
     //qDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
     emit q->repaintNeeded();
