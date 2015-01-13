@@ -1051,7 +1051,9 @@ bool Dialog::event(QEvent *event)
                                     d->positionAdjustedForMainItem(me->windowPos()) + position(),
                                     me->button(), me->buttons(), me->modifiers());
 
-                    QCoreApplication::sendEvent(this, &me2);
+                    if (isVisible()) {
+                        QCoreApplication::sendEvent(this, &me2);
+                    }
                     return true;
                 }
                 break;
@@ -1066,7 +1068,9 @@ bool Dialog::event(QEvent *event)
                                 we->pixelDelta(), we->angleDelta(), we->delta(),
                                 we->orientation(), we->buttons(), we->modifiers(), we->phase());
 
-                QCoreApplication::sendEvent(this, &we2);
+                if (isVisible()) {
+                    QCoreApplication::sendEvent(this, &we2);
+                }
                 return true;
             }
             break;
@@ -1078,7 +1082,9 @@ bool Dialog::event(QEvent *event)
                     QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
                                         de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                    QCoreApplication::sendEvent(this, &de2);
+                    if (isVisible()) {
+                        QCoreApplication::sendEvent(this, &de2);
+                    }
                     return true;
                 }
                 break;
@@ -1092,7 +1098,9 @@ bool Dialog::event(QEvent *event)
                     QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
                                     de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                    QCoreApplication::sendEvent(this, &de2);
+                    if (isVisible()) {
+                        QCoreApplication::sendEvent(this, &de2);
+                    }
                     return true;
                 }
                 break;
@@ -1103,7 +1111,9 @@ bool Dialog::event(QEvent *event)
                     QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
                                 de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
 
-                    QCoreApplication::sendEvent(this, &de2);
+                    if (isVisible()) {
+                        QCoreApplication::sendEvent(this, &de2);
+                    }
                     return true;
                 }
                 break;
