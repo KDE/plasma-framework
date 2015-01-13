@@ -132,6 +132,10 @@ Item {
                     break
                 }
             }
+
+            if (root.children[oldIndex]) {
+                root.children[oldIndex].clicked();
+            }
         }
 
         function goPreviousTab() {
@@ -152,6 +156,10 @@ Item {
                     priv.setCurrentButtonIndex(oldIndex)
                     break
                 }
+            }
+
+            if (root.children[oldIndex]) {
+                root.children[oldIndex].clicked();
             }
         }
 
