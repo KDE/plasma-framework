@@ -31,6 +31,7 @@ Name[sv]=Plasma-delprogramskal
 Name[tr]=plasma-kpart-shell
 Name[uk]=plasma-kpart-shell
 Name[x-test]=xxplasma-kpart-shellxx
+Name[zh_CN]=plasma-kpart-shell
 Name[zh_TW]=plasma-kpart-shell
 Exec=plasma-example-kpart-shell %i -caption "%c"
 Icon=plasma-example-kpart-shell
