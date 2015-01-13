@@ -168,6 +168,7 @@ QtQuickControlStyle.ButtonStyle {
                 elementId: (control.pressed || control.checked) ? "pressed" : "normal"
                 width: Math.floor(parent.height/2) * 2
                 height: width
+                anchors.centerIn: parent
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
                 opacity: (control.pressed || control.checked || !style.flat || (roundShadow.hasOverState && control.hovered)) ? 1 : 0
                 Behavior on opacity {
