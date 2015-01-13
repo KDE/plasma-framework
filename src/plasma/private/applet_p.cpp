@@ -135,7 +135,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     QString api = appletDescription.property("X-Plasma-API").toString();
 
     if (api.isEmpty()) {
-        q->setLaunchErrorMessage(i18n("The %2 widget did not define which ScriptEngine to use.", appletDescription.name()));
+        q->setLaunchErrorMessage(i18n("The %1 widget did not define which ScriptEngine to use.", appletDescription.name()));
         return;
     }
 
