@@ -81,9 +81,11 @@ void DialogNativeTest::position()
     QCOMPARE(m_dialog->x(), 0);
     QCOMPARE(m_dialog->y(), 49);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 3, 0)
     m_dialog->setVisualParent(m_panel2->contentItem());
     QCOMPARE(m_dialog->x(), 71);
     QCOMPARE(m_dialog->y(), 49);
+#endif
 }
 
 QTEST_MAIN(DialogNativeTest)
