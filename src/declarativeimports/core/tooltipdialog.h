@@ -63,6 +63,9 @@ public:
     bool interactive();
     void setInteractive(bool interactive);
 
+    bool animationsEnabled() const;
+    void setAnimationsEnabled(bool enabled);
+
 protected:
     void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
@@ -78,6 +81,7 @@ private:
     QPropertyAnimation *m_animation;
     int m_hideTimeout;
     bool m_interactive;
+    bool m_animationsEnabled;
 };
 
 #endif

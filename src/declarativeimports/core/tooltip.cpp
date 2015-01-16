@@ -143,11 +143,13 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
+    //if the dialog is not currently visible, disable the animated repositioning
+    dlg->setAnimationsEnabled(dlg->isVisible());
+    dlg->show();
     dlg->setLocation(location);
     dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
     dlg->setInteractive(m_interactive);
-    QMetaObject::invokeMethod(dlg, "show", Qt::QueuedConnection);
 }
 
 QString ToolTip::mainText() const

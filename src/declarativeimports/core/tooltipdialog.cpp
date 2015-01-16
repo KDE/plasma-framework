@@ -31,7 +31,8 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_qmlObject(0),
       m_animation(0),
       m_hideTimeout(4000),
-      m_interactive(false)
+      m_interactive(false),
+      m_animationsEnabled(true)
 {
     setFlags(Qt::ToolTip | Qt::BypassWindowManagerHint);
     setLocation(Plasma::Types::Floating);
@@ -77,9 +78,9 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
 
-    setPosition(m_animation->endValue().toPoint());
     m_animation->stop();
     Dialog::showEvent(event);
+    setPosition(m_animation->endValue().toPoint());
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
@@ -112,7 +113,7 @@ bool ToolTipDialog::event(QEvent *e)
 
 void ToolTipDialog::adjustGeometry(const QRect &geom)
 {
-    if (isVisible()) {
+    if (m_animationsEnabled) {
         QRect startGeom(geometry());
 
         switch (location()) {
@@ -135,6 +136,16 @@ void ToolTipDialog::adjustGeometry(const QRect &geom)
     } else {
         setGeometry(geom);
     }
+}
+
+bool ToolTipDialog::animationsEnabled() const
+{
+    return m_animationsEnabled;
+}
+
+void ToolTipDialog::setAnimationsEnabled(bool enabled)
+{
+    m_animationsEnabled = enabled;
 }
 
 void ToolTipDialog::dismiss()
