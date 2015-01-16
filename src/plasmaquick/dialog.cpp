@@ -331,6 +331,9 @@ void DialogPrivate::updateMinimumWidth()
     //on the scene
     auto margin = frameSvgItem->fixedMargins();
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt() + margin->left() + margin->right();
+    if (q->screen()) {
+        minimumWidth = qMin(q->screen()->availableGeometry().width(), minimumWidth);
+    }
     q->contentItem()->setWidth(qMax(q->width(), minimumWidth));
     q->setWidth(qMax(q->width(), minimumWidth));
 
@@ -354,6 +357,9 @@ void DialogPrivate::updateMinimumHeight()
     //on the scene
     auto margin = frameSvgItem->fixedMargins();
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt() + margin->top() + margin->bottom();
+    if (q->screen()) {
+        minimumHeight = qMin(q->screen()->availableGeometry().height(), minimumHeight);
+    }
     q->contentItem()->setHeight(qMax(q->height(), minimumHeight));
     q->setHeight(qMax(q->height(), minimumHeight));
 
@@ -373,6 +379,9 @@ void DialogPrivate::updateMaximumWidth()
 
     auto margin = frameSvgItem->fixedMargins();
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt() + margin->left() + margin->right();
+    if (q->screen()) {
+        maximumWidth = qMin(q->screen()->availableGeometry().width(), maximumWidth);
+    }
     q->contentItem()->setWidth(qMax(q->width(), maximumWidth));
     q->setWidth(qMax(q->width(), maximumWidth));
 
@@ -392,6 +401,9 @@ void DialogPrivate::updateMaximumHeight()
 
     auto margin = frameSvgItem->fixedMargins();
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt() + margin->top() + margin->bottom();
+    if (q->screen()) {
+        maximumHeight = qMin(q->screen()->availableGeometry().height(), maximumHeight);
+    }
     q->contentItem()->setHeight(qMax(q->height(), maximumHeight));
     q->setHeight(qMin(q->height(), maximumHeight));
 
@@ -423,6 +435,12 @@ void DialogPrivate::updateLayoutParameters()
     minimumWidth += margin->left() + margin->right();
     maximumWidth += margin->left() + margin->right();
 
+    if (q->screen()) {
+        minimumWidth = qMin(q->screen()->availableGeometry().width(), minimumWidth);
+        minimumHeight = qMin(q->screen()->availableGeometry().height(), minimumHeight);
+        maximumWidth = qMin(q->screen()->availableGeometry().width(), maximumWidth);
+        maximumHeight = qMin(q->screen()->availableGeometry().height(), maximumHeight);
+    }
 
     const QSize finalSize(qBound(minimumWidth, q->width(), maximumWidth),
                           qBound(minimumHeight, q->height(), maximumHeight));
