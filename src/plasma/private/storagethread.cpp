@@ -26,6 +26,7 @@
 #include <QSqlField>
 #include <QSqlDriver>
 #include <QSqlRecord>
+#include <QDataStream>
 
 #include <QDebug>
 #include <qstandardpaths.h>

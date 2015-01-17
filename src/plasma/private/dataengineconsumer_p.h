@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QSet>
 #include <QUrl>
+#include <QObject>
 
 namespace Plasma
 {
