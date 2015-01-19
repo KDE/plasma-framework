@@ -481,4 +481,3 @@ void FrameSvgItem::updateDevicePixelRatio()
 
 } // Plasma namespace
 
-#include "framesvgitem.moc"

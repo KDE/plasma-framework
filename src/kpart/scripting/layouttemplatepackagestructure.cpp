@@ -38,5 +38,4 @@ LayoutTemplatePackageStructure::~LayoutTemplatePackageStructure()
 
 }
 
-#include "layouttemplatepackagestructure.moc"
 

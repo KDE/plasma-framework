@@ -135,5 +135,4 @@ void ResourceInstance::notifyFocusedOut()
     m_resourceInstance->notifyFocusedOut();
 }
 
-#include "resourceinstance.moc"
 

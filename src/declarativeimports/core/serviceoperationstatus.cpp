@@ -98,4 +98,3 @@ void ServiceOperationStatus::updateStatus()
     }
 }
 
-#include "serviceoperationstatus.moc"

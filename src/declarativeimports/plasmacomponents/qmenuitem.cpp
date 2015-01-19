@@ -118,5 +118,4 @@ void QMenuItem::updateAction()
 }
 
 
-#include "qmenuitem.moc"
 

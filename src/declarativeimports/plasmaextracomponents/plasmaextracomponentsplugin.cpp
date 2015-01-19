@@ -42,5 +42,4 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }
 
-#include "plasmaextracomponentsplugin.moc"
 

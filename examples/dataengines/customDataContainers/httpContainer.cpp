@@ -96,5 +96,4 @@ void HttpContainer::fetchFinished(KJob *job)
     }
 }
 
-#include "httpContainer.moc"
 

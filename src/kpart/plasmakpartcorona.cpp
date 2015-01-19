@@ -79,4 +79,3 @@ void PlasmaKPartCorona::printScriptMessage(const QString &error)
     // qDebug() << "Startup script: " << error;
 }
 
-#include "plasmakpartcorona.moc"

@@ -204,4 +204,3 @@ void SvgItem::updateDevicePixelRatio()
 
 } // Plasma namespace
 
-#include "svgitem.moc"

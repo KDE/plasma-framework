@@ -138,5 +138,4 @@ void FullScreenSheet::open()
     }
 }
 
-#include "fullscreensheet.moc"
 

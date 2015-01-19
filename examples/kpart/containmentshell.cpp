@@ -91,4 +91,3 @@ void ContainmentShell::optionsPreferences()
     m_dialog->show();
 }
 
-#include "containmentshell.moc"

@@ -381,5 +381,4 @@ bool FullScreenWindow::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-#include "fullscreenwindow.moc"
 

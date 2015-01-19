@@ -64,4 +64,3 @@ void AppletSelector::selected(const QModelIndex &idx)
     emit addApplet(idx.data(Qt::UserRole + 1).toString());
 }
 
-#include "appletselector.moc"

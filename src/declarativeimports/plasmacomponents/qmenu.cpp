@@ -203,5 +203,4 @@ void QMenuProxy::close()
     m_menu->hide();
 }
 
-#include "qmenu.moc"
 

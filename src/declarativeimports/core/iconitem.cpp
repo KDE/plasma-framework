@@ -378,4 +378,3 @@ void IconItem::componentComplete()
     loadPixmap();
 }
 
-#include "iconitem.moc"

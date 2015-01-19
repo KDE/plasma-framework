@@ -373,5 +373,4 @@ QScriptValue ScriptEngine::theme(QScriptContext *context, QScriptEngine *engine)
 
 }
 
-#include "scriptengine.moc"
 
