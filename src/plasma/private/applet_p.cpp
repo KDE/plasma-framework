@@ -236,6 +236,8 @@ void AppletPrivate::askDestroy()
         //this needs users feedback
         transient = true;
         emit q->destroyedChanged(true);
+        //when an applet gets transient, it's "systemimmutable"
+        emit q->immutabilityChanged(q->immutability());
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
@@ -264,6 +266,8 @@ void AppletPrivate::askDestroy()
                         Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
                         if (containmentApplet && containmentApplet->d->deleteNotificationTimer) {
                             emit containmentApplet->destroyedChanged(false);
+                            //when an applet gets transient, it's "systemimmutable"
+                            emit q->immutabilityChanged(q->immutability());
                             delete containmentApplet->d->deleteNotificationTimer;
                             containmentApplet->d->deleteNotificationTimer = 0;
                         }
@@ -276,6 +280,8 @@ void AppletPrivate::askDestroy()
                         emit q->containment()->appletAdded(q);
                     }
                     emit q->destroyedChanged(false);
+                    //when an applet gets transient, it's "systemimmutable"
+                    emit q->immutabilityChanged(q->immutability());
                     if (deleteNotification) {
                         deleteNotification->close();
                     }
