@@ -260,8 +260,14 @@ void AppletPrivate::askDestroy()
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
                     transient = false;
-                    emit q->destroyedChanged(false);
                     if (!q->isContainment() && q->containment()) {
+                        Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
+                        if (containmentApplet && containmentApplet->d->deleteNotificationTimer) {
+                            emit containmentApplet->destroyedChanged(false);
+                            delete containmentApplet->d->deleteNotificationTimer;
+                            containmentApplet->d->deleteNotificationTimer = 0;
+                        }
+
                         //make sure the applets are sorted by id
                         auto position = std::lower_bound(q->containment()->d->applets.begin(), q->containment()->d->applets.end(), q, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
                             return a1->id() < a2->id();
@@ -269,6 +275,7 @@ void AppletPrivate::askDestroy()
                         q->containment()->d->applets.insert(position, q);
                         emit q->containment()->appletAdded(q);
                     }
+                    emit q->destroyedChanged(false);
                     if (deleteNotification) {
                         deleteNotification->close();
                     }
