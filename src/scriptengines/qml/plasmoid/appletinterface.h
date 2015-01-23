@@ -351,6 +351,7 @@ protected Q_SLOTS:
     virtual void init();
 
 protected:
+    bool event(QEvent *event);
     bool eventFilter(QObject *watched, QEvent *event);
 
 private Q_SLOTS:
@@ -372,6 +373,8 @@ private:
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;
     bool m_hideOnDeactivate : 1;
+    //this is used to build an emacs style shortcut
+    int m_oldKeyboardShortcut;
 
     friend class ContainmentInterface;
     //This is used by ContainmentInterface
