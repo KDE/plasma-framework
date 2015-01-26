@@ -31,6 +31,7 @@ Name[sv]=Enkelt exempel på DataEngine
 Name[tr]=Basit VeriMotoru Örneği
 Name[uk]=Простий приклад рушія даних
 Name[x-test]=xxSimple DataEngine Examplexx
+Name[zh_CN]=简单数据引擎样例
 Name[zh_TW]=簡單資料引擎範例
 Comment=A very basic DataEngine implementation
 Comment[bs]=Veoma jednostavna implementacija pogona podataka
