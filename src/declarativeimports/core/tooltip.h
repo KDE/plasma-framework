@@ -35,12 +35,11 @@ class ToolTipDialog;
  * @class ToolTip
  *
  * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
- * You can either specify iconSource, mainText and subText, or a custom Component
- * that will be put inside the tooltip. By specifying the target property, you
- * "attach" the ToolTip to an item in your code, by default the tooltip will be
+ * You can either specify icon, mainText and subText, or a custom Component
+ * that will be put inside the tooltip. By default the tooltip will be
  * rendered when hovering over the parent item.
  *
- * The item inside the ToolTip is loaded on demand and will be destroyed when the
+ * The item inside the ToolTipArea is loaded on demand and will be destroyed when the
  * tooltip is being hidden.
  *
  * Example usage:
@@ -48,12 +47,12 @@ class ToolTipDialog;
  * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  * [...]
- * PlasmaComponents.IconItem {
+ * PlasmaCore.IconItem {
  *     ...
  *     PlasmaCore.ToolTipArea {
- *         mainText: "Tooltip Title"
- *         subText: "Some explanation."
- *         iconSource: "plasma"
+ *         mainText: i18n("Tooltip Title")
+ *         subText: i18n("Some explanation.")
+ *         icon: "plasma"
  *         // alternatively, you can specify your own component
  *         // to be loaded when the tooltip shows
  *         mainComponent: Component {
