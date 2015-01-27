@@ -83,6 +83,7 @@ Row {
             width: Math.min(tooltipSubtext.implicitWidth, preferredTextWidth)
             wrapMode: Text.WordWrap
             text: toolTip ? toolTip.subText : ""
+            textFormat: toolTip.textFormat
             opacity: 0.5
         }
     }

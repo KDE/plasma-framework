@@ -55,6 +55,7 @@ Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
+      m_toolTipTextFormat(0),
       m_args(args),
       m_actionSignals(0),
       m_appletScriptEngine(script),
@@ -331,6 +332,21 @@ void AppletInterface::setToolTipSubText(const QString &text)
     }
 
     emit toolTipSubTextChanged();
+}
+
+int AppletInterface::toolTipTextFormat() const
+{
+    return m_toolTipTextFormat;
+}
+
+void AppletInterface::setToolTipTextFormat(int format)
+{
+    if (m_toolTipTextFormat == format) {
+        return;
+    }
+
+    m_toolTipTextFormat = format;
+    emit toolTipTextFormatChanged();
 }
 
 bool AppletInterface::isBusy() const

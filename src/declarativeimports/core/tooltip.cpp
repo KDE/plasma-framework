@@ -35,9 +35,10 @@ int ToolTip::s_dialogUsers  = 0;
 
 ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
+      m_textFormat(0),
       m_tooltipsEnabledGlobally(false),
-      m_containsMouse(false),
       m_location(Plasma::Types::Floating),
+      m_containsMouse(false),
       m_active(true),
       m_interactive(false),
       m_usingDialog(false)
@@ -180,6 +181,21 @@ void ToolTip::setSubText(const QString &subText)
 
     m_subText = subText;
     emit subTextChanged();
+}
+
+int ToolTip::textFormat() const
+{
+    return m_textFormat;
+}
+
+void ToolTip::setTextFormat(int format)
+{
+    if (m_textFormat == format) {
+        return;
+    }
+
+    m_textFormat = format;
+    emit textFormatChanged();
 }
 
 Plasma::Types::Location ToolTip::location() const
