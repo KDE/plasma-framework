@@ -204,7 +204,7 @@ Item {
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {
                     var child = root.children[itemIndex]
-                    if (!child.visible || root.children[i].text === undefined) {
+                    if (!child.visible || root.children[itemIndex].text === undefined) {
                         continue
                     }
 
