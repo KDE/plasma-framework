@@ -125,6 +125,7 @@ PRIVATE
     KF5::XmlGui   #KActionCollection
     KF5::GlobalAccel #Applet::setGlobalShortcut
     KF5::Notifications
+    KF5::IconThemes
     ${PLASMA_EXTRA_LIBS}
 )
 

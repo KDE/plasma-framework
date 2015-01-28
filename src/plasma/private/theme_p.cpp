@@ -346,6 +346,11 @@ void ThemePrivate::scheduledCacheUpdate()
 
 void ThemePrivate::colorsChanged()
 {
+    // in the case the theme follows the desktop settings, refetch the colorschemes
+    // and discard the svg pixmap cache
+    if (!colors) {
+        KSharedConfig::openConfig()->reparseConfiguration();
+    }
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
