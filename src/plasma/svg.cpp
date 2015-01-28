@@ -669,6 +669,17 @@ void SvgPrivate::colorsChanged()
 
     eraseRenderer();
     //qDebug() << "repaint needed from colorsChanged";
+
+    // in the case the theme follows the desktop settings, refetch the colorschemes
+    // and discard the svg pixmap cache
+    if (!theme.data()->d->colors) {
+        KSharedConfig::openConfig()->reparseConfiguration();
+        theme.data()->d->colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window);
+        theme.data()->d->buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button);
+        theme.data()->d->viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View);
+        theme.data()->d->discardCache(PixmapCache | SvgElementsCache);
+    }
+
     emit q->repaintNeeded();
 }
 
