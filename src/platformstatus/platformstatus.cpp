@@ -87,7 +87,7 @@ void PlatformStatus::findLookAndFeelPackage(bool sendSignal)
                             QStandardPaths::LocateDirectory);
         if (path.isEmpty()) {
             if (package != defaultPackage) {
-                group.deleteEntry(m_shellPackage);
+                group.deleteEntry("LookAndFeel");
                 findLookAndFeelPackage(sendSignal);
             }
 
