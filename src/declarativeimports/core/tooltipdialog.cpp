@@ -77,10 +77,9 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
-
     m_animation->stop();
+
     Dialog::showEvent(event);
-    setPosition(m_animation->endValue().toPoint());
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
