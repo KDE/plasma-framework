@@ -35,7 +35,7 @@ int ToolTip::s_dialogUsers  = 0;
 
 ToolTip::ToolTip(QQuickItem *parent)
     : QQuickItem(parent),
-      m_textFormat(0),
+      m_textFormat(2),
       m_tooltipsEnabledGlobally(false),
       m_location(Plasma::Types::Floating),
       m_containsMouse(false),
