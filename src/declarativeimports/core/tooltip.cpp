@@ -73,6 +73,7 @@ ToolTip::~ToolTip()
 void ToolTip::settingsChanged()
 {
     KSharedConfig::openConfig("plasmarc")->reparseConfiguration();
+    loadSettings();
 }
 
 void ToolTip::loadSettings()
