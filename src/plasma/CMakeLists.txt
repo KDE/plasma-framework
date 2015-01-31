@@ -175,9 +175,8 @@ install(FILES
         version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma COMPONENT Devel)
 
-install(DIRECTORY
-        ${CMAKE_CURRENT_BINARY_DIR}/Plasma
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel)
+install(FILES ${Plasma_CamelCase_HEADERS}
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/Plasma COMPONENT Devel)
 
 
 install(FILES
