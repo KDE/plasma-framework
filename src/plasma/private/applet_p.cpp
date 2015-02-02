@@ -542,6 +542,8 @@ void AppletPrivate::resetConfigurationObject()
     mainConfig->deleteEntry("formfactor");
     mainConfig->deleteEntry("immutability");
     mainConfig->deleteEntry("location");
+    //if it's not a containment, deleting the non existing activityId entry does nothing
+    mainConfig->deleteEntry("activityId");
     mainConfig->deleteGroup();
     delete mainConfig;
     mainConfig = 0;
