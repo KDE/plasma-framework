@@ -43,6 +43,7 @@ Comment[ar]=ملحقة دمية اختبارية
 Comment[bs]=Lažni priključak za probe
 Comment[ca]=Un connector fals per a proves
 Comment[cs]=Falešný zásuvný modul pro testování
+Comment[da]=Et attrap-plugin til testformål
 Comment[de]=Ein Dummy-Modul zum Testen.
 Comment[en_GB]=A dummy plugin for testing
 Comment[es]=Un complemento de simulación para hacer pruebas

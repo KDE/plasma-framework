@@ -2,6 +2,7 @@
 Name=Custom DataContainers
 Name[bs]=Odabrani kontejneri podataka
 Name[ca]=«DataContainers» personalitzats
+Name[da]=Tilpassede databeholdere
 Name[de]=Benutzerdefinierte Datencontainer
 Name[en_GB]=Custom DataContainers
 Name[es]=«DataContainers» personalizados
@@ -34,6 +35,7 @@ Name[zh_TW]=自訂資料容器
 Comment=A demonstration of how to subclass DataContainer
 Comment[bs]=Demonstracija kako se podklasira kontejner podataka
 Comment[ca]=Una demostració de com usar la subclasse «DataContainer»
+Comment[da]=En demonstration af hvordan man gør DataContainer til en underklasse
 Comment[de]=Eine Demonstration wie Unterklassen von Datencontainern erstellt werden
 Comment[en_GB]=A demonstration of how to subclass DataContainer
 Comment[es]=Una demostración de cómo derivar una clase de «DataContainer»

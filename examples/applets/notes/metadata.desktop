@@ -2,6 +2,7 @@
 Comment=Example on how to manage Drop data
 Comment[bs]=Primjer upravljanja ispuštenim podacima
 Comment[ca]=Exemple de com gestionar dades «Drop»
+Comment[da]=Eksempel på hvordan man håndterer drop-data
 Comment[de]=Beispiel zur Verwaltung von abgelegten Daten
 Comment[en_GB]=Example on how to manage Drop data
 Comment[es]=Ejemplo sobre cómo usar los datos soltados
@@ -37,6 +38,7 @@ Keywords=
 Name=Example notes
 Name[bs]=Primjer bilješke
 Name[ca]=Notes d'exemple
+Name[da]=Eksempel på noter
 Name[de]=Beispielnotizen
 Name[en_GB]=Example notes
 Name[es]=Notas del ejemplo
