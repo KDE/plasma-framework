@@ -130,6 +130,9 @@ Item {
 
     /**
      * Pops a page off the stack.
+     * If the page used to have another parent before being pushed, it will be reparented
+     * to this old parent. If the page was created from a component at push time,
+     * it will be deleted.
      *
      * @param type:Page page if page is specified then the stack is unwound to that
      * page, to unwind to the first page specify page as null.
