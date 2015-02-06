@@ -90,7 +90,7 @@ QColor ColorScope::textColor() const
 
 QColor ColorScope::highlightColor() const
 {
-    return m_theme.color(Plasma::Theme::BackgroundColor, m_group);
+    return m_theme.color(Plasma::Theme::HighlightColor, m_group);
 }
 
 QColor ColorScope::backgroundColor() const

@@ -38,7 +38,7 @@ QtQuickControlStyle.TextAreaStyle {
     backgroundColor: "transparent"
     textColor: control.backgroundVisible ? theme.viewTextColor : PlasmaCore.ColorScope.textColor
     selectionColor: control.backgroundVisible ? theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
-    selectedTextColor: control.backgroundVisible ? theme.viewBackgroundColor : PlasmaCore.ColorScope.backgroundColor
+    selectedTextColor: control.backgroundVisible ? theme.viewFocusColor : PlasmaCore.ColorScope.backgroundColor
 
     renderType: Text.NativeRendering
 
