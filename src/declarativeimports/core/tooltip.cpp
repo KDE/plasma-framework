@@ -305,6 +305,9 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         return;
     }
 
+    if (!m_mainItem && mainText().isEmpty() && subText().isEmpty()) {
+        return;
+    }
     if (tooltipDialogInstance()->isVisible()) {
         // We signal the tooltipmanager that we're "potentially interested,
         // and ask to keep it open for a bit, so other items get the chance
@@ -313,7 +316,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         tooltipDialogInstance()->keepalive();
         //FIXME: showToolTip needs to be renamed in sync or something like that
         showToolTip();
-    } else if (m_mainItem || !mainText().isEmpty() || !subText().isEmpty()) {
+    } else {
         m_showTimer->start(m_interval);
     }
 }
