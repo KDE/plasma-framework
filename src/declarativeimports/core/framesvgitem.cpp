@@ -121,7 +121,11 @@ public:
 
     void updateTexture(const QSize &size, const QString &elementId)
     {
-        setTexture(s_cache->loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId)));
+        QQuickWindow::CreateTextureOptions options;
+        if (m_fitMode != Tile) {
+            options = QQuickWindow::TextureCanUseAtlas;
+        }
+        setTexture(s_cache->loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId), options));
     }
 
     void reposition(const QRect& frameGeometry, QSize& fullSize)
@@ -132,11 +136,18 @@ public:
         if(!nodeRect.isValid() || nodeRect.isEmpty())
             nodeRect = QRect();
 
-        QRectF textureRect = QRectF(0,0,1,1);
+        //the position of the relevant texture within this texture ID.
+        //for atlas' this will only be a small part of the texture
+        QRectF textureRect;
+
         if (m_fitMode == Tile) {
+            textureRect = QRectF(0,0,1,1); //we can never be in an atlas for tiled images.
+
+            //if tiling horizontally
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
                 textureRect.setWidth(nodeRect.width() / m_elementNativeSize.width());
             }
+            //if tiling vertically
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
                 textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
             }
@@ -147,7 +158,10 @@ public:
 
             //re-render the SVG at new size
             updateTexture(nodeRect.size(), elementId);
-        } // for fast stretch, we don't have to do anything
+            textureRect = texture()->normalizedTextureSubRect();
+        } else if (texture()) { // for fast stretch.
+            textureRect = texture()->normalizedTextureSubRect();
+        }
 
         QSGGeometry::updateTexturedRectGeometry(geometry(), nodeRect, textureRect);
         markDirty(QSGNode::DirtyGeometry);
