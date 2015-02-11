@@ -381,7 +381,12 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
     d->qmlObject = new KDeclarative::QmlObject(this);
     if (applet->pluginInfo().isValid()) {
-        d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
+        const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
+        if (!rootPath.isEmpty()) {
+            d->qmlObject->setTranslationDomain("plasma_applet_" + rootPath);
+        } else {
+            d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
+        }
     }
     d->qmlObject->setInitializationDelayed(true);
 
