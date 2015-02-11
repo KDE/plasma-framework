@@ -156,7 +156,7 @@ void Applet::save(KConfigGroup &g) const
         // we're saving so we know its changed, we don't need or want the configChanged
         // signal bubbling up at this point due to that
         disconnect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
-        d->configLoader->writeConfig();
+        d->configLoader->save();
         connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
     }
 }
@@ -669,7 +669,7 @@ void Applet::configChanged()
 {
     if (d->script) {
         if (d->configLoader) {
-            d->configLoader->readConfig();
+            d->configLoader->load();
         }
         d->script->configChanged();
     }
