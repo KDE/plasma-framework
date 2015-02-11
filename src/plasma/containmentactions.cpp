@@ -50,6 +50,8 @@ ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList
     : d(new ContainmentActionsPrivate(KService::serviceByStorageId(args.count() > 0 ?
                                       args[0].toString() : QString()), this))
 {
+    setParent(parentObject);
+
     // now remove first item since those are managed by Wallpaper and subclasses shouldn't
     // need to worry about them. yes, it violates the constness of this var, but it lets us add
     // or remove items later while applets can just pretend that their args always start at 0
