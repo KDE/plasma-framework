@@ -203,6 +203,8 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
             discardPixmap();
         }
     }
+#else
+    Q_UNUSED(message)
 #endif
     // do not filter out any events, there might be further WindowThumbnails for the same window
     return false;
