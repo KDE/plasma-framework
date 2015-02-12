@@ -314,7 +314,7 @@ void IconItem::loadPixmap()
     //final pixmap to paint
     QPixmap result;
     if (size <= 0) {
-        m_pixmapIcon = QPixmap();
+        m_iconPixmap = QPixmap();
         m_animation->stop();
         update();
         return;
