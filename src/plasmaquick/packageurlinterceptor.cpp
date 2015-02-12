@@ -85,9 +85,10 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
         QString relativePath;
         foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
-            if (path.path().startsWith(m_package.path() + prefix)) {
+            QString root = m_package.path() + prefix;
+            if (path.path().startsWith(root)) {
                 //obtain a string in the form ui/foo/bar/baz.qml
-                relativePath = path.path().mid(QString(m_package.path() + prefix).length());
+                relativePath = path.path().mid(root.length());
                 break;
             }
         }
