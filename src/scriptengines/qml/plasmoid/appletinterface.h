@@ -192,6 +192,11 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut NOTIFY globalShortcutChanged)
 
+    /**
+     * An interface to the native C++ plasmoid, if implemented
+     */
+    Q_PROPERTY(QObject *nativeInterface READ nativeInterface CONSTANT)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
     AppletInterface(Plasma::Applet *applet, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
@@ -318,6 +323,8 @@ public:
     QKeySequence globalShortcut() const;
     void setGlobalShortcut(const QKeySequence &keySequence);
 
+    QObject *nativeInterface();
+
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -390,6 +397,7 @@ private:
     bool m_hideOnDeactivate : 1;
     //this is used to build an emacs style shortcut
     int m_oldKeyboardShortcut;
+    QObject *m_dummyNativeInterface;
 
     friend class ContainmentInterface;
     //This is used by ContainmentInterface

@@ -63,6 +63,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_busy(false),
       m_hideOnDeactivate(true),
       m_oldKeyboardShortcut(0),
+      m_dummyNativeInterface(0),
       m_positionBeforeRemoval(QPointF(-1, -1))
 {
     qmlRegisterType<QAction>();
@@ -118,7 +119,8 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
       m_appletScriptEngine(0),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
-      m_hideOnDeactivate(true)
+      m_hideOnDeactivate(true),
+      m_dummyNativeInterface(0)
 {
     qmlRegisterType<QAction>();
 
@@ -583,6 +585,18 @@ QKeySequence AppletInterface::globalShortcut() const
 void AppletInterface::setGlobalShortcut(const QKeySequence &sequence)
 {
     applet()->setGlobalShortcut(sequence);
+}
+
+QObject *AppletInterface::nativeInterface()
+{
+    if (applet()->metaObject()->className() != "Plasma::Applet") {
+        return applet();
+    } else {
+        if (!m_dummyNativeInterface) {
+            m_dummyNativeInterface = new QObject(this);
+        }
+        return m_dummyNativeInterface;
+    }
 }
 
 QString AppletInterface::downloadPath(const QString &file)

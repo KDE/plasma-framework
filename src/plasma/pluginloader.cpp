@@ -201,8 +201,8 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     QVariantList allArgs;
     allArgs << offer->storageId() << appletId << args;
-
-    if (!offer->property("X-Plasma-API").toString().isEmpty()) {
+    if (!offer->property("X-Plasma-API").toString().isEmpty() &&
+        offer->property("Library").toString().isEmpty()) {
 #ifndef NDEBUG
         // qDebug() << "we have a script using the"
         //         << offer->property("X-Plasma-API").toString() << "API";
