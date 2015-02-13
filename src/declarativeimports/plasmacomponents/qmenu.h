@@ -69,7 +69,7 @@ public:
     Q_INVOKABLE void addMenuItem(QMenuItem *item);
 
 protected:
-    bool event(QEvent *event);
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void statusChanged();

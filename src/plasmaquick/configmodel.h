@@ -92,8 +92,8 @@ public:
     {
         return rowCount();
     }
-    virtual int rowCount(const QModelIndex &index = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &, int) const;
+    int rowCount(const QModelIndex &index = QModelIndex()) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex &, int) const Q_DECL_OVERRIDE;
 
     /**
      * @param row the row for which the data will be returned

@@ -110,7 +110,7 @@ public:
      * Loads a new Svg
      * @param imagePath the new file
      */
-    Q_INVOKABLE void setImagePath(const QString &path);
+    Q_INVOKABLE void setImagePath(const QString &path) Q_DECL_OVERRIDE;
 
     /**
      * Sets what borders should be painted

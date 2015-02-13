@@ -53,7 +53,7 @@ public:
     void removeAllowedPath(const QString &path);
     QStringList allowedPaths() const;
 
-    virtual QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type);
+    QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type) Q_DECL_OVERRIDE;
 
     static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
     {

@@ -146,8 +146,8 @@ protected:
     KDeclarative::QmlObject *qmlObject();
 
     //Reimplementation
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry);
-    virtual void itemChange(ItemChange change, const ItemChangeData &value);
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
 
 private:
     AppletQuickItemPrivate *const d;

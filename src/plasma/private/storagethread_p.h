@@ -36,7 +36,7 @@ public:
     StorageThread(QObject *parent = 0);
     ~StorageThread();
 
-    void run();
+    void run() Q_DECL_OVERRIDE;
 
     static Plasma::StorageThread *self();
 

@@ -105,7 +105,7 @@ public:
      * Default implementation of start, which simply sets the results to false.
      * This makes it easy to create a "failure" job.
      */
-    Q_INVOKABLE virtual void start();
+    Q_INVOKABLE void start() Q_DECL_OVERRIDE;
 
 protected:
     /**

@@ -30,7 +30,7 @@ class SimpleLoader : public Plasma::PluginLoader
 {
 protected:
     virtual Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0,
-                                       const QVariantList &args = QVariantList());
+                                       const QVariantList &args = QVariantList()) Q_DECL_OVERRIDE;
 };
 
 
@@ -42,8 +42,8 @@ public:
     explicit SimpleCorona(QObject * parent = 0);
     ~SimpleCorona();
 
-    QRect screenGeometry(int) const;
-    int screenForContainment(const Plasma::Containment *) const;
+    QRect screenGeometry(int) const Q_DECL_OVERRIDE;
+    int screenForContainment(const Plasma::Containment *) const Q_DECL_OVERRIDE;
 };
 
 class SimpleApplet : public Plasma::Applet

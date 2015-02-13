@@ -77,8 +77,8 @@ Q_SIGNALS:
     void appletGlobalShortcutChanged();
 
 protected:
-    void hideEvent(QHideEvent *ev);
-    void resizeEvent(QResizeEvent *re);
+    void hideEvent(QHideEvent *ev) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
 
 private:
     ConfigViewPrivate *const d;

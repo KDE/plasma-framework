@@ -440,7 +440,7 @@ Q_SIGNALS:
 
 private:
     SvgPrivate *const d;
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
     Q_PRIVATE_SLOT(d, void themeChanged())
     Q_PRIVATE_SLOT(d, void colorsChanged())

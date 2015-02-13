@@ -105,7 +105,7 @@ public:
     Units(QObject *parent = 0);
     ~Units();
 
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
     /**
      * @return pixel value for a grid Unit. Depends on DPI and font size.

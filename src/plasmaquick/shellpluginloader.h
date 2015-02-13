@@ -33,7 +33,7 @@ public:
     static void init();
 
 protected:
-    Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization);
+    Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization) Q_DECL_OVERRIDE;
 
 /**
   These members are actually file-static in the .cpp because binary compat must be preserved

@@ -176,14 +176,14 @@ public:
     int roleNameToId(const QString &name);
 
     //Reimplemented
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const;
+                        int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
     QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+                      const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    QModelIndex parent(const QModelIndex &child) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
 
     int count() const
     {

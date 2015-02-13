@@ -229,14 +229,14 @@ protected:
     virtual void adjustGeometry(const QRect &geom);
 
     //Reimplementations
-    virtual void classBegin();
-    virtual void componentComplete();
-    virtual void resizeEvent(QResizeEvent *re);
-    virtual void focusInEvent(QFocusEvent *ev);
-    virtual void focusOutEvent(QFocusEvent *ev);
-    virtual void showEvent(QShowEvent *event);
-    virtual void hideEvent(QHideEvent *event);
-    virtual bool event(QEvent *event);
+    void classBegin() Q_DECL_OVERRIDE;
+    void componentComplete() Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *ev) Q_DECL_OVERRIDE;
+    void focusOutEvent(QFocusEvent *ev) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
 
 private:
     friend class DialogPrivate;

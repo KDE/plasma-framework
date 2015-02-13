@@ -176,19 +176,19 @@ public:
     bool fromCurrentTheme() const;
 
     void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry);
+                         const QRectF &oldGeometry) Q_DECL_OVERRIDE;
 
     /**
      * Only to be used from inside this library, is not intended to be invokable
      */
     Plasma::FrameSvg *frameSvg() const;
 
-    virtual QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *);
+    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) Q_DECL_OVERRIDE;
 
 
 
 protected:
-    virtual void componentComplete();
+    void componentComplete() Q_DECL_OVERRIDE;
 
 /// @endcond
 

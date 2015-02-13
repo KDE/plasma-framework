@@ -41,7 +41,7 @@ public:
 
 protected:
     void init();
-    bool sourceRequestEvent(const QString &source);
+    bool sourceRequestEvent(const QString &source) Q_DECL_OVERRIDE;
 };
 
 #endif // __TESTDATAENGINE_H__

@@ -169,9 +169,9 @@ public Q_SLOTS:
 
 protected:
 /// @cond INTERNAL_DOCS
-    bool childMouseEventFilter(QQuickItem *item, QEvent *event);
-    void hoverEnterEvent(QHoverEvent *event);
-    void hoverLeaveEvent(QHoverEvent *event);
+    bool childMouseEventFilter(QQuickItem *item, QEvent *event) Q_DECL_OVERRIDE;
+    void hoverEnterEvent(QHoverEvent *event) Q_DECL_OVERRIDE;
+    void hoverLeaveEvent(QHoverEvent *event) Q_DECL_OVERRIDE;
 
     ToolTipDialog *tooltipDialogInstance();
 /// @endcond

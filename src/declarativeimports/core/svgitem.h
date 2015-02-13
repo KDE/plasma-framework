@@ -81,7 +81,7 @@ public:
 
     QSizeF naturalSize() const;
 
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData);
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) Q_DECL_OVERRIDE;
 /// @endcond
 
 Q_SIGNALS:

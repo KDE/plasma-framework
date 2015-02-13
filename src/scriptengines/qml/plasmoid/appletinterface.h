@@ -362,11 +362,11 @@ Q_SIGNALS:
     void globalShortcutChanged();
 
 protected Q_SLOTS:
-    virtual void init();
+    void init() Q_DECL_OVERRIDE;
 
 protected:
-    bool event(QEvent *event);
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool event(QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void destroyedChanged(bool destroyed);

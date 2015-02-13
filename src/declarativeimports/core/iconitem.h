@@ -64,10 +64,10 @@ public:
 
     bool isValid() const;
 
-    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData);
+    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
     void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry);
+                         const QRectF &oldGeometry) Q_DECL_OVERRIDE;
 
     void componentComplete() Q_DECL_OVERRIDE;
 

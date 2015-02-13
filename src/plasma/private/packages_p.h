@@ -32,8 +32,8 @@ class ChangeableMainScriptPackage : public KPackage::PackageStructure
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
-    void pathChanged(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
 
 protected:
     virtual QString mainScriptConfigKey() const;
@@ -43,35 +43,35 @@ class GenericPackage : public ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 class PlasmoidPackage : public GenericPackage
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 class ThemePackage : public KPackage::PackageStructure
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 class ContainmentActionsPackage : public ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package);
+    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 } // namespace Plasma

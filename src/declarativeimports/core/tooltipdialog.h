@@ -55,7 +55,7 @@ public:
     /**
      * animate the position change if visible
      */
-    virtual void adjustGeometry(const QRect &geom);
+    void adjustGeometry(const QRect &geom) Q_DECL_OVERRIDE;
 
     void dismiss();
     void keepalive();
@@ -67,10 +67,10 @@ public:
     void setAnimationsEnabled(bool enabled);
 
 protected:
-    void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
-    void resizeEvent(QResizeEvent *re);
-    bool event(QEvent *e);
+    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void valueChanged(const QVariant &value);

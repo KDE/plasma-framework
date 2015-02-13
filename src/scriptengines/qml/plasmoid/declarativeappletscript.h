@@ -38,15 +38,15 @@ public:
 
     QString filePath(const QString &type, const QString &file) const;
 
-    QList<QAction *> contextualActions();
+    QList<QAction *> contextualActions() Q_DECL_OVERRIDE;
 
-    void constraintsEvent(Plasma::Types::Constraints constraints);
+    void constraintsEvent(Plasma::Types::Constraints constraints) Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void executeAction(const QString &name);
 
 protected:
-    bool init();
+    bool init() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void formFactorChanged();

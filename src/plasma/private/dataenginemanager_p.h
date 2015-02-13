@@ -78,7 +78,7 @@ protected:
     /**
      * Reimplemented from QObject
      **/
-    void timerEvent(QTimerEvent *event);
+    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
 
 private:
     /**

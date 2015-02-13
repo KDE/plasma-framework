@@ -101,14 +101,14 @@ protected:
     /**
      * @return absolute path to the main script file for this plasmoid
      */
-    QString mainScript() const;
+    QString mainScript() const Q_DECL_OVERRIDE;
 
     /**
      * @return the Package associated with this plasmoid which can
      *         be used to request resources, such as images and
      *         interface files.
      */
-    Package package() const;
+    Package package() const Q_DECL_OVERRIDE;
 
     /**
      * @return the KPluginInfo associated with this plasmoid

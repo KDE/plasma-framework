@@ -28,19 +28,19 @@
 class LookAndFeelPackage : public Plasma::PackageStructure
 {
 public:
-    void initPackage(Plasma::Package *package);
+    void initPackage(Plasma::Package *package) Q_DECL_OVERRIDE;
 };
 
 class QmlWallpaperPackage : public Plasma::PackageStructure
 {
 public:
-    void initPackage(Plasma::Package *package);
+    void initPackage(Plasma::Package *package) Q_DECL_OVERRIDE;
 };
 
 class LayoutTemplatePackage : public Plasma::PackageStructure
 {
 public:
-    void initPackage(Plasma::Package *package);
+    void initPackage(Plasma::Package *package) Q_DECL_OVERRIDE;
 };
 
 #endif // LOOKANDFEELPACKAGE_H

@@ -90,7 +90,7 @@ public:
     /**
      * Reimplemented from Applet
      */
-    void init();
+    void init() Q_DECL_OVERRIDE;
 
     /**
      * Returns the type of containment
@@ -145,13 +145,13 @@ public:
      * @reimp
      * @sa Applet::save(KConfigGroup &)
      */
-    void save(KConfigGroup &group) const;
+    void save(KConfigGroup &group) const Q_DECL_OVERRIDE;
 
     /**
      * @reimp
      * @sa Applet::restore(KConfigGroup &)
      */
-    void restore(KConfigGroup &group);
+    void restore(KConfigGroup &group) Q_DECL_OVERRIDE;
 
     /**
      * Sets wallpaper plugin.
