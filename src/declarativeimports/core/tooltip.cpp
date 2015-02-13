@@ -38,7 +38,7 @@ ToolTip::ToolTip(QQuickItem *parent)
       m_tooltipsEnabledGlobally(false),
       m_containsMouse(false),
       m_location(Plasma::Types::Floating),
-      m_textFormat(0),
+      m_textFormat(Qt::AutoText),
       m_active(true),
       m_interactive(false),
       m_usingDialog(false)
