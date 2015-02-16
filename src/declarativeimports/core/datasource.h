@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QtQml>
 #include <QQmlPropertyMap>
+#include <QQmlParserStatus>
 
 #include <Plasma/DataEngineConsumer>
 #include <Plasma/DataEngine>
@@ -40,9 +41,11 @@ class DataEngine;
  * @class DataSource
  * @short Provides data from a range of plugins
  */
-class DataSource : public QObject, DataEngineConsumer
+class DataSource : public QObject, public QQmlParserStatus, DataEngineConsumer
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
+
 public:
     enum Change {
         NoChange = 0,
@@ -54,6 +57,10 @@ public:
     typedef QMap<QString, QVariant> Data;
 
     DataSource(QObject *parent = 0);
+
+    void classBegin();
+    void componentComplete();
+
     /**
      * true if the connection to the Plasma DataEngine is valid
      */
@@ -72,6 +79,16 @@ public:
         return m_interval;
     }
     void setInterval(const int interval);
+
+    /**
+     * The interval to align polling to
+     */
+    Q_PROPERTY(Plasma::Types::IntervalAlignment intervalAlignment READ intervalAlignment WRITE setIntervalAlignment NOTIFY intervalAlignmentChanged)
+    Plasma::Types::IntervalAlignment intervalAlignment() const
+    {
+        return m_intervalAlignment;
+    }
+    void setIntervalAlignment(Plasma::Types::IntervalAlignment intervalAlignment);
 
     /**
      * Plugin name of the Plasma DataEngine
@@ -100,11 +117,7 @@ public:
     Q_PROPERTY(QStringList sources READ sources NOTIFY sourcesChanged)
     QStringList sources() const
     {
-        if (m_dataEngine) {
-            return m_dataEngine->sources();
-        } else {
-            return QStringList();
-        }
+        return m_sources;
     }
 
     /**
@@ -151,6 +164,7 @@ public Q_SLOTS:
 protected Q_SLOTS:
     void removeSource(const QString &source);
     void setupData();
+    void updateSources();
 
 Q_SIGNALS:
     void newData(const QString &sourceName, const QVariantMap &data);
@@ -159,19 +173,23 @@ Q_SIGNALS:
     void sourceConnected(const QString &source);
     void sourceDisconnected(const QString &source);
     void intervalChanged();
+    void intervalAlignmentChanged();
     void engineChanged();
     void dataChanged();
     void connectedSourcesChanged();
     void sourcesChanged();
 
 private:
+    bool m_ready;
     QString m_id;
     int m_interval;
+    Plasma::Types::IntervalAlignment m_intervalAlignment;
     QString m_engine;
     QQmlPropertyMap *m_data;
     QQmlPropertyMap *m_models;
     Plasma::DataEngine *m_dataEngine;
     Plasma::DataEngineConsumer *m_dataEngineConsumer;
+    QStringList m_sources;
     QStringList m_connectedSources;
     QStringList m_oldSources;
     QStringList m_newSources;

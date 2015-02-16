@@ -26,13 +26,26 @@ namespace Plasma
 {
 DataSource::DataSource(QObject *parent)
     : QObject(parent),
+      m_ready(false),
       m_interval(0),
+      m_intervalAlignment(Plasma::Types::NoAlignment),
       m_dataEngine(0),
       m_dataEngineConsumer(0)
 {
     m_models = new QQmlPropertyMap(this);
     m_data = new QQmlPropertyMap(this);
     setObjectName("DataSource");
+}
+
+void DataSource::classBegin()
+{
+
+}
+
+void DataSource::componentComplete()
+{
+    m_ready = true;
+    setupData();
 }
 
 void DataSource::setConnectedSources(const QStringList &sources)
@@ -43,7 +56,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
             sourcesChanged = true;
             if (m_dataEngine) {
                 m_connectedSources.append(source);
-                m_dataEngine->connectSource(source, this, m_interval);
+                m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
                 emit sourceConnected(source);
             }
         }
@@ -73,7 +86,48 @@ void DataSource::setEngine(const QString &e)
     }
 
     m_engine = e;
-    setupData();
+
+    if (m_engine.isEmpty()) {
+        emit engineChanged();
+        return;
+    }
+
+    m_dataEngineConsumer = new Plasma::DataEngineConsumer();
+    Plasma::DataEngine *engine = dataEngine(m_engine);
+    if (!engine) {
+        qWarning() << "DataEngine" << m_engine << "not found";
+        emit engineChanged();
+        return;
+    }
+
+    if (m_dataEngine) {
+        m_dataEngine->disconnect(this);
+        // Deleting the consumer triggers the reference counting
+        delete m_dataEngineConsumer;
+        m_dataEngineConsumer = 0;
+    }
+
+    /*
+     * It is due little explanation why this is a queued connection:
+     * If sourceAdded arrives immediately, in the case we have a datamodel
+     * with items at source level we connect too soon (before setData for
+     * all roles is done), having a dataupdated in the datamodel with only
+     * the first role, killing off the other roles.
+     * Besides causing a model reset more, unfortunately setRoleNames can be done a single time, so is not possible adding new roles after the
+     * first setRoleNames() is called.
+     * This fixes engines that have 1 item per source like the
+     * recommendations engine.
+     */
+    m_dataEngine = engine;
+    connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SLOT(updateSources()), Qt::QueuedConnection);
+    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(updateSources()));
+
+    connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourceAdded(QString)), Qt::QueuedConnection);
+    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(removeSource(QString)));
+    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
+
+    updateSources();
+
     emit engineChanged();
 }
 
@@ -88,56 +142,30 @@ void DataSource::setInterval(const int interval)
     emit intervalChanged();
 }
 
-//TODO: event compression for this
+void DataSource::setIntervalAlignment(Plasma::Types::IntervalAlignment intervalAlignment)
+{
+    if (intervalAlignment == m_intervalAlignment) {
+        return;
+    }
+
+    m_intervalAlignment = intervalAlignment;
+    setupData();
+    emit intervalAlignmentChanged();
+}
+
 void DataSource::setupData()
 {
+    if (!m_ready) {
+        return;
+    }
+
 //     qDebug() << " loading engine " << m_engine;
     //FIXME: should all services be deleted just because we're changing the interval, etc?
     qDeleteAll(m_services);
     m_services.clear();
 
-    if (m_engine.isEmpty()) {
-        return;
-    }
-
-    m_dataEngineConsumer = new Plasma::DataEngineConsumer();
-    Plasma::DataEngine *engine = dataEngine(m_engine);
-    if (!engine) {
-        qWarning() << "DataEngine" << m_engine << "not found";
-        return;
-    }
-//     qDebug() << "Engine loaed .. . " << m_engine << m_dataEngineConsumer;
-
-    if (engine != m_dataEngine) {
-        if (m_dataEngine) {
-            m_dataEngine->disconnect(this);
-            // Deleting the consumer triggers the reference counting
-            delete m_dataEngineConsumer;
-            m_dataEngineConsumer = 0;
-        }
-
-        /*
-         * It is due little explanation why this is a queued connection:
-         * If sourceAdded arrives immediately, in the case we have a datamodel
-         * with items at source level we connect too soon (before setData for
-         * all roles is done), having a dataupdated in the datamodel with only
-         * the first role, killing off the other roles.
-         * Besides causing a model reset more, unfortunately setRoleNames can be done a single time, so is not possible adding new roles after the
-         * first setRoleNames() is called.
-         * This fixes engines that have 1 item per source like the
-         * recommendations engine.
-         */
-        m_dataEngine = engine;
-        connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourcesChanged()), Qt::QueuedConnection);
-        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourcesChanged()));
-
-        connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourceAdded(QString)), Qt::QueuedConnection);
-        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(removeSource(QString)));
-        connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
-    }
-
     foreach (const QString &source, m_connectedSources) {
-        m_dataEngine->connectSource(source, this, m_interval);
+        m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
         emit sourceConnected(source);
     }
 }
@@ -210,7 +238,7 @@ void DataSource::connectSource(const QString &source)
 
     m_connectedSources.append(source);
     if (m_dataEngine) {
-        m_dataEngine->connectSource(source, this, m_interval);
+        m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
         emit sourceConnected(source);
         emit connectedSourcesChanged();
     }
@@ -223,6 +251,19 @@ void DataSource::disconnectSource(const QString &source)
         m_dataEngine->disconnectSource(source, this);
         emit sourceDisconnected(source);
         emit connectedSourcesChanged();
+    }
+}
+
+void DataSource::updateSources()
+{
+    QStringList sources;
+    if (m_dataEngine) {
+        sources = m_dataEngine->sources();
+    }
+
+    if (sources != m_sources) {
+        m_sources = sources;
+        emit sourcesChanged();
     }
 }
 
