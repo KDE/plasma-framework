@@ -117,7 +117,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         if (relay) {
             // connected to a relay
             //qDebug() << "     already connected, but to a relay";
-            if (relay->m_interval == pollingInterval) {
+            if (relay->m_interval == pollingInterval && relay->m_align == alignment) {
                 //qDebug() << "    already connected to a relay of the same interval of"
                 //          << pollingInterval << ", nothing to do";
                 return;
