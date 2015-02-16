@@ -88,7 +88,12 @@ void ConfigViewPrivate::init()
 
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(q->engine());
-    kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginInfo().pluginName());
+    const QString rootPath = applet.data()->pluginInfo().property("X-Plasma-RootPath").toString();
+    if (!rootPath.isEmpty()) {
+        kdeclarative.setTranslationDomain("plasma_applet_" + rootPath);
+    } else {
+        kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginInfo().pluginName());
+    }
     kdeclarative.setupBindings();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
