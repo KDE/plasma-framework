@@ -5,5 +5,3 @@ add_executable(dpitest
 
 target_link_libraries(dpitest KF5::Plasma KF5::I18n Qt5::Gui)
 
-install(TARGETS dpitest ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
-
