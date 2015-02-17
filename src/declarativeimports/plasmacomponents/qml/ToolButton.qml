@@ -24,6 +24,10 @@ import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
 /**
  * A plasma theme based toolbutton.
+ *
+ * ToolButtons which have their @c flat property set to false, which are not part
+ * of a ButtonGroup, and have an empty text will become round.
+ *
  * @inherit QtQuick.Controls.ToolButton
  */
 QtControls.ToolButton {
