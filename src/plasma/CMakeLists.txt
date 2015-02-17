@@ -67,6 +67,7 @@ set(Plasma_LIB_SRCS
     package.cpp
     packagestructure.cpp
     private/packages.cpp
+    private/plasmakpackageloader_p.cpp
 
 #graphics
     framesvg.cpp

@@ -44,6 +44,7 @@
 #include "private/storage_p.h"
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
+#include "private/plasmakpackageloader_p.h"
 
 namespace Plasma
 {
@@ -120,6 +121,7 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
 {
+    KPackage::PackageLoader::self()->setPackageLoader(new Plasma::KPackageLoader);
 }
 
 PluginLoader::~PluginLoader()
