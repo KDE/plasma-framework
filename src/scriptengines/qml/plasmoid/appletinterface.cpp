@@ -705,17 +705,26 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 return false;
             }
 
+            ContainmentInterface *ci = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
+            if (!ci) {
+                return false;
+            }
+
             //the plugin can be a single action or a context menu
             //Don't have an action list? execute as single action
             //and set the event position as action data
             if (plugin->contextualActions().length() == 1) {
+                // but first check whether we are not a popup
+                // we don't want to randomly creates applets without confirmation
+                if (static_cast<QQuickItem *>(watched)->window() != ci->window()) {
+                    return true;
+                }
+
                 QAction *action = plugin->contextualActions().first();
                 action->setData(e->globalPos());
                 action->trigger();
                 return true;
             }
-
-            ContainmentInterface *ci = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
             QMenu desktopMenu;
             ci->addAppletActions(desktopMenu, applet(), event);
