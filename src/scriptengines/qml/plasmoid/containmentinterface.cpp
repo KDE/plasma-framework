@@ -44,8 +44,10 @@
 #include <plasma.h>
 #include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
-#include <Plasma/Package>
 #include <Plasma/PluginLoader>
+
+#include <KPackage/Package>
+#include <KPackage/PackageLoader>
 
 #include <kactivities/info.h>
 
@@ -102,7 +104,7 @@ void ContainmentInterface::init()
             defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Panel");
         }
 
-        Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+        KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("Plasma/Generic");
 
         if (defaults.isValid()) {
             pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
@@ -128,7 +130,10 @@ void ContainmentInterface::init()
             } else {
                 qWarning() << "Could not load toolbox package." << pkg.path();
             }
+        } else {
+            qWarning() << "Toolbox not loading, toolbox package is either invalid or disabled.";
         }
+
     }
 
     //set parent, both as object hierarchically and visually
