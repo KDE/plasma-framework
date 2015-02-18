@@ -165,6 +165,7 @@ bool ToolTipDialog::interactive()
 void ToolTipDialog::setInteractive(bool interactive)
 {
     m_interactive = interactive;
+    setOutputOnly(!interactive);
 }
 
 void ToolTipDialog::valueChanged(const QVariant &value)
