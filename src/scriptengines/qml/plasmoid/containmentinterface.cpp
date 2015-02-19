@@ -749,6 +749,9 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     desktopMenu.setAttribute(Qt::WA_TranslucentBackground);
     //end workaround
 
+    if (window() && window()->mouseGrabberItem()) {
+        window()->mouseGrabberItem()->ungrabMouse();
+    }
     desktopMenu.exec(event->globalPos());
     event->setAccepted(true);
 }
