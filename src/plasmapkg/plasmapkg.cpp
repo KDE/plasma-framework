@@ -195,8 +195,8 @@ void PlasmaPkg::runMain()
         d->servicePrefix = "plasma-applet-";
         d->pluginTypes << "Plasma/Applet";
         d->pluginTypes << "Plasma/Containment";
-    } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 /*||
-               type.compare("theme", Qt::CaseInsensitive) == 0*/) {
+    } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 ||
+               type.compare("package", Qt::CaseInsensitive) == 0) {
         d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/";
         d->servicePrefix = "plasma-package-";
         d->pluginTypes << "Plasma/Generic";
