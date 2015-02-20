@@ -104,7 +104,8 @@ void ContainmentInterface::init()
             defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Panel");
         }
 
-        KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("Plasma/Generic");
+        KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("KPackage/GenericQML");
+        pkg.setDefaultPackageRoot("plasma/packages/");
 
         if (defaults.isValid()) {
             pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
