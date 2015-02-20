@@ -22,22 +22,10 @@
 #include <QByteArray>
 
 DaysModel::DaysModel(QObject *parent) :
-    QAbstractListModel(parent)
+    QAbstractListModel(parent),
+    m_daysBeforeCurrent(0),
+    m_daysAfterCurrent(0)
 {
-    QHash<int, QByteArray> roleNames;
-
-    roleNames.insert(isPreviousMonth,        "isPreviousMonth");
-    roleNames.insert(isCurrentMonth,         "isCurrentMonth");
-    roleNames.insert(isNextMonth,            "isNextMonth");
-    //roleNames.insert(containsHolidayItems,   "containsHolidayItems");
-    //roleNames.insert(containsEventItems,     "containsEventItems");
-    // roleNames.insert(containsTodoItems,      "containsTodoItems");
-    // roleNames.insert(containsJournalItems,   "containsJournalItems");
-    roleNames.insert(dayNumber,              "dayNumber");
-    roleNames.insert(monthNumber,            "monthNumber");
-    roleNames.insert(yearNumber,             "yearNumber");
-
-    setRoleNames(roleNames);
 
 }
 
@@ -66,10 +54,8 @@ QVariant DaysModel::data(const QModelIndex &index, int role) const
         DayData currentData = m_data->at(index.row());
 
         switch (role) {
-        case isPreviousMonth:
-            return currentData.isPreviousMonth;
-        case isNextMonth:
-            return currentData.isNextMonth;
+        case isCurrent:
+            return currentData.isCurrent;
         //      case containsHolidayItems:
         //          return currentData.containsHolidayItems;
         /* case containsEventItems:
@@ -99,3 +85,36 @@ void DaysModel::update()
     layoutChanged();
 }
 
+void DaysModel::setDaysBeforeCurrent(int daysBeforeCurrent)
+{
+    qDebug() << "SET DAYS AFTER CURRENT";
+    if (m_daysBeforeCurrent != daysBeforeCurrent) {
+        m_daysBeforeCurrent = daysBeforeCurrent;
+        emit daysBeforeCurrentChanged();
+    }
+}
+
+void DaysModel::setDaysAfterCurrent(int daysAfterCurrent)
+{
+    if (m_daysBeforeCurrent != daysAfterCurrent) {
+        m_daysBeforeCurrent = daysAfterCurrent;
+        emit daysAfterCurrentChanged();
+    }
+}
+
+QHash<int, QByteArray> DaysModel::roleNames() const
+{
+    // TODO use initializer list once we're allowed to
+    QHash<int, QByteArray> roleNames;
+
+    roleNames.insert(isCurrent, "isCurrent");
+    //roleNames.insert(containsHolidayItems,   "containsHolidayItems");
+    //roleNames.insert(containsEventItems,     "containsEventItems");
+    // roleNames.insert(containsTodoItems,      "containsTodoItems");
+    // roleNames.insert(containsJournalItems,   "containsJournalItems");
+    roleNames.insert(dayNumber,              "dayNumber");
+    roleNames.insert(monthNumber,            "monthNumber");
+    roleNames.insert(yearNumber,             "yearNumber");
+
+    return roleNames;
+}

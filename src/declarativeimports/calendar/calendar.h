@@ -170,9 +170,13 @@ public:
     Q_INVOKABLE void previousMonth();
     Q_INVOKABLE void nextYear();
     Q_INVOKABLE void previousYear();
+    Q_INVOKABLE void nextDecade();
+    Q_INVOKABLE void previousDecade();
     Q_INVOKABLE QString dayName(int weekday) const;
     Q_INVOKABLE int currentWeek() const;
     Q_INVOKABLE void resetToToday();
+    Q_INVOKABLE void goToMonth(int month);
+    Q_INVOKABLE void goToYear(int year);
 
 Q_SIGNALS:
     void displayedDateChanged();

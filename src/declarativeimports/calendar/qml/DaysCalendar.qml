@@ -1,6 +1,7 @@
 /*
  * Copyright 2013  Heena Mahour <heena393@gmail.com>
  * Copyright 2013 Sebastian Kügler <sebas@kde.org>
+ * Copyright 2015 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,28 +17,219 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.0
+
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-Item {
+
+FocusScope {
     id: daysCalendar
 
-    // This is to ensure that the inner grid.width is always aligned to be divisible by 7,
-    // fixes wrong side margins because of the rounding of cell size
-    // (consider the parent.width to be 404, the cell width would be 56,
-    // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
-    // wrong alignment)
-    anchors {
-        leftMargin: Math.floor(((parent.width - (root.columns + 1) * borderWidth) % root.columns) / 2)
-        rightMargin: anchors.leftMargin
-        bottomMargin: anchors.leftMargin
+    signal headerClicked
+    signal previous
+    signal next
+
+    signal activated(int index, var date, var item)
+    signal selected(int index, var date, var item)
+
+    // whether to show prev/next buttons
+    property bool headerVisible: true
+
+    property int rows
+    property int columns
+
+    // how precise date matching should be, 3 = day+month+year, 2 = month+year, 1 = just year
+    property int precision
+
+    property alias headerModel: days.model
+    property alias gridModel: repeater.model
+
+    property alias title: heading.text
+
+    function ensureSelectionVisible() {
+        // HACK check whether the selection is on the current screen
+        var selectionFound = false
+        var calendarItems = calendarGrid.children
+        for (var i = days.count + 1, j = calendarItems.length; i < j; ++i) {
+            var item = calendarItems[i]
+            if (item.isSelected) {
+                selectionFound = true
+                break
+            }
+        }
+
+        if (!selectionFound) {
+            calendarGrid.children[days.count + 1 + (gridModel.daysBeforeCurrent || 0)].selected()
+        }
+    }
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Backspace) {
+            daysCalendar.headerClicked()
+            event.accepted = true
+        } else if (event.key === Qt.Key_PageUp ||
+                   (event.modifiers & Qt.ShiftModifier && (event.key === Qt.Key_Up || event.key === Qt.Key_Left))) {
+            daysCalendar.previous()
+            event.accepted = true
+        } else if (event.key === Qt.Key_PageDown ||
+                   (event.modifiers & Qt.ShiftModifier && (event.key === Qt.Key_Down || event.key === Qt.Key_Right))) {
+            daysCalendar.next()
+            event.accepted = true
+        } else if (event.key === Qt.Key_Up) {
+            ensureSelectionVisible()
+        } else if (event.key === Qt.Key_Down) {
+            ensureSelectionVisible()
+        } else if (event.key === Qt.Key_Left) {
+            ensureSelectionVisible()
+        } else if (event.key === Qt.Key_Right) {
+            ensureSelectionVisible()
+        } else if (event.key === Qt.Key_Return) {
+            var calendarItems = calendarGrid.children
+            for (var i = days.count + 1, j = calendarItems.length; i < j; ++i) {
+                var item = calendarItems[i]
+                if (item.isSelected) {
+                    item.activated()
+                    break
+                }
+            }
+        }
+
+        console.log("KALENDAR", event.key)
+    }
+
+    readonly property int cellWidth: {
+        return Math.min(
+            Math.max(
+                mWidth * 3,
+                // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
+                Math.floor((canvas.width - (daysCalendar.columns + 1) * root.borderWidth) / daysCalendar.columns)
+            ),
+            mWidth * 100
+        )
+    }
+    readonly property int cellHeight: {
+        return Math.min(
+            Math.max(
+                mHeight * 1.5,
+                // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
+                Math.floor((canvas.height - (daysCalendar.rows + 1) * root.borderWidth) / (daysCalendar.rows + 1))
+            ),
+            mHeight * 40
+        )
+    }
+
+    PlasmaExtras.Heading {
+        id: heading
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        focus: true
+        level: 1
+        elide: Text.ElideRight
+        font.capitalization: Font.Capitalize
+        opacity: activeFocusChanged ? 1 : 0.8 // 0.8 is default opacity for Heading item
+        Behavior on opacity { NumberAnimation { duration: units.shortDuration } }
+
+        MouseArea {
+            id: monthMouse
+            property int previousPixelDelta
+
+            width: heading.paintedWidth
+            anchors {
+                left: parent.left
+                top: parent.top
+                bottom: parent.bottom
+            }
+            onClicked: {
+                if (!stack.busy) {
+                    daysCalendar.headerClicked()
+                }
+            }
+            onExited: previousPixelDelta = 0
+            onWheel: {
+                var delta = wheel.angleDelta.y || wheel.angleDelta.x
+                var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
+
+                // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
+                // finger movement. To prevent the view from suddenly ending up in the next century, we
+                // cumulate all the pixel deltas until they're larger than the label and then only change
+                // the month. Standard mouse wheel scrolling is unaffected since it's fine.
+                if (pixelDelta) {
+                    if (Math.abs(previousPixelDelta) < monthMouse.height) {
+                        previousPixelDelta += pixelDelta
+                        return
+                    }
+                }
+
+                if (delta >= 15) {
+                    daysCalendar.previous()
+                } else if (delta <= -15) {
+                    daysCalendar.next()
+                }
+                previousPixelDelta = 0
+            }
+        }
+    }
+
+    FocusScope {
+        id: previousButton
+        anchors {
+            top: heading.bottom
+            left: parent.left
+            leftMargin: Math.floor(units.largeSpacing / 2)
+        }
+        KeyNavigation.tab: nextButton
+
+        Components.Label {
+            text: Qt.application.layoutDirection === Qt.RightToLeft ? "▶" : "◀"
+            opacity: leftmouse.containsMouse || activeFocus ? 1 : 0.4
+            focus: true
+            Behavior on opacity { NumberAnimation { duration: units.shortDuration } }
+
+            MouseArea {
+                id: leftmouse
+                anchors.fill: parent
+                anchors.margins: -units.largeSpacing / 3
+                hoverEnabled: true
+                onClicked: daysCalendar.previous()
+            }
+        }
+    }
+
+    Components.Label {
+        id: nextButton
+        text: Qt.application.layoutDirection === Qt.RightToLeft ? "◀" : "▶"
+        focus: true
+        opacity: rightmouse.containsMouse || activeFocus ? 1 : 0.4
+        Behavior on opacity { NumberAnimation { duration: units.shortDuration } }
+        anchors {
+            top: heading.bottom
+            right: parent.right
+            rightMargin: Math.floor(units.largeSpacing / 2)
+        }
+        MouseArea {
+            id: rightmouse
+            anchors.fill: parent
+            anchors.margins: -units.largeSpacing / 3
+            hoverEnabled: true
+            onClicked: daysCalendar.next()
+        }
     }
 
     // Paints the inner grid and the outer frame
     Canvas {
         id: canvas
-        anchors.fill: parent
+        anchors {
+            top: heading.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
         opacity: root.borderOpacity
         antialiasing: false
         clip: false
@@ -56,25 +248,25 @@ Item {
 
             // This isn't the real width/height, but rather the X coord where the line will stop
             // and as the coord system starts from (0,0), we need to do "-1" to not get off-by-1 errors
-            var rectWidth = (root.cellWidth + root.borderWidth) * calendarGrid.columns + root.borderWidth - 1
-            var rectHeight = (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
+            var rectWidth = (daysCalendar.cellWidth + root.borderWidth) * calendarGrid.columns + root.borderWidth - 1
+            var rectHeight = (daysCalendar.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
 
             // the outer frame
             ctx.strokeRect(0, 0, rectWidth, rectHeight);
 
             // horizontal lines
-            for (var i = 0; i < calendarGrid.rows - 1; i++) {
-                var lineY = (rectHeight / calendarGrid.columns) * (i + 1);
+            for (var i = 1; i < calendarGrid.rows; ++i) {
+                var lineY = (rectHeight / calendarGrid.rows) * i;
 
                 ctx.moveTo(0, lineY);
                 ctx.lineTo(rectWidth, lineY);
             }
 
             // vertical lines
-            for (var i = 0; i < calendarGrid.columns - 1; i++) {
-                var lineX = (rectWidth / calendarGrid.rows) * (i + 1);
+            for (var i = 1; i < calendarGrid.columns; ++i) {
+                var lineX = (rectWidth / calendarGrid.columns) * i;
 
-                ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
+                ctx.moveTo(lineX, root.borderWidth + daysCalendar.cellHeight);
                 ctx.lineTo(lineX, rectHeight);
             }
 
@@ -86,33 +278,28 @@ Item {
 
     Grid {
         id: calendarGrid
+        focus: true
         // Pad the grid to not overlap with the top and left frame
         x: root.borderWidth
-        y: root.borderWidth
-        columns: calendarBackend.days
-        rows: calendarBackend.weeks + 1
+        y: heading.height + root.borderWidth + (!days.model ? daysCalendar.cellHeight + root.borderWidth : 0)
+        columns: daysCalendar.columns
+        rows: daysCalendar.rows + 1
         spacing: 1
-        property Item selectedItem
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
 
-        property QtObject selectedDate: root.date
-        onSelectedDateChanged: {
-            // clear the selection if the root.date is null
-            if (calendarGrid.selectedDate == null) {
-                calendarGrid.selectedItem = null;
-            }
+        Keys.onPressed: {
+            console.log("wefhiwefhiwe", event.key)
         }
 
         Repeater {
             id: days
-            model: calendarBackend.days
             Item {
-                width: root.cellWidth
-                height: root.cellHeight
+                width: daysCalendar.cellWidth
+                height: daysCalendar.cellHeight
                 Components.Label {
                     text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
-                    font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
+                    font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 6)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -124,9 +311,15 @@ Item {
 
         Repeater {
             id: repeater
-            model: calendarBackend.daysModel
 
-            DayDelegate {}
+            DayDelegate {
+                id: delegate
+                width: daysCalendar.cellWidth
+                height: daysCalendar.cellHeight
+
+                onActivated: daysCalendar.activated(index, model, delegate)
+                onSelected: daysCalendar.selected(index, model, delegate)
+            }
         }
     }
 }

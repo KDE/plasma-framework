@@ -26,11 +26,13 @@
 class DaysModel : public QAbstractListModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(int daysBeforeCurrent READ daysBeforeCurrent NOTIFY daysBeforeCurrentChanged)
+    Q_PROPERTY(int daysAfterCurrent READ daysAfterCurrent NOTIFY daysAfterCurrentChanged)
+
 public:
     enum Roles {
-        isPreviousMonth = Qt::UserRole + 1,
-        isCurrentMonth,
-        isNextMonth,
+        isCurrent = Qt::UserRole + 1,
         //containsHolidayItems,
         //containsEventItems,
         //containsTodoItems,
@@ -46,8 +48,26 @@ public:
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     void update();
 
+    int daysBeforeCurrent() const {
+        return m_daysBeforeCurrent;
+    }
+    int daysAfterCurrent() const {
+        return m_daysAfterCurrent;
+    }
+
+    void setDaysBeforeCurrent(int daysBeforeCurrent);
+    void setDaysAfterCurrent(int daysAfterCurrent);
+
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+
+Q_SIGNALS:
+    void daysBeforeCurrentChanged();
+    void daysAfterCurrentChanged();
+
 private:
     QList<DayData> *m_data;
+    int m_daysBeforeCurrent;
+    int m_daysAfterCurrent;
 };
 
 #endif // DAYSMODEL_H

@@ -1,6 +1,7 @@
 /*
  * Copyright 2013  Heena Mahour <heena393@gmail.com>
  * Copyright 2013 Sebastian Kügler <sebas@kde.org>
+ * Copyright 2015 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -15,67 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.2
+import QtQuick.Controls 1.1
+
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-Item {
+FocusScope {
     id: root
     width: parent.width
     height: parent.height
 
-    property QtObject date
-    property date showDate: new Date()
-
     property alias selectedMonth: calendarBackend.monthName
     property alias selectedYear: calendarBackend.year
+
+    property QtObject date
+    property date currentDate
+    property date showDate: new Date()
 
     property int mWidth: theme.mSize(theme.defaultFont).width
     property int mHeight: theme.mSize(theme.defaultFont).height
     property int borderWidth: 1
     property real borderOpacity: 0.4
 
-    property int columns: calendarBackend.days
-    property int rows: calendarBackend.weeks
-
-    property int cellWidth: prefCellWidth()
-    property int cellHeight: prefCellHeight()
-
-    property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
     property date today
 
-    function prefCellWidth() {
-        return Math.min(
-            Math.max(
-                mWidth * 3,
-                // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
-                Math.floor((calendar.width - (root.columns + 1) * borderWidth) / root.columns)
-            ),
-            mWidth * 100
-        )
-    }
+    activeFocusOnTab: true
 
-    function prefCellHeight() {
-        return Math.min(
-            Math.max(
-                mHeight * 1.5,
-                // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
-                Math.floor((calendar.height - (root.rows + 1) * borderWidth) / (root.rows + 1))
-            ),
-            mHeight * 40
-        )
+    // Because some locales don't have it in standaloneMonthNames,
+    // but we want our GUI to be pretty and want capitalization always
+    function capitalizeFirstLetter(monthName) {
+        return monthName.charAt(0).toUpperCase() + monthName.slice(1);
     }
 
     function isToday(date) {
-        if (date.toDateString() == new Date().toDateString()) {
-            return true;
-        }
-
-        return false;
+        return (date.toDateString() === new Date().toDateString())
     }
 
     function eventDate(yearNumber,monthNumber,dayNumber) {
@@ -85,67 +64,42 @@ Item {
 
     function resetToToday() {
         calendarBackend.resetToToday();
+        stack.pop(null);
     }
 
-    PlasmaExtras.Heading {
-        id: monthHeading
+    function updateYearOverview() {
+        var date = calendarBackend.displayedDate;
+        var day = date.getDate();
+        var year = date.getFullYear();
 
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
+        for (var i = 0, j = monthModel.count; i < j; ++i) {
+            monthModel.setProperty(i, "yearNumber", year);
+        }
+    }
+
+    function updateDecadeOverview() {
+        var date = calendarBackend.displayedDate;
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var decade = year - year % 10;
+
+        for (var i = 0, j = yearModel.count; i < j; ++i) {
+            var label = decade - 1 + i;
+            yearModel.setProperty(i, "yearNumber", label);
+            yearModel.setProperty(i, "label", label);
+        }
+    }
+
+    Keys.forwardTo: [stack.currentItem]
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Escape) {
+            stack.pop()
+            event.accepted = true
         }
 
-        level: 1
-        text: calendarBackend.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
-        elide: Text.ElideRight
-        font.capitalization: Font.Capitalize
-
-        Loader {
-            id: menuLoader
-            property QtObject calendarBackend: calendarBackend
-        }
-        MouseArea {
-            id: monthMouse
-            property int previousPixelDelta
-
-            width: monthHeading.paintedWidth
-            anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-            }
-            onClicked: {
-                if (menuLoader.source == "") {
-                    menuLoader.source = "MonthMenu.qml"
-                }
-                menuLoader.item.year = selectedYear
-                menuLoader.item.open(0, height);
-            }
-            onExited: previousPixelDelta = 0
-            onWheel: {
-                var delta = wheel.angleDelta.y || wheel.angleDelta.x
-                var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
-
-                // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
-                // finger movement. To prevent the view from suddenly ending up in the next century, we
-                // cumulate all the pixel deltas until they're larger than the label and then only change
-                // the month. Standard mouse wheel scrolling is unaffected since it's fine.
-                if (pixelDelta) {
-                    if (Math.abs(previousPixelDelta) < monthMouse.height) {
-                        previousPixelDelta += pixelDelta
-                        return
-                    }
-                }
-
-                if (delta >= 15) {
-                    calendarBackend.previousMonth()
-                } else if (delta <= -15) {
-                    calendarBackend.nextMonth()
-                }
-                previousPixelDelta = 0
-            }
-        }
+        console.log("MAIN PRESSED")
     }
 
     Calendar {
@@ -155,106 +109,168 @@ Item {
         weeks: 6
         firstDayOfWeek: Qt.locale().firstDayOfWeek
         today: root.today
+
+        onDisplayedDateChanged: {
+            updateYearOverview()
+            updateDecadeOverview()
+        }
     }
 
-    DaysCalendar {
-        id: calendar
+    ListModel {
+        id: monthModel
 
-        anchors {
-            top: monthHeading.bottom
-            left: parent.left
-            right: parent.right
-            bottom: parent.bottom
-        }
-
-        PlasmaComponents.Label {
-            text: "◀"
-            opacity: leftmouse.containsMouse ? 1 : 0.4
-            Behavior on opacity { NumberAnimation {} }
-            anchors {
-                top: parent.top
-                left: parent.left
-                leftMargin: Math.floor(units.largeSpacing / 2)
+        Component.onCompleted: {
+            for (var i = 0; i < 12; ++i) {
+                append({
+                    label: capitalizeFirstLetter(Qt.locale().standaloneMonthName(i, Locale.ShortFormat)),
+                    monthNumber: i + 1,
+                    isCurrent: true
+                })
             }
-            MouseArea {
-                id: leftmouse
-                anchors.fill: parent
-                anchors.margins: -units.largeSpacing / 3
-                hoverEnabled: true
-                onClicked: {
-                    calendarBackend.previousMonth()
+            updateYearOverview()
+        }
+    }
+
+    ListModel {
+        id: yearModel
+        readonly property int daysBeforeCurrent: 1
+        readonly property int daysAfterCurrent: 1
+
+        Component.onCompleted: {
+            for (var i = 0; i < 12; ++i) {
+                append({
+                    isCurrent: (i > 0 && i < 11) // first and last year are outside the decade
+                })
+            }
+            updateDecadeOverview()
+        }
+    }
+
+    StackView {
+        id: stack
+
+        anchors.fill: parent
+
+        delegate: StackViewDelegate {
+            pushTransition: StackViewTransition {
+                NumberAnimation {
+                    target: exitItem
+                    duration: units.longDuration
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                }
+                NumberAnimation {
+                    target: enterItem
+                    duration: units.longDuration
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                }
+                NumberAnimation {
+                    target: enterItem
+                    duration: units.longDuration
+                    property: "scale"
+                    from: 1.5
+                    to: 1
+                }
+            }
+            popTransition: StackViewTransition {
+                NumberAnimation {
+                    target: exitItem
+                    duration: units.longDuration
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                }
+                NumberAnimation {
+                    target: exitItem
+                    duration: units.longDuration
+                    property: "scale"
+                    from: 1
+                    to: 1.5
+                }
+                NumberAnimation {
+                    target: enterItem
+                    duration: units.longDuration
+                    property: "opacity"
+                    from: 0
+                    to: 1
                 }
             }
         }
-        PlasmaComponents.Label {
-            text: "▶"
-            opacity: rightmouse.containsMouse ? 1 : 0.4
-            Behavior on opacity { NumberAnimation {} }
-            anchors {
-                top: parent.top
-                right: parent.right
-                rightMargin: Math.floor(units.largeSpacing / 2)
+
+        initialItem: DaysCalendar {
+            title: calendarBackend.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
+
+            columns: calendarBackend.days
+            rows: calendarBackend.weeks
+
+            headerModel: calendarBackend.days
+            gridModel: calendarBackend.daysModel
+
+            precision: 3
+
+            onPrevious: calendarBackend.previousMonth()
+            onNext: calendarBackend.nextMonth()
+            onHeaderClicked:  {
+                stack.push(yearOverview)
             }
-            MouseArea {
-                id: rightmouse
-                anchors.fill: parent
-                anchors.margins: -units.largeSpacing / 3
-                hoverEnabled: true
-                onClicked: {
-                    calendarBackend.nextMonth()
-                }
+            onActivated: {
+                var rowNumber = Math.floor(index / 7);
+                week = 1 + calendarBackend.weeksModel[rowNumber];
+                root.date = date
+                root.currentDate = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
+            }
+            onSelected: activated(index, date, item)
+        }
+    }
+
+    Component {
+        id: yearOverview
+
+        DaysCalendar {
+            title: calendarBackend.displayedDate.getFullYear()
+            columns: 3
+            rows: 4
+
+            precision: 2
+
+            gridModel: monthModel
+
+            onPrevious: calendarBackend.previousYear()
+            onNext: calendarBackend.nextYear()
+            onHeaderClicked: stack.push(decadeOverview)
+            onActivated: {
+                calendarBackend.goToMonth(date.monthNumber)
+                stack.pop()
             }
         }
     }
 
-/*
-    Item {
-        id: calendarToolbar
-        visible: false
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottomMargin: 20
-            bottom: parent.bottom
-        }
+    Component {
+        id: decadeOverview
 
-        PlasmaComponents.ToolButton {
-            id: currentDate
-            iconSource: "view-pim-calendar"
-            width: height
-            onClicked: {
-                calendarBackend.startDate = today();
+        DaysCalendar {
+            readonly property int decade: {
+                var year = calendarBackend.displayedDate.getFullYear()
+                return year - year % 10
             }
-            PlasmaCore.ToolTipArea {
-                id: tool
-                anchors.fill: currentDate
-                mainText: "Select Today"
-            }
-            anchors {
-                left: parent.left
-            }
-        }
 
-        PlasmaComponents.TextField {
-            id: dateField
-            text: date == "" ? Qt.formatDateTime ( new Date(), "d/M/yyyy" ): date
-            width: calendarOperations.width/3
-            anchors {
-                leftMargin: 20
-                rightMargin: 30
-                left: currentDate.right
-                right: weekField.left
-            }
-        }
+            title: decade + " – " + (decade + 9)
+            columns: 3
+            rows: 4
 
-        PlasmaComponents.TextField {
-            id: weekField
-            text: week == 0 ? calendarBackend.currentWeek(): week
-            width: calendarOperations.width/10
-            anchors {
-                right: parent.right
+            precision: 1
+
+            gridModel: yearModel
+
+            onPrevious: calendarBackend.previousDecade()
+            onNext: calendarBackend.nextDecade()
+            onActivated: {
+                calendarBackend.goToYear(date.yearNumber)
+                stack.pop()
             }
         }
     }
-    */
 }
