@@ -158,6 +158,8 @@ int Units::devicePixelIconSize(const int size) const
     } else if (ratio < 2.5) {
         return size * 2.0;
     } else if (ratio < 3.0) {
+        return size * 2.5;
+    } else if (ratio < 3.5) {
         return size * 3.0;
     } else {
         return size * ratio;
