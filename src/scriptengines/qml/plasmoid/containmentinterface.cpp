@@ -311,6 +311,15 @@ QPointF ContainmentInterface::mapToApplet(AppletInterface *applet, int x, int y)
     return pos - applet->mapToScene(QPointF(0, 0));
 }
 
+void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y)
+{
+    QMimeData* mime = qobject_cast<QMimeData*>(mimeDataProxy);
+    if (mime)
+        processMimeData(mime, x, y);
+    else
+        processMimeData(mimeDataProxy->property("mimeData").value<QMimeData*>(), x, y);
+}
+
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 {
     if (!mimeData) {
