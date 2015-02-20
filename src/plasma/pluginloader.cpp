@@ -230,7 +230,17 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
 
     if (!applet) {
-        qWarning() << "Could not load applet" << name << "! reason given:" << error;
+        qWarning() << "Could not load applet" << name << "! reason given:" << error <<"Falling back to an empty one";
+
+        if (isContainment) {
+            return new Containment(0, allArgs);
+        } else {
+            if (offer->serviceTypes().contains("Plasma/Containment")) {
+                return new Containment(0, allArgs);
+            } else {
+                return new Applet(0, allArgs);
+            }
+        }
     }
 
     return applet;
