@@ -105,7 +105,7 @@ void ContainmentInterface::init()
         }
 
         KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("KPackage/GenericQML");
-        pkg.setDefaultPackageRoot("plasma/packages/");
+        pkg.setDefaultPackageRoot("plasma/packages");
 
         if (defaults.isValid()) {
             pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
