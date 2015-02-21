@@ -490,6 +490,7 @@ void AppletQuickItem::init()
         initialProperties["width"] = width();
         initialProperties["height"] = height();
     }
+    d->qmlObject->setInitializationDelayed(false);
     d->qmlObject->completeInitialization(initialProperties);
 
     //otherwise, initialize our size to root object's size
