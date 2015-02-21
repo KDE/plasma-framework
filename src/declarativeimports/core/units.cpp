@@ -35,7 +35,7 @@
 
 const QString plasmarc = QStringLiteral("plasmarc");
 const QString groupName = QStringLiteral("Units");
-const int defaultLongDuration = 250;
+const int defaultLongDuration = 120;
 
 Units::Units(QObject *parent)
     : QObject(parent),
