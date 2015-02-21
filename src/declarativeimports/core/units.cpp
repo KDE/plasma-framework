@@ -169,7 +169,7 @@ int Units::devicePixelIconSize(const int size) const
 
 qreal Units::devicePixelRatio() const
 {
-    return m_devicePixelRatio;
+    return m_devicePixelRatioDecimalPart;
 }
 
 void Units::updateDevicePixelRatio()
@@ -181,9 +181,12 @@ void Units::updateDevicePixelRatio()
     //  instead of assuming that all of them use the same dpi which applies for
     //  X11 but not for other systems.
     qreal dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
+    //dpi = 192;
     // Usual "default" is 96 dpi
     // that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_devicePixelRatio = (qreal)dpi / (qreal)96;
+    m_devicePixelRatioDecimalPart = qMax((qreal)1, m_devicePixelRatio / qApp->devicePixelRatio());
+
     iconLoaderSettingsChanged();
     emit devicePixelRatioChanged();
 }
@@ -206,6 +209,9 @@ int Units::largeSpacing() const
 void Units::updateSpacing()
 {
     int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+
+    //gridUnit = qRound((qreal)gridUnit * m_devicePixelRatioDecimalPart);
+
     if (gridUnit % 2 != 0) {
         gridUnit++;
     }

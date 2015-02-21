@@ -109,6 +109,7 @@ public:
     Theme::ColorGroup colorGroup;
     unsigned int lastModified;
     qreal devicePixelRatio;
+    qreal scaleFactor;
     bool multipleImages : 1;
     bool themed : 1;
     bool fromCurrentTheme : 1;

@@ -95,6 +95,9 @@ public:
      */
     qreal devicePixelRatio();
 
+    qreal scaleFactor() const;
+    void setScaleFactor(qreal factor);
+
     /**
      * Set a color group for the Svg.
      * if the Svg uses stylesheets and has elements

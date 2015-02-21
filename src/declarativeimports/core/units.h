@@ -177,6 +177,7 @@ private:
 
     int m_gridUnit;
     qreal m_devicePixelRatio;
+    qreal m_devicePixelRatioDecimalPart;
     qreal m_dpi;
 
     QQmlPropertyMap *m_iconSizes;
