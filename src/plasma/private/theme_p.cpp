@@ -61,7 +61,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       cachesToDiscard(NoCache),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
-      blurActive(false),
+      blurActive(KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)),
       isDefault(true),
       useGlobal(true),
       hasWallpapers(false),
@@ -275,7 +275,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
         type = QStringLiteral("/locolor/");
     } else if (!compositingActive) {
         type = QStringLiteral("/opaque/");
-    } else if (KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)) {
+    } else if (blurActive) {
         type = QStringLiteral("/translucent/");
     }
 
