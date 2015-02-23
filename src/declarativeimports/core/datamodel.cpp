@@ -104,6 +104,20 @@ QString SortFilterModel::filterRegExp() const
     return QSortFilterProxyModel::filterRegExp().pattern();
 }
 
+void SortFilterModel::setFilterString(const QString &filterString)
+{
+    if (filterString == m_filterString) {
+        return;
+    }
+    QSortFilterProxyModel::setFilterFixedString(filterString);
+    filterStringChanged(filterString);
+}
+
+QString SortFilterModel::filterString() const
+{
+    return m_filterString;
+}
+
 void SortFilterModel::setFilterRole(const QString &role)
 {
     QSortFilterProxyModel::setFilterRole(roleNameToId(role));

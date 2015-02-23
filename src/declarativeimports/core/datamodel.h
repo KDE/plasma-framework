@@ -52,6 +52,11 @@ class SortFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(QString filterRegExp READ filterRegExp WRITE setFilterRegExp NOTIFY filterRegExpChanged)
 
     /**
+     * The string for the filter, only items with their filterRole matching filterString will be displayed
+     */
+    Q_PROPERTY(QString filterString READ filterString WRITE setFilterString NOTIFY filterStringChanged)
+
+    /**
      * The role of the sourceModel on which filterRegExp must be applied.
      */
     Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
@@ -81,6 +86,9 @@ public:
 
     void setFilterRegExp(const QString &exp);
     QString filterRegExp() const;
+
+    void setFilterString(const QString &filterString);
+    QString filterString() const;
 
     void setFilterRole(const QString &role);
     QString filterRole() const;
@@ -112,6 +120,7 @@ Q_SIGNALS:
     void countChanged();
     void sourceModelChanged(QObject *);
     void filterRegExpChanged(const QString &);
+    void filterStringChanged(const QString &);
 
 protected:
     int roleNameToId(const QString &name);
@@ -122,6 +131,7 @@ protected Q_SLOTS:
 private:
     QString m_filterRole;
     QString m_sortRole;
+    QString m_filterString;
     QHash<QString, int> m_roleIds;
 };
 
