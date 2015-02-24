@@ -109,6 +109,7 @@ void SortFilterModel::setFilterString(const QString &filterString)
     if (filterString == m_filterString) {
         return;
     }
+    m_filterString = filterString;
     QSortFilterProxyModel::setFilterFixedString(filterString);
     filterStringChanged(filterString);
 }
