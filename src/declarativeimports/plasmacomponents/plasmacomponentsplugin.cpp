@@ -86,17 +86,17 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
     //platform specific c++ components
     const QString target = KDeclarative::KDeclarative::componentsTarget();
     if (target == KDeclarative::KDeclarative::defaultComponentsTarget()) {
-        qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
-        qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
+        qmlRegisterType<QMenuProxy>(uri, 2, 1, "Menu");
+        qmlRegisterType<QMenuItem>(uri, 2, 1, "MenuItem");
     } else {
-        // qmlRegisterType<FullScreenSheet>(uri, 2, 0, "Sheet");
+        // qmlRegisterType<FullScreenSheet>(uri, 2, 1, "Sheet");
     }
 
-    qmlRegisterType<Plasma::QRangeModel>(uri, 2, 0, "RangeModel");
+    qmlRegisterType<Plasma::QRangeModel>(uri, 2, 1, "RangeModel");
 
-    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", "");
-    qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", "");
-    qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", "");
+    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 1, "DialogStatus", "");
+    qmlRegisterUncreatableType<PageOrientation>(uri, 2, 1, "PageOrientation", "");
+    qmlRegisterUncreatableType<PageStatus>(uri, 2, 1, "PageStatus", "");
 }
 
 #include "moc_plasmacomponentsplugin.cpp"
