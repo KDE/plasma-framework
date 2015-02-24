@@ -73,39 +73,39 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
 
-    qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 1, "Types", "");
-    qmlRegisterUncreatableType<Units>(uri, 2, 1, "Units", "");
+    qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", "");
+    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", "");
 
-    qmlRegisterType<Plasma::Svg>(uri, 2, 1, "Svg");
-    qmlRegisterType<Plasma::FrameSvg>(uri, 2, 1, "FrameSvg");
-    qmlRegisterType<Plasma::SvgItem>(uri, 2, 1, "SvgItem");
-    qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 1, "FrameSvgItem");
+    qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
+    qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
+    qmlRegisterType<Plasma::SvgItem>(uri, 2, 0, "SvgItem");
+    qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
-    //qmlRegisterType<ThemeProxy>(uri, 2, 1, "Theme");
-    qmlRegisterUncreatableType<Plasma::QuickTheme>(uri, 2, 1, "Theme", "It is not possible to instantiate Theme directly.");
-    qmlRegisterType<ColorScope>(uri, 2, 1, "ColorScope");
+    //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
+    qmlRegisterUncreatableType<Plasma::QuickTheme>(uri, 2, 0, "Theme", "It is not possible to instantiate Theme directly.");
+    qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
-    qmlRegisterType<Plasma::DataSource>(uri, 2, 1, "DataSource");
-    qmlRegisterType<Plasma::DataModel>(uri, 2, 1, "DataModel");
-    qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 1, "SortFilterModel");
+    qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
+    qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");
+    qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 0, "SortFilterModel");
 
-    qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 1, "Dialog");
-    qmlRegisterType<ToolTip>(uri, 2, 1, "ToolTipArea");
+    qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
+    qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
     qmlRegisterInterface<Plasma::Service>("Service");
     qRegisterMetaType<Plasma::Service *>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
     qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
-    qmlRegisterType<ServiceOperationStatus>(uri, 2, 1, "ServiceOperationStatus");
+    qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterType<QAbstractItemModel>();
 
     qmlRegisterType<QQmlPropertyMap>();
-    qmlRegisterType<IconItem>(uri, 2, 1, "IconItem");
+    qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
     qRegisterMetaType<Plasma::DataSource *>("DataSource");
 
-    qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 1, "WindowThumbnail");
+    qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 }
 
 
