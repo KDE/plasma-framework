@@ -356,7 +356,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
-        //p.setDevicePixelRatio(scaleFactor);
         //qDebug() << "found cached version of " << id << p.size();
         return p;
     }
@@ -373,7 +372,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
     //makeUniform should never change the size so much that it gains or loses a whole pixel
     p = QPixmap(size);
-    //p.setDevicePixelRatio(scaleFactor);
 
     p.fill(Qt::transparent);
     QPainter renderPainter(&p);
@@ -710,6 +708,7 @@ void Svg::setDevicePixelRatio(qreal ratio)
     }
 
     d->devicePixelRatio = floor(ratio);
+
     emit repaintNeeded();
 }
 
@@ -729,6 +728,7 @@ void Svg::setScaleFactor(qreal ratio)
     }
 
     d->scaleFactor = floor(ratio);
+
     emit repaintNeeded();
     emit sizeChanged();
 }
