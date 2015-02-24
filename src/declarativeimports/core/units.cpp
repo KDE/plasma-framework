@@ -210,6 +210,8 @@ void Units::updateSpacing()
     int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
 
     //gridUnit = qRound((qreal)gridUnit * m_devicePixelRatioDecimalPart);
+    //is this the expected behavior?
+    gridUnit *= qApp->devicePixelRatio();
 
     if (gridUnit % 2 != 0) {
         gridUnit++;

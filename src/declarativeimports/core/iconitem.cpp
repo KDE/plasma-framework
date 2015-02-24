@@ -115,6 +115,7 @@ void IconItem::setSource(const QVariant &source)
             if (!m_svgIcon) {
                 m_svgIcon = new Plasma::Svg(this);
                 m_svgIcon->setColorGroup(m_colorGroup);
+                m_svgIcon->setDevicePixelRatio(qApp->devicePixelRatio());
             }
             //try as a svg icon
             m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
@@ -322,7 +323,7 @@ void IconItem::loadPixmap()
         m_svgIcon->resize(size, size);
         result = m_svgIcon->pixmap(m_source.toString());
     } else if (!m_icon.isNull()) {
-        result = m_icon.pixmap(QSize(size, size));
+        result = m_icon.pixmap(QSize(size, size) * qApp->devicePixelRatio());
     } else if (!m_pixmapIcon.isNull()) {
         result = m_pixmapIcon;
     } else if (!m_imageIcon.isNull()) {
