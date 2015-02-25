@@ -85,6 +85,44 @@ Rectangle {
             }
         }
 
+        PlasmaCore.ToolTipArea {
+            width: 300
+            height: 50
+
+            icon: "document-edit"
+            mainText: "A title"
+            subText: "A subtext"
+
+            Rectangle {
+                color: "red"
+                anchors.fill: parent
+            }
+
+            Text {
+                anchors.fill: parent
+                text: "with icon"
+            }
+        }
+
+        PlasmaCore.ToolTipArea {
+            width: 300
+            height: 50
+
+            image: "/usr/share/icons/oxygen/128x128/devices/multimedia-player.png"
+            mainText: "A title"
+            subText: "A subtext"
+
+            Rectangle {
+                color: "red"
+                anchors.fill: parent
+            }
+
+            Text {
+                anchors.fill: parent
+                text: "with image"
+            }
+        }
+
     }
 }
 
