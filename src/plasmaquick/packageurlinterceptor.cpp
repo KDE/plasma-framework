@@ -115,7 +115,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         //forbid to load random absolute paths
     } else {
-        if (m_package.allowExternalPaths()) {
+        if (m_package.allowExternalPaths() || m_package.metadata().property("X-Plasma-RequiredExtensions").toString().contains(QStringLiteral("ExternalScripts"))) {
             return path;
         }
 

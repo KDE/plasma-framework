@@ -66,3 +66,6 @@ Type=QStringList
 
 [PropertyDef::X-Plasma-StandAloneApp]
 Type=bool
+
+[PropertyDef::X-Plasma-RequiredExtensions]
+Type=QStringList
