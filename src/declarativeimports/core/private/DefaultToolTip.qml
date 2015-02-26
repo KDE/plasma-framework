@@ -1,5 +1,5 @@
 /*
-*   Copyright 2013 by Sebastian Kügler <sebas@kde.org>
+*   Copyright 2013-2015 by Sebastian Kügler <sebas@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -22,71 +22,71 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
-import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 
 
-
-Row {
+Item {
     id: tooltipContentItem
 
     property Item toolTip
+    property int preferredTextWidth: units.gridUnit * 20
 
-    property int preferredTextWidth: theme.mSize(theme.defaultFont).width * 40
-    property int _s: imageContainer.visible || (toolTip.mainText != "" && toolTip.subText != "") ? units.largeSpacing / 2 : 0
+    Layout.minimumWidth: childrenRect.width + units.gridUnit
+    Layout.minimumHeight: childrenRect.height + units.gridUnit
+    Layout.maximumWidth: childrenRect.width + units.gridUnit
+    Layout.maximumHeight: childrenRect.height + units.gridUnit
 
-    Layout.minimumWidth: implicitWidth + _s
-    Layout.minimumHeight: implicitHeight + _s * 2
-    Layout.maximumWidth: implicitWidth + _s
-    Layout.maximumHeight: implicitHeight + _s * 2
-    width: implicitWidth + _s
-    height: implicitHeight + _s * 2
+    RowLayout {
 
-    spacing: _s*2
+        anchors {
+            left: parent.left
+            top: parent.top
+            margins: units.gridUnit / 2
+        }
 
-    Item {
-        id: imageContainer
-        visible: toolTip != null && (toolTip.image != "" || toolTip.icon != "")
-        width: Math.max(tooltipImage.width, tooltipIcon.width)
-        height: Math.max(tooltipImage.height, tooltipIcon.height)
-        x: _s
-        y: _s
+        spacing: units.gridUnit / 2
 
         Image {
             id: tooltipImage
             source: toolTip ? toolTip.image : ""
-            x: _s
+            visible: toolTip != null && toolTip.image != ""
+            Layout.alignment: Qt.AlignTop
         }
 
         PlasmaCore.IconItem {
             id: tooltipIcon
-            x: _s
-            width: toolTip != undefined && toolTip.icon != null ? units.iconSizes.desktop : 0
-            height: width
-            source: toolTip != undefined && toolTip.icon != null ? toolTip.icon : ""
+            source: toolTip ? toolTip.icon : ""
+            Layout.alignment: Qt.AlignTop
+            visible: toolTip != null && toolTip.icon != "" && toolTip.image == ""
+            implicitWidth: toolTip && toolTip.icon != "" ? units.iconSizes.medium : 0
+            Layout.preferredWidth: implicitWidth
+            Layout.preferredHeight: implicitWidth
         }
-    }
 
-    Column {
-        id: mainColumn
-        x: _s
-        y: _s
+        ColumnLayout {
 
-        PlasmaExtras.Heading {
-            id: tooltipMaintext
-            level: 3
-            width: Math.min(tooltipMaintext.implicitWidth, preferredTextWidth)
-            elide: Text.ElideRight
-            text: toolTip ? toolTip.mainText : ""
-        }
-        PlasmaComponents.Label {
-            id: tooltipSubtext
-            width: Math.min(tooltipSubtext.implicitWidth, preferredTextWidth)
-            wrapMode: Text.WordWrap
-            text: toolTip ? toolTip.subText : ""
-            textFormat: toolTip.textFormat
-            opacity: 0.5
+            PlasmaExtras.Heading {
+                id: tooltipMaintext
+                level: 3
+                property int _width: Math.min(implicitWidth, preferredTextWidth)
+                Layout.minimumWidth: _width
+                Layout.maximumWidth: _width
+                elide: Text.ElideRight
+                text: toolTip ? toolTip.mainText : ""
+                visible: text != ""
+            }
+            PlasmaComponents.Label {
+                id: tooltipSubtext
+                property int _width: Math.min(implicitWidth, preferredTextWidth)
+                Layout.minimumWidth: _width
+                Layout.maximumWidth: _width
+                wrapMode: Text.WordWrap
+                text: toolTip ? toolTip.subText : ""
+                textFormat: toolTip ? toolTip.textFormat : Text.AutoText
+                opacity: 0.6
+                visible: text != ""
+                maximumLineCount: 8
+            }
         }
     }
 }
-
 
