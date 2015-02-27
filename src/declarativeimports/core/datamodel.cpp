@@ -20,6 +20,8 @@
 #include "datamodel.h"
 #include "datasource.h"
 
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QTimer>
 
 #include <QDebug>
@@ -90,6 +92,22 @@ void SortFilterModel::setModel(QAbstractItemModel *model)
     emit sourceModelChanged(model);
 }
 
+bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+{
+    if (m_filterCallback.isCallable()) {
+        QJSValueList args;
+        args << QJSValue(source_row);
+
+        const QModelIndex idx = sourceModel()->index(source_row, filterKeyColumn(), source_parent);
+        QQmlEngine *engine = QQmlEngine::contextForObject(this)->engine();
+        args << engine->toScriptValue<QVariant>(idx.data(m_roleIds.value(m_filterRole)));
+
+        return const_cast<SortFilterModel *>(this)->m_filterCallback.call(args).toBool();
+    }
+
+    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+}
+
 void SortFilterModel::setFilterRegExp(const QString &exp)
 {
     if (exp == filterRegExp()) {
@@ -117,6 +135,26 @@ void SortFilterModel::setFilterString(const QString &filterString)
 QString SortFilterModel::filterString() const
 {
     return m_filterString;
+}
+
+QJSValue SortFilterModel::filterCallback() const
+{
+    return m_filterCallback;
+}
+
+void SortFilterModel::setFilterCallback(const QJSValue& callback)
+{
+    if (m_filterCallback.strictlyEquals(callback)) {
+        return;
+    }
+
+    if (!callback.isNull() && !callback.isCallable()) {
+        return;
+    }
+
+    m_filterCallback = callback;
+
+    emit filterCallbackChanged(callback);
 }
 
 void SortFilterModel::setFilterRole(const QString &role)

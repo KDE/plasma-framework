@@ -21,6 +21,7 @@
 #define DATAMODEL_H
 
 #include <QAbstractItemModel>
+#include <QJSValue>
 #include <QSortFilterProxyModel>
 #include <QVector>
 
@@ -57,6 +58,16 @@ class SortFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(QString filterString READ filterString WRITE setFilterString NOTIFY filterStringChanged REVISION 1)
 
     /**
+     * A JavaScript callable that is passed the source model row index as first argument and the value
+     * of filterRole as second argument. The callable's return value is evaluated as boolean to determine
+     * whether the row is accepted (true) or filtered out (false). It overrides the default implementation
+     * that uses filterRegExp or filterString; while filterCallable is set those two properties are
+     * ignored. Attempts to write a non-callable to this property are silently ignored, but you can set
+     * it to null.
+     */
+    Q_PROPERTY(QJSValue filterCallback READ filterCallback WRITE setFilterCallback NOTIFY filterCallbackChanged REVISION 1)
+
+    /**
      * The role of the sourceModel on which filterRegExp must be applied.
      */
     Q_PROPERTY(QString filterRole READ filterRole WRITE setFilterRole)
@@ -90,6 +101,9 @@ public:
     void setFilterString(const QString &filterString);
     QString filterString() const;
 
+    void setFilterCallback(const QJSValue &callback);
+    QJSValue filterCallback() const;
+
     void setFilterRole(const QString &role);
     QString filterRole() const;
 
@@ -121,9 +135,11 @@ Q_SIGNALS:
     void sourceModelChanged(QObject *);
     void filterRegExpChanged(const QString &);
     Q_REVISION(1) void filterStringChanged(const QString &);
+    Q_REVISION(1) void filterCallbackChanged(const QJSValue &);
 
 protected:
     int roleNameToId(const QString &name);
+    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 protected Q_SLOTS:
     void syncRoleNames();
@@ -132,6 +148,7 @@ private:
     QString m_filterRole;
     QString m_sortRole;
     QString m_filterString;
+    QJSValue m_filterCallback;
     QHash<QString, int> m_roleIds;
 };
 
