@@ -138,7 +138,7 @@ Q_SIGNALS:
     Q_REVISION(1) void filterCallbackChanged(const QJSValue &);
 
 protected:
-    int roleNameToId(const QString &name);
+    int roleNameToId(const QString &name);  //FIXME TODO KF6: This should have been const.
     virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
 
 protected Q_SLOTS:
@@ -200,7 +200,7 @@ public:
     void setSourceFilter(const QString &key);
     QString sourceFilter() const;
 
-    int roleNameToId(const QString &name);
+    int roleNameToId(const QString &name); //FIXME TODO KF6: This should have been const.
 
     //Reimplemented
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
