@@ -87,7 +87,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
     qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");
-    qmlRegisterType<Plasma::SortFilterModel>(uri, 2, 0, "SortFilterModel");
+    qmlRegisterType<Plasma::SortFilterModel, 0>(uri, 2, 0, "SortFilterModel");
+    qmlRegisterType<Plasma::SortFilterModel, 1>(uri, 2, 1, "SortFilterModel");
 
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
