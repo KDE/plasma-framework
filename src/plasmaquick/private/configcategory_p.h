@@ -1,5 +1,6 @@
 /*
  *   Copyright 2013 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Eike Hein <hein@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -45,6 +46,7 @@ class ConfigCategory : public QObject
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString pluginName READ pluginName WRITE setPluginName NOTIFY pluginNameChanged)
+    Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 
 public:
     ConfigCategory(QObject *parent = 0);
@@ -62,17 +64,22 @@ public:
     QString pluginName() const;
     void setPluginName(const QString &pluginName);
 
+    bool visible() const;
+    void setVisible(bool visible);
+
 Q_SIGNALS:
     void nameChanged();
     void iconChanged();
     void sourceChanged();
     void pluginNameChanged();
+    void visibleChanged();
 
 private:
     QString m_name;
     QString m_icon;
     QString m_source;
     QString m_pluginName;
+    bool m_visible;
 };
 
 }

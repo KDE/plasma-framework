@@ -1,5 +1,6 @@
 /*
  *   Copyright 2013 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Eike Hein <hein@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -45,6 +46,7 @@ namespace PlasmaQuick
 
 ConfigCategory::ConfigCategory(QObject *parent)
     : QObject(parent)
+    , m_visible(true)
 {
 }
 
@@ -109,6 +111,21 @@ void ConfigCategory::setPluginName(const QString &name)
 
     m_pluginName = name;
     emit pluginNameChanged();
+}
+
+bool ConfigCategory::visible() const
+{
+    return m_visible;
+}
+
+void ConfigCategory::setVisible(bool visible)
+{
+    if (m_visible == visible) {
+        return;
+    }
+
+    m_visible = visible;
+    emit visibleChanged();
 }
 
 }

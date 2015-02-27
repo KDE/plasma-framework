@@ -1,5 +1,6 @@
 /*
  *   Copyright 2013 Marco Martin <mart@kde.org>
+ *   Copyright 2015 Eike Hein <hein@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -151,6 +152,8 @@ QVariant ConfigModelPrivate::get(int row) const
     } else {
         value["source"] = categories.at(row)->source();
     }
+    value["visible"] = categories.at(row)->visible();
+
     return value;
 }
 
@@ -163,6 +166,7 @@ ConfigModel::ConfigModel(QObject *parent)
     roleNames[IconRole] = "icon";
     roleNames[SourceRole] = "source";
     roleNames[PluginNameRole] = "pluginName";
+    roleNames[VisibleRole] = "visible";
 
     setRoleNames(roleNames);
 }
@@ -198,6 +202,8 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         }
     case PluginNameRole:
         return d->categories.at(index.row())->pluginName();
+    case VisibleRole:
+        return d->categories.at(index.row())->visible();
     default:
         return QVariant();
     }
@@ -216,6 +222,18 @@ void ConfigModel::appendCategory(const QString &iconName, const QString &name,
     cat->setName(name);
     cat->setSource(path);
     cat->setPluginName(pluginName);
+    d->appendCategory(cat);
+}
+
+void ConfigModel::appendCategory(const QString &iconName, const QString &name,
+                                 const QString &path, const QString &pluginName, bool visible)
+{
+    ConfigCategory *cat = new ConfigCategory(this);
+    cat->setIcon(iconName);
+    cat->setName(name);
+    cat->setSource(path);
+    cat->setPluginName(pluginName);
+    cat->setVisible(visible);
     d->appendCategory(cat);
 }
 
