@@ -129,8 +129,8 @@ bool SharedSvgRenderer::load(
 }
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, scaleFactor, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(int(scaleFactor)) % QLSEP % QString::number(int(devicePixelRatio))
-#define CACHE_ID_NATURAL_SIZE(id, scaleFactor, devicePixelRatio) QLatin1Literal("Natural") % QLSEP % id % QLSEP % QString::number(int(scaleFactor)) % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_WITH_SIZE(size, id, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_NATURAL_SIZE(id, devicePixelRatio) QLatin1Literal("Natural") % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
@@ -159,16 +159,16 @@ SvgPrivate::~SvgPrivate()
 QString SvgPrivate::cacheId(const QString &elementId)
 {
     if (size.isValid() && size != naturalSize) {
-        return CACHE_ID_WITH_SIZE(size, elementId, scaleFactor, devicePixelRatio);
+        return CACHE_ID_WITH_SIZE(size, elementId, devicePixelRatio);
     } else {
-        return CACHE_ID_NATURAL_SIZE(elementId, scaleFactor, devicePixelRatio);
+        return CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio);
     }
 }
 
 //This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &path, const QSize &size)
 {
-    return CACHE_ID_WITH_SIZE(size, path, scaleFactor, devicePixelRatio) % QLSEP % QString::number(colorGroup);
+    return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio) % QLSEP % QString::number(colorGroup);
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -288,7 +288,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", scaleFactor, devicePixelRatio));
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", devicePixelRatio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
@@ -455,7 +455,7 @@ void SvgPrivate::createRenderer()
                 const QString &elementId = i.key();
                 const QRectF &elementRect = i.value();
 
-                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, scaleFactor, devicePixelRatio);
+                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, devicePixelRatio);
                 localRectCache.insert(cacheId, elementRect);
                 cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId, elementRect);
             }
