@@ -772,14 +772,16 @@ QImage Svg::image(const QSize &size, const QString &elementID)
 
 void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementID)
 {
-    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size()) :
+    Q_ASSERT(painter->device());
+    const int ratio = painter->device()->devicePixelRatio();
+    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size() * ratio) :
                 d->findInCache(elementID));
 
     if (pix.isNull()) {
         return;
     }
 
-    painter->drawPixmap(QRectF(point, pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
+    painter->drawPixmap(QRectF(point, size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
@@ -789,13 +791,18 @@ void Svg::paint(QPainter *painter, int x, int y, const QString &elementID)
 
 void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, rect.size()));
-    painter->drawPixmap(QRectF(rect.topLeft(), pix.size()), pix, QRectF(QPointF(0, 0), pix.size()));
+    Q_ASSERT(painter->device());
+    const int ratio = painter->device()->devicePixelRatio();
+    QPixmap pix(d->findInCache(elementID, rect.size() * ratio));
+
+    painter->drawPixmap(QRectF(rect.topLeft(), rect.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
 
 void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, QSizeF(width, height)));
+    Q_ASSERT(painter->device());
+    const int ratio = painter->device()->devicePixelRatio();
+    QPixmap pix(d->findInCache(elementID, QSizeF(width, height) * ratio));
     painter->drawPixmap(x, y, pix, 0, 0, pix.size().width(), pix.size().height());
 }
 
