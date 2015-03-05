@@ -356,6 +356,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
+        p.setDevicePixelRatio(q->devicePixelRatio());
         //qDebug() << "found cached version of " << id << p.size();
         return p;
     }
@@ -383,6 +384,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     }
 
     renderPainter.end();
+    p.setDevicePixelRatio(q->devicePixelRatio());
 
     // Apply current color scheme if the svg asks for it
     if (applyColors) {

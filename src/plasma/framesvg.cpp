@@ -805,6 +805,7 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     }
 
     frame->cachedBackground = QPixmap(size);
+    frame->cachedBackground.setDevicePixelRatio(q->devicePixelRatio());
     frame->cachedBackground.fill(Qt::transparent);
     QPainter p(&frame->cachedBackground);
     p.setCompositionMode(QPainter::CompositionMode_Source);
