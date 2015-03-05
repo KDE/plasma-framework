@@ -69,7 +69,7 @@ Item {
                 level: 3
                 property int _width: Math.min(implicitWidth, preferredTextWidth)
                 Layout.minimumWidth: _width
-                Layout.maximumWidth: _width
+                Layout.maximumWidth: preferredTextWidth
                 elide: Text.ElideRight
                 text: toolTip ? toolTip.mainText : ""
                 visible: text != ""
@@ -78,7 +78,7 @@ Item {
                 id: tooltipSubtext
                 property int _width: Math.min(implicitWidth, preferredTextWidth)
                 Layout.minimumWidth: _width
-                Layout.maximumWidth: _width
+                Layout.maximumWidth: preferredTextWidth
                 wrapMode: Text.WordWrap
                 text: toolTip ? toolTip.subText : ""
                 textFormat: toolTip ? toolTip.textFormat : Text.AutoText
