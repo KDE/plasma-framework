@@ -43,7 +43,7 @@ Item {
             margins: units.gridUnit / 2
         }
 
-        spacing: units.gridUnit / 2
+        spacing: units.largeSpacing
 
         Image {
             id: tooltipImage
