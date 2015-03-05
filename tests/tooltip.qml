@@ -123,6 +123,25 @@ Rectangle {
             }
         }
 
+        PlasmaCore.ToolTipArea {
+            width: 300
+            height: 50
+
+            icon: "kde"
+            mainText: "Notifications"
+            subText: "Display notifications and jobs"
+
+            Rectangle {
+                color: "red"
+                anchors.fill: parent
+            }
+
+            Text {
+                anchors.fill: parent
+                text: "Notification applet tooltip"
+            }
+        }
+
     }
 }
 
