@@ -280,7 +280,7 @@ Theme *SvgPrivate::cacheAndColorsTheme()
     }
 }
 
-QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
+QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSizeF &s)
 {
     QSize size;
     QString actualElementId;
@@ -288,7 +288,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", devicePixelRatio));
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", ratio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
@@ -318,7 +318,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
             Q_FOREACH (const QSize &hint, elementSizeHints) {
 
-                if (hint.width() >= s.width() && hint.height() >= s.height() &&
+                if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio &&
                         (!bestFit.isValid() ||
                          (bestFit.width() * bestFit.height()) > (hint.width() * hint.height()))) {
                     bestFit = hint;
@@ -337,9 +337,9 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     }
 
     if (elementId.isEmpty() || (multipleImages && s.isValid())) {
-        size = s.toSize();
+        size = s.toSize() * ratio;
     } else {
-        size = elementRect(actualElementId).size().toSize();
+        size = elementRect(actualElementId).size().toSize() * ratio;
     }
 
     if (size.isEmpty()) {
@@ -356,7 +356,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
-        p.setDevicePixelRatio(q->devicePixelRatio());
+        p.setDevicePixelRatio(ratio);
         //qDebug() << "found cached version of " << id << p.size();
         return p;
     }
@@ -384,7 +384,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, const QSizeF &s)
     }
 
     renderPainter.end();
-    p.setDevicePixelRatio(q->devicePixelRatio());
+    p.setDevicePixelRatio(ratio);
 
     // Apply current color scheme if the svg asks for it
     if (applyColors) {
@@ -760,15 +760,15 @@ Plasma::Theme::ColorGroup Svg::colorGroup() const
 QPixmap Svg::pixmap(const QString &elementID)
 {
     if (elementID.isNull() || d->multipleImages) {
-        return d->findInCache(elementID, size() * d->devicePixelRatio);
+        return d->findInCache(elementID, d->devicePixelRatio, size());
     } else {
-        return d->findInCache(elementID, d->elementRect(elementID).size() * d->devicePixelRatio);
+        return d->findInCache(elementID, d->devicePixelRatio);
     }
 }
 
 QImage Svg::image(const QSize &size, const QString &elementID)
 {
-    QPixmap pix(d->findInCache(elementID, size * d->devicePixelRatio));
+    QPixmap pix(d->findInCache(elementID, d->devicePixelRatio, size));
     return pix.toImage();
 }
 
@@ -776,8 +776,8 @@ void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementI
 {
     Q_ASSERT(painter->device());
     const int ratio = painter->device()->devicePixelRatio();
-    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size() * ratio) :
-                d->findInCache(elementID, d->elementRect(elementID).size() * ratio));
+    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, ratio, size()) :
+                d->findInCache(elementID, ratio));
 
     if (pix.isNull()) {
         return;
@@ -795,7 +795,7 @@ void Svg::paint(QPainter *painter, const QRectF &rect, const QString &elementID)
 {
     Q_ASSERT(painter->device());
     const int ratio = painter->device()->devicePixelRatio();
-    QPixmap pix(d->findInCache(elementID, rect.size() * ratio));
+    QPixmap pix(d->findInCache(elementID, ratio, rect.size()));
 
     painter->drawPixmap(QRectF(rect.topLeft(), rect.size()), pix, QRectF(QPointF(0, 0), pix.size()));
 }
@@ -804,7 +804,7 @@ void Svg::paint(QPainter *painter, int x, int y, int width, int height, const QS
 {
     Q_ASSERT(painter->device());
     const int ratio = painter->device()->devicePixelRatio();
-    QPixmap pix(d->findInCache(elementID, QSizeF(width, height) * ratio));
+    QPixmap pix(d->findInCache(elementID, ratio, QSizeF(width, height)));
     painter->drawPixmap(x, y, pix, 0, 0, pix.size().width(), pix.size().height());
 }
 
