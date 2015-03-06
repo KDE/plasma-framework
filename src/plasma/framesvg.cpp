@@ -805,7 +805,6 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     }
 
     frame->cachedBackground = QPixmap(size);
-    frame->cachedBackground.setDevicePixelRatio(q->devicePixelRatio());
     frame->cachedBackground.fill(Qt::transparent);
     QPainter p(&frame->cachedBackground);
     p.setCompositionMode(QPainter::CompositionMode_Source);
@@ -827,6 +826,9 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     const int topWidth = q->elementSize(prefix % "top").width();
     paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight) * q->devicePixelRatio(), contentRect);
     paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight) * q->devicePixelRatio(), contentRect);
+    p.end();
+
+    frame->cachedBackground.setDevicePixelRatio(q->devicePixelRatio());
 }
 
 QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) const

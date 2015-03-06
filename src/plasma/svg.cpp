@@ -762,7 +762,7 @@ QPixmap Svg::pixmap(const QString &elementID)
     if (elementID.isNull() || d->multipleImages) {
         return d->findInCache(elementID, size() * d->devicePixelRatio);
     } else {
-        return d->findInCache(elementID);
+        return d->findInCache(elementID, d->elementRect(elementID).size() * d->devicePixelRatio);
     }
 }
 
@@ -777,7 +777,7 @@ void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementI
     Q_ASSERT(painter->device());
     const int ratio = painter->device()->devicePixelRatio();
     QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, size() * ratio) :
-                d->findInCache(elementID));
+                d->findInCache(elementID, d->elementRect(elementID).size() * ratio));
 
     if (pix.isNull()) {
         return;
