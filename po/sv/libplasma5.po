@@ -1,0 +1,921 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2014, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2015-02-21 09:32+0000\n"
+"PO-Revision-Date: 2015-01-16 19:04+0100\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr "Ok"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: plasma/applet.cpp:121
+msgid "Script initialization failed"
+msgstr "Initiering av skript misslyckades"
+
+#: plasma/applet.cpp:332
+msgid "Unknown"
+msgstr "Okänd"
+
+#: plasma/applet.cpp:609
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktivera komponenten %1"
+
+#: plasma/containment.cpp:126 plasma/private/applet_p.cpp:118
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "Ta bort %1"
+
+#: plasma/containment.cpp:131
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "Inställningar av %1"
+
+#: plasma/corona.cpp:309 plasma/corona.cpp:382
+msgid "Lock Widgets"
+msgstr "Lås grafiska komponenter"
+
+#: plasma/corona.cpp:309
+msgid "Unlock Widgets"
+msgstr "Lås upp grafiska komponenter"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Om en diskcache ska skapas för temat eller inte."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Den maximala storleken hos temacachen på disk i kilobyte. Observera att "
+"filerna är glesa, så den maximala storleken kanske inte används. Att ställa "
+"in en större storlek är därför ofta helt säkert."
+
+#: plasma/pluginloader.cpp:82
+msgid "Accessibility"
+msgstr "Handikappstöd"
+
+#: plasma/pluginloader.cpp:83
+msgid "Application Launchers"
+msgstr "Programstartverktyg"
+
+#: plasma/pluginloader.cpp:84
+msgid "Astronomy"
+msgstr "Astronomi"
+
+#: plasma/pluginloader.cpp:85
+msgid "Date and Time"
+msgstr "Datum och tid"
+
+#: plasma/pluginloader.cpp:86
+msgid "Development Tools"
+msgstr "Utvecklingsverktyg"
+
+#: plasma/pluginloader.cpp:87
+msgid "Education"
+msgstr "Utbildning"
+
+#: plasma/pluginloader.cpp:88
+msgid "Environment and Weather"
+msgstr "Omgivning och väder"
+
+#: plasma/pluginloader.cpp:89
+msgid "Examples"
+msgstr "Exempel"
+
+#: plasma/pluginloader.cpp:90
+msgid "File System"
+msgstr "Filsystem"
+
+#: plasma/pluginloader.cpp:91
+msgid "Fun and Games"
+msgstr "Spel och annat kul"
+
+#: plasma/pluginloader.cpp:92
+msgid "Graphics"
+msgstr "Grafik"
+
+#: plasma/pluginloader.cpp:93
+msgid "Language"
+msgstr "Språk"
+
+#: plasma/pluginloader.cpp:94
+msgid "Mapping"
+msgstr "Kartor"
+
+#: plasma/pluginloader.cpp:95
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: plasma/pluginloader.cpp:96
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#: plasma/pluginloader.cpp:97
+msgid "Online Services"
+msgstr "Nättjänster"
+
+#: plasma/pluginloader.cpp:98
+msgid "Productivity"
+msgstr "Produktivitet"
+
+#: plasma/pluginloader.cpp:99
+msgid "System Information"
+msgstr "Systeminformation"
+
+#: plasma/pluginloader.cpp:100
+msgid "Utilities"
+msgstr "Verktyg"
+
+#: plasma/pluginloader.cpp:101
+msgid "Windows and Tasks"
+msgstr "Fönster och aktiviteter"
+
+#: plasma/pluginloader.cpp:568 plasma/pluginloader.cpp:569
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: plasma/private/applet_p.cpp:123
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "Inställningar av %1..."
+
+#: plasma/private/applet_p.cpp:138
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"Den grafiska komponenten %1 definierar inte vilket skriptgränssnitt som ska "
+"användas."
+
+#: plasma/private/applet_p.cpp:155
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Kunde inte öppna paketet %1 som krävs för den grafiska komponenten %2."
+
+#: plasma/private/applet_p.cpp:170
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr ""
+"Kunde inte skapa skriptgränssnittet %1 för den grafiska komponenten %2."
+
+#: plasma/private/applet_p.cpp:189
+msgid "Alternatives..."
+msgstr "Alternativ..."
+
+#: plasma/private/applet_p.cpp:249
+msgid "Widget Removed"
+msgstr "Grafisk komponent borttagen"
+
+#: plasma/private/applet_p.cpp:250
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Den grafiska komponenten \"%1\" har tagits bort."
+
+#: plasma/private/applet_p.cpp:252
+msgid "Panel Removed"
+msgstr "Panel borttagen"
+
+#: plasma/private/applet_p.cpp:253
+msgid "A panel has been removed."
+msgstr "En panel har tagits bort."
+
+#: plasma/private/applet_p.cpp:256
+msgid "Desktop Removed"
+msgstr "Skrivbord borttaget"
+
+#: plasma/private/applet_p.cpp:257
+msgid "A desktop has been removed."
+msgstr "Ett skrivbord har tagits bort."
+
+#: plasma/private/applet_p.cpp:260
+msgid "Undo"
+msgstr "Ångra"
+
+#: plasma/private/applet_p.cpp:349
+msgid "Widget Settings"
+msgstr "Inställningar av grafiska komponenter"
+
+#: plasma/private/applet_p.cpp:356
+msgid "Remove this Widget"
+msgstr "Ta bort den här grafiska komponenten"
+
+#: plasma/private/applet_p.cpp:363
+#: plasma/private/associatedapplicationmanager.cpp:81
+#: plasma/private/associatedapplicationmanager.cpp:125
+#: plasma/private/associatedapplicationmanager.cpp:150
+msgid "Run the Associated Application"
+msgstr "Kör tillhörande program"
+
+#: plasma/private/associatedapplicationmanager.cpp:78
+#: plasma/private/associatedapplicationmanager.cpp:147
+#, kde-format
+msgid "Open with %1"
+msgstr "Öppna med %1"
+
+#: plasma/private/containment_p.cpp:84
+msgid "Remove this Panel"
+msgstr "Ta bort panelen"
+
+#: plasma/private/containment_p.cpp:86
+msgid "Remove this Activity"
+msgstr "Ta bort aktiviteten"
+
+#: plasma/private/containment_p.cpp:92
+msgid "Activity Settings"
+msgstr "Aktivitetsinställningar"
+
+#: plasma/private/containment_p.cpp:98
+msgid "Add Widgets..."
+msgstr "Lägg till grafiska komponenter..."
+
+#: plasma/private/containment_p.cpp:213
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Kunde inte hitta begärd komponent: %1"
+
+#: plasma/private/packages.cpp:45 plasma/private/packages.cpp:65
+#: plasmaquick/private/packages.cpp:86 plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "Huvudskriptfil"
+
+#: plasma/private/packages.cpp:87 plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "Bilder"
+
+#: plasma/private/packages.cpp:88 plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr "Bilder med teman"
+
+#: plasma/private/packages.cpp:94 plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "Inställningsdefinitioner"
+
+#: plasma/private/packages.cpp:99 plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "Användargränssnitt"
+
+#: plasma/private/packages.cpp:101 plasma/private/packages.cpp:125
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "Datafiler"
+
+#: plasma/private/packages.cpp:103 plasma/private/packages.cpp:127
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "Körbara skript"
+
+#: plasma/private/packages.cpp:108 plasma/private/packages.cpp:135
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "Översättningar"
+
+#: plasma/private/packages.cpp:116
+msgid "Configuration UI pages model"
+msgstr "Modell för inställningssidor i användargränssnitt"
+
+#: plasma/private/packages.cpp:117
+msgid "Configuration XML file"
+msgstr "XML-inställningsfil"
+
+#: plasma/private/packages.cpp:132
+msgid "Service Descriptions"
+msgstr "Tjänstbeskrivningar"
+
+#: plasma/private/packages.cpp:144
+msgid "Images for dialogs"
+msgstr "Bilder för dialogrutor"
+
+#: plasma/private/packages.cpp:146 plasma/private/packages.cpp:148
+msgid "Generic dialog background"
+msgstr "Generell bakgrund för dialogrutor"
+
+#: plasma/private/packages.cpp:150 plasma/private/packages.cpp:152
+msgid "Theme for the logout dialog"
+msgstr "Tema för utloggningsdialogrutan"
+
+#: plasma/private/packages.cpp:154
+msgid "Wallpaper packages"
+msgstr "Paket med skrivbordsunderlägg"
+
+#: plasma/private/packages.cpp:156 plasma/private/packages.cpp:209
+msgid "Images for widgets"
+msgstr "Bilder för grafiska komponenter"
+
+#: plasma/private/packages.cpp:158 plasma/private/packages.cpp:160
+msgid "Background image for widgets"
+msgstr "Bakgrundsbild för grafiska komponenter"
+
+#: plasma/private/packages.cpp:162 plasma/private/packages.cpp:164
+msgid "Analog clock face"
+msgstr "Urtavla för analog klocka"
+
+#: plasma/private/packages.cpp:166 plasma/private/packages.cpp:168
+msgid "Background image for panels"
+msgstr "Bakgrundsbild för paneler"
+
+#: plasma/private/packages.cpp:170 plasma/private/packages.cpp:172
+msgid "Background for graphing widgets"
+msgstr "Bakgrund för diagramkomponenter"
+
+#: plasma/private/packages.cpp:174 plasma/private/packages.cpp:176
+msgid "Background image for tooltips"
+msgstr "Bakgrundsbild för verktygstips"
+
+#: plasma/private/packages.cpp:178
+msgid "Opaque images for dialogs"
+msgstr "Ogenomskinliga bilder för dialogrutor"
+
+#: plasma/private/packages.cpp:180 plasma/private/packages.cpp:182
+msgid "Opaque generic dialog background"
+msgstr "Ogenomskinlig generell bakgrund för dialogrutor"
+
+#: plasma/private/packages.cpp:184 plasma/private/packages.cpp:186
+msgid "Opaque theme for the logout dialog"
+msgstr "Ogenomskinligt tema för utloggningsdialogrutan"
+
+#: plasma/private/packages.cpp:188
+msgid "Opaque images for widgets"
+msgstr "Ogenomskinliga bilder för grafiska komponenter"
+
+#: plasma/private/packages.cpp:190 plasma/private/packages.cpp:192
+msgid "Opaque background image for panels"
+msgstr "Ogenomskinlig bakgrundsbild för paneler"
+
+#: plasma/private/packages.cpp:194 plasma/private/packages.cpp:196
+msgid "Opaque background image for tooltips"
+msgstr "Ogenomskinlig bakgrundsbild för verktygstips"
+
+#: plasma/private/packages.cpp:199
+msgid "Low color images for dialogs"
+msgstr "Färgfattiga bilder för dialogrutor"
+
+#: plasma/private/packages.cpp:201 plasma/private/packages.cpp:203
+msgid "Low color generic dialog background"
+msgstr "Färgfattig generell bakgrund för dialogrutor"
+
+#: plasma/private/packages.cpp:205 plasma/private/packages.cpp:207
+msgid "Low color theme for the logout dialog"
+msgstr "Färgfattigt tema för utloggningsdialogrutan"
+
+#: plasma/private/packages.cpp:211 plasma/private/packages.cpp:213
+msgid "Low color background image for widgets"
+msgstr "Färgfattig bakgrundsbild för grafiska komponenter"
+
+#: plasma/private/packages.cpp:215 plasma/private/packages.cpp:217
+msgid "Low color analog clock face"
+msgstr "Färgfattig urtavla för analog klocka"
+
+#: plasma/private/packages.cpp:219 plasma/private/packages.cpp:221
+msgid "Low color background image for panels"
+msgstr "Färgfattig bakgrundsbild för paneler"
+
+#: plasma/private/packages.cpp:223 plasma/private/packages.cpp:225
+msgid "Low color background for graphing widgets"
+msgstr "Färgfattig bakgrund för diagramkomponenter"
+
+#: plasma/private/packages.cpp:227 plasma/private/packages.cpp:229
+msgid "Low color background image for tooltips"
+msgstr "Färgfattig bakgrundsbild för verktygstips"
+
+#: plasma/private/packages.cpp:231
+msgid "KColorScheme configuration file"
+msgstr "Inställningsfil för färgschema"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Att dela en grafisk komponent på nätverket låter dig komma åt komponenten "
+"från en annan dator som en fjärrkomponent."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "Dela grafisk komponent på nätverket"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "Tillåt alla att fritt komma åt grafisk komponent"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Ogiltig (tom) tjänst, kan inte utföra några åtgärder."
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Pakethantering för Plasma"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr "Skapa ett SHA1-kondensat för paketet på <path>"
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr ""
+"Installation eller borttagning utförs med paket installerade för alla "
+"användare."
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"Pakettypen, t.ex. tema, skrivbordsunderlägg, plasmoid, datagränssnitt, "
+"körningsprogram, layoutmall, etc."
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "Installera paketet på <path>"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr "Visar information om paket <name>"
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "Uppgradera paketet på <path>"
+
+#: plasmapkg/main.cpp:67
+msgid "List installed packages"
+msgstr "Lista installerade paket"
+
+#: plasmapkg/main.cpp:68
+msgid "List all known package types that can be installed"
+msgstr "Listar alla kända pakettyper som kan installeras"
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "Ta bort paketet som heter <name>"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"Absolut sökväg till paketroten. Om den inte anges, används "
+"standarddatakatalogerna för KDE-sessionen istället."
+
+#: plasmapkg/plasmapkg.cpp:98
+#, kde-format
+msgid "Failed to generate a Package hash for %1"
+msgstr "Misslyckades skapa ett paketkondensat för %1"
+
+#: plasmapkg/plasmapkg.cpp:101
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr "SHA1-kondensat för paket på %1: '%2'"
+
+#: plasmapkg/plasmapkg.cpp:139 plasmapkg/plasmapkg.cpp:186
+#: plasmapkg/plasmapkg.cpp:207
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "skrivbordsunderlägg"
+
+#: plasmapkg/plasmapkg.cpp:192
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "plasmoid"
+
+#: plasmapkg/plasmapkg.cpp:198
+msgctxt "package type"
+msgid "package"
+msgstr "paket"
+
+#: plasmapkg/plasmapkg.cpp:203
+msgctxt "package type"
+msgid "theme"
+msgstr "tema"
+
+#: plasmapkg/plasmapkg.cpp:212
+msgctxt "package type"
+msgid "dataengine"
+msgstr "datagränssnitt"
+
+#: plasmapkg/plasmapkg.cpp:217
+msgctxt "package type"
+msgid "runner"
+msgstr "körningsprogram"
+
+#: plasmapkg/plasmapkg.cpp:222
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "insticksprogram för skrivbordsunderlägg"
+
+#: plasmapkg/plasmapkg.cpp:227
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr "utseende och känsla"
+
+#: plasmapkg/plasmapkg.cpp:232
+msgctxt "package type"
+msgid "shell"
+msgstr "skal"
+
+#: plasmapkg/plasmapkg.cpp:237
+msgctxt "package type"
+msgid "layout-template"
+msgstr "layout-mall"
+
+#: plasmapkg/plasmapkg.cpp:242
+msgctxt "package type"
+msgid "kwineffect"
+msgstr "Kwin-effekt"
+
+#: plasmapkg/plasmapkg.cpp:247
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr "fönsterbytare"
+
+#: plasmapkg/plasmapkg.cpp:252
+msgctxt "package type"
+msgid "kwinscript"
+msgstr "Kwin-skript"
+
+#: plasmapkg/plasmapkg.cpp:261
+#, kde-format
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "Kunde inte hitta lämpligt installationsprogram för paket av typ %1"
+
+#: plasmapkg/plasmapkg.cpp:272
+#, kde-format
+msgid "Could not load installer for package of type %1. Error reported was: %2"
+msgstr ""
+"Kunde inte ladda installationsprogram för paket av typ %1. Felrapport: %2"
+
+#: plasmapkg/plasmapkg.cpp:288
+#, kde-format
+msgid "Listing service types: %1"
+msgstr "Listar tjänsttyper: %1"
+
+#: plasmapkg/plasmapkg.cpp:361
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr "Fel: Insticksprogrammet %1 är inte installerat."
+
+#: plasmapkg/plasmapkg.cpp:371
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr "Antingen install, remove, upgrade eller list krävs."
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr "Fel: Kan inte hitta insticksprogrammets metadata: %1"
+
+#: plasmapkg/plasmapkg.cpp:478
+#, kde-format
+msgid "Showing info for package: %1"
+msgstr "Visar information för paket: %1"
+
+#: plasmapkg/plasmapkg.cpp:479
+#, kde-format
+msgid "      Name : %1"
+msgstr "           Namn: %1"
+
+#: plasmapkg/plasmapkg.cpp:480
+#, kde-format
+msgid "   Comment : %1"
+msgstr "      Kommentar: %1"
+
+#: plasmapkg/plasmapkg.cpp:481
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "Insticksprogram: %1"
+
+#: plasmapkg/plasmapkg.cpp:482
+#, kde-format
+msgid "    Author : %1"
+msgstr "     Upphovsman: %1"
+
+#: plasmapkg/plasmapkg.cpp:483
+#, kde-format
+msgid "      Path : %1"
+msgstr "         Sökväg: %1"
+
+#: plasmapkg/plasmapkg.cpp:492
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr ""
+"Paketroten och globala alternativ står i konflikt med varandra, välj bara en."
+
+#: plasmapkg/plasmapkg.cpp:517
+msgid "Addon Name"
+msgstr "Tilläggets namn"
+
+#: plasmapkg/plasmapkg.cpp:518
+msgid "Service Type"
+msgstr "Tjänsttyp"
+
+#: plasmapkg/plasmapkg.cpp:519
+msgid "Path"
+msgstr "Sökväg"
+
+#: plasmapkg/plasmapkg.cpp:520
+msgid "Type Argument"
+msgstr "Typargument"
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Package types that are installable with this tool:"
+msgstr "Typer av paket som kan installeras med det här verkyget:"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Built in:"
+msgstr "Inbyggda:"
+
+#: plasmapkg/plasmapkg.cpp:572
+msgid "DataEngine"
+msgstr "datagränssnitt"
+
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Layout Template"
+msgstr "layout-mall"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Look and Feel"
+msgstr "Utseende och känsla"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Package"
+msgstr "Paket"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#: plasmapkg/plasmapkg.cpp:577
+msgid "Runner"
+msgstr "Körprogram"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "Shell"
+msgstr "Skal"
+
+#: plasmapkg/plasmapkg.cpp:579
+msgid "Theme"
+msgstr "Tema"
+
+#: plasmapkg/plasmapkg.cpp:580
+msgid "Wallpaper Images"
+msgstr "skrivbordsunderlägg"
+
+#: plasmapkg/plasmapkg.cpp:581
+msgid "Animated Wallpaper"
+msgstr "Animerat skrivbordsunderlägg"
+
+#: plasmapkg/plasmapkg.cpp:582
+msgid "KWin Effect"
+msgstr "Kwin-effekt"
+
+#: plasmapkg/plasmapkg.cpp:583
+msgid "KWin Window Switcher"
+msgstr "Kwin-fönsterbyte"
+
+#: plasmapkg/plasmapkg.cpp:584
+msgid "KWin Script"
+msgstr "Kwin-skript"
+
+#: plasmapkg/plasmapkg.cpp:593
+msgid "Provided by plugins:"
+msgstr "Tillhandahållna av insticksprogram:"
+
+#: plasmapkg/plasmapkg.cpp:615
+msgid "Provided by .desktop files:"
+msgstr "Tillhandahållna av skrivbordsfiler:"
+
+#: plasmapkg/plasmapkg.cpp:636
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr "Uppgraderade %1 med lyckat resultat"
+
+#: plasmapkg/plasmapkg.cpp:638
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "Installerade %1 med lyckat resultat"
+
+#: plasmapkg/plasmapkg.cpp:641
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr "Fel: Installation av %1 misslyckades: %2"
+
+#: plasmapkg/plasmapkg.cpp:653
+#, kde-format
+msgid "Upgrading package from file: %1"
+msgstr "Uppgraderar paket från fil: %1"
+
+#: plasmapkg/plasmapkg.cpp:658
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr "Avinstallerade %1 med lyckat resultat"
+
+#: plasmapkg/plasmapkg.cpp:660
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr "Fel: Avinstallation av %1 misslyckades: %2"
+
+#: plasmaquick/appletquickitem.cpp:466
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Fel vid inläsning av QML-fil: %1"
+
+#: plasmaquick/appletquickitem.cpp:468
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Fel vid inläsning av miniprogram: Paketet finns inte. %1"
+
+#: plasmaquick/configview.cpp:103
+#, kde-format
+msgid "%1 Settings"
+msgstr "Inställningar av %1"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr "Standardinställningar av teman, etc."
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr "Färgschema att använda för program."
+
+#: plasmaquick/private/packages.cpp:42
+msgid "Preview Images"
+msgstr "Förhandsgranska bilder"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr "Förhandsgranskning av inloggningshanterare"
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr "Förhandsgranskning av lås skärmen"
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr "Förhandsgranskning av användarbyte"
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Förhandsgranskning av byte av virtuellt skrivbord"
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr "Förhandsgranskning av startskärm"
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr "Förhandsgranskning av kör program"
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr "Förhandsgranskning av fönsterdekorationer"
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr "Förhandsgranskning av fönsterbyte"
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr "Inloggningshanterare"
+
+#: plasmaquick/private/packages.cpp:53
+msgid "Main Script for Login Manager"
+msgstr "Huvudskript för Inloggningshanterare"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr "Utloggningsdialogruta"
+
+#: plasmaquick/private/packages.cpp:56
+msgid "Main Script for Logout Dialog"
+msgstr "Huvudskript för Utloggningsdialogruta"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr "Skärmlåsning"
+
+#: plasmaquick/private/packages.cpp:59
+msgid "Main Script for Lock Screen"
+msgstr "Huvudskript för Lås skärmen"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr "Användargränssnitt för snabbt användarbyte"
+
+#: plasmaquick/private/packages.cpp:62
+msgid "Main Script for User Switcher"
+msgstr "Huvudskript för Användarbyte"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr "Byte av virtuellt skrivbord"
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Huvudskript för Byte av virtuellt skrivbord"
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr "Visa underrättelser på skärmen"
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Huvudskript för Visa underrättelser på skärmen"
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr "Startskärm"
+
+#: plasmaquick/private/packages.cpp:71
+msgid "Main Script for Splash Screen"
+msgstr "Huvudskript för startskärm"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr "Användargränssnitt för Kör program"
+
+#: plasmaquick/private/packages.cpp:74
+msgid "Main Script KRunner"
+msgstr "Huvudskript för Kör program"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr "Fönsterdekoration"
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr "Huvudskript för fönsterdekoration"
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr "Fönsterbyte"
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr "Huvudskript för fönsterbyte"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:365
+msgid "Fetching file type..."
+msgstr "Hämtar filtyp..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:497
+msgid "Widgets"
+msgstr "Grafiska komponenter"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:510
+msgid "Icon"
+msgstr "Ikon"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:514
+msgid "Wallpaper"
+msgstr "Skrivbordsunderlägg"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:814
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "Alternativ för %1"
