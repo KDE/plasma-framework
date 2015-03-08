@@ -209,7 +209,7 @@ void IconItem::setActive(bool active)
 
     m_active = active;
     if (isComponentComplete()) {
-        m_loadPixmapTimer.start();
+        loadPixmap();
     }
     emit activeChanged();
 }
