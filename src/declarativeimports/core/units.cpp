@@ -35,7 +35,7 @@
 
 const QString plasmarc = QStringLiteral("plasmarc");
 const QString groupName = QStringLiteral("Units");
-const int defaultLongDuration = 250;
+const int defaultLongDuration = 120;
 
 Units::Units(QObject *parent)
     : QObject(parent),
@@ -169,7 +169,7 @@ int Units::devicePixelIconSize(const int size) const
 
 qreal Units::devicePixelRatio() const
 {
-    return m_devicePixelRatioDecimalPart;
+    return m_devicePixelRatio;
 }
 
 void Units::updateDevicePixelRatio()
@@ -180,12 +180,10 @@ void Units::updateDevicePixelRatio()
     // TODO: make it possible to adapt to the dpi for the current screen dpi
     //  instead of assuming that all of them use the same dpi which applies for
     //  X11 but not for other systems.
-    qreal dpi = QGuiApplication::primaryScreen()->physicalDotsPerInchX();
+    qreal dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
     // Usual "default" is 96 dpi
     // that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_devicePixelRatio = (qreal)dpi / (qreal)96;
-    m_devicePixelRatioDecimalPart = qMax((qreal)1, m_devicePixelRatio / qApp->devicePixelRatio());
-
     iconLoaderSettingsChanged();
     emit devicePixelRatioChanged();
 }
