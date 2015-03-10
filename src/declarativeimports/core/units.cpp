@@ -206,6 +206,7 @@ int Units::largeSpacing() const
 void Units::updateSpacing()
 {
     int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+
     if (gridUnit % 2 != 0) {
         gridUnit++;
     }

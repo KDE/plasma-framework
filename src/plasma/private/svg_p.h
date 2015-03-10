@@ -72,7 +72,7 @@ public:
     Theme *actualTheme();
     Theme *cacheAndColorsTheme();
 
-    QPixmap findInCache(const QString &elementId, const QSizeF &s = QSizeF());
+    QPixmap findInCache(const QString &elementId, qreal ratio, const QSizeF &s = QSizeF());
 
     void createRenderer();
     void eraseRenderer();
@@ -109,6 +109,7 @@ public:
     Theme::ColorGroup colorGroup;
     unsigned int lastModified;
     qreal devicePixelRatio;
+    qreal scaleFactor;
     bool multipleImages : 1;
     bool themed : 1;
     bool fromCurrentTheme : 1;
