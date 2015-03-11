@@ -155,8 +155,13 @@ Plasma::Types::FormFactor ViewPrivate::formFactor() const
 void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
 {
     if (configView) {
-        configView->hide();
-        configView->deleteLater();
+        if (configView->applet() != applet) {
+            configView->hide();
+            configView->deleteLater();
+        } else {
+            configView->requestActivate();
+            return;
+        }
     }
 
     if (!applet || !applet->containment()) {
