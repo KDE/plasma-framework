@@ -551,6 +551,9 @@ void DialogPrivate::syncToMainItemSize()
     if (!componentComplete || !q->isVisible()) {
         return;
     }
+    if (mainItem->width() <= 0 || mainItem->height() <= 0) {
+        qWarning() << "trying to show an empty dialog";
+    }
 
     updateTheme();
     if (visualParent) {
@@ -608,7 +611,7 @@ void DialogPrivate::slotWindowPositionChanged()
 {
     // Tooltips always have all the borders
     // floating windows have all borders
-    if ((q->flags() & Qt::ToolTip) || location == Plasma::Types::Floating) {
+    if (!q->isVisible() || (q->flags() & Qt::ToolTip) || location == Plasma::Types::Floating) {
         return;
     }
 
@@ -944,7 +947,7 @@ void Dialog::resizeEvent(QResizeEvent* re)
     QQuickWindow::resizeEvent(re);
 
     //A dialog can be resized even if no mainItem has ever been set
-    if (!d->mainItem) {
+    if (!isVisible() || !d->mainItem) {
         return;
     }
 
