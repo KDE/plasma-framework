@@ -28,6 +28,7 @@
 #include <QPair>
 #include <QStringBuilder>
 #include <QTimer>
+#include <QThread>
 
 #include "config-plasma.h"
 
@@ -417,7 +418,7 @@ void Theme::insertIntoRectsCache(const QString &image, const QString &element, c
         }
     }
 
-    d->rectSaveTimer->start();
+    QMetaObject::invokeMethod(d->rectSaveTimer, "start");
 }
 
 void Theme::invalidateRectsCache(const QString &image)
