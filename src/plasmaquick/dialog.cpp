@@ -337,7 +337,9 @@ void DialogPrivate::updateMinimumWidth()
     q->contentItem()->setWidth(qMax(q->width(), minimumWidth));
     q->setWidth(qMax(q->width(), minimumWidth));
 
-    hintsCommitTimer.start();
+    if (mainItemLayout) {
+        hintsCommitTimer.start();
+    }
 }
 
 void DialogPrivate::updateMinimumHeight()
@@ -363,7 +365,9 @@ void DialogPrivate::updateMinimumHeight()
     q->contentItem()->setHeight(qMax(q->height(), minimumHeight));
     q->setHeight(qMax(q->height(), minimumHeight));
 
-    hintsCommitTimer.start();
+    if (mainItemLayout) {
+        hintsCommitTimer.start();
+    }
 }
 
 void DialogPrivate::updateMaximumWidth()
@@ -385,7 +389,9 @@ void DialogPrivate::updateMaximumWidth()
     q->contentItem()->setWidth(qMax(q->width(), maximumWidth));
     q->setWidth(qMax(q->width(), maximumWidth));
 
-    hintsCommitTimer.start();
+    if (mainItemLayout) {
+        hintsCommitTimer.start();
+    }
 }
 
 void DialogPrivate::updateMaximumHeight()
@@ -407,7 +413,9 @@ void DialogPrivate::updateMaximumHeight()
     q->contentItem()->setHeight(qMax(q->height(), maximumHeight));
     q->setHeight(qMin(q->height(), maximumHeight));
 
-    hintsCommitTimer.start();
+    if (mainItemLayout) {
+        hintsCommitTimer.start();
+    }
 }
 
 void DialogPrivate::updateLayoutParameters()
