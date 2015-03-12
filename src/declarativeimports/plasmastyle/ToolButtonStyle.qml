@@ -204,6 +204,7 @@ QtQuickControlStyle.ButtonStyle {
 
             Private.ButtonShadow {
                 id: shadow
+                visible: !style.flat
                 anchors.fill: parent
                 state: {
                     if (control.pressed) {
