@@ -694,9 +694,16 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 {
     if (d->mainItem != mainItem) {
         d->hintsCommitTimer.stop();
+
         if (d->mainItem) {
+            disconnect(d->mainItem, 0, this, 0);
             d->mainItem->setVisible(false);
         }
+
+        if (d->mainItemLayout) {
+            disconnect(d->mainItemLayout, 0, this, 0);
+        }
+
 
         d->mainItem = mainItem;
 
@@ -725,9 +732,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                     layout = child;
                 }
             }
-            if (d->mainItemLayout) {
-                disconnect(d->mainItemLayout, 0, this, 0);
-            }
+
             d->mainItemLayout = layout;
 
             if (layout) {
