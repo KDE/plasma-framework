@@ -146,6 +146,7 @@ Item {
         PlasmaCore.IconItem {
             id: imageLoader
             visible: iconSource != null
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
             implicitWidth: internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
