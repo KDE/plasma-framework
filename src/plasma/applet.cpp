@@ -521,7 +521,12 @@ void Applet::flushPendingConstraintsEvents()
             action->setEnabled(canConfig);
         }
 
-        emit immutabilityChanged(immutability());
+        //an immutable constraint will alwasy happen at startup
+        //make sure don't emit a change signal for nothing
+        if (d->oldImmutability != immutability()) {
+            emit immutabilityChanged(immutability());
+        }
+        d->oldImmutability = immutability();
     }
 
     // now take care of constraints in special subclass: Contaiment

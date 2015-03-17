@@ -81,6 +81,7 @@ public:
 
     // applet attributes
     Types::ImmutabilityType immutability;
+    Types::ImmutabilityType oldImmutability;
     QString launchErrorMessage;
 
     // applet info we keep around in case its needed
