@@ -241,6 +241,8 @@ void AppletPrivate::askDestroy()
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
         deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
+
+        deleteNotification->setComponentName("plasma_workspace");
         QStringList actions;
         deleteNotification->setIconName(q->icon());
         Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
