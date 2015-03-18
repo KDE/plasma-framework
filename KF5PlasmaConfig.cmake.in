@@ -2,12 +2,13 @@
 
 # Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
 
-find_dependency(KF5Package "@KF5_DEP_VERSION@")
-
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaTargets.cmake")
 
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 
 set(Plasma_LIBRARIES KF5::Plasma)
+
+find_dependency(KF5Package "@KF5_DEP_VERSION@")
+find_dependency(KF5Service "@KF5_DEP_VERSION@")
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaMacros.cmake")
