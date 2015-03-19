@@ -149,6 +149,15 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(bool fromCurrentTheme READ fromCurrentTheme NOTIFY fromCurrentThemeChanged)
 
+    /**
+     * Set a color group for the FrameSvgItem.
+     * if the Svg uses stylesheets and has elements
+     * that are eithe TextColor or BackgroundColor class,
+     * make them use ButtonTextColor/ButtonBackgroundColor
+     * or ViewTextColor/ViewBackgroundColor, ComplementaryTextColor etc.
+     */
+    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+
 public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
@@ -172,6 +181,9 @@ public:
 
     FrameSvgItemMargins *margins() const;
     FrameSvgItemMargins *fixedMargins() const;
+
+    void setColorGroup(Plasma::Theme::ColorGroup group);
+    Plasma::Theme::ColorGroup colorGroup() const;
 
     bool fromCurrentTheme() const;
 
@@ -197,6 +209,7 @@ Q_SIGNALS:
     void prefixChanged();
     void enabledBordersChanged();
     void fromCurrentThemeChanged();
+    void colorGroupChanged();
 
 private Q_SLOTS:
     void doUpdate();

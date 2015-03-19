@@ -348,6 +348,22 @@ FrameSvgItemMargins *FrameSvgItem::fixedMargins() const
     return m_fixedMargins;
 }
 
+void FrameSvgItem::setColorGroup(Plasma::Theme::ColorGroup group)
+{
+    if (m_frameSvg->colorGroup() == group) {
+        return;
+    }
+
+    m_frameSvg->setColorGroup(group);
+
+    emit colorGroupChanged();
+}
+
+Plasma::Theme::ColorGroup FrameSvgItem::colorGroup() const
+{
+    return m_frameSvg->colorGroup();
+}
+
 bool FrameSvgItem::fromCurrentTheme() const
 {
     return m_frameSvg->fromCurrentTheme();

@@ -76,14 +76,21 @@ public:
 
 /// @endcond
 
+    ColorScope *findParentScope() const;
+    void itemChange(ItemChange change, const ItemChangeData &value);
+
+protected:
+    bool event(QEvent *event);
+
 Q_SIGNALS:
     void colorGroupChanged();
     void colorsChanged();
 
 private:
+    bool m_inherit;
     Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
-    static ColorScope *s_colorScope;
+    QPointer<ColorScope> m_parentScope;
 };
 
 QML_DECLARE_TYPEINFO(ColorScope, QML_HAS_ATTACHED_PROPERTIES)
