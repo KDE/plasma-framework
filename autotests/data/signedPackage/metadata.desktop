@@ -70,6 +70,7 @@ Comment[sv]=Förevisar åtkomst av data via HTTP i Javascript
 Comment[tr]=JavaScript HTTP üzerinden veri erişimini gösterir
 Comment[uk]=Демонстрації доступу до даних за допомогою HTTP мовою JavaScript
 Comment[x-test]=xxDemonstrates accessing data via HTTP in JavaScriptxx
+Comment[zh_CN]=展示在 JavaScript 中通过 HTTP 访问数据
 Comment[zh_TW]=展示如何在 JavaScript 中透過 HTTP 存取資料
 Icon=text-x-generic
 

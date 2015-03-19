@@ -62,6 +62,7 @@ Keywords[sv]=plasma;bugzilla;fel;utveckling;support;
 Keywords[tr]=plazma;bugzilla;hata;geliştirme;destek;
 Keywords[uk]=plasma;bugzilla;bug;development;support;плазма;багзілла;вада;баг;розробка;підтримка;супровід;помилка;
 Keywords[x-test]=xxplasmaxx;xxbugzillaxx;xxbugxx;xxdevelopmentxx;xxsupportxx;
+Keywords[zh_CN]=plasma;bugzilla;bug;development;support;错误;开发;支持;
 Keywords[zh_TW]=plasma;bugzilla;bug;development;support;
 Name=Bug
 Name[ast]=Fallu
