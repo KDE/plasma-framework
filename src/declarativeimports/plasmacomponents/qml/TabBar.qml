@@ -84,6 +84,9 @@ FocusScope {
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
+    Layout.minimumWidth: tabBarLayout.minimumWidth
+    Layout.minimumHeight: tabBarLayout.minimumHeight
+
     Accessible.role: Accessible.PageTabList
 
     Item {

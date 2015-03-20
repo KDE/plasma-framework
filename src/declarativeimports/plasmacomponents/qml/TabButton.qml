@@ -114,6 +114,7 @@ Item {
             internal.tabBar.currentTab = root
         }
         onVisibleChanged: root.parent.childrenChanged()
+        onTextChanged: root.parent.childrenChanged()
     }
 
     QtObject {
