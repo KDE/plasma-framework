@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.1
+import QtQuick 2.2
 import "private/TabGroup.js" as Engine
 
 import "." 2.0 as PlasmaComponents
@@ -207,16 +207,36 @@ FocusScope {
             transitions:  [
                 Transition {
                     to: "Incoming"
+                    enabled: root.visible
                     SequentialAnimation {
                         ScriptAction { script: root.clip = true }
-                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: units.longDuration }
+                        ParallelAnimation {
+                            OpacityAnimator {
+                                easing.type: Easing.InQuad
+                                duration: units.longDuration
+                            }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: units.longDuration
+                            }
+                        }
                         ScriptAction { script: {incomingDone(); root.clip = false} }
                     }
                 },
                 Transition {
                     to: "OutgoingLeft,OutgoingRight"
+                    enabled: root.visible
                     SequentialAnimation {
-                        PropertyAnimation { properties: "opacity,x"; easing.type: Easing.InQuad; duration: units.longDuration }
+                        ParallelAnimation {
+                            OpacityAnimator {
+                                easing.type: Easing.InQuad
+                                duration: units.longDuration
+                            }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: units.longDuration
+                            }
+                        }
                         ScriptAction { script: outgoingDone() }
                     }
                 }
