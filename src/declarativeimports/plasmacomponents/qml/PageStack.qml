@@ -43,7 +43,7 @@
 // The PageStack item defines a container for pages and a stack-based
 // navigation model. Pages can be defined as QML items or components.
 
-import QtQuick 2.1
+import QtQuick 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 import "." 2.0 as PlasmaComponents
@@ -432,8 +432,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -444,8 +450,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.OutQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -456,8 +468,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -468,8 +486,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.OutQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -480,8 +504,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         // Workaround for transition animation bug causing ghost view with page pop transition animation
                         // TODO: Root cause still unknown
@@ -495,8 +525,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.OutQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
@@ -507,8 +543,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.InQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.InQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         // Workaround for transition animation bug causing ghost view with page pop transition animation
                         // TODO: Root cause still unknown
@@ -522,8 +564,14 @@ Item {
                     SequentialAnimation {
                         ScriptAction { script: transitionStarted() }
                         ParallelAnimation {
-                            PropertyAnimation { properties: "x"; easing.type: Easing.OutQuad; duration: transitionDuration }
-                            PropertyAnimation { properties: "opacity"; easing.type: Easing.Linear; duration: transitionDuration }
+                            XAnimator {
+                                easing.type: Easing.OutQuad
+                                duration: transitionDuration
+                            }
+                            OpacityAnimator {
+                                easing.type: Easing.Linear
+                                duration: transitionDuration
+                            }
                         }
                         ScriptAction { script: transitionEnded() }
                     }
