@@ -43,8 +43,8 @@ public:
 
     virtual void initialize();
 private:
-    QOpenGLFunctions *glFuncs;
-    int m_progressId;
+    QOpenGLFunctions *glFuncs = 0;
+    int m_progressId = 0;
 };
 
 QList<QByteArray> FadingMaterialShader::attributes() const
