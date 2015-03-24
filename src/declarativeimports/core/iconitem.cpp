@@ -41,6 +41,8 @@ IconItem::IconItem(QQuickItem *parent)
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
+      m_textureChanged(false),
+      m_sizeChanged(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
