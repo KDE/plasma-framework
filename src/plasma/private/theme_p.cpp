@@ -67,6 +67,9 @@ ThemePrivate::ThemePrivate(QObject *parent)
       hasWallpapers(false),
       fixedName(false),
       backgroundContrastEnabled(true),
+      backgroundContrast(0),
+      backgroundIntensity(0),
+      backgroundSaturation(0),
       apiMajor(1),
       apiMinor(0),
       apiRevision(0)
