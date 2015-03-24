@@ -59,6 +59,7 @@ public:
     DialogPrivate(Dialog *dialog)
         : q(dialog),
           location(Plasma::Types::BottomEdge),
+          frameSvgItem(0),
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
