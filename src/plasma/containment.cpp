@@ -508,13 +508,11 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     KConfigGroup cfg = d->containmentActionsConfig();
     ContainmentActions *plugin = 0;
 
-    if (containmentActions().contains(trigger)) {
-        plugin = containmentActions().value(trigger);
-        if (plugin->pluginInfo().pluginName() != pluginName) {
-            containmentActions().remove(trigger);
-            delete plugin;
-            plugin = 0;
-        }
+    plugin = containmentActions().value(trigger);
+    if (plugin && plugin->pluginInfo().pluginName() != pluginName) {
+        containmentActions().remove(trigger);
+        delete plugin;
+        plugin = 0;
     }
 
     if (pluginName.isEmpty()) {
