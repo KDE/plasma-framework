@@ -1,26 +1,26 @@
-/** @page libplasma libplasma
+/** @page libplasma Plasma framework
 
-libplasma is the core of the Plasma desktop.  It provides a framework of graphical
+Plasma framework is the core of the Plasma desktop.  It provides a framework of graphical
 widgets (Plasma::Applet) that can be organised into managed groupings
 (Plasma::Containment), such as a desktop or panel.  It also provides a data
 abstraction layer (Plasma::DataEngine) and a corresponding service interaction
 layer (Plasma::Service) to make implementing widgets easier.
 
-The <a href="http://doc.trolltech.com/latest/graphicsview.html">Qt Graphics View
-framework</a> and the <a href="http://api.kde.org/4.x-api/kdelibs-apidocs/">KDE
-libraries</a> provide the underpinning for libplasma.  As a result, it should
-work anywhere that Qt and KDE do.
+The <a href="http://doc.qt.io/qt-5/qtquick-index.html">Qt Quick
+framework</a> and set of <a href="http://api.kde.org/frameworks-api/frameworks5-apidocs/">KDE Frameworks</a>
+provide the underpinning for Plasma framework.  As a result, it should
+work anywhere that Qt does.
 
-Although libplasma is developed for the use of the Plasma desktop shell in
-KDE 4, it is general enough to be useful in other applications.
+Although Plasma framework is developed for the use of the Plasma desktop shell,
+currently known as Plasma 5, it is general enough to be useful in other applications.
 <a href="http://amarok.kde.org">Amarok</a> is using it for its context
 view, allowing for pluggable widgets to display and interact with the music
 collection, such as "current track" and "tag cloud" widgets.
 
-libplasma itself only provides a framework, and the widgets, containments,
-data engines are all implemented as plugins.  However, the framework
-is designed to make implementing these plugins as easy as possible, including
-providing scripting support.
+Plasma framework itself only provides a framework, and the widgets, containments,
+data engines are all implemented as plugins (using C++, for widgets QML is prefferd).
+However, the framework is designed to make implementing these plugins as easy
+as possible, including providing scripting support.
 
 Other important classes are:
 
@@ -71,7 +71,7 @@ Siraj Razick \<siraj@kde.net\><br>
 Zack Rusin \<zack@kde.org\>
 
 @maintainers
-Aaron Seigo \<aseigo@kde.org\>
+Marco Martin \<notmart@gmail.com\>
 
 @licenses
 @lgpl
