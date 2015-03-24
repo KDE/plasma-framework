@@ -118,6 +118,7 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
       m_actionSignals(0),
       m_configuration(0),
       m_appletScriptEngine(0),
+      m_toolTipTextFormat(0),
       m_args(args),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
