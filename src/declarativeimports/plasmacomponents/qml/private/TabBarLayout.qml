@@ -68,7 +68,7 @@ Item {
     property int minimumWidth: 0
     property int minimumHeight: 0
 
-    Component.onCompleted: layoutTimer.restart()
+    Component.onCompleted: priv.layoutChildren()
     onChildrenChanged: layoutTimer.restart()
     onWidthChanged: layoutTimer.restart()
     onHeightChanged: layoutTimer.restart()
