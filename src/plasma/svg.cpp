@@ -709,6 +709,10 @@ void Svg::setDevicePixelRatio(qreal ratio)
         return;
     }
 
+    if (FrameSvg *f = qobject_cast<FrameSvg *>(this)) {
+        f->clearCache();
+    }
+
     d->devicePixelRatio = floor(ratio);
 
     emit repaintNeeded();

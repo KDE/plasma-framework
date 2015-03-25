@@ -236,6 +236,9 @@ void FrameSvg::setElementPrefix(const QString &prefix)
             if (!oldFrameData->frameSize.isEmpty()) {
                 const QString key = d->cacheId(oldFrameData, d->prefix);
                 newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(key);
+                if (newFd && newFd->devicePixelRatio != devicePixelRatio()) {
+                    newFd = 0;
+                }
             }
 
             // we need to put this in the cache if we didn't find it in the shared frames

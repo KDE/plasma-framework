@@ -68,6 +68,7 @@ public:
           leftMargin(0),
           rightMargin(0),
           bottomMargin(0),
+          devicePixelRatio(svg->devicePixelRatio()),
           noBorderPadding(false),
           stretchBorders(false),
           tileCenter(false),
@@ -115,6 +116,8 @@ public:
     int fixedLeftMargin;
     int fixedRightMargin;
     int fixedBottomMargin;
+
+    qreal devicePixelRatio;
 
     //size of the svg where the size of the "center"
     //element is contentWidth x contentHeight
