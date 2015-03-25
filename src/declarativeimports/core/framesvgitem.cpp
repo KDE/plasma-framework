@@ -279,9 +279,9 @@ void FrameSvgItem::setImagePath(const QString &path)
         return;
     }
 
+    updateDevicePixelRatio();
     m_frameSvg->setImagePath(path);
     m_frameSvg->setElementPrefix(m_prefix);
-    updateDevicePixelRatio();
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
