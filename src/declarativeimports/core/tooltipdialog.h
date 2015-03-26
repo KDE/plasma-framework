@@ -66,6 +66,12 @@ public:
     bool animationsEnabled() const;
     void setAnimationsEnabled(bool enabled);
 
+    /**
+     * Basically the last one who has shown the dialog
+     */
+    QObject *owner() const;
+    void setOwner(QObject *owner);
+
 protected:
     void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
@@ -82,6 +88,7 @@ private:
     int m_hideTimeout;
     bool m_interactive;
     bool m_animationsEnabled;
+    QObject *m_owner;
 };
 
 #endif

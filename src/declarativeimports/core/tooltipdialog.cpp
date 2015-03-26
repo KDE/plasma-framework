@@ -32,7 +32,8 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_animation(0),
       m_hideTimeout(4000),
       m_interactive(false),
-      m_animationsEnabled(true)
+      m_animationsEnabled(true),
+      m_owner(Q_NULLPTR)
 {
     setFlags(Qt::ToolTip | Qt::BypassWindowManagerHint);
     setLocation(Plasma::Types::Floating);
@@ -145,6 +146,16 @@ bool ToolTipDialog::animationsEnabled() const
 void ToolTipDialog::setAnimationsEnabled(bool enabled)
 {
     m_animationsEnabled = enabled;
+}
+
+QObject *ToolTipDialog::owner() const
+{
+    return m_owner;
+}
+
+void ToolTipDialog::setOwner(QObject *owner)
+{
+    m_owner = owner;
 }
 
 void ToolTipDialog::dismiss()

@@ -193,6 +193,8 @@ private Q_SLOTS:
     void settingsChanged();
 
 private:
+    bool isValid() const;
+
     void loadSettings();
     bool m_tooltipsEnabledGlobally;
     bool m_containsMouse;

@@ -60,6 +60,10 @@ ToolTip::ToolTip(QQuickItem *parent)
 
 ToolTip::~ToolTip()
 {
+    if (s_dialog && s_dialog->owner() == this) {
+        s_dialog->setVisible(false);
+    }
+
     if (m_usingDialog) {
         --s_dialogUsers;
     }
@@ -109,6 +113,10 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
         m_mainItem = mainItem;
 
         emit mainItemChanged();
+
+        if (!isValid() && s_dialog && s_dialog->owner() == this) {
+            s_dialog->setVisible(false);
+        }
     }
 }
 
@@ -145,6 +153,8 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
+    dlg->setOwner(this);
+
     //if the dialog is not currently visible, disable the animated repositioning
     dlg->setAnimationsEnabled(dlg->isVisible());
     dlg->show();
@@ -167,6 +177,10 @@ void ToolTip::setMainText(const QString &mainText)
 
     m_mainText = mainText;
     emit mainTextChanged();
+
+    if (!isValid() && s_dialog && s_dialog->owner() == this) {
+        s_dialog->setVisible(false);
+    }
 }
 
 QString ToolTip::subText() const
@@ -182,6 +196,10 @@ void ToolTip::setSubText(const QString &subText)
 
     m_subText = subText;
     emit subTextChanged();
+
+    if (!isValid() && s_dialog && s_dialog->owner() == this) {
+        s_dialog->setVisible(false);
+    }
 }
 
 int ToolTip::textFormat() const
@@ -305,9 +323,10 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         return;
     }
 
-    if (!m_mainItem && mainText().isEmpty() && subText().isEmpty()) {
+    if (!isValid()) {
         return;
     }
+
     if (tooltipDialogInstance()->isVisible()) {
         // We signal the tooltipmanager that we're "potentially interested,
         // and ask to keep it open for a bit, so other items get the chance
@@ -333,3 +352,7 @@ bool ToolTip::childMouseEventFilter(QQuickItem *item, QEvent *event)
     return QQuickItem::childMouseEventFilter(item, event);
 }
 
+bool ToolTip::isValid() const
+{
+    return m_mainItem || !mainText().isEmpty() || !subText().isEmpty();
+}
