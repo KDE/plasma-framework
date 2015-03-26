@@ -149,6 +149,13 @@ public:
      */
     Q_INVOKABLE QPointF mapToApplet(AppletInterface *applet, int x, int y);
 
+    /**
+     * Given a geometry, it adjusts it moving it completely inside of the boundaries
+     * of availableScreenRegion
+     * @return the toLeft point of the rectangle
+     */
+    Q_INVOKABLE QPointF adjustToAvailableScreenRegion(int x, int y, int w, int h) const;
+
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));

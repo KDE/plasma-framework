@@ -311,6 +311,107 @@ QPointF ContainmentInterface::mapToApplet(AppletInterface *applet, int x, int y)
     return pos - applet->mapToScene(QPointF(0, 0));
 }
 
+QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w, int h) const
+{
+    QRegion reg = QRect(0, 0, width(), height());
+    int screenId = screen();
+    if (screenId > -1 && m_containment->corona()) {
+        reg = m_containment->corona()->availableScreenRegion(screenId);
+    }
+
+    const QRect rect(qBound(reg.boundingRect().left(), x, reg.boundingRect().right() - w),
+                     qBound(reg.boundingRect().top(), y, reg.boundingRect().bottom() - h), w, h);
+    const QRectF ar = availableScreenRect();
+    QRect tempRect(rect);
+
+    // in the case we are in the topleft quadrant
+    // * see if the passed rect is completely in the region, if yes, return
+    // * otherwise, try to move it horizontally to the screenrect x
+    // * if now fits, return
+    // * if fail, move vertically
+    // * as last resort, move horizontally and vertically
+
+    // top left corner
+    if (rect.center().x() <= ar.center().x() && rect.center().y() <= ar.center().y()) {
+        //QRegion::contains doesn't do what it would suggest, so do reg.intersected(rect) != rect instead
+        if (reg.intersected(rect) != rect) {
+            tempRect = QRect(qMax(rect.left(), (int)ar.left()), rect.top(), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(rect.left(), qMax(rect.top(), (int)ar.top()), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(qMax(rect.left(), (int)ar.left()), qMax(rect.top(), (int)ar.top()), w, h);
+            return tempRect.topLeft();
+        } else {
+            return rect.topLeft();
+        }
+
+    //bottom left corner
+    } else if (rect.center().x() <= ar.center().x() && rect.center().y() > ar.center().y()) {
+        if (reg.intersected(rect) != rect) {
+            tempRect = QRect(qMax(rect.left(), (int)ar.left()), rect.top(), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(qMax(rect.left(), (int)ar.left()), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            return tempRect.topLeft();
+        } else {
+            return rect.topLeft();
+        }
+
+    //top right corner
+    } else if (rect.center().x() > ar.center().x() && rect.center().y() <= ar.center().y()) {
+        if (reg.intersected(rect) != rect) {
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), rect.top(), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(rect.left(), qMax(rect.top(), (int)ar.top()), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), qMax(rect.top(), (int)ar.top()), w, h);
+            return tempRect.topLeft();
+        } else {
+            return rect.topLeft();
+        }
+
+    //bottom right corner
+    } else if (rect.center().x() > ar.center().x() && rect.center().y() > ar.center().y()) {
+        if (reg.intersected(rect) != rect) {
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), rect.top(), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            if (reg.intersected(tempRect) == tempRect) {
+                return tempRect.topLeft();
+            }
+
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            return tempRect.topLeft();
+        } else {
+            return rect.topLeft();
+        }
+    }
+
+    return rect.topLeft();
+}
+
 void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y)
 {
     QMimeData* mime = qobject_cast<QMimeData*>(mimeDataProxy);
