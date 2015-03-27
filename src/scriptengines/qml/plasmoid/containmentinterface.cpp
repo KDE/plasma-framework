@@ -313,10 +313,18 @@ QPointF ContainmentInterface::mapToApplet(AppletInterface *applet, int x, int y)
 
 QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w, int h) const
 {
-    QRegion reg = QRect(0, 0, width(), height());
+    QRegion reg;
     int screenId = screen();
     if (screenId > -1 && m_containment->corona()) {
         reg = m_containment->corona()->availableScreenRegion(screenId);
+    }
+
+    if (!reg.isEmpty()) {
+        //make it relative
+        QRect geometry = m_containment->corona()->screenGeometry(screenId);
+        reg.translate(- geometry.topLeft());
+    } else {
+        reg = QRect(0, 0, width(), height());
     }
 
     const QRect rect(qBound(reg.boundingRect().left(), x, reg.boundingRect().right() - w),
