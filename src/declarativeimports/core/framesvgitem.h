@@ -210,6 +210,7 @@ Q_SIGNALS:
     void enabledBordersChanged();
     void fromCurrentThemeChanged();
     void colorGroupChanged();
+    void repaintNeeded();
 
 private Q_SLOTS:
     void doUpdate();

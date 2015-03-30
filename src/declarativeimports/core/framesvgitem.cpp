@@ -293,6 +293,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     emit imagePathChanged();
     m_margins->update();
+    m_fixedMargins->update();
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
@@ -325,6 +326,7 @@ void FrameSvgItem::setPrefix(const QString &prefix)
 
     emit prefixChanged();
     m_margins->update();
+    m_fixedMargins->update();
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
@@ -378,6 +380,7 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
     m_textureChanged = true;
+    m_margins->update();
     update();
 }
 
@@ -419,6 +422,9 @@ void FrameSvgItem::doUpdate()
     m_textureChanged = true;
 
     update();
+    m_margins->update();
+    m_fixedMargins->update();
+    emit repaintNeeded();
 }
 
 Plasma::FrameSvg *FrameSvgItem::frameSvg() const
