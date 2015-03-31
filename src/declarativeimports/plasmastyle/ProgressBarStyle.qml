@@ -39,6 +39,12 @@ ProgressBarStyle {
         onRepaintNeeded: {
             preferredWidth = barSvg.elementSize("hint-bar-size").width
             preferredHeight = barSvg.elementSize("hint-bar-size").height
+            if (preferredWidth == 0) {
+                preferredWidth = barSvg.elementSize("bar-inactive-left").width + barSvg.elementSize("bar-inactive-right").width 
+            }
+            if (preferredHeight == 0) {
+                preferredHeight = barSvg.elementSize("bar-inactive-top").width + barSvg.elementSize("bar-inactive-bottom").width 
+            }
         }
     }
 
