@@ -43,7 +43,7 @@ ProgressBarStyle {
                 preferredWidth = barSvg.elementSize("bar-inactive-left").width + barSvg.elementSize("bar-inactive-right").width 
             }
             if (preferredHeight == 0) {
-                preferredHeight = barSvg.elementSize("bar-inactive-top").width + barSvg.elementSize("bar-inactive-bottom").width 
+                preferredHeight = barSvg.elementSize("bar-inactive-top").height + barSvg.elementSize("bar-inactive-bottom").height
             }
         }
     }
