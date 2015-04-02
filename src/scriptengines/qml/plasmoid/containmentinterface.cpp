@@ -167,6 +167,11 @@ void ContainmentInterface::init()
     connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
             this, &ContainmentInterface::containmentTypeChanged);
 
+    connect(m_containment.data()->actions(), &KActionCollection::inserted,
+            this, &ContainmentInterface::actionsChanged);
+    connect(m_containment.data()->actions(), &KActionCollection::removed,
+            this, &ContainmentInterface::actionsChanged);
+
     if (m_containment->corona()) {
         connect(m_containment->corona(), &Plasma::Corona::availableScreenRegionChanged,
                 this, &ContainmentInterface::availableScreenRegionChanged);
@@ -797,7 +802,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
     foreach (const QString &name, actionOrder) {
         QAction *a = orderedActions.value(name);
-        if (a && a->isVisible() && !a->menu()) {
+        if (a && !a->menu()) {
             actionList << a;
         }
         ++i;
