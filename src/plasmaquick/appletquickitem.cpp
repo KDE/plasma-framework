@@ -568,14 +568,14 @@ int AppletQuickItem::switchHeight() const
     return d->switchHeight;
 }
 
-void AppletQuickItem::setSwitchHeight(int width)
+void AppletQuickItem::setSwitchHeight(int height)
 {
-    if (d->switchHeight == width) {
+    if (d->switchHeight == height) {
         return;
     }
 
-    d->switchHeight = width;
-    emit switchHeightChanged(width);
+    d->switchHeight = height;
+    emit switchHeightChanged(height);
 }
 
 QQmlComponent *AppletQuickItem::compactRepresentation()
