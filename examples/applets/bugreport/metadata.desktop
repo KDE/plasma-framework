@@ -65,7 +65,6 @@ Keywords[x-test]=xxplasmaxx;xxbugzillaxx;xxbugxx;xxdevelopmentxx;xxsupportxx;
 Keywords[zh_CN]=plasma;bugzilla;bug;development;support;错误;开发;支持;
 Keywords[zh_TW]=plasma;bugzilla;bug;development;support;
 Name=Bug
-Name[ast]=Fallu
 Name[ca]=Error
 Name[cs]=Chyba
 Name[da]=Programfejl
