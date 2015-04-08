@@ -251,6 +251,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         lastModified = info.lastModified().toTime_t();
     }
 
+    q->resize();
     emit q->imagePathChanged();
 
     return updateNeeded;
