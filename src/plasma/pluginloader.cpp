@@ -25,6 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kplugintrader.h>
+#include <KPluginLoader>
 #include <kpackage/packageloader.h>
 
 #include "config-plasma.h"
@@ -251,6 +252,27 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
+    // Look for C++ plugins first
+    auto filter = [&name](const KPluginMetaData &md) -> bool
+    {
+        return md.pluginId() == name;
+    };
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->dataEnginePluginDir, filter);
+
+    if (plugins.count()) {
+        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
+        KPluginLoader loader(lst.first().libraryPath());
+        const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
+        KPluginFactory *factory = loader.factory();
+        if (factory) {
+            engine = factory->create<Plasma::DataEngine>(0, argsWithMetaData);
+        }
+    }
+    if (engine) {
+        return engine;
+    }
+
+    // Fall back to querying scripted plugins
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
 
     // First check with KServiceTypeTrader as that is where scripted engines will be
@@ -258,10 +280,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
     if (!offers.isEmpty()) {
         const QString api = offers.first()->property("X-Plasma-API").toString();
-        if (api.isEmpty()) {
-            // it is a C++ plugin, fetch it with KPluginTrader
-            engine = KPluginTrader::createInstanceFromQuery<Plasma::DataEngine>(d->dataEnginePluginDir, "Plasma/DataEngine", constraint, 0);
-        } else {
+        if (!api.isEmpty()) {
             // it is a scripted plugin, load it via a package
             engine = new DataEngine(KPluginInfo(offers.first()), 0);
         }
