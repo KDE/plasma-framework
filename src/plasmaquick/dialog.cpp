@@ -829,19 +829,23 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     if (outsideParentWindow) {
         parentGeometryBounds = item->window()->geometry();
     } else {
-        parentGeometryBounds = QRect(pos.toPoint(), QSize(item->width(), item->height()));
+        parentGeometryBounds = item->mapRectToScene(item->boundingRect()).toRect();
+        if (item->window()) {
+            parentGeometryBounds.moveTopLeft(item->window()->mapToGlobal(parentGeometryBounds.topLeft()));
+            pos = parentGeometryBounds.topLeft();
+        }
     }
 
-    const QPoint topPoint(pos.x() + (item->boundingRect().width() - size.width()) / 2,
+    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2,
                           parentGeometryBounds.top() - size.height());
-    const QPoint bottomPoint(pos.x() + (item->boundingRect().width() - size.width()) / 2,
+    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2,
                              parentGeometryBounds.bottom());
 
     const QPoint leftPoint(parentGeometryBounds.left() - size.width(),
-                           pos.y() + (item->boundingRect().height() - size.height()) / 2);
+                           pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
     const QPoint rightPoint(parentGeometryBounds.right(),
-                            pos.y() + (item->boundingRect().height() - size.height()) / 2);
+                            pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
     QPoint dialogPos;
     if (d->location == Plasma::Types::TopEdge) {
