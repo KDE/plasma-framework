@@ -654,6 +654,12 @@ bool AppletInterface::event(QEvent *event)
                 actions << wi->contextualActions();
             }
         }
+
+        //add any actions of the corona
+        if (applet()->containment() && applet()->containment()->corona()) {
+            actions << applet()->containment()->corona()->actions()->actions();
+        }
+
         bool keySequenceUsed = false;
         for (auto a : actions) {
 
