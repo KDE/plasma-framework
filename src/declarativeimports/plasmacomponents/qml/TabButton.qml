@@ -142,6 +142,8 @@ Item {
         anchors.fill: parent
         rows: 1
         columns: 1
+        rowSpacing: 0
+        columnSpacing: 0
         flow: internal.portrait ? GridLayout.LeftToRight : GridLayout.TopToBottom
 
         PlasmaCore.IconItem {
