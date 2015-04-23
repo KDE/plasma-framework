@@ -46,17 +46,11 @@
 #include <kdeclarative/qmlobject.h>
 #include <kdeclarative/configpropertymap.h>
 
-K_EXPORT_PLASMA_APPLETSCRIPTENGINE(declarativeappletscript, DeclarativeAppletScript)
-
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
       m_interface(0),
       m_args(args)
 {
-    // Chop off list entry added by KService::createInstance() before we
-    // hand this to the applet via externalData() later.
-    m_args.removeLast();
-
     //qmlRegisterType<AppletInterface>();
     //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
     /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
@@ -131,6 +125,8 @@ QList<QAction *> DeclarativeAppletScript::contextualActions()
 
     return m_interface->contextualActions();
 }
+
+K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON(plasma_appletscript_declarative, DeclarativeAppletScript, "plasma-scriptengine-applet-declarative.json")
 
 #include "declarativeappletscript.moc"
 

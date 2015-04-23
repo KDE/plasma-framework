@@ -42,7 +42,6 @@
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <KConfigLoader>
 #include <kwindowsystem.h>
 
