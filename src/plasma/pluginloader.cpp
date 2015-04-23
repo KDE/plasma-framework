@@ -58,6 +58,7 @@ public:
         : isDefaultLoader(false),
           dataEnginePluginDir("plasma/dataengine"),
           packageStructurePluginDir("plasma/packagestructure"),
+          plasmoidsPluginDir("plasma/plasmoids"),
           packageRE("[^a-zA-Z0-9\\-_]")
     {
     }
@@ -70,6 +71,7 @@ public:
     bool isDefaultLoader;
     QString dataEnginePluginDir;
     QString packageStructurePluginDir;
+    QString plasmoidsPluginDir;
     QRegExp packageRE;
 };
 
@@ -167,6 +169,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return applet;
     }
 
+    //TODO: remove KServiceTypeTrader here
     // the application-specific appletLoader failed to create an applet, here we try with our own logic.
     const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
@@ -202,34 +205,49 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     QVariantList allArgs;
     allArgs << offer->storageId() << appletId << args;
-    if (!offer->property("X-Plasma-API").toString().isEmpty() &&
-        offer->property("Library").toString().isEmpty()) {
-#ifndef NDEBUG
-        // qDebug() << "we have a script using the"
-        //         << offer->property("X-Plasma-API").toString() << "API";
-#endif
-        if (isContainment) {
-            return new Containment(0, allArgs);
-        } else {
-            if (offer->serviceTypes().contains("Plasma/Containment")) {
-                return new Containment(0, allArgs);
-            } else {
-                return new Applet(0, allArgs);
+
+    if (!offer->property("Library").toString().isEmpty()) {
+        // backwards compatibility: search in the root plugins directory
+        // TODO: remove when Plasma 5.4 is released
+        {
+            KPluginLoader loader(offer->property("Library").toString());
+            if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+                return 0;
             }
+            KPluginFactory *factory = loader.factory();
+            if (factory) {
+                applet = factory->create<Plasma::Applet>(0, allArgs);
+            }
+            if (applet) {
+                return applet;
+            }
+        }
+
+        // Look for C++ plugins first
+        auto filter = [&name](const KPluginMetaData &md) -> bool
+        {
+            return md.pluginId() == name;
+        };
+        QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->plasmoidsPluginDir, filter);
+
+        if (plugins.count()) {
+            KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
+            KPluginLoader loader(lst.first().libraryPath());
+            if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+                return 0;
+            }
+            KPluginFactory *factory = loader.factory();
+            if (factory) {
+                applet = factory->create<Plasma::Applet>(0, allArgs);
+            }
+        }
+        if (applet) {
+            return applet;
         }
     }
 
-    KPluginLoader plugin(*offer);
-
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
-        return 0;
-    }
-
-    QString error;
-    applet = offer->createInstance<Plasma::Applet>(0, allArgs, &error);
-
     if (!applet) {
-        qWarning() << "Could not load applet" << name << "! reason given:" << error <<"Falling back to an empty one";
+        qWarning() << "Could not load applet" << name << "Falling back to an empty one";
 
         if (isContainment) {
             return new Containment(0, allArgs);
