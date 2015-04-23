@@ -456,7 +456,7 @@ QString AppletPrivate::globalName() const
     if (!appletDescription.isValid()) {
         return QString();
     }
-
+return appletDescription.pluginName();
     return appletDescription.service()->library();
 }
 

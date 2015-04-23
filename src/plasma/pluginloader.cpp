@@ -169,95 +169,77 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return applet;
     }
 
-    //TODO: remove KServiceTypeTrader here
-    // the application-specific appletLoader failed to create an applet, here we try with our own logic.
-    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-
-    bool isContainment = false;
-    if (offers.isEmpty()) {
-        //TODO: what would be -really- cool is offer to try and download the applet
-        //      from the network at this point
-        offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-        if (offers.count() > 0) {
-            isContainment = true;
-        }
-    }
-
-    if (offers.isEmpty()) {
-#ifndef NDEBUG
-        // qDebug() << "offers is empty for " << name;
-#endif
-        return 0;
-    }
-
-#ifndef NDEBUG
-    if (offers.count() > 1) {
-        // qDebug() << "hey! we got more than one! let's blindly take the first one";
-    }
-#endif
-
-    KService::Ptr offer = offers.first();
-
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
     }
 
-    QVariantList allArgs;
-    allArgs << offer->storageId() << appletId << args;
 
-    if (!offer->property("Library").toString().isEmpty()) {
-        // backwards compatibility: search in the root plugins directory
-        // TODO: remove when Plasma 5.4 is released
-        {
-            KPluginLoader loader(offer->property("Library").toString());
-            if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
-                return 0;
-            }
-            KPluginFactory *factory = loader.factory();
-            if (factory) {
-                applet = factory->create<Plasma::Applet>(0, allArgs);
-            }
-            if (applet) {
-                return applet;
-            }
+
+    // Look for C++ plugins first
+    auto filter = [&name](const KPluginMetaData &md) -> bool
+    {
+        return md.pluginId() == name;
+    };
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->plasmoidsPluginDir, filter);
+
+    if (plugins.count()) {
+        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
+        KPluginLoader loader(lst.first().libraryPath());
+        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+            return 0;
         }
+        KPluginFactory *factory = loader.factory();
+        if (factory) {
+            QVariantList allArgs;
+            allArgs << loader.metaData().toVariantMap() << appletId << args;
+            applet = factory->create<Plasma::Applet>(0, allArgs);
+        }
+    }
+    if (applet) {
+        return applet;
+    }
 
-        // Look for C++ plugins first
-        auto filter = [&name](const KPluginMetaData &md) -> bool
-        {
-            return md.pluginId() == name;
-        };
-        QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->plasmoidsPluginDir, filter);
 
-        if (plugins.count()) {
-            KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-            KPluginLoader loader(lst.first().libraryPath());
-            if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
-                return 0;
-            }
-            KPluginFactory *factory = loader.factory();
-            if (factory) {
-                applet = factory->create<Plasma::Applet>(0, allArgs);
-            }
+    //At this point we depend on the desktop file of a package for the metadata
+    //TODO:: Need a cached PackageLoader::listPackageMetadata?
+    KPackage::Package p(new PlasmoidPackage());
+    p.setPath(name);
+
+    if (!p.isValid()) {
+        return 0;
+    }
+
+    // backwards compatibility: search in the root plugins directory
+    // TODO: remove when Plasma 5.4 is released
+    {
+        KPluginLoader loader(p.metadata().value("Library"));
+        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+            return 0;
+        }
+        KPluginFactory *factory = loader.factory();
+        if (factory) {
+            QVariantList allArgs;
+            allArgs << p.metadata().fileName() << appletId << args;
+            applet = factory->create<Plasma::Applet>(0, allArgs);
         }
         if (applet) {
             return applet;
         }
     }
 
+
     if (!applet) {
         qWarning() << "Could not load applet" << name << "Falling back to an empty one";
 
-        if (isContainment) {
+        QVariantList allArgs;
+        allArgs << p.metadata().fileName() << appletId << args;
+
+        if (p.metadata().serviceTypes().contains("Plasma/Containment")) {
             return new Containment(0, allArgs);
         } else {
-            if (offer->serviceTypes().contains("Plasma/Containment")) {
-                return new Containment(0, allArgs);
-            } else {
-                return new Applet(0, allArgs);
-            }
+            return new Applet(0, allArgs);
         }
+
     }
 
     return applet;
