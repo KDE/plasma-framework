@@ -56,9 +56,6 @@ class PluginLoaderPrivate
 public:
     PluginLoaderPrivate()
         : isDefaultLoader(false),
-          dataEnginePluginDir("plasma/dataengine"),
-          packageStructurePluginDir("plasma/packagestructure"),
-          plasmoidsPluginDir("plasma/plasmoids"),
           packageRE("[^a-zA-Z0-9\\-_]")
     {
     }
@@ -70,13 +67,19 @@ public:
     static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
     bool isDefaultLoader;
-    QString dataEnginePluginDir;
-    QString packageStructurePluginDir;
-    QString plasmoidsPluginDir;
+
+    static QString s_dataEnginePluginDir;
+    static QString s_packageStructurePluginDir;
+    static QString s_plasmoidsPluginDir;
     QRegExp packageRE;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
+
+QString PluginLoaderPrivate::s_dataEnginePluginDir("plasma/dataengine");
+QString PluginLoaderPrivate::s_packageStructurePluginDir("plasma/packagestructure");
+QString PluginLoaderPrivate::s_plasmoidsPluginDir("plasma/plasmoids");
+
 
 QSet<QString> PluginLoaderPrivate::knownCategories()
 {
@@ -191,7 +194,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     {
         return md.pluginId() == name;
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->plasmoidsPluginDir, filter);
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_plasmoidsPluginDir, filter);
 
     if (plugins.count()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
@@ -264,7 +267,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     {
         return md.pluginId() == name;
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(d->dataEnginePluginDir, filter);
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
 
     if (plugins.count()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
@@ -289,22 +292,28 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
 {
-    QString constraint;
-
+    QStringList engines;
+    // Look for C++ plugins first
+    auto filter = [&parentApp](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-KDE-ParentApp") == parentApp;
+    };
+    QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
     } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
+    for (auto plugin : plugins) {
+        engines << plugin.pluginId();
+    }
 
-    QStringList engines;
-    foreach (const KService::Ptr &service, offers) {
-        QString name = service->property("X-KDE-PluginInfo-Name").toString();
-        if (!name.isEmpty()) {
-            engines.append(name);
-        }
+
+    //TODO FIXME: PackageLoader needs to have a function to inject packageStructures
+    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages("Plasma/DataEngine");
+    for (auto plugin : packagePlugins) {
+        engines << plugin.pluginId();
     }
 
     return engines;
@@ -466,7 +475,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     //fallback to old structures
     } else {
         const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(d->packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
+        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
         if (structure) {
             structure->d->internalStructure = new PackageStructureWrapper(structure);
         }
@@ -705,7 +714,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
-    list.append(KPluginTrader::self()->query(d->dataEnginePluginDir, "Plasma/DataEngine", constraint));
+    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_dataEnginePluginDir, "Plasma/DataEngine", constraint));
     return list;
 }
 
