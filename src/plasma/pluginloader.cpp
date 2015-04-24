@@ -65,6 +65,7 @@ public:
 
     static QSet<QString> knownCategories();
     static QString parentAppConstraint(const QString &parentApp = QString());
+    static KPackage::Package plasmoidPackage(const QString &name);
 
     static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
@@ -118,6 +119,16 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
     }
 
     return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
+}
+
+KPackage::Package PluginLoaderPrivate::plasmoidPackage(const QString &name)
+{
+    //At this point we depend on the desktop file of a package for the metadata
+    //TODO:: Need a cached PackageLoader::listPackageMetadata?
+    KPackage::Package p(new PlasmoidPackage());
+    p.setPath(name);
+
+    return p;
 }
 
 PluginLoader::PluginLoader()
@@ -200,11 +211,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    //At this point we depend on the desktop file of a package for the metadata
-    //TODO:: Need a cached PackageLoader::listPackageMetadata?
-    KPackage::Package p(new PlasmoidPackage());
-    p.setPath(name);
-
+    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(name);
     if (!p.isValid()) {
         return 0;
     }
@@ -272,21 +279,12 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
-    // Fall back to querying scripted plugins
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-
-    // First check with KServiceTypeTrader as that is where scripted engines will be
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
-
-    if (!offers.isEmpty()) {
-        const QString api = offers.first()->property("X-Plasma-API").toString();
-        if (!api.isEmpty()) {
-            // it is a scripted plugin, load it via a package
-            engine = new DataEngine(KPluginInfo(offers.first()), 0);
-        }
+    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(name);
+    if (!p.isValid()) {
+        return 0;
     }
 
-    return engine;
+    return new DataEngine(KPluginInfo(p.metadata().fileName()), 0);
 }
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
