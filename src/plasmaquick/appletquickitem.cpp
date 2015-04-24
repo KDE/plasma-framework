@@ -402,6 +402,7 @@ AppletQuickItem::~AppletQuickItem()
     delete d->compactRepresentationExpanderItem;
 
     AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->engine());
+    delete d;
 }
 
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
