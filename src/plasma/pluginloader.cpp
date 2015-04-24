@@ -326,16 +326,32 @@ KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
-    QString constraint = QString("[X-KDE-PluginInfo-Category] == '%1'").arg(category);
+    KPluginInfo::List list;
 
+    // Look for C++ plugins first
+    auto filterNormal = [&category](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-KDE-PluginInfo-Category") == category;
+    };
+    auto filterParentApp = [&category, &parentApp](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-KDE-ParentApp") == parentApp && md.value("X-KDE-PluginInfo-Category") == category;
+    };
+    QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        constraint.append(" and not exist [X-KDE-ParentApp]");
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterNormal);
     } else {
-        constraint.append(" and [X-KDE-ParentApp] == '").append(parentApp).append("'");
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterParentApp);
     }
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/DataEngine", constraint);
-    return KPluginInfo::fromServices(offers);
+    list = KPluginInfo::fromMetaData(plugins);
+
+
+    //TODO FIXME: PackageLoader needs to have a function to inject packageStructures
+    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages("Plasma/DataEngine");
+    list << KPluginInfo::fromMetaData(packagePlugins.toVector());
+
+    return list;
 }
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
