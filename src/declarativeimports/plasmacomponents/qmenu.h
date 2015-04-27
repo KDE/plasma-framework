@@ -67,6 +67,7 @@ public:
     Q_INVOKABLE void clearMenuItems();
     Q_INVOKABLE void addMenuItem(const QString &text);
     Q_INVOKABLE void addMenuItem(QMenuItem *item);
+    Q_INVOKABLE void addSection(const QString &text);
 
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;

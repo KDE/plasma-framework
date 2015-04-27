@@ -37,6 +37,10 @@ class QMenuItem : public QQuickItem
      * If true, the menu item will behave like a separator
      */
     Q_PROPERTY(bool separator READ separator WRITE setSeparator NOTIFY separatorChanged)
+    /**
+     * If true, the menu item will behave like a section
+     */
+    Q_PROPERTY(bool section READ section WRITE setSection NOTIFY sectionChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QVariant icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QAction *action READ action WRITE setAction NOTIFY actionChanged)
@@ -52,6 +56,8 @@ public:
     void setIcon(const QVariant &i);
     bool separator() const;
     void setSeparator(bool s);
+    bool section() const;
+    void setSection(bool s);
     QString text() const;
     void setText(const QString &t);
 
@@ -67,6 +73,7 @@ Q_SIGNALS:
     void actionChanged();
     void iconChanged();
     void separatorChanged();
+    void sectionChanged();
     void textChanged();
     void toggled(bool checked);
     void checkableChanged();
@@ -75,6 +82,7 @@ private:
     void updateAction();
     QAction *m_action;
     QVariant m_icon;
+    bool m_section;
 };
 
 #endif // QMENUITEM_H

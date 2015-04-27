@@ -84,7 +84,15 @@ void QMenuProxy::setVisualParent(QObject *parent)
         action->setMenu(m_menu);
         m_menu->clear();
         foreach (QMenuItem *item, m_items) {
-            m_menu->addAction(item->action());
+            if (item->section()) {
+                if (!item->isVisible()) {
+                    continue;
+                }
+
+                m_menu->addSection(item->text());
+            } else {
+                m_menu->addAction(item->action());
+            }
         }
         m_menu->updateGeometry();
     }
@@ -116,7 +124,11 @@ bool QMenuProxy::event(QEvent *event)
         QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
         //FIXME: linear complexity here
         if (mi && !m_items.contains(mi)) {
-            m_menu->addAction(mi->action());
+            if (mi->separator()) {
+                m_menu->addSection(mi->text());
+            } else {
+                m_menu->addAction(mi->action());
+            }
             m_items << mi;
         }
         break;
@@ -161,6 +173,11 @@ void QMenuProxy::addMenuItem(QMenuItem *item)
     m_items << item;
 }
 
+void QMenuProxy::addSection(const QString &text)
+{
+    m_menu->addSection(text);
+}
+
 void QMenuProxy::itemTriggered(QAction *action)
 {
     QMenuItem *item = qobject_cast<QMenuItem *>(action);
@@ -178,8 +195,17 @@ void QMenuProxy::open(int x, int y)
     qDebug() << "opening menu at " << x << y;
     m_menu->clear();
     foreach (QMenuItem *item, m_items) {
-        qDebug() << "Adding action: " << item->text();
-        m_menu->addAction(item->action());
+        if (item->section()) {
+            if (!item->isVisible()) {
+                continue;
+            }
+
+            qDebug() << "Adding section: " << item->text();
+            m_menu->addSection(item->text());
+        } else {
+            qDebug() << "Adding action: " << item->text();
+            m_menu->addAction(item->action());
+        }
     }
 
     QQuickItem *parentItem;

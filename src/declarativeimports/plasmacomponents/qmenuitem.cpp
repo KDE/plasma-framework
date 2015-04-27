@@ -22,8 +22,8 @@
 
 QMenuItem::QMenuItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_action(0)
-
+      m_action(0),
+      m_section(false)
 {
     setAction(new QAction(this));
     connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
@@ -76,6 +76,16 @@ bool QMenuItem::separator() const
 void QMenuItem::setSeparator(bool s)
 {
     m_action->setSeparator(s);
+}
+
+bool QMenuItem::section() const
+{
+    return m_section;
+}
+
+void QMenuItem::setSection(bool s)
+{
+    m_section = s;
 }
 
 QString QMenuItem::text() const
