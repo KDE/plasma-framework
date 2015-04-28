@@ -194,7 +194,7 @@ Item {
                     }
                 }
 
-                var maxAllowedSize = theme.mSize(theme.defaultFont).width * 14
+                var maxAllowedSize = theme.mSize(theme.defaultFont).width * 24
                 var itemWidth = Math.min(maxAllowedSize, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
                 var itemHeight = Math.min(maxAllowedSize, (root.height - (visibleChildCount-1)*10) / visibleChildCount)
 
