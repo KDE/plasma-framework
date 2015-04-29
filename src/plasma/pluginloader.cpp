@@ -71,6 +71,7 @@ public:
     static QString s_dataEnginePluginDir;
     static QString s_packageStructurePluginDir;
     static QString s_plasmoidsPluginDir;
+    static QString s_servicesPluginDir;
     QRegExp packageRE;
 };
 
@@ -79,7 +80,7 @@ QSet<QString> PluginLoaderPrivate::s_customCategories;
 QString PluginLoaderPrivate::s_dataEnginePluginDir("plasma/dataengine");
 QString PluginLoaderPrivate::s_packageStructurePluginDir("plasma/packagestructure");
 QString PluginLoaderPrivate::s_plasmoidsPluginDir("plasma/plasmoids");
-
+QString PluginLoaderPrivate::s_servicesPluginDir("plasma/services");
 
 QSet<QString> PluginLoaderPrivate::knownCategories()
 {
@@ -368,35 +369,34 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
         return new Storage(parent);
     }
 
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Service", constraint);
 
-    if (offers.isEmpty()) {
-#ifndef NDEBUG
-        // qDebug() << "offers is empty for " << name;
-#endif
+    // Look for C++ plugins first
+    auto filter = [&name](const KPluginMetaData &md) -> bool
+    {
+        return md.pluginId() == name;
+    };
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_servicesPluginDir, filter);
+
+    if (plugins.count()) {
+        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
+        KPluginLoader loader(lst.first().libraryPath());
+        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+            return 0;
+        }
+        KPluginFactory *factory = loader.factory();
+        if (factory) {
+            service = factory->create<Plasma::Service>(0, args);
+        }
+    }
+
+    if (service) {
+        if (service->name().isEmpty()) {
+            service->setName(name);
+        }
+        return service;
+    } else {
         return new NullService(name, parent);
     }
-
-    KService::Ptr offer = offers.first();
-    QString error;
-
-    if (Plasma::isPluginVersionCompatible(KPluginLoader(*offer).pluginVersion())) {
-        service = offer->createInstance<Plasma::Service>(parent, args, &error);
-    }
-
-    if (!service) {
-#ifndef NDEBUG
-        // qDebug() << "Couldn't load Service \"" << name << "\"! reason given: " << error;
-#endif
-        return new NullService(name, parent);
-    }
-
-    if (service->name().isEmpty()) {
-        service->setName(name);
-    }
-
-    return service;
 }
 
 ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, const QString &name, const QVariantList &args)
