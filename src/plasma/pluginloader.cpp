@@ -433,7 +433,8 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
         return actions;
     }
 
-    //FIXME: backwards compatibility
+    //FIXME: this is only for backwards compatibility, but probably will have to stay
+    //for the time being
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
 
@@ -698,10 +699,12 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
-    const QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimeType);
-    //qDebug() << mimeType << constraint;
-    const KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-    return KPluginInfo::fromServices(offers);
+    auto filter = [&mimeType](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-KDE-ServiceTypes").contains("Plasma/Containment") && md.value("X-Plasma-DropMimeTypes").contains(mimeType);
+    };
+
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
 }
 
 QStringList PluginLoader::listContainmentTypes()
@@ -753,8 +756,13 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
         constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
     }
 
+    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, "Plasma/ContainmentActions", constraint));
+
+    //FIXME: this is only for backwards compatibility, but probably will have to stay
+    //for the time being
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
-    return KPluginInfo::fromServices(offers);
+    list.append(KPluginInfo::fromServices(offers));
+    return list;
 }
 
 Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
