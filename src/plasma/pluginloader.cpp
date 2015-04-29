@@ -613,45 +613,26 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 
 QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)
 {
-    QString constraint = PluginLoaderPrivate::parentAppConstraint(parentApp);
-    constraint.append(" and exist [X-KDE-PluginInfo-Category]");
-
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
-    foreach (const QString &category, excluded) {
-        constraint.append(" and [X-KDE-PluginInfo-Category] != '").append(category).append("'");
-    }
+    auto filter = [&parentApp, &excluded, visibleOnly](const KPluginMetaData &md) -> bool
+    {
+        const QString pa = md.value("X-KDE-ParentApp");
+        return (pa.isEmpty() || pa == parentApp) && (excluded.isEmpty() || excluded.contains(md.value("X-KDE-PluginInfo-Category"))) && (!visibleOnly || !md.isHidden());
+    };
+    QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter);
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
 
     QStringList categories;
-    QSet<QString> known = PluginLoaderPrivate::knownCategories();
-    foreach (const KService::Ptr &applet, offers) {
-        QString appletCategory = applet->property("X-KDE-PluginInfo-Category").toString();
-        if (visibleOnly && applet->noDisplay()) {
-            // we don't want to show the hidden category
-            continue;
-        }
-
-        //qDebug() << "   and we have " << appletCategory;
-        if (!appletCategory.isEmpty() && !known.contains(appletCategory.toLower())) {
-#ifndef NDEBUG
-            // qDebug() << "Unknown category: " << applet->name() << "says it is in the"
-            //         << appletCategory << "category which is unknown to us";
-#endif
-            appletCategory.clear();
-        }
-
-        if (appletCategory.isEmpty()) {
+    for (auto plugin : allApplets) {
+        if (plugin.category().isEmpty()) {
             if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
                 categories << i18nc("misc category", "Miscellaneous");
             }
-        } else  if (!categories.contains(appletCategory)) {
-            categories << appletCategory;
+        } else {
+            categories << plugin.category();
         }
     }
-
-    categories.sort();
     return categories;
 }
 
