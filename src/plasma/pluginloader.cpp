@@ -542,6 +542,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         list = internalAppletInfo(category);
     }
 
+    //FIXME: this assumes we are always use packages.. no pure c++
     if (category.isEmpty()) { //use all but the excluded categories
         KConfigGroup group(KSharedConfig::openConfig(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
@@ -570,20 +571,28 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
 KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
 {
-    QString constraint = PluginLoaderPrivate::parentAppConstraint();
-    constraint.append(QString(" and '%1' in [X-Plasma-DropMimeTypes]").arg(mimeType));
-    //qDebug() << "listAppletInfoForMimetype with" << mimeType << constraint;
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-    return KPluginInfo::fromServices(offers);
+    auto filter = [&mimeType](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-Plasma-DropMimeTypes").contains(mimeType);
+    };
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
 }
 
 KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 {
-    QString constraint = PluginLoaderPrivate::parentAppConstraint();
-    constraint.append(" and exist [X-Plasma-DropUrlPatterns]");
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
+    QString parentApp;
+    QCoreApplication *app = QCoreApplication::instance();
+    if (app) {
+        parentApp = app->applicationName();
+    }
 
-    KPluginInfo::List allApplets = KPluginInfo::fromServices(offers);
+    auto filter = [&parentApp](const KPluginMetaData &md) -> bool
+    {
+        const QString pa = md.value("X-KDE-ParentApp");
+        return (pa.isEmpty() || pa == parentApp) && !md.value("X-Plasma-DropUrlPatterns").isEmpty();
+    };
+    KPluginInfo::List allApplets =  KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+
     KPluginInfo::List filtered;
     foreach (const KPluginInfo &info, allApplets) {
         QStringList urlPatterns = info.property("X-Plasma-DropUrlPatterns").toStringList();
