@@ -652,14 +652,12 @@ QString PluginLoader::appletCategory(const QString &appletName)
         return QString();
     }
 
-    const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(appletName);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Applet", constraint);
-
-    if (offers.isEmpty()) {
+    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(appletName);
+    if (!p.isValid()) {
         return QString();
     }
 
-    return offers.first()->property("X-KDE-PluginInfo-Category").toString();
+    return p.metadata().category();
 }
 
 KPluginInfo::List PluginLoader::listContainments(const QString &category,
@@ -672,41 +670,30 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &category,
         const QString &parentApp)
 {
-    QString constraint;
-
-    if (parentApp.isEmpty()) {
-        constraint.append("(not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '')");
-    } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
-    }
-
-    if (!type.isEmpty()) {
-        if (!constraint.isEmpty()) {
-            constraint.append(" and (");
+    KConfigGroup group(KSharedConfig::openConfig(), "General");
+    const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
+    auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool
+    {
+        if (!md.value("X-KDE-ServiceTypes").contains("Plasma/Containment")) {
+            return false;
+        }
+        const QString pa = md.value("X-KDE-ParentApp");
+        if (!pa.isEmpty() && pa != parentApp) {
+            return false;
         }
 
-        //constraint.append("'").append(type).append("' == [X-Plasma-ContainmentType]");
-        if (type == "Desktop") {
-            constraint += "not exist [X-Plasma-ContainmentType] or ";
-        }
-        constraint += "[X-Plasma-ContainmentType] == '" + type + "')";
-        //by default containments are Desktop, so is not mandatory to specify it
-    }
-
-    if (!category.isEmpty()) {
-        if (!constraint.isEmpty()) {
-            constraint.append(" and ");
+        if (!type.isEmpty() && md.value("X-Plasma-ContainmentType") != type) {
+            return false;
         }
 
-        constraint.append("[X-KDE-PluginInfo-Category] == '").append(category).append("'");
-        if (category == "Miscellaneous") {
-            constraint.append(" or (not exist [X-KDE-PluginInfo-Category] or [X-KDE-PluginInfo-Category] == '')");
+        if (!category.isEmpty() && md.value("X-KDE-PluginInfo-Category") != category) {
+            return false;
         }
-    }
 
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Containment", constraint);
-    // qDebug() << "constraint was" << constraint << "which got us" << offers.count() << "matches";
-    return KPluginInfo::fromServices(offers);
+        return true;
+    };
+
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
 }
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
