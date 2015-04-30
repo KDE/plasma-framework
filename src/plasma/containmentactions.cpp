@@ -33,7 +33,6 @@
 
 #include <QDebug>
 #include <klocalizedstring.h>
-#include <kservicetypetrader.h>
 
 #include "version.h"
 

@@ -27,7 +27,6 @@
 
 #include <QDebug>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <ksharedconfig.h>
 #include <KConfigLoader>
 #include <KConfigSkeleton>

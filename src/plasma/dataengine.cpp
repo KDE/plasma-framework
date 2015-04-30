@@ -33,7 +33,6 @@
 
 #include <kplugininfo.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <klocalizedstring.h>
 
 #include "datacontainer.h"

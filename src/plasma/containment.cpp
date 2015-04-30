@@ -37,7 +37,6 @@
 #include <QDebug>
 #include <kauthorized.h>
 #include <klocalizedstring.h>
-#include <kservicetypetrader.h>
 #include <KConfigSkeleton>
 #include <KConfigLoader>
 

@@ -129,7 +129,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             // used by the installing app in any case, and the
             // package is properly installed - aseigo
 
-            //TODO: reduce code duplication with registerPackage below
+            //TODO: remove installation of the desktop file in kservices5 when possible
 
             const QString serviceName = servicePrefix + pluginName + ".desktop";
 
