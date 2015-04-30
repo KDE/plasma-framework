@@ -35,7 +35,6 @@
 #include <kactioncollection.h>
 #include <QDebug>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <klocalizedstring.h>
 #include <KConfigLoader>
 
@@ -503,13 +502,17 @@ bool AppletInterface::userConfiguring() const
 
 int AppletInterface::apiVersion() const
 {
-    const QString constraint("[X-Plasma-API] == 'declarative' and 'Applet' in [X-Plasma-ComponentTypes]");
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    if (offers.isEmpty()) {
+    // Look for C++ plugins first
+    auto filter = [](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-Plasma-API") == "declarativeappletscript" && md.value("X-Plasma-ComponentTypes").contains("Applet");
+    };
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines", filter);
+    if (plugins.isEmpty()) {
         return -1;
     }
-
-    return offers.first()->property("X-KDE-PluginInfo-Version", QVariant::Int).toInt();
+    
+    return plugins.first().value("X-KDE-PluginInfo-Version").toInt();
 }
 
 void AppletInterface::setAssociatedApplication(const QString &string)

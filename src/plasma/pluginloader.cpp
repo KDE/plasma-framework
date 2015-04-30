@@ -58,11 +58,15 @@ public:
         : isDefaultLoader(false),
           packageRE("[^a-zA-Z0-9\\-_]")
     {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new PlasmoidPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Theme", new ThemePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/ContainmentActions", new ContainmentActionsPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Generic", new GenericPackage());
     }
 
     static QSet<QString> knownCategories();
     static QString parentAppConstraint(const QString &parentApp = QString());
-    static KPackage::Package plasmoidPackage(const QString &name);
 
     static QSet<QString> s_customCategories;
     QHash<QString, QWeakPointer<PackageStructure> > structures;
@@ -125,16 +129,6 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
     }
 
     return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
-}
-
-KPackage::Package PluginLoaderPrivate::plasmoidPackage(const QString &name)
-{
-    //At this point we depend on the desktop file of a package for the metadata
-    //TODO:: Need a cached PackageLoader::listPackageMetadata?
-    KPackage::Package p(new PlasmoidPackage());
-    p.setPath(name);
-
-    return p;
 }
 
 PluginLoader::PluginLoader()
@@ -217,7 +211,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(name);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
     if (!p.isValid()) {
         return 0;
     }
@@ -285,7 +279,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
-    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(name);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
     if (!p.isValid()) {
         return 0;
     }
@@ -653,7 +647,7 @@ QString PluginLoader::appletCategory(const QString &appletName)
         return QString();
     }
 
-    const KPackage::Package p = PluginLoaderPrivate::plasmoidPackage(appletName);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", appletName);
     if (!p.isValid()) {
         return QString();
     }

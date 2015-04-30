@@ -24,7 +24,6 @@
 #include <kdeclarative/qmlobject.h>
 
 #include <kactioncollection.h>
-#include <kservicetypetrader.h>
 #include <kdesktopfile.h>
 #include <KConfigLoader>
 
