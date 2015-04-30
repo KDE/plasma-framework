@@ -290,6 +290,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
+
     QStringList engines;
     // Look for C++ plugins first
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool
@@ -317,11 +320,16 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
 
 KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
     return PluginLoader::self()->listDataEngineInfo(parentApp);
 }
 
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
+
     KPluginInfo::List list;
 
     // Look for C++ plugins first
@@ -664,11 +672,14 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &category,
         const QString &parentApp)
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
+
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool
     {
-        if (!md.value("X-KDE-ServiceTypes").contains("Plasma/Containment")) {
+        if (!md.serviceTypes().contains("Plasma/Containment")) {
             return false;
         }
         const QString pa = md.value("X-KDE-ParentApp");
@@ -692,6 +703,8 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
         return md.value("X-KDE-ServiceTypes").contains("Plasma/Containment") && md.value("X-Plasma-DropMimeTypes").contains(mimeType);
@@ -702,6 +715,8 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 
 QStringList PluginLoader::listContainmentTypes()
 {
+    //HACK: we actually need an instance for this to work correctly
+    self();
     KPluginInfo::List containmentInfos = listContainments();
     QSet<QString> types;
 
