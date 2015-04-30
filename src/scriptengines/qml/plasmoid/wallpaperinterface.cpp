@@ -35,6 +35,7 @@
 #include <QSignalMapper>
 
 #include <Plasma/PluginLoader>
+#include <kpackage/packageloader.h>
 
 QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
 
@@ -71,14 +72,14 @@ WallpaperInterface::~WallpaperInterface()
 
 KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
 {
-    QString constraint = QString("'%1' in [X-Plasma-DropMimeTypes]").arg(mimetype);
-    if (!formFactor.isEmpty()) {
-        constraint.append("[X-Plasma-FormFactors] ~~ '").append(formFactor).append("'");
-    }
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/Wallpaper", constraint);
-    qDebug() << offers.count() << constraint;
-    return KPluginInfo::fromServices(offers);
+    auto filter = [&mimetype, &formFactor](const KPluginMetaData &md) -> bool
+    {
+        if (!formFactor.isEmpty() && !md.value("X-Plasma-FormFactors").contains(formFactor)) {
+            return false;
+        }
+        return md.value("X-Plasma-DropMimeTypes").contains(mimetype);
+    };
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Wallpaper", QString(), filter).toVector());
 }
 
 Plasma::Package WallpaperInterface::package() const
