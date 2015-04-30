@@ -306,8 +306,6 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
         engines << plugin.pluginId();
     }
 
-
-    //TODO FIXME: PackageLoader needs to have a function to inject packageStructures
     const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages("Plasma/DataEngine");
     for (auto plugin : packagePlugins) {
         engines << plugin.pluginId();
