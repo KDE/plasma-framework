@@ -84,7 +84,7 @@ QSet<QString> PluginLoaderPrivate::s_customCategories;
 
 QString PluginLoaderPrivate::s_dataEnginePluginDir("plasma/dataengine");
 QString PluginLoaderPrivate::s_packageStructurePluginDir("plasma/packagestructure");
-QString PluginLoaderPrivate::s_plasmoidsPluginDir("plasma/plasmoids");
+QString PluginLoaderPrivate::s_plasmoidsPluginDir("plasma/applets");
 QString PluginLoaderPrivate::s_servicesPluginDir("plasma/services");
 QString PluginLoaderPrivate::s_containmentActionsPluginDir("plasma/containmentactions");
 
@@ -219,14 +219,15 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     // backwards compatibility: search in the root plugins directory
     // TODO: remove when Plasma 5.4 is released
     {
-        KPluginLoader loader(p.metadata().value("Library"));
+        KPluginInfo info = KPluginInfo::fromMetaData(p.metadata());
+        KPluginLoader loader(info.libraryPath());
         if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
             return 0;
         }
         KPluginFactory *factory = loader.factory();
         if (factory) {
             QVariantList allArgs;
-            allArgs << p.metadata().fileName() << appletId << args;
+            allArgs << loader.metaData().toVariantMap() << appletId << args;
             applet = factory->create<Plasma::Applet>(0, allArgs);
         }
         if (applet) {
