@@ -24,11 +24,6 @@
 #include <QDir>
 #include <QFile>
 #include <QIcon>
-#include <QQmlContext>
-#include <QQmlEngine>
-#include <QQmlExpression>
-#include <QQmlProperty>
-#include <QQmlComponent>
 #include <QSignalMapper>
 #include <QTimer>
 

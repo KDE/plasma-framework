@@ -34,7 +34,6 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <kdeclarative/qmlobject.h>
-#include <plasma/scripting/appletscript.h>
 
 #include <packageurlinterceptor.h>
 
