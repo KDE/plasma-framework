@@ -1,0 +1,1011 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2015-05-01 08:47+0000\n"
+"PO-Revision-Date: 2014-01-31 21:06+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: bosanski <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-12-06 06:21+0000\n"
+"X-Generator: Launchpad (build 16863)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr ""
+
+#: plasma/applet.cpp:121
+msgid "Script initialization failed"
+msgstr "Neuspjelo pripremanje skripte"
+
+#: plasma/applet.cpp:332
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#: plasma/applet.cpp:614
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktiviraj grafičku kontrolu %1"
+
+#: plasma/containment.cpp:126 plasma/private/applet_p.cpp:119
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "Ukloni ovaj %1"
+
+#: plasma/containment.cpp:131
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "%1 Postavke"
+
+#: plasma/corona.cpp:309 plasma/corona.cpp:382
+msgid "Lock Widgets"
+msgstr "Zaključaj grafičku kontrolu"
+
+#: plasma/corona.cpp:309
+msgid "Unlock Widgets"
+msgstr "Otključaj grafičku kontrolu"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+#: plasma/pluginloader.cpp:83
+msgid "Accessibility"
+msgstr "Pristupačnost"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:84
+msgid "Application Launchers"
+msgstr "pokretači programa"
+
+#: plasma/pluginloader.cpp:85
+msgid "Astronomy"
+msgstr "Astronomija"
+
+#: plasma/pluginloader.cpp:86
+msgid "Date and Time"
+msgstr "Datum i vrijeme"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:87
+msgid "Development Tools"
+msgstr "razvojne alatke"
+
+#: plasma/pluginloader.cpp:88
+msgid "Education"
+msgstr "Obrazovanje"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:89
+msgid "Environment and Weather"
+msgstr "priroda i vrijeme"
+
+#: plasma/pluginloader.cpp:90
+msgid "Examples"
+msgstr "Primjeri"
+
+#: plasma/pluginloader.cpp:91
+msgid "File System"
+msgstr "Datotečni sistem"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:92
+msgid "Fun and Games"
+msgstr "zabava i igre"
+
+#: plasma/pluginloader.cpp:93
+msgid "Graphics"
+msgstr "Grafika"
+
+#: plasma/pluginloader.cpp:94
+msgid "Language"
+msgstr "Jezik"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:95
+msgid "Mapping"
+msgstr "kartografija"
+
+#: plasma/pluginloader.cpp:96
+msgid "Miscellaneous"
+msgstr "Ostalo"
+
+#: plasma/pluginloader.cpp:97
+msgid "Multimedia"
+msgstr "Multimedija"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:98
+msgid "Online Services"
+msgstr "servisi na vezi"
+
+#: plasma/pluginloader.cpp:99
+msgid "Productivity"
+msgstr "Produktivnost"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:100
+msgid "System Information"
+msgstr "podaci o sistemu"
+
+#: plasma/pluginloader.cpp:101
+msgid "Utilities"
+msgstr "Alatke"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:102
+msgid "Windows and Tasks"
+msgstr "prozori i zadaci"
+
+#: plasma/pluginloader.cpp:587 plasma/pluginloader.cpp:588
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Ostalo"
+
+#: plasma/private/applet_p.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "%1 Settings"
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "%1 Postavke"
+
+#: plasma/private/applet_p.cpp:139
+#, fuzzy, kde-format
+#| msgid "The %2 widget did not define which ScriptEngine to use."
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Dodatak %2 nije odredio koji ScriptEngine će koristiti"
+
+#: plasma/private/applet_p.cpp:156
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Ne mogu da otvorim paket %1 neophodan za grafičku kontrolu %2."
+
+#: plasma/private/applet_p.cpp:171
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Ne mogu da stvorim skriptni motor %1 za grafičku kontrolu %2."
+
+#: plasma/private/applet_p.cpp:190
+msgid "Alternatives..."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:252
+#, fuzzy
+#| msgid "Widgets explorer UI"
+msgid "Widget Removed"
+msgstr "Istraživač dodataka UI"
+
+#: plasma/private/applet_p.cpp:253
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:255
+msgid "Panel Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:256
+msgid "A panel has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:259
+msgid "Desktop Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:260
+msgid "A desktop has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:263
+msgid "Undo"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:352
+msgid "Widget Settings"
+msgstr "Postavke grafičke kontrole"
+
+#: plasma/private/applet_p.cpp:359
+msgid "Remove this Widget"
+msgstr "Ukloni ovu grafičku kontrolu"
+
+#: plasma/private/applet_p.cpp:366
+#: plasma/private/associatedapplicationmanager.cpp:81
+#: plasma/private/associatedapplicationmanager.cpp:125
+#: plasma/private/associatedapplicationmanager.cpp:150
+msgid "Run the Associated Application"
+msgstr "Izvrši pridruženi program"
+
+#: plasma/private/associatedapplicationmanager.cpp:78
+#: plasma/private/associatedapplicationmanager.cpp:147
+#, kde-format
+msgid "Open with %1"
+msgstr ""
+
+#: plasma/private/containment_p.cpp:84
+msgid "Remove this Panel"
+msgstr "Ukloni ovaj panel"
+
+#: plasma/private/containment_p.cpp:86
+msgid "Remove this Activity"
+msgstr "Ukloni ovu aktivnost"
+
+#: plasma/private/containment_p.cpp:92
+msgid "Activity Settings"
+msgstr "Postavke aktivnosti"
+
+#: plasma/private/containment_p.cpp:98
+msgid "Add Widgets..."
+msgstr "Dodaj grafičke kontrole..."
+
+#: plasma/private/containment_p.cpp:213
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Ne mogu da nađem zahtijevanu komponentu: %1"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:45 plasma/private/packages.cpp:65
+#: plasmaquick/private/packages.cpp:86 plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "glavnu datoteku skripte"
+
+#: plasma/private/packages.cpp:87 plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "Slike"
+
+#: plasma/private/packages.cpp:88 plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr "Tematske slike"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:94 plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "definicije postave"
+
+#: plasma/private/packages.cpp:99 plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "Korisnički interfejs"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:101 plasma/private/packages.cpp:125
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "opšte datoteke"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:103 plasma/private/packages.cpp:127
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "izvršne skripte"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:108 plasma/private/packages.cpp:135
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "prevodi"
+
+#: plasma/private/packages.cpp:116
+msgid "Configuration UI pages model"
+msgstr "Konfiguracije UI stranica modela"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:117
+msgid "Configuration XML file"
+msgstr "XML konfiguracijska datoteka"
+
+#: plasma/private/packages.cpp:132
+msgid "Service Descriptions"
+msgstr "Opis usluga"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:144
+msgid "Images for dialogs"
+msgstr "Slike za dijaloge"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:146 plasma/private/packages.cpp:148
+msgid "Generic dialog background"
+msgstr "Generička pozadina dijaloga"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:150 plasma/private/packages.cpp:152
+msgid "Theme for the logout dialog"
+msgstr "Tema za odjavni dijalog"
+
+#: plasma/private/packages.cpp:154
+msgid "Wallpaper packages"
+msgstr "Paketi pozadinskih slika"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:156 plasma/private/packages.cpp:209
+msgid "Images for widgets"
+msgstr "Slike za grafičku kontrolu"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:158 plasma/private/packages.cpp:160
+msgid "Background image for widgets"
+msgstr "Pozadinska slika za grafičku kontrolu"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:162 plasma/private/packages.cpp:164
+msgid "Analog clock face"
+msgstr "Lice analognog sata"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:166 plasma/private/packages.cpp:168
+msgid "Background image for panels"
+msgstr "Pozadinska slika za panele"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:170 plasma/private/packages.cpp:172
+msgid "Background for graphing widgets"
+msgstr "Pozadina za grafičke kontrole"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:174 plasma/private/packages.cpp:176
+msgid "Background image for tooltips"
+msgstr "Pozadinska slika za oblačiće"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:178
+msgid "Opaque images for dialogs"
+msgstr "Neprozirne slike za dijaloge"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:180 plasma/private/packages.cpp:182
+msgid "Opaque generic dialog background"
+msgstr "Neprozirna generička pozadina dijaloga"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:184 plasma/private/packages.cpp:186
+msgid "Opaque theme for the logout dialog"
+msgstr "Neprozirna tema za odjavni dijalog"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:188
+msgid "Opaque images for widgets"
+msgstr "Neprozirne slike za grafičke kontrole"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:190 plasma/private/packages.cpp:192
+msgid "Opaque background image for panels"
+msgstr "Neprozirna pozadinska slika za panele"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:194 plasma/private/packages.cpp:196
+msgid "Opaque background image for tooltips"
+msgstr "Neprozirna pozadinska slika za oblačiće"
+
+# >> @item directory definition
+#: plasma/private/packages.cpp:199
+msgid "Low color images for dialogs"
+msgstr "malobojne slike za dijaloge"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:201 plasma/private/packages.cpp:203
+msgid "Low color generic dialog background"
+msgstr "malobojna generička pozadina dijaloga"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:205 plasma/private/packages.cpp:207
+msgid "Low color theme for the logout dialog"
+msgstr "malobojna tema za odjavni dijalog"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:211 plasma/private/packages.cpp:213
+msgid "Low color background image for widgets"
+msgstr "malobojna pozadinska slika za grafičke kontrole"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:215 plasma/private/packages.cpp:217
+msgid "Low color analog clock face"
+msgstr "malobojno lice analognog sata"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:219 plasma/private/packages.cpp:221
+msgid "Low color background image for panels"
+msgstr "malobojna pozadinska slika za panele"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:223 plasma/private/packages.cpp:225
+msgid "Low color background for graphing widgets"
+msgstr "malobojna pozadina za crtačke grafičke kontrole"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:227 plasma/private/packages.cpp:229
+msgid "Low color background image for tooltips"
+msgstr "malobojna pozadinska slika za oblačiće"
+
+# >> @item file definition
+#: plasma/private/packages.cpp:231
+msgid "KColorScheme configuration file"
+msgstr "postavnu datoteku šeme boja"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Dijeljenje grafičke kontrole na mreži omogućava vam da pristupite toj "
+"grafičkoj kontroli sa drugog računara kao daljinskim upravljačem."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "Podijeli ovu grafičku kontrolu na mreži"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "Dozvoli svima slobodan pristup ovoj grafičkoj kontroli"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Neispravan (nulti) servis, ne može izvršiti nikakvu operaciju."
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Plasmin menadžer paketa"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr "Generiši SHA1 hash za paket <path>"
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr ""
+"Pri instaliranju ili uklanjanju, radi nad paketima instaliranim za sve "
+"korisnike."
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"Tip paketa, jedno od: plasmoid theme wallpaper dataengine runner layout-"
+"template"
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "Instaliraj paket s date putanje"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr "Prikazi informacije o paketu <name>"
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "Nadogradi paket s date putanje"
+
+#: plasmapkg/main.cpp:67
+#, fuzzy
+#| msgid "Wallpaper packages"
+msgid "List installed packages"
+msgstr "Paketi pozadinskih slika"
+
+#: plasmapkg/main.cpp:68
+#, fuzzy
+#| msgid "lists all known Package types that can be installed"
+msgid "List all known package types that can be installed"
+msgstr "prikazuje sve poznate tipove paketa koji se mogu instalisati"
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "Ukloni paket po imenu <name>"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"Apsolutna putanja do korijena paketa. Ako se ne zada, traži se po "
+"standardnim direktorijumima u ovoj sesiji KDE‑a."
+
+#: plasmapkg/plasmapkg.cpp:98
+#, fuzzy, kde-format
+#| msgid "Could not delete package from: %1"
+msgid "Failed to generate a Package hash for %1"
+msgstr "Ne mogu obrisati paket sa: %1"
+
+#: plasmapkg/plasmapkg.cpp:101
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr "SHA1 hash za paket na %1: '%2'"
+
+# literal-segment: wallpaper
+#: plasmapkg/plasmapkg.cpp:139 plasmapkg/plasmapkg.cpp:186
+#: plasmapkg/plasmapkg.cpp:207
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "wallpaper"
+
+#: plasmapkg/plasmapkg.cpp:192
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "plasmoid"
+
+#: plasmapkg/plasmapkg.cpp:198
+msgctxt "package type"
+msgid "package"
+msgstr "paket"
+
+#: plasmapkg/plasmapkg.cpp:203
+msgctxt "package type"
+msgid "theme"
+msgstr "theme"
+
+# literal-segment: dataengine
+#: plasmapkg/plasmapkg.cpp:212
+msgctxt "package type"
+msgid "dataengine"
+msgstr "dataengine"
+
+# literal-segment: runner
+#: plasmapkg/plasmapkg.cpp:217
+msgctxt "package type"
+msgid "runner"
+msgstr "runner"
+
+#: plasmapkg/plasmapkg.cpp:222
+#, fuzzy
+#| msgid "Wallpaper packages"
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "Paketi pozadinskih slika"
+
+#: plasmapkg/plasmapkg.cpp:227
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr "izgled"
+
+#: plasmapkg/plasmapkg.cpp:232
+msgctxt "package type"
+msgid "shell"
+msgstr "školjka"
+
+# literal-segment: layout-template
+#: plasmapkg/plasmapkg.cpp:237
+msgctxt "package type"
+msgid "layout-template"
+msgstr "layout-template"
+
+#: plasmapkg/plasmapkg.cpp:242
+msgctxt "package type"
+msgid "kwineffect"
+msgstr "kwineffect"
+
+#: plasmapkg/plasmapkg.cpp:247
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr "windowswitcher"
+
+#: plasmapkg/plasmapkg.cpp:252
+msgctxt "package type"
+msgid "kwinscript"
+msgstr "kwinscript"
+
+#: plasmapkg/plasmapkg.cpp:261
+#, fuzzy, kde-format
+#| msgid "Could not delete package from: %1"
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "Ne mogu obrisati paket sa: %1"
+
+#: plasmapkg/plasmapkg.cpp:272
+#, kde-format
+msgid "Could not load installer for package of type %1. Error reported was: %2"
+msgstr "Ne mogu da učitam instalator za paket tipa %1. Prijavljena greška: %2"
+
+#: plasmapkg/plasmapkg.cpp:288
+#, kde-format
+msgid "Listing service types: %1"
+msgstr "Vrsta usluge:%1"
+
+#: plasmapkg/plasmapkg.cpp:361
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr "Greska: %1 nije instaliran."
+
+#: plasmapkg/plasmapkg.cpp:371
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr "Mora se zadati install, remove, upgrade ili list."
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr "Greška: Ne mogu pronaći metapodatke priključka: %1"
+
+#: plasmapkg/plasmapkg.cpp:478
+#, fuzzy, kde-format
+#| msgid "Could not open package file: %1"
+msgid "Showing info for package: %1"
+msgstr "Ne mogu otvoriti paket datoteku: %1"
+
+#: plasmapkg/plasmapkg.cpp:479
+#, kde-format
+msgid "      Name : %1"
+msgstr "      Ime : %1"
+
+#: plasmapkg/plasmapkg.cpp:480
+#, kde-format
+msgid "   Comment : %1"
+msgstr "   Komentar : %1"
+
+#: plasmapkg/plasmapkg.cpp:481
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "    Umetak : %1"
+
+#: plasmapkg/plasmapkg.cpp:482
+#, kde-format
+msgid "    Author : %1"
+msgstr "    Autor : %1"
+
+#: plasmapkg/plasmapkg.cpp:483
+#, kde-format
+msgid "      Path : %1"
+msgstr "      Staza: %1"
+
+#: plasmapkg/plasmapkg.cpp:492
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr ""
+"Opcije packageroot i global isključuju jedna drugu, zadajte samo jednu od "
+"njih."
+
+#: plasmapkg/plasmapkg.cpp:517
+msgid "Addon Name"
+msgstr "Ime dodatka"
+
+#: plasmapkg/plasmapkg.cpp:518
+msgid "Service Type"
+msgstr "Tip servisa"
+
+#: plasmapkg/plasmapkg.cpp:519
+msgid "Path"
+msgstr "Staza"
+
+#: plasmapkg/plasmapkg.cpp:520
+msgid "Type Argument"
+msgstr "Tip argumenta"
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Package types that are installable with this tool:"
+msgstr "Tipovi paketa koji se mogu instalisati ovim alatom"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Built in:"
+msgstr "Ugrađeno:"
+
+# >> @item directory definition
+#: plasmapkg/plasmapkg.cpp:572
+#, fuzzy
+#| msgid "Data Files"
+msgid "DataEngine"
+msgstr "opšte datoteke"
+
+# literal-segment: layout-template
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Layout Template"
+msgstr "Predložak rasporeda"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Look and Feel"
+msgstr "Izgled i Osjećaj"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Package"
+msgstr "Paket"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "Plasmoid"
+msgstr "Plazmoid"
+
+# literal-segment: runner
+#: plasmapkg/plasmapkg.cpp:577
+msgid "Runner"
+msgstr "Trkač"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "Shell"
+msgstr "Školjka"
+
+#: plasmapkg/plasmapkg.cpp:579
+msgid "Theme"
+msgstr "Tema"
+
+#: plasmapkg/plasmapkg.cpp:580
+#, fuzzy
+#| msgid "Wallpaper packages"
+msgid "Wallpaper Images"
+msgstr "Paketi pozadinskih slika"
+
+#: plasmapkg/plasmapkg.cpp:581
+msgid "Animated Wallpaper"
+msgstr ""
+
+#: plasmapkg/plasmapkg.cpp:582
+msgid "KWin Effect"
+msgstr "Efekti KWin-a"
+
+#: plasmapkg/plasmapkg.cpp:583
+msgid "KWin Window Switcher"
+msgstr "KWin prebacivač prozora"
+
+# >> @item file definition
+#: plasmapkg/plasmapkg.cpp:584
+#, fuzzy
+#| msgid "Main Script File"
+msgid "KWin Script"
+msgstr "glavnu datoteku skripte"
+
+#: plasmapkg/plasmapkg.cpp:593
+msgid "Provided by plugins:"
+msgstr "Navedeni dodaci:"
+
+#: plasmapkg/plasmapkg.cpp:615
+msgid "Provided by .desktop files:"
+msgstr "Dato preko .desktop datoteka:"
+
+#: plasmapkg/plasmapkg.cpp:636
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr "Uspiješno nadograđen%1"
+
+#: plasmapkg/plasmapkg.cpp:638
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "Uspješno instalirano: %1"
+
+#: plasmapkg/plasmapkg.cpp:641
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr "Greska: Instalacija %1 neuspijela:%2"
+
+#: plasmapkg/plasmapkg.cpp:653
+#, fuzzy, kde-format
+#| msgid "Could not open package file: %1"
+msgid "Upgrading package from file: %1"
+msgstr "Ne mogu otvoriti paket datoteku: %1"
+
+#: plasmapkg/plasmapkg.cpp:658
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr "Uspijesno izbrisan %1"
+
+#: plasmapkg/plasmapkg.cpp:660
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr "Greska: Brisanje %1 neuspijelo:%2"
+
+#: plasmaquick/appletquickitem.cpp:465
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Greška pri učitavanju QML datoteke: %1"
+
+#: plasmaquick/appletquickitem.cpp:467
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr ""
+
+#: plasmaquick/configview.cpp:103
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "%1 Settings"
+msgid "%1 Settings"
+msgstr "%1 Postavke"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:42
+#, fuzzy
+#| msgid "Themed Images"
+msgid "Preview Images"
+msgstr "Tematske slike"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:53
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script for Login Manager"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:56
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script for Logout Dialog"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:59
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script for Lock Screen"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:62
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script for User Switcher"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:71
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script for Splash Screen"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr ""
+
+# >> @item file definition
+#: plasmaquick/private/packages.cpp:74
+#, fuzzy
+#| msgid "Main Script File"
+msgid "Main Script KRunner"
+msgstr "glavnu datoteku skripte"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:479
+msgid "Fetching file type..."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
+#, fuzzy
+#| msgid "Lock Widgets"
+msgid "Widgets"
+msgstr "Zaključaj grafičku kontrolu"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
+msgid "Icon"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:628
+#, fuzzy
+#| msgid "Wallpaper packages"
+msgid "Wallpaper"
+msgstr "Paketi pozadinskih slika"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:928
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "%1 Opcije"
