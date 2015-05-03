@@ -18,7 +18,7 @@
  */
 
 #ifndef APPLICATION_P_H
-#define APPLiCAtION_P_H
+#define APPLICATION_P_H
 
 #include "application.h"
 
