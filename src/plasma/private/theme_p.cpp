@@ -66,10 +66,10 @@ ThemePrivate::ThemePrivate(QObject *parent)
       useGlobal(true),
       hasWallpapers(false),
       fixedName(false),
-      backgroundContrastEnabled(true),
       backgroundContrast(0),
       backgroundIntensity(0),
       backgroundSaturation(0),
+      backgroundContrastEnabled(true),
       apiMajor(1),
       apiMinor(0),
       apiRevision(0)

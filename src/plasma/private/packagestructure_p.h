@@ -54,8 +54,8 @@ class PackageStructurePrivate
 {
 public:
     PackageStructurePrivate(PackageStructure *str)
-        : internalStructure(0),
-          q(str)
+        : q(str),
+        internalStructure(0)
     {}
     ~PackageStructurePrivate()
     {}
