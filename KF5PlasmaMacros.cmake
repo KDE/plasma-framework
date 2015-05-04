@@ -34,8 +34,6 @@ macro(plasma_install_package dir component)
            PATTERN README.txt EXCLUDE
            PATTERN Messages.sh EXCLUDE
            PATTERN dummydata EXCLUDE)
-
-   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
 
