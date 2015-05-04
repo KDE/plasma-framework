@@ -211,9 +211,20 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
+    KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
     if (!p.isValid()) {
-        return 0;
+        //some applets have actually the root path from another package, such as icontasks
+        //try to do a fallback package with X-Plasma-RootPath root
+        p.setRequired("mainscript", false);
+        p.setPath(name);
+
+        KPluginMetaData md(p.filePath("metadata"));
+        const KPackage::Package fp = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", md.value("X-Plasma-RootPath"));
+        p.setFallbackPackage(fp);
+
+        if (!fp.isValid()) {
+            return 0;
+        }
     }
 
     // backwards compatibility: search in the root plugins directory
