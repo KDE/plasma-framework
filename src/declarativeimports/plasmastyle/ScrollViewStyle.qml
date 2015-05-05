@@ -29,6 +29,8 @@ QtQuickControlStyle.ScrollViewStyle {
 
     property real widthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * units.devicePixelRatio)
 
+    transientScrollBars: false
+
     frame: Item {
         PlasmaCore.Svg {
             id: borderSvg
