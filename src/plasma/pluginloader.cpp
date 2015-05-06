@@ -565,7 +565,14 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
             const QString pa = md.value("X-KDE-ParentApp");
             return (pa.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
         };
-        return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+
+        //NOTE: it still produces kplugininfos from KServices because some user code expects
+        //info.sevice() to be valid and would crash ohtherwise
+        for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
+            list << KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
+        }
+        return list;
+
 
     } else { //specific category (this could be an excluded one - is that bad?)
 
@@ -578,7 +585,13 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
                 return (pa.isEmpty() || pa == parentApp) && md.category() == category;
             }
         };
-        return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+
+        //NOTE: it still produces kplugininfos from KServices because some user code expects
+        //info.sevice() to be valid and would crash ohtherwise
+        for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
+            list << KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
+        }
+        return list;
     }
 }
 
