@@ -179,7 +179,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         if (!provides.isEmpty()) {
             auto filter = [&provides](const KPluginMetaData &md) -> bool
             {
-                for (auto p : provides) {
+                foreach (const QString &p, provides) {
                     if (md.value("X-Plasma-Provides").contains(p)) {
                         return true;
                     }
@@ -458,8 +458,8 @@ QString AppletPrivate::globalName() const
     if (!appletDescription.isValid()) {
         return QString();
     }
-return appletDescription.pluginName();
-    return appletDescription.service()->library();
+
+    return appletDescription.pluginName();
 }
 
 void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)

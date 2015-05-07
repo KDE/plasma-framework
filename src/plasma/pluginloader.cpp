@@ -659,6 +659,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
             categories << plugin.category();
         }
     }
+    categories.sort();
     return categories;
 }
 

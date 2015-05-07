@@ -578,7 +578,7 @@ void PlasmaPkgPrivate::listTypes()
     builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
     renderTypeTable(builtIns);
 
-    KPluginInfo::List offers = KPluginTrader::self()->query("kpackage/packagestructure", "KPackage/PackageStructure");
+    const KPluginInfo::List offers = KPluginTrader::self()->query("kpackage/packagestructure", "KPackage/PackageStructure");
 
     if (!offers.isEmpty()) {
         std::cout << std::endl;
