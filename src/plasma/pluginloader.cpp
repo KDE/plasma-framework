@@ -291,7 +291,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/DataEngine", name);
     if (!p.isValid()) {
         return 0;
     }
@@ -301,8 +301,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    }
 
     QStringList engines;
     // Look for C++ plugins first
@@ -331,15 +332,17 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
 
 KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    }
     return PluginLoader::self()->listDataEngineInfo(parentApp);
 }
 
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    }
 
     KPluginInfo::List list;
 
@@ -697,8 +700,9 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &category,
         const QString &parentApp)
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+    }
 
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
@@ -728,8 +732,9 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+    }
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
         return md.value("X-KDE-ServiceTypes").contains("Plasma/Containment") && md.value("X-Plasma-DropMimeTypes").contains(mimeType);
@@ -740,8 +745,9 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 
 QStringList PluginLoader::listContainmentTypes()
 {
-    //HACK: we actually need an instance for this to work correctly
-    self();
+    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+    }
     KPluginInfo::List containmentInfos = listContainments();
     QSet<QString> types;
 
