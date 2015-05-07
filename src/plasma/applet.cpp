@@ -42,7 +42,6 @@
 #include <kplugininfo.h>
 #include <klocalizedstring.h>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 #include <KConfigLoader>
 #include <kwindowsystem.h>
 
@@ -84,10 +83,13 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QObject(0),
        d(new AppletPrivate(
-             KService::serviceByStorageId(args.count() > 0 ? args[0].toString() : QString()), 0,
+             KService::serviceByStorageId(args.count() > 0 && args.first().canConvert<QString>() ? args[0].toString() : QString()), 0,
              args.count() > 1 ? args[1].toInt() : 0, this))
 {
     setParent(parentObject);
+    if (args.count() > 0 && args.first().canConvert<QVariantMap>()) {
+        d->appletDescription = KPluginInfo(args);
+    }
 
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point

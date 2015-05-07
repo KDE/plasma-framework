@@ -22,15 +22,17 @@
 
 #include <QDebug>
 #include <kservice.h>
-#include <kservicetypetrader.h>
+#include <kplugintrader.h>
 #include <kshell.h>
 #include <kconfig.h>
 #include <ksycoca.h>
 #include <klocalizedstring.h>
+#include <KPluginMetaData>
 
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
 #include <plasma/pluginloader.h>
+#include <kpackage/packageloader.h>
 #include <kjob.h>
 
 #include <qcommandlineparser.h>
@@ -254,28 +256,20 @@ void PlasmaPkg::runMain()
         d->packageRoot = "kwin/scripts/";
         d->servicePrefix = "kwin-script-";
         d->pluginTypes << "KWin/Script";
-    } else { /* if (KSycoca::isAvailable()) */
-        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(type);
-        KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure", constraint);
-        if (offers.isEmpty()) {
+
+    //do it trough normal plugin loading
+    } else {
+        Plasma::Package p = Plasma::PluginLoader::self()->loadPackage(type);
+        if (!p.hasValidStructure()) {
             d->coutput(i18n("Could not find a suitable installer for package of type %1", type));
             exit(5);
             return;
         }
-        qWarning() << "custom PackageStructure plugins not ported";
-        KService::Ptr offer = offers.first();
-        QString error;
 
-        d->installer = new Plasma::Package(offer->createInstance<Plasma::PackageStructure>(0, QVariantList(), &error));
-
-        if (!d->installer) {
-            d->coutput(i18n("Could not load installer for package of type %1. Error reported was: %2",
-                            d->parser->value("type"), error));
-            return;
-        }
+        d->installer = new Plasma::Package(p);
 
         //d->packageRoot = d->installer->defaultPackageRoot();
-        //pluginTypes << d->installer->type();
+        d->pluginTypes << type;
     }
     if (d->parser->isSet("show")) {
         const QString pluginName = d->package;
@@ -442,9 +436,9 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
             }
         }
 
-        const KService::List services = KServiceTypeTrader::self()->query(type);
-        foreach (const KService::Ptr &service, services) {
-            const QString _plugin = service->property("X-KDE-PluginInfo-Name", QVariant::String).toString();
+        const QList<KPluginMetaData> plugins = KPackage::PackageLoader::self()->listPackages(type);
+        for (auto plugin : plugins) {
+            const QString _plugin = plugin.pluginId();
             if (!result.contains(_plugin)) {
                 result << _plugin;
             }
@@ -584,17 +578,14 @@ void PlasmaPkgPrivate::listTypes()
     builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
     renderTypeTable(builtIns);
 
-    KService::List offers;
-    //if (KSycoca::isAvailable()) {
-    offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
-    //}
+    const KPluginInfo::List offers = KPluginTrader::self()->query("kpackage/packagestructure", "KPackage/PackageStructure");
+
     if (!offers.isEmpty()) {
         std::cout << std::endl;
         coutput(i18n("Provided by plugins:"));
 
         QMap<QString, QStringList> plugins;
-        foreach (const KService::Ptr service, offers) {
-            KPluginInfo info(service);
+        for (auto info : offers) {
             //const QString proot = "";
             //Plasma::PackageStructure* structure = Plasma::PackageStructure::load(info.pluginName());
             QString name = info.name();
@@ -602,7 +593,7 @@ void PlasmaPkgPrivate::listTypes()
             QString plugin = info.pluginName();
             //QString path = structure->defaultPackageRoot();
             //QString path = defaultPackageRoot;
-            plugins.insert(name, QStringList() << plugin);
+            plugins.insert(name, QStringList() << name << plugin << comment);
             //qDebug() << "KService stuff:" << name << plugin << comment;
         }
 

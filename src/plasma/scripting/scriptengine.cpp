@@ -21,7 +21,6 @@
 
 #include <QDebug>
 #include <kservice.h>
-#include <kservicetypetrader.h>
 
 #include "applet.h"
 #include "dataengine.h"
@@ -61,119 +60,50 @@ QString ScriptEngine::mainScript() const
 
 QStringList knownLanguages(Types::ComponentTypes types)
 {
-    QString constraintTemplate = "'%1' in [X-Plasma-ComponentTypes]";
-    QString constraint;
-
-    if (types & Types::AppletComponent) {
-        // currently this if statement is not needed, but this future proofs
-        // the code against someone initializing constraint to something
-        // before we get here.
-        if (!constraint.isEmpty()) {
-            constraint.append(" or ");
-        }
-
-        constraint.append(constraintTemplate.arg("Applet"));
-    }
-
-    if (types & Types::DataEngineComponent) {
-        if (!constraint.isEmpty()) {
-            constraint.append(" or ");
-        }
-
-        constraint.append(constraintTemplate.arg("DataEngine"));
-    }
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    //qDebug() << "Applet::knownApplets constraint was '" << constraint
-    //         << "' which got us " << offers.count() << " matches";
-
     QStringList languages;
-    foreach (const KService::Ptr &service, offers) {
-        QString language = service->property("X-Plasma-API").toString();
-        if (!languages.contains(language)) {
-            languages.append(language);
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines");
+
+    for (auto plugin : plugins) {
+        if ((types & Types::AppletComponent) &&
+            plugin.value("X-Plasma-ComponentTypes") == "Applet") {
+            languages << plugin.value("X-Plasma-API");
+        } else if ((types & Types::DataEngineComponent) &&
+            plugin.value("X-Plasma-ComponentTypes") == "DataEngine") {
+            languages << plugin.value("X-Plasma-API");
         }
     }
 
     return languages;
 }
 
-KService::List engineOffers(const QString &language, Types::ComponentType type)
-{
-    if (language.isEmpty()) {
-        return KService::List();
-    }
-
-    QRegExp re("[^a-zA-Z0-9\\-_]");
-    if (re.indexIn(language) != -1) {
-#ifndef NDEBUG
-        // qDebug() << "invalid language attempted:" << language;
-#endif
-        return KService::List();
-    }
-
-    QString component;
-    switch (type) {
-    case Types::AppletComponent:
-        component = "Applet";
-        break;
-    case Types::DataEngineComponent:
-        component = "DataEngine";
-        break;
-    default:
-        return KService::List();
-        break;
-    }
-
-    QString constraint = QString("[X-Plasma-API] == '%1' and "
-                                 "'%2' in [X-Plasma-ComponentTypes]").arg(language, component);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ScriptEngine", constraint);
-    /* // qDebug() << "********************* loadingApplet with Plasma/ScriptEngine" << constraint
-             << "resulting in" << offers.count() << "results";*/
-    if (offers.isEmpty()) {
-#ifndef NDEBUG
-        // qDebug() << "No offers for \"" << language << "\"";
-#endif
-    }
-
-    return offers;
-}
-
 ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent,
     const QVariantList &args = QVariantList())
 {
-    KService::List offers = engineOffers(language, type);
-
-    QString error;
-
     ScriptEngine *engine = 0;
-    foreach (const KService::Ptr &service, offers) {
-        switch (type) {
-        case Types::AppletComponent:
-            engine = service->createInstance<Plasma::AppletScript>(parent, args, &error);
-            break;
-        case Types::DataEngineComponent:
-            engine = service->createInstance<Plasma::DataEngineScript>(parent, args, &error);
-            break;
-        default:
+
+    auto filter = [&language](const KPluginMetaData &md) -> bool
+    {
+        return md.value("X-Plasma-API") == language;
+    };
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines", filter);
+
+    if (plugins.count()) {
+        if ((type & Types::AppletComponent) &&
+            plugins.first().value("X-Plasma-ComponentTypes") != "Applet") {
             return 0;
-            break;
+        } else if ((type & Types::DataEngineComponent) &&
+            plugins.first().value("X-Plasma-ComponentTypes") != "DataEngine") {
+            return 0;
         }
-
-        if (engine) {
-            return engine;
+        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
+        KPluginLoader loader(lst.first().libraryPath());
+        KPluginFactory *factory = loader.factory();
+        if (factory) {
+            engine = factory->create<Plasma::ScriptEngine>(0, args);
         }
-
-#ifndef NDEBUG
-        // qDebug() << "Couldn't load script engine for language " << language
-        //         << "! error reported: " << error;
-#endif
     }
 
-    // Try installing the engine. However, it's too late for this request.
-    ComponentInstaller::self()->installMissingComponent("scriptengine", language);
-
-    return 0;
+    return engine;
 }
 
 AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QVariantList &args)

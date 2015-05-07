@@ -428,10 +428,11 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
 void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y)
 {
     QMimeData* mime = qobject_cast<QMimeData*>(mimeDataProxy);
-    if (mime)
+    if (mime) {
         processMimeData(mime, x, y);
-    else
+    } else {
         processMimeData(mimeDataProxy->property("mimeData").value<QMimeData*>(), x, y);
+    }
 }
 
 void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)

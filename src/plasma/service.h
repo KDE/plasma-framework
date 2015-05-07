@@ -232,5 +232,9 @@ Q_DECLARE_METATYPE(Plasma::Service *)
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
+#define K_EXPORT_PLASMA_SERVICE_WITH_JSON(libname, classname, jsonFile) \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+
 #endif // multiple inclusion guard
 

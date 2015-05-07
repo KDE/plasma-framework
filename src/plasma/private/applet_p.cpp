@@ -35,7 +35,8 @@
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
 #include <KConfigLoader>
-#include <KServiceTypeTrader>
+#include <KPluginTrader>
+#include <kpackage/packageloader.h>
 
 #include "containment.h"
 #include "corona.h"
@@ -176,16 +177,17 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         QString constraint;
         QStringList provides = q->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
         if (!provides.isEmpty()) {
-            bool first = true;
-            foreach (const QString &prov, provides) {
-                if (!first) {
-                    constraint += " or ";
+            auto filter = [&provides](const KPluginMetaData &md) -> bool
+            {
+                foreach (const QString &p, provides) {
+                    if (md.value("X-Plasma-Provides").contains(p)) {
+                        return true;
+                    }
                 }
-                first = false;
-                constraint += "'" + prov + "' in [X-Plasma-Provides]";
-            }
+                return false;
+            };
+            QList<KPluginMetaData> applets = KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter);
 
-            KPluginInfo::List applets = KPluginInfo::fromServices(KServiceTypeTrader::self()->query("Plasma/Applet", constraint));
             if (applets.count() > 1) {
                 QAction *a = new QAction(QIcon::fromTheme("preferences-desktop-default-applications"), i18n("Alternatives..."), q);
                 q->actions()->addAction("alternatives", a);
@@ -457,7 +459,7 @@ QString AppletPrivate::globalName() const
         return QString();
     }
 
-    return appletDescription.service()->library();
+    return appletDescription.pluginName();
 }
 
 void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)

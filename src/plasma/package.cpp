@@ -27,7 +27,6 @@
 #include <karchive.h>
 #include <QDebug>
 #include <kdesktopfile.h>
-#include <kservicetypetrader.h>
 #include <ktar.h>
 #include <kzip.h>
 #include <KJob>

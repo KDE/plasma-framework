@@ -24,7 +24,6 @@
 
 #include <QDebug>
 
-#include <kservicetypetrader.h>
 #include <qstandardpaths.h>
 
 #include "datacontainer.h"
