@@ -106,7 +106,11 @@ Item {
         onPositionChanged: {
             var section = Sections.closestSection(position/listView.height);
             if (section) {
-                sectionLabel.text = section;
+                if (listView.section.criteria == ViewSection.FirstCharacter) {
+                    sectionLabel.text = section[0];
+                } else {
+                    sectionLabel.text = section;
+                }
             }
         }
 
