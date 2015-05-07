@@ -791,10 +791,19 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
 
     list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, "Plasma/ContainmentActions", constraint));
 
+    QSet<QString> knownPlugins;
+    foreach (const KPluginInfo &p, list) {
+        knownPlugins.insert(p.pluginName());
+    }
+
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
     KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
-    list.append(KPluginInfo::fromServices(offers));
+    foreach (KService::Ptr s, offers) {
+        if (!knownPlugins.contains(s->pluginKeyword())) {
+            list.append(KPluginInfo(s));
+        }
+    }
     return list;
 }
 
