@@ -70,7 +70,8 @@ public:
         IconRole,
         SourceRole,
         PluginNameRole,
-        VisibleRole
+        VisibleRole,
+        KCMRole
     };
     ConfigModel(QObject *parent = 0);
     ~ConfigModel();

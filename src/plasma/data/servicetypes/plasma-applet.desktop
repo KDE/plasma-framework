@@ -64,6 +64,9 @@ Type=QString
 [PropertyDef::X-Plasma-Provides]
 Type=QStringList
 
+[PropertyDef::X-Plasma-ConfigPlugins]
+Type=QStringList
+
 [PropertyDef::X-Plasma-StandAloneApp]
 Type=bool
 

@@ -35,6 +35,7 @@
 #include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
+#include <KQuickAddons/ConfigModule>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
@@ -64,6 +65,7 @@ public:
     ConfigView *q;
     QWeakPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
+    ConfigModel *kcmConfigModel;
     Plasma::Corona *corona;
 
     //Attached Layout property of mainItem, if any
@@ -119,17 +121,32 @@ void ConfigViewPrivate::init()
         interceptor->addAllowedPath(applet.data()->package().path());
         q->engine()->setUrlInterceptor(interceptor);
     }
-   
+
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
     QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->package().filePath("configmodel")), q);
     QObject *object = component->beginCreate(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
+
     if (configModel) {
         configModel->setApplet(applet.data());
     } else {
         delete object;
+    }
+
+    const QStringList kcms = applet.data()->pluginInfo().property("X-Plasma-ConfigPlugins").value<QStringList>();
+    if (!kcms.isEmpty()) {
+        if (!configModel) {
+            configModel = new ConfigModel(q);
+        }
+
+        foreach (const QString &kcm, kcms) {
+            KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + kcm));
+            KPluginMetaData md(loader.fileName());
+
+            configModel->appendCategory(md.iconName(), md.name(), QString(), loader.fileName());
+        }
     }
 
     q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());

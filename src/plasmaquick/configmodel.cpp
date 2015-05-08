@@ -35,6 +35,7 @@
 
 #include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
+#include <KQuickAddons/ConfigModule>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
@@ -53,6 +54,7 @@ public:
     ConfigModel *q;
     QList<ConfigCategory *> categories;
     QWeakPointer<Plasma::Applet> appletInterface;
+    QHash<QString, KQuickAddons::ConfigModule *> kcms;
 
     void appendCategory(ConfigCategory *c);
     void clear();
@@ -153,6 +155,7 @@ QVariant ConfigModelPrivate::get(int row) const
         value["source"] = categories.at(row)->source();
     }
     value["visible"] = categories.at(row)->visible();
+    value["kcm"] = q->data(q->index(row, 0), ConfigModel::KCMRole);
 
     return value;
 }
@@ -167,6 +170,7 @@ ConfigModel::ConfigModel(QObject *parent)
     roleNames[SourceRole] = "source";
     roleNames[PluginNameRole] = "pluginName";
     roleNames[VisibleRole] = "visible";
+    roleNames[KCMRole] = "kcm";
 
     setRoleNames(roleNames);
 }
@@ -204,6 +208,25 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         return d->categories.at(index.row())->pluginName();
     case VisibleRole:
         return d->categories.at(index.row())->visible();
+    case KCMRole: {
+        const QString pluginName = d->categories.at(index.row())->pluginName();
+        if (d->kcms.contains(pluginName)) {
+            return QVariant::fromValue(d->kcms.value(pluginName));
+        }
+
+        KPluginLoader loader(KPluginLoader::findPlugin(pluginName));
+        KPluginFactory* factory = loader.factory();
+        if (!factory) {
+            qWarning() << "Error loading KCM:" << loader.errorString();
+        } else {
+            KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule >(const_cast<ConfigModel *>(this));
+            if (!cm) {
+                qWarning() << "Error creating KCM object from plugin" << loader.fileName();
+            }
+            d->kcms[pluginName] = cm;
+            return QVariant::fromValue(cm);
+        }
+    }
     default:
         return QVariant();
     }
