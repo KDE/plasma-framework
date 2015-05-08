@@ -701,7 +701,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &parentApp)
 {
     if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new PlasmoidPackage());
     }
 
     KConfigGroup group(KSharedConfig::openConfig(), "General");
