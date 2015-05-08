@@ -407,15 +407,25 @@ AppletQuickItem::~AppletQuickItem()
     delete d->fullRepresentationItem;
     delete d->compactRepresentationExpanderItem;
 
-    AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->engine());
+    AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->rootContext());
 }
 
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
+    QQmlContext *context = QtQml::qmlContext(object);
+    //search the root context of the applet in which the object is in
+    while (context) {
+        //the rootcontext of an applet is a child of the engine root context
+        if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
+            break;
+        }
+
+        context = context->parentContext();
+    }
     //at the moment of the attached object creation, the root item is the only one that hasn't a parent
     //only way to avoid creation of this attached for everybody but the root item
-    if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
-        return AppletQuickItemPrivate::s_rootObjects.value(QtQml::qmlEngine(object));
+    if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(context)) {
+        return AppletQuickItemPrivate::s_rootObjects.value(context);
     } else {
         return 0;
     }
@@ -429,11 +439,11 @@ Plasma::Applet *AppletQuickItem::applet() const
 void AppletQuickItem::init()
 {
     //FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
-    if (0&&AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->engine())) {
+    if (0&&AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
         return;
     }
 
-    AppletQuickItemPrivate::s_rootObjects[d->qmlObject->engine()] = this;
+    AppletQuickItemPrivate::s_rootObjects[d->qmlObject->rootContext()] = this;
 
     Q_ASSERT(d->applet);
 
