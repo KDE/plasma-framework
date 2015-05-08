@@ -42,6 +42,8 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
+QQmlEngine *AppletQuickItemPrivate::s_engine = 0;
+
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
       switchWidth(-1),
@@ -49,6 +51,9 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
+    if (!s_engine) {
+        s_engine = new QQmlEngine;
+    }
 }
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
@@ -378,7 +383,8 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
 
-    d->qmlObject = new KDeclarative::QmlObject(this);
+    QQmlContext *context = new QQmlContext(AppletQuickItemPrivate::s_engine->rootContext());
+    d->qmlObject = new KDeclarative::QmlObject(AppletQuickItemPrivate::s_engine, context, this);
     if (applet->pluginInfo().isValid()) {
         const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
         if (!rootPath.isEmpty()) {
@@ -402,7 +408,6 @@ AppletQuickItem::~AppletQuickItem()
     delete d->compactRepresentationExpanderItem;
 
     AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->engine());
-    delete d;
 }
 
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
@@ -423,7 +428,8 @@ Plasma::Applet *AppletQuickItem::applet() const
 
 void AppletQuickItem::init()
 {
-    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->engine())) {
+    //FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
+    if (0&&AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->engine())) {
         return;
     }
 
@@ -481,7 +487,7 @@ void AppletQuickItem::init()
         d->applet->setLaunchErrorMessage(reason);
     }
 
-    engine->rootContext()->setContextProperty("plasmoid", this);
+    d->qmlObject->rootContext()->setContextProperty("plasmoid", this);
 
     //initialize size, so an useless resize less
     QVariantHash initialProperties;

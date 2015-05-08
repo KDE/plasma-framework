@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QQmlEngine>
 #include <QFile>
+#include <QStandardPaths>
 
 #include <kdeclarative/kdeclarative.h>
 
@@ -144,6 +145,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             }
         }
         qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
+        return path;
         return QUrl::fromLocalFile( allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
     }
 

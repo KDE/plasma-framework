@@ -22,6 +22,7 @@
 
 #include <QQmlComponent>
 #include <qquickitem.h>
+#include <QQmlEngine>
 
 //
 //  W A R N I N G
@@ -103,6 +104,7 @@ public:
     bool expanded : 1;
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
+    static QQmlEngine *s_engine;
 };
 
 }
