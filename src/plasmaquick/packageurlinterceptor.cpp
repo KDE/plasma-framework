@@ -149,9 +149,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
         const QString &filename = components.join("/");
 
-        //qDebug() << "Returning" << QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
-
         QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
+
+        //qDebug() << "Returning" << ret;
 
         if (ret.path().isEmpty()) {
             return path;
@@ -160,6 +160,8 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         //forbid to load random absolute paths
     } else {
+        return path;
+        //TODO: remove all of this?
         if (package.allowExternalPaths() || package.metadata().property("X-Plasma-RequiredExtensions").toString().contains(QStringLiteral("ExternalScripts"))) {
             return path;
         }

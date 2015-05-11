@@ -532,7 +532,6 @@ void AppletQuickItem::init()
         setHeight(d->qmlObject->rootObject()->property("height").value<qreal>());
     }
 
-
     //default fullrepresentation is our root main component, if none specified
     if (!d->fullRepresentation) {
         d->fullRepresentation = d->qmlObject->mainComponent();
