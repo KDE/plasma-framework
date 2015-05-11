@@ -248,7 +248,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 
     if (!applet) {
-        qWarning() << "Could not load applet" << name << "Falling back to an empty one";
+        //qDebug() << name << "not a C++ applet: Falling back to an empty one";
 
         QVariantList allArgs;
         allArgs << p.metadata().fileName() << appletId << args;
