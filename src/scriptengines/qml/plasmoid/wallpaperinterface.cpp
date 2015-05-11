@@ -21,7 +21,7 @@
 
 #include "containmentinterface.h"
 #include <kdeclarative/configpropertymap.h>
-#include <kdeclarative/qmlobject.h>
+#include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <kactioncollection.h>
 #include <kdesktopfile.h>
@@ -127,7 +127,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
 
     if (!m_qmlObject) {
-        m_qmlObject = new KDeclarative::QmlObject(this);
+        m_qmlObject = new KDeclarative::QmlObjectSharedEngine(this);
         s_rootObjects[m_qmlObject->engine()] = this;
         m_qmlObject->setInitializationDelayed(true);
         connect(m_qmlObject, &KDeclarative::QmlObject::finished, this, &WallpaperInterface::loadFinished);

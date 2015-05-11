@@ -462,7 +462,7 @@ void AppletQuickItem::init()
     //if the engine of the qmlObject is different from the static one, then we
     //are using an old version of the api in which every applet had one engine
     //so initialize a private url interceptor
-    if (d->applet->package().isValid() && qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
+    if (d->applet->package().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
