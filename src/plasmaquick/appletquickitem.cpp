@@ -441,7 +441,7 @@ Plasma::Applet *AppletQuickItem::applet() const
 void AppletQuickItem::init()
 {
     //FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
-    if (0&&AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
+    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
         return;
     }
 
@@ -452,13 +452,14 @@ void AppletQuickItem::init()
     //Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
 
-    //TODO: fallback to one engine per applet
-    /*
-    if (d->applet->package().isValid()) {
+    //if the engine of the qmlObject is different from the static one, then we
+    //are using an old version of the api in which every applet had one engine
+    //so initialize a private url interceptor
+    if (d->applet->package().isValid() && engine != AppletQuickItemPrivate::s_engine) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
-    }*/
+    }
 
     //Force QtQuickControls to use the "Plasma" style for this engine.
     //this way is possible to mix QtQuickControls and plasma components in applets
