@@ -53,6 +53,8 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
 {
     if (!s_engine) {
         s_engine = new QQmlEngine;
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(s_engine, Plasma::Package());
+        s_engine->setUrlInterceptor(interceptor);
     }
 }
 
@@ -450,11 +452,13 @@ void AppletQuickItem::init()
     //Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
 
+    //TODO: fallback to one engine per applet
+    /*
     if (d->applet->package().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
-    }
+    }*/
 
     //Force QtQuickControls to use the "Plasma" style for this engine.
     //this way is possible to mix QtQuickControls and plasma components in applets

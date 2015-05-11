@@ -24,17 +24,36 @@
 #include <QFile>
 #include <QStandardPaths>
 
+#include <Plasma/PluginLoader>
+
 #include <kdeclarative/kdeclarative.h>
 
 namespace PlasmaQuick
 {
 
+class PackageUrlInterceptorPrivate {
+public:
+    PackageUrlInterceptorPrivate(QQmlEngine *engine, const Plasma::Package &p)
+        : package(p),
+          engine(engine)
+    {
+    }
+
+    Plasma::Package package;
+    QStringList allowedPaths;
+    QQmlEngine *engine;
+
+    static QHash<QString, Plasma::Package> s_packages;
+};
+
+QHash<QString, Plasma::Package> PackageUrlInterceptorPrivate::s_packages = QHash<QString, Plasma::Package>();
+
+
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
     : QQmlAbstractUrlInterceptor(),
-      m_package(p),
-      m_engine(engine)
+      d(new PackageUrlInterceptorPrivate(engine, p))
 {
-    //m_allowedPaths << m_engine->importPathList();
+    //d->allowedPaths << d->engine->importPathList();
 }
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
@@ -43,29 +62,52 @@ PackageUrlInterceptor::~PackageUrlInterceptor()
 
 void PackageUrlInterceptor::addAllowedPath(const QString &path)
 {
-    m_allowedPaths << path;
+    d->allowedPaths << path;
 }
 
 void PackageUrlInterceptor::removeAllowedPath(const QString &path)
 {
-    m_allowedPaths.removeAll(path);
+    d->allowedPaths.removeAll(path);
 }
 
 QStringList PackageUrlInterceptor::allowedPaths() const
 {
-    return m_allowedPaths;
+    return d->allowedPaths;
 }
 
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
     //qDebug() << "Intercepted URL:" << path << type;
+    QString pkgRoot;
+    Plasma::Package package;
+    if (d->package.isValid()) {
+        package = d->package;
+    } else {
+        foreach (const QString &base, QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)) {
+            pkgRoot = base + "/plasma/plasmoids/";
+            if (path.path().startsWith(pkgRoot)) {
+                const QString pkgName = path.path().mid(pkgRoot.length()).split('/').first();
+                if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
+                    package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
+                } else {
+                    package = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
+                    package.setPath(pkgName);
+                    PackageUrlInterceptorPrivate::s_packages[pkgName] = package;
+                }
+                break;
+            }
+        }
+    }
+    if (!package.isValid()) {
+        return path;
+    }
 
-    if (path.scheme() == QStringLiteral("plasmapackage")) {
+    if (d->package.isValid() && path.scheme() == QStringLiteral("plasmapackage")) {
         //FIXME: this is incorrect but works around a bug in qml in resolution of urls of qmldir files
         if (type == QQmlAbstractUrlInterceptor::QmldirFile) {
-            return QUrl(m_package.filePath(0, path.path()));
+            return QUrl(d->package.filePath(0, path.path()));
         } else {
-            return QUrl::fromLocalFile(m_package.filePath(0, path.path()));
+            return QUrl::fromLocalFile(d->package.filePath(0, path.path()));
         }
     }
 
@@ -80,13 +122,13 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     }
 
     //asked a file inside a package: let's rewrite the url!
-    if (path.path().startsWith(m_package.path())) {
+    if (path.path().startsWith(package.path())) {
         //qDebug() << "Found URL in package" << path;
 
         //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
         QString relativePath;
-        foreach (const QString &prefix, m_package.contentsPrefixPaths()) {
-            QString root = m_package.path() + prefix;
+        foreach (const QString &prefix, package.contentsPrefixPaths()) {
+            QString root = package.path() + prefix;
             if (path.path().startsWith(root)) {
                 //obtain a string in the form ui/foo/bar/baz.qml
                 relativePath = path.path().mid(root.length());
@@ -105,9 +147,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
         const QString &filename = components.join("/");
 
-        //qDebug() << "Returning" << QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+        //qDebug() << "Returning" << QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
 
-        QUrl ret = QUrl::fromLocalFile(m_package.filePath(prefixForType(type, filename), filename));
+        QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
 
         if (ret.path().isEmpty()) {
             return path;
@@ -116,15 +158,15 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         //forbid to load random absolute paths
     } else {
-        if (m_package.allowExternalPaths() || m_package.metadata().property("X-Plasma-RequiredExtensions").toString().contains(QStringLiteral("ExternalScripts"))) {
+        if (package.allowExternalPaths() || package.metadata().property("X-Plasma-RequiredExtensions").toString().contains(QStringLiteral("ExternalScripts"))) {
             return path;
         }
 
         //NOTE: It's needed to build this on the fly because importPathList
         //can change at runtime
         QStringList allowedPaths;
-        allowedPaths << m_engine->importPathList();
-        allowedPaths << m_allowedPaths;
+        allowedPaths << d->engine->importPathList();
+        allowedPaths << d->allowedPaths;
 
         foreach (const QString &allowed, allowedPaths) {
             //It's a private import
@@ -132,7 +174,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 QString pathCheck(path.path());
                 pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
 
-                if (pathCheck == m_package.metadata().pluginName() || allowed.contains(pathCheck)) {
+                if (pathCheck == package.metadata().pluginName() || allowed.contains(pathCheck)) {
                     return path;
                 } else {
                     continue;
@@ -144,12 +186,12 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 return path;
             }
         }
-        qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
-        return path;
+
+        qWarning() << "WARNING: Access denied for URL" << path << package.path();
         return QUrl::fromLocalFile( allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
     }
 
-    qWarning() << "WARNING: Access denied for URL" << path << m_package.path();
+    qWarning() << "WARNING: Access denied for URL" << path << package.path();
     return QUrl();
 }
 
