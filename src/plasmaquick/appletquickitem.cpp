@@ -385,8 +385,13 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
 
-    QQmlContext *context = new QQmlContext(AppletQuickItemPrivate::s_engine->rootContext());
-    d->qmlObject = new KDeclarative::QmlObject(AppletQuickItemPrivate::s_engine, context, this);
+    if (applet->pluginInfo().property("X-Plasma-RequiredExtensions").toStringList().contains("SharedEngine")) {
+        QQmlContext *context = new QQmlContext(AppletQuickItemPrivate::s_engine->rootContext());
+        d->qmlObject = new KDeclarative::QmlObject(AppletQuickItemPrivate::s_engine, context, this);
+    } else {
+        d->qmlObject = new KDeclarative::QmlObject(this);
+    }
+
     if (applet->pluginInfo().isValid()) {
         const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
         if (!rootPath.isEmpty()) {
@@ -414,15 +419,22 @@ AppletQuickItem::~AppletQuickItem()
 
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
-    QQmlContext *context = QtQml::qmlContext(object);
-    //search the root context of the applet in which the object is in
-    while (context) {
-        //the rootcontext of an applet is a child of the engine root context
-        if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
-            break;
-        }
+    QQmlContext *context;
+    //is it using shared engine mode?
+    if (QtQml::qmlEngine(object) == AppletQuickItemPrivate::s_engine) {
+        context = QtQml::qmlContext(object);
+        //search the root context of the applet in which the object is in
+        while (context) {
+            //the rootcontext of an applet is a child of the engine root context
+            if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
+                break;
+            }
 
-        context = context->parentContext();
+            context = context->parentContext();
+        }
+    //otherwise index by root context
+    } else {
+        context = QtQml::qmlEngine(object)->rootContext();
     }
     //at the moment of the attached object creation, the root item is the only one that hasn't a parent
     //only way to avoid creation of this attached for everybody but the root item

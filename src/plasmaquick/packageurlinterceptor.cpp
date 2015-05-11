@@ -43,6 +43,8 @@ public:
     QStringList allowedPaths;
     QQmlEngine *engine;
 
+    //FIXME: those are going to be stuffed here and stay..
+    // they should probably be removed when the last applet of that type is removed
     static QHash<QString, Plasma::Package> s_packages;
 };
 
