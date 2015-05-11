@@ -33,7 +33,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
-#include <kdeclarative/qmlobject.h>
+#include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <packageurlinterceptor.h>
 
@@ -42,8 +42,6 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
-QQmlEngine *AppletQuickItemPrivate::s_engine = 0;
-
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
       switchWidth(-1),
@@ -51,10 +49,14 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
-    if (!s_engine) {
-        s_engine = new QQmlEngine;
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(s_engine, Plasma::Package());
-        s_engine->setUrlInterceptor(interceptor);
+    if (a->pluginInfo().property("X-Plasma-RequiredExtensions").toStringList().contains("SharedEngine")) {
+        qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
+        if (!qmlObject->engine()->urlInterceptor()) {
+            PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
+            qmlObject->engine()->setUrlInterceptor(interceptor);
+        }
+    } else {
+        qmlObject = new KDeclarative::QmlObject(q);
     }
 }
 
@@ -385,13 +387,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
 
-    if (applet->pluginInfo().property("X-Plasma-RequiredExtensions").toStringList().contains("SharedEngine")) {
-        QQmlContext *context = new QQmlContext(AppletQuickItemPrivate::s_engine->rootContext());
-        d->qmlObject = new KDeclarative::QmlObject(AppletQuickItemPrivate::s_engine, context, this);
-    } else {
-        d->qmlObject = new KDeclarative::QmlObject(this);
-    }
-
     if (applet->pluginInfo().isValid()) {
         const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
         if (!rootPath.isEmpty()) {
@@ -421,7 +416,7 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     QQmlContext *context;
     //is it using shared engine mode?
-    if (QtQml::qmlEngine(object) == AppletQuickItemPrivate::s_engine) {
+    if (!QtQml::qmlEngine(object)->parent()) {
         context = QtQml::qmlContext(object);
         //search the root context of the applet in which the object is in
         while (context) {
@@ -467,7 +462,7 @@ void AppletQuickItem::init()
     //if the engine of the qmlObject is different from the static one, then we
     //are using an old version of the api in which every applet had one engine
     //so initialize a private url interceptor
-    if (d->applet->package().isValid() && engine != AppletQuickItemPrivate::s_engine) {
+    if (d->applet->package().isValid() && qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
