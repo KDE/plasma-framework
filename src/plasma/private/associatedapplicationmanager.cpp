@@ -72,7 +72,15 @@ public:
         for (i = urlLists.begin(); i != urlLists.end(); ++i) {
             QAction *a = i.key()->actions()->action("run associated application");
             if (a) {
-                apps = KFileItemActions::associatedApplications(mimeDb.mimeTypeForUrl(i.value().first()).aliases(), QString());
+                // This gets the current mimetype _and_ a list of its aliases, because aliases()
+                // do not return the current mimetype in it, so it needs to be prepended,
+                // especially for the cases where there are no aliases to be returned,
+                // this would then just return an empty list, returning the generic action even
+                // when there is a valid mimetype and an associated app
+                QStringList mimeTypes{mimeDb.mimeTypeForUrl(i.value().first()).name()};
+                mimeTypes << mimeDb.mimeTypeForUrl(i.value().first()).aliases();
+
+                apps = KFileItemActions::associatedApplications(mimeTypes, QString());
                 if (!apps.isEmpty()) {
                     a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                     a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
