@@ -525,6 +525,8 @@ void AppletQuickItem::init()
     QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(d->qmlObject->rootObject()));
 
     d->compactRepresentationCheckTimer.start();
+    qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
+    qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
 }
 
 
