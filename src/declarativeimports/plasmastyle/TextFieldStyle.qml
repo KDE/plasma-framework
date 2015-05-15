@@ -33,6 +33,13 @@ QtQuickControlStyle.TextFieldStyle {
     selectedTextColor: theme.viewBackgroundColor
     placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
 
+    /*
+     * Since the password echo is a circle woithout vertical or horizontal lines, it won't be
+     * more blurred with different rendring types.
+     * Using Qt rendering, the dots will look more aligned and equally spaced.
+     */
+    renderType: control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
+
     background: Item {
         implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
