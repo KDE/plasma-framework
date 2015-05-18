@@ -20,6 +20,7 @@ set(plasmaquick_LIB_SRC
     dialog.cpp
     dialogshadows.cpp
     view.cpp
+    containmentview.cpp
     configmodel.cpp
     shellpluginloader.cpp
     configview.cpp
