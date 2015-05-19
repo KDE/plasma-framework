@@ -42,6 +42,10 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
+//TODO: temporary
+QSet<QString> AppletQuickItemPrivate::s_legacyApplets = QSet<QString>({"org.kde.plasma.bluetooth", "org.kde.plasma.pager", "org.kde.desktopcontainment", "org.kde.plasma.folder", "org.kde.panel", "org.kde.plasma.analogclock", "org.kde.plasma.battery", "org.kde.plasma.notifications", "org.kde.plasma.systemtray"});
+
+
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
       switchWidth(-1),
@@ -49,13 +53,20 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
-    if (a->pluginInfo().property("X-Plasma-RequiredExtensions").toStringList().contains("SharedEngine")) {
+    //TODO: remove the legacy support at some point
+    //use the shared engine only for applets that are nt in the legacy list
+    //if they are, use the shared engine if their mayor version is at least 3
+    const QStringList version = a->pluginInfo().version().split(".");
+    if (!AppletQuickItemPrivate::s_legacyApplets.contains(a->pluginInfo().pluginName()) ||
+         (!version.isEmpty() && version.first().toInt() >= 3)) {
+
         qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
         if (!qmlObject->engine()->urlInterceptor()) {
             PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
             qmlObject->engine()->setUrlInterceptor(interceptor);
         }
     } else {
+        qWarning() << "Falling back to legacy separed QQmlEngine for applet" << a->pluginInfo().pluginName();
         qmlObject = new KDeclarative::QmlObject(q);
     }
 }
