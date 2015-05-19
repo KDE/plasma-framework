@@ -159,44 +159,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return ret;
 
         //forbid to load random absolute paths
-    } else {
-        return path;
-        //TODO: remove all of this?
-        if (package.allowExternalPaths() || package.metadata().property("X-Plasma-RequiredExtensions").toString().contains(QStringLiteral("ExternalScripts"))) {
-            return path;
-        }
-
-        //NOTE: It's needed to build this on the fly because importPathList
-        //can change at runtime
-        QStringList allowedPaths;
-        allowedPaths << d->engine->importPathList();
-        allowedPaths << d->allowedPaths;
-
-        foreach (const QString &allowed, allowedPaths) {
-            //It's a private import
-            if (path.path().contains("org/kde/plasma/private")) {
-                QString pathCheck(path.path());
-                pathCheck = pathCheck.replace(QRegExp(".*org/kde/plasma/private/(.*)/.*"), "org.kde.plasma.\\1");
-
-                if (pathCheck == package.metadata().pluginName() || allowed.contains(pathCheck)) {
-                    return path;
-                } else {
-                    continue;
-                }
-            }
-            //it's from an allowed, good
-            if (path.path().startsWith(allowed)) {
-                //qDebug() << "Found allowed, access granted" << path;
-                return path;
-            }
-        }
-
-        qWarning() << "WARNING: Access denied for URL" << path << package.path();
-        return QUrl::fromLocalFile( allowedPaths.first() + "/org/kde/plasma/accessdenied/qmldir");
     }
 
-    qWarning() << "WARNING: Access denied for URL" << path << package.path();
-    return QUrl();
+    return path;
 }
 
 }
