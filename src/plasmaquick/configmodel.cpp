@@ -210,11 +210,17 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         return d->categories.at(index.row())->visible();
     case KCMRole: {
         const QString pluginName = d->categories.at(index.row())->pluginName();
+        const QString pluginPath = KPluginLoader::findPlugin(pluginName);
+        //no kcm is registered for this row, it's a normal qml-only entry
+        if (pluginName.isEmpty() || pluginPath.isEmpty()) {
+            return QVariant();
+        }
+
         if (d->kcms.contains(pluginName)) {
             return QVariant::fromValue(d->kcms.value(pluginName));
         }
 
-        KPluginLoader loader(KPluginLoader::findPlugin(pluginName));
+        KPluginLoader loader(pluginPath);
         KPluginFactory* factory = loader.factory();
         if (!factory) {
             qWarning() << "Error loading KCM:" << loader.errorString();
