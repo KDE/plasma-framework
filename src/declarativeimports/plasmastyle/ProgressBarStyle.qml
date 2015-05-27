@@ -57,6 +57,7 @@ ProgressBarStyle {
             height: style.implicitHeight
             imagePath: style.imagePath
             prefix: "bar-inactive"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
         }
     }
 
@@ -66,6 +67,7 @@ ProgressBarStyle {
             anchors.verticalCenter: parent.verticalCenter
             imagePath: style.imagePath
             prefix: "bar-active"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
 
             width: control.indeterminate ? units.gridUnit * 2 : Math.max(margins.left + margins.right, parent.width)
             height: style.implicitHeight

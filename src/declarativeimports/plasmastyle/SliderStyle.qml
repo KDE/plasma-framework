@@ -36,6 +36,7 @@ QtQuickControlStyle.SliderStyle {
     PlasmaCore.Svg {
         id: grooveSvg
         imagePath: "widgets/slider"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
 
     }
     handle: Item {
@@ -57,13 +58,13 @@ QtQuickControlStyle.SliderStyle {
             elementId: "horizontal-slider-handle"
         }
     }
-    
 
     groove: PlasmaCore.FrameSvgItem {
         id: groove
         imagePath: "widgets/slider"
         prefix: "groove"
         height: implicitHeight * Math.max(1, Math.floor(units.devicePixelRatio))
+        colorGroup: PlasmaCore.ColorScope.colorGroup
 
         PlasmaCore.FrameSvgItem {
             id: highlight
@@ -73,6 +74,7 @@ QtQuickControlStyle.SliderStyle {
 
             width: styleData.handlePosition
             anchors.verticalCenter: parent.verticalCenter
+            colorGroup: PlasmaCore.ColorScope.colorGroup
 
             visible: value > 0 && slider.enabled
         }
@@ -83,7 +85,7 @@ QtQuickControlStyle.SliderStyle {
         id: repeater
         model: control.stepSize > 0 ? 1 + (control.maximumValue - control.minimumValue) / control.stepSize : 0
         Rectangle {
-            color: theme.textColor
+            color: PlasmaCore.ColorScope.textColor
             width: 1 ; height: 3
             y: repeater.height
             //Position ticklines from styleData.handleWidth to width - styleData.handleWidth/2
