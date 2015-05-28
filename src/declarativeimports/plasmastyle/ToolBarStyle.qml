@@ -28,5 +28,6 @@ QtQuickControlStyle.ToolBarStyle {
 
     background: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/toolbar"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
     }
 }

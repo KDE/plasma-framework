@@ -50,6 +50,7 @@ QtQuickControlStyle.TabViewStyle {
             opacity: styleData.selected ? 1 : (styleData.hovered ? 0.4 : 0)
             imagePath: "widgets/tabbar"
             prefix: control.tabPosition === Qt.TopEdge ? "north-active-tab" : "south-active-tab"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             Behavior on opacity {
                 PropertyAnimation {
                     duration: units.longDuration

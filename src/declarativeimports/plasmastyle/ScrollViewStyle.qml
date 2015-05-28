@@ -35,6 +35,7 @@ QtQuickControlStyle.ScrollViewStyle {
         PlasmaCore.Svg {
             id: borderSvg
             imagePath: "widgets/scrollwidget"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
         }
 
         PlasmaCore.SvgItem {
@@ -121,12 +122,14 @@ QtQuickControlStyle.ScrollViewStyle {
         imagePath:"widgets/scrollbar"
         prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
         implicitWidth: widthHint
+        colorGroup: PlasmaCore.ColorScope.colorGroup
     }
 
     handle: PlasmaCore.FrameSvgItem {
         imagePath:"widgets/scrollbar"
         implicitWidth: widthHint
         implicitHeight: widthHint
+        colorGroup: PlasmaCore.ColorScope.colorGroup
 
         prefix: {
             if (styleData.hovered) {

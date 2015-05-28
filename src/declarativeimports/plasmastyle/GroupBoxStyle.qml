@@ -58,6 +58,7 @@ Style  {
             imagePath: "widgets/frame"
             prefix: "plain"
             visible: !control.flat
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             Component.onCompleted: {
                 styleRoot.padding.left = frame.margins.left
                 styleRoot.padding.top = frame.margins.top + label.height

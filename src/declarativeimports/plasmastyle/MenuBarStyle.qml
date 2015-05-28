@@ -43,6 +43,7 @@ QtQuickControlStyle.MenuBarStyle {
         implicitWidth: text.implicitWidth + units.smallSpacing * 3
         implicitHeight: text.implicitHeight + units.smallSpacing * 2
         enabled: styleData.enabled
+        colorGroup: PlasmaCore.ColorScope.colorGroup
 
         Accessible.role: Accessible.MenuItem
         Accessible.name: plainText
