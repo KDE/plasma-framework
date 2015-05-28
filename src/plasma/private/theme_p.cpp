@@ -632,6 +632,17 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
                 return viewColorScheme.foreground(KColorScheme::VisitedText).color();
             }
         }
+        case Theme::NegativeColor: {
+            if (!colors) {
+                return viewColorScheme.foreground(KColorScheme::NegativeText).color();
+            }
+            KConfigGroup cg(colors, "Colors:Complementary");
+            if (cg.isValid()) {
+                return cg.readEntry("ForegroundNegative", viewColorScheme.foreground(KColorScheme::NegativeText).color());
+            } else {
+                return viewColorScheme.foreground(KColorScheme::NegativeText).color();
+            }
+        }
         }
         break;
     }
