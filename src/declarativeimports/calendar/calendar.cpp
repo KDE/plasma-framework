@@ -184,7 +184,7 @@ QAbstractListModel *Calendar::daysModel() const
 {
     return m_daysModel;
 }
-QList<int> Calendar::weeksModel() const
+QJsonArray Calendar::weeksModel() const
 {
     return m_weekList;
 }
@@ -196,7 +196,7 @@ void Calendar::updateData()
     }
 
     m_dayList.clear();
-    m_weekList.clear();
+    m_weekList = QJsonArray();
 
     int totalDays = m_days * m_weeks;
 
@@ -261,12 +261,12 @@ void Calendar::updateData()
     }
     const int numOfDaysInCalendar = m_dayList.count();
 
-    // Fill weeksModel (just a QList<int>) with the week numbers. This needs some tweaking!
+    // Fill weeksModel with the week numbers
     for (int i = 0; i < numOfDaysInCalendar; i += 7) {
         const DayData &data = m_dayList.at(i);
         m_weekList << QDate(data.yearNumber, data.monthNumber, data.dayNumber).weekNumber();
     }
-
+    emit weeksModelChanged();
     m_daysModel->update();
 
 //    qDebug() << "---------------------------------------------------------------";

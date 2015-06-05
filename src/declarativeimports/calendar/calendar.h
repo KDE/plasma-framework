@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QDate>
 #include <QAbstractListModel>
+#include <QJsonArray>
 
 #include "daydata.h"
 #include "daysmodel.h"
@@ -53,7 +54,7 @@ class Calendar : public QObject
     /**
      * This model contains the week numbers for the given date grid.
      */
-    Q_PROPERTY(QList<int> weeksModel READ weeksModel CONSTANT)
+    Q_PROPERTY(QJsonArray weeksModel READ weeksModel NOTIFY weeksModelChanged)
 
     /**
      * The number of days a week contains.
@@ -163,7 +164,7 @@ public:
 
     // Models
     QAbstractListModel *daysModel() const;
-    QList<int> weeksModel() const;
+    QJsonArray weeksModel() const;
 
     // QML invokables
     Q_INVOKABLE void nextMonth();
@@ -184,6 +185,7 @@ Q_SIGNALS:
     void errorMessageChanged();
     void monthNameChanged();
     void yearChanged();
+    void weeksModelChanged();
 
 public Q_SLOTS:
     void updateData();
@@ -194,7 +196,7 @@ private:
     Types m_types;
     QList<DayData> m_dayList;
     DaysModel *m_daysModel;
-    QList<int> m_weekList;
+    QJsonArray m_weekList;
 
     int m_days;
     int m_weeks;

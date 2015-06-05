@@ -47,13 +47,14 @@ Item {
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
     property date today
+    property bool showWeekNumbers: true
 
     function prefCellWidth() {
         return Math.min(
             Math.max(
                 mWidth * 3,
                 // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
-                Math.floor((calendar.width - (root.columns + 1) * borderWidth) / root.columns)
+                Math.floor((calendar.width - (root.columns + 1) * borderWidth) / (root.columns + (root.showWeekNumbers ? 1 : 0)))
             ),
             mWidth * 100
         )

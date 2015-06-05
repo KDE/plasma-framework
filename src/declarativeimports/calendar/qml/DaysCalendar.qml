@@ -23,13 +23,15 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 Item {
     id: daysCalendar
 
+    readonly property int gridColumns: root.showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns
+
     // This is to ensure that the inner grid.width is always aligned to be divisible by 7,
     // fixes wrong side margins because of the rounding of cell size
     // (consider the parent.width to be 404, the cell width would be 56,
     // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
     // wrong alignment)
     anchors {
-        leftMargin: Math.floor(((parent.width - (root.columns + 1) * borderWidth) % root.columns) / 2)
+        leftMargin: Math.floor(((parent.width - (gridColumns + 1) * borderWidth) % gridColumns) / 2)
         rightMargin: anchors.leftMargin
         bottomMargin: anchors.leftMargin
     }
@@ -56,7 +58,7 @@ Item {
 
             // This isn't the real width/height, but rather the X coord where the line will stop
             // and as the coord system starts from (0,0), we need to do "-1" to not get off-by-1 errors
-            var rectWidth = (root.cellWidth + root.borderWidth) * calendarGrid.columns + root.borderWidth - 1
+            var rectWidth = (root.cellWidth + root.borderWidth) * gridColumns + root.borderWidth - 1
             var rectHeight = (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
 
             // the outer frame
@@ -64,15 +66,15 @@ Item {
 
             // horizontal lines
             for (var i = 0; i < calendarGrid.rows - 1; i++) {
-                var lineY = (rectHeight / calendarGrid.columns) * (i + 1);
+                var lineY = (rectHeight / calendarGrid.rows) * (i + 1);
 
-                ctx.moveTo(0, lineY);
+                ctx.moveTo(root.showWeekNumbers ? root.cellWidth + root.borderWidth : root.borderWidth, lineY);
                 ctx.lineTo(rectWidth, lineY);
             }
 
             // vertical lines
-            for (var i = 0; i < calendarGrid.columns - 1; i++) {
-                var lineX = (rectWidth / calendarGrid.rows) * (i + 1);
+            for (var i = 0; i < gridColumns - 1; i++) {
+                var lineX = (rectWidth / gridColumns) * (i + 1);
 
                 ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
                 ctx.lineTo(lineX, rectHeight);
@@ -84,10 +86,42 @@ Item {
         }
     }
 
+    Column {
+        id: weeksColumn
+        visible: root.showWeekNumbers
+        anchors {
+            top: canvas.top
+            left: parent.left
+            bottom: canvas.bottom
+            // The borderWidth needs to be counted twice here because it goes
+            // in fact through two lines - the topmost one (the outer edge)
+            // and then the one below weekday strings
+            topMargin: root.cellHeight + root.borderWidth + root.borderWidth
+        }
+        spacing: root.borderWidth
+
+        Repeater {
+            model: root.showWeekNumbers ? calendarBackend.weeksModel : []
+
+            Components.Label {
+                height: root.cellHeight
+                width: root.cellWidth
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: 0.4
+                text: modelData
+                font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
+            }
+        }
+    }
+
     Grid {
         id: calendarGrid
         // Pad the grid to not overlap with the top and left frame
-        x: root.borderWidth
+        // When week numbers are shown, the border needs to be counted twice
+        // because there's one more cell to count with and therefore also
+        // another border to add
+        x: root.showWeekNumbers ? 2 * root.borderWidth + root.cellWidth: root.borderWidth
         y: root.borderWidth
         columns: calendarBackend.days
         rows: calendarBackend.weeks + 1
