@@ -55,7 +55,7 @@ class ToolTipDialog;
  *         icon: "plasma"
  *         // alternatively, you can specify your own component
  *         // to be loaded when the tooltip shows
- *         mainComponent: Component {
+ *         mainItem: Component {
  *              YourCustomItem { ...  }
  *         }
  * ... }
