@@ -180,7 +180,11 @@ void Units::updateDevicePixelRatio()
     // TODO: make it possible to adapt to the dpi for the current screen dpi
     //  instead of assuming that all of them use the same dpi which applies for
     //  X11 but not for other systems.
-    qreal dpi = QGuiApplication::primaryScreen()->logicalDotsPerInchX();
+    QScreen *primary = QGuiApplication::primaryScreen();
+    if (!primary) {
+        return;
+    }
+    const qreal dpi = primary->logicalDotsPerInchX();
     // Usual "default" is 96 dpi
     // that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_devicePixelRatio = (qreal)dpi / (qreal)96;
