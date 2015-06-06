@@ -1,0 +1,907 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Weng Xuetian <wengxt@gmail.com>, 2014, 2015.
+# Xuetian Weng <xweng@cs.stonybrook.edu>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2015-05-14 08:49+0000\n"
+"PO-Revision-Date: 2015-01-24 13:52-0800\n"
+"Last-Translator: Weng Xuetian <wengxt@gmail.com>\n"
+"Language-Team: Chinese Simplified <kde-china@kde.org>\n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr "确认"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr "取消"
+
+#: plasma/applet.cpp:123
+msgid "Script initialization failed"
+msgstr "脚本初始化失败"
+
+#: plasma/applet.cpp:334
+msgid "Unknown"
+msgstr "未知"
+
+#: plasma/applet.cpp:616
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "激活 %1 部件"
+
+#: plasma/containment.cpp:125 plasma/private/applet_p.cpp:120
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "删除%1"
+
+#: plasma/containment.cpp:130
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "%1设置"
+
+#: plasma/corona.cpp:309 plasma/corona.cpp:382
+msgid "Lock Widgets"
+msgstr "锁定部件"
+
+#: plasma/corona.cpp:309
+msgid "Unlock Widgets"
+msgstr "解锁部件"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "是否创建主题的磁盘缓存。"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"在磁盘上的主题缓存的以千字节计的最大大小。注意这些文件是稀疏文件，因此不一定"
+"会用到最大大小。设置一个较大的大小因此通常比较安全。"
+
+#: plasma/pluginloader.cpp:96
+msgid "Accessibility"
+msgstr "辅助功能"
+
+#: plasma/pluginloader.cpp:97
+msgid "Application Launchers"
+msgstr "应用程序启动器"
+
+#: plasma/pluginloader.cpp:98
+msgid "Astronomy"
+msgstr "天文"
+
+#: plasma/pluginloader.cpp:99
+msgid "Date and Time"
+msgstr "日期和时间"
+
+#: plasma/pluginloader.cpp:100
+msgid "Development Tools"
+msgstr "开发工具"
+
+#: plasma/pluginloader.cpp:101
+msgid "Education"
+msgstr "教学"
+
+#: plasma/pluginloader.cpp:102
+msgid "Environment and Weather"
+msgstr "环境和天气"
+
+#: plasma/pluginloader.cpp:103
+msgid "Examples"
+msgstr "示例"
+
+#: plasma/pluginloader.cpp:104
+msgid "File System"
+msgstr "文件系统"
+
+#: plasma/pluginloader.cpp:105
+msgid "Fun and Games"
+msgstr "娱乐和游戏"
+
+#: plasma/pluginloader.cpp:106
+msgid "Graphics"
+msgstr "图像"
+
+#: plasma/pluginloader.cpp:107
+msgid "Language"
+msgstr "语言"
+
+#: plasma/pluginloader.cpp:108
+msgid "Mapping"
+msgstr "映射"
+
+#: plasma/pluginloader.cpp:109
+msgid "Miscellaneous"
+msgstr "杂项"
+
+#: plasma/pluginloader.cpp:110
+msgid "Multimedia"
+msgstr "多媒体"
+
+#: plasma/pluginloader.cpp:111
+msgid "Online Services"
+msgstr "在线服务"
+
+#: plasma/pluginloader.cpp:112
+msgid "Productivity"
+msgstr "生产力"
+
+#: plasma/pluginloader.cpp:113
+msgid "System Information"
+msgstr "系统信息"
+
+#: plasma/pluginloader.cpp:114
+msgid "Utilities"
+msgstr "工具"
+
+#: plasma/pluginloader.cpp:115
+msgid "Windows and Tasks"
+msgstr "窗口和任务"
+
+#: plasma/pluginloader.cpp:658 plasma/pluginloader.cpp:659
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "杂项"
+
+#: plasma/private/applet_p.cpp:125
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "%1 设置..."
+
+#: plasma/private/applet_p.cpp:140
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "部件 %1 未定义使用哪个脚本引擎。"
+
+#: plasma/private/applet_p.cpp:157
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "无法打开 %2 部件所需的 %1 包。"
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "无法为 %2 部件创建 %1 脚本引擎。"
+
+#: plasma/private/applet_p.cpp:192
+msgid "Alternatives..."
+msgstr "可替换项..."
+
+#: plasma/private/applet_p.cpp:254
+msgid "Widget Removed"
+msgstr "部件已移除"
+
+#: plasma/private/applet_p.cpp:255
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "已移除部件“%1”。"
+
+#: plasma/private/applet_p.cpp:257
+msgid "Panel Removed"
+msgstr "面板已移除"
+
+#: plasma/private/applet_p.cpp:258
+msgid "A panel has been removed."
+msgstr "已移除一个面板。"
+
+#: plasma/private/applet_p.cpp:261
+msgid "Desktop Removed"
+msgstr "桌面已移除"
+
+#: plasma/private/applet_p.cpp:262
+msgid "A desktop has been removed."
+msgstr "已移除一个桌面。"
+
+#: plasma/private/applet_p.cpp:265
+msgid "Undo"
+msgstr "撤消"
+
+#: plasma/private/applet_p.cpp:354
+msgid "Widget Settings"
+msgstr "部件设置"
+
+#: plasma/private/applet_p.cpp:361
+msgid "Remove this Widget"
+msgstr "删除此部件"
+
+#: plasma/private/applet_p.cpp:368
+#: plasma/private/associatedapplicationmanager.cpp:89
+#: plasma/private/associatedapplicationmanager.cpp:133
+#: plasma/private/associatedapplicationmanager.cpp:158
+msgid "Run the Associated Application"
+msgstr "运行关联应用程序"
+
+#: plasma/private/associatedapplicationmanager.cpp:86
+#: plasma/private/associatedapplicationmanager.cpp:155
+#, kde-format
+msgid "Open with %1"
+msgstr "用 %1 打开"
+
+#: plasma/private/containment_p.cpp:84
+msgid "Remove this Panel"
+msgstr "删除此面板"
+
+#: plasma/private/containment_p.cpp:86
+msgid "Remove this Activity"
+msgstr "删除此活动项"
+
+#: plasma/private/containment_p.cpp:92
+msgid "Activity Settings"
+msgstr "活动项设置"
+
+#: plasma/private/containment_p.cpp:98
+msgid "Add Widgets..."
+msgstr "添加部件..."
+
+#: plasma/private/containment_p.cpp:213
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "无法找到所需都组件：%1"
+
+#: plasma/private/packages.cpp:45 plasma/private/packages.cpp:65
+#: plasmaquick/private/packages.cpp:86 plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "主脚本文件"
+
+#: plasma/private/packages.cpp:87 plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "图像"
+
+#: plasma/private/packages.cpp:88 plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr "主题化的图像"
+
+#: plasma/private/packages.cpp:94 plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "配置定义"
+
+#: plasma/private/packages.cpp:99 plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "用户界面"
+
+#: plasma/private/packages.cpp:101 plasma/private/packages.cpp:125
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "日期文件"
+
+#: plasma/private/packages.cpp:103 plasma/private/packages.cpp:127
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "可执行脚本"
+
+#: plasma/private/packages.cpp:108 plasma/private/packages.cpp:135
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "翻译"
+
+#: plasma/private/packages.cpp:116
+msgid "Configuration UI pages model"
+msgstr "配置界面页面模型"
+
+#: plasma/private/packages.cpp:117
+msgid "Configuration XML file"
+msgstr "配置 XML 文件"
+
+#: plasma/private/packages.cpp:132
+msgid "Service Descriptions"
+msgstr "服务描述"
+
+#: plasma/private/packages.cpp:144
+msgid "Images for dialogs"
+msgstr "对话框的图像"
+
+#: plasma/private/packages.cpp:146 plasma/private/packages.cpp:148
+msgid "Generic dialog background"
+msgstr "常规对话框背景"
+
+#: plasma/private/packages.cpp:150 plasma/private/packages.cpp:152
+msgid "Theme for the logout dialog"
+msgstr "注销对话框主题"
+
+#: plasma/private/packages.cpp:154
+msgid "Wallpaper packages"
+msgstr "壁纸包"
+
+#: plasma/private/packages.cpp:156 plasma/private/packages.cpp:209
+msgid "Images for widgets"
+msgstr "部件的图像"
+
+#: plasma/private/packages.cpp:158 plasma/private/packages.cpp:160
+msgid "Background image for widgets"
+msgstr "部件的背景图像"
+
+#: plasma/private/packages.cpp:162 plasma/private/packages.cpp:164
+msgid "Analog clock face"
+msgstr "模拟时钟表面"
+
+#: plasma/private/packages.cpp:166 plasma/private/packages.cpp:168
+msgid "Background image for panels"
+msgstr "面板的背景图像"
+
+#: plasma/private/packages.cpp:170 plasma/private/packages.cpp:172
+msgid "Background for graphing widgets"
+msgstr "图形化部件的背景"
+
+#: plasma/private/packages.cpp:174 plasma/private/packages.cpp:176
+msgid "Background image for tooltips"
+msgstr "工具提示的背景图像"
+
+#: plasma/private/packages.cpp:178
+msgid "Opaque images for dialogs"
+msgstr "对话框的透明图像"
+
+#: plasma/private/packages.cpp:180 plasma/private/packages.cpp:182
+msgid "Opaque generic dialog background"
+msgstr "常规透明对话框背景"
+
+#: plasma/private/packages.cpp:184 plasma/private/packages.cpp:186
+msgid "Opaque theme for the logout dialog"
+msgstr "注销对话框的透明主题"
+
+#: plasma/private/packages.cpp:188
+msgid "Opaque images for widgets"
+msgstr "部件的透明图像"
+
+#: plasma/private/packages.cpp:190 plasma/private/packages.cpp:192
+msgid "Opaque background image for panels"
+msgstr "面板的透明背景图像"
+
+#: plasma/private/packages.cpp:194 plasma/private/packages.cpp:196
+msgid "Opaque background image for tooltips"
+msgstr "工具提示的透明背景图像"
+
+#: plasma/private/packages.cpp:199
+msgid "Low color images for dialogs"
+msgstr "对话框的低色彩图像"
+
+#: plasma/private/packages.cpp:201 plasma/private/packages.cpp:203
+msgid "Low color generic dialog background"
+msgstr "低色彩常规对话框背景"
+
+#: plasma/private/packages.cpp:205 plasma/private/packages.cpp:207
+msgid "Low color theme for the logout dialog"
+msgstr "注销对话框的低色彩主题"
+
+#: plasma/private/packages.cpp:211 plasma/private/packages.cpp:213
+msgid "Low color background image for widgets"
+msgstr "部件的低色彩背景图像"
+
+#: plasma/private/packages.cpp:215 plasma/private/packages.cpp:217
+msgid "Low color analog clock face"
+msgstr "低色彩的模拟时钟表面"
+
+#: plasma/private/packages.cpp:219 plasma/private/packages.cpp:221
+msgid "Low color background image for panels"
+msgstr "面板的低色彩背景图像"
+
+#: plasma/private/packages.cpp:223 plasma/private/packages.cpp:225
+msgid "Low color background for graphing widgets"
+msgstr "图形化部件的低色彩背景"
+
+#: plasma/private/packages.cpp:227 plasma/private/packages.cpp:229
+msgid "Low color background image for tooltips"
+msgstr "工具提示的低色彩背景图像"
+
+#: plasma/private/packages.cpp:231
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme 配置文件"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr "部件网络共享可以让您在其它计算器上也能远程访问此部件。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "在网络上共享此部件"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "允许任何人自由访问此部件"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "无效的服务，无法执行任何操作。"
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Plasma 包管理器"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr "生成位于 <path> 包的哈希值。"
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr "供所有用户安装新包或对已安装的包进行删除等操作。"
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"包的类型，例如主题、墙纸、plasmoid(plasma 部件)、数据引擎、运行器、布局模板等"
+"等。"
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "安装 <path> 处的包"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr "显示包 <name> 的信息"
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "升级 <path> 处的包"
+
+#: plasmapkg/main.cpp:67
+msgid "List installed packages"
+msgstr "列出已安装的包"
+
+#: plasmapkg/main.cpp:68
+msgid "List all known package types that can be installed"
+msgstr "列出所有可安装的已知包类型"
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "删除名为 <name> 的包"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"软件包根目录的绝对路径。如果未提供，则转而搜索本次 KDE 会话的标准数据目录。"
+
+#: plasmapkg/plasmapkg.cpp:100
+#, kde-format
+msgid "Failed to generate a Package hash for %1"
+msgstr "生成 %1 的包哈希值失败"
+
+#: plasmapkg/plasmapkg.cpp:103
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr "位于 %1 的包的 SHA1 哈希值：'%2'"
+
+#: plasmapkg/plasmapkg.cpp:141 plasmapkg/plasmapkg.cpp:188
+#: plasmapkg/plasmapkg.cpp:209
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "墙纸"
+
+#: plasmapkg/plasmapkg.cpp:194
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "小部件"
+
+#: plasmapkg/plasmapkg.cpp:200
+msgctxt "package type"
+msgid "package"
+msgstr "软件包"
+
+#: plasmapkg/plasmapkg.cpp:205
+msgctxt "package type"
+msgid "theme"
+msgstr "主题"
+
+#: plasmapkg/plasmapkg.cpp:214
+msgctxt "package type"
+msgid "dataengine"
+msgstr "数据引擎"
+
+#: plasmapkg/plasmapkg.cpp:219
+msgctxt "package type"
+msgid "runner"
+msgstr "运行器"
+
+#: plasmapkg/plasmapkg.cpp:224
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "壁纸插件"
+
+#: plasmapkg/plasmapkg.cpp:229
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr "观感"
+
+#: plasmapkg/plasmapkg.cpp:234
+msgctxt "package type"
+msgid "shell"
+msgstr "外壳"
+
+#: plasmapkg/plasmapkg.cpp:239
+msgctxt "package type"
+msgid "layout-template"
+msgstr "布局模板"
+
+#: plasmapkg/plasmapkg.cpp:244
+msgctxt "package type"
+msgid "kwineffect"
+msgstr "桌面特效"
+
+#: plasmapkg/plasmapkg.cpp:249
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr "窗口切换器"
+
+#: plasmapkg/plasmapkg.cpp:254
+msgctxt "package type"
+msgid "kwinscript"
+msgstr "KWin 脚本"
+
+#: plasmapkg/plasmapkg.cpp:264
+#, kde-format
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "找不到适合包类型 %1 的安装器"
+
+#: plasmapkg/plasmapkg.cpp:282
+#, kde-format
+msgid "Listing service types: %1"
+msgstr "列出服务类型: %1"
+
+#: plasmapkg/plasmapkg.cpp:355
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr "错误：插件 %1 未安装。"
+
+#: plasmapkg/plasmapkg.cpp:365
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr ""
+"需要使用安装(install)、删除(remove)、升级(upgrade)或列出(list)四个选项之一。"
+
+#: plasmapkg/plasmapkg.cpp:469
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr "错误：无法找到插件元数据：%1"
+
+#: plasmapkg/plasmapkg.cpp:472
+#, kde-format
+msgid "Showing info for package: %1"
+msgstr "显示包信息：%1"
+
+#: plasmapkg/plasmapkg.cpp:473
+#, kde-format
+msgid "      Name : %1"
+msgstr "      名称：%1"
+
+#: plasmapkg/plasmapkg.cpp:474
+#, kde-format
+msgid "   Comment : %1"
+msgstr "   注释：%1"
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "    插件：%1"
+
+#: plasmapkg/plasmapkg.cpp:476
+#, kde-format
+msgid "    Author : %1"
+msgstr "    作者：%1"
+
+#: plasmapkg/plasmapkg.cpp:477
+#, kde-format
+msgid "      Path : %1"
+msgstr "      路径：%1"
+
+#: plasmapkg/plasmapkg.cpp:486
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr "包目录树的选项和全局选项相互冲突，请选择其中一个。"
+
+#: plasmapkg/plasmapkg.cpp:511
+msgid "Addon Name"
+msgstr "插件名称"
+
+#: plasmapkg/plasmapkg.cpp:512
+msgid "Service Type"
+msgstr "服务类型"
+
+#: plasmapkg/plasmapkg.cpp:513
+msgid "Path"
+msgstr "路径"
+
+#: plasmapkg/plasmapkg.cpp:514
+msgid "Type Argument"
+msgstr "输入参数"
+
+#: plasmapkg/plasmapkg.cpp:562
+msgid "Package types that are installable with this tool:"
+msgstr "使用本工具可安装的包类型："
+
+#: plasmapkg/plasmapkg.cpp:563
+msgid "Built in:"
+msgstr "构建于："
+
+#: plasmapkg/plasmapkg.cpp:566
+msgid "DataEngine"
+msgstr "数据引擎"
+
+#: plasmapkg/plasmapkg.cpp:567
+msgid "Layout Template"
+msgstr "布局模板"
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Look and Feel"
+msgstr "观感"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Package"
+msgstr "软件包"
+
+#: plasmapkg/plasmapkg.cpp:570
+msgid "Plasmoid"
+msgstr "小部件"
+
+#: plasmapkg/plasmapkg.cpp:571
+msgid "Runner"
+msgstr "运行器"
+
+#: plasmapkg/plasmapkg.cpp:572
+msgid "Shell"
+msgstr "外壳"
+
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Theme"
+msgstr "主题"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Wallpaper Images"
+msgstr "墙纸图片"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Animated Wallpaper"
+msgstr "动画墙纸"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "KWin Effect"
+msgstr "KWin 效果"
+
+#: plasmapkg/plasmapkg.cpp:577
+msgid "KWin Window Switcher"
+msgstr "KWin 窗口切换器"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "KWin Script"
+msgstr "KWin 脚本"
+
+#: plasmapkg/plasmapkg.cpp:585
+msgid "Provided by plugins:"
+msgstr "插件提供："
+
+#: plasmapkg/plasmapkg.cpp:606
+msgid "Provided by .desktop files:"
+msgstr ".desktop 定义文件提供："
+
+#: plasmapkg/plasmapkg.cpp:627
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr "成功升级了 %1"
+
+#: plasmapkg/plasmapkg.cpp:629
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "成功安装了 %1"
+
+#: plasmapkg/plasmapkg.cpp:632
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr "错误：安装 %1 失败：%2"
+
+#: plasmapkg/plasmapkg.cpp:644
+#, kde-format
+msgid "Upgrading package from file: %1"
+msgstr "从文件更新包：%1"
+
+#: plasmapkg/plasmapkg.cpp:649
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr "成功卸载了 %1"
+
+#: plasmapkg/plasmapkg.cpp:651
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr "错误：卸载 %1 失败：%2"
+
+#: plasmaquick/appletquickitem.cpp:466
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "装入 QML 文件出错：%1"
+
+#: plasmaquick/appletquickitem.cpp:468
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "装入小部件出错：包不存在。%1"
+
+#: plasmaquick/configview.cpp:105
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1设置"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr "主题等默认设置"
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr "应用程序使用的配色方案。"
+
+#: plasmaquick/private/packages.cpp:42
+msgid "Preview Images"
+msgstr "预览图像"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr "预览登录管理器"
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr "预览锁屏"
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr "预览用户切换器"
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "预览虚拟桌面切换器"
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr "预览欢迎屏幕"
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr "预览 KRunner"
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr "预览窗口边框"
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr "预览窗口切换器"
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr "登录管理器"
+
+#: plasmaquick/private/packages.cpp:53
+msgid "Main Script for Login Manager"
+msgstr "登录管理器主脚本"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr "注销对话框"
+
+#: plasmaquick/private/packages.cpp:56
+msgid "Main Script for Logout Dialog"
+msgstr "注销对话框主脚本文件"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr "锁屏"
+
+#: plasmaquick/private/packages.cpp:59
+msgid "Main Script for Lock Screen"
+msgstr "锁屏主脚本文件"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr "快速用户切换的界面"
+
+#: plasmaquick/private/packages.cpp:62
+msgid "Main Script for User Switcher"
+msgstr "用户切换器主脚本文件"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr "虚拟桌面切换器"
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "虚拟桌面切换器主脚本文件"
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr "屏显提示"
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "屏显提示主脚本文件"
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr "欢迎屏幕"
+
+#: plasmaquick/private/packages.cpp:71
+msgid "Main Script for Splash Screen"
+msgstr "欢迎屏幕主脚本文件"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr "KRunner 界面"
+
+#: plasmaquick/private/packages.cpp:74
+msgid "Main Script KRunner"
+msgstr "KRunner 主脚本文件"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr "窗口装饰"
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr "窗口装饰主脚本文件"
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr "窗口切换器"
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr "窗口切换器主脚本文件"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:480
+msgid "Fetching file type..."
+msgstr "正在获取文件类型..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:612
+msgid "Widgets"
+msgstr "部件"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:625
+msgid "Icon"
+msgstr "图标"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:629
+msgid "Wallpaper"
+msgstr "墙纸"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:929
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "%1的选项"
