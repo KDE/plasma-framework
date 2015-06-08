@@ -84,7 +84,6 @@ public:
 public Q_SLOTS:
     void compositingChanged(bool active);
     void colorsChanged();
-    void blurBehindChanged(bool blur);
     void settingsFileChanged(const QString &settings);
     void scheduledCacheUpdate();
     void onAppExitCleanup();
@@ -102,7 +101,7 @@ public:
     static const char systemColorsTheme[];
     static const char themeRcFile[];
 #if HAVE_X11
-    static EffectWatcher *s_blurEffectWatcher;
+    static EffectWatcher *s_backgroundContrastEffectWatcher;
 #endif
 //Ref counting of ThemePrivate instances
     static ThemePrivate *globalTheme;
@@ -142,7 +141,7 @@ public:
 
     bool locolor : 1;
     bool compositingActive : 1;
-    bool blurActive : 1;
+    bool backgroundContrastActive : 1;
     bool isDefault : 1;
     bool useGlobal : 1;
     bool hasWallpapers : 1;

@@ -39,7 +39,7 @@ const char ThemePrivate::themeRcFile[] = "plasmarc";
 // these svgs do not follow the theme's colors, but rather the system colors
 const char ThemePrivate::systemColorsTheme[] = "internal-system-colors";
 #if HAVE_X11
-EffectWatcher *ThemePrivate::s_blurEffectWatcher = 0;
+EffectWatcher *ThemePrivate::s_backgroundContrastEffectWatcher = Q_NULLPTR;
 #endif
 
 ThemePrivate *ThemePrivate::globalTheme = 0;
@@ -61,7 +61,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       cachesToDiscard(NoCache),
       locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
-      blurActive(KWindowEffects::isEffectAvailable(KWindowEffects::BlurBehind)),
+      backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast)),
       isDefault(true),
       useGlobal(true),
       hasWallpapers(false),
@@ -95,12 +95,17 @@ ThemePrivate::ThemePrivate(QObject *parent)
 
     if (QPixmap::defaultDepth() > 8) {
 #if HAVE_X11
-        //watch for blur effect property changes as well
-        if (!s_blurEffectWatcher) {
-            s_blurEffectWatcher = new EffectWatcher("_KDE_NET_WM_BLUR_BEHIND_REGION");
+        //watch for background contrast effect property changes as well
+        if (!s_backgroundContrastEffectWatcher) {
+            s_backgroundContrastEffectWatcher = new EffectWatcher("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION");
         }
 
-        QObject::connect(s_blurEffectWatcher, SIGNAL(effectChanged(bool)), this, SLOT(blurBehindChanged(bool)));
+        QObject::connect(s_backgroundContrastEffectWatcher, &EffectWatcher::effectChanged, this, [this](bool active) {
+            if (backgroundContrastActive != active) {
+                backgroundContrastActive = active;
+                scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
+            }
+        });
 #endif
     }
     QCoreApplication::instance()->installEventFilter(this);
@@ -278,7 +283,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
         type = QStringLiteral("/locolor/");
     } else if (!compositingActive) {
         type = QStringLiteral("/opaque/");
-    } else if (blurActive) {
+    } else if (backgroundContrastActive) {
         type = QStringLiteral("/translucent/");
     }
 
@@ -358,14 +363,6 @@ void ThemePrivate::colorsChanged()
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     scheduleThemeChangeNotification(PixmapCache);
-}
-
-void ThemePrivate::blurBehindChanged(bool blur)
-{
-    if (blurActive != blur) {
-        blurActive = blur;
-        scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
-    }
 }
 
 void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
