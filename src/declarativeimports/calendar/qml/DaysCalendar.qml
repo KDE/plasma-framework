@@ -86,6 +86,13 @@ Item {
         }
     }
 
+    Connections {
+        target: root
+        onShowWeekNumbersChanged: {
+            canvas.requestPaint();
+        }
+    }
+
     Column {
         id: weeksColumn
         visible: root.showWeekNumbers
