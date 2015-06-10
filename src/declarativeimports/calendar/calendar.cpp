@@ -264,7 +264,7 @@ void Calendar::updateData()
     // Fill weeksModel with the week numbers
     for (int i = 0; i < numOfDaysInCalendar; i += 7) {
         const DayData &data = m_dayList.at(i);
-        m_weekList << QDate(data.yearNumber, data.monthNumber, data.dayNumber).weekNumber();
+        m_weekList.append(QDate(data.yearNumber, data.monthNumber, data.dayNumber).weekNumber());
     }
     emit weeksModelChanged();
     m_daysModel->update();
