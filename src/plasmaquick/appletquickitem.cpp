@@ -33,7 +33,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
-#include <kdeclarative/qmlobject.h>
+#include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <packageurlinterceptor.h>
 
@@ -42,6 +42,10 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
+//TODO: temporary
+QSet<QString> AppletQuickItemPrivate::s_legacyApplets = QSet<QString>({"org.kde.plasma.bluetooth", "org.kde.plasma.pager", "org.kde.desktopcontainment", "org.kde.plasma.folder", "org.kde.panel", "org.kde.plasma.analogclock", "org.kde.plasma.battery", "org.kde.plasma.notifications", "org.kde.plasma.systemtray"});
+
+
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
       switchWidth(-1),
@@ -49,6 +53,22 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
+    //TODO: remove the legacy support at some point
+    //use the shared engine only for applets that are nt in the legacy list
+    //if they are, use the shared engine if their mayor version is at least 3
+    const QStringList version = a->pluginInfo().version().split(".");
+    if (!AppletQuickItemPrivate::s_legacyApplets.contains(a->pluginInfo().pluginName()) ||
+         (!version.isEmpty() && version.first().toInt() >= 3)) {
+
+        qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
+        if (!qmlObject->engine()->urlInterceptor()) {
+            PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
+            qmlObject->engine()->setUrlInterceptor(interceptor);
+        }
+    } else {
+        qWarning() << "Falling back to legacy separed QQmlEngine for applet" << a->pluginInfo().pluginName();
+        qmlObject = new KDeclarative::QmlObject(q);
+    }
 }
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
@@ -378,7 +398,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
             this, SLOT(compactRepresentationCheck()));
 
-    d->qmlObject = new KDeclarative::QmlObject(this);
     if (applet->pluginInfo().isValid()) {
         const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
         if (!rootPath.isEmpty()) {
@@ -401,16 +420,32 @@ AppletQuickItem::~AppletQuickItem()
     delete d->fullRepresentationItem;
     delete d->compactRepresentationExpanderItem;
 
-    AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->engine());
-    delete d;
+    AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->rootContext());
 }
 
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
+    QQmlContext *context;
+    //is it using shared engine mode?
+    if (!QtQml::qmlEngine(object)->parent()) {
+        context = QtQml::qmlContext(object);
+        //search the root context of the applet in which the object is in
+        while (context) {
+            //the rootcontext of an applet is a child of the engine root context
+            if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
+                break;
+            }
+
+            context = context->parentContext();
+        }
+    //otherwise index by root context
+    } else {
+        context = QtQml::qmlEngine(object)->rootContext();
+    }
     //at the moment of the attached object creation, the root item is the only one that hasn't a parent
     //only way to avoid creation of this attached for everybody but the root item
-    if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(QtQml::qmlEngine(object))) {
-        return AppletQuickItemPrivate::s_rootObjects.value(QtQml::qmlEngine(object));
+    if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(context)) {
+        return AppletQuickItemPrivate::s_rootObjects.value(context);
     } else {
         return 0;
     }
@@ -423,18 +458,22 @@ Plasma::Applet *AppletQuickItem::applet() const
 
 void AppletQuickItem::init()
 {
-    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->engine())) {
+    //FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
+    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
         return;
     }
 
-    AppletQuickItemPrivate::s_rootObjects[d->qmlObject->engine()] = this;
+    AppletQuickItemPrivate::s_rootObjects[d->qmlObject->rootContext()] = this;
 
     Q_ASSERT(d->applet);
 
     //Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
 
-    if (d->applet->package().isValid()) {
+    //if the engine of the qmlObject is different from the static one, then we
+    //are using an old version of the api in which every applet had one engine
+    //so initialize a private url interceptor
+    if (d->applet->package().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
@@ -481,7 +520,7 @@ void AppletQuickItem::init()
         d->applet->setLaunchErrorMessage(reason);
     }
 
-    engine->rootContext()->setContextProperty("plasmoid", this);
+    d->qmlObject->rootContext()->setContextProperty("plasmoid", this);
 
     //initialize size, so an useless resize less
     QVariantHash initialProperties;
@@ -498,7 +537,6 @@ void AppletQuickItem::init()
         setWidth(d->qmlObject->rootObject()->property("width").value<qreal>());
         setHeight(d->qmlObject->rootObject()->property("height").value<qreal>());
     }
-
 
     //default fullrepresentation is our root main component, if none specified
     if (!d->fullRepresentation) {

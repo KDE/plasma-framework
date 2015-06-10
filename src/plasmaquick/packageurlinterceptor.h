@@ -42,6 +42,8 @@ class QQmlEngine;
 namespace PlasmaQuick
 {
 
+class PackageUrlInterceptorPrivate;
+
 //depends from https://codereview.qt-project.org/#change,65626
 class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
@@ -85,9 +87,7 @@ public:
     }
 
 private:
-    Plasma::Package m_package;
-    QStringList m_allowedPaths;
-    QQmlEngine *m_engine;
+    PackageUrlInterceptorPrivate *const d;
 };
 
 }

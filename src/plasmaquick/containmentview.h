@@ -16,10 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef PLASMAQUICKVIEW_H
-#define PLASMAQUICKVIEW_H
+#ifndef PLASMAQUICKCONTAINMENTVIEW_H
+#define PLASMAQUICKCONTAINMENTVIEW_H
 
-#include <QtQuick/QQuickView>
+#include <kquickaddons/quickviewsharedengine.h>
 
 #include <plasmaquick_export.h>
 #include "plasma/corona.h"
@@ -39,9 +39,9 @@
 namespace PlasmaQuick
 {
 
-class ViewPrivate;
+class ContainmentViewPrivate;
 
-class PLASMAQUICK_EXPORT View : public QQuickView
+class PLASMAQUICK_EXPORT ContainmentView : public KQuickAddons::QuickViewSharedEngine
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
@@ -51,86 +51,86 @@ class PLASMAQUICK_EXPORT View : public QQuickView
 public:
     /**
      * @param corona the corona of this view
-     * @param parent the QWindow this View is parented to
+     * @param parent the QWindow this ContainmentView is parented to
      **/
-    PLASMA_DEPRECATED explicit View(Plasma::Corona *corona, QWindow *parent = 0);
-    PLASMA_DEPRECATED virtual ~View();
+    explicit ContainmentView(Plasma::Corona *corona, QWindow *parent = 0);
+    virtual ~ContainmentView();
 
     /**
      * @return the corona of this view
      **/
-    PLASMA_DEPRECATED Plasma::Corona *corona() const;
+    Plasma::Corona *corona() const;
 
     /**
      * @return the KConfigGroup of this view
      **/
-    PLASMA_DEPRECATED virtual KConfigGroup config() const;
+    virtual KConfigGroup config() const;
 
     /**
      * sets the containment for this view
      * @param cont the containment of this view
      **/
-    PLASMA_DEPRECATED void setContainment(Plasma::Containment *cont);
+    void setContainment(Plasma::Containment *cont);
 
     /**
-     * @return the containment of this View
+     * @return the containment of this ContainmentView
      **/
-    PLASMA_DEPRECATED Plasma::Containment *containment() const;
+    Plasma::Containment *containment() const;
 
     /**
-     * @return the location of this View
+     * @return the location of this ContainmentView
      **/
-    PLASMA_DEPRECATED Plasma::Types::Location location() const;
+    Plasma::Types::Location location() const;
 
     /**
-     * Sets the location of the View
-     * @param location the location of the View
+     * Sets the location of the ContainmentView
+     * @param location the location of the ContainmentView
      **/
-    PLASMA_DEPRECATED void setLocation(Plasma::Types::Location location);
+    void setLocation(Plasma::Types::Location location);
 
     /**
-     * @return the formfactor of the View
+     * @return the formfactor of the ContainmentView
      **/
-    PLASMA_DEPRECATED Plasma::Types::FormFactor formFactor() const;
+    Plasma::Types::FormFactor formFactor() const;
 
     /**
-     * @return the screenGeometry of the View
+     * @return the screenGeometry of the ContainmentView
      **/
-    PLASMA_DEPRECATED QRectF screenGeometry();
+    QRectF screenGeometry();
 
 protected Q_SLOTS:
     /**
      * It will be called when the configuration is requested
      */
-    PLASMA_DEPRECATED virtual void showConfigurationInterface(Plasma::Applet *applet);
+    virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
     /**
      * emitted when the location is changed
      **/
-    PLASMA_DEPRECATED void locationChanged(Plasma::Types::Location location);
+    void locationChanged(Plasma::Types::Location location);
 
     /**
      * emitted when the formfactor is changed
      **/
-    PLASMA_DEPRECATED void formFactorChanged(Plasma::Types::FormFactor formFactor);
+    void formFactorChanged(Plasma::Types::FormFactor formFactor);
 
     /**
      * emitted when the containment is changed
      **/
-    PLASMA_DEPRECATED void containmentChanged();
+    void containmentChanged();
 
     /**
      * emitted when the screenGeometry is changed
      **/
-    PLASMA_DEPRECATED void screenGeometryChanged();
+    void screenGeometryChanged();
 
 private:
-    ViewPrivate *const d;
+    ContainmentViewPrivate *const d;
     Q_PRIVATE_SLOT(d, void updateDestroyed(bool))
-    friend class ViewPrivate;
+    friend class ContainmentViewPrivate;
 };
 
 }
 
-#endif // View_H
+#endif // CONTAINMENTVIEW_H

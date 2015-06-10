@@ -24,7 +24,7 @@
 #include <QDebug>
 #include <QPropertyAnimation>
 
-#include <kdeclarative/qmlobject.h>
+#include <kdeclarative/qmlobjectsharedengine.h>
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : Dialog(parent),
@@ -59,7 +59,7 @@ ToolTipDialog::~ToolTipDialog()
 QQuickItem *ToolTipDialog::loadDefaultItem()
 {
     if (!m_qmlObject) {
-        m_qmlObject = new KDeclarative::QmlObject(this);
+        m_qmlObject = new KDeclarative::QmlObjectSharedEngine(this);
     }
 
     if (!m_qmlObject->rootObject()) {
