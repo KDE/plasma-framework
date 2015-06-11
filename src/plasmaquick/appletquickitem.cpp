@@ -187,7 +187,10 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
         return compactRepresentationItem;
     }
 
-    compactRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject())));
+    QVariantHash initialProperties;
+    initialProperties["parent"] = QVariant::fromValue(q);
+
+    compactRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
 
     emit q->compactRepresentationItemChanged(compactRepresentationItem);
 
