@@ -261,8 +261,20 @@ void Calendar::updateData()
     }
     const int numOfDaysInCalendar = m_dayList.count();
 
+    // Week numbers are always counted from Mondays
+    // so find which index is Monday
+    int mondayOffset = 0;
+    if (!m_dayList.isEmpty()) {
+        const DayData &data = m_dayList.at(0);
+        QDate firstDay(data.yearNumber, data.monthNumber, data.dayNumber);
+        // If the first day is not already Monday, get offset for Monday
+        if (firstDay.dayOfWeek() != 1) {
+            mondayOffset = 8 - firstDay.dayOfWeek();
+        }
+    }
+
     // Fill weeksModel with the week numbers
-    for (int i = 0; i < numOfDaysInCalendar; i += 7) {
+    for (int i = mondayOffset; i < numOfDaysInCalendar; i += 7) {
         const DayData &data = m_dayList.at(i);
         m_weekList.append(QDate(data.yearNumber, data.monthNumber, data.dayNumber).weekNumber());
     }
