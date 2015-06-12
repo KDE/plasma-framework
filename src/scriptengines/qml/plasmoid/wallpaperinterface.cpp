@@ -150,7 +150,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
-    m_qmlObject->engine()->rootContext()->setContextProperty("wallpaper", this);
+    m_qmlObject->rootContext()->setContextProperty("wallpaper", this);
 
     //initialize with our size to avoid as much resize events as possible
     QVariantHash props;
