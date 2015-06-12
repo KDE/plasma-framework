@@ -542,7 +542,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
     QRectF elementRect = renderer->elementExists(elementId) ?
                          renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
                          QRectF();
-    naturalSize = renderer->defaultSize();
+    naturalSize = renderer->defaultSize() * scaleFactor;
     qreal dx = size.width() / naturalSize.width();
     qreal dy = size.height() / naturalSize.height();
 
