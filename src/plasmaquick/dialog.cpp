@@ -1165,7 +1165,6 @@ bool Dialog::event(QEvent *event)
 void Dialog::hideEvent(QHideEvent *event)
 {
     QQuickWindow::hideEvent(event);
-    destroy();
 }
 
 void Dialog::classBegin()
