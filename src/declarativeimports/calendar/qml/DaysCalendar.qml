@@ -25,21 +25,14 @@ Item {
 
     readonly property int gridColumns: root.showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns
 
-    // This is to ensure that the inner grid.width is always aligned to be divisible by 7,
-    // fixes wrong side margins because of the rounding of cell size
-    // (consider the parent.width to be 404, the cell width would be 56,
-    // but 56*7 + 6 (the inner spacing) is 398, so we split the remaining 6 to avoid
-    // wrong alignment)
-    anchors {
-        leftMargin: Math.floor(((parent.width - (gridColumns + 1) * borderWidth) % gridColumns) / 2)
-        rightMargin: anchors.leftMargin
-        bottomMargin: anchors.leftMargin
-    }
-
     // Paints the inner grid and the outer frame
     Canvas {
         id: canvas
-        anchors.fill: parent
+
+        width: (root.cellWidth + root.borderWidth) * gridColumns + root.borderWidth
+        height: (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth
+        anchors.bottom: parent.bottom
+
         opacity: root.borderOpacity
         antialiasing: false
         clip: false
@@ -56,28 +49,37 @@ Item {
 
             ctx.beginPath();
 
-            // This isn't the real width/height, but rather the X coord where the line will stop
-            // and as the coord system starts from (0,0), we need to do "-1" to not get off-by-1 errors
-            var rectWidth = (root.cellWidth + root.borderWidth) * gridColumns + root.borderWidth - 1
-            var rectHeight = (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth - 1
-
-            // the outer frame
-            ctx.strokeRect(0, 0, rectWidth, rectHeight);
+            // When line is more wide than 1px, it is painted with 1px line at the actual coords
+            // and then 1px lines are added first to the left of the middle then right (then left again)
+            // So all the lines need to be offset a bit to have their middle point in the center
+            // of the grid spacing rather than on the left most pixel, otherwise they will be painted
+            // over the days grid which will be visible on eg. mouse hover
+            var lineBasePoint = Math.floor(root.borderWidth / 2)
 
             // horizontal lines
-            for (var i = 0; i < calendarGrid.rows - 1; i++) {
-                var lineY = (rectHeight / calendarGrid.rows) * (i + 1);
+            for (var i = 0; i < calendarGrid.rows + 1; i++) {
+                var lineY = lineBasePoint + (root.cellHeight + root.borderWidth) * (i);
 
-                ctx.moveTo(root.showWeekNumbers ? root.cellWidth + root.borderWidth : root.borderWidth, lineY);
-                ctx.lineTo(rectWidth, lineY);
+                if (i == 0 || i == calendarGrid.rows) {
+                    ctx.moveTo(0, lineY);
+                } else {
+                    ctx.moveTo(root.showWeekNumbers ? root.cellWidth + root.borderWidth : root.borderWidth, lineY);
+                }
+                ctx.lineTo(width, lineY);
             }
 
             // vertical lines
-            for (var i = 0; i < gridColumns - 1; i++) {
-                var lineX = (rectWidth / gridColumns) * (i + 1);
+            for (var i = 0; i < gridColumns + 1; i++) {
+                var lineX = lineBasePoint + (root.cellWidth + root.borderWidth) * (i);
 
-                ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
-                ctx.lineTo(lineX, rectHeight);
+                // Draw the outer vertical lines in full height so that it closes
+                // the outer rectangle
+                if (i == 0 || i == gridColumns) {
+                    ctx.moveTo(lineX, 0);
+                } else {
+                    ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
+                }
+                ctx.lineTo(lineX, height);
             }
 
             ctx.closePath();
@@ -129,10 +131,15 @@ Item {
         // because there's one more cell to count with and therefore also
         // another border to add
         x: root.showWeekNumbers ? 2 * root.borderWidth + root.cellWidth: root.borderWidth
-        y: root.borderWidth
+
+        anchors {
+            bottom: parent.bottom
+            bottomMargin: root.borderWidth
+        }
+
         columns: calendarBackend.days
         rows: calendarBackend.weeks + 1
-        spacing: 1
+        spacing: root.borderWidth
         property Item selectedItem
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
@@ -144,6 +151,8 @@ Item {
                 calendarGrid.selectedItem = null;
             }
         }
+
+
 
         Repeater {
             id: days
@@ -158,7 +167,7 @@ Item {
                     verticalAlignment: Text.AlignBottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: borderWidth * 2
+                    anchors.bottomMargin: units.smallSpacing
                 }
             }
         }
