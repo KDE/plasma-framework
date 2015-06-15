@@ -95,6 +95,13 @@ Item {
         }
     }
 
+    Connections {
+        target: theme
+        onTextColorChanged: {
+            canvas.requestPaint();
+        }
+    }
+
     Column {
         id: weeksColumn
         visible: root.showWeekNumbers
