@@ -145,6 +145,11 @@ void ConfigViewPrivate::init()
             KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + kcm));
             KPluginMetaData md(loader.fileName());
 
+            if (!md.isValid()) {
+                qWarning() << "Could not find" << kcm << "specified in X-Plasma-ConfigPlugins";
+                continue;
+            }
+
             configModel->appendCategory(md.iconName(), md.name(), QString(), loader.fileName());
         }
     }
