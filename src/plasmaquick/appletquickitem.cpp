@@ -53,6 +53,12 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
+    if (!a->pluginInfo().isValid()) {
+        // This `qmlObject` is used in other parts of the code
+        qmlObject = new KDeclarative::QmlObject(q);
+        return;
+    }
+
     //TODO: remove the legacy support at some point
     //use the shared engine only for applets that are nt in the legacy list
     //if they are, use the shared engine if their mayor version is at least 3
