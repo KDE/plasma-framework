@@ -192,8 +192,14 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
         KDeclarative::KDeclarative kdeclarative;
         kdeclarative.setDeclarativeEngine(engine());
         //binds things like kconfig and icons
-        kdeclarative.setTranslationDomain("plasma_shell_" + corona->package().metadata().pluginName());
-        kdeclarative.setupBindings();
+
+        KPluginInfo info = corona->package().metadata();
+        if (info.isValid()) {
+            kdeclarative.setTranslationDomain("plasma_shell_" + info.pluginName());
+            kdeclarative.setupBindings();
+        } else {
+            qWarning() << "Invalid corona package metadata";
+        }
     } else {
         qWarning() << "Invalid home screen package";
     }
