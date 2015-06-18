@@ -73,13 +73,16 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     }
 
     connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-            [=]() {
-                if (!m_containment) {
-                    return;
-                }
-                disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
-                           this, &ContainmentInterface::appletRemovedForward);
-            });
+            this, &ContainmentInterface::slotAboutToQuit);
+}
+
+void ContainmentInterface::slotAboutToQuit()
+{
+    if (!m_containment) {
+        return;
+    }
+    disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
+               this, &ContainmentInterface::appletRemovedForward);
 }
 
 void ContainmentInterface::init()
