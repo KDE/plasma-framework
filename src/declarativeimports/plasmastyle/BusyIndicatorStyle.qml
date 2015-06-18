@@ -25,7 +25,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 BusyIndicatorStyle {
     indicator: PlasmaCore.SvgItem {
         id: indicatorItem
-        svg: PlasmaCore.Svg { imagePath: "widgets/busywidget" }
+        svg: PlasmaCore.Svg {
+            imagePath: "widgets/busywidget"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+        }
         elementId: "busywidget"
 
         anchors.centerIn: parent
