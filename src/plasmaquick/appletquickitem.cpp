@@ -210,7 +210,9 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
     }
 
     if (fullRepresentation && fullRepresentation != qmlObject->mainComponent()) {
-        fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject())));
+        QVariantHash initialProperties;
+        initialProperties["parent"] = QVariant::fromValue(q);
+        fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
     } else {
         fullRepresentation = qmlObject->mainComponent();
         fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->rootObject());
