@@ -63,7 +63,7 @@ QtQuickControlStyle.SliderStyle {
         id: groove
         imagePath: "widgets/slider"
         prefix: "groove"
-        height: implicitHeight * Math.max(1, Math.floor(units.devicePixelRatio))
+        height: implicitHeight
         colorGroup: PlasmaCore.ColorScope.colorGroup
 
         PlasmaCore.FrameSvgItem {

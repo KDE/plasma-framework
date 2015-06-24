@@ -234,13 +234,13 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     if ((themed && QFile::exists(path)) || QFile::exists(actualPath)) {
         QRectF rect;
 
-        if (cacheAndColorsTheme()->findInRectsCache(path, "_Natural", rect)) {
+        if (cacheAndColorsTheme()->findInRectsCache(path, QString("_Natural_%1").arg(scaleFactor), rect)) {
             naturalSize = rect.size();
         } else {
             createRenderer();
             naturalSize = renderer->defaultSize() * scaleFactor;
             //qDebug() << "natural size for" << path << "from renderer is" << naturalSize;
-            cacheAndColorsTheme()->insertIntoRectsCache(path, "_Natural", QRectF(QPointF(0, 0), naturalSize));
+            cacheAndColorsTheme()->insertIntoRectsCache(path, QString("_Natural_%1").arg(scaleFactor), QRectF(QPointF(0, 0), naturalSize));
             //qDebug() << "natural size for" << path << "from cache is" << naturalSize;
         }
     }
@@ -543,11 +543,12 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
                          renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
                          QRectF();
     naturalSize = renderer->defaultSize() * scaleFactor;
-    qreal dx = size.width() / naturalSize.width();
-    qreal dy = size.height() / naturalSize.height();
+
+    qreal dx = size.width() / renderer->defaultSize().width();
+    qreal dy = size.height() / renderer->defaultSize().height();
 
     elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
-                         elementRect.width() * dx * scaleFactor, elementRect.height() * dy * scaleFactor);
+                         elementRect.width() * dx, elementRect.height() * dy);
 
     cacheAndColorsTheme()->insertIntoRectsCache(path, id, elementRect);
 
@@ -735,6 +736,17 @@ void Svg::setScaleFactor(qreal ratio)
     }
 
     d->scaleFactor = floor(ratio);
+    //not resize() because we want to do it unconditionally
+    QRectF rect;
+
+    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QString("_Natural_%1").arg(d->scaleFactor), rect)) {
+        d->naturalSize = rect.size();
+    } else {
+        d->createRenderer();
+        d->naturalSize = d->renderer->defaultSize() * d->scaleFactor;
+    }
+
+    d->size = d->naturalSize;
 
     emit repaintNeeded();
     emit sizeChanged();
@@ -878,7 +890,7 @@ bool Svg::isValid() const
 
     //try very hard to avoid creation of a parser
     QRectF rect;
-    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, "_Natural", rect)) {
+    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QString("_Natural_%1").arg(d->scaleFactor), rect)) {
         return true;
     }
 
