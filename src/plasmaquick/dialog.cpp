@@ -35,6 +35,8 @@
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
 
+#include <kquickaddons/quickviewsharedengine.h>
+
 #include <kwindoweffects.h>
 #include <Plasma/Plasma>
 #include <Plasma/Corona>
@@ -1038,7 +1040,9 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
-        if (qobject_cast<const View *>(focusWindow) || (!parentHasFocus && !childHasFocus)) {
+        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow);
+
+        if (viewClicked || (!parentHasFocus && !childHasFocus)) {
             setVisible(false);
             emit windowDeactivated();
         }
