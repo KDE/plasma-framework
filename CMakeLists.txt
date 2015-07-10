@@ -20,7 +20,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(KDEFrameworkCompilerSettings)
 
-set(KF5_VERSION "5.12.0") # handled by release scripts
+set(KF5_VERSION "5.13.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.12.0") # handled by release scripts
 
 ecm_setup_version(${KF5_VERSION}
