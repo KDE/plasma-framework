@@ -65,4 +65,8 @@ QtQuickControlStyle.TextFieldStyle {
             root.padding.bottom = base.margins.bottom
         }
     }
+
+    __cursorHandle: CursorHandleStyle {}
+    __selectionHandle: SelectionHandleStyle {}
+    __editMenu: EditMenuTouch {}
 }

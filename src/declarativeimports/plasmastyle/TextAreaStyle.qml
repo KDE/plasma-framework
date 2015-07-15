@@ -67,4 +67,7 @@ QtQuickControlStyle.TextAreaStyle {
     incrementControl: svs.incrementControl
     decrementControl: svs.decrementControl
 
+    __cursorHandle: CursorHandleStyle {}
+    __selectionHandle: SelectionHandleStyle {}
+    __editMenu: EditMenuTouch {}
 }
