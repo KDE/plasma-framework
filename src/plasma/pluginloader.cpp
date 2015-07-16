@@ -574,7 +574,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
             auto pi = KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
-                qWarning() << "Could not load plugin info:" << md.metaDataFileName()   << "skipping plugin";
+                qWarning() << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
                 continue;
             }
             list << pi;
@@ -600,7 +600,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
             auto pi =  KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
-                qWarning() << "Could not load plugin info:" << md.metaDataFileName()   << "skipping plugin";
+                qWarning() << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
                 continue;
             }
             list << pi;
