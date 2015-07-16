@@ -309,7 +309,7 @@ void DialogPrivate::updateVisibility(bool visible)
         } else {
             q->setFlags(Qt::FramelessWindowHint | q->flags());
         }
-        if (type == Dialog::Dock) {
+        if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay) {
             KWindowSystem::setOnAllDesktops(q->winId(), true);
         } else {
             KWindowSystem::setOnAllDesktops(q->winId(), false);
@@ -1000,7 +1000,7 @@ void Dialog::setType(WindowType type)
         }
     }
 
-    if (type == Dock) {
+    if (type == Dock || type == Notification || type == OnScreenDisplay) {
         KWindowSystem::setOnAllDesktops(winId(), true);
     } else {
         KWindowSystem::setOnAllDesktops(winId(), false);
