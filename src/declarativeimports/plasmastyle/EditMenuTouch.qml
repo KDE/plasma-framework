@@ -52,19 +52,23 @@ Item {
         width: childrenRect.width + margins.left + margins.right
         height: childrenRect.height + margins.top + margins.bottom
         z: 9999
-        function __popup(pos) {
-            popup.x = pos.x;
-            popup.y = pos.y;
-            popup.visible = true;
-            input.z = 9999
-            print("POPUP MENU"+pos.y+" "+popup.x+" "+popup.width+" "+popup.parent)
-            //popup.y = 0
-            //popup.parent = input.parent.parent.parent.parent.parent
+        Component.onCompleted: {
             var par = popup.parent
             while (par) {
                 popup.parent = par
                 par = parent.parent
             }
+        }
+        
+        function __popup(pos) {
+            //pos = input.mapToItem(popup, pos.x, pos.y);
+            popup.x = pos.x;
+            popup.y = pos.y;
+            popup.visible = true;
+            print("POPUP MENU"+pos.y+" "+popup.x+" "+popup.width+" "+popup.parent)
+            //popup.y = 0
+            //popup.parent = input.parent.parent.parent.parent.parent
+            
             popup.z = 9999
         }
         function __dismissMenu() {
@@ -183,7 +187,7 @@ Item {
                     && (cursorHandle.delegate)) {
                 var p1 = input.positionToRectangle(input.selectionStart);
                 var p2 = input.positionToRectangle(input.selectionEnd);
-                var topLeft = input.mapToItem(input, p1.x, input.height);
+                var topLeft = input.mapToItem(null, p1.x, p1.y + units.gridUnit);
                 var size = Qt.size(p2.x - p1.x + p1.width, p2.y - p1.y + p1.height)
                 var targetRect = Qt.rect(topLeft.x, topLeft.y, size.width, size.height);
                 getMenuInstance().__dismissMenu();
