@@ -61,14 +61,9 @@ Item {
         }
         
         function __popup(pos) {
-            //pos = input.mapToItem(popup, pos.x, pos.y);
             popup.x = pos.x;
             popup.y = pos.y;
             popup.visible = true;
-            print("POPUP MENU"+pos.y+" "+popup.x+" "+popup.width+" "+popup.parent)
-            //popup.y = 0
-            //popup.parent = input.parent.parent.parent.parent.parent
-            
             popup.z = 9999
         }
         function __dismissMenu() {
