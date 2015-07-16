@@ -41,7 +41,7 @@ Item {
                 par = parent.parent
             }
         }
-        
+
         function popup(pos) {
             popup.x = pos.x;
             popup.y = pos.y;
