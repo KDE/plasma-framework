@@ -35,11 +35,11 @@ Item {
         height: childrenRect.height + margins.top + margins.bottom
         z: 9999
         Component.onCompleted: {
-            var par = popup.parent
-            while (par) {
-                popup.parent = par
-                par = parent.parent
+            var par = control
+            while (par.parent) {
+                par = par.parent
             }
+            popup.parent = par
         }
 
         function popup(pos) {
@@ -59,6 +59,7 @@ Item {
             PlasmaComponents.ToolButton {
                 iconSource: "edit-cut"
                 flat: false
+                enabled: input.selectedText != ""
                 onClicked: {
                     cut();
                     select(input.cursorPosition, input.cursorPosition);
@@ -66,6 +67,7 @@ Item {
             }
             PlasmaComponents.ToolButton {
                 iconSource: "edit-copy"
+                enabled: input.selectedText != ""
                 flat: false
                 onClicked: {
                     copy();
@@ -74,6 +76,7 @@ Item {
             }
             PlasmaComponents.ToolButton {
                 iconSource: "edit-paste"
+                enabled: input.canPaste
                 flat: false
                 onClicked: {
                     paste();
@@ -99,9 +102,9 @@ Item {
             popupTimer.restart();
         }
         onPressAndHold: {
+            input.activate();
             var pos = input.positionAt(mouseArea.mouseX, mouseArea.mouseY);
             input.select(pos, pos);
-            var hasSelection = selectionStart != selectionEnd;
             selectWord();
             popupTimer.restart();
         }
@@ -114,15 +117,21 @@ Item {
         onActiveFocusChanged: popupTimer.restart()
     }
 
+    Connections {
+        target: flickable
+        onMovingChanged: popupTimer.restart()
+    }
+
     Timer {
         id: popupTimer
         interval: 1
         onTriggered: {
-            if (selectionStart !== selectionEnd && control.activeFocus) {
+            if (((input.canPaste && mouseArea.pressed) || selectionStart !== selectionEnd) && control.activeFocus) {
                 var startRect = input.positionToRectangle(input.selectionStart);
                 var endRect = input.positionToRectangle(input.selectionEnd);
 
-                var pos = getMenuInstance().mapFromItem(input, startRect.x, startRect.y + units.gridUnit);
+                var pos = getMenuInstance().parent.mapFromItem(input, startRect.x, startRect.y + units.gridUnit);
+
                 getMenuInstance().dismiss();
                 getMenuInstance().popup(pos);
             } else {
