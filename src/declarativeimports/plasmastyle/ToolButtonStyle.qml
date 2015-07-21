@@ -119,7 +119,7 @@ QtQuickControlStyle.ButtonStyle {
     }
 
     background: {
-        if (control.text.length == 0 && (control.parent && control.parent.checkedButton === undefined) && !style.flat) {
+        if (control.text.length == 0 && (control.parent && control.parent.checkedButton === undefined) && !style.flat && !control.menu) {
             return roundButtonComponent
         } else {
             return buttonComponent
