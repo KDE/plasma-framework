@@ -49,6 +49,7 @@
 // #include "dataenginebindings_p.h"
 
 #include <QDebug>
+#include <QWindow>
 
 void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
@@ -91,6 +92,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SortFilterModel, 1>(uri, 2, 1, "SortFilterModel");
 
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
+    // HACK make properties like "opacity" work that are in REVISION 1 of QWindow
+    qmlRegisterRevision<QWindow, 1>(uri, 2, 0);
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
     qmlRegisterInterface<Plasma::Service>("Service");
