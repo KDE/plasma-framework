@@ -75,5 +75,5 @@ QtQuickControlStyle.TextAreaStyle {
 
     __cursorHandle: CursorHandleStyle {}
     __selectionHandle: SelectionHandleStyle {}
-    __editMenu: QtQuickControlsPrivate.Settings.isMobile ? editMenuTouch : null
+    property Component __editMenu: QtQuickControlsPrivate.Settings.isMobile ? editMenuTouch : null
 }
