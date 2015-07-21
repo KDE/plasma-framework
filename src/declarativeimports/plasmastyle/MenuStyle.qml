@@ -32,6 +32,7 @@ QtQuickControlStyle.MenuStyle {
     submenuOverlap: 0
     submenuPopupDelay: 0
     __maxPopupHeight: 0
+    __leftLabelMargin: theme.mSize(theme.defaultFont).height * 2 //see RadioButtonStyle size
 
     frame: StyleItem {
         elementType: "menu"
