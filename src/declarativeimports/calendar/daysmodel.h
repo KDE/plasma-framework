@@ -28,9 +28,7 @@ class DaysModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum Roles {
-        isPreviousMonth = Qt::UserRole + 1,
-        isCurrentMonth,
-        isNextMonth,
+        isCurrent = Qt::UserRole + 1,
         //containsHolidayItems,
         //containsEventItems,
         //containsTodoItems,

@@ -48,10 +48,22 @@ void Calendar::setDisplayedDate(const QDate &dateTime)
     if (m_displayedDate == dateTime) {
         return;
     }
+
+    const int oldMonth = m_displayedDate.month();
+    const int oldYear = m_displayedDate.year();
+
     m_displayedDate = dateTime;
+
     //  m_dayHelper->setDate(m_displayedDate.year(), m_displayedDate.month());
+
     updateData();
     emit displayedDateChanged();
+    if (oldMonth != m_displayedDate.month()) {
+        emit monthNameChanged();
+    }
+    if (oldYear != m_displayedDate.year()) {
+        emit yearChanged();
+    }
 }
 
 QDate Calendar::today() const
@@ -222,9 +234,7 @@ void Calendar::updateData()
         //QDate previousMonth(m_displayedDate.year(), m_displayedDate.month() - 1, 1);
         for (int i = 0; i < daysBeforeCurrentMonth; i++) {
             DayData day;
-            day.isCurrentMonth = false;
-            day.isNextMonth = false;
-            day.isPreviousMonth = true;
+            day.isCurrent = false;
             day.dayNumber = previousMonth.daysInMonth() - (daysBeforeCurrentMonth - (i + 1));
             day.monthNumber = previousMonth.month();
             day.yearNumber = previousMonth.year();
@@ -235,9 +245,7 @@ void Calendar::updateData()
 
     for (int i = 0; i < m_displayedDate.daysInMonth(); i++) {
         DayData day;
-        day.isCurrentMonth = true;
-        day.isNextMonth = false;
-        day.isPreviousMonth = false;
+        day.isCurrent = true;
         day.dayNumber = i + 1; // +1 to go form 0 based index to 1 based calendar dates
         //  day.containsEventItems = m_dayHelper->containsEventItems(i + 1);
         day.monthNumber = m_displayedDate.month();
@@ -249,9 +257,7 @@ void Calendar::updateData()
     if (daysAfterCurrentMonth > 0) {
         for (int i = 0; i < daysAfterCurrentMonth; i++) {
             DayData day;
-            day.isCurrentMonth = false;
-            day.isNextMonth = true;
-            day.isPreviousMonth = false;
+            day.isCurrent = false;
             day.dayNumber = i + 1; // +1 to go form 0 based index to 1 based calendar dates
             //   day.containsEventItems = false;
             day.monthNumber = m_displayedDate.addMonths(1).month();
@@ -292,36 +298,43 @@ void Calendar::updateData()
 //    qDebug() << "m_dayList size: " << m_dayList.count();
 //    qDebug() << "---------------------------------------------------------------";
 }
+
+void Calendar::nextDecade()
+{
+    setDisplayedDate(m_displayedDate.addYears(10));
+}
+
+void Calendar::previousDecade()
+{
+    setDisplayedDate(m_displayedDate.addYears(-10));
+}
+
 void Calendar::nextYear()
 {
-    m_displayedDate = m_displayedDate.addYears(1);
-    updateData();
-    emit displayedDateChanged();
-    emit yearChanged();
+    setDisplayedDate(m_displayedDate.addYears(1));
 }
 
 void Calendar::previousYear()
 {
-    m_displayedDate = m_displayedDate.addYears(-1);
-    updateData();
-    emit displayedDateChanged();
-    emit yearChanged();
+    setDisplayedDate(m_displayedDate.addYears(-1));
 }
 
 void Calendar::nextMonth()
 {
-    m_displayedDate = m_displayedDate.addMonths(1);
-    updateData();
-    emit displayedDateChanged();
-    emit monthNameChanged();
-    emit yearChanged();
+    setDisplayedDate(m_displayedDate.addMonths(1));
 }
 
 void Calendar::previousMonth()
 {
-    m_displayedDate = m_displayedDate.addMonths(-1);
-    updateData();
-    emit displayedDateChanged();
-    emit monthNameChanged();
-    emit yearChanged();
+    setDisplayedDate(m_displayedDate.addMonths(-1));
+}
+
+void Calendar::goToMonth(int month)
+{
+    setDisplayedDate(QDate(m_displayedDate.year(), month, m_displayedDate.day()));
+}
+
+void Calendar::goToYear(int year)
+{
+    setDisplayedDate(QDate(year, m_displayedDate.month(), m_displayedDate.day()));
 }

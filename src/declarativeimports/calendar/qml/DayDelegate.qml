@@ -1,6 +1,7 @@
 /*
  * Copyright 2013 Heena Mahour <heena393@gmail.com>
  * Copyright 2013 Sebastian Kügler <sebas@kde.org>
+ * Copyright 2015 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,26 +21,55 @@ import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
 
+import org.kde.plasma.calendar 2.0
 
 Item {
     id: dayStyle
-    width: root.cellWidth
-    height: root.cellHeight
 
-    property bool today: root.today.toDateString() == new Date(yearNumber, monthNumber - 1, dayNumber).toDateString() // for some reason the comparison doesn't work without toDateString()
+    signal activated
+
+    readonly property date thisDate: new Date(yearNumber, typeof monthNumber !== "undefined" ? monthNumber - 1 : 0, typeof dayNumber !== "undefined" ? dayNumber : 1)
+    readonly property bool today: {
+        var today = root.today;
+        var result = true;
+        if (dateMatchingPrecision >= Calendar.MatchYear) {
+            result = result && today.getFullYear() === thisDate.getFullYear()
+        }
+        if (dateMatchingPrecision >= Calendar.MatchYearAndMonth) {
+            result = result && today.getMonth() === thisDate.getMonth()
+        }
+        if (dateMatchingPrecision >= Calendar.MatchYearMonthAndDay) {
+            result = result && today.getDate() === thisDate.getDate()
+        }
+        return result
+    }
+    readonly property bool selected: {
+        var current = root.currentDate
+        var result = true
+        if (dateMatchingPrecision >= Calendar.MatchYear) {
+            result = result && current.getFullYear() === thisDate.getFullYear()
+        }
+        if (dateMatchingPrecision >= Calendar.MatchYearAndMonth) {
+            result = result && current.getMonth() === thisDate.getMonth()
+        }
+        if (dateMatchingPrecision >= Calendar.MatchYearMonthAndDay) {
+            result = result && current.getDate() === thisDate.getDate()
+        }
+        return result
+    }
 
     onHeightChanged: {
         // this is needed here as the text is first rendered, counting with the default root.cellHeight
         // then root.cellHeight actually changes to whatever it should be, but the Label does not pick
         // it up after that, so we need to change it explicitly after the cell size changes
-        label.font.pixelSize = Math.max(theme.smallestFont.pixelSize, Math.floor(root.cellHeight / 3))
+        label.font.pixelSize = Math.max(theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
     }
 
     Rectangle {
         id: todayRect
         anchors.fill: parent
         opacity: {
-            if (calendarGrid.selectedItem == dayStyle && today) {
+            if (selected && today) {
                 0.6
             } else if (today) {
                 0.4
@@ -55,7 +85,7 @@ Item {
         id: highlightDate
         anchors.fill: todayRect
         opacity: {
-            if (calendarGrid.selectedItem == dayStyle) {
+            if (selected) {
                 0.6
             } else if (dateMouse.containsMouse) {
                 0.4
@@ -71,10 +101,17 @@ Item {
 
     Components.Label {
         id: label
-        anchors.centerIn: parent
-        text: dayNumber
-        opacity: (isPreviousMonth || isNextMonth) ? 0.5: 1.0
+        anchors.fill: parent
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        text: model.label || dayNumber
+        opacity: isCurrent ? 1.0 : 0.5
+        wrapMode: Text.NoWrap
+        elide: Text.ElideRight
         color: today ? theme.backgroundColor : theme.textColor
+        Behavior on color {
+            ColorAnimation { duration: units.shortDuration * 2 }
+        }
     }
 
     MouseArea {
@@ -82,17 +119,12 @@ Item {
         anchors.fill: parent
         //z: label.z + 1
         hoverEnabled: true
-        onClicked: {
-            var rowNumber = Math.floor(index / 7);
-            week = 1+calendarBackend.weeksModel[rowNumber];
-            root.date = model;
-            calendarGrid.selectedItem = dayStyle;
-        }
+        onClicked: dayStyle.activated()
     }
 
     Component.onCompleted: {
-        if (today) {
-            root.date = model;
+        if (stack.depth === 1 && today) {
+            root.date = model
         }
     }
 }

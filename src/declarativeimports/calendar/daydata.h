@@ -4,9 +4,7 @@
 class DayData
 {
 public:
-    bool isPreviousMonth;
-    bool isCurrentMonth;
-    bool isNextMonth;
+    bool isCurrent;
 //   bool containsHolidayItems;
 //   bool containsEventItems;
 //   bool containsTodoItems;

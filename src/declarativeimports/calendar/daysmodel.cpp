@@ -26,9 +26,7 @@ DaysModel::DaysModel(QObject *parent) :
 {
     QHash<int, QByteArray> roleNames;
 
-    roleNames.insert(isPreviousMonth,        "isPreviousMonth");
-    roleNames.insert(isCurrentMonth,         "isCurrentMonth");
-    roleNames.insert(isNextMonth,            "isNextMonth");
+    roleNames.insert(isCurrent, "isCurrent");
     //roleNames.insert(containsHolidayItems,   "containsHolidayItems");
     //roleNames.insert(containsEventItems,     "containsEventItems");
     // roleNames.insert(containsTodoItems,      "containsTodoItems");
@@ -63,13 +61,11 @@ QVariant DaysModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
 
-        DayData currentData = m_data->at(index.row());
+        const DayData &currentData = m_data->at(index.row());
 
         switch (role) {
-        case isPreviousMonth:
-            return currentData.isPreviousMonth;
-        case isNextMonth:
-            return currentData.isNextMonth;
+        case isCurrent:
+            return currentData.isCurrent;
         //      case containsHolidayItems:
         //          return currentData.containsHolidayItems;
         /* case containsEventItems:

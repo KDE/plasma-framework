@@ -1,6 +1,7 @@
 /*
  * Copyright 2013  Heena Mahour <heena393@gmail.com>
  * Copyright 2013 Sebastian Kügler <sebas@kde.org>
+ * Copyright 2015 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,22 +17,146 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import QtQuick 2.0
+
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+
 Item {
     id: daysCalendar
 
-    readonly property int gridColumns: root.showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns
+    signal headerClicked
+
+    signal previous
+    signal next
+
+    signal activated(int index, var date, var item)
+
+    readonly property int gridColumns: showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns
+
+    property int rows
+    property int columns
+
+    property bool showWeekNumbers
+
+    onShowWeekNumbersChanged: canvas.requestPaint()
+
+    // how precise date matching should be, 3 = day+month+year, 2 = month+year, 1 = just year
+    property int dateMatchingPrecision
+
+    property alias headerModel: days.model
+    property alias gridModel: repeater.model
+
+    property alias title: heading.text
+
+    // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
+    readonly property int cellWidth: Math.floor((stack.width - (daysCalendar.columns + 1) * root.borderWidth) / (daysCalendar.columns + (showWeekNumbers ? 1 : 0)))
+    // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
+    readonly property int cellHeight:  Math.floor((stack.height - heading.height - (daysCalendar.rows + 1) * root.borderWidth) / (daysCalendar.rows + 1))
+
+    PlasmaExtras.Heading {
+        id: heading
+
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+
+        level: 1
+        elide: Text.ElideRight
+        font.capitalization: Font.Capitalize
+
+        MouseArea {
+            id: monthMouse
+            property int previousPixelDelta
+
+            width: heading.paintedWidth
+            anchors {
+                left: parent.left
+                top: parent.top
+                bottom: parent.bottom
+            }
+            onClicked: {
+                if (!stack.busy) {
+                    daysCalendar.headerClicked()
+                }
+            }
+            onExited: previousPixelDelta = 0
+            onWheel: {
+                var delta = wheel.angleDelta.y || wheel.angleDelta.x
+                var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
+
+                // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
+                // finger movement. To prevent the view from suddenly ending up in the next century, we
+                // cumulate all the pixel deltas until they're larger than the label and then only change
+                // the month. Standard mouse wheel scrolling is unaffected since it's fine.
+                if (pixelDelta) {
+                    if (Math.abs(previousPixelDelta) < monthMouse.height) {
+                        previousPixelDelta += pixelDelta
+                        return
+                    }
+                }
+
+                if (delta >= 15) {
+                    daysCalendar.previous()
+                } else if (delta <= -15) {
+                    daysCalendar.next()
+                }
+                previousPixelDelta = 0
+            }
+        }
+    }
+
+    Components.Label {
+        anchors {
+            top: heading.bottom
+            left: parent.left
+            leftMargin: Math.floor(units.largeSpacing / 2)
+        }
+        text: "◀"
+        opacity: leftmouse.containsMouse ? 1 : 0.4
+        Behavior on opacity { NumberAnimation {} }
+
+        MouseArea {
+            id: leftmouse
+            anchors.fill: parent
+            anchors.margins: -units.largeSpacing / 3
+            hoverEnabled: true
+            onClicked: daysCalendar.previous()
+        }
+    }
+
+    Components.Label {
+        anchors {
+            top: heading.bottom
+            right: parent.right
+            rightMargin: Math.floor(units.largeSpacing / 2)
+        }
+        text: "▶"
+        opacity: rightmouse.containsMouse ? 1 : 0.4
+        Behavior on opacity { NumberAnimation {} }
+
+        MouseArea {
+            id: rightmouse
+            anchors.fill: parent
+            anchors.margins: -units.largeSpacing / 3
+            hoverEnabled: true
+            onClicked: daysCalendar.next()
+        }
+    }
 
     // Paints the inner grid and the outer frame
     Canvas {
         id: canvas
 
-        width: (root.cellWidth + root.borderWidth) * gridColumns + root.borderWidth
-        height: (root.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth
-        anchors.bottom: parent.bottom
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            bottom: parent.bottom
+        }
+        width: (daysCalendar.cellWidth + root.borderWidth) * gridColumns + root.borderWidth
+        height: (daysCalendar.cellHeight + root.borderWidth) * calendarGrid.rows + root.borderWidth
 
         opacity: root.borderOpacity
         antialiasing: false
@@ -58,26 +183,26 @@ Item {
 
             // horizontal lines
             for (var i = 0; i < calendarGrid.rows + 1; i++) {
-                var lineY = lineBasePoint + (root.cellHeight + root.borderWidth) * (i);
+                var lineY = lineBasePoint + (daysCalendar.cellHeight + root.borderWidth) * (i);
 
                 if (i == 0 || i == calendarGrid.rows) {
                     ctx.moveTo(0, lineY);
                 } else {
-                    ctx.moveTo(root.showWeekNumbers ? root.cellWidth + root.borderWidth : root.borderWidth, lineY);
+                    ctx.moveTo(showWeekNumbers ? daysCalendar.cellWidth + root.borderWidth : root.borderWidth, lineY);
                 }
                 ctx.lineTo(width, lineY);
             }
 
             // vertical lines
             for (var i = 0; i < gridColumns + 1; i++) {
-                var lineX = lineBasePoint + (root.cellWidth + root.borderWidth) * (i);
+                var lineX = lineBasePoint + (daysCalendar.cellWidth + root.borderWidth) * (i);
 
                 // Draw the outer vertical lines in full height so that it closes
                 // the outer rectangle
                 if (i == 0 || i == gridColumns) {
                     ctx.moveTo(lineX, 0);
                 } else {
-                    ctx.moveTo(lineX, root.borderWidth + root.cellHeight);
+                    ctx.moveTo(lineX, root.borderWidth + daysCalendar.cellHeight);
                 }
                 ctx.lineTo(lineX, height);
             }
@@ -85,13 +210,6 @@ Item {
             ctx.closePath();
             ctx.stroke();
             ctx.restore();
-        }
-    }
-
-    Connections {
-        target: root
-        onShowWeekNumbersChanged: {
-            canvas.requestPaint();
         }
     }
 
@@ -104,7 +222,7 @@ Item {
 
     Column {
         id: weeksColumn
-        visible: root.showWeekNumbers
+        visible: showWeekNumbers
         anchors {
             top: canvas.top
             left: parent.left
@@ -112,40 +230,38 @@ Item {
             // The borderWidth needs to be counted twice here because it goes
             // in fact through two lines - the topmost one (the outer edge)
             // and then the one below weekday strings
-            topMargin: root.cellHeight + root.borderWidth + root.borderWidth
+            topMargin: daysCalendar.cellHeight + root.borderWidth + root.borderWidth
         }
         spacing: root.borderWidth
 
         Repeater {
-            model: root.showWeekNumbers ? calendarBackend.weeksModel : []
+            model: showWeekNumbers ? calendarBackend.weeksModel : []
 
             Components.Label {
-                height: root.cellHeight
-                width: root.cellWidth
+                height: daysCalendar.cellHeight
+                width: daysCalendar.cellWidth
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 opacity: 0.4
                 text: modelData
-                font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
+                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 6)
             }
         }
     }
 
     Grid {
         id: calendarGrid
-        // Pad the grid to not overlap with the top and left frame
-        // When week numbers are shown, the border needs to be counted twice
-        // because there's one more cell to count with and therefore also
-        // another border to add
-        x: root.showWeekNumbers ? 2 * root.borderWidth + root.cellWidth: root.borderWidth
 
         anchors {
+            right: canvas.right
+            rightMargin: root.borderWidth
             bottom: parent.bottom
             bottomMargin: root.borderWidth
         }
 
-        columns: calendarBackend.days
-        rows: calendarBackend.weeks + 1
+        columns: daysCalendar.columns
+        rows: daysCalendar.rows + 1
+
         spacing: root.borderWidth
         property Item selectedItem
         property bool containsEventItems: false // FIXME
@@ -159,17 +275,16 @@ Item {
             }
         }
 
-
-
         Repeater {
             id: days
-            model: calendarBackend.days
+
             Item {
-                width: root.cellWidth
-                height: root.cellHeight
+                width: daysCalendar.cellWidth
+                height: daysCalendar.cellHeight
+
                 Components.Label {
                     text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
-                    font.pixelSize: Math.max(theme.smallestFont.pixelSize, root.cellHeight / 6)
+                    font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 6)
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignBottom
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -181,9 +296,14 @@ Item {
 
         Repeater {
             id: repeater
-            model: calendarBackend.daysModel
 
-            DayDelegate {}
+            DayDelegate {
+                id: delegate
+                width: daysCalendar.cellWidth
+                height: daysCalendar.cellHeight
+
+                onActivated: daysCalendar.activated(index, model, delegate)
+            }
         }
     }
 }
