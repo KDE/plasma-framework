@@ -1,5 +1,6 @@
 # Plasma Framework
-The plasma framework provides the foundations that can be used to build a primary user interface, from graphical to logical components.
+
+Foundational libraries, components, and tools of the Plasma workspaces
 
 ## Introduction
 The plasma framework provides the following:
