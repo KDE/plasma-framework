@@ -43,7 +43,7 @@ endif()
 
 ################# now find all used packages #################
 
-set (REQUIRED_QT_VERSION "5.2.0")
+set (REQUIRED_QT_VERSION "5.3.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg Script)
 
