@@ -26,7 +26,9 @@
 #include "utils/d_ptr.h"
 
 /**
- * Class which handles an icondialog execution.
+ * @class which handles an icondialog execution.
+ *
+ * @deprecated Use IconDialog from org.kde.kquickcontrolsaddons
  *
  * Example:
  * <code>
