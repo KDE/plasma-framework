@@ -25,7 +25,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-Item {
+PinchArea {
     id: root
 
     anchors.fill: parent
@@ -49,6 +49,29 @@ Item {
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
     property date today
     property bool showWeekNumbers: false
+
+    onPinchStarted: stack.currentItem.transformOrigin = pinch.center
+    onPinchUpdated: {
+        var item = stack.currentItem
+        if (stack.depth < 3 && pinch.scale < 1) {
+            item.transformScale = pinch.scale
+            item.opacity = pinch.scale
+        } else if (stack.depth > 1 && pinch.scale > 1) {
+            item.transformScale = pinch.scale
+            item.opacity = (2 - pinch.scale / 2)
+        }
+    }
+    onPinchFinished: {
+        var item = stack.currentItem
+        if (item.transformScale < 0.7) {
+            item.headerClicked()
+        } else if (item.transformScale > 1.4) {
+            item.activateHighlightedItem()
+        } else {
+            item.transformScale = 1
+            item.opacity = 1
+        }
+    }
 
     function isToday(date) {
         if (date.toDateString() == new Date().toDateString()) {
@@ -158,7 +181,7 @@ Item {
                 NumberAnimation {
                     target: enterItem
                     duration: units.longDuration
-                    property: "scale"
+                    property: "transformScale"
                     from: 1.5
                     to: 1
                 }
@@ -174,9 +197,9 @@ Item {
                 NumberAnimation {
                     target: exitItem
                     duration: units.longDuration
-                    property: "scale"
-                    from: 1
-                    to: 1.5
+                    property: "transformScale"
+                    // so no matter how much you scaled, it would still fly towards you
+                    to: exitItem.transformScale * 1.5
                 }
                 NumberAnimation {
                     target: enterItem

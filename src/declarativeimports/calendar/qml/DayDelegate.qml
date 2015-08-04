@@ -23,8 +23,10 @@ import org.kde.plasma.components 2.0 as Components
 
 import org.kde.plasma.calendar 2.0
 
-Item {
+MouseArea {
     id: dayStyle
+
+    hoverEnabled: true
 
     signal activated
 
@@ -87,7 +89,7 @@ Item {
         opacity: {
             if (selected) {
                 0.6
-            } else if (dateMouse.containsMouse) {
+            } else if (dayStyle.containsMouse) {
                 0.4
             } else {
                 0
@@ -112,14 +114,6 @@ Item {
         Behavior on color {
             ColorAnimation { duration: units.shortDuration * 2 }
         }
-    }
-
-    MouseArea {
-        id: dateMouse
-        anchors.fill: parent
-        //z: label.z + 1
-        hoverEnabled: true
-        onClicked: dayStyle.activated()
     }
 
     Component.onCompleted: {
