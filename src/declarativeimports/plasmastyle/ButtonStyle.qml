@@ -38,7 +38,7 @@ QtQuickControlStyle.ButtonStyle {
     label: RowLayout {
         id: buttonContent
         spacing: units.smallSpacing
-        Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
+        Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight, icon.implicitHeight)
 
         property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
         onMinimumWidthChanged: {
@@ -60,11 +60,11 @@ QtQuickControlStyle.ButtonStyle {
             id: icon
             source: control.iconName || control.iconSource
             anchors.verticalCenter: parent.verticalCenter
-            Layout.minimumWidth: valid ? parent.height: 0
-            Layout.maximumWidth: Layout.minimumWidth
+            Layout.minimumWidth: valid ? units.iconSizes.tiny : 0
+            Layout.preferredWidth: valid ? units.iconSizes.small : 0
             visible: valid
             Layout.minimumHeight: Layout.minimumWidth
-            Layout.maximumHeight: Layout.minimumWidth
+            Layout.preferredHeight: Layout.preferredWidth
             active: control.hovered
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
