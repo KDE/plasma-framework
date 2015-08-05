@@ -34,7 +34,7 @@ QtQuickControlStyle.ButtonStyle {
 
     property int minimumWidth
     property int minimumHeight
-    property bool flat: control.flat !== undefined ? control.flat : !(control.pressed || (control.checkable && control.checked))
+    property bool flat: control.flat !== undefined ? control.flat : !(control.checkable && control.checked)
     label: Item {
         //wrapper is needed as we are adjusting the preferredHeight of the layout from the default
         //and the implicitHeight is implicitly read only
