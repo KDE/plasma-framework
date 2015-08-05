@@ -20,6 +20,7 @@
 
 import QtQuick 2.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
+import QtQuick.Controls.Private 1.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
@@ -29,7 +30,7 @@ QtQuickControlStyle.ScrollViewStyle {
 
     property real widthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * units.devicePixelRatio)
 
-    transientScrollBars: false
+    transientScrollBars: Settings.hasTouchScreen && Settings.isMobile
 
     function syncVelocity() {
         if (!control.flickableItem) {
