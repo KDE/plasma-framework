@@ -31,6 +31,26 @@ QtQuickControlStyle.ScrollViewStyle {
 
     transientScrollBars: false
 
+    function syncVelocity() {
+        if (!control.flickableItem) {
+            return;
+        }
+
+        // QTBUG-35608
+        // default values are hardcoded in qtdeclarative/src/quick/items/qquickflickablebehavior_p.h
+        control.flickableItem.flickDeceleration = Math.round(1500 * units.devicePixelRatio);
+        // double maximum speed so it feels better
+        control.flickableItem.maximumFlickVelocity = Math.round(2500 * units.devicePixelRatio);
+
+        control.flickableItem.interactive = true;
+    }
+
+    Component.onCompleted: syncVelocity()
+    Connections {
+        target: control
+        onContentItemChanged: syncVelocity()
+    }
+
     frame: Item {
         PlasmaCore.Svg {
             id: borderSvg
