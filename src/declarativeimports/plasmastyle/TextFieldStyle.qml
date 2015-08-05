@@ -71,9 +71,13 @@ QtQuickControlStyle.TextFieldStyle {
         id: editMenuTouch
         EditMenuTouch {}
     }
+    Component {
+        id: cursorTouch
+        CursorDelegate {}
+    }
 
     __cursorHandle: CursorHandleStyle {}
-    __cursorDelegate: CursorDelegate{}
+    __cursorDelegate: QtQuickControlsPrivate.Settings.isMobile ? cursorTouch : null
     __selectionHandle: SelectionHandleStyle {}
     property Component __editMenu: QtQuickControlsPrivate.Settings.isMobile ? editMenuTouch : null
 }
