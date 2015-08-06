@@ -126,7 +126,7 @@ Item {
         id: popupTimer
         interval: 1
         onTriggered: {
-            if (((input.canPaste && mouseArea.pressed) || selectionStart !== selectionEnd) && control.activeFocus) {
+            if ((input.canPaste || selectionStart !== selectionEnd) && control.activeFocus) {
                 var startRect = input.positionToRectangle(input.selectionStart);
                 var endRect = input.positionToRectangle(input.selectionEnd);
 

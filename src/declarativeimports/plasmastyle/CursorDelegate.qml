@@ -61,6 +61,7 @@ Item {
             var pos = mapToItem(input, mouse.x, mouse.y);
             input.cursorPosition = input.positionAt(pos.x, pos.y);
         }
+        onPressAndHold: print("AAAAAA"+control.getMenuInstance())
     }
 }
 
