@@ -36,9 +36,7 @@ QtQuickControlStyle.ButtonStyle {
     property int minimumHeight
 
     label: RowLayout {
-        id: buttonContent
         spacing: units.smallSpacing
-        Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight, icon.implicitHeight)
 
         property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
         onMinimumWidthChanged: {
