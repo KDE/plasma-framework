@@ -28,6 +28,42 @@
 
 class QDeclarativeItem;
 
+/**
+ * @class Menu
+ *
+ * An Item provides a menu for use in context specific situations.
+ * You can specify the position for the menu to open by setting its visualParent.
+ * MenuItems should be used to draw entries in the menu.
+ * The open() function opens up the menu at the given visualParent.
+ *
+ *
+ * Example usage:
+ * @code
+ * import org.kde.plasma.components 2.0 as PlasmaComponents
+ *
+ * [...]
+ * PlasmaComponents.Menu {
+ *     id: menu
+ *     ...
+ *     PlasmaComponents.MenuItem {
+ *         text: "Delete"
+ *         onClicked: {
+ *             myListItem.remove();
+ *         }
+ *     }
+ * }
+ * PlasmaComponents.Button {
+ *     id: btn
+ *     onClicked: {
+ *         menu.visualParent = btn
+ *         menu.open()
+ *     }
+ * }
+ * [...]
+ * @endcode
+ *
+ */
+
 class QMenuProxy : public QObject
 {
     Q_OBJECT
@@ -61,12 +97,31 @@ public:
     QWindow *transientParent();
     void setTransientParent(QWindow *parent);
 
+
+    /**
+     * This opens the menu at position x,y on the given visualParent. By default x and y are set to 0
+     */
     Q_INVOKABLE void open(int x = 0, int y = 0);
     //Q_INVOKABLE void open();
+    /**
+     * This closes the menu
+     */
     Q_INVOKABLE void close();
+    /**
+     * This removes all menuItems inside the menu
+     */
     Q_INVOKABLE void clearMenuItems();
+    /**
+     * This adds a menu item from a String
+     */
     Q_INVOKABLE void addMenuItem(const QString &text);
+    /**
+     * This adds a menu item of type MenuItem
+     */
     Q_INVOKABLE void addMenuItem(QMenuItem *item);
+    /**
+     * This adds a section header with a string used as name for the section
+     */
     Q_INVOKABLE void addSection(const QString &text);
 
 protected:
