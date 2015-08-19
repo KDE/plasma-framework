@@ -223,6 +223,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         p.setFallbackPackage(fp);
 
         if (!fp.isValid()) {
+            qWarning() << "invalid fallback path in " << p.path();
             return 0;
         }
     }
@@ -231,8 +232,13 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     // TODO: remove when Plasma 5.4 is released
     {
         KPluginInfo info = KPluginInfo::fromMetaData(p.metadata());
+        if (!info.isValid()) {
+            qWarning() << "invalid plugin in" << p.path();
+            return 0;
+        }
         KPluginLoader loader(info.libraryPath());
         if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+            qWarning() << "incompatiable plugin version in" << p.path();
             return 0;
         }
         KPluginFactory *factory = loader.factory();
