@@ -16,7 +16,9 @@
 const char defaultPackage[] = "org.kde.plasma.desktop";
 const char defaultLnFPackage[] = "org.kde.breeze.desktop";
 
-K_PLUGIN_FACTORY(PlatformStatusFactory, registerPlugin<PlatformStatus>();)
+K_PLUGIN_FACTORY_WITH_JSON(PlatformStatusFactory,
+                           "platformstatus.json",
+                           registerPlugin<PlatformStatus>();)
 
 PlatformStatus::PlatformStatus(QObject *parent, const QVariantList &)
     : KDEDModule(parent)
