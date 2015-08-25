@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment=Basic App
+Name=Bug
+Icon=kbugbuster
+
+Type=Application
+Exec=kpackagelauncherqml -a org.kde.example.developerguide.basic %u
+
+X-KDE-PluginInfo-Author=Sebastian Kügler
+X-KDE-PluginInfo-Category=Development
+X-KDE-PluginInfo-Email=sebas@kde.org
+X-KDE-PluginInfo-License=LGPLv2+
+X-KDE-PluginInfo-Name=org.kde.example.developerguide.basic
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=http://www.kde.org
+X-KDE-ServiceTypes=KPackage/GenericQML
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
