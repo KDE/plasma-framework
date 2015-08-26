@@ -58,7 +58,7 @@ PlasmaComponents.ContextMenu {
      * This signal is emitted when a menu item is clicked.
      * The attached model properties for that menu item are passed as an argument
      */
-    signal clicked(QtObject model)
+    signal clicked(var model)
 
     //ContextMenu cannot have child items, so in order to have ContextMenu as the root object of this item
     //we create a new property which contains an item which can then load the child items
