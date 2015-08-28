@@ -436,6 +436,10 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
             }
         }
 
+        //Loading a package of the given type, caches the proper
+        //packagestructures in the packageloader, making the listing
+        //of packages succeed
+        Plasma::PluginLoader::self()->loadPackage(type);
         const QList<KPluginMetaData> plugins = KPackage::PackageLoader::self()->listPackages(type);
         for (auto plugin : plugins) {
             const QString _plugin = plugin.pluginId();
