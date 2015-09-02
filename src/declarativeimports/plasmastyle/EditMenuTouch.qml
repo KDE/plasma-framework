@@ -36,9 +36,12 @@ Item {
         z: 9999
         Component.onCompleted: {
             var par = control
-            while (par.parent) {
+            //heuristic: if a flickable is found in the parents,
+            //reparent to it, so it scrolls together
+            while (par.parent && par.parent.contentY === undefined) {
                 par = par.parent
             }
+
             popup.parent = par
         }
 
@@ -46,11 +49,9 @@ Item {
             popup.x = pos.x;
             popup.y = pos.y;
             popup.visible = true;
-            popup.z = 9999
         }
         function dismiss() {
             popup.visible = false;
-            input.z = 0
         }
         Row {
             x: parent.margins.left
@@ -59,18 +60,18 @@ Item {
             PlasmaComponents.ToolButton {
                 iconSource: "edit-cut"
                 flat: false
-                enabled: input.selectedText != ""
+                visible: input.selectedText != ""
                 onClicked: {
-                    cut();
+                    control.cut();
                     select(input.cursorPosition, input.cursorPosition);
                 }
             }
             PlasmaComponents.ToolButton {
                 iconSource: "edit-copy"
-                enabled: input.selectedText != ""
+                visible: input.selectedText != ""
                 flat: false
                 onClicked: {
-                    copy();
+                    control.copy();
                     select(input.cursorPosition, input.cursorPosition);
                 }
             }
@@ -79,7 +80,7 @@ Item {
                 enabled: input.canPaste
                 flat: false
                 onClicked: {
-                    paste();
+                    control.paste();
                 }
             }
         }
