@@ -20,6 +20,7 @@
 
 import QtQuick 2.1
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
+import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 import QtQuick.Controls 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -67,4 +68,17 @@ QtQuickControlStyle.TextAreaStyle {
     incrementControl: svs.incrementControl
     decrementControl: svs.decrementControl
 
+    Component {
+        id: editMenuTouch
+        EditMenuTouch {}
+    }
+    Component {
+        id: cursorTouch
+        CursorDelegate {}
+    }
+
+    __cursorHandle: CursorHandleStyle {}
+    __cursorDelegate: QtQuickControlsPrivate.Settings.isMobile ? cursorTouch : null
+    __selectionHandle: SelectionHandleStyle {}
+    property Component __editMenu: QtQuickControlsPrivate.Settings.isMobile ? editMenuTouch : null
 }
