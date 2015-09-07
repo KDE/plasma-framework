@@ -675,6 +675,8 @@ Dialog::Dialog(QQuickItem *parent)
     property("data");
     //Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
+    //This is needed as a transition thing for KWayland
+    setProperty("__plasma_frameSvg", QVariant::fromValue(d->frameSvgItem->frameSvg()));
 
     connect(&d->theme, SIGNAL(themeChanged()),
             this, SLOT(updateTheme()));
