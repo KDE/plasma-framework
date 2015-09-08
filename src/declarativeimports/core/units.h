@@ -38,7 +38,8 @@ class Units : public QObject
 
     /**
      * The fundamental unit of space that should be used for sizes, expressed in pixels.
-     * Given the screen has an accurate DPI settings, it corresponds to a millimeter
+     * Given the screen has an accurate DPI settings, it corresponds to a width of
+     * the capital letter M
      */
     Q_PROPERTY(int gridUnit READ gridUnit NOTIFY gridUnitChanged)
 
