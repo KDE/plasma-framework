@@ -885,7 +885,20 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     if (window() && window()->mouseGrabberItem()) {
         window()->mouseGrabberItem()->ungrabMouse();
     }
-    desktopMenu.exec(event->globalPos());
+
+    QPoint pos = event->globalPos();
+    if (window() && applet && m_containment->containmentType() == Plasma::Types::PanelContainment) {
+        desktopMenu.adjustSize();
+
+        if (QScreen *screen = window()->screen()) {
+            const QRect geo = screen->availableGeometry();
+
+            pos = QPoint(qBound(geo.left(), pos.x(), geo.right() - desktopMenu.width()),
+                         qBound(geo.top(), pos.y(), geo.bottom() - desktopMenu.height()));
+        }
+    }
+
+    desktopMenu.exec(pos);
     event->setAccepted(true);
 }
 
