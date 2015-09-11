@@ -122,11 +122,9 @@ public:
     Containment *createContainment(const QString &name, const QVariantList &args = QVariantList());
 
     /**
-     * Returns the Containment, if any, for a given physical screen and desktop
+     * Returns the Containment, if any, for a given physical screen
      *
      * @param screen number of the physical screen to locate
-     * @param desktop the virtual desktop) to locate; if < 0 then it will
-     *        simply return the first Containment associated with screen
      */
     Containment *containmentForScreen(int screen) const;
 
