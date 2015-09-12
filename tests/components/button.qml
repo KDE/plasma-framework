@@ -9,23 +9,62 @@ Rectangle
     height: 300
     color: "white"
 
-    Flow {
+    Grid {
         anchors.fill: parent
         anchors.margins: 20
         spacing: 20
+        columns: 2
+
+        Label {
+            text: "icon + text"
+        }
 
         PlasmaComponents.Button {
             iconSource: "list-remove"
             text: "test"
         }
+
+        Label {
+            text: "icon alone, should look small and square"
+        }
+
         PlasmaComponents.Button {
             iconSource: "list-remove"
         }
+
+        Label {
+            text: "text alone, should be about 12 chars wide"
+        }
+
         PlasmaComponents.Button {
             text: "test"
         }
 
-        PlasmaComponents.Button{
+
+        Label {
+            text: "long text, should expand to fit"
+        }
+
+        PlasmaComponents.Button {
+            iconSource: "list-remove"
+            text: "This is a really really really really long button"
+        }
+
+        Label {
+            text: "long text but constrained, should be 150px and elided"
+        }
+
+        PlasmaComponents.Button {
+            iconSource: "list-remove"
+            text: "This is a really really really really long button"
+            width: 150
+        }
+
+        Label {
+            text: "button with menu"
+        }
+
+        PlasmaComponents.Button {
             text: "test"
             menu: Menu {
                 MenuItem {
