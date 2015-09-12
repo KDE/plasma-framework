@@ -69,7 +69,6 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaComponents.Label {
             id: label
-            Layout.minimumWidth: implicitWidth
             text: QtQuickControlsPrivate.StyleHelpers.stylizeMnemonics(control.text)
             font: control.font || theme.defaultFont
             visible: control.text != ""
