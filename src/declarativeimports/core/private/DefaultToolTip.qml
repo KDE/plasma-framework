@@ -54,7 +54,7 @@ Item {
 
         PlasmaCore.IconItem {
             id: tooltipIcon
-            source: toolTip ? toolTip.icon : ""
+            source: tooltipContentItem.visible && toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignTop
             visible: toolTip != null && toolTip.icon != "" && toolTip.image == ""
             implicitWidth: toolTip && toolTip.icon != "" ? units.iconSizes.medium : 0
