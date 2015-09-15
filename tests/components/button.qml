@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.2
 
 Rectangle
 {
@@ -93,6 +94,19 @@ Rectangle
                     }
             }
         }
+
+        Label {
+            text: "button and textfield should have the same height"
+        }
+
+        RowLayout {
+            PlasmaComponents.Button {
+                text: "test"
+            }
+            PlasmaComponents.TextField {
+            }
+        }
+
     }
 }
 

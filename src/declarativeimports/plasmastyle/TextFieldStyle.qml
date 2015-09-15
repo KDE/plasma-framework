@@ -42,7 +42,13 @@ QtQuickControlStyle.TextFieldStyle {
     renderType: control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
 
     background: Item {
-        implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
+        //QQC button heights are max(backgroundHeight, label + margins).
+        //QQC lineedits are only from the background (and if background is not set, just an arbirtary value of 25)
+        //Why? I don't know
+
+        //In order to get the same height in both buttons and lineedits we need to apply the same rule here
+
+        implicitHeight: Math.max(theme.mSize(theme.defaultFont).height * 1.6, theme.mSize(theme.defaultFont).height + base.margins.top + base.margins.bottom)
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
 
         Private.TextFieldFocus {
@@ -53,8 +59,6 @@ QtQuickControlStyle.TextFieldStyle {
         PlasmaCore.FrameSvgItem {
             id: base
             anchors.fill: parent
-            // TODO: see what is the correct policy for margins
-            //anchors.fill: parent
             imagePath: "widgets/lineedit"
             prefix: "base"
         }
