@@ -18,22 +18,27 @@
 */
 
 import QtQuick 2.1
-//import "." 2.0
+import QtQuick.Layouts 1.1
 
 /**
  * ToolBarLayout is a container for items on a toolbar that automatically
  * implements an appropriate layout for its children.
- * @inherit QtQuick.Row
+ * @inherit QtQuick.Layouts.RowLayout
  */
-Row {
+RowLayout {
     id: root
 
     visible: false
 
     Item {
-        id: spacer
-        width: 10
-        height: 10
+        id: spacer1
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+    }
+    Item {
+        id: spacer2
+        Layout.fillWidth: true
+        Layout.fillHeight: true
     }
 
     QtObject {
@@ -41,26 +46,36 @@ Row {
         property bool layouting: false
         function layoutChildren()
         {
-            var numChildren = root.children.length
-            if (layouting || parent == null ||
-                root.width == 0 || numChildren < 2) {
-                return
+            if (layouting) {
+                return;
             }
 
-            layouting = true
-            spacer.parent = null
+            layouting = true;
 
-            spacer.width = root.parent.width - root.childrenRect.width -10
+            spacer1.parent = null;
+            spacer2.parent = null;
 
-            var last = root.children[numChildren-2]
-            last.parent = null
-            spacer.parent = root
-            last.parent = root
-            layouting = false
+            var children = Array();
+            //seems there is no other way to create a copy of the array
+            //as children is not an actual JS array
+            for (var i = 0; i < root.children.length; ++i) {
+                children.push(root.children[i]);
+            }
+            var numChildren = children.length;
+
+            spacer1.parent = root;
+
+            for (var i = 1; i < numChildren-1; ++i) {
+                children[i].parent = null;
+                children[i].parent = root;
+            }
+            spacer2.parent = root;
+            children[numChildren-1].parent = null;
+            children[numChildren-1].parent = root;
+            layouting = false;
         }
     }
 
     Component.onCompleted: internal.layoutChildren()
     onChildrenChanged: internal.layoutChildren()
-    onWidthChanged: internal.layoutChildren()
 }
