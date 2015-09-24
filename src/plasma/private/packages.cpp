@@ -104,6 +104,7 @@ void GenericPackage::initPackage(KPackage::Package *package)
     mimetypes.clear();
     mimetypes << "text/plain";
     package->setMimeTypes("scripts", mimetypes);
+    package->addFileDefinition("screenshot", "screenshot.png", i18n("Screenshot"));
 
     package->addDirectoryDefinition("translations", "locale", i18n("Translations"));
 }
