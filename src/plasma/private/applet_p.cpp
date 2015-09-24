@@ -164,7 +164,14 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     // deleted when the applet does
     script = Plasma::loadScriptEngine(api, q, args);
 
-    if (!script) {
+    //It's valid, let's try to load the icon from within the package
+    if (script) {
+        //use the absolute path of the in-package icon as icon name
+        if (appletDescription.icon().startsWith("/")) {
+            icon = package->filePath("", appletDescription.icon().toUtf8());
+        }
+    //package not valid, get rid of it
+    } else {
         delete package;
         package = 0;
         q->setLaunchErrorMessage(
