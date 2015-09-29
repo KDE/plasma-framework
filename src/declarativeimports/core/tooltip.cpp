@@ -332,9 +332,12 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         // and ask to keep it open for a bit, so other items get the chance
         // to update the content before the tooltip hides -- this avoids
         // flickering
-        tooltipDialogInstance()->keepalive();
-        //FIXME: showToolTip needs to be renamed in sync or something like that
-        showToolTip();
+        // It need to be considered only when other items can deal with tooltip area
+        if (m_active) {
+            tooltipDialogInstance()->keepalive();
+            //FIXME: showToolTip needs to be renamed in sync or something like that
+            showToolTip();
+        }
     } else {
         m_showTimer->start(m_interval);
     }
