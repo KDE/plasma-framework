@@ -1064,6 +1064,7 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Show) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
@@ -1161,11 +1162,7 @@ bool Dialog::event(QEvent *event)
         }
     }
 
-    const bool retval = QQuickWindow::event(event);
-    if (event->type() != QEvent::DeferredDelete) {
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-    }
-    return retval;
+    return QQuickWindow::event(event);
 }
 
 void Dialog::hideEvent(QHideEvent *event)
