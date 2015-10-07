@@ -568,7 +568,7 @@ QList<QAction *> Applet::contextualActions()
 
 KActionCollection *Applet::actions() const
 {
-    return d->actions ? d->actions : new KActionCollection((QObject *)this);
+    return d->actions;
 }
 
 Types::FormFactor Applet::formFactor() const
