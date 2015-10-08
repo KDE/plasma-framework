@@ -1065,8 +1065,9 @@ void Dialog::showEvent(QShowEvent *event)
 
 bool Dialog::event(QEvent *event)
 {
-    if (event->type() == QEvent::Show) {
+    if (event->type() == QEvent::Expose) {
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
