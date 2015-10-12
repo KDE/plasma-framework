@@ -152,7 +152,7 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     //        we simply iterate over the virtual screens and pick the one our QWindow
     //        says it's at.
     QRect avail;
-    Q_FOREACH (QScreen *screen, q->screen()->virtualSiblings()) {
+    Q_FOREACH (QScreen *screen, QGuiApplication::screens()) {
         //we check geometry() but then take availableGeometry()
         //to reliably check in which screen a position is, we need the full
         //geometry, including areas for panels
@@ -168,8 +168,10 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
      * the screen should be correctly updated now on Qt 5.3+ so should be
      * more reliable anyways (could be tried to remove the whole Q_FOREACH
      * at this point)
+     *
+     * imporant: screen can be a nullptr... see bug 345173
      */
-    if (avail.isEmpty()) {
+    if (avail.isEmpty() && q->screen()) {
         avail = q->screen()->availableGeometry();
     }
 
@@ -1063,7 +1065,9 @@ void Dialog::showEvent(QShowEvent *event)
 
 bool Dialog::event(QEvent *event)
 {
-    if (event->type() == QEvent::Show) {
+    if (event->type() == QEvent::Expose) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
@@ -1161,11 +1165,7 @@ bool Dialog::event(QEvent *event)
         }
     }
 
-    const bool retval = QQuickWindow::event(event);
-    if (event->type() != QEvent::DeferredDelete) {
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-    }
-    return retval;
+    return QQuickWindow::event(event);
 }
 
 void Dialog::hideEvent(QHideEvent *event)

@@ -89,6 +89,26 @@ Rectangle {
             width: 300
             height: 50
 
+	    active: false
+
+            mainText: "A"
+            subText: "B"
+
+            Rectangle {
+                color: "red"
+                anchors.fill: parent
+            }
+
+            Text {
+                anchors.fill: parent
+                text: "tooltip exists but inactive"
+            }
+        }
+
+        PlasmaCore.ToolTipArea {
+            width: 300
+            height: 50
+
             icon: "document-edit"
             mainText: "A title"
             subText: "A subtext"
