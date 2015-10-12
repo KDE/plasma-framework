@@ -125,7 +125,7 @@ Item {
             return
         }
 
-        scrollAnimation.to = Math.max(0, Math.min(Math.max(0, columnWidth * level - columnWidth), mainFlickable.contentWidth - mainFlickable.width))
+        scrollAnimation.to = Math.max(0, Math.min(Math.max(0, columnWidth * level - columnWidth), mainFlickable.contentWidth))
         scrollAnimation.running = true
     }
 
