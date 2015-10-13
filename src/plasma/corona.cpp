@@ -514,6 +514,10 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         q->requestConfigSync();
         containment->flushPendingConstraintsEvents();
         emit q->containmentAdded(containment);
+        //if id = 0 a new containment has been created, not restored
+        if (id == 0) {
+            emit q->containmentCreated(containment);
+        }
     }
 
     return containment;

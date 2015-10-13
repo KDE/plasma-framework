@@ -199,7 +199,11 @@ public:
 
 Q_SIGNALS:
     /**
-     * This signal is emitted when a new applet is created by the containment
+     * This signal is emitted when a new applet is added in the containment
+     * It may happen in the following situations:
+     * * The user created the applet
+     * * The applet was moved in from another containment
+     * * The applet got restored at startup
      */
     void appletAdded(Plasma::Applet *applet);
 
@@ -207,6 +211,16 @@ Q_SIGNALS:
      * This signal is emitted when an applet is destroyed
      */
     void appletRemoved(Plasma::Applet *applet);
+
+    /**
+     * This signal is emitted when a new applet is created by the containment.
+     * Compared to appletAdded, this gets emitted only when the user explicitly
+     * creates a new applet, either via the widget explorer or the scripting
+     * environment.
+     * @see appletAdded
+     * @since 5.16
+     */
+    void appletCreated(Plasma::Applet *applet);
 
     /**
      * Emitted when the activity id has changed

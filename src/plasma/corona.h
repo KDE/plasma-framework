@@ -264,9 +264,19 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * This signal indicates a new containment has been added to
-     * the Corona
+     * the Corona: it may occur after creation or restore from config
      */
     void containmentAdded(Plasma::Containment *containment);
+
+    /**
+     * This signal indicates a new containment has been created
+     * in the Corona. Compared to containmentAdded it can only happen
+     * after the creation of a new containment.
+     *
+     * @see containmentAdded
+     * @since 5.16
+     */
+    void containmentCreated(Plasma::Containment *containment);
 
     /**
      * This signal indicates that a containment has been newly

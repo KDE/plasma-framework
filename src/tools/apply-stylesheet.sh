@@ -62,11 +62,12 @@ xml ed --subnode "/svg:svg/svg:defs" -t elem -n "style" -v "$stylesheet"\
 for i in {0..4}
 do
   xml ed --subnode "//*/*[contains(@style, '${colors[i]}')]" -t attr -n "class" -v "${colorNames[i]}" temp.svg > temp2.svg
+
   mv temp2.svg temp.svg
 
-  echo sed -i 's/\(style=".*\)fill:'${colors[i]}'/\1fill:currentColor/g' temp.svg
+  sed -i 's/\(style=".*\)fill:'${colors[i]}'/\1fill:currentColor/g' temp.svg
 done
 
-mv temp.svg $file.svgz
+mv temp.svg $file.svg
 gzip $file.svg
 mv $file.svg.gz $file.svgz
