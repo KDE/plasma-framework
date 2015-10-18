@@ -111,7 +111,7 @@ QtQuickControlStyle.ButtonStyle {
             if (control.text.length == 0) {
                 height;
             } else {
-                Math.max(theme.mSize(theme.defaultFont).width*12, style.minimumWidth);
+                theme.mSize(theme.defaultFont).width*12
             }
         }
 
