@@ -32,13 +32,14 @@ import "private" as Private
 QtQuickControlStyle.ButtonStyle {
     id: style
 
+    //this is the minimum size that can hold the entire contents
     property int minimumWidth
     property int minimumHeight
 
     label: RowLayout {
         spacing: units.smallSpacing
 
-        property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
+        property real minimumWidth: implicitWidth + style.padding.left + style.padding.right
         onMinimumWidthChanged: {
             if (control.minimumWidth !== undefined) {
                 style.minimumWidth = minimumWidth;
@@ -46,7 +47,7 @@ QtQuickControlStyle.ButtonStyle {
             }
         }
 
-        property real minimumHeight: Layout.preferredHeight + style.padding.top + style.padding.bottom
+        property real minimumHeight: implicitHeight + style.padding.top + style.padding.bottom
         onMinimumHeightChanged: {
             if (control.minimumHeight !== undefined) {
                 style.minimumHeight = minimumHeight;

@@ -7,7 +7,7 @@ import QtQuick.Layouts 1.2
 Rectangle
 {
     width: 500
-    height: 300
+    height: 500
     color: "white"
 
     Grid {
@@ -104,6 +104,17 @@ Rectangle
                 text: "test"
             }
             PlasmaComponents.TextField {
+            }
+        }
+
+        Label {
+            text: "minimum width property. Should be two letters wide"
+        }
+
+        RowLayout {
+            PlasmaComponents.Button {
+                text: "AA"
+                implicitWidth: minimumWidth
             }
         }
 
