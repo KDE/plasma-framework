@@ -59,7 +59,6 @@ QtQuickControlStyle.CheckBoxStyle {
             }
             anchors {
                 fill: parent
-                margins: parent.margins.left/2
             }
             Behavior on opacity {
                 NumberAnimation {
