@@ -63,7 +63,7 @@ stylesheet='
         stop-color:#3daee9;
       }
       '
-colors=(\#caced0 \#ffffff \#93cee9 \#fcfcfc \#a3cee9)
+colors=(\#4d4d4d \#ffffff \#93cee9 \#fcfcfc \#a3cee9)
 colorNames=(ColorScheme-Text ColorScheme-Background ColorScheme-Highlight ColorScheme-ViewBackground ColorScheme-ViewHover)
 
 
