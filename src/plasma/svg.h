@@ -396,6 +396,21 @@ public:
     bool fromCurrentTheme() const;
 
     /**
+     * Sets wether the Svg uses the global system theme for its colors or
+     * the Plasma theme. Default is False.
+     *
+     * @since 5.16
+     */
+    void setUseSystemColors(bool system);
+
+    /**
+     * @returns True if colors from the system theme are used.
+     *           Default is False
+     * @since 5.16
+     */
+    bool useSystemColors() const;
+
+    /**
      * Sets the Plasma::Theme to use with this Svg object.
      *
      * By default, Svg objects use Plasma::Theme::default().

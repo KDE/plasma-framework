@@ -31,6 +31,7 @@
 
 #include <kiconloader.h>
 #include <kiconeffect.h>
+#include <KIconTheme>
 
 #include "fadingnode_p.h"
 #include <QuickAddons/ManagedTextureNode>
@@ -43,6 +44,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_active(false),
       m_textureChanged(false),
       m_sizeChanged(false),
+      m_svgFromIconLoader(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
@@ -129,14 +131,25 @@ void IconItem::setSource(const QVariant &source)
                 m_icon = QIcon();
                 connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
 
-                //ok, svg not available
+                //ok, svg not available from the plasma theme
             } else {
-                m_icon = QIcon::fromTheme(source.toString());
-                delete m_svgIcon;
-                m_svgIcon = 0;
-                m_imageIcon = QImage();
-                m_pixmapIcon = QPixmap();
+                //try to load from iconloader an svg with Plasma::Svg
+                QString iconPath = KIconLoader::global()->theme()->iconPath(source.toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+                if (iconPath.isEmpty()) {
+                    iconPath = KIconLoader::global()->theme()->iconPath(source.toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                }
+                m_svgFromIconLoader = !iconPath.isEmpty();
 
+                if (m_svgFromIconLoader) {
+                    m_svgIcon->setImagePath(iconPath);
+                //fail, use QIcon
+                } else {
+                    m_icon = QIcon::fromTheme(source.toString());
+                    delete m_svgIcon;
+                    m_svgIcon = 0;
+                    m_imageIcon = QImage();
+                    m_pixmapIcon = QPixmap();
+                }
             }
         }
 
@@ -323,7 +336,19 @@ void IconItem::loadPixmap()
         return;
     } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
-        result = m_svgIcon->pixmap(m_source.toString());
+        if (m_svgIcon->hasElement(m_source.toString())) {
+            result = m_svgIcon->pixmap(m_source.toString());
+        } else if (m_svgFromIconLoader) {
+            QString iconPath = KIconLoader::global()->theme()->iconPath(source().toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+            if (iconPath.isEmpty()) {
+                iconPath = KIconLoader::global()->theme()->iconPath(source().toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+            }
+
+            if (!iconPath.isEmpty()) {
+                m_svgIcon->setImagePath(iconPath);
+            }
+            result = m_svgIcon->pixmap();
+        }
     } else if (!m_icon.isNull()) {
         result = m_icon.pixmap(QSize(size, size) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
     } else if (!m_pixmapIcon.isNull()) {

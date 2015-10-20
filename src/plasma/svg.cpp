@@ -142,6 +142,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
       scaleFactor(1.0),
       multipleImages(false),
       themed(false),
+      useSystemColors(false),
       fromCurrentTheme(false),
       applyColors(false),
       usesColors(false),
@@ -268,7 +269,7 @@ Theme *SvgPrivate::actualTheme()
 
 Theme *SvgPrivate::cacheAndColorsTheme()
 {
-    if (themed) {
+    if (themed || !useSystemColors) {
         return actualTheme();
     } else {
         // use a separate cache source for unthemed svg's
@@ -938,6 +939,21 @@ bool Svg::isUsingRenderingCache() const
 bool Svg::fromCurrentTheme() const
 {
     return d->fromCurrentTheme;
+}
+
+void Svg::setUseSystemColors(bool system)
+{
+    if (d->useSystemColors == system) {
+        return;
+    }
+
+    d->useSystemColors = system;
+    emit repaintNeeded();
+}
+
+bool Svg::useSystemColors() const
+{
+    return d->useSystemColors;
 }
 
 void Svg::setTheme(Plasma::Theme *theme)

@@ -112,6 +112,7 @@ public:
     qreal scaleFactor;
     bool multipleImages : 1;
     bool themed : 1;
+    bool useSystemColors : 1;
     bool fromCurrentTheme : 1;
     bool applyColors : 1;
     bool usesColors : 1;
