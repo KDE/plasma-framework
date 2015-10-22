@@ -76,10 +76,15 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_texture(0)
 #if HAVE_GLX
     , m_glxPixmap(XCB_PIXMAP_NONE)
+    , m_bindTexImage(Q_NULLPTR)
+    , m_releaseTexImage(Q_NULLPTR)
 #endif // HAVE_GLX
 #if HAVE_EGL
     , m_eglFunctionsResolved(false)
     , m_image(EGL_NO_IMAGE_KHR)
+    , m_eglCreateImageKHR(Q_NULLPTR)
+    , m_eglDestroyImageKHR(Q_NULLPTR)
+    , m_glEGLImageTargetTexture2DOES(Q_NULLPTR)
 #endif // HAVE_EGL
 #endif
 {
