@@ -173,14 +173,22 @@ if [ -z "$file" ];
     exit 1
 fi
 
-if [ ! -f $file.svgz ]; then
+isSvgz=0
+
+if [ ! -f $file.svgz ] && [ ! -f $file.svg ]; then
     echo "you must specify a valid svg"
     exit 1
 fi
 
+if [ -f $file.svgz ]; then
+    isSvgz=1
+fi
 
-mv $file.svgz $file.svg.gz
-gunzip $file.svg.gz
+
+if [ $isSvgz = 1 ]; then
+    mv $file.svgz $file.svg.gz
+    gunzip $file.svg.gz
+fi
 
 echo Processing $file
 
@@ -273,5 +281,7 @@ done
 rm transform.xsl
 
 mv temp.svg $file.svg
-gzip $file.svg
-mv $file.svg.gz $file.svgz
+if [ $isSvgz = 1 ]; then
+    gzip $file.svg
+    mv $file.svg.gz $file.svgz
+fi
