@@ -71,7 +71,7 @@ PlasmaComponents.ContextMenu {
                 text: typeof(modelData) != "undefined" ? modelData.text : model.display
                 icon: typeof(modelData) != "undefined" ? modelData.icon : model.decoration
                 separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator === true
-                section: typeof(modelData) != "undefined" ? modelData.section : modelData.section === true
+                section: typeof(modelData) != "undefined" ? modelData.section : model.section === true
                 onClicked: {
                     menu.clicked(typeof(modelData) != "undefined" ? modelData : model)
                 }
