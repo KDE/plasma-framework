@@ -331,10 +331,10 @@ void Calendar::previousMonth()
 
 void Calendar::goToMonth(int month)
 {
-    setDisplayedDate(QDate(m_displayedDate.year(), month, m_displayedDate.day()));
+    setDisplayedDate(QDate(m_displayedDate.year(), month, 1));
 }
 
 void Calendar::goToYear(int year)
 {
-    setDisplayedDate(QDate(year, m_displayedDate.month(), m_displayedDate.day()));
+    setDisplayedDate(QDate(year, m_displayedDate.month(), 1));
 }
