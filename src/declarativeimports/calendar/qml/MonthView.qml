@@ -252,7 +252,10 @@ PinchArea {
 
             onPrevious: calendarBackend.previousYear()
             onNext: calendarBackend.nextYear()
-            onHeaderClicked: stack.push(decadeOverview)
+            onHeaderClicked: {
+                updateDecadeOverview();
+                stack.push(decadeOverview)
+            }
             onActivated: {
                 calendarBackend.goToMonth(date.monthNumber)
                 stack.pop()
