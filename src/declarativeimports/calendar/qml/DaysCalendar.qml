@@ -99,12 +99,7 @@ Item {
             id: monthMouse
             property int previousPixelDelta
 
-            width: heading.paintedWidth
-            anchors {
-                left: parent.left
-                top: parent.top
-                bottom: parent.bottom
-            }
+            anchors.fill: parent
             onClicked: {
                 if (!stack.busy) {
                     daysCalendar.headerClicked()
