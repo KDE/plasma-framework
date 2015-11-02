@@ -21,7 +21,11 @@
 #define DAYSMODEL_H
 
 #include <QAbstractListModel>
+
 #include "daydata.h"
+#include "eventdatadecorator.h"
+
+#include "plasmacalendarintegration/calendareventsplugin.h"
 
 class DaysModel : public QAbstractListModel
 {
@@ -30,7 +34,7 @@ public:
     enum Roles {
         isCurrent = Qt::UserRole + 1,
         //containsHolidayItems,
-        //containsEventItems,
+        containsEventItems,
         //containsTodoItems,
         //containsJournalItems,
         dayNumber,
@@ -39,13 +43,31 @@ public:
     };
 
     explicit DaysModel(QObject *parent = 0);
+    virtual ~DaysModel();
     void setSourceData(QList<DayData> *data);
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     void update();
 
+    Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
+
+Q_SIGNALS:
+    void agendaUpdated(const QDate &updatedDate);
+
+private Q_SLOTS:
+    void onDataReady(const QMultiHash<QDate, Plasma::EventData> &data);
+    void onEventModified(const Plasma::EventData &data);
+    void onEventRemoved(const QString &uid);
+
 private:
+    QModelIndex indexForDate(const QDate &date);
+
     QList<DayData> *m_data;
+    QList<QObject*> m_qmlData;
+    QDate m_lastRequestedAgendaDate;
+    QList<Plasma::CalendarEventsPlugin*> m_eventPlugins;
+    QMultiHash<QDate, Plasma::EventData> m_eventsData;
+    bool m_agendaNeedsUpdate;
 };
 
 #endif // DAYSMODEL_H

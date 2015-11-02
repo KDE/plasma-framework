@@ -7,6 +7,7 @@ set(calendar_SRCS
     #calendarroleproxymodel.cpp
     #datetimerangefiltermodel.cpp
     daysmodel.cpp
+    eventdatadecorator.cpp
 )
 
 add_library(calendarplugin SHARED ${calendar_SRCS})
@@ -16,11 +17,11 @@ target_link_libraries(calendarplugin
     Qt5::Quick
     Qt5::Qml
     Qt5::Gui
-    ${KDEPIMLIBS_AKONADI_LIBS}
-    ${KDEPIMLIBS_KCALCORE_LIBS}
-    ${KDEPIMLIBS_AKONADI_CALENDAR_LIBS}
+    KF5::I18n
+    plasmacalendarintegration
 )
 
 install(TARGETS calendarplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
 
+add_subdirectory(plasmacalendarintegration)

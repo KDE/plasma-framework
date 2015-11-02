@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013 Mark Gaiser <markg85@gmail.com>
+    Copyright (C) 2015 Martin Klapetek <mklapetek@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,24 +17,19 @@
 
 */
 
-#include "calendarplugin.h"
-#include "calendardata.h"
-#include "calendar.h"
-#include "eventdatadecorator.h"
+#include "calendareventsplugin.h"
 
-#include <QtQml>
-#include <QAbstractItemModel>
-#include <QAbstractListModel>
+namespace Plasma {
 
-void CalendarPlugin::registerTypes(const char *uri)
+CalendarEventsPlugin::CalendarEventsPlugin(QObject *parent)
+    : QObject(parent)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.calendar"));
-    qmlRegisterType<CalendarData>(uri, 2, 0, "CalendarData");
-    qmlRegisterType<Calendar>(uri, 2, 0, "Calendar");
-    qmlRegisterType<QAbstractItemModel>();
-    qmlRegisterType<QAbstractListModel>();
-    qmlRegisterUncreatableType<EventDataDecorator>();
+
 }
 
-//Q_EXPORT_PLUGIN2(calendarplugin, CalendarPlugin)
-#include "moc_calendarplugin.cpp"
+CalendarEventsPlugin::~CalendarEventsPlugin()
+{
+
+}
+
+}
