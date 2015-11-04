@@ -2,6 +2,7 @@
 Name=plasma-kpart-shell
 Name[bs]=plasma-kpart-shell
 Name[ca]=plasma-kpart-shell
+Name[ca@valencia]=plasma-kpart-shell
 Name[cs]=plasma-kpart-shell
 Name[da]=plasma-kpart-shell
 Name[de]=plasma-kpart-shell
@@ -42,6 +43,7 @@ X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
 GenericName[bs]=Kpart školjka za plazmu
 GenericName[ca]=Una KPart d'intèrpret d'ordres pel Plasma
+GenericName[ca@valencia]=Una KPart d'intèrpret d'ordes pel Plasma
 GenericName[da]=En KPart-skal til Plasma
 GenericName[de]=Eine KPart-Shell für Plasma
 GenericName[en_GB]=A KPart shell for Plasma

@@ -2,6 +2,7 @@
 Name=JavaScript File Operations
 Name[bs]=JavaScript operacije s datotekama
 Name[ca]=Operacions amb fitxers en JavaScript
+Name[ca@valencia]=Operacions amb fitxers en JavaScript
 Name[cs]=Operace souboru JavaScript
 Name[da]=JavaScript filoperationer
 Name[de]=JavaScript-Datei-Aktionen
@@ -40,6 +41,7 @@ Name[zh_TW]=JavaScript 檔案操作
 Comment=Demonstrates accessing data via HTTP in JavaScript
 Comment[bs]=Demonstrira pristupanje padacima preko HTTP u JavaScript
 Comment[ca]=Demostra l'accés a dades via HTTP en JavaScript
+Comment[ca@valencia]=Demostra l'accés a dades via HTTP en JavaScript
 Comment[cs]=Ukazuje jak v JavaScriptu přistupovat k datům přes HTTP
 Comment[da]=Demonstrerer tilgang til data via HTTP i JavaScript
 Comment[de]=Demonstriert den Zugriff auf Daten über HTTP in JavaScript

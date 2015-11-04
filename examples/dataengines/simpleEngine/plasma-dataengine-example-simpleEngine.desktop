@@ -2,6 +2,7 @@
 Name=Simple DataEngine Example
 Name[bs]=Jednostavan primjer pogona podataka
 Name[ca]=Exemple senzill de «DataEngine»
+Name[ca@valencia]=Exemple senzill de «DataEngine»
 Name[cs]=Jednoduchý příklad datového nástroje
 Name[da]=Simpelt eksempel på datamotor
 Name[de]=Einfaches Datentreiber-Beispiel
@@ -38,6 +39,7 @@ Name[zh_TW]=簡單資料引擎範例
 Comment=A very basic DataEngine implementation
 Comment[bs]=Veoma jednostavna implementacija pogona podataka
 Comment[ca]=Una implementació molt bàsica de «DataEngine»
+Comment[ca@valencia]=Una implementació molt bàsica de «DataEngine»
 Comment[da]=En meget basal implementation af en datamotor
 Comment[de]=Eine Basis-Implementation eines Datentreibers
 Comment[en_GB]=A very basic DataEngine implementation

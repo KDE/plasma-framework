@@ -2,6 +2,7 @@
 Name=Example window thumbnails list
 Name[bs]=Primjer prozor liste sličica
 Name[ca]=Exemple de llista de miniatures de les finestres
+Name[ca@valencia]=Exemple de llista de miniatures de les finestres
 Name[da]=Eksempel på miniatureliste over vinduer
 Name[de]=Beispiel einer Liste mit Fenstervorschaubilden
 Name[en_GB]=Example window thumbnails list
@@ -36,6 +37,7 @@ Name[zh_TW]=視窗縮圖列表的範例
 Comment=Example showing how to display window thumbnails
 Comment[bs]=Primjer prikazuje kako prikazati prozor sličica
 Comment[ca]=Exemple que mostra com visualitzar miniatures de les finestres
+Comment[ca@valencia]=Exemple que mostra com visualitzar miniatures de les finestres
 Comment[da]=Eksempel som viser, hvordan vinduesminiaturer vises
 Comment[de]=Beispiel zur Anzeige einer Liste mit Fenstervorschaubilden
 Comment[en_GB]=Example showing how to display window thumbnails

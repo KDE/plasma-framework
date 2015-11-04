@@ -2,6 +2,7 @@
 Name=Sources On Request
 Name[bs]=Izvori na zahtjev
 Name[ca]=Fonts a demanda
+Name[ca@valencia]=Fonts a demanda
 Name[da]=Kilder på anmodning
 Name[de]=Ressourcen auf Anforderung
 Name[en_GB]=Sources On Request
@@ -36,6 +37,7 @@ Name[zh_TW]=要求來源
 Comment=A DataEngine example showing how to respond to requests for source creation and updates
 Comment[bs]=Primjer pogona podataka prikazuje kako odgovoriti na zahtjeve za kreiranje izvora i ažuriranja
 Comment[ca]=Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts
+Comment[ca@valencia]=Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts
 Comment[da]=Et datamotor-eksempel som viser hvordan man besvarer anmodninger om kilde-oprettelser og opdateringer
 Comment[de]=Ein Datentreiber-Beispiel, das die Antwort auf Anfragen zur Erstellung von Quellen und Aktualisierungen zeigt
 Comment[en_GB]=A DataEngine example showing how to respond to requests for source creation and updates

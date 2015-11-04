@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Example applet that shows how to use Models embedded in DataEngines
 Comment[ca]=Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»
+Comment[ca@valencia]=Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»
 Comment[da]=Eksempel på applet som viser hvordan modeller bruges indlejret i datamotorer
 Comment[de]=Miniprogramm-Beispiel, das die Anwendung von Modellen eingebettet in Datenquellen zeigt
 Comment[en_GB]=Example applet that shows how to use Models embedded in DataEngines
@@ -38,6 +39,7 @@ Keywords=
 Name=Dataengine model
 Name[ar]=نموذج محرّك بيانات (Dataengine)
 Name[ca]=Model de «DataEngine»
+Name[ca@valencia]=Model de «DataEngine»
 Name[da]=Datamotor-model
 Name[de]=Datenquellen-Modell
 Name[en_GB]=Dataengine model

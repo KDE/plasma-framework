@@ -2,6 +2,7 @@
 Name=Python data engine
 Name[ar]=محرّك بيانات بايثون
 Name[ca]=Motor de dades en Python
+Name[ca@valencia]=Motor de dades en Python
 Name[cs]=Rozhraní v Pythonu
 Name[da]=Datamotor til Python
 Name[de]=Python-Datentreiber
@@ -40,6 +41,7 @@ Name[zh_TW]=Python 資料引擎
 Comment=Plasma data engine support for Python
 Comment[ar]=دعم محرّك بيانات پلازما لِبايثون
 Comment[ca]=Implementació d'un motor de dades del Plasma per a Python
+Comment[ca@valencia]=Implementació d'un motor de dades del Plasma per a Python
 Comment[cs]=Podpora datového rozhraní Plasmy v Pythonu
 Comment[da]=Plasma datamotor-understøttelse af Python
 Comment[de]=Unterstützung für Plasma-Datentreiber in Python
