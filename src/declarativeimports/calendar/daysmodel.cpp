@@ -18,60 +18,18 @@
 */
 
 #include "daysmodel.h"
+#include "eventdatadecorator.h"
+#include "eventpluginsmanager.h"
 
 #include <QDebug>
 #include <QByteArray>
-#include <QPluginLoader>
 #include <QDir>
-#include <QCoreApplication>
 
 DaysModel::DaysModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_agendaNeedsUpdate(false)
+    m_agendaNeedsUpdate(false),
+    m_pluginsManager(0)
 {
-    QString pluginPath;
-
-    const QStringList paths = QCoreApplication::libraryPaths();
-    Q_FOREACH (const QString &libraryPath, paths) {
-        const QString path(libraryPath + QStringLiteral("/plasmacalendarplugins"));
-        QDir dir(path);
-
-        if (!dir.exists()) {
-            continue;
-        }
-
-        QStringList entryList = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
-        Q_FOREACH (const QString &fileName, entryList) {
-            QPluginLoader loader(dir.absoluteFilePath(fileName));
-
-            if (!loader.load()) {
-                qWarning() << "Could not create Plasma Calendar Plugin: " << pluginPath;
-                qWarning() << loader.errorString();
-                continue;
-            }
-
-            QObject *obj = loader.instance();
-            if (obj) {
-                Plasma::CalendarEventsPlugin *eventsPlugin = qobject_cast<Plasma::CalendarEventsPlugin*>(obj);
-                if (eventsPlugin) {
-                    qDebug() << "Adding Calendar plugin" << eventsPlugin;
-                    connect(eventsPlugin, &Plasma::CalendarEventsPlugin::dataReady,
-                            this, &DaysModel::onDataReady);
-                    connect(eventsPlugin, &Plasma::CalendarEventsPlugin::eventModified,
-                            this, &DaysModel::onEventModified);
-                    connect(eventsPlugin, &Plasma::CalendarEventsPlugin::eventRemoved,
-                            this, &DaysModel::onEventRemoved);
-                    m_eventPlugins << eventsPlugin;
-                } else {
-                    // not our/valid plugin, so unload it
-                    loader.unload();
-                }
-            } else {
-                loader.unload();
-            }
-        }
-    }
-
     QHash<int, QByteArray> roleNames;
 
     roleNames.insert(isCurrent,              "isCurrent");
@@ -142,8 +100,10 @@ void DaysModel::update()
 
     const QDate modelFirstDay(m_data->at(0).yearNumber, m_data->at(0).monthNumber, m_data->at(0).dayNumber);
 
-    Q_FOREACH (Plasma::CalendarEventsPlugin *eventsPlugin, m_eventPlugins) {
-        eventsPlugin->loadEventsForDateRange(modelFirstDay, modelFirstDay.addDays(42));
+    if (m_pluginsManager) {
+        Q_FOREACH (Plasma::CalendarEventsPlugin *eventsPlugin, m_pluginsManager->plugins()) {
+            eventsPlugin->loadEventsForDateRange(modelFirstDay, modelFirstDay.addDays(42));
+        }
     }
 }
 
@@ -244,4 +204,31 @@ QModelIndex DaysModel::indexForDate(const QDate &date)
     qint64 daysTo = firstDate.daysTo(date);
 
     return createIndex(daysTo, 0);
+}
+
+void DaysModel::setPluginsManager(QObject *manager)
+{
+    EventPluginsManager *m = qobject_cast<EventPluginsManager*>(manager);
+
+    if (!m) {
+        return;
+    }
+
+    if (m_pluginsManager != 0) {
+        m_pluginsManager->deleteLater();
+        m_pluginsManager = 0;
+    }
+
+    m_pluginsManager = m;
+
+    connect(m_pluginsManager, &EventPluginsManager::dataReady,
+            this, &DaysModel::onDataReady);
+    connect(m_pluginsManager, &EventPluginsManager::eventModified,
+            this, &DaysModel::onEventModified);
+    connect(m_pluginsManager, &EventPluginsManager::eventRemoved,
+            this, &DaysModel::onEventRemoved);
+    connect(m_pluginsManager, &EventPluginsManager::pluginsChanged,
+            this, &DaysModel::update);
+
+    update();
 }

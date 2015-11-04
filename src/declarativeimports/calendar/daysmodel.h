@@ -23,13 +23,14 @@
 #include <QAbstractListModel>
 
 #include "daydata.h"
-#include "eventdatadecorator.h"
-
 #include "plasmacalendarintegration/calendareventsplugin.h"
+
+class EventPluginsManager;
 
 class DaysModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
     enum Roles {
         isCurrent = Qt::UserRole + 1,
@@ -49,6 +50,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     void update();
 
+    Q_INVOKABLE void setPluginsManager(QObject *manager);
+
     Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
 
 Q_SIGNALS:
@@ -62,6 +65,7 @@ private Q_SLOTS:
 private:
     QModelIndex indexForDate(const QDate &date);
 
+    EventPluginsManager *m_pluginsManager;
     QList<DayData> *m_data;
     QList<QObject*> m_qmlData;
     QDate m_lastRequestedAgendaDate;

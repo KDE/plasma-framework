@@ -123,6 +123,10 @@ PinchArea {
         firstDayOfWeek: Qt.locale().firstDayOfWeek
         today: root.today
 
+        Component.onCompleted: {
+            daysModel.setPluginsManager(EventPluginsManager);
+        }
+
         onYearChanged: {
             updateYearOverview()
             updateDecadeOverview()

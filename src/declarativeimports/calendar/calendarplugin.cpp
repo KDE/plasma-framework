@@ -21,10 +21,21 @@
 #include "calendardata.h"
 #include "calendar.h"
 #include "eventdatadecorator.h"
+#include "eventpluginsmanager.h"
 
 #include <QtQml>
-#include <QAbstractItemModel>
+#include <QQmlEngine>
 #include <QAbstractListModel>
+
+static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(scriptEngine)
+
+    EventPluginsManager *manager = new EventPluginsManager();
+    engine->setObjectOwnership(manager, QQmlEngine::CppOwnership);
+
+    return manager;
+}
 
 void CalendarPlugin::registerTypes(const char *uri)
 {
@@ -34,7 +45,5 @@ void CalendarPlugin::registerTypes(const char *uri)
     qmlRegisterType<QAbstractItemModel>();
     qmlRegisterType<QAbstractListModel>();
     qmlRegisterUncreatableType<EventDataDecorator>();
+    qmlRegisterSingletonType<EventPluginsManager>(uri, 2, 0, "EventPluginsManager", event_plugins_manager_provider);
 }
-
-//Q_EXPORT_PLUGIN2(calendarplugin, CalendarPlugin)
-#include "moc_calendarplugin.cpp"

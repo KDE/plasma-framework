@@ -8,6 +8,7 @@ set(calendar_SRCS
     #datetimerangefiltermodel.cpp
     daysmodel.cpp
     eventdatadecorator.cpp
+    eventpluginsmanager.cpp
 )
 
 add_library(calendarplugin SHARED ${calendar_SRCS})
