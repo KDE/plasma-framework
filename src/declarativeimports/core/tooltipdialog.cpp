@@ -26,6 +26,11 @@
 
 #include <kdeclarative/qmlobjectsharedengine.h>
 
+#include <config-x11.h>
+#if HAVE_X11
+#include <QX11Info>
+#endif
+
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : Dialog(parent),
       m_qmlObject(0),
@@ -35,7 +40,13 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_animationsEnabled(true),
       m_owner(Q_NULLPTR)
 {
-    setFlags(Qt::ToolTip | Qt::BypassWindowManagerHint);
+    Qt::WindowFlags flags = Qt::ToolTip;
+#if HAVE_X11
+    if (QX11Info::isPlatformX11()) {
+        flags = flags | Qt::BypassWindowManagerHint;
+    }
+#endif
+    setFlags(flags);
     setLocation(Plasma::Types::Floating);
 
     m_animation = new QPropertyAnimation(this);
@@ -107,7 +118,13 @@ bool ToolTipDialog::event(QEvent *e)
     }
 
     bool ret = Dialog::event(e);
-    setFlags(Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint | Qt::BypassWindowManagerHint);
+    Qt::WindowFlags flags = Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
+#if HAVE_X11
+    if (QX11Info::isPlatformX11()) {
+        flags = flags | Qt::BypassWindowManagerHint;
+    }
+#endif
+    setFlags(flags);
     return ret;
 }
 

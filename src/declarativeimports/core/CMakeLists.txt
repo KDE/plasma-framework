@@ -15,6 +15,8 @@ else()
     add_definitions(-DHAVE_XCB_SHAPE=0)
 endif()
 
+configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
+
 set(corebindings_SRCS
     corebindingsplugin.cpp
     colorscope.cpp
