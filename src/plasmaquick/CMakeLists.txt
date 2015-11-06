@@ -53,10 +53,6 @@ if(HAVE_X11)
     if(XCB_SHAPE_FOUND)
         target_link_libraries(KF5PlasmaQuick PRIVATE XCB::SHAPE)
     endif()
-
-    if(HAVE_GLX)
-        target_link_libraries(KF5PlasmaQuick PRIVATE ${OPENGL_gl_LIBRARY})
-    endif()
 endif()
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
