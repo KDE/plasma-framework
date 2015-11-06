@@ -1,7 +1,7 @@
 if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
-    add_definitions(-DHAVE_XCB_COMPOSITE=1)
+    set(HAVE_XCB_COMPOSITE TRUE)
 else()
-    add_definitions(-DHAVE_XCB_COMPOSITE=0)
+    set(HAVE_XCB_COMPOSITE FALSE)
 endif()
 
 configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
