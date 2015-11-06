@@ -815,7 +815,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         apiMinor = 0;
         apiRevision = 0;
         if (!apiVersion.isEmpty()) {
-            QStringList parts = apiVersion.split('.');
+            QVector<QStringRef> parts = apiVersion.splitRef('.');
             if (!parts.isEmpty()) {
                 apiMajor = parts.value(0).toInt();
             }

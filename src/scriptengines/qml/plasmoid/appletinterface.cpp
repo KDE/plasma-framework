@@ -500,9 +500,10 @@ int AppletInterface::apiVersion() const
     // Look for C++ plugins first
     auto filter = [](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-Plasma-API") == "declarativeappletscript" && md.value("X-Plasma-ComponentTypes").contains("Applet");
+        return md.value(QStringLiteral("X-Plasma-API")) == QLatin1String("declarativeappletscript")
+            && md.value(QStringLiteral("X-Plasma-ComponentTypes")).contains(QLatin1String("Applet"));
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines", filter);
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
     if (plugins.isEmpty()) {
         return -1;
     }

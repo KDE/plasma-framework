@@ -43,13 +43,13 @@ class Application: public QObject
     /**
      * The name or path of the applications
      */
-    Q_PROPERTY(QString application READ application WRITE setApplication NOTIFY applicationChanged);
+    Q_PROPERTY(QString application READ application WRITE setApplication NOTIFY applicationChanged)
 
     /**
      * Indicates whether the user wants the application to be running or not.
      * It does not refer to the actual state of the application.
      */
-    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged);
+    Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
 
 public:
     Application(QObject *parent = Q_NULLPTR);
