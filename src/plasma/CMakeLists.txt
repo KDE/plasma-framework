@@ -99,7 +99,7 @@ add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)
 
 if(HAVE_X11)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} ${XCB_XCB_LIBRARY})
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} XCB::XCB)
 endif()
 
 if(DL_LIBRARY)

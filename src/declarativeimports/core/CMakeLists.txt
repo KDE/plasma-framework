@@ -1,10 +1,5 @@
 if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     add_definitions(-DHAVE_XCB_COMPOSITE=1)
-    include_directories(
-        ${XCB_XCB_INCLUDE_DIR}
-        ${XCB_DAMAGE_INCLUDE_DIR}
-        ${XCB_COMPOSITE_INCLUDE_DIR}
-    )
 else()
     add_definitions(-DHAVE_XCB_COMPOSITE=0)
 endif()
@@ -45,13 +40,13 @@ target_link_libraries(corebindingsplugin
 )
 
 if(HAVE_X11)
-  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} ${XCB_XCB_LIBRARY} )
+  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} XCB::XCB )
   target_link_libraries(corebindingsplugin Qt5::X11Extras)
 
   if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     target_link_libraries(corebindingsplugin
-        ${XCB_DAMAGE_LIBRARY}
-        ${XCB_COMPOSITE_LIBRARY}
+        XCB::DAMAGE
+        XCB::COMPOSITE
         )
   endif()
 
