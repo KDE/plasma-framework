@@ -30,6 +30,9 @@ QtQuickControlStyle.ScrollViewStyle {
 
     property real widthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * units.devicePixelRatio)
 
+    property StyleItem __styleitem: StyleItem { elementType: "frame" }
+    readonly property int __wheelScrollLines: __styleitem.styleHint("wheelScrollLines")
+
     transientScrollBars: Settings.hasTouchScreen && Settings.isMobile
 
     function syncVelocity() {
