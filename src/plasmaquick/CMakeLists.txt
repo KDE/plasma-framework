@@ -1,8 +1,3 @@
-if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
-    add_definitions(-DHAVE_XCB_COMPOSITE=1)
-else()
-    add_definitions(-DHAVE_XCB_COMPOSITE=0)
-endif()
 if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_SHAPE_FOUND)
     add_definitions(-DHAVE_XCB_SHAPE=1)
 else()
@@ -54,14 +49,6 @@ if(HAVE_X11)
             ${X11_LIBRARIES}
             XCB::XCB
     )
-
-    if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
-        target_link_libraries(KF5PlasmaQuick
-            PRIVATE
-                XCB::DAMAGE
-                XCB::COMPOSITE
-        )
-    endif()
 
     if(XCB_SHAPE_FOUND)
         target_link_libraries(KF5PlasmaQuick PRIVATE XCB::SHAPE)
