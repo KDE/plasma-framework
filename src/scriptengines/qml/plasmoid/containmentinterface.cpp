@@ -610,7 +610,6 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         }
 
         if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
-            choices->clear();
             QHash<QAction *, QString> actionsToApplets;
             choices->addSection(i18n("Widgets"));
             foreach (const KPluginInfo &info, appletList) {
@@ -647,6 +646,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     actionsToWallpapers.insert(action, info.pluginName());
                 }
             }
+
+            // HACK If the QMenu becomes empty at any point after the "determining mimetype"
+            // popup was shown, it self-destructs, does not matter if we call clear() or remove
+            // the action manually, hence we remove the aforementioned item after we populated the menu
+            choices->removeAction(choices->actions().first());
 
             QAction *choice = choices->exec();
             if (choice) {
