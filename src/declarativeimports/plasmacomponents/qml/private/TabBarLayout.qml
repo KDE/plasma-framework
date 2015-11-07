@@ -68,11 +68,10 @@ Item {
     property int minimumWidth: 0
     property int minimumHeight: 0
 
-    Component.onCompleted: priv.layoutChildren()
+    Component.onCompleted: layoutTimer.restart()
     onChildrenChanged: layoutTimer.restart()
     onWidthChanged: layoutTimer.restart()
     onHeightChanged: layoutTimer.restart()
-
 
     Keys.onPressed: {
         if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
@@ -90,9 +89,10 @@ Item {
 
     Timer {
         id: layoutTimer
-        interval: 150
+        interval: 10
         onTriggered: priv.layoutChildren()
     }
+
     MouseEventListener {
         anchors.fill: parent
         onWheelMoved: {
