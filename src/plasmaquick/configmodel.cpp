@@ -199,11 +199,15 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
     case IconRole:
         return d->categories.at(index.row())->icon();
     case SourceRole:
-        if (d->appletInterface) {
-            return QUrl::fromLocalFile(d->appletInterface.data()->package().filePath("ui", d->categories.at(index.row())->source()));
+    {
+        const QString source = d->categories.at(index.row())->source();
+        // Quick check if source is an absolute path or not
+        if (d->appletInterface && !(source.startsWith('/') && source.endsWith(QLatin1String("qml")))) {
+            return QUrl::fromLocalFile(d->appletInterface.data()->package().filePath("ui", source));
         } else {
-            return d->categories.at(index.row())->source();
+            return source;
         }
+    }
     case PluginNameRole:
         return d->categories.at(index.row())->pluginName();
     case VisibleRole:

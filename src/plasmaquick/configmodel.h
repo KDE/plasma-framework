@@ -83,7 +83,7 @@ public:
     void appendCategory(const QString &iconName, const QString &name,
                         const QString &path, const QString &pluginName);
 
-    void appendCategory(const QString &iconName, const QString &name,
+    Q_INVOKABLE void appendCategory(const QString &iconName, const QString &name,
                         const QString &path, const QString &pluginName, bool visible);
 
     /**
