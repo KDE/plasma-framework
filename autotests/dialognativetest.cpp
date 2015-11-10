@@ -65,13 +65,13 @@ void DialogNativeTest::size()
 
     QCOMPARE(m_content->width(), (qreal)100);
     QCOMPARE(m_content->height(), (qreal)100);
-    QCOMPARE(m_dialog->width(), 108);
-    QCOMPARE(m_dialog->height(), 108);
+    QCOMPARE(m_dialog->width(), 112);
+    QCOMPARE(m_dialog->height(), 112);
 
-    QCOMPARE(m_dialog->margins()->property("left").value<qreal>(), (qreal)4.0);
-    QCOMPARE(m_dialog->margins()->property("top").value<qreal>(), (qreal)4.0);
-    QCOMPARE(m_dialog->margins()->property("right").value<qreal>(), (qreal)4.0);
-    QCOMPARE(m_dialog->margins()->property("bottom").value<qreal>(), (qreal)4.0);
+    QCOMPARE(m_dialog->margins()->property("left").value<qreal>(), (qreal)6.0);
+    QCOMPARE(m_dialog->margins()->property("top").value<qreal>(), (qreal)6.0);
+    QCOMPARE(m_dialog->margins()->property("right").value<qreal>(), (qreal)6.0);
+    QCOMPARE(m_dialog->margins()->property("bottom").value<qreal>(), (qreal)6.0);
 }
 
 void DialogNativeTest::position()
@@ -83,7 +83,7 @@ void DialogNativeTest::position()
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 3, 0)
     m_dialog->setVisualParent(m_panel2->contentItem());
-    QCOMPARE(m_dialog->x(), 71);
+    QCOMPARE(m_dialog->x(), 69);
     QCOMPARE(m_dialog->y(), 49);
 #endif
 }
