@@ -83,14 +83,8 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    //platform specific c++ components
-    const QString target = KDeclarative::KDeclarative::componentsTarget();
-    if (target == KDeclarative::KDeclarative::defaultComponentsTarget()) {
-        qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
-        qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
-    } else {
-        // qmlRegisterType<FullScreenSheet>(uri, 2, 0, "Sheet");
-    }
+    qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
+    qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 2, 0, "RangeModel");
 

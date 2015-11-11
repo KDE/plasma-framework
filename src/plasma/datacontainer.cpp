@@ -131,8 +131,10 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
                 disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                            visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
                 //modelChanged is always emitted by the dataSource since there is no polling there
-                disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
-                           visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+                if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+                        disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                                visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+                }
                 //relay->isUnused();
             }
         } else if (pollingInterval < 1) {
@@ -144,8 +146,10 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-            disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
-                       visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+            if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+                disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                    visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+            }
         }
     } else {
         connect(visualization, SIGNAL(destroyed(QObject*)),
@@ -174,8 +178,10 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                 visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
         //modelChanged is always emitted by the dataSource since there is no polling there
-        connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+        if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+            connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                 visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+        }
     }
 }
 
@@ -305,8 +311,10 @@ void DataContainer::disconnectVisualization(QObject *visualization)
         // it is connected directly to the DataContainer itself
         disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-        disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+        if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+            disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                    visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+        }
     } else {
         SignalRelay *relay = objIt.value();
 
@@ -317,8 +325,10 @@ void DataContainer::disconnectVisualization(QObject *visualization)
             disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                        visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
             //modelChanged is always emitted by the dataSource since there is no polling there
-            disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
-                       visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+            if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+                    disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
+                        visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
+            }
         }
     }
 
