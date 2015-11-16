@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QStringList>
 
 namespace Plasma {
 class CalendarEventsPlugin;
