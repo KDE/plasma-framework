@@ -24,7 +24,7 @@
 #include <QDateTime>
 #include <QString>
 
-#include "plasmacalendarintegration/calendareventsplugin.h"
+#include <CalendarEvents/CalendarEventsPlugin>
 
 class EventDataDecorator : public QObject
 {
@@ -39,7 +39,7 @@ class EventDataDecorator : public QObject
     Q_PROPERTY(QString eventType READ eventType NOTIFY eventDataChanged)
 
 public:
-    EventDataDecorator(const Plasma::EventData &data, QObject *parent = Q_NULLPTR);
+    EventDataDecorator(const CalendarEvents::EventData &data, QObject *parent = Q_NULLPTR);
 
     QDateTime startDateTime() const;
     QDateTime endDateTime() const;
@@ -54,7 +54,7 @@ Q_SIGNALS:
     void eventDataChanged();
 
 private:
-    Plasma::EventData m_data;
+    CalendarEvents::EventData m_data;
 };
 
 #endif

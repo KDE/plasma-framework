@@ -101,20 +101,20 @@ void DaysModel::update()
     const QDate modelFirstDay(m_data->at(0).yearNumber, m_data->at(0).monthNumber, m_data->at(0).dayNumber);
 
     if (m_pluginsManager) {
-        Q_FOREACH (Plasma::CalendarEventsPlugin *eventsPlugin, m_pluginsManager->plugins()) {
+        Q_FOREACH (CalendarEvents::CalendarEventsPlugin *eventsPlugin, m_pluginsManager->plugins()) {
             eventsPlugin->loadEventsForDateRange(modelFirstDay, modelFirstDay.addDays(42));
         }
     }
 }
 
-void DaysModel::onDataReady(const QMultiHash<QDate, Plasma::EventData> &data)
+void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data)
 {
     m_eventsData.reserve(m_eventsData.size() + data.size());
     m_eventsData += data;
     layoutChanged();
 }
 
-void DaysModel::onEventModified(const Plasma::EventData &data)
+void DaysModel::onEventModified(const CalendarEvents::EventData &data)
 {
     QList<QDate> updatesList;
     auto i = m_eventsData.begin();
@@ -176,10 +176,10 @@ QList<QObject*> DaysModel::eventsForDate(const QDate &date)
     qDeleteAll(m_qmlData);
     m_qmlData.clear();
 
-    const QList<Plasma::EventData> events = m_eventsData.values(date);
+    const QList<CalendarEvents::EventData> events = m_eventsData.values(date);
     m_qmlData.reserve(events.size());
 
-    Q_FOREACH (const Plasma::EventData &event, events) {
+    Q_FOREACH (const CalendarEvents::EventData &event, events) {
         m_qmlData << new EventDataDecorator(event, this);
     }
 

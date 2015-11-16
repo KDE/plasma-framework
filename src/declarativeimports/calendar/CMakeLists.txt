@@ -19,10 +19,8 @@ target_link_libraries(calendarplugin
     Qt5::Qml
     Qt5::Gui
     KF5::I18n
-    plasmacalendarintegration
+    KF5::CalendarEvents
 )
 
 install(TARGETS calendarplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
-
-add_subdirectory(plasmacalendarintegration)

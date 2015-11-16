@@ -18,7 +18,8 @@
 */
 
 #include "eventpluginsmanager.h"
-#include "plasmacalendarintegration/calendareventsplugin.h"
+
+#include <CalendarEvents/CalendarEventsPlugin>
 
 #include <QCoreApplication>
 #include <QAbstractListModel>
@@ -213,18 +214,18 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
 
     QObject *obj = loader.instance();
     if (obj) {
-        Plasma::CalendarEventsPlugin *eventsPlugin = qobject_cast<Plasma::CalendarEventsPlugin*>(obj);
+        CalendarEvents::CalendarEventsPlugin *eventsPlugin = qobject_cast<CalendarEvents::CalendarEventsPlugin*>(obj);
         if (eventsPlugin) {
             qDebug() << "Loading Calendar plugin" << eventsPlugin;
             eventsPlugin->setProperty("pluginPath", absolutePath);
             m_plugins << eventsPlugin;
 
             // Connect the relay signals
-            connect(eventsPlugin, &Plasma::CalendarEventsPlugin::dataReady,
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::dataReady,
                     this, &EventPluginsManager::dataReady);
-            connect(eventsPlugin, &Plasma::CalendarEventsPlugin::eventModified,
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventModified,
                     this, &EventPluginsManager::eventModified);
-            connect(eventsPlugin, &Plasma::CalendarEventsPlugin::eventRemoved,
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventRemoved,
                     this, &EventPluginsManager::eventRemoved);
         } else {
             // not our/valid plugin, so unload it
@@ -235,7 +236,7 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
     }
 }
 
-QList<Plasma::CalendarEventsPlugin*> EventPluginsManager::plugins() const
+QList<CalendarEvents::CalendarEventsPlugin*> EventPluginsManager::plugins() const
 {
     return m_plugins;
 }

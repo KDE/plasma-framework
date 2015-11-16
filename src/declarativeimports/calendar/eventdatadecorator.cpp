@@ -21,7 +21,7 @@
 
 #include <KLocalizedString>
 
-EventDataDecorator::EventDataDecorator(const Plasma::EventData &data, QObject *parent)
+EventDataDecorator::EventDataDecorator(const CalendarEvents::EventData &data, QObject *parent)
     : QObject(parent),
       m_data(data)
 {
@@ -60,11 +60,11 @@ QString EventDataDecorator::description() const
 QString EventDataDecorator::eventType() const
 {
     switch (m_data.type()) {
-        case Plasma::EventData::Holiday:
+        case CalendarEvents::EventData::Holiday:
             return i18nc("Agenda listview section title", "Holidays");
-        case Plasma::EventData::Event:
+        case CalendarEvents::EventData::Event:
             return i18nc("Agenda listview section title", "Events");
-        case Plasma::EventData::Todo:
+        case CalendarEvents::EventData::Todo:
             return i18nc("Agenda listview section title", "Todo");
     }
     return i18nc("Means 'Other calendar items'", "Other");

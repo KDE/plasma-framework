@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QStringList>
 
-namespace Plasma {
+namespace CalendarEvents {
 class CalendarEventsPlugin;
 class EventData;
 }
@@ -41,7 +41,7 @@ public:
     EventPluginsManager(QObject *parent = 0);
     ~EventPluginsManager();
 
-    QList<Plasma::CalendarEventsPlugin*> plugins() const;
+    QList<CalendarEvents::CalendarEventsPlugin*> plugins() const;
     QAbstractListModel* pluginsModel() const;
 
     // This is a helper function to set which plugins
@@ -59,8 +59,8 @@ Q_SIGNALS:
     // These three signals below are used for relaying the
     // plugin signals so that the EventPluginsManager don't
     // have to worry about connecting to newly loaded plugins
-    void dataReady(const QMultiHash<QDate, Plasma::EventData> &data);
-    void eventModified(const Plasma::EventData &modifiedEvent);
+    void dataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data);
+    void eventModified(const CalendarEvents::EventData &modifiedEvent);
     void eventRemoved(const QString &uid);
 
 private:
@@ -68,7 +68,7 @@ private:
 
     friend class EventPluginsModel;
     EventPluginsModel *m_model;
-    QList<Plasma::CalendarEventsPlugin*> m_plugins;
+    QList<CalendarEvents::CalendarEventsPlugin*> m_plugins;
     QMap<QString, QJsonObject> m_availablePlugins;
     QStringList m_enabledPlugins;
 };

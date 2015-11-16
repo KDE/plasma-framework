@@ -23,7 +23,7 @@
 #include <QAbstractListModel>
 
 #include "daydata.h"
-#include "plasmacalendarintegration/calendareventsplugin.h"
+#include <CalendarEvents/CalendarEventsPlugin>
 
 class EventPluginsManager;
 
@@ -58,8 +58,8 @@ Q_SIGNALS:
     void agendaUpdated(const QDate &updatedDate);
 
 private Q_SLOTS:
-    void onDataReady(const QMultiHash<QDate, Plasma::EventData> &data);
-    void onEventModified(const Plasma::EventData &data);
+    void onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data);
+    void onEventModified(const CalendarEvents::EventData &data);
     void onEventRemoved(const QString &uid);
 
 private:
@@ -69,8 +69,8 @@ private:
     QList<DayData> *m_data;
     QList<QObject*> m_qmlData;
     QDate m_lastRequestedAgendaDate;
-    QList<Plasma::CalendarEventsPlugin*> m_eventPlugins;
-    QMultiHash<QDate, Plasma::EventData> m_eventsData;
+    QList<CalendarEvents::CalendarEventsPlugin*> m_eventPlugins;
+    QMultiHash<QDate, CalendarEvents::EventData> m_eventsData;
     bool m_agendaNeedsUpdate;
 };
 
