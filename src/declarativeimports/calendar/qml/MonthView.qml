@@ -47,8 +47,11 @@ PinchArea {
     property Item selectedItem
     property int week;
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
-    property date today
+    property alias today: calendarBackend.today
     property bool showWeekNumbers: false
+
+    property alias cellHeight: mainDaysCalendar.cellHeight
+    property QtObject daysModel: calendarBackend.daysModel
 
     onPinchStarted: stack.currentItem.transformOrigin = pinch.center
     onPinchUpdated: {
@@ -291,5 +294,9 @@ PinchArea {
                 stack.pop()
             }
         }
+    }
+
+    Component.onCompleted: {
+        root.currentDate = calendarBackend.today
     }
 }
