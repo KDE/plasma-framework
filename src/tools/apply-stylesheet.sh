@@ -257,20 +257,20 @@ echo $reorderXslt > transform.xsl
 
 if grep -q '"current-color-scheme"' $file.svg; then
     echo replacing the stylesheet
-    xml ed --update "/svg:svg/svg:defs/_:style" -v "$stylesheet" $file.svg > temp.svg
+    xmlstarlet ed --update "/svg:svg/svg:defs/_:style" -v "$stylesheet" $file.svg > temp.svg
 else
     echo adding the stylesheet
-xml ed --subnode "/svg:svg/svg:defs" -t elem -n "style" -v "$stylesheet"\
+xmlstarlet ed --subnode "/svg:svg/svg:defs" -t elem -n "style" -v "$stylesheet"\
        --subnode "/svg:svg/svg:defs/style" -t attr -n "type" -v "text/css"\
        --subnode "/svg:svg/svg:defs/style" -t attr -n "id" -v "current-color-scheme" $file.svg > temp.svg
 fi
 
-xml tr transform.xsl temp.svg > temp2.svg
+xmlstarlet tr transform.xsl temp.svg > temp2.svg
 mv temp2.svg temp.svg
 
 for i in {0..4}
 do
-  xml ed --subnode "//*/*[contains(@style, '${colors[i]}') and not (@class)]" -t attr -n "class" -v "${colorNames[i]}" temp.svg > temp2.svg
+  xmlstarlet ed --subnode "//*/*[contains(@style, '${colors[i]}') and not (@class)]" -t attr -n "class" -v "${colorNames[i]}" temp.svg > temp2.svg
 
   mv temp2.svg temp.svg
 
