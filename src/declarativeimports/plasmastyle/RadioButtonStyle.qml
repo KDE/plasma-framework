@@ -41,6 +41,7 @@ QtQuickControlStyle.RadioButtonStyle {
             imagePath: "widgets/actionbutton"
         }
         elementId: "normal"
+        opacity: control.enabled ? 1 : 0.6
 
         width: height
         height: theme.mSize(theme.defaultFont).height * 1.6

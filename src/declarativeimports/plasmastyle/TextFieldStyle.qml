@@ -29,7 +29,7 @@ import "private" as Private
 QtQuickControlStyle.TextFieldStyle {
     id: root
 
-    textColor: theme.viewTextColor
+    textColor: control.enabled ? theme.viewTextColor : Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.6)
     selectionColor: theme.viewFocusColor
     selectedTextColor: theme.viewBackgroundColor
     placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
@@ -50,6 +50,7 @@ QtQuickControlStyle.TextFieldStyle {
 
         implicitHeight: Math.max(theme.mSize(theme.defaultFont).height * 1.6, theme.mSize(theme.defaultFont).height + base.margins.top + base.margins.bottom)
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
+        opacity: control.enabled ? 1 : 0.6
 
         Private.TextFieldFocus {
             id: hover

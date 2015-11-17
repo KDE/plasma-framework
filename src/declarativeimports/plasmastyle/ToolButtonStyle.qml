@@ -121,7 +121,7 @@ QtQuickControlStyle.ButtonStyle {
     }
 
     background: {
-        if (control.text.length == 0 && (control.parent && control.parent.checkedButton === undefined) && !style.flat && !control.menu) {
+        if (control.text.length == 0 && (control.parent && (control.parent.spacing === undefined || control.parent.spacing !== 0)) && !style.flat && !control.menu) {
             return roundButtonComponent
         } else {
             return buttonComponent
@@ -233,7 +233,7 @@ QtQuickControlStyle.ButtonStyle {
                 enabledBorders: {
                     if (style.flat || !control.parent ||
                         control.parent.width < control.parent.implicitWidth ||
-                        control.parent.checkedButton === undefined ||
+                        control.parent.spacing !== 0 ||
                         !bordersSvg.hasElement("pressed-hint-compose-over-border")) {
                         if (shadows !== null) {
                             shadows.destroy()

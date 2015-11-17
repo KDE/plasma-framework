@@ -42,6 +42,7 @@ QtQuickControlStyle.SliderStyle {
     handle: Item {
         width: handle.naturalSize.width
         height: handle.naturalSize.height
+        //keep this opaque to not show half highlight beneath
         Private.RoundShadow {
             id: shadow
             anchors.fill: parent
@@ -65,6 +66,7 @@ QtQuickControlStyle.SliderStyle {
         prefix: "groove"
         height: implicitHeight
         colorGroup: PlasmaCore.ColorScope.colorGroup
+        opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.FrameSvgItem {
             id: highlight
@@ -76,7 +78,7 @@ QtQuickControlStyle.SliderStyle {
             anchors.verticalCenter: parent.verticalCenter
             colorGroup: PlasmaCore.ColorScope.colorGroup
 
-            visible: value > 0 && slider.enabled
+            visible: value > 0
         }
     }
 
@@ -91,6 +93,7 @@ QtQuickControlStyle.SliderStyle {
             //Position ticklines from styleData.handleWidth to width - styleData.handleWidth/2
             //position them at an half handle width increment
             x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count>1 ? repeater.count-1 : 1))
+            opacity: control.enabled ? 1 : 0.6
         }
     }
 }
