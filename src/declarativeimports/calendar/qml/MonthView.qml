@@ -219,6 +219,7 @@ PinchArea {
         }
 
         initialItem: DaysCalendar {
+            id: mainDaysCalendar
             title: calendarBackend.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
 
             columns: calendarBackend.days
