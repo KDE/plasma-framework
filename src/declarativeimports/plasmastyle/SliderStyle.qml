@@ -86,10 +86,12 @@ QtQuickControlStyle.SliderStyle {
    tickmarks: Repeater {
         id: repeater
         model: control.stepSize > 0 ? 1 + (control.maximumValue - control.minimumValue) / control.stepSize : 0
+        width: control.orientation == Qt.Vertical ? control.height : control.width
+        height: control.orientation == Qt.Vertical ? control.width : control.height
         Rectangle {
             color: PlasmaCore.ColorScope.textColor
             width: 1 ; height: 3
-            y: repeater.height
+            y: control.orientation == Qt.Vertical ? control.width : control.height
             //Position ticklines from styleData.handleWidth to width - styleData.handleWidth/2
             //position them at an half handle width increment
             x: styleData.handleWidth / 2 + index * ((repeater.width - styleData.handleWidth) / (repeater.count>1 ? repeater.count-1 : 1))
