@@ -147,7 +147,7 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
             const QString absolutePath = dir.absoluteFilePath(fileName);
             QPluginLoader loader(absolutePath);
             // Load only our own plugins
-            if (loader.metaData().value(QStringLiteral("IID")) == QLatin1String("org.kde.plasma.CalendarEventsPlugin")) {
+            if (loader.metaData().value(QStringLiteral("IID")) == QLatin1String("org.kde.CalendarEventsPlugin")) {
                 m_availablePlugins.insert(absolutePath, loader.metaData());
             }
         }
