@@ -58,6 +58,15 @@ Item {
             y: parent.margins.top
             property Item checkedButton
             PlasmaComponents.ToolButton {
+                iconSource: "text-field"
+                flat: false
+                visible: input.selectedText == ""
+                onClicked: {
+                    selectWord();
+                    popupTimer.restart();
+                }
+            }
+            PlasmaComponents.ToolButton {
                 iconSource: "edit-cut"
                 flat: false
                 visible: input.selectedText != ""
@@ -77,7 +86,7 @@ Item {
             }
             PlasmaComponents.ToolButton {
                 iconSource: "edit-paste"
-                enabled: input.canPaste
+                visible: input.canPaste
                 flat: false
                 onClicked: {
                     control.paste();
@@ -127,11 +136,12 @@ Item {
         id: popupTimer
         interval: 1
         onTriggered: {
-            if ((input.canPaste || selectionStart !== selectionEnd) && control.activeFocus) {
+            if (control.echoMode != TextInput.Password && control.activeFocus) {
                 var startRect = input.positionToRectangle(input.selectionStart);
                 var endRect = input.positionToRectangle(input.selectionEnd);
 
-                var pos = getMenuInstance().parent.mapFromItem(input, startRect.x, startRect.y + units.gridUnit);
+                var pos = getMenuInstance().parent.mapFromItem(input, (startRect.x + endRect.x)/2 - getMenuInstance().width/2, endRect.y);
+                pos.y += (pos.y + getMenuInstance().height + units.gridUnit) > getMenuInstance().parent.height ? -units.smallSpacing - getMenuInstance().height : units.gridUnit*2;
 
                 getMenuInstance().dismiss();
                 getMenuInstance().popup(pos);
