@@ -60,7 +60,7 @@ Item {
             PlasmaComponents.ToolButton {
                 iconSource: "text-field"
                 flat: false
-                visible: input.selectedText == ""
+                visible: input.selectedText == "" && control.echoMode != TextInput.Password
                 onClicked: {
                     selectWord();
                     popupTimer.restart();
@@ -69,7 +69,7 @@ Item {
             PlasmaComponents.ToolButton {
                 iconSource: "edit-cut"
                 flat: false
-                visible: input.selectedText != ""
+                visible: input.selectedText != "" && control.echoMode != TextInput.Password
                 onClicked: {
                     control.cut();
                     select(input.cursorPosition, input.cursorPosition);
@@ -77,7 +77,7 @@ Item {
             }
             PlasmaComponents.ToolButton {
                 iconSource: "edit-copy"
-                visible: input.selectedText != ""
+                visible: input.selectedText != "" && control.echoMode != TextInput.Password
                 flat: false
                 onClicked: {
                     control.copy();
@@ -136,7 +136,7 @@ Item {
         id: popupTimer
         interval: 1
         onTriggered: {
-            if (control.echoMode != TextInput.Password && control.activeFocus) {
+            if (control.activeFocus) {
                 var startRect = input.positionToRectangle(input.selectionStart);
                 var endRect = input.positionToRectangle(input.selectionEnd);
 
