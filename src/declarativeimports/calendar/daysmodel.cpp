@@ -176,17 +176,17 @@ QList<QObject*> DaysModel::eventsForDate(const QDate &date)
     qDeleteAll(m_qmlData);
     m_qmlData.clear();
 
-    const QList<CalendarEvents::EventData> events = m_eventsData.values(date);
+    QList<CalendarEvents::EventData> events = m_eventsData.values(date);
     m_qmlData.reserve(events.size());
+
+    // sort events by their time and type
+    std::sort(events.begin(), events.end(), [](const CalendarEvents::EventData &a, const CalendarEvents::EventData &b) {
+        return b.type() > a.type() || b.startDateTime() > a.startDateTime();
+    });
 
     Q_FOREACH (const CalendarEvents::EventData &event, events) {
         m_qmlData << new EventDataDecorator(event, this);
     }
-
-    // sort events by their time
-    std::sort(m_qmlData.begin(), m_qmlData.end(), [](QObject *a, QObject *b) {
-        return qobject_cast<EventDataDecorator*>(b)->startDateTime() > qobject_cast<EventDataDecorator*>(a)->startDateTime();
-    });
 
     m_agendaNeedsUpdate = false;
     return m_qmlData;
