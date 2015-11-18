@@ -184,7 +184,18 @@ QString Calendar::dayName(int weekday) const
 
 QString Calendar::monthName() const
 {
-    return QDate::longMonthName(m_displayedDate.month(), QDate::StandaloneFormat);
+    // Simple QDate::longMonthName won't do the job as it
+    // will return the month name using LC_DATE locale which is used
+    // for date formatting etc. So for example, in en_US locale
+    // and cs_CZ LC_DATE, it would return Czech month names while
+    // it should return English ones. So here we force the LANG
+    // locale and take the month name from that.
+    //
+    // See https://bugs.kde.org/show_bug.cgi?id=353715
+    const QString lang = QLocale().uiLanguages().first();
+    // If lang is empty, it will create just a system locale
+    QLocale langLocale(lang);
+    return langLocale.standaloneMonthName(m_displayedDate.month());
 }
 
 int Calendar::year() const
