@@ -578,7 +578,7 @@ void SvgPrivate::checkColorHints()
 
     // check to see if we are using colors, but the theme isn't being used or isn't providing
     // a colorscheme
-    if (qApp) {
+    if (qGuiApp) {
         if (usesColors && (!themed || !actualTheme()->colorScheme())) {
             QObject::connect(actualTheme()->d, SIGNAL(applicationPaletteChange()), q, SLOT(colorsChanged()));
         } else {
