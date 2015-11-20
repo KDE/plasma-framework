@@ -44,6 +44,7 @@
 namespace Plasma
 {
 
+
 SharedSvgRenderer::SharedSvgRenderer(QObject *parent)
     : QSvgRenderer(parent)
 {
@@ -579,20 +580,15 @@ void SvgPrivate::checkColorHints()
     // a colorscheme
     if (qApp) {
         if (usesColors && (!themed || !actualTheme()->colorScheme())) {
-            qApp->installEventFilter(q);
+            QObject::connect(actualTheme()->d, SIGNAL(applicationPaletteChange()), q, SLOT(colorsChanged()));
         } else {
-            qApp->removeEventFilter(q);
+            QObject::disconnect(actualTheme()->d, SIGNAL(applicationPaletteChange()), q, SLOT(colorsChanged()));
         }
     }
 }
 
 bool Svg::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == QCoreApplication::instance()) {
-        if (event->type() == QEvent::ApplicationPaletteChange) {
-            d->colorsChanged();
-        }
-    }
     return QObject::eventFilter(watched, event);
 }
 
@@ -978,4 +974,5 @@ Theme *Svg::theme() const
 
 } // Plasma namespace
 
+#include "private/moc_svg_p.cpp"
 #include "moc_svg.cpp"

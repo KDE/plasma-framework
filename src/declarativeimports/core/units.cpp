@@ -37,6 +37,28 @@ const QString plasmarc = QStringLiteral("plasmarc");
 const QString groupName = QStringLiteral("Units");
 const int defaultLongDuration = 120;
 
+
+SharedAppFilter::SharedAppFilter(QObject *parent)
+    : QObject(parent)
+{
+    QCoreApplication::instance()->installEventFilter(this);
+}
+
+SharedAppFilter::~SharedAppFilter()
+{}
+
+bool SharedAppFilter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == QCoreApplication::instance()) {
+        if (event->type() == QEvent::ApplicationFontChange) {
+            emit fontChanged();
+        }
+    }
+    return QObject::eventFilter(watched, event);
+}
+
+SharedAppFilter *Units::s_sharedAppFilter = nullptr;
+
 Units::Units(QObject *parent)
     : QObject(parent),
       m_gridUnit(-1),
@@ -45,12 +67,16 @@ Units::Units(QObject *parent)
       m_largeSpacing(-1),
       m_longDuration(defaultLongDuration) // default base value for animations
 {
+    if (!s_sharedAppFilter) {
+        s_sharedAppFilter = new SharedAppFilter();
+    }
+
     m_iconSizes = new QQmlPropertyMap(this);
     updateDevicePixelRatio(); // also updates icon sizes
     updateSpacing(); // updates gridUnit and *Spacing properties
 
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
-    QCoreApplication::instance()->installEventFilter(this);
+    QObject::connect(s_sharedAppFilter, SIGNAL(fontChanged()), this, SLOT(updateSpacing()));
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
     KDirWatch::self()->addFile(configFile);
@@ -236,13 +262,5 @@ int Units::shortDuration() const
     return m_longDuration / 5;
 }
 
-bool Units::eventFilter(QObject *watched, QEvent *event)
-{
-    if (watched == QCoreApplication::instance()) {
-        if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            updateSpacing();
-        }
-    }
-    return QObject::eventFilter(watched, event);
-}
+#include "moc_units.cpp"
 

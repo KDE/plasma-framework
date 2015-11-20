@@ -28,6 +28,20 @@
 
 class QQuickItem;
 
+class SharedAppFilter : public QObject
+{
+   Q_OBJECT
+public:
+    SharedAppFilter(QObject *parent = 0);
+    ~SharedAppFilter();
+
+Q_SIGNALS:
+    void fontChanged();
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event);
+};
+
 /**
  * @class Units
  * @short Expose sizes to QML
@@ -106,8 +120,6 @@ public:
     Units(QObject *parent = 0);
     ~Units();
 
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
-
     /**
      * @return pixel value for a grid Unit. Depends on DPI and font size.
      */
@@ -166,10 +178,10 @@ Q_SIGNALS:
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
     void settingsFileChanged(const QString &file);
+    void updateSpacing();
 
 private:
     void updateDevicePixelRatio();
-    void updateSpacing();
     void updatePlasmaRCSettings();
     /**
      * @return The dpi-adjusted size for a given icon size
@@ -181,6 +193,7 @@ private:
     qreal m_dpi;
 
     QQmlPropertyMap *m_iconSizes;
+    static SharedAppFilter *s_sharedAppFilter;
 
     int m_smallSpacing;
     int m_largeSpacing;

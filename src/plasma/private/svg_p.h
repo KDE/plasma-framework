@@ -24,6 +24,7 @@
 #include <QSharedData>
 #include <QSvgRenderer>
 #include <QExplicitlySharedDataPointer>
+#include <QObject>
 
 namespace Plasma
 {

@@ -363,6 +363,7 @@ void ThemePrivate::colorsChanged()
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     scheduleThemeChangeNotification(PixmapCache);
+    emit applicationPaletteChange();
 }
 
 void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
