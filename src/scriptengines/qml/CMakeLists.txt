@@ -34,6 +34,7 @@ target_link_libraries(plasma_appletscript_declarative
     KF5::Plasma
     KF5::PlasmaQuick
     KF5::Package
+    KF5::Notifications
 )
 
 

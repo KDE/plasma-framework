@@ -34,6 +34,7 @@
 #include <klocalizedstring.h>
 #include <kurlmimedata.h>
 #include <QMimeDatabase>
+#include <KNotification>
 
 #ifndef PLASMA_NO_KIO
 #include "kio/jobclasses.h" // for KIO::JobFlags
@@ -609,7 +610,15 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
         }
 
-        if (!appletList.isEmpty() || !wallpaperList.isEmpty()) {
+        const bool isPlasmaPackage = (mimetype == QLatin1String("application/x-plasma"));
+
+        if (!appletList.isEmpty() || !wallpaperList.isEmpty() || isPlasmaPackage) {
+            QAction *installPlasmaPackageAction = nullptr;
+            if (isPlasmaPackage) {
+                choices->addSection(i18n("Plasma Package"));
+                installPlasmaPackageAction = choices->addAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"));
+            }
+
             QHash<QAction *, QString> actionsToApplets;
             choices->addSection(i18n("Widgets"));
             foreach (const KPluginInfo &info, appletList) {
@@ -661,8 +670,45 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     tjob->putOnHold();
                     KIO::Scheduler::publishSlaveOnHold();
                 }
+
                 QString plugin = actionsToApplets.value(choice);
-                if (plugin.isEmpty()) {
+
+                if (choice == installPlasmaPackageAction) {
+                    using namespace KPackage;
+                    PackageStructure *structure = PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"));
+                    Package package(structure);
+
+                    const QString &packagePath = tjob->url().toLocalFile();
+
+                    KJob *installJob = package.update(packagePath);
+                    connect(installJob, &KJob::result, this, [this, packagePath, structure, posi](KJob *job) {
+                        auto fail = [job](const QString &text) {
+                            KNotification::event(QStringLiteral("plasmoidInstallationFailed"), i18n("Package Installation Failed"),
+                                                 text, QStringLiteral("dialog-error"), 0, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
+                        };
+
+                        // if the applet is already installed, just add it to the containment
+                        if (job->error() != KJob::NoError
+                            && job->error() != Package::PackageAlreadyInstalledError
+                            && job->error() != Package::NewerVersionAlreadyInstalledError) {
+                            fail(job->errorText());
+                            return;
+                        }
+
+                        using namespace KPackage;
+                        Package package(structure);
+                        // TODO how can I get the path of the actual package?
+                        package.setPath(packagePath);
+
+                        // TODO how can I get the plugin id? Package::metadata() is deprecated
+                        if (!package.isValid() || !package.metadata().isValid()) {
+                            fail(i18n("The package you just dropped is invalid."));
+                            return;
+                        }
+
+                        createApplet(package.metadata().pluginId(), QVariantList(), posi);
+                    });
+                } else if (plugin.isEmpty()) {
                     //set wallpapery stuff
                     plugin = actionsToWallpapers.value(choice);
                     if (m_wallpaperInterface && tjob->url().isValid()) {
