@@ -31,6 +31,7 @@ CustomCorona::CustomCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
     KPackage::Package package = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Shell"));
+    //applications that want to load a plasma scene would have to load their own shell.. TODO: have a simple shell in plasma-framework for this purpose?
     package.setPath(QStringLiteral("org.kde.plasma.desktop"));
     setKPackage(package);
 
@@ -75,6 +76,8 @@ void CustomCorona::load()
     //don't let containments to be removed
     for (auto c : containments()) {
         if (c->containmentType() == Plasma::Types::DesktopContainment) {
+            //example of a shell without a wallpaper
+            c->setWallpaper("null");
             m_view->setContainment(c);
             QAction *removeAction = c->actions()->action(QStringLiteral("remove"));
             if(removeAction) {

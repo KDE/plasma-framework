@@ -66,6 +66,9 @@ Type=QString
 [PropertyDef::X-Plasma-DBusActivationService]
 Type=QString
 
+[PropertyDef::X-Plasma-ParentApp]
+Type=QString
+
 [PropertyDef::X-Plasma-Provides]
 Type=QStringList
 
