@@ -602,12 +602,17 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         qDebug() << "Creating menu for:" << mimetype  << posi;
 
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
+
         KPluginInfo::List wallpaperList;
 
-        if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
-            wallpaperList << m_wallpaperInterface->package().metadata();
-        } else {
-            wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
+        if (m_containment->containmentType() != Plasma::Types::PanelContainment
+            && m_containment->containmentType() != Plasma::Types::CustomPanelContainment) {
+
+            if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
+                wallpaperList << m_wallpaperInterface->package().metadata();
+            } else {
+                wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
+            }
         }
 
         const bool isPlasmaPackage = (mimetype == QLatin1String("application/x-plasma"));
