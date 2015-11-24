@@ -21,8 +21,8 @@
 #ifndef CUSTOMCORONA_H
 #define CUSTOMCORONA_H
 
-#include <plasma/corona.h>
-#include "plasmaquick/containmentview.h"
+#include <Plasma/Corona>
+#include <PlasmaQuick/ContainmentView>
 
 class CustomCorona : public Plasma::Corona
 {
