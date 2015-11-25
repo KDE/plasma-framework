@@ -134,9 +134,15 @@ void IconItem::setSource(const QVariant &source)
                 //ok, svg not available from the plasma theme
             } else {
                 //try to load from iconloader an svg with Plasma::Svg
-                QString iconPath = KIconLoader::global()->theme()->iconPath(source.toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
-                if (iconPath.isEmpty()) {
-                    iconPath = KIconLoader::global()->theme()->iconPath(source.toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                const auto *iconTheme = KIconLoader::global()->theme();
+                QString iconPath;
+                if (iconTheme) {
+                    iconTheme->iconPath(source.toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+                    if (iconPath.isEmpty()) {
+                        iconPath = iconTheme->iconPath(source.toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                    }
+                } else {
+                    qWarning() << "KIconLoader has no theme set";
                 }
                 m_svgFromIconLoader = !iconPath.isEmpty();
 
@@ -339,9 +345,15 @@ void IconItem::loadPixmap()
         if (m_svgIcon->hasElement(m_source.toString())) {
             result = m_svgIcon->pixmap(m_source.toString());
         } else if (m_svgFromIconLoader) {
-            QString iconPath = KIconLoader::global()->theme()->iconPath(source().toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
-            if (iconPath.isEmpty()) {
-                iconPath = KIconLoader::global()->theme()->iconPath(source().toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+            const auto *iconTheme = KIconLoader::global()->theme();
+            QString iconPath;
+            if (iconTheme) {
+                QString iconPath = iconTheme->iconPath(source().toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+                if (iconPath.isEmpty()) {
+                    iconPath = iconTheme->iconPath(source().toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                }
+            } else {
+                qWarning() << "KIconLoader has no theme set";
             }
 
             if (!iconPath.isEmpty()) {
