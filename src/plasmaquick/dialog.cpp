@@ -1229,7 +1229,7 @@ void Dialog::setVisible(bool visible)
 
     d->visible = visible;
     if (d->componentComplete) {
-        if (d->visualParent) {
+        if (visible && d->visualParent) {
             setPosition(popupPosition(d->visualParent, size()));
         }
         QQuickWindow::setVisible(visible);
