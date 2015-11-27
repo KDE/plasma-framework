@@ -61,15 +61,13 @@ QString ScriptEngine::mainScript() const
 QStringList knownLanguages(Types::ComponentTypes types)
 {
     QStringList languages;
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines");
+    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
 
     for (auto plugin : plugins) {
-        if ((types & Types::AppletComponent) &&
-            plugin.value("X-Plasma-ComponentTypes") == "Applet") {
-            languages << plugin.value("X-Plasma-API");
-        } else if ((types & Types::DataEngineComponent) &&
-            plugin.value("X-Plasma-ComponentTypes") == "DataEngine") {
-            languages << plugin.value("X-Plasma-API");
+        const QString componentTypes = plugin.value(QStringLiteral("X-Plasma-ComponentTypes"));
+        if (((types & Types::AppletComponent)     && componentTypes == QLatin1String("Applet"))
+          ||((types & Types::DataEngineComponent) && componentTypes == QLatin1String("DataEngine"))) {
+            languages << plugin.value(QStringLiteral("X-Plasma-API"));
         }
     }
 
@@ -83,16 +81,14 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
 
     auto filter = [&language](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-Plasma-API") == language;
+        return md.value(QStringLiteral("X-Plasma-API")) == language;
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins("plasma/scriptengines", filter);
+    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
 
     if (plugins.count()) {
-        if ((type & Types::AppletComponent) &&
-            plugins.first().value("X-Plasma-ComponentTypes") != "Applet") {
-            return 0;
-        } else if ((type & Types::DataEngineComponent) &&
-            plugins.first().value("X-Plasma-ComponentTypes") != "DataEngine") {
+        const QString componentTypes = plugins.first().value(QStringLiteral("X-Plasma-ComponentTypes"));
+        if (((type & Types::AppletComponent)     && componentTypes != QLatin1String("Applet"))
+         || ((type & Types::DataEngineComponent) && componentTypes != QLatin1String("DataEngine"))) {
             return 0;
         }
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);

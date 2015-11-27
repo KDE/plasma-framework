@@ -75,29 +75,29 @@ Plasma::ContainmentPrivate::~ContainmentPrivate()
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
-    actions->setConfigGroup("Shortcuts-Containment");
+    actions->setConfigGroup(QLatin1String("Shortcuts-Containment"));
 
     //adjust applet actions
-    QAction *appAction = qobject_cast<QAction *>(actions->action("remove"));
-    appAction->setShortcut(QKeySequence("alt+d, alt+r"));
+    QAction *appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("remove")));
+    appAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::ALT+Qt::Key_R));
     if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this Panel"));
     } else {
         appAction->setText(i18n("Remove this Activity"));
     }
 
-    appAction = qobject_cast<QAction *>(actions->action("configure"));
+    appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("configure")));
     if (appAction) {
-        appAction->setShortcut(QKeySequence("alt+d, alt+s"));
+        appAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::ALT+Qt::Key_S));
         appAction->setText(i18n("Activity Settings"));
     }
 
     //add our own actions
-    QAction *appletBrowserAction = actions->add<QAction>("add widgets");
+    QAction *appletBrowserAction = actions->add<QAction>(QLatin1String("add widgets"));
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
-    appletBrowserAction->setIcon(QIcon::fromTheme("list-add"));
-    appletBrowserAction->setShortcut(QKeySequence("alt+d, a"));
+    appletBrowserAction->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
+    appletBrowserAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::Key_A));
     appletBrowserAction->setData(Plasma::Types::AddAction);
 }
 

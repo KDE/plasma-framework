@@ -80,7 +80,7 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     } else if (appletId > s_maxAppletId) {
         s_maxAppletId = appletId;
     }
-    QObject::connect(actions->action("configure"), SIGNAL(triggered()),
+    QObject::connect(actions->action(QStringLiteral("configure")), SIGNAL(triggered()),
                      q, SLOT(requestConfiguration()));
 #ifndef NDEBUG
     new TimeTracker(q);
@@ -115,7 +115,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     //          that requires a Corona, which is not available at this point
     q->setHasConfigurationInterface(true);
 
-    QAction *closeApplet = actions->action("remove");
+    QAction *closeApplet = actions->action(QStringLiteral("remove"));
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->title()));
     }
@@ -167,7 +167,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     //It's valid, let's try to load the icon from within the package
     if (script) {
         //use the absolute path of the in-package icon as icon name
-        if (appletDescription.icon().startsWith("/")) {
+        if (appletDescription.icon().startsWith('/')) {
             icon = package->filePath("", appletDescription.icon().toUtf8());
         }
     //package not valid, get rid of it
@@ -182,12 +182,12 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 
     if (!q->isContainment() && q->pluginInfo().isValid()) {
         QString constraint;
-        QStringList provides = q->pluginInfo().property("X-Plasma-Provides").value<QStringList>();
+        QStringList provides = q->pluginInfo().property("X-Plasma-Provides").toStringList();
         if (!provides.isEmpty()) {
             auto filter = [&provides](const KPluginMetaData &md) -> bool
             {
                 foreach (const QString &p, provides) {
-                    if (md.value("X-Plasma-Provides").contains(p)) {
+                    if (md.value(QStringLiteral("X-Plasma-Provides")).contains(p)) {
                         return true;
                     }
                 }

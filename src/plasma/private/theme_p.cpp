@@ -110,7 +110,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     }
     QCoreApplication::instance()->installEventFilter(this);
 
-    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + themeRcFile;
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + QLatin1String(themeRcFile);
     KDirWatch::self()->addFile(configFile);
 
     // Catch both, direct changes to the config file ...
@@ -145,7 +145,7 @@ KConfigGroup &ThemePrivate::config()
 #ifndef NDEBUG
                 // qDebug() << "using theme for app" << app;
 #endif
-                groupName.append("-").append(app);
+                groupName.append('-').append(app);
             }
         }
         cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
@@ -163,8 +163,8 @@ bool ThemePrivate::useCache()
             ThemeConfig config;
             cacheSize = config.themeCacheKb();
         }
-        const bool isRegularTheme = themeName != systemColorsTheme;
-        QString cacheFile = QStringLiteral("plasma_theme_") + themeName;
+        const bool isRegularTheme = themeName != QLatin1String(systemColorsTheme);
+        QString cacheFile = QLatin1String("plasma_theme_") + themeName;
 
         // clear any cached values from the previous theme cache
         themeVersion.clear();
@@ -176,7 +176,7 @@ bool ThemePrivate::useCache()
             themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
 
             Q_ASSERT(!themeMetadataPath.isEmpty() || themeName.isEmpty());
-            const QString cacheFileBase = cacheFile + QStringLiteral("*.kcache");
+            const QString cacheFileBase = cacheFile + QLatin1String("*.kcache");
 
             QString currentCacheFileName;
             if (!themeMetadataPath.isEmpty()) {
@@ -184,8 +184,8 @@ bool ThemePrivate::useCache()
                 const KPluginInfo pluginInfo(themeMetadataPath);
                 themeVersion = pluginInfo.version();
                 if (!themeVersion.isEmpty()) {
-                    cacheFile += "_v" + themeVersion;
-                    currentCacheFileName = cacheFile + QStringLiteral(".kcache");
+                    cacheFile += QLatin1String("_v") + themeVersion;
+                    currentCacheFileName = cacheFile + QLatin1String(".kcache");
                 }
 
                 // watch the metadata file for changes at runtime
@@ -218,7 +218,7 @@ bool ThemePrivate::useCache()
             // the cache should be dropped; we need a way to detect system color change when the
             // application is not running.
             // check for expired cache
-            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + cacheFile + ".kcache";
+            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + cacheFile + QLatin1String(".kcache");
             if (!cacheFilePath.isEmpty()) {
                 const QFileInfo cacheFileInfo(cacheFilePath);
                 const QFileInfo metadataFileInfo(themeMetadataPath);
@@ -235,10 +235,10 @@ bool ThemePrivate::useCache()
     }
 
     if (cacheTheme && !svgElementsCache) {
-        const QString svgElementsFileNameBase = QStringLiteral("plasma-svgelements-") + themeName;
+        const QString svgElementsFileNameBase = QLatin1String("plasma-svgelements-") + themeName;
         QString svgElementsFileName = svgElementsFileNameBase;
         if (!themeVersion.isEmpty()) {
-            svgElementsFileName += "_v" + themeVersion;
+            svgElementsFileName += QLatin1String("_v") + themeVersion;
         }
 
         // now we check for (and remove) old caches
@@ -434,7 +434,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
     elements[QStringLiteral("%fontfamily")] = font.family().split('[').first();
-    elements[QStringLiteral("%smallfontsize")] = QString("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
+    elements[QStringLiteral("%smallfontsize")] = QStringLiteral("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
     QHash<QString, QString>::const_iterator itEnd = elements.constEnd();
@@ -507,7 +507,7 @@ void ThemePrivate::settingsFileChanged(const QString &file)
         if (themeVersion != pluginInfo.version()) {
             scheduleThemeChangeNotification(SvgElementsCache);
         }
-    } else if (file.endsWith(themeRcFile)) {
+    } else if (file.endsWith(QLatin1String(themeRcFile))) {
         config().config()->reparseConfiguration();
         settingsChanged(true);
     }
@@ -696,7 +696,7 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     KConfigGroup cg;
     if (metadata->hasGroup("ContrastEffect")) {
         cg = KConfigGroup(metadata, "ContrastEffect");
-        backgroundContrastEnabled = cg.readEntry(QStringLiteral("enabled"), false);
+        backgroundContrastEnabled = cg.readEntry("enabled", false);
 
         //if (backgroundContrastEnabled) {
         // Make up sensible default values, based on the background color
@@ -711,9 +711,9 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
             _intensity = 0.45;
             _saturation = 1.7;
         }
-        backgroundContrast = cg.readEntry(QStringLiteral("contrast"), _contrast);
-        backgroundIntensity = cg.readEntry(QStringLiteral("intensity"), _intensity);
-        backgroundSaturation = cg.readEntry(QStringLiteral("saturation"), _saturation);
+        backgroundContrast = cg.readEntry("contrast", _contrast);
+        backgroundIntensity = cg.readEntry("intensity", _intensity);
+        backgroundSaturation = cg.readEntry("saturation", _saturation);
         //}
     } else {
         backgroundContrastEnabled = false;
@@ -726,7 +726,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (theme.isEmpty() || theme == themeName) {
         // let's try and get the default theme at least
         if (themeName.isEmpty()) {
-            theme = ThemePrivate::defaultTheme;
+            theme = QLatin1String(ThemePrivate::defaultTheme);
         } else {
             return;
         }
@@ -734,19 +734,19 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     // we have one special theme: essentially a dummy theme used to cache things with
     // the system colors.
-    bool realTheme = theme != systemColorsTheme;
+    bool realTheme = theme != QLatin1String(systemColorsTheme);
     if (realTheme) {
-        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % "/metadata.desktop");
+        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop"));
 
         if (themePath.isEmpty() && themeName.isEmpty()) {
             // note: can't use QStringLiteral("foo" "bar") on Windows
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QString(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;
             }
 
-            theme = ThemePrivate::defaultTheme;
+            theme = QLatin1String(ThemePrivate::defaultTheme);
         }
     }
 
@@ -798,8 +798,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             fallback = cg.readEntry("FallbackTheme", QString());
         }
 
-        if (!fallbackThemes.contains(ThemePrivate::defaultTheme)) {
-            fallbackThemes.append(ThemePrivate::defaultTheme);
+        if (!fallbackThemes.contains(QLatin1String(ThemePrivate::defaultTheme))) {
+            fallbackThemes.append(QLatin1String(ThemePrivate::defaultTheme));
         }
 
         foreach (const QString &theme, fallbackThemes) {

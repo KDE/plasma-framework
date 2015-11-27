@@ -51,13 +51,13 @@ public:
         , bottomHeight(0)
     {
         if (svg->enabledBorders() & FrameSvg::LeftBorder)
-            leftWidth = svg->elementSize(prefix % "left").width();
+            leftWidth = svg->elementSize(prefix % QLatin1String("left")).width();
         if (svg->enabledBorders() & FrameSvg::RightBorder)
-            rightWidth = svg->elementSize(prefix % "right").width();
+            rightWidth = svg->elementSize(prefix % QLatin1String("right")).width();
         if (svg->enabledBorders() & FrameSvg::TopBorder)
-            topHeight = svg->elementSize(prefix % "top").height();
+            topHeight = svg->elementSize(prefix % QLatin1String("top")).height();
         if (svg->enabledBorders() & FrameSvg::BottomBorder)
-            bottomHeight = svg->elementSize(prefix % "bottom").height();
+            bottomHeight = svg->elementSize(prefix % QLatin1String("bottom")).height();
     }
 
     QRect contentsRect(const QSize& size) const
@@ -415,9 +415,9 @@ void FrameSvgItem::doUpdate()
     }
 
     QString prefix = m_frameSvg->actualPrefix();
-    bool hasOverlay = !prefix.startsWith(QStringLiteral("mask-")) && m_frameSvg->hasElement(prefix % "overlay");
-    bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % "hint-compose-over-border") &&
-                m_frameSvg->hasElement("mask-" % prefix % "center");
+    bool hasOverlay = !prefix.startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(prefix % QLatin1String("overlay"));
+    bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % QLatin1String("hint-compose-over-border")) &&
+                m_frameSvg->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"));
     m_fastPath = !hasOverlay && !hasComposeOverBorder;
     m_textureChanged = true;
 
@@ -450,8 +450,10 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             QString prefix = m_frameSvg->actualPrefix();
             oldNode = new FrameNode(prefix, m_frameSvg);
 
-            bool tileCenter = (m_frameSvg->hasElement("hint-tile-center") || m_frameSvg->hasElement(prefix % "hint-tile-center"));
-            bool stretchBorders = (m_frameSvg->hasElement("hint-stretch-borders") || m_frameSvg->hasElement(prefix % "hint-stretch-borders"));
+            bool tileCenter = (m_frameSvg->hasElement(QStringLiteral("hint-tile-center"))
+                            || m_frameSvg->hasElement(prefix % QLatin1String("hint-tile-center")));
+            bool stretchBorders = (m_frameSvg->hasElement(QStringLiteral("hint-stretch-borders"))
+                                || m_frameSvg->hasElement(prefix % QLatin1String("hint-stretch-borders")));
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
             FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 

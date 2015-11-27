@@ -147,7 +147,7 @@ QString Theme::themeName() const
 QString Theme::imagePath(const QString &name) const
 {
     // look for a compressed svg file in the theme
-    if (name.contains("../") || name.isEmpty()) {
+    if (name.contains(QLatin1String("../")) || name.isEmpty()) {
         // we don't support relative paths
         //qDebug() << "Theme says: bad image path " << name;
         return QString();
@@ -190,7 +190,7 @@ QString Theme::imagePath(const QString &name) const
 
 QString Theme::backgroundPath(const QString& image) const
 {
-    return d->imagePath(themeName(), QLatin1Literal("/appbackgrounds/"), image);
+    return d->imagePath(themeName(), QStringLiteral("/appbackgrounds/"), image);
 }
 
 QString Theme::styleSheet(const QString &css) const
@@ -257,7 +257,7 @@ QString Theme::wallpaperPathForSize(int width, int height) const
 
 bool Theme::currentThemeHasImage(const QString &name) const
 {
-    if (name.contains("../")) {
+    if (name.contains(QLatin1String("../"))) {
         // we don't support relative paths
         return false;
     }
@@ -385,7 +385,7 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
     QMutableListIterator<QString> i(keys);
     while (i.hasNext()) {
         QString key = i.next();
-        if (key.endsWith("Size")) {
+        if (key.endsWith(QLatin1String("Size"))) {
             // The actual cache id used from outside doesn't end on "Size".
             key.resize(key.size() - 4);
             i.setValue(key);

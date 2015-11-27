@@ -50,19 +50,19 @@ Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFor
 {
     Q_UNUSED(specialization)
 
-    if (packageFormat == "Plasma/LookAndFeel") {
+    if (packageFormat == QLatin1String("Plasma/LookAndFeel")) {
         if (!m_lnfPackage) {
             m_lnfPackage = new LookAndFeelPackage();
         }
 
         return Plasma::Package(m_lnfPackage);
-    } else if (packageFormat == "Plasma/Wallpaper") {
+    } else if (packageFormat == QLatin1String("Plasma/Wallpaper")) {
         if (!m_qmlPackage) {
             m_qmlPackage = new QmlWallpaperPackage();
         }
 
         return Plasma::Package(m_qmlPackage);
-    } else if (packageFormat == "Plasma/LayoutTemplate") {
+    } else if (packageFormat == QLatin1String("Plasma/LayoutTemplate")) {
         if (!m_layoutPackage) {
             m_layoutPackage = new LayoutTemplatePackage();
         }

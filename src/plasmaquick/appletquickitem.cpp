@@ -194,7 +194,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
     }
 
     QVariantHash initialProperties;
-    initialProperties["parent"] = QVariant::fromValue(q);
+    initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
 
     compactRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
 
@@ -211,7 +211,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
 
     if (fullRepresentation && fullRepresentation != qmlObject->mainComponent()) {
         QVariantHash initialProperties;
-        initialProperties["parent"] = QVariant::fromValue(q);
+        initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
         fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
     } else {
         fullRepresentation = qmlObject->mainComponent();
@@ -301,8 +301,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             item->setParentItem(q);
             {
                 //set anchors
-                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, "parent");
-                QQmlProperty prop(item, "anchors.fill");
+                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, QStringLiteral("parent"));
+                QQmlProperty prop(item, QStringLiteral("anchors.fill"));
                 prop.write(expr.evaluate());
             }
 
@@ -328,8 +328,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             compactExpanderItem->setVisible(true);
             {
                 //set anchors
-                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactExpanderItem, "parent");
-                QQmlProperty prop(compactExpanderItem, "anchors.fill");
+                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactExpanderItem, QStringLiteral("parent"));
+                QQmlProperty prop(compactExpanderItem, QStringLiteral("anchors.fill"));
                 prop.write(expr.evaluate());
             }
 
@@ -410,11 +410,11 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
             this, SLOT(compactRepresentationCheck()));
 
     if (applet->pluginInfo().isValid()) {
-        const QString rootPath = applet->pluginInfo().property("X-Plasma-RootPath").toString();
+        const QString rootPath = applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
         if (!rootPath.isEmpty()) {
-            d->qmlObject->setTranslationDomain("plasma_applet_" + rootPath);
+            d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
         } else {
-            d->qmlObject->setTranslationDomain("plasma_applet_" + applet->pluginInfo().pluginName());
+            d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + applet->pluginInfo().pluginName());
         }
     }
     d->qmlObject->setInitializationDelayed(true);
@@ -494,14 +494,14 @@ void AppletQuickItem::init()
     //this way is possible to mix QtQuickControls and plasma components in applets
     //while still having the desktop style in configuration dialogs
     QQmlComponent c(engine);
-    c.setData("import QtQuick 2.1\n\
+    c.setData(QByteArrayLiteral("import QtQuick 2.1\n\
         import QtQuick.Controls 1.0\n\
         import QtQuick.Controls.Private 1.0\n \
         Item {\
           Component.onCompleted: {\
             Settings.styleName = \"Plasma\";\
           }\
-        }", QUrl());
+        }"), QUrl());
     QObject *o = c.create();
     o->deleteLater();
 
@@ -531,14 +531,14 @@ void AppletQuickItem::init()
         d->applet->setLaunchErrorMessage(reason);
     }
 
-    d->qmlObject->rootContext()->setContextProperty("plasmoid", this);
+    d->qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), this);
 
     //initialize size, so an useless resize less
     QVariantHash initialProperties;
     //initialize with our size only if valid
     if (width() > 0 && height() > 0) {
-        initialProperties["width"] = width();
-        initialProperties["height"] = height();
+        initialProperties[QStringLiteral("width")] = width();
+        initialProperties[QStringLiteral("height")] = height();
     }
     d->qmlObject->setInitializationDelayed(false);
     d->qmlObject->completeInitialization(initialProperties);

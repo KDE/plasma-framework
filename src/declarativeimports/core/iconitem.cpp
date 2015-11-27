@@ -122,7 +122,7 @@ void IconItem::setSource(const QVariant &source)
                 m_svgIcon->setDevicePixelRatio((window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
             }
             //try as a svg icon
-            m_svgIcon->setImagePath("icons/" + source.toString().split("-").first());
+            m_svgIcon->setImagePath(QLatin1String("icons/") + source.toString().split('-').first());
 
             m_svgIcon->setContainsMultipleImages(true);
 
@@ -137,9 +137,9 @@ void IconItem::setSource(const QVariant &source)
                 const auto *iconTheme = KIconLoader::global()->theme();
                 QString iconPath;
                 if (iconTheme) {
-                    iconTheme->iconPath(source.toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+                    iconTheme->iconPath(source.toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                     if (iconPath.isEmpty()) {
-                        iconPath = iconTheme->iconPath(source.toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                        iconPath = iconTheme->iconPath(source.toString() + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
                     }
                 } else {
                     qWarning() << "KIconLoader has no theme set";
@@ -348,9 +348,9 @@ void IconItem::loadPixmap()
             const auto *iconTheme = KIconLoader::global()->theme();
             QString iconPath;
             if (iconTheme) {
-                QString iconPath = iconTheme->iconPath(source().toString() + ".svg", qMin(width(), height()), KIconLoader::MatchBest);
+                QString iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                 if (iconPath.isEmpty()) {
-                    iconPath = iconTheme->iconPath(source().toString() + ".svgz", qMin(width(), height()), KIconLoader::MatchBest);
+                    iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
                 }
             } else {
                 qWarning() << "KIconLoader has no theme set";

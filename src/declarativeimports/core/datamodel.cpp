@@ -32,7 +32,7 @@ namespace Plasma
 SortFilterModel::SortFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
-    setObjectName("SortFilterModel");
+    setObjectName(QStringLiteral("SortFilterModel"));
     setDynamicSortFilter(true);
     connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
@@ -54,8 +54,8 @@ void SortFilterModel::syncRoleNames()
     }
 
     m_roleIds.clear();
-    QHash<int, QByteArray>::const_iterator i;
-    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+    const QHash<int, QByteArray> rNames = roleNames();
+    for (auto i = rNames.constBegin(); i != rNames.constEnd(); ++i) {
         m_roleIds[i.value()] = i.key();
     }
 
@@ -194,8 +194,8 @@ QVariantMap SortFilterModel::get(int row) const
     QModelIndex idx = index(row, 0);
     QVariantMap hash;
 
-    QHash<int, QByteArray>::const_iterator i;
-    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+    const QHash<int, QByteArray> rNames = roleNames();
+    for (auto i = rNames.begin(); i != rNames.end(); ++i) {
         hash[i.value()] = data(idx, i.key());
     }
 
@@ -224,11 +224,11 @@ DataModel::DataModel(QObject *parent)
       m_maxRoleId(Qt::UserRole + 1)
 {
     //There is one reserved role name: DataEngineSource
-    m_roleNames[m_maxRoleId] = "DataEngineSource";
+    m_roleNames[m_maxRoleId] = QByteArrayLiteral("DataEngineSource");
     m_roleIds["DataEngineSource"] = m_maxRoleId;
     ++m_maxRoleId;
 
-    setObjectName("DataModel");
+    setObjectName(QStringLiteral("DataModel"));
     connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
@@ -541,8 +541,8 @@ QVariantMap DataModel::get(int row) const
     QModelIndex idx = index(row, 0);
     QVariantMap map;
 
-    QHash<int, QByteArray>::const_iterator i;
-    for (i = roleNames().constBegin(); i != roleNames().constEnd(); ++i) {
+    const QHash<int, QByteArray> rNames = roleNames();
+    for (auto i = rNames.constBegin(); i != rNames.constEnd(); ++i) {
         map[i.value()] = data(idx, i.key());
     }
 

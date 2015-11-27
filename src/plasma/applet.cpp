@@ -614,7 +614,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
     if (!d->activationAction) {
         d->activationAction = new QAction(this);
         d->activationAction->setText(i18n("Activate %1 Widget", title()));
-        d->activationAction->setObjectName(QString("activate widget %1").arg(id())); // NO I18N
+        d->activationAction->setObjectName(QStringLiteral("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activated()));
         connect(d->activationAction, SIGNAL(changed()),
                 this, SLOT(globalShortcutChanged()));
@@ -659,12 +659,12 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
         return;
     }
 
-    QAction *configAction = d->actions->action("configure");
+    QAction *configAction = d->actions->action(QStringLiteral("configure"));
     if (configAction) {
         bool enable = hasInterface;
         if (enable) {
             const bool unlocked = immutability() == Types::Mutable;
-            enable = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
+            enable = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
         }
         configAction->setEnabled(enable);
     }
@@ -728,11 +728,12 @@ bool Applet::hasValidAssociatedApplication() const
 
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 {
-    if (QFile::exists(path + "/metadata.desktop")) {
-        KService service(path + "/metadata.desktop");
+    const QString metadataPath = path + QLatin1String("/metadata.desktop");
+    if (QFile::exists(metadataPath)) {
+        KService service(metadataPath);
         const QStringList &types = service.serviceTypes();
 
-        if (types.contains("Plasma/Containment")) {
+        if (types.contains(QStringLiteral("Plasma/Containment"))) {
             return new Containment(path, appletId);
         } else {
             return new Applet(path, appletId);

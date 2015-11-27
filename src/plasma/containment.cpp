@@ -102,11 +102,11 @@ void Containment::init()
         //Try to determine the containment type. It must be done as soon as possible
         QString type = pluginInfo().property("X-Plasma-ContainmentType").toString();
 
-        if (type == "Panel") {
+        if (type == QLatin1String("Panel")) {
             setContainmentType(Plasma::Types::PanelContainment);
-        } else if (type == "Custom") {
+        } else if (type == QLatin1String("Custom")) {
             setContainmentType(Plasma::Types::CustomContainment);
-        } else if (type == "CustomPanel") {
+        } else if (type == QLatin1String("CustomPanel")) {
             setContainmentType(Plasma::Types::CustomPanelContainment);
             //default to desktop
         } else {
@@ -120,17 +120,17 @@ void Containment::init()
 
     //fix the text of the actions that need title()
     //btw, do we really want to use title() when it's a desktopcontainment?
-    QAction *closeApplet = actions()->action("remove");
+    QAction *closeApplet = actions()->action(QStringLiteral("remove"));
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", title()));
     }
 
-    QAction *configAction = actions()->action("configure");
+    QAction *configAction = actions()->action(QStringLiteral("configure"));
     if (configAction) {
         configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", title()));
     }
 
-    QAction *appletBrowserAction = actions()->action("add widgets");
+    QAction *appletBrowserAction = actions()->action(QStringLiteral("add widgets"));
     if (appletBrowserAction) {
         appletBrowserAction->setVisible(unlocked);
         appletBrowserAction->setEnabled(unlocked);
@@ -138,10 +138,10 @@ void Containment::init()
     }
 
     if (immutability() != Types::SystemImmutable && corona()) {
-        QAction *lockDesktopAction = corona()->actions()->action("lock widgets");
+        QAction *lockDesktopAction = corona()->actions()->action(QStringLiteral("lock widgets"));
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            actions()->addAction("lock widgets", lockDesktopAction);
+            actions()->addAction(QLatin1String("lock widgets"), lockDesktopAction);
         }
     }
 

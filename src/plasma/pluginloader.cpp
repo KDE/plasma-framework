@@ -56,13 +56,13 @@ class PluginLoaderPrivate
 public:
     PluginLoaderPrivate()
         : isDefaultLoader(false),
-          packageRE("[^a-zA-Z0-9\\-_]")
+          packageRE(QLatin1String("[^a-zA-Z0-9\\-_]"))
     {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new PlasmoidPackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Theme", new ThemePackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/ContainmentActions", new ContainmentActionsPackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Generic", new GenericPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new PlasmoidPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/DataEngine"), new DataEnginePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Theme"), new ThemePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/ContainmentActions"), new ContainmentActionsPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Generic"), new GenericPackage());
     }
 
     static QSet<QString> knownCategories();
@@ -82,11 +82,11 @@ public:
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
 
-QString PluginLoaderPrivate::s_dataEnginePluginDir("plasma/dataengine");
-QString PluginLoaderPrivate::s_packageStructurePluginDir("plasma/packagestructure");
-QString PluginLoaderPrivate::s_plasmoidsPluginDir("plasma/applets");
-QString PluginLoaderPrivate::s_servicesPluginDir("plasma/services");
-QString PluginLoaderPrivate::s_containmentActionsPluginDir("plasma/containmentactions");
+QString PluginLoaderPrivate::s_dataEnginePluginDir = QStringLiteral("plasma/dataengine");
+QString PluginLoaderPrivate::s_packageStructurePluginDir = QStringLiteral("plasma/packagestructure");
+QString PluginLoaderPrivate::s_plasmoidsPluginDir = QStringLiteral("plasma/applets");
+QString PluginLoaderPrivate::s_servicesPluginDir = QStringLiteral("plasma/services");
+QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("plasma/containmentactions");
 
 QSet<QString> PluginLoaderPrivate::knownCategories()
 {
@@ -124,11 +124,11 @@ QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
             return QString();
         }
 
-        return QString("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
+        return QStringLiteral("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
                .arg(app->applicationName());
     }
 
-    return QString("[X-KDE-ParentApp] == '%1'").arg(parentApp);
+    return QStringLiteral("[X-KDE-ParentApp] == '%1'").arg(parentApp);
 }
 
 PluginLoader::PluginLoader()
@@ -211,7 +211,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", name);
+    KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
     if (!p.isValid()) {
         //some applets have actually the root path from another package, such as icontasks
         //try to do a fallback package with X-Plasma-RootPath root
@@ -219,7 +219,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         p.setPath(name);
 
         KPluginMetaData md(p.filePath("metadata"));
-        const KPackage::Package fp = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", md.value("X-Plasma-RootPath"));
+        const KPackage::Package fp = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), md.value(QStringLiteral("X-Plasma-RootPath")));
         p.setFallbackPackage(fp);
 
         if (!fp.isValid()) {
@@ -259,7 +259,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         QVariantList allArgs;
         allArgs << p.metadata().fileName() << appletId << args;
 
-        if (p.metadata().serviceTypes().contains("Plasma/Containment")) {
+        if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             return new Containment(0, allArgs);
         } else {
             return new Applet(0, allArgs);
@@ -297,7 +297,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return engine;
     }
 
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/DataEngine", name);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), name);
     if (!p.isValid()) {
         return 0;
     }
@@ -315,7 +315,7 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
     // Look for C++ plugins first
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-KDE-ParentApp") == parentApp;
+        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
     };
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
@@ -355,11 +355,12 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
     // Look for C++ plugins first
     auto filterNormal = [&category](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-KDE-PluginInfo-Category") == category;
+        return md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
     };
     auto filterParentApp = [&category, &parentApp](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-KDE-ParentApp") == parentApp && md.value("X-KDE-PluginInfo-Category") == category;
+        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp
+            && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
     };
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
@@ -388,7 +389,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     //TODO: scripting API support
     if (name.isEmpty()) {
         return new NullService(QString(), parent);
-    } else if (name == "org.kde.servicestorage") {
+    } else if (name == QLatin1String("org.kde.servicestorage")) {
         return new Storage(parent);
     }
 
@@ -456,8 +457,8 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
-    QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
+    QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
+    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
@@ -508,16 +509,16 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         return Package(structure);
     }
 
-    if (packageFormat.startsWith("Plasma")) {
-        if (packageFormat.endsWith("/Applet")) {
+    if (packageFormat.startsWith(QLatin1String("Plasma"))) {
+        if (packageFormat.endsWith(QLatin1String("/Applet"))) {
             internalStructure = new PlasmoidPackage();
-        } else if (packageFormat.endsWith("/DataEngine")) {
+        } else if (packageFormat.endsWith(QLatin1String("/DataEngine"))) {
             internalStructure = new DataEnginePackage();
-        } else if (packageFormat.endsWith("/Theme")) {
+        } else if (packageFormat.endsWith(QLatin1String("/Theme"))) {
             internalStructure = new ThemePackage();
-        } else if (packageFormat.endsWith("/ContainmentActions")) {
+        } else if (packageFormat.endsWith(QLatin1String("/ContainmentActions"))) {
             internalStructure = new ContainmentActionsPackage();
-        } else if (packageFormat.endsWith("/Generic")) {
+        } else if (packageFormat.endsWith(QLatin1String("/Generic"))) {
             internalStructure = new GenericPackage();
         }
 
@@ -571,7 +572,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
         auto filter = [&excluded, &parentApp](const KPluginMetaData &md) -> bool
         {
-            const QString pa = md.value("X-KDE-ParentApp");
+            const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
             return (pa.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
         };
 
@@ -592,8 +593,8 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
         auto filter = [&category, &parentApp](const KPluginMetaData &md) -> bool
         {
-            const QString pa = md.value("X-KDE-ParentApp");
-            if (category == "Miscellaneous") {
+            const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
+            if (category == QLatin1String("Miscellaneous")) {
                 return (pa.isEmpty() || pa == parentApp) && (md.category() == category || md.category().isEmpty());
             } else {
                 return (pa.isEmpty() || pa == parentApp) && md.category() == category;
@@ -619,7 +620,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeTyp
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-Plasma-DropMimeTypes").contains(mimeType);
+        return md.value(QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
     };
     return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
 }
@@ -634,8 +635,8 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool
     {
-        const QString pa = md.value("X-KDE-ParentApp");
-        return (pa.isEmpty() || pa == parentApp) && !md.value("X-Plasma-DropUrlPatterns").isEmpty();
+        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
+        return (pa.isEmpty() || pa == parentApp) && !md.value(QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
     KPluginInfo::List allApplets =  KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
 
@@ -663,10 +664,12 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     auto filter = [&parentApp, &excluded, visibleOnly](const KPluginMetaData &md) -> bool
     {
-        const QString pa = md.value("X-KDE-ParentApp");
-        return (pa.isEmpty() || pa == parentApp) && (excluded.isEmpty() || excluded.contains(md.value("X-KDE-PluginInfo-Category"))) && (!visibleOnly || !md.isHidden());
+        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
+        return (pa.isEmpty() || pa == parentApp)
+            && (excluded.isEmpty() || excluded.contains(md.value(QStringLiteral("X-KDE-PluginInfo-Category"))))
+            && (!visibleOnly || !md.isHidden());
     };
-    QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter);
+    const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
 
     QStringList categories;
@@ -699,7 +702,7 @@ QString PluginLoader::appletCategory(const QString &appletName)
         return QString();
     }
 
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage("Plasma/Applet", appletName);
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), appletName);
     if (!p.isValid()) {
         return QString();
     }
@@ -717,53 +720,54 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &category,
         const QString &parentApp)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new PlasmoidPackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new PlasmoidPackage());
     }
 
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool
     {
-        if (!md.serviceTypes().contains("Plasma/Containment")) {
+        if (!md.serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             return false;
         }
-        const QString pa = md.value("X-KDE-ParentApp");
+        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
         if (!pa.isEmpty() && pa != parentApp) {
             return false;
         }
 
-        if (!type.isEmpty() && md.value("X-Plasma-ContainmentType") != type) {
+        if (!type.isEmpty() && md.value(QStringLiteral("X-Plasma-ContainmentType")) != type) {
             return false;
         }
 
-        if (!category.isEmpty() && md.value("X-KDE-PluginInfo-Category") != category) {
+        if (!category.isEmpty() && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) != category) {
             return false;
         }
 
         return true;
     };
 
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
 }
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new DataEnginePackage());
     }
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
-        return md.value("X-KDE-ServiceTypes").contains("Plasma/Containment") && md.value("X-Plasma-DropMimeTypes").contains(mimeType);
+        return md.value(QStringLiteral("X-KDE-ServiceTypes")).contains(QLatin1String("Plasma/Containment"))
+            && md.value(QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
     };
 
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
 }
 
 QStringList PluginLoader::listContainmentTypes()
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/Applet")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/Applet", new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new DataEnginePackage());
     }
     KPluginInfo::List containmentInfos = listContainments();
     QSet<QString> types;
@@ -788,12 +792,12 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 
     QString constraint;
     if (parentApp.isEmpty()) {
-        constraint.append("not exist [X-KDE-ParentApp]");
+        constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
     } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + '\'';
     }
 
-    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_dataEnginePluginDir, "Plasma/DataEngine", constraint));
+    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_dataEnginePluginDir, QStringLiteral("Plasma/DataEngine"), constraint));
     return list;
 }
 
@@ -807,12 +811,12 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
 
     QString constraint;
     if (parentApp.isEmpty()) {
-        constraint.append("not exist [X-KDE-ParentApp]");
+        constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
     } else {
-        constraint.append("[X-KDE-ParentApp] == '").append(parentApp).append("'");
+        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + '\'';
     }
 
-    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, "Plasma/ContainmentActions", constraint));
+    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, QStringLiteral("Plasma/ContainmentActions"), constraint));
 
     QSet<QString> knownPlugins;
     foreach (const KPluginInfo &p, list) {
@@ -821,7 +825,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
 
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/ContainmentActions", constraint);
+    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
     foreach (KService::Ptr s, offers) {
         if (!knownPlugins.contains(s->pluginKeyword())) {
             list.append(KPluginInfo(s));
@@ -891,7 +895,7 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
     QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                        PLASMA_RELATIVE_DATA_INSTALL_DIR "/internal/" + type + "/*.desktop",
+                        QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/internal/") + type + QLatin1String("/*.desktop"),
                         QStandardPaths::LocateFile);
 
     KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
@@ -912,17 +916,17 @@ static KPluginInfo::List standardInternalInfo(const QString &type, const QString
 
 KPluginInfo::List PluginLoader::standardInternalAppletInfo(const QString &category) const
 {
-    return standardInternalInfo("applets", category);
+    return standardInternalInfo(QStringLiteral("applets"), category);
 }
 
 KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
 {
-    return standardInternalInfo("dataengines");
+    return standardInternalInfo(QStringLiteral("dataengines"));
 }
 
 KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
 {
-    return standardInternalInfo("services");
+    return standardInternalInfo(QStringLiteral("services"));
 }
 
 } // Plasma Namespace

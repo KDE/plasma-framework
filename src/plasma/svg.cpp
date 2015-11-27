@@ -86,18 +86,19 @@ bool SharedSvgRenderer::load(
             return false;
         }
 
-        QDomNode defs = svg.elementsByTagName("defs").item(0);
+        QDomNode defs = svg.elementsByTagName(QStringLiteral("defs")).item(0);
 
-        for (QDomElement style = defs.firstChildElement("style"); !style.isNull();
-                style = style.nextSiblingElement("style")) {
-            if (style.attribute("id") == "current-color-scheme") {
-                QDomElement colorScheme = svg.createElement("style");
-                colorScheme.setAttribute("type", "text/css");
-                colorScheme.setAttribute("id", "current-color-scheme");
+        const QString STYLE = QStringLiteral("style");
+        for (QDomElement style = defs.firstChildElement(STYLE); !style.isNull();
+                style = style.nextSiblingElement(STYLE)) {
+            if (style.attribute(QStringLiteral("id")) == QLatin1String("current-color-scheme")) {
+                QDomElement colorScheme = svg.createElement(STYLE);
+                colorScheme.setAttribute(QLatin1String("type"), QLatin1String("text/css"));
+                colorScheme.setAttribute(QLatin1String("id"), QLatin1String("current-color-scheme"));
                 defs.replaceChild(colorScheme, style);
                 colorScheme.appendChild(svg.createCDATASection(styleSheet));
 
-                interestingElements.insert("current-color-scheme", QRect(0, 0, 1, 1));
+                interestingElements.insert(QLatin1String("current-color-scheme"), QRect(0, 0, 1, 1));
 
                 break;
             }
@@ -111,7 +112,7 @@ bool SharedSvgRenderer::load(
 
     // Search the SVG to find and store all ids that contain size hints.
     const QString contentsAsString(QString::fromLatin1(contents));
-    QRegExp idExpr("id\\s*=\\s*(['\"])(\\d+-\\d+-.*)\\1");
+    QRegExp idExpr(QLatin1String("id\\s*=\\s*(['\"])(\\d+-\\d+-.*)\\1"));
     idExpr.setMinimal(true);
 
     int pos = 0;
@@ -131,7 +132,7 @@ bool SharedSvgRenderer::load(
 
 #define QLSEP QLatin1Char('_')
 #define CACHE_ID_WITH_SIZE(size, id, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
-#define CACHE_ID_NATURAL_SIZE(id, devicePixelRatio) QLatin1Literal("Natural") % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_NATURAL_SIZE(id, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
@@ -176,7 +177,7 @@ QString SvgPrivate::cachePath(const QString &path, const QSize &size)
 bool SvgPrivate::setImagePath(const QString &imagePath)
 {
     QString actualPath = imagePath;
-    if (imagePath.startsWith("file://")) {
+    if (imagePath.startsWith(QLatin1String("file://"))) {
         //length of file://
         actualPath = actualPath.mid(7);
     }
@@ -236,13 +237,13 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     if ((themed && QFile::exists(path)) || QFile::exists(actualPath)) {
         QRectF rect;
 
-        if (cacheAndColorsTheme()->findInRectsCache(path, QString("_Natural_%1").arg(scaleFactor), rect)) {
+        if (cacheAndColorsTheme()->findInRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), rect)) {
             naturalSize = rect.size();
         } else {
             createRenderer();
             naturalSize = renderer->defaultSize() * scaleFactor;
             //qDebug() << "natural size for" << path << "from renderer is" << naturalSize;
-            cacheAndColorsTheme()->insertIntoRectsCache(path, QString("_Natural_%1").arg(scaleFactor), QRectF(QPointF(0, 0), naturalSize));
+            cacheAndColorsTheme()->insertIntoRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), QRectF(QPointF(0, 0), naturalSize));
             //qDebug() << "natural size for" << path << "from cache is" << naturalSize;
         }
     }
@@ -276,7 +277,7 @@ Theme *SvgPrivate::cacheAndColorsTheme()
         // use a separate cache source for unthemed svg's
         if (!s_systemColorsCache) {
             //FIXME: reference count this, so that it is deleted when no longer in use
-            s_systemColorsCache = new Plasma::Theme("internal-system-colors");
+            s_systemColorsCache = new Plasma::Theme(QLatin1String("internal-system-colors"));
         }
 
         return s_systemColorsCache.data();
@@ -319,7 +320,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         if (!elementSizeHints.isEmpty()) {
             QSize bestFit(-1, -1);
 
-            Q_FOREACH (const QSize &hint, elementSizeHints) {
+            Q_FOREACH (QSize hint, elementSizeHints) {
 
                 if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio &&
                         (!bestFit.isValid() ||
@@ -329,8 +330,8 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
             }
 
             if (bestFit.isValid()) {
-                actualElementId = QString::number(bestFit.width()) % "-" %
-                                  QString::number(bestFit.height()) % "-" % elementId;
+                actualElementId = QString::number(bestFit.width()) % '-' %
+                                  QString::number(bestFit.height()) % '-' % elementId;
             }
         }
     }
@@ -417,10 +418,10 @@ void SvgPrivate::createRenderer()
         //for.
         if (applet && applet->kPackage().isValid()) {
             const KPackage::Package package = applet->kPackage();
-            path = package.filePath("images", themePath + ".svg");
+            path = package.filePath("images", themePath + QLatin1String(".svg"));
 
             if (path.isEmpty()) {
-                path = package.filePath("images", themePath + ".svgz");
+                path = package.filePath("images", themePath + QLatin1String(".svgz"));
             }
         }
 
@@ -565,10 +566,10 @@ QMatrix SvgPrivate::matrixForElement(const QString &elementId)
 
 void SvgPrivate::checkColorHints()
 {
-    if (elementRect("hint-apply-color-scheme").isValid()) {
+    if (elementRect(QStringLiteral("hint-apply-color-scheme")).isValid()) {
         applyColors = true;
         usesColors = true;
-    } else if (elementRect("current-color-scheme").isValid()) {
+    } else if (elementRect(QStringLiteral("current-color-scheme")).isValid()) {
         applyColors = false;
         usesColors = true;
     } else {
@@ -887,7 +888,7 @@ bool Svg::isValid() const
 
     //try very hard to avoid creation of a parser
     QRectF rect;
-    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QString("_Natural_%1").arg(d->scaleFactor), rect)) {
+    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QStringLiteral("_Natural_%1").arg(d->scaleFactor), rect)) {
         return true;
     }
 
