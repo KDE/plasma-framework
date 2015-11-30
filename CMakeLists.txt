@@ -19,6 +19,7 @@ include(KDECompilerSettings)
 include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(KDEFrameworkCompilerSettings)
+include(KDETemplateMacro)
 
 set(KF5_VERSION "5.16.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.16.0") # handled by release scripts
@@ -187,5 +188,6 @@ endif()
 
 add_subdirectory(autotests)
 add_subdirectory(tests)
+add_subdirectory(templates)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
