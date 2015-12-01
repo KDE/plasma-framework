@@ -67,6 +67,31 @@ public:
                        const QVariantList &args = QVariantList());
 
     /**
+     * Sets the data directory for plasmoids.
+     * By default plasmoid packages will be loaded from the
+     * "plasma" data directory, usually under the "share"
+     * subdirectory of the install prefix.
+     * An application that uses a custom plasma shell
+     * can have its private plasmoids
+     * in its own data directory, not having them mixeed
+     * with the ones from plasma desktop.
+     * It takes effect only in applets loaded after setting
+     * this, so use it at the application startup.
+     *
+     * @param dir data directory name
+     * @since 5.18
+     */
+    void setAppletsDataDirectory(const QString &dir);
+
+    /**
+     * @return the custom applets data directory.
+     * Default is "plasma"
+     *
+     * @since 5.18
+     */
+    QString appletsDataDirectory() const;
+
+    /**
      * Load a DataEngine plugin.
      *
      * @param name the name of the engine
