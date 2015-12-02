@@ -24,6 +24,7 @@
 #include <QDebug>
 #include <QByteArray>
 #include <QDir>
+#include <QMetaObject>
 
 DaysModel::DaysModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -230,5 +231,5 @@ void DaysModel::setPluginsManager(QObject *manager)
     connect(m_pluginsManager, &EventPluginsManager::pluginsChanged,
             this, &DaysModel::update);
 
-    update();
+    QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
 }
