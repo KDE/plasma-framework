@@ -1,6 +1,22 @@
 [Desktop Entry]
 Name=%{APPNAME}
+Name[ca]=%{APPNAME}
+Name[es]=%{APPNAME}
+Name[nl]=%{APPNAME}
+Name[pt]=%{APPNAME}
+Name[pt_BR]=%{APPNAME}
+Name[sv]=%{APPNAME}
+Name[uk]=%{APPNAME}
+Name[x-test]=xx%{APPNAME}xx
 Comment=what your app does in a few words
+Comment[ca]=Què fa aquesta aplicació en poques paraules
+Comment[es]=lo que hace su aplicación, en pocas palabras
+Comment[nl]=wat uw app doet in een paar woorden
+Comment[pt]=o que faz a sua aplicação, em poucas palavras
+Comment[pt_BR]=breve descrição do que o seu aplicativo faz
+Comment[sv]=vad programmet gör med några få ord
+Comment[uk]=призначення вашої програми у декількох словах
+Comment[x-test]=xxwhat your app does in a few wordsxx
 
 Icon=applications-system
 Type=Service
