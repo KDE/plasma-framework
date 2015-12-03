@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=%{APPNAME}
 Name[ca]=%{APPNAME}
+Name[ca@valencia]=%{APPNAME}
+Name[da]=%{APPNAME}
 Name[es]=%{APPNAME}
+Name[fi]=%{APPNAME}
+Name[gl]=%{APPNAME}
+Name[nb]=%{APPNAME}
 Name[nl]=%{APPNAME}
+Name[nn]=%{APPNAME}
 Name[pt]=%{APPNAME}
 Name[pt_BR]=%{APPNAME}
 Name[sv]=%{APPNAME}
@@ -10,7 +16,12 @@ Name[uk]=%{APPNAME}
 Name[x-test]=xx%{APPNAME}xx
 Comment=what your app does in a few words
 Comment[ca]=Què fa aquesta aplicació en poques paraules
+Comment[ca@valencia]=Què fa esta aplicació en poques paraules
+Comment[da]=nogle få ord om hvad din app gør
 Comment[es]=lo que hace su aplicación, en pocas palabras
+Comment[fi]=ohjelmasi toiminta muutamalla sanalla
+Comment[gl]=o que fai o seu programa en poucas palabras
+Comment[nb]=hva programmet gjør, med noen få ord
 Comment[nl]=wat uw app doet in een paar woorden
 Comment[pt]=o que faz a sua aplicação, em poucas palavras
 Comment[pt_BR]=breve descrição do que o seu aplicativo faz
