@@ -1,5 +1,10 @@
 [Desktop Entry]
 Comment=Basic App
+Comment[nl]=Basis app
+Comment[pt]=Aplicação Básica
+Comment[sv]=Enkel applikation
+Comment[uk]=Базова програма
+Comment[x-test]=xxBasic Appxx
 Name=Bug
 Name[ast]=Fallu
 Name[ca]=Error
