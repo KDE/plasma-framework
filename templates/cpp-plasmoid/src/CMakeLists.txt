@@ -6,7 +6,7 @@ set(%{APPNAMELC}_SRCS
 
 add_library(plasma_applet_%{APPNAMELC} MODULE ${%{APPNAMELC}_SRCS})
 
-kcoreaddons_desktop_to_json(plasma_applet_%{APPNAMELC} package/metadata.desktop)
+kcoreaddons_desktop_to_json(plasma_applet_%{APPNAMELC} package/metadata.desktop SERVICE_TYPES plasma-applet.desktop)
 
 target_link_libraries(plasma_applet_%{APPNAMELC}
                       Qt5::Gui

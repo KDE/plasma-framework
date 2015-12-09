@@ -19,7 +19,11 @@ set(declarative_appletscript_SRCS
 add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SRCS} )
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
-kcoreaddons_desktop_to_json(plasma_appletscript_declarative data/plasma-scriptengine-applet-declarative.desktop)
+kcoreaddons_desktop_to_json(
+    plasma_appletscript_declarative data/plasma-scriptengine-applet-declarative.desktop
+    SERVICE_TYPES ${CMAKE_SOURCE_DIR}/src/plasma/data/servicetypes/plasma-scriptengine.desktop
+)
+
 
 target_link_libraries(plasma_appletscript_declarative
     Qt5::Quick
