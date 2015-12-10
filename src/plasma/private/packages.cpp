@@ -118,6 +118,20 @@ void PlasmoidPackage::initPackage(KPackage::Package *package)
     package->addFileDefinition("mainconfigxml", "config/main.xml", i18n("Configuration XML file"));
 }
 
+void PlasmoidPackage::pathChanged(KPackage::Package *package)
+{
+    ChangeableMainScriptPackage::pathChanged(package);
+
+    if (!package->metadata().isValid()) {
+        return;
+    }
+    if (package->metadata().serviceTypes().contains("Plasma/Containment")) {
+        package->addFileDefinition("compactapplet", "applet/CompactApplet.qml", i18n("Custom expander for compact applets"));
+    } else {
+        package->removeDefinition("compactapplet");
+    }
+}
+
 void DataEnginePackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);

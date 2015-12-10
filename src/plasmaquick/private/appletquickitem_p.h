@@ -100,6 +100,7 @@ public:
 
     Plasma::Package appletPackage;
     Plasma::Package coronaPackage;
+    Plasma::Package containmentPackage;
 
     bool expanded : 1;
 

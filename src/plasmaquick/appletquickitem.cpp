@@ -403,6 +403,9 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     if (d->applet && d->applet->containment() && d->applet->containment()->corona()) {
         d->coronaPackage = d->applet->containment()->corona()->package();
     }
+    if (d->applet && d->applet->containment()) {
+        d->containmentPackage = d->applet->containment()->package();
+    }
 
     d->compactRepresentationCheckTimer.setSingleShot(true);
     d->compactRepresentationCheckTimer.setInterval(250);
@@ -567,7 +570,13 @@ void AppletQuickItem::init()
     //default compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
-        d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("compactapplet")));
+        QString compactExpanderPath = d->containmentPackage.filePath("compactapplet");
+
+        if (compactExpanderPath.isEmpty()) {
+            compactExpanderPath = d->coronaPackage.filePath("compactapplet");
+        }
+
+        d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(compactExpanderPath));
     }
 
     //HACK: check the Layout properties we wrote

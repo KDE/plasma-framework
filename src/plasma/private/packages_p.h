@@ -51,6 +51,7 @@ class PlasmoidPackage : public GenericPackage
     Q_OBJECT
 public:
     void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 
 class DataEnginePackage : public ChangeableMainScriptPackage
