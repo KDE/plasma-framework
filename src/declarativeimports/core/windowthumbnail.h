@@ -109,6 +109,7 @@ private:
     void setThumbnailAvailable(bool thumbnailAvailable);
 
     bool m_xcb;
+    bool m_composite;
     uint32_t m_winId;
     QSizeF m_paintedSize;
     bool m_thumbnailAvailable;

@@ -63,6 +63,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     : QQuickItem(parent)
     , QAbstractNativeEventFilter()
     , m_xcb(false)
+    , m_composite(false)
     , m_winId(0)
     , m_paintedSize(QSizeF())
     , m_thumbnailAvailable(false)
@@ -103,6 +104,10 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
             gui->installNativeEventFilter(this);
 #if HAVE_XCB_COMPOSITE
             xcb_connection_t *c = QX11Info::connection();
+            xcb_prefetch_extension_data(c, &xcb_composite_id);
+            const auto *compositeReply = xcb_get_extension_data(c, &xcb_composite_id);
+            m_composite = (compositeReply && compositeReply->present);
+
             xcb_prefetch_extension_data(c, &xcb_damage_id);
             const auto *reply = xcb_get_extension_data(c, &xcb_damage_id);
             m_damageEventBase = reply->first_event;
@@ -190,7 +195,7 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
 bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *message, long int *result)
 {
     Q_UNUSED(result)
-    if (!m_xcb || eventType != QByteArrayLiteral("xcb_generic_event_t")) {
+    if (!m_xcb || !m_composite || eventType != QByteArrayLiteral("xcb_generic_event_t")) {
         // currently we are only interested in XCB events
         return false;
     }
@@ -390,6 +395,10 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
 #if HAVE_XCB_COMPOSITE
 xcb_pixmap_t WindowThumbnail::pixmapForWindow()
 {
+    if (!m_composite) {
+        return XCB_PIXMAP_NONE;
+    }
+
     xcb_connection_t *c = QX11Info::connection();
     xcb_pixmap_t pix = xcb_generate_id(c);
     auto cookie = xcb_composite_name_window_pixmap_checked(c, m_winId, pix);
@@ -544,7 +553,7 @@ void WindowThumbnail::resetDamaged()
 
 void WindowThumbnail::stopRedirecting()
 {
-    if (!m_xcb) {
+    if (!m_xcb || !m_composite) {
         return;
     }
 #if HAVE_XCB_COMPOSITE
@@ -567,7 +576,7 @@ void WindowThumbnail::stopRedirecting()
 
 void WindowThumbnail::startRedirecting()
 {
-    if (!m_xcb || !window() || window()->winId() == m_winId) {
+    if (!m_xcb || !m_composite || !window() || window()->winId() == m_winId) {
         return;
     }
 #if HAVE_XCB_COMPOSITE
