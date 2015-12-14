@@ -64,9 +64,9 @@ QStringList knownLanguages(Types::ComponentTypes types)
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
 
     for (auto plugin : plugins) {
-        const QString componentTypes = plugin.value(QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && componentTypes == QLatin1String("Applet"))
-          ||((types & Types::DataEngineComponent) && componentTypes == QLatin1String("DataEngine"))) {
+        const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
+        if (((types & Types::AppletComponent)     && !componentTypes.contains(QLatin1String("Applet")))
+          ||((types & Types::DataEngineComponent) && !componentTypes.contains(QLatin1String("DataEngine")))) {
             languages << plugin.value(QStringLiteral("X-Plasma-API"));
         }
     }
@@ -86,9 +86,9 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
 
     if (plugins.count()) {
-        const QString componentTypes = plugins.first().value(QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((type & Types::AppletComponent)     && componentTypes != QLatin1String("Applet"))
-         || ((type & Types::DataEngineComponent) && componentTypes != QLatin1String("DataEngine"))) {
+        const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
+        if (((type & Types::AppletComponent)     && !componentTypes.contains(QLatin1String("Applet")))
+         || ((type & Types::DataEngineComponent) && !componentTypes.contains(QLatin1String("DataEngine")))) {
             return 0;
         }
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
