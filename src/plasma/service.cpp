@@ -35,6 +35,7 @@
 
 #include "version.h"
 #include "pluginloader.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -71,7 +72,7 @@ QStringList Service::operationNames() const
 {
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "No valid operations scheme has been registered";
+        // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
         return QStringList();
     }
@@ -83,12 +84,12 @@ QVariantMap Service::operationDescription(const QString &operationName)
 {
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "No valid operations scheme has been registered";
+        // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
         return QVariantMap();
     }
 
-    //qDebug() << "operation" << operationName
+    //qCDebug(LOG_PLASMA) << "operation" << operationName
     //         << "requested, has keys" << d->operationsMap.keys();
     return d->operationsMap.value(operationName);
 }
@@ -101,12 +102,12 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
 
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "No valid operations scheme has been registered";
+        // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
     } else if (!op.isEmpty() && d->operationsMap.contains(op)) {
         if (d->disabledOperations.contains(op)) {
 #ifndef NDEBUG
-            // qDebug() << "Operation" << op << "is disabled";
+            // qCDebug(LOG_PLASMA) << "Operation" << op << "is disabled";
 #endif
         } else {
             QVariantMap map = description;
@@ -114,7 +115,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
         }
     } else {
 #ifndef NDEBUG
-        // qDebug() << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
+        // qCDebug(LOG_PLASMA) << op << "is not a valid group; valid groups are:" << d->operationsMap.keys();
 #endif
     }
 
@@ -192,7 +193,7 @@ void Service::registerOperationsScheme()
 
     if (d->name.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "No name found";
+        // qCDebug(LOG_PLASMA) << "No name found";
 #endif
         return;
     }
@@ -201,7 +202,7 @@ void Service::registerOperationsScheme()
 
     if (path.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "Cannot find operations description:" << d->name << ".operations";
+        // qCDebug(LOG_PLASMA) << "Cannot find operations description:" << d->name << ".operations";
 #endif
         return;
     }

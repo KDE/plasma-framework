@@ -32,6 +32,7 @@
 #include "private/dataengine_p.h"
 #include "private/datacontainer_p.h"
 #include "scripting/scriptengine.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -121,7 +122,7 @@ Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 {
     if (name.isEmpty()) {
-        qDebug() << "Asked an engine with empty name";
+        qCDebug(LOG_PLASMA) << "Asked an engine with empty name";
         return d->nullEngine();
     }
     Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
@@ -134,7 +135,7 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
 
     DataEngine *engine = PluginLoader::self()->loadDataEngine(name);
     if (!engine) {
-        qDebug() << "Can't find a dataengine named" << name;
+        qCDebug(LOG_PLASMA) << "Can't find a dataengine named" << name;
         // Try installing the engine. However, it's too late for this request.
         ComponentInstaller::self()->installMissingComponent("dataengine", name);
 
@@ -166,7 +167,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
     QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma_dataenginemanager_log";
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
-        // qDebug() << "faild to open" << path;
+        // qCDebug(LOG_PLASMA) << "faild to open" << path;
         return;
     }
 

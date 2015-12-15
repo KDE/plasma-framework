@@ -30,6 +30,7 @@
 
 #include <QDebug>
 #include <qstandardpaths.h>
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -84,12 +85,12 @@ void StorageThread::initializeDb(StorageJob *caller)
     }
 
     if (!m_db.open()) {
-        qWarning() << "Unable to open the plasma storage cache database: " << m_db.lastError();
+        qCWarning(LOG_PLASMA) << "Unable to open the plasma storage cache database: " << m_db.lastError();
     } else if (!m_db.tables().contains(caller->clientName())) {
         QSqlQuery query(m_db);
         query.prepare(QString("create table ") + caller->clientName() + " (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
         if (!query.exec()) {
-            qWarning() << "Unable to create table for" << caller->clientName();
+            qCWarning(LOG_PLASMA) << "Unable to create table for" << caller->clientName();
             m_db.close();
         }
     }
@@ -150,7 +151,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
     it.toFront();
     while (it.hasNext()) {
         it.next();
-        //qDebug() << "going to insert" << valueGroup << it.key();
+        //qCDebug(LOG_PLASMA) << "going to insert" << valueGroup << it.key();
         query.bindValue(":id", it.key());
 
         QString field;
@@ -185,7 +186,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         }
 
         if (!query.exec()) {
-            //qDebug() << "query failed:" << query.lastQuery() << query.lastError().text();
+            //qCDebug(LOG_PLASMA) << "query failed:" << query.lastQuery() << query.lastError().text();
             m_db.commit();
             emit newResult(caller, false);
             return;

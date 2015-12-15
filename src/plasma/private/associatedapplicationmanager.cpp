@@ -20,6 +20,7 @@
 #include "associatedapplicationmanager_p.h"
 
 #include "config-plasma.h"
+#include "debug_p.h"
 
 #include <QAction>
 #include <QHash>
@@ -167,7 +168,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
 #if !PLASMA_NO_KIO
         bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), 0);
         if (!success) {
-            qWarning() << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
+            qCWarning(LOG_PLASMA) << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
         }
 #else
         QString execCommand = d->applicationNames.value(applet);

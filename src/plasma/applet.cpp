@@ -55,6 +55,7 @@
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/package_p.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -63,7 +64,7 @@ Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
     :  QObject(parent),
        d(new AppletPrivate(KService::Ptr(), &info, appletId, this))
 {
-    qDebug() << " From KPluginInfo, valid? " << info.isValid();
+    qCDebug(LOG_PLASMA) << " From KPluginInfo, valid? " << info.isValid();
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
@@ -141,7 +142,7 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
-    //qDebug() << "saving" << pluginName() << "to" << group.name();
+    //qCDebug(LOG_PLASMA) << "saving" << pluginName() << "to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -174,10 +175,10 @@ void Applet::restore(KConfigGroup &group)
         setGlobalShortcut(QKeySequence(shortcutText));
         /*
         #ifndef NDEBUG
-        // qDebug() << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
+        // qCDebug(LOG_PLASMA) << "got global shortcut for" << name() << "of" << QKeySequence(shortcutText);
         #endif
         #ifndef NDEBUG
-        // qDebug() << "set to" << d->activationAction->objectName()
+        // qCDebug(LOG_PLASMA) << "set to" << d->activationAction->objectName()
         #endif
                  << d->activationAction->globalShortcut().primary();
                  */
@@ -314,7 +315,7 @@ void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
     //      without calling the Applet:: version as well, which it shouldn't need to.
     //      INSTEAD put such code into flushPendingConstraintsEvents
     Q_UNUSED(constraints)
-    //qDebug() << constraints << "constraints are FormFactor: " << formFactor()
+    //qCDebug(LOG_PLASMA) << constraints << "constraints are FormFactor: " << formFactor()
     //         << ", Location: " << location();
     if (d->script) {
         d->script->constraintsEvent(constraints);
@@ -466,7 +467,7 @@ void Applet::flushPendingConstraintsEvents()
         d->constraintsTimer.stop();
     }
 
-    //qDebug() << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //qCDebug(LOG_PLASMA) << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
@@ -562,7 +563,7 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    //qDebug() << "empty context actions";
+    //qCDebug(LOG_PLASMA) << "empty context actions";
     return d->script ? d->script->contextualActions() : QList<QAction *>();
 }
 

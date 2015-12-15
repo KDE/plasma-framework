@@ -94,6 +94,7 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 #   TEST_INCLUDES
 #)
 
+ecm_qt_declare_logging_category(Plasma_LIB_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMA CATEGORY_NAME org.kde.plasma)
 
 add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)

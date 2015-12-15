@@ -24,6 +24,8 @@
 #include <QAbstractItemModel>
 
 #include "plasma.h"
+#include "debug_p.h"
+
 
 namespace Plasma
 {
@@ -106,7 +108,7 @@ bool DataContainer::visualizationIsConnected(QObject *visualization) const
 void DataContainer::connectVisualization(QObject *visualization, uint pollingInterval,
         Plasma::Types::IntervalAlignment alignment)
 {
-    //qDebug() << "connecting visualization" <<this<< visualization << "at interval of"
+    //qCDebug(LOG_PLASMA) << "connecting visualization" <<this<< visualization << "at interval of"
     //         << pollingInterval << "to" << objectName();
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
     bool connected = objIt != d->relayObjects.end();
@@ -116,15 +118,15 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         SignalRelay *relay = objIt.value();
         if (relay) {
             // connected to a relay
-            //qDebug() << "     already connected, but to a relay";
+            //qCDebug(LOG_PLASMA) << "     already connected, but to a relay";
             if (relay->m_interval == pollingInterval && relay->m_align == alignment) {
-                //qDebug() << "    already connected to a relay of the same interval of"
+                //qCDebug(LOG_PLASMA) << "    already connected to a relay of the same interval of"
                 //          << pollingInterval << ", nothing to do";
                 return;
             }
 
             if (relay->receiverCount() == 1) {
-                //qDebug() << "    removing relay, as it is now unused";
+                //qCDebug(LOG_PLASMA) << "    removing relay, as it is now unused";
                 d->relays.remove(relay->m_interval);
                 delete relay;
             } else {
@@ -141,7 +143,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
             // the visualization was connected already, but not to a relay
             // and it still doesn't want to connect to a relay, so we have
             // nothing to do!
-            //qDebug() << "     already connected, nothing to do";
+            //qCDebug(LOG_PLASMA) << "     already connected, nothing to do";
             return;
         } else {
             disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
@@ -157,7 +159,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
     }
 
     if (pollingInterval < 1) {
-        //qDebug() << "    connecting directly";
+        //qCDebug(LOG_PLASMA) << "    connecting directly";
         d->relayObjects[visualization] = 0;
         if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
             connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
@@ -168,7 +170,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
                     visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
         }
     } else {
-        //qDebug() << "    connecting to a relay";
+        //qCDebug(LOG_PLASMA) << "    connecting to a relay";
         // we only want to do an imediate update if this is not the first object to connect to us
         // if it is the first visualization, then the source will already have been populated
         // engine's sourceRequested method
@@ -338,7 +340,7 @@ void DataContainer::disconnectVisualization(QObject *visualization)
 
 void DataContainer::checkForUpdate()
 {
-    //qDebug() << objectName() << d->dirty;
+    //qCDebug(LOG_PLASMA) << objectName() << d->dirty;
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
@@ -390,7 +392,7 @@ void DataContainer::timerEvent(QTimerEvent *event)
     if (event->timerId() == d->checkUsageTimer.timerId()) {
         if (!isUsed()) {
             // DO NOT CALL ANYTHING AFTER THIS LINE AS IT MAY GET DELETED!
-            //qDebug() << objectName() << "is unused";
+            //qCDebug(LOG_PLASMA) << objectName() << "is unused";
 
             //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
             if (d->model) {

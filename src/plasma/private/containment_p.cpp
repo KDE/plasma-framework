@@ -35,6 +35,7 @@
 
 #include "private/applet_p.h"
 #include "timetracker.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -115,7 +116,7 @@ void ContainmentPrivate::configChanged()
 
 void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
-    //qDebug() << "================== "<< appletStatus << q->status();
+    //qCDebug(LOG_PLASMA) << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
         emit q->statusChanged(appletStatus);
         return;
@@ -145,7 +146,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         return;
     }
 
-    //qDebug() << "got containmentConstraintsEvent" << constraints;
+    //qCDebug(LOG_PLASMA) << "got containmentConstraintsEvent" << constraints;
     if (constraints & Plasma::Types::ImmutableConstraint) {
         //update actions
         const bool unlocked = q->immutability() == Types::Mutable;
@@ -200,7 +201,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
 
     if (q->immutability() != Types::Mutable) {
 #ifndef NDEBUG
-        // qDebug() << "addApplet for" << name << "requested, but we're currently immutable!";
+        // qCDebug(LOG_PLASMA) << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
         return 0;
     }
@@ -208,7 +209,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
     Applet *applet = PluginLoader::self()->loadApplet(name, id, args);
 
     if (!applet) {
-        qWarning() << "Applet" << name << "could not be loaded.";
+        qCWarning(LOG_PLASMA) << "Applet" << name << "could not be loaded.";
         applet = new Applet(0, QString(), id);
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }

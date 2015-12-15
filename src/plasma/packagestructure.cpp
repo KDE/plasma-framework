@@ -21,6 +21,7 @@
 #include <QDebug>
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
+#include "debug_p.h"
 
 #include <kpackage/packageloader.h>
 #include <kpackage/packagestructure.h>
@@ -108,7 +109,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
 
         bool ok = QFile::remove(service);
         if (!ok) {
-            qWarning() << "Unable to remove " << service;
+            qCWarning(LOG_PLASMA) << "Unable to remove " << service;
         }
 
     //install
@@ -135,16 +136,16 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
 
             QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kservices5/");
             if (!QDir().mkpath(localServiceDirectory)) {
-                qDebug() << "Failed to create ... " << localServiceDirectory;
-                qWarning() << "Could not create local service directory:" << localServiceDirectory;
+                qCDebug(LOG_PLASMA) << "Failed to create ... " << localServiceDirectory;
+                qCWarning(LOG_PLASMA) << "Could not create local service directory:" << localServiceDirectory;
                 return;
             }
             QString service = localServiceDirectory + serviceName;
 
-            qDebug() << "-- Copying " << metaPath << service;
+            qCDebug(LOG_PLASMA) << "-- Copying " << metaPath << service;
             const bool ok = QFile::copy(metaPath, service);
             if (ok) {
-                qDebug() << "Copying metadata went ok.";
+                qCDebug(LOG_PLASMA) << "Copying metadata went ok.";
                 // the icon in the installed file needs to point to the icon in the
                 // installation dir!
                 QString iconPath = path + '/' + cg.readEntry("Icon");
@@ -155,7 +156,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
                     cg.writeEntry("Icon", iconPath);
                 }
             } else {
-                qWarning() << "Could not register package as service (this is not necessarily fatal):" << serviceName;
+                qCWarning(LOG_PLASMA) << "Could not register package as service (this is not necessarily fatal):" << serviceName;
             }
         }
     }

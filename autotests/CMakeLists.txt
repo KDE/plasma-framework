@@ -46,7 +46,7 @@ PLASMA_UNIT_TESTS(
     #    plasmoidpackagetest
 )
 
-add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp)
+add_executable(storagetest storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp ../src/plasma/debug_p.cpp)
 target_link_libraries(storagetest Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons)
 
 if(HAVE_X11)

@@ -40,6 +40,7 @@
 #include "applet.h"
 #include "package.h"
 #include "theme.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -225,7 +226,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         path = actualPath;
     } else {
 #ifndef NDEBUG
-        // qDebug() << "file '" << path << "' does not exist!";
+        // qCDebug(LOG_PLASMA) << "file '" << path << "' does not exist!";
 #endif
     }
 
@@ -242,9 +243,9 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         } else {
             createRenderer();
             naturalSize = renderer->defaultSize() * scaleFactor;
-            //qDebug() << "natural size for" << path << "from renderer is" << naturalSize;
+            //qCDebug(LOG_PLASMA) << "natural size for" << path << "from renderer is" << naturalSize;
             cacheAndColorsTheme()->insertIntoRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), QRectF(QPointF(0, 0), naturalSize));
-            //qDebug() << "natural size for" << path << "from cache is" << naturalSize;
+            //qCDebug(LOG_PLASMA) << "natural size for" << path << "from cache is" << naturalSize;
         }
     }
 
@@ -356,18 +357,18 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         id.append(actualElementId);
     }
 
-    //qDebug() << "id is " << id;
+    //qCDebug(LOG_PLASMA) << "id is " << id;
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
         p.setDevicePixelRatio(ratio);
-        //qDebug() << "found cached version of " << id << p.size();
+        //qCDebug(LOG_PLASMA) << "found cached version of " << id << p.size();
         return p;
     }
 
-    //qDebug() << "didn't find cached version of " << id << ", so re-rendering";
+    //qCDebug(LOG_PLASMA) << "didn't find cached version of " << id << ", so re-rendering";
 
-    //qDebug() << "size for " << actualElementId << " is " << s;
+    //qCDebug(LOG_PLASMA) << "size for " << actualElementId << " is " << s;
     // we have to re-render this puppy
 
     createRenderer();
@@ -410,7 +411,7 @@ void SvgPrivate::createRenderer()
         return;
     }
 
-    //qDebug() << kBacktrace();
+    //qCDebug(LOG_PLASMA) << kBacktrace();
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet *>(q->parent());
         //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
@@ -429,14 +430,14 @@ void SvgPrivate::createRenderer()
             path = actualTheme()->imagePath(themePath);
             themeFailed = path.isEmpty();
             if (themeFailed) {
-                qWarning() << "No image path found for" << themePath;
+                qCWarning(LOG_PLASMA) << "No image path found for" << themePath;
             }
         }
     }
 
-    //qDebug() << "********************************";
-    //qDebug() << "FAIL! **************************";
-    //qDebug() << path << "**";
+    //qCDebug(LOG_PLASMA) << "********************************";
+    //qCDebug(LOG_PLASMA) << "FAIL! **************************";
+    //qCDebug(LOG_PLASMA) << path << "**";
 
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup);
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
@@ -444,7 +445,7 @@ void SvgPrivate::createRenderer()
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 
     if (it != s_renderers.constEnd()) {
-        //qDebug() << "gots us an existing one!";
+        //qCDebug(LOG_PLASMA) << "gots us an existing one!";
         renderer = it.value();
     } else {
         if (path.isEmpty()) {
@@ -639,7 +640,7 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
         res.setHeight(res.height() + offset);
     }
 
-    //qDebug()<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
+    //qCDebug(LOG_PLASMA)<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
     return res;
 }
 
@@ -660,7 +661,7 @@ void SvgPrivate::themeChanged()
     setImagePath(currentPath);
     q->resize();
 
-    //qDebug() << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
+    //qCDebug(LOG_PLASMA) << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
     emit q->repaintNeeded();
 }
 
@@ -671,7 +672,7 @@ void SvgPrivate::colorsChanged()
     }
 
     eraseRenderer();
-    //qDebug() << "repaint needed from colorsChanged";
+    //qCDebug(LOG_PLASMA) << "repaint needed from colorsChanged";
 
     // in the case the theme follows the desktop settings, refetch the colorschemes
     // and discard the svg pixmap cache
@@ -913,7 +914,7 @@ bool Svg::containsMultipleImages() const
 void Svg::setImagePath(const QString &svgFilePath)
 {
     if (d->setImagePath(svgFilePath)) {
-        //qDebug() << "repaintNeeded";
+        //qCDebug(LOG_PLASMA) << "repaintNeeded";
         emit repaintNeeded();
     }
 }

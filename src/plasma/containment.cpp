@@ -49,6 +49,7 @@
 #include "containmentactions.h"
 #include "corona.h"
 #include "pluginloader.h"
+#include "debug_p.h"
 
 #include "private/applet_p.h"
 
@@ -166,11 +167,11 @@ void Containment::restore(KConfigGroup &group)
 {
     /*
     #ifndef NDEBUG
-    // qDebug() << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
-    // qDebug() << "    location:" << group.readEntry("location", (int)d->location);
-    // qDebug() << "    geom:" << group.readEntry("geometry", geometry());
-    // qDebug() << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
-    // qDebug() << "    screen:" << group.readEntry("screen", d->screen);
+    // qCDebug(LOG_PLASMA) << "!!!!!!!!!!!!initConstraints" << group.name() << d->type;
+    // qCDebug(LOG_PLASMA) << "    location:" << group.readEntry("location", (int)d->location);
+    // qCDebug(LOG_PLASMA) << "    geom:" << group.readEntry("geometry", geometry());
+    // qCDebug(LOG_PLASMA) << "    formfactor:" << group.readEntry("formfactor", (int)d->formFactor);
+    // qCDebug(LOG_PLASMA) << "    screen:" << group.readEntry("screen", d->screen);
     #endif
     */
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
@@ -189,10 +190,10 @@ void Containment::restore(KConfigGroup &group)
         KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
         cfg = KConfigGroup(&cfg, QString::number(containmentType()));
 
-        //qDebug() << cfg.keyList();
+        //qCDebug(LOG_PLASMA) << cfg.keyList();
         if (cfg.exists()) {
             foreach (const QString &key, cfg.keyList()) {
-                //qDebug() << "loading" << key;
+                //qCDebug(LOG_PLASMA) << "loading" << key;
                 setContainmentActions(key, cfg.readEntry(key, QString()));
             }
         } else { //shell defaults
@@ -213,7 +214,7 @@ void Containment::restore(KConfigGroup &group)
 
     /*
     #ifndef NDEBUG
-    // qDebug() << "Containment" << id() <<
+    // qCDebug(LOG_PLASMA) << "Containment" << id() <<
     #endif
                 "screen" << screen() <<
                 "geometry is" << geometry() <<
@@ -267,7 +268,7 @@ void Containment::restoreContents(KConfigGroup &group)
     // are added from left to right or top to bottom for a panel containment
     QList<KConfigGroup> appletConfigs;
     foreach (const QString &appletGroup, groups) {
-        //qDebug() << "reading from applet group" << appletGroup;
+        //qCDebug(LOG_PLASMA) << "reading from applet group" << appletGroup;
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
     }
@@ -329,7 +330,7 @@ void Containment::setFormFactor(Types::FormFactor formFactor)
         return;
     }
 
-    //qDebug() << "switching FF to " << formFactor;
+    //qCDebug(LOG_PLASMA) << "switching FF to " << formFactor;
     d->formFactor = formFactor;
 
     updateConstraints(Plasma::Types::FormFactorConstraint);
@@ -375,14 +376,14 @@ void Containment::addApplet(Applet *applet)
 
     if (!applet) {
 #ifndef NDEBUG
-        // qDebug() << "adding null applet!?!";
+        // qCDebug(LOG_PLASMA) << "adding null applet!?!";
 #endif
         return;
     }
 
     if (d->applets.contains(applet)) {
 #ifndef NDEBUG
-        // qDebug() << "already have this applet!";
+        // qCDebug(LOG_PLASMA) << "already have this applet!";
 #endif
     }
 

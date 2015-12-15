@@ -43,6 +43,7 @@
 #include "private/containment_p.h"
 #include "private/package_p.h"
 #include "private/timetracker.h"
+#include "debug_p.h"
 
 using namespace Plasma;
 
@@ -54,7 +55,7 @@ Corona::Corona(QObject *parent)
       d(new CoronaPrivate(this))
 {
 #ifndef NDEBUG
-    // qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
+    // qCDebug(LOG_PLASMA) << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
 #endif
     d->init();
 
@@ -291,7 +292,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     }
 
 #ifndef NDEBUG
-    // qDebug() << "setting immutability to" << immutable;
+    // qCDebug(LOG_PLASMA) << "setting immutability to" << immutable;
 #endif
     d->immutability = immutable;
     d->updateContainmentImmutability();
@@ -445,7 +446,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     Containment *containment = 0;
     Applet *applet = 0;
 
-    // qDebug() << "Loading" << name << args << id;
+    // qCDebug(LOG_PLASMA) << "Loading" << name << args << id;
 
     if (pluginName.isEmpty() || pluginName == "default") {
         // default to the desktop containment
@@ -464,7 +465,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     if (!containment) {
         if (!loadingNull) {
 #ifndef NDEBUG
-            // qDebug() << "loading of containment" << name << "failed.";
+            // qCDebug(LOG_PLASMA) << "loading of containment" << name << "failed.";
 #endif
         }
 
@@ -562,9 +563,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
             containmentConfig.copyTo(&realConf);
         }
 
-        //qDebug() << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
+        //qCDebug(LOG_PLASMA) << "got a containment in the config, trying to make a" << containmentConfig.readEntry("plugin", QString()) << "from" << group;
 #ifndef NDEBUG
-        // qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
+        // qCDebug(LOG_PLASMA) << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
 #endif
         Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid);
         if (!c) {
@@ -575,7 +576,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         containmentsIds.insert(c->id());
 
 #ifndef NDEBUG
-//         qDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
+//         qCDebug(LOG_PLASMA) << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Restored Containment" << c->pluginName();
 #endif
     }
 

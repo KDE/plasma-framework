@@ -43,6 +43,7 @@
 #include <qstandardpaths.h>
 
 #include "private/packages_p.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -149,7 +150,7 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains(QLatin1String("../")) || name.isEmpty()) {
         // we don't support relative paths
-        //qDebug() << "Theme says: bad image path " << name;
+        //qCDebug(LOG_PLASMA) << "Theme says: bad image path " << name;
         return QString();
     }
 
@@ -180,7 +181,7 @@ QString Theme::imagePath(const QString &name) const
     /*
     if (path.isEmpty()) {
     #ifndef NDEBUG
-        // qDebug() << "Theme says: bad image path " << name;
+        // qCDebug(LOG_PLASMA) << "Theme says: bad image path " << name;
     #endif
     }
     */
@@ -230,19 +231,19 @@ QString Theme::wallpaperPath(const QSize &size) const
 
     if (fullPath.isEmpty()) {
         // we failed to find it in the theme, so look in the standard directories
-        //qDebug() << "looking for" << image;
+        //qCDebug(LOG_PLASMA) << "looking for" << image;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + image);
     }
 
     if (fullPath.isEmpty()) {
         // we still failed to find it in the theme, so look for the default in
         // the standard directories
-        //qDebug() << "looking for" << defaultImage;
+        //qCDebug(LOG_PLASMA) << "looking for" << defaultImage;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + defaultImage);
 
         if (fullPath.isEmpty()) {
 #ifndef NDEBUG
-            // qDebug() << "exhausted every effort to find a wallpaper.";
+            // qCDebug(LOG_PLASMA) << "exhausted every effort to find a wallpaper.";
 #endif
         }
     }

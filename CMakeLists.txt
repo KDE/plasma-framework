@@ -20,6 +20,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(KDEFrameworkCompilerSettings)
 include(KDETemplateMacro)
+include(ECMQtDeclareLoggingCategory)
 
 set(KF5_VERSION "5.18.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.17.0") # handled by release scripts

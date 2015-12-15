@@ -35,6 +35,7 @@
 #include "theme.h"
 #include "private/svg_p.h"
 #include "private/framesvg_helpers.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -137,10 +138,10 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
     const QString newKey = d->cacheId(fd, d->prefix);
     fd->enabledBorders = oldBorders;
 
-    //qDebug() << "looking for" << newKey;
+    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
     FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
     if (newFd) {
-        //qDebug() << "FOUND IT!" << newFd->refcount;
+        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
         // we've found a math, so insert that new one and ref it ..
         newFd->ref(this);
         d->frames.insert(d->prefix, newFd);
@@ -148,7 +149,7 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
         //.. then deref the old one and if it's no longer used, get rid of it
         if (fd->deref(this)) {
             //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qDebug() << "1. Removing it" << oldKey << fd->refcount;
+            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
             FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
             delete fd;
         }
@@ -256,7 +257,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
                 // we have to cache after inserting the frame since the cacheId requires the
                 // frame to be in the frames collection already
                 const QString key = d->cacheId(oldFrameData, d->prefix);
-                //qDebug() << this << "     1. inserting as" << key;
+                //qCDebug(LOG_PLASMA) << this << "     1. inserting as" << key;
 
                 FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, newFd);
             }
@@ -329,7 +330,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
 
     if (size.isEmpty()) {
 #ifndef NDEBUG
-        // qDebug() << "Invalid size" << size;
+        // qCDebug(LOG_PLASMA) << "Invalid size" << size;
 #endif
         return;
     }
@@ -345,10 +346,10 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     const QString newKey = d->cacheId(fd, d->prefix);
     fd->frameSize = currentSize;
 
-    //qDebug() << "looking for" << newKey;
+    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
     FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
     if (newFd) {
-        //qDebug() << "FOUND IT!" << newFd->refcount;
+        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
         // we've found a math, so insert that new one and ref it ..
         newFd->ref(this);
         d->frames.insert(d->prefix, newFd);
@@ -356,7 +357,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         //.. then deref the old one and if it's no longer used, get rid of it
         if (fd->deref(this)) {
             //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qDebug() << "1. Removing it" << oldKey << fd->refcount;
+            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
             FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
             delete fd;
         }
@@ -583,7 +584,7 @@ FrameSvgPrivate::~FrameSvgPrivate()
 {
 #ifdef DEBUG_FRAMESVG_CACHE
 #ifndef NDEBUG
-    // qDebug() << "*************" << q << q->imagePath() << "****************";
+    // qCDebug(LOG_PLASMA) << "*************" << q << q->imagePath() << "****************";
 #endif
 #endif
 
@@ -597,7 +598,7 @@ FrameSvgPrivate::~FrameSvgPrivate()
                 const QString key = cacheId(it.value(), it.key());
 #ifdef DEBUG_FRAMESVG_CACHE
 #ifndef NDEBUG
-                // qDebug() << "2. Removing it" << key << it.value() << it.value()->refcount() << s_sharedFrames[theme()->d].contains(key);
+                // qCDebug(LOG_PLASMA) << "2. Removing it" << key << it.value() << it.value()->refcount() << s_sharedFrames[theme()->d].contains(key);
 #endif
 #endif
                 s_sharedFrames[q->theme()->d].remove(key);
@@ -606,12 +607,12 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #ifdef DEBUG_FRAMESVG_CACHE
             else {
 #ifndef NDEBUG
-                // qDebug() << "still shared:" << cacheId(it.value(), it.key()) << it.value() << it.value()->refcount() << it.value()->isUsed();
+                // qCDebug(LOG_PLASMA) << "still shared:" << cacheId(it.value(), it.key()) << it.value() << it.value()->refcount() << it.value()->isUsed();
 #endif
             }
         } else {
 #ifndef NDEBUG
-            // qDebug() << "lost our value for" << it.key();
+            // qCDebug(LOG_PLASMA) << "lost our value for" << it.key();
 #endif
 #endif
         }
@@ -625,22 +626,22 @@ FrameSvgPrivate::~FrameSvgPrivate()
         const int rc = it2.value()->refcount();
         if (rc == 0) {
 #ifndef NDEBUG
-            // qDebug() << "     LOST!" << it2.key() << rc << it2.value();// << it2.value()->references;
+            // qCDebug(LOG_PLASMA) << "     LOST!" << it2.key() << rc << it2.value();// << it2.value()->references;
 #endif
         } else {
 #ifndef NDEBUG
-            // qDebug() << "          " << it2.key() << rc << it2.value();
+            // qCDebug(LOG_PLASMA) << "          " << it2.key() << rc << it2.value();
 #endif
             foreach (FrameSvg *data, it2.value()->references.keys()) {
 #ifndef NDEBUG
-                qDebug() << "            " << (void *)data << it2.value()->references[data];
+                qCDebug(LOG_PLASMA) << "            " << (void *)data << it2.value()->references[data];
 #endif
             }
             shares += rc - 1;
         }
     }
 #ifndef NDEBUG
-    // qDebug() << "#####################################" << s_sharedFrames[theme()->d].count() << ", pixmaps saved:" << shares;
+    // qCDebug(LOG_PLASMA) << "#####################################" << s_sharedFrames[theme()->d].count() << ", pixmaps saved:" << shares;
 #endif
 #endif
 
@@ -793,17 +794,17 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
 
 void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
 {
-    //qDebug() << "generating background";
+    //qCDebug(LOG_PLASMA) << "generating background";
     const QSize size = frameSize(frame).toSize() * q->devicePixelRatio();
 
     if (!size.isValid()) {
 #ifndef NDEBUG
-        // qDebug() << "Invalid frame size" << size;
+        // qCDebug(LOG_PLASMA) << "Invalid frame size" << size;
 #endif
         return;
     }
     if (size.width() >= MAX_FRAME_SIZE || size.height() >= MAX_FRAME_SIZE) {
-        qWarning() << "Not generating frame background for a size whose width or height is more than" << MAX_FRAME_SIZE << size;
+        qCWarning(LOG_PLASMA) << "Not generating frame background for a size whose width or height is more than" << MAX_FRAME_SIZE << size;
         return;
     }
 
@@ -934,7 +935,7 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
 
     const QString id = cacheId(frame, prefixToSave);
 
-    //qDebug()<<"Saving to cache frame"<<id;
+    //qCDebug(LOG_PLASMA)<<"Saving to cache frame"<<id;
 
     q->theme()->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
 
@@ -946,7 +947,7 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
 
 void FrameSvgPrivate::updateSizes() const
 {
-    //qDebug() << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
+    //qCDebug(LOG_PLASMA) << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
     FrameData *frame = frames[prefix];
     Q_ASSERT(frame);
 
@@ -1073,13 +1074,13 @@ QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const
 void FrameData::ref(FrameSvg *svg)
 {
     references[svg] = references[svg] + 1;
-    //qDebug() << this << svg << references[svg];
+    //qCDebug(LOG_PLASMA) << this << svg << references[svg];
 }
 
 bool FrameData::deref(FrameSvg *svg)
 {
     references[svg] = references[svg] - 1;
-    //qDebug() << this << svg << references[svg];
+    //qCDebug(LOG_PLASMA) << this << svg << references[svg];
     if (references[svg] < 1) {
         references.remove(svg);
     }

@@ -21,6 +21,7 @@
 #include "theme_p.h"
 #include "framesvg.h"
 #include "framesvg_p.h"
+#include "debug_p.h"
 
 #include <QGuiApplication>
 #include <QFile>
@@ -143,7 +144,7 @@ KConfigGroup &ThemePrivate::config()
 
             if (!app.isEmpty()) {
 #ifndef NDEBUG
-                // qDebug() << "using theme for app" << app;
+                // qCDebug(LOG_PLASMA) << "using theme for app" << app;
 #endif
                 groupName.append('-').append(app);
             }
@@ -306,7 +307,7 @@ void ThemePrivate::compositingChanged(bool active)
 #if HAVE_X11
     if (compositingActive != active) {
         compositingActive = active;
-        //qDebug() << QTime::currentTime();
+        //qCDebug(LOG_PLASMA) << QTime::currentTime();
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 #endif
@@ -374,7 +375,7 @@ void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
 
 void ThemePrivate::notifyOfChanged()
 {
-    //qDebug() << cachesToDiscard;
+    //qCDebug(LOG_PLASMA) << cachesToDiscard;
     discardCache(cachesToDiscard);
     cachesToDiscard = NoCache;
     emit themeChanged();
@@ -501,7 +502,7 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 
 void ThemePrivate::settingsFileChanged(const QString &file)
 {
-    qDebug() << "settingsFile: " << file;
+    qCDebug(LOG_PLASMA) << "settingsFile: " << file;
     if (file == themeMetadataPath) {
         const KPluginInfo pluginInfo(themeMetadataPath);
         if (themeVersion != pluginInfo.version()) {
@@ -518,7 +519,7 @@ void ThemePrivate::settingsChanged(bool emitChanges)
     if (fixedName) {
         return;
     }
-    //qDebug() << "Settings Changed!";
+    //qCDebug(LOG_PLASMA) << "Settings Changed!";
     KConfigGroup cg = config();
     setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false, emitChanges);
 }
@@ -761,7 +762,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/colors"))
                                : QString();
 
-    //qDebug() << "we're going for..." << colorsFile << "*******************";
+    //qCDebug(LOG_PLASMA) << "we're going for..." << colorsFile << "*******************";
 
     if (colorsFile.isEmpty()) {
         colors = 0;

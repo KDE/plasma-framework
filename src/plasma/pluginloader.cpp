@@ -45,6 +45,7 @@
 #include "private/storage_p.h"
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -151,7 +152,7 @@ void PluginLoader::setPluginLoader(PluginLoader *loader)
         s_pluginLoader = loader;
     } else {
 #ifndef NDEBUG
-        // qDebug() << "Cannot set pluginLoader, already set!" << s_pluginLoader;
+        // qCDebug(LOG_PLASMA) << "Cannot set pluginLoader, already set!" << s_pluginLoader;
 #endif
     }
 }
@@ -223,7 +224,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         p.setFallbackPackage(fp);
 
         if (!fp.isValid()) {
-            qWarning() << "invalid fallback path in " << p.path();
+            qCWarning(LOG_PLASMA) << "invalid fallback path in " << p.path();
             return 0;
         }
     }
@@ -233,12 +234,12 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     {
         KPluginInfo info = KPluginInfo::fromMetaData(p.metadata());
         if (!info.isValid()) {
-            qWarning() << "invalid plugin in" << p.path();
+            qCWarning(LOG_PLASMA) << "invalid plugin in" << p.path();
             return 0;
         }
         KPluginLoader loader(info.libraryPath());
         if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
-            qWarning() << "incompatiable plugin version in" << p.path();
+            qCWarning(LOG_PLASMA) << "incompatiable plugin version in" << p.path();
             return 0;
         }
         KPluginFactory *factory = loader.factory();
@@ -254,7 +255,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 
     if (!applet) {
-        //qDebug() << name << "not a C++ applet: Falling back to an empty one";
+        //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
         QVariantList allArgs;
         allArgs << p.metadata().fileName() << appletId << args;
@@ -462,7 +463,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (offers.isEmpty()) {
 #ifndef NDEBUG
-        qDebug() << "offers is empty for " << name;
+        qCDebug(LOG_PLASMA) << "offers is empty for " << name;
 #endif
         return 0;
     }
@@ -481,7 +482,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (!actions) {
 #ifndef NDEBUG
-        // qDebug() << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
+        // qCDebug(LOG_PLASMA) << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
 #endif
     }
 
@@ -551,7 +552,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     }
 
 #ifndef NDEBUG
-        // qDebug() << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
+        // qCDebug(LOG_PLASMA) << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
 #endif
 
     return Package();
@@ -581,7 +582,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
             auto pi = KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
-                qWarning() << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
+                qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
                 continue;
             }
             list << pi;
@@ -607,7 +608,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
             auto pi =  KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
-                qWarning() << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
+                qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
                 continue;
             }
             list << pi;
@@ -648,7 +649,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
 #ifndef NDEBUG
-                // qDebug() << info.name() << "matches" << glob << url;
+                // qCDebug(LOG_PLASMA) << info.name() << "matches" << glob << url;
 #endif
                 filtered << info;
             }

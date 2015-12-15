@@ -290,8 +290,8 @@ KJob *Package::install(const QString &sourcePackage, const QString &packageRoot)
 {
     const QString src = sourcePackage;
     const QString dest = packageRoot.isEmpty() ? defaultPackageRoot() : packageRoot;
-    //qDebug() << "Source: " << src;
-    //qDebug() << "PackageRoot: " << dest;
+    //qCDebug(LOG_PLASMA) << "Source: " << src;
+    //qCDebug(LOG_PLASMA) << "PackageRoot: " << dest;
     KJob *j = d->structure->install(this, src, dest);
     return j;
 }
