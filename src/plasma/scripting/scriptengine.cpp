@@ -89,6 +89,8 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
         if (((type & Types::AppletComponent)     && !componentTypes.contains(QLatin1String("Applet")))
          || ((type & Types::DataEngineComponent) && !componentTypes.contains(QLatin1String("DataEngine")))) {
+
+            qWarning() << "ScriptEngine" << plugins.first().name() << "does not provide Applet or DataEngine components, returning empty.";
             return 0;
         }
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
@@ -96,6 +98,8 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
         KPluginFactory *factory = loader.factory();
         if (factory) {
             engine = factory->create<Plasma::ScriptEngine>(0, args);
+        } else {
+            qWarning() << "Unable to load" << plugins.first().name() << "ScriptEngine";
         }
     }
 
