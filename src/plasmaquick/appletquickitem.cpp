@@ -43,7 +43,7 @@ namespace PlasmaQuick
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
 //TODO: temporary
-QSet<QString> AppletQuickItemPrivate::s_legacyApplets = QSet<QString>({"org.kde.plasma.bluetooth", "org.kde.plasma.pager", "org.kde.desktopcontainment", "org.kde.plasma.folder", "org.kde.panel", "org.kde.plasma.analogclock", "org.kde.plasma.battery", "org.kde.plasma.notifications", "org.kde.plasma.systemtray"});
+QSet<QString> AppletQuickItemPrivate::s_legacyApplets = QSet<QString>({QStringLiteral("org.kde.plasma.bluetooth"), QStringLiteral("org.kde.plasma.pager"), QStringLiteral("org.kde.desktopcontainment"), QStringLiteral("org.kde.plasma.folder"), QStringLiteral("org.kde.panel"), QStringLiteral("org.kde.plasma.analogclock"), QStringLiteral("org.kde.plasma.battery"), QStringLiteral("org.kde.plasma.notifications"), QStringLiteral("org.kde.plasma.systemtray")});
 
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
