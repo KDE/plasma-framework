@@ -500,12 +500,17 @@ QRegion FrameSvg::mask() const
     QString id = d->cacheId(frame, QString());
 
     QRegion* obj = frame->cachedMasks.object(id);
+    QRegion result;
 
     if (!obj) {
         obj = new QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
+        result = *obj;
         frame->cachedMasks.insert(id, obj);
     }
-    return *obj;
+    else {
+        result = *obj;
+    }
+    return result;
 }
 
 void FrameSvg::setCacheAllRenderedFrames(bool cache)
