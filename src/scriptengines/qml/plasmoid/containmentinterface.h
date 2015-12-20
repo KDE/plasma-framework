@@ -218,6 +218,7 @@ private:
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QWeakPointer<QMenu> m_contextMenu;
+    int m_wheelDelta;
     friend class AppletInterface;
 };
 

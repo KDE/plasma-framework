@@ -58,7 +58,8 @@
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args)
     : AppletInterface(parent, args),
       m_wallpaperInterface(0),
-      m_activityInfo(0)
+      m_activityInfo(0),
+      m_wheelDelta(0)
 {
     m_containment = static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
 
@@ -962,14 +963,22 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
     Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
 
-    if (plugin) {
-        if (event->delta() < 0) {
-            plugin->performNextAction();
-        } else {
-            plugin->performPreviousAction();
-        }
-    } else {
+    if (!plugin) {
         event->setAccepted(false);
+        return;
+    }
+
+    m_wheelDelta += event->delta();
+
+    // Angle delta 120 for common "one click"
+    // See: http://qt-project.org/doc/qt-5/qml-qtquick-wheelevent.html#angleDelta-prop
+    while (m_wheelDelta >= 120) {
+        m_wheelDelta -= 120;
+        plugin->performPreviousAction();
+    }
+    while (m_wheelDelta <= -120) {
+        m_wheelDelta += 120;
+        plugin->performNextAction();
     }
 }
 
