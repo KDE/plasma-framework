@@ -364,7 +364,9 @@ void Containment::setLocation(Types::Location location)
 Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 {
     Plasma::Applet *applet = d->createApplet(name, args);
-    emit appletCreated(applet);
+    if (applet) {
+        emit appletCreated(applet);
+    }
     return applet;
 }
 
