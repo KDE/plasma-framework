@@ -60,6 +60,7 @@ PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::P
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
 {
+    delete d;
 }
 
 void PackageUrlInterceptor::addAllowedPath(const QString &path)
