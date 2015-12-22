@@ -453,6 +453,9 @@ Types::ItemStatus Applet::status() const
 
 void Applet::setStatus(const Types::ItemStatus status)
 {
+    if (status == d->itemStatus) {
+        return;
+    }
     d->itemStatus = status;
     emit statusChanged(status);
 }
