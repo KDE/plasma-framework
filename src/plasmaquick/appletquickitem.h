@@ -152,7 +152,6 @@ protected:
 private:
     AppletQuickItemPrivate *const d;
 
-    Q_PRIVATE_SLOT(d, void compactRepresentationCheck())
     Q_PRIVATE_SLOT(d, void minimumWidthChanged())
     Q_PRIVATE_SLOT(d, void minimumHeightChanged())
     Q_PRIVATE_SLOT(d, void preferredWidthChanged())

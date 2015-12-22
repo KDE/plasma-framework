@@ -407,11 +407,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
         d->containmentPackage = d->applet->containment()->package();
     }
 
-    d->compactRepresentationCheckTimer.setSingleShot(true);
-    d->compactRepresentationCheckTimer.setInterval(250);
-    connect(&d->compactRepresentationCheckTimer, SIGNAL(timeout()),
-            this, SLOT(compactRepresentationCheck()));
-
     if (applet->pluginInfo().isValid()) {
         const QString rootPath = applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
         if (!rootPath.isEmpty()) {
@@ -582,7 +577,7 @@ void AppletQuickItem::init()
     //HACK: check the Layout properties we wrote
     QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(d->qmlObject->rootObject()));
 
-    d->compactRepresentationCheckTimer.start();
+    d->compactRepresentationCheck();
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
     qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
 }
@@ -746,7 +741,7 @@ void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &o
     Q_UNUSED(oldGeometry)
 
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
-    d->compactRepresentationCheckTimer.start();
+    d->compactRepresentationCheck();
 }
 
 void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
