@@ -48,10 +48,6 @@ IconItem::IconItem(QQuickItem *parent)
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
-    m_loadPixmapTimer.setSingleShot(true);
-    m_loadPixmapTimer.setInterval(150);
-    connect(&m_loadPixmapTimer, &QTimer::timeout, this, &IconItem::loadPixmap);
-
     m_animation = new QPropertyAnimation(this);
     connect(m_animation, SIGNAL(valueChanged(QVariant)),
             this, SLOT(valueChanged(QVariant)));
@@ -69,7 +65,7 @@ IconItem::IconItem(QQuickItem *parent)
             this, SIGNAL(implicitHeightChanged()));
 
     connect(this, SIGNAL(enabledChanged()),
-            &m_loadPixmapTimer, SLOT(start()));
+            this, SLOT(loadPixmap()));
 
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -87,8 +83,6 @@ void IconItem::setSource(const QVariant &source)
     }
 
     m_source = source;
-
-    const bool oldValid = isValid();
 
     if (source.canConvert<QIcon>()) {
         m_icon = source.value<QIcon>();
@@ -182,11 +176,7 @@ void IconItem::setSource(const QVariant &source)
     }
 
     if (width() > 0 && height() > 0) {
-        if (!oldValid) {
-            loadPixmap();
-        } else {
-            m_loadPixmapTimer.start();
-        }
+        loadPixmap();
     }
 
     emit sourceChanged();
@@ -403,8 +393,8 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
         m_sizeChanged = true;
         update();
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
-            if (!m_loadPixmapTimer.isActive() && isComponentComplete()) {
-                m_loadPixmapTimer.start();
+            if (isComponentComplete()) {
+                loadPixmap();
             }
         }
     }
@@ -417,4 +407,3 @@ void IconItem::componentComplete()
     QQuickItem::componentComplete();
     loadPixmap();
 }
-
