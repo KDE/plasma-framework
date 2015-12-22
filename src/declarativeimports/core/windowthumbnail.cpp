@@ -101,14 +101,14 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     connect(this, &QQuickItem::enabledChanged, [this]() {
         if (!isEnabled()) {
             stopRedirecting();
-        } else {
+        } else if (isVisible()) {
             startRedirecting();
         }
     });
     connect(this, &QQuickItem::visibleChanged, [this]() {
         if (!isVisible()) {
             stopRedirecting();
-        } else {
+        } else if (isEnabled()) {
             startRedirecting();
         }
     });
