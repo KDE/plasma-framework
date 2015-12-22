@@ -98,6 +98,20 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
         stopRedirecting();
         startRedirecting();
     });
+    connect(this, &QQuickItem::enabledChanged, [this]() {
+        if (!isEnabled()) {
+            stopRedirecting();
+        } else {
+            startRedirecting();
+        }
+    });
+    connect(this, &QQuickItem::visibleChanged, [this]() {
+        if (!isVisible()) {
+            stopRedirecting();
+        } else {
+            startRedirecting();
+        }
+    });
     if (QGuiApplication *gui = dynamic_cast<QGuiApplication *>(QCoreApplication::instance())) {
         m_xcb = (gui->platformName() == QStringLiteral("xcb"));
         if (m_xcb) {
@@ -148,7 +162,11 @@ void WindowThumbnail::setWinId(uint32_t winId)
     }
     stopRedirecting();
     m_winId = winId;
-    startRedirecting();
+
+    if (isEnabled() && isVisible()) {
+        startRedirecting();
+    }
+
     emit winIdChanged();
 }
 
