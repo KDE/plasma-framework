@@ -65,7 +65,7 @@ IconItem::IconItem(QQuickItem *parent)
             this, SIGNAL(implicitHeightChanged()));
 
     connect(this, SIGNAL(enabledChanged()),
-            this, SLOT(loadPixmap()));
+            this, SLOT(schedulePixmapUpdate()));
 
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -97,7 +97,7 @@ void IconItem::setSource(const QVariant &source)
             m_svgIcon = 0;
             m_icon = QIcon();
             emit validChanged();
-            loadPixmap();
+            schedulePixmapUpdate();
             return;
         }
 
@@ -123,7 +123,7 @@ void IconItem::setSource(const QVariant &source)
             //success?
             if (m_svgIcon->isValid() && m_svgIcon->hasElement(m_source.toString())) {
                 m_icon = QIcon();
-                connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(loadPixmap()));
+                connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(schedulePixmapUpdate()));
 
                 //ok, svg not available from the plasma theme
             } else {
@@ -176,7 +176,7 @@ void IconItem::setSource(const QVariant &source)
     }
 
     if (width() > 0 && height() > 0) {
-        loadPixmap();
+        schedulePixmapUpdate();
     }
 
     emit sourceChanged();
@@ -221,7 +221,7 @@ void IconItem::setActive(bool active)
 
     m_active = active;
     if (isComponentComplete()) {
-        loadPixmap();
+        schedulePixmapUpdate();
     }
     emit activeChanged();
 }
@@ -243,6 +243,12 @@ bool IconItem::smooth() const
 bool IconItem::isValid() const
 {
     return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
+}
+
+void IconItem::updatePolish()
+{
+    QQuickItem::updatePolish();
+    loadPixmap();
 }
 
 QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
@@ -313,6 +319,11 @@ void IconItem::animationFinished()
     m_oldIconPixmap = QPixmap();
     m_textureChanged = true;
     update();
+}
+
+void IconItem::schedulePixmapUpdate()
+{
+    polish();
 }
 
 void IconItem::loadPixmap()
@@ -391,11 +402,10 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
 {
     if (newGeometry.size() != oldGeometry.size()) {
         m_sizeChanged = true;
-        update();
         if (newGeometry.width() > 0 && newGeometry.height() > 0) {
-            if (isComponentComplete()) {
-                loadPixmap();
-            }
+            schedulePixmapUpdate();
+        } else {
+            update();
         }
     }
 
@@ -405,5 +415,5 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
 void IconItem::componentComplete()
 {
     QQuickItem::componentComplete();
-    loadPixmap();
+    schedulePixmapUpdate();
 }

@@ -64,6 +64,7 @@ public:
 
     bool isValid() const;
 
+    void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
     void geometryChanged(const QRectF &newGeometry,
@@ -79,11 +80,13 @@ Q_SIGNALS:
     void colorGroupChanged();
 
 private Q_SLOTS:
-    void loadPixmap();
+    void schedulePixmapUpdate();
     void animationFinished();
     void valueChanged(const QVariant &value);
 
 private:
+    void loadPixmap();
+
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
