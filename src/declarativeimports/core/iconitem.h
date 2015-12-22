@@ -94,7 +94,6 @@ private:
     QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
-    QTimer m_loadPixmapTimer;
 
     QSizeF m_implicitSize;
 
