@@ -253,7 +253,8 @@ public:
         ActiveStatus = 2, /**< The Item is active **/
         NeedsAttentionStatus = 3, /**< The Item needs attention **/
         RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
-        AcceptingInputStatus = 5 /**< The Item is accepting input **/
+        AcceptingInputStatus = 5, /**< The Item is accepting input **/
+        HiddenStatus = 6    /**< The Item will be hidden totally  **/
     };
     Q_ENUMS(ItemStatus)
 
