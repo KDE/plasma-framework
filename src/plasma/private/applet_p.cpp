@@ -84,7 +84,9 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
     QObject::connect(actions->action(QStringLiteral("configure")), SIGNAL(triggered()),
                      q, SLOT(requestConfiguration()));
 #ifndef NDEBUG
-    new TimeTracker(q);
+    if (qEnvironmentVariableIsSet("PLASMA_TRACK_STARTUP")) {
+        new TimeTracker(q);
+    }
 #endif
 }
 

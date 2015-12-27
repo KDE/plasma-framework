@@ -60,7 +60,9 @@ Corona::Corona(QObject *parent)
     d->init();
 
 #ifndef NDEBUG
-    new Plasma::TimeTracker(this);
+    if (qEnvironmentVariableIsSet("PLASMA_TRACK_STARTUP")) {
+        new TimeTracker(this);
+    }
 #endif
 }
 

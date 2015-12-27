@@ -57,10 +57,6 @@ ContainmentPrivate::ContainmentPrivate(Containment *c):
     if (appletParent) {
         QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
     }
-
-#ifndef NDEBUG
-    new TimeTracker(q);
-#endif
 }
 
 Plasma::ContainmentPrivate::~ContainmentPrivate()
