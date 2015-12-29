@@ -133,7 +133,7 @@ void IconItem::setSource(const QVariant &source)
                 if (iconTheme) {
                     iconTheme->iconPath(source.toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                     if (iconPath.isEmpty()) {
-                        iconPath = iconTheme->iconPath(source.toString() + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
+                        iconPath = iconTheme->iconPath(source.toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                     }
                 } else {
                     qWarning() << "KIconLoader has no theme set";
@@ -198,6 +198,7 @@ void IconItem::setColorGroup(Plasma::Theme::ColorGroup group)
 
     if (m_svgIcon) {
         m_svgIcon->setColorGroup(group);
+        loadPixmap();
     }
 
     emit colorGroupChanged();
@@ -351,7 +352,7 @@ void IconItem::loadPixmap()
             if (iconTheme) {
                 QString iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                 if (iconPath.isEmpty()) {
-                    iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
+                    iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                 }
             } else {
                 qWarning() << "KIconLoader has no theme set";

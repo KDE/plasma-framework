@@ -79,7 +79,7 @@ QtQuickControlStyle.ButtonStyle {
                 Layout.minimumHeight: Layout.minimumWidth
                 Layout.maximumHeight: Layout.minimumWidth
                 active: style.controlHovered
-                colorGroup: style.controlHovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                colorGroup: controlHovered || !flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
             }
 
             PlasmaComponents.Label {
@@ -90,7 +90,7 @@ QtQuickControlStyle.ButtonStyle {
                 visible: control.text != ""
                 Layout.fillWidth: true
                 height: parent.height
-                color: style.controlHovered || !style.flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
+                color: controlHovered || !flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight

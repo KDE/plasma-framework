@@ -2,4 +2,4 @@ set(apptemplate_DIRS
     qml-plasmoid
     cpp-plasmoid)
 
-kdetemplate_add_app_templates(${apptemplate_DIRS})
+kde_package_app_templates(TEMPLATES ${apptemplate_DIRS} INSTALL_DIR ${KDE_INSTALL_KTEMPLATESDIR})
