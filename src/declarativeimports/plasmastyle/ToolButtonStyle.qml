@@ -144,7 +144,7 @@ QtQuickControlStyle.ButtonStyle {
             property alias hasOverState: roundShadow.hasOverState
             Private.RoundShadow {
                 id: roundShadow
-                visible: !style.flat
+                visible: !style.flat || control.activeFocus
                 anchors.fill: parent
                 state: {
                     if (control.pressed) {
@@ -206,7 +206,7 @@ QtQuickControlStyle.ButtonStyle {
 
             Private.ButtonShadow {
                 id: shadow
-                visible: !style.flat
+                visible: !style.flat || control.activeFocus
                 anchors.fill: parent
                 state: {
                     if (control.pressed) {
