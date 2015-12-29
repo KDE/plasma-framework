@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QQmlEngine>
 #include <QFile>
+#include <QFileInfo>
 #include <QStandardPaths>
 
 #include <Plasma/PluginLoader>
@@ -87,9 +88,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         package = d->package;
     } else {
         foreach (const QString &base, QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)) {
-            pkgRoot = base + "/plasma/plasmoids/";
-            if (path.path().startsWith(pkgRoot)) {
-                const QString pkgName = path.path().mid(pkgRoot.length()).split('/').first();
+            pkgRoot = QFileInfo(base + "/plasma/plasmoids/").canonicalFilePath();
+            if (!pkgRoot.isEmpty() && path.path().startsWith(pkgRoot)) {
+                const QString pkgName = path.path().mid(pkgRoot.length() + 1).split('/').first();
                 if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
                     package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
                 } else {
