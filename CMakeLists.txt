@@ -22,7 +22,7 @@ include(ECMQtDeclareLoggingCategory)
 include(KDEPackageAppTemplates)
 
 set(KF5_VERSION "5.18.0") # handled by release scripts
-set(KF5_DEP_VERSION "5.17.0") # handled by release scripts
+set(KF5_DEP_VERSION "5.18.0") # handled by release scripts
 
 ecm_setup_version(${KF5_VERSION}
                   VARIABLE_PREFIX PLASMA
