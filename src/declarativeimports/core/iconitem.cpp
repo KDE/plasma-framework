@@ -246,6 +246,16 @@ bool IconItem::isValid() const
     return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
 }
 
+int IconItem::paintedWidth() const
+{
+    return Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+}
+
+int IconItem::paintedHeight() const
+{
+    return Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+}
+
 void IconItem::updatePolish()
 {
     QQuickItem::updatePolish();
@@ -407,6 +417,11 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
             schedulePixmapUpdate();
         } else {
             update();
+        }
+
+        if (Units::roundToIconSize(qMin(oldGeometry.size().width(), oldGeometry.size().height())) !=
+            Units::roundToIconSize(qMin(newGeometry.size().width(), newGeometry.size().height()))) {
+            emit paintedSizeChanged();
         }
     }
 

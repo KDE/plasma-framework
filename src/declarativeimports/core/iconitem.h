@@ -44,6 +44,8 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
+    Q_PROPERTY(int paintedWidth READ paintedWidth NOTIFY paintedSizeChanged)
+    Q_PROPERTY(int paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
 
 public:
 
@@ -64,6 +66,9 @@ public:
 
     bool isValid() const;
 
+    int paintedWidth() const;
+    int paintedHeight() const;
+
     void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
@@ -78,6 +83,7 @@ Q_SIGNALS:
     void smoothChanged();
     void validChanged();
     void colorGroupChanged();
+    void paintedSizeChanged();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
