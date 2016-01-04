@@ -101,6 +101,15 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(int toolTipTextFormat READ toolTipTextFormat WRITE setToolTipTextFormat NOTIFY toolTipTextFormatChanged)
 
     /**
+     * This allows to set custom full QML items as the tooltip.
+     * It will ignore all texts set by setToolTipMainText or setToolTipSubText
+     *
+     * @since: 5.19
+     */
+    Q_PROPERTY(QQuickItem *toolTipItem READ toolTipItem WRITE setToolTipItem NOTIFY toolTipItemChanged)
+
+
+    /**
      * Icon to represent the plasmoid
      */
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
@@ -285,6 +294,9 @@ public:
     int toolTipTextFormat() const;
     void setToolTipTextFormat(int format);
 
+    QQuickItem *toolTipItem() const;
+    void setToolTipItem(QQuickItem *toolTipItem);
+
     uint id() const;
 
     Plasma::Types::FormFactor formFactor() const;
@@ -353,6 +365,7 @@ Q_SIGNALS:
     void toolTipMainTextChanged();
     void toolTipSubTextChanged();
     void toolTipTextFormatChanged();
+    void toolTipItemChanged();
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
@@ -391,6 +404,7 @@ private:
     QString m_toolTipMainText;
     QString m_toolTipSubText;
     int m_toolTipTextFormat;
+    QPointer<QQuickItem> m_toolTipItem;
     QVariantList m_args;
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_busy : 1;

@@ -53,6 +53,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_configuration(0),
       m_appletScriptEngine(script),
       m_toolTipTextFormat(0),
+      m_toolTipItem(0),
       m_args(args),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_busy(false),
@@ -348,6 +349,24 @@ void AppletInterface::setToolTipTextFormat(int format)
 
     m_toolTipTextFormat = format;
     emit toolTipTextFormatChanged();
+}
+
+QQuickItem *AppletInterface::toolTipItem() const
+{
+    return m_toolTipItem.data();
+}
+
+void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
+{
+    if (m_toolTipItem.data() == toolTipItem) {
+        return;
+    }
+
+    connect(m_toolTipItem.data(), &QObject::destroyed,
+            this, &AppletInterface::toolTipItemChanged);
+
+    m_toolTipItem = toolTipItem;
+    emit toolTipItemChanged();
 }
 
 bool AppletInterface::isBusy() const
