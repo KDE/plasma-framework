@@ -117,7 +117,7 @@ void Units::updatePlasmaRCSettings()
 void Units::iconLoaderSettingsChanged()
 {
     // These are not scaled, we respect the user's setting over dpi scaling
-    m_iconSizes->insert("desktop", QVariant(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert("desktop", devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
 
     // The following icon sizes are fully scaled to dpi
     m_iconSizes->insert("tiny", devicePixelIconSize(KIconLoader::SizeSmall) / 2);
