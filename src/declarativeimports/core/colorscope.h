@@ -91,6 +91,8 @@ private:
     Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
     QPointer<ColorScope> m_parentScope;
+
+    static QHash<QObject *, ColorScope *> s_attachedScopes;
 };
 
 QML_DECLARE_TYPEINFO(ColorScope, QML_HAS_ATTACHED_PROPERTIES)

@@ -24,6 +24,7 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 
+QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, ColorScope *>();
 
 ColorScope::ColorScope(QQuickItem *parent)
     : QQuickItem(parent),
@@ -31,17 +32,29 @@ ColorScope::ColorScope(QQuickItem *parent)
       m_group(Plasma::Theme::NormalColorGroup)
 {
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
+
+    if (parent) {
+        connect(parent, &QQuickItem::parentChanged, this, &ColorScope::colorGroupChanged);
+        connect(parent, &QQuickItem::parentChanged, this, &ColorScope::colorsChanged);
+    }
 }
 
 ColorScope::~ColorScope()
 {
-
+    s_attachedScopes.remove(parentItem());
 }
 
 ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 {
     QQuickItem *qp = qobject_cast<QQuickItem *>(object);
+
+    if (ColorScope::s_attachedScopes.contains(object)) {
+        return s_attachedScopes.value(object);
+    }
+
     ColorScope *s = new ColorScope(qp);
+    s_attachedScopes[object] = s;
+
     if (!qp) {
         s->setParent(object);
     }
@@ -51,46 +64,43 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 
 ColorScope *ColorScope::findParentScope() const
 {
-    QObject *p = parentItem();
-    if (!p) {
-        p = parent();
+    QQuickItem *p = 0;
+    if (parentItem()) {
+        p = parentItem()->parentItem();
     }
 
-    while (p) {
-        ColorScope *c = qobject_cast<ColorScope *>(p);
-        if (c) {
-            if (c != m_parentScope) {
-                if (m_parentScope) {
-                    disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
-                            this, &ColorScope::colorGroupChanged);
-                    disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
-                            this, &ColorScope::colorsChanged);
-                }
-                connect(c, &ColorScope::colorGroupChanged,
-                        this, &ColorScope::colorGroupChanged);
-                connect(c, &ColorScope::colorsChanged,
-                        this, &ColorScope::colorsChanged);
-                //HACK
-                const_cast<ColorScope *>(this)->m_parentScope = c;
-            }
-            return m_parentScope;
+    if (!p || !parentItem()) {
+        if (m_parentScope) {
+            disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
+                    this, &ColorScope::colorGroupChanged);
+            disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
+                    this, &ColorScope::colorsChanged);
         }
-
-        if (QQuickItem *qi = qobject_cast<QQuickItem *>(p)) {
-            p = qi->parentItem();
-        } else {
-            p = p->parent();
-        }
+        return 0;
     }
 
-    if (m_parentScope) {
-        disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
+    ColorScope *c = qobject_cast<ColorScope *>(p);
+    if (!c) {
+        c = qmlAttachedProperties(p);
+    }
+
+    if (c != m_parentScope) {
+        if (m_parentScope) {
+            disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
+                    this, &ColorScope::colorGroupChanged);
+            disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
+                    this, &ColorScope::colorsChanged);
+        }
+        connect(c, &ColorScope::colorGroupChanged,
                 this, &ColorScope::colorGroupChanged);
-        disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
+        connect(c, &ColorScope::colorsChanged,
                 this, &ColorScope::colorsChanged);
+        //HACK
+        const_cast<ColorScope *>(this)->m_parentScope = c;
     }
-    const_cast<ColorScope *>(this)->m_parentScope.clear();
-    return 0;
+
+
+    return m_parentScope;
 }
 
 void ColorScope::setColorGroup(Plasma::Theme::ColorGroup group)
