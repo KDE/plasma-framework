@@ -42,6 +42,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_svgIcon(0),
       m_smooth(false),
       m_active(false),
+      m_animated(true),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_svgFromIconLoader(false),
@@ -241,6 +242,21 @@ bool IconItem::smooth() const
     return m_smooth;
 }
 
+bool IconItem::isAnimated() const
+{
+    return m_animated;
+}
+
+void IconItem::setAnimated(bool animated)
+{
+    if (m_animated == animated) {
+        return;
+    }
+
+    m_animated = animated;
+    emit animatedChanged();
+}
+
 bool IconItem::isValid() const
 {
     return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
@@ -397,7 +413,7 @@ void IconItem::loadPixmap()
     m_textureChanged = true;
 
     //don't animate initial setting
-    if (!m_oldIconPixmap.isNull() && !m_sizeChanged) {
+    if (m_animated && !m_oldIconPixmap.isNull() && !m_sizeChanged) {
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
         m_animation->start();
