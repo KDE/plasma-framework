@@ -41,6 +41,7 @@ Item {
     state: parent.state
     //used to tell apart this implementation with the touch components one
     property bool hasOverState: true
+    property alias enabledBorders: shadow.enabledBorders
 
     PlasmaCore.FrameSvgItem {
         id: hover

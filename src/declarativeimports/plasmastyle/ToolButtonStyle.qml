@@ -208,6 +208,7 @@ QtQuickControlStyle.ButtonStyle {
                 id: shadow
                 visible: !style.flat || control.activeFocus
                 anchors.fill: parent
+                enabledBorders: surfaceNormal.enabledBorders
                 state: {
                     if (control.pressed) {
                         return "hidden"
