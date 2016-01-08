@@ -91,6 +91,7 @@ private:
     Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
     QPointer<ColorScope> m_parentScope;
+    QQuickItem *m_parent;
 
     static QHash<QObject *, ColorScope *> s_attachedScopes;
 };
