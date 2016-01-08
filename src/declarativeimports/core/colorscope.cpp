@@ -26,11 +26,11 @@
 
 QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, ColorScope *>();
 
-ColorScope::ColorScope(QQuickItem *parent)
+ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
     : QQuickItem(parent),
       m_inherit(false),
       m_group(Plasma::Theme::NormalColorGroup),
-      m_parent(parent)
+      m_parent(parentObject)
 {
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
 
@@ -53,7 +53,7 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
         return s_attachedScopes.value(object);
     }
 
-    ColorScope *s = new ColorScope(qp);
+    ColorScope *s = new ColorScope(qp, object);
     s_attachedScopes[object] = s;
 
     if (!qp) {
@@ -65,9 +65,14 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 
 ColorScope *ColorScope::findParentScope() const
 {
-    QQuickItem *p = 0;
+    QObject *p = 0;
     if (m_parent) {
-        p = m_parent->parentItem();
+        QQuickItem *gp = qobject_cast<QQuickItem *>(m_parent);
+        if (gp) {
+            p = gp->parentItem();
+        } else {
+            p = m_parent->parent();
+        }
     }
 
     if (!p || !m_parent) {

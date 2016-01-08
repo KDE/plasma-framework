@@ -61,7 +61,7 @@ class ColorScope : public QQuickItem
 
 public:
 /// @cond INTERNAL_DOCS
-    ColorScope(QQuickItem *parent = 0);
+    ColorScope(QQuickItem *parent = 0, QObject *parentObject = 0);
     ~ColorScope();
 
     void setColorGroup(Plasma::Theme::ColorGroup group);
@@ -91,7 +91,7 @@ private:
     Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
     QPointer<ColorScope> m_parentScope;
-    QQuickItem *m_parent;
+    QObject *m_parent;
 
     static QHash<QObject *, ColorScope *> s_attachedScopes;
 };

@@ -39,6 +39,17 @@ ColumnLayout {
             Column {
                 id: widgetsParent
                 anchors.centerIn: parent
+                PlasmaCore.Svg {
+                    id: audioSvg
+                    imagePath: "icons/audio"
+                    colorGroup: PlasmaCore.ColorScope.colorGroup
+                }
+                PlasmaCore.SvgItem {
+                    width: 32
+                    height: 32
+                    elementId: "audio-volume-medium"
+                    svg: audioSvg
+                }
                 Row {
                     PlasmaCore.IconItem {
                         colorGroup: PlasmaCore.ColorScope.colorGroup
