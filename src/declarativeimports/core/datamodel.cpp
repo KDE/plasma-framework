@@ -24,8 +24,6 @@
 #include <QQmlEngine>
 #include <QTimer>
 
-#include <QDebug>
-
 namespace Plasma
 {
 
@@ -437,25 +435,39 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
 void DataModel::removeSource(const QString &sourceName)
 {
-    //FIXME: this could be way more efficient by not resetting the whole model
     //FIXME: find a way to remove only the proper things also in the case where sources are items
 
     if (m_keyRoleFilter.isEmpty()) {
         //source name in the map, linear scan
         for (int i = 0; i < m_items.value(QString()).count(); ++i) {
             if (m_items.value(QString())[i].value<QVariantMap>().value("DataEngineSource") == sourceName) {
-                beginResetModel();
+                beginRemoveRows(QModelIndex(), i, i);
                 m_items[QString()].remove(i);
-                endResetModel();
+                endRemoveRows();
                 break;
             }
         }
     } else {
-        //source name as key of the map
         if (m_items.contains(sourceName)) {
-            beginResetModel();
+            //At what row number the first item associated to this source starts
+            int sourceIndex = 0;
+            for (auto i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
+                if (i.key() == sourceName) {
+                    break;
+                }
+                sourceIndex += i.value().count();
+            }
+
+            //source name as key of the map
+
+            int count = m_items.value(sourceName).count();
+            if (count > 0) {
+                beginRemoveRows(QModelIndex(), sourceIndex, sourceIndex + count - 1);
+            }
             m_items.remove(sourceName);
-            endResetModel();
+            if (count > 0) {
+                endRemoveRows();
+            }
         }
     }
 }
