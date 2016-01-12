@@ -288,6 +288,8 @@ public:
      * Returns a pointer to the applet if successful.
      * The caller takes responsibility for the applet, including
      * deleting it when no longer needed.
+     * Deprecated: use Containment::createApplet instead, you are not
+     * supposed to have applets without containments
      *
      * @param path the path to the package
      * @param appletId unique ID to assign the applet, or zero to have one
@@ -295,7 +297,7 @@ public:
      * @return a pointer to the loaded applet, or 0 on load failure
      * @since 4.3
      **/
-    static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
+    PLASMA_DEPRECATED static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
 
     /**
      * @returns The icon name related to this applet
