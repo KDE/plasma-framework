@@ -290,6 +290,8 @@ public:
      * deleting it when no longer needed.
      * Deprecated: use Containment::createApplet instead, you are not
      * supposed to have applets without containments
+     * If you instance a plasmoid with this deprecated API, the
+     * automated default setup scripts won't be executed for that plasmoid
      *
      * @param path the path to the package
      * @param appletId unique ID to assign the applet, or zero to have one
