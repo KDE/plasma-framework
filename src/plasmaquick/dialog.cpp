@@ -279,7 +279,7 @@ void DialogPrivate::updateVisibility(bool visible)
     }
 
 
-    if (!(q->flags() & Qt::ToolTip)) {
+    if (!(q->flags() & Qt::ToolTip) && type != Dialog::Notification) {
         KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
 
         switch (location) {
