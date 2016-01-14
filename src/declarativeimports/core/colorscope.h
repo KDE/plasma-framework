@@ -79,9 +79,6 @@ public:
     ColorScope *findParentScope() const;
     void itemChange(ItemChange change, const ItemChangeData &value);
 
-protected:
-    bool event(QEvent *event);
-
 Q_SIGNALS:
     void colorGroupChanged();
     void colorsChanged();

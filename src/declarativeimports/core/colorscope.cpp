@@ -34,9 +34,10 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
 {
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
 
-    if (parent) {
-        connect(parent, &QQuickItem::parentChanged, this, &ColorScope::colorGroupChanged);
-        connect(parent, &QQuickItem::parentChanged, this, &ColorScope::colorsChanged);
+    QQuickItem *parentItem = qobject_cast<QQuickItem *>(parentObject);
+    if (parentItem) {
+        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::colorGroupChanged);
+        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::colorsChanged);
     }
 }
 
@@ -47,18 +48,15 @@ ColorScope::~ColorScope()
 
 ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 {
-    QQuickItem *qp = qobject_cast<QQuickItem *>(object);
-
     if (ColorScope::s_attachedScopes.contains(object)) {
         return s_attachedScopes.value(object);
     }
 
-    ColorScope *s = new ColorScope(qp, object);
+    ColorScope *s = new ColorScope(0, object);
     s_attachedScopes[object] = s;
 
-    if (!qp) {
-        s->setParent(object);
-    }
+    s->setParent(object);
+
     s->m_inherit = true;
     return s;
 }
@@ -180,14 +178,5 @@ void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
-bool ColorScope::event(QEvent *event)
-{
-    if (event->type() == QEvent::ParentChange) {
-        emit colorGroupChanged();
-        emit colorsChanged();
-    }
-
-    return QQuickItem::event(event);
-}
 
 #include "moc_colorscope.cpp"
