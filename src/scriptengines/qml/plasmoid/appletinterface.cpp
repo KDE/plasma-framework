@@ -499,6 +499,13 @@ void AppletInterface::removeAction(const QString &name)
     m_actions.removeAll(name);
 }
 
+void AppletInterface::clearActions()
+{
+    Q_FOREACH (const QString &action, m_actions) {
+        removeAction(action);
+    }
+}
+
 QAction *AppletInterface::action(QString name) const
 {
     return applet()->actions()->action(name);

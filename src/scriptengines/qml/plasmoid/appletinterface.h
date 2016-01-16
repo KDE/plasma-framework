@@ -242,6 +242,8 @@ public:
 
     Q_INVOKABLE void removeAction(const QString &name);
 
+    Q_INVOKABLE void clearActions();
+
     Q_INVOKABLE QAction *action(QString name) const;
 
     /**
