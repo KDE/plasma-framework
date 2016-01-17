@@ -255,8 +255,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
         return;
     }
 
-    //ignore 0,0 sizes;
-    if (q->width() <= 0 && q->height() <= 0) {
+    //ignore 0 sizes;
+    if (q->width() <= 0 || q->height() <= 0) {
         return;
     }
 
