@@ -105,7 +105,9 @@ void Units::settingsFileChanged(const QString &file)
 void Units::updatePlasmaRCSettings()
 {
     KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
-    const int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
+    // Animators with a duration of 0 do not fire reliably
+    // see Bug 357532 and QTBUG-39766
+    const int longDuration = qMax(1, cfg.readEntry("longDuration", defaultLongDuration));
 
     if (longDuration != m_longDuration) {
         m_longDuration = longDuration;
@@ -257,7 +259,7 @@ int Units::longDuration() const
 
 int Units::shortDuration() const
 {
-    return m_longDuration / 5;
+    return qMax(1, m_longDuration / 5);
 }
 
 #include "moc_units.cpp"
