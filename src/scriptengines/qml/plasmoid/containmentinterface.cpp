@@ -109,35 +109,37 @@ void ContainmentInterface::init()
             defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Panel");
         }
 
-        KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("KPackage/GenericQML");
-        pkg.setDefaultPackageRoot("plasma/packages");
-
         if (defaults.isValid()) {
-            pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
-        } else {
-            pkg.setPath("org.kde.desktoptoolbox");
-        }
+            KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("KPackage/GenericQML");
+            pkg.setDefaultPackageRoot("plasma/packages");
 
-        PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
-        if (interceptor) {
-            interceptor->addAllowedPath(pkg.path());
-        }
+            if (defaults.isValid()) {
+                pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
+            } else {
+                pkg.setPath("org.kde.desktoptoolbox");
+            }
 
-        if (pkg.metadata().isValid() && !pkg.metadata().isHidden()) {
-            if (pkg.isValid()) {
-                QObject *containmentGraphicObject = qmlObject()->rootObject();
+            PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
+            if (interceptor) {
+                interceptor->addAllowedPath(pkg.path());
+            }
 
-                QVariantHash toolboxProperties;
-                toolboxProperties["parent"] = QVariant::fromValue(this);
-                QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), 0, toolboxProperties);
-                if (toolBoxObject && containmentGraphicObject) {
-                    containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+            if (pkg.metadata().isValid() && !pkg.metadata().isHidden()) {
+                if (pkg.isValid()) {
+                    QObject *containmentGraphicObject = qmlObject()->rootObject();
+
+                    QVariantHash toolboxProperties;
+                    toolboxProperties["parent"] = QVariant::fromValue(this);
+                    QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), 0, toolboxProperties);
+                    if (toolBoxObject && containmentGraphicObject) {
+                        containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
+                    }
+                } else {
+                    qWarning() << "Could not load toolbox package." << pkg.path();
                 }
             } else {
-                qWarning() << "Could not load toolbox package." << pkg.path();
+                qWarning() << "Toolbox not loading, toolbox package is either invalid or disabled.";
             }
-        } else {
-            qWarning() << "Toolbox not loading, toolbox package is either invalid or disabled.";
         }
 
     }
