@@ -85,15 +85,14 @@ void IconItem::setSource(const QVariant &source)
 
     m_source = source;
 
-    if (source.canConvert<QIcon>()) {
-        m_icon = source.value<QIcon>();
-        m_imageIcon = QImage();
-        m_pixmapIcon = QPixmap();
-        delete m_svgIcon;
-        m_svgIcon = 0;
+    // If the QIcon was created with QIcon::fromTheme(), try to load it as svg
+    if (m_source.canConvert<QIcon>() && !m_source.value<QIcon>().name().isEmpty()) {
+        m_source = m_source.value<QIcon>().name();
+    }
 
-    } else if (source.canConvert<QString>()) {
-        if (source.toString().isEmpty()) {
+    if (m_source.canConvert<QString>()) {
+        const QString sourceString = m_source.toString();
+        if (sourceString.isEmpty()) {
             delete m_svgIcon;
             m_svgIcon = 0;
             m_icon = QIcon();
@@ -103,7 +102,7 @@ void IconItem::setSource(const QVariant &source)
         }
 
         //If a url in the form file:// is passed, take the image pointed by that from disk
-        QUrl url = QUrl(source.toString());
+        QUrl url(sourceString);
         if (url.isLocalFile()) {
             m_icon = QIcon();
             m_imageIcon = QImage(url.path());
@@ -117,12 +116,12 @@ void IconItem::setSource(const QVariant &source)
                 m_svgIcon->setDevicePixelRatio((window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
             }
             //try as a svg icon
-            m_svgIcon->setImagePath(QLatin1String("icons/") + source.toString().split('-').first());
+            m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.split('-').first());
 
             m_svgIcon->setContainsMultipleImages(true);
 
             //success?
-            if (m_svgIcon->isValid() && m_svgIcon->hasElement(m_source.toString())) {
+            if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
                 connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(schedulePixmapUpdate()));
 
@@ -132,9 +131,9 @@ void IconItem::setSource(const QVariant &source)
                 const auto *iconTheme = KIconLoader::global()->theme();
                 QString iconPath;
                 if (iconTheme) {
-                    iconTheme->iconPath(source.toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
+                    iconTheme->iconPath(sourceString + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                     if (iconPath.isEmpty()) {
-                        iconPath = iconTheme->iconPath(source.toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
+                        iconPath = iconTheme->iconPath(sourceString + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                     }
                 } else {
                     qWarning() << "KIconLoader has no theme set";
@@ -145,7 +144,7 @@ void IconItem::setSource(const QVariant &source)
                     m_svgIcon->setImagePath(iconPath);
                 //fail, use QIcon
                 } else {
-                    m_icon = QIcon::fromTheme(source.toString());
+                    m_icon = QIcon::fromTheme(sourceString);
                     delete m_svgIcon;
                     m_svgIcon = 0;
                     m_imageIcon = QImage();
@@ -153,6 +152,13 @@ void IconItem::setSource(const QVariant &source)
                 }
             }
         }
+
+    } else if (source.canConvert<QIcon>()) {
+        m_icon = source.value<QIcon>();
+        m_imageIcon = QImage();
+        m_pixmapIcon = QPixmap();
+        delete m_svgIcon;
+        m_svgIcon = 0;
 
     } else if (source.canConvert<QPixmap>()) {
         m_icon = QIcon();
