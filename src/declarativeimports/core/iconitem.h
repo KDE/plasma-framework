@@ -44,6 +44,7 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
+    Q_PROPERTY(bool usesPlasmaTheme READ usesPlasmaTheme WRITE setUsesPlasmaTheme NOTIFY usesPlasmaThemeChanged)
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     Q_PROPERTY(int paintedWidth READ paintedWidth NOTIFY paintedSizeChanged)
     Q_PROPERTY(int paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
@@ -68,6 +69,9 @@ public:
     bool isAnimated() const;
     void setAnimated(bool animated);
 
+    bool usesPlasmaTheme() const;
+    void setUsesPlasmaTheme(bool usesPlasmaTheme);
+
     bool isValid() const;
 
     int paintedWidth() const;
@@ -86,6 +90,7 @@ Q_SIGNALS:
     void sourceChanged();
     void smoothChanged();
     void animatedChanged();
+    void usesPlasmaThemeChanged();
     void validChanged();
     void colorGroupChanged();
     void paintedSizeChanged();
@@ -111,6 +116,7 @@ private:
     bool m_smooth;
     bool m_active;
     bool m_animated;
+    bool m_usesPlasmaTheme;
 
     bool m_textureChanged;
     bool m_sizeChanged;

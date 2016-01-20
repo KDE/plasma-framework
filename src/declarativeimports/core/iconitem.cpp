@@ -43,6 +43,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_smooth(false),
       m_active(false),
       m_animated(true),
+      m_usesPlasmaTheme(true),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_svgFromIconLoader(false),
@@ -115,10 +116,12 @@ void IconItem::setSource(const QVariant &source)
                 m_svgIcon->setColorGroup(m_colorGroup);
                 m_svgIcon->setDevicePixelRatio((window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
             }
-            //try as a svg icon
-            m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.split('-').first());
 
-            m_svgIcon->setContainsMultipleImages(true);
+            if (m_usesPlasmaTheme) {
+                //try as a svg icon from plasma theme
+                m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.split('-').first());
+                m_svgIcon->setContainsMultipleImages(true);
+            }
 
             //success?
             if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
@@ -261,6 +264,29 @@ void IconItem::setAnimated(bool animated)
 
     m_animated = animated;
     emit animatedChanged();
+}
+
+bool IconItem::usesPlasmaTheme() const
+{
+    return m_usesPlasmaTheme;
+}
+
+void IconItem::setUsesPlasmaTheme(bool usesPlasmaTheme)
+{
+    if (m_usesPlasmaTheme == usesPlasmaTheme) {
+        return;
+    }
+
+    m_usesPlasmaTheme = usesPlasmaTheme;
+
+    // Reload icon with new settings
+    if (m_svgIcon && m_svgIcon->hasElement(m_source.toString())) {
+        const QVariant src = m_source;
+        m_source.clear();
+        setSource(src);
+    }
+
+    emit usesPlasmaThemeChanged();
 }
 
 bool IconItem::isValid() const
