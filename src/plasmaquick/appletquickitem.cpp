@@ -535,16 +535,20 @@ void AppletQuickItem::init()
     QVariantHash initialProperties;
     //initialize with our size only if valid
     if (width() > 0 && height() > 0) {
-        initialProperties[QStringLiteral("width")] = width();
-        initialProperties[QStringLiteral("height")] = height();
+        const qreal w = parentItem() ? std::min(parentItem()->width(), width()) : width();
+        const qreal h = parentItem() ? std::min(parentItem()->height(), height()) : height();
+        initialProperties[QStringLiteral("width")] = w;
+        initialProperties[QStringLiteral("height")] = h;
     }
     d->qmlObject->setInitializationDelayed(false);
     d->qmlObject->completeInitialization(initialProperties);
 
     //otherwise, initialize our size to root object's size
     if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
-        setWidth(d->qmlObject->rootObject()->property("width").value<qreal>());
-        setHeight(d->qmlObject->rootObject()->property("height").value<qreal>());
+        const qreal w = d->qmlObject->rootObject()->property("width").value<qreal>();
+        const qreal h = d->qmlObject->rootObject()->property("height").value<qreal>();
+        setWidth(parentItem() ? std::min(parentItem()->width(), w) : w);
+        setHeight(parentItem() ? std::min(parentItem()->height(), h) : h);
     }
 
     //default fullrepresentation is our root main component, if none specified
