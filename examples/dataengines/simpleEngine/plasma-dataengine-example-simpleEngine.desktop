@@ -70,6 +70,7 @@ Comment[sv]=En mycket grundläggande implementering av DataEngine
 Comment[tr]=Çok basit bir VeriMotoru gerçekleştirimi
 Comment[uk]=Базова реалізація рушія даних
 Comment[x-test]=xxA very basic DataEngine implementationxx
+Comment[zh_CN]=非常基础的数据引擎实现
 Comment[zh_TW]=非常基本的 DataEngine 實作
 Type=Service
 Icon=plasma

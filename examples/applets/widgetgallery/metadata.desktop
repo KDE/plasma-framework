@@ -71,6 +71,7 @@ Comment[sv]=galleri av grafiska komponenter skapade med Plasma Qt-komponenter
 Comment[tr]=Plasma QtComponents ile yapılmış parçacık galerisi
 Comment[uk]=Галерея віджетів, створених за допомогою QtComponent-ів Плазми
 Comment[x-test]=xxgallery of widgets done with Plasma QtComponentsxx
+Comment[zh_CN]=Plasma Qt 部件实现的部件展示
 Comment[zh_TW]=Plasma QtComponents 的元件集
 Type=Service
 ServiceTypes=Plasma/Applet
