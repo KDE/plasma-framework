@@ -53,6 +53,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
+      complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(0)),
       defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
       defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -563,75 +564,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 
     //this doesn't have a real kcolorscheme
     case Theme::ComplementaryColorGroup: {
-        switch (role) {
-        case Theme::TextColor: {
-            if (!colors) {
-                return colorScheme.foreground(KColorScheme::NormalText).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("ForegroundNormal", colorScheme.foreground(KColorScheme::NormalText).color());
-            } else {
-                return colorScheme.foreground(KColorScheme::NormalText).color();
-            }
-        }
-        case Theme::BackgroundColor: {
-            if (!colors) {
-                return colorScheme.background(KColorScheme::NormalBackground).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("BackgroundNormal", colorScheme.background(KColorScheme::NormalBackground).color());
-            } else {
-                return colorScheme.background(KColorScheme::NormalBackground).color();
-            }
-        }
-        case Theme::HighlightColor:
-        case Theme::HoverColor: {
-            if (!colors) {
-                return colorScheme.decoration(KColorScheme::HoverColor).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("DecorationFocus", colorScheme.decoration(KColorScheme::HoverColor).color());
-            } else {
-                return colorScheme.decoration(KColorScheme::HoverColor).color();
-            }
-        }
-        case Theme::FocusColor: {
-            if (!colors) {
-                return colorScheme.decoration(KColorScheme::FocusColor).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("DecorationHover", colorScheme.decoration(KColorScheme::FocusColor).color());
-            } else {
-                return colorScheme.decoration(KColorScheme::FocusColor).color();
-            }
-        }
-        case Theme::LinkColor: {
-            if (!colors) {
-                return viewColorScheme.foreground(KColorScheme::LinkText).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("ForegroundLink", viewColorScheme.foreground(KColorScheme::LinkText).color());
-            } else {
-                return viewColorScheme.foreground(KColorScheme::LinkText).color();
-            }
-        }
-        case Theme::VisitedLinkColor: {
-            if (!colors) {
-                return viewColorScheme.foreground(KColorScheme::VisitedText).color();
-            }
-            KConfigGroup cg(colors, "Colors:Complementary");
-            if (cg.isValid()) {
-                return cg.readEntry("ForegroundVisited", viewColorScheme.foreground(KColorScheme::VisitedText).color());
-            } else {
-                return viewColorScheme.foreground(KColorScheme::VisitedText).color();
-            }
-        }
-        }
+        scheme = &complementaryColorScheme;
         break;
     }
 
@@ -773,6 +706,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
+    complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
     const QString wallpaperPath = QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1Literal("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 
