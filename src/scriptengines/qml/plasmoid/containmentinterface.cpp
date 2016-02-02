@@ -765,6 +765,10 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     m_appletInterfaces << appletGraphicObject;
+    connect(appletGraphicObject, &QObject::destroyed, this,
+            [this](QObject *obj) {
+                m_appletInterfaces.removeAll(obj);
+            });
     emit appletAdded(appletGraphicObject, appletGraphicObject->m_positionBeforeRemoval.x(), appletGraphicObject->m_positionBeforeRemoval.y());
     emit appletsChanged();
 }
