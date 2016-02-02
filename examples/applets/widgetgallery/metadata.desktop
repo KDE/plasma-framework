@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Widgets gallery
+Name[ast]=Galería de widgets
 Name[bs]=galerija dodataka
 Name[ca]=Galeria d'estris
 Name[ca@valencia]=Galeria d'estris
@@ -38,6 +39,7 @@ Name[x-test]=xxWidgets galleryxx
 Name[zh_CN]=部件浏览器
 Name[zh_TW]=元件集
 Comment=gallery of widgets done with Plasma QtComponents
+Comment[ast]=galería de widgets fecha con QTComponents de Plasma
 Comment[bs]=galerija dodataka urađena sa plazma Qt komponentama
 Comment[ca]=Galeria d'estris fets amb el «QtComponents» del Plasma
 Comment[ca@valencia]=Galeria d'estris fets amb el «QtComponents» del Plasma

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Declarative widget
+Name[ast]=Widget declarativu
 Name[bs]=Deklarativna grafička kontrola
 Name[ca]=Estri declaratiu
 Name[ca@valencia]=Estri declaratiu
@@ -41,6 +42,7 @@ Name[x-test]=xxDeclarative widgetxx
 Name[zh_CN]=描述部件
 Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
+Comment[ast]=Widget de Plasma nativu escritu en QML y javaScript
 Comment[bs]=Prirodna Plasma grafička kontrola pisana u QML i JavaScript
 Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
 Comment[ca@valencia]=Estri nadiu del Plasma escrit en QML i JavaScript

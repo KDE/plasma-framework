@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=plasma-kpart-shell
+Name[ast]=plasma-kpart-shell
 Name[bs]=plasma-kpart-shell
 Name[ca]=plasma-kpart-shell
 Name[ca@valencia]=plasma-kpart-shell
@@ -41,6 +42,7 @@ Icon=plasma-example-kpart-shell
 Type=Application
 X-DocPath=plasma-kpart-shell/index.html
 GenericName=A KPart shell for Plasma
+GenericName[ast]=Un shell KPart pa Plasma
 GenericName[bs]=Kpart školjka za plazmu
 GenericName[ca]=Una KPart d'intèrpret d'ordres pel Plasma
 GenericName[ca@valencia]=Una KPart d'intèrpret d'ordes pel Plasma
