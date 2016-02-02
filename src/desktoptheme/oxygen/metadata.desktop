@@ -89,7 +89,7 @@ Comment[zh_TW]=以 Oxygen 樣式完成的外觀主題
 X-KDE-PluginInfo-Author=The Oxygen Project
 X-KDE-PluginInfo-Email=kde-artists@kde.org
 X-KDE-PluginInfo-Name=oxygen
-X-KDE-PluginInfo-Version=0.9
+X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=http://plasma.kde.org
 X-KDE-PluginInfo-Category=
 X-KDE-PluginInfo-Depends=
@@ -102,3 +102,10 @@ defaultWallpaperTheme=Elarun
 defaultFileSuffix=.png
 defaultWidth=2560
 defaultHeight=1600
+
+[ContrastEffect]
+enabled=true
+contrast=0.3
+intensity=0.5
+saturation=1.9
+
