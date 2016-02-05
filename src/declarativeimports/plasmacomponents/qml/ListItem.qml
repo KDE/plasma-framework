@@ -78,6 +78,13 @@ Item {
      */
     property alias containsMouse: itemMouse.containsMouse
 
+    /**
+     * type: bool
+     * True if the separator between items is visible
+     * default: true
+     */
+    property bool separatorVisible: true
+
     width: parent ? parent.width : childrenRect.width
     height: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
@@ -112,7 +119,7 @@ Item {
             top: parent.top
         }
         height: naturalSize.height
-        visible: listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !itemMouse.pressed)
+        visible: separatorVisible && (listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !itemMouse.pressed))
     }
 
     MouseArea {
