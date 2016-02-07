@@ -103,13 +103,17 @@ MouseArea {
 
     Components.Label {
         id: label
-        anchors.fill: todayRect
+        anchors {
+            fill: todayRect
+            margins: units.smallSpacing
+        }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: model.label || dayNumber
         opacity: isCurrent ? 1.0 : 0.5
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
+        fontSizeMode: Text.HorizontalFit
         font.pixelSize: Math.max(theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
         // This is to avoid the "Both point size and
         // pixel size set. Using pixel size" warnings

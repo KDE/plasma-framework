@@ -1,7 +1,7 @@
 /*
  * Copyright 2013  Heena Mahour <heena393@gmail.com>
  * Copyright 2013 Sebastian Kügler <sebas@kde.org>
- * Copyright 2015 Kai Uwe Broulik <kde@privat.broulik.de>
+ * Copyright 2015, 2016 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.2
+import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.1
 
 import org.kde.plasma.calendar 2.0
@@ -38,6 +40,9 @@ Item {
 
     readonly property int gridColumns: showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns
 
+    property alias previousLabel: previousButton.tooltip
+    property alias nextLabel: nextButton.tooltip
+
     property int rows
     property int columns
 
@@ -56,7 +61,7 @@ Item {
     // Take the calendar width, subtract the inner and outer spacings and divide by number of columns (==days in week)
     readonly property int cellWidth: Math.floor((stack.width - (daysCalendar.columns + 1) * root.borderWidth) / (daysCalendar.columns + (showWeekNumbers ? 1 : 0)))
     // Take the calendar height, subtract the inner spacings and divide by number of rows (root.weeks + one row for day names)
-    readonly property int cellHeight:  Math.floor((stack.height - heading.height - (daysCalendar.rows + 1) * root.borderWidth) / (daysCalendar.rows + 1))
+    readonly property int cellHeight:  Math.floor((stack.height - heading.height - calendarGrid.rows * root.borderWidth) / calendarGrid.rows)
 
     property real transformScale: 1
     property point transformOrigin: Qt.point(width / 2, height / 2)
@@ -82,90 +87,79 @@ Item {
         }
     }
 
-    PlasmaExtras.Heading {
-        id: heading
-
+    RowLayout {
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
         }
+        spacing: units.smallSpacing
 
-        level: 1
-        elide: Text.ElideRight
-        font.capitalization: Font.Capitalize
+        PlasmaExtras.Heading {
+            id: heading
 
-        MouseArea {
-            id: monthMouse
-            property int previousPixelDelta
+            Layout.fillWidth: true
 
-            anchors.fill: parent
-            onClicked: {
-                if (!stack.busy) {
-                    daysCalendar.headerClicked()
-                }
-            }
-            onExited: previousPixelDelta = 0
-            onWheel: {
-                var delta = wheel.angleDelta.y || wheel.angleDelta.x
-                var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
+            level: 1
+            elide: Text.ElideRight
+            font.capitalization: Font.Capitalize
 
-                // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
-                // finger movement. To prevent the view from suddenly ending up in the next century, we
-                // cumulate all the pixel deltas until they're larger than the label and then only change
-                // the month. Standard mouse wheel scrolling is unaffected since it's fine.
-                if (pixelDelta) {
-                    if (Math.abs(previousPixelDelta) < monthMouse.height) {
-                        previousPixelDelta += pixelDelta
-                        return
+            MouseArea {
+                id: monthMouse
+                property int previousPixelDelta
+
+                anchors.fill: parent
+                onClicked: {
+                    if (!stack.busy) {
+                        daysCalendar.headerClicked()
                     }
                 }
+                onExited: previousPixelDelta = 0
+                onWheel: {
+                    var delta = wheel.angleDelta.y || wheel.angleDelta.x
+                    var pixelDelta = wheel.pixelDelta.y || wheel.pixelDelta.x
 
-                if (delta >= 15) {
-                    daysCalendar.previous()
-                } else if (delta <= -15) {
-                    daysCalendar.next()
+                    // For high-precision touchpad scrolling, we get a wheel event for basically every slightest
+                    // finger movement. To prevent the view from suddenly ending up in the next century, we
+                    // cumulate all the pixel deltas until they're larger than the label and then only change
+                    // the month. Standard mouse wheel scrolling is unaffected since it's fine.
+                    if (pixelDelta) {
+                        if (Math.abs(previousPixelDelta) < monthMouse.height) {
+                            previousPixelDelta += pixelDelta
+                            return
+                        }
+                    }
+
+                    if (delta >= 15) {
+                        daysCalendar.previous()
+                    } else if (delta <= -15) {
+                        daysCalendar.next()
+                    }
+                    previousPixelDelta = 0
                 }
-                previousPixelDelta = 0
             }
         }
-    }
 
-    Components.Label {
-        anchors {
-            top: heading.bottom
-            left: parent.left
-            leftMargin: Math.floor(units.largeSpacing / 2)
-        }
-        text: "◀"
-        opacity: leftmouse.containsMouse ? 1 : 0.4
-        Behavior on opacity { NumberAnimation {} }
-
-        MouseArea {
-            id: leftmouse
-            anchors.fill: parent
-            anchors.margins: -units.largeSpacing / 3
-            hoverEnabled: true
+        Components.ToolButton {
+            id: previousButton
+            iconName: "go-previous"
             onClicked: daysCalendar.previous()
+            Accessible.name: tooltip
         }
-    }
 
-    Components.Label {
-        anchors {
-            top: heading.bottom
-            right: parent.right
-            rightMargin: Math.floor(units.largeSpacing / 2)
+        Components.ToolButton {
+            iconName: "go-jump-today"
+            onClicked: root.resetToToday()
+            tooltip: i18ndc("libplasma5", "Reset calendar to today", "Today")
+            Accessible.name: tooltip
+            Accessible.description: i18nd("libplasma5", "Reset calendar to today")
         }
-        text: "▶"
-        opacity: rightmouse.containsMouse ? 1 : 0.4
-        Behavior on opacity { NumberAnimation {} }
 
-        MouseArea {
-            id: rightmouse
-            anchors.fill: parent
-            anchors.margins: -units.largeSpacing / 3
-            hoverEnabled: true
+        Components.ToolButton {
+            id: nextButton
+            iconName: "go-next"
             onClicked: daysCalendar.next()
+            Accessible.name: tooltip
         }
     }
 
@@ -221,7 +215,7 @@ Item {
 
                 // Draw the outer vertical lines in full height so that it closes
                 // the outer rectangle
-                if (i == 0 || i == gridColumns) {
+                if (i == 0 || i == gridColumns || !daysCalendar.headerModel) {
                     ctx.moveTo(lineX, 0);
                 } else {
                     ctx.moveTo(lineX, root.borderWidth + daysCalendar.cellHeight);
@@ -266,7 +260,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 opacity: 0.4
                 text: modelData
-                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 6)
+                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
             }
         }
     }
@@ -282,7 +276,7 @@ Item {
         }
 
         columns: daysCalendar.columns
-        rows: daysCalendar.rows + 1
+        rows: daysCalendar.rows + (daysCalendar.headerModel ? 1 : 0)
 
         spacing: root.borderWidth
         property Item selectedItem
@@ -300,19 +294,14 @@ Item {
         Repeater {
             id: days
 
-            Item {
+            Components.Label {
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
-
-                Components.Label {
-                    text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
-                    font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 6)
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignBottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: units.smallSpacing
-                }
+                text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
+                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
+                opacity: 0.4
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
             }
         }
 
