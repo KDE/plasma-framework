@@ -115,6 +115,10 @@ void ConfigViewPrivate::init()
     } else {
         corona = applet.data()->containment()->corona();
     }
+    if (!corona) {
+        qWarning() << "Cannot find a Corona, this should never happen!";
+        return;
+    }
 
     if (corona->package().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
