@@ -42,9 +42,6 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
-//TODO: temporary
-QSet<QString> AppletQuickItemPrivate::s_legacyApplets = QSet<QString>({QStringLiteral("org.kde.plasma.bluetooth"), QStringLiteral("org.kde.plasma.pager"), QStringLiteral("org.kde.desktopcontainment"), QStringLiteral("org.kde.plasma.folder"), QStringLiteral("org.kde.panel"), QStringLiteral("org.kde.plasma.analogclock"), QStringLiteral("org.kde.plasma.battery"), QStringLiteral("org.kde.plasma.notifications"), QStringLiteral("org.kde.plasma.systemtray")});
-
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
@@ -59,21 +56,10 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
         return;
     }
 
-    //TODO: remove the legacy support at some point
-    //use the shared engine only for applets that are nt in the legacy list
-    //if they are, use the shared engine if their mayor version is at least 3
-    const QStringList version = a->pluginInfo().version().split(".");
-    if (!AppletQuickItemPrivate::s_legacyApplets.contains(a->pluginInfo().pluginName()) ||
-         (!version.isEmpty() && version.first().toInt() >= 3)) {
-
-        qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
-        if (!qmlObject->engine()->urlInterceptor()) {
-            PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
-            qmlObject->engine()->setUrlInterceptor(interceptor);
-        }
-    } else {
-        qWarning() << "Falling back to legacy separed QQmlEngine for applet" << a->pluginInfo().pluginName();
-        qmlObject = new KDeclarative::QmlObject(q);
+    qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
+    if (!qmlObject->engine()->urlInterceptor()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
+        qmlObject->engine()->setUrlInterceptor(interceptor);
     }
 }
 

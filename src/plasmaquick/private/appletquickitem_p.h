@@ -103,7 +103,6 @@ public:
     bool expanded : 1;
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
-    static QSet<QString> s_legacyApplets;
 };
 
 }
