@@ -197,9 +197,9 @@ QtQuickControlStyle.ButtonStyle {
                 target: control
                 onHoveredChanged: {
                     if (style.controlHovered) {
-                        button.z += 2
+                        control.z += 2
                     } else {
-                        button.z -= 2
+                        control.z -= 2
                     }
                 }
             }
