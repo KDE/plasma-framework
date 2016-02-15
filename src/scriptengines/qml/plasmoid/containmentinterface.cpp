@@ -270,17 +270,22 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 
 QObject *ContainmentInterface::containmentAt(int x, int y)
 {
+    QObject *desktop = Q_NULLPTR;
     foreach (Plasma::Containment *c, m_containment->corona()->containments()) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
         if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
             if (w && w->geometry().contains(QPoint(window()->x(), window()->y()) + QPoint(x, y))) {
-                return contInterface;
+                if (c->containmentType() == Plasma::Types::DesktopContainment) {
+                    desktop = contInterface;
+                } else {
+                    return contInterface;
+                }
             }
         }
     }
-    return 0;
+    return desktop;
 }
 
 void ContainmentInterface::addApplet(AppletInterface *applet, int x, int y)
