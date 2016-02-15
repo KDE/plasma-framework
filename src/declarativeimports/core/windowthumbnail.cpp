@@ -584,6 +584,7 @@ void WindowThumbnail::stopRedirecting()
         return;
     }
     xcb_composite_unredirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
+    discardPixmap();
     if (m_damage == XCB_NONE) {
         return;
     }
