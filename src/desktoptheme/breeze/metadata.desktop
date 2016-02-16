@@ -43,7 +43,7 @@ Name[zh_TW]=Breeze Dark
 X-KDE-PluginInfo-Author=KDE Visual Design Group
 X-KDE-PluginInfo-Email=kde-artists@kde.org
 X-KDE-PluginInfo-Name=default
-X-KDE-PluginInfo-Version=5.19
+X-KDE-PluginInfo-Version=5.20
 X-KDE-PluginInfo-Website=http://plasma.kde.org
 X-KDE-PluginInfo-Category=
 X-KDE-PluginInfo-Depends=
@@ -60,5 +60,6 @@ defaultHeight=1080
 [ContrastEffect]
 enabled=true
 contrast=0.2
-intensity=2.0
+#intensity is disabled, in order to auto adjust to the chosen theme color
+#intensity=2.0
 saturation=1.7
