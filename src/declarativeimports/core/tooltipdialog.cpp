@@ -22,7 +22,6 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
-#include <QPropertyAnimation>
 
 #include <kdeclarative/qmlobjectsharedengine.h>
 
@@ -34,10 +33,8 @@
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : Dialog(parent),
       m_qmlObject(0),
-      m_animation(0),
       m_hideTimeout(4000),
       m_interactive(false),
-      m_animationsEnabled(true),
       m_owner(Q_NULLPTR)
 {
     Qt::WindowFlags flags = Qt::ToolTip;
@@ -48,13 +45,6 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
 #endif
     setFlags(flags);
     setLocation(Plasma::Types::Floating);
-
-    m_animation = new QPropertyAnimation(this);
-    connect(m_animation, SIGNAL(valueChanged(QVariant)),
-            this, SLOT(valueChanged(QVariant)));
-    m_animation->setTargetObject(this);
-    m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-    m_animation->setDuration(250);
 
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
@@ -89,7 +79,6 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
     m_showTimer->start(m_hideTimeout);
-    m_animation->stop();
 
     Dialog::showEvent(event);
 }
@@ -97,7 +86,6 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 void ToolTipDialog::hideEvent(QHideEvent *event)
 {
     m_showTimer->stop();
-    m_animation->stop();
 
     Dialog::hideEvent(event);
 }
@@ -126,43 +114,6 @@ bool ToolTipDialog::event(QEvent *e)
 #endif
     setFlags(flags);
     return ret;
-}
-
-void ToolTipDialog::adjustGeometry(const QRect &geom)
-{
-    if (m_animationsEnabled) {
-        QRect startGeom(geometry());
-
-        switch (location()) {
-        case Plasma::Types::RightEdge:
-            startGeom.moveLeft(geom.left());
-            break;
-        case Plasma::Types::BottomEdge:
-            startGeom.moveTop(geom.top());
-            break;
-        default:
-            break;
-        }
-
-        startGeom.setSize(geom.size());
-        setGeometry(startGeom);
-
-        m_animation->setStartValue(startGeom.topLeft());
-        m_animation->setEndValue(geom.topLeft());
-        m_animation->start();
-    } else {
-        setGeometry(geom);
-    }
-}
-
-bool ToolTipDialog::animationsEnabled() const
-{
-    return m_animationsEnabled;
-}
-
-void ToolTipDialog::setAnimationsEnabled(bool enabled)
-{
-    m_animationsEnabled = enabled;
 }
 
 QObject *ToolTipDialog::owner() const

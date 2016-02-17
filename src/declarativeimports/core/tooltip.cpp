@@ -155,8 +155,6 @@ void ToolTip::showToolTip()
 
     dlg->setOwner(this);
 
-    //if the dialog is not currently visible, disable the animated repositioning
-    dlg->setAnimationsEnabled(dlg->isVisible());
     dlg->show();
     dlg->setLocation(location);
     dlg->setMainItem(mainItem());

@@ -29,7 +29,6 @@
 
 class QQuickItem;
 class QGraphicsWidget;
-class QPropertyAnimation;
 
 namespace KDeclarative
 {
@@ -52,19 +51,11 @@ public:
     Plasma::Types::Direction direction() const;
     void setDirection(Plasma::Types::Direction loc);
 
-    /**
-     * animate the position change if visible
-     */
-    void adjustGeometry(const QRect &geom) Q_DECL_OVERRIDE;
-
     void dismiss();
     void keepalive();
 
     bool interactive();
     void setInteractive(bool interactive);
-
-    bool animationsEnabled() const;
-    void setAnimationsEnabled(bool enabled);
 
     /**
      * Basically the last one who has shown the dialog
@@ -84,10 +75,8 @@ private Q_SLOTS:
 private:
     KDeclarative::QmlObject *m_qmlObject;
     QTimer *m_showTimer;
-    QPropertyAnimation *m_animation;
     int m_hideTimeout;
     bool m_interactive;
-    bool m_animationsEnabled;
     QObject *m_owner;
 };
 
