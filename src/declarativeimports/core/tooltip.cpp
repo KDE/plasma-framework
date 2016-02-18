@@ -255,6 +255,7 @@ void ToolTip::setInteractive(bool interactive)
 
 void ToolTip::hideToolTip()
 {
+    m_showTimer->stop();
     tooltipDialogInstance()->dismiss();
 }
 
