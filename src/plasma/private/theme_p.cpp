@@ -335,7 +335,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
         discoveries.clear();
         invalidElements.clear();
 
-        svgElementsCache = 0;
+        svgElementsCache->reparseConfiguration();
     }
 }
 
