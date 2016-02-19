@@ -21,6 +21,7 @@
 #define SVGITEM_P
 
 #include <QQuickItem>
+#include <QImage>
 
 #include "units.h"
 
@@ -97,11 +98,16 @@ protected Q_SLOTS:
 /// @endcond
 
 private:
+    void scheduleImageUpdate();
+    void updatePolish() Q_DECL_OVERRIDE;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;
     bool m_smooth;
     bool m_textureChanged;
     Units m_units;
+    QImage m_image;
 };
 }
 

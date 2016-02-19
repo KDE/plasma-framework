@@ -64,8 +64,7 @@ void SvgItem::setElementId(const QString &elementID)
     emit elementIdChanged();
     emit naturalSizeChanged();
 
-    m_textureChanged = true;
-    update();
+    scheduleImageUpdate();
 }
 
 QString SvgItem::elementId() const
@@ -105,7 +104,7 @@ void SvgItem::setSvg(Plasma::Svg *svg)
         setImplicitHeight(naturalSize().height());
     }
 
-    m_textureChanged = true;
+    scheduleImageUpdate();
 
     emit svgChanged();
     emit naturalSizeChanged();
@@ -156,19 +155,15 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     //updating the material
 
     if (m_textureChanged || textureNode->texture()->textureSize() != QSize(width(), height())) {
-        //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
-        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
-        const QImage image = m_svg.data()->image(QSize(width(), height()), m_elementID);
-
         //despite having a valid size sometimes we still get a null QImage from Plasma::Svg
         //loading a null texture to an atlas fatals
         //Dave E fixed this in Qt in 5.3.something onwards but we need this for now
-        if (image.isNull()) {
+        if (m_image.isNull()) {
             delete textureNode;
             return Q_NULLPTR;
         }
 
-        QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
+        QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(m_image, QQuickWindow::TextureCanUseAtlas));
         if (m_smooth) {
             texture->setFiltering(QSGTexture::Linear);
         }
@@ -189,8 +184,7 @@ void SvgItem::updateNeeded()
     if (implicitHeight() <= 0) {
         setImplicitHeight(naturalSize().height());
     }
-    m_textureChanged = true;
-    update();
+    scheduleImageUpdate();
 }
 
 void SvgItem::updateDevicePixelRatio()
@@ -205,6 +199,33 @@ void SvgItem::updateDevicePixelRatio()
         }
         m_svg.data()->setScaleFactor(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
     }
+}
+
+void SvgItem::scheduleImageUpdate()
+{
+    polish();
+    update();
+}
+
+void SvgItem::updatePolish()
+{
+    QQuickItem::updatePolish();
+
+    if (m_svg) {
+        //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
+        m_textureChanged = true;
+        m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
+        m_image = m_svg.data()->image(QSize(width(), height()), m_elementID);
+    }
+}
+
+void SvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    if (newGeometry.size() != oldGeometry.size() && newGeometry.isValid()) {
+        scheduleImageUpdate();
+    }
+
+    QQuickItem::geometryChanged(newGeometry, oldGeometry);
 }
 
 } // Plasma namespace
