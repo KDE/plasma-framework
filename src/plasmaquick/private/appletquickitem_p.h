@@ -55,6 +55,8 @@ class AppletQuickItemPrivate
 public:
     AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);
 
+    void init();
+
     QQuickItem *createCompactRepresentationItem();
     QQuickItem *createFullRepresentationItem();
     QQuickItem *createCompactRepresentationExpanderItem();

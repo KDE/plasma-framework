@@ -50,7 +50,11 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       applet(a),
       expanded(false)
 {
-    if (!a->pluginInfo().isValid()) {
+}
+
+void AppletQuickItemPrivate::init()
+{
+    if (!applet->pluginInfo().isValid()) {
         // This `qmlObject` is used in other parts of the code
         qmlObject = new KDeclarative::QmlObject(q);
         return;
@@ -383,6 +387,7 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       d(new AppletQuickItemPrivate(applet, this))
 {
+    d->init();
     if (d->applet) {
         d->appletPackage = d->applet->package();
     }
@@ -564,9 +569,6 @@ void AppletQuickItem::init()
         d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(compactExpanderPath));
     }
 
-    //HACK: check the Layout properties we wrote
-    QQmlProperty p(this, "Layout.minimumWidth", QtQml::qmlContext(d->qmlObject->rootObject()));
-
     d->compactRepresentationCheck();
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
     qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
@@ -724,6 +726,21 @@ QQuickItem *AppletQuickItem::fullRepresentationItem()
 QObject *AppletQuickItem::rootItem()
 {
     return d->qmlObject->rootObject();
+}
+
+void AppletQuickItem::childEvent(QChildEvent *event)
+{
+    // Added child may be QQuickLayoutAttached
+    if (event->added() && !d->ownLayout && d->currentRepresentationItem) {
+        // Child has not yet finished initialization at this point
+        QTimer::singleShot(0, this, [this]() {
+            if (!d->ownLayout) {
+                d->connectLayoutAttached(d->currentRepresentationItem);
+            }
+        });
+    }
+
+    QQuickItem::childEvent(event);
 }
 
 void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
