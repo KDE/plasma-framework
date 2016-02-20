@@ -1,11 +1,16 @@
 [Desktop Entry]
 Name=Breeze Light
 Name[ca]=Brisa clara
+Name[ca@valencia]=Brisa clara
+Name[de]=Breeze Light
+Name[nl]=Breeze Light
+Name[pl]=Lekka Bryza
 Name[pt]=Brisa Clara
 Name[pt_BR]=Breeze Light
 Name[sv]=Breeze ljus
 Name[uk]=Світла Breeze
 Name[x-test]=xxBreeze Lightxx
+Name[zh_CN]=亮色微风
 
 
 X-KDE-PluginInfo-Author=KDE Visual Design Group
