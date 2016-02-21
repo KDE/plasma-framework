@@ -132,9 +132,8 @@ void ToolTip::showToolTip()
         setMainItem(dlg->loadDefaultItem());
     }
 
-    if (dlg->mainItem()) {
-        dlg->mainItem()->setVisible(false);
-    }
+    // Unset the dialog's old contents before reparenting the dialog.
+    dlg->setMainItem(Q_NULLPTR);
 
     Plasma::Types::Location location = m_location;
     if (m_location == Plasma::Types::Floating) {
@@ -154,12 +153,11 @@ void ToolTip::showToolTip()
     }
 
     dlg->setOwner(this);
-
-    dlg->show();
     dlg->setLocation(location);
-    dlg->setMainItem(mainItem());
     dlg->setVisualParent(this);
+    dlg->setMainItem(mainItem());
     dlg->setInteractive(m_interactive);
+    dlg->show();
 }
 
 QString ToolTip::mainText() const
