@@ -26,7 +26,8 @@
 #include <QCoreApplication>
 
 Application::Private::Private(Application *parent)
-    : q(parent)
+    : q(parent),
+    running(false)
 {
     connect(
         &process, SIGNAL(stateChanged(QProcess::ProcessState)),
