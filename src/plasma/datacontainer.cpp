@@ -130,10 +130,12 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
                 d->relays.remove(relay->m_interval);
                 delete relay;
             } else {
-                disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                           visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+                if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+                    disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                               visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+                }
                 //modelChanged is always emitted by the dataSource since there is no polling there
-                if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+                if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
                         disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                                 visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
                 }
@@ -146,9 +148,11 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
             //qCDebug(LOG_PLASMA) << "     already connected, nothing to do";
             return;
         } else {
-            disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                       visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-            if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+            if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+                disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                           visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+            }
+            if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
                 disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                     visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
             }
@@ -177,10 +181,12 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         bool immediateUpdate = connected || d->relayObjects.count() > 1;
         SignalRelay *relay = d->signalRelay(this, visualization, pollingInterval,
                                             alignment, immediateUpdate);
-        connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+            connect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                    visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        }
         //modelChanged is always emitted by the dataSource since there is no polling there
-        if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+        if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
             connect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                 visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
         }
@@ -311,9 +317,11 @@ void DataContainer::disconnectVisualization(QObject *visualization)
 
     if (objIt == d->relayObjects.end() || !objIt.value()) {
         // it is connected directly to the DataContainer itself
-        disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                   visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
-        if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+        if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+            disconnect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                       visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+        }
+        if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
             disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                    visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
         }
@@ -324,10 +332,12 @@ void DataContainer::disconnectVisualization(QObject *visualization)
             d->relays.remove(relay->m_interval);
             delete relay;
         } else {
-            disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
-                       visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+            if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
+                disconnect(relay, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
+                           visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
+            }
             //modelChanged is always emitted by the dataSource since there is no polling there
-            if (visualization->metaObject()->indexOfMethod(QMetaObject::normalizedSignature("modelChanged(QString,QAbstractItemModel*)"))) {
+            if (visualization->metaObject()->indexOfSlot("modelChanged(QString,QAbstractItemModel*)") >= 0) {
                     disconnect(this, SIGNAL(modelChanged(QString,QAbstractItemModel*)),
                         visualization, SLOT(modelChanged(QString,QAbstractItemModel*)));
             }
