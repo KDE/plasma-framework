@@ -79,7 +79,6 @@ QtQuickControlStyle.ScrollViewStyle {
                 left: parent.left
                 top: parent.top
                 right: parent.right
-                topMargin: flickableItem.anchors.topMargin
             }
         }
         PlasmaCore.SvgItem {
@@ -99,7 +98,6 @@ QtQuickControlStyle.ScrollViewStyle {
                 left: parent.left
                 bottom: parent.bottom
                 right: parent.right
-                bottomMargin: flickableItem.anchors.bottomMargin
             }
         }
         PlasmaCore.SvgItem {
@@ -118,7 +116,6 @@ QtQuickControlStyle.ScrollViewStyle {
                 left: parent.left
                 top: parent.top
                 bottom: parent.bottom
-                leftMargin: flickableItem.anchors.leftMargin
             }
         }
         PlasmaCore.SvgItem {
@@ -137,7 +134,6 @@ QtQuickControlStyle.ScrollViewStyle {
                 top: parent.top
                 bottom: parent.bottom
                 right: parent.right
-                rightMargin: flickableItem.anchors.rightMargin
             }
         }
     }
