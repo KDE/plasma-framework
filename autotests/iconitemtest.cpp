@@ -46,6 +46,26 @@ static bool imageIsEmpty(const QImage &img)
 
 void IconItemTest::initTestCase()
 {
+    // make our theme in search path
+    qputenv("XDG_DATA_DIRS",
+            qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
+
+    // set default icon theme to test-theme
+    QStandardPaths::setTestModeEnabled(true);
+
+    QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+
+    if(!QDir(configPath).mkpath(QStringLiteral("."))) {
+        qFatal("Failed to create test configuration directory.");
+    }
+
+    QFile::remove(configPath);
+
+    KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
+    cg.writeEntry("Theme", "test-theme");
+    KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
+    plasmaConfig.writeEntry("name", "default");
+
     m_view = new QQuickView();
     m_view->setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
     m_view->show();
@@ -88,6 +108,11 @@ QImage IconItemTest::grabImage(QQuickItem *item)
     return grab->image();
 }
 
+Plasma::Svg *IconItemTest::findPlasmaSvg(QQuickItem *item)
+{
+    return item->findChild<Plasma::Svg *>();
+}
+
 // ------ Tests
 void IconItemTest::invalidIcon()
 {
@@ -106,7 +131,7 @@ void IconItemTest::invalidIcon()
 void IconItemTest::usesPlasmaTheme()
 {
     Plasma::Theme theme;
-    if (!theme.themeName().startsWith("breeze")) {
+    if (!theme.themeName().startsWith("default")) {
         QSKIP("Current Plasma theme is not Breeze.");
     }
 
@@ -132,7 +157,7 @@ void IconItemTest::usesPlasmaTheme()
 
     img1 = grabImage(item2);
     // This depends on konversation icon being different in Plasma Breeze theme
-    // and normal Breeze icon theme
+    // and our test icon theme
     QVERIFY(img1 != img2);
 }
 
@@ -191,22 +216,46 @@ void IconItemTest::bug_359388()
 {
     QString name("bug359388");
     KIconLoader iconLoader("tst_plasma-framework");
+    QIcon customThemeIcon(new KIconEngine(name, &iconLoader));
     if (iconLoader.hasIcon(name)) {
         QSKIP("Current icon theme has 'bug359388' icon.");
     }
 
-    iconLoader.addAppDir("tst_plasma-framework", QFINDTESTDATA("data/icons"));
-    QIcon customThemeIcon(new KIconEngine(name, &iconLoader));
+    iconLoader.addAppDir("tst_plasma-framework", QFINDTESTDATA("data/bug359388"));
 
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", customThemeIcon);
     QVERIFY(item1->property("valid").toBool());
 
     QQuickItem *item2 = createIconItem();
-    item2->setProperty("source", QIcon(QFINDTESTDATA("data/icons/hicolor/22x22/apps/" + name + ".svg")));
+    item2->setProperty("source", QIcon(QFINDTESTDATA("data/bug359388/hicolor/22x22/apps/" + name + ".svg")));
     QVERIFY(item2->property("valid").toBool());
 
     QCOMPARE(grabImage(item1), grabImage(item2));
+}
+
+void IconItemTest::loadSvg()
+{
+    QString name("tst-plasma-framework-test-icon");
+
+    QQuickItem *item = createIconItem();
+    item->setProperty("animated", false);
+    item->setSize(QSize(22, 22));
+    item->setProperty("source", name);
+    QVERIFY(item->property("valid").toBool());
+
+    Plasma::Svg *svg;
+    svg = findPlasmaSvg(item);
+    Q_ASSERT(svg);
+    QCOMPARE(svg->imagePath(), QFINDTESTDATA("data/icons/test-theme/apps/22/" + name + ".svg"));
+
+    // we only have 32x32 and 22x22 version in the theme, thus 32x32 is a better match.
+    item->setSize(QSize(64, 64));
+    // just to update the icon
+    grabImage(item);
+    svg = findPlasmaSvg(item);
+    Q_ASSERT(svg);
+    QCOMPARE(svg->imagePath(), QFINDTESTDATA("data/icons/test-theme/apps/32/" + name + ".svg"));
 }
 
 QTEST_MAIN(IconItemTest)

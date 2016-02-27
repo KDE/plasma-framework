@@ -1,0 +1,39 @@
+[Icon Theme]
+Name=Unittest Theme
+
+DisplayDepth=32
+
+Inherits=breeze
+
+DesktopDefault=48
+DesktopSizes=16,22,32,48,64,128,256
+ToolbarDefault=22
+ToolbarSizes=16,22,32,48
+MainToolbarDefault=22
+MainToolbarSizes=16,22,32,48
+SmallDefault=16
+SmallSizes=16,22,32,48
+PanelDefault=32
+PanelSizes=16,22,32,48,64,128,256
+DialogDefault=32
+DialogSizes=16,22,32,48,64,128,256
+
+########## Directories
+########## ordered by category and alphabetically
+
+Directories=apps/22,apps/32
+
+[apps/22]
+Size=22
+Context=Applications
+Type=Fixed
+
+[apps/32]
+Size=32
+Context=Applications
+Type=Fixed
+
+[apps/48]
+Size=48
+Context=Applications
+Type=Fixed

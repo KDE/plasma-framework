@@ -23,6 +23,11 @@
 #include <QQuickView>
 #include <QtTest/QtTest>
 
+namespace Plasma
+{
+class Svg;
+}
+
 class IconItemTest : public QObject
 {
     Q_OBJECT
@@ -36,10 +41,12 @@ private Q_SLOTS:
     void animation();
     void animationAfterHide();
     void bug_359388();
+    void loadSvg();
 
 private:
     QQuickItem *createIconItem();
     QImage grabImage(QQuickItem *item);
+    Plasma::Svg *findPlasmaSvg(QQuickItem *item);
 
     QQuickView *m_view;
 };
