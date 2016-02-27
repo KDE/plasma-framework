@@ -27,7 +27,8 @@ MACRO(PLASMA_UNIT_TESTS)
                                      KF5::ConfigGui
                                      KF5::I18n
                                      KF5::KIOCore
-                                     KF5::Service)
+                                     KF5::Service
+                                     KF5::IconThemes)
                if(QT_QTOPENGL_FOUND)
                    target_link_libraries(${_testname} Qt5::OpenGL)
                endif()
@@ -43,6 +44,7 @@ PLASMA_UNIT_TESTS(
     packageurlinterceptortest
     pluginloadertest
     framesvgtest
+    iconitemtest
     #    plasmoidpackagetest
 )
 
