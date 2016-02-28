@@ -34,10 +34,9 @@
 
 static bool imageIsEmpty(const QImage &img)
 {
-    const QColor empty = QColor::fromRgba(0);
     for (int i = 0; i < img.width(); ++i) {
         for (int j = 0; j < img.height(); ++j) {
-            if (img.pixelColor(i, j) != empty) {
+            if (img.pixel(i, j) != 0) {
                 return false;
             }
         }
