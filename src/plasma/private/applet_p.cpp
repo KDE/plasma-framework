@@ -184,7 +184,6 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     }
 
     if (!q->isContainment() && q->pluginInfo().isValid()) {
-        QString constraint;
         QStringList provides = q->pluginInfo().property(QStringLiteral("X-Plasma-Provides")).toStringList();
         if (!provides.isEmpty()) {
             auto filter = [&provides](const KPluginMetaData &md) -> bool

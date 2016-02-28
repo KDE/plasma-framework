@@ -26,8 +26,8 @@
 #include <QCoreApplication>
 
 Application::Private::Private(Application *parent)
-    : q(parent),
-    running(false)
+    : running(false)
+    , q(parent)
 {
     connect(
         &process, SIGNAL(stateChanged(QProcess::ProcessState)),
@@ -42,12 +42,14 @@ Application::Private::Private(Application *parent)
 
 void Application::Private::stateChanged(QProcess::ProcessState newState)
 {
+    Q_UNUSED(newState)
     //running = (newState != QProcess::NotRunning);
     //q->runningChanged(running);
 }
 
 void Application::Private::errorFound(QProcess::ProcessError err)
 {
+    Q_UNUSED(err)
     qWarning() << "Error" << process.error() << "while starting" << application;
 }
 

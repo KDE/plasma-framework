@@ -70,7 +70,7 @@ QString Service::destination() const
 
 QStringList Service::operationNames() const
 {
-    if (d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.isEmpty()) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
@@ -82,7 +82,7 @@ QStringList Service::operationNames() const
 
 QVariantMap Service::operationDescription(const QString &operationName)
 {
-    if (d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.isEmpty()) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
@@ -100,7 +100,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
     ServiceJob *job = 0;
     const QString op = !description.isEmpty() ? description.value(QStringLiteral("_name")).toString() : QString();
 
-    if (d->operationsMap.keys().isEmpty()) {
+    if (d->operationsMap.isEmpty()) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "No valid operations scheme has been registered";
 #endif
@@ -147,7 +147,7 @@ void Service::setName(const QString &name)
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
 {
-    if (d->operationsMap.keys().isEmpty() || !d->operationsMap.contains(operation)) {
+    if (d->operationsMap.isEmpty() || !d->operationsMap.contains(operation)) {
         return;
     }
 
@@ -186,7 +186,7 @@ void Service::setOperationsScheme(QIODevice *xml)
 
 void Service::registerOperationsScheme()
 {
-    if (!d->operationsMap.keys().isEmpty()) {
+    if (!d->operationsMap.isEmpty()) {
         // we've already done our job. let's go home.
         return;
     }

@@ -54,7 +54,6 @@ class QuickTheme : public Plasma::Theme
     Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonHoverColor READ buttonHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonFocusColor READ buttonFocusColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewTextColor READ viewTextColor NOTIFY themeChangedProxy)

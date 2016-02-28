@@ -28,8 +28,8 @@
 
 DaysModel::DaysModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_agendaNeedsUpdate(false),
-    m_pluginsManager(0)
+    m_pluginsManager(0),
+    m_agendaNeedsUpdate(false)
 {
     QHash<int, QByteArray> roleNames;
 

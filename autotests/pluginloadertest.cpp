@@ -38,9 +38,9 @@ bool buildonly = true;
 void PluginTest::listEngines()
 {
     KPluginInfo::List plugins = Plasma::PluginLoader::listEngineInfo();
-    foreach (const KPluginInfo& info, plugins) {
+//     foreach (const KPluginInfo& info, plugins) {
         //qDebug() << " Found DataEngine: " << info.pluginName() << info.name();
-    }
+//     }
     qDebug() << " Found " << plugins.count() << " DataEngines";
     QVERIFY(plugins.count() > 0 || buildonly);
 }

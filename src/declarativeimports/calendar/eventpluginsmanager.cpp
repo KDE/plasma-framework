@@ -127,8 +127,6 @@ private:
 EventPluginsManager::EventPluginsManager(QObject *parent)
     : QObject(parent)
 {
-    QString pluginPath;
-
     // First of all get a list of available plugins
     // and get their metadata. This alone is enough
     // for the applet config to work

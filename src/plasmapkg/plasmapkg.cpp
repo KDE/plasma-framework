@@ -113,7 +113,6 @@ void PlasmaPkg::runMain()
     }
 
     QString type = d->parser->value(QStringLiteral("type"));
-    QString packageRoot = type;
     d->pluginTypes.clear();
     d->installer = 0;
 
@@ -334,15 +333,10 @@ void PlasmaPkg::runMain()
             }
             QStringList installed = d->packages(d->pluginTypes);
 
-            const QString file = QDir::currentPath() + '/' + pluginName;
-
             if (QFile::exists(d->packageFile)) {
-                const QString file = QDir::currentPath() + '/' + d->package;
                 d->installer->setPath(d->packageFile);
-                if (d->installer->isValid()) {
-                    if (d->installer->metadata().isValid()) {
-                        pluginName = d->installer->metadata().pluginName();
-                    }
+                if (d->installer->isValid() && d->installer->metadata().isValid()) {
+                    pluginName = d->installer->metadata().pluginName();
                 }
             }
             // Uninstalling ...
@@ -485,6 +479,8 @@ void PlasmaPkg::showPackageInfo(const QString &pluginName)
 
 QString PlasmaPkg::findPackageRoot(const QString &pluginName, const QString &prefix)
 {
+    Q_UNUSED(pluginName)
+    Q_UNUSED(prefix)
     QString packageRoot;
     if (d->parser->isSet(QStringLiteral("packageroot")) && d->parser->isSet(QStringLiteral("global"))) {
         qWarning() << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
@@ -616,7 +612,7 @@ void PlasmaPkgPrivate::listTypes()
 #pragma message("read config here")
             // structure.read(&config);
             // get the name based on the rc file name, just as Plasma::PackageStructure does
-            const QString name = file.left(file.length() - 2);
+            // const QString name = file.left(file.length() - 2);
             //plugins.insert(name, QStringList() << structure.type() << structure.defaultPackageRoot());
         }
     }
