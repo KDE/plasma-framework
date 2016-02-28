@@ -39,7 +39,7 @@ void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 #ifndef NDEBUG
     // qCDebug(LOG_PLASMA) << "engine ready!";
 #endif
-    QString engineName = job->parameters()["EngineName"].toString();
+    QString engineName = job->parameters().value(QStringLiteral("EngineName")).toString();
     QString location = job->destination();
     QPair<QString, QString> pair(location, engineName);
 #ifndef NDEBUG
@@ -68,8 +68,8 @@ void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidServic
 #ifndef NDEBUG
     // qCDebug(LOG_PLASMA) << "requesting dataengine!";
 #endif
-    QVariantMap op = plasmoidService->operationDescription("DataEngine");
-    op["EngineName"] = engineNameForService.value(plasmoidService);
+    QVariantMap op = plasmoidService->operationDescription(QStringLiteral("DataEngine"));
+    op[QStringLiteral("EngineName")] = engineNameForService.value(plasmoidService);
     plasmoidService->startOperationCall(op);
     connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob*)),
             this, SLOT(slotJobFinished(Plasma::ServiceJob*)));

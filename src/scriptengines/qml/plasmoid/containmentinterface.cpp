@@ -150,8 +150,8 @@ void ContainmentInterface::init()
         qmlObject()->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
         //set anchors
-        QQmlExpression expr(qmlObject()->engine()->rootContext(), qmlObject()->rootObject(), "parent");
-        QQmlProperty prop(qmlObject()->rootObject(), "anchors.fill");
+        QQmlExpression expr(qmlObject()->engine()->rootContext(), qmlObject()->rootObject(), QStringLiteral("parent"));
+        QQmlProperty prop(qmlObject()->rootObject(), QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
     }
 
@@ -457,8 +457,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
     qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
 
-    if (mimeData->hasFormat("text/x-plasmoidservicename")) {
-        QString data = mimeData->data("text/x-plasmoidservicename");
+    if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
+        QString data = mimeData->data(QStringLiteral("text/x-plasmoidservicename"));
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
@@ -488,8 +488,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
             QObject::connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
                              this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
 
-            QMenu *choices = new QMenu("Content dropped");
-            choices->addAction(QIcon::fromTheme("process-working"), i18n("Fetching file type..."));
+            QMenu *choices = new QMenu(i18n("Content dropped"));
+            choices->addAction(QIcon::fromTheme(QStringLiteral("process-working")), i18n("Fetching file type..."));
             choices->popup(window() ? window()->mapToGlobal(QPoint(x, y)) : QPoint(x, y));
 
             m_dropMenus[job] = choices;
@@ -584,7 +584,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         return;
     }
     KPluginInfo::List appletList = Plasma::PluginLoader::self()->listAppletInfoForUrl(tjob->url());
-    if (mimetype.isEmpty() && !appletList.count()) {
+    if (mimetype.isEmpty() && appletList.isEmpty()) {
         clearDataForMimeJob(job);
         qDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
         return;
@@ -646,7 +646,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 actionsToApplets.insert(action, info.pluginName());
                 qDebug() << info.pluginName();
             }
-            actionsToApplets.insert(choices->addAction(i18n("Icon")), "org.kde.plasma.icon");
+            actionsToApplets.insert(choices->addAction(i18n("Icon")), QStringLiteral("org.kde.plasma.icon"));
 
             QHash<QAction *, QString> actionsToWallpapers;
             if (!wallpaperList.isEmpty())  {
@@ -672,7 +672,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             // HACK If the QMenu becomes empty at any point after the "determining mimetype"
             // popup was shown, it self-destructs, does not matter if we call clear() or remove
             // the action manually, hence we remove the aforementioned item after we populated the menu
-            choices->removeAction(choices->actions().first());
+            choices->removeAction(choices->actions().at(0));
 
             QAction *choice = choices->exec();
             if (choice) {
@@ -737,7 +737,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            Plasma::Applet *applet = createApplet("org.kde.plasma.icon", QVariantList(), posi);
+            Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), posi);
             setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
@@ -803,8 +803,8 @@ void ContainmentInterface::loadWallpaper()
         m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 
         //set anchors
-        QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, "parent");
-        QQmlProperty prop(m_wallpaperInterface, "anchors.fill");
+        QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, QStringLiteral("parent"));
+        QQmlProperty prop(m_wallpaperInterface, QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
 
         m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
@@ -834,7 +834,7 @@ QList<QObject *> ContainmentInterface::actions() const
     //FIXME: giving directly a QList<QAction*> crashes
 
     QStringList actionOrder;
-    actionOrder << "add widgets" << "manage activities" << "remove" << "lock widgets" << "run associated application" << "configure";
+    actionOrder << QStringLiteral("add widgets") << QStringLiteral("manage activities") << QStringLiteral("remove") << QStringLiteral("lock widgets") << QStringLiteral("run associated application") << QStringLiteral("configure");
     QHash<QString, QAction *> orderedActions;
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
@@ -911,7 +911,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     //Don't have an action list? execute as single action
     //and set the event position as action data
     if (plugin->contextualActions().length() == 1) {
-        QAction *action = plugin->contextualActions().first();
+        QAction *action = plugin->contextualActions().at(0);
         action->setData(event->pos());
         action->trigger();
         event->accept();
@@ -1002,16 +1002,16 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
     }
 
     if (!applet->failedToLaunch()) {
-        QAction *runAssociatedApplication = applet->actions()->action("run associated application");
+        QAction *runAssociatedApplication = applet->actions()->action(QStringLiteral("run associated application"));
         if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
             desktopMenu.addAction(runAssociatedApplication);
         }
 
-        QAction *configureApplet = applet->actions()->action("configure");
+        QAction *configureApplet = applet->actions()->action(QStringLiteral("configure"));
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu.addAction(configureApplet);
         }
-        QAction *appletAlternatives = applet->actions()->action("alternatives");
+        QAction *appletAlternatives = applet->actions()->action(QStringLiteral("alternatives"));
         if (appletAlternatives && appletAlternatives->isEnabled()) {
             desktopMenu.addAction(appletAlternatives);
         }
@@ -1047,7 +1047,7 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
 
     if (m_containment->immutability() == Plasma::Types::Mutable &&
         (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
-        QAction *closeApplet = applet->actions()->action("remove");
+        QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
         //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu.isEmpty()) {
@@ -1063,7 +1063,7 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
 void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *event)
 {
     if (m_containment->corona()->immutability() != Plasma::Types::Mutable &&
-            !KAuthorized::authorizeKAction("plasma/containment_actions")) {
+            !KAuthorized::authorizeKAction(QStringLiteral("plasma/containment_actions"))) {
         //qDebug() << "immutability";
         return;
     }
@@ -1093,8 +1093,8 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
         //a better plugin.  note that if the user sets no-plugin this won't happen...
         if ((m_containment->containmentType() != Plasma::Types::PanelContainment &&
                 m_containment->containmentType() != Plasma::Types::CustomPanelContainment) &&
-                m_containment->actions()->action("configure")) {
-            desktopMenu.addAction(m_containment->actions()->action("configure"));
+                m_containment->actions()->action(QStringLiteral("configure"))) {
+            desktopMenu.addAction(m_containment->actions()->action(QStringLiteral("configure")));
         }
     } else {
         desktopMenu.addActions(actions);

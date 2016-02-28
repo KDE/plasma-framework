@@ -534,7 +534,7 @@ int AppletInterface::apiVersion() const
         return -1;
     }
     
-    return plugins.first().value("X-KDE-PluginInfo-Version").toInt();
+    return plugins.first().value(QStringLiteral("X-KDE-PluginInfo-Version")).toInt();
 }
 
 void AppletInterface::setAssociatedApplication(const QString &string)
@@ -686,7 +686,7 @@ bool AppletInterface::event(QEvent *event)
         }
 
         bool keySequenceUsed = false;
-        for (auto a : actions) {
+        foreach (auto a, actions) {
 
             if (a->shortcut().isEmpty()) {
                 continue;
@@ -756,7 +756,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                     return true;
                 }
 
-                QAction *action = plugin->contextualActions().first();
+                QAction *action = plugin->contextualActions().at(0);
                 action->setData(e->globalPos());
                 action->trigger();
                 return true;

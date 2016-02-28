@@ -60,7 +60,7 @@ void DialogQmlTest::loadAndShow()
     QQmlComponent component(&engine);
 
     QSignalSpy spy(&component, SIGNAL(statusChanged(QQmlComponent::Status)));
-    component.setData(dialogQml, QUrl("test://dialogTest"));
+    component.setData(dialogQml, QUrl(QStringLiteral("test://dialogTest")));
     spy.wait();
 
     PlasmaQuick::Dialog *dialog = qobject_cast< PlasmaQuick::Dialog* >(component.beginCreate(engine.rootContext()));

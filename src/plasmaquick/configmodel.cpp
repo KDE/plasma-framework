@@ -146,16 +146,16 @@ QVariant ConfigModelPrivate::get(int row) const
         return value;
     }
 
-    value["name"] = categories.at(row)->name();
-    value["icon"] = categories.at(row)->icon();
-    value["pluginName"] = categories.at(row)->pluginName();
+    value[QStringLiteral("name")] = categories.at(row)->name();
+    value[QStringLiteral("icon")] = categories.at(row)->icon();
+    value[QStringLiteral("pluginName")] = categories.at(row)->pluginName();
     if (appletInterface) {
-        value["source"] = QUrl::fromLocalFile(appletInterface.data()->package().filePath("ui", categories.at(row)->source()));
+        value[QStringLiteral("source")] = QUrl::fromLocalFile(appletInterface.data()->package().filePath("ui", categories.at(row)->source()));
     } else {
-        value["source"] = categories.at(row)->source();
+        value[QStringLiteral("source")] = categories.at(row)->source();
     }
-    value["visible"] = categories.at(row)->visible();
-    value["kcm"] = q->data(q->index(row, 0), ConfigModel::KCMRole);
+    value[QStringLiteral("visible")] = categories.at(row)->visible();
+    value[QStringLiteral("kcm")] = q->data(q->index(row, 0), ConfigModel::KCMRole);
 
     return value;
 }

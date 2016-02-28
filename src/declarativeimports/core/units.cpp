@@ -33,8 +33,8 @@
 #include <KDirWatch>
 #include <KIconLoader>
 
-const QString plasmarc = QStringLiteral("plasmarc");
-const QString groupName = QStringLiteral("Units");
+QString plasmarc() { return QStringLiteral("plasmarc"); }
+QString groupName() { return QStringLiteral("Units"); }
 const int defaultLongDuration = 120;
 
 
@@ -78,7 +78,7 @@ Units::Units(QObject *parent)
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
     QObject::connect(s_sharedAppFilter, SIGNAL(fontChanged()), this, SLOT(updateSpacing()));
 
-    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc;
+    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc();
     KDirWatch::self()->addFile(configFile);
 
     // Catch both, direct changes to the config file ...
@@ -95,8 +95,8 @@ Units::~Units()
 
 void Units::settingsFileChanged(const QString &file)
 {
-    if (file.endsWith(plasmarc)) {
-        KSharedConfigPtr cfg = KSharedConfig::openConfig(plasmarc);
+    if (file.endsWith(plasmarc())) {
+        KSharedConfigPtr cfg = KSharedConfig::openConfig(plasmarc());
         cfg->reparseConfiguration();
         updatePlasmaRCSettings();
     }
@@ -104,7 +104,7 @@ void Units::settingsFileChanged(const QString &file)
 
 void Units::updatePlasmaRCSettings()
 {
-    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc), groupName);
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc()), groupName());
     // Animators with a duration of 0 do not fire reliably
     // see Bug 357532 and QTBUG-39766
     const int longDuration = qMax(1, cfg.readEntry("longDuration", defaultLongDuration));
@@ -118,15 +118,15 @@ void Units::updatePlasmaRCSettings()
 
 void Units::iconLoaderSettingsChanged()
 {
-    m_iconSizes->insert("desktop", devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+    m_iconSizes->insert(QStringLiteral("desktop"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
 
-    m_iconSizes->insert("tiny", devicePixelIconSize(KIconLoader::SizeSmall) / 2);
-    m_iconSizes->insert("small", devicePixelIconSize(KIconLoader::SizeSmall));
-    m_iconSizes->insert("smallMedium", devicePixelIconSize(KIconLoader::SizeSmallMedium));
-    m_iconSizes->insert("medium", devicePixelIconSize(KIconLoader::SizeMedium));
-    m_iconSizes->insert("large", devicePixelIconSize(KIconLoader::SizeLarge));
-    m_iconSizes->insert("huge", devicePixelIconSize(KIconLoader::SizeHuge));
-    m_iconSizes->insert("enormous", devicePixelIconSize(KIconLoader::SizeEnormous));
+    m_iconSizes->insert(QStringLiteral("tiny"), devicePixelIconSize(KIconLoader::SizeSmall) / 2);
+    m_iconSizes->insert(QStringLiteral("small"), devicePixelIconSize(KIconLoader::SizeSmall));
+    m_iconSizes->insert(QStringLiteral("smallMedium"), devicePixelIconSize(KIconLoader::SizeSmallMedium));
+    m_iconSizes->insert(QStringLiteral("medium"), devicePixelIconSize(KIconLoader::SizeMedium));
+    m_iconSizes->insert(QStringLiteral("large"), devicePixelIconSize(KIconLoader::SizeLarge));
+    m_iconSizes->insert(QStringLiteral("huge"), devicePixelIconSize(KIconLoader::SizeHuge));
+    m_iconSizes->insert(QStringLiteral("enormous"), devicePixelIconSize(KIconLoader::SizeEnormous));
 
     emit iconSizesChanged();
 }
@@ -235,7 +235,7 @@ int Units::largeSpacing() const
 
 void Units::updateSpacing()
 {
-    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect("M").height();
+    int gridUnit = QFontMetrics(QGuiApplication::font()).boundingRect(QStringLiteral("M")).height();
 
     if (gridUnit % 2 != 0) {
         gridUnit++;

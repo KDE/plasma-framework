@@ -73,12 +73,12 @@ KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString
 {
     auto filter = [&mimetype, &formFactor](const KPluginMetaData &md) -> bool
     {
-        if (!formFactor.isEmpty() && !md.value("X-Plasma-FormFactors").contains(formFactor)) {
+        if (!formFactor.isEmpty() && !md.value(QStringLiteral("X-Plasma-FormFactors")).contains(formFactor)) {
             return false;
         }
-        return md.value("X-Plasma-DropMimeTypes").contains(mimetype);
+        return md.value(QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
     };
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Wallpaper", QString(), filter).toVector());
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Wallpaper"), QString(), filter).toVector());
 }
 
 Plasma::Package WallpaperInterface::package() const
@@ -100,7 +100,7 @@ KConfigLoader *WallpaperInterface::configScheme()
 {
     if (!m_configLoader) {
         //FIXME: do we need "mainconfigxml" in wallpaper packagestructures?
-        const QString xmlPath = m_pkg.filePath("config", "main.xml");
+        const QString xmlPath = m_pkg.filePath("config", QStringLiteral("main.xml"));
 
         KConfigGroup cfg = m_containmentInterface->containment()->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
@@ -134,7 +134,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_actions->clear();
-    m_pkg = Plasma::PluginLoader::self()->loadPackage("Plasma/Wallpaper");
+    m_pkg = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
     m_pkg.setPath(m_wallpaperPlugin);
     if (!m_pkg.isValid()) {
         qWarning() << "Error loading the wallpaper, no valid package loaded";
@@ -150,12 +150,12 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
-    m_qmlObject->rootContext()->setContextProperty("wallpaper", this);
+    m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
 
     //initialize with our size to avoid as much resize events as possible
     QVariantHash props;
-    props["width"] = width();
-    props["height"] = height();
+    props[QStringLiteral("width")] = width();
+    props[QStringLiteral("height")] = height();
     m_qmlObject->completeInitialization(props);
 }
 
@@ -168,8 +168,8 @@ void WallpaperInterface::loadFinished()
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
         //set anchors
-        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), "parent");
-        QQmlProperty prop(m_qmlObject->rootObject(), "anchors.fill");
+        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), QStringLiteral("parent"));
+        QQmlProperty prop(m_qmlObject->rootObject(), QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
 
     } else if (m_qmlObject->mainComponent()) {
@@ -201,7 +201,7 @@ bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 void WallpaperInterface::setUrl(const QUrl &url)
 {
     if (m_qmlObject->rootObject()) {
-        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
+        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QStringLiteral("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
     }
 }
 

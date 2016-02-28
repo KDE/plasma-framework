@@ -160,8 +160,8 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             }
         }
     }
-    QDBusInterface sycoca("org.kde.kded5", "/kbuildsycoca");
-    sycoca.asyncCall("recreate");
+    QDBusInterface sycoca(QStringLiteral("org.kde.kded5"), QStringLiteral("/kbuildsycoca"));
+    sycoca.asyncCall(QStringLiteral("recreate"));
 }
 
 

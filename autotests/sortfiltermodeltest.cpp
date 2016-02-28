@@ -65,18 +65,18 @@ void SortFilterModelTest::setFilterRegExp()
     SortFilterModel filterModel;
     QSignalSpy spy(&filterModel, SIGNAL(filterRegExpChanged(QString)));
 
-    filterModel.setFilterRegExp("foo");
+    filterModel.setFilterRegExp(QStringLiteral("foo"));
     QCOMPARE(spy.count(), 1);
     QList<QVariant> arguments = spy.takeFirst();
-    QCOMPARE(arguments.at(0).toString(), QString("foo"));
+    QCOMPARE(arguments.at(0).toString(), QStringLiteral("foo"));
 
-    filterModel.setFilterRegExp("foo");
+    filterModel.setFilterRegExp(QStringLiteral("foo"));
     QCOMPARE(spy.count(), 0);
 }
 
 void SortFilterModelTest::mapRowToSource()
 {
-    QStringList list = QStringList() << "Foo" << "Bar" << "Baz";
+    QStringList list = QStringList() << QStringLiteral("Foo") << QStringLiteral("Bar") << QStringLiteral("Baz");
     QStringListModel model(list);
 
     SortFilterModel filterModel;
@@ -87,7 +87,7 @@ void SortFilterModelTest::mapRowToSource()
     QCOMPARE(filterModel.mapRowToSource(3), -1);
     QCOMPARE(filterModel.mapRowToSource(-1), -1);
 
-    filterModel.setFilterRegExp("Ba");
+    filterModel.setFilterRegExp(QStringLiteral("Ba"));
     // filterModel now contains "Bar" and "Baz"
     QCOMPARE(filterModel.mapRowToSource(0), 1);
     QCOMPARE(filterModel.mapRowToSource(1), 2);
@@ -97,7 +97,7 @@ void SortFilterModelTest::mapRowToSource()
 
 void SortFilterModelTest::mapRowFromSource()
 {
-    QStringList list = QStringList() << "Foo" << "Bar" << "Baz";
+    QStringList list = QStringList() << QStringLiteral("Foo") << QStringLiteral("Bar") << QStringLiteral("Baz");
     QStringListModel model(list);
 
     SortFilterModel filterModel;
@@ -108,7 +108,7 @@ void SortFilterModelTest::mapRowFromSource()
     QCOMPARE(filterModel.mapRowFromSource(3), -1);
     QCOMPARE(filterModel.mapRowFromSource(-1), -1);
 
-    filterModel.setFilterRegExp("Ba");
+    filterModel.setFilterRegExp(QStringLiteral("Ba"));
     // filterModel now contains "Bar" and "Baz"
     QCOMPARE(filterModel.mapRowFromSource(0), -1);
     QCOMPARE(filterModel.mapRowFromSource(1), 0);

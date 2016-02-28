@@ -29,7 +29,7 @@ class DialogShadows : public Plasma::Svg
     Q_OBJECT
 
 public:
-    explicit DialogShadows(QObject *parent = 0, const QString &prefix = "dialogs/background");
+    explicit DialogShadows(QObject *parent = 0, const QString &prefix = QStringLiteral("dialogs/background"));
     ~DialogShadows();
 
     static DialogShadows *self();

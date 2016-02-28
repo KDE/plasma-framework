@@ -90,7 +90,7 @@ void ConfigViewPrivate::init()
 
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(q->engine());
-    const QString rootPath = applet.data()->pluginInfo().property("X-Plasma-RootPath").toString();
+    const QString rootPath = applet.data()->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
     if (!rootPath.isEmpty()) {
         kdeclarative.setTranslationDomain("plasma_applet_" + rootPath);
     } else {
@@ -139,7 +139,7 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    const QStringList kcms = applet.data()->pluginInfo().property("X-Plasma-ConfigPlugins").value<QStringList>();
+    const QStringList kcms = applet.data()->pluginInfo().property(QStringLiteral("X-Plasma-ConfigPlugins")).toStringList();
     if (!kcms.isEmpty()) {
         if (!configModel) {
             configModel = new ConfigModel(q);
@@ -158,8 +158,8 @@ void ConfigViewPrivate::init()
         }
     }
 
-    q->engine()->rootContext()->setContextProperty("plasmoid", applet.data()->property("_plasma_graphicObject").value<QObject *>());
-    q->engine()->rootContext()->setContextProperty("configDialog", q);
+    q->engine()->rootContext()->setContextProperty(QStringLiteral("plasmoid"), applet.data()->property("_plasma_graphicObject").value<QObject *>());
+    q->engine()->rootContext()->setContextProperty(QStringLiteral("configDialog"), q);
     component->completeCreate();
     delete component;
 }
@@ -261,7 +261,7 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent),
       d(new ConfigViewPrivate(applet, this))
 {
-    setIcon(QIcon::fromTheme("configure"));
+    setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     d->init();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");

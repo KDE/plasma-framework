@@ -63,7 +63,7 @@ void QMenuItem::setIcon(const QVariant &i)
     if (i.canConvert<QIcon>()) {
         m_action->setIcon(i.value<QIcon>());
     } else if (i.canConvert<QString>()) {
-        m_action->setIcon(QIcon::fromTheme(i.value<QString>()));
+        m_action->setIcon(QIcon::fromTheme(i.toString()));
     }
     emit iconChanged();
 }

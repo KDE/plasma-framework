@@ -149,7 +149,7 @@ void ToolTipDialog::setInteractive(bool interactive)
 
 void ToolTipDialog::valueChanged(const QVariant &value)
 {
-    setPosition(value.value<QPoint>());
+    setPosition(value.toPoint());
 }
 
 #include "moc_tooltipdialog.cpp"

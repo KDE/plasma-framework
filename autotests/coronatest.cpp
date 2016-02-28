@@ -28,11 +28,11 @@ Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint apple
                                    const QVariantList &args)
 {
     Q_UNUSED(args)
-    if (name == "simpleapplet") {
+    if (name == QLatin1String("simpleapplet")) {
         return new SimpleApplet(0, QString(), appletId);
-    } else if (name == "simplecontainment") {
+    } else if (name == QLatin1String("simplecontainment")) {
         return new SimpleContainment(0, QString(), appletId);
-    } else if (name == "simplenoscreencontainment") {
+    } else if (name == QLatin1String("simplenoscreencontainment")) {
         return new SimpleNoScreenContainment(0, QString(), appletId);
     } else {
         return 0;
@@ -103,10 +103,10 @@ SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parent , const QSt
 static void runKBuildSycoca()
 {
     QProcess proc;
-    const QString kbuildsycoca = QStandardPaths::findExecutable(KBUILDSYCOCA_EXENAME);
+    const QString kbuildsycoca = QStandardPaths::findExecutable(QStringLiteral(KBUILDSYCOCA_EXENAME));
     QVERIFY(!kbuildsycoca.isEmpty());
     QStringList args;
-    args << "--testmode";
+    args << QStringLiteral("--testmode");
     proc.setProcessChannelMode(QProcess::MergedChannels); // silence kbuildsycoca output
     proc.start(kbuildsycoca, args);
 
@@ -130,7 +130,7 @@ void CoronaTest::initTestCase()
     m_configDir = QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation));
     m_configDir.removeRecursively();
 
-    QVERIFY(m_configDir.mkpath("."));
+    QVERIFY(m_configDir.mkpath(QStringLiteral(".")));
 
     QVERIFY(QFile::copy(QStringLiteral(":/plasma-test-appletsrc"), m_configDir.filePath(QStringLiteral("plasma-test-appletsrc"))));
 }
@@ -143,10 +143,10 @@ void CoronaTest::cleanupTestCase()
 
 void CoronaTest::restore()
 {
-    m_corona->loadLayout("plasma-test-appletsrc");
+    m_corona->loadLayout(QStringLiteral("plasma-test-appletsrc"));
     QCOMPARE(m_corona->containments().count(), 3);
 
-    for (auto cont : m_corona->containments()) {
+    foreach (auto cont, m_corona->containments()) {
         switch (cont->id()) {
         case 1:
             QCOMPARE(cont->applets().count(), 2);
@@ -166,41 +166,41 @@ void CoronaTest::checkOrder()
     QCOMPARE(m_corona->containments().count(), 3);
 
     //check containments order
-    QCOMPARE(m_corona->containments()[0]->id(), (uint)1);
-    QCOMPARE(m_corona->containments()[1]->id(), (uint)4);
-    QCOMPARE(m_corona->containments()[2]->id(), (uint)5);
+    QCOMPARE(m_corona->containments().at(0)->id(), (uint)1);
+    QCOMPARE(m_corona->containments().at(1)->id(), (uint)4);
+    QCOMPARE(m_corona->containments().at(2)->id(), (uint)5);
 
     //check applets order
-    QCOMPARE(m_corona->containments()[0]->applets().count(), 2);
-    QCOMPARE(m_corona->containments()[0]->applets()[0]->id(), (uint)2);
-    QCOMPARE(m_corona->containments()[0]->applets()[1]->id(), (uint)3);
+    QCOMPARE(m_corona->containments().at(0)->applets().count(), 2);
+    QCOMPARE(m_corona->containments().at(0)->applets().at(0)->id(), (uint)2);
+    QCOMPARE(m_corona->containments().at(0)->applets().at(1)->id(), (uint)3);
 }
 
 void CoronaTest::startupCompletion()
 {
     QVERIFY(!m_corona->isStartupCompleted());
-    QVERIFY(!m_corona->containments().first()->isUiReady());
+    QVERIFY(!m_corona->containments().at(0)->isUiReady());
 
     QSignalSpy spy(m_corona, SIGNAL(startupCompleted()));
     QVERIFY(spy.wait(1000));
 
     QVERIFY(m_corona->isStartupCompleted());
-    QVERIFY(m_corona->containments().first()->isUiReady());
+    QVERIFY(m_corona->containments().at(0)->isUiReady());
 }
 
 void CoronaTest::addRemoveApplets()
 {
-    m_corona->containments().first()->createApplet("invalid");
-    QCOMPARE(m_corona->containments().first()->applets().count(), 3);
+    m_corona->containments().at(0)->createApplet(QStringLiteral("invalid"));
+    QCOMPARE(m_corona->containments().at(0)->applets().count(), 3);
 
     //remove action present
-    QVERIFY(m_corona->containments().first()->applets().first()->actions()->action("remove"));
+    QVERIFY(m_corona->containments().at(0)->applets().at(0)->actions()->action(QStringLiteral("remove")));
     //kill an applet
-    m_corona->containments().first()->applets().first()->destroy();
+    m_corona->containments().at(0)->applets().at(0)->destroy();
 
-    QSignalSpy spy(m_corona->containments().first()->applets().first(), SIGNAL(destroyed()));
+    QSignalSpy spy(m_corona->containments().at(0)->applets().at(0), SIGNAL(destroyed()));
     QVERIFY(spy.wait(1000));
-    QCOMPARE(m_corona->containments().first()->applets().count(), 2);
+    QCOMPARE(m_corona->containments().at(0)->applets().count(), 2);
 }
 
 //this test has to be the last, since systemimmutability
@@ -212,9 +212,9 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::UserImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::UserImmutable);
 
-    for (Plasma::Containment *cont : m_corona->containments()) {
+    foreach (Plasma::Containment *cont, m_corona->containments()) {
         QCOMPARE(cont->immutability(), Plasma::Types::UserImmutable);
-        for (Plasma::Applet *app : cont->applets()) {
+        foreach (Plasma::Applet *app, cont->applets()) {
             QCOMPARE(app->immutability(), Plasma::Types::UserImmutable);
         }
     }
@@ -222,9 +222,9 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::Mutable);
 
-    for (Plasma::Containment *cont : m_corona->containments()) {
+    foreach (Plasma::Containment *cont, m_corona->containments()) {
         QCOMPARE(cont->immutability(), Plasma::Types::Mutable);
-        for (Plasma::Applet *app : cont->applets()) {
+        foreach (Plasma::Applet *app, cont->applets()) {
             QCOMPARE(app->immutability(), Plasma::Types::Mutable);
         }
     }
@@ -232,9 +232,9 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::SystemImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
-    for (Plasma::Containment *cont : m_corona->containments()) {
+    foreach (Plasma::Containment *cont, m_corona->containments()) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
-        for (Plasma::Applet *app : cont->applets()) {
+        foreach (Plasma::Applet *app, cont->applets()) {
             QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
         }
     }
@@ -243,9 +243,9 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
-    for (Plasma::Containment *cont : m_corona->containments()) {
+    foreach (Plasma::Containment *cont, m_corona->containments()) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
-        for (Plasma::Applet *app : cont->applets()) {
+        foreach (Plasma::Applet *app, cont->applets()) {
             QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
         }
     }

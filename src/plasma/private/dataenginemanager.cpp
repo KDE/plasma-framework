@@ -137,7 +137,7 @@ Plasma::DataEngine *DataEngineManager::loadEngine(const QString &name)
     if (!engine) {
         qCDebug(LOG_PLASMA) << "Can't find a dataengine named" << name;
         // Try installing the engine. However, it's too late for this request.
-        ComponentInstaller::self()->installMissingComponent("dataengine", name);
+        ComponentInstaller::self()->installMissingComponent(QStringLiteral("dataengine"), name);
 
         return d->nullEngine();
     }

@@ -223,7 +223,7 @@ DataModel::DataModel(QObject *parent)
 {
     //There is one reserved role name: DataEngineSource
     m_roleNames[m_maxRoleId] = QByteArrayLiteral("DataEngineSource");
-    m_roleIds["DataEngineSource"] = m_maxRoleId;
+    m_roleIds[QStringLiteral("DataEngineSource")] = m_maxRoleId;
     ++m_maxRoleId;
 
     setObjectName(QStringLiteral("DataModel"));
@@ -257,7 +257,7 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
                 QVariant value = m_dataSource->data()->value(key);
                 if (value.isValid() && value.canConvert<Plasma::DataEngine::Data>()) {
                     Plasma::DataEngine::Data data = value.value<Plasma::DataEngine::Data>();
-                    data["DataEngineSource"] = key;
+                    data[QStringLiteral("DataEngineSource")] = key;
                     list.append(data);
                 }
             }

@@ -59,11 +59,11 @@ public:
         : isDefaultLoader(false),
           packageRE(QLatin1String("[^a-zA-Z0-9\\-_]"))
     {
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new PlasmoidPackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/DataEngine"), new DataEnginePackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Theme"), new ThemePackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/ContainmentActions"), new ContainmentActionsPackage());
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Generic"), new GenericPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Applet"), new PlasmoidPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/DataEngine"), new DataEnginePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Theme"), new ThemePackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/ContainmentActions"), new ContainmentActionsPackage());
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Generic"), new GenericPackage());
     }
 
     static QSet<QString> knownCategories();
@@ -94,26 +94,26 @@ QSet<QString> PluginLoaderPrivate::knownCategories()
     // this is to trick the tranlsation tools into making the correct
     // strings for translation
     QSet<QString> categories = s_customCategories;
-    categories << QString(I18N_NOOP("Accessibility")).toLower()
-               << QString(I18N_NOOP("Application Launchers")).toLower()
-               << QString(I18N_NOOP("Astronomy")).toLower()
-               << QString(I18N_NOOP("Date and Time")).toLower()
-               << QString(I18N_NOOP("Development Tools")).toLower()
-               << QString(I18N_NOOP("Education")).toLower()
-               << QString(I18N_NOOP("Environment and Weather")).toLower()
-               << QString(I18N_NOOP("Examples")).toLower()
-               << QString(I18N_NOOP("File System")).toLower()
-               << QString(I18N_NOOP("Fun and Games")).toLower()
-               << QString(I18N_NOOP("Graphics")).toLower()
-               << QString(I18N_NOOP("Language")).toLower()
-               << QString(I18N_NOOP("Mapping")).toLower()
-               << QString(I18N_NOOP("Miscellaneous")).toLower()
-               << QString(I18N_NOOP("Multimedia")).toLower()
-               << QString(I18N_NOOP("Online Services")).toLower()
-               << QString(I18N_NOOP("Productivity")).toLower()
-               << QString(I18N_NOOP("System Information")).toLower()
-               << QString(I18N_NOOP("Utilities")).toLower()
-               << QString(I18N_NOOP("Windows and Tasks")).toLower();
+    categories << QStringLiteral(I18N_NOOP("Accessibility")).toLower()
+               << QStringLiteral(I18N_NOOP("Application Launchers")).toLower()
+               << QStringLiteral(I18N_NOOP("Astronomy")).toLower()
+               << QStringLiteral(I18N_NOOP("Date and Time")).toLower()
+               << QStringLiteral(I18N_NOOP("Development Tools")).toLower()
+               << QStringLiteral(I18N_NOOP("Education")).toLower()
+               << QStringLiteral(I18N_NOOP("Environment and Weather")).toLower()
+               << QStringLiteral(I18N_NOOP("Examples")).toLower()
+               << QStringLiteral(I18N_NOOP("File System")).toLower()
+               << QStringLiteral(I18N_NOOP("Fun and Games")).toLower()
+               << QStringLiteral(I18N_NOOP("Graphics")).toLower()
+               << QStringLiteral(I18N_NOOP("Language")).toLower()
+               << QStringLiteral(I18N_NOOP("Mapping")).toLower()
+               << QStringLiteral(I18N_NOOP("Miscellaneous")).toLower()
+               << QStringLiteral(I18N_NOOP("Multimedia")).toLower()
+               << QStringLiteral(I18N_NOOP("Online Services")).toLower()
+               << QStringLiteral(I18N_NOOP("Productivity")).toLower()
+               << QStringLiteral(I18N_NOOP("System Information")).toLower()
+               << QStringLiteral(I18N_NOOP("Utilities")).toLower()
+               << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower();
     return categories;
 }
 
@@ -194,7 +194,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_plasmoidsPluginDir, filter);
 
-    if (plugins.count()) {
+    if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
         if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
@@ -285,7 +285,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
 
-    if (plugins.count()) {
+    if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
@@ -308,8 +308,8 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/DataEngine"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/DataEngine"), new DataEnginePackage());
     }
 
     QStringList engines;
@@ -325,12 +325,12 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
         plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
-    for (auto plugin : plugins) {
+    foreach (auto& plugin, plugins) {
         engines << plugin.pluginId();
     }
 
-    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages("Plasma/DataEngine");
-    for (auto plugin : packagePlugins) {
+    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages(QStringLiteral("Plasma/DataEngine"));
+    for (auto& plugin : packagePlugins) {
         engines << plugin.pluginId();
     }
 
@@ -339,16 +339,16 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
 
 KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/DataEngine"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/DataEngine"), new DataEnginePackage());
     }
     return PluginLoader::self()->listDataEngineInfo(parentApp);
 }
 
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure("Plasma/DataEngine")) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure("Plasma/DataEngine", new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/DataEngine"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/DataEngine"), new DataEnginePackage());
     }
 
     KPluginInfo::List list;
@@ -374,7 +374,7 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
 
 
     //TODO FIXME: PackageLoader needs to have a function to inject packageStructures
-    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages("Plasma/DataEngine");
+    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages(QStringLiteral("Plasma/DataEngine"));
     list << KPluginInfo::fromMetaData(packagePlugins.toVector());
 
     return list;
@@ -402,7 +402,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_servicesPluginDir, filter);
 
-    if (plugins.count()) {
+    if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
         if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
@@ -443,7 +443,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
 
-    if (plugins.count()) {
+    if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
@@ -538,8 +538,8 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         structure->d->internalStructure = internalStructure;
     //fallback to old structures
     } else {
-        const QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, "Plasma/PackageStructure", constraint, 0);
+        const QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
+        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, QStringLiteral("Plasma/PackageStructure"), constraint, 0);
         if (structure) {
             structure->d->internalStructure = new PackageStructureWrapper(structure);
         }
@@ -579,7 +579,8 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
         //NOTE: it still produces kplugininfos from KServices because some user code expects
         //info.sevice() to be valid and would crash ohtherwise
-        for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
+        auto plugins = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
+        foreach (auto& md, plugins) {
             auto pi = KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
                 qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
@@ -605,7 +606,8 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
         //NOTE: it still produces kplugininfos from KServices because some user code expects
         //info.sevice() to be valid and would crash ohtherwise
-        for (auto md : KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter)) {
+        const auto plugins = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
+        foreach (auto& md, plugins) {
             auto pi =  KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
             if (!pi.isValid()) {
                 qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
@@ -623,7 +625,7 @@ KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeTyp
     {
         return md.value(QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
     };
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
 }
 
 KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
@@ -639,11 +641,11 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
         return (pa.isEmpty() || pa == parentApp) && !md.value(QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
-    KPluginInfo::List allApplets =  KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter).toVector());
+    KPluginInfo::List allApplets =  KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
 
     KPluginInfo::List filtered;
     foreach (const KPluginInfo &info, allApplets) {
-        QStringList urlPatterns = info.property("X-Plasma-DropUrlPatterns").toStringList();
+        QStringList urlPatterns = info.property(QStringLiteral("X-Plasma-DropUrlPatterns")).toStringList();
         foreach (const QString &glob, urlPatterns) {
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
@@ -674,7 +676,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
 
 
     QStringList categories;
-    for (auto plugin : allApplets) {
+    foreach (auto& plugin, allApplets) {
         if (plugin.category().isEmpty()) {
             if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
                 categories << i18nc("misc category", "Miscellaneous");
@@ -721,8 +723,8 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &category,
         const QString &parentApp)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new PlasmoidPackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Applet"), new PlasmoidPackage());
     }
 
     KConfigGroup group(KSharedConfig::openConfig(), "General");
@@ -753,8 +755,8 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
 
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Applet"), new DataEnginePackage());
     }
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
@@ -767,14 +769,14 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 
 QStringList PluginLoader::listContainmentTypes()
 {
-    if (!KPackage::PackageLoader::self()->loadPackageStructure(QLatin1String("Plasma/Applet"))) {
-        KPackage::PackageLoader::self()->addKnownPackageStructure(QLatin1String("Plasma/Applet"), new DataEnginePackage());
+    if (!KPackage::PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"))) {
+        KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Applet"), new DataEnginePackage());
     }
     KPluginInfo::List containmentInfos = listContainments();
     QSet<QString> types;
 
     foreach (const KPluginInfo &containmentInfo, containmentInfos) {
-        QStringList theseTypes = containmentInfo.service()->property("X-Plasma-ContainmentType").toStringList();
+        QStringList theseTypes = containmentInfo.service()->property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
         foreach (const QString &type, theseTypes) {
             types.insert(type);
         }

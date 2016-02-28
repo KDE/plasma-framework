@@ -75,9 +75,9 @@ void ComponentInstaller::installMissingComponent(const QString &type,
 
     d->alreadyPrompted.insert(searchString);
 
-    QDBusInterface packageKit(QLatin1String("org.freedesktop.PackageKit"),
-                              QLatin1String("/org/freedesktop/PackageKit"),
-                              QLatin1String("org.freedesktop.PackageKit.Modify"));
+    QDBusInterface packageKit(QStringLiteral("org.freedesktop.PackageKit"),
+                              QStringLiteral("/org/freedesktop/PackageKit"),
+                              QStringLiteral("org.freedesktop.PackageKit.Modify"));
     // We don't check packageKit.isValid() because the service is activated on
     // demand, so it will show up as "not valid".
     WId wid = 0;
@@ -86,7 +86,7 @@ void ComponentInstaller::installMissingComponent(const QString &type,
     }
     QStringList resources;
     resources.append(searchString);
-    packageKit.asyncCall(QLatin1String("InstallResources"), (unsigned int) wid,
+    packageKit.asyncCall(QStringLiteral("InstallResources"), (unsigned int) wid,
                          QLatin1String("plasma-service"), resources, QString());
 #else
     Q_UNUSED(type);

@@ -98,7 +98,7 @@ ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject 
 {
     // TODO: nested groups?
     ServiceJob *job = 0;
-    const QString op = !description.isEmpty() ? description.value("_name").toString() : QString();
+    const QString op = !description.isEmpty() ? description.value(QStringLiteral("_name")).toString() : QString();
 
     if (d->operationsMap.keys().isEmpty()) {
 #ifndef NDEBUG
@@ -173,11 +173,11 @@ void Service::setOperationsScheme(QIODevice *xml)
     //  KSharedConfig. We need a config object for the config loader even
     //  though we dont' actually want to use any config parts from it,
     //  we just want to share the KConfigLoader XML parsing.
-    KSharedConfigPtr config = KSharedConfig::openConfig("/dev/null");
+    KSharedConfigPtr config = KSharedConfig::openConfig(QStringLiteral("/dev/null"));
     KConfigLoader loader(config, xml);
 
     foreach (const QString &group, loader.groupList()) {
-        d->operationsMap[group]["_name"] = group;
+        d->operationsMap[group][QStringLiteral("_name")] = group;
     }
     foreach (KConfigSkeletonItem *item,  loader.items()) {
         d->operationsMap[item->group()][item->key()] = item->property();

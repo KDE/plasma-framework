@@ -38,7 +38,7 @@ bool buildonly = true;
 void PluginTest::listEngines()
 {
     KPluginInfo::List plugins = Plasma::PluginLoader::listEngineInfo();
-    foreach (const KPluginInfo info, plugins) {
+    foreach (const KPluginInfo& info, plugins) {
         //qDebug() << " Found DataEngine: " << info.pluginName() << info.name();
     }
     qDebug() << " Found " << plugins.count() << " DataEngines";
@@ -54,14 +54,14 @@ void PluginTest::listAppletCategories()
 
 void PluginTest::listContainmentActions()
 {
-    const KPluginInfo::List plugins = Plasma::PluginLoader::self()->listContainmentActionsInfo("plasma-shell");
+    const KPluginInfo::List plugins = Plasma::PluginLoader::self()->listContainmentActionsInfo(QStringLiteral("plasma-shell"));
     qDebug() << "Categories: " << plugins.count();
     //QVERIFY(plugins.count() > 0 || buildonly);
 }
 
 void PluginTest::listContainmentsOfType()
 {
-    const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType("Desktop");
+    const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType(QStringLiteral("Desktop"));
     qDebug() << "Desktop Containments: " << plugins.count();
     QVERIFY(plugins.count() > 0 || buildonly);
 
@@ -69,7 +69,7 @@ void PluginTest::listContainmentsOfType()
 
 void PluginTest::loadDataEngine()
 {
-    Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine("time");
+    Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine(QStringLiteral("time"));
     //qDebug() << "Engine loaded successfully" << engine->pluginInfo().name();
     QVERIFY(engine != 0 || buildonly);
 

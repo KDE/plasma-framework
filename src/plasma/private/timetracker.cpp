@@ -40,8 +40,8 @@ public:
 
         Q_FOREACH(const ObjectHistory& history, m_data) {
             QVariantMap map;
-            map["events"] = serializeEvents(history.events);
-            map["initial"] = history.initial;
+            map[QStringLiteral("events")] = serializeEvents(history.events);
+            map[QStringLiteral("initial")] = history.initial;
 
             array.append(QJsonValue::fromVariant(map));
         }
@@ -68,8 +68,8 @@ private:
         Q_ASSERT(!events.isEmpty());
         foreach(const TimeEvent& ev, events) {
             QVariantMap map;
-            map["comment"] = ev.comment;
-            map["time"] = ev.moment.toMSecsSinceEpoch();
+            map[QStringLiteral("comment")] = ev.comment;
+            map[QStringLiteral("time")] = ev.moment.toMSecsSinceEpoch();
             ret.append(map);
         }
         Q_ASSERT(ret.count() == events.count());
@@ -81,7 +81,7 @@ Q_GLOBAL_STATIC(TimeTrackerWriter, s_writer);
 TimeTracker::TimeTracker(QObject* o)
     : QObject(o)
 {
-    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QString("constructed %1 %2").arg(o->metaObject()->className()).arg(o->objectName()) });
+    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(o->metaObject()->className(), o->objectName()) });
 
     QTimer* t = new QTimer(this);
     t->setInterval(2000);
@@ -135,9 +135,9 @@ void TimeTracker::propertyChanged()
             }
 
             if (val.isEmpty()) {
-                val = QString("<unknown %1>").arg(prop.typeName());
+                val = QStringLiteral("<unknown %1>").arg(prop.typeName());
             }
-            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QString("property %1 changed to %2").arg(prop.name()).arg(val)});
+            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(prop.name(), val)});
             break;
         }
     }

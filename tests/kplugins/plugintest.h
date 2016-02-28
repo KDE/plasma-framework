@@ -45,7 +45,7 @@ public:
 public Q_SLOTS:
     void runMain();
     bool loadKPlugin();
-    bool loadFromKService(const QString &name = "time");
+    bool loadFromKService(const QString &name = QStringLiteral("time"));
     bool loadFromPlasma();
     void loadKQPlugin();
     bool loadKService(const QString &name = QString());

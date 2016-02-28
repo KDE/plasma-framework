@@ -56,7 +56,7 @@ public:
         : Service(parent)
     {
         setDestination(target);
-        setName("NullService");
+        setName(QStringLiteral("NullService"));
     }
 
     ServiceJob *createJob(const QString &operation, QVariantMap &) Q_DECL_OVERRIDE

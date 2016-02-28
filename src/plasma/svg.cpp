@@ -94,12 +94,12 @@ bool SharedSvgRenderer::load(
                 style = style.nextSiblingElement(STYLE)) {
             if (style.attribute(QStringLiteral("id")) == QLatin1String("current-color-scheme")) {
                 QDomElement colorScheme = svg.createElement(STYLE);
-                colorScheme.setAttribute(QLatin1String("type"), QLatin1String("text/css"));
-                colorScheme.setAttribute(QLatin1String("id"), QLatin1String("current-color-scheme"));
+                colorScheme.setAttribute(QStringLiteral("type"), QStringLiteral("text/css"));
+                colorScheme.setAttribute(QStringLiteral("id"), QStringLiteral("current-color-scheme"));
                 defs.replaceChild(colorScheme, style);
                 colorScheme.appendChild(svg.createCDATASection(styleSheet));
 
-                interestingElements.insert(QLatin1String("current-color-scheme"), QRect(0, 0, 1, 1));
+                interestingElements.insert(QStringLiteral("current-color-scheme"), QRect(0, 0, 1, 1));
 
                 break;
             }
@@ -278,7 +278,7 @@ Theme *SvgPrivate::cacheAndColorsTheme()
         // use a separate cache source for unthemed svg's
         if (!s_systemColorsCache) {
             //FIXME: reference count this, so that it is deleted when no longer in use
-            s_systemColorsCache = new Plasma::Theme(QLatin1String("internal-system-colors"));
+            s_systemColorsCache = new Plasma::Theme(QStringLiteral("internal-system-colors"));
         }
 
         return s_systemColorsCache.data();
@@ -738,7 +738,7 @@ void Svg::setScaleFactor(qreal ratio)
     //not resize() because we want to do it unconditionally
     QRectF rect;
 
-    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QString("_Natural_%1").arg(d->scaleFactor), rect)) {
+    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QStringLiteral("_Natural_%1").arg(d->scaleFactor), rect)) {
         d->naturalSize = rect.size();
     } else {
         d->createRenderer();

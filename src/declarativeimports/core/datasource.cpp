@@ -34,7 +34,7 @@ DataSource::DataSource(QObject *parent)
 {
     m_models = new QQmlPropertyMap(this);
     m_data = new QQmlPropertyMap(this);
-    setObjectName("DataSource");
+    setObjectName(QStringLiteral("DataSource"));
 }
 
 void DataSource::classBegin()

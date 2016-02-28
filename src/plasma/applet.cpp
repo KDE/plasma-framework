@@ -238,7 +238,7 @@ KConfigGroup Applet::config() const
 KConfigGroup Applet::globalConfig() const
 {
     KConfigGroup globalAppletConfig;
-    QString group = isContainment() ? "ContainmentGlobals" : "AppletGlobals";
+    QString group = isContainment() ? QStringLiteral("ContainmentGlobals") : QStringLiteral("AppletGlobals");
 
     Containment *cont = containment();
     Corona *corona = 0;
@@ -481,24 +481,24 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::Types::StartupCompletedConstraint) {
         //common actions
         bool unlocked = immutability() == Types::Mutable;
-        QAction *closeApplet = d->actions->action("remove");
+        QAction *closeApplet = d->actions->action(QStringLiteral("remove"));
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
             connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(askDestroy()), Qt::UniqueConnection);
         }
 
-        QAction *configAction = d->actions->action("configure");
+        QAction *configAction = d->actions->action(QStringLiteral("configure"));
         if (configAction) {
 
             if (d->hasConfigurationInterface) {
-                bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
+                bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
                 configAction->setVisible(canConfig);
                 configAction->setEnabled(canConfig);
             }
         }
 
-        QAction *runAssociatedApplication = d->actions->action("run associated application");
+        QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
         if (runAssociatedApplication) {
             connect(runAssociatedApplication, SIGNAL(triggered(bool)), this, SLOT(runAssociatedApplication()), Qt::UniqueConnection);
         }
@@ -508,21 +508,21 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::Types::ImmutableConstraint) {
         bool unlocked = immutability() == Types::Mutable;
-        QAction *action = d->actions->action("remove");
+        QAction *action = d->actions->action(QStringLiteral("remove"));
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
 
-        action = d->actions->action("alternatives");
+        action = d->actions->action(QStringLiteral("alternatives"));
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
 
-        action = d->actions->action("configure");
+        action = d->actions->action(QStringLiteral("configure"));
         if (action && d->hasConfigurationInterface) {
-            bool canConfig = unlocked || KAuthorized::authorize("plasma/allow_configure_when_locked");
+            bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
             action->setVisible(canConfig);
             action->setEnabled(canConfig);
         }
@@ -690,7 +690,7 @@ void Applet::setAssociatedApplication(const QString &string)
 {
     AssociatedApplicationManager::self()->setApplication(this, string);
 
-    QAction *runAssociatedApplication = d->actions->action("run associated application");
+    QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
         runAssociatedApplication->setVisible(valid);
@@ -702,7 +702,7 @@ void Applet::setAssociatedApplicationUrls(const QList<QUrl> &urls)
 {
     AssociatedApplicationManager::self()->setUrls(this, urls);
 
-    QAction *runAssociatedApplication = d->actions->action("run associated application");
+    QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
     if (runAssociatedApplication) {
         bool valid = AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
         runAssociatedApplication->setVisible(valid);

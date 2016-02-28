@@ -64,10 +64,10 @@ QStringList knownLanguages(Types::ComponentTypes types)
     QStringList languages;
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
 
-    for (auto plugin : plugins) {
+    foreach (const auto &plugin, plugins) {
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && !componentTypes.contains(QLatin1String("Applet")))
-          ||((types & Types::DataEngineComponent) && !componentTypes.contains(QLatin1String("DataEngine")))) {
+        if (((types & Types::AppletComponent)     && !componentTypes.contains(QStringLiteral("Applet")))
+          ||((types & Types::DataEngineComponent) && !componentTypes.contains(QStringLiteral("DataEngine")))) {
             languages << plugin.value(QStringLiteral("X-Plasma-API"));
         }
     }
@@ -86,10 +86,10 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
 
-    if (plugins.count()) {
+    if (!plugins.isEmpty()) {
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((type & Types::AppletComponent)     && !componentTypes.contains(QLatin1String("Applet")))
-         || ((type & Types::DataEngineComponent) && !componentTypes.contains(QLatin1String("DataEngine")))) {
+        if (((type & Types::AppletComponent)     && !componentTypes.contains(QStringLiteral("Applet")))
+         || ((type & Types::DataEngineComponent) && !componentTypes.contains(QStringLiteral("DataEngine")))) {
 
             qCWarning(LOG_PLASMA) << "ScriptEngine" << plugins.first().name() << "does not provide Applet or DataEngine components, returning empty.";
             return 0;

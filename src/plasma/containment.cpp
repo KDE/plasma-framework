@@ -101,7 +101,7 @@ void Containment::init()
     if (d->type == Types::NoContainmentType) {
         //setContainmentType(Plasma::Types::DesktopContainment);
         //Try to determine the containment type. It must be done as soon as possible
-        QString type = pluginInfo().property("X-Plasma-ContainmentType").toString();
+        QString type = pluginInfo().property(QStringLiteral("X-Plasma-ContainmentType")).toString();
 
         if (type == QLatin1String("Panel")) {
             setContainmentType(Plasma::Types::PanelContainment);
@@ -142,7 +142,7 @@ void Containment::init()
         QAction *lockDesktopAction = corona()->actions()->action(QStringLiteral("lock widgets"));
         //keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            actions()->addAction(QLatin1String("lock widgets"), lockDesktopAction);
+            actions()->addAction(QStringLiteral("lock widgets"), lockDesktopAction);
         }
     }
 
@@ -287,7 +287,7 @@ void Containment::restoreContents(KConfigGroup &group)
         d->createApplet(plugin, QVariantList(), appId);
     }
 
-    for (Applet *applet : Containment::applets()) {
+    foreach (Applet *applet, Containment::applets()) {
         if (!applet->pluginInfo().isValid()) {
             applet->updateConstraints(Plasma::Types::UiReadyConstraint);
         }

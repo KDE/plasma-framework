@@ -56,12 +56,12 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));*/
     qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
-            QLatin1String("Do not create objects of type Plasmoid"));
+            QStringLiteral("Do not create objects of type Plasmoid"));
     qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
-            QLatin1String("Do not create objects of type Containment"));
+            QStringLiteral("Do not create objects of type Containment"));
 
     qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
-            QLatin1String("Do not create objects of type Wallpaper"));
+            QStringLiteral("Do not create objects of type Wallpaper"));
 
     qmlRegisterType<KDeclarative::ConfigPropertyMap>();
 }

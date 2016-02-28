@@ -53,21 +53,21 @@ int main(int argc, char **argv)
     parser.addVersionOption();
     parser.addHelpOption();
     parser.setApplicationDescription(description);
-    parser.addOption(QCommandLineOption(QStringList() << "hash", i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), "path"));
-    parser.addOption(QCommandLineOption(QStringList() << "g" << "global", i18n("For install or remove, operates on packages installed for all users.")));
-    parser.addOption(QCommandLineOption(QStringList() << "t" << "type",
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("hash"), i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), QStringLiteral("path")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("g") << QStringLiteral("global"), i18n("For install or remove, operates on packages installed for all users.")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("type"),
                                         i18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
                                                 "are recognized by the application "
                                                 "(if translated, should be same as messages with 'package type' context below)",
                                                 "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, layout-template, etc."),
-                                        "type", "plasmoid"));
-    parser.addOption(QCommandLineOption(QStringList() << "i" << "install", i18nc("Do not translate <path>", "Install the package at <path>"), "path"));
-    parser.addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show information of package <name>"), "name"));
-    parser.addOption(QCommandLineOption(QStringList() << "u" << "upgrade", i18nc("Do not translate <path>", "Upgrade the package at <path>"), "path"));
-    parser.addOption(QCommandLineOption(QStringList() << "l" << "list", i18n("List installed packages")));
-    parser.addOption(QCommandLineOption(QStringList() << "list-types", i18n("List all known package types that can be installed")));
-    parser.addOption(QCommandLineOption(QStringList() << "r" << "remove", i18nc("Do not translate <name>", "Remove the package named <name>"), "name"));
-    parser.addOption(QCommandLineOption(QStringList() << "p" << "packageroot", i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), "path"));
+                                        QStringLiteral("type"), QStringLiteral("plasmoid")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("i") << QStringLiteral("install"), i18nc("Do not translate <path>", "Install the package at <path>"), QStringLiteral("path")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"), i18nc("Do not translate <name>", "Show information of package <name>"), QStringLiteral("name")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("u") << QStringLiteral("upgrade"), i18nc("Do not translate <path>", "Upgrade the package at <path>"), QStringLiteral("path")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("l") << QStringLiteral("list"), i18n("List installed packages")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("list-types"), i18n("List all known package types that can be installed")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("r") << QStringLiteral("remove"), i18nc("Do not translate <name>", "Remove the package named <name>"), QStringLiteral("name")));
+    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("p") << QStringLiteral("packageroot"), i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), QStringLiteral("path")));
 
     parser.process(app);
 

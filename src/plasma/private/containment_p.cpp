@@ -72,7 +72,7 @@ Plasma::ContainmentPrivate::~ContainmentPrivate()
 
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
-    actions->setConfigGroup(QLatin1String("Shortcuts-Containment"));
+    actions->setConfigGroup(QStringLiteral("Shortcuts-Containment"));
 
     //adjust applet actions
     QAction *appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("remove")));
@@ -90,10 +90,10 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     }
 
     //add our own actions
-    QAction *appletBrowserAction = actions->add<QAction>(QLatin1String("add widgets"));
+    QAction *appletBrowserAction = actions->add<QAction>(QStringLiteral("add widgets"));
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
-    appletBrowserAction->setIcon(QIcon::fromTheme(QLatin1String("list-add")));
+    appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     appletBrowserAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::Key_A));
     appletBrowserAction->setData(Plasma::Types::AddAction);
 }
@@ -147,13 +147,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         //update actions
         const bool unlocked = q->immutability() == Types::Mutable;
 
-        QAction *action = q->actions()->action("remove");
+        QAction *action = q->actions()->action(QStringLiteral("remove"));
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);
         }
 
-        action = q->actions()->action("add widgets");
+        action = q->actions()->action(QStringLiteral("add widgets"));
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);

@@ -35,17 +35,17 @@ public:
         : Plasma::Package(new Plasma::PackageStructure)
     {
         setContentsPrefixPaths(QStringList());
-        addDirectoryDefinition("bin", "bin", "bin");
-        addFileDefinition("MultiplePaths", "first", "Description proper");
-        addFileDefinition("MultiplePaths", "second", "Description proper");
-        setPath("/");
+        addDirectoryDefinition("bin", QStringLiteral("bin"), QStringLiteral("bin"));
+        addFileDefinition("MultiplePaths", QStringLiteral("first"), QStringLiteral("Description proper"));
+        addFileDefinition("MultiplePaths", QStringLiteral("second"), QStringLiteral("Description proper"));
+        setPath(QStringLiteral("/"));
     }
 };
 
 void PackageStructureTest::initTestCase()
 {
     m_packagePath = QFINDTESTDATA("data/testpackage");
-    ps = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    ps = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Generic"));
     ps.setPath(m_packagePath);
 }
 
@@ -53,19 +53,19 @@ void PackageStructureTest::validStructures()
 {
     QVERIFY(ps.hasValidStructure());
     QVERIFY(!Plasma::Package().hasValidStructure());
-    QVERIFY(!Plasma::PluginLoader::self()->loadPackage("doesNotExist").hasValidStructure());
+    QVERIFY(!Plasma::PluginLoader::self()->loadPackage(QStringLiteral("doesNotExist")).hasValidStructure());
 }
 
 void PackageStructureTest::validPackages()
 {
     QVERIFY(ps.isValid());
     QVERIFY(!Plasma::Package().isValid());
-    QVERIFY(!Plasma::PluginLoader::self()->loadPackage("doesNotExist").isValid());
+    QVERIFY(!Plasma::PluginLoader::self()->loadPackage(QStringLiteral("doesNotExist")).isValid());
     QVERIFY(NoPrefixes().isValid());
 
-    Plasma::Package p = Plasma::PluginLoader::self()->loadPackage("Plasma/Generic");
+    Plasma::Package p = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Generic"));
     QVERIFY(!p.isValid());
-    p.setPath("/does/not/exist");
+    p.setPath(QStringLiteral("/does/not/exist"));
     QVERIFY(!p.isValid());
     p.setPath(ps.path());
     QVERIFY(p.isValid());
@@ -120,18 +120,18 @@ void PackageStructureTest::mutateAfterCopy()
 
     copy = ps;
     QStringList copyContentsPrefixPaths = contentsPrefixPaths;
-    copyContentsPrefixPaths << "more/";
+    copyContentsPrefixPaths << QStringLiteral("more/");
     copy.setContentsPrefixPaths(copyContentsPrefixPaths);
     QCOMPARE(ps.contentsPrefixPaths(), contentsPrefixPaths);
     QCOMPARE(copy.contentsPrefixPaths(), copyContentsPrefixPaths);
 
     copy = ps;
-    copy.addFileDefinition("nonsense", "foobar", QString());
+    copy.addFileDefinition("nonsense", QStringLiteral("foobar"), QString());
     QCOMPARE(ps.files(), files);
     QVERIFY(ps.files() != copy.files());
 
     copy = ps;
-    copy.addDirectoryDefinition("nonsense", "foobar", QString());
+    copy.addDirectoryDefinition("nonsense", QStringLiteral("foobar"), QString());
     QCOMPARE(ps.directories(), dirs);
     QVERIFY(ps.directories() != copy.directories());
 
@@ -152,7 +152,7 @@ void PackageStructureTest::mutateAfterCopy()
 
     copy = ps;
     QStringList copyDefaultMimeTypes = defaultMimeTypes;
-    copyDefaultMimeTypes << "rubbish";
+    copyDefaultMimeTypes << QStringLiteral("rubbish");
     copy.setDefaultMimeTypes(copyDefaultMimeTypes);
     QCOMPARE(ps.mimeTypes("translations"), defaultMimeTypes);
     QCOMPARE(copy.mimeTypes("translations"), copyDefaultMimeTypes);
@@ -162,15 +162,15 @@ void PackageStructureTest::mutateAfterCopy()
 void PackageStructureTest::emptyContentsPrefix()
 {
     NoPrefixes package;
-    QString path(package.filePath("bin", "ls"));
+    QString path(package.filePath("bin", QStringLiteral("ls")));
     //qDebug() << path;
-    QCOMPARE(path, QString("/bin/ls"));
+    QCOMPARE(path, QStringLiteral("/bin/ls"));
 }
 
 void PackageStructureTest::multiplePaths()
 {
     NoPrefixes package;
-    QCOMPARE(package.name("MultiplePaths"), QString("Description proper"));
+    QCOMPARE(package.name("MultiplePaths"), QStringLiteral("Description proper"));
 }
 
 void PackageStructureTest::directories()
@@ -248,9 +248,9 @@ void PackageStructureTest::requiredFiles()
 
 void PackageStructureTest::path()
 {
-    QCOMPARE(ps.filePath("images"), QDir(m_packagePath + QString("/contents/images")).canonicalPath());
-    QCOMPARE(ps.filePath("theme"), QDir(m_packagePath + QString("/contents/theme")).canonicalPath());
-    QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QString("/contents/ui/main.qml")).canonicalFilePath());
+    QCOMPARE(ps.filePath("images"), QDir(m_packagePath + QStringLiteral("/contents/images")).canonicalPath());
+    QCOMPARE(ps.filePath("theme"), QDir(m_packagePath + QStringLiteral("/contents/theme")).canonicalPath());
+    QCOMPARE(ps.filePath("mainscript"), QFileInfo(m_packagePath + QStringLiteral("/contents/ui/main.qml")).canonicalFilePath());
 }
 
 void PackageStructureTest::name()
@@ -267,7 +267,7 @@ void PackageStructureTest::required()
 void PackageStructureTest::mimeTypes()
 {
     QStringList mimeTypes;
-    mimeTypes << "image/svg+xml" << "image/png" << "image/jpeg";
+    mimeTypes << QStringLiteral("image/svg+xml") << QStringLiteral("image/png") << QStringLiteral("image/jpeg");
     QCOMPARE(ps.mimeTypes("images"), mimeTypes);
     QCOMPARE(ps.mimeTypes("theme"), mimeTypes);
 }

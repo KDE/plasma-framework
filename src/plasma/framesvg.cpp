@@ -193,16 +193,16 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 {
     switch (location) {
     case Types::TopEdge:
-        setElementPrefix("north");
+        setElementPrefix(QStringLiteral("north"));
         break;
     case Types::BottomEdge:
-        setElementPrefix("south");
+        setElementPrefix(QStringLiteral("south"));
         break;
     case Types::LeftEdge:
-        setElementPrefix("west");
+        setElementPrefix(QStringLiteral("west"));
         break;
     case Types::RightEdge:
-        setElementPrefix("east");
+        setElementPrefix(QStringLiteral("east"));
         break;
     default:
         setElementPrefix(QString());

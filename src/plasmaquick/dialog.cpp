@@ -215,9 +215,9 @@ void DialogPrivate::updateTheme()
         DialogShadows::self()->removeWindow(q);
     } else {
         if (type == Dialog::Tooltip) {
-            frameSvgItem->setImagePath("widgets/tooltip");
+            frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
         } else {
-            frameSvgItem->setImagePath("dialogs/background");
+            frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
         }
 
         KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
@@ -661,7 +661,7 @@ Dialog::Dialog(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    setIcon(QIcon::fromTheme("plasma"));
+    setIcon(QIcon::fromTheme(QStringLiteral("plasma")));
 
     connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
     connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
@@ -998,9 +998,9 @@ void Dialog::setType(WindowType type)
         d->frameSvgItem->setImagePath(QString());
     } else {
         if (d->type == Tooltip) {
-            d->frameSvgItem->setImagePath("widgets/tooltip");
+            d->frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
         } else {
-            d->frameSvgItem->setImagePath("dialogs/background");
+            d->frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
         }
     }
 

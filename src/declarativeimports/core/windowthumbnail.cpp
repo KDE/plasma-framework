@@ -245,7 +245,7 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
         icon = KWindowSystem::self()->icon(m_winId);
     } else {
         // fallback to plasma icon
-        icon = QIcon::fromTheme("plasma");
+        icon = QIcon::fromTheme(QStringLiteral("plasma"));
     }
     QImage image = icon.pixmap(boundingRect().size().toSize()).toImage();
     textureNode->reset(window()->createTextureFromImage(image));
@@ -513,7 +513,7 @@ bool WindowThumbnail::loadGLXTexture()
     // As the GLXFBConfig might be context specific and we cannot be sure
     // that the code might be entered from different contexts, the cache
     // also maps the cached configs against the context.
-    static QMap<GLXContext, QMap<int, GLXFBConfig> > s_fbConfigs;
+    static QHash<GLXContext, QMap<int, GLXFBConfig> > s_fbConfigs;
     auto it = s_fbConfigs.find(glxContext);
     if (it == s_fbConfigs.end()) {
         // create a map entry for the current context

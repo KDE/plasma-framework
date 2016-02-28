@@ -33,6 +33,7 @@ class Svg;
 
 class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {
+    Q_OBJECT
 public:
     typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
 

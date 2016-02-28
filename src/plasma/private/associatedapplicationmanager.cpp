@@ -71,7 +71,7 @@ public:
 
         QHash<const Plasma::Applet *, QList<QUrl> >::iterator i;
         for (i = urlLists.begin(); i != urlLists.end(); ++i) {
-            QAction *a = i.key()->actions()->action("run associated application");
+            QAction *a = i.key()->actions()->action(QStringLiteral("run associated application"));
             if (a) {
                 const QString mimeType = mimeDb.mimeTypeForUrl(i.value().first()).name();
                 const KService::List apps = KMimeTypeTrader::self()->query(mimeType);
@@ -79,7 +79,7 @@ public:
                     a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                     a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
                 } else {
-                    a->setIcon(QIcon::fromTheme("system-run"));
+                    a->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                     a->setText(i18n("Run the Associated Application"));
                 }
             }
@@ -121,9 +121,9 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
     if (service || !QStandardPaths::findExecutable(application).isNull() || QFile::exists(application)) {
         d->applicationNames[applet] = application;
         if (d->urlLists.contains(applet)) {
-            QAction *a = applet->actions()->action("run associated application");
+            QAction *a = applet->actions()->action(QStringLiteral("run associated application"));
             if (a) {
-                a->setIcon(QIcon::fromTheme("system-run"));
+                a->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                 a->setText(i18n("Run the Associated Application"));
             }
         }
@@ -140,7 +140,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
 {
     d->urlLists[applet] = urls;
     if (!d->applicationNames.contains(applet)) {
-        QAction *a = applet->actions()->action("run associated application");
+        QAction *a = applet->actions()->action(QStringLiteral("run associated application"));
         if (a) {
             QMimeDatabase mimeDb;
             const QString mimeType = mimeDb.mimeTypeForUrl(urls.first()).name();
@@ -149,7 +149,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
                 a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                 a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
             } else {
-                a->setIcon(QIcon::fromTheme("system-run"));
+                a->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                 a->setText(i18n("Run the Associated Application"));
             }
         }

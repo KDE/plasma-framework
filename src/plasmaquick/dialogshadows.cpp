@@ -252,22 +252,22 @@ QPixmap DialogShadows::Private::initEmptyPixmap(const QSize &size)
 void DialogShadows::Private::setupPixmaps()
 {
     clearPixmaps();
-    initPixmap("shadow-top");
-    initPixmap("shadow-topright");
-    initPixmap("shadow-right");
-    initPixmap("shadow-bottomright");
-    initPixmap("shadow-bottom");
-    initPixmap("shadow-bottomleft");
-    initPixmap("shadow-left");
-    initPixmap("shadow-topleft");
+    initPixmap(QStringLiteral("shadow-top"));
+    initPixmap(QStringLiteral("shadow-topright"));
+    initPixmap(QStringLiteral("shadow-right"));
+    initPixmap(QStringLiteral("shadow-bottomright"));
+    initPixmap(QStringLiteral("shadow-bottom"));
+    initPixmap(QStringLiteral("shadow-bottomleft"));
+    initPixmap(QStringLiteral("shadow-left"));
+    initPixmap(QStringLiteral("shadow-topleft"));
 
     m_emptyCornerPix = initEmptyPixmap(QSize(1, 1));
-    m_emptyCornerLeftPix = initEmptyPixmap(QSize(q->elementSize("shadow-topleft").width(), 1));
-    m_emptyCornerTopPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-topleft").height()));
-    m_emptyCornerRightPix = initEmptyPixmap(QSize(q->elementSize("shadow-bottomright").width(), 1));
-    m_emptyCornerBottomPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-bottomright").height()));
-    m_emptyVerticalPix = initEmptyPixmap(QSize(1, q->elementSize("shadow-left").height()));
-    m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize("shadow-top").width(), 1));
+    m_emptyCornerLeftPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-topleft")).width(), 1));
+    m_emptyCornerTopPix = initEmptyPixmap(QSize(1, q->elementSize(QStringLiteral("shadow-topleft")).height()));
+    m_emptyCornerRightPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-bottomright")).width(), 1));
+    m_emptyCornerBottomPix = initEmptyPixmap(QSize(1, q->elementSize(QStringLiteral("shadow-bottomright")).height()));
+    m_emptyVerticalPix = initEmptyPixmap(QSize(1, q->elementSize(QStringLiteral("shadow-left")).height()));
+    m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-top")).width(), 1));
 
 }
 
@@ -358,7 +358,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
 
     QSize marginHint;
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
-        marginHint = q->elementSize("shadow-hint-top-margin");
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-top-margin"));
         if (marginHint.isValid()) {
             top = marginHint.height();
         } else {
@@ -369,7 +369,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
     }
 
     if (enabledBorders & Plasma::FrameSvg::RightBorder) {
-        marginHint = q->elementSize("shadow-hint-right-margin");
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-right-margin"));
         if (marginHint.isValid()) {
             right = marginHint.width();
         } else {
@@ -380,7 +380,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
     }
 
     if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
-        marginHint = q->elementSize("shadow-hint-bottom-margin");
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-bottom-margin"));
         if (marginHint.isValid()) {
             bottom = marginHint.height();
         } else {
@@ -391,7 +391,7 @@ void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledB
     }
 
     if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
-        marginHint = q->elementSize("shadow-hint-left-margin");
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-left-margin"));
         if (marginHint.isValid()) {
             left = marginHint.width();
         } else {
@@ -502,7 +502,7 @@ void DialogShadows::Private::clearShadow(const QWindow *window)
 
 bool DialogShadows::enabled() const
 {
-    return hasElement("shadow-left");
+    return hasElement(QStringLiteral("shadow-left"));
 }
 
 #include "moc_dialogshadows_p.cpp"

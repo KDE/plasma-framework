@@ -123,9 +123,9 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->title()));
     }
 
-    QAction *configAction = actions->action("configure");
+    QAction *configAction = actions->action(QStringLiteral("configure"));
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings...", q->title().replace('&', "&&")));
+        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings...", q->title().replace(QLatin1Char('&'), QStringLiteral("&&"))));
     }
 
     if (!appletDescription.isValid()) {
@@ -137,18 +137,18 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         return;
     }
 
-    QString api = appletDescription.property("X-Plasma-API").toString();
+    QString api = appletDescription.property(QStringLiteral("X-Plasma-API")).toString();
 
     if (api.isEmpty()) {
         q->setLaunchErrorMessage(i18n("The %1 widget did not define which ScriptEngine to use.", appletDescription.name()));
         return;
     }
 
-    QString path = appletDescription.property("X-Plasma-RootPath").toString();
+    QString path = appletDescription.property(QStringLiteral("X-Plasma-RootPath")).toString();
     if (path.isEmpty()) {
         path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
     }
-    Plasma::Package p = PluginLoader::self()->loadPackage("Plasma/Applet", api);
+    Plasma::Package p = PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), api);
     p.setPath(path);
 
     package = new KPackage::Package(*p.d->internalPackage);
@@ -185,7 +185,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 
     if (!q->isContainment() && q->pluginInfo().isValid()) {
         QString constraint;
-        QStringList provides = q->pluginInfo().property("X-Plasma-Provides").toStringList();
+        QStringList provides = q->pluginInfo().property(QStringLiteral("X-Plasma-Provides")).toStringList();
         if (!provides.isEmpty()) {
             auto filter = [&provides](const KPluginMetaData &md) -> bool
             {
@@ -196,11 +196,11 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
                 }
                 return false;
             };
-            QList<KPluginMetaData> applets = KPackage::PackageLoader::self()->findPackages("Plasma/Applet", QString(), filter);
+            QList<KPluginMetaData> applets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
             if (applets.count() > 1) {
-                QAction *a = new QAction(QIcon::fromTheme("preferences-desktop-default-applications"), i18n("Alternatives..."), q);
-                q->actions()->addAction("alternatives", a);
+                QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("preferences-desktop-default-applications")), i18n("Alternatives..."), q);
+                q->actions()->addAction(QStringLiteral("alternatives"), a);
                 QObject::connect(a, &QAction::triggered,[=] {
                     if (q->containment()) {
                         emit q->containment()->appletAlternativesRequested(q);
@@ -253,10 +253,10 @@ void AppletPrivate::askDestroy()
         emit q->immutabilityChanged(q->immutability());
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
-        deleteNotification = new KNotification("plasmoidDeleted", KNotification::Persistent, 0);
+        deleteNotification = new KNotification(QStringLiteral("plasmoidDeleted"), KNotification::Persistent, 0);
         deleteNotification->setFlags(KNotification::SkipGrouping);
 
-        deleteNotification->setComponentName("plasma_workspace");
+        deleteNotification->setComponentName(QStringLiteral("plasma_workspace"));
         QStringList actions;
         deleteNotification->setIconName(q->icon());
         Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
@@ -358,27 +358,27 @@ void AppletPrivate::globalShortcutChanged()
 KActionCollection *AppletPrivate::defaultActions(QObject *parent)
 {
     KActionCollection *actions = new KActionCollection(parent);
-    actions->setConfigGroup("Shortcuts-Applet");
+    actions->setConfigGroup(QStringLiteral("Shortcuts-Applet"));
 
-    QAction *configAction = actions->add<QAction>("configure");
+    QAction *configAction = actions->add<QAction>(QStringLiteral("configure"));
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
-    configAction->setIcon(QIcon::fromTheme("configure"));
-    configAction->setShortcut(QKeySequence("alt+d, s"));
+    configAction->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
+    configAction->setShortcut(QKeySequence(QStringLiteral("alt+d, s")));
     configAction->setData(Plasma::Types::ConfigureAction);
 
-    QAction *closeApplet = actions->add<QAction>("remove");
+    QAction *closeApplet = actions->add<QAction>(QStringLiteral("remove"));
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
-    closeApplet->setIcon(QIcon::fromTheme("edit-delete"));
-    closeApplet->setShortcut(QKeySequence("alt+d, r"));
+    closeApplet->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
+    closeApplet->setShortcut(QKeySequence(QStringLiteral("alt+d, r")));
     closeApplet->setData(Plasma::Types::DestructiveAction);
 
-    QAction *runAssociatedApplication = actions->add<QAction>("run associated application");
+    QAction *runAssociatedApplication = actions->add<QAction>(QStringLiteral("run associated application"));
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
-    runAssociatedApplication->setIcon(QIcon::fromTheme("system-run"));
-    runAssociatedApplication->setShortcut(QKeySequence("alt+d, t"));
+    runAssociatedApplication->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
+    runAssociatedApplication->setShortcut(QKeySequence(QStringLiteral("alt+d, t")));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
     runAssociatedApplication->setData(Plasma::Types::ControlAction);
@@ -400,7 +400,7 @@ void AppletPrivate::updateShortcuts()
         //we pull them out, then read, then put them back
         QList<QString> names;
         QList<QAction *> qactions;
-        names << "add sibling containment" << "configure shortcuts" << "lock widgets";
+        names << QStringLiteral("add sibling containment") << QStringLiteral("configure shortcuts") << QStringLiteral("lock widgets");
         foreach (const QString &name, names) {
             QAction *a = actions->action(name);
             actions->takeAction(a); //FIXME this is stupid, KActionCollection needs a takeAction(QString) method

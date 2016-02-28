@@ -302,7 +302,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     emit immutabilityChanged(immutable);
 
     //update our actions
-    QAction *action = d->actions.action("lock widgets");
+    QAction *action = d->actions.action(QStringLiteral("lock widgets"));
     if (action) {
         if (d->immutability == Types::SystemImmutable) {
             action->setEnabled(false);
@@ -310,7 +310,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
         } else {
             bool unlocked = d->immutability == Types::Mutable;
             action->setText(unlocked ? i18n("Lock Widgets") : i18n("Unlock Widgets"));
-            action->setIcon(QIcon::fromTheme(unlocked ? "object-locked" : "object-unlocked"));
+            action->setIcon(QIcon::fromTheme(unlocked ? QStringLiteral("object-locked") : QStringLiteral("object-unlocked")));
             action->setEnabled(true);
             action->setVisible(true);
         }
@@ -361,7 +361,7 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
     if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
     } else {
-        configName = "plasma-appletsrc";
+        configName = QStringLiteral("plasma-appletsrc");
     }
 }
 
@@ -378,15 +378,15 @@ void CoronaPrivate::init()
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
     //some common actions
-    actions.setConfigGroup("Shortcuts");
+    actions.setConfigGroup(QStringLiteral("Shortcuts"));
 
-    QAction *lockAction = actions.add<QAction>("lock widgets");
+    QAction *lockAction = actions.add<QAction>(QStringLiteral("lock widgets"));
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
-    lockAction->setIcon(QIcon::fromTheme("object-locked"));
+    lockAction->setIcon(QIcon::fromTheme(QStringLiteral("object-locked")));
     lockAction->setData(Plasma::Types::ControlAction);
-    lockAction->setShortcut(QKeySequence("alt+d, l"));
+    lockAction->setShortcut(QKeySequence(QStringLiteral("alt+d, l")));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
     //fake containment/applet actions
@@ -450,12 +450,12 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     // qCDebug(LOG_PLASMA) << "Loading" << name << args << id;
 
-    if (pluginName.isEmpty() || pluginName == "default") {
+    if (pluginName.isEmpty() || pluginName == QLatin1String("default")) {
         // default to the desktop containment
         pluginName = desktopDefaultsConfig.readEntry("Containment", "org.kde.desktopcontainment");
     }
 
-    bool loadingNull = pluginName == "null";
+    bool loadingNull = pluginName == QLatin1String("null");
     if (!loadingNull) {
         applet = PluginLoader::self()->loadApplet(pluginName, id, args);
         containment = dynamic_cast<Containment *>(applet);

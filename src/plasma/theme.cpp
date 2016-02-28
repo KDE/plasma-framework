@@ -469,7 +469,7 @@ QFont Theme::smallestFont() const
 
 QSizeF Theme::mSize(const QFont &font) const
 {
-    return QFontMetrics(font).boundingRect("M").size();
+    return QFontMetrics(font).boundingRect(QStringLiteral("M")).size();
 }
 
 bool Theme::backgroundContrastEnabled() const

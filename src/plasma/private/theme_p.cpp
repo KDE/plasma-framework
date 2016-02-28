@@ -99,7 +99,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
 #if HAVE_X11
         //watch for background contrast effect property changes as well
         if (!s_backgroundContrastEffectWatcher) {
-            s_backgroundContrastEffectWatcher = new EffectWatcher("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION");
+            s_backgroundContrastEffectWatcher = new EffectWatcher(QStringLiteral("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION"));
         }
 
         QObject::connect(s_backgroundContrastEffectWatcher, &EffectWatcher::effectChanged, this, [this](bool active) {
@@ -604,7 +604,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 
 void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
 {
-    if (!defaultWallpaperTheme.isEmpty() && defaultWallpaperTheme != DEFAULT_WALLPAPER_THEME) {
+    if (!defaultWallpaperTheme.isEmpty() && defaultWallpaperTheme != QStringLiteral(DEFAULT_WALLPAPER_THEME)) {
         return;
     }
 
@@ -674,7 +674,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         if (themePath.isEmpty() && themeName.isEmpty()) {
             // note: can't use QStringLiteral("foo" "bar") on Windows
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;

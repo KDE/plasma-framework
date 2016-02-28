@@ -75,19 +75,19 @@ void StorageJob::start()
     //FIXME: QHASH
     QVariantMap params = parameters();
 
-    QString valueGroup = params["group"].toString();
+    QString valueGroup = params[QStringLiteral("group")].toString();
     if (valueGroup.isEmpty()) {
-        valueGroup = "default";
+        valueGroup = QStringLiteral("default");
     }
 
     QWeakPointer<StorageJob> me(this);
-    if (operationName() == "save") {
+    if (operationName() == QLatin1String("save")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
-    } else if (operationName() == "retrieve") {
+    } else if (operationName() == QLatin1String("retrieve")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
-    } else if (operationName() == "delete") {
+    } else if (operationName() == QLatin1String("delete")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
-    } else if (operationName() == "expire") {
+    } else if (operationName() == QLatin1String("expire")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
     } else {
         setError(true);
@@ -117,7 +117,7 @@ Plasma::ServiceJob *Storage::createJob(const QString &operation, QVariantMap &pa
 //Storage implementation
 Storage::Storage(QObject *parent)
     : Plasma::Service(parent),
-      m_clientName("data")
+      m_clientName(QStringLiteral("data"))
 {
     //search among parents for an applet or dataengine: if found call the table as its plugin name
     QObject *parentObject = this;
@@ -136,10 +136,10 @@ Storage::Storage(QObject *parent)
         }
     }
 
-    m_clientName = m_clientName.replace('.', "_");
-    m_clientName = m_clientName.replace('-', "_");
+    m_clientName = m_clientName.replace(QLatin1Char('.'), QLatin1Char('_'));
+    m_clientName = m_clientName.replace(QLatin1Char('-'), QLatin1Char('_'));
 
-    setName("storage");
+    setName(QStringLiteral("storage"));
 }
 
 Storage::~Storage()

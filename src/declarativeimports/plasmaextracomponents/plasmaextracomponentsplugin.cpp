@@ -32,7 +32,7 @@
 void PlasmaExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-    engine->addImageProvider(QLatin1String("appbackgrounds"), new AppBackgroundProvider);
+    engine->addImageProvider(QStringLiteral("appbackgrounds"), new AppBackgroundProvider);
 }
 
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)

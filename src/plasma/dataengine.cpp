@@ -233,9 +233,9 @@ void DataEngine::removeData(const QString &source, const QString &key)
 void DataEngine::setModel(const QString &source, QAbstractItemModel *model)
 {
     if (model) {
-        setData(source, "HasModel", true);
+        setData(source, QStringLiteral("HasModel"), true);
     } else {
-        removeData(source, "HasModel");
+        removeData(source, QStringLiteral("HasModel"));
     }
 
     Plasma::DataContainer *s = containerForSource(source);
@@ -425,18 +425,18 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
     if (dataEngineDescription.isValid()) {
         e->setObjectName(dataEngineDescription.name());
     } else {
-        e->setObjectName("NullEngine");
+        e->setObjectName(QStringLiteral("NullEngine"));
     }
 
     if (dataEngineDescription.isValid()) {
-        QString api = dataEngineDescription.property("X-Plasma-API").toString();
+        QString api = dataEngineDescription.property(QStringLiteral("X-Plasma-API")).toString();
 
         if (!api.isEmpty()) {
             const QString path =
                 QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                        PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/" + dataEngineDescription.pluginName() + '/',
                                        QStandardPaths::LocateDirectory);
-            package = new Package(PluginLoader::self()->loadPackage("Plasma/DataEngine", api));
+            package = new Package(PluginLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), api));
             package->setPath(path);
 
             if (package->isValid()) {

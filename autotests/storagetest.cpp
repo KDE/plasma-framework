@@ -26,20 +26,20 @@ void StorageTest::initTestCase()
 {
     QStandardPaths::enableTestMode(true);
 
-    m_data.insert("String 1", "Fork");
-    m_data.insert("String 2", "Spoon");
-    m_data.insert("String 3", "Knife");
-    m_data.insert("Int 1", 3141);
-    m_data.insert("Int 2", 60);
+    m_data.insert(QStringLiteral("String 1"), "Fork");
+    m_data.insert(QStringLiteral("String 2"), "Spoon");
+    m_data.insert(QStringLiteral("String 3"), "Knife");
+    m_data.insert(QStringLiteral("Int 1"), 3141);
+    m_data.insert(QStringLiteral("Int 2"), 60);
     QByteArray bytes("yadda yadda yadda");
-    m_data.insert("Binary Data", bytes);
+    m_data.insert(QStringLiteral("Binary Data"), bytes);
 }
 
 void StorageTest::store()
 {
     Storage storage;
-    QVariantMap op = storage.operationDescription("save");
-    op["group"] = "Test";
+    QVariantMap op = storage.operationDescription(QStringLiteral("save"));
+    op[QStringLiteral("group")] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -54,8 +54,8 @@ void StorageTest::store()
 void StorageTest::retrieve()
 {
     Storage storage;
-    QVariantMap op = storage.operationDescription("retrieve");
-    op["group"] = "Test";
+    QVariantMap op = storage.operationDescription(QStringLiteral("retrieve"));
+    op[QStringLiteral("group")] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -70,8 +70,8 @@ void StorageTest::retrieve()
 void StorageTest::deleteEntry()
 {
     Storage storage;
-    QVariantMap op = storage.operationDescription("delete");
-    op["group"] = "Test";
+    QVariantMap op = storage.operationDescription(QStringLiteral("delete"));
+    op[QStringLiteral("group")] = "Test";
     Plasma::ServiceJob *job = storage.startOperationCall(op);
     StorageJob *storageJob = qobject_cast<StorageJob *>(job);
 
@@ -82,8 +82,8 @@ void StorageTest::deleteEntry()
         QVERIFY(storageJob->result().toBool());
     }
 
-    op = storage.operationDescription("retrieve");
-    op["group"] = "Test";
+    op = storage.operationDescription(QStringLiteral("retrieve"));
+    op[QStringLiteral("group")] = "Test";
     job = storage.startOperationCall(op);
     storageJob = qobject_cast<StorageJob *>(job);
 

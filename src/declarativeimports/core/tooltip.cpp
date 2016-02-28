@@ -76,13 +76,13 @@ ToolTip::~ToolTip()
 
 void ToolTip::settingsChanged()
 {
-    KSharedConfig::openConfig("plasmarc")->reparseConfiguration();
+    KSharedConfig::openConfig(QStringLiteral("plasmarc"))->reparseConfiguration();
     loadSettings();
 }
 
 void ToolTip::loadSettings()
 {
-    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig("plasmarc"), "PlasmaToolTips");
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(QStringLiteral("plasmarc")), "PlasmaToolTips");
     m_interval = cfg.readEntry("Delay", 700);
     m_tooltipsEnabledGlobally = (m_interval > 0);
 }

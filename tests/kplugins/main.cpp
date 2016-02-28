@@ -36,7 +36,7 @@ int main(int argc, char **argv)
     parser->addVersionOption();
     parser->setApplicationDescription(description);
 
-    parser->addOption(QCommandLineOption(QStringList() << "s" << "show", i18nc("Do not translate <name>", "Show plugins"), "name"));
+    parser->addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"), i18nc("Do not translate <name>", "Show plugins"), QStringLiteral("name")));
 
     return app.exec();
 }

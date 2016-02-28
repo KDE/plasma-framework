@@ -132,7 +132,7 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
         m_agendaNeedsUpdate = true;
     }
 
-    Q_FOREACH (const QDate &date, updatesList) {
+    Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex);
@@ -158,7 +158,7 @@ void DaysModel::onEventRemoved(const QString &uid)
         m_agendaNeedsUpdate = true;
     }
 
-    Q_FOREACH (const QDate &date, updatesList) {
+    Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex);

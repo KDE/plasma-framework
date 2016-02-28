@@ -134,7 +134,7 @@ QString ContainmentActions::eventToString(QEvent *event)
         QWheelEvent *e = static_cast<QWheelEvent *>(event);
         int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
         QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
-        trigger = "wheel:";
+        trigger = QStringLiteral("wheel:");
         trigger += orient.valueToKey(e->orientation());
         modifiers = e->modifiers();
         break;

@@ -91,8 +91,8 @@ PlasmaPkg::~PlasmaPkg()
 void PlasmaPkg::runMain()
 {
     Plasma::PackageStructure *structure = new Plasma::PackageStructure;
-    if (d->parser->isSet("hash")) {
-        const QString path = d->parser->value("hash");
+    if (d->parser->isSet(QStringLiteral("hash"))) {
+        const QString path = d->parser->value(QStringLiteral("hash"));
         Plasma::Package package(structure);
         package.setPath(path);
         const QString hash = package.contentsHash();
@@ -106,156 +106,156 @@ void PlasmaPkg::runMain()
         return;
     }
 
-    if (d->parser->isSet("list-types")) {
+    if (d->parser->isSet(QStringLiteral("list-types"))) {
         d->listTypes();
         exit(0);
         return;
     }
 
-    QString type = d->parser->value("type");
+    QString type = d->parser->value(QStringLiteral("type"));
     QString packageRoot = type;
     d->pluginTypes.clear();
     d->installer = 0;
 
-    if (d->parser->isSet("remove")) {
-        d->package = d->parser->value("remove");
-    } else if (d->parser->isSet("upgrade")) {
-        d->package = d->parser->value("upgrade");
-    } else if (d->parser->isSet("install")) {
-        d->package = d->parser->value("install");
-    } else if (d->parser->isSet("show")) {
-        d->package = d->parser->value("show");
+    if (d->parser->isSet(QStringLiteral("remove"))) {
+        d->package = d->parser->value(QStringLiteral("remove"));
+    } else if (d->parser->isSet(QStringLiteral("upgrade"))) {
+        d->package = d->parser->value(QStringLiteral("upgrade"));
+    } else if (d->parser->isSet(QStringLiteral("install"))) {
+        d->package = d->parser->value(QStringLiteral("install"));
+    } else if (d->parser->isSet(QStringLiteral("show"))) {
+        d->package = d->parser->value(QStringLiteral("show"));
     }
 
     if (!QDir::isAbsolutePath(d->package)) {
         d->packageFile = QDir(QDir::currentPath() + '/' + d->package).absolutePath();
         d->packageFile = QFileInfo(d->packageFile).canonicalFilePath();
-        if (d->parser->isSet("upgrade")) {
+        if (d->parser->isSet(QStringLiteral("upgrade"))) {
             d->package = d->packageFile;
         }
     } else {
         d->packageFile = d->package;
     }
 
-    if (!d->packageFile.isEmpty() && (!d->parser->isSet("type") ||
+    if (!d->packageFile.isEmpty() && (!d->parser->isSet(QStringLiteral("type")) ||
                                       type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
-                                      type.compare("wallpaper", Qt::CaseInsensitive) == 0)) {
+                                      type.compare(QLatin1String("wallpaper"), Qt::CaseInsensitive) == 0)) {
         // Check type for common plasma packages
         Plasma::Package package(structure);
         QString serviceType;
-        if (d->parser->isSet("remove")) {
+        if (d->parser->isSet(QStringLiteral("remove"))) {
             package.setPath(d->package);
         } else {
             package.setPath(d->packageFile);
         }
         if (package.isValid() && package.metadata().isValid()) {
-            serviceType = package.metadata().property("X-Plasma-ServiceType").toString();
+            serviceType = package.metadata().property(QStringLiteral("X-Plasma-ServiceType")).toString();
         }
 
         if (!serviceType.isEmpty()) {
-            if (serviceType.contains("Plasma/Applet") ||
+            if (serviceType.contains(QStringLiteral("Plasma/Applet")) ||
                     //serviceType.contains("Plasma/PopupApplet") ||
-                    serviceType.contains("Plasma/Containment")) {
-                type = "plasmoid";
-            } else if (serviceType == "Plasma/Generic") {
-                type = "package";
-            } else if (serviceType == "Plasma/DataEngine") {
-                type = "dataengine";
-            } else if (serviceType == "Plasma/Runner") {
-                type = "runner";
-            } else if (serviceType == "Plasma/LookAndFeel") {
-                type = "lookandfeel";
-            } else if (serviceType == "Plasma/Shell") {
-                type = "shell";
-            } else if (serviceType == "Plasma/Wallpaper") {
+                    serviceType.contains(QStringLiteral("Plasma/Containment"))) {
+                type = QStringLiteral("plasmoid");
+            } else if (serviceType == QLatin1String("Plasma/Generic")) {
+                type = QStringLiteral("package");
+            } else if (serviceType == QLatin1String("Plasma/DataEngine")) {
+                type = QStringLiteral("dataengine");
+            } else if (serviceType == QLatin1String("Plasma/Runner")) {
+                type = QStringLiteral("runner");
+            } else if (serviceType == QLatin1String("Plasma/LookAndFeel")) {
+                type = QStringLiteral("lookandfeel");
+            } else if (serviceType == QLatin1String("Plasma/Shell")) {
+                type = QStringLiteral("shell");
+            } else if (serviceType == QLatin1String("Plasma/Wallpaper")) {
                 // This also changes type to wallpaperplugin when --type wallpaper
                 // was specified and we have wallpaper plugin package (instead of
                 // wallpaper image package)
-                type = "wallpaperplugin";
-            } else if (serviceType == "KWin/WindowSwitcher") {
-                type = "windowswitcher";
-            } else if (serviceType == "KWin/Effect") {
-                type = "kwineffect";
-            } else if (serviceType == "KWin/Script") {
-                type = "kwinscript";
-            } else if (serviceType == "Plasma/LayoutTemplate") {
-                type = "layout-template";
+                type = QStringLiteral("wallpaperplugin");
+            } else if (serviceType == QLatin1String("KWin/WindowSwitcher")) {
+                type = QStringLiteral("windowswitcher");
+            } else if (serviceType == QLatin1String("KWin/Effect")) {
+                type = QStringLiteral("kwineffect");
+            } else if (serviceType == QLatin1String("KWin/Script")) {
+                type = QStringLiteral("kwinscript");
+            } else if (serviceType == QLatin1String("Plasma/LayoutTemplate")) {
+                type = QStringLiteral("layout-template");
             } else {
                 type = serviceType;
                 //qDebug() << "fallthrough type is" << serviceType;
             }
         } else {
             if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0) {
-                serviceType = "Plasma/Wallpaper";
+                serviceType = QStringLiteral("Plasma/Wallpaper");
             }
         }
     }
 
     if (type.compare(i18nc("package type", "plasmoid"), Qt::CaseInsensitive) == 0 ||
-            type.compare("plasmoid", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/";
-        d->servicePrefix = "plasma-applet-";
-        d->pluginTypes << "Plasma/Applet";
-        d->pluginTypes << "Plasma/Containment";
+            type.compare(QLatin1String("plasmoid"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/");
+        d->servicePrefix = QStringLiteral("plasma-applet-");
+        d->pluginTypes << QStringLiteral("Plasma/Applet");
+        d->pluginTypes << QStringLiteral("Plasma/Containment");
     } else if (type.compare(i18nc("package type", "package"), Qt::CaseInsensitive) == 0 ||
-               type.compare("package", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/";
-        d->servicePrefix = "plasma-package-";
-        d->pluginTypes << "Plasma/Generic";
+               type.compare(QLatin1String("package"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/");
+        d->servicePrefix = QStringLiteral("plasma-package-");
+        d->pluginTypes << QStringLiteral("Plasma/Generic");
     } else if (type.compare(i18nc("package type", "theme"), Qt::CaseInsensitive) == 0 ||
-               type.compare("theme", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/";
-        d->pluginTypes << "Plasma/Theme";
+               type.compare(QLatin1String("theme"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/");
+        d->pluginTypes << QStringLiteral("Plasma/Theme");
     } else if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0 ||
-               type.compare("wallpaper", Qt::CaseInsensitive) == 0) {
-        d->pluginTypes << "Plasma/ImageWallpaper"; // we'll catch that later
-        d->packageRoot = "wallpapers/";
-        d->servicePrefix = "plasma-wallpaper-";
+               type.compare(QLatin1String("wallpaper"), Qt::CaseInsensitive) == 0) {
+        d->pluginTypes << QStringLiteral("Plasma/ImageWallpaper"); // we'll catch that later
+        d->packageRoot = QStringLiteral("wallpapers/");
+        d->servicePrefix = QStringLiteral("plasma-wallpaper-");
     } else if (type.compare(i18nc("package type", "dataengine"), Qt::CaseInsensitive) == 0 ||
-               type.compare("dataengine", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/";
-        d->servicePrefix = "plasma-dataengine-";
-        d->pluginTypes << "Plasma/DataEngine";
+               type.compare(QLatin1String("dataengine"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/");
+        d->servicePrefix = QStringLiteral("plasma-dataengine-");
+        d->pluginTypes << QStringLiteral("Plasma/DataEngine");
     } else if (type.compare(i18nc("package type", "runner"), Qt::CaseInsensitive) == 0 ||
-               type.compare("runner", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/";
-        d->servicePrefix = "plasma-runner-";
-        d->pluginTypes << "Plasma/Runner";
+               type.compare(QLatin1String("runner"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/");
+        d->servicePrefix = QStringLiteral("plasma-runner-");
+        d->pluginTypes << QStringLiteral("Plasma/Runner");
     } else if (type.compare(i18nc("package type", "wallpaperplugin"), Qt::CaseInsensitive) == 0 ||
-               type.compare("wallpaperplugin", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/";
-        d->servicePrefix = "plasma-wallpaper-";
-        d->pluginTypes << "Plasma/Wallpaper";
+               type.compare(QLatin1String("wallpaperplugin"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/");
+        d->servicePrefix = QStringLiteral("plasma-wallpaper-");
+        d->pluginTypes << QStringLiteral("Plasma/Wallpaper");
     } else if (type.compare(i18nc("package type", "lookandfeel"), Qt::CaseInsensitive) == 0 ||
-               type.compare("lookandfeel", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/";
-        d->servicePrefix = "plasma-lookandfeel-";
-        d->pluginTypes << "Plasma/LookAndFeel";
+               type.compare(QLatin1String("lookandfeel"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/");
+        d->servicePrefix = QStringLiteral("plasma-lookandfeel-");
+        d->pluginTypes << QStringLiteral("Plasma/LookAndFeel");
     } else if (type.compare(i18nc("package type", "shell"), Qt::CaseInsensitive) == 0 ||
-               type.compare("shell", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/";
-        d->servicePrefix = "plasma-shell-";
-        d->pluginTypes << "Plasma/Shell";
+               type.compare(QLatin1String("shell"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/");
+        d->servicePrefix = QStringLiteral("plasma-shell-");
+        d->pluginTypes << QStringLiteral("Plasma/Shell");
     } else if (type.compare(i18nc("package type", "layout-template"), Qt::CaseInsensitive) == 0 ||
-               type.compare("layout-template", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/";
-        d->servicePrefix = "plasma-layout-";
-        d->pluginTypes << "Plasma/LayoutTemplate";
+               type.compare(QLatin1String("layout-template"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/");
+        d->servicePrefix = QStringLiteral("plasma-layout-");
+        d->pluginTypes << QStringLiteral("Plasma/LayoutTemplate");
     } else if (type.compare(i18nc("package type", "kwineffect"), Qt::CaseInsensitive) == 0 ||
-               type.compare("kwineffect", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "kwin/effects/";
-        d->servicePrefix = "kwin-effect-";
-        d->pluginTypes << "KWin/Effect";
+               type.compare(QLatin1String("kwineffect"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral("kwin/effects/");
+        d->servicePrefix = QStringLiteral("kwin-effect-");
+        d->pluginTypes << QStringLiteral("KWin/Effect");
     } else if (type.compare(i18nc("package type", "windowswitcher"), Qt::CaseInsensitive) == 0 ||
-               type.compare("windowswitcher", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "kwin/tabbox/";
-        d->servicePrefix = "kwin-windowswitcher-";
-        d->pluginTypes << "KWin/WindowSwitcher";
+               type.compare(QLatin1String("windowswitcher"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral("kwin/tabbox/");
+        d->servicePrefix = QStringLiteral("kwin-windowswitcher-");
+        d->pluginTypes << QStringLiteral("KWin/WindowSwitcher");
     } else if (type.compare(i18nc("package type", "kwinscript"), Qt::CaseInsensitive) == 0 ||
-               type.compare("kwinscript", Qt::CaseInsensitive) == 0) {
-        d->packageRoot = "kwin/scripts/";
-        d->servicePrefix = "kwin-script-";
-        d->pluginTypes << "KWin/Script";
+               type.compare(QLatin1String("kwinscript"), Qt::CaseInsensitive) == 0) {
+        d->packageRoot = QStringLiteral("kwin/scripts/");
+        d->servicePrefix = QStringLiteral("kwin-script-");
+        d->pluginTypes << QStringLiteral("KWin/Script");
 
     //do it trough normal plugin loading
     } else {
@@ -271,15 +271,15 @@ void PlasmaPkg::runMain()
         //d->packageRoot = d->installer->defaultPackageRoot();
         d->pluginTypes << type;
     }
-    if (d->parser->isSet("show")) {
+    if (d->parser->isSet(QStringLiteral("show"))) {
         const QString pluginName = d->package;
         showPackageInfo(pluginName);
         exit(0);
         return;
     }
 
-    if (d->parser->isSet("list")) {
-        d->coutput(i18n("Listing service types: %1", d->pluginTypes.join(", ")));
+    if (d->parser->isSet(QStringLiteral("list"))) {
+        d->coutput(i18n("Listing service types: %1", d->pluginTypes.join(QStringLiteral(", "))));
         listPackages(d->pluginTypes);
         exit(0);
     } else {
@@ -292,7 +292,7 @@ void PlasmaPkg::runMain()
 
         d->packageRoot = findPackageRoot(d->package, d->packageRoot);
 
-        if (d->parser->isSet("remove") || d->parser->isSet("upgrade")) {
+        if (d->parser->isSet(QStringLiteral("remove")) || d->parser->isSet(QStringLiteral("upgrade"))) {
             QString pkgPath;
             foreach (const QString &t, d->pluginTypes) {
                 Plasma::Package pkg = Plasma::PluginLoader::self()->loadPackage(t);
@@ -309,7 +309,7 @@ void PlasmaPkg::runMain()
                 pkgPath = d->package;
             }
 
-            if (d->parser->isSet("upgrade")) {
+            if (d->parser->isSet(QStringLiteral("upgrade"))) {
                 d->installer->setPath(d->package);
             }
             QString _p = d->packageRoot;
@@ -356,7 +356,7 @@ void PlasmaPkg::runMain()
                 exit(2);
             }
         }
-        if (d->parser->isSet("install")) {
+        if (d->parser->isSet(QStringLiteral("install"))) {
             KJob *installJob = d->installer->install(d->packageFile, d->packageRoot);
             connect(installJob, SIGNAL(result(KJob*)), SLOT(packageInstalled(KJob*)));
             return;
@@ -380,8 +380,8 @@ void PlasmaPkgPrivate::runKbuildsycoca()
 {
     return;
     if (KSycoca::isAvailable()) {
-        QDBusInterface dbus("org.kde.kded5", "/kbuildsycoca", "org.kde.kbuildsycoca");
-        dbus.call(QDBus::NoBlock, "recreate");
+        QDBusInterface dbus(QStringLiteral("org.kde.kded5"), QStringLiteral("/kbuildsycoca"), QStringLiteral("org.kde.kbuildsycoca"));
+        dbus.call(QDBus::NoBlock, QStringLiteral("recreate"));
     }
 }
 
@@ -391,13 +391,13 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
 
     foreach (const QString &type, types) {
 
-        if (type.compare("Plasma/Generic", Qt::CaseInsensitive) == 0) {
-            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/", QStandardPaths::LocateDirectory);
+        if (type.compare(QLatin1String("Plasma/Generic"), Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/"), QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
-                foreach (const QString pack, entries) {
-                    if ((pack != "." && pack != "..") &&
+                foreach (const QString& pack, entries) {
+                    if ((pack != QLatin1String(".") && pack != QLatin1String("..")) &&
                             (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
@@ -406,13 +406,13 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
             }
         }
 
-        if (type.compare("Plasma/ImageWallpaper", Qt::CaseInsensitive) == 0) {
-            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, "wallpapers/", QStandardPaths::LocateDirectory);
+        if (type.compare(QLatin1String("Plasma/ImageWallpaper"), Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("wallpapers/"), QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
-                foreach (const QString pack, entries) {
-                    if ((pack != "." && pack != "..") &&
+                foreach (const QString& pack, entries) {
+                    if ((pack != QLatin1String(".") && pack != QLatin1String("..")) &&
                             (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
@@ -421,13 +421,13 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
             }
         }
 
-        if (type.compare("Plasma/Theme", Qt::CaseInsensitive) == 0) {
-            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/", QStandardPaths::LocateDirectory);
+        if (type.compare(QLatin1String("Plasma/Theme"), Qt::CaseInsensitive) == 0) {
+            const QStringList &packs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/"), QStandardPaths::LocateDirectory);
             foreach (const QString &ppath, packs) {
                 const QDir cd(ppath);
                 const QStringList &entries = cd.entryList(QDir::Dirs);
-                foreach (const QString pack, entries) {
-                    if ((pack != "." && pack != "..") &&
+                foreach (const QString& pack, entries) {
+                    if ((pack != QLatin1String(".") && pack != QLatin1String("..")) &&
                             (QFile::exists(ppath + '/' + pack + "/metadata.desktop"))) {
 
                         result << pack;
@@ -441,7 +441,7 @@ QStringList PlasmaPkgPrivate::packages(const QStringList &types)
         //of packages succeed
         Plasma::PluginLoader::self()->loadPackage(type);
         const QList<KPluginMetaData> plugins = KPackage::PackageLoader::self()->listPackages(type);
-        for (auto plugin : plugins) {
+        for (auto& plugin : plugins) {
             const QString _plugin = plugin.pluginId();
             if (!result.contains(_plugin)) {
                 result << _plugin;
@@ -486,13 +486,13 @@ void PlasmaPkg::showPackageInfo(const QString &pluginName)
 QString PlasmaPkg::findPackageRoot(const QString &pluginName, const QString &prefix)
 {
     QString packageRoot;
-    if (d->parser->isSet("packageroot") && d->parser->isSet("global")) {
+    if (d->parser->isSet(QStringLiteral("packageroot")) && d->parser->isSet(QStringLiteral("global"))) {
         qWarning() << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
         ::exit(7);
-    } else if (d->parser->isSet("packageroot")) {
-        packageRoot = d->parser->value("packageroot");
+    } else if (d->parser->isSet(QStringLiteral("packageroot"))) {
+        packageRoot = d->parser->value(QStringLiteral("packageroot"));
         //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
-    } else if (d->parser->isSet("global")) {
+    } else if (d->parser->isSet(QStringLiteral("global"))) {
         packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
     } else {
         packageRoot = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->packageRoot;
@@ -567,29 +567,29 @@ void PlasmaPkgPrivate::listTypes()
     coutput(i18n("Built in:"));
 
     QMap<QString, QStringList> builtIns;
-    builtIns.insert(i18n("DataEngine"), QStringList() << "Plasma/DataEngine" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/" << "dataengine");
-    builtIns.insert(i18n("Layout Template"), QStringList() << "Plasma/LayoutTemplate" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/" << "layout-template");
-    builtIns.insert(i18n("Look and Feel"), QStringList() << "Plasma/LookAndFeel" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/" << "lookandfeel");
-    builtIns.insert(i18n("Package"), QStringList() << "Plasma/Generic" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/" << "package");
-    builtIns.insert(i18n("Plasmoid"), QStringList() << "Plasma/Applet" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/" << "plasmoid");
-    builtIns.insert(i18n("Runner"), QStringList() << "Plasma/Runner" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/" << "runner");
-    builtIns.insert(i18n("Shell"), QStringList() << "Plasma/Shell" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/" << "shell");
-    builtIns.insert(i18n("Theme"), QStringList() << "" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/" << "theme");
-    builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << "wallpapers/" << "wallpaper");
-    builtIns.insert(i18n("Animated Wallpaper"), QStringList() << "Plasma/Wallpaper" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/" << "wallpaperplugin");
-    builtIns.insert(i18n("KWin Effect"), QStringList() << "KWin/Effect" << "kwin/effects/" << "kwineffect");
-    builtIns.insert(i18n("KWin Window Switcher"), QStringList() << "KWin/WindowSwitcher" << "kwin/tabbox/" << "windowswitcher");
-    builtIns.insert(i18n("KWin Script"), QStringList() << "KWin/Script" << "kwin/scripts/" << "kwinscript");
+    builtIns.insert(i18n("DataEngine"), QStringList() << QStringLiteral("Plasma/DataEngine") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") << QStringLiteral("dataengine"));
+    builtIns.insert(i18n("Layout Template"), QStringList() << QStringLiteral("Plasma/LayoutTemplate") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/layout-templates/") << QStringLiteral("layout-template"));
+    builtIns.insert(i18n("Look and Feel"), QStringList() << QStringLiteral("Plasma/LookAndFeel") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/") << QStringLiteral("lookandfeel"));
+    builtIns.insert(i18n("Package"), QStringList() << QStringLiteral("Plasma/Generic") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/packages/") << QStringLiteral("package"));
+    builtIns.insert(i18n("Plasmoid"), QStringList() << QStringLiteral("Plasma/Applet") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/") << QStringLiteral("plasmoid"));
+    builtIns.insert(i18n("Runner"), QStringList() << QStringLiteral("Plasma/Runner") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/runners/") << QStringLiteral("runner"));
+    builtIns.insert(i18n("Shell"), QStringList() << QStringLiteral("Plasma/Shell") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/shells/") << QStringLiteral("shell"));
+    builtIns.insert(i18n("Theme"), QStringList() << "" << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") << QStringLiteral("theme"));
+    builtIns.insert(i18n("Wallpaper Images"), QStringList() << "" << QStringLiteral("wallpapers/") << QStringLiteral("wallpaper"));
+    builtIns.insert(i18n("Animated Wallpaper"), QStringList() << QStringLiteral("Plasma/Wallpaper") << QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/wallpapers/") << QStringLiteral("wallpaperplugin"));
+    builtIns.insert(i18n("KWin Effect"), QStringList() << QStringLiteral("KWin/Effect") << QStringLiteral("kwin/effects/") << QStringLiteral("kwineffect"));
+    builtIns.insert(i18n("KWin Window Switcher"), QStringList() << QStringLiteral("KWin/WindowSwitcher") << QStringLiteral("kwin/tabbox/") << QStringLiteral("windowswitcher"));
+    builtIns.insert(i18n("KWin Script"), QStringList() << QStringLiteral("KWin/Script") << QStringLiteral("kwin/scripts/") << QStringLiteral("kwinscript"));
     renderTypeTable(builtIns);
 
-    const KPluginInfo::List offers = KPluginTrader::self()->query("kpackage/packagestructure", "KPackage/PackageStructure");
+    const KPluginInfo::List offers = KPluginTrader::self()->query(QStringLiteral("kpackage/packagestructure"), QStringLiteral("KPackage/PackageStructure"));
 
     if (!offers.isEmpty()) {
         std::cout << std::endl;
         coutput(i18n("Provided by plugins:"));
 
         QMap<QString, QStringList> plugins;
-        for (auto info : offers) {
+        for (auto& info : offers) {
             //const QString proot = "";
             //Plasma::PackageStructure* structure = Plasma::PackageStructure::load(info.pluginName());
             QString name = info.name();
@@ -604,7 +604,7 @@ void PlasmaPkgPrivate::listTypes()
         renderTypeTable(plugins);
     }
 
-    QStringList desktopFiles = QStandardPaths::locateAll(QStandardPaths::DataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/packageformats/*rc", QStandardPaths::LocateFile);
+    QStringList desktopFiles = QStandardPaths::locateAll(QStandardPaths::DataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/packageformats/*rc"), QStandardPaths::LocateFile);
 
     if (!desktopFiles.isEmpty()) {
         coutput(i18n("Provided by .desktop files:"));
@@ -627,7 +627,7 @@ void PlasmaPkg::packageInstalled(KJob *job)
     bool success = (job->error() == KJob::NoError);
     int exitcode = 0;
     if (success) {
-        if (d->parser->isSet("upgrade")) {
+        if (d->parser->isSet(QStringLiteral("upgrade"))) {
             d->coutput(i18n("Successfully upgraded %1", d->packageFile));
         } else {
             d->coutput(i18n("Successfully installed %1", d->packageFile));
@@ -644,7 +644,7 @@ void PlasmaPkg::packageUninstalled(KJob *job)
     bool success = (job->error() == KJob::NoError);
     int exitcode = 0;
     if (success) {
-        if (d->parser->isSet("upgrade")) {
+        if (d->parser->isSet(QStringLiteral("upgrade"))) {
             d->coutput(i18n("Upgrading package from file: %1", d->packageFile));
             KJob *installJob = d->installer->install(d->packageFile, d->packageRoot);
             connect(installJob, SIGNAL(result(KJob*)), SLOT(packageInstalled(KJob*)));

@@ -94,7 +94,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
                     package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
                 } else {
-                    package = Plasma::PluginLoader::self()->loadPackage("Plasma/Applet");
+                    package = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"));
                     package.setPath(pkgName);
                     PackageUrlInterceptorPrivate::s_packages[pkgName] = package;
                 }
@@ -149,7 +149,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         components.pop_front();
         //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
-        const QString &filename = components.join("/");
+        const QString &filename = components.join(QStringLiteral("/"));
 
         QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
 
