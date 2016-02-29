@@ -772,7 +772,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     if(emitChanged) {
-        scheduleThemeChangeNotification(SvgElementsCache);
+        scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 }
 
