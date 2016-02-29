@@ -70,6 +70,10 @@ void IconItemTest::initTestCase()
     m_view->setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
     m_view->show();
     QTest::qWaitForWindowExposed(m_view);
+
+    if (!m_view->rootObject() || !m_view->rootObject()->grabToImage()) {
+        QSKIP("Cannot grab item to image.");
+    }
 }
 
 void IconItemTest::cleanup()
