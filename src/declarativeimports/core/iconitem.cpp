@@ -115,6 +115,7 @@ void IconItem::setSource(const QVariant &source)
                 m_svgIcon = new Plasma::Svg(this);
                 m_svgIcon->setColorGroup(m_colorGroup);
                 m_svgIcon->setDevicePixelRatio((window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
+                connect(m_svgIcon, &Plasma::Svg::repaintNeeded, this, &IconItem::schedulePixmapUpdate);
             }
 
             if (m_usesPlasmaTheme) {
@@ -126,7 +127,6 @@ void IconItem::setSource(const QVariant &source)
             //success?
             if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
-                connect(m_svgIcon, SIGNAL(repaintNeeded()), this, SLOT(schedulePixmapUpdate()));
 
                 //ok, svg not available from the plasma theme
             } else {

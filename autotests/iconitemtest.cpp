@@ -113,6 +113,15 @@ Plasma::Svg *IconItemTest::findPlasmaSvg(QQuickItem *item)
     return item->findChild<Plasma::Svg *>();
 }
 
+void IconItemTest::changeTheme(Plasma::Theme *theme, const QString &themeName)
+{
+    if (theme->themeName() != themeName) {
+        QSignalSpy spy(theme, SIGNAL(themeChanged()));
+        theme->setThemeName(themeName);
+        spy.wait();
+    }
+}
+
 // ------ Tests
 void IconItemTest::invalidIcon()
 {
@@ -256,6 +265,33 @@ void IconItemTest::loadSvg()
     svg = findPlasmaSvg(item);
     Q_ASSERT(svg);
     QCOMPARE(svg->imagePath(), QFINDTESTDATA("data/icons/test-theme/apps/32/" + name + ".svg"));
+}
+
+void IconItemTest::themeChange()
+{
+    // Icon from Plasma theme
+    QQuickItem *item1 = createIconItem();
+    item1->setProperty("animated", false);
+    item1->setProperty("source", "zoom-fit-height");
+    Plasma::Svg *svg1 = item1->findChild<Plasma::Svg*>();
+    changeTheme(svg1->theme(), "breeze-light");
+    QImage img1 = grabImage(item1);
+    changeTheme(svg1->theme(), "breeze-dark");
+    QImage img2 = grabImage(item1);
+    QVERIFY(img1 != img2);
+
+    // Icon from icon theme
+    QQuickItem *item2 = createIconItem();
+    item2->setProperty("animated", false);
+    item2->setProperty("width", 22);
+    item2->setProperty("height", 22);
+    item2->setProperty("source", "tst-plasma-framework-test-icon");
+    Plasma::Svg *svg2 = item2->findChild<Plasma::Svg*>();
+    changeTheme(svg2->theme(), "breeze-light");
+    img1 = grabImage(item2);
+    changeTheme(svg2->theme(), "breeze-dark");
+    img2 = grabImage(item2);
+    QVERIFY(img1 != img2);
 }
 
 QTEST_MAIN(IconItemTest)

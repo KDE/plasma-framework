@@ -26,6 +26,7 @@
 namespace Plasma
 {
 class Svg;
+class Theme;
 }
 
 class IconItemTest : public QObject
@@ -42,11 +43,13 @@ private Q_SLOTS:
     void animationAfterHide();
     void bug_359388();
     void loadSvg();
+    void themeChange();
 
 private:
     QQuickItem *createIconItem();
     QImage grabImage(QQuickItem *item);
     Plasma::Svg *findPlasmaSvg(QQuickItem *item);
+    void changeTheme(Plasma::Theme *theme, const QString &themeName);
 
     QQuickView *m_view;
 };
