@@ -206,6 +206,16 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QObject *nativeInterface READ nativeInterface CONSTANT)
 
+    /**
+     * If true the applet requires manual configuration from the user
+     */
+    Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequiredProperty NOTIFY configurationRequiredChanged)
+
+    /**
+     * Reason why the manual user configuration is required
+     */
+    Q_PROPERTY(QString configurationRequiredReason READ configurationRequiredReason WRITE setConfigurationRequiredReason NOTIFY configurationRequiredReasonChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
     AppletInterface(Plasma::Applet *applet, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
@@ -339,6 +349,14 @@ public:
 
     QObject *nativeInterface();
 
+    //NOTE: setConfigurationRequiredProperty because ambiguous with the
+    // setConfigurationRequired invokable
+    bool configurationRequired() const;
+    void setConfigurationRequiredProperty(bool required);
+
+    QString configurationRequiredReason() const;
+    void setConfigurationRequiredReason(const QString &reason);
+
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -382,6 +400,8 @@ Q_SIGNALS:
 
     void userConfiguringChanged();
     void globalShortcutChanged();
+    void configurationRequiredChanged();
+    void configurationRequiredReasonChanged();
 
 protected Q_SLOTS:
     void init() Q_DECL_OVERRIDE;

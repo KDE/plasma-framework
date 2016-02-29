@@ -133,6 +133,11 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
             this, &AppletInterface::immutableChanged);
     connect(applet(), &Plasma::Applet::userConfiguringChanged,
             this, &AppletInterface::userConfiguringChanged);
+    connect(applet(), &Plasma::Applet::configurationRequiredChanged,
+            this, [this](bool needsConfig, const QString &reason) {
+                emit configurationRequiredChanged();
+                emit configurationRequiredReasonChanged();
+            });
 
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
@@ -630,6 +635,26 @@ QObject *AppletInterface::nativeInterface()
         }
         return m_dummyNativeInterface;
     }
+}
+
+bool AppletInterface::configurationRequired() const
+{
+    return applet()->configurationRequired();
+}
+
+void AppletInterface::setConfigurationRequiredProperty(bool needsConfiguring)
+{
+    appletScript()->setConfigurationRequired(needsConfiguring, applet()->configurationRequiredReason());
+}
+
+QString AppletInterface::configurationRequiredReason() const
+{
+    return applet()->configurationRequiredReason();
+}
+
+void AppletInterface::setConfigurationRequiredReason(const QString &reason)
+{
+    appletScript()->setConfigurationRequired(applet()->configurationRequired(), reason);
 }
 
 QString AppletInterface::downloadPath(const QString &file)

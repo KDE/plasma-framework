@@ -421,14 +421,21 @@ bool Applet::configurationRequired() const
     return d->needsConfig;
 }
 
+QString Applet::configurationRequiredReason() const
+{
+    return d->configurationRequiredReason;
+}
+
 void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
 {
-    if (d->needsConfig == needsConfig) {
+    if (d->needsConfig == needsConfig && reason == d->configurationRequiredReason) {
         return;
     }
 
     d->needsConfig = needsConfig;
-    d->showConfigurationRequiredMessage(needsConfig, reason);
+    d->configurationRequiredReason = reason;
+
+    emit configurationRequiredChanged(needsConfig, reason);
 }
 
 bool Applet::isUserConfiguring() const

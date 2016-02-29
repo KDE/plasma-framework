@@ -228,13 +228,6 @@ void AppletPrivate::cleanUpAndDelete()
     q->deleteLater();
 }
 
-void AppletPrivate::showConfigurationRequiredMessage(bool show, const QString &reason)
-{
-    // reimplemented in the UI specific library
-    Q_UNUSED(show)
-    Q_UNUSED(reason)
-}
-
 void AppletPrivate::askDestroy()
 {
     if (q->immutability() != Types::Mutable || !started) {

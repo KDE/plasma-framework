@@ -51,8 +51,6 @@ public:
 
     void init(const QString &packagePath = QString(), const QVariantList &args = QVariantList());
 
-    // the interface
-    virtual void showConfigurationRequiredMessage(bool show, const QString &reason);
     void askDestroy();
     virtual void cleanUpAndDelete();
 
@@ -110,6 +108,8 @@ public:
 
     QPointer <KNotification> deleteNotification;
     QTimer *deleteNotificationTimer;
+
+    QString configurationRequiredReason;
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;

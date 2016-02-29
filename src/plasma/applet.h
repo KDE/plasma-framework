@@ -214,6 +214,16 @@ public:
     bool configurationRequired() const;
 
     /**
+     * @return A translated message for the user explaining that the
+     *           applet needs configuring; this should note what needs
+     *           to be configured
+     *
+     * @see setConfigurationRequired
+     * @since 5.20
+     */
+    QString configurationRequiredReason() const;
+
+    /**
      * @return true when the configuration interface is being shown
      * @since 4.5
      */
@@ -454,6 +464,13 @@ Q_SIGNALS:
      * Emitted when the location changes
      */
     void locationChanged(Plasma::Types::Location location);
+
+    /**
+     * Emitted when setConfigurationRequired was called
+     * @see setConfigurationRequired
+     * @since 5.20
+     */
+    void configurationRequiredChanged(bool needsConfig, const QString &reason);
 
 public Q_SLOTS:
 //BOOKKEEPING
