@@ -186,11 +186,13 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
+    //if name wasn't a path, pluginName == name
+    const QString pluginName = name.split('/').last();
 
     // Look for C++ plugins first
-    auto filter = [&name](const KPluginMetaData &md) -> bool
+    auto filter = [&pluginName](const KPluginMetaData &md) -> bool
     {
-        return md.pluginId() == name;
+        return md.pluginId() == pluginName;
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_plasmoidsPluginDir, filter);
 
