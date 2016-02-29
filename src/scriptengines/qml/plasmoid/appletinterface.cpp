@@ -71,6 +71,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::userConfiguringChanged,
             this, &AppletInterface::userConfiguringChanged);
 
+    connect(applet(), &Plasma::Applet::contextualActionsAboutToShow,
+            this, &AppletInterface::contextualActionsAboutToShow);
+
     connect(applet(), &Plasma::Applet::statusChanged,
             this, &AppletInterface::statusChanged);
 

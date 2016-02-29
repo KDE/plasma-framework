@@ -427,6 +427,13 @@ Q_SIGNALS:
 
 //ACTIONS
     /**
+     * Emitted just before the contextual actions are about to show
+     * For instance just before the context menu containing the actions
+     * added with setAction() is shown
+     */
+    void contextualActionsAboutToShow();
+
+    /**
      * Emitted when activation is requested due to, for example, a global
      * keyboard shortcut. By default the wiget is given focus.
      */
