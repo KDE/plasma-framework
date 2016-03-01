@@ -62,6 +62,7 @@ public:
         : q(dialog),
           location(Plasma::Types::BottomEdge),
           frameSvgItem(0),
+          hasMask(false),
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
@@ -131,6 +132,7 @@ public:
     QTimer hintsCommitTimer;
 
     QRect cachedGeometry;
+    bool hasMask;
     Dialog::WindowType type;
     bool hideOnWindowDeactivate;
     bool outputOnly;
@@ -228,9 +230,11 @@ void DialogPrivate::updateTheme()
                 theme.backgroundSaturation(),
                 frameSvgItem->frameSvg()->mask());
 
-        if (KWindowSystem::compositingActive()) {
+        if (KWindowSystem::compositingActive() && hasMask) {
+            hasMask = false;
             q->setMask(QRegion());
         } else {
+            hasMask = true;
             q->setMask(frameSvgItem->frameSvg()->mask());
         }
         if (q->isVisible()) {
