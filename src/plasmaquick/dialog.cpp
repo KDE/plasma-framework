@@ -230,9 +230,11 @@ void DialogPrivate::updateTheme()
                 theme.backgroundSaturation(),
                 frameSvgItem->frameSvg()->mask());
 
-        if (KWindowSystem::compositingActive() && hasMask) {
-            hasMask = false;
-            q->setMask(QRegion());
+        if (KWindowSystem::compositingActive()) {
+            if (hasMask) {
+                hasMask = false;
+                q->setMask(QRegion());
+            }
         } else {
             hasMask = true;
             q->setMask(frameSvgItem->frameSvg()->mask());
