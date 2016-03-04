@@ -35,6 +35,7 @@ class IconItemTest : public QObject
 
 private Q_SLOTS:
     void initTestCase();
+    void cleanupTestCase();
     void cleanup();
 
     void loadPixmap();
@@ -47,6 +48,7 @@ private Q_SLOTS:
     void bug_359388();
     void loadSvg();
     void themeChange();
+    void qiconFromTheme();
 
 private:
     QQuickItem *createIconItem();

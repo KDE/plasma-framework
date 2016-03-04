@@ -76,6 +76,11 @@ void IconItemTest::initTestCase()
     }
 }
 
+void IconItemTest::cleanupTestCase()
+{
+    delete m_view;
+}
+
 void IconItemTest::cleanup()
 {
     qDeleteAll(m_view->rootObject()->childItems());
@@ -138,6 +143,7 @@ void IconItemTest::loadPixmap()
 
     QImage capture = grabImage(item.data());
     QCOMPARE(capture, sourcePixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied));
+    QCOMPARE(sourcePixmap, item->property("source").value<QPixmap>());
 }
 
 //tests setting icon from a QImage
@@ -151,8 +157,8 @@ void IconItemTest::loadImage()
 
     QImage capture = grabImage(item.data());
     QCOMPARE(capture, sourceImage.convertToFormat(QImage::Format_ARGB32_Premultiplied));
+    QCOMPARE(sourceImage, item->property("source").value<QImage>());
 }
-
 
 void IconItemTest::invalidIcon()
 {
@@ -179,6 +185,7 @@ void IconItemTest::usesPlasmaTheme()
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", "konversation");
     QVERIFY(item1->property("valid").toBool());
+    QCOMPARE(QStringLiteral("konversation"), item1->property("source").toString());
 
     Plasma::Svg svg;
     svg.setContainsMultipleImages(true);
@@ -266,6 +273,7 @@ void IconItemTest::bug_359388()
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", customThemeIcon);
     QVERIFY(item1->property("valid").toBool());
+    QCOMPARE(customThemeIcon, item1->property("source").value<QIcon>());
 
     QQuickItem *item2 = createIconItem();
     item2->setProperty("source", QIcon(QFINDTESTDATA("data/bug359388/hicolor/22x22/apps/" + name + ".svg")));
@@ -323,6 +331,25 @@ void IconItemTest::themeChange()
     changeTheme(svg2->theme(), "breeze-dark");
     img2 = grabImage(item2);
     QVERIFY(img1 != img2);
+}
+
+void IconItemTest::qiconFromTheme()
+{
+    // Icon from Plasma theme
+    QQuickItem *item1 = createIconItem();
+    item1->setProperty("source", QIcon::fromTheme("zoom-fit-height"));
+    QIcon icon1 = QIcon::fromTheme("zoom-fit-height");
+    QVERIFY(item1->findChild<Plasma::Svg*>());
+    QVERIFY(!imageIsEmpty(grabImage(item1)));
+    QCOMPARE(icon1, item1->property("source").value<QIcon>());
+
+    // Icon from icon theme
+    QQuickItem *item2 = createIconItem();
+    QIcon icon2 = QIcon::fromTheme("tst-plasma-framework-test-icon");
+    item2->setProperty("source", icon2);
+    QVERIFY(item2->findChild<Plasma::Svg*>());
+    QVERIFY(!imageIsEmpty(grabImage(item2)));
+    QCOMPARE(icon2, item2->property("source").value<QIcon>());
 }
 
 QTEST_MAIN(IconItemTest)

@@ -46,7 +46,6 @@ IconItem::IconItem(QQuickItem *parent)
       m_usesPlasmaTheme(true),
       m_textureChanged(false),
       m_sizeChanged(false),
-      m_svgFromIconLoader(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
@@ -85,28 +84,20 @@ void IconItem::setSource(const QVariant &source)
     }
 
     m_source = source;
+    QString sourceString = source.toString();
 
     // If the QIcon was created with QIcon::fromTheme(), try to load it as svg
-    if (m_source.canConvert<QIcon>() && !m_source.value<QIcon>().name().isEmpty()) {
-        m_source = m_source.value<QIcon>().name();
+    if (source.canConvert<QIcon>() && !source.value<QIcon>().name().isEmpty()) {
+        sourceString = source.value<QIcon>().name();
     }
 
-    if (m_source.canConvert<QString>()) {
-        const QString sourceString = m_source.toString();
-        if (sourceString.isEmpty()) {
-            delete m_svgIcon;
-            m_svgIcon = 0;
-            m_icon = QIcon();
-            emit validChanged();
-            schedulePixmapUpdate();
-            return;
-        }
-
+    if (!sourceString.isEmpty()) {
         //If a url in the form file:// is passed, take the image pointed by that from disk
         QUrl url(sourceString);
         if (url.isLocalFile()) {
             m_icon = QIcon();
             m_imageIcon = QImage(url.path());
+            m_svgIconName.clear();
             delete m_svgIcon;
             m_svgIcon = 0;
         } else {
@@ -126,6 +117,7 @@ void IconItem::setSource(const QVariant &source)
             //success?
             if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
+                m_svgIconName = sourceString;
 
                 //ok, svg not available from the plasma theme
             } else {
@@ -140,10 +132,10 @@ void IconItem::setSource(const QVariant &source)
                 } else {
                     qWarning() << "KIconLoader has no theme set";
                 }
-                m_svgFromIconLoader = !iconPath.isEmpty();
 
-                if (m_svgFromIconLoader) {
+                if (!iconPath.isEmpty()) {
                     m_svgIcon->setImagePath(iconPath);
+                    m_svgIconName = sourceString;
                 //fail, use QIcon
                 } else {
                     m_icon = QIcon::fromTheme(sourceString);
@@ -151,6 +143,7 @@ void IconItem::setSource(const QVariant &source)
                         // fallback for non-theme icons
                         m_icon = source.value<QIcon>();
                     }
+                    m_svgIconName.clear();
                     delete m_svgIcon;
                     m_svgIcon = 0;
                     m_imageIcon = QImage();
@@ -161,17 +154,20 @@ void IconItem::setSource(const QVariant &source)
     } else if (source.canConvert<QIcon>()) {
         m_icon = source.value<QIcon>();
         m_imageIcon = QImage();
+        m_svgIconName.clear();
         delete m_svgIcon;
         m_svgIcon = 0;
     } else if (source.canConvert<QImage>()) {
         m_icon = QIcon();
         m_imageIcon = source.value<QImage>();
+        m_svgIconName.clear();
         delete m_svgIcon;
         m_svgIcon = 0;
 
     } else {
         m_icon = QIcon();
         m_imageIcon = QImage();
+        m_svgIconName.clear();
         delete m_svgIcon;
         m_svgIcon = 0;
     }
@@ -393,15 +389,15 @@ void IconItem::loadPixmap()
         return;
     } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
-        if (m_svgIcon->hasElement(m_source.toString())) {
-            result = m_svgIcon->pixmap(m_source.toString());
-        } else if (m_svgFromIconLoader) {
+        if (m_svgIcon->hasElement(m_svgIconName)) {
+            result = m_svgIcon->pixmap(m_svgIconName);
+        } else if (!m_svgIconName.isEmpty()) {
             const auto *iconTheme = KIconLoader::global()->theme();
             QString iconPath;
             if (iconTheme) {
-                iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
+                iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
                 if (iconPath.isEmpty()) {
-                    iconPath = iconTheme->iconPath(source().toString() + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
+                    iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
                 }
             } else {
                 qWarning() << "KIconLoader has no theme set";

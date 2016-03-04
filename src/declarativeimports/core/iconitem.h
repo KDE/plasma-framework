@@ -155,6 +155,7 @@ private:
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
+    QString m_svgIconName;
     QPixmap m_pixmapIcon;
     QImage m_imageIcon;
     //this contains the raw variant it was passed
@@ -169,8 +170,6 @@ private:
 
     bool m_textureChanged;
     bool m_sizeChanged;
-
-    bool m_svgFromIconLoader;
 
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
