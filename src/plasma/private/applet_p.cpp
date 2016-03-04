@@ -292,19 +292,23 @@ void AppletPrivate::askDestroy()
                     emit q->immutabilityChanged(q->immutability());
                     if (deleteNotification) {
                         deleteNotification->close();
-                    }
-                    if (deleteNotificationTimer) {
-                        delete deleteNotificationTimer;
+                    } else if (deleteNotificationTimer) {
+                        deleteNotificationTimer->stop();
+                        deleteNotificationTimer->deleteLater();
                         deleteNotificationTimer = 0;
                     }
                 });
-        QObject::connect(deleteNotification.data(), &KNotification::closed,
+        QObject::connect(deleteNotification.data(), &KNotification::closed, q,
                 [=]() {
                     //If the timer still exists, it means the undo action was NOT triggered
-                    if (deleteNotificationTimer) {
-                        transient = true;
+                    if (transient) {
                         emit q->destroyedChanged(true);
                         cleanUpAndDelete();
+                    }
+                    if (deleteNotificationTimer) {
+                        deleteNotificationTimer->stop();
+                        deleteNotificationTimer->deleteLater();
+                        deleteNotificationTimer = 0;
                     }
                 });
 
@@ -314,14 +318,15 @@ void AppletPrivate::askDestroy()
             //really delete after a minute
             deleteNotificationTimer->setInterval(60 * 1000);
             deleteNotificationTimer->setSingleShot(true);
-            QObject::connect(deleteNotificationTimer, &QTimer::timeout,
+            QObject::connect(deleteNotificationTimer, &QTimer::timeout, q,
                 [=]() {
+                    transient = true;
                     if (deleteNotification) {
                         deleteNotification->close();
+                    } else {
+                        emit q->destroyedChanged(true);
+                        cleanUpAndDelete();
                     }
-                    transient = true;
-                    emit q->destroyedChanged(true);
-                    cleanUpAndDelete();
                 });
             deleteNotificationTimer->start();
         }
