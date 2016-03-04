@@ -107,7 +107,6 @@ void IconItem::setSource(const QVariant &source)
         if (url.isLocalFile()) {
             m_icon = QIcon();
             m_imageIcon = QImage(url.path());
-            m_pixmapIcon = QPixmap();
             delete m_svgIcon;
             m_svgIcon = 0;
         } else {
@@ -155,7 +154,6 @@ void IconItem::setSource(const QVariant &source)
                     delete m_svgIcon;
                     m_svgIcon = 0;
                     m_imageIcon = QImage();
-                    m_pixmapIcon = QPixmap();
                 }
             }
         }
@@ -163,28 +161,17 @@ void IconItem::setSource(const QVariant &source)
     } else if (source.canConvert<QIcon>()) {
         m_icon = source.value<QIcon>();
         m_imageIcon = QImage();
-        m_pixmapIcon = QPixmap();
         delete m_svgIcon;
         m_svgIcon = 0;
-
-    } else if (source.canConvert<QPixmap>()) {
-        m_icon = QIcon();
-        m_imageIcon = QImage();
-        m_pixmapIcon = source.value<QPixmap>();
-        delete m_svgIcon;
-        m_svgIcon = 0;
-
     } else if (source.canConvert<QImage>()) {
         m_icon = QIcon();
         m_imageIcon = source.value<QImage>();
-        m_pixmapIcon = QPixmap();
         delete m_svgIcon;
         m_svgIcon = 0;
 
     } else {
         m_icon = QIcon();
         m_imageIcon = QImage();
-        m_pixmapIcon = QPixmap();
         delete m_svgIcon;
         m_svgIcon = 0;
     }
@@ -295,7 +282,7 @@ void IconItem::setUsesPlasmaTheme(bool usesPlasmaTheme)
 
 bool IconItem::isValid() const
 {
-    return !m_icon.isNull() || m_svgIcon || !m_pixmapIcon.isNull() || !m_imageIcon.isNull();
+    return !m_icon.isNull() || m_svgIcon || !m_imageIcon.isNull();
 }
 
 int IconItem::paintedWidth() const
@@ -427,8 +414,6 @@ void IconItem::loadPixmap()
         }
     } else if (!m_icon.isNull()) {
         result = m_icon.pixmap(QSize(size, size) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
-    } else if (!m_pixmapIcon.isNull()) {
-        result = m_pixmapIcon;
     } else if (!m_imageIcon.isNull()) {
         result = QPixmap::fromImage(m_imageIcon);
     } else {
