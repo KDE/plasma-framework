@@ -127,6 +127,33 @@ void IconItemTest::changeTheme(Plasma::Theme *theme, const QString &themeName)
 }
 
 // ------ Tests
+
+void IconItemTest::loadPixmap()
+{
+    QScopedPointer<QQuickItem> item(createIconItem());
+    QPixmap sourcePixmap(QFINDTESTDATA("data/test_image.png"));
+
+    item->setProperty("source", sourcePixmap);
+    QVERIFY(item->property("valid").toBool());
+
+    QImage capture = grabImage(item.data());
+    QCOMPARE(capture, sourcePixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied));
+}
+
+//tests setting icon from a QImage
+void IconItemTest::loadImage()
+{
+    QScopedPointer<QQuickItem> item(createIconItem());
+    QImage sourceImage(QFINDTESTDATA("data/test_image.png"));
+
+    item->setProperty("source", sourceImage);
+    QVERIFY(item->property("valid").toBool());
+
+    QImage capture = grabImage(item.data());
+    QCOMPARE(capture, sourceImage.convertToFormat(QImage::Format_ARGB32_Premultiplied));
+}
+
+
 void IconItemTest::invalidIcon()
 {
     QString name("tst-plasma-framework-invalid-icon-name");

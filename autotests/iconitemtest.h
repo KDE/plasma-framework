@@ -37,6 +37,9 @@ private Q_SLOTS:
     void initTestCase();
     void cleanup();
 
+    void loadPixmap();
+    void loadImage();
+
     void invalidIcon();
     void usesPlasmaTheme();
     void animation();
