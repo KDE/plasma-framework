@@ -39,14 +39,63 @@ class IconItem : public QQuickItem
 {
     Q_OBJECT
 
+    /**
+     * Sets the icon to be displayed. Source can be one of:
+     *  - iconName (as a string)
+     *  - URL
+     *  - QImage
+     *  - QPixmap
+     *  - QIcon
+     *
+     * When passing an icon name (or a QIcon with an icon name set) it will:
+     *  - load the plasma variant if usesPlasmaTheme is set and exists
+     *  - otherwise try to load the icon as an SVG so colorscopes apply
+     *  - load the icon as normal
+     */
     Q_PROPERTY(QVariant source READ source WRITE setSource NOTIFY sourceChanged)
+
+    /**
+     * Specifies the color group to use for this icon
+     * This only applies to icons loaded from the plasma theme
+     */
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+
+    /**
+     * See QQuickItem::smooth
+     */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
+
+    /**
+     * Apply a visual indication that this icon is active.
+     * Typically used to indicate that it is hovered
+     */
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
+
+    /**
+     * If set, icon will blend when the source is changed or resized
+     */
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
+
+    /**
+     * If set, icon will try and use icons from the Plasma theme if possible
+     */
     Q_PROPERTY(bool usesPlasmaTheme READ usesPlasmaTheme WRITE setUsesPlasmaTheme NOTIFY usesPlasmaThemeChanged)
+
+    /**
+     * True if a valid icon is set. False otherwise.
+     */
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
+
+    /**
+     * The width of the icon that is actually painted
+     * Icons are drawn at standard icon sizes (eg. 16,32,64) centered within the item
+     */
     Q_PROPERTY(int paintedWidth READ paintedWidth NOTIFY paintedSizeChanged)
+
+    /**
+     * The height of the icon actually being drawn.
+     * Icons are drawn at standard icon sizes (eg. 16,32,64) centered within the item
+     */
     Q_PROPERTY(int paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
 
 public:
