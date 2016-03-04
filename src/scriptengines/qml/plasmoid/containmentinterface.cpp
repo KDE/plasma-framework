@@ -344,8 +344,8 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
         reg = QRect(0, 0, width(), height());
     }
 
-    const QRect rect(qBound(reg.boundingRect().left(), x, reg.boundingRect().right() - w),
-                     qBound(reg.boundingRect().top(), y, reg.boundingRect().bottom() - h), w, h);
+    const QRect rect(qBound(reg.boundingRect().left(), x, reg.boundingRect().right() + 1 - w),
+                     qBound(reg.boundingRect().top(), y, reg.boundingRect().bottom() + 1 - h), w, h);
     const QRectF ar = availableScreenRect();
     QRect tempRect(rect);
 
@@ -384,12 +384,12 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
                 return tempRect.topLeft();
             }
 
-            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() + 1 - h)), w, h);
             if (reg.intersected(tempRect) == tempRect) {
                 return tempRect.topLeft();
             }
 
-            tempRect = QRect(qMax(rect.left(), (int)ar.left()), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            tempRect = QRect(qMax(rect.left(), (int)ar.left()), qMin(rect.top(), (int)(ar.bottom() + 1 - h)), w, h);
             return tempRect.topLeft();
         } else {
             return rect.topLeft();
@@ -398,7 +398,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     //top right corner
     } else if (rect.center().x() > ar.center().x() && rect.center().y() <= ar.center().y()) {
         if (reg.intersected(rect) != rect) {
-            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), rect.top(), w, h);
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), rect.top(), w, h);
             if (reg.intersected(tempRect) == tempRect) {
                 return tempRect.topLeft();
             }
@@ -408,7 +408,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
                 return tempRect.topLeft();
             }
 
-            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), qMax(rect.top(), (int)ar.top()), w, h);
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), qMax(rect.top(), (int)ar.top()), w, h);
             return tempRect.topLeft();
         } else {
             return rect.topLeft();
@@ -417,17 +417,17 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     //bottom right corner
     } else if (rect.center().x() > ar.center().x() && rect.center().y() > ar.center().y()) {
         if (reg.intersected(rect) != rect) {
-            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), rect.top(), w, h);
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), rect.top(), w, h);
             if (reg.intersected(tempRect) == tempRect) {
                 return tempRect.topLeft();
             }
 
-            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            tempRect = QRect(rect.left(), qMin(rect.top(), (int)(ar.bottom() + 1 - h)), w, h);
             if (reg.intersected(tempRect) == tempRect) {
                 return tempRect.topLeft();
             }
 
-            tempRect = QRect(qMin(rect.left(), (int)(ar.right() - w)), qMin(rect.top(), (int)(ar.bottom() - h)), w, h);
+            tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), qMin(rect.top(), (int)(ar.bottom() + 1 - h)), w, h);
             return tempRect.topLeft();
         } else {
             return rect.topLeft();
@@ -960,8 +960,8 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         if (QScreen *screen = window()->screen()) {
             const QRect geo = screen->availableGeometry();
 
-            pos = QPoint(qBound(geo.left(), pos.x(), geo.right() - desktopMenu.width()),
-                         qBound(geo.top(), pos.y(), geo.bottom() - desktopMenu.height()));
+            pos = QPoint(qBound(geo.left(), pos.x(), geo.right() + 1 - desktopMenu.width()),
+                         qBound(geo.top(), pos.y(), geo.bottom() + 1 - desktopMenu.height()));
         }
     }
 
