@@ -337,8 +337,8 @@ void IconItemTest::qiconFromTheme()
 {
     // Icon from Plasma theme
     QQuickItem *item1 = createIconItem();
-    item1->setProperty("source", QIcon::fromTheme("zoom-fit-height"));
-    QIcon icon1 = QIcon::fromTheme("zoom-fit-height");
+    QIcon icon1 = QIcon::fromTheme("konversation");
+    item1->setProperty("source", icon1);
     QVERIFY(item1->findChild<Plasma::Svg*>());
     QVERIFY(!imageIsEmpty(grabImage(item1)));
     QCOMPARE(icon1, item1->property("source").value<QIcon>());
