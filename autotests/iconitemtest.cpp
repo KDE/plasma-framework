@@ -61,6 +61,9 @@ void IconItemTest::initTestCase()
 
     QFile::remove(configPath);
 
+    QIcon::setThemeSearchPaths({QFINDTESTDATA("data/icons")});
+    QIcon::setThemeName("test-theme");
+
     KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
     cg.writeEntry("Theme", "test-theme");
     KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");

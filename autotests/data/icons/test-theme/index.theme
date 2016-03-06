@@ -3,8 +3,6 @@ Name=Unittest Theme
 
 DisplayDepth=32
 
-Inherits=breeze
-
 DesktopDefault=48
 DesktopSizes=16,22,32,48,64,128,256
 ToolbarDefault=22
@@ -21,7 +19,7 @@ DialogSizes=16,22,32,48,64,128,256
 ########## Directories
 ########## ordered by category and alphabetically
 
-Directories=apps/22,apps/32
+Directories=apps/22,apps/32,apps/48
 
 [apps/22]
 Size=22
