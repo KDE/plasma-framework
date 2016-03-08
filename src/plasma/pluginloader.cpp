@@ -57,8 +57,7 @@ class PluginLoaderPrivate
 public:
     PluginLoaderPrivate()
         : isDefaultLoader(false),
-          plasmoidsDataDir(PLASMA_RELATIVE_DATA_INSTALL_DIR),
-          packageRE(QLatin1String("[^a-zA-Z0-9\\-_]"))
+          packageRE("[^a-zA-Z0-9\\-_]")
     {
         KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/Applet"), new PlasmoidPackage());
         KPackage::PackageLoader::self()->addKnownPackageStructure(QStringLiteral("Plasma/DataEngine"), new DataEnginePackage());
@@ -79,7 +78,6 @@ public:
     static QString s_plasmoidsPluginDir;
     static QString s_servicesPluginDir;
     static QString s_containmentActionsPluginDir;
-    QString plasmoidsDataDir;
     QRegExp packageRE;
 };
 
@@ -233,7 +231,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         }
     }
 
-    p.setDefaultPackageRoot(d->plasmoidsDataDir + "/plasmoids/");
     // backwards compatibility: search in the root plugins directory
     // TODO: remove when Plasma 5.4 is released
     {
@@ -274,16 +271,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     return applet;
-}
-
-void PluginLoader::setAppletsDataDirectory(const QString &dir)
-{
-    d->plasmoidsDataDir = dir;
-}
-
-QString PluginLoader::appletsDataDirectory() const
-{
-    return d->plasmoidsDataDir;
 }
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
@@ -542,11 +529,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             structure = new PackageStructure();
             structure->d->internalStructure = internalStructure;
             d->structures.insert(hashkey, structure);
-            Package p(structure);
-            if (packageFormat == "Plasma/Applet") {
-                p.setDefaultPackageRoot(d->plasmoidsDataDir + "/plasmoids/");
-            }
-            return p;
+            return Package(structure);
         }
     }
 
