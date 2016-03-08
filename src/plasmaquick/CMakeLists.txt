@@ -22,7 +22,7 @@ set(plasmaquick_LIB_SRC
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
-target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>")
+target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/..>")
 
 target_link_libraries(KF5PlasmaQuick
     PUBLIC
@@ -68,18 +68,29 @@ generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
     appletquickitem.h
-    view.h
+    containmentview.h
     configview.h
     configmodel.h
+    dialog.h
     packageurlinterceptor.h
 )
 
-#install(FILES ${plasmaquick_LIB_INCLUDES}
-#        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasmaquick COMPONENT Devel)
+ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
+    HEADER_NAMES
+        AppletQuickItem
+        ContainmentView
+        ConfigView
+        ConfigModel
+        Dialog
+    REQUIRED_HEADERS plasmaquick_LIB_INCLUDES
+    PREFIX PlasmaQuick
+)
 
-#install(DIRECTORY
-#        includes/PlasmaQuick
-#        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KDE COMPONENT Devel)
+install(FILES ${plasmaquick_LIB_INCLUDES}
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasmaquick COMPONENT Devel)
+
+install(FILES ${PlasmaQuick_CamelCase_HEADERS}
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/PlasmaQuick COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5PlasmaQuick")
 

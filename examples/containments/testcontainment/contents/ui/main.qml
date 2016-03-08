@@ -20,6 +20,7 @@ import QtQuick 2.0
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.plasmoid 2.0
 
 Item {
     id: root
@@ -28,188 +29,21 @@ Item {
 
     property Item toolBox
 
-    Connections {
-        target: plasmoid
-        onAppletAdded: {
-            var container = appletContainerComponent.createObject(root)
-            container.visible = true
-            print("Applet added: " + applet)
-            applet.parent = container
-            container.applet = applet
-            applet.anchors.fill= applet.parent
-            applet.visible = true
-        }
+    function addApplet(applet, x, y) {
+        var component = Qt.createComponent("PlasmoidContainer.qml")
+        var plasmoidContainer = component.createObject(root, {"x": x, "y": y});
+
+        plasmoidContainer.parent = root;
+        plasmoidContainer.applet = applet
+        applet.parent = plasmoidContainer
+        applet.anchors.fill = plasmoidContainer
+        applet.visible = true
+        plasmoidContainer.visible = true
+
     }
 
-    Component {
-        id: appletContainerComponent
-        Item {
-            id: frameParent
-            x: 50
-            y: 50
-
-            property int small: 90
-            property int large: 400
-
-            width: large + frame.margins.left + frame.margins.right
-            height: large + frame.margins.top + frame.margins.bottom
-
-            property alias applet: appletContainer.children
-            onAppletChanged: {
-                if (appletContainer.children.length == 0) {
-                    killAnim.running = true
-                }
-            }
-            PlasmaCore.FrameSvgItem {
-                id: frame
-                anchors.fill: parent
-
-                property int tm: 0
-                property int lm: 0
-
-                imagePath: applet.length > 0 && applet[0].backgroundHints == 0 ? "" : "widgets/background"
-
-                onImagePathChanged: {
-                    // Reposition applet so it fits into the frame
-                    if (imagePath == "") {
-                        frameParent.x = frameParent.x + lm;
-                        frameParent.y = frameParent.y + tm;
-                    } else {
-                        // Cache values, so we can subtract them when the background is removed
-                        frame.lm = frame.margins.left;
-                        frame.tm = frame.margins.top;
-
-                        frameParent.x = frameParent.x - frame.margins.left;
-                        frameParent.y = frameParent.y - frame.margins.top;
-                    }
-                }
-                MouseArea {
-                    id: mouseArea
-                    
-                    property real dx: 0
-                    property real dy: 0
-                    property real startX
-                    property real startY
-                    
-                    anchors.fill: parent
-                    drag.target: frameParent
-                    onClicked: {
-                        var s = (frameParent.width == frameParent.large) ? frameParent.small : frameParent.large;
-                        frameParent.height = s
-                        frameParent.width = s
-                    }
-                    onPressed: {
-                        speedSampleTimer.running = true
-                        mouseArea.startX = mouse.x
-                        mouseArea.startY = mouse.y
-                        speedSampleTimer.lastFrameParentX = frameParent.x
-                        speedSampleTimer.lastFrameParentY = frameParent.y
-                    }
-                    onPositionChanged: {
-                        //mouseArea.dx = mouse.x - mouseArea.startX
-                        //mouseArea.dy = mouse.y - mouseArea.startY
-                        dxAnim.running = false
-                        dyAnim.running = false
-                    }
-                    onReleased: {
-                        speedSampleTimer.running = false
-                        dxAnim.running = true
-                        dyAnim.running = true
-                    }
-                    Timer {
-                        id: speedSampleTimer
-                        interval: 40
-                        repeat: true
-                        property real lastFrameParentX
-                        property real lastFrameParentY
-                        onTriggered: {
-                            mouseArea.dx = frameParent.x - lastFrameParentX
-                            mouseArea.dy = frameParent.y - lastFrameParentY
-                            lastFrameParentX = frameParent.x
-                            lastFrameParentY = frameParent.y
-                            dxAnim.running = true
-                            dyAnim.running = true
-                        }
-                    }
-                }
-
-                Item {
-                    id: appletContainer
-                    anchors {
-                        fill: parent
-                        leftMargin: frame.margins.left
-                        rightMargin: parent.margins.right
-                        topMargin: parent.margins.top
-                        bottomMargin: parent.margins.bottom
-                    }
-                }
-
-                PlasmaComponents.BusyIndicator {
-                    id: busyIndicator
-                    z: 1000
-                    visible: applet.length > 0 && applet[0].busy
-                    running: visible
-                    anchors.centerIn: parent
-                }
-                SequentialAnimation {
-                    id: killAnim
-                    NumberAnimation {
-                        target: frame
-                        properties: "scale"
-                        to: 0
-                        duration: units.longDuration
-                    }
-                    ScriptAction { script: frame.destroy()}
-                }
-            }
-            ShaderEffect {
-                id: wobbleShader
-                anchors.fill: frame
-                property variant source: ShaderEffectSource {
-                    hideSource: true
-                    sourceItem: frame
-                }
-
-                property int fadeDuration: 150
-                property real time: 0
-                property real dx: mouseArea.dx
-                property real dy: mouseArea.dy
-                property real startX: mouseArea.startX/mouseArea.width
-                property real startY: mouseArea.startY/mouseArea.height
-                
-                NumberAnimation on dx { id: dxAnim; to: 0; duration: units.longDuration; easing.type: Easing.OutElastic }
-                NumberAnimation on dy { id: dyAnim; to: 0; duration: units.longDuration; easing.type: Easing.OutElastic }
-                //! [fragment]
-                fragmentShader: {
-                    "uniform lowp float qt_Opacity;" +
-                    "uniform highp float dx;" +
-                    "uniform highp float dy;" +
-                    "uniform highp float startX;" +
-                    "uniform highp float startY;" +
-                    "uniform sampler2D source;" +
-                    "varying highp vec2 qt_TexCoord0;" +
-                    "void main() {" +
-
-                    "  highp vec2 tmp = 1.0 / (1.0 + abs(qt_TexCoord0 - vec2(startX, startY)));" +
-                    "  vec2 wave = qt_TexCoord0 - vec2(dx, dy) * 0.0025 * tmp.xx * tmp.yy;" +
-                    "   gl_FragColor = texture2D(source, wave);" +
-                    "}"
-                }
-                //! [fragment]
-            }
-        }
-    }
-    PlasmaCore.IconItem {
-        width: 24
-        height: 24
-        source: "list-add"
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                print("Add widgets ...");
-                plasmoid.action("add widgets").trigger();
-            }
-        }
+    Containment.onAppletAdded: {
+        addApplet(applet, x, y);
     }
 
     Component.onCompleted: {
