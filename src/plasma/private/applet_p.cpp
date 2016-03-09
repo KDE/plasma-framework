@@ -245,8 +245,8 @@ void AppletPrivate::askDestroy()
         emit q->immutabilityChanged(q->immutability());
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
-        deleteNotification = new KNotification(QStringLiteral("plasmoidDeleted"), KNotification::Persistent, 0);
-        deleteNotification->setFlags(KNotification::SkipGrouping);
+        deleteNotification = new KNotification(QStringLiteral("plasmoidDeleted"));
+        deleteNotification->setFlags(KNotification::Persistent | KNotification::SkipGrouping);
 
         deleteNotification->setComponentName(QStringLiteral("plasma_workspace"));
         QStringList actions;
