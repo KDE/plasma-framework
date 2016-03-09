@@ -23,7 +23,6 @@
 #define APPLETINTERFACE_H
 
 #include <QQuickItem>
-#include <QScriptValue>
 #include <QQuickView>
 
 #include <Plasma/Applet>

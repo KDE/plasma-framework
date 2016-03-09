@@ -19,7 +19,6 @@ set(corebindings_SRCS
     tooltip.cpp
     tooltipdialog.cpp
     serviceoperationstatus.cpp
-    dataenginebindings.cpp
     iconitem.cpp
     units.cpp
     windowthumbnail.cpp
@@ -27,7 +26,6 @@ set(corebindings_SRCS
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
-        Qt5::Script
         Qt5::Quick
         Qt5::Qml
         KF5::Declarative

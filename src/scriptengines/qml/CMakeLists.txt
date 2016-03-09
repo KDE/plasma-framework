@@ -28,7 +28,6 @@ kcoreaddons_desktop_to_json(
 target_link_libraries(plasma_appletscript_declarative
     Qt5::Quick
     Qt5::Qml
-    Qt5::Script
     KF5::Activities
     KF5::KIOCore
     KF5::KIOWidgets

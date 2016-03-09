@@ -23,7 +23,6 @@
 #include "corebindingsplugin.h"
 
 #include <QQmlContext>
-#include <QScriptEngine>
 
 #include <kdeclarative/kdeclarative.h>
 
