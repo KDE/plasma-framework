@@ -80,6 +80,12 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::destroyedChanged,
             this, &AppletInterface::destroyedChanged);
 
+    connect(applet(), &Plasma::Applet::titleChanged,
+            this, &AppletInterface::titleChanged);
+
+    connect(applet(), &Plasma::Applet::iconChanged,
+            this, &AppletInterface::iconChanged);
+
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
 

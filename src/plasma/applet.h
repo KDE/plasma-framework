@@ -71,8 +71,8 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(Plasma::Types::ImmutabilityType immutability READ immutability WRITE setImmutability NOTIFY immutabilityChanged)
     Q_PROPERTY(Plasma::Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
-    Q_PROPERTY(QString title READ title WRITE setTitle FINAL)
-    Q_PROPERTY(QString icon READ icon WRITE setIcon FINAL)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
+    Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
 
 public:
 //CONSTRUCTORS
@@ -290,7 +290,7 @@ public:
      * @since 5.0
      * @param title the user-visible title for the applet.
      */
-    void setTitle(const QString &title) const;
+    void setTitle(const QString &title);
 
     /**
      * Attempts to load an applet from a package
@@ -418,6 +418,18 @@ Q_SIGNALS:
      * @since 5.4
      */
     void destroyedChanged(bool destroyed);
+
+    /**
+     * Emitted when the title has changed
+     * @since 5.20
+     */
+    void titleChanged(const QString &title);
+
+    /**
+     * Emitted when the icon name for the applet has changed
+     * @since 5.20
+     */
+    void iconChanged(const QString &icon);
 
 //CONFIGURATION
     /**

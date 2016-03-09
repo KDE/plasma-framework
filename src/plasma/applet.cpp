@@ -335,9 +335,14 @@ QString Applet::title() const
     return i18n("Unknown");
 }
 
-void Applet::setTitle(const QString &title) const
+void Applet::setTitle(const QString &title)
 {
+    if (title == d->customTitle) {
+        return;
+    }
+
     d->customTitle = title;
+    emit titleChanged(title);
 }
 
 QString Applet::icon() const
@@ -347,7 +352,12 @@ QString Applet::icon() const
 
 void Applet::setIcon(const QString &icon)
 {
+    if (icon == d->icon) {
+        return;
+    }
+
     d->icon = icon;
+    emit iconChanged(icon);
 }
 
 KPluginInfo Applet::pluginInfo() const
