@@ -113,7 +113,9 @@ QSet<QString> PluginLoaderPrivate::knownCategories()
                << QStringLiteral(I18N_NOOP("Productivity")).toLower()
                << QStringLiteral(I18N_NOOP("System Information")).toLower()
                << QStringLiteral(I18N_NOOP("Utilities")).toLower()
-               << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower();
+               << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower()
+               << QStringLiteral(I18N_NOOP("Clipboard")).toLower()
+               << QStringLiteral(I18N_NOOP("Tasks")).toLower();
     return categories;
 }
 
