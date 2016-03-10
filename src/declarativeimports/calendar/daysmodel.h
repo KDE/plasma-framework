@@ -48,7 +48,6 @@ public:
     void setSourceData(QList<DayData> *data);
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
-    void update();
 
     Q_INVOKABLE void setPluginsManager(QObject *manager);
 
@@ -56,6 +55,9 @@ public:
 
 Q_SIGNALS:
     void agendaUpdated(const QDate &updatedDate);
+
+public Q_SLOTS:
+    void update();
 
 private Q_SLOTS:
     void onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data);
