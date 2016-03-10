@@ -355,5 +355,24 @@ void IconItemTest::qiconFromTheme()
     QCOMPARE(icon2, item2->property("source").value<QIcon>());
 }
 
+void IconItemTest::changeColorGroup()
+{
+    // Icon from Plasma theme
+    QQuickItem *item = createIconItem();
+    item->setProperty("animated", false);
+    item->setProperty("source", "zoom-fit-height");
+    Plasma::Svg *svg = item->findChild<Plasma::Svg*>();
+    // not using "breeze" theme as that one follows system color scheme
+    // and that one might not have a complementary group or a broken one
+    changeTheme(svg->theme(), "breeze-light");
+    QSignalSpy spy(svg, SIGNAL(repaintNeeded()));
+    QVERIFY(spy.isValid());
+    QImage img1 = grabImage(item);
+    item->setProperty("colorGroup", Plasma::Theme::ComplementaryColorGroup);
+    QTRY_VERIFY(spy.count() == 1);
+    QImage img2 = grabImage(item);
+    QVERIFY(img1 != img2);
+}
+
 QTEST_MAIN(IconItemTest)
 

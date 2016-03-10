@@ -195,7 +195,6 @@ void IconItem::setColorGroup(Plasma::Theme::ColorGroup group)
 
     if (m_svgIcon) {
         m_svgIcon->setColorGroup(group);
-        loadPixmap();
     }
 
     emit colorGroupChanged();

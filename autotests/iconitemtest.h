@@ -49,6 +49,7 @@ private Q_SLOTS:
     void loadSvg();
     void themeChange();
     void qiconFromTheme();
+    void changeColorGroup();
 
 private:
     QQuickItem *createIconItem();
