@@ -129,6 +129,7 @@ public:
     void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
+    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry) Q_DECL_OVERRIDE;
 

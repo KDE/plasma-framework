@@ -240,8 +240,6 @@ void IconItemTest::animation()
 
 void IconItemTest::animationAfterHide()
 {
-    QEXPECT_FAIL("", "Needs 'no animation after hide' patch", Abort);
-
     QQuickItem *item1 = createIconItem();
     QQuickItem *item2 = createIconItem();
     item1->setProperty("source", "user-away");

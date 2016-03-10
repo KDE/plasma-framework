@@ -441,6 +441,16 @@ void IconItem::loadPixmap()
     update();
 }
 
+void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
+{
+    if (change == ItemVisibleHasChanged && value.boolValue) {
+        // Clear pixmap to disable animation
+        m_iconPixmap = QPixmap();
+    }
+
+    QQuickItem::itemChange(change, value);
+}
+
 void IconItem::geometryChanged(const QRectF &newGeometry,
                                const QRectF &oldGeometry)
 {
