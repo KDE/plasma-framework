@@ -372,5 +372,43 @@ void IconItemTest::changeColorGroup()
     QVERIFY(img1 != img2);
 }
 
+void IconItemTest::animatingActiveChange()
+{
+    QQuickItem *item1 = createIconItem();
+    item1->setProperty("animated", false);
+    item1->setProperty("source", "tst-plasma-framework-test-icon");
+    QImage img1 = grabImage(item1);
+
+    QQuickItem *item2 = createIconItem();
+    item2->setProperty("animated", false);
+    item2->setProperty("active", true);
+    item2->setProperty("source", "tst-plasma-framework-test-icon");
+    QImage img2 = grabImage(item2);
+    QVERIFY(img1 != img2);
+
+    item1->setProperty("active", true);
+    img1 = grabImage(item1);
+    QVERIFY(img1 != img2); // animation is running
+}
+
+void IconItemTest::animatingEnabledChange()
+{
+    QQuickItem *item1 = createIconItem();
+    item1->setProperty("animated", false);
+    item1->setProperty("source", "tst-plasma-framework-test-icon");
+    QImage img1 = grabImage(item1);
+
+    QQuickItem *item2 = createIconItem();
+    item2->setProperty("animated", false);
+    item2->setProperty("enabled", false);
+    item2->setProperty("source", "tst-plasma-framework-test-icon");
+    QImage img2 = grabImage(item2);
+    QVERIFY(img1 != img2);
+
+    item1->setProperty("enabled", false);
+    img1 = grabImage(item1);
+    QVERIFY(img1 != img2); // animation is running
+}
+
 QTEST_MAIN(IconItemTest)
 

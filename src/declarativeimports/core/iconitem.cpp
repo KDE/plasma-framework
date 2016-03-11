@@ -46,6 +46,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_usesPlasmaTheme(true),
       m_textureChanged(false),
       m_sizeChanged(false),
+      m_allowNextAnimation(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
@@ -65,8 +66,8 @@ IconItem::IconItem(QQuickItem *parent)
     connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()),
             this, SIGNAL(implicitHeightChanged()));
 
-    connect(this, SIGNAL(enabledChanged()),
-            this, SLOT(schedulePixmapUpdate()));
+    connect(this, &QQuickItem::enabledChanged,
+            this, &IconItem::enabledChanged);
 
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -218,6 +219,7 @@ void IconItem::setActive(bool active)
 
     m_active = active;
     if (isComponentComplete()) {
+        m_allowNextAnimation = true;
         schedulePixmapUpdate();
     }
     emit activeChanged();
@@ -359,6 +361,12 @@ void IconItem::valueChanged(const QVariant &value)
     update();
 }
 
+void IconItem::enabledChanged()
+{
+    m_allowNextAnimation = true;
+    schedulePixmapUpdate();
+}
+
 void IconItem::animationFinished()
 {
     m_oldIconPixmap = QPixmap();
@@ -429,11 +437,12 @@ void IconItem::loadPixmap()
     m_textureChanged = true;
 
     //don't animate initial setting
-    if (m_animated && !m_oldIconPixmap.isNull() && !m_sizeChanged) {
+    if ((m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged) {
         m_animValue = 0.0;
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
         m_animation->start();
+        m_allowNextAnimation = false;
     } else {
         m_animValue = 1.0;
         m_animation->stop();

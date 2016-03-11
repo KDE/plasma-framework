@@ -50,6 +50,8 @@ private Q_SLOTS:
     void themeChange();
     void qiconFromTheme();
     void changeColorGroup();
+    void animatingActiveChange();
+    void animatingEnabledChange();
 
 private:
     QQuickItem *createIconItem();

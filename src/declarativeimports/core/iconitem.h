@@ -72,7 +72,7 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
     /**
-     * If set, icon will blend when the source is changed or resized
+     * If set, icon will blend when the source is changed
      */
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
 
@@ -149,6 +149,7 @@ private Q_SLOTS:
     void schedulePixmapUpdate();
     void animationFinished();
     void valueChanged(const QVariant &value);
+    void enabledChanged();
 
 private:
     void loadPixmap();
@@ -171,6 +172,7 @@ private:
 
     bool m_textureChanged;
     bool m_sizeChanged;
+    bool m_allowNextAnimation;
 
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
