@@ -796,14 +796,16 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 return true;
             }
 
-            QMenu desktopMenu;
+            QMenu *desktopMenu = new QMenu;
             ci->addAppletActions(desktopMenu, applet(), event);
 
-            if (!desktopMenu.isEmpty()) {
-                desktopMenu.exec(e->globalPos());
+            if (!desktopMenu->isEmpty()) {
+                desktopMenu->setAttribute(Qt::WA_DeleteOnClose);
+                desktopMenu->popup(e->globalPos());
                 return true;
             }
 
+            delete desktopMenu;
             return false;
         }
     }

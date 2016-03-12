@@ -932,9 +932,10 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
     //qDebug() << "Invoking menu for applet" << applet;
 
-    QMenu desktopMenu;
+    QMenu *desktopMenu = new QMenu;
+    desktopMenu->setAttribute(Qt::WA_DeleteOnClose);
 
-    m_contextMenu = &desktopMenu;
+    m_contextMenu = desktopMenu;
 
     if (applet) {
         emit applet->contextualActionsAboutToShow();
@@ -946,7 +947,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     //this is a workaround where Qt now creates the menu widget
     //in .exec before oxygen can polish it and set the following attribute
-    desktopMenu.setAttribute(Qt::WA_TranslucentBackground);
+    desktopMenu->setAttribute(Qt::WA_TranslucentBackground);
     //end workaround
 
     if (window() && window()->mouseGrabberItem()) {
@@ -955,17 +956,17 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     QPoint pos = event->globalPos();
     if (window() && applet && m_containment->containmentType() == Plasma::Types::PanelContainment) {
-        desktopMenu.adjustSize();
+        desktopMenu->adjustSize();
 
         if (QScreen *screen = window()->screen()) {
             const QRect geo = screen->availableGeometry();
 
-            pos = QPoint(qBound(geo.left(), pos.x(), geo.right() + 1 - desktopMenu.width()),
-                         qBound(geo.top(), pos.y(), geo.bottom() + 1 - desktopMenu.height()));
+            pos = QPoint(qBound(geo.left(), pos.x(), geo.right() + 1 - desktopMenu->width()),
+                         qBound(geo.top(), pos.y(), geo.bottom() + 1 - desktopMenu->height()));
         }
     }
 
-    desktopMenu.exec(pos);
+    desktopMenu->popup(pos);
     event->setAccepted(true);
 }
 
@@ -993,32 +994,32 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
     }
 }
 
-void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *applet, QEvent *event)
+void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
     foreach (QAction *action, applet->contextualActions()) {
         if (action) {
-            desktopMenu.addAction(action);
+            desktopMenu->addAction(action);
         }
     }
 
     if (!applet->failedToLaunch()) {
         QAction *runAssociatedApplication = applet->actions()->action(QStringLiteral("run associated application"));
         if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
-            desktopMenu.addAction(runAssociatedApplication);
+            desktopMenu->addAction(runAssociatedApplication);
         }
 
         QAction *configureApplet = applet->actions()->action(QStringLiteral("configure"));
         if (configureApplet && configureApplet->isEnabled()) {
-            desktopMenu.addAction(configureApplet);
+            desktopMenu->addAction(configureApplet);
         }
         QAction *appletAlternatives = applet->actions()->action(QStringLiteral("alternatives"));
         if (appletAlternatives && appletAlternatives->isEnabled()) {
-            desktopMenu.addAction(appletAlternatives);
+            desktopMenu->addAction(appletAlternatives);
         }
     }
 
-    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", m_containment->title()), &desktopMenu);
-    addContainmentActions(*containmentMenu, event);
+    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", m_containment->title()), desktopMenu);
+    addContainmentActions(containmentMenu, event);
 
     if (!containmentMenu->isEmpty()) {
         int enabled = 0;
@@ -1036,11 +1037,11 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
             if (enabled < 2) {
                 foreach (QAction *action, containmentMenu->actions()) {
                     if (action->isVisible() && !action->isSeparator()) {
-                        desktopMenu.addAction(action);
+                        desktopMenu->addAction(action);
                     }
                 }
             } else {
-                desktopMenu.addMenu(containmentMenu);
+                desktopMenu->addMenu(containmentMenu);
             }
         }
     }
@@ -1050,17 +1051,17 @@ void ContainmentInterface::addAppletActions(QMenu &desktopMenu, Plasma::Applet *
         QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
         //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
-            if (!desktopMenu.isEmpty()) {
-                desktopMenu.addSeparator();
+            if (!desktopMenu->isEmpty()) {
+                desktopMenu->addSeparator();
             }
 
             //qDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
-            desktopMenu.addAction(closeApplet);
+            desktopMenu->addAction(closeApplet);
         }
     }
 }
 
-void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *event)
+void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event)
 {
     if (m_containment->corona()->immutability() != Plasma::Types::Mutable &&
             !KAuthorized::authorizeKAction(QStringLiteral("plasma/containment_actions"))) {
@@ -1094,10 +1095,10 @@ void ContainmentInterface::addContainmentActions(QMenu &desktopMenu, QEvent *eve
         if ((m_containment->containmentType() != Plasma::Types::PanelContainment &&
                 m_containment->containmentType() != Plasma::Types::CustomPanelContainment) &&
                 m_containment->actions()->action(QStringLiteral("configure"))) {
-            desktopMenu.addAction(m_containment->actions()->action(QStringLiteral("configure")));
+            desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
         }
     } else {
-        desktopMenu.addActions(actions);
+        desktopMenu->addActions(actions);
     }
 
     return;
