@@ -54,4 +54,25 @@ void FrameSvgTest::contentsRect()
     QCOMPARE(m_frameSvg->contentsRect(), QRectF(26, 26, 48, 48));
 }
 
+void FrameSvgTest::setTheme()
+{
+    // Should not crash
+
+    Plasma::FrameSvg *frameSvg = new Plasma::FrameSvg;
+    frameSvg->setImagePath("widgets/background");
+    frameSvg->setTheme(new Plasma::Theme("breeze-light", this));
+    frameSvg->framePixmap();
+    frameSvg->setTheme(new Plasma::Theme("breeze-dark", this));
+    frameSvg->framePixmap();
+    delete frameSvg;
+
+    frameSvg = new Plasma::FrameSvg;
+    frameSvg->setImagePath("widgets/background");
+    frameSvg->setTheme(new Plasma::Theme("breeze-light", this));
+    frameSvg->framePixmap();
+    frameSvg->setTheme(new Plasma::Theme("breeze-dark", this));
+    frameSvg->framePixmap();
+    delete frameSvg;
+}
+
 QTEST_MAIN(FrameSvgTest)

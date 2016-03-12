@@ -81,7 +81,7 @@ void FrameSvg::setImagePath(const QString &path)
         // we're the only user of it, let's remove it from the shared keys
         // we don't want to deref it, however, as we'll still be using it
         const QString oldKey = d->cacheId(fd, d->prefix);
-        FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
     } else {
         // others are using this frame, so deref it for ourselves
         fd->deref(this);
@@ -116,6 +116,7 @@ void FrameSvg::setImagePath(const QString &path)
         // ensure our frame is in the cache
         const QString key = d->cacheId(fd, d->prefix);
         FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, fd);
+        fd->theme = theme()->d;
 
         // this will emit repaintNeeded() as well when it is done
         d->updateAndSignalSizes();
@@ -150,7 +151,7 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
         if (fd->deref(this)) {
             //const QString oldKey = d->cacheId(fd, d->prefix);
             //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
             delete fd;
         }
 
@@ -160,7 +161,7 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
     if (fd->refcount() == 1) {
         // we're the only user of it, let's remove it from the shared keys
         // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
     } else {
         // others are using it, but we wish to change its size. so deref it,
         // then create a copy of it (we're automatically ref'd via the ctor),
@@ -260,6 +261,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
                 //qCDebug(LOG_PLASMA) << this << "     1. inserting as" << key;
 
                 FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, newFd);
+                newFd->theme = theme()->d;
             }
         } else {
             // couldn't find anything useful, so we just create something here
@@ -276,7 +278,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
         if (oldFrameData) {
             if (oldFrameData->deref(this)) {
                 const QString oldKey = d->cacheId(oldFrameData, oldPrefix);
-                FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+                FrameSvgPrivate::s_sharedFrames[oldFrameData->theme].remove(oldKey);
                 delete oldFrameData;
             }
         }
@@ -358,7 +360,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         if (fd->deref(this)) {
             //const QString oldKey = d->cacheId(fd, d->prefix);
             //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
             delete fd;
         }
 
@@ -368,7 +370,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     if (fd->refcount() == 1) {
         // we're the only user of it, let's remove it from the shared keys
         // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[theme()->d].remove(oldKey);
+        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
     } else {
         // others are using it, but we wish to change its size. so deref it,
         // then create a copy of it (we're automatically ref'd via the ctor),
@@ -382,6 +384,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     fd->frameSize = size.toSize();
     // we know it isn't in s_sharedFrames due to the check above, so insert it now
     FrameSvgPrivate::s_sharedFrames[theme()->d].insert(newKey, fd);
+    fd->theme = theme()->d;
 }
 
 QSizeF FrameSvg::frameSize() const
@@ -539,7 +542,7 @@ void FrameSvg::clearCache()
             //TODO: should we clear from the Theme pixmap cache as well?
             if (p->deref(this)) {
                 const QString key = d->cacheId(p, it.key());
-                FrameSvgPrivate::s_sharedFrames[theme()->d].remove(key);
+                FrameSvgPrivate::s_sharedFrames[p->theme].remove(key);
                 p->cachedBackground = QPixmap();
             }
 
@@ -606,7 +609,7 @@ FrameSvgPrivate::~FrameSvgPrivate()
                 // qCDebug(LOG_PLASMA) << "2. Removing it" << key << it.value() << it.value()->refcount() << s_sharedFrames[theme()->d].contains(key);
 #endif
 #endif
-                s_sharedFrames[q->theme()->d].remove(key);
+                s_sharedFrames[it.value()->theme].remove(key);
                 delete it.value();
             }
 #ifdef DEBUG_FRAMESVG_CACHE
@@ -690,6 +693,7 @@ QPixmap FrameSvgPrivate::alphaMask()
             } else {
                 maskFrame = new FrameData(*frame, q);
                 s_sharedFrames[q->theme()->d].insert(key, maskFrame);
+                maskFrame->theme = q->theme()->d;
             }
             maskFrame->enabledBorders = frame->enabledBorders;
 

@@ -37,6 +37,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void margins();
     void contentsRect();
+    void setTheme();
 
 private:
     Plasma::FrameSvg *m_frameSvg;

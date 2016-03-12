@@ -50,7 +50,8 @@ public:
           noBorderPadding(false),
           stretchBorders(false),
           tileCenter(false),
-          composeOverBorder(false)
+          composeOverBorder(false),
+          theme(0)
     {
         ref(svg);
     }
@@ -72,7 +73,8 @@ public:
           noBorderPadding(false),
           stretchBorders(false),
           tileCenter(false),
-          composeOverBorder(false)
+          composeOverBorder(false),
+          theme(0)
     {
         ref(svg);
     }
@@ -127,6 +129,7 @@ public:
     bool composeOverBorder : 1;
 
     QHash<FrameSvg *, int> references;
+    Plasma::ThemePrivate *theme;
 };
 
 class FrameSvgPrivate
