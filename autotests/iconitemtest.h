@@ -52,6 +52,7 @@ private Q_SLOTS:
     void changeColorGroup();
     void animatingActiveChange();
     void animatingEnabledChange();
+    void windowChanged();
 
 private:
     QQuickItem *createIconItem();

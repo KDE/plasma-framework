@@ -69,6 +69,9 @@ IconItem::IconItem(QQuickItem *parent)
     connect(this, &QQuickItem::enabledChanged,
             this, &IconItem::enabledChanged);
 
+    connect(this, &QQuickItem::windowChanged,
+            this, &IconItem::schedulePixmapUpdate);
+
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
     setImplicitHeight(KIconLoader::global()->currentSize(KIconLoader::Dialog));

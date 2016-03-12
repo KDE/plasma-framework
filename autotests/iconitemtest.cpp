@@ -410,5 +410,23 @@ void IconItemTest::animatingEnabledChange()
     QVERIFY(img1 != img2); // animation is running
 }
 
+void IconItemTest::windowChanged()
+{
+    QQuickItem *item = createIconItem();
+    item->setProperty("animated", false);
+    item->setProperty("source", "tst-plasma-framework-test-icon");
+    QImage img = grabImage(item);
+
+    QQuickView newView;
+    newView.setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
+    newView.show();
+    QTest::qWaitForWindowExposed(&newView);
+
+    item->setProperty("visible", false);
+    item->setParentItem(newView.rootObject());
+    item->setProperty("visible", true);
+    QCOMPARE(grabImage(item), img);
+}
+
 QTEST_MAIN(IconItemTest)
 
