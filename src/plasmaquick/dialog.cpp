@@ -1071,9 +1071,7 @@ void Dialog::showEvent(QShowEvent *event)
 
 bool Dialog::event(QEvent *event)
 {
-    if (event->type() == QEvent::Expose) {
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-    } else if (event->type() == QEvent::Show) {
+    if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
@@ -1171,7 +1169,18 @@ bool Dialog::event(QEvent *event)
         }
     }
 
-    return QQuickWindow::event(event);
+    bool rc = QQuickWindow::event(event);
+
+    /*
+     * qxcbwindow resets WM_STATE to only the flags that Qt supports
+     * disacarding all other atoms just before it maps the window. We need to set additional flags afterwards.
+     * Can be moved to the constructor after https://codereview.qt-project.org/#/c/149013/ is merged.
+     */
+    if (event->type() == QEvent::Show) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    }
+
+    return rc;
 }
 
 void Dialog::hideEvent(QHideEvent *event)
