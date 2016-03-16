@@ -645,6 +645,21 @@ QQmlComponent *AppletQuickItem::fullRepresentation()
     return d->fullRepresentation;
 }
 
+QObject *AppletQuickItem::testItem()
+{
+    if (!d->testItem) {
+        const QUrl url = QUrl::fromLocalFile(d->appletPackage.filePath("test"));
+        if (url.isEmpty()) {
+            return nullptr;
+        }
+
+        d->testItem = d->qmlObject->createObjectFromSource(url, QtQml::qmlContext(rootItem()));
+        d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject*>(this));
+    }
+
+    return d->testItem;
+}
+
 void AppletQuickItem::setFullRepresentation(QQmlComponent *component)
 {
     if (d->fullRepresentation == component) {

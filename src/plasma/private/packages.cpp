@@ -43,6 +43,7 @@ namespace Plasma
 void ChangeableMainScriptPackage::initPackage(KPackage::Package *package)
 {
     package->addFileDefinition("mainscript", QStringLiteral("ui/main.qml"), i18n("Main Script File"));
+    package->addFileDefinition("test", QStringLiteral("tests/test.qml"), i18n("Tests"));
     package->setRequired("mainscript", true);
 }
 
