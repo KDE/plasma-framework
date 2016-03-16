@@ -176,7 +176,9 @@ void Corona::loadLayout(const QString &configName)
     }
 
     KConfigGroup conf(config(), QString());
-    d->importLayout(conf, false);
+    if (!config()->groupList().isEmpty()) {
+        d->importLayout(conf, false);
+    }
 
     KConfigGroup cg(config(), "General");
     setImmutability((Plasma::Types::ImmutabilityType)cg.readEntry("immutability", (int)Plasma::Types::Mutable));
