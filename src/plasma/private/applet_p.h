@@ -119,6 +119,7 @@ public:
     bool started : 1;
     bool globalShortcutEnabled : 1;
     bool userConfiguring : 1;
+    bool busy : 1;
 };
 
 } // Plasma namespace

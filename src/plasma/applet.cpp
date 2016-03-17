@@ -360,6 +360,21 @@ void Applet::setIcon(const QString &icon)
     emit iconChanged(icon);
 }
 
+bool Applet::isBusy() const
+{
+    return d->busy;
+}
+
+void Applet::setBusy(bool busy)
+{
+    if (busy == d->busy) {
+        return;
+    }
+
+    d->busy = busy;
+    emit busyChanged(busy);
+}
+
 KPluginInfo Applet::pluginInfo() const
 {
     return d->appletDescription;

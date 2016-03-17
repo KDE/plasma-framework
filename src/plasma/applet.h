@@ -73,6 +73,7 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
+    Q_PROPERTY(bool busy READ isBusy WRITE setBusy NOTIFY busyChanged FINAL)
 
 public:
 //CONSTRUCTORS
@@ -323,6 +324,23 @@ public:
      */
     void setIcon(const QString &icon);
 
+    /**
+     * @returns true if the applet should show a busy status, for instance doing
+     * some network operation
+     * @since 5.21
+     */
+    bool isBusy() const;
+
+    /**
+     * Sets the Applet to have a busy status hint, for instance the applet doing
+     * some network operation.
+     * The graphical representation of the busy status depends completely from
+     * the visualization.
+     * @param busy true if the applet is busy
+     * @since 5.21
+     */
+    void setBusy(bool busy);
+
 //ACTIONS
     /**
      * Returns a list of context-related QAction instances.
@@ -430,6 +448,12 @@ Q_SIGNALS:
      * @since 5.20
      */
     void iconChanged(const QString &icon);
+
+    /**
+     * Emitted when the busy status has changed
+     * @since 5.21
+     */
+    void busyChanged(bool busy);
 
 //CONFIGURATION
     /**

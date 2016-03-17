@@ -428,7 +428,6 @@ private:
     QPointer<QQuickItem> m_toolTipItem;
     QVariantList m_args;
     Plasma::Types::BackgroundHints m_backgroundHints;
-    bool m_busy : 1;
     bool m_hideOnDeactivate : 1;
     //this is used to build an emacs style shortcut
     int m_oldKeyboardShortcut;

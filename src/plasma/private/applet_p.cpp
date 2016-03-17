@@ -74,7 +74,8 @@ AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int
       needsConfig(false),
       started(false),
       globalShortcutEnabled(false),
-      userConfiguring(false)
+      userConfiguring(false),
+      busy(false)
 {
     if (appletId == 0) {
         appletId = ++s_maxAppletId;

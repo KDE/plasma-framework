@@ -56,7 +56,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_toolTipItem(0),
       m_args(args),
       m_backgroundHints(Plasma::Types::StandardBackground),
-      m_busy(false),
       m_hideOnDeactivate(true),
       m_oldKeyboardShortcut(0),
       m_dummyNativeInterface(0),
@@ -85,6 +84,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
     connect(applet(), &Plasma::Applet::iconChanged,
             this, &AppletInterface::iconChanged);
+
+    connect(applet(), &Plasma::Applet::busyChanged,
+            this, &AppletInterface::busyChanged);
 
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
@@ -125,7 +127,6 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
       m_toolTipTextFormat(0),
       m_args(args),
       m_backgroundHints(Plasma::Types::StandardBackground),
-      m_busy(false),
       m_hideOnDeactivate(true),
       m_oldKeyboardShortcut(0),
       m_dummyNativeInterface(0),
@@ -150,6 +151,15 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
 
     connect(applet(), &Plasma::Applet::destroyedChanged,
             this, &AppletInterface::destroyedChanged);
+
+    connect(applet(), &Plasma::Applet::titleChanged,
+            this, &AppletInterface::titleChanged);
+
+    connect(applet(), &Plasma::Applet::iconChanged,
+            this, &AppletInterface::iconChanged);
+
+    connect(applet(), &Plasma::Applet::busyChanged,
+            this, &AppletInterface::busyChanged);
 
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
@@ -385,17 +395,12 @@ void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
 
 bool AppletInterface::isBusy() const
 {
-    return m_busy;
+    return applet()->isBusy();
 }
 
 void AppletInterface::setBusy(bool busy)
 {
-    if (m_busy == busy) {
-        return;
-    }
-
-    m_busy = busy;
-    emit busyChanged();
+    applet()->setBusy(busy);
 }
 
 Plasma::Types::BackgroundHints AppletInterface::backgroundHints() const
