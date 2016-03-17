@@ -22,7 +22,7 @@
 
 #include <QQmlAbstractUrlInterceptor>
 
-#include <plasmaquick_export.h>
+#include <plasmaquick/plasmaquick_export.h>
 
 #include <Plasma/Package>
 

@@ -22,7 +22,7 @@
 
 #include <QQuickView>
 
-#include <plasmaquick_export.h>
+#include <plasmaquick/plasmaquick_export.h>
 
 //
 //  W A R N I N G
