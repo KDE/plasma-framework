@@ -1066,6 +1066,10 @@ void Dialog::showEvent(QShowEvent *event)
     if (d->backgroundHints != Dialog::NoBackground) {
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
+
+    // TODO: Remove this call from other places once we can depend on Qt >= 5.6.1
+    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+
     QQuickWindow::showEvent(event);
 }
 
