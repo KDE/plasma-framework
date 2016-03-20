@@ -92,6 +92,10 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
         d->appletDescription = KPluginInfo(args);
     }
 
+    if (args.contains("org.kde.plasma:force-create")) {
+        setProperty("org.kde.plasma:force-create", true);
+    }
+
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init(QString(), args.mid(2));

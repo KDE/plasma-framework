@@ -372,14 +372,14 @@ Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 
 void Containment::addApplet(Applet *applet)
 {
-    if (immutability() != Types::Mutable) {
-        return;
-    }
-
     if (!applet) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "adding null applet!?!";
 #endif
+        return;
+    }
+
+    if (immutability() != Types::Mutable && !applet->property("org.kde.plasma:force-create").toBool()) {
         return;
     }
 
