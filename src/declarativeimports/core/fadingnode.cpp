@@ -74,8 +74,7 @@ const char* FadingMaterialShader::fragmentShader() const
     "void main() {"
         "lowp vec4 tex1 = texture2D(u_target, v_coord);"
         "lowp vec4 tex2 = texture2D(u_src, v_coord);"
-        "gl_FragColor.rgb = mix(tex2.rgb, tex1.rgb, u_transitionProgress);"
-        "gl_FragColor.a = mix(tex2.a, tex1.a, u_transitionProgress) * qt_Opacity;"
+        "gl_FragColor = mix(tex2, tex1, u_transitionProgress) * qt_Opacity;"
     "}";
 }
 
