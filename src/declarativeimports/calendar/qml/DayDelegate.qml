@@ -46,8 +46,8 @@ MouseArea {
         return result
     }
     readonly property bool selected: {
-        var current = root.currentDate
-        var result = true
+        var current = root.currentDate;
+        var result = true;
         if (dateMatchingPrecision >= Calendar.MatchYear) {
             result = result && current.getFullYear() === thisDate.getFullYear()
         }
@@ -121,12 +121,6 @@ MouseArea {
         color: today ? theme.backgroundColor : theme.textColor
         Behavior on color {
             ColorAnimation { duration: units.shortDuration * 2 }
-        }
-    }
-
-    Component.onCompleted: {
-        if (stack.depth === 1 && today) {
-            root.date = model
         }
     }
 }

@@ -279,17 +279,8 @@ Item {
         rows: daysCalendar.rows + (daysCalendar.headerModel ? 1 : 0)
 
         spacing: root.borderWidth
-        property Item selectedItem
         property bool containsEventItems: false // FIXME
         property bool containsTodoItems: false // FIXME
-
-        property QtObject selectedDate: root.date
-        onSelectedDateChanged: {
-            // clear the selection if the root.date is null
-            if (calendarGrid.selectedDate == null) {
-                calendarGrid.selectedItem = null;
-            }
-        }
 
         Repeater {
             id: days

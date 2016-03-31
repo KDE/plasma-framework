@@ -91,6 +91,7 @@ PinchArea {
 
     function resetToToday() {
         calendarBackend.resetToToday();
+        root.currentDate = root.today;
         stack.pop(null);
     }
 
@@ -243,7 +244,6 @@ PinchArea {
             onActivated: {
                 var rowNumber = Math.floor(index / columns);
                 week = 1 + calendarBackend.weeksModel[rowNumber];
-                root.date = date
                 root.currentDate = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
             }
         }
