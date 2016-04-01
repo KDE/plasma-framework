@@ -36,6 +36,8 @@
 #include <QDebug>
 #include <kfilterdev.h>
 #include <kiconeffect.h>
+#include <KIconLoader>
+#include <KIconTheme>
 
 #include "applet.h"
 #include "package.h"
@@ -182,8 +184,15 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         //length of file://
         actualPath = actualPath.mid(7);
     }
-    const bool isThemed = !QDir::isAbsolutePath(actualPath);
 
+    bool isThemed = !QDir::isAbsolutePath(actualPath);
+    bool inIconTheme = false;
+
+    //an absolute path.. let's try if this actually an *icon* theme
+    if (!isThemed) {
+        const auto *iconTheme = KIconLoader::global()->theme();
+        isThemed = inIconTheme = iconTheme && actualPath.startsWith(iconTheme->dir());
+    }
     // lets check to see if we're already set to this file
     if (isThemed == themed &&
             ((themed && themePath == actualPath) ||
@@ -216,7 +225,11 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         emit q->fromCurrentThemeChanged(fromCurrentTheme);
     }
 
-    if (themed) {
+    if (inIconTheme) {
+        themePath = actualPath;
+        path = actualPath;
+        QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
+    } else if (themed) {
         themePath = actualPath;
         path = actualTheme()->imagePath(themePath);
         themeFailed = path.isEmpty();

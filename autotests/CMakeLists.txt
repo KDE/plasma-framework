@@ -45,6 +45,7 @@ PLASMA_UNIT_TESTS(
     pluginloadertest
     framesvgtest
     iconitemtest
+    themetest
     #    plasmoidpackagetest
 )
 

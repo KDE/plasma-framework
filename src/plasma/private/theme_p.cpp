@@ -30,6 +30,8 @@
 
 #include <kdirwatch.h>
 #include <kwindoweffects.h>
+#include <KIconLoader>
+#include <KIconTheme>
 
 namespace Plasma
 {
@@ -120,6 +122,11 @@ ThemePrivate::ThemePrivate(QObject *parent)
     // ... but also remove/recreate cycles, like KConfig does it
     connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
 
+    QObject::connect(KIconLoader::global(), &KIconLoader::iconChanged,
+        this, [this]() {
+            scheduleThemeChangeNotification(PixmapCache|SvgElementsCache);
+        });
+
     connect(KWindowSystem::self(), &KWindowSystem::compositingChanged, this, &ThemePrivate::compositingChanged);
 }
 
@@ -172,6 +179,8 @@ bool ThemePrivate::useCache()
         }
         if (isRegularTheme) {
             themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
+            const auto *iconTheme = KIconLoader::global()->theme();
+            iconThemeMetadataPath = iconTheme->dir() + "index.theme";
 
             Q_ASSERT(!themeMetadataPath.isEmpty() || themeName.isEmpty());
             const QString cacheFileBase = cacheFile + QLatin1String("*.kcache");
@@ -194,6 +203,10 @@ bool ThemePrivate::useCache()
                 QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)),
                                  this, SLOT(settingsFileChanged(QString)),
                                  Qt::UniqueConnection);
+
+                if (!iconThemeMetadataPath.isEmpty()) {
+                    KDirWatch::self()->addFile(iconThemeMetadataPath);
+                }
             }
 
             // now we check for, and remove if necessary, old caches
@@ -220,7 +233,10 @@ bool ThemePrivate::useCache()
             if (!cacheFilePath.isEmpty()) {
                 const QFileInfo cacheFileInfo(cacheFilePath);
                 const QFileInfo metadataFileInfo(themeMetadataPath);
-                cachesTooOld = cacheFileInfo.lastModified().toTime_t() < metadataFileInfo.lastModified().toTime_t();
+                const QFileInfo iconThemeMetadataFileInfo(iconThemeMetadataPath);
+
+                cachesTooOld = (cacheFileInfo.lastModified().toTime_t() < metadataFileInfo.lastModified().toTime_t()) ||
+                        (cacheFileInfo.lastModified().toTime_t() < iconThemeMetadataFileInfo.lastModified().toTime_t());
             }
         }
 
@@ -248,6 +264,18 @@ bool ThemePrivate::useCache()
 
         const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + svgElementsFileName;
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
+        QString currentIconThemePath;
+        const auto *iconTheme = KIconLoader::global()->theme();
+        if (iconTheme) {
+            currentIconThemePath = iconTheme->dir();
+        }
+        KConfigGroup globalGroup(svgElementsCache, QLatin1String("Global"));
+        const QString oldIconThemePath = globalGroup.readEntry("currentIconThemePath", QString());
+        if (oldIconThemePath != currentIconThemePath) {
+            discardCache(PixmapCache | SvgElementsCache);
+            globalGroup.writeEntry("currentIconThemePath", currentIconThemePath);
+            svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
+        }
     }
 
     return cacheTheme;
