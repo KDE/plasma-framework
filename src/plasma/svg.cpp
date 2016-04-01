@@ -229,7 +229,6 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         themePath = actualPath;
         path = actualPath;
         QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-        
     } else if (themed) {
         themePath = actualPath;
         path = actualTheme()->imagePath(themePath);
