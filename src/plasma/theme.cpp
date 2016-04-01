@@ -343,6 +343,7 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QStrin
 
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
+
     if (!d->useCache()) {
         return false;
     }

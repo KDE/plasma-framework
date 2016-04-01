@@ -140,6 +140,7 @@ public:
     CacheTypes cachesToDiscard;
     QString themeVersion;
     QString themeMetadataPath;
+    QString iconThemeMetadataPath;
 
     bool locolor : 1;
     bool compositingActive : 1;
