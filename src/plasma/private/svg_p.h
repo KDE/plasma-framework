@@ -64,10 +64,10 @@ public:
     ~SvgPrivate();
 
     //This function is meant for the rects cache
-    QString cacheId(const QString &elementId);
+    QString cacheId(const QString &elementId) const;
 
     //This function is meant for the pixmap cache
-    QString cachePath(const QString &path, const QSize &size);
+    QString cachePath(const QString &path, const QSize &size) const;
 
     bool setImagePath(const QString &imagePath);
 

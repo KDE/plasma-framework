@@ -160,7 +160,7 @@ SvgPrivate::~SvgPrivate()
 }
 
 //This function is meant for the rects cache
-QString SvgPrivate::cacheId(const QString &elementId)
+QString SvgPrivate::cacheId(const QString &elementId) const
 {
     if (size.isValid() && size != naturalSize) {
         return CACHE_ID_WITH_SIZE(size, elementId, devicePixelRatio);
@@ -170,7 +170,7 @@ QString SvgPrivate::cacheId(const QString &elementId)
 }
 
 //This function is meant for the pixmap cache
-QString SvgPrivate::cachePath(const QString &path, const QSize &size)
+QString SvgPrivate::cachePath(const QString &path, const QSize &size) const
 {
     return CACHE_ID_WITH_SIZE(size, path, devicePixelRatio) % QLSEP % QString::number(colorGroup);
 }
