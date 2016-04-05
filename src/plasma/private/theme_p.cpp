@@ -180,7 +180,9 @@ bool ThemePrivate::useCache()
         if (isRegularTheme) {
             themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
             const auto *iconTheme = KIconLoader::global()->theme();
-            iconThemeMetadataPath = iconTheme->dir() + "index.theme";
+            if (iconTheme) {
+                iconThemeMetadataPath = iconTheme->dir() + "index.theme";
+            }
 
             Q_ASSERT(!themeMetadataPath.isEmpty() || themeName.isEmpty());
             const QString cacheFileBase = cacheFile + QLatin1String("*.kcache");
