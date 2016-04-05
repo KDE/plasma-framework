@@ -92,7 +92,7 @@ KJob *PackageStructureWrapper::uninstall(KPackage::Package *package, const QStri
 void PackageStructurePrivate::installPathChanged(const QString &path)
 {
     KJob *job = qobject_cast<KJob *>(q->sender());
-    if (!job && job->error()) {
+    if (!job || job->error()) {
         return;
     }
 
