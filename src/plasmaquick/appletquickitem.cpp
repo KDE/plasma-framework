@@ -388,29 +388,34 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
       d(new AppletQuickItemPrivate(applet, this))
 {
     d->init();
+
     if (d->applet) {
         d->appletPackage = d->applet->package();
-    }
-    if (d->applet && d->applet->containment() && d->applet->containment()->corona()) {
-        d->coronaPackage = d->applet->containment()->corona()->package();
-    }
-    if (d->applet && d->applet->containment()) {
-        d->containmentPackage = d->applet->containment()->package();
+
+        if (d->applet->containment()) {
+            if (d->applet->containment()->corona()) {
+                d->coronaPackage = d->applet->containment()->corona()->package();
+            }
+
+            d->containmentPackage = d->applet->containment()->package();
+        }
+
+        if (d->applet->pluginInfo().isValid()) {
+            const QString rootPath = d->applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
+            if (!rootPath.isEmpty()) {
+                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
+            } else {
+                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + d->applet->pluginInfo().pluginName());
+            }
+        }
+
+        // set the graphicObject dynamic property on applet
+        d->applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
     }
 
-    if (applet->pluginInfo().isValid()) {
-        const QString rootPath = applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
-        if (!rootPath.isEmpty()) {
-            d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
-        } else {
-            d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + applet->pluginInfo().pluginName());
-        }
-    }
     d->qmlObject->setInitializationDelayed(true);
 
-    // set the graphicObject dynamic property on applet
-    d->applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
-    setProperty("_plasma_applet", QVariant::fromValue(applet));
+    setProperty("_plasma_applet", QVariant::fromValue(d->applet));
 }
 
 AppletQuickItem::~AppletQuickItem()
