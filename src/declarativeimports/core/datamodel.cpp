@@ -151,6 +151,7 @@ void SortFilterModel::setFilterCallback(const QJSValue& callback)
     }
 
     m_filterCallback = callback;
+    invalidateFilter();
 
     emit filterCallbackChanged(callback);
 }
