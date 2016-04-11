@@ -20,10 +20,6 @@
 #ifndef PLASMA_DATAENGINEMANAGER_H
 #define PLASMA_DATAENGINEMANAGER_H
 
-#include <QtCore/QHash>
-
-#include <kplugininfo.h>
-
 #include <plasma/dataengine.h>
 
 namespace Plasma
@@ -39,7 +35,7 @@ class DataEngineManagerPrivate;
  * Plasma::DataEngineManager provides facilities for listing, loading and
  * according to reference count unloading of DataEngines.
  **/
-class PLASMA_EXPORT DataEngineManager: public QObject
+class DataEngineManager: public QObject
 {
     Q_OBJECT
 public:
