@@ -117,18 +117,34 @@ AssociatedApplicationManager *AssociatedApplicationManager::self()
 
 void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const QString &application)
 {
+    const bool hasAppBefore = d->applicationNames.contains(applet);
+    const bool hasUrls = d->urlLists.contains(applet);
+
+    // unsetting the application?
+    if (application.isEmpty()) {
+        if (hasAppBefore) {
+            d->applicationNames.remove(applet);
+            if (!hasUrls) {
+                disconnect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+            }
+        }
+        return;
+    }
+
     KService::Ptr service = KService::serviceByDesktopName(application);
     if (service || !QStandardPaths::findExecutable(application).isNull() || QFile::exists(application)) {
         d->applicationNames[applet] = application;
-        if (d->urlLists.contains(applet)) {
+
+        if (hasUrls) {
             QAction *a = applet->actions()->action(QStringLiteral("run associated application"));
             if (a) {
                 a->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                 a->setText(i18n("Run the Associated Application"));
             }
+        } else if (!hasAppBefore) {
+            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
         }
     }
-    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
 }
 
 QString AssociatedApplicationManager::application(const Plasma::Applet *applet) const
@@ -138,8 +154,23 @@ QString AssociatedApplicationManager::application(const Plasma::Applet *applet) 
 
 void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<QUrl> &urls)
 {
+    const bool hasApp = d->applicationNames.contains(applet);
+    const bool hasUrlsBefore = d->urlLists.contains(applet);
+
+    // unsetting the urls?
+    if (urls.isEmpty()) {
+        if (hasUrlsBefore) {
+            d->urlLists.remove(applet);
+            if (!hasApp) {
+                disconnect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+            }
+        }
+        return;
+    }
+
     d->urlLists[applet] = urls;
-    if (!d->applicationNames.contains(applet)) {
+
+    if (!hasApp) {
         QAction *a = applet->actions()->action(QStringLiteral("run associated application"));
         if (a) {
             QMimeDatabase mimeDb;
@@ -153,8 +184,10 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
                 a->setText(i18n("Run the Associated Application"));
             }
         }
+        if (!hasUrlsBefore) {
+            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+        }
     }
-    connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
 }
 //TODO: updateAction slot, called on setting of url or app, and on sycoca change
 QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
@@ -181,7 +214,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
         QProcess::startDetached(execCommand, parameters);
 #endif
 
-    } else if (d->urlLists.contains(applet) && !d->urlLists.value(applet).isEmpty()) {
+    } else if (d->urlLists.contains(applet)) {
 #if !PLASMA_NO_KIO
         KRun *krun = new KRun(d->urlLists.value(applet).first(), 0);
         krun->setAutoDelete(true);
