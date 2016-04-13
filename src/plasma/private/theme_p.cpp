@@ -439,6 +439,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%textcolor")] = color(Theme::TextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%backgroundcolor")] = color(Theme::BackgroundColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%highlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%activatedlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%hoveredlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
@@ -448,16 +449,19 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ButtonColorGroup).name();
 
     elements[QStringLiteral("%viewtextcolor")] = color(Theme::TextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ViewColorGroup).name();
 
     elements[QStringLiteral("%complementarytextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
 
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
@@ -484,41 +488,47 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%buttonbackgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%buttonhovercolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%buttonhighlightedtextcolor"));
             break;
         case Theme::ViewColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%viewtextcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%viewbackgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%viewhighlightedtextcolor"));
             break;
         case Theme::ComplementaryColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%complementarytextcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%complementarybackgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%complementaryhovercolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%complementaryhighlightedtextcolor"));
             break;
         default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%highlightedtextcolor"));
         }
-
 
         stylesheet += skel.arg(QStringLiteral("ButtonText"), QStringLiteral("%buttontextcolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonBackground"), QStringLiteral("%buttonbackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonHover"), QStringLiteral("%buttonhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonFocus"), QStringLiteral("%buttonfocuscolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonHighlightedText"), QStringLiteral("%buttonhighlightedtextcolor"));
 
         stylesheet += skel.arg(QStringLiteral("ViewText"), QStringLiteral("%viewtextcolor"));
         stylesheet += skel.arg(QStringLiteral("ViewBackground"), QStringLiteral("%viewbackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ViewHover"), QStringLiteral("%viewhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewHighlightedText"), QStringLiteral("%viewhighlightedtextcolor"));
 
         stylesheet += skel.arg(QStringLiteral("ComplementaryText"), QStringLiteral("%complementarytextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryBackground"), QStringLiteral("%complementarybackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryHover"), QStringLiteral("%complementaryhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryFocus"), QStringLiteral("%complementaryfocuscolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryHighlightedText"), QStringLiteral("%complementaryhighlightedtextcolor"));
 
         stylesheet = processStyleSheet(stylesheet);
         cachedSvgStyleSheets.insert(group, stylesheet);
@@ -623,6 +633,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 
     case Theme::VisitedLinkColor:
         return scheme->foreground(KColorScheme::VisitedText).color();
+
+    case Theme::HighlightedTextColor:
+        return scheme->shade(scheme->decoration(KColorScheme::HoverColor).color(), KColorScheme::LightShade, 1);
     }
 
     return QColor();

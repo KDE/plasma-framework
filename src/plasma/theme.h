@@ -75,6 +75,7 @@ public:
         FocusColor = 4, /** color for focus effect on view */
         LinkColor = 5, /** color for clickable links */
         VisitedLinkColor = 6, /** color visited clickable links */
+        HighlightedTextColor = 7/** color contrasting with HighlightColor, to be used for instance with */
     };
 
     enum ColorGroup {

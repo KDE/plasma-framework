@@ -154,6 +154,17 @@ QColor ColorScope::highlightColor() const
     return m_theme.color(Plasma::Theme::HighlightColor, m_group);
 }
 
+QColor ColorScope::highlightedTextColor() const
+{
+    if (m_inherit) {
+        ColorScope *s = findParentScope();
+        if (s) {
+            return s->highlightedTextColor();
+        }
+    }
+    return m_theme.color(Plasma::Theme::HighlightedTextColor, m_group);
+}
+
 QColor ColorScope::backgroundColor() const
 {
     if (m_inherit) {

@@ -36,6 +36,7 @@ void ThemeTest::initTestCase()
     // set default icon theme to test-theme
     QStandardPaths::setTestModeEnabled(true);
 
+    m_theme = new Plasma::Theme("testtheme", this);
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
     if(!QDir(configPath).mkpath(QStringLiteral("."))) {
@@ -94,6 +95,78 @@ void ThemeTest::loadSvgIcon()
 
     QVERIFY(!m_svg->theme()->findInCache(cacheId, result));
 }
+
+void ThemeTest::testColors()
+{
+    QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
+                            Plasma::Theme::NormalColorGroup), QColor(49,54,59));
+    QCOMPARE(m_theme->color(Plasma::Theme::BackgroundColor,
+                            Plasma::Theme::NormalColorGroup), QColor(239,240,241));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightColor,
+                            Plasma::Theme::NormalColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HoverColor,
+                            Plasma::Theme::NormalColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::FocusColor,
+                            Plasma::Theme::NormalColorGroup), QColor(30,146,255));
+    QCOMPARE(m_theme->color(Plasma::Theme::LinkColor,
+                            Plasma::Theme::NormalColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::VisitedLinkColor,
+                            Plasma::Theme::NormalColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
+                            Plasma::Theme::NormalColorGroup).name(), QColor(163,214,251).name());
+
+    QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(49,54,59));
+    QCOMPARE(m_theme->color(Plasma::Theme::BackgroundColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(239,240,241));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HoverColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::FocusColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(30,146,255));
+    QCOMPARE(m_theme->color(Plasma::Theme::LinkColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::VisitedLinkColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
+                            Plasma::Theme::ButtonColorGroup).name(), QColor(163,214,251).name());
+
+    QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
+                            Plasma::Theme::ViewColorGroup), QColor(49,54,59));
+    QCOMPARE(m_theme->color(Plasma::Theme::BackgroundColor,
+                            Plasma::Theme::ViewColorGroup), QColor(252,252,252));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightColor,
+                            Plasma::Theme::ViewColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HoverColor,
+                            Plasma::Theme::ViewColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::FocusColor,
+                            Plasma::Theme::ViewColorGroup), QColor(30,146,255));
+    QCOMPARE(m_theme->color(Plasma::Theme::LinkColor,
+                            Plasma::Theme::ViewColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::VisitedLinkColor,
+                            Plasma::Theme::ViewColorGroup), QColor(61,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
+                            Plasma::Theme::ViewColorGroup).name(), QColor(163,214,251).name());
+
+    QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(239,240,241));
+    QCOMPARE(m_theme->color(Plasma::Theme::BackgroundColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(49,54,59));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(71,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HoverColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(71,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::FocusColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(40,146,255));
+    QCOMPARE(m_theme->color(Plasma::Theme::LinkColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(71,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::VisitedLinkColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(71,174,230));
+    QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
+                            Plasma::Theme::ComplementaryColorGroup).name(), QColor(169,214,249).name());
+}
+
 
 QTEST_MAIN(ThemeTest)
 

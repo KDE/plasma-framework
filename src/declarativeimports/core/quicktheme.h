@@ -49,22 +49,28 @@ class QuickTheme : public Plasma::Theme
     // colors
     Q_PROPERTY(QColor textColor READ textColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChangedProxy)
+
+    Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonHoverColor READ buttonHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonFocusColor READ buttonFocusColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonHighlightedTextColor READ buttonHighlightedTextColor NOTIFY themeChangedProxy)
+
     Q_PROPERTY(QColor viewTextColor READ viewTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor viewHighlightedTextColor READ viewHighlightedTextColor NOTIFY themeChangedProxy)
 
     Q_PROPERTY(QColor complementaryTextColor READ complementaryTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryBackgroundColor READ complementaryBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryHoverColor READ viewHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryFocusColor READ viewFocusColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor complementaryHighlightedTextColor READ complementaryHighlightedTextColor NOTIFY themeChangedProxy)
 
 public:
     explicit QuickTheme(QObject *parent = 0);
@@ -83,6 +89,12 @@ public:
      * @since 5.0
      */
     QColor highlightColor() const;
+
+    /**
+     * @return The theme's colorscheme's highlighted text color
+     * @since 5.22
+     */
+    QColor highlightedTextColor() const;
 
     /**
      * @return The theme's colorscheme's background color
@@ -127,6 +139,12 @@ public:
     QColor buttonFocusColor() const;
 
     /**
+     * @return The theme's colorscheme's highlighted text color for buttons
+     * @since 5.22
+     */
+    QColor buttonHighlightedTextColor() const;
+
+    /**
      * @return The theme's colorscheme's text color in views
      * @since 5.0
      */
@@ -151,6 +169,12 @@ public:
     QColor viewFocusColor() const;
 
     /**
+     * @return The theme's colorscheme's highlighted text color for views
+     * @since 5.22
+     */
+    QColor viewHighlightedTextColor() const;
+
+    /**
      * @return The theme's colorscheme's text color of "complementary" areas
      * @since 5.0
      */
@@ -173,6 +197,12 @@ public:
      * @since 5.0
      */
     QColor complementaryFocusColor() const;
+
+    /**
+     * @return The theme's colorscheme's highlighted text color for "complementary" areas
+     * @since 5.22
+     */
+    QColor complementaryHighlightedTextColor() const;
 
 Q_SIGNALS:
     void themeChangedProxy();

@@ -55,6 +55,11 @@ class ColorScope : public QQuickItem
     Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged)
 
     /**
+     * The highlighted text color within this colorscope
+     */
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor NOTIFY colorsChanged)
+
+    /**
      * The background color that should be used within this colorscope
      */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
@@ -69,8 +74,9 @@ public:
 
     QColor textColor() const;
     QColor highlightColor() const;
+    QColor highlightedTextColor() const;
     QColor backgroundColor() const;
-    
+
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static ColorScope *qmlAttachedProperties(QObject *object);
 
