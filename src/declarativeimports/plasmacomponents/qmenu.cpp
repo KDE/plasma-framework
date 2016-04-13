@@ -116,6 +116,20 @@ void QMenuProxy::setTransientParent(QWindow *parent)
     emit transientParentChanged();
 }
 
+int QMenuProxy::minimumWidth() const
+{
+    return m_menu->minimumWidth();
+}
+
+void QMenuProxy::setMinimumWidth(int width)
+{
+    if (m_menu->minimumWidth() != width) {
+        m_menu->setMinimumWidth(width);
+
+        emit minimumWidthChanged();
+    }
+}
+
 bool QMenuProxy::event(QEvent *event)
 {
     switch (event->type()) {

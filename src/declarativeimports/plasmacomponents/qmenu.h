@@ -82,6 +82,11 @@ class QMenuProxy : public QObject
     Q_PROPERTY(QObject *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
+    /**
+     * A minimum width for the menu.
+     */
+    Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
+
 public:
     QMenuProxy(QObject *parent = 0);
     ~QMenuProxy();
@@ -97,6 +102,8 @@ public:
     QWindow *transientParent();
     void setTransientParent(QWindow *parent);
 
+    int minimumWidth() const;
+    void setMinimumWidth(int width);
 
     /**
      * This opens the menu at position x,y on the given visualParent. By default x and y are set to 0
@@ -135,6 +142,7 @@ Q_SIGNALS:
     void statusChanged();
     void visualParentChanged();
     void transientParentChanged();
+    void minimumWidthChanged();
     void triggered(QMenuItem *item);
     void triggeredIndex(int index);
 
