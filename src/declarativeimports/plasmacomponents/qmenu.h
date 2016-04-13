@@ -116,9 +116,13 @@ public:
      */
     Q_INVOKABLE void addMenuItem(const QString &text);
     /**
-     * This adds a menu item of type MenuItem
+     * This adds MenuItem 'item' to the menu before MenuItem 'before'.
+     * If MenuItem 'before' is 0 or does not exist in the menu, 'item'
+     * is appended to the menu instead.
+     * If MenuItem 'item' already exists in the menu, it is removed and
+     * inserted at the new position.
      */
-    Q_INVOKABLE void addMenuItem(QMenuItem *item);
+    Q_INVOKABLE void addMenuItem(QMenuItem *item, QMenuItem *before = nullptr);
     /**
      * This adds a section header with a string used as name for the section
      */

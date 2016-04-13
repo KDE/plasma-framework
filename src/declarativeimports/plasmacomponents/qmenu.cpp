@@ -167,10 +167,20 @@ void QMenuProxy::addMenuItem(const QString &text)
     m_items << item;
 }
 
-void QMenuProxy::addMenuItem(QMenuItem *item)
+void QMenuProxy::addMenuItem(QMenuItem *item, QMenuItem *before)
 {
-    m_menu->addAction(item->action());
-    m_items << item;
+    if (before) {
+        if (m_items.contains(item)) {
+            m_menu->removeAction(item->action());
+        } else {
+            m_items << item;
+        }
+
+        m_menu->insertAction(before->action(), item->action());
+    } else if (!m_items.contains(item)) {
+        m_menu->addAction(item->action());
+        m_items << item;
+    }
 }
 
 void QMenuProxy::addSection(const QString &text)
