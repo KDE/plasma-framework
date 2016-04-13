@@ -172,11 +172,19 @@ void QMenuProxy::addMenuItem(QMenuItem *item, QMenuItem *before)
     if (before) {
         if (m_items.contains(item)) {
             m_menu->removeAction(item->action());
+            m_items.removeAll(item);
+        }
+
+        m_menu->insertAction(before->action(), item->action());
+
+        const int index = m_items.indexOf(before);
+
+        if (index != -1) {
+            m_items.insert(index, item);
         } else {
             m_items << item;
         }
 
-        m_menu->insertAction(before->action(), item->action());
     } else if (!m_items.contains(item)) {
         m_menu->addAction(item->action());
         m_items << item;
