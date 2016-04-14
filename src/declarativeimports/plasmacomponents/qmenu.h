@@ -25,6 +25,7 @@
 #include <QQmlListProperty>
 #include "qmenuitem.h"
 #include "enums.h"
+#include "plasma.h"
 
 class QDeclarativeItem;
 
@@ -83,6 +84,11 @@ class QMenuProxy : public QObject
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
     /**
+     * The default placement for the menu.
+     */
+    Q_PROPERTY(Plasma::Types::PopupPlacement placement READ placement WRITE setPlacement NOTIFY placementChanged)
+
+    /**
      * A minimum width for the menu.
      */
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
@@ -102,6 +108,9 @@ public:
     QWindow *transientParent();
     void setTransientParent(QWindow *parent);
 
+    Plasma::Types::PopupPlacement placement() const;
+    void setPlacement(Plasma::Types::PopupPlacement placement);
+
     int minimumWidth() const;
     void setMinimumWidth(int width);
 
@@ -109,7 +118,10 @@ public:
      * This opens the menu at position x,y on the given visualParent. By default x and y are set to 0
      */
     Q_INVOKABLE void open(int x = 0, int y = 0);
-    //Q_INVOKABLE void open();
+    /**
+     * This opens the menu at the specified placement relative to the visualParent.
+     */
+    Q_INVOKABLE void openRelative();
     /**
      * This closes the menu
      */
@@ -142,6 +154,7 @@ Q_SIGNALS:
     void statusChanged();
     void visualParentChanged();
     void transientParentChanged();
+    void placementChanged();
     void minimumWidthChanged();
     void triggered(QMenuItem *item);
     void triggeredIndex(int index);
@@ -150,10 +163,14 @@ private Q_SLOTS:
     void itemTriggered(QAction *item);
 
 private:
+    void rebuildMenu();
+    void openInternal(QPoint pos);
+
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
     DialogStatus::Status m_status;
     QWeakPointer<QObject> m_visualParent;
+    Plasma::Types::PopupPlacement m_placement;
 };
 
 #endif //QMENU_PROXY_H

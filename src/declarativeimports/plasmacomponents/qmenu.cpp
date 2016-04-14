@@ -22,11 +22,13 @@
 #include <QDebug>
 #include <QQuickWindow>
 #include <QQuickItem>
+#include <QScreen>
 
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent),
-      m_status(DialogStatus::Closed)
+      m_status(DialogStatus::Closed),
+      m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
 {
     m_menu = new QMenu(0);
     connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
@@ -114,6 +116,20 @@ void QMenuProxy::setTransientParent(QWindow *parent)
 
     m_menu->windowHandle()->setTransientParent(parent);
     emit transientParentChanged();
+}
+
+Plasma::Types::PopupPlacement QMenuProxy::placement() const
+{
+    return m_placement;
+}
+
+void QMenuProxy::setPlacement(Plasma::Types::PopupPlacement placement)
+{
+    if (m_placement != placement) {
+        m_placement = placement;
+
+        emit placementChanged();
+    }
 }
 
 int QMenuProxy::minimumWidth() const
@@ -222,10 +238,10 @@ void QMenuProxy::itemTriggered(QAction *action)
     }
 }
 
-void QMenuProxy::open(int x, int y)
+void QMenuProxy::rebuildMenu()
 {
-    qDebug() << "opening menu at " << x << y;
     m_menu->clear();
+
     foreach (QMenuItem *item, m_items) {
         if (item->section()) {
             if (!item->isVisible()) {
@@ -240,18 +256,104 @@ void QMenuProxy::open(int x, int y)
         }
     }
 
-    QQuickItem *parentItem;
+    m_menu->adjustSize();
+}
+
+void QMenuProxy::open(int x, int y)
+{
+    qDebug() << "opening menu at " << x << y;
+
+    QQuickItem *parentItem = nullptr;
+
     if (m_visualParent) {
         parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
     } else {
         parentItem = qobject_cast<QQuickItem *>(parent());
     }
+
+    if (!parentItem) {
+        return;
+    }
+
+    rebuildMenu();
+
     QPointF pos = parentItem->mapToScene(QPointF(x, y));
+
     if (parentItem->window() && parentItem->window()->screen()) {
         pos = parentItem->window()->mapToGlobal(pos.toPoint());
     }
 
-    m_menu->popup(pos.toPoint());
+    openInternal(pos.toPoint());
+}
+
+Q_INVOKABLE void QMenuProxy::openRelative()
+{
+    QQuickItem *parentItem = nullptr;
+
+    if (m_visualParent) {
+        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
+    } else {
+        parentItem = qobject_cast<QQuickItem *>(parent());
+    }
+
+    if (!parentItem) {
+        return;
+    }
+
+    rebuildMenu();
+
+    QPointF pos;
+
+    using namespace Plasma;
+
+    switch(m_placement) {
+        case Types::TopPosedLeftAlignedPopup:
+        case Types::LeftPosedTopAlignedPopup: {
+            pos = parentItem->mapToScene(QPointF(0, 0));
+            break;
+        }
+        case Types::TopPosedRightAlignedPopup:
+        case Types::RightPosedTopAlignedPopup: {
+            pos = parentItem->mapToScene(QPointF(parentItem->width(), 0));
+            break;
+        }
+        case Types::LeftPosedBottomAlignedPopup:
+        case Types::BottomPosedLeftAlignedPopup: {
+            pos = parentItem->mapToScene(QPointF(0, parentItem->height()));
+            break;
+        }
+        case Types::BottomPosedRightAlignedPopup:
+        case Types::RightPosedBottomAlignedPopup: {
+            pos = parentItem->mapToScene(QPointF(parentItem->width(), parentItem->height()));
+            break;
+        }
+        default:
+            open();
+            return;
+    }
+
+    if (parentItem->window() && parentItem->window()->screen()) {
+        pos = parentItem->window()->mapToGlobal(pos.toPoint());
+    }
+
+    QScreen *screen = parentItem->window()->screen();
+
+    if (screen) {
+        if (pos.x() + m_menu->width() > screen->geometry().width()) {
+            pos.setX(pos.x() - m_menu->width());
+        }
+
+        if (pos.y() + m_menu->height() > screen->geometry().height()) {
+            pos.setY(pos.y() - m_menu->height());
+        }
+    }
+
+    openInternal(pos.toPoint());
+}
+
+void QMenuProxy::openInternal(QPoint pos)
+{
+    m_menu->popup(pos);
     m_status = DialogStatus::Open;
     emit statusChanged();
 }
