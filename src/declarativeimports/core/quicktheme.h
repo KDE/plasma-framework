@@ -53,24 +53,36 @@ class QuickTheme : public Plasma::Theme
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor visitedLinkColor READ visitedLinkColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY themeChangedProxy)
 
     Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonHoverColor READ buttonHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonFocusColor READ buttonFocusColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonHighlightedTextColor READ buttonHighlightedTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonPositiveTextColor READ buttonPositiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNeutralTextColor READ buttonNeutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNegativeTextColor READ buttonNegativeTextColor NOTIFY themeChangedProxy)
 
     Q_PROPERTY(QColor viewTextColor READ viewTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewBackgroundColor READ viewBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewHoverColor READ viewHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewFocusColor READ viewFocusColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor viewHighlightedTextColor READ viewHighlightedTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonPositiveTextColor READ buttonPositiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNeutralTextColor READ buttonNeutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNegativeTextColor READ buttonNegativeTextColor NOTIFY themeChangedProxy)
 
     Q_PROPERTY(QColor complementaryTextColor READ complementaryTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryBackgroundColor READ complementaryBackgroundColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryHoverColor READ viewHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryFocusColor READ viewFocusColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryHighlightedTextColor READ complementaryHighlightedTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonPositiveTextColor READ buttonPositiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNeutralTextColor READ buttonNeutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor buttonNegativeTextColor READ buttonNegativeTextColor NOTIFY themeChangedProxy)
 
 public:
     explicit QuickTheme(QObject *parent = 0);
@@ -97,6 +109,24 @@ public:
     QColor highlightedTextColor() const;
 
     /**
+     * @return The theme's colorscheme's positive text color
+     * @since 5.22
+     */
+    QColor positiveTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's neutral text color
+     * @since 5.22
+     */
+    QColor neutralTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's negative text color
+     * @since 5.22
+     */
+    QColor negativeTextColor() const;
+
+    /**
      * @return The theme's colorscheme's background color
      * @since 5.0
      */
@@ -113,6 +143,24 @@ public:
      * @since 5.0
      */
     QColor buttonBackgroundColor() const;
+
+    /**
+     * @return The theme's colorscheme's positive text color of buttons
+     * @since 5.22
+     */
+    QColor buttonPositiveTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's neutral text color of buttons
+     * @since 5.22
+     */
+    QColor buttonNeutralTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's negative text color of buttons
+     * @since 5.22
+     */
+    QColor buttonNegativeTextColor() const;
 
     /**
      * @return The theme's colorscheme's link color
@@ -175,6 +223,24 @@ public:
     QColor viewHighlightedTextColor() const;
 
     /**
+     * @return The theme's colorscheme's positive text color of view
+     * @since 5.22
+     */
+    QColor viewPositiveTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's neutral text color of view
+     * @since 5.22
+     */
+    QColor viewNeutralTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's negative text color of view
+     * @since 5.22
+     */
+    QColor viewNegativeTextColor() const;
+
+    /**
      * @return The theme's colorscheme's text color of "complementary" areas
      * @since 5.0
      */
@@ -203,6 +269,24 @@ public:
      * @since 5.22
      */
     QColor complementaryHighlightedTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's positive text color of complementary
+     * @since 5.22
+     */
+    QColor complementaryPositiveTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's neutral text color of complementary
+     * @since 5.22
+     */
+    QColor complementaryNeutralTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's negative text color of complementary
+     * @since 5.22
+     */
+    QColor complementaryNegativeTextColor() const;
 
 Q_SIGNALS:
     void themeChangedProxy();

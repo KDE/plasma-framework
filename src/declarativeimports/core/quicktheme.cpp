@@ -49,6 +49,21 @@ QColor QuickTheme::highlightedTextColor() const
     return Plasma::Theme::color(Plasma::Theme::HighlightedTextColor);
 }
 
+QColor QuickTheme::positiveTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor);
+}
+
+QColor QuickTheme::neutralTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor);
+}
+
+QColor QuickTheme::negativeTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor);
+}
+
 QColor QuickTheme::backgroundColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::BackgroundColor);
@@ -62,6 +77,21 @@ QColor QuickTheme::buttonTextColor() const
 QColor QuickTheme::buttonBackgroundColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::BackgroundColor, Plasma::Theme::ButtonColorGroup);
+}
+
+QColor QuickTheme::buttonPositiveTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ButtonColorGroup);
+}
+
+QColor QuickTheme::buttonNeutralTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ButtonColorGroup);
+}
+
+QColor QuickTheme::buttonNegativeTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ButtonColorGroup);
 }
 
 QColor QuickTheme::linkColor() const
@@ -114,6 +144,21 @@ QColor QuickTheme::viewHighlightedTextColor() const
     return Plasma::Theme::color(Plasma::Theme::HighlightedTextColor, Plasma::Theme::ViewColorGroup);
 }
 
+QColor QuickTheme::viewPositiveTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ViewColorGroup);
+}
+
+QColor QuickTheme::viewNeutralTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ViewColorGroup);
+}
+
+QColor QuickTheme::viewNegativeTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ViewColorGroup);
+}
+
 QColor QuickTheme::complementaryTextColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
@@ -137,6 +182,21 @@ QColor QuickTheme::complementaryFocusColor() const
 QColor QuickTheme::complementaryHighlightedTextColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::HighlightedTextColor, Plasma::Theme::ComplementaryColorGroup);
+}
+
+QColor QuickTheme::complementaryPositiveTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
+}
+
+QColor QuickTheme::complementaryNeutralTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
+}
+
+QColor QuickTheme::complementaryNegativeTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
 }
 
 }

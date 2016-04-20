@@ -75,7 +75,10 @@ public:
         FocusColor = 4, /** color for focus effect on view */
         LinkColor = 5, /** color for clickable links */
         VisitedLinkColor = 6, /** color visited clickable links */
-        HighlightedTextColor = 7/** color contrasting with HighlightColor, to be used for instance with */
+        HighlightedTextColor = 7,/** color contrasting with HighlightColor, to be used for instance with */
+        PositiveTextColor = 8, /** color of foreground objects with a "positive message" connotation (usually green) */
+        NeutralTextColor = 9, /** color of foreground objects with a "neutral message" connotation (usually yellow) */
+        NegativeTextColor = 10 /** color of foreground objects with a "negative message" connotation (usually red) */
     };
 
     enum ColorGroup {

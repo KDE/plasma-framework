@@ -26,10 +26,10 @@ DecorationHover=61,174,230
 ForegroundActive=246,116,0
 ForegroundInactive=175,176,179
 ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+ForegroundNegative=237,21,22
+ForegroundNeutral=201,206,60
 ForegroundNormal=49,54,59
-ForegroundPositive=17,209,22
+ForegroundPositive=17,209,23
 ForegroundVisited=61,174,230
 
 [Colors:Selection]
@@ -68,10 +68,10 @@ DecorationHover=61,174,230
 ForegroundActive=246,116,0
 ForegroundInactive=175,176,179
 ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+ForegroundNegative=237,21,23
+ForegroundNeutral=201,206,61
 ForegroundNormal=49,54,59
-ForegroundPositive=17,209,22
+ForegroundPositive=17,209,24
 ForegroundVisited=61,174,230
 
 [Colors:Window]
@@ -96,12 +96,11 @@ DecorationHover=71,174,230
 ForegroundActive=246,116,20
 ForegroundInactive=185,176,179
 ForegroundLink=71,174,230
-ForegroundNegative=247,21,21
-ForegroundNeutral=201,206,69
+ForegroundNegative=237,21,24
+ForegroundNeutral=201,206,62
 ForegroundNormal=239,240,241
-ForegroundPositive=27,209,22
+ForegroundPositive=17,209,25
 ForegroundVisited=71,174,230
-
 
 [General]
 ColorScheme=Breeze

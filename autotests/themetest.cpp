@@ -114,6 +114,12 @@ void ThemeTest::testColors()
                             Plasma::Theme::NormalColorGroup), QColor(61,174,230));
     QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
                             Plasma::Theme::NormalColorGroup).name(), QColor(163,214,251).name());
+    QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor,
+                            Plasma::Theme::NormalColorGroup), QColor(17,209,22));
+    QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor,
+                            Plasma::Theme::NormalColorGroup), QColor(201,206,59));
+    QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor,
+                            Plasma::Theme::NormalColorGroup), QColor(237,21,21));
 
     QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
                             Plasma::Theme::ButtonColorGroup), QColor(49,54,59));
@@ -131,6 +137,12 @@ void ThemeTest::testColors()
                             Plasma::Theme::ButtonColorGroup), QColor(61,174,230));
     QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
                             Plasma::Theme::ButtonColorGroup).name(), QColor(163,214,251).name());
+    QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(17,209,23));
+    QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(201,206,60));
+    QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor,
+                            Plasma::Theme::ButtonColorGroup), QColor(237,21,22));
 
     QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
                             Plasma::Theme::ViewColorGroup), QColor(49,54,59));
@@ -148,6 +160,12 @@ void ThemeTest::testColors()
                             Plasma::Theme::ViewColorGroup), QColor(61,174,230));
     QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
                             Plasma::Theme::ViewColorGroup).name(), QColor(163,214,251).name());
+    QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor,
+                            Plasma::Theme::ViewColorGroup), QColor(17,209,24));
+    QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor,
+                            Plasma::Theme::ViewColorGroup), QColor(201,206,61));
+    QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor,
+                            Plasma::Theme::ViewColorGroup), QColor(237,21,23));
 
     QCOMPARE(m_theme->color(Plasma::Theme::TextColor,
                             Plasma::Theme::ComplementaryColorGroup), QColor(239,240,241));
@@ -165,6 +183,12 @@ void ThemeTest::testColors()
                             Plasma::Theme::ComplementaryColorGroup), QColor(71,174,230));
     QCOMPARE(m_theme->color(Plasma::Theme::HighlightedTextColor,
                             Plasma::Theme::ComplementaryColorGroup).name(), QColor(169,214,249).name());
+    QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(17,209,25));
+    QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(201,206,62));
+    QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor,
+                            Plasma::Theme::ComplementaryColorGroup), QColor(237,21,24));
 }
 
 

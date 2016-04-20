@@ -176,6 +176,39 @@ QColor ColorScope::backgroundColor() const
     return m_theme.color(Plasma::Theme::BackgroundColor, m_group);
 }
 
+QColor ColorScope::positiveTextColor() const
+{
+    if (m_inherit) {
+        ColorScope *s = findParentScope();
+        if (s) {
+            return s->positiveTextColor();
+        }
+    }
+    return m_theme.color(Plasma::Theme::PositiveTextColor, m_group);
+}
+
+QColor ColorScope::neutralTextColor() const
+{
+    if (m_inherit) {
+        ColorScope *s = findParentScope();
+        if (s) {
+            return s->neutralTextColor();
+        }
+    }
+    return m_theme.color(Plasma::Theme::NeutralTextColor, m_group);
+}
+
+QColor ColorScope::negativeTextColor() const
+{
+    if (m_inherit) {
+        ColorScope *s = findParentScope();
+        if (s) {
+            return s->negativeTextColor();
+        }
+    }
+    return m_theme.color(Plasma::Theme::NegativeTextColor, m_group);
+}
+
 void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {

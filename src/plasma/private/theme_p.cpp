@@ -444,24 +444,36 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%activatedlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%hoveredlink")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%link")] = color(Theme::LinkColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%positivetextcolor")] = color(Theme::PositiveTextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%neutraltextcolor")] = color(Theme::NeutralTextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%negativetextcolor")] = color(Theme::NegativeTextColor, Theme::NormalColorGroup).name();
 
     elements[QStringLiteral("%buttontextcolor")] = color(Theme::TextColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonpositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ButtonColorGroup).name();
 
     elements[QStringLiteral("%viewtextcolor")] = color(Theme::TextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewpositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ViewColorGroup).name();
 
     elements[QStringLiteral("%complementarytextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarypositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementaryneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarynegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ComplementaryColorGroup).name();
 
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
@@ -489,6 +501,9 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%buttonhovercolor"));
             stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%buttonhighlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%buttonpositivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%buttonneutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%buttonnegativetextcolor"));
             break;
         case Theme::ViewColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%viewtextcolor"));
@@ -496,6 +511,9 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%viewhovercolor"));
             stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%viewhighlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%viewpositivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%viewneutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%viewnegativetextcolor"));
             break;
         case Theme::ComplementaryColorGroup:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%complementarytextcolor"));
@@ -503,6 +521,9 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%complementaryhovercolor"));
             stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%complementaryhighlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%complementarypositivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%complementarynegativetextcolor"));
             break;
         default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
@@ -510,6 +531,9 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
 
             stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%highlightcolor"));
             stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%highlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%positivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%neutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%negativetextcolor"));
         }
 
         stylesheet += skel.arg(QStringLiteral("ButtonText"), QStringLiteral("%buttontextcolor"));
@@ -517,18 +541,27 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
         stylesheet += skel.arg(QStringLiteral("ButtonHover"), QStringLiteral("%buttonhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonFocus"), QStringLiteral("%buttonfocuscolor"));
         stylesheet += skel.arg(QStringLiteral("ButtonHighlightedText"), QStringLiteral("%buttonhighlightedtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonPositiveText"), QStringLiteral("%buttonpositivetextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonNeutralText"), QStringLiteral("%buttonneutraltextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ButtonNegativeText"), QStringLiteral("%buttonnegativetextcolor"));
 
         stylesheet += skel.arg(QStringLiteral("ViewText"), QStringLiteral("%viewtextcolor"));
         stylesheet += skel.arg(QStringLiteral("ViewBackground"), QStringLiteral("%viewbackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ViewHover"), QStringLiteral("%viewhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ViewFocus"), QStringLiteral("%viewfocuscolor"));
         stylesheet += skel.arg(QStringLiteral("ViewHighlightedText"), QStringLiteral("%viewhighlightedtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewPositiveText"), QStringLiteral("%viewpositivetextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewNeutralText"), QStringLiteral("%viewneutraltextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ViewNegativeText"), QStringLiteral("%viewnegativetextcolor"));
 
         stylesheet += skel.arg(QStringLiteral("ComplementaryText"), QStringLiteral("%complementarytextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryBackground"), QStringLiteral("%complementarybackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryHover"), QStringLiteral("%complementaryhovercolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryFocus"), QStringLiteral("%complementaryfocuscolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryHighlightedText"), QStringLiteral("%complementaryhighlightedtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryPositiveText"), QStringLiteral("%complementarypositivetextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryNeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
+        stylesheet += skel.arg(QStringLiteral("ComplementaryNegativeText"), QStringLiteral("%complementarynegativetextcolor"));
 
         stylesheet = processStyleSheet(stylesheet);
         cachedSvgStyleSheets.insert(group, stylesheet);
@@ -636,6 +669,13 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 
     case Theme::HighlightedTextColor:
         return scheme->shade(scheme->decoration(KColorScheme::HoverColor).color(), KColorScheme::LightShade, 1);
+
+    case Theme::PositiveTextColor:
+        return scheme->foreground(KColorScheme::PositiveText).color();
+    case Theme::NeutralTextColor:
+        return scheme->foreground(KColorScheme::NeutralText).color();
+    case Theme::NegativeTextColor:
+        return scheme->foreground(KColorScheme::NegativeText).color();
     }
 
     return QColor();

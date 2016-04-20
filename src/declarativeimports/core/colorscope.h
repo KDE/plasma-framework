@@ -64,6 +64,21 @@ class ColorScope : public QQuickItem
      */
     Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
 
+    /**
+     * Color of foreground objects with a "positive message" connotation (usually green)
+     */
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor NOTIFY colorsChanged)
+
+    /**
+     * Color of foreground objects with a "neutral message" connotation (usually yellow)
+     */
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY colorsChanged)
+ 
+    /**
+     * Color of foreground objects with a "negative message" connotation (usually red)
+     */
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY colorsChanged)
+
 public:
 /// @cond INTERNAL_DOCS
     ColorScope(QQuickItem *parent = 0, QObject *parentObject = 0);
@@ -76,6 +91,9 @@ public:
     QColor highlightColor() const;
     QColor highlightedTextColor() const;
     QColor backgroundColor() const;
+    QColor positiveTextColor() const;
+    QColor neutralTextColor() const;
+    QColor negativeTextColor() const;
 
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static ColorScope *qmlAttachedProperties(QObject *object);
