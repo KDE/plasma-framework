@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2013 Mark Gaiser <markg85@gmail.com>
+    Copyright (C) 2016 Martin Klapetek <mklapetek@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@
 DaysModel::DaysModel(QObject *parent) :
     QAbstractListModel(parent),
     m_pluginsManager(0),
+    m_lastRequestedEventsStartDate(QDate()),
     m_agendaNeedsUpdate(false)
 {
     QHash<int, QByteArray> roleNames;
@@ -112,7 +114,9 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
 {
     m_eventsData.reserve(m_eventsData.size() + data.size());
     m_eventsData += data;
+
     layoutChanged();
+    Q_EMIT agendaUpdated(QDate::currentDate());
 }
 
 void DaysModel::onEventModified(const CalendarEvents::EventData &data)

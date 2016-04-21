@@ -229,6 +229,21 @@ Item {
         }
     }
 
+    PlasmaCore.Svg {
+        id: calendarSvg
+        imagePath: "widgets/calendar"
+    }
+
+    Component {
+        id: eventsMarkerComponent
+
+        PlasmaCore.SvgItem {
+            id: eventsMarker
+            svg: calendarSvg
+            elementId: "event"
+        }
+    }
+
     Connections {
         target: theme
         onTextColorChanged: {

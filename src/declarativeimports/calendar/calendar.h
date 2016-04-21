@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2013 Mark Gaiser <markg85@gmail.com>
+    Copyright (C) 2016 Martin Klapetek <mklapetek@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

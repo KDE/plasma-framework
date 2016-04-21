@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2013 Mark Gaiser <markg85@gmail.com>
+    Copyright (C) 2016 Martin Klapetek <mklapetek@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -73,6 +74,7 @@ private:
     QDate m_lastRequestedAgendaDate;
     QList<CalendarEvents::CalendarEventsPlugin*> m_eventPlugins;
     QMultiHash<QDate, CalendarEvents::EventData> m_eventsData;
+    QDate m_lastRequestedEventsStartDate; // this is always this+42 days
     bool m_agendaNeedsUpdate;
 };
 
