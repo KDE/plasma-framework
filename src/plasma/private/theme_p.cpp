@@ -846,11 +846,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (realTheme && isDefault && writeSettings) {
         // we're the default theme, let's save our state
         KConfigGroup &cg = config();
-        if (ThemePrivate::defaultTheme == themeName) {
-            cg.deleteEntry("name");
-        } else {
-            cg.writeEntry("name", themeName);
-        }
+        cg.writeEntry("name", themeName);
         cg.sync();
     }
 
