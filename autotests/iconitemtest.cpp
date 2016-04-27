@@ -28,6 +28,7 @@
 
 #include <KIconLoader>
 #include <KIconEngine>
+#include <KIconTheme>
 
 #include "plasma/theme.h"
 #include "plasma/svg.h"
