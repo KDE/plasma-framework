@@ -52,6 +52,10 @@ void ThemeTest::initTestCase()
     KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
     plasmaConfig.writeEntry("name", "default");
     m_svg = new Plasma::Svg();
+
+    KSharedConfig::openConfig()->reparseConfiguration();
+    KIconTheme::reconfigure();
+    KIconLoader::global()->reconfigure(QString());
 }
 
 void ThemeTest::cleanupTestCase()
