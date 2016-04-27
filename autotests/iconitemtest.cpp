@@ -47,6 +47,14 @@ static bool imageIsEmpty(const QImage &img)
 
 void IconItemTest::initTestCase()
 {
+    if (qgetenv("XDG_DATA_DIRS").isEmpty()) {
+        QWARN("\n"
+              "  !!!\n"
+              "  Switching QStandardPaths into testing mode.\n"
+              "  Make sure xdg data can be found or set XDG_DATA_DIRS.\n"
+              "  !!!\n");
+    }
+
     // make our theme in search path
     qputenv("XDG_DATA_DIRS",
             qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
@@ -219,6 +227,11 @@ void IconItemTest::usesPlasmaTheme()
 
 void IconItemTest::animation()
 {
+    if (!Plasma::Theme().themeName().startsWith("default")) {
+        // This this depends on the production default theme.
+        QSKIP("Current Plasma theme is not Breeze.");
+    }
+
     // animated = true (default)
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", "user-away");
@@ -246,6 +259,11 @@ void IconItemTest::animation()
 
 void IconItemTest::animationAfterHide()
 {
+    if (!Plasma::Theme().themeName().startsWith("default")) {
+        // This this depends on the production default theme.
+        QSKIP("Current Plasma theme is not Breeze.");
+    }
+
     QQuickItem *item1 = createIconItem();
     QQuickItem *item2 = createIconItem();
     item1->setProperty("source", "user-away");
@@ -268,6 +286,11 @@ void IconItemTest::animationAfterHide()
 
 void IconItemTest::bug_359388()
 {
+    if (!KIconTheme::list().contains("hicolor")) {
+        // This test depends on hicolor icon theme to resolve the icon.
+        QSKIP("hicolor icon theme not available");
+    }
+
     QString name("bug359388");
     KIconLoader iconLoader("tst_plasma-framework");
     QIcon customThemeIcon(new KIconEngine(name, &iconLoader));
@@ -315,6 +338,11 @@ void IconItemTest::loadSvg()
 
 void IconItemTest::themeChange()
 {
+    if (!Plasma::Theme().themeName().startsWith("default")) {
+        // This this depends on the production themes (infer their presence from default).
+        QSKIP("Current Plasma theme is not Breeze.");
+    }
+
     // Icon from Plasma theme
     QQuickItem *item1 = createIconItem();
     item1->setProperty("animated", false);
@@ -361,6 +389,11 @@ void IconItemTest::qiconFromTheme()
 
 void IconItemTest::changeColorGroup()
 {
+    if (!Plasma::Theme().themeName().startsWith("default")) {
+        // This this depends on the production default theme.
+        QSKIP("Current Plasma theme is not Breeze.");
+    }
+
     // Icon from Plasma theme
     QQuickItem *item = createIconItem();
     item->setProperty("animated", false);
