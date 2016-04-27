@@ -69,6 +69,11 @@ void IconItemTest::initTestCase()
     KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
     plasmaConfig.writeEntry("name", "default");
 
+    cg.sync(); // sync explicitly so it will be correctly parsed
+    KSharedConfig::openConfig()->reparseConfiguration();
+    KIconTheme::reconfigure();
+    KIconLoader::global()->reconfigure(QString());
+
     m_view = new QQuickView();
     m_view->setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
     m_view->show();
