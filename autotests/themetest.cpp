@@ -53,6 +53,7 @@ void ThemeTest::initTestCase()
     plasmaConfig.writeEntry("name", "default");
     m_svg = new Plasma::Svg();
 
+    cg.sync(); // sync explicitly so it will be correctly parsed
     KSharedConfig::openConfig()->reparseConfiguration();
     KIconTheme::reconfigure();
     KIconLoader::global()->reconfigure(QString());
