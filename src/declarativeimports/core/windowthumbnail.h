@@ -127,19 +127,19 @@ private:
     void resolveGLXFunctions();
     bool loadGLXTexture();
     void bindGLXTexture();
+    xcb_pixmap_t m_glxPixmap;
     QFunctionPointer m_bindTexImage;
     QFunctionPointer m_releaseTexImage;
-    xcb_pixmap_t m_glxPixmap;
 #endif // HAVE_GLX
 #if HAVE_EGL
     bool xcbWindowToTextureEGL(WindowTextureNode *textureNode);
     void resolveEGLFunctions();
     void bindEGLTexture();
     bool m_eglFunctionsResolved;
+    EGLImageKHR m_image;
     QFunctionPointer m_eglCreateImageKHR;
     QFunctionPointer m_eglDestroyImageKHR;
     QFunctionPointer m_glEGLImageTargetTexture2DOES;
-    EGLImageKHR m_image;
 #endif // HAVE_EGL
 #endif
 };
