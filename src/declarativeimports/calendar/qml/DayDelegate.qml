@@ -102,7 +102,7 @@ MouseArea {
     }
 
     Loader {
-        active: containsEventItems
+        active: model.containsEventItems !== undefined && model.containsEventItems
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         height: parent.height / 3
