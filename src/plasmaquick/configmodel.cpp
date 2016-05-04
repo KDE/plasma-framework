@@ -149,11 +149,7 @@ QVariant ConfigModelPrivate::get(int row) const
     value[QStringLiteral("name")] = categories.at(row)->name();
     value[QStringLiteral("icon")] = categories.at(row)->icon();
     value[QStringLiteral("pluginName")] = categories.at(row)->pluginName();
-    if (appletInterface) {
-        value[QStringLiteral("source")] = QUrl::fromLocalFile(appletInterface.data()->package().filePath("ui", categories.at(row)->source()));
-    } else {
-        value[QStringLiteral("source")] = categories.at(row)->source();
-    }
+    value[QStringLiteral("source")] = q->data(q->index(row, 0), ConfigModel::SourceRole);
     value[QStringLiteral("visible")] = categories.at(row)->visible();
     value[QStringLiteral("kcm")] = q->data(q->index(row, 0), ConfigModel::KCMRole);
 
@@ -202,7 +198,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
     {
         const QString source = d->categories.at(index.row())->source();
         // Quick check if source is an absolute path or not
-        if (d->appletInterface && !(source.startsWith('/') && source.endsWith(QLatin1String("qml")))) {
+        if (d->appletInterface && !source.isEmpty() && !(source.startsWith('/') && source.endsWith(QLatin1String("qml")))) {
             return QUrl::fromLocalFile(d->appletInterface.data()->package().filePath("ui", source));
         } else {
             return source;
