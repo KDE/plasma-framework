@@ -115,6 +115,7 @@ public:
     QList<QString> fallbackThemes;
     KSharedConfigPtr colors;
     KColorScheme colorScheme;
+    KColorScheme selectionColorScheme;
     KColorScheme buttonColorScheme;
     KColorScheme viewColorScheme;
     KColorScheme complementaryColorScheme;

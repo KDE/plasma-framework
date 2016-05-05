@@ -53,6 +53,7 @@ QHash<QString, QAtomicInt> ThemePrivate::themesRefCount = QHash<QString, QAtomic
 ThemePrivate::ThemePrivate(QObject *parent)
     : QObject(parent),
       colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
+      selectionColorScheme(QPalette::Active, KColorScheme::Selection, KSharedConfigPtr(0)),
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
       complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(0)),
@@ -654,9 +655,11 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
     case Theme::BackgroundColor:
         return scheme->background(KColorScheme::NormalBackground).color();
 
-    case Theme::HighlightColor:
     case Theme::HoverColor:
         return scheme->decoration(KColorScheme::HoverColor).color();
+
+    case Theme::HighlightColor:
+        return selectionColorScheme.background(KColorScheme::NormalBackground).color();
 
     case Theme::FocusColor:
         return scheme->decoration(KColorScheme::FocusColor).color();
@@ -668,7 +671,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         return scheme->foreground(KColorScheme::VisitedText).color();
 
     case Theme::HighlightedTextColor:
-        return scheme->shade(scheme->decoration(KColorScheme::HoverColor).color(), KColorScheme::LightShade, 1);
+        return selectionColorScheme.foreground(KColorScheme::NormalText).color();
 
     case Theme::PositiveTextColor:
         return scheme->foreground(KColorScheme::PositiveText).color();
@@ -783,6 +786,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
+    selectionColorScheme = KColorScheme(QPalette::Active, KColorScheme::Selection, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
