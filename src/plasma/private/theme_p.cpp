@@ -391,6 +391,7 @@ void ThemePrivate::colorsChanged()
     colorScheme = KColorScheme(QPalette::Active, KColorScheme::Window, colors);
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
+    selectionColorScheme = KColorScheme(QPalette::Active, KColorScheme::Selection, colors);
     scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     emit applicationPaletteChange();
 }
