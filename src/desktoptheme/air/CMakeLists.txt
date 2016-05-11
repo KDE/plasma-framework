@@ -19,4 +19,6 @@ install( FILES ${translucent_widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/des
 FILE(GLOB translucent_dialogs translucent/dialogs/*.svgz)
 install( FILES ${translucent_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/translucent/dialogs/ )
 
+FILE(GLOB icons icons/*.svgz)
+install( FILES ${icons} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/icons/ )
 
