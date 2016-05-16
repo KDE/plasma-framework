@@ -73,6 +73,9 @@ void ThemeTest::loadSvgIcon()
         iconPath = iconTheme->iconPath(QLatin1String("konversation.svg"), 48, KIconLoader::MatchBest);
     }
 
+    QVERIFY(iconTheme);
+    QVERIFY(iconTheme->isValid());
+    QVERIFY2(QFile::exists(iconPath), qPrintable(iconPath));
     m_svg->setImagePath(iconPath);
     QVERIFY(m_svg->isValid());
 
