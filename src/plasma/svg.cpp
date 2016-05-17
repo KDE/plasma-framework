@@ -26,10 +26,12 @@
 
 #include <QCoreApplication>
 #include <QDir>
-#include <QDomDocument>
 #include <QMatrix>
 #include <QPainter>
 #include <QStringBuilder>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
+#include <QBuffer>
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
@@ -84,29 +86,29 @@ bool SharedSvgRenderer::load(
 {
     // Apply the style sheet.
     if (!styleSheet.isEmpty() && contents.contains("current-color-scheme")) {
-        QDomDocument svg;
-        if (!svg.setContent(contents)) {
-            return false;
-        }
+        QByteArray processedContents;
+        QXmlStreamReader reader(contents);
 
-        QDomNode defs = svg.elementsByTagName(QStringLiteral("defs")).item(0);
-
-        const QString STYLE = QStringLiteral("style");
-        for (QDomElement style = defs.firstChildElement(STYLE); !style.isNull();
-                style = style.nextSiblingElement(STYLE)) {
-            if (style.attribute(QStringLiteral("id")) == QLatin1String("current-color-scheme")) {
-                QDomElement colorScheme = svg.createElement(STYLE);
-                colorScheme.setAttribute(QStringLiteral("type"), QStringLiteral("text/css"));
-                colorScheme.setAttribute(QStringLiteral("id"), QStringLiteral("current-color-scheme"));
-                defs.replaceChild(colorScheme, style);
-                colorScheme.appendChild(svg.createCDATASection(styleSheet));
-
-                interestingElements.insert(QStringLiteral("current-color-scheme"), QRect(0, 0, 1, 1));
-
-                break;
+        QBuffer buffer(&processedContents);
+        buffer.open(QIODevice::WriteOnly);
+        QXmlStreamWriter writer(&buffer);
+        while (!reader.atEnd()) {
+            if (reader.readNext() == QXmlStreamReader::StartElement &&
+                reader.qualifiedName() == QLatin1String("style") &&
+                reader.attributes().value(QLatin1String("id")) == QLatin1String("current-color-scheme")) {
+                writer.writeStartElement(QLatin1String("style"));
+                writer.writeAttributes(reader.attributes());
+                writer.writeCharacters(styleSheet);
+                writer.writeEndElement();
+                while (reader.tokenType() != QXmlStreamReader::EndElement) {
+                    reader.readNext();
+                }
+            } else if (reader.tokenType() != QXmlStreamReader::Invalid) {
+                writer.writeCurrentToken(reader);
             }
         }
-        if (!QSvgRenderer::load(svg.toByteArray(-1))) {
+        buffer.close();
+        if (!QSvgRenderer::load(processedContents)) {
             return false;
         }
     } else if (!QSvgRenderer::load(contents)) {
