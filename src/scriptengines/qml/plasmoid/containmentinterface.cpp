@@ -966,6 +966,12 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         }
     }
 
+    if (desktopMenu->isEmpty()) {
+        delete desktopMenu;
+        event->accept();
+        return;
+    }
+
     desktopMenu->popup(pos);
     event->setAccepted(true);
 }
