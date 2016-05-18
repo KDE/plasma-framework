@@ -73,13 +73,7 @@ void IconItemTest::initTestCase()
     QIcon::setThemeSearchPaths({QFINDTESTDATA("data/icons")});
     QIcon::setThemeName("test-theme");
 
-    KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
-    cg.writeEntry("Theme", "test-theme");
-    KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
-    plasmaConfig.writeEntry("name", "default");
-
-    cg.sync(); // sync explicitly so it will be correctly parsed
-    KSharedConfig::openConfig()->reparseConfiguration();
+    KIconTheme::forceThemeForTests("test-theme");
     KIconTheme::reconfigure();
     KIconLoader::global()->reconfigure(QString());
 

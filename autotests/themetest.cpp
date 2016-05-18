@@ -47,13 +47,11 @@ void ThemeTest::initTestCase()
 
     QIcon::setThemeSearchPaths(QStringList()<<QFINDTESTDATA("data/icons"));
 
-    KConfigGroup cg(KSharedConfig::openConfig("kdeglobals"), "Icons");
-    cg.writeEntry("Theme", "test-theme");
     KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
     plasmaConfig.writeEntry("name", "default");
     m_svg = new Plasma::Svg();
 
-    cg.sync(); // sync explicitly so it will be correctly parsed
+    KIconTheme::forceThemeForTests("test-theme");
     KSharedConfig::openConfig()->reparseConfiguration();
     KIconTheme::reconfigure();
     KIconLoader::global()->reconfigure(QString());
@@ -89,9 +87,7 @@ void ThemeTest::loadSvgIcon()
     QSignalSpy spy(m_svg, SIGNAL(repaintNeeded()));
     QVERIFY(spy.isValid());
 
-    KConfigGroup cg(KSharedConfig::openConfig("kdeglobals"), "Icons");
-    cg.writeEntry("Theme", "test-theme-two");
-    cg.sync();
+    KIconTheme::forceThemeForTests("test-theme-two");
     // KIconloader needs changesto be emitted manually, ouch.
     for (int i=0; i < KIconLoader::LastGroup; i++) {
         KIconLoader::emitChange(KIconLoader::Group(i));
