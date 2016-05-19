@@ -21,6 +21,7 @@
 #define PLUGINTEST_H
 
 #include <QCoreApplication>
+#include <plasma/dataengine.h>
 
 class PluginTest : public QObject
 {
@@ -37,6 +38,16 @@ private Q_SLOTS:
     void loadDataEngine();
 
 private:
+};
+
+class EngineTest : public QObject
+{
+    Q_OBJECT
+public:
+    EngineTest() {}
+
+public Q_SLOTS:
+    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
 };
 
 #endif

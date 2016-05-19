@@ -299,9 +299,9 @@ void DataEngine::removeSource(const QString &source)
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
         s->d->store();
+        d->sources.erase(it);
         s->disconnect(this);
         s->deleteLater();
-        d->sources.erase(it);
         emit sourceRemoved(source);
     }
 }
@@ -416,13 +416,14 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
       checkSourcesTimerId(0),
       updateTimerId(0),
       minPollingInterval(-1),
-      valid(true),
+      valid(false),
       script(0),
       package(0)
 {
     updateTimer.start();
 
     if (dataEngineDescription.isValid()) {
+        valid = true;
         e->setObjectName(dataEngineDescription.name());
     } else {
         e->setObjectName(QStringLiteral("NullEngine"));

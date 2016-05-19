@@ -22,12 +22,13 @@
 #include <qtest.h>
 #include <QDebug>
 //#include <QJsonObject>
+#include <QtTest/QSignalSpy>
 
 #include <kplugininfo.h>
 //#include <kplugintrader.h>
 
-#include <plasma/dataengine.h>
 #include <plasma/pluginloader.h>
+#include <plasma/dataengineconsumer.h>
 
 QTEST_MAIN(PluginTest)
 
@@ -67,12 +68,34 @@ void PluginTest::listContainmentsOfType()
 
 }
 
+static const auto source = QStringLiteral("Europe/Sofia");
+
+void EngineTest::dataUpdated(const QString &s, const Plasma::DataEngine::Data &data) {
+    QVERIFY(source == s);
+    QVERIFY(data["Timezone"] == source);
+}
+
 void PluginTest::loadDataEngine()
 {
-    Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine(QStringLiteral("time"));
-    //qDebug() << "Engine loaded successfully" << engine->pluginInfo().name();
-    QVERIFY(engine != 0 || buildonly);
-
+    QPointer<Plasma::DataEngine> engine, nullEngine;
+    {
+        Plasma::DataEngineConsumer consumer;
+        engine = consumer.dataEngine(QStringLiteral("time"));
+        nullEngine = consumer.dataEngine(QStringLiteral("noop"));
+        QVERIFY(nullEngine && engine);
+        QVERIFY(!nullEngine->isValid() && engine->isValid());
+        {
+            EngineTest test;
+            engine->connectSource(source, &test);
+            QSignalSpy spy(engine, SIGNAL(sourceAdded(QString)));
+            spy.wait();
+            QVERIFY(!engine->isEmpty());
+        }
+        QSignalSpy spy(engine, SIGNAL(sourceRemoved(QString)));
+        spy.wait();
+        QVERIFY(engine->isEmpty());
+    }
+    QVERIFY(!nullEngine.isNull() && engine.isNull());
 }
 
 #include "moc_pluginloadertest.cpp"
