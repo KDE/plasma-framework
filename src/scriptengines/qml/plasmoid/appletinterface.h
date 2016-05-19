@@ -149,9 +149,21 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged)
 
     /**
-     * The immutability state of the Corona. the plasmoid implementation should avoid allowing "dangerous" modifications from the user when in an immutable mode
+     * Whether the Corona is immutable. The plasmoid implementation should avoid allowing "dangerous" modifications from the user when in an immutable mode
+     *
+     * This is true when immutability is not Mutable
      */
-    Q_PROPERTY(bool immutable READ immutable NOTIFY immutableChanged)
+    Q_PROPERTY(bool immutable READ immutable NOTIFY immutabilityChanged)
+
+    /**
+     * The immutability of the Corona.
+     *
+     * Use this if you need more granular control than just using the immutable property
+     *
+     * @see immutable
+     * @since 5.23
+     */
+    Q_PROPERTY(Plasma::Types::ImmutabilityType immutability READ immutability NOTIFY immutabilityChanged)
 
     /**
      * True when the user is configuring, for instance when the configuration dialog is open.
@@ -337,6 +349,7 @@ public:
     QRect screenGeometry() const;
 
     bool immutable() const;
+    Plasma::Types::ImmutabilityType immutability() const;
     bool userConfiguring() const;
     int apiVersion() const;
 
@@ -388,7 +401,7 @@ Q_SIGNALS:
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
-    void immutableChanged();
+    void immutabilityChanged();
     void statusChanged();
     void backgroundHintsChanged();
     void busyChanged();

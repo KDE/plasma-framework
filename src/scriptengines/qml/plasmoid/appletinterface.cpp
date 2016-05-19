@@ -66,7 +66,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(this, &AppletInterface::configNeedsSaving,
             applet(), &Plasma::Applet::configNeedsSaving);
     connect(applet(), &Plasma::Applet::immutabilityChanged,
-            this, &AppletInterface::immutableChanged);
+            this, &AppletInterface::immutabilityChanged);
     connect(applet(), &Plasma::Applet::userConfiguringChanged,
             this, &AppletInterface::userConfiguringChanged);
 
@@ -137,7 +137,7 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
     connect(this, &AppletInterface::configNeedsSaving,
             applet(), &Plasma::Applet::configNeedsSaving);
     connect(applet(), &Plasma::Applet::immutabilityChanged,
-            this, &AppletInterface::immutableChanged);
+            this, &AppletInterface::immutabilityChanged);
     connect(applet(), &Plasma::Applet::userConfiguringChanged,
             this, &AppletInterface::userConfiguringChanged);
     connect(applet(), &Plasma::Applet::configurationRequiredChanged,
@@ -533,6 +533,11 @@ QAction *AppletInterface::action(QString name) const
 bool AppletInterface::immutable() const
 {
     return applet()->immutability() != Plasma::Types::Mutable;
+}
+
+Plasma::Types::ImmutabilityType AppletInterface::immutability() const
+{
+    return applet()->immutability();
 }
 
 bool AppletInterface::userConfiguring() const
