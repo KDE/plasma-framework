@@ -27,7 +27,7 @@ class PluginTest : public QObject
 {
     Q_OBJECT
 public:
-    PluginTest() {}
+    PluginTest();
 
 private Q_SLOTS:
     void listEngines();
@@ -38,6 +38,7 @@ private Q_SLOTS:
     void loadDataEngine();
 
 private:
+    bool m_buildonly;
 };
 
 class EngineTest : public QObject

@@ -32,9 +32,10 @@
 
 QTEST_MAIN(PluginTest)
 
-// Switch to true in order to let tests pass, this test usually will only
-// work with plugins installed, but there aren't any in plasma-framework
-bool buildonly = true;
+PluginTest::PluginTest()
+    : m_buildonly(false)
+{
+}
 
 void PluginTest::listEngines()
 {
@@ -43,28 +44,31 @@ void PluginTest::listEngines()
         //qDebug() << " Found DataEngine: " << info.pluginName() << info.name();
 //     }
     qDebug() << " Found " << plugins.count() << " DataEngines";
-    QVERIFY(plugins.count() > 0 || buildonly);
+    // Switch to true in order to let tests pass, this test usually will only
+    // work with plugins installed, but there aren't any in plasma-framework
+    m_buildonly = plugins.count() == 0;
+    QVERIFY(plugins.count() > 0 || m_buildonly);
 }
 
 void PluginTest::listAppletCategories()
 {
     const QStringList cats = Plasma::PluginLoader::self()->listAppletCategories();
     qDebug() << "Categories" << cats;
-    QVERIFY(cats.count() > 0 || buildonly);
+    QVERIFY(cats.count() > 0 || m_buildonly);
 }
 
 void PluginTest::listContainmentActions()
 {
     const KPluginInfo::List plugins = Plasma::PluginLoader::self()->listContainmentActionsInfo(QStringLiteral("plasma-shell"));
     qDebug() << "Categories: " << plugins.count();
-    //QVERIFY(plugins.count() > 0 || buildonly);
+    //QVERIFY(plugins.count() > 0 || m_buildonly);
 }
 
 void PluginTest::listContainmentsOfType()
 {
     const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType(QStringLiteral("Desktop"));
     qDebug() << "Desktop Containments: " << plugins.count();
-    QVERIFY(plugins.count() > 0 || buildonly);
+    QVERIFY(plugins.count() > 0 || m_buildonly);
 
 }
 
@@ -77,6 +81,9 @@ void EngineTest::dataUpdated(const QString &s, const Plasma::DataEngine::Data &d
 
 void PluginTest::loadDataEngine()
 {
+    if (m_buildonly) {
+        return;
+    }
     QPointer<Plasma::DataEngine> engine, nullEngine;
     {
         Plasma::DataEngineConsumer consumer;
