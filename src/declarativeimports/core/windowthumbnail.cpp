@@ -242,7 +242,7 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
 {
     QIcon icon;
     if (KWindowSystem::self()->hasWId(m_winId)) {
-        icon = KWindowSystem::self()->icon(m_winId);
+        icon = KWindowSystem::self()->icon(m_winId, boundingRect().width(), boundingRect().height());
     } else {
         // fallback to plasma icon
         icon = QIcon::fromTheme(QStringLiteral("plasma"));
