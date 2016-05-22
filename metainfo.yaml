@@ -11,3 +11,7 @@ libraries:
  - cmake: KF5::Plasma
  - cmake: KF5::PlasmaQuick
 cmakename: KF5Plasma
+
+public_lib: true
+group: Frameworks
+subgroup: Tier 3
