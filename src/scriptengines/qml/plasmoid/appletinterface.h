@@ -188,7 +188,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     // TODO: This was moved up from ContainmentInterface because it is required by the
     // Task Manager applet (for "Show only tasks from this screen") and no Qt API exposes
     // screen numbering. An alternate solution that doesn't extend the applet interface
-    // would be preferrable if found.
+    // would be preferable if found.
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
 
     /**
@@ -285,9 +285,17 @@ public:
     Q_INVOKABLE QString file(const QString &fileType, const QString &filePath);
 
     /**
-     * @returns A path where is safe to write on disk downloaded files
+     * @returns A path where it is safe to write on disk downloaded files.
+     * @since 5.23
      */
-    Q_INVOKABLE QString downloadPath(const QString &file);
+    Q_INVOKABLE QString downloadPath() const;
+
+    /**
+     * @returns A path where it is safe to write on disk downloaded files.
+     * @param file that name of the file to download (unused).
+     * @deprecated Use downloadPath() instead.
+     */
+    Q_INVOKABLE PLASMA_DEPRECATED QString downloadPath(const QString &file);
 
     /**
      * @returns The list of files that have been downloaded

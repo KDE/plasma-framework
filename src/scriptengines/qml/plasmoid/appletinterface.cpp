@@ -557,7 +557,7 @@ int AppletInterface::apiVersion() const
     if (plugins.isEmpty()) {
         return -1;
     }
-    
+
     return plugins.first().value(QStringLiteral("X-KDE-PluginInfo-Version")).toInt();
 }
 
@@ -674,6 +674,12 @@ void AppletInterface::setConfigurationRequiredReason(const QString &reason)
 }
 
 QString AppletInterface::downloadPath(const QString &file)
+{
+    Q_UNUSED(file);
+    return downloadPath();
+}
+
+QString AppletInterface::downloadPath() const
 {
     const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginInfo().pluginName() + '/';
 
