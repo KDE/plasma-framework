@@ -115,6 +115,9 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
     m_eventsData.reserve(m_eventsData.size() + data.size());
     m_eventsData += data;
 
+    if (data.contains(QDate::currentDate())) {
+        m_agendaNeedsUpdate = true;
+    }
     layoutChanged();
     Q_EMIT agendaUpdated(QDate::currentDate());
 }
