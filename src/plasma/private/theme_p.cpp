@@ -357,6 +357,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
 
     cachedDefaultStyleSheet = QString();
     cachedSvgStyleSheets.clear();
+    cachedSelectedSvgStyleSheets.clear();
 
     if (caches & SvgElementsCache) {
         discoveries.clear();
@@ -410,7 +411,7 @@ void ThemePrivate::notifyOfChanged()
     emit themeChanged();
 }
 
-const QString ThemePrivate::processStyleSheet(const QString &css)
+const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::State state)
 {
     QString stylesheet;
     if (css.isEmpty()) {
@@ -427,7 +428,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
                         a:visited { color: %visitedlink; }\n\
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
-            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet);
+            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet, state);
         }
 
         return stylesheet;
@@ -438,8 +439,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements[QStringLiteral("%textcolor")] = color(Theme::TextColor, Theme::NormalColorGroup).name();
-    elements[QStringLiteral("%backgroundcolor")] = color(Theme::BackgroundColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%textcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%backgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor, Theme::NormalColorGroup).name();
@@ -450,8 +451,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%neutraltextcolor")] = color(Theme::NeutralTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%negativetextcolor")] = color(Theme::NegativeTextColor, Theme::NormalColorGroup).name();
 
-    elements[QStringLiteral("%buttontextcolor")] = color(Theme::TextColor, Theme::ButtonColorGroup).name();
-    elements[QStringLiteral("%buttonbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttontextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonbackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ButtonColorGroup).name();
@@ -459,8 +460,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%buttonneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ButtonColorGroup).name();
 
-    elements[QStringLiteral("%viewtextcolor")] = color(Theme::TextColor, Theme::ViewColorGroup).name();
-    elements[QStringLiteral("%viewbackgroundcolor")] = color(Theme::BackgroundColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewtextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewbackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ViewColorGroup).name();
@@ -468,11 +469,11 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     elements[QStringLiteral("%viewneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ViewColorGroup).name();
 
-    elements[QStringLiteral("%complementarytextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
-    elements[QStringLiteral("%complementarybackgroundcolor")] = color(Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarytextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarybackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
-    elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarypositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarynegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ComplementaryColorGroup).name();
@@ -490,9 +491,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css)
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
+const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::State state)
 {
-    QString stylesheet = cachedSvgStyleSheets.value(group);
+    QString stylesheet = (state == Svg::State::Selected) ? cachedSelectedSvgStyleSheets.value(group) : cachedSvgStyleSheets.value(group);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
@@ -565,8 +566,12 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group)
         stylesheet += skel.arg(QStringLiteral("ComplementaryNeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryNegativeText"), QStringLiteral("%complementarynegativetextcolor"));
 
-        stylesheet = processStyleSheet(stylesheet);
-        cachedSvgStyleSheets.insert(group, stylesheet);
+        stylesheet = processStyleSheet(stylesheet, state);
+        if (state == Svg::State::Selected) {
+            cachedSelectedSvgStyleSheets.insert(group, stylesheet);
+        } else {
+            cachedSvgStyleSheets.insert(group, stylesheet);
+        }
     }
 
     return stylesheet;

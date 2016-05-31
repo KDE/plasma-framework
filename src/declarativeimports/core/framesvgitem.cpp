@@ -267,6 +267,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
     connect(&m_units, &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
+    connect(m_frameSvg, &Svg::stateChanged, this, &FrameSvgItem::stateChanged);
 }
 
 FrameSvgItem::~FrameSvgItem()
@@ -369,6 +370,16 @@ Plasma::Theme::ColorGroup FrameSvgItem::colorGroup() const
 bool FrameSvgItem::fromCurrentTheme() const
 {
     return m_frameSvg->fromCurrentTheme();
+}
+
+void FrameSvgItem::setState(Plasma::Svg::State state)
+{
+    m_frameSvg->setState(state);
+}
+
+Plasma::Svg::State FrameSvgItem::state() const
+{
+    return m_frameSvg->state();
 }
 
 void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)

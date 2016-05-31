@@ -112,6 +112,7 @@ public:
     unsigned int lastModified;
     qreal devicePixelRatio;
     qreal scaleFactor;
+    Svg::State state;
     bool multipleImages : 1;
     bool themed : 1;
     bool useSystemColors : 1;

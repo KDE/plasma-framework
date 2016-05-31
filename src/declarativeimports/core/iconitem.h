@@ -72,6 +72,17 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
     /**
+     * Sets the image in a selected state.
+     * Svgs can be colored with system color themes, if the state is selected,
+     * the TextColor will become HighlightedText color and BackgroundColor
+     * will become HighlightColor, making the svg graphics (for instance an icon)
+     * will look correct together selected text
+     * @see Plasma::Svg::state
+     * @since 5.23
+     */
+    Q_PROPERTY(Plasma::Svg::State state READ state WRITE setState NOTIFY stateChanged)
+
+    /**
      * If set, icon will blend when the source is changed
      */
     Q_PROPERTY(bool animated READ isAnimated WRITE setAnimated NOTIFY animatedChanged)
@@ -99,7 +110,6 @@ class IconItem : public QQuickItem
     Q_PROPERTY(int paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
 
 public:
-
     IconItem(QQuickItem *parent = 0);
     ~IconItem();
 
@@ -126,6 +136,9 @@ public:
     int paintedWidth() const;
     int paintedHeight() const;
 
+    void setState(Plasma::Svg::State state);
+    Plasma::Svg::State state() const;
+
     void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
@@ -144,6 +157,7 @@ Q_SIGNALS:
     void validChanged();
     void colorGroupChanged();
     void paintedSizeChanged();
+    void stateChanged();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
@@ -162,6 +176,7 @@ private:
     QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
+    Plasma::Svg::State m_state;
 
     QSizeF m_implicitSize;
 
@@ -182,7 +197,6 @@ private:
     //animation on pixmap change
     QPropertyAnimation *m_animation;
     qreal m_animValue;
-
 };
 
 #endif
