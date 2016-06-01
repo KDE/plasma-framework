@@ -25,7 +25,7 @@
 #include <KIconTheme>
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_WITH_SIZE(size, id, state, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(state) % QLSEP % QString::number(int(devicePixelRatio))
 
 void ThemeTest::initTestCase()
 {
@@ -79,7 +79,7 @@ void ThemeTest::loadSvgIcon()
 
     m_svg->pixmap(); //trigger the SVG being loaded
 
-    QString cacheId = CACHE_ID_WITH_SIZE(QSize(48, 48), iconPath, m_svg->devicePixelRatio()) % QLSEP % QString::number(m_svg->colorGroup());
+    QString cacheId = CACHE_ID_WITH_SIZE(QSize(48, 48), iconPath, Plasma::Svg::Normal, m_svg->devicePixelRatio()) % QLSEP % QString::number(m_svg->colorGroup());
 
     QPixmap result;
     QVERIFY(m_svg->theme()->findInCache(cacheId, result));
