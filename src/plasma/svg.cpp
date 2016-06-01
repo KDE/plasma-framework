@@ -136,8 +136,8 @@ bool SharedSvgRenderer::load(
 }
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, state, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(state) % QLSEP % QString::number(int(devicePixelRatio))
-#define CACHE_ID_NATURAL_SIZE(id, state, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(state) % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_WITH_SIZE(size, id, status, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_NATURAL_SIZE(id, status, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(int(devicePixelRatio))
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
@@ -147,7 +147,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
       lastModified(0),
       devicePixelRatio(1.0),
       scaleFactor(1.0),
-      state(Svg::State::Normal),
+      status(Svg::Status::Normal),
       multipleImages(false),
       themed(false),
       useSystemColors(false),
@@ -168,16 +168,16 @@ SvgPrivate::~SvgPrivate()
 QString SvgPrivate::cacheId(const QString &elementId) const
 {
     if (size.isValid() && size != naturalSize) {
-        return CACHE_ID_WITH_SIZE(size, elementId, state, devicePixelRatio);
+        return CACHE_ID_WITH_SIZE(size, elementId, status, devicePixelRatio);
     } else {
-        return CACHE_ID_NATURAL_SIZE(elementId, state, devicePixelRatio);
+        return CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
     }
 }
 
 //This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &path, const QSize &size) const
 {
-    return CACHE_ID_WITH_SIZE(size, path, state, devicePixelRatio) % QLSEP % QString::number(colorGroup);
+    return CACHE_ID_WITH_SIZE(size, path, status, devicePixelRatio) % QLSEP % QString::number(colorGroup);
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -309,7 +309,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", state, ratio));
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", status, ratio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
@@ -455,7 +455,7 @@ void SvgPrivate::createRenderer()
     //qCDebug(LOG_PLASMA) << "FAIL! **************************";
     //qCDebug(LOG_PLASMA) << path << "**";
 
-    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup, state);
+    QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup, status);
     styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
@@ -478,7 +478,7 @@ void SvgPrivate::createRenderer()
                 const QString &elementId = i.key();
                 const QRectF &elementRect = i.value();
 
-                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, state, devicePixelRatio);
+                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
                 localRectCache.insert(cacheId, elementRect);
                 cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId, elementRect);
             }
@@ -980,21 +980,21 @@ Theme *Svg::theme() const
     return d->actualTheme();
 }
 
-void Svg::setState(Plasma::Svg::State state)
+void Svg::setStatus(Plasma::Svg::Status status)
 {
-    if (state == d->state) {
+    if (status == d->status) {
         return;
     }
 
-    d->state = state;
+    d->status = status;
     d->eraseRenderer();
-    emit stateChanged(state);
+    emit statusChanged(status);
     emit repaintNeeded();
 }
 
-Svg::State Svg::state() const
+Svg::Status Svg::status() const
 {
-    return d->state;
+    return d->status;
 }
 
 } // Plasma namespace

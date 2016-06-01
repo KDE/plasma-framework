@@ -159,15 +159,15 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
 
     /**
-     * Sets the image in a selected state.
-     * Svgs can be colored with system color themes, if the state is selected,
+     * Sets the image in a selected status.
+     * Svgs can be colored with system color themes, if the status is selected,
      * the TextColor will become HighlightedText color and BackgroundColor
      * will become HighlightColor, making the svg graphics (for instance an icon)
      * will look correct together selected text
-     * @see Plasma::Svg::state
+     * @see Plasma::Svg::status
      * @since 5.23
      */
-    Q_PROPERTY(Plasma::Svg::State state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(Plasma::Svg::Status status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
     /**
@@ -198,8 +198,8 @@ public:
 
     bool fromCurrentTheme() const;
 
-    void setState(Plasma::Svg::State state);
-    Plasma::Svg::State state() const;
+    void setStatus(Plasma::Svg::Status status);
+    Plasma::Svg::Status status() const;
 
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry) Q_DECL_OVERRIDE;
@@ -225,7 +225,7 @@ Q_SIGNALS:
     void fromCurrentThemeChanged();
     void colorGroupChanged();
     void repaintNeeded();
-    void stateChanged();
+    void statusChanged();
 
 private Q_SLOTS:
     void doUpdate();

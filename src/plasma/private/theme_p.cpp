@@ -411,7 +411,7 @@ void ThemePrivate::notifyOfChanged()
     emit themeChanged();
 }
 
-const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::State state)
+const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::Status status)
 {
     QString stylesheet;
     if (css.isEmpty()) {
@@ -428,7 +428,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
                         a:visited { color: %visitedlink; }\n\
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
-            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet, state);
+            stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet, status);
         }
 
         return stylesheet;
@@ -439,8 +439,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements[QStringLiteral("%textcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
-    elements[QStringLiteral("%backgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%textcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%backgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor, Theme::NormalColorGroup).name();
@@ -451,8 +451,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%neutraltextcolor")] = color(Theme::NeutralTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%negativetextcolor")] = color(Theme::NegativeTextColor, Theme::NormalColorGroup).name();
 
-    elements[QStringLiteral("%buttontextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ButtonColorGroup).name();
-    elements[QStringLiteral("%buttonbackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttontextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ButtonColorGroup).name();
@@ -460,8 +460,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%buttonneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ButtonColorGroup).name();
 
-    elements[QStringLiteral("%viewtextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ViewColorGroup).name();
-    elements[QStringLiteral("%viewbackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewtextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ViewColorGroup).name();
@@ -469,8 +469,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%viewneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ViewColorGroup).name();
 
-    elements[QStringLiteral("%complementarytextcolor")] = color(state == Svg::State::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
-    elements[QStringLiteral("%complementarybackgroundcolor")] = color(state == Svg::State::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarytextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarybackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ComplementaryColorGroup).name();
@@ -491,9 +491,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     return stylesheet;
 }
 
-const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::State state)
+const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::Status status)
 {
-    QString stylesheet = (state == Svg::State::Selected) ? cachedSelectedSvgStyleSheets.value(group) : cachedSvgStyleSheets.value(group);
+    QString stylesheet = (status == Svg::Status::Selected) ? cachedSelectedSvgStyleSheets.value(group) : cachedSvgStyleSheets.value(group);
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
@@ -566,8 +566,8 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
         stylesheet += skel.arg(QStringLiteral("ComplementaryNeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryNegativeText"), QStringLiteral("%complementarynegativetextcolor"));
 
-        stylesheet = processStyleSheet(stylesheet, state);
-        if (state == Svg::State::Selected) {
+        stylesheet = processStyleSheet(stylesheet, status);
+        if (status == Svg::Status::Selected) {
             cachedSelectedSvgStyleSheets.insert(group, stylesheet);
         } else {
             cachedSvgStyleSheets.insert(group, stylesheet);
@@ -854,7 +854,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     if (realTheme && isDefault && writeSettings) {
-        // we're the default theme, let's save our state
+        // we're the default theme, let's save our status
         KConfigGroup &cg = config();
         cg.writeEntry("name", themeName);
         cg.sync();

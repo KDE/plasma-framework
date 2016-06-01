@@ -196,7 +196,7 @@ QString Theme::backgroundPath(const QString& image) const
 
 QString Theme::styleSheet(const QString &css) const
 {
-    return d->processStyleSheet(css, Svg::State::Normal);
+    return d->processStyleSheet(css, Svg::Status::Normal);
 }
 
 QString Theme::wallpaperPath(const QSize &size) const

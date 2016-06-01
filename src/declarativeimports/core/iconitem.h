@@ -72,15 +72,15 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
     /**
-     * Sets the image in a selected state.
-     * Svgs can be colored with system color themes, if the state is selected,
+     * Sets the image in a selected status.
+     * Svgs can be colored with system color themes, if the status is selected,
      * the TextColor will become HighlightedText color and BackgroundColor
      * will become HighlightColor, making the svg graphics (for instance an icon)
      * will look correct together selected text
-     * @see Plasma::Svg::state
+     * @see Plasma::Svg::status
      * @since 5.23
      */
-    Q_PROPERTY(Plasma::Svg::State state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(Plasma::Svg::Status status READ status WRITE setStatus NOTIFY statusChanged)
 
     /**
      * If set, icon will blend when the source is changed
@@ -136,8 +136,8 @@ public:
     int paintedWidth() const;
     int paintedHeight() const;
 
-    void setState(Plasma::Svg::State state);
-    Plasma::Svg::State state() const;
+    void setStatus(Plasma::Svg::Status status);
+    Plasma::Svg::Status status() const;
 
     void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
@@ -157,7 +157,7 @@ Q_SIGNALS:
     void validChanged();
     void colorGroupChanged();
     void paintedSizeChanged();
-    void stateChanged();
+    void statusChanged();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
@@ -176,7 +176,7 @@ private:
     QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
-    Plasma::Svg::State m_state;
+    Plasma::Svg::Status m_status;
 
     QSizeF m_implicitSize;
 

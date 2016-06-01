@@ -77,8 +77,8 @@ public:
     void processWallpaperSettings(KConfigBase *metadata);
     void processContrastSettings(KConfigBase *metadata);
 
-    const QString processStyleSheet(const QString &css, Plasma::Svg::State state);
-    const QString svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::State state);
+    const QString processStyleSheet(const QString &css, Plasma::Svg::Status status);
+    const QString svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::Status status);
     QColor color(Theme::ColorRole role, Theme::ColorGroup group = Theme::NormalColorGroup) const;
 
 public Q_SLOTS:

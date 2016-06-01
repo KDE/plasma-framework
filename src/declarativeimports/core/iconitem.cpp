@@ -40,7 +40,7 @@
 IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_svgIcon(0),
-      m_state(Plasma::Svg::Normal),
+      m_status(Plasma::Svg::Normal),
       m_smooth(false),
       m_active(false),
       m_animated(true),
@@ -109,7 +109,7 @@ void IconItem::setSource(const QVariant &source)
             if (!m_svgIcon) {
                 m_svgIcon = new Plasma::Svg(this);
                 m_svgIcon->setColorGroup(m_colorGroup);
-                m_svgIcon->setState(m_state);
+                m_svgIcon->setStatus(m_status);
                 m_svgIcon->setDevicePixelRatio((window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
                 connect(m_svgIcon, &Plasma::Svg::repaintNeeded, this, &IconItem::schedulePixmapUpdate);
             }
@@ -298,22 +298,22 @@ int IconItem::paintedHeight() const
     return Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
 }
 
-void IconItem::setState(Plasma::Svg::State state)
+void IconItem::setStatus(Plasma::Svg::Status status)
 {
-    if (m_state == state) {
+    if (m_status == status) {
         return;
     }
 
-    m_state = state;
+    m_status = status;
     if (m_svgIcon) {
-        m_svgIcon->setState(state);
+        m_svgIcon->setStatus(status);
     }
-    emit stateChanged();
+    emit statusChanged();
 }
 
-Plasma::Svg::State IconItem::state() const
+Plasma::Svg::Status IconItem::status() const
 {
-    return m_state;
+    return m_status;
 }
 
 void IconItem::updatePolish()

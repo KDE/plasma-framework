@@ -63,14 +63,14 @@ class PLASMA_EXPORT Svg : public QObject
     Q_PROPERTY(bool usingRenderingCache READ isUsingRenderingCache WRITE setUsingRenderingCache)
     Q_PROPERTY(bool fromCurrentTheme READ fromCurrentTheme NOTIFY fromCurrentThemeChanged)
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
-    Q_PROPERTY(Plasma::Svg::State state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(Plasma::Svg::Status status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
-    enum State {
+    enum Status {
         Normal = 0,
         Selected
     };
-    Q_ENUMS(State)
+    Q_ENUMS(Status)
 
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
@@ -439,21 +439,21 @@ public:
     Theme *theme() const;
 
     /**
-     * Sets the image in a selected state.
-     * Svgs can be colored with system color themes, if the state is selected,
+     * Sets the image in a selected status.
+     * Svgs can be colored with system color themes, if the status is selected,
      * the TextColor will become HighlightedText color and BackgroundColor
      * will become HighlightColor, making the svg graphics (for instance an icon)
      * will look correct together selected text
-     * Supported states as of 5.23 are Normal and Selected
+     * Supported statuss as of 5.23 are Normal and Selected
      * @since 5.23
      */
-    void setState(Svg::State state);
+    void setStatus(Svg::Status status);
 
     /**
-     * @return the state of the Svg
+     * @return the status of the Svg
      * @since 5.23
      */
-    Svg::State state() const;
+    Svg::Status status() const;
 
 Q_SIGNALS:
     /**
@@ -495,10 +495,10 @@ Q_SIGNALS:
     void fromCurrentThemeChanged(bool fromCurrentTheme);
 
     /**
-     * Emitted when the state changes
+     * Emitted when the status changes
      * @since 5.23
      */
-    void stateChanged(Plasma::Svg::State state);
+    void statusChanged(Plasma::Svg::Status status);
 
 private:
     SvgPrivate *const d;
