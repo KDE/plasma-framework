@@ -178,6 +178,9 @@ void Corona::loadLayout(const QString &configName)
     KConfigGroup conf(config(), QString());
     if (!config()->groupList().isEmpty()) {
         d->importLayout(conf, false);
+    } else {
+        loadDefaultLayout();
+        d->notifyContainmentsReady();
     }
 
     KConfigGroup cg(config(), "General");
@@ -585,28 +588,36 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
     }
 
     if (!mergeConfig) {
-        containmentsStarting = 0;
-        foreach (Containment *containment, containments) {
-            if (!containment->isUiReady() && containment->screen() < q->numScreens() && containment->screen() >= 0) {
-                ++containmentsStarting;
-                QObject::connect(containment, &Plasma::Containment::uiReadyChanged, [=](bool ready) {
-                    if (!ready) {
-                        return;
-                    }
-                    --containmentsStarting;
-                    if (containmentsStarting <= 0) {
-                        emit q->startupCompleted();
-                    }
-                });
-            }
-        }
-
-        if (containmentsStarting <= 0) {
-            emit q->startupCompleted();
-        }
+        notifyContainmentsReady();
     }
 
     return newContainments;
+}
+
+void CoronaPrivate::notifyContainmentsReady()
+{
+    containmentsStarting = 0;
+    foreach (Containment *containment, containments) {
+        if (!containment->isUiReady() && containment->screen() < q->numScreens() && containment->screen() >= 0) {
+            ++containmentsStarting;
+            QObject::connect(containment, &Plasma::Containment::uiReadyChanged, q, [this](bool ready) { containmentReady(ready); } );
+        }
+    }
+
+    if (containmentsStarting <= 0) {
+        emit q->startupCompleted();
+    }
+}
+
+void CoronaPrivate::containmentReady(bool ready)
+{
+    if (!ready) {
+        return;
+    }
+    --containmentsStarting;
+    if (containmentsStarting <= 0) {
+        emit q->startupCompleted();
+    }
 }
 
 } // namespace Plasma

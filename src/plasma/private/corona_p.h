@@ -45,6 +45,8 @@ public:
     void updateContainmentImmutability();
     void containmentDestroyed(QObject *obj);
     void syncConfig();
+    void notifyContainmentsReady();
+    void containmentReady(bool ready);
     Containment *addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit = false);
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
