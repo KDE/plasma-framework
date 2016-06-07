@@ -100,7 +100,8 @@ public:
         PanelContainment,        /**< A desktop panel */
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific */
-        CustomPanelContainment = 128 /**< A customized desktop panel */
+        CustomPanelContainment = 128, /**< A customized desktop panel */
+        CustomEmbeddedContainment = 129 /**< A customized containment embedded in another applet */
     };
     Q_ENUMS(ContainmentType)
 
