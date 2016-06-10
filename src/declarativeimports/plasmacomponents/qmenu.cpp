@@ -306,6 +306,7 @@ Q_INVOKABLE void QMenuProxy::openRelative()
 
     using namespace Plasma;
 
+
     switch(m_placement) {
         case Types::TopPosedLeftAlignedPopup:
         case Types::LeftPosedTopAlignedPopup: {
@@ -339,11 +340,11 @@ Q_INVOKABLE void QMenuProxy::openRelative()
     QScreen *screen = parentItem->window()->screen();
 
     if (screen) {
-        if (pos.x() + m_menu->width() > screen->geometry().width()) {
+        if (pos.x() + m_menu->width() > (screen->geometry().x() + screen->geometry().width())) {
             pos.setX(pos.x() - m_menu->width());
         }
 
-        if (pos.y() + m_menu->height() > screen->geometry().height()) {
+        if (pos.y() + m_menu->height() > (screen->geometry().y() + screen->geometry().height())) {
             pos.setY(pos.y() - m_menu->height());
         }
     }
