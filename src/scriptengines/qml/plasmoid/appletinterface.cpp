@@ -386,10 +386,10 @@ void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
         return;
     }
 
+    m_toolTipItem = toolTipItem;
     connect(m_toolTipItem.data(), &QObject::destroyed,
             this, &AppletInterface::toolTipItemChanged);
 
-    m_toolTipItem = toolTipItem;
     emit toolTipItemChanged();
 }
 
