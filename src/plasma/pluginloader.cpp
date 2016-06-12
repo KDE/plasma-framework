@@ -233,31 +233,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         }
     }
 
-    // backwards compatibility: search in the root plugins directory
-    // TODO: remove when Plasma 5.4 is released
-    {
-        KPluginInfo info = KPluginInfo::fromMetaData(p.metadata());
-        if (!info.isValid()) {
-            qCWarning(LOG_PLASMA) << "invalid plugin in" << p.path();
-            return 0;
-        }
-        KPluginLoader loader(info.libraryPath());
-        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
-            qCWarning(LOG_PLASMA) << "incompatiable plugin version in" << p.path();
-            return 0;
-        }
-        KPluginFactory *factory = loader.factory();
-        if (factory) {
-            QVariantList allArgs;
-            allArgs << loader.metaData().toVariantMap() << appletId << args;
-            applet = factory->create<Plasma::Applet>(0, allArgs);
-        }
-        if (applet) {
-            return applet;
-        }
-    }
-
-
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
