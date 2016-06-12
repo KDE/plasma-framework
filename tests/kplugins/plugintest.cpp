@@ -58,7 +58,7 @@ public:
 };
 
 PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser) :
-    QGuiApplication(argc, argv)
+    QApplication(argc, argv) // QApp needed for CursorNotificationHandler (QWidget)
 {
     d = new PluginTestPrivate;
     d->parser = parser;
@@ -144,7 +144,7 @@ bool PluginTest::loadFromKService(const QString &name)
         if (api.isEmpty()) {
             if (offers.first()) {
                 KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+                if (Plasma::isPluginVersionCompatible(plugin)) {
                     engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
                 }
             }
@@ -236,7 +236,7 @@ bool PluginTest::loadKService(const QString &name)
         if (api.isEmpty()) {
             if (offers.first()) {
                 KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+                if (Plasma::isPluginVersionCompatible(plugin)) {
                     //KPluginInfo::List infos = KPluginInfo::fromServices(offers.first());
                     //qDebug() << " plugininfo:" << info.name();
                     engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
@@ -282,7 +282,7 @@ bool PluginTest::loadKService(const QString &name)
 
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
 {
-//     qDebug() << "new data for source:  " << s << d;
+    qDebug() << "new data for source:" << s << d;
 }
 
 } // namespace Plasma
