@@ -45,6 +45,7 @@
 #include "private/storage_p.h"
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
+#include <plasma/version.h>
 #include "debug_p.h"
 
 namespace Plasma
@@ -201,7 +202,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
-        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+        if (!isPluginVersionCompatible(loader)) {
             return 0;
         }
         KPluginFactory *factory = loader.factory();
@@ -384,7 +385,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
         KPluginLoader loader(lst.first().libraryPath());
-        if (!Plasma::isPluginVersionCompatible(loader.pluginVersion())) {
+        if (!isPluginVersionCompatible(loader)) {
             return 0;
         }
         KPluginFactory *factory = loader.factory();
@@ -450,7 +451,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     KService::Ptr offer = offers.first();
     KPluginLoader plugin(*offer);
 
-    if (!Plasma::isPluginVersionCompatible(plugin.pluginVersion())) {
+    if (!isPluginVersionCompatible(plugin)) {
         return 0;
     }
 
@@ -909,6 +910,31 @@ KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
 KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
 {
     return standardInternalInfo(QStringLiteral("services"));
+}
+
+bool PluginLoader::isPluginVersionCompatible(KPluginLoader &loader)
+{
+    const quint32 version = loader.pluginVersion();
+    if (version == quint32(-1)) {
+        // unversioned, just let it through
+        qCWarning(LOG_PLASMA) << loader.fileName() << "unversioned plugin detected, may result in instability";
+        return true;
+    }
+
+    // we require PLASMA_VERSION_MAJOR and PLASMA_VERSION_MINOR
+    const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, 0, 0);
+    const quint32 maxVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 60);
+
+    if (version < minVersion || version > maxVersion) {
+#ifndef NDEBUG
+        qCDebug(LOG_PLASMA) << loader.fileName() << ": this plugin is compiled against incompatible Plasma version" << version
+                << "This build is compatible with" << PLASMA_VERSION_MAJOR << ".0.0 (" << minVersion
+                << ") to" << PLASMA_VERSION_STRING << "(" << maxVersion << ")";
+#endif
+        return false;
+    }
+
+    return true;
 }
 
 } // Plasma Namespace
