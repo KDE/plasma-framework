@@ -78,11 +78,9 @@ void PluginTest::runMain()
 //     qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
 //     //loadKQPlugin();
     qDebug() << "::: loadKPlugin() == " << loadKPlugin();
-//     qDebug() << " - - - -- - - - - ------------------------------------\n";
-//     qDebug() << "::: loadKService() == " << loadKService();
 //
     qDebug() << " - - - -- - - - - ------------------------------------\n";
-    qDebug() << "::: loadKFromPlasma() == " << loadFromPlasma();
+    qDebug() << "::: loadFromPlasma() == " << loadFromPlasma();
     exit(0);
     return;
 }
@@ -123,37 +121,6 @@ bool PluginTest::loadKPlugin()
     //KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
     return ok;
 
-}
-
-bool PluginTest::loadFromKService(const QString &name)
-{
-    DataEngine *engine = 0;
-
-    // load the engine, add it to the engines
-    QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/DataEngine"),
-                            constraint);
-    QString error;
-
-    if (offers.isEmpty()) {
-        qDebug() << "offers are empty for " << name << " with constraint " << constraint;
-    } else {
-        QVariantList allArgs;
-        allArgs << offers.first()->storageId();
-        QString api = offers.first()->property(QStringLiteral("X-Plasma-API")).toString();
-        if (api.isEmpty()) {
-            if (offers.first()) {
-                KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin)) {
-                    engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
-                }
-            }
-        } else {
-            engine = new DataEngine(KPluginInfo(offers.first()), 0);
-        }
-    }
-
-    return engine != 0;
 }
 
 bool PluginTest::loadFromPlasma()
@@ -208,76 +175,6 @@ void PluginTest::loadKQPlugin()
     }
     //KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
 #endif
-}
-
-bool PluginTest::loadKService(const QString &name)
-{
-//     DataEngine *engine = d->isDefaultLoader ? 0 : internalLoadDataEngine(name);
-//     if (engine) {
-//         return engine;
-//     }
-    qDebug() << "Load KService";
-    DataEngine *engine = 0;
-    // load the engine, add it to the engines
-    QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    constraint = QString();
-    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/DataEngine"),
-                            constraint);
-    QString error;
-
-    if (offers.isEmpty()) {
-        qDebug() << "offers are empty for " << name << " with constraint " << constraint;
-    } else {
-        qDebug() << "Found a bunch of stuff";
-
-        QVariantList allArgs;
-        allArgs << offers.first()->storageId();
-        QString api = offers.first()->property(QStringLiteral("X-Plasma-API")).toString();
-        if (api.isEmpty()) {
-            if (offers.first()) {
-                KPluginLoader plugin(*offers.first());
-                if (Plasma::isPluginVersionCompatible(plugin)) {
-                    //KPluginInfo::List infos = KPluginInfo::fromServices(offers.first());
-                    //qDebug() << " plugininfo:" << info.name();
-                    engine = offers.first()->createInstance<Plasma::DataEngine>(0, allArgs, &error);
-                    qDebug() << "DE";
-                    if (engine) {
-                        engine->connectSource(QStringLiteral("Europe/Amsterdam"), this);
-                        qDebug() << "SOURCE: " << engine->sources();
-                        //qDebug() << "DataEngine ID: " << engine->pluginInfo().name();
-                    } else {
-                        qDebug() << "Engine invalid";
-                    }
-                } else {
-                    qDebug() << "Plugin version incompatible" << plugin.pluginVersion();
-                }
-            }
-        } else {
-            engine = new DataEngine(KPluginInfo(offers.first()), 0);
-            qDebug() << "DataEngine ID (from KPluginINfo): " << engine << engine->pluginInfo().icon() << engine->pluginInfo().name();
-        }
-        QStringList result;
-        foreach (const KService::Ptr &service, offers) {
-            const QString _plugin = service->property(QStringLiteral("X-KDE-PluginInfo-Name"), QVariant::String).toString();
-            qDebug() << "Found plugin: " << _plugin;
-            if (!result.contains(_plugin)) {
-                result << _plugin;
-                //engine = PluginLoader::self()->loadDataEngine(_plugin);
-                //engine = PluginLoader::self()->loadDataEngine(name);
-                //qDebug() << "SOURCE: " << engine->sources();
-
-                //engine->setPluginInfo(service->pluginInfo());
-                //qDebug() << engine->pluginInfo().name();
-            }
-        }
-
-    }
-
-    if (!engine) {
-        qDebug() << "Couldn't load engine \"" << name << "\". Error given: " << error;
-    }
-
-    return engine != 0;
 }
 
 void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
