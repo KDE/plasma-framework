@@ -198,6 +198,10 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return md.pluginId() == pluginName;
     };
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_plasmoidsPluginDir, filter);
+    if (plugins.isEmpty()) {
+        // COMPAT CODE for applets installed into the toplevel plugins dir by mistake.
+        plugins = KPluginLoader::findPlugins(QString(), filter);
+    }
 
     if (!plugins.isEmpty()) {
         KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
