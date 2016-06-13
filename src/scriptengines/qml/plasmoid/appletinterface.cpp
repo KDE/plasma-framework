@@ -161,12 +161,14 @@ AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQ
     connect(applet(), &Plasma::Applet::busyChanged,
             this, &AppletInterface::busyChanged);
 
-    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
-            this, &AppletInterface::formFactorChanged);
-    connect(appletScript(), &DeclarativeAppletScript::locationChanged,
-            this, &AppletInterface::locationChanged);
-    connect(appletScript(), &DeclarativeAppletScript::contextChanged,
-            this, &AppletInterface::contextChanged);
+    if (appletScript()) {
+        connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
+                this, &AppletInterface::formFactorChanged);
+        connect(appletScript(), &DeclarativeAppletScript::locationChanged,
+                this, &AppletInterface::locationChanged);
+        connect(appletScript(), &DeclarativeAppletScript::contextChanged,
+                this, &AppletInterface::contextChanged);
+    }
 
     if (applet()->containment()) {
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
