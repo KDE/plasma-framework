@@ -248,10 +248,8 @@ void QMenuProxy::rebuildMenu()
                 continue;
             }
 
-            qDebug() << "Adding section: " << item->text();
             m_menu->addSection(item->text());
         } else {
-            qDebug() << "Adding action: " << item->text();
             m_menu->addAction(item->action());
         }
     }
@@ -261,7 +259,7 @@ void QMenuProxy::rebuildMenu()
 
 void QMenuProxy::open(int x, int y)
 {
-    qDebug() << "opening menu at " << x << y;
+    qDebug() << "Opening menu at" << x << y;
 
     QQuickItem *parentItem = nullptr;
 
