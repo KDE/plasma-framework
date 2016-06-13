@@ -87,7 +87,7 @@ install, list, remove Plasma packages.</para>
 </varlistentry>
 <varlistentry>
 <term><option>-p, --packageroot</option> <replaceable> path</replaceable></term>
-<listitem><para>Absolute path to the package root. If not supplied, then the standard data 
+<listitem><para>Absolute path to the package root. If not supplied, then the standard data
 directories for this &plasma; session will be searched instead.</para></listitem>
 </varlistentry>
 

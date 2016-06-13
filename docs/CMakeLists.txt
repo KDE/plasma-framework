@@ -1,2 +1,2 @@
 
-add_subdirectory(plasmapkg)
+add_subdirectory(plasmapkg2)
