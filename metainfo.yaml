@@ -3,7 +3,9 @@ description: Plugin based UI runtime used to write primary user interfaces
 tier: 3
 type: solution
 platforms:
-    - name: All
+    - name: Linux
+    - name: Windows
+    - name: MacOSX
 portingAid: false
 deprecated: false
 release: true
