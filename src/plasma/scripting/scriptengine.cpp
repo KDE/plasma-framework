@@ -78,6 +78,8 @@ QStringList knownLanguages(Types::ComponentTypes types)
 ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent,
     const QVariantList &args = QVariantList())
 {
+    Q_UNUSED(parent);
+
     ScriptEngine *engine = 0;
 
     auto filter = [&language](const KPluginMetaData &md) -> bool
