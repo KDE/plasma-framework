@@ -290,9 +290,13 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
 bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
 {
     EGLContext context = eglGetCurrentContext();
+
     if (context != EGL_NO_CONTEXT) {
         if (!m_eglFunctionsResolved) {
             resolveEGLFunctions();
+        }
+        if (QByteArray((char *)glGetString(GL_RENDERER)).contains("llvmpipe")) {
+            return Q_NULLPTR;
         }
         if (!m_eglCreateImageKHR || !m_eglDestroyImageKHR || !m_glEGLImageTargetTexture2DOES) {
             return false;
@@ -466,6 +470,10 @@ GLXFBConfig *getConfig(int depth, int *index)
         GLX_BIND_TO_TEXTURE_RGBA_EXT, (depth == 32) ? 1 : int(GLX_DONT_CARE),
         0
     };
+
+    if (QByteArray((char *)glGetString(GL_RENDERER)).contains("llvmpipe")) {
+        return Q_NULLPTR;
+    }
 
     int count = 0;
     GLXFBConfig *fbConfigs = glXChooseFBConfig(QX11Info::display(), QX11Info::appScreen(), attribs, &count);
