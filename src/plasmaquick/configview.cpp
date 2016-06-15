@@ -85,6 +85,10 @@ void ConfigViewPrivate::init()
         qWarning() << "Null applet passed to constructor";
         return;
     }
+    if (!applet.data()->pluginInfo().isValid()) {
+        qWarning() << "Invalid applet passed to constructor";
+        return;
+    }
 
     applet.data()->setUserConfiguring(true);
 
