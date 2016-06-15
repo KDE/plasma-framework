@@ -57,6 +57,7 @@ public:
     // put all setup routines for script here. at this point we can assume that
     // package exists and that we have a script engin
     void setupPackage();
+    void setupScripting();
 
     QString globalName() const;
     void scheduleConstraintsUpdate(Plasma::Types::Constraints c);

@@ -123,11 +123,7 @@ Applet::~Applet()
 
 void Applet::init()
 {
-    if (d->script) {
-        if (!d->script->init() && !d->failed) {
-            setLaunchErrorMessage(i18n("Script initialization failed"));
-        }
-    }
+    //Don't implement anything here, it will be overridden by subclasses
 }
 
 uint Applet::id() const

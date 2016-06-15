@@ -97,6 +97,7 @@ Containment::~Containment()
 void Containment::init()
 {
     Applet::init();
+    static_cast<Applet *>(this)->d->setupScripting();
 
     if (d->type == Types::NoContainmentType) {
         //setContainmentType(Plasma::Types::DesktopContainment);
@@ -449,6 +450,7 @@ void Containment::addApplet(Applet *applet)
         }
 
         applet->init();
+        applet->d->setupScripting();
 
         if (isNew) {
             applet->save(*applet->d->mainConfigGroup());

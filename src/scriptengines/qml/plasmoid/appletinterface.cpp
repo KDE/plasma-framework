@@ -119,63 +119,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     });
 }
 
-AppletInterface::AppletInterface(Plasma::Applet *a, const QVariantList &args, QQuickItem *parent)
-    : AppletQuickItem(a, parent),
-      m_actionSignals(0),
-      m_configuration(0),
-      m_appletScriptEngine(0),
-      m_toolTipTextFormat(0),
-      m_args(args),
-      m_backgroundHints(Plasma::Types::StandardBackground),
-      m_hideOnDeactivate(true),
-      m_oldKeyboardShortcut(0),
-      m_dummyNativeInterface(0),
-      m_positionBeforeRemoval(QPointF(-1, -1))
-{
-    qmlRegisterType<QAction>();
-
-    connect(this, &AppletInterface::configNeedsSaving,
-            applet(), &Plasma::Applet::configNeedsSaving);
-    connect(applet(), &Plasma::Applet::immutabilityChanged,
-            this, &AppletInterface::immutabilityChanged);
-    connect(applet(), &Plasma::Applet::userConfiguringChanged,
-            this, &AppletInterface::userConfiguringChanged);
-    connect(applet(), &Plasma::Applet::configurationRequiredChanged,
-            this, [this](bool needsConfig, const QString &reason) {
-                emit configurationRequiredChanged();
-                emit configurationRequiredReasonChanged();
-            });
-
-    connect(applet(), &Plasma::Applet::statusChanged,
-            this, &AppletInterface::statusChanged);
-
-    connect(applet(), &Plasma::Applet::destroyedChanged,
-            this, &AppletInterface::destroyedChanged);
-
-    connect(applet(), &Plasma::Applet::titleChanged,
-            this, &AppletInterface::titleChanged);
-
-    connect(applet(), &Plasma::Applet::iconChanged,
-            this, &AppletInterface::iconChanged);
-
-    connect(applet(), &Plasma::Applet::busyChanged,
-            this, &AppletInterface::busyChanged);
-
-    if (appletScript()) {
-        connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
-                this, &AppletInterface::formFactorChanged);
-        connect(appletScript(), &DeclarativeAppletScript::locationChanged,
-                this, &AppletInterface::locationChanged);
-        connect(appletScript(), &DeclarativeAppletScript::contextChanged,
-                this, &AppletInterface::contextChanged);
-    }
-
-    if (applet()->containment()) {
-        connect(applet()->containment(), &Plasma::Containment::screenChanged,
-                this, &ContainmentInterface::screenChanged);
-    }
-}
-
 AppletInterface::~AppletInterface()
 {
 }

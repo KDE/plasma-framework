@@ -229,7 +229,6 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
-    AppletInterface(Plasma::Applet *applet, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
     ~AppletInterface();
 
 //API not intended for the QML part

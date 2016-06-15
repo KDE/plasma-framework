@@ -462,6 +462,15 @@ void AppletPrivate::setupPackage()
     }
 }
 
+void AppletPrivate::setupScripting()
+{
+    if (script) {
+        if (!script->init() && !failed) {
+            q->setLaunchErrorMessage(i18n("Script initialization failed"));
+        }
+    }
+}
+
 QString AppletPrivate::globalName() const
 {
     if (!appletDescription.isValid()) {

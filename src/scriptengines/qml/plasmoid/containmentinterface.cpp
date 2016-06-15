@@ -758,10 +758,9 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 //     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
 //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
+    //Every applet should have a graphics object, otherwise don't disaplay anything
     if (!appletGraphicObject) {
-        appletGraphicObject = new AppletInterface(applet, QVariantList(), this);
-        applet->setProperty("_plasma_graphicObject", QVariant::fromValue(appletGraphicObject));
-        static_cast<AppletInterface *>(appletGraphicObject)->init();
+        return;
     }
 
     if (contGraphicObject) {
