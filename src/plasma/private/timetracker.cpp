@@ -76,7 +76,7 @@ private:
         return ret;
     }
 };
-Q_GLOBAL_STATIC(TimeTrackerWriter, s_writer);
+Q_GLOBAL_STATIC(TimeTrackerWriter, s_writer)
 
 TimeTracker::TimeTracker(QObject* o)
     : QObject(o)
