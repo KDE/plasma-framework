@@ -296,7 +296,7 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
             resolveEGLFunctions();
         }
         if (QByteArray((char *)glGetString(GL_RENDERER)).contains("llvmpipe")) {
-            return Q_NULLPTR;
+            return false;
         }
         if (!m_eglCreateImageKHR || !m_eglDestroyImageKHR || !m_glEGLImageTargetTexture2DOES) {
             return false;
