@@ -277,6 +277,9 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
         if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
             if (w && w->geometry().contains(QPoint(window()->x(), window()->y()) + QPoint(x, y))) {
+                if (c->containmentType() == Plasma::Types::CustomEmbeddedContainment) {
+                    continue;
+                }
                 if (c->containmentType() == Plasma::Types::DesktopContainment) {
                     desktop = contInterface;
                 } else {
