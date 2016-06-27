@@ -68,8 +68,8 @@ class ServicePrivate;
  * @code
  * Plasma::DataEngine *twitter = dataEngine("twitter");
  * Plasma::Service *service = twitter.serviceForSource("aseigo");
- * KConfigGroup op = service->operationDescription("update");
- * op.writeEntry("tweet", "Hacking on plasma!");
+ * QVariantMap op = service->operationDescription("update");
+ * op.insert("tweet", "Hacking on plasma!");
  * Plasma::ServiceJob *job = service->startOperationCall(op);
  * connect(job, SIGNAL(finished(KJob*)), this, SLOT(jobCompeted()));
  * @endcode
@@ -124,7 +124,7 @@ public:
      * Retrieves the parameters for a given operation
      *
      * @param operationName the operation to retrieve parameters for
-     * @return KConfigGroup containing the parameters
+     * @return QVariantMap containing the parameters
      */
     Q_INVOKABLE QVariantMap operationDescription(const QString &operationName);
 
