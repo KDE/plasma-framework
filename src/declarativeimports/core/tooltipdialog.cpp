@@ -22,8 +22,12 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+#include <QPlatformSurfaceEvent>
+#endif
 
 #include <kdeclarative/qmlobjectsharedengine.h>
+#include <KWindowSystem>
 
 #include <config-x11.h>
 #if HAVE_X11
@@ -104,6 +108,15 @@ bool ToolTipDialog::event(QEvent *e)
     } else if (e->type() == QEvent::Leave) {
         dismiss();
     }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
+    if (e->type() == QEvent::PlatformSurface) {
+        auto pe = static_cast<QPlatformSurfaceEvent*>(e);
+        if (pe->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+            KWindowSystem::setType(winId(), NET::Tooltip);
+        }
+    }
+#endif
 
     bool ret = Dialog::event(e);
     Qt::WindowFlags flags = Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
