@@ -50,8 +50,7 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 
     //resize at the beginning to avoid as much resize events as possible
     if (parent) {
-        setWidth(parent->width());
-        setHeight(parent->height());
+        setSize(QSizeF(parent->width(), parent->height()));
     }
 
     if (!m_containmentInterface->containment()->wallpaper().isEmpty()) {

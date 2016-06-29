@@ -333,8 +333,7 @@ void ConfigView::resizeEvent(QResizeEvent *re)
     if (!rootObject()) {
         return;
     }
-    rootObject()->setWidth(re->size().width());
-    rootObject()->setHeight(re->size().height());
+    rootObject()->setSize(re->size());
 
     if (d->applet) {
         KConfigGroup cg = d->applet.data()->config();

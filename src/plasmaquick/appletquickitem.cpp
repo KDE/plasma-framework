@@ -543,8 +543,7 @@ void AppletQuickItem::init()
     if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
         const qreal w = d->qmlObject->rootObject()->property("width").value<qreal>();
         const qreal h = d->qmlObject->rootObject()->property("height").value<qreal>();
-        setWidth(parentItem() ? std::min(parentItem()->width(), w) : w);
-        setHeight(parentItem() ? std::min(parentItem()->height(), h) : h);
+        setSize(parentItem() ? QSizeF(std::min(parentItem()->width(), w), std::min(parentItem()->height(), h)) : QSizeF(w, h));
     }
 
     //default fullrepresentation is our root main component, if none specified
