@@ -142,7 +142,7 @@ Item {
 
         Components.ToolButton {
             id: previousButton
-            iconName: "go-previous"
+            iconName: Qt.application.layoutDirection === Qt.RightToLeft ? "go-next" : "go-previous"
             onClicked: daysCalendar.previous()
             Accessible.name: tooltip
         }
@@ -157,7 +157,7 @@ Item {
 
         Components.ToolButton {
             id: nextButton
-            iconName: "go-next"
+            iconName: Qt.application.layoutDirection === Qt.RightToLeft ? "go-previous" : "go-next"
             onClicked: daysCalendar.next()
             Accessible.name: tooltip
         }
