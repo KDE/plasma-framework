@@ -188,6 +188,7 @@ private:
     bool m_textureChanged;
     bool m_sizeChanged;
     bool m_allowNextAnimation;
+    bool m_blockNextAnimation;
 
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;

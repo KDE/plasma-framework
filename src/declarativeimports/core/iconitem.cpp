@@ -48,6 +48,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_textureChanged(false),
       m_sizeChanged(false),
       m_allowNextAnimation(false),
+      m_blockNextAnimation(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
@@ -461,7 +462,7 @@ void IconItem::loadPixmap()
     m_textureChanged = true;
 
     //don't animate initial setting
-    if ((m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged) {
+    if ((m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged && !m_blockNextAnimation) {
         m_animValue = 0.0;
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
@@ -470,6 +471,7 @@ void IconItem::loadPixmap()
     } else {
         m_animValue = 1.0;
         m_animation->stop();
+        m_blockNextAnimation = false;
     }
     update();
 }
@@ -477,8 +479,7 @@ void IconItem::loadPixmap()
 void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == ItemVisibleHasChanged && value.boolValue) {
-        // Clear pixmap to disable animation
-        m_iconPixmap = QPixmap();
+        m_blockNextAnimation = true;
     }
 
     QQuickItem::itemChange(change, value);
