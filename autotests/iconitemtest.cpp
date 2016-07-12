@@ -92,6 +92,11 @@ void IconItemTest::cleanupTestCase()
     delete m_view;
 }
 
+void IconItemTest::init()
+{
+    Plasma::Theme().setThemeName(QStringLiteral("default"));
+}
+
 void IconItemTest::cleanup()
 {
     qDeleteAll(m_view->rootObject()->childItems());
@@ -187,11 +192,6 @@ void IconItemTest::invalidIcon()
 
 void IconItemTest::usesPlasmaTheme()
 {
-    Plasma::Theme theme;
-    if (!theme.themeName().startsWith("default")) {
-        QSKIP("Current Plasma theme is not Breeze.");
-    }
-
     // usesPlasmaTheme = true (default)
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", "konversation");
@@ -221,11 +221,6 @@ void IconItemTest::usesPlasmaTheme()
 
 void IconItemTest::animation()
 {
-    if (!Plasma::Theme().themeName().startsWith("default")) {
-        // This this depends on the production default theme.
-        QSKIP("Current Plasma theme is not Breeze.");
-    }
-
     // animated = true (default)
     QQuickItem *item1 = createIconItem();
     item1->setProperty("source", "user-away");
@@ -253,11 +248,6 @@ void IconItemTest::animation()
 
 void IconItemTest::animationAfterHide()
 {
-    if (!Plasma::Theme().themeName().startsWith("default")) {
-        // This this depends on the production default theme.
-        QSKIP("Current Plasma theme is not Breeze.");
-    }
-
     QQuickItem *item1 = createIconItem();
     QQuickItem *item2 = createIconItem();
     item1->setProperty("source", "user-away");
@@ -332,11 +322,6 @@ void IconItemTest::loadSvg()
 
 void IconItemTest::themeChange()
 {
-    if (!Plasma::Theme().themeName().startsWith("default")) {
-        // This this depends on the production themes (infer their presence from default).
-        QSKIP("Current Plasma theme is not Breeze.");
-    }
-
     // Icon from Plasma theme
     QQuickItem *item1 = createIconItem();
     item1->setProperty("animated", false);
@@ -383,11 +368,6 @@ void IconItemTest::qiconFromTheme()
 
 void IconItemTest::changeColorGroup()
 {
-    if (!Plasma::Theme().themeName().startsWith("default")) {
-        // This this depends on the production default theme.
-        QSKIP("Current Plasma theme is not Breeze.");
-    }
-
     // Icon from Plasma theme
     QQuickItem *item = createIconItem();
     item->setProperty("animated", false);

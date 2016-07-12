@@ -36,6 +36,7 @@ class IconItemTest : public QObject
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void init();
     void cleanup();
 
     void loadPixmap();
