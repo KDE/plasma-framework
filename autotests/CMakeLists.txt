@@ -40,6 +40,7 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 
 PLASMA_UNIT_TESTS(
     dialogqmltest
+    dialogstatetest
     fallbackpackagetest
     packagestructuretest
     packageurlinterceptortest

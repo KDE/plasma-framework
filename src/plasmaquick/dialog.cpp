@@ -32,6 +32,10 @@
 #include <QMenu>
 #include <QPointer>
 
+#if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
+#include <QPlatformSurfaceEvent>
+#endif
+
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
 
@@ -317,6 +321,7 @@ void DialogPrivate::updateVisibility(bool visible)
         } else {
             q->setFlags(Qt::FramelessWindowHint | q->flags());
         }
+
         if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay) {
             KWindowSystem::setOnAllDesktops(q->winId(), true);
         } else {
@@ -1067,7 +1072,6 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 
-    // TODO: Remove this call from other places once we can depend on Qt >= 5.6.1
     KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
 
     QQuickWindow::showEvent(event);
@@ -1076,7 +1080,17 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
+        // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
+        // See: https://bugreports.qt.io/browse/QTBUG-26978
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+#if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
+    } else if (event->type() == QEvent::PlatformSurface) {
+        const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
+
+        if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+        }
+#endif
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
@@ -1193,9 +1207,10 @@ void Dialog::componentComplete()
     d->componentComplete = true;
     QQuickWindow::setVisible(d->visible);
     if (d->visible) {
+        // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
+        // See: https://bugreports.qt.io/browse/QTBUG-26978
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
     }
-
     d->updateTheme();
 
     if (d->mainItem) {
@@ -1247,6 +1262,8 @@ void Dialog::setVisible(bool visible)
         }
         QQuickWindow::setVisible(visible);
         if (visible) {
+            // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
+            // See: https://bugreports.qt.io/browse/QTBUG-26978
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
         }
         //signal will be emitted and proxied from the QQuickWindow code
