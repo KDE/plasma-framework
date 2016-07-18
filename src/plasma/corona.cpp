@@ -211,7 +211,7 @@ Containment *Corona::containmentForScreen(int screen,
     Containment *containment = containmentForScreen(screen);
     if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
         // screen requests are allowed to bypass immutability
-        if (screen >= 0 && screen < numScreens()) {
+        if (screen >= 0) {
             Plasma::Types::ImmutabilityType imm = d->immutability;
             d->immutability = Types::Mutable;
             containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
@@ -598,7 +598,7 @@ void CoronaPrivate::notifyContainmentsReady()
 {
     containmentsStarting = 0;
     foreach (Containment *containment, containments) {
-        if (!containment->isUiReady() && containment->screen() < q->numScreens() && containment->screen() >= 0) {
+        if (!containment->isUiReady() && containment->screen() >= 0) {
             ++containmentsStarting;
             QObject::connect(containment, &Plasma::Containment::uiReadyChanged, q, [this](bool ready) { containmentReady(ready); } );
         }
