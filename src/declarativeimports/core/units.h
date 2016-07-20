@@ -136,14 +136,6 @@ public:
     QQmlPropertyMap *iconSizes() const;
 
     /**
-     * @return a size rounded tothe nearest inferior standard icon size.
-     *           sizes larger than iconSizes.huge, it will be returned unmodified
-     * @param int size the size we want to be rounded down
-     * @see iconSizes
-     */
-    Q_INVOKABLE static int roundToIconSize(int size);
-
-    /**
      * @return Pixel value for large spacing between elements.
      * @since 5.0
      */
@@ -167,6 +159,14 @@ public:
      */
     int shortDuration() const;
 /// @endcond
+
+    /**
+     * @return a size rounded tothe nearest inferior standard icon size.
+     *           sizes larger than iconSizes.huge, it will be returned unmodified
+     * @param int size the size we want to be rounded down
+     * @see iconSizes
+     */
+    Q_INVOKABLE static int roundToIconSize(int size);
 
 Q_SIGNALS:
     void devicePixelRatioChanged();
