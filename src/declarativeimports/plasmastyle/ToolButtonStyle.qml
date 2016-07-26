@@ -78,6 +78,7 @@ QtQuickControlStyle.ButtonStyle {
                 visible: valid
                 Layout.minimumHeight: Layout.minimumWidth
                 Layout.maximumHeight: Layout.minimumWidth
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 active: style.controlHovered
                 colorGroup: controlHovered || !flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
             }

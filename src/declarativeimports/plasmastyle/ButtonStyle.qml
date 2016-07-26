@@ -64,6 +64,7 @@ QtQuickControlStyle.ButtonStyle {
             visible: valid
             Layout.minimumHeight: Layout.minimumWidth
             Layout.preferredHeight: Layout.preferredWidth
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             active: control.hovered
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
