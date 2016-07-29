@@ -80,7 +80,7 @@ QtControls.TextField {
         source: "edit-clear-locationbar-rtl"
         height: Math.max(parent.height*0.8, units.iconSizes.small)
         width: height
-        opacity: (textField.text != "" && clearButtonShown && textField.enabled) ? 1 : 0
+        opacity: (textField.length > 0 && clearButtonShown && textField.enabled) ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
                 duration: units.longDuration
