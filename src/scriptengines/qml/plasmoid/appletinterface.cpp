@@ -758,7 +758,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
             }
 
             QMenu *desktopMenu = new QMenu;
-            emit applet->contextualActionsAboutToShow();
+            emit applet()->contextualActionsAboutToShow();
             ci->addAppletActions(desktopMenu, applet(), event);
 
             if (!desktopMenu->isEmpty()) {
