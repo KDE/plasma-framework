@@ -670,7 +670,7 @@ Dialog::Dialog(QQuickItem *parent)
 {
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
-    setFlags(Qt::FramelessWindowHint);
+    setFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
     setIcon(QIcon::fromTheme(QStringLiteral("plasma")));
 
