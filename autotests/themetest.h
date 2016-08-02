@@ -35,6 +35,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void loadSvgIcon();
     void testColors();
+    void testCompositingChange();
 
 private:
     Plasma::Svg *m_svg;
