@@ -147,10 +147,10 @@ void IconItem::setSource(const QVariant &source)
                     m_svgIconName = sourceString;
                 //fail, use QIcon
                 } else {
-                    m_icon = QIcon::fromTheme(sourceString);
+                    //if we started with a QIcon use that.
+                    m_icon = source.value<QIcon>();
                     if (m_icon.isNull()) {
-                        // fallback for non-theme icons
-                        m_icon = source.value<QIcon>();
+                        m_icon = QIcon::fromTheme(sourceString);
                     }
                     m_svgIconName.clear();
                     delete m_svgIcon;
