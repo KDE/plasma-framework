@@ -61,6 +61,11 @@ class IconItem : public QQuickItem
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
 
     /**
+      * Specifies the overlay(s) for this icon
+      */
+    Q_PROPERTY(QStringList overlays READ overlays WRITE setOverlays NOTIFY overlaysChanged)
+
+    /**
      * See QQuickItem::smooth
      */
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
@@ -119,6 +124,9 @@ public:
     void setColorGroup(Plasma::Theme::ColorGroup group);
     Plasma::Theme::ColorGroup colorGroup() const;
 
+    void setOverlays(const QStringList &overlays);
+    QStringList overlays() const;
+
     bool isActive() const;
     void setActive(bool active);
 
@@ -149,6 +157,7 @@ public:
     void componentComplete() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
+    void overlaysChanged();
     void activeChanged();
     void sourceChanged();
     void smoothChanged();
@@ -192,6 +201,8 @@ private:
 
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
+
+    QStringList m_overlays;
 
     Plasma::Theme::ColorGroup m_colorGroup;
 

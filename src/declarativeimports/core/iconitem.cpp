@@ -19,7 +19,6 @@
  */
 
 #include "iconitem.h"
-
 #include <QDebug>
 #include <QPaintEngine>
 #include <QPainter>
@@ -73,6 +72,9 @@ IconItem::IconItem(QQuickItem *parent)
 
     connect(this, &QQuickItem::windowChanged,
             this, &IconItem::schedulePixmapUpdate);
+
+    connect(this, SIGNAL(overlaysChanged()),
+            this, SLOT(schedulePixmapUpdate()));
 
     //initialize implicit size to the Dialog size
     setImplicitWidth(KIconLoader::global()->currentSize(KIconLoader::Dialog));
@@ -211,6 +213,22 @@ Plasma::Theme::ColorGroup IconItem::colorGroup() const
 {
     return m_colorGroup;
 }
+
+
+void IconItem::setOverlays(const QStringList &overlays)
+{
+    if (overlays == m_overlays) {
+        return;
+    }
+    m_overlays = overlays;
+    emit overlaysChanged();
+}
+
+QStringList IconItem::overlays() const
+{
+    return m_overlays;
+}
+
 
 bool IconItem::isActive() const
 {
@@ -449,6 +467,20 @@ void IconItem::loadPixmap()
         m_animation->stop();
         update();
         return;
+    }
+
+    // Strangely KFileItem::overlays() returns empty string-values, so
+    // we need to check first whether an overlay must be drawn at all.
+    // It is more efficient to do it here, as KIconLoader::drawOverlays()
+    // assumes that an overlay will be drawn and has some additional
+    // setup time.
+    foreach (const QString& overlay, m_overlays) {
+        if (!overlay.isEmpty()) {
+            // There is at least one overlay, draw all overlays above m_pixmap
+            // and cancel the check
+            KIconLoader::global()->drawOverlays(m_overlays, result, KIconLoader::Desktop);
+            break;
+        }
     }
 
     if (!isEnabled()) {
