@@ -17,17 +17,25 @@
  */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0 as PlasmaComponents
+
+import QtQuick.Controls 1.0 as QtControls
+
+// for "units"
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 Column {
     id: root
     property alias cfg_Speed: slider.value
 
     Row {
-        PlasmaComponents.Label {
+        spacing: units.largeSpacing / 2
+
+        QtControls.Label {
+            width: formAlignment - units.largeSpacing
+            horizontalAlignment: Text.AlignRight
             text: "Speed:"
         }
-        PlasmaComponents.Slider {
+        QtControls.Slider {
             id: slider
             minimumValue: 20
             maximumValue: 150
