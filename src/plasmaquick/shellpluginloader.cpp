@@ -35,9 +35,10 @@ ShellPluginLoader::~ShellPluginLoader()
 {
 }
 
-Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &packageFormat, const QString &specialization)
+Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &/*packageFormat*/, const QString &/*specialization*/)
 {
     Q_ASSERT(false);
+    return Plasma::Package();
 }
 
 void ShellPluginLoader::init()
