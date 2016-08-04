@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "aseigo@kde.org",
+                "Name": "Aaron Seigo"
+            }
+        ],
+        "Id": "Plasma/Theme",
+        "Name": "Plasma Theme",
+        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        "Version": "1"
+    }
+}

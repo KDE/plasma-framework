@@ -32,6 +32,8 @@ class ChangeableMainScriptPackage : public KPackage::PackageStructure
 {
     Q_OBJECT
 public:
+    ChangeableMainScriptPackage(QObject *parent = 0, const QVariantList &args = QVariantList()) : KPackage::PackageStructure(parent, args) {}
+
     void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
     void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
 
@@ -43,35 +45,7 @@ class GenericPackage : public ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
-};
-
-class PlasmoidPackage : public GenericPackage
-{
-    Q_OBJECT
-public:
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
-    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
-};
-
-class DataEnginePackage : public ChangeableMainScriptPackage
-{
-    Q_OBJECT
-public:
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
-};
-
-class ThemePackage : public KPackage::PackageStructure
-{
-    Q_OBJECT
-public:
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
-};
-
-class ContainmentActionsPackage : public ChangeableMainScriptPackage
-{
-    Q_OBJECT
-public:
+    GenericPackage(QObject *parent = 0, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
     void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
 };
 

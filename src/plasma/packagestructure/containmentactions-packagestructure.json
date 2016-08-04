@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "aseigo@kde.org",
+                "Name": "Aaron Seigo"
+            }
+        ],
+        "Id": "Plasma/ContainmentActions",
+        "Name": "Containment Actions",
+        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        "Version": "1"
+    }
+}

@@ -1,3 +1,5 @@
+add_subdirectory(packagestructure)
+
 # This option should be removed, or moved down as far as possible.
 # That means porting the existing frameworks to the CMake automoc
 # feature. Porting is mostly removing explicit moc includes, and
@@ -66,7 +68,6 @@ set(Plasma_LIB_SRCS
 #packages
     package.cpp
     packagestructure.cpp
-    private/packages.cpp
 
 #graphics
     framesvg.cpp

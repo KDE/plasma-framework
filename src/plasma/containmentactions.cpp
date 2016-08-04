@@ -20,7 +20,6 @@
 #include "containmentactions.h"
 #include "containment.h"
 
-#include "private/packages_p.h"
 #include "private/containmentactions_p.h"
 #include "private/containment_p.h"
 

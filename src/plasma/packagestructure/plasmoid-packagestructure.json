@@ -1,0 +1,14 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "aseigo@kde.org",
+                "Name": "Aaron Seigo"
+            }
+        ],
+        "Id": "Plasma/Applet",
+        "Name": "Plasmoid",
+        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        "Version": "1"
+    }
+}

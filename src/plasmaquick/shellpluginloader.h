@@ -24,7 +24,10 @@
 
 #include <plasmaquick/plasmaquick_export.h>
 
-class PLASMAQUICK_EXPORT ShellPluginLoader : public Plasma::PluginLoader
+/**
+ * @deprecated, don't use
+ */
+class PLASMAQUICK_DEPRECATED_EXPORT ShellPluginLoader : public Plasma::PluginLoader
 {
 public:
     ShellPluginLoader();
@@ -34,16 +37,6 @@ public:
 
 protected:
     Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization) Q_DECL_OVERRIDE;
-
-/**
-  These members are actually file-static in the .cpp because binary compat must be preserved
-  and there is no dptr!
-
-private:
-    Plasma::PackageStructure *m_lnfPackage;
-    Plasma::PackageStructure *m_qmlPackage;
-    Plasma::PackageStructure *m_layoutPackage;
-**/
 };
 
 #endif

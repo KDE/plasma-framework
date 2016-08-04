@@ -40,7 +40,6 @@
 #include "pluginloader.h"
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
-#include "private/packages_p.h"
 
 namespace Plasma
 {

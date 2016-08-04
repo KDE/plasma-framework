@@ -42,7 +42,6 @@
 #include <kwindowsystem.h>
 #include <qstandardpaths.h>
 
-#include "private/packages_p.h"
 #include "debug_p.h"
 
 namespace Plasma
