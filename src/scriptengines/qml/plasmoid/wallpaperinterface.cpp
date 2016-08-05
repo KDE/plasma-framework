@@ -151,6 +151,13 @@ void WallpaperInterface::syncWallpaperPackage()
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
     m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
 
+    const QString rootPath = m_pkg.metadata().property(QStringLiteral("X-Plasma-RootPath")).toString();
+    if (!rootPath.isEmpty()) {
+        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + rootPath);
+    } else {
+        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + m_pkg.metadata().pluginName());
+    }
+
     //initialize with our size to avoid as much resize events as possible
     QVariantHash props;
     props[QStringLiteral("width")] = width();
