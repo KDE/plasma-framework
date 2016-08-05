@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=%{APPNAME}
+
+Type=Service
+Icon=plasma
+
+X-KDE-ServiceTypes=Plasma/Wallpaper
+X-KDE-PluginInfo-Author=%{AUTHOR}
+X-KDE-PluginInfo-Email=%{EMAIL}
+X-KDE-PluginInfo-Name=org.kde.plasma.%{APPNAMELC}
+X-KDE-PluginInfo-License=LGPLv2+
+X-KDE-PluginInfo-Version=%{VERSION}
+X-KDE-PluginInfo-Website=https://plasma.kde.org/
+X-Plasma-MainScript=ui/main.qml
