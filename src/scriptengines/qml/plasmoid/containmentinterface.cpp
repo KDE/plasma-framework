@@ -236,7 +236,7 @@ QRect ContainmentInterface::availableScreenRect() const
     return rect;
 }
 
-Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
 {
     //HACK
     //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
@@ -244,11 +244,15 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
     Plasma::Applet *applet = m_containment->createApplet(plugin, args);
 
     if (applet) {
-        QObject *appletGraphicObject = applet->property("_plasma_graphicObject").value<QObject *>();
+        QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
+        if (geom.width() > 0 && geom.height() > 0) {
+            appletGraphicObject->setWidth(geom.width());
+            appletGraphicObject->setHeight(geom.height());
+        }
 
         blockSignals(false);
 
-        emit appletAdded(appletGraphicObject, pos.x(), pos.y());
+        emit appletAdded(appletGraphicObject, geom.x(), geom.y());
         emit appletsChanged();
     } else {
         blockSignals(false);
@@ -466,7 +470,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
 
-            metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QPoint, QPoint(x, y)));
+            metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRect, QRect(x, y, -1, -1)));
         }
     } else if (mimeData->hasUrls()) {
         //TODO: collect the mimetypes of available script engines and offer
@@ -546,7 +550,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
         if (!selectedPlugin.isEmpty()) {
 
-            Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QPoint(x, y));
+            Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
             setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
 
         }
@@ -722,7 +726,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                             return;
                         }
 
-                        createApplet(package.metadata().pluginId(), QVariantList(), posi);
+                        createApplet(package.metadata().pluginId(), QVariantList(), QRect(posi, QSize(-1,-1)));
                     });
                 } else if (plugin.isEmpty()) {
                     //set wallpapery stuff
@@ -731,7 +735,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         m_wallpaperInterface->setUrl(tjob->url());
                     }
                 } else {
-                    Plasma::Applet *applet = createApplet(actionsToApplets[choice], QVariantList(), posi);
+                    Plasma::Applet *applet = createApplet(actionsToApplets[choice], QVariantList(), QRect(posi, QSize(-1,-1)));
                     setAppletArgs(applet, mimetype, tjob->url().toString());
                 }
 
@@ -740,7 +744,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             }
         } else {
             // we can at least create an icon as a link to the URL
-            Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), posi);
+            Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(posi, QSize(-1,-1)));
             setAppletArgs(applet, mimetype, tjob->url().toString());
         }
     }
