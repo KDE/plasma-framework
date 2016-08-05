@@ -10,5 +10,6 @@
         "Name": "Generic",
         "ServiceTypes": [ "KPackage/PackageStructure" ],
         "Version": "1"
-    }
+    },
+    "X-KDE-ParentApp": "org.kde.plasmashell"
 }
