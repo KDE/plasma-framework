@@ -70,5 +70,5 @@ Comment[tr]=Plasma QML Programcığı Şablonu: Bir metin ve svg resmi gösteren
 Comment[uk]=Шаблон аплету Плазми. Шаблон аплету Плазми, який показу зображення SVG і текст.
 Comment[x-test]=xxPlasma QML Applet Template: a plasma applet template displaying a svg picture and a text.xx
 Comment[zh_TW]=Plasma QML 小程式樣本：用於顯示 svg 圖片與文字的 plasma 小程式樣本
-Category=KDE/Plasmoid
+Category=Plasma/Plasmoid
 Icon=qml-plasmoid.png
