@@ -1,0 +1,267 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Ukrainian "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Керування пакунками Плазми</title>
+<date
+>25 квітня 2014 року</date>
+<releaseinfo
+>Frameworks 5.0</releaseinfo>
+<productname
+>KDE Frameworks</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>Встановлення, показ списку, вилучення пакунків Плазми</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> шлях</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> тип</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> шлях</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> назва</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> шлях</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> назва</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> шлях</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Опис</title>
+<para
+><command
+>plasmapkg2</command
+> — програма з інтерфейсом командного рядка для встановлення, показу списку та вилучення пакунків Плазми.</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Параметри</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+>шлях</replaceable
+></term>
+<listitem
+><para
+>Створює хеш SHA1 для пакунка у каталозі «шлях».</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Для встановлення і вилучення, працює з пакунками, встановленими для всіх користувачів.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+>тип</replaceable
+></term>
+<listitem
+><para
+>Тип пакунка, наприклад theme (тема), wallpaper (тло стільниці), plasmoid (плазмоїд), dataengine (рушій даних), runner (система запуску), layout-template (шаблон компонування) тощо. [plasmoid]</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+>шлях</replaceable
+></term>
+<listitem
+><para
+>Встановити пакунок за адресою «шлях».</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+>назва</replaceable
+></term>
+<listitem
+><para
+>Показати дані щодо пакунка «назва».</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+>шлях</replaceable
+></term>
+<listitem
+><para
+>Оновити пакунок за адресою «шлях».</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Показати список встановлених пакунків.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>Показує список всіх відомих типів пакунків, які програма може встановлювати.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+>назва</replaceable
+></term>
+<listitem
+><para
+>Вилучити пакунок з назвою «назва».</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+>шлях</replaceable
+></term>
+<listitem
+><para
+>Абсолютний шлях до кореня пакунків. Якщо його не вказано, для пошуку буде використано стандартні каталоги даних цього сеансу Плазми.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Прочитайте також</title>
+
+<para
+>Докладнішу документацію користувача можна знайти за адресою <ulink url="help:/plasma"
+>help:/plasma-desktop</ulink
+> (ви можете або ввести цю адресу <acronym
+>URL</acronym
+> у рядок адреси &konqueror;, або виконати команду <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Автори</title>
+<para
+>Автором <command
+>plasmapkg2</command
+> є <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+>.</para>
+</refsect1>
+
+</refentry>
