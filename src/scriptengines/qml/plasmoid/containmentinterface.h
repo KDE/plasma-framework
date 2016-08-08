@@ -205,7 +205,6 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom);
-    void slotAboutToQuit();
 
 private:
     void clearDataForMimeJob(KIO::Job *job);
