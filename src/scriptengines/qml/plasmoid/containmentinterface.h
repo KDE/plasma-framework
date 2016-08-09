@@ -204,6 +204,7 @@ protected Q_SLOTS:
     void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
 
 private Q_SLOTS:
+    Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
     Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom);
 
 private:

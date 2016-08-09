@@ -224,6 +224,11 @@ QRect ContainmentInterface::availableScreenRect() const
     return rect;
 }
 
+Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+{
+    return createApplet(plugin, args, QRectF(pos, QSize()));
+}
+
 Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
 {
     //HACK
