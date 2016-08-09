@@ -240,6 +240,7 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
         QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
         //invalid applet?
         if (!appletGraphicObject) {
+            blockSignals(false);
             return applet;
         }
         if (geom.width() > 0 && geom.height() > 0) {
