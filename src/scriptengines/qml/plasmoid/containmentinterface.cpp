@@ -233,6 +233,10 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
 
     if (applet) {
         QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
+        //invalid applet?
+        if (!appletGraphicObject) {
+            return applet;
+        }
         if (geom.width() > 0 && geom.height() > 0) {
             appletGraphicObject->setWidth(geom.width());
             appletGraphicObject->setHeight(geom.height());
