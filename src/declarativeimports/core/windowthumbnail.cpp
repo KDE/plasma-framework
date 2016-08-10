@@ -276,7 +276,7 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                 return false;
             }
 
-            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureOwnsGLTexture));
+            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height)));
         }
         textureNode->texture()->bind();
         bindGLXTexture();
@@ -325,7 +325,7 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
                 size.setWidth(geo->width);
                 size.setHeight(geo->height);
             }
-            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureOwnsGLTexture));
+            textureNode->reset(window()->createTextureFromId(m_texture, size));
         }
         textureNode->texture()->bind();
         bindEGLTexture();

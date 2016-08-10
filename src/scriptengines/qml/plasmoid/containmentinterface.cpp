@@ -73,18 +73,6 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
     }
-
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-            this, &ContainmentInterface::slotAboutToQuit);
-}
-
-void ContainmentInterface::slotAboutToQuit()
-{
-    if (!m_containment) {
-        return;
-    }
-    disconnect(m_containment.data(), &Plasma::Containment::appletRemoved,
-               this, &ContainmentInterface::appletRemovedForward);
 }
 
 void ContainmentInterface::init()
@@ -236,6 +224,11 @@ QRect ContainmentInterface::availableScreenRect() const
     return rect;
 }
 
+Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
+{
+    return createApplet(plugin, args, QRectF(pos, QSize()));
+}
+
 Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
 {
     //HACK
@@ -245,6 +238,11 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
 
     if (applet) {
         QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
+        //invalid applet?
+        if (!appletGraphicObject) {
+            blockSignals(false);
+            return applet;
+        }
         if (geom.width() > 0 && geom.height() > 0) {
             appletGraphicObject->setWidth(geom.width());
             appletGraphicObject->setHeight(geom.height());
@@ -470,7 +468,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
 
-            metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRect, QRect(x, y, -1, -1)));
+            metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRectF, QRectF(x, y, -1, -1)));
         }
     } else if (mimeData->hasUrls()) {
         //TODO: collect the mimetypes of available script engines and offer
