@@ -98,9 +98,6 @@ void DaysModel::update()
 
     m_eventsData.clear();
 
-    // We always have 42 items (or weeks * num of days in week) so we only have to tell the view that the data changed.
-    layoutChanged();
-
     const QDate modelFirstDay(m_data->at(0).yearNumber, m_data->at(0).monthNumber, m_data->at(0).dayNumber);
 
     if (m_pluginsManager) {
@@ -108,6 +105,9 @@ void DaysModel::update()
             eventsPlugin->loadEventsForDateRange(modelFirstDay, modelFirstDay.addDays(42));
         }
     }
+
+    // We always have 42 items (or weeks * num of days in week) so we only have to tell the view that the data changed.
+    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0));
 }
 
 void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data)
@@ -118,7 +118,10 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
     if (data.contains(QDate::currentDate())) {
         m_agendaNeedsUpdate = true;
     }
-    layoutChanged();
+
+    // only the containsEventItems role may have changed
+    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0), {containsEventItems});
+
     Q_EMIT agendaUpdated(QDate::currentDate());
 }
 
@@ -142,7 +145,7 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
     Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex);
+            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
@@ -168,7 +171,7 @@ void DaysModel::onEventRemoved(const QString &uid)
     Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex);
+            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
