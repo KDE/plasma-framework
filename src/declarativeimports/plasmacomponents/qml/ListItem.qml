@@ -88,7 +88,7 @@ Item {
     width: parent ? parent.width : childrenRect.width
     height: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
-    property int implicitHeight: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
+    implicitHeight: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
 
     Connections {
