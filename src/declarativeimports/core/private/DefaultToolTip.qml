@@ -35,6 +35,9 @@ Item {
     Layout.maximumWidth: childrenRect.width + units.gridUnit
     Layout.maximumHeight: childrenRect.height + units.gridUnit
 
+    LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
+
     RowLayout {
 
         anchors {
