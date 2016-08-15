@@ -63,12 +63,20 @@ QtQuickControlStyle.TextFieldStyle {
             imagePath: "widgets/lineedit"
             prefix: "base"
         }
+
         Component.onCompleted: {
             root.padding.left = base.margins.left
             root.padding.top = base.margins.top
-            //TODO: if QtControls gets a component for this, use it instead of this hardcoded heuristic
-            root.padding.right = base.margins.right + (control.clearButtonShown ? Math.max(control.parent.height*0.8, units.iconSizes.small)+units.smallSpacing : 0)
             root.padding.bottom = base.margins.bottom
+
+            //TODO: if QtControls gets a component for this, use it instead of this hardcoded heuristic
+            root.padding.right = Qt.binding(function() {
+                var actionIconSize = Math.max(textField.height * 0.8, units.iconSizes.small);
+                //actionCount is an int of the number of items
+                var actionCount = (control.hasOwnProperty("clearButtonShown") && control.clearButtonShown) +
+                                  (control.hasOwnProperty("revealPasswordButtonShown") && control.revealPasswordButtonShown);
+                return base.margins.right + (actionIconSize * actionCount) + (actionCount > 0 ? units.smallSpacing : 0);
+            })
         }
     }
 

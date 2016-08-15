@@ -34,5 +34,25 @@ Rectangle {
             width: 400
             placeholderText: longText
         }
+
+        PlasmaComponents.TextField {
+            text: root.longText
+            echoMode: TextInput.Password
+            revealPasswordButtonShown: true
+        }
+
+        PlasmaComponents.TextField {
+            text: longText
+            echoMode: TextInput.Password
+            revealPasswordButtonShown: true
+            clearButtonShown: true
+        }
+
+        PlasmaComponents.TextField {
+            text: longText
+            LayoutMirroring.enabled: true
+            LayoutMirroring.childrenInherit: true
+            clearButtonShown: true
+        }
     }
 }

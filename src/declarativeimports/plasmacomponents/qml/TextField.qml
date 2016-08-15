@@ -31,14 +31,19 @@ import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 QtControls.TextField {
     id: textField
 
-
-
     //Plasma api
 
     /**
      * Whether the button to clear the text from TextField is visible.
      */
     property bool clearButtonShown: false
+
+    /*
+     * Whether to show a button that allows the user to reveal the password in plain text
+     * This only makes sense if the echoMode is set to Password.
+     * @since 5.26
+     */
+    property bool revealPasswordButtonShown: false
 
     //Deprecated/unsupported api
     /**
@@ -72,31 +77,57 @@ QtControls.TextField {
         print("DEPRECATED function");
     }
 
-
     style: Styles.TextFieldStyle {}
 
-    PlasmaCore.IconItem {
-        id: clearButton
-        source: "edit-clear-locationbar-rtl"
-        height: Math.max(parent.height*0.8, units.iconSizes.small)
-        width: height
-        opacity: (textField.length > 0 && clearButtonShown && textField.enabled) ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
+    Row {
         anchors {
-            right: parent.right
+            right: textField.right
             rightMargin: 6
             verticalCenter: textField.verticalCenter
         }
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                textField.text = ""
-                textField.forceActiveFocus()
+
+        PlasmaCore.IconItem {
+            id: showPasswordButton
+            source: textField.echoMode === TextInput.Normal ? "hint" : "visibility"
+            height: Math.max(textField.height * 0.8, units.iconSizes.small)
+            width: height
+            opacity: (textField.length > 0 && revealPasswordButtonShown && textField.enabled) ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    textField.echoMode = (textField.echoMode == TextInput.Normal ? TextInput.Password : TextInput.Normal)
+                    textField.forceActiveFocus()
+                }
+            }
+        }
+
+        PlasmaCore.IconItem {
+            id: clearButton
+            //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
+            source: LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
+            height: Math.max(textField.height * 0.8, units.iconSizes.small)
+            width: height
+            opacity: (textField.length > 0 && clearButtonShown && textField.enabled) ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    textField.text = ""
+                    textField.forceActiveFocus()
+                }
             }
         }
     }
