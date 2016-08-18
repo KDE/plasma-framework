@@ -105,8 +105,19 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
                          q, &ContainmentView::showConfigurationInterface);
         QObject::connect(cont, SIGNAL(destroyedChanged(bool)),
                          q, SLOT(updateDestroyed(bool)));
+
+        // Panels are created invisible and the code below ensures they are only
+        // shown once their contents have settled to avoid visual glitches on startup
         if (cont->containmentType() == Plasma::Types::PanelContainment ||
             cont->containmentType() == Plasma::Types::CustomPanelContainment) {
+
+            QObject::connect(cont, &Plasma::Containment::uiReadyChanged,
+                             q, [this, cont](bool ready) {
+                if (ready && !cont->destroyed()) {
+                    q->setVisible(true);
+                }
+            }, Qt::QueuedConnection);
+
             q->setVisible(!cont->destroyed() && cont->isUiReady());
         }
     } else {
