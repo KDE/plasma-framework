@@ -431,10 +431,6 @@ void Containment::addApplet(Applet *applet)
 
     if (!d->uiReady) {
         d->loadingApplets << applet;
-        if (d->uiReady) {
-            d->uiReady = false;
-            emit uiReadyChanged(false);
-        }
     }
 
     connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
