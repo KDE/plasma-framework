@@ -189,14 +189,9 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
                      this, &ContainmentView::screenGeometryChanged);
 
     if (corona->package().isValid()) {
-        KDeclarative::KDeclarative kdeclarative;
-        kdeclarative.setDeclarativeEngine(engine());
-        //binds things like kconfig and icons
-
         KPluginInfo info = corona->package().metadata();
         if (info.isValid()) {
-            kdeclarative.setTranslationDomain("plasma_shell_" + info.pluginName());
-            kdeclarative.setupBindings();
+            setTranslationDomain("plasma_shell_" + info.pluginName());
         } else {
             qWarning() << "Invalid corona package metadata";
         }
