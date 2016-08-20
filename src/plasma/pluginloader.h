@@ -67,50 +67,50 @@ public:
                        const QVariantList &args = QVariantList());
 
     /**
-     * Load a DataEngine plugin.
+     * Load a dataengine plugin.
      *
      * @param name the name of the engine
-     * @return the DataEngine that was loaded, or the NullEngine on failure.
+     * @return the dataengine that was loaded, or the NullEngine on failure.
      **/
     DataEngine *loadDataEngine(const QString &name);
 
     /**
-     * @return a listing of all known DataEngines by name
+     * @return a listing of all known dataengines by name
      *
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only dataengines not specifically
      *                  registered to an application.
      */
     static QStringList listAllEngines(const QString &parentApp = QString());
 
     /**
-     * Returns a list of all known DataEngines.
+     * Returns a list of all known dataengines.
      *
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only dataengines not specifically
      *                  registered to an application.
-     * @return list of DataEngines
+     * @return list of dataengines
      **/
     static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
 
     /**
-     * Returns a list of all known DataEngines filtering by category.
+     * Returns a list of all known dataengines filtering by category.
      *
-     * @param category the category to filter applets on. Uses the
+     * @param category the category to filter dataengines on. Uses the
      *                  X-KDE-PluginInfo-Category entry (if any) in the
      *                  plugin info. The value of QString() will
-     *                  result in a list of engines with an empty category.
+     *                  result in a list of dataengines with an empty category.
      *
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only dataengines not specifically
      *                  registered to an application.
-     * @return list of DataEngines
+     * @return list of dataengines
      * @since 4.3
      **/
     static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
@@ -200,7 +200,7 @@ public:
 
     /**
      * Sets the list of custom categories that are used in addition to the default
-     * set of categories known to libplasma for Applets.
+     * set of categories known to libplasma for applets.
      * @param categories a list of categories
      * @since 4.3
      */
@@ -224,76 +224,76 @@ public:
      *
      * @param category Only containments matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
-     *                 If "Miscellaneous" is passed in, then applets without a
+     *                 If "Miscellaneous" is passed in, then containments without a
      *                 Categories= entry are also returned.
-     *                 If an empty string is passed in, all applets are
+     *                 If an empty string is passed in, all containments are
      *                 returned.
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter containments on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only containments not specifically
      *                  registered to an application.
-     * @return list of applets
+     * @return list of containments
      **/
     static KPluginInfo::List listContainments(const QString &category = QString(),
             const QString &parentApp = QString());
 
     /**
-     * Returns a list of all known Containments that match the parameters.
+     * Returns a list of all known containments that match the parameters.
      *
-     * @param type Only Containments with this string in X-Plasma-ContainmentType
+     * @param type Only containments with this string in X-Plasma-ContainmentType
      *             in their .desktop files will be returned. Common values are panel and
      *             desktop
-     * @param category Only applets matchin this category will be returned.
+     * @param category Only containments matchin this category will be returned.
      *                 Useful in conjunction with knownCategories.
-     *                 If "Miscellaneous" is passed in, then applets without a
+     *                 If "Miscellaneous" is passed in, then containments without a
      *                 Categories= entry are also returned.
-     *                 If an empty string is passed in, all applets are
+     *                 If an empty string is passed in, all containments are
      *                 returned.
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter containments on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only containments not specifically
      *                  registered to an application.
-     * @return list of applets
+     * @return list of containments
      **/
     static KPluginInfo::List listContainmentsOfType(const QString &type,
             const QString &category = QString(),
             const QString &parentApp = QString());
 
     /**
-     * @return a list of all known types of Containments on this system
+     * @return a list of all known types of containments on this system
      */
     static QStringList listContainmentTypes();
 
     /**
-     * Returns a list of all known applets associated with a certain MimeType
+     * Returns a list of all known containments associated with a certain MimeType
      *
-     * @return list of applets
+     * @return list of containments
      **/
     static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
 
     /**
-     * Returns a list of all known DataEngines.
+     * Returns a list of all known dataengines.
      *
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only dataengines not specifically
      *                  registered to an application.
-     * @return list of DataEngines
+     * @return list of dataengines
      **/
     KPluginInfo::List listDataEngineInfo(const QString &parentApp = QString());
 
     /**
      * Returns a list of all known ContainmentActions.
      *
-     * @param parentApp the application to filter applets on. Uses the
+     * @param parentApp the application to filter ContainmentActions on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
+     *                  list containing only ContainmentActions not specifically
      *                  registered to an application.
-     * @return list of applets
+     * @return list of ContainmentActions
      **/
     KPluginInfo::List listContainmentActionsInfo(const QString &parentApp);
 
@@ -356,7 +356,7 @@ protected:
 
     /**
      * A re-implementable method that allows subclasses to override
-     * the default behaviour of loadContainmentActions. If the Containments Action requested is not recognized,
+     * the default behaviour of loadContainmentActions. If the ContainmentActions requested is not recognized,
      * then the implementation should return a NULL pointer. This method is called
      * by loadService prior to attempting to load a Service using the standard Plasma
      * plugin mechanisms.
@@ -407,10 +407,10 @@ protected:
     virtual KPluginInfo::List internalAppletInfo(const QString &category) const;
 
     /**
-     * A re-implementable method that allows subclasses to provide additional DataEngines
+     * A re-implementable method that allows subclasses to provide additional dataengines
      * for DataEngine::listDataEngines.
      *
-     * @return list of DataEngines info, or an empty list if none
+     * @return list of dataengine info, or an empty list if none
      **/
     virtual KPluginInfo::List internalDataEngineInfo() const;
 
@@ -429,7 +429,7 @@ protected:
     virtual KPluginInfo::List internalContainmentActionsInfo() const;
 
     /**
-     * Standardized mechanism for providing internal Applets by install .desktop files
+     * Standardized mechanism for providing internal applets by install .desktop files
      * in $APPPDATA/plasma/internal/applets/
      *
      * For applications that do this, internalAppletInfo can be implemented as a one-liner
@@ -441,29 +441,29 @@ protected:
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
      *                 returned.
-     * @return list of Applets, or an empty list if none
+     * @return list of applets, or an empty list if none
      */
     KPluginInfo::List standardInternalAppletInfo(const QString &category) const;
 
     /**
-     * Standardized mechanism for providing internal Applets by install .desktop files
+     * Standardized mechanism for providing internal dataengines by install .desktop files
      * in $APPPDATA/plasma/internal/dataengines/
      *
      * For applications that do this, internalDataEngineInfo can be implemented as a one-liner
      * call to this method.
      *
-     * @return list of applets
+     * @return list of dataengines
      */
     KPluginInfo::List standardInternalDataEngineInfo() const;
 
     /**
-     * Standardized mechanism for providing internal Applets by install .desktop files
+     * Standardized mechanism for providing internal services by install .desktop files
      * in $APPPDATA/plasma/internal/services/
      *
      * For applications that do this, internalServiceInfo can be implemented as a one-liner
      * call to this method.
      *
-     * @return list of applets
+     * @return list of services
      */
     KPluginInfo::List standardInternalServiceInfo() const;
 
