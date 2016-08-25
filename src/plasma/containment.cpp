@@ -317,7 +317,7 @@ Corona *Containment::corona() const
     //case in which this containment is child of an applet, hello systray :)
     } else {
         Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent());
-        if (parentApplet) {
+        if (parentApplet && parentApplet->containment()) {
             return parentApplet->containment()->corona();
         }
     }
