@@ -88,7 +88,7 @@ QtControls.TextField {
 
         PlasmaCore.IconItem {
             id: showPasswordButton
-            source: textField.echoMode === TextInput.Normal ? "hint" : "visibility"
+            source: revealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "hint" : "visibility") : ""
             height: Math.max(textField.height * 0.8, units.iconSizes.small)
             width: height
             opacity: (textField.length > 0 && revealPasswordButtonShown && textField.enabled) ? 1 : 0
@@ -111,7 +111,7 @@ QtControls.TextField {
         PlasmaCore.IconItem {
             id: clearButton
             //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
-            source: LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
+            source: clearButtonShown ? (LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl") : ""
             height: Math.max(textField.height * 0.8, units.iconSizes.small)
             width: height
             opacity: (textField.length > 0 && clearButtonShown && textField.enabled) ? 1 : 0
