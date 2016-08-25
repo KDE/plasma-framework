@@ -229,6 +229,20 @@ void AppletPrivate::cleanUpAndDelete()
     q->deleteLater();
 }
 
+void AppletPrivate::setDestroyed(bool destroyed)
+{
+    transient = destroyed;
+    emit q->destroyedChanged(destroyed);
+    //when an applet gets transient, it's "systemimmutable"
+    emit q->immutabilityChanged(q->immutability());
+
+    Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
+    if (asContainment) {
+        foreach(Applet *a , asContainment->applets())
+        a->d->setDestroyed(destroyed);
+    }
+}
+
 void AppletPrivate::askDestroy()
 {
     if (q->immutability() != Types::Mutable || !started) {
@@ -240,10 +254,7 @@ void AppletPrivate::askDestroy()
     } else {
         //There is no confirmation anymore for panels removal:
         //this needs users feedback
-        transient = true;
-        emit q->destroyedChanged(true);
-        //when an applet gets transient, it's "systemimmutable"
-        emit q->immutabilityChanged(q->immutability());
+        setDestroyed(true);
         //no parent, but it won't leak, since it will be closed both in case of timeout
         //or direct action
         deleteNotification = new KNotification(QStringLiteral("plasmoidDeleted"));
@@ -270,7 +281,7 @@ void AppletPrivate::askDestroy()
         deleteNotification->setActions(actions);
         QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
                 [=]() {
-                    transient = false;
+                    setDestroyed(false);
                     if (!q->isContainment() && q->containment()) {
                         Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
                         if (containmentApplet && containmentApplet->d->deleteNotificationTimer) {
@@ -288,9 +299,6 @@ void AppletPrivate::askDestroy()
                         q->containment()->d->applets.insert(position, q);
                         emit q->containment()->appletAdded(q);
                     }
-                    emit q->destroyedChanged(false);
-                    //when an applet gets transient, it's "systemimmutable"
-                    emit q->immutabilityChanged(q->immutability());
                     if (deleteNotification) {
                         deleteNotification->close();
                     } else if (deleteNotificationTimer) {
@@ -303,7 +311,6 @@ void AppletPrivate::askDestroy()
                 [=]() {
                     //If the timer still exists, it means the undo action was NOT triggered
                     if (transient) {
-                        emit q->destroyedChanged(true);
                         cleanUpAndDelete();
                     }
                     if (deleteNotificationTimer) {

@@ -51,6 +51,7 @@ public:
 
     void init(const QString &packagePath = QString(), const QVariantList &args = QVariantList());
 
+    void setDestroyed(bool destroyed);
     void askDestroy();
     virtual void cleanUpAndDelete();
 

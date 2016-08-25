@@ -261,8 +261,7 @@ void Applet::destroy()
         return; //don't double delete
     }
 
-    d->transient = true;
-    emit destroyedChanged(true);
+    d->setDestroyed(true);
     //FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
     d->cleanUpAndDelete();
 }
