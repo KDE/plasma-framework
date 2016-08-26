@@ -124,9 +124,10 @@ MouseArea {
         elide: Text.ElideRight
         fontSizeMode: Text.HorizontalFit
         font.pixelSize: Math.max(theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
-        // This is to avoid the "Both point size and
-        // pixel size set. Using pixel size" warnings
-        font.pointSize: undefined
+        // Plasma component set point size, this code wants to set pixel size
+        // Setting both results in a warning
+        // -1 is an undocumented same as unset (see qquickvaluetypes)
+        font.pointSize: -1
         color: today ? theme.backgroundColor : theme.textColor
         Behavior on color {
             ColorAnimation { duration: units.shortDuration * 2 }
