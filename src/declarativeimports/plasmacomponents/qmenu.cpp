@@ -19,6 +19,7 @@
 
 #include "qmenu.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QQuickWindow>
 #include <QQuickItem>
@@ -27,15 +28,18 @@
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent),
+      m_menu(Q_NULLPTR),
       m_status(DialogStatus::Closed),
       m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
 {
-    m_menu = new QMenu(0);
-    connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
-    connect(m_menu, &QMenu::aboutToHide, [ = ]() {
-        m_status = DialogStatus::Closed;
-        emit statusChanged();
-    });
+    if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
+        m_menu = new QMenu(0);
+        connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
+        connect(m_menu, &QMenu::aboutToHide, [ = ]() {
+                m_status = DialogStatus::Closed;
+                emit statusChanged();
+        });
+    }
 }
 
 QMenuProxy::~QMenuProxy()
@@ -105,6 +109,9 @@ void QMenuProxy::setVisualParent(QObject *parent)
 
 QWindow *QMenuProxy::transientParent()
 {
+    if (!m_menu) {
+        return Q_NULLPTR;
+    }
     return m_menu->windowHandle()->transientParent();
 }
 
