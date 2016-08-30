@@ -1,9 +1,9 @@
 
-find_package(ECM 0.0.9 CONFIG REQUIRED)
+find_package(ECM 1.6.0 CONFIG REQUIRED)
 include(KDEInstallDirs)
 
 set(PLASMA_RELATIVE_DATA_INSTALL_DIR "plasma")
-set(PLASMA_DATA_INSTALL_DIR "${DATA_INSTALL_DIR}/${PLASMA_RELATIVE_DATA_INSTALL_DIR}")
+set(PLASMA_DATA_INSTALL_DIR "${KDE_INSTALL_DATADIR}/${PLASMA_RELATIVE_DATA_INSTALL_DIR}")
 
 # plasma_install_package(path componentname [root] [type])
 #
@@ -31,7 +31,7 @@ macro(plasma_install_package dir component)
    endif()
 
    kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR})
-   install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-${type}-${component}.desktop)
+   install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
 
