@@ -24,6 +24,8 @@
 #include <QIcon>
 #include <QOpenGLContext>
 #include <QQuickWindow>
+#include <QRunnable>
+
 // X11
 #if HAVE_XCB_COMPOSITE
 #include <QX11Info>
@@ -43,6 +45,72 @@ typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 
 namespace Plasma
 {
+
+#if HAVE_XCB_COMPOSITE
+#if HAVE_GLX
+class DiscardGlxPixmapRunnable : public QRunnable {
+public:
+    DiscardGlxPixmapRunnable(
+        uint,
+        QFunctionPointer,
+        xcb_pixmap_t
+    );
+    void run() Q_DECL_OVERRIDE;
+private:
+    uint m_texture;
+    QFunctionPointer m_releaseTexImage;
+    xcb_pixmap_t m_glxPixmap;
+};
+
+DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
+    : QRunnable(),
+    m_texture(texture),
+    m_releaseTexImage(deleteFunction),
+    m_glxPixmap(pixmap)
+{}
+
+void DiscardGlxPixmapRunnable::run()
+{
+    if (m_glxPixmap != XCB_PIXMAP_NONE) {
+        Display *d = QX11Info::display();
+        ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
+        glXDestroyPixmap(d, m_glxPixmap);
+        glDeleteTextures(1, &m_texture);
+    }
+}
+#endif //HAVE_GLX
+
+#if HAVE_EGL
+class DiscardEglPixmapRunnable : public QRunnable {
+public:
+    DiscardEglPixmapRunnable(
+        uint,
+        QFunctionPointer,
+        EGLImageKHR
+    );
+    void run() Q_DECL_OVERRIDE;
+private:
+    uint m_texture;
+    QFunctionPointer m_eglDestroyImageKHR;
+    EGLImageKHR m_image;
+};
+
+DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, QFunctionPointer deleteFunction, EGLImageKHR image)
+    : QRunnable(),
+    m_texture(texture),
+    m_eglDestroyImageKHR(deleteFunction),
+    m_image(image)
+{}
+
+void DiscardEglPixmapRunnable::run()
+{
+    if (m_image != EGL_NO_IMAGE_KHR) {
+        ((eglDestroyImageKHR_func)(m_eglDestroyImageKHR))(eglGetCurrentDisplay(), m_image);
+        glDeleteTextures(1, &m_texture);
+    }
+}
+#endif//HAVE_EGL
+#endif //HAVE_XCB_COMPOSITE
 
 WindowTextureNode::WindowTextureNode()
     : QSGSimpleTextureNode()
@@ -101,6 +169,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     connect(this, &QQuickItem::enabledChanged, [this]() {
         if (!isEnabled()) {
             stopRedirecting();
+            releaseResources();
         } else if (isVisible()) {
             startRedirecting();
         }
@@ -108,6 +177,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     connect(this, &QQuickItem::visibleChanged, [this]() {
         if (!isVisible()) {
             stopRedirecting();
+            releaseResources();
         } else if (isEnabled()) {
             startRedirecting();
         }
@@ -138,9 +208,47 @@ WindowThumbnail::~WindowThumbnail()
     if (m_xcb) {
         QCoreApplication::instance()->removeNativeEventFilter(this);
         stopRedirecting();
-        discardPixmap();
     }
 }
+
+void WindowThumbnail::releaseResources()
+{
+#if HAVE_XCB_COMPOSITE
+
+#if HAVE_GLX && HAVE_EGL
+    //only one (or none) should be set, but never both
+    Q_ASSERT(m_glxPixmap == XCB_PIXMAP_NONE || m_image == EGL_NO_IMAGE_KHR);
+#endif
+
+    //data is deleted in the render thread (with relevant GLX calls)
+    //note runnable may be called *after* this is deleted
+    //but the pointer is held by the WindowThumbnail which is in the main thread
+#if HAVE_GLX
+    if (m_glxPixmap != XCB_PIXMAP_NONE) {
+        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture,
+                                                        m_releaseTexImage,
+                                                        m_glxPixmap),
+                                                        QQuickWindow::NoStage);
+
+        m_glxPixmap = XCB_PIXMAP_NONE;
+        m_texture = 0;
+    }
+#endif
+#if HAVE_EGL
+    if (m_image != EGL_NO_IMAGE_KHR) {
+        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture,
+                                                        m_eglDestroyImageKHR,
+                                                        m_image),
+                                                        QQuickWindow::NoStage);
+
+        m_image = EGL_NO_IMAGE_KHR;
+        m_texture = 0;
+    }
+#endif
+#endif
+}
+
+
 
 uint32_t WindowThumbnail::winId() const
 {
@@ -227,8 +335,9 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
         }
     } else if (responseType == XCB_CONFIGURE_NOTIFY) {
         if (reinterpret_cast<xcb_configure_notify_event_t *>(event)->window == m_winId) {
-            // TODO: only discard if size changes
-            discardPixmap();
+            releaseResources();
+            m_damaged = true;
+            update();
         }
     }
 #else
@@ -373,16 +482,7 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
     if (!textureNode->texture()) {
         // the texture got discarded by the scene graph, but our mapping is still valid
         // let's discard the pixmap to have a clean state again
-#if HAVE_GLX
-        if (m_glxPixmap != XCB_PIXMAP_NONE) {
-            discardPixmap();
-        }
-#endif
-#if HAVE_EGL
-        if (m_image != EGL_NO_IMAGE_KHR) {
-            discardPixmap();
-        }
-#endif
+        releaseResources();
     }
     if (m_pixmap == XCB_PIXMAP_NONE) {
         m_pixmap = pixmapForWindow();
@@ -592,7 +692,6 @@ void WindowThumbnail::stopRedirecting()
         return;
     }
     xcb_composite_unredirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
-    discardPixmap();
     if (m_damage == XCB_NONE) {
         return;
     }
@@ -635,36 +734,7 @@ void WindowThumbnail::startRedirecting()
 #endif
 }
 
-void WindowThumbnail::discardPixmap()
-{
-    if (!m_xcb) {
-        return;
-    }
-#if HAVE_XCB_COMPOSITE
-#if HAVE_GLX
-    if (m_glxPixmap != XCB_PIXMAP_NONE) {
-        Display *d = QX11Info::display();
-        ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
-        glXDestroyPixmap(d, m_glxPixmap);
-        m_glxPixmap = XCB_PIXMAP_NONE;
-        glDeleteTextures(1, &m_texture);
-    }
-#endif
-#if HAVE_EGL
-    if (m_image != EGL_NO_IMAGE_KHR) {
-        ((eglDestroyImageKHR_func)(m_eglDestroyImageKHR))(eglGetCurrentDisplay(), m_image);
-        m_image = EGL_NO_IMAGE_KHR;
-        glDeleteTextures(1, &m_texture);
-    }
-#endif
-    if (m_pixmap != XCB_WINDOW_NONE) {
-        xcb_free_pixmap(QX11Info::connection(), m_pixmap);
-        m_pixmap = XCB_PIXMAP_NONE;
-    }
-    m_damaged = true;
-    update();
-#endif
-}
+
 
 void WindowThumbnail::setThumbnailAvailable(bool thumbnailAvailable)
 {

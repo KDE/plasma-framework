@@ -99,13 +99,15 @@ Q_SIGNALS:
     void paintedSizeChanged();
     void thumbnailAvailableChanged();
 
+protected:
+    void releaseResources() Q_DECL_OVERRIDE;
+
 private:
     void iconToTexture(WindowTextureNode *textureNode);
     void windowToTexture(WindowTextureNode *textureNode);
     void startRedirecting();
     void stopRedirecting();
     void resetDamaged();
-    void discardPixmap();
     void setThumbnailAvailable(bool thumbnailAvailable);
 
     bool m_xcb;
@@ -121,6 +123,8 @@ private:
     uint8_t m_damageEventBase;
     xcb_damage_damage_t m_damage;
     xcb_pixmap_t m_pixmap;
+
+/*The following must *only* be used from the render thread*/
     uint m_texture;
 #if HAVE_GLX
     bool windowToTextureGLX(WindowTextureNode *textureNode);
