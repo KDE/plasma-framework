@@ -87,6 +87,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
            ) {
             layout = child;
+            break;
         }
     }
 
@@ -115,6 +116,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
            ) {
             ownLayout = child;
+            break;
         }
     }
 
