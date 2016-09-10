@@ -67,11 +67,6 @@ generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
-    appletquickitem.h
-    containmentview.h
-    configview.h
-    configmodel.h
-    dialog.h
     packageurlinterceptor.h
 )
 
