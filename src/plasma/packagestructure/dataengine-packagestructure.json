@@ -2,14 +2,43 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "aseigo@kde.org",
-                "Name": "Aaron Seigo"
+                "Email": "aseigo@kde.org", 
+                "Name": "Aaron Seigo", 
+                "Name[sr@ijekavian]": "Арон Џ. Сајго", 
+                "Name[sr@ijekavianlatin]": "Aron Dž. Sajgo", 
+                "Name[sr@latin]": "Aron Dž. Sajgo", 
+                "Name[sr]": "Арон Џ. Сајго", 
+                "Name[x-test]": "xxAaron Seigoxx"
             }
-        ],
-        "Id": "Plasma/DataEngine",
-        "Name": "Data Engine",
-        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        ], 
+        "Id": "Plasma/DataEngine", 
+        "Name": "Data Engine", 
+        "Name[ca@valencia]": "Motor de dades", 
+        "Name[ca]": "Motor de dades", 
+        "Name[cs]": "Datový nástroj", 
+        "Name[da]": "Datamotor", 
+        "Name[de]": "Datenmodul", 
+        "Name[es]": "Motor de datos", 
+        "Name[et]": "Andmemootor", 
+        "Name[it]": "Motore dati", 
+        "Name[nl]": "Gegevensengine", 
+        "Name[pl]": "Silnik danych", 
+        "Name[pt]": "Motor de Dados", 
+        "Name[ru]": "Источник данных Plasma", 
+        "Name[sk]": "Dátový nástroj", 
+        "Name[sl]": "Podatkovni pogon", 
+        "Name[sr@ijekavian]": "Датомотор", 
+        "Name[sr@ijekavianlatin]": "Datomotor", 
+        "Name[sr@latin]": "Datomotor", 
+        "Name[sr]": "Датомотор", 
+        "Name[sv]": "Datagränssnitt", 
+        "Name[uk]": "Рушій даних", 
+        "Name[x-test]": "xxData Enginexx", 
+        "Name[zh_CN]": "数据引擎", 
+        "ServiceTypes": [
+            "KPackage/PackageStructure"
+        ], 
         "Version": "1"
-    },
+    }, 
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

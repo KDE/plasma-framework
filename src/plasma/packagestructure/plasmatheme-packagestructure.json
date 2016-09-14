@@ -2,14 +2,43 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "aseigo@kde.org",
-                "Name": "Aaron Seigo"
+                "Email": "aseigo@kde.org", 
+                "Name": "Aaron Seigo", 
+                "Name[sr@ijekavian]": "Арон Џ. Сајго", 
+                "Name[sr@ijekavianlatin]": "Aron Dž. Sajgo", 
+                "Name[sr@latin]": "Aron Dž. Sajgo", 
+                "Name[sr]": "Арон Џ. Сајго", 
+                "Name[x-test]": "xxAaron Seigoxx"
             }
-        ],
-        "Id": "Plasma/Theme",
-        "Name": "Plasma Theme",
-        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        ], 
+        "Id": "Plasma/Theme", 
+        "Name": "Plasma Theme", 
+        "Name[ca@valencia]": "Tema del Plasma", 
+        "Name[ca]": "Tema del Plasma", 
+        "Name[cs]": "Motiv Plasma", 
+        "Name[da]": "Plasma-tema", 
+        "Name[de]": "Plasma-Design", 
+        "Name[es]": "Tema de Plasma", 
+        "Name[et]": "Plasma teema", 
+        "Name[it]": "Tema di Plasma", 
+        "Name[nl]": "Plasma-thema", 
+        "Name[pl]": "Wystrój Plazmy", 
+        "Name[pt]": "Tema do Plasma", 
+        "Name[ru]": "Тема оформления Plasma", 
+        "Name[sk]": "Téma Plasmy", 
+        "Name[sl]": "Tema za Plasmo", 
+        "Name[sr@ijekavian]": "Плазма тема", 
+        "Name[sr@ijekavianlatin]": "Plasma tema", 
+        "Name[sr@latin]": "Plasma tema", 
+        "Name[sr]": "Плазма тема", 
+        "Name[sv]": "Plasmatema", 
+        "Name[uk]": "Тема Плазми", 
+        "Name[x-test]": "xxPlasma Themexx", 
+        "Name[zh_CN]": "Plasma 主题", 
+        "ServiceTypes": [
+            "KPackage/PackageStructure"
+        ], 
         "Version": "1"
-    },
+    }, 
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

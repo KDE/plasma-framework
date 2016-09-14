@@ -2,14 +2,44 @@
     "KPlugin": {
         "Authors": [
             {
-                "Email": "aseigo@kde.org",
-                "Name": "Aaron Seigo"
+                "Email": "aseigo@kde.org", 
+                "Name": "Aaron Seigo", 
+                "Name[sr@ijekavian]": "Арон Џ. Сајго", 
+                "Name[sr@ijekavianlatin]": "Aron Dž. Sajgo", 
+                "Name[sr@latin]": "Aron Dž. Sajgo", 
+                "Name[sr]": "Арон Џ. Сајго", 
+                "Name[x-test]": "xxAaron Seigoxx"
             }
-        ],
-        "Id": "Plasma/Generic",
-        "Name": "Generic",
-        "ServiceTypes": [ "KPackage/PackageStructure" ],
+        ], 
+        "Id": "Plasma/Generic", 
+        "Name": "Generic", 
+        "Name[ca@valencia]": "Genèric", 
+        "Name[ca]": "Genèric", 
+        "Name[cs]": "Obecné", 
+        "Name[da]": "Generisk", 
+        "Name[de]": "Generisch", 
+        "Name[es]": "General", 
+        "Name[et]": "Üldine", 
+        "Name[it]": "Generico", 
+        "Name[nl]": "Algemeen", 
+        "Name[pl]": "Ogólne", 
+        "Name[pt]": "Genérico", 
+        "Name[pt_BR]": "Genérico", 
+        "Name[ru]": "Пакет Plasma общего назначения", 
+        "Name[sk]": "Všeobecné", 
+        "Name[sl]": "Splošno", 
+        "Name[sr@ijekavian]": "Генерички", 
+        "Name[sr@ijekavianlatin]": "Generički", 
+        "Name[sr@latin]": "Generički", 
+        "Name[sr]": "Генерички", 
+        "Name[sv]": "Generella", 
+        "Name[uk]": "Загальний", 
+        "Name[x-test]": "xxGenericxx", 
+        "Name[zh_CN]": "常规", 
+        "ServiceTypes": [
+            "KPackage/PackageStructure"
+        ], 
         "Version": "1"
-    },
+    }, 
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }
