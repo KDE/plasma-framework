@@ -198,8 +198,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     if (!plugins.isEmpty()) {
-        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-        KPluginLoader loader(lst.first().libraryPath());
+        KPluginLoader loader(plugins.first().fileName());
         if (!isPluginVersionCompatible(loader)) {
             return 0;
         }
@@ -264,8 +263,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
 
     if (!plugins.isEmpty()) {
-        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-        KPluginLoader loader(lst.first().libraryPath());
+        KPluginLoader loader(plugins.first().fileName());
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
         KPluginFactory *factory = loader.factory();
         if (factory) {
@@ -370,8 +368,7 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_servicesPluginDir, filter);
 
     if (!plugins.isEmpty()) {
-        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-        KPluginLoader loader(lst.first().libraryPath());
+        KPluginLoader loader(plugins.first().fileName());
         if (!isPluginVersionCompatible(loader)) {
             return 0;
         }
@@ -411,8 +408,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
 
     if (!plugins.isEmpty()) {
-        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-        KPluginLoader loader(lst.first().libraryPath());
+        KPluginLoader loader(plugins.first().fileName());
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
         KPluginFactory *factory = loader.factory();
         if (factory) {
