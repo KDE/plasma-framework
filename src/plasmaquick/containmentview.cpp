@@ -95,6 +95,12 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
 
     emit q->containmentChanged();
 
+    //we are QuickViewSharedEngine::SizeRootObjectToView, but that's not enough, as
+    //the root object isn't immediately resized (done at the resizeEvent handler).
+    //by resising it just before restoring the containment, it removes a chain of resizes at startup
+    if (q->rootObject()) {
+        q->rootObject()->setSize(q->size());
+    }
     if (cont) {
         cont->reactToScreenChange();
         QObject::connect(cont, &Plasma::Containment::locationChanged,
