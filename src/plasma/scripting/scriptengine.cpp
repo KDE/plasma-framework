@@ -96,8 +96,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
             qCWarning(LOG_PLASMA) << "ScriptEngine" << plugins.first().name() << "does not provide Applet or DataEngine components, returning empty.";
             return 0;
         }
-        KPluginInfo::List lst = KPluginInfo::fromMetaData(plugins);
-        KPluginLoader loader(lst.first().libraryPath());
+        KPluginLoader loader(plugins.first().fileName());
         KPluginFactory *factory = loader.factory();
         if (factory) {
             engine = factory->create<Plasma::ScriptEngine>(0, args);
