@@ -66,8 +66,8 @@ QStringList knownLanguages(Types::ComponentTypes types)
 
     foreach (const auto &plugin, plugins) {
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && !componentTypes.contains(QStringLiteral("Applet")))
-          ||((types & Types::DataEngineComponent) && !componentTypes.contains(QStringLiteral("DataEngine")))) {
+        if (((types & Types::AppletComponent)     && componentTypes.contains(QStringLiteral("Applet")))
+          ||((types & Types::DataEngineComponent) && componentTypes.contains(QStringLiteral("DataEngine")))) {
             languages << plugin.value(QStringLiteral("X-Plasma-API"));
         }
     }
