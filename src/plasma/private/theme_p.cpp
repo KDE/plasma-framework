@@ -266,7 +266,7 @@ bool ThemePrivate::useCache()
         }
 
         const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + svgElementsFileName;
-        svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
+        svgElementsCache = KSharedConfig::openConfig(svgElementsFile, KConfig::SimpleConfig);
         QString currentIconThemePath;
         const auto *iconTheme = KIconLoader::global()->theme();
         if (iconTheme) {
@@ -277,7 +277,7 @@ bool ThemePrivate::useCache()
         if (oldIconThemePath != currentIconThemePath) {
             discardCache(PixmapCache | SvgElementsCache);
             globalGroup.writeEntry("currentIconThemePath", currentIconThemePath);
-            svgElementsCache = KSharedConfig::openConfig(svgElementsFile);
+            svgElementsCache = KSharedConfig::openConfig(svgElementsFile, KConfig::SimpleConfig);
         }
     }
 
