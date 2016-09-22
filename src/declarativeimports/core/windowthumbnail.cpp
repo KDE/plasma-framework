@@ -339,6 +339,12 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
             m_damaged = true;
             update();
         }
+    } else if (responseType == XCB_MAP_NOTIFY) {
+        if (reinterpret_cast<xcb_configure_notify_event_t *>(event)->window == m_winId) {
+            releaseResources();
+            m_damaged = true;
+            update();
+        }
     }
 #else
     Q_UNUSED(message)
