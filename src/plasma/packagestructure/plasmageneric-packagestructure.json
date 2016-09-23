@@ -36,6 +36,7 @@
         "Name[uk]": "Загальний", 
         "Name[x-test]": "xxGenericxx", 
         "Name[zh_CN]": "常规", 
+        "Name[zh_TW]": "一般", 
         "ServiceTypes": [
             "KPackage/PackageStructure"
         ], 

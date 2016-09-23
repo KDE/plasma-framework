@@ -34,6 +34,7 @@
         "Name[uk]": "Дії з контейнерами", 
         "Name[x-test]": "xxContainment Actionsxx", 
         "Name[zh_CN]": "容器动作", 
+        "Name[zh_TW]": "遏止動作", 
         "ServiceTypes": [
             "KPackage/PackageStructure"
         ], 

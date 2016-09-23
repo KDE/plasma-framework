@@ -35,6 +35,7 @@
         "Name[uk]": "Тема Плазми", 
         "Name[x-test]": "xxPlasma Themexx", 
         "Name[zh_CN]": "Plasma 主题", 
+        "Name[zh_TW]": "Plasma 主題", 
         "ServiceTypes": [
             "KPackage/PackageStructure"
         ], 

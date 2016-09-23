@@ -27,6 +27,7 @@
         "Name[uk]": "Плазмоїд", 
         "Name[x-test]": "xxPlasmoidxx", 
         "Name[zh_CN]": "小部件", 
+        "Name[zh_TW]": "元件", 
         "ServiceTypes": [
             "KPackage/PackageStructure"
         ], 
