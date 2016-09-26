@@ -226,6 +226,16 @@ void QMenuProxy::addSection(const QString &text)
     m_menu->addSection(text);
 }
 
+void QMenuProxy::removeMenuItem(QMenuItem *item)
+{
+    if (!item) {
+        return;
+    }
+
+    m_menu->removeAction(item->action());
+    m_items.removeOne(item);
+}
+
 void QMenuProxy::itemTriggered(QAction *action)
 {
     QMenuItem *item = qobject_cast<QMenuItem *>(action);

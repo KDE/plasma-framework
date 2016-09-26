@@ -147,6 +147,13 @@ public:
      */
     Q_INVOKABLE void addSection(const QString &text);
 
+    /**
+     * This removes MenuItem 'item'
+     *
+     * @since 5.27
+     */
+    Q_INVOKABLE void removeMenuItem(QMenuItem *item);
+
 protected:
     bool event(QEvent *event) Q_DECL_OVERRIDE;
 
