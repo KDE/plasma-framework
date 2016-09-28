@@ -103,16 +103,18 @@ QtQuickControlStyle.ButtonStyle {
                 visible: when
                 Layout.minimumWidth: units.iconSizes.small
                 Layout.maximumWidth: Layout.minimumWidth
+
+                Layout.minimumHeight: Layout.minimumWidth
+                Layout.maximumHeight: Layout.maximumWidth
+
                 Layout.alignment: Qt.AlignVCenter
-                height: width
 
                 source: Component {
                     PlasmaCore.SvgItem {
                         visible: control.menu !== null
-                        anchors.fill: parent
                         svg: PlasmaCore.Svg {
                             imagePath: "widgets/arrows"
-                            colorGroup: style.controlHovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.Theme.NormalColorGroup
+                            colorGroup: style.controlHovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
                         }
                         elementId: "down-arrow"
                     }
