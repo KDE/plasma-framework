@@ -1,6 +1,6 @@
 # KDE Config File
 [General]
 Name=Plasma QML/C++ Applet
-Comment=A Plasma Applet Template written in an hybrid mix of QML and C++: a plasma applet template displaying a svg picture and a text.
+Comment=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
 Category=Plasma/Plasmoid
 Icon=cpp-plasmoid.png
