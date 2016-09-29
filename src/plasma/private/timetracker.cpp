@@ -22,11 +22,14 @@
 #include <QDateTime>
 #include <qmetaobject.h>
 #include <QFile>
+#include <QDebug>
 #include <qjsondocument.h>
 #include <qjsonarray.h>
 #include <QTimer>
 
 using namespace Plasma;
+
+Q_GLOBAL_STATIC_WITH_ARGS(const qint64, s_beginning, (QDateTime::currentDateTime().toMSecsSinceEpoch()))
 
 struct TimeTrackerWriter : QObject {
     Q_OBJECT
@@ -39,11 +42,10 @@ public:
         QJsonArray array;
 
         Q_FOREACH(const ObjectHistory& history, m_data) {
-            QVariantMap map;
-            map[QStringLiteral("events")] = serializeEvents(history.events);
-            map[QStringLiteral("initial")] = history.initial;
-
-            array.append(QJsonValue::fromVariant(map));
+            array.append(QJsonObject {
+                { QStringLiteral("events"), serializeEvents(history.events) },
+                { QStringLiteral("initial"), QJsonValue::fromVariant(history.initial) }
+            });
         }
         Q_ASSERT(array.count() == m_data.count());
         QJsonDocument doc;
@@ -63,14 +65,14 @@ public:
     QHash<QObject*, ObjectHistory> m_data;
 
 private:
-    QVariantList serializeEvents(const QVector<TimeEvent>& events) const {
-        QVariantList ret;
+    QJsonArray serializeEvents(const QVector<TimeEvent>& events) const {
+        QJsonArray ret;
         Q_ASSERT(!events.isEmpty());
         foreach(const TimeEvent& ev, events) {
-            QVariantMap map;
-            map[QStringLiteral("comment")] = ev.comment;
-            map[QStringLiteral("time")] = ev.moment.toMSecsSinceEpoch();
-            ret.append(map);
+            ret.append(QJsonObject {
+                { QStringLiteral("comment"), ev.comment },
+                { QStringLiteral("time"), ev.moment.toMSecsSinceEpoch() - *s_beginning }
+            });
         }
         Q_ASSERT(ret.count() == events.count());
         return ret;
@@ -81,7 +83,7 @@ Q_GLOBAL_STATIC(TimeTrackerWriter, s_writer)
 TimeTracker::TimeTracker(QObject* o)
     : QObject(o)
 {
-    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(o->metaObject()->className(), o->objectName()) });
+    *s_beginning * 1; // ensure it's initialized
 
     QTimer* t = new QTimer(this);
     t->setInterval(2000);
@@ -94,14 +96,15 @@ TimeTracker::TimeTracker(QObject* o)
 
 void TimeTracker::init()
 {
+    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(parent()->metaObject()->className(), parent()->objectName()) });
+
     QMetaMethod propChange = metaObject()->method(metaObject()->indexOfSlot("propertyChanged()"));
     Q_ASSERT(propChange.isValid() && metaObject()->indexOfSlot("propertyChanged()")>=0);
 
     QObject* o = parent();
     for (int i = 0, pc = o->metaObject()->propertyCount(); i<pc; ++i) {
         QMetaProperty prop = o->metaObject()->property(i);
-        if (prop.isFinal() || prop.isConstant())
-            m_history.initial[prop.name()] = prop.read(o);
+        m_history.initial[prop.name()] = prop.read(o);
 
         if (prop.hasNotifySignal())
             connect(o, prop.notifySignal(), this, propChange);
@@ -123,22 +126,14 @@ void TimeTracker::propertyChanged()
     Q_ASSERT(sender() == parent());
 
     const QMetaObject* mo = parent()->metaObject();
+
     for (int i = 0, pc = mo->propertyCount(); i<pc; ++i) {
-        QMetaProperty prop = mo->property(i);
+        const QMetaProperty prop = mo->property(i);
         if (prop.notifySignalIndex() == senderSignalIndex()) {
             QString val;
-            if (prop.type() < QVariant::UserType) {
-                QVariant var = prop.read(parent());
-                if(var.canConvert<QString>()) {
-                    val = var.toString();
-                }
-            }
-
-            if (val.isEmpty()) {
-                val = QStringLiteral("<unknown %1>").arg(prop.typeName());
-            }
-            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(prop.name(), val)});
-            break;
+            QDebug d(&val);
+            d << prop.read(parent());
+            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(prop.name(), val.trimmed())});
         }
     }
 }
