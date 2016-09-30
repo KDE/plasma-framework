@@ -1,6 +1,20 @@
 # KDE Config File
 [General]
 Name=Simple Plasma Wallpaper
+Name[ca]=Fons d'escriptori senzill del Plasma
+Name[es]=Fondo de escritorio sencillo para Plasma
+Name[nl]=Eenvoudige Plasma-bureaubladachtergrond
+Name[pt]=Papel de Parede Simples do Plasma
+Name[sv]=Enkelt Plasma skrivbordsunderlägg
+Name[uk]=Просте тло стільниці Плазми
+Name[x-test]=xxSimple Plasma Wallpaperxx
 Comment=Simple Plasma Wallpaper template: a Plasma wallpaper template displaying a text
+Comment[ca]=Plantilla de fons d'escriptori senzill del Plasma: una plantilla de fons d'escriptori del Plasma que mostra un text
+Comment[es]=Plantilla de fondo de escritorio sencillo para Plasma: una plantilla de fondo de escritorio para Plasma que muestra un texto
+Comment[nl]=Sjabloon voor eenvoudige Plasma-bureaubladachtergrond: een sjabloon voor het tonen een Plasma-bureaubladachtergrond met een tekst
+Comment[pt]=Modelo de Papel de Parede Simples do Plasma: um modelo de papel de parede do Plasma que mostra um texto
+Comment[sv]=Enkel mall för Plasma-skrivbordsunderlägg: en mall för ett Plasma-skrivbordsunderlägg som visar en text
+Comment[uk]=Простий шаблон тла стільниці Плазми: шаблон шпалер, який показує текст
+Comment[x-test]=xxSimple Plasma Wallpaper template: a Plasma wallpaper template displaying a textxx
 Category=Plasma/Wallpaper
 Icon=

@@ -1,6 +1,20 @@
 # KDE Config File
 [General]
 Name=Plasma QML/C++ Applet
+Name[ca]=Miniaplicació QML/C++ del Plasma
+Name[es]=Miniaplicación en QML/C++ para Plasma
+Name[nl]=Plasma-applet voor QML/C++ Applet
+Name[pt]='Applet' em QML/C++ do Plasma
+Name[sv]=Plasma QML/C++ miniprogram
+Name[uk]=Аплет Плазми мовами QML/C++
+Name[x-test]=xxPlasma QML/C++ Appletxx
 Comment=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
+Comment[ca]=Una plantilla de miniaplicació del Plasma escrita en una barreja híbrida de QML i C++: una plantilla de miniaplicació del Plasma que mostra una imatge SVG i un text
+Comment[es]=Una plantilla de miniaplicación para Plasma escrita en una mezcla híbrida de QML y C++: una plantilla de miniaplicación para Plasma que muestra una imagen SVG y un texto
+Comment[nl]=Een sjabloon voor Plasma-applet geschreven in een hybride mengel van QML en C++: een Plasma-appletsjabloon die een SVG afbeelding en een tekst toont
+Comment[pt]=Um modelo de 'applets' do Plasma criado numa mistura híbrida de QML e C++: um modelo de 'applets' do Plasma que mostra uma figura em SVG e um texto
+Comment[sv]=En mall för Plasma-miniprogram skriven med en blandning av QML och C++: en mall för ett Plasma-miniprogram som visar en SVG-bild och en text
+Comment[uk]=Шаблон аплету Плазми на гібридній суміші QML і C++: шаблон аплету Плазми, який показує зображення SVG і текст
+Comment[x-test]=xxA Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a textxx
 Category=Plasma/Plasmoid
 Icon=cpp-plasmoid.png
