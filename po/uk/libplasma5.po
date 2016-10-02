@@ -1,0 +1,1151 @@
+# Translation of libplasma5.po to Ukrainian
+# Copyright (C) 2014-2016 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2014, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: libplasma5\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2016-09-15 07:20+0000\n"
+"PO-Revision-Date: 2016-03-17 19:19+0200\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Вихідні дні"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Події"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Завдання"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Інше"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:153
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Сьогодні"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:155
+msgid "Reset calendar to today"
+msgstr "Сьогоднішній день у календарі"
+
+#: declarativeimports/calendar/qml/MonthView.qml:236
+msgid "Previous Month"
+msgstr "Попередній місяць"
+
+#: declarativeimports/calendar/qml/MonthView.qml:237
+msgid "Next Month"
+msgstr "Наступний місяць"
+
+#: declarativeimports/calendar/qml/MonthView.qml:264
+msgid "Previous Year"
+msgstr "Попередній рік"
+
+#: declarativeimports/calendar/qml/MonthView.qml:265
+msgid "Next Year"
+msgstr "Наступний рік"
+
+#: declarativeimports/calendar/qml/MonthView.qml:297
+msgid "Previous Decade"
+msgstr "Попередня декада"
+
+#: declarativeimports/calendar/qml/MonthView.qml:298
+msgid "Next Decade"
+msgstr "Наступна декада"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr "Гаразд"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: plasma/applet.cpp:334
+msgid "Unknown"
+msgstr "Невідомий"
+
+#: plasma/applet.cpp:651
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Задіяти віджет «%1»"
+
+#: plasma/containment.cpp:127 plasma/private/applet_p.cpp:124
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "Вилучити віджет «%1»"
+
+#: plasma/containment.cpp:132
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "Налаштувати віджет «%1»"
+
+#: plasma/corona.cpp:317 plasma/corona.cpp:390
+msgid "Lock Widgets"
+msgstr "Заблокувати віджети"
+
+#: plasma/corona.cpp:317
+msgid "Unlock Widgets"
+msgstr "Розблокувати віджети"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Визначає, чи слід створювати кеш теми на диску."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Максимальний розмір кешу теми на диску у кілобайтах. Зауважте, що файли кешу "
+"є доволі рідкісними, отже, максимальний обсяг може бути і не використано. "
+"Тому встановлення більшого розміру забезпечить безпечне користування темами."
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:99
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "Файли даних"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:101
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "Скрипти"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+msgid "Service Descriptions"
+msgstr "Описи служб"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:107
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "Переклади"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:63 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "Головний файл скрипту"
+
+#: plasma/packagestructure/packages.cpp:43
+msgid "Tests"
+msgstr "Тести"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "Зображення"
+
+#: plasma/packagestructure/packages.cpp:86
+#: plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr "Тематичні зображення"
+
+#: plasma/packagestructure/packages.cpp:92
+#: plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "Визначення налаштування"
+
+#: plasma/packagestructure/packages.cpp:97
+#: plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "Інтерфейс користувача"
+
+#: plasma/packagestructure/packages.cpp:105
+msgid "Screenshot"
+msgstr "Знімок вікна"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:38
+msgid "Images for dialogs"
+msgstr "Зображення для вікон"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+msgid "Generic dialog background"
+msgstr "Загальне тло вікна"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+msgid "Theme for the logout dialog"
+msgstr "Тема для вікна виходу"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+msgid "Wallpaper packages"
+msgstr "Пакунки зображень тла стільниці"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#: plasma/packagestructure/plasmathemepackage.cpp:103
+msgid "Images for widgets"
+msgstr "Зображення для віджетів"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+msgid "Background image for widgets"
+msgstr "Зображення тла для віджетів"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+msgid "Analog clock face"
+msgstr "Циферблат аналогового годинника"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+msgid "Background image for panels"
+msgstr "Зображення тла для панелей"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+msgid "Background for graphing widgets"
+msgstr "Тло для віджетів графіки"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+msgid "Background image for tooltips"
+msgstr "Зображення тла для підказок"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+msgid "Opaque images for dialogs"
+msgstr "Непрозорі зображення для діалогових вікон"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+msgid "Opaque generic dialog background"
+msgstr "Непрозоре тло типового діалогового вікна"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+msgid "Opaque theme for the logout dialog"
+msgstr "Непрозора тема для вікна виходу"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+msgid "Opaque images for widgets"
+msgstr "Непрозорі зображення для віджетів"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+msgid "Opaque background image for panels"
+msgstr "Непрозоре зображення для тла панелей"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+msgid "Opaque background image for tooltips"
+msgstr "Непрозоре зображення для тла підказок"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:93
+msgid "Low color images for dialogs"
+msgstr "Малокольорові зображення для діалогових вікон"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:95
+#: plasma/packagestructure/plasmathemepackage.cpp:97
+msgid "Low color generic dialog background"
+msgstr "Малокольорові зображення для типового вікна"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:99
+#: plasma/packagestructure/plasmathemepackage.cpp:101
+msgid "Low color theme for the logout dialog"
+msgstr "Малокольорова тема для вікна виходу"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:105
+#: plasma/packagestructure/plasmathemepackage.cpp:107
+msgid "Low color background image for widgets"
+msgstr "Малокольорові зображення для тла віджетів"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:109
+#: plasma/packagestructure/plasmathemepackage.cpp:111
+msgid "Low color analog clock face"
+msgstr "Малокольоровий циферблат аналогового годинника"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:113
+#: plasma/packagestructure/plasmathemepackage.cpp:115
+msgid "Low color background image for panels"
+msgstr "Малокольорові зображення для тла панелей"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:117
+#: plasma/packagestructure/plasmathemepackage.cpp:119
+msgid "Low color background for graphing widgets"
+msgstr "Малокольорове зображення для тла віджетів-графіків"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:121
+#: plasma/packagestructure/plasmathemepackage.cpp:123
+msgid "Low color background image for tooltips"
+msgstr "Малокольорове зображення для тла підказок"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:125
+msgid "KColorScheme configuration file"
+msgstr "Файл налаштування KColorScheme"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+msgid "Configuration UI pages model"
+msgstr "Модель сторінок налаштовування інтерфейсу"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+msgid "Configuration XML file"
+msgstr "XML-файл налаштування"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+msgid "Custom expander for compact applets"
+msgstr "Нетиповий доповнювач для компактних аплетів"
+
+#: plasma/pluginloader.cpp:92
+msgid "Accessibility"
+msgstr "Доступність"
+
+#: plasma/pluginloader.cpp:93
+msgid "Application Launchers"
+msgstr "Інструменти запуску програм"
+
+#: plasma/pluginloader.cpp:94
+msgid "Astronomy"
+msgstr "Астрономія"
+
+#: plasma/pluginloader.cpp:95
+msgid "Date and Time"
+msgstr "Дата і час"
+
+#: plasma/pluginloader.cpp:96
+msgid "Development Tools"
+msgstr "Інструменти для розробки"
+
+#: plasma/pluginloader.cpp:97
+msgid "Education"
+msgstr "Освіта"
+
+#: plasma/pluginloader.cpp:98
+msgid "Environment and Weather"
+msgstr "Середовище і погода"
+
+#: plasma/pluginloader.cpp:99
+msgid "Examples"
+msgstr "Приклади"
+
+#: plasma/pluginloader.cpp:100
+msgid "File System"
+msgstr "Файлова система"
+
+#: plasma/pluginloader.cpp:101
+msgid "Fun and Games"
+msgstr "Забавки та ігри"
+
+#: plasma/pluginloader.cpp:102
+msgid "Graphics"
+msgstr "Графіка"
+
+#: plasma/pluginloader.cpp:103
+msgid "Language"
+msgstr "Мова"
+
+#: plasma/pluginloader.cpp:104
+msgid "Mapping"
+msgstr "Картографія"
+
+#: plasma/pluginloader.cpp:105
+msgid "Miscellaneous"
+msgstr "Різне"
+
+#: plasma/pluginloader.cpp:106
+msgid "Multimedia"
+msgstr "Мультимедіа"
+
+#: plasma/pluginloader.cpp:107
+msgid "Online Services"
+msgstr "Мережеві служби"
+
+#: plasma/pluginloader.cpp:108
+msgid "Productivity"
+msgstr "Офісні програми"
+
+#: plasma/pluginloader.cpp:109
+msgid "System Information"
+msgstr "Системна інформація"
+
+#: plasma/pluginloader.cpp:110
+msgid "Utilities"
+msgstr "Інструменти"
+
+#: plasma/pluginloader.cpp:111
+msgid "Windows and Tasks"
+msgstr "Вікна і завдання"
+
+#: plasma/pluginloader.cpp:112
+msgid "Clipboard"
+msgstr "Буфер обміну"
+
+#: plasma/pluginloader.cpp:113
+msgid "Tasks"
+msgstr "Завдання"
+
+#: plasma/pluginloader.cpp:622 plasma/pluginloader.cpp:623
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Різне"
+
+#: plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "Параметри віджета «%1»…"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"Віджетом %1 не визначено, який з рушіїв скриптів (ScriptEngine) "
+"використовувати."
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Не вдалося відкрити пакунок %1, потрібний для віджета %2."
+
+#: plasma/private/applet_p.cpp:183
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Не вдалося створити рушій скриптів %1 для віджета %2."
+
+#: plasma/private/applet_p.cpp:202
+msgid "Alternatives..."
+msgstr "Альтернативи…"
+
+#: plasma/private/applet_p.cpp:269
+msgid "Widget Removed"
+msgstr "Віджет вилучено"
+
+#: plasma/private/applet_p.cpp:270
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Віджет «%1» було вилучено."
+
+#: plasma/private/applet_p.cpp:272
+msgid "Panel Removed"
+msgstr "Панель вилучено"
+
+#: plasma/private/applet_p.cpp:273
+msgid "A panel has been removed."
+msgstr "Панель було вилучено."
+
+#: plasma/private/applet_p.cpp:276
+msgid "Desktop Removed"
+msgstr "Стільницю вилучено"
+
+#: plasma/private/applet_p.cpp:277
+msgid "A desktop has been removed."
+msgstr "Стільницю було вилучено."
+
+#: plasma/private/applet_p.cpp:280
+msgid "Undo"
+msgstr "Вернути"
+
+#: plasma/private/applet_p.cpp:370
+msgid "Widget Settings"
+msgstr "Параметри віджета"
+
+#: plasma/private/applet_p.cpp:377
+msgid "Remove this Widget"
+msgstr "Вилучити цей віджет"
+
+#: plasma/private/applet_p.cpp:384
+#: plasma/private/associatedapplicationmanager.cpp:83
+#: plasma/private/associatedapplicationmanager.cpp:142
+#: plasma/private/associatedapplicationmanager.cpp:184
+msgid "Run the Associated Application"
+msgstr "Запустити пов’язану програму"
+
+#: plasma/private/applet_p.cpp:476
+msgid "Script initialization failed"
+msgstr "Спроба ініціалізації скрипту завершилася невдало"
+
+#: plasma/private/associatedapplicationmanager.cpp:80
+#: plasma/private/associatedapplicationmanager.cpp:181
+#, kde-format
+msgid "Open with %1"
+msgstr "Відкрити за допомогою %1"
+
+#: plasma/private/containment_p.cpp:76
+msgid "Remove this Panel"
+msgstr "Вилучити цю панель"
+
+#: plasma/private/containment_p.cpp:78
+msgid "Remove this Activity"
+msgstr "Вилучити цей простір дій"
+
+#: plasma/private/containment_p.cpp:84
+msgid "Activity Settings"
+msgstr "Налаштувати простір дій"
+
+#: plasma/private/containment_p.cpp:90
+msgid "Add Widgets..."
+msgstr "Додати віджети..."
+
+#: plasma/private/containment_p.cpp:205
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Не вдалося знайти потрібного компонента: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Оприлюднення віджета у мережі надасть вам змогу отримувати доступ до цього "
+"віджета з іншого комп’ютера для віддаленого керування."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "Оприлюднити цей віджет у мережі"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "Дозволити доступ будь-кому вільний доступ до цього віджета"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Некоректна (нульова) служба, не вдалося виконати жодних дій."
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Керування пакунками Плазми"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr "Визначити хеш SHA1 для пакунка за адресою <path>"
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr ""
+"Для встановлення і вилучення, працює з пакунками, встановленими для всіх "
+"користувачів."
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"Тип пакунка, наприклад theme (тема), wallpaper (тло стільниці), plasmoid "
+"(плазмоїд), dataengine (рушій даних), runner (система запуску), layout-"
+"template (шаблон компонування) тощо."
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "Встановити пакунок до <path>"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr "Показ даних щодо пакунка <name>"
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "Оновити пакунок до <path>"
+
+#: plasmapkg/main.cpp:67
+msgid "List installed packages"
+msgstr "Показати список встановлених пакунків"
+
+#: plasmapkg/main.cpp:68
+msgid "List all known package types that can be installed"
+msgstr ""
+"Показати список усіх відомих типів пакунків, які програма може встановлювати"
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "Вилучити пакунок з назвою <name>"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"Абсолютний шлях до кореня пакунків. Якщо його не вказано, для пошуку буде "
+"використано стандартні каталоги даних цього сеансу KDE."
+
+#: plasmapkg/plasmapkg.cpp:100
+#, kde-format
+msgid "Failed to generate a Package hash for %1"
+msgstr "Не вдалося визначити хеш пакунка для %1"
+
+#: plasmapkg/plasmapkg.cpp:103
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr "Хеш SHA1 для пакунка за адресою %1: «%2»"
+
+#: plasmapkg/plasmapkg.cpp:140 plasmapkg/plasmapkg.cpp:187
+#: plasmapkg/plasmapkg.cpp:208
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "шпалери"
+
+#: plasmapkg/plasmapkg.cpp:193
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "плазмоїд"
+
+#: plasmapkg/plasmapkg.cpp:199
+msgctxt "package type"
+msgid "package"
+msgstr "пакунок"
+
+#: plasmapkg/plasmapkg.cpp:204
+msgctxt "package type"
+msgid "theme"
+msgstr "тема"
+
+#: plasmapkg/plasmapkg.cpp:213
+msgctxt "package type"
+msgid "dataengine"
+msgstr "рушій даних"
+
+#: plasmapkg/plasmapkg.cpp:218
+msgctxt "package type"
+msgid "runner"
+msgstr "засіб запуску"
+
+#: plasmapkg/plasmapkg.cpp:223
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "додаток шпалер"
+
+#: plasmapkg/plasmapkg.cpp:228
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr "вигляд і поведінка"
+
+#: plasmapkg/plasmapkg.cpp:233
+msgctxt "package type"
+msgid "shell"
+msgstr "оболонка"
+
+#: plasmapkg/plasmapkg.cpp:238
+msgctxt "package type"
+msgid "layout-template"
+msgstr "шаблон компонування"
+
+#: plasmapkg/plasmapkg.cpp:243
+msgctxt "package type"
+msgid "kwineffect"
+msgstr "kwineffect"
+
+#: plasmapkg/plasmapkg.cpp:248
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr "windowswitcher"
+
+#: plasmapkg/plasmapkg.cpp:253
+msgctxt "package type"
+msgid "kwinscript"
+msgstr "kwinscript"
+
+#: plasmapkg/plasmapkg.cpp:263
+#, kde-format
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "Не вдалося знайти програми встановлення для пакунка типу %1"
+
+#: plasmapkg/plasmapkg.cpp:281
+#, kde-format
+msgid "Listing service types: %1"
+msgstr "Будуємо список типів служб: %1"
+
+#: plasmapkg/plasmapkg.cpp:349
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr "Помилка: додаток %1 не встановлено."
+
+#: plasmapkg/plasmapkg.cpp:359
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr "Слід вказати одну з дій: встановити, вилучити або показати список."
+
+#: plasmapkg/plasmapkg.cpp:467
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr "Помилка: не вдалося знайти метаданих додатка: %1"
+
+#: plasmapkg/plasmapkg.cpp:470
+#, kde-format
+msgid "Showing info for package: %1"
+msgstr "Показуємо дані щодо пакунка: %1"
+
+#: plasmapkg/plasmapkg.cpp:471
+#, kde-format
+msgid "      Name : %1"
+msgstr "      Назва: %1"
+
+#: plasmapkg/plasmapkg.cpp:472
+#, kde-format
+msgid "   Comment : %1"
+msgstr "   Коментар: %1"
+
+#: plasmapkg/plasmapkg.cpp:473
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "    Додаток: %1"
+
+#: plasmapkg/plasmapkg.cpp:474
+#, kde-format
+msgid "    Author : %1"
+msgstr "      Автор: %1"
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "      Path : %1"
+msgstr "       Шлях: %1"
+
+#: plasmapkg/plasmapkg.cpp:486
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr ""
+"Виявлено конфлікт між кореневою текою пакунка і загальними параметрами. Будь "
+"ласка, визначіть, яке з налаштувань є правильним."
+
+#: plasmapkg/plasmapkg.cpp:511
+msgid "Addon Name"
+msgstr "Назва додатка"
+
+#: plasmapkg/plasmapkg.cpp:512
+msgid "Service Type"
+msgstr "Тип служби"
+
+#: plasmapkg/plasmapkg.cpp:513
+msgid "Path"
+msgstr "Шлях"
+
+#: plasmapkg/plasmapkg.cpp:514
+msgid "Type Argument"
+msgstr "Аргумент типу"
+
+#: plasmapkg/plasmapkg.cpp:562
+msgid "Package types that are installable with this tool:"
+msgstr "Типи пакунків, які здатна встановлювати ця програма:"
+
+#: plasmapkg/plasmapkg.cpp:563
+msgid "Built in:"
+msgstr "Вбудовані:"
+
+#: plasmapkg/plasmapkg.cpp:566
+msgid "DataEngine"
+msgstr "Рушій даних"
+
+#: plasmapkg/plasmapkg.cpp:567
+msgid "Layout Template"
+msgstr "Шаблон компонування"
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Look and Feel"
+msgstr "Вигляд і поведінка"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Package"
+msgstr "Пакунок"
+
+#: plasmapkg/plasmapkg.cpp:570
+msgid "Plasmoid"
+msgstr "Плазмоїд"
+
+#: plasmapkg/plasmapkg.cpp:571
+msgid "Runner"
+msgstr "Засіб для запуску"
+
+#: plasmapkg/plasmapkg.cpp:572
+msgid "Shell"
+msgstr "Оболонка"
+
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Theme"
+msgstr "Тема"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Wallpaper Images"
+msgstr "Зображення шпалер"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Animated Wallpaper"
+msgstr "Анімовані шпалери"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "KWin Effect"
+msgstr "Ефект KWin"
+
+#: plasmapkg/plasmapkg.cpp:577
+msgid "KWin Window Switcher"
+msgstr "Перемикач вікон KWin"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "KWin Script"
+msgstr "Скрипт KWin"
+
+#: plasmapkg/plasmapkg.cpp:585
+msgid "Provided by plugins:"
+msgstr "Керовані додатками:"
+
+#: plasmapkg/plasmapkg.cpp:606
+msgid "Provided by .desktop files:"
+msgstr "Керовані файлами .desktop:"
+
+#: plasmapkg/plasmapkg.cpp:627
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr "%1 успішно оновлено"
+
+#: plasmapkg/plasmapkg.cpp:629
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "%1 успішно встановлено"
+
+#: plasmapkg/plasmapkg.cpp:632
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr "Помилка: спроба встановлення %1 зазнала невдачі: %2"
+
+#: plasmapkg/plasmapkg.cpp:644
+#, kde-format
+msgid "Upgrading package from file: %1"
+msgstr "Оновлення пакунка з файла: %1"
+
+#: plasmapkg/plasmapkg.cpp:649
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr "%1 успішно вилучено"
+
+#: plasmapkg/plasmapkg.cpp:651
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr "Помилка: спроба вилучення %1 зазнала невдачі: %2"
+
+#: plasmaquick/appletquickitem.cpp:512
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Помилка під час завантаження файла QML: %1"
+
+#: plasmaquick/appletquickitem.cpp:514
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Помилка під час спроби завантажити аплет: пакунка не існує. %1"
+
+#: plasmaquick/configview.cpp:109
+#, kde-format
+msgid "%1 Settings"
+msgstr "Налаштувати віджет «%1»"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr "Типові параметри для теми тощо."
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr "Схема кольорів, яку слід використовувати для вікон програм."
+
+#: plasmaquick/private/packages.cpp:42
+msgid "Preview Images"
+msgstr "Ескізи зображень"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr "Ескіз засобу керування входом до системи"
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr "Ескіз вікна блокування"
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr "Ескіз засобу перемикання користувачів"
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Ескіз засобу перемикання віртуальних стільниць"
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr "Ескіз вікна вітання"
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr "Ескіз для KRunner"
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr "Ескіз для обрамлення вікон"
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr "Ескіз засобу перемикання вікон"
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr "Керування входом до системи"
+
+#: plasmaquick/private/packages.cpp:53
+msgid "Main Script for Login Manager"
+msgstr "Основний скрипт засобу керування входом до системи"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr "Діалогове вікно виходу з системи"
+
+#: plasmaquick/private/packages.cpp:56
+msgid "Main Script for Logout Dialog"
+msgstr "Основний скрипт діалогового вікна виходу з системи"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr "Засіб блокування екрана"
+
+#: plasmaquick/private/packages.cpp:59
+msgid "Main Script for Lock Screen"
+msgstr "Основний скрипт засобу блокування екрана"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr "Інтерфейс для швидкого перемикання користувачів"
+
+#: plasmaquick/private/packages.cpp:62
+msgid "Main Script for User Switcher"
+msgstr "Основний скрипт засобу перемикання користувачів"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr "Перемикач віртуальних стільниць"
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Основний скрипт засобу перемикання віртуальних стільниць"
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr "Екранні сповіщення"
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Основний скрипт засобу показу екранних сповіщень"
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr "Вікно вітання"
+
+#: plasmaquick/private/packages.cpp:71
+msgid "Main Script for Splash Screen"
+msgstr "Основний скрипт вікна вітання"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr "Інтерфейс KRunner"
+
+#: plasmaquick/private/packages.cpp:74
+msgid "Main Script KRunner"
+msgstr "Основний скрипт KRunner"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr "Обрамлення вікон"
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr "Основний скрипт засобу керування обрамленням вікон"
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr "Перемикач вікон"
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr "Основний скрипт засобу перемикання вікон"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:496
+msgid "Content dropped"
+msgstr "Скинуто дані"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:497
+msgid "Fetching file type..."
+msgstr "Отримання типу файла..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:636
+msgid "Plasma Package"
+msgstr "Пакунок Плазми"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:637
+msgid "Install"
+msgstr "Встановити"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:641
+msgid "Widgets"
+msgstr "Віджети"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:654
+msgid "Icon"
+msgstr "Піктограма"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:658
+msgid "Wallpaper"
+msgstr "Шпалери"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:704
+msgid "Package Installation Failed"
+msgstr "Не вдалося встановити пакунок"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:723
+msgid "The package you just dropped is invalid."
+msgstr "Скинутий вами пакунок є некоректним."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:1031
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "Налаштування віджета «%1»"
+
+#~ msgid ""
+#~ "Could not load installer for package of type %1. Error reported was: %2"
+#~ msgstr ""
+#~ "Не вдалося знайти програми встановлення для пакунка типу %1. Повідомлення "
+#~ "помилки: %2"
+
+#~ msgid "Could not create package root directory: %1"
+#~ msgstr "Не вдалося створити кореневий каталог пакунка: %1"
+
+#~ msgid "No such file: %1"
+#~ msgstr "Такого файла не існує: %1"
+
+#~ msgid "Could not open package file, unsupported archive format: %1 %2"
+#~ msgstr ""
+#~ "Не вдалося відкрити файл пакунка, непідтримуваний формат архіву: %1 %2"
+
+#~ msgid "Could not open package file: %1"
+#~ msgstr "Не вдалося відкрити файл пакунка: %1"
+
+#~ msgid "No metadata file in package: %1"
+#~ msgstr "У пакунку не виявлено файла метаданих: %1"
+
+#~ msgid "Package plugin name not specified: %1"
+#~ msgstr "Не вказано назви додатка у пакунку: %1"
+
+#~ msgid "Package plugin name %1 contains invalid characters"
+#~ msgstr "Назва додатка у пакунку %1 містить некоректні символи"
+
+#~ msgid "%1 already exists"
+#~ msgstr "%1 вже існує"
+
+#~ msgid "Could not move package to destination: %1"
+#~ msgstr "Не вдалося пересунути пакунок до його місця призначення: %1"
+
+#~ msgid "Could not copy package to destination: %1"
+#~ msgstr "Не вдалося скопіювати пакунок до його місця призначення: %1"
+
+#~ msgid "Could not create local service directory: %1"
+#~ msgstr "Не вдалося створити каталог локальної служби: %1"
+
+#~ msgid ""
+#~ "Could not register package as service (this is not necessarily fatal): %1"
+#~ msgstr ""
+#~ "Не вдалося зареєструвати пакунок як службу (така помилка не обов’язково є "
+#~ "критичною): %1"
+
+#~ msgid "%1 does not exist"
+#~ msgstr "%1 не існує"
+
+#~ msgid "Could not delete package from: %1"
+#~ msgstr "Не вдалося вилучити пакунок з %1"
+
+#~ msgctxt "@title:window %1 is the name of the containment"
+#~ msgid "Remove %1"
+#~ msgstr "Вилучити віджет «%1»"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Do you really want to remove this %1?"
+#~ msgstr "Ви справді бажаєте вилучити %1?"
+
+#~ msgid "Applets furniture"
+#~ msgstr "Компоненти аплетів"
+
+#~ msgid "Explorer UI for adding widgets"
+#~ msgstr "Графічний інтерфейс перегляду для додавання віджетів"
+
+#~ msgid "User interface for the views that will show containments"
+#~ msgstr ""
+#~ "Інтерфейс користувача для панелей перегляду, які показують вміст "
+#~ "контейнерів"
+
+#~ msgid "Default layout file"
+#~ msgstr "Типовий файл компонування"
+
+#~ msgid "Default plugins for containments, containmentActions, etc."
+#~ msgstr "Типові додатки для контейнерів, дій з контейнерами тощо"
+
+#~ msgid "Error message shown when an applet fails to load"
+#~ msgstr ""
+#~ "Повідомлення про помилку, яке буде показано, якщо аплет не вдалося "
+#~ "завантажити"
+
+#~ msgid "QML component that shows an applet in a popup"
+#~ msgstr "Компонент QML, який показує аплет у контекстному вікні"
+
+#~ msgid ""
+#~ "Compact representation of an applet when collapsed in a popup, for "
+#~ "instance as an icon. Applets can override this component."
+#~ msgstr ""
+#~ "Компактне представлення аплету, якщо його згорнуто у контекстне вікно, "
+#~ "наприклад піктограму. Аплети можуть перевизначати цей компонент."
+
+#~ msgid "QML component for the configuration dialog for applets"
+#~ msgstr "Компонент QML діалогового вікна налаштовування для аплетів"
+
+#~ msgid "QML component for the configuration dialog for containments"
+#~ msgstr "Компонент QML діалогового вікна налаштовування для контейнерів"
+
+#~ msgid "Panel configuration UI"
+#~ msgstr "Інтерфейс налаштовування панелей"
+
+#~ msgid "QML component for choosing an alternate applet"
+#~ msgstr "Компонент QML для вибору альтернативного аплету"
+
+#~ msgid ""
+#~ "A UI for writing, loading and running desktop scripts in the current live "
+#~ "session"
+#~ msgstr ""
+#~ "Графічний інтерфейс для написання, завантаження та виконання скриптів "
+#~ "стільниці у поточному сеансі"
