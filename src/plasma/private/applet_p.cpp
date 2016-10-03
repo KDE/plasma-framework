@@ -184,30 +184,37 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
                   api, appletDescription.name()));
     }
 
-    if (!q->isContainment() && q->pluginInfo().isValid()) {
-        QStringList provides = q->pluginInfo().property(QStringLiteral("X-Plasma-Provides")).toStringList();
-        if (!provides.isEmpty()) {
-            auto filter = [&provides](const KPluginMetaData &md) -> bool
-            {
-                foreach (const QString &p, provides) {
-                    if (md.value(QStringLiteral("X-Plasma-Provides")).contains(p)) {
-                        return true;
-                    }
-                }
-                return false;
-            };
-            QList<KPluginMetaData> applets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
-
-            if (applets.count() > 1) {
-                QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("preferences-desktop-default-applications")), i18n("Alternatives..."), q);
-                q->actions()->addAction(QStringLiteral("alternatives"), a);
-                QObject::connect(a, &QAction::triggered,[=] {
-                    if (q->containment()) {
-                        emit q->containment()->appletAlternativesRequested(q);
-                    }
-                });
+    if (!q->isContainment()) {
+        QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("preferences-desktop-default-applications")), i18n("Alternatives..."), q);
+        q->actions()->addAction(QStringLiteral("alternatives"), a);
+        QObject::connect(a, &QAction::triggered,[=] {
+            if (q->containment()) {
+                emit q->containment()->appletAlternativesRequested(q);
             }
-        }
+        });
+
+        QObject::connect(q, &Applet::contextualActionsAboutToShow, a, [=]() {
+            bool hasAlternatives = false;
+
+            QStringList provides = q->pluginInfo().property(QStringLiteral("X-Plasma-Provides")).toStringList();
+            if (!provides.isEmpty() && q->immutability() == Types::Mutable) {
+                auto filter = [&provides](const KPluginMetaData &md) -> bool
+                {
+                    foreach (const QString &p, provides) {
+                        if (md.value(QStringLiteral("X-Plasma-Provides")).contains(p)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                QList<KPluginMetaData> applets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
+
+                if (applets.count() > 1) {
+                    hasAlternatives = true;
+                }
+            }
+            a->setVisible(hasAlternatives);
+        });
     }
 }
 
