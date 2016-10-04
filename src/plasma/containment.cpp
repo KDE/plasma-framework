@@ -213,10 +213,11 @@ void Containment::restore(KConfigGroup &group)
                     //for any other type of containment, there are no defaults
                     break;
             }
-            defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
-
-            foreach (const QString &key, defaultActionsCfg.keyList()) {
-                setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
+            if (defaultActionsCfg.isValid()) {
+                defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
+                foreach (const QString &key, defaultActionsCfg.keyList()) {
+                    setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
+                }
             }
         }
     }
