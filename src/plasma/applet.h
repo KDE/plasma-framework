@@ -92,8 +92,19 @@ public:
      * @param appletId a unique id used to differentiate between multiple
      *      instances of the same Applet type
      * @since 4.6
+     *
+     * @deprecated prefer using KPluginMetaData
      */
-    explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
+    PLASMA_DEPRECATED explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
+
+    /**
+     * @param parent the QObject this applet is parented to
+     * @param metadata the plugin information object for this Applet
+     * @param appletId a unique id used to differentiate between multiple
+     *      instances of the same Applet type
+     * @since 5.27
+     */
+    explicit Applet(const KPluginMetaData &metadata, QObject *parent = 0, uint appletId = 0);
 
     ~Applet();
 
@@ -270,10 +281,18 @@ public:
 //METADATA
     /**
      * @return metadata information about this plugin
-     * @see KPluginInfo
+     * @see KPluginInfo, pluginMetaData
      * @since 5.0
+     * @deprecated use pluginMetaData instead
      */
-    KPluginInfo pluginInfo() const;
+    PLASMA_DEPRECATED KPluginInfo pluginInfo() const;
+
+    /**
+     * @return metadata information about this plugin
+     *
+     * @since 5.27
+     */
+    KPluginMetaData pluginMetaData() const;
 
     /**
      * Returns the user-visible title for the applet, as specified in the

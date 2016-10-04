@@ -60,20 +60,25 @@
 namespace Plasma
 {
 
-Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
+Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
     :  QObject(parent),
-       d(new AppletPrivate(KService::Ptr(), &info, appletId, this))
+       d(new AppletPrivate(info, appletId, this))
 {
-    qCDebug(LOG_PLASMA) << " From KPluginInfo, valid? " << info.isValid();
+    qCDebug(LOG_PLASMA) << " From KPluginMetaData, valid? " << info.isValid();
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     d->init();
     d->setupPackage();
 }
 
+Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
+    :  Applet(info.toMetaData(), parent, appletId)
+{
+}
+
 Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
     :  QObject(parent),
-       d(new AppletPrivate(KService::serviceByStorageId(serviceID), 0, appletId, this))
+       d(new AppletPrivate(KPluginMetaData(serviceID), appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -84,12 +89,12 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QObject(0),
        d(new AppletPrivate(
-             KService::serviceByStorageId(args.count() > 0 && args.first().canConvert<QString>() ? args[0].toString() : QString()), 0,
+             KPluginMetaData(args.count() > 0 && args.first().canConvert<QString>() ? args[0].toString() : QString()),
              args.count() > 1 ? args[1].toInt() : 0, this))
 {
     setParent(parentObject);
     if (args.count() > 0 && args.first().canConvert<QVariantMap>()) {
-        d->appletDescription = KPluginInfo(args);
+        d->appletDescription = KPluginInfo(args).toMetaData();
     }
 
     if (args.contains("org.kde.plasma:force-create")) {
@@ -104,7 +109,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::Applet(const QString &packagePath, uint appletId)
     : QObject(0),
-      d(new AppletPrivate(KService::Ptr(new KService(packagePath + "/metadata.desktop")), 0, appletId, this))
+      d(new AppletPrivate(KPluginMetaData(packagePath + QStringLiteral("/metadata.desktop")), appletId, this))
 {
     d->init(packagePath);
     d->setupPackage();
@@ -146,7 +151,7 @@ void Applet::save(KConfigGroup &g) const
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
-    group.writeEntry("plugin", d->appletDescription.pluginName());
+    group.writeEntry("plugin", d->appletDescription.pluginId());
 
     if (!d->started) {
         return;
@@ -375,6 +380,11 @@ void Applet::setBusy(bool busy)
 }
 
 KPluginInfo Applet::pluginInfo() const
+{
+    return KPluginInfo(d->appletDescription);
+}
+
+KPluginMetaData Applet::pluginMetaData() const
 {
     return d->appletDescription;
 }

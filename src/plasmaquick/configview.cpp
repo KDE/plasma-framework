@@ -85,7 +85,7 @@ void ConfigViewPrivate::init()
         qWarning() << "Null applet passed to constructor";
         return;
     }
-    if (!applet.data()->pluginInfo().isValid()) {
+    if (!applet.data()->pluginMetaData().isValid()) {
         qWarning() << "Invalid applet passed to constructor";
         return;
     }
@@ -98,7 +98,7 @@ void ConfigViewPrivate::init()
     if (!rootPath.isEmpty()) {
         kdeclarative.setTranslationDomain("plasma_applet_" + rootPath);
     } else {
-        kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginInfo().pluginName());
+        kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginMetaData().pluginId());
     }
     kdeclarative.setupBindings();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");

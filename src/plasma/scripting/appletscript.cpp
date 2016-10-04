@@ -114,7 +114,7 @@ Package AppletScript::package() const
 KPluginInfo AppletScript::description() const
 {
     Q_ASSERT(d->applet);
-    return d->applet->d->appletDescription;
+    return d->applet->pluginInfo();
 }
 
 Plasma::Types::ContainmentType AppletScript::containmentType() const

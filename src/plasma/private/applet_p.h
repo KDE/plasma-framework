@@ -27,8 +27,6 @@
 
 #include <kactioncollection.h>
 #include <kconfigskeleton.h>
-#include <kservice.h>
-#include <kplugininfo.h>
 #include <KNotification>
 
 #include <KPackage/Package>
@@ -46,7 +44,7 @@ class Service;
 class AppletPrivate
 {
 public:
-    AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet);
+    AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *applet);
     virtual ~AppletPrivate();
 
     void init(const QString &packagePath = QString(), const QVariantList &args = QVariantList());
@@ -85,7 +83,7 @@ public:
     QString launchErrorMessage;
 
     // applet info we keep around in case its needed
-    KPluginInfo appletDescription;
+    KPluginMetaData appletDescription;
     QString customTitle;
     QString icon;
 

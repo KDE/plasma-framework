@@ -125,7 +125,7 @@ Storage::Storage(QObject *parent)
     while ((parentObject = parentObject->parent())) {
         Plasma::Applet *applet = qobject_cast<Plasma::Applet *>(parentObject);
         if (applet) {
-            m_clientName = applet->pluginInfo().pluginName();
+            m_clientName = applet->pluginMetaData().pluginId();
             break;
         }
 

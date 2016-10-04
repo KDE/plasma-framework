@@ -220,7 +220,7 @@ uint AppletInterface::id() const
 
 QString AppletInterface::pluginName() const
 {
-    return applet()->pluginInfo().isValid() ? applet()->pluginInfo().pluginName() : QString();
+    return applet()->pluginMetaData().isValid() ? applet()->pluginMetaData().pluginId() : QString();
 }
 
 QString AppletInterface::icon() const
@@ -282,8 +282,8 @@ void AppletInterface::setToolTipMainText(const QString &text)
 
 QString AppletInterface::toolTipSubText() const
 {
-    if (m_toolTipSubText.isNull() && applet()->pluginInfo().isValid()) {
-        return applet()->pluginInfo().comment();
+    if (m_toolTipSubText.isNull() && applet()->pluginMetaData().isValid()) {
+        return applet()->pluginMetaData().description();
     } else {
         return m_toolTipSubText;
     }
@@ -626,7 +626,7 @@ QString AppletInterface::downloadPath(const QString &file)
 
 QString AppletInterface::downloadPath() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginInfo().pluginName() + '/';
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginMetaData().pluginId() + '/';
 
     if (!QFile::exists(downloadDir)) {
         QDir dir(QChar('/'));
@@ -638,7 +638,7 @@ QString AppletInterface::downloadPath() const
 
 QStringList AppletInterface::downloadedFiles() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginInfo().pluginName() + '/';
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginMetaData().pluginId() + '/';
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }

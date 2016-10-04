@@ -298,7 +298,7 @@ void Containment::restoreContents(KConfigGroup &group)
     }
 
     foreach (Applet *applet, Containment::applets()) {
-        if (!applet->pluginInfo().isValid()) {
+        if (!applet->pluginMetaData().isValid()) {
             applet->updateConstraints(Plasma::Types::UiReadyConstraint);
         }
     }

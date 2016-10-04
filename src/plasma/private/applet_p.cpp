@@ -28,14 +28,14 @@
 #include <QFile>
 #include <qstandardpaths.h>
 #include <QTimer>
-
+#include <QJsonArray>
 #include <QDebug>
 #include <QMessageBox>
+
 #include <klocalizedstring.h>
 #include <kkeysequencewidget.h>
 #include <kglobalaccel.h>
 #include <KConfigLoader>
-#include <KPluginTrader>
 #include <kpackage/packageloader.h>
 
 #include "containment.h"
@@ -51,13 +51,13 @@
 namespace Plasma
 {
 
-AppletPrivate::AppletPrivate(KService::Ptr service, const KPluginInfo *info, int uniqueID, Applet *applet)
+AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *applet)
     : appletId(uniqueID),
       q(applet),
       immutability(Types::Mutable),
       oldImmutability(Types::Mutable),
-      appletDescription(info ? *info : KPluginInfo(service)),
-      icon(appletDescription.isValid() ? appletDescription.icon() : QString()),
+      appletDescription(info),
+      icon(appletDescription.isValid() ? appletDescription.iconName() : QString()),
       mainConfig(0),
       pendingConstraints(Types::NoConstraint),
       script(0),
@@ -138,16 +138,16 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         return;
     }
 
-    QString api = appletDescription.property(QStringLiteral("X-Plasma-API")).toString();
+    QString api = appletDescription.rawData().value(QStringLiteral("X-Plasma-API")).toString();
 
     if (api.isEmpty()) {
         q->setLaunchErrorMessage(i18n("The %1 widget did not define which ScriptEngine to use.", appletDescription.name()));
         return;
     }
 
-    QString path = appletDescription.property(QStringLiteral("X-Plasma-RootPath")).toString();
+    QString path = appletDescription.rawData().value(QStringLiteral("X-Plasma-RootPath")).toString();
     if (path.isEmpty()) {
-        path = packagePath.isEmpty() ? appletDescription.pluginName() : packagePath;
+        path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
     }
     Plasma::Package p = PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), api);
     p.setPath(path);
@@ -159,7 +159,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         package = 0;
         q->setLaunchErrorMessage(i18nc("Package file, name of the widget",
                                        "Could not open the %1 package required for the %2 widget.",
-                                       appletDescription.pluginName(), appletDescription.name()));
+                                       appletDescription.pluginId(), appletDescription.name()));
         return;
     }
 
@@ -171,8 +171,8 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
     //It's valid, let's try to load the icon from within the package
     if (script) {
         //use the absolute path of the in-package icon as icon name
-        if (appletDescription.icon().startsWith('/')) {
-            icon = package->filePath("", appletDescription.icon().toUtf8());
+        if (appletDescription.iconName().startsWith('/')) {
+            icon = package->filePath("", appletDescription.iconName().toUtf8());
         }
     //package not valid, get rid of it
     } else {
@@ -196,12 +196,13 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         QObject::connect(q, &Applet::contextualActionsAboutToShow, a, [=]() {
             bool hasAlternatives = false;
 
-            QStringList provides = q->pluginInfo().property(QStringLiteral("X-Plasma-Provides")).toStringList();
+            const QStringList provides = KPluginMetaData::readStringList(q->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides"));
             if (!provides.isEmpty() && q->immutability() == Types::Mutable) {
                 auto filter = [&provides](const KPluginMetaData &md) -> bool
                 {
+                    const QStringList provided = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-Provides"));
                     foreach (const QString &p, provides) {
-                        if (md.value(QStringLiteral("X-Plasma-Provides")).contains(p)) {
+                        if (provided.contains(p)) {
                             return true;
                         }
                     }
@@ -491,7 +492,7 @@ QString AppletPrivate::globalName() const
         return QString();
     }
 
-    return appletDescription.pluginName();
+    return appletDescription.pluginId();
 }
 
 void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)

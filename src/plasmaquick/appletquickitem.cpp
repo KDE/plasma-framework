@@ -54,7 +54,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
 
 void AppletQuickItemPrivate::init()
 {
-    if (!applet->pluginInfo().isValid()) {
+    if (!applet->pluginMetaData().isValid()) {
         // This `qmlObject` is used in other parts of the code
         qmlObject = new KDeclarative::QmlObject(q);
         return;
@@ -402,12 +402,12 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
             d->containmentPackage = d->applet->containment()->package();
         }
 
-        if (d->applet->pluginInfo().isValid()) {
+        if (d->applet->pluginMetaData().isValid()) {
             const QString rootPath = d->applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
             if (!rootPath.isEmpty()) {
                 d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
             } else {
-                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + d->applet->pluginInfo().pluginName());
+                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + d->applet->pluginMetaData().pluginId());
             }
         }
 
