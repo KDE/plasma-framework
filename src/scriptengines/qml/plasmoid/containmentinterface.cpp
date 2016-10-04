@@ -190,40 +190,6 @@ void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType typ
     appletScript()->setContainmentType(type);
 }
 
-QVariantList ContainmentInterface::availableScreenRegion() const
-{
-    QRegion reg = QRect(0, 0, width(), height());
-    int screenId = screen();
-    if (screenId > -1 && m_containment->corona()) {
-        reg = m_containment->corona()->availableScreenRegion(screenId);
-    }
-
-    QVariantList regVal;
-    foreach (QRect rect, reg.rects()) {
-        //make it relative
-        QRect geometry = m_containment->corona()->screenGeometry(screenId);
-        rect.moveTo(rect.topLeft() - geometry.topLeft());
-        regVal << QVariant::fromValue(QRectF(rect));
-    }
-    return regVal;
-}
-
-QRect ContainmentInterface::availableScreenRect() const
-{
-    QRect rect(0, 0, width(), height());
-
-    int screenId = screen();
-
-    if (screenId > -1 && m_containment->corona()) {
-        rect = m_containment->corona()->availableScreenRect(screenId);
-        //make it relative
-        QRect geometry = m_containment->corona()->screenGeometry(screenId);
-        rect.moveTo(rect.topLeft() - geometry.topLeft());
-    }
-
-    return rect;
-}
-
 Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)
 {
     return createApplet(plugin, args, QRectF(pos, QSize()));

@@ -656,6 +656,49 @@ void AppletInterface::executeAction(const QString &name)
     }
 }
 
+QVariantList AppletInterface::availableScreenRegion() const
+{
+    QVariantList regVal;
+
+    if (!applet()->containment() || !applet()->containment()->corona()) {
+        return regVal;
+    }
+
+    QRegion reg = QRect(0, 0, width(), height());
+    int screenId = screen();
+    if (screenId > -1) {
+        reg = applet()->containment()->corona()->availableScreenRegion(screenId);
+    }
+
+    foreach (QRect rect, reg.rects()) {
+        //make it relative
+        QRect geometry = applet()->containment()->corona()->screenGeometry(screenId);
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
+        regVal << QVariant::fromValue(QRectF(rect));
+    }
+    return regVal;
+}
+
+QRect AppletInterface::availableScreenRect() const
+{
+    if (!applet()->containment() || !applet()->containment()->corona()) {
+        return QRect();
+    }
+
+    QRect rect(0, 0, width(), height());
+
+    int screenId = screen();
+
+    if (screenId > -1) {
+        rect = applet()->containment()->corona()->availableScreenRect(screenId);
+        //make it relative
+        QRect geometry = applet()->containment()->corona()->screenGeometry(screenId);
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
+    }
+
+    return rect;
+}
+
 bool AppletInterface::event(QEvent *event)
 {
     // QAction keyboard shortcuts cannot work with QML2 (and probably newver will

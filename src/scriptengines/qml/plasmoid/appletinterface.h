@@ -227,6 +227,18 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QString configurationRequiredReason READ configurationRequiredReason WRITE setConfigurationRequiredReason NOTIFY configurationRequiredReasonChanged)
 
+    /**
+     * screen area free of panels: the coordinates are relative to the containment,
+     * it's independent from the screen position
+     * For more precise available geometry use availableScreenRegion()
+     */
+    Q_PROPERTY(QRect availableScreenRect READ availableScreenRect NOTIFY availableScreenRectChanged)
+
+    /**
+     * The available region of this screen, panels excluded. It's a list of rectangles
+     */
+    Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
     ~AppletInterface();
@@ -300,6 +312,10 @@ public:
      * @returns The list of files that have been downloaded
      */
     Q_INVOKABLE QStringList downloadedFiles() const;
+
+    QVariantList availableScreenRegion() const;
+
+    QRect availableScreenRect() const;
 
     static AppletInterface *qmlAttachedProperties(QObject *object)
     {
@@ -416,6 +432,8 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
     void associatedApplicationChanged();
     void associatedApplicationUrlsChanged();
+    void availableScreenRegionChanged();
+    void availableScreenRectChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();
