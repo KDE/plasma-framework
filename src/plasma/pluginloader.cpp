@@ -56,8 +56,7 @@ class PluginLoaderPrivate
 {
 public:
     PluginLoaderPrivate()
-        : isDefaultLoader(false),
-          packageRE("[^a-zA-Z0-9\\-_]")
+        : isDefaultLoader(false)
     {
     }
 
@@ -73,7 +72,6 @@ public:
     static QString s_plasmoidsPluginDir;
     static QString s_servicesPluginDir;
     static QString s_containmentActionsPluginDir;
-    QRegExp packageRE;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
