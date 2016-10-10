@@ -102,7 +102,7 @@ void Containment::init()
     if (d->type == Types::NoContainmentType) {
         //setContainmentType(Plasma::Types::DesktopContainment);
         //Try to determine the containment type. It must be done as soon as possible
-        QString type = pluginInfo().property(QStringLiteral("X-Plasma-ContainmentType")).toString();
+        QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
 
         if (type == QLatin1String("Panel")) {
             setContainmentType(Plasma::Types::PanelContainment);

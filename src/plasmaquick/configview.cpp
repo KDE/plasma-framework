@@ -94,7 +94,7 @@ void ConfigViewPrivate::init()
 
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(q->engine());
-    const QString rootPath = applet.data()->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
+    const QString rootPath = applet.data()->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
     if (!rootPath.isEmpty()) {
         kdeclarative.setTranslationDomain("plasma_applet_" + rootPath);
     } else {
@@ -143,7 +143,7 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    const QStringList kcms = applet.data()->pluginInfo().property(QStringLiteral("X-Plasma-ConfigPlugins")).toStringList();
+    const QStringList kcms = KPluginMetaData::readStringList(applet.data()->pluginMetaData().rawData(), QStringLiteral("X-Plasma-ConfigPlugins"));
     if (!kcms.isEmpty()) {
         if (!configModel) {
             configModel = new ConfigModel(q);

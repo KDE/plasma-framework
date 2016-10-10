@@ -403,7 +403,7 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
         }
 
         if (d->applet->pluginMetaData().isValid()) {
-            const QString rootPath = d->applet->pluginInfo().property(QStringLiteral("X-Plasma-RootPath")).toString();
+            const QString rootPath = d->applet->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
             if (!rootPath.isEmpty()) {
                 d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
             } else {
