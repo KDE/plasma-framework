@@ -221,7 +221,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         p.setRequired("mainscript", false);
         p.setPath(name);
 
-        KPluginMetaData md(p.filePath("metadata"));
+        const KPluginMetaData md(p.metadata());
         const KPackage::Package fp = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), md.value(QStringLiteral("X-Plasma-RootPath")));
         p.setFallbackPackage(fp);
 
@@ -234,8 +234,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
-        QVariantList allArgs;
-        allArgs << p.metadata().fileName() << appletId << args;
+        QVariantList allArgs = { p.metadata().fileName(), appletId, args };
 
         if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             return new Containment(0, allArgs);
@@ -499,42 +498,22 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     return Package();
 }
 
-KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
+QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
 {
-    KPluginInfo::List list;
-
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
-        list = internalAppletInfo(category);
-    }
-
     //FIXME: this assumes we are always use packages.. no pure c++
+    std::function<bool(const KPluginMetaData&)> filter;
     if (category.isEmpty()) { //use all but the excluded categories
         KConfigGroup group(KSharedConfig::openConfig(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
 
-        auto filter = [&excluded, &parentApp](const KPluginMetaData &md) -> bool
+        filter = [excluded, parentApp](const KPluginMetaData &md) -> bool
         {
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
             return (pa.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
         };
-
-        //NOTE: it still produces kplugininfos from KServices because some user code expects
-        //info.sevice() to be valid and would crash ohtherwise
-        auto plugins = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
-        foreach (auto& md, plugins) {
-            auto pi = KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
-            if (!pi.isValid()) {
-                qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
-                continue;
-            }
-            list << pi;
-        }
-        return list;
-
-
     } else { //specific category (this could be an excluded one - is that bad?)
 
-        auto filter = [&category, &parentApp](const KPluginMetaData &md) -> bool
+        filter = [category, parentApp](const KPluginMetaData &md) -> bool
         {
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
             if (category == QLatin1String("Miscellaneous")) {
@@ -543,21 +522,31 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
                 return (pa.isEmpty() || pa == parentApp) && md.category() == category;
             }
         };
-
-
-        //NOTE: it still produces kplugininfos from KServices because some user code expects
-        //info.sevice() to be valid and would crash ohtherwise
-        const auto plugins = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
-        foreach (auto& md, plugins) {
-            auto pi =  KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
-            if (!pi.isValid()) {
-                qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
-                continue;
-            }
-            list << pi;
-        }
-        return list;
     }
+
+    QList<KPluginMetaData> list;
+    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
+        list = KPluginInfo::toMetaData(internalAppletInfo(category)).toList();
+    }
+    return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
+}
+
+KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
+{
+    KPluginInfo::List list;
+    const auto plugins = listAppletMetaData(category, parentApp);
+
+    //NOTE: it still produces kplugininfos from KServices because some user code expects
+    //info.sevice() to be valid and would crash ohtherwise
+    foreach (auto& md, plugins) {
+        auto pi = md.metaDataFileName().endsWith(".json") ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
+        if (!pi.isValid()) {
+            qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
+            continue;
+        }
+        list << pi;
+    }
+    return list;
 }
 
 KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)

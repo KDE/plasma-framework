@@ -330,7 +330,7 @@ private:
      * @param parent a QObject parent; you probably want to pass in 0
      * @since 4.3
      */
-    Containment(const QString &packagePath, uint appletId);
+    Containment(const KPluginMetaData &md, uint appletId);
 
     Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet *))
     Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())

@@ -167,8 +167,31 @@ public:
      *                  list containing only applets not specifically
      *                  registered to an application.
      * @return list of applets
+     *
+     * @deprecated use listAppletMetaData. Doesn't support metadata.json packages.
      **/
-    KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
+    PLASMA_DEPRECATED KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
+
+    /**
+     * Returns a list of all known applets.
+     * This may skip applets based on security settings and ExcludeCategories in the application's config.
+     *
+     * @param category Only applets matchin this category will be returned.
+     *                 Useful in conjunction with knownCategories.
+     *                 If "Misc" is passed in, then applets without a
+     *                 Categories= entry are also returned.
+     *                 If an empty string is passed in, all applets are
+     *                 returned.
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list containing only applets not specifically
+     *                  registered to an application.
+     * @return list of applets
+     *
+     * @since 5.28
+     **/
+    QList<KPluginMetaData> listAppletMetaData(const QString &category, const QString &parentApp = QString());
 
     /**
      * Returns a list of all known applets associated with a certain mimetype.
