@@ -79,8 +79,8 @@ Containment::Containment(QObject *parent, const QVariantList &args)
     setHasConfigurationInterface(true);
 }
 
-Containment::Containment(const QString &packagePath, uint appletId)
-    : Applet(packagePath, appletId),
+Containment::Containment(const KPluginMetaData &md, uint appletId)
+    : Applet(md, nullptr, appletId),
       d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!

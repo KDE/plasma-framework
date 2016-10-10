@@ -57,7 +57,7 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
       immutability(Types::Mutable),
       oldImmutability(Types::Mutable),
       appletDescription(info),
-      icon(appletDescription.isValid() ? appletDescription.iconName() : QString()),
+      icon(appletDescription.iconName()),
       mainConfig(0),
       pendingConstraints(Types::NoConstraint),
       script(0),

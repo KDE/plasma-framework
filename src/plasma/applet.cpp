@@ -60,6 +60,13 @@
 namespace Plasma
 {
 
+static KPluginMetaData appletMetadataForDirectory(const QString &path)
+{
+    return QFile::exists(path + QLatin1String("/metadata.json"))
+                ? KPluginMetaData(path + QLatin1String("/metadata.json"))
+                : KPluginMetaData::fromDesktopFile(path + QLatin1String("/metadata.desktop"), { QStringLiteral("plasma-applet.desktop") });
+}
+
 Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
     :  QObject(parent),
        d(new AppletPrivate(info, appletId, this))
@@ -88,14 +95,19 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QObject(0),
-       d(new AppletPrivate(
-             KPluginMetaData(args.count() > 0 && args.first().canConvert<QString>() ? args[0].toString() : QString()),
-             args.count() > 1 ? args[1].toInt() : 0, this))
+       d(new AppletPrivate(KPluginMetaData(), args.count() > 1 ? args[1].toInt() : 0, this))
 {
     setParent(parentObject);
-    if (args.count() > 0 && args.first().canConvert<QVariantMap>()) {
-        d->appletDescription = KPluginInfo(args).toMetaData();
+    if (args.count() > 0) {
+        const QVariant first = args.first();
+        if (first.canConvert<QString>()) {
+            d->appletDescription = KPluginMetaData(first.toString());
+        } else if (first.canConvert<QVariantMap>()) {
+            auto metadata = first.toMap().value(QStringLiteral("MetaData")).toMap();
+            d->appletDescription = KPluginMetaData(QJsonObject::fromVariantMap(metadata), {});
+        }
     }
+    d->icon = d->appletDescription.iconName();
 
     if (args.contains("org.kde.plasma:force-create")) {
         setProperty("org.kde.plasma:force-create", true);
@@ -109,7 +121,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
 Applet::Applet(const QString &packagePath, uint appletId)
     : QObject(0),
-      d(new AppletPrivate(KPluginMetaData(packagePath + QStringLiteral("/metadata.desktop")), appletId, this))
+      d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
 {
     d->init(packagePath);
     d->setupPackage();
@@ -767,15 +779,14 @@ bool Applet::hasValidAssociatedApplication() const
 
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 {
-    const QString metadataPath = path + QLatin1String("/metadata.desktop");
-    if (QFile::exists(metadataPath)) {
-        KService service(metadataPath);
-        const QStringList &types = service.serviceTypes();
+    const KPluginMetaData md = appletMetadataForDirectory(path);
+    if (md.isValid()) {
+        QStringList types = md.serviceTypes();
 
         if (types.contains(QStringLiteral("Plasma/Containment"))) {
-            return new Containment(path, appletId);
+            return new Containment(md, appletId);
         } else {
-            return new Applet(path, appletId);
+            return new Applet(md, nullptr, appletId);
         }
     }
 
