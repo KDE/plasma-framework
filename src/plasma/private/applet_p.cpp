@@ -29,9 +29,7 @@
 #include <qstandardpaths.h>
 #include <QTimer>
 #include <QJsonArray>
-#include <QDir>
 #include <QDebug>
-#include <QFileInfo>
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
@@ -115,9 +113,8 @@ AppletPrivate::~AppletPrivate()
     delete modificationsTimer;
 }
 
-void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
+void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
 {
-    const QString packagePath = _packagePath.isEmpty() ? QFileInfo(appletDescription.metaDataFileName()).dir().path() : _packagePath;
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a Corona, which is not available at this point
     q->setHasConfigurationInterface(true);
