@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "dialog.h"
+#include "config-plasma.h"
 #include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
 #include "view.h"

@@ -4,12 +4,6 @@ else()
     add_definitions(-DHAVE_XCB_SHAPE=0)
 endif()
 
-if(HAVE_KWAYLAND)
-    add_definitions(-DHAVE_KWAYLAND=1)
-else()
-    add_definitions(-DHAVE_KWAYLAND=0)
-endif()
-
 set(plasmaquick_LIB_SRC
     appletquickitem.cpp
     dialog.cpp
