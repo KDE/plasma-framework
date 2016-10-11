@@ -1121,6 +1121,12 @@ bool Dialog::event(QEvent *event)
 
         if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+            d->setupWaylandIntegration();
+        } else if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceAboutToBeDestroyed) {
+#if HAVE_KWAYLAND
+            delete d->shellSurface;
+            d->shellSurface = nullptr;
+#endif
         }
 #endif
     } else if (event->type() == QEvent::Show) {
@@ -1131,11 +1137,6 @@ bool Dialog::event(QEvent *event)
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
         if (d->shellSurface) {
             d->shellSurface->setPosition(me->pos());
-        }
-    } else if (event->type() == QEvent::PlatformSurface) {
-        QPlatformSurfaceEvent *se = static_cast<QPlatformSurfaceEvent *>(event);
-        if (se->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-            d->setupWaylandIntegration();
         }
     }
 
