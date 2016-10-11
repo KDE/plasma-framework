@@ -66,6 +66,14 @@ find_package(KF5XmlGui ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5Notifications ${KF5_DEP_VERSION} REQUIRED)
 find_package(KF5Package ${KF5_DEP_VERSION} REQUIRED)
 
+find_package(KF5Wayland ${KF5_DEP_VERSION})
+set_package_properties(KF5Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
+                       TYPE OPTIONAL
+                      )
+if(KF5Wayland_FOUND)
+  set(HAVE_KWAYLAND 1)
+endif()
+
 find_package(KF5DocTools ${KF5_DEP_VERSION})
 set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
                        TYPE OPTIONAL

@@ -42,6 +42,13 @@ target_link_libraries(KF5PlasmaQuick
         KF5::QuickAddons
 )
 
+if(HAVE_KWAYLAND)
+    target_link_libraries(KF5PlasmaQuick
+        PRIVATE
+        KF5::WaylandClient
+    )
+endif()
+
 if(HAVE_X11)
     target_link_libraries(KF5PlasmaQuick
         PRIVATE

@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include "dialog.h"
+#include "config-plasma.h"
 #include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
 #include "view.h"
@@ -46,6 +47,11 @@
 #include <Plasma/Corona>
 
 #include <QDebug>
+
+#if HAVE_KWAYLAND
+#include <KWayland/Client/plasmashell.h>
+#include <KWayland/Client/surface.h>
+#endif
 
 #include <config-plasma.h>
 #if HAVE_XCB_SHAPE
@@ -128,12 +134,18 @@ public:
     bool mainItemContainsPosition(const QPointF &point) const;
     QPointF positionAdjustedForMainItem(const QPointF &point) const;
 
+    void setupWaylandIntegration();
+
+
     Dialog *q;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
     QTimer hintsCommitTimer;
+#if HAVE_KWAYLAND
+    QPointer<KWayland::Client::PlasmaShellSurface> shellSurface;
+#endif
 
     QRect cachedGeometry;
     bool hasMask;
@@ -664,6 +676,28 @@ QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
                    qBound(itemRect.top(), point.y(), itemRect.bottom()));
 }
 
+void DialogPrivate::setupWaylandIntegration()
+{
+#if HAVE_KWAYLAND
+    if (shellSurface) {
+        // already setup
+        return;
+    }
+
+    using namespace KWayland::Client;
+    PlasmaShell *interface = DialogShadows::self()->waylandPlasmaShellInterface();
+    if (!interface) {
+        return;
+    }
+    Surface *s = Surface::fromWindow(q);
+    if (!s) {
+        return;
+    }
+    shellSurface = interface->createSurface(s, q);
+#endif
+}
+
+
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
@@ -721,7 +755,6 @@ void Dialog::setMainItem(QQuickItem *mainItem)
         if (d->mainItemLayout) {
             disconnect(d->mainItemLayout, 0, this, 0);
         }
-
 
         d->mainItem = mainItem;
 
@@ -1089,12 +1122,23 @@ bool Dialog::event(QEvent *event)
 
         if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+            d->setupWaylandIntegration();
+        } else if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceAboutToBeDestroyed) {
+#if HAVE_KWAYLAND
+            delete d->shellSurface;
+            d->shellSurface = nullptr;
+#endif
         }
 #endif
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
+    } else if (event->type() == QEvent::Move) {
+        QMoveEvent *me = static_cast<QMoveEvent *>(event);
+        if (d->shellSurface) {
+            d->shellSurface->setPosition(me->pos());
+        }
     }
 
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked

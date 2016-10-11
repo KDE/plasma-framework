@@ -18,17 +18,26 @@
 
 #include "dialogshadows_p.h"
 
-#include <QGlobalStatic>
 #include <QWindow>
 #include <QPainter>
 #include <config-plasma.h>
 
+#include <KWindowSystem>
 #if HAVE_X11
 #include <QX11Info>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
 #include <X11/Xlib-xcb.h>
 #include <fixx11h.h>
+#endif
+
+#if HAVE_KWAYLAND
+#include <KWayland/Client/connection_thread.h>
+#include <KWayland/Client/registry.h>
+#include <KWayland/Client/shadow.h>
+#include <KWayland/Client/shm_pool.h>
+#include <KWayland/Client/surface.h>
+#include <KWayland/Client/plasmashell.h>
 #endif
 
 #include <qdebug.h>
@@ -39,11 +48,12 @@ public:
     Private(DialogShadows *shadows)
         : q(shadows)
 #if HAVE_X11
-        , _connection(0x0),
+        ,_connection(0x0),
         _gc(0x0)
-        , m_isX11(QX11Info::isPlatformX11())
+        , m_isX11(KWindowSystem::isPlatformX11())
 #endif
     {
+        setupWaylandIntegration();
     }
 
     ~Private()
@@ -54,16 +64,23 @@ public:
     }
 
     void freeX11Pixmaps();
+    void freeWaylandBuffers();
     void clearPixmaps();
     void setupPixmaps();
     Qt::HANDLE createPixmap(const QPixmap &source);
     void initPixmap(const QString &element);
     QPixmap initEmptyPixmap(const QSize &size);
     void updateShadow(const QWindow *window, Plasma::FrameSvg::EnabledBorders);
+    void updateShadowX11(const QWindow *window, Plasma::FrameSvg::EnabledBorders);
+    void updateShadowWayland(const QWindow *window, Plasma::FrameSvg::EnabledBorders);
     void clearShadow(const QWindow *window);
+    void clearShadowX11(const QWindow *window);
+    void clearShadowWayland(const QWindow *window);
     void updateShadows();
     void windowDestroyed(QObject *deletedObject);
     void setupData(Plasma::FrameSvg::EnabledBorders enabledBorders);
+
+    void setupWaylandIntegration();
 
     DialogShadows *q;
     QList<QPixmap> m_shadowPixmaps;
@@ -83,6 +100,17 @@ public:
     //! graphical context
     xcb_gcontext_t _gc;
     bool m_isX11;
+#endif
+
+#if HAVE_KWAYLAND
+    struct Wayland {
+        KWayland::Client::ShadowManager *manager = nullptr;
+        KWayland::Client::ShmPool *shmPool = nullptr;
+        KWayland::Client::PlasmaShell *plasmaShell = nullptr;
+
+        QList<KWayland::Client::Buffer::Ptr> shadowBuffers;
+    };
+    Wayland m_wayland;
 #endif
 
     QHash<Plasma::FrameSvg::EnabledBorders, QVector<unsigned long> > data;
@@ -145,6 +173,16 @@ void DialogShadows::removeWindow(const QWindow *window)
         d->clearPixmaps();
     }
 }
+
+void DialogShadows::setEnabledBorders(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
+{
+    if (!window || !d->m_windows.contains(window)) {
+        return;
+    }
+
+    d->updateShadow(window, enabledBorders);
+}
+
 
 void DialogShadows::Private::windowDestroyed(QObject *deletedObject)
 {
@@ -269,6 +307,13 @@ void DialogShadows::Private::setupPixmaps()
     m_emptyVerticalPix = initEmptyPixmap(QSize(1, q->elementSize(QStringLiteral("shadow-left")).height()));
     m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-top")).width(), 1));
 
+#if HAVE_KWAYLAND
+    if (m_wayland.shmPool) {
+        for (auto it = m_shadowPixmaps.constBegin(); it != m_shadowPixmaps.constEnd(); ++it) {
+            m_wayland.shadowBuffers << m_wayland.shmPool->createBuffer(it->toImage());
+        }
+    }
+#endif
 }
 
 void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledBorders)
@@ -459,16 +504,35 @@ void DialogShadows::Private::clearPixmaps()
     m_emptyVerticalPix = QPixmap();
     m_emptyHorizontalPix = QPixmap();
 #endif
+    freeWaylandBuffers();
     m_shadowPixmaps.clear();
     data.clear();
+}
+
+void DialogShadows::Private::freeWaylandBuffers()
+{
+#if HAVE_KWAYLAND
+    m_wayland.shadowBuffers.clear();
+#endif
 }
 
 void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
 #if HAVE_X11
-    if (!m_isX11) {
-        return;
+    if (m_isX11) {
+        updateShadowX11(window, enabledBorders);
     }
+#endif
+#if HAVE_KWAYLAND
+    if (m_wayland.manager) {
+        updateShadowWayland(window, enabledBorders);
+    }
+#endif
+}
+
+void DialogShadows::Private::updateShadowX11(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
+{
+#if HAVE_X11
     if (m_shadowPixmaps.isEmpty()) {
         setupPixmaps();
     }
@@ -483,29 +547,197 @@ void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSv
     //qDebug() << "going to set the shadow of" << window->winId() << "to" << data;
     XChangeProperty(dpy, window->winId(), atom, XA_CARDINAL, 32, PropModeReplace,
                     reinterpret_cast<const unsigned char *>(data[enabledBorders].constData()), data[enabledBorders].size());
-#else
-    Q_UNUSED(window)
-    Q_UNUSED(enabledBorders)
+#endif
+}
+
+void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
+{
+#if HAVE_KWAYLAND
+    if (!m_wayland.shmPool) {
+        return;
+    }
+    if (m_wayland.shadowBuffers.isEmpty()) {
+        setupPixmaps();
+    }
+    // TODO: check whether the surface already has a shadow
+    KWayland::Client::Surface *surface = KWayland::Client::Surface::fromWindow(const_cast<QWindow*>(window));
+    if (!surface) {
+        return;
+    }
+    auto shadow = m_wayland.manager->createShadow(surface, surface);
+
+    //shadow-top
+    if (enabledBorders & Plasma::FrameSvg::TopBorder) {
+        shadow->attachTop(m_wayland.shadowBuffers.at(0));
+    }
+
+    //shadow-topright
+    if (enabledBorders & Plasma::FrameSvg::TopBorder &&
+        enabledBorders & Plasma::FrameSvg::RightBorder) {
+        shadow->attachTopRight(m_wayland.shadowBuffers.at(1));
+    }
+
+    //shadow-right
+    if (enabledBorders & Plasma::FrameSvg::RightBorder) {
+        shadow->attachRight(m_wayland.shadowBuffers.at(2));
+    }
+
+    //shadow-bottomright
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
+        enabledBorders & Plasma::FrameSvg::RightBorder) {
+        shadow->attachBottomRight(m_wayland.shadowBuffers.at(3));
+    }
+
+    //shadow-bottom
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
+        shadow->attachBottom(m_wayland.shadowBuffers.at(4));
+    }
+
+    //shadow-bottomleft
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
+        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        shadow->attachBottomLeft(m_wayland.shadowBuffers.at(5));
+    }
+
+    //shadow-left
+    if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        shadow->attachLeft(m_wayland.shadowBuffers.at(6));
+    }
+
+    //shadow-topleft
+    if (enabledBorders & Plasma::FrameSvg::TopBorder &&
+        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        shadow->attachTopLeft(m_wayland.shadowBuffers.at(7));
+    }
+
+    QSize marginHint;
+    QMarginsF margins = QMarginsF(1, 1, 1, 1);
+    if (enabledBorders & Plasma::FrameSvg::TopBorder) {
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-top-margin"));
+        if (marginHint.isValid()) {
+            margins.setTop(marginHint.height());
+        } else {
+            margins.setTop(m_shadowPixmaps[0].height());
+        }
+    }
+
+    if (enabledBorders & Plasma::FrameSvg::RightBorder) {
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-right-margin"));
+        if (marginHint.isValid()) {
+            margins.setRight(marginHint.width());
+        } else {
+            margins.setRight(m_shadowPixmaps[2].width());
+        }
+    }
+
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder) {
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-bottom-margin"));
+        if (marginHint.isValid()) {
+            margins.setBottom(marginHint.height());
+        } else {
+            margins.setBottom(m_shadowPixmaps[4].height());
+        }
+    }
+
+    if (enabledBorders & Plasma::FrameSvg::LeftBorder) {
+        marginHint = q->elementSize(QStringLiteral("shadow-hint-left-margin"));
+        if (marginHint.isValid()) {
+            margins.setLeft(marginHint.width());
+        } else {
+            margins.setLeft(m_shadowPixmaps[6].width());
+        }
+    }
+
+    shadow->setOffsets(margins);
+    shadow->commit();
+    surface->commit(KWayland::Client::Surface::CommitFlag::None);
 #endif
 }
 
 void DialogShadows::Private::clearShadow(const QWindow *window)
 {
-#if HAVE_X11
-    if (!m_isX11) {
+    if (!static_cast<const QSurface*>(window)->surfaceHandle()) {
+        qWarning() << "Cannot clear shadow from window without native surface!";
         return;
     }
+#if HAVE_X11
+    if (m_isX11) {
+        clearShadowX11(window);
+    }
+#endif
+#if HAVE_KWAYLAND
+    if (m_wayland.manager) {
+        clearShadowWayland(window);
+    }
+#endif
+}
+
+void DialogShadows::Private::clearShadowX11(const QWindow* window)
+{
+#if HAVE_X11
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_NET_WM_SHADOW", False);
     XDeleteProperty(dpy, window->winId(), atom);
-#else
-    Q_UNUSED(window)
+#endif
+}
+
+void DialogShadows::Private::clearShadowWayland(const QWindow *window)
+{
+#if HAVE_KWAYLAND
+    KWayland::Client::Surface *surface = KWayland::Client::Surface::fromWindow(const_cast<QWindow*>(window));
+    if (!surface) {
+        return;
+    }
+    m_wayland.manager->removeShadow(surface);
+    surface->commit(KWayland::Client::Surface::CommitFlag::None);
 #endif
 }
 
 bool DialogShadows::enabled() const
 {
     return hasElement(QStringLiteral("shadow-left"));
+}
+
+KWayland::Client::PlasmaShell *DialogShadows::waylandPlasmaShellInterface() const
+{
+#if HAVE_KWAYLAND
+    return d->m_wayland.plasmaShell;
+#endif
+}
+
+void DialogShadows::Private::setupWaylandIntegration()
+{
+#if HAVE_KWAYLAND
+    if (!KWindowSystem::isPlatformWayland()) {
+        return;
+    }
+    using namespace KWayland::Client;
+    ConnectionThread *connection = ConnectionThread::fromApplication(q);
+    if (!connection) {
+        return;
+    }
+    Registry *registry = new Registry(q);
+    registry->create(connection);
+    connect(registry, &Registry::shadowAnnounced, q,
+        [this, registry] (quint32 name, quint32 version) {
+            m_wayland.manager = registry->createShadowManager(name, version, q);
+            updateShadows();
+        }, Qt::QueuedConnection
+    );
+    connect(registry, &Registry::shmAnnounced, q,
+        [this, registry] (quint32 name, quint32 version) {
+            m_wayland.shmPool = registry->createShmPool(name, version, q);
+            updateShadows();
+        }, Qt::QueuedConnection
+    );
+    connect(registry, &Registry::plasmaShellAnnounced, q,
+        [this, registry] (quint32 name, quint32 version) {
+            m_wayland.plasmaShell = registry->createPlasmaShell(name, version, q);
+        }
+    );
+    registry->setup();
+    connection->roundtrip();
+#endif
 }
 
 #include "moc_dialogshadows_p.cpp"
