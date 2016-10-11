@@ -31,12 +31,14 @@
 #include <fixx11h.h>
 #endif
 
+#if HAVE_KWAYLAND
 #include <KWayland/Client/connection_thread.h>
 #include <KWayland/Client/registry.h>
 #include <KWayland/Client/shadow.h>
 #include <KWayland/Client/shm_pool.h>
 #include <KWayland/Client/surface.h>
 #include <KWayland/Client/plasmashell.h>
+#endif
 
 #include <qdebug.h>
 
@@ -100,6 +102,7 @@ public:
     bool m_isX11;
 #endif
 
+#if HAVE_KWAYLAND
     struct Wayland {
         KWayland::Client::ShadowManager *manager = nullptr;
         KWayland::Client::ShmPool *shmPool = nullptr;
@@ -108,6 +111,7 @@ public:
         QList<KWayland::Client::Buffer::Ptr> shadowBuffers;
     };
     Wayland m_wayland;
+#endif
 
     QHash<Plasma::FrameSvg::EnabledBorders, QVector<unsigned long> > data;
     QHash<const QWindow *, Plasma::FrameSvg::EnabledBorders> m_windows;
@@ -303,11 +307,13 @@ void DialogShadows::Private::setupPixmaps()
     m_emptyVerticalPix = initEmptyPixmap(QSize(1, q->elementSize(QStringLiteral("shadow-left")).height()));
     m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-top")).width(), 1));
 
+#if HAVE_KWAYLAND
     if (m_wayland.shmPool) {
         for (auto it = m_shadowPixmaps.constBegin(); it != m_shadowPixmaps.constEnd(); ++it) {
             m_wayland.shadowBuffers << m_wayland.shmPool->createBuffer(it->toImage());
         }
     }
+#endif
 }
 
 void DialogShadows::Private::setupData(Plasma::FrameSvg::EnabledBorders enabledBorders)
@@ -505,7 +511,9 @@ void DialogShadows::Private::clearPixmaps()
 
 void DialogShadows::Private::freeWaylandBuffers()
 {
+#if HAVE_KWAYLAND
     m_wayland.shadowBuffers.clear();
+#endif
 }
 
 void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
@@ -515,9 +523,11 @@ void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSv
         updateShadowX11(window, enabledBorders);
     }
 #endif
+#if HAVE_KWAYLAND
     if (m_wayland.manager) {
         updateShadowWayland(window, enabledBorders);
     }
+#endif
 }
 
 void DialogShadows::Private::updateShadowX11(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
@@ -542,6 +552,7 @@ void DialogShadows::Private::updateShadowX11(const QWindow *window, Plasma::Fram
 
 void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
+#if HAVE_KWAYLAND
     if (!m_wayland.shmPool) {
         return;
     }
@@ -640,6 +651,7 @@ void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::
     shadow->setOffsets(margins);
     shadow->commit();
     surface->commit(KWayland::Client::Surface::CommitFlag::None);
+#endif
 }
 
 void DialogShadows::Private::clearShadow(const QWindow *window)
@@ -653,9 +665,11 @@ void DialogShadows::Private::clearShadow(const QWindow *window)
         clearShadowX11(window);
     }
 #endif
+#if HAVE_KWAYLAND
     if (m_wayland.manager) {
         clearShadowWayland(window);
     }
+#endif
 }
 
 void DialogShadows::Private::clearShadowX11(const QWindow* window)
@@ -669,12 +683,14 @@ void DialogShadows::Private::clearShadowX11(const QWindow* window)
 
 void DialogShadows::Private::clearShadowWayland(const QWindow *window)
 {
+#if HAVE_KWAYLAND
     KWayland::Client::Surface *surface = KWayland::Client::Surface::fromWindow(const_cast<QWindow*>(window));
     if (!surface) {
         return;
     }
     m_wayland.manager->removeShadow(surface);
     surface->commit(KWayland::Client::Surface::CommitFlag::None);
+#endif
 }
 
 bool DialogShadows::enabled() const
@@ -684,11 +700,14 @@ bool DialogShadows::enabled() const
 
 KWayland::Client::PlasmaShell *DialogShadows::waylandPlasmaShellInterface() const
 {
+#if HAVE_KWAYLAND
     return d->m_wayland.plasmaShell;
+#endif
 }
 
 void DialogShadows::Private::setupWaylandIntegration()
 {
+#if HAVE_KWAYLAND
     if (!KWindowSystem::isPlatformWayland()) {
         return;
     }
@@ -718,6 +737,7 @@ void DialogShadows::Private::setupWaylandIntegration()
     );
     registry->setup();
     connection->roundtrip();
+#endif
 }
 
 #include "moc_dialogshadows_p.cpp"

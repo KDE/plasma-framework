@@ -4,6 +4,12 @@ else()
     add_definitions(-DHAVE_XCB_SHAPE=0)
 endif()
 
+if(HAVE_KWAYLAND)
+    add_definitions(-DHAVE_KWAYLAND=1)
+else()
+    add_definitions(-DHAVE_KWAYLAND=0)
+endif()
+
 set(plasmaquick_LIB_SRC
     appletquickitem.cpp
     dialog.cpp
@@ -40,8 +46,14 @@ target_link_libraries(KF5PlasmaQuick
         KF5::XmlGui
         KF5::Declarative
         KF5::QuickAddons
-        KF5::WaylandClient
 )
+
+if(HAVE_KWAYLAND)
+    target_link_libraries(KF5PlasmaQuick
+        PRIVATE
+        KF5::WaylandClient
+    )
+endif()
 
 if(HAVE_X11)
     target_link_libraries(KF5PlasmaQuick

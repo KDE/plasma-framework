@@ -47,8 +47,10 @@
 
 #include <QDebug>
 
+#if HAVE_KWAYLAND
 #include <KWayland/Client/plasmashell.h>
 #include <KWayland/Client/surface.h>
+#endif
 
 #include <config-plasma.h>
 #if HAVE_XCB_SHAPE
@@ -140,7 +142,9 @@ public:
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
     QTimer hintsCommitTimer;
+#if HAVE_KWAYLAND
     QPointer<KWayland::Client::PlasmaShellSurface> shellSurface;
+#endif
 
     QRect cachedGeometry;
     bool hasMask;
@@ -673,6 +677,7 @@ QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
 
 void DialogPrivate::setupWaylandIntegration()
 {
+#if HAVE_KWAYLAND
     if (shellSurface) {
         // already setup
         return;
@@ -688,6 +693,7 @@ void DialogPrivate::setupWaylandIntegration()
         return;
     }
     shellSurface = interface->createSurface(s, q);
+#endif
 }
 
 
