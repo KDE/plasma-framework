@@ -29,7 +29,9 @@
 #include <qstandardpaths.h>
 #include <QTimer>
 #include <QJsonArray>
+#include <QDir>
 #include <QDebug>
+#include <QFileInfo>
 #include <QMessageBox>
 
 #include <klocalizedstring.h>
@@ -113,7 +115,7 @@ AppletPrivate::~AppletPrivate()
     delete modificationsTimer;
 }
 
-void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
+void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a Corona, which is not available at this point
@@ -145,6 +147,7 @@ void AppletPrivate::init(const QString &packagePath, const QVariantList &args)
         return;
     }
 
+    const QString packagePath = _packagePath.isEmpty() && !appletDescription.metaDataFileName().isEmpty() ? QFileInfo(appletDescription.metaDataFileName()).dir().path() : _packagePath;
     QString path = appletDescription.rawData().value(QStringLiteral("X-Plasma-RootPath")).toString();
     if (path.isEmpty()) {
         path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
