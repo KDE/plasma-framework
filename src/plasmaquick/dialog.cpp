@@ -80,7 +80,6 @@ public:
         hintsCommitTimer.setSingleShot(true);
         hintsCommitTimer.setInterval(0);
         QObject::connect(&hintsCommitTimer, SIGNAL(timeout()), q, SLOT(updateLayoutParameters()));
-        setupWaylandIntegration();
     }
 
     void updateInputShape();
@@ -750,7 +749,6 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             disconnect(d->mainItemLayout, 0, this, 0);
         }
 
-
         d->mainItem = mainItem;
 
         if (mainItem) {
@@ -1100,6 +1098,7 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 
+    d->setupWaylandIntegration();
     KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
 
     QQuickWindow::showEvent(event);
