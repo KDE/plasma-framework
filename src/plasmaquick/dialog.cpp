@@ -1098,7 +1098,6 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 
-    d->setupWaylandIntegration();
     KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
 
     QQuickWindow::showEvent(event);
@@ -1126,6 +1125,11 @@ bool Dialog::event(QEvent *event)
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
         if (d->shellSurface) {
             d->shellSurface->setPosition(me->pos());
+        }
+    } else if (event->type() == QEvent::PlatformSurface) {
+        QPlatformSurfaceEvent *se = static_cast<QPlatformSurfaceEvent *>(event);
+        if (se->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+            d->setupWaylandIntegration();
         }
     }
 
