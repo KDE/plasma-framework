@@ -24,6 +24,14 @@
 #include "plasma/framesvg.h"
 #include "plasma/svg.h"
 
+namespace KWayland
+{
+    namespace Client
+    {
+        class PlasmaShell;
+    }
+}
+
 class DialogShadows : public Plasma::Svg
 {
     Q_OBJECT
@@ -40,6 +48,8 @@ public:
     void setEnabledBorders(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders = Plasma::FrameSvg::AllBorders);
 
     bool enabled() const;
+
+    KWayland::Client::PlasmaShell *waylandPlasmaShellInterface() const;
 
 private:
     class Private;

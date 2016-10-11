@@ -37,6 +37,7 @@
 #include <KWayland/Client/shadow.h>
 #include <KWayland/Client/shm_pool.h>
 #include <KWayland/Client/surface.h>
+#include <KWayland/Client/plasmashell.h>
 
 #include <qdebug.h>
 
@@ -103,6 +104,7 @@ public:
     struct Wayland {
         KWayland::Client::ShadowManager *manager = nullptr;
         KWayland::Client::ShmPool *shmPool = nullptr;
+        KWayland::Client::PlasmaShell *plasmaShell = nullptr;
 
         QList<KWayland::Client::Buffer::Ptr> shadowBuffers;
     };
@@ -679,6 +681,11 @@ bool DialogShadows::enabled() const
      return hasElement(QStringLiteral("shadow-left"));
 }
 
+KWayland::Client::PlasmaShell *DialogShadows::waylandPlasmaShellInterface() const
+{
+    return d->m_wayland.plasmaShell;
+}
+
 void DialogShadows::Private::setupWaylandIntegration()
 {
     if (!KWindowSystem::isPlatformWayland()) {
@@ -702,6 +709,11 @@ void DialogShadows::Private::setupWaylandIntegration()
             m_wayland.shmPool = registry->createShmPool(name, version, q);
             updateShadows();
         }, Qt::QueuedConnection
+    );
+    connect(registry, &Registry::plasmaShellAnnounced, q,
+        [this, registry] (quint32 name, quint32 version) {
+            m_wayland.plasmaShell = registry->createPlasmaShell(name, version, q);
+        }
     );
     registry->setup();
     connection->roundtrip();

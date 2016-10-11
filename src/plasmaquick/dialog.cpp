@@ -47,6 +47,9 @@
 
 #include <QDebug>
 
+#include <KWayland/Client/plasmashell.h>
+#include <KWayland/Client/surface.h>
+
 #include <config-plasma.h>
 #if HAVE_XCB_SHAPE
 #include <QX11Info>
@@ -77,6 +80,7 @@ public:
         hintsCommitTimer.setSingleShot(true);
         hintsCommitTimer.setInterval(0);
         QObject::connect(&hintsCommitTimer, SIGNAL(timeout()), q, SLOT(updateLayoutParameters()));
+        setupWaylandIntegration();
     }
 
     void updateInputShape();
@@ -128,12 +132,16 @@ public:
     bool mainItemContainsPosition(const QPointF &point) const;
     QPointF positionAdjustedForMainItem(const QPointF &point) const;
 
+    void setupWaylandIntegration();
+
+
     Dialog *q;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
     QTimer hintsCommitTimer;
+    QPointer<KWayland::Client::PlasmaShellSurface> shellSurface;
 
     QRect cachedGeometry;
     bool hasMask;
@@ -664,6 +672,26 @@ QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
                    qBound(itemRect.top(), point.y(), itemRect.bottom()));
 }
 
+void DialogPrivate::setupWaylandIntegration()
+{
+    if (shellSurface) {
+        // already setup
+        return;
+    }
+
+    using namespace KWayland::Client;
+    PlasmaShell *interface = DialogShadows::self()->waylandPlasmaShellInterface();
+    if (!interface) {
+        return;
+    }
+    Surface *s = Surface::fromWindow(q);
+    if (!s) {
+        return;
+    }
+    shellSurface = interface->createSurface(s, q);
+}
+
+
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : 0),
       d(new DialogPrivate(this))
@@ -1095,6 +1123,11 @@ bool Dialog::event(QEvent *event)
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
+    } else if (event->type() == QEvent::Move) {
+        QMoveEvent *me = static_cast<QMoveEvent *>(event);
+        if (d->shellSurface) {
+            d->shellSurface->setPosition(me->pos());
+        }
     }
 
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked
