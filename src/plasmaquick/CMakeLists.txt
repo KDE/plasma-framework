@@ -40,6 +40,7 @@ target_link_libraries(KF5PlasmaQuick
         KF5::XmlGui
         KF5::Declarative
         KF5::QuickAddons
+        KF5::WaylandClient
 )
 
 if(HAVE_X11)
