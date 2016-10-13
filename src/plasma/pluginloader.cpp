@@ -234,7 +234,8 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
-        QVariantList allArgs = { p.metadata().fileName(), appletId, args };
+        QVariantList allArgs;
+        allArgs << p.metadata().fileName() << appletId << args;
 
         if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             return new Containment(0, allArgs);
