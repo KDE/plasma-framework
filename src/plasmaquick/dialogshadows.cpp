@@ -702,6 +702,8 @@ KWayland::Client::PlasmaShell *DialogShadows::waylandPlasmaShellInterface() cons
 {
 #if HAVE_KWAYLAND
     return d->m_wayland.plasmaShell;
+#else
+    return nullptr;
 #endif
 }
 

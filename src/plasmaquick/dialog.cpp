@@ -1136,9 +1136,11 @@ bool Dialog::event(QEvent *event)
         d->updateVisibility(false);
     } else if (event->type() == QEvent::Move) {
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
+#if HAVE_KWAYLAND
         if (d->shellSurface) {
             d->shellSurface->setPosition(me->pos());
         }
+#endif
     }
 
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked
