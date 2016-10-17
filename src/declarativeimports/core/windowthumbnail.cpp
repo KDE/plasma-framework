@@ -219,6 +219,14 @@ void WindowThumbnail::releaseResources()
     //only one (or none) should be set, but never both
     Q_ASSERT(m_glxPixmap == XCB_PIXMAP_NONE || m_image == EGL_NO_IMAGE_KHR);
 #endif
+#if HAVE_GLX || HAVE_EGL
+    // NoStage is supported since Qt >= 5.6.x
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) 
+        QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
+    #else
+        QQuickWindow::RenderStage m_renderStage = QQuickWindow::BeforeSynchronizingStage;
+    #endif
+#endif
 
     //data is deleted in the render thread (with relevant GLX calls)
     //note runnable may be called *after* this is deleted
@@ -228,7 +236,7 @@ void WindowThumbnail::releaseResources()
         window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture,
                                                         m_releaseTexImage,
                                                         m_glxPixmap),
-                                                        QQuickWindow::NoStage);
+                                                        m_renderStage);
 
         m_glxPixmap = XCB_PIXMAP_NONE;
         m_texture = 0;
@@ -239,7 +247,7 @@ void WindowThumbnail::releaseResources()
         window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture,
                                                         m_eglDestroyImageKHR,
                                                         m_image),
-                                                        QQuickWindow::NoStage);
+                                                        m_renderStage);
 
         m_image = EGL_NO_IMAGE_KHR;
         m_texture = 0;
