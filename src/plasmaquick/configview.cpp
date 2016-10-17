@@ -114,7 +114,7 @@ void ConfigViewPrivate::init()
         if (a) {
             corona = a->containment()->corona();
         }
-    } else if (!applet.data()->containment()->corona()->package().isValid()) {
+    } else if (!applet.data()->containment()->corona()->kPackage().isValid()) {
         qWarning() << "Invalid home screen package";
     } else {
         corona = applet.data()->containment()->corona();
@@ -124,7 +124,7 @@ void ConfigViewPrivate::init()
         return;
     }
 
-    if (corona->package().isValid()) {
+    if (corona->kPackage().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
         interceptor->addAllowedPath(applet.data()->package().path());
         q->engine()->setUrlInterceptor(interceptor);
@@ -133,7 +133,7 @@ void ConfigViewPrivate::init()
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
-    QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->package().filePath("configmodel")), q);
+    QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->kPackage().filePath("configmodel")), q);
     QObject *object = component->beginCreate(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
 
@@ -289,7 +289,7 @@ ConfigView::~ConfigView()
 
 void ConfigView::init()
 {
-    setSource(QUrl::fromLocalFile(d->corona->package().filePath("appletconfigurationui")));
+    setSource(QUrl::fromLocalFile(d->corona->kPackage().filePath("appletconfigurationui")));
 }
 
 Plasma::Applet *ConfigView::applet()

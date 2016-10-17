@@ -205,7 +205,7 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
     QObject::connect(screen(), &QScreen::geometryChanged,
                      this, &ContainmentView::screenGeometryChanged);
 
-    if (corona->package().isValid()) {
+    if (corona->kPackage().isValid()) {
         KPluginInfo info = corona->package().metadata();
         if (info.isValid()) {
             setTranslationDomain("plasma_shell_" + info.pluginName());

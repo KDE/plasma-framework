@@ -204,10 +204,10 @@ void Containment::restore(KConfigGroup &group)
                 case Plasma::Types::PanelContainment:
                     /* fall through*/
                 case Plasma::Types::CustomPanelContainment:
-                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Panel");
+                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
                     break;
                 case Plasma::Types::DesktopContainment:
-                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->package().filePath("defaults")), "Desktop");
+                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
                     break;
                 default:
                     //for any other type of containment, there are no defaults

@@ -92,9 +92,9 @@ void ContainmentInterface::init()
     if (m_containment) {
         KConfigGroup defaults;
         if (m_containment->containmentType() == Plasma::Types::DesktopContainment) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Desktop");
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Desktop");
         } else if (m_containment->containmentType() == Plasma::Types::PanelContainment) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->package().filePath("defaults")), "Panel");
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Panel");
         }
 
         if (defaults.isValid()) {

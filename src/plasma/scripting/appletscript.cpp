@@ -102,7 +102,7 @@ void AppletScript::configChanged()
 QString AppletScript::mainScript() const
 {
     Q_ASSERT(d->applet);
-    return d->applet->package().filePath("mainscript");
+    return d->applet->kPackage().filePath("mainscript");
 }
 
 Package AppletScript::package() const

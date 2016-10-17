@@ -480,7 +480,7 @@ void AppletQuickItem::init()
     //if the engine of the qmlObject is different from the static one, then we
     //are using an old version of the api in which every applet had one engine
     //so initialize a private url interceptor
-    if (d->applet->package().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
+    if (d->applet->kPackage().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
@@ -501,11 +501,11 @@ void AppletQuickItem::init()
     QObject *o = c.create();
     o->deleteLater();
 
-    d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->package().filePath("mainscript")));
+    d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->kPackage().filePath("mainscript")));
 
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()) {
         QString reason;
-        if (d->applet->package().isValid()) {
+        if (d->applet->kPackage().isValid()) {
             foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
                 reason += error.toString() + '\n';
             }
