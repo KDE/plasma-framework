@@ -183,7 +183,7 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
       m_frameSvg(frameSvg),
       m_fixed(false)
 {
-    //qDebug() << "margins at: " << left() << top() << right() << bottom();
+    //qCDebug(LOG_PLASMACORE) << "margins at: " << left() << top() << right() << bottom();
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(update()));
 }
 

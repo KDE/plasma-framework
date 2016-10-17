@@ -24,6 +24,8 @@ set(corebindings_SRCS
     windowthumbnail.cpp
     )
 
+ecm_qt_declare_logging_category(corebindings_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMACORE CATEGORY_NAME org.kde.plasma.imports.core)
+
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
         Qt5::Quick

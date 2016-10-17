@@ -25,6 +25,7 @@
 #include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
 #include "view.h"
+#include "debug_p.h"
 
 #include <QQuickItem>
 #include <QTimer>
@@ -580,7 +581,7 @@ void DialogPrivate::syncToMainItemSize()
         return;
     }
     if (mainItem->width() <= 0 || mainItem->height() <= 0) {
-        qWarning() << "trying to show an empty dialog";
+        qCWarning(LOG_PLASMAQUICK) << "trying to show an empty dialog";
     }
 
     updateTheme();

@@ -10,6 +10,8 @@ set(plasmacomponents_SRCS
     qmenuitem.cpp
     )
 
+ecm_qt_declare_logging_category(plasmacomponents_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMACOMPONENTS CATEGORY_NAME org.kde.plasma.imports.components)
+
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
         Qt5::Core

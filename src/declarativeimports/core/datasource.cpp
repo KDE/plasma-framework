@@ -21,6 +21,7 @@
  */
 
 #include "datasource.h"
+#include "debug_p.h"
 
 namespace Plasma
 {
@@ -95,7 +96,7 @@ void DataSource::setEngine(const QString &e)
     m_dataEngineConsumer = new Plasma::DataEngineConsumer();
     Plasma::DataEngine *engine = dataEngine(m_engine);
     if (!engine) {
-        qWarning() << "DataEngine" << m_engine << "not found";
+        qCWarning(LOG_PLASMACORE) << "DataEngine" << m_engine << "not found";
         emit engineChanged();
         return;
     }
@@ -159,7 +160,7 @@ void DataSource::setupData()
         return;
     }
 
-//     qDebug() << " loading engine " << m_engine;
+//     qCDebug(LOG_PLASMACORE) << " loading engine " << m_engine;
     //FIXME: should all services be deleted just because we're changing the interval, etc?
     qDeleteAll(m_services);
     m_services.clear();

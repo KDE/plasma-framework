@@ -18,6 +18,7 @@
 */
 
 #include "eventpluginsmanager.h"
+#include "debug_p.h"
 
 #include <CalendarEvents/CalendarEventsPlugin>
 
@@ -205,8 +206,8 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
     QPluginLoader loader(absolutePath);
 
     if (!loader.load()) {
-        qWarning() << "Could not create Plasma Calendar Plugin: " << absolutePath;
-        qWarning() << loader.errorString();
+        qCWarning(LOG_PLASMACALENDAR) << "Could not create Plasma Calendar Plugin: " << absolutePath;
+        qCWarning(LOG_PLASMACALENDAR) << loader.errorString();
         return;
     }
 
@@ -214,7 +215,7 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
     if (obj) {
         CalendarEvents::CalendarEventsPlugin *eventsPlugin = qobject_cast<CalendarEvents::CalendarEventsPlugin*>(obj);
         if (eventsPlugin) {
-            qDebug() << "Loading Calendar plugin" << eventsPlugin;
+            qCDebug(LOG_PLASMACALENDAR) << "Loading Calendar plugin" << eventsPlugin;
             eventsPlugin->setProperty("pluginPath", absolutePath);
             m_plugins << eventsPlugin;
 

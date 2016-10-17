@@ -16,6 +16,8 @@ set(declarative_appletscript_SRCS
     plasmoid/wallpaperinterface.cpp
     )
 
+ecm_qt_declare_logging_category(declarative_appletscript_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMAQMLSCRIPTENGINE CATEGORY_NAME org.kde.plasma.scriptengine.qml)
+
 add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SRCS} )
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 

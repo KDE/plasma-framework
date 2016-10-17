@@ -33,6 +33,7 @@
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"
+#include "debug_p.h"
 
 class BKSingleton
 {
@@ -54,7 +55,7 @@ QQmlEngine *EngineBookKeeping::engine() const
 {
     //for components creation, any engine will do, as long is valid
     if (m_engines.isEmpty()) {
-        qWarning() << "No engines found, this should never happen";
+        qCWarning(LOG_PLASMACOMPONENTS) << "No engines found, this should never happen";
         return 0;
     } else {
         return m_engines.values().at(0);
