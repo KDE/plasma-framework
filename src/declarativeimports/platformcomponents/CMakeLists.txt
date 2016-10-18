@@ -7,8 +7,6 @@ set(platformcomponents_SRCS
     icondialog.cpp
     )
 
-ecm_qt_declare_logging_category(platformcomponents_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMAPLATFORMCOMPONENTS CATEGORY_NAME org.kde.plasma.imports.platformcomponents)
-
 add_library(platformcomponentsplugin SHARED ${platformcomponents_SRCS})
 
 target_link_libraries(

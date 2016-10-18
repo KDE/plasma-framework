@@ -67,15 +67,11 @@ ecm_add_test(${coronatest_srcs} TEST_NAME coronatest LINK_LIBRARIES Qt5::Gui Qt5
 add_test(plasma-storagetest storagetest)
 ecm_mark_as_test(storagetest)
 
-set(sortfiltermodeltest_SRCS
+add_executable(sortfiltermodeltest
     sortfiltermodeltest.cpp
     ../src/declarativeimports/core/datamodel.cpp
     ../src/declarativeimports/core/datasource.cpp
     )
-
-ecm_qt_declare_logging_category(sortfiltermodeltest_SRCS HEADER plasmacoredebug_p.h IDENTIFIER LOG_PLASMACORE CATEGORY_NAME org.kde.plasma.imports.core)
-
-add_executable(sortfiltermodeltest ${sortfiltermodeltest_SRCS})
 
 target_link_libraries(sortfiltermodeltest
     KF5::Plasma

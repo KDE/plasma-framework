@@ -19,7 +19,6 @@
  */
 
 #include "iconitem.h"
-#include "debug_p.h"
 #include <QDebug>
 #include <QPaintEngine>
 #include <QPainter>
@@ -140,7 +139,7 @@ void IconItem::setSource(const QVariant &source)
                         iconPath = iconTheme->iconPath(sourceString + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
                     }
                 } else {
-                    qCWarning(LOG_PLASMACORE) << "KIconLoader has no theme set";
+                    qWarning() << "KIconLoader has no theme set";
                 }
 
                 if (!iconPath.isEmpty()) {
@@ -451,7 +450,7 @@ void IconItem::loadPixmap()
                     iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
                 }
             } else {
-                qCWarning(LOG_PLASMACORE) << "KIconLoader has no theme set";
+                qWarning() << "KIconLoader has no theme set";
             }
 
             if (!iconPath.isEmpty()) {

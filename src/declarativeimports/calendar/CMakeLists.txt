@@ -11,8 +11,6 @@ set(calendar_SRCS
     eventpluginsmanager.cpp
 )
 
-ecm_qt_declare_logging_category(calendar_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMACALENDAR CATEGORY_NAME org.kde.plasma.imports.calendar)
-
 add_library(calendarplugin SHARED ${calendar_SRCS})
 
 target_link_libraries(calendarplugin

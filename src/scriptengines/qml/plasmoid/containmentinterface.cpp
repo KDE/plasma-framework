@@ -20,7 +20,6 @@
  */
 
 #include "containmentinterface.h"
-#include "debug_p.h"
 #include "wallpaperinterface.h"
 #include <kdeclarative/qmlobject.h>
 
@@ -124,10 +123,10 @@ void ContainmentInterface::init()
                         containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
                     }
                 } else {
-                    qCWarning(LOG_PLASMAQMLSCRIPTENGINE) << "Could not load toolbox package." << pkg.path();
+                    qWarning() << "Could not load toolbox package." << pkg.path();
                 }
             } else {
-                qCWarning(LOG_PLASMAQMLSCRIPTENGINE) << "Toolbox not loading, toolbox package is either invalid or disabled.";
+                qWarning() << "Toolbox not loading, toolbox package is either invalid or disabled.";
             }
         }
 
@@ -427,13 +426,13 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
 
     //const QMimeData *mimeData = data;
 
-    qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
+    qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
 
     if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
         QString data = mimeData->data(QStringLiteral("text/x-plasmoidservicename"));
         const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
-            qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "adding" << appletName;
+            qDebug() << "adding" << appletName;
 
             metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRectF, QRectF(x, y, -1, -1)));
         }
@@ -449,7 +448,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
             QString mimeName = mime.name();
             QVariantList args;
             args << url.url();
-            qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "can decode" << mimeName << args;
+            qDebug() << "can decode" << mimeName << args;
 
             // It may be a directory or a file, let's stat
             KIO::JobFlags flags = KIO::HideProgressInfo;
@@ -485,7 +484,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y)
                 pluginFormats.insert(plugin.pluginName(), format);
             }
         }
-        //qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
+        //qDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
 
         QString selectedPlugin;
 
@@ -537,7 +536,7 @@ void ContainmentInterface::dropJobResult(KJob *job)
 {
 #ifndef PLASMA_NO_KIO
     if (job->error()) {
-        qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "ERROR" << job->error() << ' ' << job->errorString();
+        qDebug() << "ERROR" << job->error() << ' ' << job->errorString();
     }
     // We call mimetypeRetrieved since there might be other mechanisms
     // for finding suitable applets. Cleanup happens there as well.
@@ -548,38 +547,38 @@ void ContainmentInterface::dropJobResult(KJob *job)
 void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
 #ifndef PLASMA_NO_KIO
-    qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Mimetype Job returns." << mimetype;
+    qDebug() << "Mimetype Job returns." << mimetype;
     KIO::TransferJob *tjob = dynamic_cast<KIO::TransferJob *>(job);
     if (!tjob) {
-        qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "job should be a TransferJob, but isn't";
+        qDebug() << "job should be a TransferJob, but isn't";
         clearDataForMimeJob(job);
         return;
     }
     KPluginInfo::List appletList = Plasma::PluginLoader::self()->listAppletInfoForUrl(tjob->url());
     if (mimetype.isEmpty() && appletList.isEmpty()) {
         clearDataForMimeJob(job);
-        qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
+        qDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
         return;
     } else {
 
         QPoint posi; // will be overwritten with the event's position
         if (m_dropPoints.keys().contains(tjob)) {
             posi = m_dropPoints[tjob];
-            qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Received a suitable dropEvent at" << posi;
+            qDebug() << "Received a suitable dropEvent at" << posi;
         } else {
-            qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
+            qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
             clearDataForMimeJob(job);
             return;
         }
 
         QMenu *choices = m_dropMenus.value(tjob);
         if (!choices) {
-            qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Bailing out. No QMenu found for this job.";
+            qDebug() << "Bailing out. No QMenu found for this job.";
             clearDataForMimeJob(job);
             return;
         }
 
-        qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Creating menu for:" << mimetype  << posi;
+        qDebug() << "Creating menu for:" << mimetype  << posi;
 
         appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
 
@@ -607,7 +606,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             QHash<QAction *, QString> actionsToApplets;
             choices->addSection(i18n("Widgets"));
             foreach (const KPluginInfo &info, appletList) {
-                qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << info.name();
+                qDebug() << info.name();
                 QAction *action;
                 if (!info.icon().isEmpty()) {
                     action = choices->addAction(QIcon::fromTheme(info.icon()), info.name());
@@ -616,7 +615,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 }
 
                 actionsToApplets.insert(action, info.pluginName());
-                qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << info.pluginName();
+                qDebug() << info.pluginName();
             }
             actionsToApplets.insert(choices->addAction(i18n("Icon")), QStringLiteral("org.kde.plasma.icon"));
 
@@ -727,7 +726,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     AppletInterface *appletGraphicObject = applet->property("_plasma_graphicObject").value<AppletInterface *>();
     AppletInterface *contGraphicObject = m_containment->property("_plasma_graphicObject").value<AppletInterface *>();
 
-//     qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Applet added on containment:" << m_containment->title() << contGraphicObject
+//     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
 //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
     //Every applet should have a graphics object, otherwise don't disaplay anything
@@ -901,7 +900,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
             }
         }
     }
-    //qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "Invoking menu for applet" << applet;
+    //qDebug() << "Invoking menu for applet" << applet;
 
     QMenu *desktopMenu = new QMenu;
     desktopMenu->setAttribute(Qt::WA_DeleteOnClose);
@@ -1026,13 +1025,13 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     if (m_containment->immutability() == Plasma::Types::Mutable &&
         (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
         QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
-        //qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "checking for removal" << closeApplet;
+        //qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu->isEmpty()) {
                 desktopMenu->addSeparator();
             }
 
-            //qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
+            //qDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
             desktopMenu->addAction(closeApplet);
         }
     }
@@ -1042,7 +1041,7 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
 {
     if (m_containment->corona()->immutability() != Plasma::Types::Mutable &&
             !KAuthorized::authorizeKAction(QStringLiteral("plasma/containment_actions"))) {
-        //qCDebug(LOG_PLASMAQMLSCRIPTENGINE) << "immutability";
+        //qDebug() << "immutability";
         return;
     }
 

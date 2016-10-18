@@ -24,7 +24,6 @@
 #include "Plasma/Containment"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
-#include "debug_p.h"
 
 #include <QDebug>
 #include <QDir>
@@ -83,11 +82,11 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
 void ConfigViewPrivate::init()
 {
     if (!applet) {
-        qCWarning(LOG_PLASMAQUICK) << "Null applet passed to constructor";
+        qWarning() << "Null applet passed to constructor";
         return;
     }
     if (!applet.data()->pluginMetaData().isValid()) {
-        qCWarning(LOG_PLASMAQUICK) << "Invalid applet passed to constructor";
+        qWarning() << "Invalid applet passed to constructor";
         return;
     }
 
@@ -116,12 +115,12 @@ void ConfigViewPrivate::init()
             corona = a->containment()->corona();
         }
     } else if (!applet.data()->containment()->corona()->kPackage().isValid()) {
-        qCWarning(LOG_PLASMAQUICK) << "Invalid home screen package";
+        qWarning() << "Invalid home screen package";
     } else {
         corona = applet.data()->containment()->corona();
     }
     if (!corona) {
-        qCWarning(LOG_PLASMAQUICK) << "Cannot find a Corona, this should never happen!";
+        qWarning() << "Cannot find a Corona, this should never happen!";
         return;
     }
 
@@ -155,7 +154,7 @@ void ConfigViewPrivate::init()
             KPluginMetaData md(loader.fileName());
 
             if (!md.isValid()) {
-                qCWarning(LOG_PLASMAQUICK) << "Could not find" << kcm << "specified in X-Plasma-ConfigPlugins";
+                qWarning() << "Could not find" << kcm << "specified in X-Plasma-ConfigPlugins";
                 continue;
             }
 

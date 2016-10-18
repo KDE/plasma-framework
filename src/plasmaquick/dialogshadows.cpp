@@ -17,7 +17,6 @@
 */
 
 #include "dialogshadows_p.h"
-#include "debug_p.h"
 
 #include <QWindow>
 #include <QPainter>
@@ -545,7 +544,7 @@ void DialogShadows::Private::updateShadowX11(const QWindow *window, Plasma::Fram
     Display *dpy = QX11Info::display();
     Atom atom = XInternAtom(dpy, "_KDE_NET_WM_SHADOW", False);
 
-    //qCDebug(LOG_PLASMAQUICK) << "going to set the shadow of" << window->winId() << "to" << data;
+    //qDebug() << "going to set the shadow of" << window->winId() << "to" << data;
     XChangeProperty(dpy, window->winId(), atom, XA_CARDINAL, 32, PropModeReplace,
                     reinterpret_cast<const unsigned char *>(data[enabledBorders].constData()), data[enabledBorders].size());
 #endif
@@ -658,7 +657,7 @@ void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::
 void DialogShadows::Private::clearShadow(const QWindow *window)
 {
     if (!static_cast<const QSurface*>(window)->surfaceHandle()) {
-        qCWarning(LOG_PLASMAQUICK) << "Cannot clear shadow from window without native surface!";
+        qWarning() << "Cannot clear shadow from window without native surface!";
         return;
     }
 #if HAVE_X11

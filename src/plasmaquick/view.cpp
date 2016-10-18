@@ -18,7 +18,6 @@
 
 #include "view.h"
 #include "configview.h"
-#include "debug_p.h"
 
 #include <QDebug>
 #include <QQuickItem>
@@ -77,7 +76,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment, 0, q, 0);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
-//             qCDebug(LOG_PLASMA) << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
+//             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
             //make sure the graphic object won't die with us
             //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
             oldGraphicObject->setParent(containment);
@@ -117,7 +116,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
 
     if (graphicObject) {
-//         qCDebug(LOG_PLASMA) << "using as graphic containment" << graphicObject << containment.data();
+//         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
         //by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setProperty("width", q->width());
@@ -130,10 +129,10 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
                 q->rootObject()->setProperty("wallpaper", QVariant::fromValue(wpGraphicObject));
             }
         } else {
-            qCWarning(LOG_PLASMAQUICK) << "Could not set containment property on rootObject";
+            qWarning() << "Could not set containment property on rootObject";
         }
     } else {
-        qCWarning(LOG_PLASMAQUICK) << "Containment graphic object not valid";
+        qWarning() << "Containment graphic object not valid";
     }
 }
 
@@ -199,7 +198,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         kdeclarative.setTranslationDomain("plasma_shell_" + corona->kPackage().metadata().pluginId());
         kdeclarative.setupBindings();
     } else {
-        qCWarning(LOG_PLASMAQUICK) << "Invalid home screen package";
+        qWarning() << "Invalid home screen package";
     }
 
     //Force QtQuickControls to use the "Plasma" style for this engine.

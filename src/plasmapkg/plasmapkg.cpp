@@ -19,7 +19,6 @@
 *******************************************************************************/
 
 #include "plasmapkg.h"
-#include "debug_p.h"
 
 #include <QDebug>
 #include <kservice.h>
@@ -182,7 +181,7 @@ void PlasmaPkg::runMain()
                 type = QStringLiteral("layout-template");
             } else {
                 type = serviceType;
-                //qCDebug(LOG_PLASMAPKG) << "fallthrough type is" << serviceType;
+                //qDebug() << "fallthrough type is" << serviceType;
             }
         } else {
             if (type.compare(i18nc("package type", "wallpaper"), Qt::CaseInsensitive) == 0) {
@@ -357,7 +356,7 @@ void PlasmaPkg::runMain()
             return;
         }
         if (d->package.isEmpty()) {
-            qCWarning(LOG_PLASMAPKG) << i18nc("No option was given, this is the error message telling the user he needs at least one, do not translate install, remove, upgrade nor list", "One of install, remove, upgrade or list is required.");
+            qWarning() << i18nc("No option was given, this is the error message telling the user he needs at least one, do not translate install, remove, upgrade nor list", "One of install, remove, upgrade or list is required.");
             exit(6);
         } else {
             d->runKbuildsycoca();
@@ -484,11 +483,11 @@ QString PlasmaPkg::findPackageRoot(const QString &pluginName, const QString &pre
     Q_UNUSED(prefix)
     QString packageRoot;
     if (d->parser->isSet(QStringLiteral("packageroot")) && d->parser->isSet(QStringLiteral("global"))) {
-        qCWarning(LOG_PLASMAPKG) << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
+        qWarning() << i18nc("The user entered conflicting options packageroot and global, this is the error message telling the user he can use only one", "The packageroot and global options conflict each other, please select only one.");
         ::exit(7);
     } else if (d->parser->isSet(QStringLiteral("packageroot"))) {
         packageRoot = d->parser->value(QStringLiteral("packageroot"));
-        //qCDebug(LOG_PLASMAPKG) << "(set via arg) d->packageRoot is: " << d->packageRoot;
+        //qDebug() << "(set via arg) d->packageRoot is: " << d->packageRoot;
     } else if (d->parser->isSet(QStringLiteral("global"))) {
         packageRoot = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, d->packageRoot, QStandardPaths::LocateDirectory).last();
     } else {
@@ -595,7 +594,7 @@ void PlasmaPkgPrivate::listTypes()
             //QString path = structure->defaultPackageRoot();
             //QString path = defaultPackageRoot;
             plugins.insert(name, QStringList() << name << plugin << comment);
-            //qCDebug(LOG_PLASMAPKG) << "KService stuff:" << name << plugin << comment;
+            //qDebug() << "KService stuff:" << name << plugin << comment;
         }
 
         renderTypeTable(plugins);

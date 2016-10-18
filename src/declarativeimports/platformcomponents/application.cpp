@@ -19,7 +19,6 @@
 
 #include "application.h"
 #include "application_p.h"
-#include "debug_p.h"
 
 #include "utils/d_ptr_implementation.h"
 
@@ -51,7 +50,7 @@ void Application::Private::stateChanged(QProcess::ProcessState newState)
 void Application::Private::errorFound(QProcess::ProcessError err)
 {
     Q_UNUSED(err)
-    qCWarning(LOG_PLASMAPLATFORMCOMPONENTS) << "Error" << process.error() << "while starting" << application;
+    qWarning() << "Error" << process.error() << "while starting" << application;
 }
 
 Application::Application(QObject *parent)
@@ -110,7 +109,7 @@ void Application::start()
     }
 
     if (d->application.isEmpty()) {
-        qCWarning(LOG_PLASMAPLATFORMCOMPONENTS) << "Cannot run an empty application";
+        qWarning() << "Cannot run an empty application";
         return;
     }
 

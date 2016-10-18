@@ -18,7 +18,6 @@
  ***************************************************************************/
 
 #include "qmenu.h"
-#include "debug_p.h"
 
 #include <QDebug>
 #include <QQuickWindow>
@@ -270,7 +269,7 @@ void QMenuProxy::rebuildMenu()
 
 void QMenuProxy::open(int x, int y)
 {
-    qCDebug(LOG_PLASMACOMPONENTS) << "Opening menu at" << x << y;
+    qDebug() << "Opening menu at" << x << y;
 
     QQuickItem *parentItem = nullptr;
 

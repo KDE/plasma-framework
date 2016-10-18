@@ -19,7 +19,6 @@
 #include <sortfiltermodeltest.h>
 
 #include <declarativeimports/core/datamodel.h>
-#include "plasmacoredebug_p.h"
 
 // KDE
 

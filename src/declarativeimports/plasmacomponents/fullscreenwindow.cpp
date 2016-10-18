@@ -20,7 +20,6 @@
 #include "fullscreenwindow.h"
 #include "../core/declarativeitemcontainer_p.h"
 #include "plasmacomponentsplugin.h"
-#include "debug_p.h"
 
 #include <QApplication>
 #include <QDeclarativeItem>
@@ -137,13 +136,13 @@ void FullScreenWindow::init(const QString &componentName)
     }
 
     if (filePath.isEmpty()) {
-        qCWarning(LOG_PLASMACOMPONENTS) << "Component not found:" << componentName;
+        qWarning() << "Component not found:" << componentName;
         return;
     }
 
     QDeclarativeEngine *engine = EngineBookKeeping::self()->engine();
     if (!engine) {
-        qCWarning(LOG_PLASMACOMPONENTS) << "Warning, no QDeclarativeEngines available anymore, should never happen";
+        qWarning() << "Warning, no QDeclarativeEngines available anymore, should never happen";
         Q_ASSERT(0);
     }
     QDeclarativeComponent *component = new QDeclarativeComponent(engine, filePath, this);
@@ -151,7 +150,7 @@ void FullScreenWindow::init(const QString &componentName)
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
     if (component->status() == QDeclarativeComponent::Error) {
-        qCWarning(LOG_PLASMACOMPONENTS) << component->errors();
+        qWarning() << component->errors();
     }
 
     if (m_rootObject) {

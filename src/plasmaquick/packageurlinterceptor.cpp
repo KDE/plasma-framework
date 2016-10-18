@@ -81,7 +81,7 @@ QStringList PackageUrlInterceptor::allowedPaths() const
 
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
-    //qCDebug(LOG_PLASMA) << "Intercepted URL:" << path << type;
+    //qDebug() << "Intercepted URL:" << path << type;
     QString pkgRoot;
     Plasma::Package package;
     if (d->package.isValid()) {
@@ -127,7 +127,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
     //asked a file inside a package: let's rewrite the url!
     if (path.path().startsWith(package.path())) {
-        //qCDebug(LOG_PLASMA) << "Found URL in package" << path;
+        //qDebug() << "Found URL in package" << path;
 
         //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
         QString relativePath;
@@ -153,7 +153,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 
         QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
 
-        //qCDebug(LOG_PLASMA) << "Returning" << ret;
+        //qDebug() << "Returning" << ret;
 
         if (ret.path().isEmpty()) {
             return path;

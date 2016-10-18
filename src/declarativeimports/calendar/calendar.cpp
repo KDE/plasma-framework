@@ -299,16 +299,16 @@ void Calendar::updateData()
     emit weeksModelChanged();
     m_daysModel->update();
 
-//    qCDebug(LOG_PLASMACALENDAR) << "---------------------------------------------------------------";
-//    qCDebug(LOG_PLASMACALENDAR) << "Date obj: " << m_displayedDate;
-//    qCDebug(LOG_PLASMACALENDAR) << "Month: " << m_displayedDate.month();
-//    qCDebug(LOG_PLASMACALENDAR) << "m_days: " << m_days;
-//    qCDebug(LOG_PLASMACALENDAR) << "m_weeks: " << m_weeks;
-//    qCDebug(LOG_PLASMACALENDAR) << "Days before this month: " << daysBeforeCurrentMonth;
-//    qCDebug(LOG_PLASMACALENDAR) << "Days after this month: " << daysAfterCurrentMonth;
-//    qCDebug(LOG_PLASMACALENDAR) << "Days in current month: " << m_displayedDate.daysInMonth();
-//    qCDebug(LOG_PLASMACALENDAR) << "m_dayList size: " << m_dayList.count();
-//    qCDebug(LOG_PLASMACALENDAR) << "---------------------------------------------------------------";
+//    qDebug() << "---------------------------------------------------------------";
+//    qDebug() << "Date obj: " << m_displayedDate;
+//    qDebug() << "Month: " << m_displayedDate.month();
+//    qDebug() << "m_days: " << m_days;
+//    qDebug() << "m_weeks: " << m_weeks;
+//    qDebug() << "Days before this month: " << daysBeforeCurrentMonth;
+//    qDebug() << "Days after this month: " << daysAfterCurrentMonth;
+//    qDebug() << "Days in current month: " << m_displayedDate.daysInMonth();
+//    qDebug() << "m_dayList size: " << m_dayList.count();
+//    qDebug() << "---------------------------------------------------------------";
 }
 
 void Calendar::nextDecade()

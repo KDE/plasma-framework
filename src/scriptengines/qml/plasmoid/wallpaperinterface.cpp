@@ -18,7 +18,6 @@
  */
 
 #include "wallpaperinterface.h"
-#include "debug_p.h"
 
 #include "containmentinterface.h"
 #include <kdeclarative/configpropertymap.h>
@@ -137,7 +136,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_pkg = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
     m_pkg.setPath(m_wallpaperPlugin);
     if (!m_pkg.isValid()) {
-        qCWarning(LOG_PLASMAQMLSCRIPTENGINE) << "Error loading the wallpaper, no valid package loaded";
+        qWarning() << "Error loading the wallpaper, no valid package loaded";
         return;
     }
 
@@ -180,13 +179,13 @@ void WallpaperInterface::loadFinished()
         prop.write(expr.evaluate());
 
     } else if (m_qmlObject->mainComponent()) {
-        qCWarning(LOG_PLASMAQMLSCRIPTENGINE) << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
+        qWarning() << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
         s_rootObjects.remove(m_qmlObject->engine());
         m_qmlObject->deleteLater();
         m_qmlObject = 0;
 
     } else {
-        qCWarning(LOG_PLASMAQMLSCRIPTENGINE) << "Error loading the wallpaper, package not found";
+        qWarning() << "Error loading the wallpaper, package not found";
     }
 
     emit packageChanged();

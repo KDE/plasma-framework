@@ -25,7 +25,6 @@
 #include "Plasma/Containment"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
-#include "debug_p.h"
 
 #include <QDebug>
 #include <QDir>
@@ -201,7 +200,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         // Quick check if source is an absolute path or not
         if (d->appletInterface && !source.isEmpty() && !(source.startsWith('/') && source.endsWith(QLatin1String("qml")))) {
             if(!d->appletInterface.data()->kPackage().isValid())
-                qCWarning(LOG_PLASMAQUICK) << "wrong applet" << d->appletInterface.data()->pluginMetaData().name();
+                qWarning() << "wrong applet" << d->appletInterface.data()->pluginMetaData().name();
             return QUrl::fromLocalFile(d->appletInterface.data()->kPackage().filePath("ui", source));
         } else {
             return source;
@@ -226,11 +225,11 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         KPluginLoader loader(pluginPath);
         KPluginFactory* factory = loader.factory();
         if (!factory) {
-            qCWarning(LOG_PLASMAQUICK) << "Error loading KCM:" << loader.errorString();
+            qWarning() << "Error loading KCM:" << loader.errorString();
         } else {
             KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule >(const_cast<ConfigModel *>(this));
             if (!cm) {
-                qCWarning(LOG_PLASMAQUICK) << "Error creating KCM object from plugin" << loader.fileName();
+                qWarning() << "Error creating KCM object from plugin" << loader.fileName();
             }
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
