@@ -104,6 +104,7 @@ public:
     Plasma::Package containmentPackage;
 
     bool expanded : 1;
+    bool activationTogglesExpanded : 1;
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };

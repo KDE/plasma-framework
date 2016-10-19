@@ -142,11 +142,16 @@ void AppletInterface::init()
     emit busyChanged();
 
     applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+
     connect(applet(), &Plasma::Applet::activated,
     [ = ]() {
-        setExpanded(true);
+        // in case the applet doesn't want to get shrinked on reactivation,
+        // we always expand it again (only in order to conform with legacy behaviour)
+        bool activate = !( isExpanded() && isActivationTogglesExpanded() );
+
+        setExpanded(activate);
         if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
-            i->setFocus(true, Qt::ShortcutFocusReason);
+            i->setFocus(activate, Qt::ShortcutFocusReason);
         }
     });
 

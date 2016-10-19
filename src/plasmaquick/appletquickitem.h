@@ -81,6 +81,12 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
 
     /**
+     * True when the applet wants the activation signal act in toggle mode, i.e. while being expanded
+     * the signal shrinks the applet to its not exanded state instead of reexpanding it.
+     */
+    Q_PROPERTY(bool activationTogglesExpanded WRITE setActivationTogglesExpanded READ isActivationTogglesExpanded NOTIFY activationTogglesExpandedChanged)
+
+    /**
      * the applet root QML item: sometimes is the same as fullRepresentationItem
      * if a fullrepresentation was not declared explicitly
      */
@@ -126,6 +132,9 @@ public:
     bool isExpanded() const;
     void setExpanded(bool expanded);
 
+    bool isActivationTogglesExpanded() const;
+    void setActivationTogglesExpanded(bool activationTogglesExpanded);
+
 ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletQuickItem *qmlAttachedProperties(QObject *object);
 
@@ -135,6 +144,7 @@ Q_SIGNALS:
     void switchHeightChanged(int height);
 
     void expandedChanged(bool expanded);
+    void activationTogglesExpandedChanged(bool activationTogglesExpanded);
 
     void compactRepresentationChanged(QQmlComponent *compactRepresentation);
     void fullRepresentationChanged(QQmlComponent *fullRepresentation);

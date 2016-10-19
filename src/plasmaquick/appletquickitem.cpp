@@ -48,7 +48,8 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       switchWidth(-1),
       switchHeight(-1),
       applet(a),
-      expanded(false)
+      expanded(false),
+      activationTogglesExpanded(false)
 {
 }
 
@@ -725,6 +726,20 @@ void AppletQuickItem::setExpanded(bool expanded)
 
     d->expanded = expanded;
     emit expandedChanged(expanded);
+}
+
+bool AppletQuickItem::isActivationTogglesExpanded() const
+{
+    return d->activationTogglesExpanded;
+}
+
+void AppletQuickItem::setActivationTogglesExpanded(bool activationTogglesExpanded)
+{
+    if (d->activationTogglesExpanded == activationTogglesExpanded) {
+        return;
+    }
+    d->activationTogglesExpanded = activationTogglesExpanded;
+    emit activationTogglesExpandedChanged(activationTogglesExpanded);
 }
 
 ////////////Internals
