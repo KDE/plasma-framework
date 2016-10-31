@@ -31,6 +31,10 @@ class KJob;
 
 #ifndef PLASMA_NO_DEPRECATED
 
+namespace KPackage {
+    class Package;
+}
+
 namespace Plasma
 {
 
@@ -342,6 +346,13 @@ public:
      * @return KJob to track removal progress and result
      */
     PLASMA_DEPRECATED KJob *uninstall(const QString &packageName, const QString &packageRoot);
+
+    /**
+     * @returns the wrapped KPackage::Package instance, which deprecated this class
+     *
+     * @since 5.28
+     */
+    KPackage::Package kPackage() const;
 
 private:
     QExplicitlySharedDataPointer<PackagePrivate> d;

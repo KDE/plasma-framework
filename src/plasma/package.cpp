@@ -161,6 +161,11 @@ void Package::setServicePrefix(const QString &servicePrefix)
     d->servicePrefix = servicePrefix;
 }
 
+KPackage::Package Package::kPackage() const
+{
+    return *d->internalPackage;
+}
+
 bool Package::allowExternalPaths() const
 {
     return d->internalPackage->allowExternalPaths();

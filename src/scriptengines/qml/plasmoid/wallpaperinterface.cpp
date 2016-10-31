@@ -199,9 +199,7 @@ QList<QAction *> WallpaperInterface::contextualActions() const
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 {
-    //FIXME: a less brutal way? packages should have valid KService :/
-    KDesktopFile desktop(m_pkg.path() + "/" + "metadata.desktop");
-    return desktop.desktopGroup().readEntry<QStringList>("X-Plasma-DropMimeTypes", QStringList()).contains(mimetype);
+    return KPluginMetaData::readStringList(m_pkg.kPackage().metadata().rawData(), "X-Plasma-DropMimeTypes").contains(mimetype);
 }
 
 void WallpaperInterface::setUrl(const QUrl &url)
