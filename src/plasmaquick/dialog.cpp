@@ -1037,6 +1037,11 @@ void Dialog::setType(WindowType type)
     } else {
         setFlags(Qt::FramelessWindowHint | flags());
     }
+    //an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
+    //see bug 370433
+    if (type == OnScreenDisplay) {
+        setFlags((flags() & ~Qt::Dialog) | Qt::Window);
+    }
 
     if (d->backgroundHints == Dialog::NoBackground) {
         d->frameSvgItem->setImagePath(QString());
