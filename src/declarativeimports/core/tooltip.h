@@ -178,7 +178,6 @@ protected:
 
 Q_SIGNALS:
     void mainItemChanged();
-    void visibleChanged();
     void mainTextChanged();
     void subTextChanged();
     void textFormatChanged();
