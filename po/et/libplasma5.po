@@ -1,0 +1,1033 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2016-11-01 07:36+0000\n"
+"PO-Revision-Date: 2016-09-10 02:24+0300\n"
+"Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
+"Language-Team: Estonian <kde-i18n-doc@kde.org>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Pühad"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Sündmused"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Ülesanded"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Muu"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:153
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Täna"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:155
+msgid "Reset calendar to today"
+msgstr "Lähtesta kalender tänasele"
+
+#: declarativeimports/calendar/qml/MonthView.qml:236
+msgid "Previous Month"
+msgstr "Eelmine kuu"
+
+#: declarativeimports/calendar/qml/MonthView.qml:237
+msgid "Next Month"
+msgstr "Järgmine kuu"
+
+#: declarativeimports/calendar/qml/MonthView.qml:264
+msgid "Previous Year"
+msgstr "Eelmine aasta"
+
+#: declarativeimports/calendar/qml/MonthView.qml:265
+msgid "Next Year"
+msgstr "Järgmine aasta"
+
+#: declarativeimports/calendar/qml/MonthView.qml:297
+msgid "Previous Decade"
+msgstr "Eelmine kümnend"
+
+#: declarativeimports/calendar/qml/MonthView.qml:298
+msgid "Next Decade"
+msgstr "Järgmine kümnend"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+msgid "Cancel"
+msgstr "Loobu"
+
+#: plasma/applet.cpp:351
+msgid "Unknown"
+msgstr "Tundmatu"
+
+#: plasma/applet.cpp:667
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktiveeri %1 vidin"
+
+#: plasma/containment.cpp:127 plasma/private/applet_p.cpp:126
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove this %1"
+msgstr "Eemalda see %1"
+
+#: plasma/containment.cpp:132
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings"
+msgstr "Apleti %1 seadistused"
+
+#: plasma/corona.cpp:317 plasma/corona.cpp:390
+msgid "Lock Widgets"
+msgstr "Lukusta vidinad"
+
+#: plasma/corona.cpp:317
+msgid "Unlock Widgets"
+msgstr "Eemalda vidinate lukustus"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Kas luua teemale kettal puhver või mitte."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Teema kettapuhvri maksimaalne suurus kilobaitides. Pane tähele, et tegu on "
+"hajusfailiga, nii et maksimaalset suurust küllap ei kasutatagi. Seepärast "
+"võib suurema suuruse määramist pidada üpris turvaliseks valikuks."
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98
+#: plasmaquick/private/packages.cpp:117
+msgid "Data Files"
+msgstr "Andmefailid"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+msgid "Executable Scripts"
+msgstr "Käivitatavad skriptid"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+msgid "Service Descriptions"
+msgstr "Teenuse kirjeldused"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+msgid "Translations"
+msgstr "Tõlked"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+msgid "Main Script File"
+msgstr "Peamine skriptifail"
+
+#: plasma/packagestructure/packages.cpp:43
+msgid "Tests"
+msgstr "Testid"
+
+#: plasma/packagestructure/packages.cpp:84
+#: plasmaquick/private/packages.cpp:103
+msgid "Images"
+msgstr "Pildid"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasmaquick/private/packages.cpp:104
+msgid "Themed Images"
+msgstr "Teemaga pildid"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasmaquick/private/packages.cpp:110
+msgid "Configuration Definitions"
+msgstr "Seadistamise definitsioonid"
+
+#: plasma/packagestructure/packages.cpp:96
+#: plasmaquick/private/packages.cpp:115
+msgid "User Interface"
+msgstr "Kasutajaliides"
+
+#: plasma/packagestructure/packages.cpp:104
+msgid "Screenshot"
+msgstr "Ekraanipilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:38
+msgid "Images for dialogs"
+msgstr "Dialoogide pildid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+msgid "Generic dialog background"
+msgstr "Üldine dialoogi taust"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+msgid "Theme for the logout dialog"
+msgstr "Väljalogimisdialoogi teema"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+msgid "Wallpaper packages"
+msgstr "Taustapildipaketid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#: plasma/packagestructure/plasmathemepackage.cpp:103
+msgid "Images for widgets"
+msgstr "Vidinate pildid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+msgid "Background image for widgets"
+msgstr "Vidinate taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+msgid "Analog clock face"
+msgstr "Analoogkella esiplaan"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+msgid "Background image for panels"
+msgstr "Paneelide taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+msgid "Background for graphing widgets"
+msgstr "Graafikavidinate taust"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+msgid "Background image for tooltips"
+msgstr "Kohtspikrite taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+msgid "Opaque images for dialogs"
+msgstr "Dialoogide läbipaistmatud pildid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+msgid "Opaque generic dialog background"
+msgstr "Üldine läbipaistmatu dialoogi taust"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+msgid "Opaque theme for the logout dialog"
+msgstr "Väljalogimisdialoogi läbipaistmatu teema"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+msgid "Opaque images for widgets"
+msgstr "Vidinate läbipaistmatud pildid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+msgid "Opaque background image for panels"
+msgstr "Paneelide läbipaistmatu taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+msgid "Opaque background image for tooltips"
+msgstr "Kohtspikrite läbipaistmatu taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:93
+msgid "Low color images for dialogs"
+msgstr "Dialoogide vähevärvilised pildid"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:95
+#: plasma/packagestructure/plasmathemepackage.cpp:97
+msgid "Low color generic dialog background"
+msgstr "Üldine vähevärviline dialoogi taust"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:99
+#: plasma/packagestructure/plasmathemepackage.cpp:101
+msgid "Low color theme for the logout dialog"
+msgstr "Väljalogimisdialoogi vähevärviline teema"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:105
+#: plasma/packagestructure/plasmathemepackage.cpp:107
+msgid "Low color background image for widgets"
+msgstr "Vidinate vähevärviline taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:109
+#: plasma/packagestructure/plasmathemepackage.cpp:111
+msgid "Low color analog clock face"
+msgstr "Analoogkella vähevärviline esiplaan"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:113
+#: plasma/packagestructure/plasmathemepackage.cpp:115
+msgid "Low color background image for panels"
+msgstr "Paneelide vähevärviline taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:117
+#: plasma/packagestructure/plasmathemepackage.cpp:119
+msgid "Low color background for graphing widgets"
+msgstr "Graafikavidinate vähevärviline taust"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:121
+#: plasma/packagestructure/plasmathemepackage.cpp:123
+msgid "Low color background image for tooltips"
+msgstr "Kohtspikrite vähevärviline taustapilt"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:125
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme seadistusfail"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+msgid "Configuration UI pages model"
+msgstr "Seadistuse UI lehekülgede mudel"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+msgid "Configuration XML file"
+msgstr "Seadistuse XML-fail"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+msgid "Custom expander for compact applets"
+msgstr "Kompaktsete aplettide kohandatav laiendaja"
+
+#: plasma/pluginloader.cpp:90
+msgid "Accessibility"
+msgstr "Hõlbustus"
+
+#: plasma/pluginloader.cpp:91
+msgid "Application Launchers"
+msgstr "Rakenduste käivitajad"
+
+#: plasma/pluginloader.cpp:92
+msgid "Astronomy"
+msgstr "Astronoomia"
+
+#: plasma/pluginloader.cpp:93
+msgid "Date and Time"
+msgstr "Kuupäev ja kellaaeg"
+
+#: plasma/pluginloader.cpp:94
+msgid "Development Tools"
+msgstr "Arendustööriistad"
+
+#: plasma/pluginloader.cpp:95
+msgid "Education"
+msgstr "Haridus"
+
+#: plasma/pluginloader.cpp:96
+msgid "Environment and Weather"
+msgstr "Keskkond ja ilm"
+
+#: plasma/pluginloader.cpp:97
+msgid "Examples"
+msgstr "Näited"
+
+#: plasma/pluginloader.cpp:98
+msgid "File System"
+msgstr "Failisüsteem"
+
+#: plasma/pluginloader.cpp:99
+msgid "Fun and Games"
+msgstr "Lõbu ja mängud"
+
+#: plasma/pluginloader.cpp:100
+msgid "Graphics"
+msgstr "Graafika"
+
+#: plasma/pluginloader.cpp:101
+msgid "Language"
+msgstr "Keel"
+
+#: plasma/pluginloader.cpp:102
+msgid "Mapping"
+msgstr "Geograafia"
+
+#: plasma/pluginloader.cpp:103
+msgid "Miscellaneous"
+msgstr "Muu"
+
+#: plasma/pluginloader.cpp:104
+msgid "Multimedia"
+msgstr "Multimeedia"
+
+#: plasma/pluginloader.cpp:105
+msgid "Online Services"
+msgstr "Võrguteenused"
+
+#: plasma/pluginloader.cpp:106
+msgid "Productivity"
+msgstr "Loometegevus"
+
+#: plasma/pluginloader.cpp:107
+msgid "System Information"
+msgstr "Süsteemi teave"
+
+#: plasma/pluginloader.cpp:108
+msgid "Utilities"
+msgstr "Tööriistad"
+
+#: plasma/pluginloader.cpp:109
+msgid "Windows and Tasks"
+msgstr "Aknad ja ülesanded"
+
+#: plasma/pluginloader.cpp:110
+msgid "Clipboard"
+msgstr "Lõikepuhver"
+
+#: plasma/pluginloader.cpp:111
+msgid "Tasks"
+msgstr "Ülesanded"
+
+#: plasma/pluginloader.cpp:610 plasma/pluginloader.cpp:611
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Muu"
+
+#: plasma/private/applet_p.cpp:131
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "%1 Settings..."
+msgstr "Apleti %1 seadistused..."
+
+#: plasma/private/applet_p.cpp:146
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Vidin %1 ei määratle, millist skriptimootorit kasutada."
+
+#: plasma/private/applet_p.cpp:164
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Vidinale %2 vajaliku paketi %1 avamine nurjus."
+
+#: plasma/private/applet_p.cpp:186
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "%1 skriptimootori loomine vidinale %2 nurjus."
+
+#: plasma/private/applet_p.cpp:191
+msgid "Alternatives..."
+msgstr "Alternatiivid..."
+
+#: plasma/private/applet_p.cpp:281
+msgid "Widget Removed"
+msgstr "Vidin eemaldatud"
+
+#: plasma/private/applet_p.cpp:282
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Vidin \"%1\" eemaldati."
+
+#: plasma/private/applet_p.cpp:284
+msgid "Panel Removed"
+msgstr "Paneel eemaldatud"
+
+#: plasma/private/applet_p.cpp:285
+msgid "A panel has been removed."
+msgstr "Paneel eemaldati."
+
+#: plasma/private/applet_p.cpp:288
+msgid "Desktop Removed"
+msgstr "Töölaud eemaldatud"
+
+#: plasma/private/applet_p.cpp:289
+msgid "A desktop has been removed."
+msgstr "Töölaud eemaldati."
+
+#: plasma/private/applet_p.cpp:292
+msgid "Undo"
+msgstr "Võta tagasi"
+
+#: plasma/private/applet_p.cpp:382
+msgid "Widget Settings"
+msgstr "Vidina seadistused"
+
+#: plasma/private/applet_p.cpp:389
+msgid "Remove this Widget"
+msgstr "Eemalda see vidin"
+
+#: plasma/private/applet_p.cpp:396
+#: plasma/private/associatedapplicationmanager.cpp:83
+#: plasma/private/associatedapplicationmanager.cpp:142
+#: plasma/private/associatedapplicationmanager.cpp:184
+msgid "Run the Associated Application"
+msgstr "Käivita seostatud rakendus"
+
+#: plasma/private/applet_p.cpp:488
+msgid "Script initialization failed"
+msgstr "Skripti initsialiseerimine nurjus"
+
+#: plasma/private/associatedapplicationmanager.cpp:80
+#: plasma/private/associatedapplicationmanager.cpp:181
+#, kde-format
+msgid "Open with %1"
+msgstr "Ava rakendusega %1"
+
+#: plasma/private/containment_p.cpp:76
+msgid "Remove this Panel"
+msgstr "Eemalda see paneel"
+
+#: plasma/private/containment_p.cpp:78
+msgid "Remove this Activity"
+msgstr "Eemalda see tegevus"
+
+#: plasma/private/containment_p.cpp:84
+msgid "Activity Settings"
+msgstr "Tegevuse seadistused"
+
+#: plasma/private/containment_p.cpp:90
+msgid "Add Widgets..."
+msgstr "Lisa vidinaid..."
+
+#: plasma/private/containment_p.cpp:205
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Nõutud komponenti ei leitud: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Vidina jagamine võrgus lubab sul kasutada seda vidinat ka mõnest teisest "
+"arvutist."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+msgid "Share this widget on the network"
+msgstr "Vidina jagamine võrgus"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+msgid "Allow everybody to freely access this widget"
+msgstr "Kõik võivad takistusteta vidinat kasutada"
+
+#: plasma/private/service_p.h:47
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Vigane (tühi) teenus, ühtegi toimingut ei saa teostada."
+
+#: plasmapkg/main.cpp:49
+msgid "Plasma Package Manager"
+msgstr "Plasma paketihaldur"
+
+#: plasmapkg/main.cpp:56
+msgctxt "Do not translate <path>"
+msgid "Generate a SHA1 hash for the package at <path>"
+msgstr "SHA1 räsi genereerimine paketile asukohas <path>"
+
+#: plasmapkg/main.cpp:57
+msgid "For install or remove, operates on packages installed for all users."
+msgstr ""
+"Paigaldamise või eemaldamise korral käsitleb pakette, mis on paigaldatud "
+"kõigi kasutajate jaoks."
+
+#: plasmapkg/main.cpp:62
+msgctxt ""
+"theme, wallpaper, etc. are keywords, but they may be translated, as both "
+"versions are recognized by the application (if translated, should be same as "
+"messages with 'package type' context below)"
+msgid ""
+"The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+"layout-template, etc."
+msgstr ""
+"Paketi tüüp, nt. teema, taustapilt, plasmoid, andmemootor, käivitaja, "
+"paigutusemall vms."
+
+#: plasmapkg/main.cpp:64
+msgctxt "Do not translate <path>"
+msgid "Install the package at <path>"
+msgstr "Paketi paigaldamine asukohas <path>"
+
+#: plasmapkg/main.cpp:65
+msgctxt "Do not translate <name>"
+msgid "Show information of package <name>"
+msgstr "Paketi <name> teabe näitamine"
+
+#: plasmapkg/main.cpp:66
+msgctxt "Do not translate <path>"
+msgid "Upgrade the package at <path>"
+msgstr "Paketi uuendamine asukohas <path>"
+
+#: plasmapkg/main.cpp:67
+msgid "List installed packages"
+msgstr "Paigaldatud pakettide loetlemine"
+
+#: plasmapkg/main.cpp:68
+msgid "List all known package types that can be installed"
+msgstr "Kõigi teadaolevate paigaldatavate paketitüüpide näitamine"
+
+#: plasmapkg/main.cpp:69
+msgctxt "Do not translate <name>"
+msgid "Remove the package named <name>"
+msgstr "Paketi <name> eemaldamine"
+
+#: plasmapkg/main.cpp:70
+msgid ""
+"Absolute path to the package root. If not supplied, then the standard data "
+"directories for this KDE session will be searched instead."
+msgstr ""
+"Pakettide juurasukoha absoluutne asukoht. Kui seda ei anta, otsitakse antud "
+"KDE seansi standardsetest andmekataloogidest."
+
+#: plasmapkg/plasmapkg.cpp:100
+#, kde-format
+msgid "Failed to generate a Package hash for %1"
+msgstr "Paketi räsi genereerimine %1 jaoks nurjus"
+
+#: plasmapkg/plasmapkg.cpp:103
+#, kde-format
+msgid "SHA1 hash for Package at %1: '%2'"
+msgstr "SHA1 räsi paketile asukohas %1: '%2'"
+
+#: plasmapkg/plasmapkg.cpp:140 plasmapkg/plasmapkg.cpp:187
+#: plasmapkg/plasmapkg.cpp:208
+msgctxt "package type"
+msgid "wallpaper"
+msgstr "taustapilt"
+
+#: plasmapkg/plasmapkg.cpp:193
+msgctxt "package type"
+msgid "plasmoid"
+msgstr "plasmoid"
+
+#: plasmapkg/plasmapkg.cpp:199
+msgctxt "package type"
+msgid "package"
+msgstr "pakett"
+
+#: plasmapkg/plasmapkg.cpp:204
+msgctxt "package type"
+msgid "theme"
+msgstr "teema"
+
+#: plasmapkg/plasmapkg.cpp:213
+msgctxt "package type"
+msgid "dataengine"
+msgstr "andmemootor"
+
+#: plasmapkg/plasmapkg.cpp:218
+msgctxt "package type"
+msgid "runner"
+msgstr "käivitaja"
+
+#: plasmapkg/plasmapkg.cpp:223
+msgctxt "package type"
+msgid "wallpaperplugin"
+msgstr "taustapildiplugin"
+
+#: plasmapkg/plasmapkg.cpp:228
+msgctxt "package type"
+msgid "lookandfeel"
+msgstr "välimus"
+
+#: plasmapkg/plasmapkg.cpp:233
+msgctxt "package type"
+msgid "shell"
+msgstr "kest"
+
+#: plasmapkg/plasmapkg.cpp:238
+msgctxt "package type"
+msgid "layout-template"
+msgstr "paigutusemall"
+
+#: plasmapkg/plasmapkg.cpp:243
+msgctxt "package type"
+msgid "kwineffect"
+msgstr "kwiniefekt"
+
+#: plasmapkg/plasmapkg.cpp:248
+msgctxt "package type"
+msgid "windowswitcher"
+msgstr "aknavahetaja"
+
+#: plasmapkg/plasmapkg.cpp:253
+msgctxt "package type"
+msgid "kwinscript"
+msgstr "kwiniskript"
+
+#: plasmapkg/plasmapkg.cpp:263
+#, kde-format
+msgid "Could not find a suitable installer for package of type %1"
+msgstr "Paketile tüübiga %1 ei leitud sobivat paigaldajat"
+
+#: plasmapkg/plasmapkg.cpp:281
+#, kde-format
+msgid "Listing service types: %1"
+msgstr "Teenusetüüpide loend: %1"
+
+#: plasmapkg/plasmapkg.cpp:349
+#, kde-format
+msgid "Error: Plugin %1 is not installed."
+msgstr "Tõrge: plugin %1 ei ole paigaldatud."
+
+#: plasmapkg/plasmapkg.cpp:359
+msgctxt ""
+"No option was given, this is the error message telling the user he needs at "
+"least one, do not translate install, remove, upgrade nor list"
+msgid "One of install, remove, upgrade or list is required."
+msgstr "Nõutav on kas install, remove, upgrade või list."
+
+#: plasmapkg/plasmapkg.cpp:467
+#, kde-format
+msgid "Error: Can't find plugin metadata: %1"
+msgstr "Tõrge: plugina metaandmeid ei leitud: %1"
+
+#: plasmapkg/plasmapkg.cpp:470
+#, kde-format
+msgid "Showing info for package: %1"
+msgstr "Paketi teabe näitamine: %1"
+
+#: plasmapkg/plasmapkg.cpp:471
+#, kde-format
+msgid "      Name : %1"
+msgstr "      Nimi : %1"
+
+#: plasmapkg/plasmapkg.cpp:472
+#, kde-format
+msgid "   Comment : %1"
+msgstr "   Kommentaar : %1"
+
+#: plasmapkg/plasmapkg.cpp:473
+#, kde-format
+msgid "    Plugin : %1"
+msgstr "    Plugin : %1"
+
+#: plasmapkg/plasmapkg.cpp:474
+#, kde-format
+msgid "    Author : %1"
+msgstr "    Autor : %1"
+
+#: plasmapkg/plasmapkg.cpp:475
+#, kde-format
+msgid "      Path : %1"
+msgstr "      Asukoht : %1"
+
+#: plasmapkg/plasmapkg.cpp:486
+msgctxt ""
+"The user entered conflicting options packageroot and global, this is the "
+"error message telling the user he can use only one"
+msgid ""
+"The packageroot and global options conflict each other, please select only "
+"one."
+msgstr ""
+"Paketi juurasukoht ja globaalsed valikud on konfliktis, palun vali neist "
+"ainult üks."
+
+#: plasmapkg/plasmapkg.cpp:511
+msgid "Addon Name"
+msgstr "Lisandi nimi"
+
+#: plasmapkg/plasmapkg.cpp:512
+msgid "Service Type"
+msgstr "Teenuse tüüp"
+
+#: plasmapkg/plasmapkg.cpp:513
+msgid "Path"
+msgstr "Asukoht"
+
+#: plasmapkg/plasmapkg.cpp:514
+msgid "Type Argument"
+msgstr "Tüübi argument"
+
+#: plasmapkg/plasmapkg.cpp:562
+msgid "Package types that are installable with this tool:"
+msgstr "Selle tööriistaga paigaldatavate pakettide tüübid:"
+
+#: plasmapkg/plasmapkg.cpp:563
+msgid "Built in:"
+msgstr "Sisseehitatud:"
+
+#: plasmapkg/plasmapkg.cpp:566
+msgid "DataEngine"
+msgstr "Andmemootor"
+
+#: plasmapkg/plasmapkg.cpp:567
+msgid "Layout Template"
+msgstr "Paigutusemall"
+
+#: plasmapkg/plasmapkg.cpp:568
+msgid "Look and Feel"
+msgstr "Välimus"
+
+#: plasmapkg/plasmapkg.cpp:569
+msgid "Package"
+msgstr "Pakett"
+
+#: plasmapkg/plasmapkg.cpp:570
+msgid "Plasmoid"
+msgstr "Plasmoid"
+
+#: plasmapkg/plasmapkg.cpp:571
+msgid "Runner"
+msgstr "Käivitaja"
+
+#: plasmapkg/plasmapkg.cpp:572
+msgid "Shell"
+msgstr "Kest"
+
+#: plasmapkg/plasmapkg.cpp:573
+msgid "Theme"
+msgstr "Teema"
+
+#: plasmapkg/plasmapkg.cpp:574
+msgid "Wallpaper Images"
+msgstr "Taustapildid"
+
+#: plasmapkg/plasmapkg.cpp:575
+msgid "Animated Wallpaper"
+msgstr "Animeeritud taustapilt"
+
+#: plasmapkg/plasmapkg.cpp:576
+msgid "KWin Effect"
+msgstr "KWini efekt"
+
+#: plasmapkg/plasmapkg.cpp:577
+msgid "KWin Window Switcher"
+msgstr "KWini aknavahetaja"
+
+#: plasmapkg/plasmapkg.cpp:578
+msgid "KWin Script"
+msgstr "KWini skript"
+
+#: plasmapkg/plasmapkg.cpp:585
+msgid "Provided by plugins:"
+msgstr "Pluginate pakutavad:"
+
+#: plasmapkg/plasmapkg.cpp:606
+msgid "Provided by .desktop files:"
+msgstr ".desktop-failide pakutavad:"
+
+#: plasmapkg/plasmapkg.cpp:627
+#, kde-format
+msgid "Successfully upgraded %1"
+msgstr "%1 edukalt uuendatud"
+
+#: plasmapkg/plasmapkg.cpp:629
+#, kde-format
+msgid "Successfully installed %1"
+msgstr "%1 edukalt paigaldatud"
+
+#: plasmapkg/plasmapkg.cpp:632
+#, kde-format
+msgid "Error: Installation of %1 failed: %2"
+msgstr "Tõrge: %1 paigaldamine nurjus: %2"
+
+#: plasmapkg/plasmapkg.cpp:644
+#, kde-format
+msgid "Upgrading package from file: %1"
+msgstr "Paketi uuendamine failist: %1"
+
+#: plasmapkg/plasmapkg.cpp:649
+#, kde-format
+msgid "Successfully uninstalled %1"
+msgstr "%1 edukalt eemaldatud"
+
+#: plasmapkg/plasmapkg.cpp:651
+#, kde-format
+msgid "Error: Uninstallation of %1 failed: %2"
+msgstr "Tõrge: %1 eemaldamine nurjus: %2"
+
+#: plasmaquick/appletquickitem.cpp:513
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Tõrge QML-faili laadimisel: %1"
+
+#: plasmaquick/appletquickitem.cpp:515
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Tõrge apleti laadimisel: paketti ei ole olemas. %1"
+
+#: plasmaquick/configview.cpp:109
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 seadistused"
+
+#: plasmaquick/private/packages.cpp:37
+msgid "Default settings for theme, etc."
+msgstr "Teema jne vaikimisi seadistused."
+
+#: plasmaquick/private/packages.cpp:39
+msgid "Color scheme to use for applications."
+msgstr "Rakendustest kasutatav värviskeem."
+
+#: plasmaquick/private/packages.cpp:42
+msgid "Preview Images"
+msgstr "Piltide eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:43
+msgid "Preview for the Login Manager"
+msgstr "Sisselogimishalduri eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:44
+msgid "Preview for the Lock Screen"
+msgstr "Lukustusekraani eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:45
+msgid "Preview for the Userswitcher"
+msgstr "Kasutaja vahetaja eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:46
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Virtuaalsete töölaudade vahetaja eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:47
+msgid "Preview for Splash Screen"
+msgstr "Tiitelkuva eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:48
+msgid "Preview for KRunner"
+msgstr "KRunneri eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:49
+msgid "Preview for the Window Decorations"
+msgstr "Akna dekoratsioonide eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:50
+msgid "Preview for Window Switcher"
+msgstr "Aknavahetaja eelvaatlus"
+
+#: plasmaquick/private/packages.cpp:52
+msgid "Login Manager"
+msgstr "Sisselogimise haldur"
+
+#: plasmaquick/private/packages.cpp:53
+msgid "Main Script for Login Manager"
+msgstr "Sisselogimise haldur peamine skript"
+
+#: plasmaquick/private/packages.cpp:55
+msgid "Logout Dialog"
+msgstr "Väljalogimisdialoog"
+
+#: plasmaquick/private/packages.cpp:56
+msgid "Main Script for Logout Dialog"
+msgstr "Väljalogimisdialoogi peamine skript"
+
+#: plasmaquick/private/packages.cpp:58
+msgid "Screenlocker"
+msgstr "Ekraani lukustaja"
+
+#: plasmaquick/private/packages.cpp:59
+msgid "Main Script for Lock Screen"
+msgstr "Lukustusekraani peamine skript"
+
+#: plasmaquick/private/packages.cpp:61
+msgid "UI for fast user switching"
+msgstr "Kasutajaliides kiireks kasutaja vahetamiseks"
+
+#: plasmaquick/private/packages.cpp:62
+msgid "Main Script for User Switcher"
+msgstr "Kasutaja vahetaja peamine skript"
+
+#: plasmaquick/private/packages.cpp:64
+msgid "Virtual Desktop Switcher"
+msgstr "Virtuaalsete töölaudade vahetaja"
+
+#: plasmaquick/private/packages.cpp:65
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Virtuaalsete töölaudade vahetaja peamine skript"
+
+#: plasmaquick/private/packages.cpp:67
+msgid "On-Screen Display Notifications"
+msgstr "Ekraanimärguanded"
+
+#: plasmaquick/private/packages.cpp:68
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Ekraanimärguannete peamine skript"
+
+#: plasmaquick/private/packages.cpp:70
+msgid "Splash Screen"
+msgstr "Tiitelkuva"
+
+#: plasmaquick/private/packages.cpp:71
+msgid "Main Script for Splash Screen"
+msgstr "Tiitelkuva peamine skript"
+
+#: plasmaquick/private/packages.cpp:73
+msgid "KRunner UI"
+msgstr "KRunneri kasutajaliides"
+
+#: plasmaquick/private/packages.cpp:74
+msgid "Main Script KRunner"
+msgstr "KRunneri peamine skript"
+
+#: plasmaquick/private/packages.cpp:76
+msgid "Window Decoration"
+msgstr "Akna dekoratsioonid"
+
+#: plasmaquick/private/packages.cpp:77
+msgid "Main Script for Window Decoration"
+msgstr "Akna dekoratsioonide peamine skript"
+
+#: plasmaquick/private/packages.cpp:79
+msgid "Window Switcher"
+msgstr "Aknavahetaja"
+
+#: plasmaquick/private/packages.cpp:80
+msgid "Main Script for Window Switcher"
+msgstr "Aknavahetaja peamine skript"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:462
+msgid "Content dropped"
+msgstr "Kohale lohistati sisu"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:463
+msgid "Fetching file type..."
+msgstr "Failitüübi hankimine..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:602
+msgid "Plasma Package"
+msgstr "Plasma pakett"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
+msgid "Install"
+msgstr "Paigalda"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+msgid "Widgets"
+msgstr "Vidinad"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
+msgid "Icon"
+msgstr "Ikoon"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
+msgid "Wallpaper"
+msgstr "Taustapilt"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:670
+msgid "Package Installation Failed"
+msgstr "Paketi paigaldamine nurjus"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:689
+msgid "The package you just dropped is invalid."
+msgstr "Lohistatud pakett on vigane."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:997
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "%1 valikud"
