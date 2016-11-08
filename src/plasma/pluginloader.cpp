@@ -212,23 +212,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
-    if (!p.isValid()) {
-        //some applets have actually the root path from another package, such as icontasks
-        //try to do a fallback package with X-Plasma-RootPath root
-        p.setRequired("mainscript", false);
-        p.setPath(name);
-
-        const KPluginMetaData md(p.metadata());
-        const KPackage::Package fp = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), md.value(QStringLiteral("X-Plasma-RootPath")));
-        p.setFallbackPackage(fp);
-
-        if (!fp.isValid()) {
-            qCWarning(LOG_PLASMA) << "invalid fallback path in " << p.path();
-            return 0;
-        }
-    }
-
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
