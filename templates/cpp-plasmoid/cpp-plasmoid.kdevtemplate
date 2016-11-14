@@ -25,6 +25,7 @@ Comment[ca]=Una plantilla de miniaplicació del Plasma escrita en una barreja h�
 Comment[ca@valencia]=Una plantilla de miniaplicació del Plasma escrita en una barreja híbrida de QML i C++: una plantilla de miniaplicació del Plasma que mostra una imatge SVG i un text
 Comment[en_GB]=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
 Comment[es]=Una plantilla de miniaplicación para Plasma escrita en una mezcla híbrida de QML y C++: una plantilla de miniaplicación para Plasma que muestra una imagen SVG y un texto
+Comment[fi]=QML:n ja C++:n hybridikoosteella kirjoitettu Plasma-sovelmamalli, joka näyttää SVG-kuvan ja tekstin
 Comment[it]=Un modello di applet di Plasma scritto in un misto di QML e C++: un modello di applet di Plasma che visualizza un'immagine SVG e un testo
 Comment[ko]=QML과 C++가 섞여 있는 Plasma 애플릿 템플릿: SVG 그림과 텍스트를 표시하는 Plasma 애플릿 템플릿
 Comment[nl]=Een sjabloon voor Plasma-applet geschreven in een hybride mengel van QML en C++: een Plasma-appletsjabloon die een SVG afbeelding en een tekst toont
