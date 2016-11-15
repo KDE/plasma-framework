@@ -150,8 +150,11 @@ void AppletInterface::init()
         bool activate = !( isExpanded() && isActivationTogglesExpanded() );
 
         setExpanded(activate);
-        if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
-            i->setFocus(activate, Qt::ShortcutFocusReason);
+        if (activate) {
+            if (QQuickItem *i = qobject_cast<QQuickItem *>(fullRepresentationItem())) {
+                // Bug 372476: never pull focus away from it, only setFocus(true)
+                i->setFocus(true, Qt::ShortcutFocusReason);
+            }
         }
     });
 
