@@ -198,8 +198,8 @@ Item {
                 var itemWidth = Math.min(maxAllowedSize, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
                 var itemHeight = Math.min(maxAllowedSize, (root.height - (visibleChildCount-1)*10) / visibleChildCount)
 
-                var itemIndex = mirrored ? childCount - 1 : 0
-                var increment = mirrored ? - 1 : 1
+                var itemIndex = mirrored && root.isHorizontal ? childCount - 1 : 0
+                var increment = mirrored && root.isHorizontal ? - 1 : 1
                 var visibleIndex = 0
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {
