@@ -582,7 +582,7 @@ void ThemePrivate::settingsFileChanged(const QString &file)
     qCDebug(LOG_PLASMA) << "settingsFile: " << file;
     if (file == themeMetadataPath) {
         const KPluginInfo pluginInfo(themeMetadataPath);
-        if (themeVersion != pluginInfo.version()) {
+        if (!pluginInfo.isValid() || themeVersion != pluginInfo.version()) {
             scheduleThemeChangeNotification(SvgElementsCache);
         }
     } else if (file.endsWith(QLatin1String(themeRcFile))) {
