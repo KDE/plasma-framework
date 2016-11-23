@@ -24,7 +24,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.Label {
     id: control
 
-    height: Math.round(Math.max(paintedHeight, TextSingleton.height * 1.6))
+    height: Math.round(Math.max(paintedHeight, units.gridUnit * 1.6))
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     activeFocusOnTab: false

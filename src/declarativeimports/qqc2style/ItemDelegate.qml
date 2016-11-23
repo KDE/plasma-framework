@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Templates 2.0 as T
+import org.kde.plasma.core 2.0 as PlasmaCore
 import "private"
 
 T.CheckDelegate {
@@ -41,7 +42,7 @@ T.CheckDelegate {
 
         text: control.text
         font: control.font
-        color: (control.pressed && !control.checked && !control.sectionDelegate) ? SystemPaletteSingleton.highlightedText(control.enabled) : SystemPaletteSingleton.text(control.enabled)
+        color: (control.pressed && !control.checked && !control.sectionDelegate) ? theme.highlightedText : theme.viewTextColor
         elide: Text.ElideRight
         visible: control.text
         horizontalAlignment: Text.AlignLeft

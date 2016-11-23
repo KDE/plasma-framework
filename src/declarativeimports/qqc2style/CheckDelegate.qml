@@ -19,6 +19,7 @@
 
 import QtQuick 2.5
 import QtQuick.Templates 2.0 as T
+import org.kde.plasma.core 2.0 as PlasmaCore
 import "private"
 
 T.CheckDelegate {
