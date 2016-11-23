@@ -25,7 +25,8 @@ import "private" as Private
 T.Button {
     id: control
 
-    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
+    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+                            contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(units.gridUnit * 1.6, contentItem.implicitHeight + topPadding + bottomPadding)
 
     leftPadding: surfaceNormal.margins.left
@@ -47,6 +48,8 @@ T.Button {
 
     background: PlasmaCore.FrameSvgItem {
         id: surfaceNormal
+        //retrocompatibility with old controls
+        implicitWidth: units.gridUnit * 6
         anchors.fill: parent
         imagePath: "widgets/button"
         prefix: control.pressed ? "pressed" : "normal"
