@@ -22,12 +22,14 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
 PlasmaCore.FrameSvgItem {
+    id: root
     property Item control
     imagePath: "widgets/button"
     prefix: "normal"
     implicitWidth: units.gridUnit
     implicitHeight: units.gridUnit
     opacity: control.enabled ? 1 : 0.6
+    property int checkState: control.checkState
 
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {
@@ -36,7 +38,7 @@ PlasmaCore.FrameSvgItem {
         }
         elementId: "checkbox"
         opacity: {
-            switch (control.checkState) {
+            switch (root.checkState) {
             case Qt.Checked:
                 return 1;
             case Qt.PartiallyChecked:
