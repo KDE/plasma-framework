@@ -21,30 +21,26 @@ import QtQuick 2.6
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
-PlasmaCore.FrameSvgItem {
+PlasmaCore.SvgItem {
     property Item control
-    imagePath: "widgets/button"
-    prefix: "normal"
-    implicitWidth: units.gridUnit
-    implicitHeight: units.gridUnit
+    svg: PlasmaCore.Svg {
+        id: buttonSvg
+        imagePath: "widgets/actionbutton"
+    }
+    elementId: "normal"
     opacity: control.enabled ? 1 : 0.6
 
+    implicitWidth: implicitHeight
+    implicitHeight: units.gridUnit
+
     PlasmaCore.SvgItem {
+        id: checkmark
         svg: PlasmaCore.Svg {
             id: checkmarkSvg
             imagePath: "widgets/checkmarks"
         }
-        elementId: "checkbox"
-        opacity: {
-            switch (control.checkState) {
-            case Qt.Checked:
-                return 1;
-            case Qt.PartiallyChecked:
-                return 0.5;
-            default:
-                return 0;
-            }
-        }
+        elementId: "radiobutton"
+        opacity: control.checked ? 1 : 0
         anchors {
             fill: parent
         }
@@ -55,9 +51,9 @@ PlasmaCore.FrameSvgItem {
             }
         }
     }
-    Private.ButtonShadow {
-        z: -1
+    Private.RoundShadow {
         anchors.fill: parent
+        z: -1
         state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
     }
 }
