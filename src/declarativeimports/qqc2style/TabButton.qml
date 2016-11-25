@@ -21,6 +21,7 @@ import QtQuick 2.6
 import QtQuick.Controls 2.0
 import QtQml.Models 2.1
 import QtQuick.Templates 2.0 as T
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 T.TabButton {
     id: control

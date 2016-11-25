@@ -42,7 +42,7 @@ T.CheckDelegate {
 
         text: control.text
         font: control.font
-        color: (control.pressed && !control.checked && !control.sectionDelegate) ? theme.highlightedText : theme.viewTextColor
+        color: theme.viewTextColor
         elide: Text.ElideRight
         visible: control.text
         horizontalAlignment: Text.AlignLeft

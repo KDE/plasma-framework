@@ -30,8 +30,7 @@ T.ComboBox {
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding) + indicator.implicitWidth + rightPadding
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitHeight: units.gridUnit * 1.6
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     hoverEnabled: true

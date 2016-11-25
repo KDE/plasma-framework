@@ -22,14 +22,12 @@ import QtQuick.Templates 2.0 as T
 import QtQuick.Controls 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
-T.CheckBox {
+T.RadioButton {
     id: control
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-                             Math.max(contentItem.implicitHeight,
-                                      indicator ? indicator.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitHeight: units.gridUnit * 1.6
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 1
