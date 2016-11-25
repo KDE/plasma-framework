@@ -46,15 +46,10 @@ T.Button {
         elide: Text.ElideRight
     }
 
-    background: PlasmaCore.FrameSvgItem {
-        id: surfaceNormal
+    background: Item {
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 6
-        anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: control.pressed ? "pressed" : "normal"
         Private.ButtonShadow {
-            z: -1
             anchors.fill: parent
             state: {
                 if (control.pressed) {
@@ -65,6 +60,31 @@ T.Button {
                     return "focus"
                 } else {
                     return "shadow"
+                }
+            }
+        }
+        PlasmaCore.FrameSvgItem {
+            id: surfaceNormal
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "normal"
+            opacity: control.checked || control.pressed ? 0 : 1
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "pressed"
+            opacity: control.checked || control.pressed ? 1 : 0
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
         }

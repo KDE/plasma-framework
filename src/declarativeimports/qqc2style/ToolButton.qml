@@ -47,21 +47,12 @@ T.ToolButton {
         elide: Text.ElideRight
     }
 
-    background: PlasmaCore.FrameSvgItem {
-        id: surfaceNormal
-        anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: control.pressed || control.checked ? "pressed" : "normal"
-        opacity: !control.flat || control.hovered || control.pressed || control.checked ? 1 : 0
-        Behavior on opacity {
-            OpacityAnimator {
-                easing.type: Easing.InOutQuad
-                duration: units.longDuration
-            }
-        }
+    background: Item {
+        //retrocompatibility with old controls
+        implicitWidth: units.gridUnit * 6
         Private.ButtonShadow {
-            z: -1
             anchors.fill: parent
+            visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
             state: {
                 if (control.pressed) {
                     return "hidden"
@@ -71,6 +62,31 @@ T.ToolButton {
                     return "focus"
                 } else {
                     return "shadow"
+                }
+            }
+        }
+        PlasmaCore.FrameSvgItem {
+            id: surfaceNormal
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "normal"
+            opacity: (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            imagePath: "widgets/button"
+            prefix: "pressed"
+            opacity: control.checked || control.pressed ? 1 : 0
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
                 }
             }
         }
