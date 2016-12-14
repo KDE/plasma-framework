@@ -48,7 +48,7 @@ QtQuickControlStyle.TextFieldStyle {
 
         //In order to get the same height in both buttons and lineedits we need to apply the same rule here
 
-        implicitHeight: Math.max(theme.mSize(theme.defaultFont).height * 1.6, theme.mSize(theme.defaultFont).height + base.margins.top + base.margins.bottom)
+        implicitHeight: Math.max(control.cursorRectangle.height * 1.6, control.cursorRectangle.height + base.margins.top + base.margins.bottom)
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
         opacity: control.enabled ? 1 : 0.6
 
