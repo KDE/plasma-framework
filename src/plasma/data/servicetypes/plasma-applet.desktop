@@ -53,6 +53,12 @@ Type=QString
 [PropertyDef::X-Plasma-RootPath]
 Type=QString
 
+[PropertyDef::X-Plasma-MainScript]
+Type=QString
+
+[PropertyDef::X-Plasma-ContainmentType]
+Type=QString
+
 [PropertyDef::X-Plasma-DropMimeTypes]
 Type=QStringList
 
