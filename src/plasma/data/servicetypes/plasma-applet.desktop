@@ -59,8 +59,10 @@ Type=QStringList
 [PropertyDef::X-Plasma-DropUrlPatterns]
 Type=QStringList
 
+#TODO KF6: this should become a bool again
+#is a string due to wrong checking in systray client code X-Plasma-NotificationArea == "true"
 [PropertyDef::X-Plasma-NotificationArea]
-Type=bool
+Type=QString
 
 [PropertyDef::X-Plasma-NotificationAreaCategory]
 Type=QString
