@@ -74,14 +74,12 @@ Item {
     onHeightChanged: layoutTimer.restart()
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
-            if (event.key == Qt.Key_Right || priv.mirrored) {
-                priv.goNextTab()
-                event.accepted = true
-            } else if (event.key == Qt.Key_Left || priv.mirrored) {
-                priv.goPreviousTab()
-                event.accepted = true
-            }
+        if (event.key == Qt.Key_Right) {
+            (priv.mirrored ? priv.goPreviousTab : priv.goNextTab)();
+            event.accepted = true
+        } else if (event.key == Qt.Key_Left || priv.mirrored) {
+            (priv.mirrored ? priv.goNextTab : priv.goPreviousTab)();
+            event.accepted = true
         }
     }
 
