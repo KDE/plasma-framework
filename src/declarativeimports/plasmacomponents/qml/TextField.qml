@@ -22,7 +22,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.2 as QtControls
 import org.kde.plasma.core 2.0 as PlasmaCore
 import QtQuick.Controls.Styles.Plasma 2.0 as Styles
-
+import org.kde.kconfig 1.0
 
 /**
  * A plasma theme based text field widget.
@@ -44,6 +44,10 @@ QtControls.TextField {
      * @since 5.26
      */
     property bool revealPasswordButtonShown: false
+
+    // this takes into account kiosk restriction
+    readonly property bool __effectiveRevealPasswordButtonShown: revealPasswordButtonShown
+                                                              && KAuthorized.authorize("lineedit_reveal_password")
 
     //Deprecated/unsupported api
     /**
@@ -88,10 +92,10 @@ QtControls.TextField {
 
         PlasmaCore.IconItem {
             id: showPasswordButton
-            source: revealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "hint" : "visibility") : ""
+            source: __effectiveRevealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "hint" : "visibility") : ""
             height: Math.max(textField.height * 0.8, units.iconSizes.small)
             width: height
-            opacity: (textField.length > 0 && revealPasswordButtonShown && textField.enabled) ? 1 : 0
+            opacity: (textField.length > 0 && __effectiveRevealPasswordButtonShown && textField.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {

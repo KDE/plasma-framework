@@ -74,7 +74,7 @@ QtQuickControlStyle.TextFieldStyle {
                 var actionIconSize = Math.max(textField.height * 0.8, units.iconSizes.small);
                 //actionCount is an int of the number of items
                 var actionCount = (control.hasOwnProperty("clearButtonShown") && control.clearButtonShown) +
-                                  (control.hasOwnProperty("revealPasswordButtonShown") && control.revealPasswordButtonShown);
+                                  (control.hasOwnProperty("__effectiveRevealPasswordButtonShown") && control.__effectiveRevealPasswordButtonShown);
                 return base.margins.right + (actionIconSize * actionCount) + (actionCount > 0 ? units.smallSpacing : 0);
             })
         }
