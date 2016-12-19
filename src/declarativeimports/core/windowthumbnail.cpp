@@ -165,6 +165,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
         // restart the redirection, it might not have been active yet
         stopRedirecting();
         startRedirecting();
+        update();
     });
     connect(this, &QQuickItem::enabledChanged, [this]() {
         if (!isEnabled()) {
@@ -172,6 +173,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
             releaseResources();
         } else if (isVisible()) {
             startRedirecting();
+            update();
         }
     });
     connect(this, &QQuickItem::visibleChanged, [this]() {
@@ -180,6 +182,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
             releaseResources();
         } else if (isEnabled()) {
             startRedirecting();
+            update();
         }
     });
     if (QGuiApplication *gui = dynamic_cast<QGuiApplication *>(QCoreApplication::instance())) {
@@ -221,7 +224,7 @@ void WindowThumbnail::releaseResources()
 #endif
 #if HAVE_GLX || HAVE_EGL
     // NoStage is supported since Qt >= 5.6.x
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) 
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
         QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
     #else
         QQuickWindow::RenderStage m_renderStage = QQuickWindow::BeforeSynchronizingStage;
