@@ -250,7 +250,6 @@ void AppletInterface::setIcon(const QString &icon)
     }
 
     applet()->setIcon(icon);
-    emit iconChanged();
 }
 
 QString AppletInterface::title() const
