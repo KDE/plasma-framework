@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Example window thumbnails list
-Name[ast]=Exemplu de llistáu de miniatures de ventanes
 Name[bs]=Primjer prozor liste sličica
 Name[ca]=Exemple de llista de miniatures de les finestres
 Name[ca@valencia]=Exemple de llista de miniatures de les finestres
@@ -38,7 +37,6 @@ Name[x-test]=xxExample window thumbnails listxx
 Name[zh_CN]=窗口缩略图的例子
 Name[zh_TW]=視窗縮圖列表的範例
 Comment=Example showing how to display window thumbnails
-Comment[ast]=Exemplu enseñando cómo amosar miniatures de ventanes
 Comment[bs]=Primjer prikazuje kako prikazati prozor sličica
 Comment[ca]=Exemple que mostra com visualitzar miniatures de les finestres
 Comment[ca@valencia]=Exemple que mostra com visualitzar miniatures de les finestres
