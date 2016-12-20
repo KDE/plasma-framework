@@ -258,7 +258,6 @@ void AppletInterface::setTitle(const QString &title)
     }
 
     applet()->setTitle(title);
-    emit titleChanged();
 }
 
 QString AppletInterface::toolTipMainText() const
