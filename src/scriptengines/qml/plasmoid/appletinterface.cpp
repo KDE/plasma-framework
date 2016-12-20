@@ -82,6 +82,13 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::titleChanged,
             this, &AppletInterface::titleChanged);
 
+    connect(applet(), &Plasma::Applet::titleChanged,
+            this, [this]() {
+                if (m_toolTipMainText.isNull()) {
+                    emit toolTipMainTextChanged();
+                }
+            });
+
     connect(applet(), &Plasma::Applet::iconChanged,
             this, &AppletInterface::iconChanged);
 
