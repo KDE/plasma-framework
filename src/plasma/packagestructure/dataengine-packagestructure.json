@@ -13,6 +13,7 @@
         ], 
         "Id": "Plasma/DataEngine", 
         "Name": "Data Engine", 
+        "Name[ast]": "Motor de datos", 
         "Name[ca@valencia]": "Motor de dades", 
         "Name[ca]": "Motor de dades", 
         "Name[cs]": "Datový nástroj", 
