@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Shell
 Name=Plasma Shell
 Name[ar]=صَدفة پلازما
+Name[ast]=Shell de Plasma
 Name[bs]=Plazma školjka
 Name[ca]=Intèrpret d'ordres del Plasma
 Name[ca@valencia]=Intèrpret d'ordes del Plasma

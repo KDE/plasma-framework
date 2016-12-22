@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Plasma QML Applet
+Name[ast]=Applet QML de Plasma
 Name[ca]=Miniaplicació QML del Plasma
 Name[ca@valencia]=Miniaplicació QML del Plasma
 Name[cs]=Aplet QML Plasma

@@ -1,6 +1,7 @@
 # KDE Config File
 [General]
 Name=Simple Plasma Wallpaper
+Name[ast]=Fondu de pantalla cenciellu de Plasma
 Name[ca]=Fons d'escriptori senzill del Plasma
 Name[ca@valencia]=Fons d'escriptori senzill del Plasma
 Name[cs]=Jednoduchá tapeta pro prostředí Plasma
