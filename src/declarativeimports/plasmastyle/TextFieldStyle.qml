@@ -38,8 +38,9 @@ QtQuickControlStyle.TextFieldStyle {
      * Since the password echo is a circle woithout vertical or horizontal lines, it won't be
      * more blurred with different rendring types.
      * Using Qt rendering, the dots will look more aligned and equally spaced.
+     * Also if we are on mobile, make sure we use QtRendering
      */
-    renderType: control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
+    renderType: !QtQuickControlsPrivate.Settings.isMobile && control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
