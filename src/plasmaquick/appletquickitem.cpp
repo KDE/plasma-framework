@@ -692,6 +692,7 @@ void AppletQuickItem::setPreferredRepresentation(QQmlComponent *component)
 
     d->preferredRepresentation = component;
     emit preferredRepresentationChanged(component);
+    d->compactRepresentationCheck();
 }
 
 bool AppletQuickItem::isExpanded() const
