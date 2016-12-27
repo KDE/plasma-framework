@@ -1,6 +1,5 @@
 /*
- *   Copyright 2008 Aaron Seigo <aseigo@kde.org>
- *   Copyright 2013 Sebastian Kügler <sebas@kde.org>
+ *   Copyright 2016 Aleix Pol Gonzalez <aleixpol@kde.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as
@@ -19,58 +18,20 @@
  */
 
 /**
- * plasmapkg2 exit codes used in this program
+ * This binary is deprecated, please refer to kpackagetool5 within the KPackage framework
+ */
 
-    0 No error
-
-    1 Unspecified error
-    2 Plugin is not installed
-    3 Plugin or package invalid
-    4 Installation failed, see stderr for reason
-    5 Could not find a suitable installer for package type
-    6 No install option given
-    7 Conflicting arguments supplied
-    8 Uninstallation failed, see stderr for reason
-    9 Failed to generate package hash
-
-*/
-
-#include <klocalizedstring.h>
-#include <qcommandlineparser.h>
-#include <qcommandlineoption.h>
-
-#include "plasmapkg.h"
+#include <QCoreApplication>
+#include <QProcess>
 
 int main(int argc, char **argv)
 {
-    QCommandLineParser parser;
-    Plasma::PlasmaPkg app(argc, argv, &parser);
+    QCoreApplication app(argc, argv);
+    QProcess p;
+    p.setProcessChannelMode(QProcess::ForwardedChannels);
+    p.start("kpackagetool5", app.arguments().mid(1));
+    p.waitForFinished();
 
-    const QString description = i18n("Plasma Package Manager");
-    const char version[] = "2.0";
-
-    app.setApplicationVersion(version);
-    parser.addVersionOption();
-    parser.addHelpOption();
-    parser.setApplicationDescription(description);
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("hash"), i18nc("Do not translate <path>", "Generate a SHA1 hash for the package at <path>"), QStringLiteral("path")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("g") << QStringLiteral("global"), i18n("For install or remove, operates on packages installed for all users.")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("type"),
-                                        i18nc("theme, wallpaper, etc. are keywords, but they may be translated, as both versions "
-                                                "are recognized by the application "
-                                                "(if translated, should be same as messages with 'package type' context below)",
-                                                "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, layout-template, etc."),
-                                        QStringLiteral("type"), QStringLiteral("plasmoid")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("i") << QStringLiteral("install"), i18nc("Do not translate <path>", "Install the package at <path>"), QStringLiteral("path")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"), i18nc("Do not translate <name>", "Show information of package <name>"), QStringLiteral("name")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("u") << QStringLiteral("upgrade"), i18nc("Do not translate <path>", "Upgrade the package at <path>"), QStringLiteral("path")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("l") << QStringLiteral("list"), i18n("List installed packages")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("list-types"), i18n("List all known package types that can be installed")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("r") << QStringLiteral("remove"), i18nc("Do not translate <name>", "Remove the package named <name>"), QStringLiteral("name")));
-    parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("p") << QStringLiteral("packageroot"), i18n("Absolute path to the package root. If not supplied, then the standard data directories for this KDE session will be searched instead."), QStringLiteral("path")));
-
-    parser.process(app);
-
-    return app.exec();
+    return p.exitCode();
 }
 
