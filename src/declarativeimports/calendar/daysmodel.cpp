@@ -52,8 +52,9 @@ DaysModel::~DaysModel()
 void DaysModel::setSourceData(QList<DayData> *data)
 {
     if (m_data != data) {
+        beginResetModel();
         m_data = data;
-        reset();
+        endResetModel();
     }
 }
 
