@@ -143,6 +143,13 @@ QtQuickControlStyle.ScrollViewStyle {
         prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
         implicitWidth: widthHint
         colorGroup: PlasmaCore.ColorScope.colorGroup
+        opacity: styleData.hovered ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     handle: PlasmaCore.FrameSvgItem {
