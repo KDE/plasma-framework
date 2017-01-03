@@ -556,19 +556,19 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
         return (pa.isEmpty() || pa == parentApp) && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
-    KPluginInfo::List allApplets =  KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
+    QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
     KPluginInfo::List filtered;
-    foreach (const KPluginInfo &info, allApplets) {
-        QStringList urlPatterns = info.property(QStringLiteral("X-Plasma-DropUrlPatterns")).toStringList();
+    foreach (const KPluginMetaData &md, allApplets) {
+        QStringList urlPatterns = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns"));
         foreach (const QString &glob, urlPatterns) {
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
 #ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << info.name() << "matches" << glob << url;
+                // qCDebug(LOG_PLASMA) << md.name() << "matches" << glob << url;
 #endif
-                filtered << info;
+                filtered << KPluginInfo::fromMetaData(md);
             }
         }
     }
