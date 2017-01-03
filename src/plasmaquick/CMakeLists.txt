@@ -96,7 +96,7 @@ install(FILES ${PlasmaQuick_CamelCase_HEADERS}
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5PlasmaQuick")
 
-ecm_configure_package_config_file(
+configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
