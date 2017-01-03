@@ -101,7 +101,7 @@ public:
 /// @endcond
 
     ColorScope *findParentScope() const;
-    void itemChange(ItemChange change, const ItemChangeData &value);
+    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void colorGroupChanged();
