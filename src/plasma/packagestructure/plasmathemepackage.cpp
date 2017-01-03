@@ -22,6 +22,7 @@
 #include <KLocalizedString>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
+#include "config-plasma.h"
 
 class ThemePackage : public KPackage::PackageStructure
 {
@@ -34,6 +35,7 @@ public:
         // by default the packages have "contents/" as contentsPrefixPaths
         // but for the themes we don't want that, so unset it.
         package->setContentsPrefixPaths(QStringList());
+        package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/"));
 
         package->addDirectoryDefinition("dialogs", QStringLiteral("dialogs/"), i18n("Images for dialogs"));
         package->addFileDefinition("dialogs/background", QStringLiteral("dialogs/background.svg"),
