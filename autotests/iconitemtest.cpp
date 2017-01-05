@@ -441,5 +441,44 @@ void IconItemTest::windowChanged()
     QCOMPARE(grabImage(item), img);
 }
 
+void IconItemTest::paintedSize()
+{
+    QQuickItem *item = createIconItem();
+
+    QCOMPARE(item->property("paintedWidth").toInt(), item->property("implicitWidth").toInt());
+    QCOMPARE(item->property("paintedHeight").toInt(), item->property("implicitHeight").toInt());
+
+    item->setWidth(40);
+    item->setHeight(40);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 32);
+    QCOMPARE(item->property("paintedHeight").toInt(), 32);
+
+    QIcon landscapeIcon(QPixmap(40, 35));
+    item->setProperty("source", landscapeIcon);
+    grabImage(item); // basically just to force loading the pixmap
+
+    // expanded to fit IconItem size whilst keeping aspect ratio
+    // width should be rounded to icon size, ie. 32 is next smallest
+    QCOMPARE(item->property("paintedWidth").toInt(), 32);
+    // height should still match aspect ratio, so *not* 24!
+    QCOMPARE(item->property("paintedHeight").toInt(), 28);
+
+    QIcon portraitIcon(QPixmap(15, 40));
+    item->setProperty("source", portraitIcon);
+    grabImage(item);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 12);
+    QCOMPARE(item->property("paintedHeight").toInt(), 32);
+
+    item->setWidth(400);
+    item->setHeight(400);
+
+    grabImage(item);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 150);
+    QCOMPARE(item->property("paintedHeight").toInt(), 400);
+}
+
 QTEST_MAIN(IconItemTest)
 

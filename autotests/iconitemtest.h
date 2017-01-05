@@ -54,6 +54,7 @@ private Q_SLOTS:
     void animatingActiveChange();
     void animatingEnabledChange();
     void windowChanged();
+    void paintedSize();
 
 private:
     QQuickItem *createIconItem();

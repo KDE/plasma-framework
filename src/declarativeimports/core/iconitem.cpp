@@ -309,12 +309,37 @@ bool IconItem::isValid() const
 
 int IconItem::paintedWidth() const
 {
-    return Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+    return paintedSize(boundingRect().size()).width();
 }
 
 int IconItem::paintedHeight() const
 {
-    return Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
+    return paintedSize(boundingRect().size()).height();
+}
+
+QSize IconItem::paintedSize(const QSizeF &containerSize) const
+{
+    const QSize &actualContainerSize = (containerSize.isValid() ? containerSize : boundingRect().size()).toSize();
+
+    const QSize paintedSize = m_iconPixmap.size().scaled(actualContainerSize, Qt::KeepAspectRatio);
+
+    const int width = paintedSize.width();
+    const int height = paintedSize.height();
+
+    if (width == height) {
+        return QSize(Units::roundToIconSize(width), Units::roundToIconSize(height));
+    }
+
+    // if we don't have a square image, we still want it to be rounded to icon size
+    // but we cannot just blindly round both as we might erroneously change a 50x45 image to be 48x32
+    // instead, round the bigger of the two and then downscale the smaller with the ratio
+    if (width > height) {
+        const int roundedWidth = Units::roundToIconSize(width);
+        return QSize(roundedWidth, qRound(height * (roundedWidth / static_cast<qreal>(width))));
+    } else {
+        const int roundedHeight = Units::roundToIconSize(height);
+        return QSize(qRound(width * (roundedHeight / static_cast<qreal>(height))), roundedHeight);
+    }
 }
 
 void IconItem::setStatus(Plasma::Svg::Status status)
@@ -366,10 +391,8 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         animatingNode->setProgress(m_animValue);
 
         if (m_sizeChanged) {
-            const int iconSize = Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
-            const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
-                                 QSize(iconSize, iconSize));
-
+            const QSize newSize = paintedSize();
+            const QRect destRect(QPointF(boundingRect().center() - QPointF(newSize.width(), newSize.height()) / 2).toPoint(), newSize);
             animatingNode->setRect(destRect);
             m_sizeChanged = false;
         }
@@ -387,10 +410,8 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         }
 
         if (m_sizeChanged) {
-            const int iconSize = Units::roundToIconSize(qMin(boundingRect().size().width(), boundingRect().size().height()));
-            const QRect destRect(QPointF(boundingRect().center() - QPointF(iconSize/2, iconSize/2)).toPoint(),
-                                 QSize(iconSize, iconSize));
-
+            const QSize newSize = paintedSize();
+            const QRect destRect(QPointF(boundingRect().center() - QPointF(newSize.width(), newSize.height()) / 2).toPoint(), newSize);
             textureNode->setRect(destRect);
             m_sizeChanged = false;
         }
@@ -489,9 +510,15 @@ void IconItem::loadPixmap()
         result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
     }
 
+    const QSize oldPaintedSize = paintedSize();
+
     m_oldIconPixmap = m_iconPixmap;
     m_iconPixmap = result;
     m_textureChanged = true;
+
+    if (oldPaintedSize != paintedSize()) {
+        emit paintedSizeChanged();
+    }
 
     //don't animate initial setting
     if ((m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged && !m_blockNextAnimation) {
@@ -528,8 +555,7 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
             update();
         }
 
-        if (Units::roundToIconSize(qMin(oldGeometry.size().width(), oldGeometry.size().height())) !=
-            Units::roundToIconSize(qMin(newGeometry.size().width(), newGeometry.size().height()))) {
+        if (paintedSize(oldGeometry.size()) != paintedSize(newGeometry.size())) {
             emit paintedSizeChanged();
         }
     }
