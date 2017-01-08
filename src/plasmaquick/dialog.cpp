@@ -648,10 +648,9 @@ void DialogPrivate::slotWindowPositionChanged()
 
     if (mainItem) {
         auto margin = frameSvgItem->fixedMargins();
-        mainItem->setX(margin->left());
-        mainItem->setY(margin->top());
-        mainItem->setWidth(q->width() - margin->left() - margin->right());
-        mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+        mainItem->setPosition(QPoint(margin->left(), margin->top()));
+        mainItem->setSize(QSize(q->width() - margin->left() - margin->right(),
+                                q->height() - margin->top() - margin->bottom()));
     }
 }
 
