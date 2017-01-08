@@ -117,8 +117,13 @@ class Units : public QObject
 public:
 /// @cond INTERNAL_DOCS
 
-    Units(QObject *parent = 0);
     ~Units();
+
+    /**
+     * @return a reference to the global Units instance
+     * @since 5.31
+     */
+    static Units &instance();
 
     /**
      * @return pixel value for a grid Unit. Depends on DPI and font size.
@@ -181,6 +186,12 @@ private Q_SLOTS:
     void updateSpacing();
 
 private:
+    Units(QObject *parent = 0);
+    Units(Units const&) = delete; // Copy construct
+    Units(Units&&) = delete; // Move construct
+    Units& operator=(Units const&) = delete; // Copy assign
+    Units& operator=(Units &&) = delete; // Move assign
+
     void updateDevicePixelRatio();
     void updatePlasmaRCSettings();
     /**

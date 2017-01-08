@@ -236,7 +236,6 @@ private:
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
     QString m_prefix;
-    Units m_units;
     bool m_textureChanged;
     bool m_sizeChanged;
     bool m_fastPath;

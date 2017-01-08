@@ -59,8 +59,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     Plasma::QuickTheme *theme = new Plasma::QuickTheme(engine);
     context->setContextProperty(QStringLiteral("theme"), theme);
 
-    Units *units = new Units(context);
-    context->setContextProperty(QStringLiteral("units"), units);
+    context->setContextProperty(QStringLiteral("units"), &Units::instance());
 
     if (!engine->rootContext()->contextObject()) {
         KDeclarative::KDeclarative kdeclarative;

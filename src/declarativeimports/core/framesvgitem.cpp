@@ -265,7 +265,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
-    connect(&m_units, &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
+    connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
 }
@@ -532,7 +532,7 @@ void FrameSvgItem::updateDevicePixelRatio()
     } else {
         m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(qApp->devicePixelRatio())));
     }
-    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
+    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
     m_textureChanged = true;
 }
 
