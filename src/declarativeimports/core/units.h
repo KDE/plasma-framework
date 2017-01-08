@@ -74,7 +74,7 @@ class Units : public QObject
      * Not devicePixelRation-adjusted::
      * * desktop
      */
-    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
+    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
 
     // layout hints
 
@@ -176,7 +176,6 @@ public:
 Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
-    void iconSizesChanged();
     void spacingChanged();
     void durationChanged();
 

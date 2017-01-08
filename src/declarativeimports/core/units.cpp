@@ -134,8 +134,6 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert(QStringLiteral("large"), devicePixelIconSize(KIconLoader::SizeLarge));
     m_iconSizes->insert(QStringLiteral("huge"), devicePixelIconSize(KIconLoader::SizeHuge));
     m_iconSizes->insert(QStringLiteral("enormous"), devicePixelIconSize(KIconLoader::SizeEnormous));
-
-    emit iconSizesChanged();
 }
 
 QQmlPropertyMap *Units::iconSizes() const
