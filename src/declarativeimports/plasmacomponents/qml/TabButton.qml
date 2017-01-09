@@ -122,7 +122,7 @@ Item {
 
         property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
-        property bool portrait: (root != undefined) && (label != undefined) && root.height >= label.paintedHeight + units.iconSizes.small
+        property bool portrait: (root != undefined) && (label != undefined) &&  label.text != "" && root.height >= label.paintedHeight + units.iconSizes.small
 
         function click() {
             root.clicked()
