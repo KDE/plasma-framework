@@ -241,6 +241,7 @@ void ConfigViewPrivate::mainItemLoaded()
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
             ) {
             layout = child;
+            break;
         }
     }
     mainItemLayout = layout;
