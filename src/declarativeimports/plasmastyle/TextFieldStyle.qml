@@ -31,7 +31,7 @@ QtQuickControlStyle.TextFieldStyle {
     id: root
 
     textColor: control.enabled ? theme.viewTextColor : Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.6)
-    selectionColor: theme.viewFocusColor
+    selectionColor: theme.highlightColor
     selectedTextColor: theme.viewHighlightedTextColor
     placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
 
