@@ -452,7 +452,7 @@ void IconItem::loadPixmap()
         return;
     }
 
-    const int size = Units::roundToIconSize(qMin(width(), height()));
+    const int size = Units::roundToIconSize(qMin(qRound(width()), qRound(height())));
 
     //final pixmap to paint
     QPixmap result;
