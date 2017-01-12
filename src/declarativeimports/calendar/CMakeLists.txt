@@ -20,6 +20,7 @@ target_link_libraries(calendarplugin
     Qt5::Gui
     KF5::I18n
     KF5::CalendarEvents
+    KF5::CoreAddons
 )
 
 install(TARGETS calendarplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/calendar)
