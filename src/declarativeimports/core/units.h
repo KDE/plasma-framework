@@ -73,7 +73,10 @@ class Units : public QObject
      *
      * Not devicePixelRation-adjusted::
      * * desktop
+     *
      */
+    //note the iconSizeChanges signal indicates that one (or more) of these icons have changed
+    //but the property map itself remains constant
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
 
     // layout hints
@@ -176,6 +179,7 @@ public:
 Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
+    void iconSizesChanged();
     void spacingChanged();
     void durationChanged();
 
