@@ -159,13 +159,13 @@ public:
         Notification = NET::Notification,
         OnScreenDisplay = NET::OnScreenDisplay
     };
-    Q_ENUMS(WindowType)
+    Q_ENUM(WindowType)
 
     enum BackgroundHints {
         NoBackground = 0,         /**< Not drawing a background under the applet, the dialog has its own implementation */
         StandardBackground = 1   /**< The standard background from the theme is drawn */
     };
-    Q_ENUMS(BackgroundHints)
+    Q_ENUM(BackgroundHints)
 
     Dialog(QQuickItem *parent = 0);
     ~Dialog();

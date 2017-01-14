@@ -87,7 +87,7 @@ public:
         ViewColorGroup = 2,
         ComplementaryColorGroup = 3
     };
-    Q_ENUMS(ColorGroup)
+    Q_ENUM(ColorGroup)
 
     /**
      * Default constructor. It will be the global theme configured in plasmarc

@@ -77,7 +77,6 @@ class PLASMA_EXPORT FrameSvg : public Svg
 {
     Q_OBJECT
 
-    Q_FLAGS(EnabledBorders)
     Q_PROPERTY(EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
 
 public:
@@ -93,6 +92,7 @@ public:
         AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder
     };
     Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
+    Q_FLAG(EnabledBorders)
 
     /**
      * Constructs a new FrameSvg that paints the proper named subelements

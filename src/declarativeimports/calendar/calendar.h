@@ -119,7 +119,6 @@ class Calendar : public QObject
      */
     Q_PROPERTY(QAbstractListModel *daysModel READ daysModel CONSTANT)
 
-    Q_ENUMS(Type DateMatchingPrecision)
 
 public:
     enum Type {
@@ -128,6 +127,7 @@ public:
         Todo = 4,
         Journal = 8
     };
+    Q_ENUM(Type)
     Q_DECLARE_FLAGS(Types, Type)
 
     enum DateMatchingPrecision {
@@ -135,6 +135,7 @@ public:
         MatchYearAndMonth,
         MatchYearMonthAndDay
     };
+    Q_ENUM(DateMatchingPrecision)
 
     explicit Calendar(QObject *parent = 0);
 

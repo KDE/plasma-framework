@@ -133,7 +133,6 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(QObject *fixedMargins READ fixedMargins CONSTANT)
 
-    Q_FLAGS(Plasma::FrameSvg::EnabledBorders)
     /**
      * The borders that will be rendered, it's a flag combination of:
      *  NoBorder
