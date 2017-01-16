@@ -549,7 +549,7 @@ void DialogPrivate::updateInputShape()
             if (extension->present) {
                 // query version
                 auto cookie = xcb_shape_query_version(c);
-                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, Q_NULLPTR));
+                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, nullptr));
                 if (!version.isNull()) {
                     s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
                 }

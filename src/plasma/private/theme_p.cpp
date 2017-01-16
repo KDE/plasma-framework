@@ -42,7 +42,7 @@ const char ThemePrivate::themeRcFile[] = "plasmarc";
 // these svgs do not follow the theme's colors, but rather the system colors
 const char ThemePrivate::systemColorsTheme[] = "internal-system-colors";
 #if HAVE_X11
-EffectWatcher *ThemePrivate::s_backgroundContrastEffectWatcher = Q_NULLPTR;
+EffectWatcher *ThemePrivate::s_backgroundContrastEffectWatcher = nullptr;
 #endif
 
 ThemePrivate *ThemePrivate::globalTheme = 0;

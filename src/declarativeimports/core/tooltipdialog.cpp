@@ -34,7 +34,7 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_qmlObject(0),
       m_hideTimeout(4000),
       m_interactive(false),
-      m_owner(Q_NULLPTR)
+      m_owner(nullptr)
 {
     Qt::WindowFlags flags = Qt::ToolTip;
     if (KWindowSystem::isPlatformX11()) {

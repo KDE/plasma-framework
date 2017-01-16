@@ -46,7 +46,7 @@ class IconDialog: public QObject
     Q_OBJECT
 
 public:
-    IconDialog(QObject *parent = Q_NULLPTR);
+    IconDialog(QObject *parent = nullptr);
     ~IconDialog();
 
     Q_INVOKABLE QString openDialog();

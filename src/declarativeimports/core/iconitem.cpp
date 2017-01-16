@@ -375,7 +375,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 
     if (m_iconPixmap.isNull() || width() == 0 || height() == 0) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     if (m_animation->state() == QAbstractAnimation::Running) {

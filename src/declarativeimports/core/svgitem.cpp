@@ -134,13 +134,13 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     Q_UNUSED(updatePaintNodeData);
     if (!window() || !m_svg) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     //this is more than just an optimisation, uploading a null image to QSGAtlasTexture causes a crash
     if (width() == 0 || height() == 0) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     ManagedTextureNode *textureNode = static_cast<ManagedTextureNode *>(oldNode);
@@ -160,7 +160,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         //Dave E fixed this in Qt in 5.3.something onwards but we need this for now
         if (m_image.isNull()) {
             delete textureNode;
-            return Q_NULLPTR;
+            return nullptr;
         }
 
         QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(m_image, QQuickWindow::TextureCanUseAtlas));

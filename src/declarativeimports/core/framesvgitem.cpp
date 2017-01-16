@@ -448,7 +448,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (!window() || !m_frameSvg ||
         (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_prefix))) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     if (m_fastPath) {

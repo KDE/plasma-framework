@@ -133,7 +133,7 @@ void ToolTip::showToolTip()
     }
 
     // Unset the dialog's old contents before reparenting the dialog.
-    dlg->setMainItem(Q_NULLPTR);
+    dlg->setMainItem(nullptr);
 
     Plasma::Types::Location location = m_location;
     if (m_location == Plasma::Types::Floating) {

@@ -39,7 +39,7 @@ class EventDataDecorator : public QObject
     Q_PROPERTY(QString eventType READ eventType NOTIFY eventDataChanged)
 
 public:
-    EventDataDecorator(const CalendarEvents::EventData &data, QObject *parent = Q_NULLPTR);
+    EventDataDecorator(const CalendarEvents::EventData &data, QObject *parent = nullptr);
 
     QDateTime startDateTime() const;
     QDateTime endDateTime() const;

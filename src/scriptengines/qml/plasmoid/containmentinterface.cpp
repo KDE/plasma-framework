@@ -238,7 +238,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 
 QObject *ContainmentInterface::containmentAt(int x, int y)
 {
-    QObject *desktop = Q_NULLPTR;
+    QObject *desktop = nullptr;
     foreach (Plasma::Containment *c, m_containment->corona()->containments()) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 

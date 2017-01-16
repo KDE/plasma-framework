@@ -145,15 +145,15 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_texture(0)
 #if HAVE_GLX
     , m_glxPixmap(XCB_PIXMAP_NONE)
-    , m_bindTexImage(Q_NULLPTR)
-    , m_releaseTexImage(Q_NULLPTR)
+    , m_bindTexImage(nullptr)
+    , m_releaseTexImage(nullptr)
 #endif // HAVE_GLX
 #if HAVE_EGL
     , m_eglFunctionsResolved(false)
     , m_image(EGL_NO_IMAGE_KHR)
-    , m_eglCreateImageKHR(Q_NULLPTR)
-    , m_eglDestroyImageKHR(Q_NULLPTR)
-    , m_glEGLImageTargetTexture2DOES(Q_NULLPTR)
+    , m_eglCreateImageKHR(nullptr)
+    , m_eglDestroyImageKHR(nullptr)
+    , m_glEGLImageTargetTexture2DOES(nullptr)
 #endif // HAVE_EGL
 #endif
 {
@@ -391,7 +391,7 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
             xcb_connection_t *c = QX11Info::connection();
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
-            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
+            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, nullptr));
 
             if (geo.isNull()) {
                 return false;
@@ -445,7 +445,7 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
             }
 
             glGenTextures(1, &m_texture);
-            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, Q_NULLPTR));
+            QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, nullptr));
             QSize size;
             if (!geo.isNull()) {
                 size.setWidth(geo->width);
@@ -589,13 +589,13 @@ GLXFBConfig *getConfig(int depth, int *index)
     };
 
     if (QByteArray((char *)glGetString(GL_RENDERER)).contains("llvmpipe")) {
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     int count = 0;
     GLXFBConfig *fbConfigs = glXChooseFBConfig(QX11Info::display(), QX11Info::appScreen(), attribs, &count);
     if (count < 1) {
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     for (int i = 0; i < count; ++i) {
@@ -738,7 +738,7 @@ void WindowThumbnail::startRedirecting()
     m_damage = xcb_generate_id(c);
     xcb_damage_create(c, m_damage, m_winId, XCB_DAMAGE_REPORT_LEVEL_NON_EMPTY);
 
-    QScopedPointer<xcb_get_window_attributes_reply_t, QScopedPointerPodDeleter> attr(xcb_get_window_attributes_reply(c, attribsCookie, Q_NULLPTR));
+    QScopedPointer<xcb_get_window_attributes_reply_t, QScopedPointerPodDeleter> attr(xcb_get_window_attributes_reply(c, attribsCookie, nullptr));
     uint32_t events = XCB_EVENT_MASK_STRUCTURE_NOTIFY;
     if (!attr.isNull()) {
         events = events | attr->your_event_mask;

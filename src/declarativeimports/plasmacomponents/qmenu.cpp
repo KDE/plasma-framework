@@ -28,7 +28,7 @@
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent),
-      m_menu(Q_NULLPTR),
+      m_menu(nullptr),
       m_status(DialogStatus::Closed),
       m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
 {
@@ -110,7 +110,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
 QWindow *QMenuProxy::transientParent()
 {
     if (!m_menu) {
-        return Q_NULLPTR;
+        return nullptr;
     }
     return m_menu->windowHandle()->transientParent();
 }
