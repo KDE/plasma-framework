@@ -255,6 +255,7 @@ public:
         NeedsAttentionStatus = 3, /**< The Item needs attention **/
         RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
         AcceptingInputStatus = 5, /**< The Item is accepting input **/
+        //FIXME KF6: this should be the smallest status
         HiddenStatus = 6    /**< The Item will be hidden totally  **/
     };
     Q_ENUM(ItemStatus)
