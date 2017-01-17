@@ -14,7 +14,7 @@ set(PLASMA_DATA_INSTALL_DIR "${KDE_INSTALL_DATADIR}/${PLASMA_RELATIVE_DATA_INSTA
 # @arg root The subdirectory to install to, default: plasmoids
 # @arg type The type, default to applet, or applet, package, containment,
 #       wallpaper, shell, lookandfeel, etc.
-# @see Types column in plasmapkg --list-types
+# @see Types column in kpackagetool5 --list-types
 #
 # Examples:
 # plasma_install_package(mywidget org.kde.plasma.mywidget) # installs an applet
