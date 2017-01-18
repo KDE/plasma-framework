@@ -107,7 +107,18 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
     if (applet()->containment()) {
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
-                this, &ContainmentInterface::screenChanged);
+                this, &AppletInterface::screenChanged);
+
+        // Screen change implies geo change for good measure.
+        connect(applet()->containment(), &Plasma::Containment::screenChanged,
+                this, &AppletInterface::screenGeometryChanged);
+
+        connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
+            if (id == applet()->containment()->screen()) {
+                emit screenGeometryChanged();
+            }
+        });
+
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {

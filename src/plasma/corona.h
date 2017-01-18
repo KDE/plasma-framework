@@ -292,14 +292,19 @@ Q_SIGNALS:
     void configSynced();
 
     /**
-     * This signal indicates that a change in available screen gemetry occurred.
+     * This signal indicates that a change in available screen geometry occurred.
      */
     void availableScreenRegionChanged();
 
     /**
-     * This signal indicates that a change in available screen gemetry occurred.
+     * This signal indicates that a change in available screen geometry occurred.
      */
     void availableScreenRectChanged();
+
+    /**
+     * This signal indicates that a change in geometry for the screen occurred.
+     */
+    void screenGeometryChanged(int id);
 
     /**
      * emitted when immutability changes.
