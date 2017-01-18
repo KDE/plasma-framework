@@ -75,6 +75,7 @@ Item {
                 Layout.minimumWidth: _width
                 Layout.maximumWidth: preferredTextWidth
                 elide: Text.ElideRight
+                wrapMode: Text.Wrap
                 text: toolTip ? toolTip.mainText : ""
                 visible: text != ""
             }
