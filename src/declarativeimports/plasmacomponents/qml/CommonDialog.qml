@@ -73,7 +73,6 @@ PlasmaComponents.Dialog {
     Accessible.role: Accessible.Dialog
 
     onButtonTextsChanged: {
-        print("btex6tchanged:"  + buttonTexts);
         for (var i = buttonRow.children.length; i > 0; --i) {
             buttonRow.children[i - 1].destroy()
         }
@@ -91,7 +90,6 @@ PlasmaComponents.Dialog {
 
             onClicked: {
                 if (root.status == PlasmaComponents.DialogStatus.Open) {
-                    print("Clicked...." + index);
                     root.buttonClicked(index)
                     root.close()
                 }
