@@ -123,7 +123,7 @@ void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
         }
     }
 
-    if (appletStatus > q->status() && appletStatus != Plasma::Types::HiddenStatus) {
+    if (appletStatus != Plasma::Types::HiddenStatus) {
         q->setStatus(appletStatus);
     }
 }
