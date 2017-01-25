@@ -153,6 +153,25 @@ void QMenuProxy::setMinimumWidth(int width)
     }
 }
 
+int QMenuProxy::maximumWidth() const
+{
+    return m_menu->maximumWidth();
+}
+
+void QMenuProxy::setMaximumWidth(int width)
+{
+    if (m_menu->maximumWidth() != width) {
+        m_menu->setMaximumWidth(width);
+
+        emit maximumWidthChanged();
+    }
+}
+
+void QMenuProxy::resetMaximumWidth()
+{
+    setMaximumWidth(QWIDGETSIZE_MAX);
+}
+
 bool QMenuProxy::event(QEvent *event)
 {
     switch (event->type()) {
