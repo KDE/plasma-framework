@@ -562,8 +562,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
     } else {
 
         QPoint posi; // will be overwritten with the event's position
-        if (m_dropPoints.keys().contains(tjob)) {
-            posi = m_dropPoints[tjob];
+        if (m_dropPoints.contains(tjob)) {
+            posi = m_dropPoints.value(tjob);
             qDebug() << "Received a suitable dropEvent at" << posi;
         } else {
             qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
