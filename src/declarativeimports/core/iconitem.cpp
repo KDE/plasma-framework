@@ -378,7 +378,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         return nullptr;
     }
 
-    if (m_animation->state() == QAbstractAnimation::Running) {
+    /*if (m_animation->state() == QAbstractAnimation::Running) {
         FadingNode *animatingNode = dynamic_cast<FadingNode*>(oldNode);
 
         if (!animatingNode || m_textureChanged) {
@@ -401,7 +401,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         }
 
         return animatingNode;
-    } else {
+    } else {*/
         ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode*>(oldNode);
 
         if (!textureNode || m_textureChanged) {
@@ -419,7 +419,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
             m_sizeChanged = false;
         }
         return textureNode;
-    }
+    //}
 }
 
 void IconItem::valueChanged(const QVariant &value)
