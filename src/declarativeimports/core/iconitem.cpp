@@ -407,7 +407,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         if (!textureNode || m_textureChanged) {
             delete oldNode;
             textureNode = new ManagedTextureNode;
-            textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage())));
+            textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas)));
             m_sizeChanged = true;
             m_textureChanged = false;
         }
