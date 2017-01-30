@@ -48,8 +48,8 @@ static const int MAX_FRAME_SIZE = 100000;
 
 FrameData::~FrameData()
 {
-    foreach (FrameSvg *frame, references.keys()) {
-        frame->d->frames.remove(prefix);
+    for (auto it = references.constBegin(), end = references.constEnd(); it != end; ++it) {
+        it.key()->d->frames.remove(prefix);
     }
 }
 
