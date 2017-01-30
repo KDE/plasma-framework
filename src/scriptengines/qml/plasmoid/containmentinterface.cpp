@@ -210,8 +210,7 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
             return applet;
         }
         if (geom.width() > 0 && geom.height() > 0) {
-            appletGraphicObject->setWidth(geom.width());
-            appletGraphicObject->setHeight(geom.height());
+            appletGraphicObject->setSize(geom.size());
         }
 
         blockSignals(false);
