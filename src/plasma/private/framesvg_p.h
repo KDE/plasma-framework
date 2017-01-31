@@ -173,8 +173,8 @@ public:
 
     QPoint overlayPos;
 
-    QHash<QString, FrameData *> frames;
-    //FrameData *frame;
+    FrameData *frame;
+    FrameData *maskFrame;
 
     //those can differ from frame->enabledBorders if we are in a transition
     FrameSvg::EnabledBorders pendingEnabledBorders;
