@@ -292,6 +292,8 @@ public:
      */
     QString actualPrefix() const;
 
+    void setRepaintBlocked(bool blocked);
+
 private:
     FrameSvgPrivate *const d;
     friend class FrameData;

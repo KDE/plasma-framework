@@ -137,8 +137,10 @@ class FrameSvgPrivate
 public:
     FrameSvgPrivate(FrameSvg *psvg)
         : q(psvg),
+          overlayPos(0, 0),
+          pendingEnabledBorders(FrameSvg::AllBorders),
           cacheAll(false),
-          overlayPos(0, 0)
+          repaintBlocked(false)
     {
     }
 
@@ -158,8 +160,10 @@ public:
     void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
     void paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize);
     QRect contentGeometry(FrameData* frame, const QSize& size) const;
+    void updateFrameData();
 
     Types::Location location;
+    QString pendingPrefix;
     QString prefix;
     //sometimes the prefix we requested is not available, so prefix will be emoty
     //keep track of the requested one anyways, we'll try again when the theme changes
@@ -167,12 +171,20 @@ public:
 
     FrameSvg *q;
 
-    bool cacheAll : 1;
     QPoint overlayPos;
 
     QHash<QString, FrameData *> frames;
+    //FrameData *frame;
+
+    //those can differ from frame->enabledBorders if we are in a transition
+    FrameSvg::EnabledBorders pendingEnabledBorders;
+    //this can differ from frame->frameSize if we are in a transition
+    QSize pendingFrameSize;
 
     static QHash<ThemePrivate *, QHash<QString, FrameData *> > s_sharedFrames;
+
+    bool cacheAll : 1;
+    bool repaintBlocked : 1;
 };
 
 }

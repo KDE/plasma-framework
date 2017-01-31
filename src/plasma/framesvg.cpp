@@ -45,9 +45,11 @@ QHash<ThemePrivate *, QHash<QString, FrameData *> > FrameSvgPrivate::s_sharedFra
 // Any attempt to generate a frame whose width or height is larger than this
 // will be rejected
 static const int MAX_FRAME_SIZE = 100000;
-
+static int destcount = 0;
 FrameData::~FrameData()
 {
+    ++destcount;
+    qWarning()<<"AAA"<<destcount;
     for (auto it = references.constBegin(), end = references.constEnd(); it != end; ++it) {
         it.key()->d->frames.remove(prefix);
     }
@@ -131,48 +133,11 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
         return;
     }
 
-    FrameData *fd = d->frames[d->prefix];
+    d->pendingEnabledBorders = borders;
 
-    const QString oldKey = d->cacheId(fd, d->prefix);
-    const EnabledBorders oldBorders = fd->enabledBorders;
-    fd->enabledBorders = borders;
-    const QString newKey = d->cacheId(fd, d->prefix);
-    fd->enabledBorders = oldBorders;
-
-    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
-    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
-    if (newFd) {
-        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
-        // we've found a math, so insert that new one and ref it ..
-        newFd->ref(this);
-        d->frames.insert(d->prefix, newFd);
-
-        //.. then deref the old one and if it's no longer used, get rid of it
-        if (fd->deref(this)) {
-            //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-            delete fd;
-        }
-
-        return;
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
     }
-
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-    } else {
-        // others are using it, but we wish to change its size. so deref it,
-        // then create a copy of it (we're automatically ref'd via the ctor),
-        // then insert it into our frames.
-        fd->deref(this);
-        fd = new FrameData(*fd, this);
-        d->frames.insert(d->prefix, fd);
-    }
-
-    fd->enabledBorders = borders;
-    d->updateAndSignalSizes();
 }
 
 FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
@@ -215,76 +180,21 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 
 void FrameSvg::setElementPrefix(const QString &prefix)
 {
-    const QString oldPrefix(d->prefix);
-
     if (!hasElement(prefix % QLatin1String("-center"))) {
-        d->prefix.clear();
+        d->pendingPrefix.clear();
     } else {
-        d->prefix = prefix;
-        if (!d->prefix.isEmpty()) {
-            d->prefix += '-';
+        d->pendingPrefix = prefix;
+        if (!d->pendingPrefix.isEmpty()) {
+            d->pendingPrefix += '-';
         }
     }
     d->requestedPrefix = prefix;
 
-    FrameData *oldFrameData = d->frames.value(oldPrefix);
-    if (oldPrefix == d->prefix && oldFrameData) {
-        return;
-    }
-
-    if (!d->frames.contains(d->prefix)) {
-        if (oldFrameData) {
-            FrameData *newFd = 0;
-            if (!oldFrameData->frameSize.isEmpty()) {
-                const QString key = d->cacheId(oldFrameData, d->prefix);
-                newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(key);
-                if (newFd && newFd->devicePixelRatio != devicePixelRatio()) {
-                    newFd = 0;
-                }
-            }
-
-            // we need to put this in the cache if we didn't find it in the shared frames
-            // and we have a size; if we don't have a size, we'll catch it later
-            const bool cache = !newFd && !oldFrameData->frameSize.isEmpty();
-            if (newFd) {
-                newFd->ref(this);
-            } else  {
-                newFd = new FrameData(*oldFrameData, this);
-            }
-
-            d->frames.insert(d->prefix, newFd);
-
-            if (cache) {
-                // we have to cache after inserting the frame since the cacheId requires the
-                // frame to be in the frames collection already
-                const QString key = d->cacheId(oldFrameData, d->prefix);
-                //qCDebug(LOG_PLASMA) << this << "     1. inserting as" << key;
-
-                FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, newFd);
-                newFd->theme = theme()->d;
-            }
-        } else {
-            // couldn't find anything useful, so we just create something here
-            // we don't have a size for it yet, so don't bother trying to share it just yet
-            FrameData *newFd = new FrameData(this, d->prefix);
-            d->frames.insert(d->prefix, newFd);
-        }
-
-        d->updateSizes();
-    }
-
-    if (!d->cacheAll) {
-        d->frames.remove(oldPrefix);
-        if (oldFrameData) {
-            if (oldFrameData->deref(this)) {
-                const QString oldKey = d->cacheId(oldFrameData, oldPrefix);
-                FrameSvgPrivate::s_sharedFrames[oldFrameData->theme].remove(oldKey);
-                delete oldFrameData;
-            }
-        }
-    }
-
     d->location = Types::Floating;
+
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
+    }
 }
 
 bool FrameSvg::hasElementPrefix(const QString &prefix) const
@@ -338,53 +248,14 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     }
 
     FrameData *fd = d->frames[d->prefix];
-    if (size == fd->frameSize) {
+    if (size.toSize() == fd->frameSize) {
         return;
     }
+    d->pendingFrameSize = size.toSize();
 
-    const QString oldKey = d->cacheId(fd, d->prefix);
-    const QSize currentSize = fd->frameSize;
-    fd->frameSize = size.toSize();
-    const QString newKey = d->cacheId(fd, d->prefix);
-    fd->frameSize = currentSize;
-
-    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
-    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
-    if (newFd) {
-        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
-        // we've found a math, so insert that new one and ref it ..
-        newFd->ref(this);
-        d->frames.insert(d->prefix, newFd);
-
-        //.. then deref the old one and if it's no longer used, get rid of it
-        if (fd->deref(this)) {
-            //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-            delete fd;
-        }
-
-        return;
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
     }
-
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-    } else {
-        // others are using it, but we wish to change its size. so deref it,
-        // then create a copy of it (we're automatically ref'd via the ctor),
-        // then insert it into our frames.
-        fd->deref(this);
-        fd = new FrameData(*fd, this);
-        d->frames.insert(d->prefix, fd);
-    }
-
-    d->updateSizes();
-    fd->frameSize = size.toSize();
-    // we know it isn't in s_sharedFrames due to the check above, so insert it now
-    FrameSvgPrivate::s_sharedFrames[theme()->d].insert(newKey, fd);
-    fd->theme = theme()->d;
 }
 
 QSizeF FrameSvg::frameSize() const
@@ -860,6 +731,76 @@ QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) cons
     return contentRect;
 }
 
+void FrameSvgPrivate::updateFrameData()
+{
+    FrameData *fd = frames[prefix];
+
+    const QString oldKey = cacheId(fd, fd->prefix);
+
+    const FrameSvg::EnabledBorders oldBorders = fd->enabledBorders;
+    const QSize currentSize = fd->frameSize;
+
+    fd->enabledBorders = pendingEnabledBorders;
+    fd->frameSize = pendingFrameSize;
+
+    const QString newKey = cacheId(fd, pendingPrefix);
+
+    //reset frame to old values
+    fd->enabledBorders = oldBorders;
+    fd->frameSize = currentSize;
+    if (oldKey == newKey) return;
+
+    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
+    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[q->theme()->d].value(newKey);
+    if (newFd) {
+        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
+        // we've found a math, so insert that new one and ref it ..
+        newFd->ref(q);
+        frames.insert(pendingPrefix, newFd);
+
+        //.. then deref the old one and if it's no longer used, get rid of it
+        if (fd->deref(q)) {
+            //const QString oldKey = cacheId(fd, prefix);
+            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
+            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+
+            if (prefix != pendingPrefix) {
+                frames.remove(fd->prefix);
+            }
+
+            delete fd;
+        }
+
+        prefix = pendingPrefix;
+        return;
+    }
+
+    if (fd->refcount() == 1) {
+        // we're the only user of it, let's remove it from the shared keys
+        // we don't want to deref it, however, as we'll still be using it
+        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+        frames.remove(fd->prefix);
+    } else {
+        // others are using it, but we wish to change its size. so deref it,
+        // then create a copy of it (we're automatically ref'd via the ctor),
+        // then insert it into our frames.
+        fd->deref(q);
+        fd = new FrameData(*fd, q);
+    }
+
+    frames.insert(pendingPrefix, fd);
+    prefix = pendingPrefix;
+    fd->prefix = pendingPrefix;
+    //updateSizes();
+    fd->enabledBorders = pendingEnabledBorders;
+    fd->frameSize = pendingFrameSize;
+
+    // we know it isn't in s_sharedFrames due to the check above, so insert it now
+    FrameSvgPrivate::s_sharedFrames[q->theme()->d].insert(newKey, fd);
+    fd->theme = q->theme()->d;
+    updateAndSignalSizes();
+}
+
 void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize)
 {
     if (!contentRect.isEmpty()) {
@@ -1116,6 +1057,15 @@ int FrameData::refcount() const
 QString FrameSvg::actualPrefix() const
 {
     return d->prefix;
+}
+
+void FrameSvg::setRepaintBlocked(bool blocked)
+{
+    d->repaintBlocked = blocked;
+
+    if (!blocked) {
+        d->updateFrameData();
+    }
 }
 
 } // Plasma namespace
