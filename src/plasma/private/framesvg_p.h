@@ -138,6 +138,8 @@ public:
     FrameSvgPrivate(FrameSvg *psvg)
         : q(psvg),
           overlayPos(0, 0),
+          frame(nullptr),
+          maskFrame(nullptr),
           pendingEnabledBorders(FrameSvg::AllBorders),
           cacheAll(false),
           repaintBlocked(false)
