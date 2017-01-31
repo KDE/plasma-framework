@@ -390,23 +390,12 @@ bool FrameSvg::cacheAllRenderedFrames() const
 
 void FrameSvg::clearCache()
 {
-   /* FrameData *frame = d->frames[d->prefix];
-
-    // delete all the frames that aren't this one
-    QMutableHashIterator<QString, FrameData *> it(d->frames);
-    while (it.hasNext()) {
-        FrameData *p = it.next().value();
-        if (frame != p) {
-            //TODO: should we clear from the Theme pixmap cache as well?
-            if (p->deref(this)) {
-                const QString key = d->cacheId(p, it.key());
-                FrameSvgPrivate::s_sharedFrames[p->theme].remove(key);
-                p->cachedBackground = QPixmap();
-            }
-
-            it.remove();
-        }
-    }*/
+    if (d->frame) {
+        d->frame->cachedBackground = QPixmap();
+    }
+    if (d->maskFrame) {
+        d->maskFrame->cachedBackground = QPixmap();
+    }
 }
 
 QPixmap FrameSvg::framePixmap()
