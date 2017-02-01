@@ -721,7 +721,11 @@ void FrameSvgPrivate::updateFrameData()
     //reset frame to old values
     fd->enabledBorders = oldBorders;
     fd->frameSize = currentSize;
-    if (oldKey == newKey) return;
+
+    //FIXME: something more efficient than string comparison?
+    if (oldKey == newKey) {
+        return;
+    }
 
     //qCDebug(LOG_PLASMA) << "looking for" << newKey;
     FrameData *newFd = FrameSvgPrivate::s_sharedFrames[q->theme()->d].value(newKey);
