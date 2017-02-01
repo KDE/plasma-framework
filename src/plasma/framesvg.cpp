@@ -542,10 +542,10 @@ QPixmap FrameSvgPrivate::alphaMask()
             }
             maskFrame->enabledBorders = frame->enabledBorders;
 
-            updateSizes();
+            updateSizes(maskFrame);
         }
 
-        maskFrame = frame;
+       // maskFrame = frame;
         maskFrame->enabledBorders = frame->enabledBorders;
         if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
             const QString oldKey = cacheId(maskFrame, prefix);
@@ -861,7 +861,7 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
     }
 }
 
-void FrameSvgPrivate::updateSizes() const
+void FrameSvgPrivate::updateSizes(FrameData *frame) const
 {
     //qCDebug(LOG_PLASMA) << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
     Q_ASSERT(frame);
@@ -967,19 +967,19 @@ void FrameSvgPrivate::updateNeeded()
 {
     q->setElementPrefix(requestedPrefix);
     q->clearCache();
-    updateSizes();
+    updateSizes(frame);
 }
 
 void FrameSvgPrivate::updateAndSignalSizes()
 {
-    updateSizes();
+    updateSizes(frame);
     emit q->repaintNeeded();
 }
 
 QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const
 {
     if (!frame->frameSize.isValid()) {
-        updateSizes();
+        updateSizes(frame);
         frame->frameSize = q->size();
     }
 

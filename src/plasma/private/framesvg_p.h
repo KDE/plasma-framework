@@ -154,7 +154,7 @@ public:
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
     void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
-    void updateSizes() const;
+    void updateSizes(FrameData *frame) const;
     void updateNeeded();
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
