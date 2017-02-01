@@ -165,7 +165,6 @@ public:
     void updateFrameData();
 
     Types::Location location;
-    QString pendingPrefix;
     QString prefix;
     //sometimes the prefix we requested is not available, so prefix will be emoty
     //keep track of the requested one anyways, we'll try again when the theme changes

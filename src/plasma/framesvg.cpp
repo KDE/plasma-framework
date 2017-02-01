@@ -177,11 +177,11 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 void FrameSvg::setElementPrefix(const QString &prefix)
 {
     if (!hasElement(prefix % QLatin1String("-center"))) {
-        d->pendingPrefix.clear();
+        d->prefix.clear();
     } else {
-        d->pendingPrefix = prefix;
-        if (!d->pendingPrefix.isEmpty()) {
-            d->pendingPrefix += '-';
+        d->prefix = prefix;
+        if (!d->prefix.isEmpty()) {
+            d->prefix += '-';
         }
     }
     d->requestedPrefix = prefix;
@@ -716,7 +716,7 @@ void FrameSvgPrivate::updateFrameData()
     fd->enabledBorders = pendingEnabledBorders;
     fd->frameSize = pendingFrameSize;
 
-    const QString newKey = cacheId(fd, pendingPrefix);
+    const QString newKey = cacheId(fd, prefix);
 
     //reset frame to old values
     fd->enabledBorders = oldBorders;
@@ -744,7 +744,6 @@ void FrameSvgPrivate::updateFrameData()
             delete fd;
         }
 
-        prefix = pendingPrefix;
         return;
     }
 
@@ -761,8 +760,7 @@ void FrameSvgPrivate::updateFrameData()
     }
 
     frame = fd;
-    prefix = pendingPrefix;
-    fd->prefix = pendingPrefix;
+    fd->prefix = prefix;
     //updateSizes();
     fd->enabledBorders = pendingEnabledBorders;
     fd->frameSize = pendingFrameSize;
