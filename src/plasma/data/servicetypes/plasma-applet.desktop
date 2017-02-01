@@ -90,3 +90,6 @@ Type=bool
 
 [PropertyDef::X-Plasma-RequiredExtensions]
 Type=QStringList
+
+[PropertyDef::NoDisplay]
+Type=bool
