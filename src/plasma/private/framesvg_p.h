@@ -88,6 +88,7 @@ public:
     int refcount() const;
 
     QString prefix;
+    QString requestedPrefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
     QCache<QString, QRegion> cachedMasks;

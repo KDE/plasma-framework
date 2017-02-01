@@ -522,6 +522,7 @@ QPixmap FrameSvgPrivate::alphaMask()
     } else {
         // We are setting the prefix only temporary to generate
         // the needed mask image
+        const QString maskRequestedPrefix = maskPrefix % requestedPrefix;
         maskPrefix = maskPrefix % prefix;
 
         if (!maskFrame) {
@@ -536,6 +537,7 @@ QPixmap FrameSvgPrivate::alphaMask()
             } else {
                 maskFrame = new FrameData(*frame, q);
                 maskFrame->prefix = maskPrefix;
+                maskFrame->requestedPrefix = maskRequestedPrefix;
                 maskFrame->theme = q->theme()->d;
                 s_sharedFrames[q->theme()->d].insert(key, maskFrame);
             }
@@ -570,9 +572,8 @@ QPixmap FrameSvgPrivate::alphaMask()
 
 void FrameSvgPrivate::generateBackground(FrameData *frame)
 {
-    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(frame->prefix)) {
-        //FIXME: requestedprefix for every frame?
-       // return;
+    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(frame->requestedPrefix)) {
+        return;
     }
 
     const QString id = cacheId(frame, frame->prefix);
@@ -761,6 +762,7 @@ void FrameSvgPrivate::updateFrameData()
 
     frame = fd;
     fd->prefix = prefix;
+    fd->requestedPrefix = requestedPrefix;
     //updateSizes();
     fd->enabledBorders = pendingEnabledBorders;
     fd->frameSize = pendingFrameSize;
