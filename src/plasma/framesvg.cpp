@@ -45,11 +45,9 @@ QHash<ThemePrivate *, QHash<QString, FrameData *> > FrameSvgPrivate::s_sharedFra
 // Any attempt to generate a frame whose width or height is larger than this
 // will be rejected
 static const int MAX_FRAME_SIZE = 100000;
-static int destcount = 0;
+
 FrameData::~FrameData()
 {
-    ++destcount;
-    qWarning()<<"AAA"<<destcount;
     for (auto it = references.constBegin(), end = references.constEnd(); it != end; ++it) {
         if (it.key()->d->frame == this) {
             it.key()->d->frame = nullptr;
