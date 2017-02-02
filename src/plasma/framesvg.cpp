@@ -440,36 +440,26 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #endif
 #endif
 
-    QList<FrameData *> frames({frame, maskFrame});
-    QListIterator<FrameData *> it(frames);
-    while (it.hasNext()) {
-        FrameData *fd = it.next();
-        if (fd) {
-            // we remove all references from this widget to the frame, and delete it if we're the
-            // last user
-            if (fd->removeRefs(q)) {
-                const QString key = cacheId(fd, fd->prefix);
+    // we remove all references from this widget to the frame, and delete it if we're the
+    // last user
+    if (frame && frame->removeRefs(q)) {
+        const QString key = cacheId(frame, frame->prefix);
 #ifdef DEBUG_FRAMESVG_CACHE
 #ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << "2. Removing it" << key << fd << fd->refcount() << s_sharedFrames[theme()->d].contains(key);
+        // qCDebug(LOG_PLASMA) << "2. Removing it" << key << frame << frame->refcount() << s_sharedFrames[theme()->d].contains(key);
 #endif
 #endif
-                s_sharedFrames[fd->theme].remove(key);
-                delete fd;
-            }
-#ifdef DEBUG_FRAMESVG_CACHE
-            else {
-#ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << "still shared:" << cacheId(*it, it.key()) << fd << fd->refcount() << fd->isUsed();
-#endif
-            }
-        } else {
-#ifndef NDEBUG
-            // qCDebug(LOG_PLASMA) << "lost our value for" << it.key();
-#endif
-#endif
-        }
+        s_sharedFrames[frame->theme].remove(key);
+        delete frame;
     }
+
+    //same thing for maskFrame
+    if (maskFrame && maskFrame->removeRefs(q)) {
+        const QString key = cacheId(maskFrame, maskFrame->prefix);
+        s_sharedFrames[maskFrame->theme].remove(key);
+        delete maskFrame;
+    }
+
 
 #ifdef DEBUG_FRAMESVG_CACHE
     QHashIterator<QString, FrameData *> it2(s_sharedFrames[theme()->d]);
