@@ -1016,6 +1016,11 @@ QString FrameSvg::actualPrefix() const
     return d->prefix;
 }
 
+bool FrameSvg::isRepaintBlocked() const
+{
+    return d->repaintBlocked;
+}
+
 void FrameSvg::setRepaintBlocked(bool blocked)
 {
     d->repaintBlocked = blocked;
