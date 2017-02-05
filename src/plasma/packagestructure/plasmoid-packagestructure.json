@@ -13,6 +13,7 @@
         ], 
         "Id": "Plasma/Applet", 
         "Name": "Plasmoid", 
+        "Name[ar]": "بلازمويد", 
         "Name[ast]": "Plasmoide", 
         "Name[ca@valencia]": "Plasmoide", 
         "Name[ca]": "Plasmoide", 
