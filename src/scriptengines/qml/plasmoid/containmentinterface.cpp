@@ -924,7 +924,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
 
     QPoint pos = event->globalPos();
-    if (window() && applet && m_containment->containmentType() == Plasma::Types::PanelContainment) {
+    if (window() && m_containment->containmentType() == Plasma::Types::PanelContainment) {
         desktopMenu->adjustSize();
 
         if (QScreen *screen = window()->screen()) {
