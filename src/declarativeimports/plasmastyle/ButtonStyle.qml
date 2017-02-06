@@ -75,7 +75,7 @@ QtQuickControlStyle.ButtonStyle {
             font: control.font || theme.defaultFont
             visible: control.text != ""
             Layout.fillWidth: true
-            height: parent.height
+            Layout.fillHeight: true
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

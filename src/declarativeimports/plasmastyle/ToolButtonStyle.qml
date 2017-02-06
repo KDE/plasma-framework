@@ -90,7 +90,7 @@ QtQuickControlStyle.ButtonStyle {
                 font: control.font || theme.defaultFont
                 visible: control.text != ""
                 Layout.fillWidth: true
-                height: parent.height
+                Layout.fillHeight: true
                 color: controlHovered || !flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
