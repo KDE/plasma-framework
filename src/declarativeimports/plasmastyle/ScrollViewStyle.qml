@@ -35,6 +35,13 @@ QtQuickControlStyle.ScrollViewStyle {
 
     transientScrollBars: Settings.hasTouchScreen && Settings.isMobile
 
+    padding {
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+    }
+
     function syncVelocity() {
         if (!control.flickableItem) {
             return;
