@@ -56,6 +56,8 @@ QtQuickControlStyle.ScrollViewStyle {
     }
 
     frame: Item {
+        visible: frameVisible
+
         PlasmaCore.Svg {
             id: borderSvg
             imagePath: "widgets/scrollwidget"
