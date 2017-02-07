@@ -88,6 +88,7 @@ public:
     int refcount() const;
 
     QString prefix;
+    QString requestedPrefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
     QCache<QString, QRegion> cachedMasks;
@@ -137,8 +138,12 @@ class FrameSvgPrivate
 public:
     FrameSvgPrivate(FrameSvg *psvg)
         : q(psvg),
+          overlayPos(0, 0),
+          frame(nullptr),
+          maskFrame(nullptr),
+          enabledBorders(FrameSvg::AllBorders),
           cacheAll(false),
-          overlayPos(0, 0)
+          repaintBlocked(false)
     {
     }
 
@@ -150,7 +155,7 @@ public:
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
     void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
-    void updateSizes() const;
+    void updateSizes(FrameData *frame) const;
     void updateNeeded();
     void updateAndSignalSizes();
     QSizeF frameSize(FrameData *frame) const;
@@ -158,6 +163,7 @@ public:
     void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
     void paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize);
     QRect contentGeometry(FrameData* frame, const QSize& size) const;
+    void updateFrameData();
 
     Types::Location location;
     QString prefix;
@@ -167,12 +173,20 @@ public:
 
     FrameSvg *q;
 
-    bool cacheAll : 1;
     QPoint overlayPos;
 
-    QHash<QString, FrameData *> frames;
+    FrameData *frame;
+    FrameData *maskFrame;
+
+    //those can differ from frame->enabledBorders if we are in a transition
+    FrameSvg::EnabledBorders enabledBorders;
+    //this can differ from frame->frameSize if we are in a transition
+    QSize pendingFrameSize;
 
     static QHash<ThemePrivate *, QHash<QString, FrameData *> > s_sharedFrames;
+
+    bool cacheAll : 1;
+    bool repaintBlocked : 1;
 };
 
 }

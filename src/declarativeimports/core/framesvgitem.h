@@ -22,6 +22,7 @@
 #define FRAMESVGITEM_P
 
 #include <QQuickItem>
+#include <QQmlParserStatus>
 
 #include <Plasma/FrameSvg>
 
@@ -107,6 +108,7 @@ private:
 class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     /**
      * Theme relative path of the svg, like "widgets/background"
@@ -213,6 +215,7 @@ public:
 
 
 protected:
+    void classBegin() Q_DECL_OVERRIDE;
     void componentComplete() Q_DECL_OVERRIDE;
 
 /// @endcond

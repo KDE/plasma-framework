@@ -516,10 +516,17 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     return oldNode;
 }
 
+void FrameSvgItem::classBegin()
+{
+    QQuickItem::classBegin();
+    m_frameSvg->setRepaintBlocked(true);
+}
+
 void FrameSvgItem::componentComplete()
 {
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
+    m_frameSvg->setRepaintBlocked(false);
     m_textureChanged = true;
 }
 
