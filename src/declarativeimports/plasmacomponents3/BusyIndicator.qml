@@ -38,9 +38,8 @@ T.BusyIndicator {
         }
         elementId: "busywidget"
 
-        anchors.centerIn: parent
-        width:  Math.min(control.width, control.height)
-        height: width
+        implicitWidth:  units.gridUnit * 2
+        implicitHeight: width
 
         Connections {
             target: control
