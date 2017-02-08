@@ -32,10 +32,10 @@ T.Drawer {
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
-    topPadding: control.edge === Qt.BottomEdge ? 1 : 0
-    leftPadding: control.edge === Qt.RightEdge ? 1 : 0
-    rightPadding: control.edge === Qt.LeftEdge ? 1 : 0
-    bottomPadding: control.edge === Qt.TopEdge ? 1 : 0
+    topPadding: control.edge === Qt.BottomEdge ? Math.round(units.devicePixelRatio) : 0
+    leftPadding: control.edge === Qt.RightEdge ? Math.round(units.devicePixelRatio) : 0
+    rightPadding: control.edge === Qt.LeftEdge ? Math.round(units.devicePixelRatio) : 0
+    bottomPadding: control.edge === Qt.TopEdge ? Math.round(units.devicePixelRatio) : 0
 
     background: PlasmaCore.FrameSvgItem {
         anchors {
