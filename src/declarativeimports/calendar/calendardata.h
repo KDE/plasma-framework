@@ -37,8 +37,6 @@ class CalendarData : public QObject
     Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
     //  Q_PROPERTY(QAbstractItemModel* model READ model CONSTANT)
 
-    Q_ENUMS(Type)
-
 public:
     enum Type {
         Holiday = 1,
@@ -46,6 +44,7 @@ public:
         Todo = 4,
         Journal = 8
     };
+    Q_ENUM(Type)
     Q_DECLARE_FLAGS(Types, Type)
 
     explicit CalendarData(QObject *parent = 0);

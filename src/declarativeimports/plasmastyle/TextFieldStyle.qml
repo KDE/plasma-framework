@@ -18,6 +18,7 @@
 */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 
@@ -30,7 +31,7 @@ QtQuickControlStyle.TextFieldStyle {
     id: root
 
     textColor: control.enabled ? theme.viewTextColor : Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.6)
-    selectionColor: theme.viewFocusColor
+    selectionColor: theme.highlightColor
     selectedTextColor: theme.viewHighlightedTextColor
     placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
 
@@ -38,8 +39,9 @@ QtQuickControlStyle.TextFieldStyle {
      * Since the password echo is a circle woithout vertical or horizontal lines, it won't be
      * more blurred with different rendring types.
      * Using Qt rendering, the dots will look more aligned and equally spaced.
+     * Also if we are on mobile, make sure we use QtRendering
      */
-    renderType: control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
+    renderType: !QtQuickControlsPrivate.Settings.isMobile && control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
@@ -48,7 +50,7 @@ QtQuickControlStyle.TextFieldStyle {
 
         //In order to get the same height in both buttons and lineedits we need to apply the same rule here
 
-        implicitHeight: Math.max(theme.mSize(theme.defaultFont).height * 1.6, theme.mSize(theme.defaultFont).height + base.margins.top + base.margins.bottom)
+        implicitHeight: Math.max(control.cursorRectangle.height * 1.6, control.cursorRectangle.height + base.margins.top + base.margins.bottom)
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
         opacity: control.enabled ? 1 : 0.6
 
@@ -74,7 +76,7 @@ QtQuickControlStyle.TextFieldStyle {
                 var actionIconSize = Math.max(textField.height * 0.8, units.iconSizes.small);
                 //actionCount is an int of the number of items
                 var actionCount = (control.hasOwnProperty("clearButtonShown") && control.clearButtonShown) +
-                                  (control.hasOwnProperty("revealPasswordButtonShown") && control.revealPasswordButtonShown);
+                                  (control.hasOwnProperty("__effectiveRevealPasswordButtonShown") && control.__effectiveRevealPasswordButtonShown);
                 return base.margins.right + (actionIconSize * actionCount) + (actionCount > 0 ? units.smallSpacing : 0);
             })
         }

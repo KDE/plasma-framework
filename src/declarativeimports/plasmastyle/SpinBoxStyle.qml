@@ -19,7 +19,9 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
+import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -38,7 +40,7 @@ QtQuickControlStyle.SpinBoxStyle {
     selectedTextColor: theme.viewBackgroundColor
 
 
-    renderType: Text.NativeRendering
+    renderType: QtQuickControlsPrivate.Settings.isMobile ? Text.QtRendering : Text.NativeRendering
 
     PlasmaCore.Svg {
         id: arrowSvg

@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
 Name[ar]=مهام الرجل الفقير
-Name[ast]=Xeres d'un home probe
+Name[ast]=Xeres d'home probe
 Name[bs]=Zadaci siromašnog čovjeka
 Name[ca]=Tasques senzilles
 Name[ca@valencia]=Tasques senzilles
@@ -40,7 +40,6 @@ Name[zh_CN]=穷人的任务栏
 Name[zh_TW]=窮人的工作
 Comment=Example showing how to write your own tasks Widget
 Comment[ar]=مثال يُظهر كيفية كتابة ودجات المهام
-Comment[ast]=Exemplu enseñando cómo escribir el to propiu widget de xeres
 Comment[bs]=Primjer prikazuje kako da napišete svoj vlastiti podsjetnik zadataka
 Comment[ca]=Exemple que mostra com escriure el vostre propi estri de tasques
 Comment[ca@valencia]=Exemple que mostra com escriure el vostre propi estri de tasques
@@ -52,7 +51,7 @@ Comment[et]=Näidis, kuidas kirjutada ise ülesannete vidin
 Comment[fi]=Esimerkki oman tehtäväsovelman kirjoittamisesta
 Comment[fr]=Exemple montrant comment écrire votre propre composant graphique de tâches
 Comment[gd]=Buill-eisimpleir a sheallas dhut mar a sgrìobhas tu Widget shaothraichean agad fhèin
-Comment[gl]=Un exemplo de como escribir un widget de tarefas pendentes
+Comment[gl]=Un exemplo de como escribir un trebello de tarefas pendentes
 Comment[hu]=Példa saját feladatlista írásához
 Comment[ia]=Exemplo monstrante como scriber tu proprie Widget de cargas
 Comment[it]=Esempio che mostra come scrivere il proprio widget

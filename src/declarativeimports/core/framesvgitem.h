@@ -22,6 +22,7 @@
 #define FRAMESVGITEM_P
 
 #include <QQuickItem>
+#include <QQmlParserStatus>
 
 #include <Plasma/FrameSvg>
 
@@ -107,6 +108,7 @@ private:
 class FrameSvgItem : public QQuickItem
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 
     /**
      * Theme relative path of the svg, like "widgets/background"
@@ -133,7 +135,6 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(QObject *fixedMargins READ fixedMargins CONSTANT)
 
-    Q_FLAGS(Plasma::FrameSvg::EnabledBorders)
     /**
      * The borders that will be rendered, it's a flag combination of:
      *  NoBorder
@@ -214,6 +215,7 @@ public:
 
 
 protected:
+    void classBegin() Q_DECL_OVERRIDE;
     void componentComplete() Q_DECL_OVERRIDE;
 
 /// @endcond
@@ -236,7 +238,6 @@ private:
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
     QString m_prefix;
-    Units m_units;
     bool m_textureChanged;
     bool m_sizeChanged;
     bool m_fastPath;

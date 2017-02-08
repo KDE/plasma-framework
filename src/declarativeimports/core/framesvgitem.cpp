@@ -265,7 +265,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
-    connect(&m_units, &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
+    connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
 }
@@ -448,7 +448,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (!window() || !m_frameSvg ||
         (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_prefix))) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     if (m_fastPath) {
@@ -516,10 +516,17 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     return oldNode;
 }
 
+void FrameSvgItem::classBegin()
+{
+    QQuickItem::classBegin();
+    m_frameSvg->setRepaintBlocked(true);
+}
+
 void FrameSvgItem::componentComplete()
 {
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
+    m_frameSvg->setRepaintBlocked(false);
     m_textureChanged = true;
 }
 
@@ -532,7 +539,7 @@ void FrameSvgItem::updateDevicePixelRatio()
     } else {
         m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(qApp->devicePixelRatio())));
     }
-    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
+    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
     m_textureChanged = true;
 }
 

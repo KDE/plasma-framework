@@ -82,6 +82,13 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::titleChanged,
             this, &AppletInterface::titleChanged);
 
+    connect(applet(), &Plasma::Applet::titleChanged,
+            this, [this]() {
+                if (m_toolTipMainText.isNull()) {
+                    emit toolTipMainTextChanged();
+                }
+            });
+
     connect(applet(), &Plasma::Applet::iconChanged,
             this, &AppletInterface::iconChanged);
 
@@ -100,7 +107,18 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
     if (applet()->containment()) {
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
-                this, &ContainmentInterface::screenChanged);
+                this, &AppletInterface::screenChanged);
+
+        // Screen change implies geo change for good measure.
+        connect(applet()->containment(), &Plasma::Containment::screenChanged,
+                this, &AppletInterface::screenGeometryChanged);
+
+        connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
+            if (id == applet()->containment()->screen()) {
+                emit screenGeometryChanged();
+            }
+        });
+
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
@@ -243,7 +261,6 @@ void AppletInterface::setIcon(const QString &icon)
     }
 
     applet()->setIcon(icon);
-    emit iconChanged();
 }
 
 QString AppletInterface::title() const
@@ -258,7 +275,6 @@ void AppletInterface::setTitle(const QString &title)
     }
 
     applet()->setTitle(title);
-    emit titleChanged();
 }
 
 QString AppletInterface::toolTipMainText() const

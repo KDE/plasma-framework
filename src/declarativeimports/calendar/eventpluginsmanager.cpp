@@ -28,6 +28,9 @@
 #include <QDir>
 #include <QDebug>
 
+#include <KPluginLoader>
+#include <KPluginMetaData>
+
 class EventPluginsModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -68,20 +71,23 @@ public:
             return QVariant();
         }
 
-        const QString currentPlugin = m_manager->m_availablePlugins.keys().at(index.row());
-        const QJsonObject metadata = m_manager->m_availablePlugins.value(currentPlugin).value(QStringLiteral("MetaData")).toObject();
+        const auto it = m_manager->m_availablePlugins.cbegin() + index.row();
+        const QString currentPlugin = it.key();
+        const EventPluginsManager::PluginData metadata = it.value();
 
         switch (role) {
             case Qt::DisplayRole:
-                return metadata.value(QStringLiteral("Name"));
+                return metadata.name;
+            case Qt::ToolTipRole:
+                return metadata.desc;
             case Qt::DecorationRole:
-                return metadata.value(QStringLiteral("Icon"));
+                return metadata.icon;
             case Qt::UserRole:
             {
                 // The currentPlugin path contains the full path including
                 // the plugin filename, so it needs to be cut off from the last '/'
                 const QStringRef pathRef = currentPlugin.leftRef(currentPlugin.lastIndexOf('/'));
-                const QString qmlFilePath = metadata.value(QStringLiteral("ConfigUi")).toString();
+                const QString qmlFilePath = metadata.configUi;
                 return QString(pathRef % '/' % qmlFilePath);
             }
             case Qt::EditRole:
@@ -127,9 +133,21 @@ private:
 EventPluginsManager::EventPluginsManager(QObject *parent)
     : QObject(parent)
 {
-    // First of all get a list of available plugins
-    // and get their metadata. This alone is enough
-    // for the applet config to work
+    auto plugins = KPluginLoader::findPlugins(
+            QStringLiteral("plasmacalendarplugins"),
+            [](const KPluginMetaData &md) {
+                return md.serviceTypes().contains(QLatin1String("PlasmaCalendar/Plugin"));
+            });
+    Q_FOREACH (const KPluginMetaData &plugin, plugins) {
+        m_availablePlugins.insert(plugin.fileName(),
+                                  { plugin.name(),
+                                    plugin.description(),
+                                    plugin.iconName(),
+                                    plugin.value(QStringLiteral("X-KDE-PlasmaCalendar-ConfigUi"))
+                                  });
+    }
+
+    // Fallback for legacy pre-KPlugin plugins so we can still load them
     const QStringList paths = QCoreApplication::libraryPaths();
     Q_FOREACH (const QString &libraryPath, paths) {
         const QString path(libraryPath + QStringLiteral("/plasmacalendarplugins"));
@@ -143,10 +161,20 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
 
         Q_FOREACH (const QString &fileName, entryList) {
             const QString absolutePath = dir.absoluteFilePath(fileName);
+            if (m_availablePlugins.contains(absolutePath)) {
+                continue;
+            }
+
             QPluginLoader loader(absolutePath);
             // Load only our own plugins
             if (loader.metaData().value(QStringLiteral("IID")) == QLatin1String("org.kde.CalendarEventsPlugin")) {
-                m_availablePlugins.insert(absolutePath, loader.metaData());
+                const auto md = loader.metaData().value(QStringLiteral("MetaData")).toObject();
+                m_availablePlugins.insert(absolutePath,
+                                          { md.value(QStringLiteral("Name")).toString(),
+                                            md.value(QStringLiteral("Description")).toString(),
+                                            md.value(QStringLiteral("Icon")).toString(),
+                                            md.value(QStringLiteral("ConfigUi")).toString()
+                                          });
             }
         }
     }

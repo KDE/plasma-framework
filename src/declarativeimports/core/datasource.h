@@ -58,8 +58,8 @@ public:
 
     DataSource(QObject *parent = 0);
 
-    void classBegin();
-    void componentComplete();
+    void classBegin() Q_DECL_OVERRIDE;
+    void componentComplete() Q_DECL_OVERRIDE;
 
     /**
      * true if the connection to the Plasma DataEngine is valid

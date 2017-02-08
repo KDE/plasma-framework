@@ -210,8 +210,7 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
             return applet;
         }
         if (geom.width() > 0 && geom.height() > 0) {
-            appletGraphicObject->setWidth(geom.width());
-            appletGraphicObject->setHeight(geom.height());
+            appletGraphicObject->setSize(geom.size());
         }
 
         blockSignals(false);
@@ -238,7 +237,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 
 QObject *ContainmentInterface::containmentAt(int x, int y)
 {
-    QObject *desktop = Q_NULLPTR;
+    QObject *desktop = nullptr;
     foreach (Plasma::Containment *c, m_containment->corona()->containments()) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
@@ -562,8 +561,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
     } else {
 
         QPoint posi; // will be overwritten with the event's position
-        if (m_dropPoints.keys().contains(tjob)) {
-            posi = m_dropPoints[tjob];
+        if (m_dropPoints.contains(tjob)) {
+            posi = m_dropPoints.value(tjob);
             qDebug() << "Received a suitable dropEvent at" << posi;
         } else {
             qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
@@ -925,7 +924,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
 
     QPoint pos = event->globalPos();
-    if (window() && applet && m_containment->containmentType() == Plasma::Types::PanelContainment) {
+    if (window() && m_containment->containmentType() == Plasma::Types::PanelContainment) {
         desktopMenu->adjustSize();
 
         if (QScreen *screen = window()->screen()) {

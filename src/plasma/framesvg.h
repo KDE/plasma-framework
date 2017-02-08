@@ -77,7 +77,6 @@ class PLASMA_EXPORT FrameSvg : public Svg
 {
     Q_OBJECT
 
-    Q_FLAGS(EnabledBorders)
     Q_PROPERTY(EnabledBorders enabledBorders READ enabledBorders WRITE setEnabledBorders)
 
 public:
@@ -93,6 +92,7 @@ public:
         AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder
     };
     Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
+    Q_FLAG(EnabledBorders)
 
     /**
      * Constructs a new FrameSvg that paints the proper named subelements
@@ -292,11 +292,28 @@ public:
      */
     QString actualPrefix() const;
 
+    /**
+     * @returns true if we are in a transaction of many changes at once
+     * and we don't want to rebuild the generated graphics for each change yet
+     * @since 5.31
+     */
+    bool isRepaintBlocked() const;
+
+    /**
+     * If we will do several changes at once in the frame properties,
+     * such as prefix, enabled borders and size, in order to not regenerate
+     * the graphics for each change, set this property to true, and set
+     * it to false again after applying all the changes needed.
+     * Note that any change will not be visible in the painted frame while this property is set to true.
+     * @since 5.31
+     */
+    void setRepaintBlocked(bool blocked);
+
 private:
     FrameSvgPrivate *const d;
     friend class FrameData;
 
-    Q_PRIVATE_SLOT(d, void updateSizes())
+    //Q_PRIVATE_SLOT(d, void updateSizes())
     Q_PRIVATE_SLOT(d, void updateNeeded())
 };
 

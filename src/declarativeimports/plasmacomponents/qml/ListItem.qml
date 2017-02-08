@@ -90,24 +90,14 @@ Item {
 
     implicitHeight: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
-
-    Connections {
-        target: listItem
-        onCheckedChanged: background.prefix = (listItem.checked ? "pressed" : "normal")
-        onSectionDelegateChanged: background.prefix = (listItem.sectionDelegate ? "section" : "normal")
-    }
-
     PlasmaCore.FrameSvgItem {
         id : background
         imagePath: "widgets/listitem"
-        prefix: "normal"
+        prefix: (listItem.sectionDelegate ? "section" :
+                (itemMouse.pressed || listItem.checked) ? "pressed" : "normal")
 
         anchors.fill: parent
         visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
-        opacity: itemMouse.containsMouse && !itemMouse.pressed ? 0.5 : 1
-        Component.onCompleted: {
-            prefix = (listItem.sectionDelegate ? "section" : (listItem.checked ? "pressed" : "normal"))
-        }
         Behavior on opacity { NumberAnimation { duration: units.longDuration } }
     }
     PlasmaCore.SvgItem {
@@ -131,9 +121,6 @@ Item {
 
         onClicked: listItem.clicked()
         onPressAndHold: listItem.pressAndHold()
-        onPressed: if (changeBackgroundOnPress) background.prefix = "pressed"
-        onReleased: if (changeBackgroundOnPress) background.prefix = "normal"
-        onCanceled: if (changeBackgroundOnPress) background.prefix = "normal"
 
         Item {
             id: paddingItem

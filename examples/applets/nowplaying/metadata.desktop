@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Now playing (QML)
 Name[ar]=يشغّل الآن (QML)
-Name[ast]=Agora reproduciendo (QML)
 Name[bs]=Sada svira (QML)
 Name[ca]=Ara està en reproducció (QML)
 Name[ca@valencia]=Ara està en reproducció (QML)
@@ -40,7 +39,7 @@ Name[x-test]=xxNow playing (QML)xx
 Name[zh_CN]=正在播放 (QML)
 Name[zh_TW]=現正播放（QML）
 Comment=A proof of concept media player controller qml
-Comment[ast]=Una prueba de conceutu de controlador de reproductor multimedia de qml
+Comment[ar]=متحكّم لمشغّل وسائط ب‍QML يثبت فعاليّة المبدأ
 Comment[bs]=Dokaz koncepta media player upravljača qml
 Comment[ca]=Una prova del concepte de controlador qml per a un reproductor multimèdia
 Comment[ca@valencia]=Una prova del concepte de controlador qml per a un reproductor multimèdia

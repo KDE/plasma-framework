@@ -35,6 +35,13 @@ QtQuickControlStyle.ScrollViewStyle {
 
     transientScrollBars: Settings.hasTouchScreen && Settings.isMobile
 
+    padding {
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+    }
+
     function syncVelocity() {
         if (!control.flickableItem) {
             return;
@@ -56,6 +63,8 @@ QtQuickControlStyle.ScrollViewStyle {
     }
 
     frame: Item {
+        visible: frameVisible
+
         PlasmaCore.Svg {
             id: borderSvg
             imagePath: "widgets/scrollwidget"
@@ -143,6 +152,13 @@ QtQuickControlStyle.ScrollViewStyle {
         prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
         implicitWidth: widthHint
         colorGroup: PlasmaCore.ColorScope.colorGroup
+        opacity: styleData.hovered ? 1 : 0
+        Behavior on opacity {
+            NumberAnimation {
+                duration: units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+        }
     }
 
     handle: PlasmaCore.FrameSvgItem {

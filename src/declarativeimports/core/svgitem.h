@@ -106,7 +106,6 @@ private:
     QString m_elementID;
     bool m_smooth;
     bool m_textureChanged;
-    Units m_units;
     QImage m_image;
 };
 }

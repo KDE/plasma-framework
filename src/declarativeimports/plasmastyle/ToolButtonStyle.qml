@@ -85,15 +85,14 @@ QtQuickControlStyle.ButtonStyle {
 
             PlasmaComponents.Label {
                 id: label
+                anchors.verticalCenter: parent.verticalCenter
                 Layout.minimumWidth: implicitWidth
                 text: QtQuickControlsPrivate.StyleHelpers.stylizeMnemonics(control.text)
                 font: control.font || theme.defaultFont
                 visible: control.text != ""
                 Layout.fillWidth: true
-                height: parent.height
                 color: controlHovered || !flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
 

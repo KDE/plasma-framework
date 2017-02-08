@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Simple DataEngine Example
-Name[ast]=Exemplu cenciellu del motor de datos
+Name[ar]=مثال بسيط لمحرّك بيانات
 Name[bs]=Jednostavan primjer pogona podataka
 Name[ca]=Exemple senzill de «DataEngine»
 Name[ca@valencia]=Exemple senzill de «DataEngine»
@@ -39,7 +39,7 @@ Name[x-test]=xxSimple DataEngine Examplexx
 Name[zh_CN]=简单数据引擎样例
 Name[zh_TW]=簡單資料引擎範例
 Comment=A very basic DataEngine implementation
-Comment[ast]=Una implementación perbásica del motor de datos
+Comment[ar]=تنفيذ أساسيّ لمحرّك بيانات (DataEngine)
 Comment[bs]=Veoma jednostavna implementacija pogona podataka
 Comment[ca]=Una implementació molt bàsica de «DataEngine»
 Comment[ca@valencia]=Una implementació molt bàsica de «DataEngine»

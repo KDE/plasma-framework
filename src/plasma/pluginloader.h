@@ -148,8 +148,11 @@ public:
      * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
      *
      * @return a Package object matching name, or an invalid package on failure
+     * @deprecated since 5.29 use KPackage::PackageLoader::loadPackage
      **/
-    Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
+#ifndef PLASMA_NO_DEPRECATED
+    PLASMA_DEPRECATED Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
+#endif
 
     /**
      * Returns a list of all known applets.
@@ -407,8 +410,11 @@ protected:
      * @param parent the parent object, if any, for the service
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
+     * @deprecated since 5.29
      **/
-    virtual Package internalLoadPackage(const QString &name, const QString &specialization);
+#ifndef PLASMA_NO_DEPRECATED
+    virtual PLASMA_DEPRECATED Package internalLoadPackage(const QString &name, const QString &specialization);
+#endif
 
     /**
      * A re-implementable method that allows subclasses to provide additional applets

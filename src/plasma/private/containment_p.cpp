@@ -123,7 +123,9 @@ void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
         }
     }
 
-    q->setStatus(appletStatus);
+    if (appletStatus != Plasma::Types::HiddenStatus) {
+        q->setStatus(appletStatus);
+    }
 }
 
 void ContainmentPrivate::triggerShowAddWidgets()

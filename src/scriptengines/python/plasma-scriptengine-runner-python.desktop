@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Python Runner
-Name[ar]=مشغِّل بايثون
-Name[ast]=Runner de Python
+Name[ar]=مشغّل بايثون
 Name[ca]=Executor en Python
 Name[ca@valencia]=Executor en Python
 Name[cs]=Python spouštěč
@@ -41,8 +40,7 @@ Name[x-test]=xxPython Runnerxx
 Name[zh_CN]=Python 运行器
 Name[zh_TW]=Python 執行器
 Comment=Plasma Runner support for Python
-Comment[ar]=دعم مشغِّل پلازما لِبايثون
-Comment[ast]=Sofitu de Runner de Plasma pa Python
+Comment[ar]=دعم مشغّل «بلازما» ل‍«بايثون»
 Comment[ca]=Implementació d'un executor del Plasma per a Python
 Comment[ca@valencia]=Implementació d'un executor del Plasma per a Python
 Comment[cs]=Podpora Plasma spouštěče pro Python

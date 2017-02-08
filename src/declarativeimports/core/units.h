@@ -39,7 +39,7 @@ Q_SIGNALS:
     void fontChanged();
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
 };
 
 /**
@@ -73,8 +73,11 @@ class Units : public QObject
      *
      * Not devicePixelRation-adjusted::
      * * desktop
+     *
      */
-    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes NOTIFY iconSizesChanged)
+    //note the iconSizeChanges signal indicates that one (or more) of these icons have changed
+    //but the property map itself remains constant
+    Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
 
     // layout hints
 
@@ -117,8 +120,13 @@ class Units : public QObject
 public:
 /// @cond INTERNAL_DOCS
 
-    Units(QObject *parent = 0);
     ~Units();
+
+    /**
+     * @return a reference to the global Units instance
+     * @since 5.31
+     */
+    static Units &instance();
 
     /**
      * @return pixel value for a grid Unit. Depends on DPI and font size.
@@ -181,6 +189,12 @@ private Q_SLOTS:
     void updateSpacing();
 
 private:
+    Units(QObject *parent = 0);
+    Units(Units const&) = delete; // Copy construct
+    Units(Units&&) = delete; // Move construct
+    Units& operator=(Units const&) = delete; // Copy assign
+    Units& operator=(Units &&) = delete; // Move assign
+
     void updateDevicePixelRatio();
     void updatePlasmaRCSettings();
     /**

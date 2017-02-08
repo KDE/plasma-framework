@@ -25,6 +25,7 @@
 #include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
 #include "view.h"
+#include "configview.h"
 
 #include <QQuickItem>
 #include <QTimer>
@@ -549,7 +550,7 @@ void DialogPrivate::updateInputShape()
             if (extension->present) {
                 // query version
                 auto cookie = xcb_shape_query_version(c);
-                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, Q_NULLPTR));
+                QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, nullptr));
                 if (!version.isNull()) {
                     s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
                 }
@@ -648,10 +649,9 @@ void DialogPrivate::slotWindowPositionChanged()
 
     if (mainItem) {
         auto margin = frameSvgItem->fixedMargins();
-        mainItem->setX(margin->left());
-        mainItem->setY(margin->top());
-        mainItem->setWidth(q->width() - margin->left() - margin->right());
-        mainItem->setHeight(q->height() - margin->top() - margin->bottom());
+        mainItem->setPosition(QPoint(margin->left(), margin->top()));
+        mainItem->setSize(QSize(q->width() - margin->left() - margin->right(),
+                                q->height() - margin->top() - margin->bottom()));
     }
 }
 
@@ -781,6 +781,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
                         child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
                    ) {
                     layout = child;
+                    break;
                 }
             }
 
@@ -873,7 +874,8 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 
     //if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock
     const KWindowInfo winInfo = KWindowSystem::windowInfo(item->window()->winId(), NET::WMWindowType);
-    const bool outsideParentWindow = (winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint);
+    const bool outsideParentWindow = ((winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint))
+            && item->window()->mask().isNull();
 
     QRect parentGeometryBounds;
     if (outsideParentWindow) {
@@ -1093,7 +1095,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
 
-        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow);
+        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
 
         if (viewClicked || (!parentHasFocus && !childHasFocus)) {
             setVisible(false);

@@ -2,7 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=Plasma/LookAndFeel
 Name=Plasma Look and Feel
-Name[ar]=مظهر وَإحساس پلازما
+Name[ar]=مظهر وإحساس بلازما
 Name[ast]=Aspeutu y sentir de Plasma
 Name[bs]=Plazma izgled i osjećaj
 Name[ca]=Aspecte i comportament del Plasma
@@ -43,7 +43,6 @@ Name[x-test]=xxPlasma Look and Feelxx
 Name[zh_CN]=Plasma 观感
 Name[zh_TW]=Plasma 外觀與感覺
 Comment=Defines the Visual Language for Plasma Shells
-Comment[ast]=Define'l llinguax visual pa shells de Plasma
 Comment[bs]=Definicija vizuelnog jezika za plazma školjke
 Comment[ca]=Defineix el llenguatge visual pels intèrprets d'ordres del Plasma
 Comment[ca@valencia]=Defineix el llenguatge visual pels intèrprets d'ordes del Plasma

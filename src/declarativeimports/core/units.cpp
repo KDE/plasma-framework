@@ -91,6 +91,13 @@ Units::Units(QObject *parent)
 
 Units::~Units()
 {
+
+}
+
+Units &Units::instance()
+{
+    static Units units;
+    return units;
 }
 
 void Units::settingsFileChanged(const QString &file)

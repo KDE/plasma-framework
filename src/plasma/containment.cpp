@@ -297,6 +297,10 @@ void Containment::restoreContents(KConfigGroup &group)
         d->createApplet(plugin, QVariantList(), appId);
     }
 
+    //if there are no applets, none of them is "loading"
+    if (Containment::applets().isEmpty()) {
+        d->appletsUiReady = true;
+    }
     foreach (Applet *applet, Containment::applets()) {
         if (!applet->pluginMetaData().isValid()) {
             applet->updateConstraints(Plasma::Types::UiReadyConstraint);

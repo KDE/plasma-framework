@@ -103,6 +103,9 @@ Item {
             level: 1
             elide: Text.ElideRight
             font.capitalization: Font.Capitalize
+            //SEE QTBUG-58307
+            //try to make all heights an even number, otherwise the layout engine gets confused
+            Layout.preferredHeight: implicitHeight + implicitHeight%2
 
             MouseArea {
                 id: monthMouse
@@ -145,6 +148,8 @@ Item {
             iconName: Qt.application.layoutDirection === Qt.RightToLeft ? "go-next" : "go-previous"
             onClicked: daysCalendar.previous()
             Accessible.name: tooltip
+            //SEE QTBUG-58307
+            Layout.preferredHeight: implicitHeight + implicitHeight%2
         }
 
         Components.ToolButton {
@@ -153,6 +158,8 @@ Item {
             tooltip: i18ndc("libplasma5", "Reset calendar to today", "Today")
             Accessible.name: tooltip
             Accessible.description: i18nd("libplasma5", "Reset calendar to today")
+            //SEE QTBUG-58307
+            Layout.preferredHeight: implicitHeight + implicitHeight%2
         }
 
         Components.ToolButton {
@@ -160,6 +167,8 @@ Item {
             iconName: Qt.application.layoutDirection === Qt.RightToLeft ? "go-previous" : "go-next"
             onClicked: daysCalendar.next()
             Accessible.name: tooltip
+            //SEE QTBUG-58307
+            Layout.preferredHeight: implicitHeight + implicitHeight%2
         }
     }
 

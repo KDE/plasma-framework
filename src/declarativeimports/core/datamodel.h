@@ -139,7 +139,7 @@ Q_SIGNALS:
 
 protected:
     int roleNameToId(const QString &name);  //FIXME TODO KF6: This should have been const.
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const Q_DECL_OVERRIDE;
 
 protected Q_SLOTS:
     void syncRoleNames();

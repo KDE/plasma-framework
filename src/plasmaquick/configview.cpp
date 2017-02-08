@@ -101,8 +101,6 @@ void ConfigViewPrivate::init()
         kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginMetaData().pluginId());
     }
     kdeclarative.setupBindings();
-    qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
-    qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
@@ -243,6 +241,7 @@ void ConfigViewPrivate::mainItemLoaded()
                 child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
             ) {
             layout = child;
+            break;
         }
     }
     mainItemLayout = layout;
@@ -266,9 +265,9 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
       d(new ConfigViewPrivate(applet, this))
 {
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
-    d->init();
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
+    d->init();
     connect(applet, &QObject::destroyed, this, &ConfigView::close);
     connect(this, &QQuickView::statusChanged, [=](QQuickView::Status status) {
         if (status == QQuickView::Ready) {

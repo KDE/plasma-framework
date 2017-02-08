@@ -93,6 +93,13 @@ class QMenuProxy : public QObject
      */
     Q_PROPERTY(int minimumWidth READ minimumWidth WRITE setMinimumWidth NOTIFY minimumWidthChanged)
 
+    /**
+     * A maximum width for the menu.
+     *
+     * @since 5.31
+     */
+    Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth RESET resetMaximumWidth NOTIFY maximumWidthChanged)
+
 public:
     QMenuProxy(QObject *parent = 0);
     ~QMenuProxy();
@@ -113,6 +120,10 @@ public:
 
     int minimumWidth() const;
     void setMinimumWidth(int width);
+
+    int maximumWidth() const;
+    void setMaximumWidth(int maximumWidth);
+    void resetMaximumWidth();
 
     /**
      * This opens the menu at position x,y on the given visualParent. By default x and y are set to 0
@@ -163,6 +174,7 @@ Q_SIGNALS:
     void transientParentChanged();
     void placementChanged();
     void minimumWidthChanged();
+    void maximumWidthChanged();
     void triggered(QMenuItem *item);
     void triggeredIndex(int index);
 

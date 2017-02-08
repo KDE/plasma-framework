@@ -61,7 +61,7 @@ public:
         AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
                          ImmutableConstraint
     };
-    Q_ENUMS(Constraint)
+    Q_ENUM(Constraint)
     Q_DECLARE_FLAGS(Constraints, Constraint)
 
     /**
@@ -87,7 +87,7 @@ public:
         Application /**< The Applet lives in a plane and should be optimized to look as a full application,
                      for the desktop or the particular device. */
     };
-    Q_ENUMS(FormFactor)
+    Q_ENUM(FormFactor)
 
     /**
      * This enumeration describes the type of the Containment.
@@ -103,7 +103,7 @@ public:
         CustomPanelContainment = 128, /**< A customized desktop panel */
         CustomEmbeddedContainment = 129 /**< A customized containment embedded in another applet */
     };
-    Q_ENUMS(ContainmentType)
+    Q_ENUM(ContainmentType)
 
     /**
      * A descriptrive type for QActions, to help categorizing them when presented to the user
@@ -116,7 +116,7 @@ public:
         DestructiveAction = 400,  /** A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separed from other actions */
         UserAction = DestructiveAction + 1000 /** If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
     };
-    Q_ENUMS(ActionType)
+    Q_ENUM(ActionType)
 
     /**
      * The Direction enumeration describes in which direction, relative to the
@@ -130,7 +130,7 @@ public:
         Left,     /**< Display to the left */
         Right     /**< Display to the right */
     };
-    Q_ENUMS(Direction)
+    Q_ENUM(Direction)
 
     /**
      * The Location enumeration describes where on screen an element, such as an
@@ -147,7 +147,7 @@ public:
         LeftEdge,     /**< Along the left side of the screen */
         RightEdge     /**< Along the right side of the screen */
     };
-    Q_ENUMS(Location)
+    Q_ENUM(Location)
 
     /**
      * The position enumeration
@@ -160,7 +160,7 @@ public:
         BottomPositioned,  /**< Positioned bottom */
         CenterPositioned   /**< Positioned in the center */
     };
-    Q_ENUMS(Position)
+    Q_ENUM(Position)
 
     /**
      * The popup position enumeration relatively to his attached widget
@@ -185,7 +185,7 @@ public:
         RightPosedBottomAlignedPopup  /**< Popup positioned on the right, aligned
                                      to the bottom of the widget */
     };
-    Q_ENUMS(PopupPlacement)
+    Q_ENUM(PopupPlacement)
 
     /**
      * Flip enumeration
@@ -195,7 +195,7 @@ public:
         HorizontalFlip = 1,  /**< Flip horizontally */
         VerticalFlip = 2     /**< Flip vertically */
     };
-    Q_ENUMS(FlipDirection)
+    Q_ENUM(FlipDirection)
     Q_DECLARE_FLAGS(Flip, FlipDirection)
 
     /**
@@ -206,7 +206,7 @@ public:
         AlignToMinute, /**< Align to the minute **/
         AlignToHour /**< Align to the hour **/
     };
-    Q_ENUMS(IntervalAlignment)
+    Q_ENUM(IntervalAlignment)
 
     /**
      * Defines the immutability of items like applets, corona and containments
@@ -220,7 +220,7 @@ public:
         SystemImmutable = 4 /**<  the item is locked down by the system, the user
                            can't unlock it **/
     };
-    Q_ENUMS(ImmutabilityType)
+    Q_ENUM(ImmutabilityType)
 
     /**
      * The ComonentType enumeration refers to the various types of components,
@@ -233,7 +233,7 @@ public:
         WallpaperComponent = 8,   /**< Plasma::Wallpaper based plugins **/
         GenericComponent = 16      /** Generic repositories of files, usually they keep QML files and their assets **/
     };
-    Q_ENUMS(ComponentType)
+    Q_ENUM(ComponentType)
     Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
 
     enum MarginEdge {
@@ -242,7 +242,7 @@ public:
         LeftMargin, /**< The left margin **/
         RightMargin /**< The right margin **/
     };
-    Q_ENUMS(MarginEdge)
+    Q_ENUM(MarginEdge)
 
     /**
      * Status of an applet
@@ -255,9 +255,10 @@ public:
         NeedsAttentionStatus = 3, /**< The Item needs attention **/
         RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
         AcceptingInputStatus = 5, /**< The Item is accepting input **/
+        //FIXME KF6: this should be the smallest status
         HiddenStatus = 6    /**< The Item will be hidden totally  **/
     };
-    Q_ENUMS(ItemStatus)
+    Q_ENUM(ItemStatus)
 
     enum TrustLevel {
         UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
@@ -270,7 +271,7 @@ public:
         FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
         UltimatelyTrusted           /**< The signature is valid and made with the vendor's key*/
     };
-    Q_ENUMS(TrustLevel)
+    Q_ENUM(TrustLevel)
 
     /**
      * Description on how draw a background for the applet
@@ -281,7 +282,7 @@ public:
         TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
         DefaultBackground = StandardBackground /**< Default settings: both standard background */
     };
-    Q_ENUMS(BackgroundHints)
+    Q_ENUM(BackgroundHints)
 
 private:
     Types(QObject *parent = 0);

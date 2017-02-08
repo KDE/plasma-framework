@@ -68,5 +68,36 @@ Rectangle {
                 PlasmaComponents.MenuItem { text: "Another item" }
             }
         }
+
+        Row {
+            spacing: units.smallSpacing
+
+            PlasmaComponents.Button {
+                id: minMaxButton
+                text: "Fixed minimum and maximum width"
+                onClicked: minMaxMenu.open(0, height)
+
+                PlasmaComponents.Menu {
+                    id: minMaxMenu
+
+                    minimumWidth: minMaxButton.width
+                    maximumWidth: limitMenuMaxWidth.checked ? minMaxButton.width : undefined // has a RESET property
+
+                    PlasmaComponents.MenuItem { text: "Hello" }
+                    PlasmaComponents.MenuItem { text: "This is just a simple" }
+                    PlasmaComponents.MenuItem { text: "Menu" }
+                    PlasmaComponents.MenuItem { text: "with some very very long text in one item that will "
+                                                    + "make the menu super huge if you don't do anything about it" }
+                    PlasmaComponents.MenuItem { text: "and other stuff" }
+                }
+            }
+
+            PlasmaComponents.CheckBox {
+                id: limitMenuMaxWidth
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Limit maximum width"
+                checked: true
+            }
+        }
     }
 }

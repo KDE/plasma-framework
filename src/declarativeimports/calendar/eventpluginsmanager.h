@@ -69,7 +69,13 @@ private:
     friend class EventPluginsModel;
     EventPluginsModel *m_model;
     QList<CalendarEvents::CalendarEventsPlugin*> m_plugins;
-    QMap<QString, QJsonObject> m_availablePlugins;
+    struct PluginData {
+        QString name;
+        QString desc;
+        QString icon;
+        QString configUi;
+    };
+    QMap<QString, PluginData> m_availablePlugins;
     QStringList m_enabledPlugins;
 };
 

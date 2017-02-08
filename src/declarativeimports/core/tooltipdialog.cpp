@@ -29,24 +29,17 @@
 #include <kdeclarative/qmlobjectsharedengine.h>
 #include <KWindowSystem>
 
-#include <config-x11.h>
-#if HAVE_X11
-#include <QX11Info>
-#endif
-
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : Dialog(parent),
       m_qmlObject(0),
       m_hideTimeout(4000),
       m_interactive(false),
-      m_owner(Q_NULLPTR)
+      m_owner(nullptr)
 {
     Qt::WindowFlags flags = Qt::ToolTip;
-#if HAVE_X11
-    if (QX11Info::isPlatformX11()) {
+    if (KWindowSystem::isPlatformX11()) {
         flags = flags | Qt::BypassWindowManagerHint;
     }
-#endif
     setFlags(flags);
     setLocation(Plasma::Types::Floating);
 
@@ -120,11 +113,9 @@ bool ToolTipDialog::event(QEvent *e)
 
     bool ret = Dialog::event(e);
     Qt::WindowFlags flags = Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
-#if HAVE_X11
-    if (QX11Info::isPlatformX11()) {
+    if (KWindowSystem::isPlatformX11()) {
         flags = flags | Qt::BypassWindowManagerHint;
     }
-#endif
     setFlags(flags);
     return ret;
 }

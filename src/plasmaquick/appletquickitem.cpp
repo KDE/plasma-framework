@@ -504,9 +504,11 @@ void AppletQuickItem::init()
 
     d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->kPackage().filePath("mainscript")));
 
-    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()) {
+    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError() || d->applet->failedToLaunch()) {
         QString reason;
-        if (d->applet->kPackage().isValid()) {
+        if (d->applet->failedToLaunch()) {
+            reason = d->applet->launchErrorMessage();
+        } else if (d->applet->kPackage().isValid()) {
             foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
                 reason += error.toString() + '\n';
             }
@@ -690,6 +692,7 @@ void AppletQuickItem::setPreferredRepresentation(QQmlComponent *component)
 
     d->preferredRepresentation = component;
     emit preferredRepresentationChanged(component);
+    d->compactRepresentationCheck();
 }
 
 bool AppletQuickItem::isExpanded() const

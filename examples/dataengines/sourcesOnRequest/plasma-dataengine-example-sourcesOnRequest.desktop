@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=Sources On Request
-Name[ast]=Fontes so solicitú
 Name[bs]=Izvori na zahtjev
 Name[ca]=Fonts a demanda
 Name[ca@valencia]=Fonts a demanda
@@ -38,7 +37,6 @@ Name[x-test]=xxSources On Requestxx
 Name[zh_CN]=按需请求源
 Name[zh_TW]=要求來源
 Comment=A DataEngine example showing how to respond to requests for source creation and updates
-Comment[ast]=Un exemplu de motor de datos enseñando cómo responder a les solicitúes pa la creación y anovamientu de fontes
 Comment[bs]=Primjer pogona podataka prikazuje kako odgovoriti na zahtjeve za kreiranje izvora i ažuriranja
 Comment[ca]=Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts
 Comment[ca@valencia]=Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts

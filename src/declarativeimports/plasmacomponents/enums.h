@@ -25,7 +25,6 @@
 class DialogStatus : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Status)
 
 public:
     enum Status {
@@ -34,12 +33,12 @@ public:
         Closing,
         Closed
     };
+    Q_ENUM(Status)
 };
 
 class PageOrientation : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Orientation)
 
 public:
     enum Orientation {
@@ -49,12 +48,12 @@ public:
         LockPrevious,
         Manual
     };
+    Q_ENUM(Orientation)
 };
 
 class PageStatus : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Status)
 
 public:
     enum Status {
@@ -63,6 +62,7 @@ public:
         Active,
         Deactivating
     };
+    Q_ENUM(Status)
 };
 
 #endif // ENUMS_H

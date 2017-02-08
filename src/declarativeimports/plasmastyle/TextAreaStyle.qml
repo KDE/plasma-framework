@@ -41,7 +41,7 @@ QtQuickControlStyle.TextAreaStyle {
     selectionColor: control.backgroundVisible ? theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
     selectedTextColor: control.backgroundVisible ? theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
 
-    renderType: Text.NativeRendering
+    renderType: QtQuickControlsPrivate.Settings.isMobile ? Text.QtRendering : Text.NativeRendering
 
     frame: PlasmaCore.FrameSvgItem {
         id: base

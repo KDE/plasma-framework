@@ -40,7 +40,7 @@ SvgItem::SvgItem(QQuickItem *parent)
       m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
-    connect(&m_units, &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
+    connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
 }
 
 SvgItem::~SvgItem()
@@ -134,13 +134,13 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     Q_UNUSED(updatePaintNodeData);
     if (!window() || !m_svg) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     //this is more than just an optimisation, uploading a null image to QSGAtlasTexture causes a crash
     if (width() == 0 || height() == 0) {
         delete oldNode;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     ManagedTextureNode *textureNode = static_cast<ManagedTextureNode *>(oldNode);
@@ -160,7 +160,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         //Dave E fixed this in Qt in 5.3.something onwards but we need this for now
         if (m_image.isNull()) {
             delete textureNode;
-            return Q_NULLPTR;
+            return nullptr;
         }
 
         QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(m_image, QQuickWindow::TextureCanUseAtlas));
@@ -197,7 +197,7 @@ void SvgItem::updateDevicePixelRatio()
         } else {
             m_svg.data()->setDevicePixelRatio(qMax<qreal>(1.0, floor(qApp->devicePixelRatio())));
         }
-        m_svg.data()->setScaleFactor(qMax<qreal>(1.0, floor(m_units.devicePixelRatio())));
+        m_svg.data()->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
     }
 }
 

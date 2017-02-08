@@ -3,7 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/Service
 
 Comment=Plasma service
-Comment[ar]=خدمة پلازما
+Comment[ar]=خدمة «بلازما»
 Comment[ast]=Serviciu de Plasma
 Comment[bs]=Plazma usluga
 Comment[ca]=Servei del Plasma

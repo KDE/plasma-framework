@@ -1,6 +1,5 @@
 [Desktop Entry]
 Comment=Example applet that shows how to use Models embedded in DataEngines
-Comment[ast]=Applet d'exemplu qu'enseña cómo usar modelos incrustaos en motores de datos
 Comment[ca]=Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»
 Comment[ca@valencia]=Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»
 Comment[da]=Eksempel på applet som viser hvordan modeller bruges indlejret i datamotorer
@@ -39,7 +38,6 @@ Comment[zh_TW]=顯示如何使用嵌入於資料引擎中的模型的範例小�
 Encoding=UTF-8
 Keywords=
 Name=Dataengine model
-Name[ar]=نموذج محرّك بيانات (Dataengine)
 Name[ast]=Modelu de motor de datos
 Name[ca]=Model de «Dataengine»
 Name[ca@valencia]=Model de «Dataengine»

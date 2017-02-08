@@ -48,8 +48,10 @@ static const int MAX_FRAME_SIZE = 100000;
 
 FrameData::~FrameData()
 {
-    foreach (FrameSvg *frame, references.keys()) {
-        frame->d->frames.remove(prefix);
+    for (auto it = references.constBegin(), end = references.constEnd(); it != end; ++it) {
+        if (it.key()->d->frame == this) {
+            it.key()->d->frame = nullptr;
+        }
     }
 }
 
@@ -59,7 +61,7 @@ FrameSvg::FrameSvg(QObject *parent)
       d(new FrameSvgPrivate(this))
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
-    d->frames.insert(QString(), new FrameData(this, QString()));
+    d->frame = new FrameData(this, QString());
 }
 
 FrameSvg::~FrameSvg()
@@ -76,7 +78,7 @@ void FrameSvg::setImagePath(const QString &path)
     bool updateNeeded = true;
     clearCache();
 
-    FrameData *fd = d->frames[d->prefix];
+    FrameData *fd = d->frame;
     if (fd->refcount() == 1) {
         // we're the only user of it, let's remove it from the shared keys
         // we don't want to deref it, however, as we'll still be using it
@@ -92,7 +94,7 @@ void FrameSvg::setImagePath(const QString &path)
 
     if (!fd) {
         // we need to replace our frame, start by looking in the frame cache
-        FrameData *oldFd = d->frames[d->prefix];
+        FrameData *oldFd = d->frame;
         const QString key = d->cacheId(oldFd, d->prefix);
         fd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(key);
 
@@ -108,7 +110,7 @@ void FrameSvg::setImagePath(const QString &path)
             fd = new FrameData(*oldFd, this);
         }
 
-        d->frames.insert(d->prefix, fd);
+        d->frame = fd;
     }
 
     setContainsMultipleImages(true);
@@ -127,67 +129,20 @@ void FrameSvg::setImagePath(const QString &path)
 
 void FrameSvg::setEnabledBorders(const EnabledBorders borders)
 {
-    if (borders == d->frames[d->prefix]->enabledBorders) {
+    if (borders == d->enabledBorders) {
         return;
     }
 
-    FrameData *fd = d->frames[d->prefix];
+    d->enabledBorders = borders;
 
-    const QString oldKey = d->cacheId(fd, d->prefix);
-    const EnabledBorders oldBorders = fd->enabledBorders;
-    fd->enabledBorders = borders;
-    const QString newKey = d->cacheId(fd, d->prefix);
-    fd->enabledBorders = oldBorders;
-
-    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
-    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
-    if (newFd) {
-        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
-        // we've found a math, so insert that new one and ref it ..
-        newFd->ref(this);
-        d->frames.insert(d->prefix, newFd);
-
-        //.. then deref the old one and if it's no longer used, get rid of it
-        if (fd->deref(this)) {
-            //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-            delete fd;
-        }
-
-        return;
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
     }
-
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-    } else {
-        // others are using it, but we wish to change its size. so deref it,
-        // then create a copy of it (we're automatically ref'd via the ctor),
-        // then insert it into our frames.
-        fd->deref(this);
-        fd = new FrameData(*fd, this);
-        d->frames.insert(d->prefix, fd);
-    }
-
-    fd->enabledBorders = borders;
-    d->updateAndSignalSizes();
 }
 
 FrameSvg::EnabledBorders FrameSvg::enabledBorders() const
 {
-    if (d->frames.isEmpty()) {
-        return NoBorder;
-    }
-
-    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
-
-    if (it != d->frames.constEnd()) {
-        return it.value()->enabledBorders;
-    } else {
-        return NoBorder;
-    }
+    return d->enabledBorders;
 }
 
 void FrameSvg::setElementPrefix(Plasma::Types::Location location)
@@ -215,8 +170,6 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 
 void FrameSvg::setElementPrefix(const QString &prefix)
 {
-    const QString oldPrefix(d->prefix);
-
     if (!hasElement(prefix % QLatin1String("-center"))) {
         d->prefix.clear();
     } else {
@@ -227,64 +180,11 @@ void FrameSvg::setElementPrefix(const QString &prefix)
     }
     d->requestedPrefix = prefix;
 
-    FrameData *oldFrameData = d->frames.value(oldPrefix);
-    if (oldPrefix == d->prefix && oldFrameData) {
-        return;
-    }
-
-    if (!d->frames.contains(d->prefix)) {
-        if (oldFrameData) {
-            FrameData *newFd = 0;
-            if (!oldFrameData->frameSize.isEmpty()) {
-                const QString key = d->cacheId(oldFrameData, d->prefix);
-                newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(key);
-                if (newFd && newFd->devicePixelRatio != devicePixelRatio()) {
-                    newFd = 0;
-                }
-            }
-
-            // we need to put this in the cache if we didn't find it in the shared frames
-            // and we have a size; if we don't have a size, we'll catch it later
-            const bool cache = !newFd && !oldFrameData->frameSize.isEmpty();
-            if (newFd) {
-                newFd->ref(this);
-            } else  {
-                newFd = new FrameData(*oldFrameData, this);
-            }
-
-            d->frames.insert(d->prefix, newFd);
-
-            if (cache) {
-                // we have to cache after inserting the frame since the cacheId requires the
-                // frame to be in the frames collection already
-                const QString key = d->cacheId(oldFrameData, d->prefix);
-                //qCDebug(LOG_PLASMA) << this << "     1. inserting as" << key;
-
-                FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, newFd);
-                newFd->theme = theme()->d;
-            }
-        } else {
-            // couldn't find anything useful, so we just create something here
-            // we don't have a size for it yet, so don't bother trying to share it just yet
-            FrameData *newFd = new FrameData(this, d->prefix);
-            d->frames.insert(d->prefix, newFd);
-        }
-
-        d->updateSizes();
-    }
-
-    if (!d->cacheAll) {
-        d->frames.remove(oldPrefix);
-        if (oldFrameData) {
-            if (oldFrameData->deref(this)) {
-                const QString oldKey = d->cacheId(oldFrameData, oldPrefix);
-                FrameSvgPrivate::s_sharedFrames[oldFrameData->theme].remove(oldKey);
-                delete oldFrameData;
-            }
-        }
-    }
-
     d->location = Types::Floating;
+
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
+    }
 }
 
 bool FrameSvg::hasElementPrefix(const QString &prefix) const
@@ -337,155 +237,108 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         return;
     }
 
-    FrameData *fd = d->frames[d->prefix];
-    if (size == fd->frameSize) {
+    if (size.toSize() == d->frame->frameSize) {
         return;
     }
+    d->pendingFrameSize = size.toSize();
 
-    const QString oldKey = d->cacheId(fd, d->prefix);
-    const QSize currentSize = fd->frameSize;
-    fd->frameSize = size.toSize();
-    const QString newKey = d->cacheId(fd, d->prefix);
-    fd->frameSize = currentSize;
-
-    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
-    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(newKey);
-    if (newFd) {
-        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
-        // we've found a math, so insert that new one and ref it ..
-        newFd->ref(this);
-        d->frames.insert(d->prefix, newFd);
-
-        //.. then deref the old one and if it's no longer used, get rid of it
-        if (fd->deref(this)) {
-            //const QString oldKey = d->cacheId(fd, d->prefix);
-            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-            delete fd;
-        }
-
-        return;
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
     }
-
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-    } else {
-        // others are using it, but we wish to change its size. so deref it,
-        // then create a copy of it (we're automatically ref'd via the ctor),
-        // then insert it into our frames.
-        fd->deref(this);
-        fd = new FrameData(*fd, this);
-        d->frames.insert(d->prefix, fd);
-    }
-
-    d->updateSizes();
-    fd->frameSize = size.toSize();
-    // we know it isn't in s_sharedFrames due to the check above, so insert it now
-    FrameSvgPrivate::s_sharedFrames[theme()->d].insert(newKey, fd);
-    fd->theme = theme()->d;
 }
 
 QSizeF FrameSvg::frameSize() const
 {
-    QHash<QString, FrameData *>::const_iterator it = d->frames.constFind(d->prefix);
-
-    if (it == d->frames.constEnd()) {
+    if (!d->frame) {
         return QSize(-1, -1);
     } else {
-        return d->frameSize(it.value());
+        return d->frameSize(d->frame);
     }
 }
 
 qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
 {
-    if (d->frames[d->prefix]->noBorderPadding) {
+    if (d->frame->noBorderPadding) {
         return .0;
     }
 
     switch (edge) {
     case Plasma::Types::TopMargin:
-        return d->frames[d->prefix]->topMargin;
+        return d->frame->topMargin;
         break;
 
     case Plasma::Types::LeftMargin:
-        return d->frames[d->prefix]->leftMargin;
+        return d->frame->leftMargin;
         break;
 
     case Plasma::Types::RightMargin:
-        return d->frames[d->prefix]->rightMargin;
+        return d->frame->rightMargin;
         break;
 
     //Plasma::BottomMargin
     default:
-        return d->frames[d->prefix]->bottomMargin;
+        return d->frame->bottomMargin;
         break;
     }
 }
 
 qreal FrameSvg::fixedMarginSize(const Plasma::Types::MarginEdge edge) const
 {
-    if (d->frames[d->prefix]->noBorderPadding) {
+    if (d->frame->noBorderPadding) {
         return .0;
     }
 
     switch (edge) {
     case Plasma::Types::TopMargin:
-        return d->frames[d->prefix]->fixedTopMargin;
+        return d->frame->fixedTopMargin;
         break;
 
     case Plasma::Types::LeftMargin:
-        return d->frames[d->prefix]->fixedLeftMargin;
+        return d->frame->fixedLeftMargin;
         break;
 
     case Plasma::Types::RightMargin:
-        return d->frames[d->prefix]->fixedRightMargin;
+        return d->frame->fixedRightMargin;
         break;
 
     //Plasma::BottomMargin
     default:
-        return d->frames[d->prefix]->fixedBottomMargin;
+        return d->frame->fixedBottomMargin;
         break;
     }
 }
 
 void FrameSvg::getMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
 {
-    FrameData *frame = d->frames[d->prefix];
-
-    if (frame->noBorderPadding) {
+    if (d->frame->noBorderPadding) {
         left = top = right = bottom = 0;
         return;
     }
 
-    top = frame->topMargin;
-    left = frame->leftMargin;
-    right = frame->rightMargin;
-    bottom = frame->bottomMargin;
+    top = d->frame->topMargin;
+    left = d->frame->leftMargin;
+    right = d->frame->rightMargin;
+    bottom = d->frame->bottomMargin;
 }
 
 void FrameSvg::getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
 {
-    FrameData *frame = d->frames[d->prefix];
-
-    if (frame->noBorderPadding) {
+    if (d->frame->noBorderPadding) {
         left = top = right = bottom = 0;
         return;
     }
 
-    top = frame->fixedTopMargin;
-    left = frame->fixedLeftMargin;
-    right = frame->fixedRightMargin;
-    bottom = frame->fixedBottomMargin;
+    top = d->frame->fixedTopMargin;
+    left = d->frame->fixedLeftMargin;
+    right = d->frame->fixedRightMargin;
+    bottom = d->frame->fixedBottomMargin;
 }
 
 QRectF FrameSvg::contentsRect() const
 {
-    FrameData* frame = d->frames.value(d->prefix);
-    if (frame) {
-        QRectF rect(QPoint(0,0), frame->frameSize);
-        return rect.adjusted(frame->leftMargin, frame->topMargin, -frame->rightMargin, -frame->bottomMargin);
+    if (d->frame) {
+        QRectF rect(QPoint(0,0), d->frame->frameSize);
+        return rect.adjusted(d->frame->leftMargin, d->frame->topMargin, -d->frame->rightMargin, -d->frame->bottomMargin);
     } else {
         return QRectF();
     }
@@ -499,16 +352,15 @@ QPixmap FrameSvg::alphaMask() const
 
 QRegion FrameSvg::mask() const
 {
-    FrameData *frame = d->frames[d->prefix];
-    QString id = d->cacheId(frame, QString());
+    QString id = d->cacheId(d->frame, QString());
 
-    QRegion* obj = frame->cachedMasks.object(id);
+    QRegion* obj = d->frame->cachedMasks.object(id);
     QRegion result;
 
     if (!obj) {
         obj = new QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
         result = *obj;
-        frame->cachedMasks.insert(id, obj);
+        d->frame->cachedMasks.insert(id, obj);
     }
     else {
         result = *obj;
@@ -532,59 +384,45 @@ bool FrameSvg::cacheAllRenderedFrames() const
 
 void FrameSvg::clearCache()
 {
-    FrameData *frame = d->frames[d->prefix];
-
-    // delete all the frames that aren't this one
-    QMutableHashIterator<QString, FrameData *> it(d->frames);
-    while (it.hasNext()) {
-        FrameData *p = it.next().value();
-        if (frame != p) {
-            //TODO: should we clear from the Theme pixmap cache as well?
-            if (p->deref(this)) {
-                const QString key = d->cacheId(p, it.key());
-                FrameSvgPrivate::s_sharedFrames[p->theme].remove(key);
-                p->cachedBackground = QPixmap();
-            }
-
-            it.remove();
-        }
+    if (d->frame) {
+        d->frame->cachedBackground = QPixmap();
+    }
+    if (d->maskFrame) {
+        d->maskFrame->cachedBackground = QPixmap();
     }
 }
 
 QPixmap FrameSvg::framePixmap()
 {
-    FrameData *frame = d->frames[d->prefix];
-    if (frame->cachedBackground.isNull()) {
-        d->generateBackground(frame);
+    if (d->frame->cachedBackground.isNull()) {
+        d->generateBackground(d->frame);
     }
 
-    return frame->cachedBackground;
+    return d->frame->cachedBackground;
 }
 
 void FrameSvg::paintFrame(QPainter *painter, const QRectF &target, const QRectF &source)
 {
-    FrameData *frame = d->frames[d->prefix];
-    if (frame->cachedBackground.isNull()) {
-        d->generateBackground(frame);
-        if (frame->cachedBackground.isNull()) {
+    if (d->frame->cachedBackground.isNull()) {
+        d->generateBackground(d->frame);
+        if (d->frame->cachedBackground.isNull()) {
             return;
         }
     }
 
-    painter->drawPixmap(target, frame->cachedBackground, source.isValid() ? source : target);
+    painter->drawPixmap(target, d->frame->cachedBackground, source.isValid() ? source : target);
 }
 
 void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 {
-    FrameData *frame = d->frames[d->prefix];
-    if (frame->cachedBackground.isNull()) {
-        d->generateBackground(frame);
-        if (frame->cachedBackground.isNull()) {
+    if (d->frame->cachedBackground.isNull()) {
+        d->generateBackground(d->frame);
+        if (d->frame->cachedBackground.isNull()) {
             return;
         }
     }
 
-    painter->drawPixmap(pos, frame->cachedBackground);
+    painter->drawPixmap(pos, d->frame->cachedBackground);
 }
 
 //#define DEBUG_FRAMESVG_CACHE
@@ -596,35 +434,26 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #endif
 #endif
 
-    QHashIterator<QString, FrameData *> it(frames);
-    while (it.hasNext()) {
-        it.next();
-        if (it.value()) {
-            // we remove all references from this widget to the frame, and delete it if we're the
-            // last user
-            if (it.value()->removeRefs(q)) {
-                const QString key = cacheId(it.value(), it.key());
+    // we remove all references from this widget to the frame, and delete it if we're the
+    // last user
+    if (frame && frame->removeRefs(q)) {
+        const QString key = cacheId(frame, frame->prefix);
 #ifdef DEBUG_FRAMESVG_CACHE
 #ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << "2. Removing it" << key << it.value() << it.value()->refcount() << s_sharedFrames[theme()->d].contains(key);
+        // qCDebug(LOG_PLASMA) << "2. Removing it" << key << frame << frame->refcount() << s_sharedFrames[theme()->d].contains(key);
 #endif
 #endif
-                s_sharedFrames[it.value()->theme].remove(key);
-                delete it.value();
-            }
-#ifdef DEBUG_FRAMESVG_CACHE
-            else {
-#ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << "still shared:" << cacheId(it.value(), it.key()) << it.value() << it.value()->refcount() << it.value()->isUsed();
-#endif
-            }
-        } else {
-#ifndef NDEBUG
-            // qCDebug(LOG_PLASMA) << "lost our value for" << it.key();
-#endif
-#endif
-        }
+        s_sharedFrames[frame->theme].remove(key);
+        delete frame;
     }
+
+    //same thing for maskFrame
+    if (maskFrame && maskFrame->removeRefs(q)) {
+        const QString key = cacheId(maskFrame, maskFrame->prefix);
+        s_sharedFrames[maskFrame->theme].remove(key);
+        delete maskFrame;
+    }
+
 
 #ifdef DEBUG_FRAMESVG_CACHE
     QHashIterator<QString, FrameData *> it2(s_sharedFrames[theme()->d]);
@@ -653,12 +482,12 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #endif
 #endif
 
-    frames.clear();
+    frame = nullptr;
+    maskFrame = nullptr;
 }
 
 QPixmap FrameSvgPrivate::alphaMask()
 {
-    FrameData *frame = frames[prefix];
     QString maskPrefix;
 
     if (q->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"))) {
@@ -675,38 +504,38 @@ QPixmap FrameSvgPrivate::alphaMask()
 
         return frame->cachedBackground;
     } else {
-        QString oldPrefix = prefix;
-
         // We are setting the prefix only temporary to generate
         // the needed mask image
-        prefix = maskPrefix % oldPrefix;
+        const QString maskRequestedPrefix = maskPrefix % requestedPrefix;
+        maskPrefix = maskPrefix % prefix;
 
-        if (!frames.contains(prefix)) {
-            const QString key = cacheId(frame, prefix);
+        if (!maskFrame) {
+            const QString key = cacheId(frame, maskPrefix);
             // see if we can find a suitable candidate in the shared frames
             // if successful, ref and insert, otherwise create a new one
             // and insert that into both the shared frames and our frames.
-            FrameData *maskFrame = s_sharedFrames[q->theme()->d].value(key);
+            maskFrame = s_sharedFrames[q->theme()->d].value(key);
 
             if (maskFrame) {
                 maskFrame->ref(q);
             } else {
                 maskFrame = new FrameData(*frame, q);
-                s_sharedFrames[q->theme()->d].insert(key, maskFrame);
+                maskFrame->prefix = maskPrefix;
+                maskFrame->requestedPrefix = maskRequestedPrefix;
                 maskFrame->theme = q->theme()->d;
+                s_sharedFrames[q->theme()->d].insert(key, maskFrame);
             }
             maskFrame->enabledBorders = frame->enabledBorders;
 
-            frames.insert(prefix, maskFrame);
-            updateSizes();
+            updateSizes(maskFrame);
         }
 
-        FrameData *maskFrame = frames[prefix];
+       // maskFrame = frame;
         maskFrame->enabledBorders = frame->enabledBorders;
         if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
-            const QString oldKey = cacheId(maskFrame, prefix);
+            const QString oldKey = cacheId(maskFrame, maskPrefix);
             maskFrame->frameSize = frameSize(frame).toSize();
-            const QString newKey = cacheId(maskFrame, prefix);
+            const QString newKey = cacheId(maskFrame, maskPrefix);
             if (s_sharedFrames[q->theme()->d].contains(oldKey)) {
                 s_sharedFrames[q->theme()->d].remove(oldKey);
                 s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
@@ -715,27 +544,27 @@ QPixmap FrameSvgPrivate::alphaMask()
             maskFrame->cachedBackground = QPixmap();
 
             generateBackground(maskFrame);
+
             if (maskFrame->cachedBackground.isNull()) {
                 return QPixmap();
             }
         }
 
-        prefix = oldPrefix;
         return maskFrame->cachedBackground;
     }
 }
 
 void FrameSvgPrivate::generateBackground(FrameData *frame)
 {
-    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(q->prefix())) {
+    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(frame->requestedPrefix)) {
         return;
     }
 
-    const QString id = cacheId(frame, prefix);
+    const QString id = cacheId(frame, frame->prefix);
 
     bool frameCached = !frame->cachedBackground.isNull();
     bool overlayCached = false;
-    const bool overlayAvailable = !prefix.startsWith(QLatin1String("mask-")) && q->hasElement(prefix % QLatin1String("overlay"));
+    const bool overlayAvailable = !frame->prefix.startsWith(QLatin1String("mask-")) && q->hasElement(frame->prefix % QLatin1String("overlay"));
     QPixmap overlay;
     if (q->isUsingRenderingCache()) {
         frameCached = q->theme()->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
@@ -753,20 +582,20 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
     QSize overlaySize;
     QPoint actualOverlayPos = QPoint(0, 0);
     if (overlayAvailable && !overlayCached) {
-        overlaySize = q->elementSize(prefix % QLatin1String("overlay"));
+        overlaySize = q->elementSize(frame->prefix % QLatin1String("overlay"));
 
-        if (q->hasElement(prefix % QLatin1String("hint-overlay-pos-right"))) {
+        if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-pos-right"))) {
             actualOverlayPos.setX(frame->frameSize.width() - overlaySize.width());
-        } else if (q->hasElement(prefix % QLatin1String("hint-overlay-pos-bottom"))) {
+        } else if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-pos-bottom"))) {
             actualOverlayPos.setY(frame->frameSize.height() - overlaySize.height());
             //Stretched or Tiled?
-        } else if (q->hasElement(prefix % QLatin1String("hint-overlay-stretch"))) {
+        } else if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-stretch"))) {
             overlaySize = frameSize(frame).toSize();
         } else {
-            if (q->hasElement(prefix % QLatin1String("hint-overlay-tile-horizontal"))) {
+            if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-tile-horizontal"))) {
                 overlaySize.setWidth(frameSize(frame).width());
             }
-            if (q->hasElement(prefix % QLatin1String("hint-overlay-tile-vertical"))) {
+            if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-tile-vertical"))) {
                 overlaySize.setHeight(frameSize(frame).height());
             }
         }
@@ -775,23 +604,23 @@ void FrameSvgPrivate::generateBackground(FrameData *frame)
         QPainter overlayPainter(&overlay);
         overlayPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
         //Tiling?
-        if (q->hasElement(prefix % QLatin1String("hint-overlay-tile-horizontal")) ||
-                q->hasElement(prefix % QLatin1String("hint-overlay-tile-vertical"))) {
+        if (q->hasElement(frame->prefix % QLatin1String("hint-overlay-tile-horizontal")) ||
+                q->hasElement(frame->prefix % QLatin1String("hint-overlay-tile-vertical"))) {
 
             QSize s = q->size();
-            q->resize(q->elementSize(prefix % QLatin1String("overlay")));
+            q->resize(q->elementSize(frame->prefix % QLatin1String("overlay")));
 
-            overlayPainter.drawTiledPixmap(QRect(QPoint(0, 0), overlaySize), q->pixmap(prefix % QLatin1String("overlay")));
+            overlayPainter.drawTiledPixmap(QRect(QPoint(0, 0), overlaySize), q->pixmap(frame->prefix % QLatin1String("overlay")));
             q->resize(s);
         } else {
-            q->paint(&overlayPainter, QRect(actualOverlayPos, overlaySize), prefix % QLatin1String("overlay"));
+            q->paint(&overlayPainter, QRect(actualOverlayPos, overlaySize), frame->prefix % QLatin1String("overlay"));
         }
 
         overlayPainter.end();
     }
 
     if (!frameCached) {
-        cacheFrame(prefix, frame->cachedBackground, overlayCached ? overlay : QPixmap());
+        cacheFrame(frame->prefix, frame->cachedBackground, overlayCached ? overlay : QPixmap());
     }
 
     if (!overlay.isNull()) {
@@ -832,11 +661,11 @@ void FrameSvgPrivate::generateFrameBackground(FrameData *frame)
     paintCorner(p, frame, FrameSvg::RightBorder|FrameSvg::BottomBorder, contentRect);
 
     // Sides
-    const int leftHeight = q->elementSize(prefix % QLatin1String("left")).height();
+    const int leftHeight = q->elementSize(frame->prefix % QLatin1String("left")).height();
     paintBorder(p, frame, FrameSvg::LeftBorder, QSize(frame->leftWidth, leftHeight) * q->devicePixelRatio(), contentRect);
     paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, leftHeight) * q->devicePixelRatio(), contentRect);
 
-    const int topWidth = q->elementSize(prefix % QLatin1String("top")).width();
+    const int topWidth = q->elementSize(frame->prefix % QLatin1String("top")).width();
     paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight) * q->devicePixelRatio(), contentRect);
     paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight) * q->devicePixelRatio(), contentRect);
     p.end();
@@ -849,21 +678,89 @@ QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) cons
     const QSize contentSize(size.width() - frame->leftWidth * q->devicePixelRatio() - frame->rightWidth * q->devicePixelRatio(),
                             size.height() - frame->topHeight * q->devicePixelRatio() - frame->bottomHeight * q->devicePixelRatio());
     QRect contentRect(QPoint(0,0), contentSize);
-    if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(prefix % QLatin1String("left"))) {
+    if (frame->enabledBorders & FrameSvg::LeftBorder && q->hasElement(frame->prefix % QLatin1String("left"))) {
         contentRect.translate(frame->leftWidth * q->devicePixelRatio(), 0);
     }
 
     // Corners
-    if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(prefix % QLatin1String("top"))) {
+    if (frame->enabledBorders & FrameSvg::TopBorder && q->hasElement(frame->prefix % QLatin1String("top"))) {
         contentRect.translate(0, frame->topHeight * q->devicePixelRatio());
     }
     return contentRect;
 }
 
+void FrameSvgPrivate::updateFrameData()
+{
+    FrameData *fd = frame;
+
+    const QString oldKey = cacheId(fd, fd->prefix);
+
+    const FrameSvg::EnabledBorders oldBorders = fd->enabledBorders;
+    const QSize currentSize = fd->frameSize;
+
+    fd->enabledBorders = enabledBorders;
+    fd->frameSize = pendingFrameSize;
+
+    const QString newKey = cacheId(fd, prefix);
+
+    //reset frame to old values
+    fd->enabledBorders = oldBorders;
+    fd->frameSize = currentSize;
+
+    //FIXME: something more efficient than string comparison?
+    if (oldKey == newKey) {
+        return;
+    }
+
+    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
+    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[q->theme()->d].value(newKey);
+    if (newFd) {
+        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
+        // we've found a math, so insert that new one and ref it ..
+        newFd->ref(q);
+        frame = newFd;
+
+        //.. then deref the old one and if it's no longer used, get rid of it
+        if (fd->deref(q)) {
+            //const QString oldKey = cacheId(fd, prefix);
+            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
+            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+
+            delete fd;
+        }
+
+        return;
+    }
+
+    if (fd->refcount() == 1) {
+        // we're the only user of it, let's remove it from the shared keys
+        // we don't want to deref it, however, as we'll still be using it
+        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+    } else {
+        // others are using it, but we wish to change its size. so deref it,
+        // then create a copy of it (we're automatically ref'd via the ctor),
+        // then insert it into our frames.
+        fd->deref(q);
+        fd = new FrameData(*fd, q);
+    }
+
+    frame = fd;
+    fd->prefix = prefix;
+    fd->requestedPrefix = requestedPrefix;
+    //updateSizes();
+    fd->enabledBorders = enabledBorders;
+    fd->frameSize = pendingFrameSize;
+
+    // we know it isn't in s_sharedFrames due to the check above, so insert it now
+    FrameSvgPrivate::s_sharedFrames[q->theme()->d].insert(newKey, fd);
+    fd->theme = q->theme()->d;
+    updateAndSignalSizes();
+}
+
 void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize)
 {
     if (!contentRect.isEmpty()) {
-        const QString centerElementId = prefix % QLatin1String("center");
+        const QString centerElementId = frame->prefix % QLatin1String("center");
         if (frame->tileCenter) {
             QSize centerTileSize = q->elementSize(centerElementId);
             QPixmap center(centerTileSize);
@@ -897,7 +794,7 @@ void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QRect& co
 
 void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg::EnabledBorders borders, const QSize& size, const QRect& contentRect) const
 {
-    QString side = prefix % FrameSvgHelpers::borderToElementId(borders);
+    QString side = frame->prefix % FrameSvgHelpers::borderToElementId(borders);
     if (frame->enabledBorders & borders && q->hasElement(side) && !size.isEmpty()) {
         if (frame->stretchBorders) {
             q->paint(&p, FrameSvgHelpers::sectionRect(borders, contentRect, frame->frameSize * q->devicePixelRatio()), side);
@@ -916,7 +813,7 @@ void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg:
 
 void FrameSvgPrivate::paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& contentRect) const
 {
-    QString corner = prefix % FrameSvgHelpers::borderToElementId(border);
+    QString corner = frame->prefix % FrameSvgHelpers::borderToElementId(border);
     if (frame->enabledBorders & border && q->hasElement(corner)) {
         q->paint(&p, FrameSvgHelpers::sectionRect(border, contentRect, frame->frameSize * q->devicePixelRatio()), corner);
     }
@@ -936,8 +833,6 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
     }
 
     //insert background
-    FrameData *frame = frames.value(prefixToSave);
-
     if (!frame) {
         return;
     }
@@ -954,10 +849,9 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
     }
 }
 
-void FrameSvgPrivate::updateSizes() const
+void FrameSvgPrivate::updateSizes(FrameData *frame) const
 {
     //qCDebug(LOG_PLASMA) << "!!!!!!!!!!!!!!!!!!!!!! updating sizes" << prefix;
-    FrameData *frame = frames[prefix];
     Q_ASSERT(frame);
 
     QSize s = q->size();
@@ -965,20 +859,20 @@ void FrameSvgPrivate::updateSizes() const
     frame->cachedBackground = QPixmap();
 
     //This has the same size regardless the border is enabled or not
-    frame->fixedTopHeight = q->elementSize(prefix % QLatin1String("top")).height();
+    frame->fixedTopHeight = q->elementSize(frame->prefix % QLatin1String("top")).height();
 
-    if (q->hasElement(prefix % QLatin1String("hint-top-margin"))) {
-        frame->fixedTopMargin = q->elementSize(prefix % QLatin1String("hint-top-margin")).height();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-top-margin"))) {
+        frame->fixedTopMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-margin")).height();
     } else {
         frame->fixedTopMargin = frame->fixedTopHeight;
     }
 
     //The same, but its size depends from the margin being enabled
     if (frame->enabledBorders & FrameSvg::TopBorder) {
-        frame->topHeight = q->elementSize(prefix % QLatin1String("top")).height();
+        frame->topHeight = q->elementSize(frame->prefix % QLatin1String("top")).height();
 
-        if (q->hasElement(prefix % QLatin1String("hint-top-margin"))) {
-            frame->topMargin = q->elementSize(prefix % QLatin1String("hint-top-margin")).height();
+        if (q->hasElement(frame->prefix % QLatin1String("hint-top-margin"))) {
+            frame->topMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-margin")).height();
         } else {
             frame->topMargin = frame->topHeight;
         }
@@ -986,19 +880,19 @@ void FrameSvgPrivate::updateSizes() const
         frame->topMargin = frame->topHeight = 0;
     }
 
-    frame->fixedLeftWidth = q->elementSize(prefix % QLatin1String("left")).width();
+    frame->fixedLeftWidth = q->elementSize(frame->prefix % QLatin1String("left")).width();
 
-    if (q->hasElement(prefix % QLatin1String("hint-left-margin"))) {
-        frame->fixedLeftMargin = q->elementSize(prefix % QLatin1String("hint-left-margin")).width();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-left-margin"))) {
+        frame->fixedLeftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-margin")).width();
     } else {
         frame->fixedLeftMargin = frame->fixedLeftWidth;
     }
 
     if (frame->enabledBorders & FrameSvg::LeftBorder) {
-        frame->leftWidth = q->elementSize(prefix % QLatin1String("left")).width();
+        frame->leftWidth = q->elementSize(frame->prefix % QLatin1String("left")).width();
 
-        if (q->hasElement(prefix % QLatin1String("hint-left-margin"))) {
-            frame->leftMargin = q->elementSize(prefix % QLatin1String("hint-left-margin")).width();
+        if (q->hasElement(frame->prefix % QLatin1String("hint-left-margin"))) {
+            frame->leftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-margin")).width();
         } else {
             frame->leftMargin = frame->leftWidth;
         }
@@ -1006,19 +900,19 @@ void FrameSvgPrivate::updateSizes() const
         frame->leftMargin = frame->leftWidth = 0;
     }
 
-    frame->fixedRightWidth = q->elementSize(prefix % QLatin1String("right")).width();
+    frame->fixedRightWidth = q->elementSize(frame->prefix % QLatin1String("right")).width();
 
-    if (q->hasElement(prefix % QLatin1String("hint-right-margin"))) {
-        frame->fixedRightMargin = q->elementSize(prefix % QLatin1String("hint-right-margin")).width();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-right-margin"))) {
+        frame->fixedRightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-margin")).width();
     } else {
         frame->fixedRightMargin = frame->fixedRightWidth;
     }
 
     if (frame->enabledBorders & FrameSvg::RightBorder) {
-        frame->rightWidth = q->elementSize(prefix % QLatin1String("right")).width();
+        frame->rightWidth = q->elementSize(frame->prefix % QLatin1String("right")).width();
 
-        if (q->hasElement(prefix % QLatin1String("hint-right-margin"))) {
-            frame->rightMargin = q->elementSize(prefix % QLatin1String("hint-right-margin")).width();
+        if (q->hasElement(frame->prefix % QLatin1String("hint-right-margin"))) {
+            frame->rightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-margin")).width();
         } else {
             frame->rightMargin = frame->rightWidth;
         }
@@ -1026,19 +920,19 @@ void FrameSvgPrivate::updateSizes() const
         frame->rightMargin = frame->rightWidth = 0;
     }
 
-    frame->fixedBottomHeight = q->elementSize(prefix % QLatin1String("bottom")).height();
+    frame->fixedBottomHeight = q->elementSize(frame->prefix % QLatin1String("bottom")).height();
 
-    if (q->hasElement(prefix % QLatin1String("hint-bottom-margin"))) {
-        frame->fixedBottomMargin = q->elementSize(prefix % QLatin1String("hint-bottom-margin")).height();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-bottom-margin"))) {
+        frame->fixedBottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-margin")).height();
     } else {
         frame->fixedBottomMargin = frame->fixedBottomHeight;
     }
 
     if (frame->enabledBorders & FrameSvg::BottomBorder) {
-        frame->bottomHeight = q->elementSize(prefix % QLatin1String("bottom")).height();
+        frame->bottomHeight = q->elementSize(frame->prefix % QLatin1String("bottom")).height();
 
-        if (q->hasElement(prefix % QLatin1String("hint-bottom-margin"))) {
-            frame->bottomMargin = q->elementSize(prefix % QLatin1String("hint-bottom-margin")).height();
+        if (q->hasElement(frame->prefix % QLatin1String("hint-bottom-margin"))) {
+            frame->bottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-margin")).height();
         } else {
             frame->bottomMargin = frame->bottomHeight;
         }
@@ -1046,14 +940,14 @@ void FrameSvgPrivate::updateSizes() const
         frame->bottomMargin = frame->bottomHeight = 0;
     }
 
-    frame->composeOverBorder = (q->hasElement(prefix % QLatin1String("hint-compose-over-border")) &&
-                                q->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center")));
+    frame->composeOverBorder = (q->hasElement(frame->prefix % QLatin1String("hint-compose-over-border")) &&
+                                q->hasElement(QLatin1String("mask-") % frame->prefix % QLatin1String("center")));
 
     //since it's rectangular, topWidth and bottomWidth must be the same
-    //the ones that don't have a prefix is for retrocompatibility
-    frame->tileCenter = (q->hasElement(QStringLiteral("hint-tile-center")) || q->hasElement(prefix % QLatin1String("hint-tile-center")));
-    frame->noBorderPadding = (q->hasElement(QStringLiteral("hint-no-border-padding")) || q->hasElement(prefix % QLatin1String("hint-no-border-padding")));
-    frame->stretchBorders = (q->hasElement(QStringLiteral("hint-stretch-borders")) || q->hasElement(prefix % QLatin1String("hint-stretch-borders")));
+    //the ones that don't have a frame->prefix is for retrocompatibility
+    frame->tileCenter = (q->hasElement(QStringLiteral("hint-tile-center")) || q->hasElement(frame->prefix % QLatin1String("hint-tile-center")));
+    frame->noBorderPadding = (q->hasElement(QStringLiteral("hint-no-border-padding")) || q->hasElement(frame->prefix % QLatin1String("hint-no-border-padding")));
+    frame->stretchBorders = (q->hasElement(QStringLiteral("hint-stretch-borders")) || q->hasElement(frame->prefix % QLatin1String("hint-stretch-borders")));
     q->resize(s);
 }
 
@@ -1061,19 +955,19 @@ void FrameSvgPrivate::updateNeeded()
 {
     q->setElementPrefix(requestedPrefix);
     q->clearCache();
-    updateSizes();
+    updateSizes(frame);
 }
 
 void FrameSvgPrivate::updateAndSignalSizes()
 {
-    updateSizes();
+    updateSizes(frame);
     emit q->repaintNeeded();
 }
 
 QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const
 {
     if (!frame->frameSize.isValid()) {
-        updateSizes();
+        updateSizes(frame);
         frame->frameSize = q->size();
     }
 
@@ -1116,6 +1010,20 @@ int FrameData::refcount() const
 QString FrameSvg::actualPrefix() const
 {
     return d->prefix;
+}
+
+bool FrameSvg::isRepaintBlocked() const
+{
+    return d->repaintBlocked;
+}
+
+void FrameSvg::setRepaintBlocked(bool blocked)
+{
+    d->repaintBlocked = blocked;
+
+    if (!blocked) {
+        d->updateFrameData();
+    }
 }
 
 } // Plasma namespace

@@ -34,14 +34,14 @@ class FadingMaterialShader : public QSGSimpleMaterialShader<FadingMaterialState>
 {
     QSG_DECLARE_SIMPLE_SHADER(FadingMaterialShader, FadingMaterialState)
 public:
-    virtual const char* fragmentShader() const;
-    virtual const char* vertexShader() const;
+    const char* fragmentShader() const Q_DECL_OVERRIDE;
+    const char* vertexShader() const Q_DECL_OVERRIDE;
 
     using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
     virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
-    virtual QList<QByteArray> attributes() const;
+    QList<QByteArray> attributes() const Q_DECL_OVERRIDE;
 
-    virtual void initialize();
+    void initialize() Q_DECL_OVERRIDE;
 private:
     QOpenGLFunctions *glFuncs = 0;
     int m_progressId = 0;

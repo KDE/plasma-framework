@@ -74,14 +74,12 @@ Item {
     onHeightChanged: layoutTimer.restart()
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_Right || event.key == Qt.Key_Left) {
-            if (event.key == Qt.Key_Right || priv.mirrored) {
-                priv.goNextTab()
-                event.accepted = true
-            } else if (event.key == Qt.Key_Left || priv.mirrored) {
-                priv.goPreviousTab()
-                event.accepted = true
-            }
+        if (event.key == Qt.Key_Right) {
+            (priv.mirrored ? priv.goPreviousTab : priv.goNextTab)();
+            event.accepted = true
+        } else if (event.key == Qt.Key_Left || priv.mirrored) {
+            (priv.mirrored ? priv.goNextTab : priv.goPreviousTab)();
+            event.accepted = true
         }
     }
 
@@ -198,8 +196,8 @@ Item {
                 var itemWidth = Math.min(maxAllowedSize, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
                 var itemHeight = Math.min(maxAllowedSize, (root.height - (visibleChildCount-1)*10) / visibleChildCount)
 
-                var itemIndex = mirrored ? childCount - 1 : 0
-                var increment = mirrored ? - 1 : 1
+                var itemIndex = mirrored && root.isHorizontal ? childCount - 1 : 0
+                var increment = mirrored && root.isHorizontal ? - 1 : 1
                 var visibleIndex = 0
 
                 for (var i = 0; i < childCount; ++i, itemIndex += increment) {

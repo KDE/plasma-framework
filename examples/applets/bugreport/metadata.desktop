@@ -1,7 +1,6 @@
 [Desktop Entry]
 Comment=Report a bug in Plasma
-Comment[ar]=أبلغ عن علة في پلازما
-Comment[ast]=Informa un fallu en Plasma
+Comment[ar]=أبلغ عن علّة في «بلازما»
 Comment[ca]=Informa d'un error en el Plasma
 Comment[ca@valencia]=Informa d'un error en el Plasma
 Comment[cs]=Nahlásit chybu v Plasmě
@@ -54,6 +53,7 @@ Keywords[fi]=plasma;bugzilla;bug;bugi;vika;virhe;development;kehitys;kehittämin
 Keywords[fr]=plasma;bugzilla;bug;développement;support;
 Keywords[gd]=plasma;bugzilla;bug;development;support;buga;leasachadh;taic;cobhair;
 Keywords[gl]=plasma;bugzilla;erro;desenvolvemento;soporte;asistencia técnica;
+Keywords[ia]=plasma;bugzilla;bug;development;support;
 Keywords[it]=plasma;bugzilla;bug;sviluppo;supporto;
 Keywords[ko]=plasma;bugzilla;bug;development;support;버그;개발;지원;
 Keywords[lt]=plasma;bugzilla;klaida;kūrimas;palaikymas;
@@ -77,7 +77,7 @@ Keywords[x-test]=xxplasmaxx;xxbugzillaxx;xxbugxx;xxdevelopmentxx;xxsupportxx;
 Keywords[zh_CN]=plasma;bugzilla;bug;development;support;错误;开发;支持;
 Keywords[zh_TW]=plasma;bugzilla;bug;development;support;
 Name=Bug
-Name[ast]=Fallu
+Name[ar]=علّة
 Name[ca]=Error
 Name[ca@valencia]=Error
 Name[cs]=Chyba

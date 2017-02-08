@@ -195,7 +195,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * Provides access to the geometry of the applet is in.
      * Can be useful to figure out what's the absolute position of the applet.
      */
-    Q_PROPERTY(QRect screenGeometry READ screenGeometry NOTIFY screenChanged)
+    Q_PROPERTY(QRect screenGeometry READ screenGeometry NOTIFY screenGeometryChanged)
 
     /**
      * Whether the dialog should be hidden when the dialog loses focus.
@@ -429,6 +429,7 @@ Q_SIGNALS:
     void backgroundHintsChanged();
     void busyChanged();
     void screenChanged();
+    void screenGeometryChanged();
     void hideOnWindowDeactivateChanged();
     void associatedApplicationChanged();
     void associatedApplicationUrlsChanged();

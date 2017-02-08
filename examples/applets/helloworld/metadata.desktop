@@ -4,7 +4,6 @@ Encoding=UTF-8
 Keywords=
 Name=hello world
 Name[ar]=أهلًا يا عالم
-Name[ast]=hola mundiu
 Name[bs]=zdravo raja
 Name[ca]=hola món
 Name[ca@valencia]=hola món
@@ -53,7 +52,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Name=org.kde.example.helloworld
 X-KDE-PluginInfo-Version=
 X-KDE-PluginInfo-Website=
-X-KDE-ServiceTypes=Plasma/Applet,Plasma/PopupApplet
+X-KDE-ServiceTypes=Plasma/Applet
 X-Plasma-API=declarativeappletscript
 
 X-Plasma-MainScript=ui/main.qml

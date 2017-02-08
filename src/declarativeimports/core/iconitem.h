@@ -176,6 +176,8 @@ private Q_SLOTS:
 
 private:
     void loadPixmap();
+    QSize paintedSize(const QSizeF &containerSize = QSizeF()) const;
+    void updateImplicitSize();
 
     //all the ways we can set an source. Only one of them will be valid
     QIcon m_icon;

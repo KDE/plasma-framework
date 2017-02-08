@@ -75,7 +75,7 @@ KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString
         if (!formFactor.isEmpty() && !md.value(QStringLiteral("X-Plasma-FormFactors")).contains(formFactor)) {
             return false;
         }
-        return md.value(QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
+        return KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
     };
     return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Wallpaper"), QString(), filter).toVector());
 }

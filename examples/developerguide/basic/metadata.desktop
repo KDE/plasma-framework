@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Basic App
+Comment[ar]=تطبيق أساسيّ
 Comment[ast]=Aplicación básica
 Comment[ca]=Aplicació bàsica
 Comment[ca@valencia]=Aplicació bàsica
@@ -9,8 +10,10 @@ Comment[en_GB]=Basic App
 Comment[es]=Aplicación básica
 Comment[et]=Lihtrakendus
 Comment[fi]=Perussovellus
+Comment[fr]=Application basique
 Comment[gd]=Aplacaid bhunaiteach
 Comment[gl]=Programa básico
+Comment[ia]=App Basic
 Comment[it]=Applicazione di base
 Comment[ko]=기본 앱
 Comment[nl]=Basis app
@@ -31,7 +34,7 @@ Comment[x-test]=xxBasic Appxx
 Comment[zh_CN]=基础小程序
 Comment[zh_TW]=基本應用程式
 Name=Bug
-Name[ast]=Fallu
+Name[ar]=علّة
 Name[ca]=Error
 Name[ca@valencia]=Error
 Name[cs]=Chyba

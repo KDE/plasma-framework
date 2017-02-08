@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=%{APPNAME}
+Name[ar]=%{APPNAME}
 Name[ast]=%{APPNAME}
 Name[ca]=%{APPNAME}
 Name[ca@valencia]=%{APPNAME}
@@ -10,8 +11,10 @@ Name[en_GB]=%{APPNAME}
 Name[es]=%{APPNAME}
 Name[et]=%{APPNAME}
 Name[fi]=%{APPNAME}
+Name[fr]=%{APPNAME}
 Name[gd]=%{APPNAME}
 Name[gl]=%{APPNAME}
+Name[ia]=%{APPNAME}
 Name[it]=%{APPNAME}
 Name[ko]=%{APPNAME}
 Name[nb]=%{APPNAME}

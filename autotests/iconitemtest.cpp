@@ -441,5 +441,76 @@ void IconItemTest::windowChanged()
     QCOMPARE(grabImage(item), img);
 }
 
+void IconItemTest::paintedSize()
+{
+    QQuickItem *item = createIconItem();
+
+    QCOMPARE(item->property("paintedWidth").toInt(), item->property("implicitWidth").toInt());
+    QCOMPARE(item->property("paintedHeight").toInt(), item->property("implicitHeight").toInt());
+
+    item->setWidth(40);
+    item->setHeight(40);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 32);
+    QCOMPARE(item->property("paintedHeight").toInt(), 32);
+
+    QIcon landscapeIcon(QPixmap(40, 35));
+    item->setProperty("source", landscapeIcon);
+    grabImage(item); // basically just to force loading the pixmap
+
+    // expanded to fit IconItem size whilst keeping aspect ratio
+    // width should be rounded to icon size, ie. 32 is next smallest
+    QCOMPARE(item->property("paintedWidth").toInt(), 32);
+    // height should still match aspect ratio, so *not* 24!
+    QCOMPARE(item->property("paintedHeight").toInt(), 28);
+
+    QIcon portraitIcon(QPixmap(15, 40));
+    item->setProperty("source", portraitIcon);
+    grabImage(item);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 12);
+    QCOMPARE(item->property("paintedHeight").toInt(), 32);
+
+    item->setWidth(400);
+    item->setHeight(400);
+
+    grabImage(item);
+
+    QCOMPARE(item->property("paintedWidth").toInt(), 150);
+    QCOMPARE(item->property("paintedHeight").toInt(), 400);
+}
+
+void IconItemTest::implicitSize()
+{
+    KConfigGroup cg(KSharedConfig::openConfig(), "DialogIcons");
+    cg.writeEntry("Size", 22);
+    cg.sync();
+    KIconLoader::global()->reconfigure(QString());
+
+    QQuickItem *item = createIconItem();
+
+    // qreal cast needed as QTest::qCompare<double, int> fails to link
+    QCOMPARE(item->implicitWidth(), qreal(22));
+    QCOMPARE(item->implicitHeight(), qreal(22));
+
+    QSignalSpy widthSpy(item, &QQuickItem::implicitWidthChanged);
+    QVERIFY(widthSpy.isValid());
+    QSignalSpy heightSpy(item, &QQuickItem::implicitHeightChanged);
+    QVERIFY(heightSpy.isValid());
+
+    cg.writeEntry("Size", 64);
+    cg.sync();
+    KIconLoader::global()->reconfigure(QString());
+    // merely changing the setting and calling reconfigure won't emit this signal,
+    // the KCM uses a method "newIconLoader" method which does that but it's deprecated
+    emit KIconLoader::global()->iconLoaderSettingsChanged();
+
+    QCOMPARE(widthSpy.count(), 1);
+    QCOMPARE(heightSpy.count(), 1);
+
+    QCOMPARE(item->implicitWidth(), qreal(64));
+    QCOMPARE(item->implicitHeight(), qreal(64));
+}
+
 QTEST_MAIN(IconItemTest)
 

@@ -56,7 +56,6 @@ class SvgPrivate;
 class PLASMA_EXPORT Svg : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(ContentType)
     Q_PROPERTY(QSize size READ size WRITE resize NOTIFY sizeChanged)
     Q_PROPERTY(bool multipleImages READ containsMultipleImages WRITE setContainsMultipleImages)
     Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
@@ -70,7 +69,7 @@ public:
         Normal = 0,
         Selected
     };
-    Q_ENUMS(Status)
+    Q_ENUM(Status)
 
     /**
      * Constructs an SVG object that implicitly shares and caches rendering.
