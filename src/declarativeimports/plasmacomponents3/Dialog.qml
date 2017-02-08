@@ -64,7 +64,7 @@ T.Dialog {
         imagePath: "widgets/background"
     }
 
-    buttonBox: DialogButtonBox {
+    footer: DialogButtonBox {
         position: DialogButtonBox.Footer
     }
 }
