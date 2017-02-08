@@ -41,7 +41,6 @@ T.BusyIndicator {
         anchors.centerIn: parent
         width:  Math.min(control.width, control.height)
         height: width
-        smooth: !control.running || (control.hasOwnProperty("smoothAnimation") && control.smoothAnimation)
 
         Connections {
             target: control
