@@ -135,6 +135,21 @@ void ConfigModelPrivate::appendCategory(ConfigCategory *c)
 {
     q->beginInsertRows(QModelIndex(), categories.size(), categories.size());
     categories.append(c);
+
+    auto emitChange = [this, c] {
+        const int row = categories.indexOf(c);
+        if (row > -1) {
+            QModelIndex modelIndex = q->index(row);
+            emit q->dataChanged(modelIndex, modelIndex);
+        }
+    };
+
+    QObject::connect(c, &ConfigCategory::nameChanged, q, emitChange);
+    QObject::connect(c, &ConfigCategory::iconChanged, q, emitChange);
+    QObject::connect(c, &ConfigCategory::sourceChanged, q, emitChange);
+    QObject::connect(c, &ConfigCategory::pluginNameChanged, q, emitChange);
+    QObject::connect(c, &ConfigCategory::visibleChanged, q, emitChange);
+
     q->endInsertRows();
     emit q->countChanged();
 }
