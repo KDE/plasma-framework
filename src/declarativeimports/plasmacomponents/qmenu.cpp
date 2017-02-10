@@ -342,7 +342,10 @@ Q_INVOKABLE void QMenuProxy::openRelative()
 
 
     switch(m_placement) {
-        case Types::TopPosedLeftAlignedPopup:
+        case Types::TopPosedLeftAlignedPopup: {
+            pos = parentItem->mapToScene(QPointF(0, -m_menu->height()));
+            break;
+        }
         case Types::LeftPosedTopAlignedPopup: {
             pos = parentItem->mapToScene(QPointF(0, 0));
             break;
