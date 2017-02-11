@@ -18,7 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.2
 
 SequentialAnimation {
     id: appearAnimation
@@ -27,25 +27,28 @@ SequentialAnimation {
     property Item targetItem
     property int duration: units.longDuration
 
-    // Fast scaling while we're animation == more FPS
-    ScriptAction { script: { targetItem.smooth = false; targetItem.visible = true; } }
-
-    ParallelAnimation {
-        PropertyAnimation {
-            target: targetItem
-            properties: "opacity"
-            from: 0; to: 1.0
-            duration: appearAnimation.duration;
-            easing.type: Easing.InExpo;
-        }
-        PropertyAnimation {
-            target: targetItem
-            properties: "scale"
-            from: 0.8; to: 1.0
-            duration: appearAnimation.duration;
-            easing.type: Easing.InExpo;
+    // Animators run on the render thread so they kick in slightly delayed
+    // so explicitly set the item's opacity to 0 before starting the animation
+    ScriptAction {
+        script: {
+            targetItem.opacity = 0
         }
     }
 
-    ScriptAction { script: targetItem.smooth = true }
+    ParallelAnimation {
+        OpacityAnimator {
+            target: targetItem
+            from: 0
+            to: 1.0
+            duration: appearAnimation.duration
+            easing.type: Easing.InExpo
+        }
+        ScaleAnimator {
+            target: targetItem
+            from: 0.8
+            to: 1.0
+            duration: appearAnimation.duration
+            easing.type: Easing.InExpo
+        }
+    }
 }

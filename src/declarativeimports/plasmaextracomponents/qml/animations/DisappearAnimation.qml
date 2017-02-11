@@ -18,8 +18,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
  */
 
-import QtQuick 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick 2.2
 
 SequentialAnimation {
     id: disappearAnimation
@@ -28,29 +27,25 @@ SequentialAnimation {
     property Item targetItem
     property int duration: units.longDuration
 
-    ScriptAction { script: targetItem.smooth = false; }
-
     ParallelAnimation {
-        PropertyAnimation {
-            properties: "opacity"
+        OpacityAnimator {
             duration: disappearAnimation.duration
             from: 1.0
             to: 0
             target: disappearAnimation.targetItem
-            easing.type: Easing.OutExpo;
+            easing.type: Easing.OutExpo
         }
-        PropertyAnimation {
-            properties: "scale"
+        ScaleAnimator {
             target: disappearAnimation.targetItem
             from: 1.0
             to: 0.8
             duration: disappearAnimation.duration * 0.6
-            easing.type: Easing.OutExpo;
+            easing.type: Easing.OutExpo
         }
     }
+
     ScriptAction {
         script: {
-            targetItem.smooth = true;
             targetItem.visible = false;
         }
     }
