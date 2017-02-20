@@ -32,6 +32,7 @@ class WallpaperInterface;
 namespace KIO
 {
 class Job;
+class DropJob;
 }
 
 namespace KActivities
@@ -104,12 +105,12 @@ public:
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
-    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y);
+    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y, KIO::DropJob *dropJob = 0);
 
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
-    Q_INVOKABLE void processMimeData(QObject *data, int x, int y);
+    Q_INVOKABLE void processMimeData(QObject *data, int x, int y, KIO::DropJob *dropJob = 0);
 
     /**
      * Search for a containment at those coordinates.
@@ -197,6 +198,8 @@ private:
     QList<QObject *> m_appletInterfaces;
     QHash<KJob *, QPoint> m_dropPoints;
     QHash<KJob *, QMenu *> m_dropMenus;
+    QHash<KJob *, QJSValue *> m_dropCallbacks;
+    QHash<KJob *, KIO::DropJob *> m_dropJobs;
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QWeakPointer<QMenu> m_contextMenu;
