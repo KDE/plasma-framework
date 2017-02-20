@@ -509,9 +509,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             foreach (const KPluginInfo &info, seenPlugins) {
                 QAction *action;
                 if (!info.icon().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.icon()), info.name());
+                    action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
                 } else {
-                    action = new QAction(info.name());
+                    action = new QAction(info.name(), nullptr);
                 }
                 extraActions << action;
                 if (choices) {
@@ -623,11 +623,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     choices->addSection(i18n("Plasma Package"));
                     installPlasmaPackageAction = choices->addAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"));
                 } else {
-                    QAction *action = new QAction(i18n("Plasma Package"));
+                    QAction *action = new QAction(i18n("Plasma Package"), nullptr);
                     action->setSeparator(true);
                     dropActions << action;
 
-                    installPlasmaPackageAction = new QAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"));
+                    installPlasmaPackageAction = new QAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"), nullptr);
                     Q_ASSERT(dropJob);
                     dropActions << installPlasmaPackageAction;
                     dropJob->setApplicationActions(dropActions);
@@ -673,7 +673,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             if (choices) {
                 choices->addSection(i18n("Widgets"));
             } else {
-                QAction *action = new QAction(i18n("Widgets"));
+                QAction *action = new QAction(i18n("Widgets"), nullptr);
                 action->setSeparator(true);
                 dropActions << action;
             }
@@ -681,9 +681,9 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 qDebug() << info.name();
                 QAction *action;
                 if (!info.icon().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.icon()), info.name());
+                    action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
                 } else {
-                    action = new QAction(info.name());
+                    action = new QAction(info.name(), nullptr);
                 }
 
                 if (choices) {
@@ -699,7 +699,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 });
             }
             {
-                QAction *action = new QAction(i18n("Icon"));
+                QAction *action = new QAction(i18n("Icon"), nullptr);
                 if (choices) {
                     choices->addAction(action);
                 }
@@ -717,7 +717,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 if (choices) {
                     choices->addSection(i18n("Wallpaper"));
                 } else {
-                    QAction *action = new QAction(i18n("Wallpaper"));
+                    QAction *action = new QAction(i18n("Wallpaper"), nullptr);
                     action->setSeparator(true);
                     dropActions << action;
                 }
@@ -730,9 +730,9 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 foreach (const KPluginInfo &info, wallpaperList) {
                     QAction *action;
                     if (!info.icon().isEmpty()) {
-                        action = new QAction(QIcon::fromTheme(info.icon()), info.name());
+                        action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
                     } else {
-                        action = new QAction(info.name());
+                        action = new QAction(info.name(), nullptr);
                     }
 
                     if (choices) {
@@ -761,11 +761,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     choices->addSection(i18n("Widgets"));
                     action = choices->addAction(i18n("Icon"));
                 } else {
-                    QAction *sep = new QAction(i18n("Widgets"));
+                    QAction *sep = new QAction(i18n("Widgets"), nullptr);
                     sep->setSeparator(true);
                     dropActions << sep;
                     // we can at least create an icon as a link to the URL
-                    action = new QAction(i18n("Icon"));
+                    action = new QAction(i18n("Icon"), nullptr);
                     dropActions << action;
                 }
 
