@@ -184,7 +184,6 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
       m_fixed(false)
 {
     //qDebug() << "margins at: " << left() << top() << right() << bottom();
-    connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(update()));
 }
 
 qreal FrameSvgItemMargins::left() const
