@@ -154,6 +154,7 @@ void IconItemTest::loadPixmap()
     QScopedPointer<QQuickItem> item(createIconItem());
     QPixmap sourcePixmap(QFINDTESTDATA("data/test_image.png"));
 
+    item->setSize(sourcePixmap.size());
     item->setProperty("source", sourcePixmap);
     QVERIFY(item->property("valid").toBool());
 
@@ -168,6 +169,7 @@ void IconItemTest::loadImage()
     QScopedPointer<QQuickItem> item(createIconItem());
     QImage sourceImage(QFINDTESTDATA("data/test_image.png"));
 
+    item->setSize(sourceImage.size());
     item->setProperty("source", sourceImage);
     QVERIFY(item->property("valid").toBool());
 
