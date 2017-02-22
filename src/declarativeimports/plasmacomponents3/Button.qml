@@ -25,9 +25,9 @@ import "private" as Private
 T.Button {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
+    implicitWidth: Math.max(background.implicitWidth,
                             contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(units.gridUnit * 1.6, contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
 
     leftPadding: surfaceNormal.margins.left
     topPadding: surfaceNormal.margins.top
@@ -49,6 +49,7 @@ T.Button {
     background: Item {
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 6
+        implicitHeight: units.gridUnit * 1.6
         Private.ButtonShadow {
             anchors.fill: parent
             state: {

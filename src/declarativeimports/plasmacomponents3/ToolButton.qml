@@ -25,8 +25,9 @@ import "private" as Private
 T.ToolButton {
     id: control
 
-    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
-    implicitHeight: Math.max(units.gridUnit * 1.6, contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(background.implicitWidth,
+                            contentItem.implicitWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
 
     leftPadding: surfaceNormal.margins.left
     topPadding: surfaceNormal.margins.top
@@ -50,6 +51,7 @@ T.ToolButton {
     background: Item {
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 6
+        implicitHeight: units.gridUnit * 1.6
         Private.ButtonShadow {
             anchors.fill: parent
             visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)

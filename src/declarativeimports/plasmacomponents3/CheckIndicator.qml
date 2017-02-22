@@ -29,7 +29,6 @@ PlasmaCore.FrameSvgItem {
     implicitWidth: units.gridUnit
     implicitHeight: units.gridUnit
     opacity: control.enabled ? 1 : 0.6
-    property int checkState: control.checkState
 
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {
@@ -38,7 +37,7 @@ PlasmaCore.FrameSvgItem {
         }
         elementId: "checkbox"
         opacity: {
-            switch (root.checkState) {
+            switch (control.checkState) {
             case Qt.Checked:
                 return 1;
             case Qt.PartiallyChecked:
