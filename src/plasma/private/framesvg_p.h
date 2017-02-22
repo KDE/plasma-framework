@@ -151,6 +151,11 @@ public:
 
     QPixmap alphaMask();
 
+    enum UpdateType {
+        UpdateFrame,
+        UpdateFrameAndMargins
+    };
+
     void generateBackground(FrameData *frame);
     void generateFrameBackground(FrameData *frame);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
@@ -163,7 +168,7 @@ public:
     void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
     void paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize);
     QRect contentGeometry(FrameData* frame, const QSize& size) const;
-    void updateFrameData();
+    void updateFrameData(UpdateType updateType = UpdateFrameAndMargins);
 
     Types::Location location;
     QString prefix;

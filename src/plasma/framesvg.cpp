@@ -243,7 +243,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     d->pendingFrameSize = size.toSize();
 
     if (!d->repaintBlocked) {
-        d->updateFrameData();
+        d->updateFrameData(FrameSvgPrivate::UpdateFrame);
     }
 }
 
@@ -689,7 +689,7 @@ QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) cons
     return contentRect;
 }
 
-void FrameSvgPrivate::updateFrameData()
+void FrameSvgPrivate::updateFrameData(UpdateType updateType)
 {
     FrameData *fd = frame;
 
@@ -754,7 +754,11 @@ void FrameSvgPrivate::updateFrameData()
     // we know it isn't in s_sharedFrames due to the check above, so insert it now
     FrameSvgPrivate::s_sharedFrames[q->theme()->d].insert(newKey, fd);
     fd->theme = q->theme()->d;
-    updateAndSignalSizes();
+    if (updateType == UpdateFrameAndMargins) {
+        updateAndSignalSizes();
+    } else {
+        updateSizes(frame);
+    }
 }
 
 void FrameSvgPrivate::paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize)
