@@ -49,7 +49,7 @@ BusyIndicatorStyle {
             from: 0
             to: 360
             duration: 1500
-            running: control.running && indicatorItem.visible && indicatorItem.opacity > 0;
+            running: control.running && control.visible && control.opacity > 0;
             loops: Animation.Infinite
         }
     }
