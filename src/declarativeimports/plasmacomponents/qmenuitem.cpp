@@ -26,7 +26,6 @@ QMenuItem::QMenuItem(QQuickItem *parent)
       m_section(false)
 {
     setAction(new QAction(this));
-    connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
 }
 
 QAction *QMenuItem::action() const
@@ -44,6 +43,7 @@ void QMenuItem::setAction(QAction *a)
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
         connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
         connect(m_action, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
+        connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
 
         connect(this, &QQuickItem::visibleChanged, this, &QMenuItem::updateAction);
         connect(this, &QQuickItem::enabledChanged, this, &QMenuItem::updateAction);
