@@ -32,6 +32,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+#include <KAuthorized>
 #include <klocalizedstring.h>
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
@@ -141,7 +142,15 @@ void ConfigViewPrivate::init()
         delete object;
     }
 
-    const QStringList kcms = KPluginMetaData::readStringList(applet.data()->pluginMetaData().rawData(), QStringLiteral("X-Plasma-ConfigPlugins"));
+    QStringList kcms = KPluginMetaData::readStringList(applet.data()->pluginMetaData().rawData(), QStringLiteral("X-Plasma-ConfigPlugins"));
+
+    // filter out non-authorized KCMs
+    // KAuthorized expects KCMs with .desktop suffix, so we can't just pass everything
+    // to KAuthorized::authorizeControlModules verbatim
+    kcms.erase(std::remove_if(kcms.begin(), kcms.end(), [](const QString &kcm) {
+        return !KAuthorized::authorizeControlModule(kcm + QLatin1String(".desktop"));
+    }), kcms.end());
+
     if (!kcms.isEmpty()) {
         if (!configModel) {
             configModel = new ConfigModel(q);
