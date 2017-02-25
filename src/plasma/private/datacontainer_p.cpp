@@ -89,9 +89,7 @@ void SignalRelay::checkAlignment()
     QTime t = QTime::currentTime();
     if (m_align == Plasma::Types::AlignToMinute) {
         int seconds = t.second();
-        if (seconds > 2) {
-            newTime = ((60 - seconds) * 1000) + 500;
-        }
+        newTime = ((60 - seconds) * 1000) + 500;
     } else if (m_align == Plasma::Types::AlignToHour) {
         int minutes = t.minute();
         int seconds = t.second();
