@@ -98,6 +98,11 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool usesPlasmaTheme READ usesPlasmaTheme WRITE setUsesPlasmaTheme NOTIFY usesPlasmaThemeChanged)
 
     /**
+     * If set, icon will round the painted size to defined icon sizes. Default is true.
+     */
+    Q_PROPERTY(bool roundToIconSize READ roundToIconSize WRITE setRoundToIconSize NOTIFY roundToIconSizeChanged)
+
+    /**
      * True if a valid icon is set. False otherwise.
      */
     Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
@@ -139,6 +144,9 @@ public:
     bool usesPlasmaTheme() const;
     void setUsesPlasmaTheme(bool usesPlasmaTheme);
 
+    bool roundToIconSize() const;
+    void setRoundToIconSize(bool roundToIconSize);
+
     bool isValid() const;
 
     int paintedWidth() const;
@@ -163,6 +171,7 @@ Q_SIGNALS:
     void smoothChanged();
     void animatedChanged();
     void usesPlasmaThemeChanged();
+    void roundToIconSizeChanged();
     void validChanged();
     void colorGroupChanged();
     void paintedSizeChanged();
@@ -195,6 +204,7 @@ private:
     bool m_active;
     bool m_animated;
     bool m_usesPlasmaTheme;
+    bool m_roundToIconSize;
 
     bool m_textureChanged;
     bool m_sizeChanged;

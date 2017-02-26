@@ -514,5 +514,25 @@ void IconItemTest::implicitSize()
     QCOMPARE(item->implicitHeight(), qreal(64));
 }
 
+void IconItemTest::roundToIconSize()
+{
+    QQuickItem *item = createIconItem();
+
+    item->setWidth(25);
+    item->setHeight(25);
+    QVERIFY(item->property("paintedWidth").toInt() != 25);
+    QVERIFY(item->property("paintedHeight").toInt() != 25);
+
+    QSignalSpy paintedSizeSpy(item, SIGNAL(paintedSizeChanged()));
+    QSignalSpy roundToIconSizeSpy(item, SIGNAL(roundToIconSizeChanged()));
+
+    item->setProperty("roundToIconSize", false);
+
+    QTRY_COMPARE(paintedSizeSpy.count(), 1);
+    QTRY_COMPARE(roundToIconSizeSpy.count(), 1);
+    QVERIFY(item->property("paintedWidth").toInt() == 25);
+    QVERIFY(item->property("paintedHeight").toInt() == 25);
+}
+
 QTEST_MAIN(IconItemTest)
 

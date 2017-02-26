@@ -44,6 +44,7 @@ IconItem::IconItem(QQuickItem *parent)
       m_active(false),
       m_animated(true),
       m_usesPlasmaTheme(true),
+      m_roundToIconSize(true),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_allowNextAnimation(false),
@@ -305,6 +306,29 @@ void IconItem::setUsesPlasmaTheme(bool usesPlasmaTheme)
     emit usesPlasmaThemeChanged();
 }
 
+bool IconItem::roundToIconSize() const
+{
+    return m_roundToIconSize;
+}
+
+void IconItem::setRoundToIconSize(bool roundToIconSize)
+{
+    if (m_roundToIconSize == roundToIconSize) {
+        return;
+    }
+
+    const QSize oldPaintedSize = paintedSize();
+
+    m_roundToIconSize = roundToIconSize;
+    emit roundToIconSizeChanged();
+
+    if (oldPaintedSize != paintedSize()) {
+        emit paintedSizeChanged();
+    }
+
+    schedulePixmapUpdate();
+}
+
 bool IconItem::isValid() const
 {
     return !m_icon.isNull() || m_svgIcon || !m_imageIcon.isNull();
@@ -330,17 +354,21 @@ QSize IconItem::paintedSize(const QSizeF &containerSize) const
     const int height = paintedSize.height();
 
     if (width == height) {
-        return QSize(Units::roundToIconSize(width), Units::roundToIconSize(height));
+        if (m_roundToIconSize) {
+            return QSize(Units::roundToIconSize(width), Units::roundToIconSize(height));
+        } else {
+            return QSize(width, height);
+        }
     }
 
     // if we don't have a square image, we still want it to be rounded to icon size
     // but we cannot just blindly round both as we might erroneously change a 50x45 image to be 48x32
     // instead, round the bigger of the two and then downscale the smaller with the ratio
     if (width > height) {
-        const int roundedWidth = Units::roundToIconSize(width);
+        const int roundedWidth = m_roundToIconSize ? Units::roundToIconSize(width) : width;
         return QSize(roundedWidth, qRound(height * (roundedWidth / static_cast<qreal>(width))));
     } else {
-        const int roundedHeight = Units::roundToIconSize(height);
+        const int roundedHeight = m_roundToIconSize ? Units::roundToIconSize(height) : height;
         return QSize(qRound(width * (roundedHeight / static_cast<qreal>(height))), roundedHeight);
     }
 }
@@ -452,7 +480,10 @@ void IconItem::loadPixmap()
         return;
     }
 
-    const int size = Units::roundToIconSize(qMin(qRound(width()), qRound(height())));
+    int size = qMin(qRound(width()), qRound(height()));
+    if (m_roundToIconSize) {
+        size = Units::roundToIconSize(size);
+    }
 
     //final pixmap to paint
     QPixmap result;

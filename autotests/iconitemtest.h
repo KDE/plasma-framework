@@ -56,6 +56,7 @@ private Q_SLOTS:
     void windowChanged();
     void paintedSize();
     void implicitSize();
+    void roundToIconSize();
 
 private:
     QQuickItem *createIconItem();
