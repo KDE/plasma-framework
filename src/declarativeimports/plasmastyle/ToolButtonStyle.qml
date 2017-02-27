@@ -231,7 +231,7 @@ QtQuickControlStyle.ButtonStyle {
                 id: surfaceNormal
                 anchors.fill: parent
                 imagePath: "widgets/button"
-                prefix: "normal"
+                prefix: style.flat ? ["toolbutton-hover", "normal"] : "normal"
 
                 enabledBorders: {
                     if (style.flat || !control.parent ||
@@ -288,7 +288,7 @@ QtQuickControlStyle.ButtonStyle {
                 id: surfacePressed
                 anchors.fill: parent
                 imagePath: "widgets/button"
-                prefix: "pressed"
+                prefix: style.flat ? ["toolbutton-pressed", "pressed"] : "pressed"
                 enabledBorders: surfaceNormal.enabledBorders
                 opacity: 0
             }

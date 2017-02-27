@@ -281,7 +281,6 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     updateDevicePixelRatio();
     m_frameSvg->setImagePath(path);
-    m_frameSvg->setElementPrefix(m_prefix);
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
@@ -296,6 +295,8 @@ void FrameSvgItem::setImagePath(const QString &path)
     m_fixedMargins->update();
 
     if (isComponentComplete()) {
+        applyPrefixes();
+
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
         m_textureChanged = true;
         update();
@@ -307,14 +308,22 @@ QString FrameSvgItem::imagePath() const
     return m_frameSvg->imagePath();
 }
 
-void FrameSvgItem::setPrefix(const QString &prefix)
+void FrameSvgItem::setPrefix(const QVariant &prefixes)
 {
-    if (m_prefix == prefix) {
+    QStringList prefixList;
+    //is this a simple string?
+    if (prefixes.canConvert<QString>()) {
+        prefixList << prefixes.toString();
+    } else if (prefixes.canConvert<QStringList>()) {
+        prefixList = prefixes.toStringList();
+    }
+
+    if (m_prefixes == prefixList) {
         return;
     }
 
-    m_frameSvg->setElementPrefix(prefix);
-    m_prefix = prefix;
+    m_prefixes = prefixList;
+    applyPrefixes();
 
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
@@ -335,9 +344,9 @@ void FrameSvgItem::setPrefix(const QString &prefix)
     }
 }
 
-QString FrameSvgItem::prefix() const
+QVariant FrameSvgItem::prefix() const
 {
-    return m_prefix;
+    return m_prefixes;
 }
 
 FrameSvgItemMargins *FrameSvgItem::margins() const
@@ -416,6 +425,9 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
+    //if the theme changed, the available prefix may have changed as well
+    applyPrefixes();
+
     if (implicitWidth() <= 0) {
         setImplicitWidth(m_frameSvg->marginSize(Plasma::Types::LeftMargin) + m_frameSvg->marginSize(Plasma::Types::RightMargin));
     }
@@ -445,7 +457,7 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
     if (!window() || !m_frameSvg ||
-        (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_prefix))) {
+        (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_frameSvg->prefix()))) {
         delete oldNode;
         return nullptr;
     }
@@ -540,6 +552,27 @@ void FrameSvgItem::updateDevicePixelRatio()
     }
     m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
     m_textureChanged = true;
+}
+
+void FrameSvgItem::applyPrefixes()
+{
+    if (m_prefixes.isEmpty() || m_frameSvg->imagePath().isEmpty()) {
+        return;
+    }
+
+    bool found = false;
+    for (const QString &prefix : m_prefixes) {
+        if (m_frameSvg->hasElementPrefix(prefix)) {
+            m_frameSvg->setElementPrefix(prefix);
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        qWarning() << "The image" << m_frameSvg->imagePath() << "doesn't contain any of the prefixes" << m_prefixes;
+        //this setElementPrefix is done to keep the same behavior as before, when it was a simple string
+        m_frameSvg->setElementPrefix(m_prefixes.last());
+    }
 }
 
 } // Plasma namespace

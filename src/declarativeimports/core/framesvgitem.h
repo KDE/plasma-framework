@@ -119,8 +119,12 @@ class FrameSvgItem : public QQuickItem
      * prefix for the 9 piece svg, like "pushed" or "normal" for the button
      * see http://techbase.kde.org/Development/Tutorials/Plasma/ThemeDetails
      * for a list of paths and prefixes
+     * It can also be an array of strings, specifying a fallback chain in case
+     * the first element isn't found in the theme, eg ["toolbutton-normal", "normal"]
+     * so it's easy to keep backwards compatibility with old themes
+     * (Note: fallback chain is supported only @since 5.32)
      */
-    Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged)
+    Q_PROPERTY(QVariant prefix READ prefix WRITE setPrefix NOTIFY prefixChanged)
 
     /**
      * The margins of the frame, read only
@@ -185,8 +189,8 @@ public:
     void setImagePath(const QString &path);
     QString imagePath() const;
 
-    void setPrefix(const QString &prefix);
-    QString prefix() const;
+    void setPrefix(const QVariant &prefix);
+    QVariant prefix() const;
 
     void setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders);
     Plasma::FrameSvg::EnabledBorders enabledBorders() const;
@@ -234,10 +238,12 @@ private Q_SLOTS:
     void updateDevicePixelRatio();
 
 private:
+    void applyPrefixes();
+
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
-    QString m_prefix;
+    QStringList m_prefixes;
     bool m_textureChanged;
     bool m_sizeChanged;
     bool m_fastPath;
