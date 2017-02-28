@@ -40,12 +40,13 @@ QtQuickControlStyle.SliderStyle {
 
     }
     handle: Item {
-        width: handle.naturalSize.width
-        height: handle.naturalSize.height
+        width: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").width : handle.width
+        height: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").height : handle.height
+
         //keep this opaque to not show half highlight beneath
         Private.RoundShadow {
             id: shadow
-            anchors.fill: parent
+            anchors.fill: handle
             imagePath: "widgets/slider"
             focusElement: "horizontal-slider-focus"
             hoverElement: "horizontal-slider-hover"
@@ -54,7 +55,9 @@ QtQuickControlStyle.SliderStyle {
         }
         PlasmaCore.SvgItem {
             id: handle
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: naturalSize.width
+            height: naturalSize.height
             svg: grooveSvg
             elementId: "horizontal-slider-handle"
         }
