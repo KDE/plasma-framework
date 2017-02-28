@@ -36,7 +36,8 @@ class FrameData
 {
 public:
     FrameData(FrameSvg *svg, const QString &p)
-        : prefix(p),
+        : imagePath(svg->imagePath()),
+          prefix(p),
           enabledBorders(FrameSvg::AllBorders),
           frameSize(-1, -1),
           topHeight(0),
@@ -57,7 +58,8 @@ public:
     }
 
     FrameData(const FrameData &other, FrameSvg *svg)
-        : prefix(other.prefix),
+        : imagePath(other.imagePath),
+          prefix(other.prefix),
           enabledBorders(other.enabledBorders),
           cachedMasks(MAX_CACHED_MASKS),
           frameSize(other.frameSize),
@@ -87,6 +89,7 @@ public:
     bool isUsed() const;
     int refcount() const;
 
+    QString imagePath;
     QString prefix;
     QString requestedPrefix;
     FrameSvg::EnabledBorders enabledBorders;

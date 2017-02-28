@@ -61,7 +61,7 @@ FrameSvg::FrameSvg(QObject *parent)
       d(new FrameSvgPrivate(this))
 {
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
-    d->frame = new FrameData(this, QString());
+    d->frame = nullptr;
 }
 
 FrameSvg::~FrameSvg()
@@ -75,55 +75,12 @@ void FrameSvg::setImagePath(const QString &path)
         return;
     }
 
-    bool updateNeeded = true;
     clearCache();
 
-    FrameData *fd = d->frame;
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        const QString oldKey = d->cacheId(fd, d->prefix);
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-    } else {
-        // others are using this frame, so deref it for ourselves
-        fd->deref(this);
-        fd = 0;
-    }
-
-    Svg::d->setImagePath(path);
-
-    if (!fd) {
-        // we need to replace our frame, start by looking in the frame cache
-        FrameData *oldFd = d->frame;
-        const QString key = d->cacheId(oldFd, d->prefix);
-        fd = FrameSvgPrivate::s_sharedFrames[theme()->d].value(key);
-
-        if (fd) {
-            // we found one, so ref it and use it; we also don't need to (or want to!)
-            // trigger a full update of the frame since it is already the one we want
-            // and likely already rendered just fine
-            fd->ref(this);
-            updateNeeded = false;
-        } else {
-            // nothing exists for us in the cache, so create a new FrameData based
-            // on the old one
-            fd = new FrameData(*oldFd, this);
-        }
-
-        d->frame = fd;
-    }
-
     setContainsMultipleImages(true);
-    if (updateNeeded) {
-        // ensure our frame is in the cache
-        const QString key = d->cacheId(fd, d->prefix);
-        FrameSvgPrivate::s_sharedFrames[theme()->d].insert(key, fd);
-        fd->theme = theme()->d;
-
-        // this will emit repaintNeeded() as well when it is done
-        d->updateAndSignalSizes();
-    } else {
-        emit repaintNeeded();
+    Svg::d->setImagePath(path);
+    if (!d->repaintBlocked) {
+        d->updateFrameData();
     }
 }
 
@@ -237,7 +194,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
         return;
     }
 
-    if (size.toSize() == d->frame->frameSize) {
+    if (d->frame && size.toSize() == d->frame->frameSize) {
         return;
     }
     d->pendingFrameSize = size.toSize();
@@ -258,6 +215,10 @@ QSizeF FrameSvg::frameSize() const
 
 qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
 {
+    if (!d->frame) {
+        return .0;
+    }
+
     if (d->frame->noBorderPadding) {
         return .0;
     }
@@ -284,6 +245,10 @@ qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
 
 qreal FrameSvg::fixedMarginSize(const Plasma::Types::MarginEdge edge) const
 {
+    if (!d->frame) {
+        return .0;
+    }
+
     if (d->frame->noBorderPadding) {
         return .0;
     }
@@ -523,6 +488,7 @@ QPixmap FrameSvgPrivate::alphaMask()
                 maskFrame->prefix = maskPrefix;
                 maskFrame->requestedPrefix = maskRequestedPrefix;
                 maskFrame->theme = q->theme()->d;
+                maskFrame->imagePath = q->imagePath();
                 s_sharedFrames[q->theme()->d].insert(key, maskFrame);
             }
             maskFrame->enabledBorders = frame->enabledBorders;
@@ -692,56 +658,63 @@ QRect FrameSvgPrivate::contentGeometry(FrameData* frame, const QSize& size) cons
 void FrameSvgPrivate::updateFrameData(UpdateType updateType)
 {
     FrameData *fd = frame;
+    QString newKey;
 
-    const QString oldKey = cacheId(fd, fd->prefix);
+    if (fd) {
+        const QString oldKey = cacheId(fd, fd->prefix);
 
-    const FrameSvg::EnabledBorders oldBorders = fd->enabledBorders;
-    const QSize currentSize = fd->frameSize;
+        const QString oldPath = fd->imagePath;
+        const FrameSvg::EnabledBorders oldBorders = fd->enabledBorders;
+        const QSize currentSize = fd->frameSize;
 
-    fd->enabledBorders = enabledBorders;
-    fd->frameSize = pendingFrameSize;
+        fd->enabledBorders = enabledBorders;
+        fd->frameSize = pendingFrameSize;
+        fd->imagePath = q->imagePath();
 
-    const QString newKey = cacheId(fd, prefix);
+        newKey = cacheId(fd, prefix);
 
-    //reset frame to old values
-    fd->enabledBorders = oldBorders;
-    fd->frameSize = currentSize;
+        //reset frame to old values
+        fd->enabledBorders = oldBorders;
+        fd->frameSize = currentSize;
+        fd->imagePath = oldPath;
 
-    //FIXME: something more efficient than string comparison?
-    if (oldKey == newKey) {
-        return;
-    }
-
-    //qCDebug(LOG_PLASMA) << "looking for" << newKey;
-    FrameData *newFd = FrameSvgPrivate::s_sharedFrames[q->theme()->d].value(newKey);
-    if (newFd) {
-        //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
-        // we've found a math, so insert that new one and ref it ..
-        newFd->ref(q);
-        frame = newFd;
-
-        //.. then deref the old one and if it's no longer used, get rid of it
-        if (fd->deref(q)) {
-            //const QString oldKey = cacheId(fd, prefix);
-            //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
-            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
-
-            delete fd;
+        //FIXME: something more efficient than string comparison?
+        if (oldKey == newKey) {
+            return;
         }
 
-        return;
-    }
+        //qCDebug(LOG_PLASMA) << "looking for" << newKey;
+        FrameData *newFd = FrameSvgPrivate::s_sharedFrames[q->theme()->d].value(newKey);
+        if (newFd) {
+            //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
+            // we've found a math, so insert that new one and ref it ..
+            newFd->ref(q);
+            frame = newFd;
 
-    if (fd->refcount() == 1) {
-        // we're the only user of it, let's remove it from the shared keys
-        // we don't want to deref it, however, as we'll still be using it
-        FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+            //.. then deref the old one and if it's no longer used, get rid of it
+            if (fd->deref(q)) {
+                //const QString oldKey = cacheId(fd, prefix);
+                //qCDebug(LOG_PLASMA) << "1. Removing it" << oldKey << fd->refcount;
+                FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+                delete fd;
+            }
+
+            return;
+        }
+
+        if (fd->refcount() == 1) {
+            // we're the only user of it, let's remove it from the shared keys
+            // we don't want to deref it, however, as we'll still be using it
+            FrameSvgPrivate::s_sharedFrames[fd->theme].remove(oldKey);
+        } else {
+            // others are using it, but we wish to change its size. so deref it,
+            // then create a copy of it (we're automatically ref'd via the ctor),
+            // then insert it into our frames.
+            fd->deref(q);
+            fd = new FrameData(*fd, q);
+        }
     } else {
-        // others are using it, but we wish to change its size. so deref it,
-        // then create a copy of it (we're automatically ref'd via the ctor),
-        // then insert it into our frames.
-        fd->deref(q);
-        fd = new FrameData(*fd, q);
+        fd = new FrameData(q, QString());
     }
 
     frame = fd;
@@ -750,6 +723,11 @@ void FrameSvgPrivate::updateFrameData(UpdateType updateType)
     //updateSizes();
     fd->enabledBorders = enabledBorders;
     fd->frameSize = pendingFrameSize;
+    fd->imagePath = q->imagePath();
+    //was fd just created empty now?
+    if (newKey.isEmpty()) {
+        newKey = cacheId(fd, prefix);
+    }
 
     // we know it isn't in s_sharedFrames due to the check above, so insert it now
     FrameSvgPrivate::s_sharedFrames[q->theme()->d].insert(newKey, fd);
@@ -827,7 +805,7 @@ QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) 
 {
     const QSize size = frameSize(frame).toSize();
     const QLatin1Char s('_');
-    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % QString::number(q->scaleFactor()) % s % QString::number(q->devicePixelRatio()) % s % prefixToSave % s % q->imagePath();
+    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % QString::number(q->scaleFactor()) % s % QString::number(q->devicePixelRatio()) % s % prefixToSave % s % frame->imagePath;
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
@@ -958,18 +936,30 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
 void FrameSvgPrivate::updateNeeded()
 {
     q->setElementPrefix(requestedPrefix);
+    //frame not created yet?
+    if (!frame) {
+        return;
+    }
     q->clearCache();
     updateSizes(frame);
 }
 
 void FrameSvgPrivate::updateAndSignalSizes()
 {
+    //frame not created yet?
+    if (!frame) {
+        return;
+    }
     updateSizes(frame);
     emit q->repaintNeeded();
 }
 
 QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const
 {
+    if (!frame) {
+        return QSizeF();
+    }
+
     if (!frame->frameSize.isValid()) {
         updateSizes(frame);
         frame->frameSize = q->size();

@@ -536,7 +536,6 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
 
     QRectF rect;
     bool found = cacheAndColorsTheme()->findInRectsCache(path, id, rect);
-
     //This is a corner case where we are *sure* the element is not valid
     if (found && rect == QRectF()) {
         return rect;
@@ -551,10 +550,10 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
 
 QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
 {
+    //we need to check the id before createRenderer(), otherwise it may generate a different id compared to the previous cacheId)( call
+    const QString id = cacheId(elementId);
     createRenderer();
 
-    // createRenderer() can insert some interesting rects in the cache, so check it
-    const QString id = cacheId(elementId);
     if (localRectCache.contains(id)) {
         return localRectCache.value(id);
     }
