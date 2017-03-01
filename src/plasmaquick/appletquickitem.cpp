@@ -702,12 +702,6 @@ bool AppletQuickItem::isExpanded() const
 
 void AppletQuickItem::setExpanded(bool expanded)
 {
-    if (d->applet->isContainment()) {
-        expanded = true;
-    }
-
-    //if there is no compact representation it means it's always expanded
-    //Containments are always expanded
     if (d->expanded == expanded) {
         return;
     }
