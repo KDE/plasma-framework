@@ -173,7 +173,7 @@ public:
         TopPosedRightAlignedPopup,    /**< Popup positioned on the top, aligned
                                      to the right of the widget */
         LeftPosedTopAlignedPopup,     /**< Popup positioned on the left, aligned
-                                     to the right of the wigdet */
+                                     to the top of the wigdet */
         LeftPosedBottomAlignedPopup,  /**< Popup positioned on the left, aligned
                                      to the bottom of the widget */
         BottomPosedLeftAlignedPopup,  /**< Popup positioned on the bottom, aligned

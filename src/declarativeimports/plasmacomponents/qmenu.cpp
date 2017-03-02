@@ -340,50 +340,70 @@ Q_INVOKABLE void QMenuProxy::openRelative()
 
     using namespace Plasma;
 
+    auto boundaryCorrection = [&pos, this, parentItem](int hDelta, int vDelta) {
+        if (!parentItem->window()) {
+            return;
+        }
+        QScreen *screen = parentItem->window()->screen();
+        if (!screen) {
+            return;
+        }
+        QRect geo = screen->geometry();
+        pos = parentItem->window()->mapToGlobal(pos.toPoint());
+
+        if (pos.x() < geo.x()) {
+            pos.setX(pos.x() + hDelta);
+        }
+        if (pos.y() < geo.y()) {
+            pos.setY(pos.y() + vDelta);
+        }
+
+        if (geo.x() + geo.width() < pos.x() + this->m_menu->width()) {
+            pos.setX(pos.x() + hDelta);
+        }
+        if (geo.y() + geo.height() < pos.y() + this->m_menu->height()) {
+            pos.setY(pos.y() + vDelta);
+        }
+    };
 
     switch(m_placement) {
         case Types::TopPosedLeftAlignedPopup: {
             pos = parentItem->mapToScene(QPointF(0, -m_menu->height()));
+            boundaryCorrection(- m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
             break;
         }
         case Types::LeftPosedTopAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(0, 0));
+            pos = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
+            boundaryCorrection(m_menu->width() + parentItem->width(), - m_menu->height() + parentItem->height());
             break;
         }
         case Types::TopPosedRightAlignedPopup:
+            pos = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height()));
+            boundaryCorrection(- m_menu->width() + parentItem->width(), m_menu->height());  // in top right corner this will cover the parent item
+            break;
         case Types::RightPosedTopAlignedPopup: {
             pos = parentItem->mapToScene(QPointF(parentItem->width(), 0));
+            boundaryCorrection(- m_menu->width() - parentItem->width(), m_menu->height() + parentItem->height());
             break;
         }
         case Types::LeftPosedBottomAlignedPopup:
+            pos = parentItem->mapToScene(QPointF(-m_menu->width(), parentItem->height()));
+            boundaryCorrection(m_menu->width(), - m_menu->height()); // in lower left corner this will cover the parent item
+            break;
         case Types::BottomPosedLeftAlignedPopup: {
             pos = parentItem->mapToScene(QPointF(0, parentItem->height()));
+            boundaryCorrection(- m_menu->width() + parentItem->width(), - m_menu->height() - parentItem->height());
             break;
         }
         case Types::BottomPosedRightAlignedPopup:
         case Types::RightPosedBottomAlignedPopup: {
             pos = parentItem->mapToScene(QPointF(parentItem->width(), parentItem->height()));
+            boundaryCorrection(- m_menu->width() + parentItem->width(), - m_menu->height() + parentItem->height());
             break;
         }
         default:
             open();
             return;
-    }
-
-    if (parentItem->window() && parentItem->window()->screen()) {
-        pos = parentItem->window()->mapToGlobal(pos.toPoint());
-    }
-
-    QScreen *screen = parentItem->window()->screen();
-
-    if (screen) {
-        if (pos.x() + m_menu->width() > (screen->geometry().x() + screen->geometry().width())) {
-            pos.setX(pos.x() - m_menu->width());
-        }
-
-        if (pos.y() + m_menu->height() > (screen->geometry().y() + screen->geometry().height())) {
-            pos.setY(pos.y() - m_menu->height());
-        }
     }
 
     openInternal(pos.toPoint());
