@@ -92,7 +92,19 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
         }
     }
 
+    //if the compact repr doesn't export a Layout.* attached property,
+    //reset our own with default values
     if (!layout) {
+        if (ownLayout) {
+            ownLayout->setProperty("minimumWidth", 0);
+            ownLayout->setProperty("minimumHeight", 0);
+            ownLayout->setProperty("preferredWidth", -1);
+            ownLayout->setProperty("preferredHeight", -1);
+            ownLayout->setProperty("maximumWidth", std::numeric_limits<qreal>::infinity());
+            ownLayout->setProperty("maximumHeight", std::numeric_limits<qreal>::infinity());
+            ownLayout->setProperty("fillWidth", false);
+            ownLayout->setProperty("fillHeight", false);
+        }
         return;
     }
 
