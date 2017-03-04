@@ -85,16 +85,7 @@ public:
 
     Q_INVOKABLE QAction *action(QString name) const;
 
-    static WallpaperInterface *qmlAttachedProperties(QObject *object)
-    {
-        //at the moment of the attached object creation, the root item is the only one that hasn't a parent
-        //only way to avoid creation of this attached for everybody but the root item
-        if (!object->parent() && s_rootObjects.contains(QtQml::qmlEngine(object))) {
-            return s_rootObjects.value(QtQml::qmlEngine(object));
-        } else {
-            return 0;
-        }
-    }
+    static WallpaperInterface *qmlAttachedProperties(QObject *object);
 
 Q_SIGNALS:
     void packageChanged();

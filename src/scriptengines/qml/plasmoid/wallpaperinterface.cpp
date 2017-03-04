@@ -269,4 +269,11 @@ void WallpaperInterface::executeAction(const QString &name)
     }
 }
 
+WallpaperInterface * WallpaperInterface::qmlAttachedProperties(QObject* object)
+{
+    //at the moment of the attached object creation, the root item is the only one that hasn't a parent
+    //only way to avoid creation of this attached for everybody but the root item
+    return object->parent() ? nullptr : s_rootObjects.value(QtQml::qmlEngine(object));
+}
+
 #include "moc_wallpaperinterface.cpp"
