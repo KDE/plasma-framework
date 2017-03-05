@@ -34,9 +34,7 @@ class FadingMaterialShader : public QSGSimpleMaterialShader<FadingMaterialState>
 {
     QSG_DECLARE_SIMPLE_SHADER(FadingMaterialShader, FadingMaterialState)
 public:
-    const char* fragmentShader() const Q_DECL_OVERRIDE;
-    const char* vertexShader() const Q_DECL_OVERRIDE;
-
+    FadingMaterialShader();
     using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
     virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
     QList<QByteArray> attributes() const Q_DECL_OVERRIDE;
@@ -47,37 +45,17 @@ private:
     int m_progressId = 0;
 };
 
+
+FadingMaterialShader::FadingMaterialShader()
+{
+    setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.frag"));
+    setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.vert"));
+}
+
 QList<QByteArray> FadingMaterialShader::attributes() const
 {
     return QList<QByteArray>() << "qt_Vertex" << "qt_MultiTexCoord0";
 }
-
-const char* FadingMaterialShader::vertexShader() const
-{
-     return "uniform highp mat4 qt_Matrix;"
-            "attribute highp vec4 qt_Vertex;"
-            "attribute highp vec2 qt_MultiTexCoord0;"
-            "varying highp vec2 v_coord;"
-            "void main() {"
-            "        v_coord = qt_MultiTexCoord0;"
-            "        gl_Position = qt_Matrix * qt_Vertex;"
-            "    }";
-}
-
-const char* FadingMaterialShader::fragmentShader() const
-{
-    return "varying highp vec2 v_coord;"
-    "uniform sampler2D u_src;"
-    "uniform sampler2D u_target;"
-    "uniform highp float u_transitionProgress;"
-    "uniform lowp float qt_Opacity;"
-    "void main() {"
-        "lowp vec4 tex1 = texture2D(u_target, v_coord);"
-        "lowp vec4 tex2 = texture2D(u_src, v_coord);"
-        "gl_FragColor = mix(tex2, tex1, u_transitionProgress) * qt_Opacity;"
-    "}";
-}
-
 
 void FadingMaterialShader::updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState)
 {
