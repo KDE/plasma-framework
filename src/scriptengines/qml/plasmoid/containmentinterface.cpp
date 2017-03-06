@@ -1045,6 +1045,15 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
     }
 }
 
+void ContainmentInterface::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Menu) {
+        QMouseEvent me(QEvent::MouseButtonRelease, QPoint(), Qt::RightButton, Qt::RightButton, event->modifiers());
+        mousePressEvent(&me);
+        event->accept();
+    }
+}
+
 void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
     foreach (QAction *action, applet->contextualActions()) {
