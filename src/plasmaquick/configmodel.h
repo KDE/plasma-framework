@@ -100,6 +100,7 @@ public:
     }
     int rowCount(const QModelIndex &index = QModelIndex()) const Q_DECL_OVERRIDE;
     QVariant data(const QModelIndex &, int) const Q_DECL_OVERRIDE;
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
 
     /**
      * @param row the row for which the data will be returned

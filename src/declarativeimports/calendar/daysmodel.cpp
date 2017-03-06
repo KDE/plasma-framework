@@ -33,15 +33,7 @@ DaysModel::DaysModel(QObject *parent) :
     m_lastRequestedEventsStartDate(QDate()),
     m_agendaNeedsUpdate(false)
 {
-    QHash<int, QByteArray> roleNames;
 
-    roleNames.insert(isCurrent,              "isCurrent");
-    roleNames.insert(containsEventItems,     "containsEventItems");
-    roleNames.insert(dayNumber,              "dayNumber");
-    roleNames.insert(monthNumber,            "monthNumber");
-    roleNames.insert(yearNumber,             "yearNumber");
-
-    setRoleNames(roleNames);
 }
 
 DaysModel::~DaysModel()
@@ -243,4 +235,15 @@ void DaysModel::setPluginsManager(QObject *manager)
             this, &DaysModel::update);
 
     QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
+}
+
+QHash<int, QByteArray> DaysModel::roleNames() const
+{
+    return {
+        {isCurrent, "isCurrent"},
+        {containsEventItems, "containsEventItems"},
+        {dayNumber, "dayNumber"},
+        {monthNumber, "monthNumber"},
+        {yearNumber, "yearNumber"}
+    };
 }

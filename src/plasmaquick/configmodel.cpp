@@ -175,15 +175,7 @@ ConfigModel::ConfigModel(QObject *parent)
     : QAbstractListModel(parent),
       d(new ConfigModelPrivate(this))
 {
-    QHash<int, QByteArray> roleNames;
-    roleNames[NameRole] = "name";
-    roleNames[IconRole] = "icon";
-    roleNames[SourceRole] = "source";
-    roleNames[PluginNameRole] = "pluginName";
-    roleNames[VisibleRole] = "visible";
-    roleNames[KCMRole] = "kcm";
 
-    setRoleNames(roleNames);
 }
 
 ConfigModel::~ConfigModel()
@@ -253,6 +245,18 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
     default:
         return QVariant();
     }
+}
+
+QHash<int, QByteArray> ConfigModel::roleNames() const
+{
+    return {
+        {NameRole, "name"},
+        {IconRole, "icon"},
+        {SourceRole, "source"},
+        {PluginNameRole, "pluginName"},
+        {VisibleRole, "visible"},
+        {KCMRole, "kcm"},
+    };
 }
 
 QVariant ConfigModel::get(int row) const

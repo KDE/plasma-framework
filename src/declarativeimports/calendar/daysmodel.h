@@ -54,6 +54,8 @@ public:
 
     Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
 
+    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+
 Q_SIGNALS:
     void agendaUpdated(const QDate &updatedDate);
 
