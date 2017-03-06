@@ -54,7 +54,7 @@ FadingMaterialShader::FadingMaterialShader()
 
 QList<QByteArray> FadingMaterialShader::attributes() const
 {
-    return QList<QByteArray>() << "qt_Vertex" << "qt_MultiTexCoord0";
+    return {QByteArrayLiteral("qt_Vertex"), QByteArrayLiteral("qt_MultiTexCoord0")};
 }
 
 void FadingMaterialShader::updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState)
