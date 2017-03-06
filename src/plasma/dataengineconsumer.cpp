@@ -95,16 +95,11 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
         DataEngine *engine = DataEngineManager::self()->engine(name);
         if (engine->isValid()) {
             return engine;
-        } else {
-            d->loadedEngines.remove(name);
         }
     }
 
     DataEngine *engine = DataEngineManager::self()->loadEngine(name);
-    if (engine->isValid()) {
-        d->loadedEngines.insert(name);
-    }
-
+    d->loadedEngines.insert(name);
     return engine;
 }
 

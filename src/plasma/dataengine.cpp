@@ -425,8 +425,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
     if (dataEngineDescription.isValid()) {
         valid = true;
         e->setObjectName(dataEngineDescription.name());
-    } else {
-        e->setObjectName(QStringLiteral("NullEngine"));
     }
 
     if (dataEngineDescription.isValid()) {
