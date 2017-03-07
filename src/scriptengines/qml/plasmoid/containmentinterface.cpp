@@ -1052,6 +1052,8 @@ void ContainmentInterface::keyPressEvent(QKeyEvent *event)
         mousePressEvent(&me);
         event->accept();
     }
+
+    AppletInterface::keyPressEvent(event);
 }
 
 void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
