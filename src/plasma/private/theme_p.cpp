@@ -27,6 +27,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFontDatabase>
+#include <QDir>
 
 #include <kdirwatch.h>
 #include <kwindoweffects.h>
@@ -212,11 +213,15 @@ bool ThemePrivate::useCache()
                 }
             }
 
+
             // now we check for, and remove if necessary, old caches
-            foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::GenericCacheLocation, cacheFileBase)) {
+            QDir cacheDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
+            cacheDir.setNameFilters(QStringList({cacheFileBase}));
+
+            for (const QFileInfo &file : cacheDir.entryInfoList()) {
                 if (currentCacheFileName.isEmpty() ||
-                        !file.endsWith(currentCacheFileName)) {
-                    QFile::remove(file);
+                        !file.absoluteFilePath().endsWith(currentCacheFileName)) {
+                    QFile::remove(file.absoluteFilePath());
                 }
             }
 
@@ -259,9 +264,12 @@ bool ThemePrivate::useCache()
         }
 
         // now we check for (and remove) old caches
-        foreach (const QString &file, QStandardPaths::locateAll(QStandardPaths::GenericCacheLocation, svgElementsFileNameBase + QLatin1Char('*'))) {
-            if (cachesTooOld || !file.endsWith(svgElementsFileName)) {
-                QFile::remove(file);
+        QDir cacheDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
+        cacheDir.setNameFilters(QStringList({svgElementsFileNameBase + QLatin1Char('*')}));
+
+        for (const QFileInfo &file : cacheDir.entryInfoList()) {
+            if (!file.absoluteFilePath().endsWith(svgElementsFileName)) {
+                QFile::remove(file.absoluteFilePath());
             }
         }
 
