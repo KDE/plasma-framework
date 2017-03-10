@@ -556,7 +556,13 @@ void FrameSvgItem::updateDevicePixelRatio()
 
 void FrameSvgItem::applyPrefixes()
 {
-    if (m_prefixes.isEmpty() || m_frameSvg->imagePath().isEmpty()) {
+
+    if (m_frameSvg->imagePath().isEmpty()) {
+        return;
+    }
+
+    if (m_prefixes.isEmpty()) {
+        m_frameSvg->setElementPrefix(QString());
         return;
     }
 
