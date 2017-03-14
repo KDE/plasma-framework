@@ -1,0 +1,34 @@
+module org.kde.plasma.components
+
+BusyIndicator 3.0 BusyIndicator.qml
+Button 3.0 Button.qml
+CheckBox 3.0 CheckBox.qml
+CheckDelegate 3.0 CheckDelegate.qml
+ComboBox 3.0 ComboBox.qml
+Container 3.0 Container.qml
+Control 3.0 Control.qml
+Dial 3.0 Dial.qml
+Drawer 3.0 Drawer.qml
+Frame 3.0 Frame.qml
+GroupBox 3.0 GroupBox.qml
+ItemDelegate 3.0 ItemDelegate.qml
+Label 3.0 Label.qml
+MenuItem 3.0 MenuItem.qml
+Menu 3.0 Menu.qml
+Popup 3.0 Popup.qml
+ProgressBar 3.0 ProgressBar.qml
+RadioButton 3.0 RadioButton.qml
+RadioDelegate 3.0 RadioDelegate.qml
+RangeSlider 3.0 RangeSlider.qml
+ScrollBar 3.0 ScrollBar.qml
+Slider 3.0 Slider.qml
+SpinBox 3.0 SpinBox.qml
+SwitchDelegate 3.0 SwitchDelegate.qml
+Switch 3.0 Switch.qml
+TabBar 3.0 TabBar.qml
+TabButton 3.0 TabButton.qml
+TextArea 3.0 TextArea.qml
+TextField 3.0 TextField.qml
+ToolBar 3.0 ToolBar.qml
+ToolButton 3.0 ToolButton.qml
+ToolTip 3.0 ToolTip.qml
