@@ -29,6 +29,7 @@
 #include <QMimeData>
 
 #include <kactioncollection.h>
+#include <KAcceleratorManager>
 #include <kauthorized.h>
 #include <QDebug>
 #include <klocalizedstring.h>
@@ -1016,6 +1017,8 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         event->accept();
         return;
     }
+
+    KAcceleratorManager::manage(desktopMenu);
 
     desktopMenu->popup(pos);
     event->setAccepted(true);

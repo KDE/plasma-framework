@@ -16,6 +16,7 @@ target_link_libraries(plasmacomponentsplugin
         Qt5::Quick
         Qt5::Qml
         Qt5::Gui
+        KF5::WidgetsAddons # for KAcceleratorManager
         KF5::Declarative
         KF5::Plasma
         KF5::IconThemes

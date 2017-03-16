@@ -25,6 +25,8 @@
 #include <QQuickItem>
 #include <QScreen>
 
+#include <KAcceleratorManager>
+
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent),
@@ -34,6 +36,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
         m_menu = new QMenu(0);
+        KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
         connect(m_menu, &QMenu::aboutToHide, [ = ]() {
                 m_status = DialogStatus::Closed;
