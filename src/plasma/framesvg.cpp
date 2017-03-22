@@ -471,7 +471,7 @@ QPixmap FrameSvgPrivate::alphaMask()
     } else {
         // We are setting the prefix only temporary to generate
         // the needed mask image
-        const QString maskRequestedPrefix = maskPrefix % requestedPrefix;
+        const QString maskRequestedPrefix = requestedPrefix.isEmpty() ? QStringLiteral("mask") : maskPrefix % requestedPrefix;
         maskPrefix = maskPrefix % prefix;
 
         if (!maskFrame) {
