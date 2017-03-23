@@ -61,7 +61,8 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     : AppletInterface(parent, args),
       m_wallpaperInterface(0),
       m_activityInfo(0),
-      m_wheelDelta(0)
+      m_wheelDelta(0),
+      m_editMode(false)
 {
     m_containment = static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
 
@@ -407,6 +408,21 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     }
 
     return rect.topLeft();
+}
+
+bool ContainmentInterface::isEditMode() const
+{
+    return m_editMode;
+}
+
+void ContainmentInterface::setEditMode(bool edit)
+{
+    if (edit == m_editMode) {
+        return;
+    }
+
+    m_editMode = edit;
+    emit editModeChanged();
 }
 
 void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y, KIO::DropJob *dropJob)

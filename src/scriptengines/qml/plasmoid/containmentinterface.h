@@ -77,6 +77,14 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
+    /**
+     * True when the containment is in an edit mode that allows to move
+     * things around: it's different from userConfiguring as it's about
+     * editing plasmoids inside the containment, rather than the containment
+     * settings dialog itself
+     */
+    Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
+
 public:
     ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
 
@@ -141,6 +149,9 @@ public:
      */
     Q_INVOKABLE QPointF adjustToAvailableScreenRegion(int x, int y, int w, int h) const;
 
+    bool isEditMode() const;
+    void setEditMode(bool edit);
+
     static ContainmentInterface *qmlAttachedProperties(QObject *object)
     {
         return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
@@ -179,6 +190,7 @@ Q_SIGNALS:
     void drawWallpaperChanged();
     void containmentTypeChanged();
     void actionsChanged();
+    void editModeChanged();
 
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
@@ -205,6 +217,7 @@ private:
     QPointer<Plasma::Containment> m_containment;
     QWeakPointer<QMenu> m_contextMenu;
     int m_wheelDelta;
+    bool m_editMode : 1;
     friend class AppletInterface;
 };
 
