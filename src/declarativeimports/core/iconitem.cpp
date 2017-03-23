@@ -84,7 +84,25 @@ IconItem::~IconItem()
 
 void IconItem::updateImplicitSize()
 {
-    //initialize implicit size to the Dialog size
+    if (!m_imageIcon.isNull()) {
+        const QSize &s = m_imageIcon.size();
+
+        if (s.isValid()) {
+            setImplicitSize(s.width(), s.height());
+
+            return;
+        }
+    } else if (m_svgIcon) { // FIXME: Check Svg::isValid()? Considered expensive by apidox.
+        const QSize &s = m_svgIcon->size();
+
+        if (s.isValid()) {
+            setImplicitSize(s.width(), s.height());
+
+            return;
+        }
+    }
+
+    // Fall back to initializing implicit size to the Dialog size.
     const int implicitSize = KIconLoader::global()->currentSize(KIconLoader::Dialog);
     setImplicitSize(implicitSize, implicitSize);
 }
@@ -131,7 +149,6 @@ void IconItem::setSource(const QVariant &source)
             if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
                 m_svgIconName = sourceString;
-
                 //ok, svg not available from the plasma theme
             } else {
                 //try to load from iconloader an svg with Plasma::Svg
@@ -176,7 +193,6 @@ void IconItem::setSource(const QVariant &source)
         m_svgIconName.clear();
         delete m_svgIcon;
         m_svgIcon = 0;
-
     } else {
         m_icon = QIcon();
         m_imageIcon = QImage();
@@ -188,6 +204,8 @@ void IconItem::setSource(const QVariant &source)
     if (width() > 0 && height() > 0) {
         schedulePixmapUpdate();
     }
+
+    updateImplicitSize();
 
     emit sourceChanged();
     emit validChanged();
