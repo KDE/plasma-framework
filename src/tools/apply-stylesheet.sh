@@ -144,7 +144,7 @@ do
       shift 2;;
 
     --ButtonHoverFrom)
-      buttonBackgroundFrom=$2
+      buttonHoverFrom=$2
       shift 2;;
     --ButtonHoverTo)
       buttonHoverTo=$2
@@ -268,7 +268,7 @@ fi
 xmlstarlet tr transform.xsl temp.svg > temp2.svg
 mv temp2.svg temp.svg
 
-for i in {0..4}
+for i in ${!colors[@]}
 do
   xmlstarlet ed --subnode "//*/*[contains(@style, '${colors[i]}') and not (@class)]" -t attr -n "class" -v "${colorNames[i]}" temp.svg > temp2.svg
 
