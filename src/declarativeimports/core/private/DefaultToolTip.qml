@@ -60,10 +60,9 @@ Item {
             animated: false
             source: toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignTop
-            visible: toolTip != null && toolTip.icon != "" && toolTip.image == ""
-            implicitWidth: toolTip && toolTip.icon != "" ? units.iconSizes.medium : 0
-            Layout.preferredWidth: implicitWidth
-            Layout.preferredHeight: implicitWidth
+            visible: toolTip != null && toolTip.icon != "" && toolTip.image == "" && valid
+            Layout.preferredWidth: units.iconSizes.medium
+            Layout.preferredHeight: units.iconSizes.medium
         }
 
         ColumnLayout {
