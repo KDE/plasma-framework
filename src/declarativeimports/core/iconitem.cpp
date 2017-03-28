@@ -93,8 +93,17 @@ void IconItem::updateImplicitSize()
             return;
         }
     } else if (m_svgIcon) { // FIXME: Check Svg::isValid()? Considered expensive by apidox.
-        const QSize &s = m_svgIcon->size();
-
+        //resize() resets the icon to its implicit size, specified
+        m_svgIcon->resize();
+        QSize s;
+        const QString &sourceString = m_source.toString();
+        //plasma theme icon, where one file contains multiple images
+        if (m_svgIcon->hasElement(sourceString)) {
+            s = m_svgIcon->elementSize(sourceString);
+        //normal icon: one image per file, page size is icon size
+        } else {
+            s = m_svgIcon->size();
+        }
         if (s.isValid()) {
             setImplicitSize(s.width(), s.height());
 
