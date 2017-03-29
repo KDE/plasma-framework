@@ -1,5 +1,6 @@
 /*
  *   Copyright 2014 David Edmundson <davidedmundson@kde.org>
+ *   Copyright 2017 Kai Uwe Broulik <kde@privat.broulik.de>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -20,6 +21,7 @@
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import QtQuick 2.1
+import QtQml 2.0
 
 /**
  * A ModelMenu creates a context menu with items populated from a model or a QList<QAction*>
@@ -52,7 +54,7 @@ PlasmaComponents.ContextMenu {
     /**
      * The model containing menu items
      */
-    property alias model: repeater.model
+    property alias model: instantiator.model
 
     /**
      * This signal is emitted when a menu item is clicked.
@@ -62,24 +64,22 @@ PlasmaComponents.ContextMenu {
 
     //ContextMenu cannot have child items, so in order to have ContextMenu as the root object of this item
     //we create a new property which contains an item which can then load the child items
-    property Item _children : Item {
-        Repeater {
-            id: repeater
-            delegate: PlasmaComponents.MenuItem {
-                //for QList<QAction*> Repeater adds an attached property modelData
-                //for QAbstractItemModel* it doesn't. Not checking causes errors
-                text: typeof(modelData) != "undefined" ? modelData.text : model.display
-                icon: typeof(modelData) != "undefined" ? modelData.icon : model.decoration
-                separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator === true
-                section: typeof(modelData) != "undefined" ? modelData.section : model.section === true
-                onClicked: {
-                    menu.clicked(typeof(modelData) != "undefined" ? modelData : model)
-                }
-                Component.onCompleted: {
-                    parent = menu
-                }
+    property Instantiator _children: Instantiator {
+        id: instantiator
+        delegate: PlasmaComponents.MenuItem {
+            //for QList<QAction*> Repeater adds an attached property modelData
+            //for QAbstractItemModel* it doesn't. Not checking causes errors
+            text: typeof(modelData) != "undefined" ? modelData.text : model.display
+            icon: typeof(modelData) != "undefined" ? modelData.icon : model.decoration
+            separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator === true
+            section: typeof(modelData) != "undefined" ? modelData.section : model.section === true
+            onClicked: {
+                menu.clicked(typeof(modelData) != "undefined" ? modelData : model)
             }
         }
+
+        onObjectAdded: menu.addMenuItem(object)
+        onObjectRemoved: menu.removeMenuItem(object)
     }
     Accessible.role: Accessible.PopupMenu
 }
