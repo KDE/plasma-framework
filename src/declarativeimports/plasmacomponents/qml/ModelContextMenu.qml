@@ -69,10 +69,10 @@ PlasmaComponents.ContextMenu {
         delegate: PlasmaComponents.MenuItem {
             //for QList<QAction*> Repeater adds an attached property modelData
             //for QAbstractItemModel* it doesn't. Not checking causes errors
-            text: typeof(modelData) != "undefined" ? modelData.text : model.display
+            text: (typeof(modelData) != "undefined" ? modelData.text : model.display) || ""
             icon: typeof(modelData) != "undefined" ? modelData.icon : model.decoration
-            separator: typeof(modelData) != "undefined" ? modelData.separator : model.separator === true
-            section: typeof(modelData) != "undefined" ? modelData.section : model.section === true
+            separator: (typeof(modelData) != "undefined" ? modelData.separator : model.separator === true) || false
+            section: (typeof(modelData) != "undefined" ? modelData.section : model.section === true) || false
             onClicked: {
                 menu.clicked(typeof(modelData) != "undefined" ? modelData : model)
             }
