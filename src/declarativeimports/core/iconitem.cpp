@@ -49,6 +49,8 @@ IconItem::IconItem(QQuickItem *parent)
       m_sizeChanged(false),
       m_allowNextAnimation(false),
       m_blockNextAnimation(false),
+      m_implicitHeightSetByUser(false),
+      m_implicitWidthSetByUser(false),
       m_colorGroup(Plasma::Theme::NormalColorGroup),
       m_animValue(0)
 {
@@ -75,6 +77,9 @@ IconItem::IconItem(QQuickItem *parent)
     connect(this, SIGNAL(overlaysChanged()),
             this, SLOT(schedulePixmapUpdate()));
 
+    connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
+    connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
+
     updateImplicitSize();
 }
 
@@ -88,7 +93,13 @@ void IconItem::updateImplicitSize()
         const QSize &s = m_imageIcon.size();
 
         if (s.isValid()) {
-            setImplicitSize(s.width(), s.height());
+            if (!m_implicitWidthSetByUser && !m_implicitHeightSetByUser) {
+                setImplicitSize(s.width(), s.height());
+            } else if (!m_implicitWidthSetByUser) {
+                setImplicitWidth(s.width());
+            } else if (!m_implicitHeightSetByUser) {
+                setImplicitHeight(s.height());
+            }
 
             return;
         }
@@ -105,7 +116,13 @@ void IconItem::updateImplicitSize()
             s = m_svgIcon->size();
         }
         if (s.isValid()) {
-            setImplicitSize(s.width(), s.height());
+            if (!m_implicitWidthSetByUser && !m_implicitHeightSetByUser) {
+                setImplicitSize(s.width(), s.height());
+            } else if (!m_implicitWidthSetByUser) {
+                setImplicitWidth(s.width());
+            } else if (!m_implicitHeightSetByUser) {
+                setImplicitHeight(s.height());
+            }
 
             return;
         }
@@ -113,7 +130,14 @@ void IconItem::updateImplicitSize()
 
     // Fall back to initializing implicit size to the Dialog size.
     const int implicitSize = KIconLoader::global()->currentSize(KIconLoader::Dialog);
-    setImplicitSize(implicitSize, implicitSize);
+
+    if (!m_implicitWidthSetByUser && !m_implicitHeightSetByUser) {
+        setImplicitSize(implicitSize, implicitSize);
+    } else if (!m_implicitWidthSetByUser) {
+        setImplicitWidth(implicitSize);
+    } else if (!m_implicitHeightSetByUser) {
+        setImplicitHeight(implicitSize);
+    }
 }
 
 void IconItem::setSource(const QVariant &source)
@@ -416,6 +440,20 @@ void IconItem::setStatus(Plasma::Svg::Status status)
 Plasma::Svg::Status IconItem::status() const
 {
     return m_status;
+}
+
+void IconItem::setImplicitHeight2(int height)
+{
+    m_implicitHeightSetByUser = true;
+    setImplicitHeight(height);
+    emit implicitHeightChanged2();
+}
+
+void IconItem::setImplicitWidth2(int width)
+{
+    m_implicitWidthSetByUser = true;
+    setImplicitWidth(width);
+    emit implicitWidthChanged2();
 }
 
 void IconItem::updatePolish()

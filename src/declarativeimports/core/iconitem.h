@@ -119,6 +119,10 @@ class IconItem : public QQuickItem
      */
     Q_PROPERTY(int paintedHeight READ paintedHeight NOTIFY paintedSizeChanged)
 
+    Q_PROPERTY(int implicitHeight READ implicitHeight WRITE setImplicitHeight2 NOTIFY implicitHeightChanged2)
+
+    Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth2 NOTIFY implicitWidthChanged2)
+
 public:
     IconItem(QQuickItem *parent = 0);
     ~IconItem();
@@ -155,6 +159,9 @@ public:
     void setStatus(Plasma::Svg::Status status);
     Plasma::Svg::Status status() const;
 
+    void setImplicitHeight2(int height);
+    void setImplicitWidth2(int height);
+
     void updatePolish() Q_DECL_OVERRIDE;
     QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
 
@@ -176,6 +183,8 @@ Q_SIGNALS:
     void colorGroupChanged();
     void paintedSizeChanged();
     void statusChanged();
+    void implicitHeightChanged2();
+    void implicitWidthChanged2();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
@@ -210,6 +219,8 @@ private:
     bool m_sizeChanged;
     bool m_allowNextAnimation;
     bool m_blockNextAnimation;
+    bool m_implicitHeightSetByUser;
+    bool m_implicitWidthSetByUser;
 
     QPixmap m_iconPixmap;
     QPixmap m_oldIconPixmap;
