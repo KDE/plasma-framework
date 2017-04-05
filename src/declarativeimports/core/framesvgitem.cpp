@@ -575,7 +575,6 @@ void FrameSvgItem::applyPrefixes()
         }
     }
     if (!found) {
-        qWarning() << "The image" << m_frameSvg->imagePath() << "doesn't contain any of the prefixes" << m_prefixes;
         //this setElementPrefix is done to keep the same behavior as before, when it was a simple string
         m_frameSvg->setElementPrefix(m_prefixes.last());
     }
