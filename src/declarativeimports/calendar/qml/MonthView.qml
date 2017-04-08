@@ -143,7 +143,7 @@ PinchArea {
         Component.onCompleted: {
             for (var i = 0; i < 12; ++i) {
                 append({
-                    label: Qt.locale().standaloneMonthName(i, Locale.LongFormat),
+                    label: Qt.locale(Qt.locale().uiLanguages[0]).standaloneMonthName(i, Locale.LongFormat),
                     monthNumber: i + 1,
                     isCurrent: true
                 })

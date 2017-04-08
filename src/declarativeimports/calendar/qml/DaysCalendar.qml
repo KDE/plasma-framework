@@ -312,7 +312,7 @@ Item {
             Components.Label {
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
-                text: Qt.locale().dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
+                text: Qt.locale(Qt.locale().uiLanguages[0]).dayName(calendarBackend.firstDayOfWeek + index, Locale.ShortFormat)
                 font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
                 opacity: 0.4
                 horizontalAlignment: Text.AlignHCenter

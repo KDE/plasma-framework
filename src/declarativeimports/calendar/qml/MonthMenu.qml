@@ -28,7 +28,7 @@ PlasmaComponents.Menu {
     property Instantiator items: Instantiator {
         model: 12
         PlasmaComponents.MenuItem {
-            text: capitalizeFirstLetter(Qt.locale().standaloneMonthName(index))
+            text: capitalizeFirstLetter(Qt.locale(Qt.locale().uiLanguages[0]).standaloneMonthName(index))
             onClicked: calendarBackend.displayedDate = new Date(year, index, 1)
         }
         onObjectAdded: testMenu.addMenuItem(object)
