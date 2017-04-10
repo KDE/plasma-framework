@@ -28,3 +28,4 @@ install(TARGETS plasmacomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde
 
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components)
 
+ecm_generate_qmltypes(org.kde.plasma.components 2.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components)

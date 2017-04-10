@@ -26,6 +26,8 @@ install(TARGETS plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/or
 
 install(DIRECTORY qml/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/extras)
 
+ecm_generate_qmltypes(org.kde.plasma.extras 2.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/extras)
+
 
 # The platform specific stuff, overwrites a copy of the desktop one
 # it does install some files on top of the old ones, has to be done

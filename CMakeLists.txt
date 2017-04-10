@@ -22,6 +22,7 @@ include(ECMSetupVersion)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 include(KDEPackageAppTemplates)
+include(ECMGenerateQmlTypes)
 
 ecm_setup_version(PROJECT
                   VARIABLE_PREFIX PLASMA
