@@ -7,7 +7,7 @@ import QtQuick.tooling 1.2
 // 'qmlplugindump -nonrelocatable org.kde.plasma.platformcomponents 2.0 /home/apol/devel/kde5/lib64/qml -output /home/apol/devel/frameworks/plasma-framework/src/declarativeimports/platformcomponents/plugins.qmltypes'
 
 Module {
-    dependencies: []
+    dependencies: ["QtQuick 2.8"]
     Component {
         name: "Application"
         prototype: "QObject"
