@@ -821,7 +821,8 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 //     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
 //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
-    //Every applet should have a graphics object, otherwise don't disaplay anything
+    //applets can not have a graphic object if they don't have a script engine loaded
+    //this can happen if they were loaded with an invalid metadata
     if (!appletGraphicObject) {
         return;
     }
@@ -843,8 +844,10 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 {
     AppletInterface *appletGraphicObject = applet->property("_plasma_graphicObject").value<AppletInterface *>();
-    m_appletInterfaces.removeAll(appletGraphicObject);
-    appletGraphicObject->m_positionBeforeRemoval = appletGraphicObject->mapToItem(this, QPointF());
+    if (appletGraphicObject) {
+        m_appletInterfaces.removeAll(appletGraphicObject);
+        appletGraphicObject->m_positionBeforeRemoval = appletGraphicObject->mapToItem(this, QPointF());
+    }
     emit appletRemoved(appletGraphicObject);
     emit appletsChanged();
 }
