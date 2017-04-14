@@ -31,6 +31,7 @@ Name[sr@ijekavian]=%{APPNAME}
 Name[sr@ijekavianlatin]=%{APPNAME}
 Name[sr@latin]=%{APPNAME}
 Name[sv]=%{APPNAME}
+Name[tr]=%{APPNAME}
 Name[uk]=%{APPNAME}
 Name[x-test]=xx%{APPNAME}xx
 Name[zh_CN]=%{APPNAME}
