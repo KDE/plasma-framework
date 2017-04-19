@@ -27,6 +27,7 @@
 #include <QQmlExpression>
 #include <QQmlProperty>
 #include <QMimeData>
+#include <QVersionNumber>
 
 #include <kactioncollection.h>
 #include <KAcceleratorManager>
@@ -1015,9 +1016,30 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     desktopMenu->setAttribute(Qt::WA_TranslucentBackground);
     //end workaround
 
-    if (window() && window()->mouseGrabberItem()) {
-        window()->mouseGrabberItem()->ungrabMouse();
+
+    //this is a workaround where Qt will fail to realise a mouse has been released
+
+    // this happens if a window which does not accept focus spawns a new window that takes focus and X grab
+    // whilst the mouse is depressed
+    // https://bugreports.qt.io/browse/QTBUG-59044
+    // this causes the next click to go missing
+
+    //by releasing manually we avoid that situation
+    auto ungrabMouseHack = [this]() {
+        if (window() && window()->mouseGrabberItem()) {
+            window()->mouseGrabberItem()->ungrabMouse();
+        }
+    };
+
+    //pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
+    //post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
+    if (QVersionNumber::fromString(qVersion()) > QVersionNumber(5, 8, 0)) {
+        QTimer::singleShot(0, this, ungrabMouseHack);
     }
+    else {
+        ungrabMouseHack();
+    }
+    //end workaround
 
     QPoint pos = event->globalPos();
     if (window() && m_containment->containmentType() == Plasma::Types::PanelContainment) {
