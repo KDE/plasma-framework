@@ -70,14 +70,27 @@ class Units : public QObject
      * * large
      * * huge
      * * enormous
-     *
-     * Not devicePixelRation-adjusted::
-     * * desktop
+     * * desktop (DEPRECATED: use iconSizeHints instead)
      *
      */
-    //note the iconSizeChanges signal indicates that one (or more) of these icons have changed
+    //note the iconSizeChanged signal indicates that one (or more) of these icons have changed
     //but the property map itself remains constant
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
+
+    /**
+     * units.iconSizeHints provides access to user-configurable icon size hints,
+     * to be used where appropriate in the user interface.
+     *
+     * Conceptually, an icon size hint is a key that has one of the sizes from
+     * @iconSizes property as value.
+     *
+     * Currently available hints:
+     * * panel
+     * * desktop
+     */
+    //note the iconSizeHintsChanged signal indicates that one (or more) of these icons have changed
+    //but the property map itself remains constant
+    Q_PROPERTY(QQmlPropertyMap *iconSizeHints READ iconSizeHints CONSTANT)
 
     // layout hints
 
@@ -144,6 +157,12 @@ public:
     QQmlPropertyMap *iconSizes() const;
 
     /**
+     * @return map with user-configurable icon size hints, indexed by name
+     * @since 5.33
+     */
+    QQmlPropertyMap *iconSizeHints() const;
+
+    /**
      * @return Pixel value for large spacing between elements.
      * @since 5.0
      */
@@ -180,6 +199,7 @@ Q_SIGNALS:
     void devicePixelRatioChanged();
     void gridUnitChanged();
     void iconSizesChanged();
+    void iconSizeHintsChanged();
     void spacingChanged();
     void durationChanged();
 
@@ -206,6 +226,7 @@ private:
     qreal m_devicePixelRatio;
 
     QQmlPropertyMap *m_iconSizes;
+    QQmlPropertyMap *m_iconSizeHints;
     static SharedAppFilter *s_sharedAppFilter;
 
     int m_smallSpacing;

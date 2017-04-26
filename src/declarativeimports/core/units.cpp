@@ -72,6 +72,7 @@ Units::Units(QObject *parent)
     }
 
     m_iconSizes = new QQmlPropertyMap(this);
+    m_iconSizeHints = new QQmlPropertyMap(this);
     updateDevicePixelRatio(); // also updates icon sizes
     updateSpacing(); // updates gridUnit and *Spacing properties
 
@@ -135,12 +136,21 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert(QStringLiteral("huge"), devicePixelIconSize(KIconLoader::SizeHuge));
     m_iconSizes->insert(QStringLiteral("enormous"), devicePixelIconSize(KIconLoader::SizeEnormous));
 
+    m_iconSizeHints->insert(QStringLiteral("panel"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Panel)));
+    m_iconSizeHints->insert(QStringLiteral("desktop"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
+
     emit iconSizesChanged();
+    emit iconSizeHintsChanged();
 }
 
 QQmlPropertyMap *Units::iconSizes() const
 {
     return m_iconSizes;
+}
+
+QQmlPropertyMap *Units::iconSizeHints() const
+{
+    return m_iconSizeHints;
 }
 
 int Units::roundToIconSize(int size)
