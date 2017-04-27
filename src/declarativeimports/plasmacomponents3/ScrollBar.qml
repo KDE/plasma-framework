@@ -37,6 +37,7 @@ T.ScrollBar {
         implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
         implicitHeight: implicitWidth
         colorGroup: PlasmaCore.ColorScope.colorGroup
+        visible: control.size < 1.0
 
         prefix: control.horizontal ? "background-horizontal" : "background-vertical"
         opacity: control.hovered ? 1 : 0
@@ -52,6 +53,7 @@ T.ScrollBar {
         implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
         implicitHeight: implicitWidth
         colorGroup: PlasmaCore.ColorScope.colorGroup
+        visible: control.size < 1.0
 
         prefix: control.hovered ? "mouseover-slider" : "slider"
     }
