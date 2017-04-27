@@ -41,5 +41,6 @@ install(FILES plasmacomponents3/BusyIndicator.qml
     plasmacomponents3/TextField.qml
     plasmacomponents3/ToolBar.qml
     plasmacomponents3/ToolButton.qml
+    plasmacomponents3/qmldir
 
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
