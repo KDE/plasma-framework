@@ -21,6 +21,7 @@ endif()
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                add_executable(${_testname} ${_testname}.cpp)
+               target_include_directories(${_testname} PRIVATE "$<BUILD_INTERFACE:$<TARGET_PROPERTY:KF5PlasmaQuick,INCLUDE_DIRECTORIES>>;")
                target_link_libraries(${_testname} Qt5::Qml Qt5::Test
                                      KF5::Plasma KF5::PlasmaQuick
                                      KF5::Archive KF5::CoreAddons
