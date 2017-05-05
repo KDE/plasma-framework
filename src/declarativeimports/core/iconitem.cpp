@@ -176,6 +176,9 @@ void IconItem::setSource(const QVariant &source)
                 //try as a svg icon from plasma theme
                 m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.split('-').first());
                 m_svgIcon->setContainsMultipleImages(true);
+            //invalidate the image path to recalculate it later
+            } else {
+                m_svgIcon->setImagePath(QString());
             }
 
             //success?
@@ -348,12 +351,11 @@ void IconItem::setUsesPlasmaTheme(bool usesPlasmaTheme)
     m_usesPlasmaTheme = usesPlasmaTheme;
 
     // Reload icon with new settings
-    if (m_svgIcon && m_svgIcon->hasElement(m_source.toString())) {
-        const QVariant src = m_source;
-        m_source.clear();
-        setSource(src);
-    }
+    const QVariant src = m_source;
+    m_source.clear();
+    setSource(src);
 
+    update();
     emit usesPlasmaThemeChanged();
 }
 
