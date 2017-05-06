@@ -5,5 +5,5 @@
 
 #First arg should be the directory to check
 
-! find $1 -name '*.qml' | xargs grep 'i18n[^d]*('
+! find "$1" -name '*.qml' -print0 | xargs -0 grep 'i18n[^d]*('
 
