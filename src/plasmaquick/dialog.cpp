@@ -1120,27 +1120,43 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
-        // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
-        // See: https://bugreports.qt.io/browse/QTBUG-26978
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+        auto ee = static_cast<QExposeEvent*>(event);
+
+        if (ee->region().isNull()) {
+            return QQuickWindow::event(event);
+        }
+
+        /*
+         * expose event is the only place where to correctly
+         * register our wayland extensions, as showevent is a bit too
+         * soon and the platform window isn't shown yet
+         * create a shell surface every time the window gets exposed
+         * (only the first expose event, guarded by shelldurface existence)
+         * and tear it down when the window gets hidden
+         * see https://phabricator.kde.org/T6064
+         */
+        if (!d->shellSurface) {
+            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+            d->setupWaylandIntegration();
+            d->updateVisibility(true);
+        }
 #if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
     } else if (event->type() == QEvent::PlatformSurface) {
         const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
 
         if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-            d->setupWaylandIntegration();
-        } else if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceAboutToBeDestroyed) {
-#if HAVE_KWAYLAND
-            delete d->shellSurface;
-            d->shellSurface = nullptr;
-#endif
         }
 #endif
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
+#if HAVE_KWAYLAND
+        delete d->shellSurface;
+        d->shellSurface = nullptr;
+#endif
+
     } else if (event->type() == QEvent::Move) {
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
 #if HAVE_KWAYLAND
