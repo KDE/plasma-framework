@@ -102,15 +102,6 @@ bool ToolTipDialog::event(QEvent *e)
         dismiss();
     }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
-    if (e->type() == QEvent::PlatformSurface) {
-        auto pe = static_cast<QPlatformSurfaceEvent*>(e);
-        if (pe->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-            KWindowSystem::setType(winId(), NET::Tooltip);
-        }
-    }
-#endif
-
     bool ret = Dialog::event(e);
     Qt::WindowFlags flags = Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
     if (KWindowSystem::isPlatformX11()) {
