@@ -290,6 +290,12 @@ void QMenuProxy::rebuildMenu()
             m_menu->addSection(item->text());
         } else {
             m_menu->addAction(item->action());
+            if (item->action()->menu()) {
+                //This ensures existence of the QWindow
+                m_menu->winId();
+                item->action()->menu()->winId();
+                item->action()->menu()->windowHandle()->setTransientParent(m_menu->windowHandle());
+            }
         }
     }
 
@@ -418,6 +424,20 @@ Q_INVOKABLE void QMenuProxy::openRelative()
 
 void QMenuProxy::openInternal(QPoint pos)
 {
+    QQuickItem *parentItem = nullptr;
+
+    if (m_visualParent) {
+        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
+    } else {
+        parentItem = qobject_cast<QQuickItem *>(parent());
+    }
+
+    if (parentItem && parentItem->window()) {
+        //create the QWindow
+        m_menu->winId();
+        m_menu->windowHandle()->setTransientParent(parentItem->window());
+    }
+
     m_menu->popup(pos);
     m_status = DialogStatus::Open;
     emit statusChanged();
