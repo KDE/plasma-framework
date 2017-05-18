@@ -1,0 +1,4 @@
+[General]
+Name=Plasma QML Applet with QML extension
+Comment=A template for a Plasma applet which uses custom API provided by an own QML extension plugin
+Category=Plasma/Plasmoid
