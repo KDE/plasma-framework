@@ -1,5 +1,6 @@
 set(apptemplate_DIRS
     qml-plasmoid
+    qml-plasmoid-with-qml-extension
     cpp-plasmoid
     plasma-wallpaper
 )
