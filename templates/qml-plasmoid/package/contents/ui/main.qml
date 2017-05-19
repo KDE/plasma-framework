@@ -26,10 +26,14 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 Item {
     Plasmoid.fullRepresentation: ColumnLayout {
         anchors.fill: parent
-        PlasmaCore.IconItem {
-            source: "kde"
+        Image {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            fillMode: Image.PreserveAspectFit
+            source: "../images/pairs.svgz"
         }
         PlasmaComponents.Label {
+            Layout.alignment: Qt.AlignCenter
             text: "This is Plasma!"
         }
     }
