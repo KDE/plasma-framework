@@ -21,8 +21,12 @@ include(CMakePackageConfigHelpers)
 include(ECMSetupVersion)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
+include(ECMAddQch)
 include(KDEPackageAppTemplates)
 include(ECMGenerateQmlTypes)
+
+option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
+add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
 ecm_setup_version(PROJECT
                   VARIABLE_PREFIX PLASMA
@@ -146,11 +150,43 @@ if(BUILD_COVERAGE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lgcov")
 endif()
 
+# make plasma_version.h available
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+################# list the subdirectories #################
+if (KF5DocTools_FOUND)
+    add_subdirectory(docs)
+endif()
+add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
+if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
+    ki18n_install(po)
+    kdoctools_install(po)
+endif()
+add_subdirectory(src)
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+add_subdirectory(autotests)
+add_subdirectory(tests)
+add_subdirectory(templates)
+
 ################ create PlasmaConfig.cmake and install it ###########################
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Plasma")
+
+if (BUILD_QCH)
+    ecm_install_qch_export(
+        TARGETS KF5Plasma_QCH
+        FILE KF5PlasmaQchTargets.cmake
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        COMPONENT Devel
+    )
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaQchTargets.cmake\")")
+endif()
 
 configure_package_config_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
@@ -175,27 +211,5 @@ install(EXPORT KF5PlasmaTargets
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel )
-
-# make plasma_version.h available
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-################# list the subdirectories #################
-if (KF5DocTools_FOUND)
-    add_subdirectory(docs)
-endif()
-add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
-if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/po")
-    ki18n_install(po)
-    kdoctools_install(po)
-endif()
-add_subdirectory(src)
-
-if (BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
-
-add_subdirectory(autotests)
-add_subdirectory(tests)
-add_subdirectory(templates)
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
