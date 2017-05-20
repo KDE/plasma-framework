@@ -170,21 +170,28 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
     PREFIX Plasma
 )
 
+set(Plasma_HEADERS
+    ${Plasma_HEADERS}
+    version.h
+)
+
+set(PlasmaScripting_HEADERS
+    scripting/appletscript.h
+    scripting/dataenginescript.h
+    scripting/scriptengine.h
+)
+
 
 install(FILES
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
-        version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma COMPONENT Devel)
 
 install(FILES ${Plasma_CamelCase_HEADERS}
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/Plasma COMPONENT Devel)
 
 
-install(FILES
-    scripting/appletscript.h
-    scripting/dataenginescript.h
-    scripting/scriptengine.h
+install(FILES ${PlasmaScripting_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma/scripting COMPONENT Devel)
 
 install(FILES
@@ -206,3 +213,28 @@ install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTA
 
 install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
+if(BUILD_QCH)
+    ecm_add_qch(
+        KF5Plasma_QCH
+        NAME Plasma
+        BASE_NAME KF5Plasma
+        VERSION ${KF5_VERSION}
+        ORG_DOMAIN org.kde
+        SOURCES # using only public headers, to cover only public API
+            ${Plasma_HEADERS}
+            ${PlasmaScripting_HEADERS}
+            Mainpage.dox
+        MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
+        LINK_QCHS
+            Qt5Gui_QCH
+            KF5Service_QCH
+            KF5Package_QCH
+        BLANK_MACROS
+            PLASMA_EXPORT
+            PLASMA_DEPRECATED
+            PLASMA_DEPRECATED_EXPORT
+        TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
+        COMPONENT Devel
+    )
+endif()
