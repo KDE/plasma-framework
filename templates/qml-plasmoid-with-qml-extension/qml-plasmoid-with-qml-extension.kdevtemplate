@@ -1,4 +1,18 @@
 [General]
 Name=Plasma QML Applet with QML extension
+Name[ca]=Miniaplicació QML del Plasma amb una extensió QML
+Name[ca@valencia]=Miniaplicació QML del Plasma amb una extensió QML
+Name[es]=Miniaplicación en QML para Plasma con extensión QML
+Name[nl]=Plasma QML-applet met QML-extensie
+Name[pt]='Applet' em QML do Plasma com extensão QML
+Name[uk]=Аплет Плазми мовою QML із розширенням QML
+Name[x-test]=xxPlasma QML Applet with QML extensionxx
 Comment=A template for a Plasma applet which uses custom API provided by an own QML extension plugin
+Comment[ca]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
+Comment[ca@valencia]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
+Comment[es]=Una plantilla para una miniaplicación de Plasma que usa la API común proporcionada por un complemento de extensión QML propio
+Comment[nl]=Een sjabloon voor een Plasma-applet die aangepaste API gebruikt geleverd door een eigen QML-extensie-plug-in
+Comment[pt]=Um modelo para uma 'applet' do Plasma que usa uma API personalizada oferecida por um 'plugin' de extensão em QML
+Comment[uk]=Шаблон для аплету Плазми, у якому використовується нетиповий програмний інтерфейс, що надається власним додатком розширення QML
+Comment[x-test]=xxA template for a Plasma applet which uses custom API provided by an own QML extension pluginxx
 Category=Plasma/Plasmoid
