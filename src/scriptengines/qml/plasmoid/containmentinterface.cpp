@@ -481,6 +481,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
                 m_dropJobs[job] = dropJob;
             } else {
                 QMenu *choices = new QMenu(i18n("Content dropped"));
+                if (choices->winId()) {
+                    choices->windowHandle()->setTransientParent(window());
+                }
                 choices->addAction(QIcon::fromTheme(QStringLiteral("process-working")), i18n("Fetching file type..."));
                 choices->popup(window() ? window()->mapToGlobal(QPoint(x, y)) : QPoint(x, y));
 
@@ -521,6 +524,9 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             QMenu *choices = nullptr;
             if (!dropJob) {
                 choices = new QMenu();
+                if (choices->winId()) {
+                    choices->windowHandle()->setTransientParent(window());
+                }
             }
             QList<QAction *> extraActions;
             QHash<QAction *, QString> actionsToPlugins;
@@ -999,6 +1005,9 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     //qDebug() << "Invoking menu for applet" << applet;
 
     QMenu *desktopMenu = new QMenu;
+    if (desktopMenu->winId()) {
+        desktopMenu->windowHandle()->setTransientParent(window());
+    }
     desktopMenu->setAttribute(Qt::WA_DeleteOnClose);
 
     m_contextMenu = desktopMenu;

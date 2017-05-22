@@ -825,6 +825,9 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
             }
 
             QMenu *desktopMenu = new QMenu;
+            if (desktopMenu->winId()) {
+                desktopMenu->windowHandle()->setTransientParent(window());
+            }
             emit applet()->contextualActionsAboutToShow();
             ci->addAppletActions(desktopMenu, applet(), event);
 
