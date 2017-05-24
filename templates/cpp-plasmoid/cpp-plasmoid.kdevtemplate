@@ -38,6 +38,7 @@ Comment[da]=En skabelon til en Plasma-applet skrevet i et hybrid-miks af QML og 
 Comment[en_GB]=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
 Comment[es]=Una plantilla de miniaplicación para Plasma escrita en una mezcla híbrida de QML y C++: una plantilla de miniaplicación para Plasma que muestra una imagen SVG y un texto
 Comment[fi]=QML:n ja C++:n hybridikoosteella kirjoitettu Plasma-sovelmamalli, joka näyttää SVG-kuvan ja tekstin
+Comment[fr]=Un modèle d'applet Plasma écrit dans un mélange hybride de QML et de C++ : un modèle d'applet Plasma qui affiche une image SVG et du texte
 Comment[ia]=Un patrono de Applet de plasma scribite in un mixtura hybride de QML e C++: un patrono de applet de Plasma monstrante  un imagine SVG e un texto
 Comment[it]=Un modello di applet di Plasma scritto in un misto di QML e C++: un modello di applet di Plasma che visualizza un'immagine SVG e un testo
 Comment[ko]=QML과 C++가 섞여 있는 Plasma 애플릿 템플릿: SVG 그림과 텍스트를 표시하는 Plasma 애플릿 템플릿
