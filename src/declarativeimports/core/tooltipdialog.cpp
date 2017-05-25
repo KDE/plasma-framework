@@ -36,12 +36,8 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
       m_interactive(false),
       m_owner(nullptr)
 {
-    Qt::WindowFlags flags = Qt::ToolTip;
-    if (KWindowSystem::isPlatformX11()) {
-        flags = flags | Qt::BypassWindowManagerHint;
-    }
-    setFlags(flags);
     setLocation(Plasma::Types::Floating);
+    setType(Dialog::WindowType::Tooltip);
 
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
