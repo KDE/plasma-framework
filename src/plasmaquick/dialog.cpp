@@ -112,6 +112,11 @@ public:
     void updateMaximumHeight();
 
     /**
+     * Gets the maximum and minimum size hints for the window based on the contents. it doesn't actually resize anything
+     */
+    void getSizeHints(QSize &min, QSize &max) const;
+
+    /**
      * This function is an optimized version of updateMaximumHeight,
      * updateMaximumWidth,updateMinimumWidth and updateMinimumHeight.
      * It should be called when you need to call all 4 of these functions
@@ -292,6 +297,7 @@ void DialogPrivate::updateVisibility(bool visible)
                 }
                 cachedGeometry = QRect();
             }
+
             if (mainItem) {
                 syncToMainItemSize();
             }
@@ -439,15 +445,13 @@ void DialogPrivate::updateMaximumHeight()
     hintsCommitTimer.start();
 }
 
-void DialogPrivate::updateLayoutParameters()
+void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
 {
     if (!componentComplete || !mainItem || !q->isVisible() || !mainItemLayout) {
         return;
     }
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
-
-    mainItem->disconnect(q);
 
     auto margin = frameSvgItem->fixedMargins();
 
@@ -471,8 +475,25 @@ void DialogPrivate::updateLayoutParameters()
         maximumHeight = qMin(q->screen()->availableGeometry().height(), maximumHeight);
     }
 
-    const QSize finalSize(qBound(minimumWidth, q->width(), maximumWidth),
-                          qBound(minimumHeight, q->height(), maximumHeight));
+    min = QSize(minimumWidth, minimumHeight);
+    max = QSize(maximumWidth, maximumHeight);
+}
+
+void DialogPrivate::updateLayoutParameters()
+{
+    if (!componentComplete || !mainItem || !q->isVisible() || !mainItemLayout) {
+        return;
+    }
+
+    mainItem->disconnect(q);
+    auto margin = frameSvgItem->fixedMargins();
+
+    QSize min;
+    QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
+    getSizeHints(min, max);
+
+    const QSize finalSize(qBound(min.width(), q->width(), max.width()),
+                          qBound(min.height(), q->height(), max.height()));
 
     if (visualParent) {
         //it's important here that we're using re->size() as size, we don't want to do recursive resizeEvents
@@ -496,8 +517,8 @@ void DialogPrivate::updateLayoutParameters()
     //FIXME: this seems to interfere with the geometry change that
     //sometimes is still going on, causing flicker (this one is two repositions happening in quick succession).
     //it may have to be delayed further
-    q->setMinimumSize(QSize(minimumWidth, minimumHeight));
-    q->setMaximumSize(QSize(maximumWidth, maximumHeight));
+    q->setMinimumSize(min);
+    q->setMaximumSize(max);
 
     QObject::connect(mainItem, SIGNAL(widthChanged()), q, SLOT(slotMainItemSizeChanged()));
     QObject::connect(mainItem, SIGNAL(heightChanged()), q, SLOT(slotMainItemSizeChanged()));
@@ -607,9 +628,15 @@ void DialogPrivate::syncToMainItemSize()
         syncBorders(q->geometry());
     }
 
-    const QSize s = QSize(mainItem->width(), mainItem->height()) +
+    QSize s = QSize(mainItem->width(), mainItem->height()) +
                     QSize(frameSvgItem->fixedMargins()->left() + frameSvgItem->fixedMargins()->right(),
                           frameSvgItem->fixedMargins()->top() + frameSvgItem->fixedMargins()->bottom());
+
+    QSize min;
+    QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
+    getSizeHints(min, max);
+    s = QSize(qBound(min.width(), s.width(), max.width()),
+              qBound(min.height(), s.height(), max.height()));
 
     q->contentItem()->setSize(s);
 
@@ -621,6 +648,7 @@ void DialogPrivate::syncToMainItemSize()
         if (geom == q->geometry()) {
             return;
         }
+
         q->adjustGeometry(geom);
         // The borders will instantly be updated but the geometry might take a
         // while as sub-classes can reimplement adjustGeometry and animate it.
