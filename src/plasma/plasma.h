@@ -34,7 +34,7 @@ class QAction;
 namespace Plasma
 {
 /**
- * @class Types
+ * @class Types plasma/plasma.h <Plasma/Plasma>
  * @short Enums and constants used in Plasma
  *
  */
