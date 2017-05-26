@@ -40,6 +40,8 @@ class PluginLoaderPrivate;
 // * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
 
 /**
+ * @class PluginLoader plasma/pluginloader.h <Plasma/PluginLoader>
+ *
  * This is an abstract base class which defines an interface to which Plasma's
  * Applet Loading logic can communicate with a parent application. The plugin loader
  * must be set before any plugins are loaded, otherwise (for safety reasons), the
