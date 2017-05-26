@@ -52,7 +52,7 @@ class ConfigCategoryPrivate;
 class ConfigModelPrivate;
 class ConfigCategory;
 
-/*
+/**
  * This model contains all the possible config categories for a dialog,
  * such as categories of the config dialog for an Applet
  * TODO: it should probably become an import instead of a library?

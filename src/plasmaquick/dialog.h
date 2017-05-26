@@ -223,7 +223,7 @@ Q_SIGNALS:
     void windowDeactivated();
 
 protected:
-    /*
+    /**
      * set the dialog position. subclasses may change it. ToolTipDialog adjusts the position in an animated way
      */
     virtual void adjustGeometry(const QRect &geom);
