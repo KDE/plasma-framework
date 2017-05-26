@@ -57,7 +57,7 @@ public:
         ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
         StartupCompletedConstraint = 16, /**< application startup has completed */
         ContextConstraint = 32, /**< the context (e.g. activity) has changed */
-        UiReadyConstraint = 64, /** The ui has been completely loaded (FIXME: merged with StartupCompletedConstraint?) */
+        UiReadyConstraint = 64, /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
         AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
                          ImmutableConstraint
     };
@@ -109,12 +109,12 @@ public:
      * A descriptrive type for QActions, to help categorizing them when presented to the user
      */
     enum ActionType {
-        AddAction = 0,   /**The action will cause something new being created*/
-        ConfigureAction = 100,   /** The Action will make some kind of configuration ui to appear */
-        ControlAction = 200,  /** Generic control, similar to ConfigureAction TODO: better doc */
-        MiscAction = 300,  /** A type of action that doesn't fit in the oher categories */
-        DestructiveAction = 400,  /** A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separed from other actions */
-        UserAction = DestructiveAction + 1000 /** If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
+        AddAction = 0,   /**< The action will cause something new being created*/
+        ConfigureAction = 100,   /**< The Action will make some kind of configuration ui to appear */
+        ControlAction = 200,  /**< Generic control, similar to ConfigureAction TODO: better doc */
+        MiscAction = 300,  /**< A type of action that doesn't fit in the oher categories */
+        DestructiveAction = 400,  /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separed from other actions */
+        UserAction = DestructiveAction + 1000 /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
     };
     Q_ENUM(ActionType)
 
