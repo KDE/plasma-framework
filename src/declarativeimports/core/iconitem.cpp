@@ -26,7 +26,6 @@
 #include <QPixmap>
 #include <QSGSimpleTextureNode>
 #include <QQuickWindow>
-#include <QPixmap>
 
 #include <kiconloader.h>
 #include <kiconeffect.h>
@@ -156,10 +155,10 @@ void IconItem::setSource(const QVariant &source)
 
     if (!sourceString.isEmpty()) {
         //If a url in the form file:// is passed, take the image pointed by that from disk
-        QUrl url(sourceString);
-        if (url.isLocalFile()) {
+        if (sourceString.startsWith(QLatin1String("file:"))) {
+            const QUrl url(sourceString);
             m_icon = QIcon();
-            m_imageIcon = QImage(url.path());
+            m_imageIcon = QImage(url.toLocalFile());
             m_svgIconName.clear();
             delete m_svgIcon;
             m_svgIcon = 0;
@@ -174,7 +173,7 @@ void IconItem::setSource(const QVariant &source)
 
             if (m_usesPlasmaTheme) {
                 //try as a svg icon from plasma theme
-                m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.split('-').first());
+                m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.section('-', 0, 0));
                 m_svgIcon->setContainsMultipleImages(true);
             //invalidate the image path to recalculate it later
             } else {
@@ -562,23 +561,23 @@ void IconItem::loadPixmap()
         return;
     } else if (m_svgIcon) {
         m_svgIcon->resize(size, size);
-        if (m_svgIcon->hasElement(m_svgIconName)) {
+        if (!m_svgIconName.isEmpty() && m_svgIcon->hasElement(m_svgIconName)) {
             result = m_svgIcon->pixmap(m_svgIconName);
         } else if (!m_svgIconName.isEmpty()) {
             const auto *iconTheme = KIconLoader::global()->theme();
-            QString iconPath;
             if (iconTheme) {
-                iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svg"), qMin(width(), height()), KIconLoader::MatchBest);
+                QString iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svg"), size, KIconLoader::MatchBest);
                 if (iconPath.isEmpty()) {
-                    iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svgz"), qMin(width(), height()), KIconLoader::MatchBest);
+                    iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svgz"), size, KIconLoader::MatchBest);
+                }
+
+                if (!iconPath.isEmpty()) {
+                    m_svgIcon->setImagePath(iconPath);
                 }
             } else {
                 qWarning() << "KIconLoader has no theme set";
             }
 
-            if (!iconPath.isEmpty()) {
-                m_svgIcon->setImagePath(iconPath);
-            }
             result = m_svgIcon->pixmap();
         }
     } else if (!m_icon.isNull()) {
