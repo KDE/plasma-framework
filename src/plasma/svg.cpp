@@ -528,10 +528,10 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
         return QRectF();
     }
 
-    QString id = cacheId(elementId);
-
-    if (localRectCache.contains(id)) {
-        return localRectCache.value(id);
+    const QString id = cacheId(elementId);
+    const auto it = localRectCache.constFind(id);
+    if (it != localRectCache.constEnd()) {
+        return *it;
     }
 
     QRectF rect;
