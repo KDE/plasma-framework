@@ -84,6 +84,13 @@ Package::Package(const Package &other)
     PackageStructureWrapper::s_packagesMap[d->internalPackage] = this;
 }
 
+Package::Package(const KPackage::Package &other)
+    : d(new Plasma::PackagePrivate())
+{
+    d->internalPackage = new KPackage::Package(other);
+    PackageStructureWrapper::s_packagesMap[d->internalPackage] = this;
+}
+
 Package::~Package()
 {
     PackageStructureWrapper::s_packagesMap.remove(d->internalPackage);

@@ -26,6 +26,8 @@
 #include <QStandardPaths>
 
 #include <Plasma/PluginLoader>
+#include <Plasma/Package>
+#include <KPackage/Package>
 
 #include <kdeclarative/kdeclarative.h>
 
@@ -34,25 +36,25 @@ namespace PlasmaQuick
 
 class PackageUrlInterceptorPrivate {
 public:
-    PackageUrlInterceptorPrivate(QQmlEngine *engine, const Plasma::Package &p)
+    PackageUrlInterceptorPrivate(QQmlEngine *engine, const KPackage::Package &p)
         : package(p),
           engine(engine)
     {
     }
 
-    Plasma::Package package;
+    KPackage::Package package;
     QStringList allowedPaths;
     QQmlEngine *engine;
 
     //FIXME: those are going to be stuffed here and stay..
     // they should probably be removed when the last applet of that type is removed
-    static QHash<QString, Plasma::Package> s_packages;
+    static QHash<QString, KPackage::Package> s_packages;
 };
 
-QHash<QString, Plasma::Package> PackageUrlInterceptorPrivate::s_packages = QHash<QString, Plasma::Package>();
+QHash<QString, KPackage::Package> PackageUrlInterceptorPrivate::s_packages = QHash<QString, KPackage::Package>();
 
 
-PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p)
+PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p)
     : QQmlAbstractUrlInterceptor(),
       d(new PackageUrlInterceptorPrivate(engine, p))
 {
@@ -83,7 +85,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 {
     //qDebug() << "Intercepted URL:" << path << type;
     QString pkgRoot;
-    Plasma::Package package;
+    KPackage::Package package;
     if (d->package.isValid()) {
         package = d->package;
     } else {
@@ -94,7 +96,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
                 if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
                     package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
                 } else {
-                    package = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"));
+                    package = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet")).kPackage();
                     package.setPath(pkgName);
                     PackageUrlInterceptorPrivate::s_packages[pkgName] = package;
                 }
