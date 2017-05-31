@@ -494,19 +494,19 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
     } else {
         QStringList formats = mimeData->formats();
-        QHash<QString, KPluginInfo> seenPlugins;
+        QHash<QString, KPluginMetaData> seenPlugins;
         QHash<QString, QString> pluginFormats;
 
         foreach (const QString &format, formats) {
-            KPluginInfo::List plugins = Plasma::PluginLoader::self()->listAppletInfoForMimeType(format);
+            const auto plugins = Plasma::PluginLoader::self()->listAppletMetaDataForMimeType(format);
 
-            foreach (const KPluginInfo &plugin, plugins) {
-                if (seenPlugins.contains(plugin.pluginName())) {
+            foreach (const auto &plugin, plugins) {
+                if (seenPlugins.contains(plugin.pluginId())) {
                     continue;
                 }
 
-                seenPlugins.insert(plugin.pluginName(), plugin);
-                pluginFormats.insert(plugin.pluginName(), format);
+                seenPlugins.insert(plugin.pluginId(), plugin);
+                pluginFormats.insert(plugin.pluginId(), format);
             }
         }
         //qDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
@@ -530,10 +530,10 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             }
             QList<QAction *> extraActions;
             QHash<QAction *, QString> actionsToPlugins;
-            foreach (const KPluginInfo &info, seenPlugins) {
+            foreach (const auto &info, seenPlugins) {
                 QAction *action;
-                if (!info.icon().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
+                if (!info.iconName().isEmpty()) {
+                    action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
                 } else {
                     action = new QAction(info.name(), nullptr);
                 }
@@ -541,14 +541,14 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
                 if (choices) {
                     choices->addAction(action);
                 }
-                action->setData(info.pluginName());
+                action->setData(info.pluginId());
                 connect(action, &QAction::triggered, this, [this, x, y, mimeData, action]() {
                     const QString selectedPlugin = action->data().toString();
                     Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
                     setAppletArgs(applet, selectedPlugin, mimeData->data(selectedPlugin));
                 });
 
-                actionsToPlugins.insert(action, info.pluginName());
+                actionsToPlugins.insert(action, info.pluginId());
             }
 
             //if the menu was created by ourselves, delete it
@@ -595,7 +595,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         clearDataForMimeJob(job);
         return;
     }
-    KPluginInfo::List appletList = Plasma::PluginLoader::self()->listAppletInfoForUrl(tjob->url());
+    QList<KPluginMetaData> appletList = Plasma::PluginLoader::self()->listAppletMetaDataForUrl(tjob->url());
     if (mimetype.isEmpty() && appletList.isEmpty()) {
         clearDataForMimeJob(job);
         qDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
@@ -624,17 +624,17 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         qDebug() << "Creating menu for:" << mimetype  << posi;
 
-        appletList << Plasma::PluginLoader::self()->listAppletInfoForMimeType(mimetype);
+        appletList << Plasma::PluginLoader::self()->listAppletMetaDataForMimeType(mimetype);
 
-        KPluginInfo::List wallpaperList;
+        QList<KPluginMetaData> wallpaperList;
 
         if (m_containment->containmentType() != Plasma::Types::PanelContainment
             && m_containment->containmentType() != Plasma::Types::CustomPanelContainment) {
 
             if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
-                wallpaperList << m_wallpaperInterface->package().metadata();
+                wallpaperList << m_wallpaperInterface->kPackage().metadata();
             } else {
-                wallpaperList = WallpaperInterface::listWallpaperInfoForMimetype(mimetype);
+                wallpaperList = WallpaperInterface::listWallpaperMetadataForMimetype(mimetype);
             }
         }
 
@@ -701,11 +701,10 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 action->setSeparator(true);
                 dropActions << action;
             }
-            foreach (const KPluginInfo &info, appletList) {
-                qDebug() << info.name();
+            foreach (const auto &info, appletList) {
                 QAction *action;
-                if (!info.icon().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
+                if (!info.iconName().isEmpty()) {
+                    action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
                 } else {
                     action = new QAction(info.name(), nullptr);
                 }
@@ -714,8 +713,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     choices->addAction(action);
                 }
                 dropActions << action;
-                action->setData(info.pluginName());
-                qDebug() << info.pluginName();
+                action->setData(info.pluginId());
                 const QUrl url = tjob->url();
                 connect(action, &QAction::triggered, this, [this, action, posi, mimetype, url]() {
                     Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(posi, QSize(-1,-1)));
@@ -746,15 +744,15 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     dropActions << action;
                 }
 
-                QMap<QString, KPluginInfo> sorted;
-                foreach (const KPluginInfo &info, appletList) {
+                QMap<QString, KPluginMetaData> sorted;
+                foreach (const auto &info, appletList) {
                     sorted.insert(info.name(), info);
                 }
 
-                foreach (const KPluginInfo &info, wallpaperList) {
+                foreach (const KPluginMetaData &info, wallpaperList) {
                     QAction *action;
-                    if (!info.icon().isEmpty()) {
-                        action = new QAction(QIcon::fromTheme(info.icon()), info.name(), nullptr);
+                    if (!info.iconName().isEmpty()) {
+                        action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
                     } else {
                         action = new QAction(info.name(), nullptr);
                     }
@@ -763,7 +761,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         choices->addAction(action);
                     }
                     dropActions << action;
-                    actionsToWallpapers.insert(action, info.pluginName());
+                    actionsToWallpapers.insert(action, info.pluginId());
                     const QUrl url = tjob->url();
                     connect(action, &QAction::triggered, this, [this, action, url]() {
                         //set wallpapery stuff

@@ -36,6 +36,7 @@
 #include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <packageurlinterceptor.h>
+#include <private/package_p.h>
 
 namespace PlasmaQuick
 {
@@ -63,7 +64,7 @@ void AppletQuickItemPrivate::init()
 
     qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
     if (!qmlObject->engine()->urlInterceptor()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), Plasma::Package());
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
         qmlObject->engine()->setUrlInterceptor(interceptor);
     }
 }
@@ -405,14 +406,14 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     d->init();
 
     if (d->applet) {
-        d->appletPackage = d->applet->package();
+        d->appletPackage = d->applet->kPackage();
 
         if (d->applet->containment()) {
             if (d->applet->containment()->corona()) {
-                d->coronaPackage = d->applet->containment()->corona()->package();
+                d->coronaPackage = d->applet->containment()->corona()->kPackage();
             }
 
-            d->containmentPackage = d->applet->containment()->package();
+            d->containmentPackage = d->applet->containment()->kPackage();
         }
 
         if (d->applet->pluginMetaData().isValid()) {
@@ -494,7 +495,7 @@ void AppletQuickItem::init()
     //are using an old version of the api in which every applet had one engine
     //so initialize a private url interceptor
     if (d->applet->kPackage().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->package());
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->kPackage());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
     }
@@ -598,22 +599,22 @@ void AppletQuickItem::init()
 
 Plasma::Package AppletQuickItem::appletPackage() const
 {
-    return d->appletPackage;
+    return Plasma::Package(d->appletPackage);
 }
 
 void AppletQuickItem::setAppletPackage(const Plasma::Package &package)
 {
-    d->appletPackage = package;
+    d->appletPackage = package.kPackage();
 }
 
 Plasma::Package AppletQuickItem::coronaPackage() const
 {
-    return d->coronaPackage;
+    return Plasma::Package(d->coronaPackage);
 }
 
 void AppletQuickItem::setCoronaPackage(const Plasma::Package &package)
 {
-    d->coronaPackage = package;
+    d->coronaPackage = package.kPackage();
 }
 
 int AppletQuickItem::switchWidth() const

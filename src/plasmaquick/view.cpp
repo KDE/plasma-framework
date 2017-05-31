@@ -188,14 +188,15 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     QObject::connect(screen(), &QScreen::geometryChanged,
                      this, &View::screenGeometryChanged);
 
-    if (corona->kPackage().isValid()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine(), corona->package());
+    const auto pkg = corona->kPackage();
+    if (pkg.isValid()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine(), pkg);
         engine()->setUrlInterceptor(interceptor);
 
         KDeclarative::KDeclarative kdeclarative;
         kdeclarative.setDeclarativeEngine(engine());
         //binds things like kconfig and icons
-        kdeclarative.setTranslationDomain("plasma_shell_" + corona->kPackage().metadata().pluginId());
+        kdeclarative.setTranslationDomain("plasma_shell_" + pkg.metadata().pluginId());
         kdeclarative.setupBindings();
     } else {
         qWarning() << "Invalid home screen package";

@@ -98,6 +98,12 @@ public:
      * Copy constructore
      * @since 4.6
      */
+    PLASMA_DEPRECATED Package(const KPackage::Package &other);
+
+    /**
+     * Copy constructore
+     * @since 4.6
+     */
     PLASMA_DEPRECATED Package(const Package &other);
 
     ~Package();

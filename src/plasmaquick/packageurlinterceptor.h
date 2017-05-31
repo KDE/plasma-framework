@@ -24,7 +24,7 @@
 
 #include <plasmaquick/plasmaquick_export.h>
 
-#include <Plasma/Package>
+#include <KPackage/Package>
 
 //
 //  W A R N I N G
@@ -48,7 +48,7 @@ class PackageUrlInterceptorPrivate;
 class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlInterceptor
 {
 public:
-    PackageUrlInterceptor(QQmlEngine *engine, const Plasma::Package &p);
+    PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p);
     virtual ~PackageUrlInterceptor();
 
     void addAllowedPath(const QString &path);

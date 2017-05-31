@@ -23,7 +23,7 @@
 #include <QQuickItem>
 #include <QQmlEngine>
 
-#include <Plasma/Package>
+#include <KPackage/Package>
 
 class KConfigLoader;
 class KActionCollection;
@@ -56,15 +56,15 @@ public:
     ~WallpaperInterface();
 
     /**
-    * Returns a list of all known wallpapers that can accept the given mimetype
-    * @param mimetype the mimetype to search for
-    * @param formFactor the format of the wallpaper being search for (e.g. desktop)
-    * @return list of wallpapers
-    */
-    static KPluginInfo::List listWallpaperInfoForMimetype(const QString &mimetype,
+     * Returns a list of all known wallpapers that can accept the given mimetype
+     * @param mimetype the mimetype to search for
+     * @param formFactor the format of the wallpaper being search for (e.g. desktop)
+     * @return list of wallpapers
+     */
+    static QList<KPluginMetaData> listWallpaperMetadataForMimetype(const QString &mimetype,
             const QString &formFactor = QString());
 
-    Plasma::Package package() const;
+    KPackage::Package kPackage() const;
 
     QString pluginName() const;
 
@@ -100,7 +100,7 @@ private:
     QString m_wallpaperPlugin;
     ContainmentInterface *m_containmentInterface;
     KDeclarative::QmlObject *m_qmlObject;
-    Plasma::Package m_pkg;
+    KPackage::Package m_pkg;
     KDeclarative::ConfigPropertyMap *m_configuration;
     KConfigLoader *m_configLoader;
     KActionCollection *m_actions;

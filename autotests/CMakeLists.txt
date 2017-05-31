@@ -39,7 +39,6 @@ PLASMA_UNIT_TESTS(
     dialogstatetest
     fallbackpackagetest
     packagestructuretest
-    packageurlinterceptortest
     pluginloadertest
     framesvgtest
     iconitemtest

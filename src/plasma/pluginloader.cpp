@@ -534,16 +534,21 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
     return list;
 }
 
-KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
+QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool
     {
         return KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
     };
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
+    return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
 
-KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
+KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
+{
+    return KPluginInfo::fromMetaData(listAppletMetaDataForMimeType(mimeType).toVector());
+}
+
+QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 {
     QString parentApp;
     QCoreApplication *app = QCoreApplication::instance();
@@ -556,9 +561,9 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
         return (pa.isEmpty() || pa == parentApp) && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
-    QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
+    const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
-    KPluginInfo::List filtered;
+    QList<KPluginMetaData> filtered;
     foreach (const KPluginMetaData &md, allApplets) {
         QStringList urlPatterns = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns"));
         foreach (const QString &glob, urlPatterns) {
@@ -568,12 +573,17 @@ KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 #ifndef NDEBUG
                 // qCDebug(LOG_PLASMA) << md.name() << "matches" << glob << url;
 #endif
-                filtered << KPluginInfo::fromMetaData(md);
+                filtered << md;
             }
         }
     }
 
     return filtered;
+}
+
+KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
+{
+    return KPluginInfo::fromMetaData(listAppletMetaDataForUrl(url).toVector());
 }
 
 QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)

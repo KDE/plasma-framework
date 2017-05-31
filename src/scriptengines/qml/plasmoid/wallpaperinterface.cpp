@@ -68,7 +68,7 @@ WallpaperInterface::~WallpaperInterface()
     }
 }
 
-KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString &mimetype, const QString &formFactor)
+QList<KPluginMetaData> WallpaperInterface::listWallpaperMetadataForMimetype(const QString &mimetype, const QString &formFactor)
 {
     auto filter = [&mimetype, &formFactor](const KPluginMetaData &md) -> bool
     {
@@ -77,10 +77,10 @@ KPluginInfo::List WallpaperInterface::listWallpaperInfoForMimetype(const QString
         }
         return KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
     };
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Wallpaper"), QString(), filter).toVector());
+    return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Wallpaper"), QString(), filter);
 }
 
-Plasma::Package WallpaperInterface::package() const
+KPackage::Package WallpaperInterface::kPackage() const
 {
     return m_pkg;
 }
@@ -133,7 +133,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_actions->clear();
-    m_pkg = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
+    m_pkg = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper")).kPackage();
     m_pkg.setPath(m_wallpaperPlugin);
     if (!m_pkg.isValid()) {
         qWarning() << "Error loading the wallpaper, no valid package loaded";
@@ -151,11 +151,11 @@ void WallpaperInterface::syncWallpaperPackage()
     m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
     m_qmlObject->setSource(QUrl::fromLocalFile(m_pkg.filePath("mainscript")));
 
-    const QString rootPath = m_pkg.metadata().property(QStringLiteral("X-Plasma-RootPath")).toString();
+    const QString rootPath = m_pkg.metadata().value(QStringLiteral("X-Plasma-RootPath"));
     if (!rootPath.isEmpty()) {
         m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + rootPath);
     } else {
-        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + m_pkg.metadata().pluginName());
+        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + m_pkg.metadata().pluginId());
     }
 
     //initialize with our size to avoid as much resize events as possible
@@ -199,7 +199,7 @@ QList<QAction *> WallpaperInterface::contextualActions() const
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 {
-    return KPluginMetaData::readStringList(m_pkg.kPackage().metadata().rawData(), "X-Plasma-DropMimeTypes").contains(mimetype);
+    return KPluginMetaData::readStringList(m_pkg.metadata().rawData(), "X-Plasma-DropMimeTypes").contains(mimetype);
 }
 
 void WallpaperInterface::setUrl(const QUrl &url)

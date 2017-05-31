@@ -123,8 +123,9 @@ void ConfigViewPrivate::init()
         return;
     }
 
-    if (corona->kPackage().isValid()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), corona->package());
+    const auto pkg = corona->kPackage();
+    if (pkg.isValid()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), pkg);
         interceptor->addAllowedPath(applet.data()->kPackage().path());
         q->engine()->setUrlInterceptor(interceptor);
     }

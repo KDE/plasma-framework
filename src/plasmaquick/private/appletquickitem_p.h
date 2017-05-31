@@ -21,8 +21,9 @@
 #define APPLETQUICKITEM_P_H
 
 #include <QQmlComponent>
-#include <qquickitem.h>
+#include <QQuickItem>
 #include <QQmlEngine>
+#include <KPackage/Package>
 
 //
 //  W A R N I N G
@@ -34,6 +35,7 @@
 //
 // We mean it.
 //
+
 
 namespace Plasma
 {
@@ -99,9 +101,9 @@ public:
     Plasma::Applet *applet;
     KDeclarative::QmlObject *qmlObject;
 
-    Plasma::Package appletPackage;
-    Plasma::Package coronaPackage;
-    Plasma::Package containmentPackage;
+    KPackage::Package appletPackage;
+    KPackage::Package coronaPackage;
+    KPackage::Package containmentPackage;
 
     bool expanded : 1;
     bool activationTogglesExpanded : 1;
