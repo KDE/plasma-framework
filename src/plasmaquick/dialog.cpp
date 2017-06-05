@@ -1163,11 +1163,13 @@ bool Dialog::event(QEvent *event)
          * and tear it down when the window gets hidden
          * see https://phabricator.kde.org/T6064
          */
+#if HAVE_KWAYLAND
         if (!d->shellSurface) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
             d->setupWaylandIntegration();
             d->updateVisibility(true);
         }
+#endif
 #if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
     } else if (event->type() == QEvent::PlatformSurface) {
         const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
@@ -1186,9 +1188,9 @@ bool Dialog::event(QEvent *event)
 #endif
 
     } else if (event->type() == QEvent::Move) {
-        QMoveEvent *me = static_cast<QMoveEvent *>(event);
 #if HAVE_KWAYLAND
         if (d->shellSurface) {
+            QMoveEvent *me = static_cast<QMoveEvent *>(event);
             d->shellSurface->setPosition(me->pos());
         }
 #endif
@@ -1396,4 +1398,3 @@ void Dialog::setBackgroundHints(Dialog::BackgroundHints hints)
 }
 
 #include "moc_dialog.cpp"
-
