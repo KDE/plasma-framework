@@ -83,6 +83,14 @@ QtQuickControlStyle.ButtonStyle {
                 colorGroup: controlHovered || !flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
             }
 
+            //NOTE: this is used only to check elements existence
+            PlasmaCore.FrameSvgItem {
+                id: buttonsurfaceChecker
+                visible: false
+                imagePath: "widgets/button"
+                prefix: style.flat ? ["toolbutton-hover", "normal"] : "normal"
+            }
+
             PlasmaComponents.Label {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
@@ -91,7 +99,7 @@ QtQuickControlStyle.ButtonStyle {
                 font: control.font || theme.defaultFont
                 visible: control.text != ""
                 Layout.fillWidth: true
-                color: controlHovered || !flat ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
+                color: (controlHovered || !flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 elide: Text.ElideRight
             }
@@ -113,7 +121,7 @@ QtQuickControlStyle.ButtonStyle {
                         visible: control.menu !== null
                         svg: PlasmaCore.Svg {
                             imagePath: "widgets/arrows"
-                            colorGroup: style.controlHovered || !style.flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
+                            colorGroup: (style.controlHovered || !style.flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
                         }
                         elementId: "down-arrow"
                     }
@@ -223,7 +231,6 @@ QtQuickControlStyle.ButtonStyle {
                     }
                 }
             }
-
 
             //This code is duplicated here and Button and ToolButton
             //maybe we can make an AbstractButton class?
