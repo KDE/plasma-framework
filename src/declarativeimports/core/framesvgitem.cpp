@@ -570,6 +570,9 @@ void FrameSvgItem::applyPrefixes()
 
     if (m_prefixes.isEmpty()) {
         m_frameSvg->setElementPrefix(QString());
+        if (oldPrefix != m_frameSvg->prefix()) {
+            emit usedPrefixChanged();
+        }
         return;
     }
 
