@@ -349,6 +349,11 @@ QVariant FrameSvgItem::prefix() const
     return m_prefixes;
 }
 
+QString FrameSvgItem::usedPrefix() const
+{
+    return m_frameSvg->prefix();
+}
+
 FrameSvgItemMargins *FrameSvgItem::margins() const
 {
     return m_margins;
@@ -561,6 +566,8 @@ void FrameSvgItem::applyPrefixes()
         return;
     }
 
+    const QString oldPrefix = m_frameSvg->prefix();
+
     if (m_prefixes.isEmpty()) {
         m_frameSvg->setElementPrefix(QString());
         return;
@@ -577,6 +584,9 @@ void FrameSvgItem::applyPrefixes()
     if (!found) {
         //this setElementPrefix is done to keep the same behavior as before, when it was a simple string
         m_frameSvg->setElementPrefix(m_prefixes.last());
+    }
+    if (oldPrefix != m_frameSvg->prefix()) {
+        emit usedPrefixChanged();
     }
 }
 

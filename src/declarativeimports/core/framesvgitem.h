@@ -127,6 +127,12 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(QVariant prefix READ prefix WRITE setPrefix NOTIFY prefixChanged)
 
     /**
+     * the actual prefix that was used, if a fallback chain array was set as "prefix"
+     * @since 5.34
+     */
+    Q_PROPERTY(QString usedPrefix READ usedPrefix NOTIFY usedPrefixChanged)
+
+    /**
      * The margins of the frame, read only
      * @see FrameSvgItemMargins
      */
@@ -192,6 +198,8 @@ public:
     void setPrefix(const QVariant &prefix);
     QVariant prefix() const;
 
+    QString usedPrefix() const;
+
     void setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders);
     Plasma::FrameSvg::EnabledBorders enabledBorders() const;
 
@@ -232,6 +240,7 @@ Q_SIGNALS:
     void colorGroupChanged();
     void repaintNeeded();
     void statusChanged();
+    void usedPrefixChanged();
 
 private Q_SLOTS:
     void doUpdate();
