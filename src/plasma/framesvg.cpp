@@ -496,10 +496,9 @@ QPixmap FrameSvgPrivate::alphaMask()
             updateSizes(maskFrame);
         }
 
-       // maskFrame = frame;
+        const QString oldKey = cacheId(maskFrame, maskPrefix);
         maskFrame->enabledBorders = frame->enabledBorders;
         if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
-            const QString oldKey = cacheId(maskFrame, maskPrefix);
             maskFrame->frameSize = frameSize(frame).toSize();
             const QString newKey = cacheId(maskFrame, maskPrefix);
             if (s_sharedFrames[q->theme()->d].contains(oldKey)) {
