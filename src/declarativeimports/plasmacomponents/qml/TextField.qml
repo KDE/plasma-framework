@@ -95,7 +95,7 @@ QtControls.TextField {
             source: __effectiveRevealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "hint" : "visibility") : ""
             height: Math.max(textField.height * 0.8, units.iconSizes.small)
             width: height
-            opacity: (textField.length > 0 && __effectiveRevealPasswordButtonShown && textField.enabled) ? 1 : 0
+            opacity: (__effectiveRevealPasswordButtonShown && textField.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
