@@ -135,6 +135,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     if (graphicObject) {
 //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
+        graphicObject->setFocus(true);
         //by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setProperty("width", q->width());
         graphicObject->setProperty("height", q->height());
