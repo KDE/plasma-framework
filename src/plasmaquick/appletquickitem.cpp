@@ -403,7 +403,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
     : QQuickItem(parent),
       d(new AppletQuickItemPrivate(applet, this))
 {
-    setFlags(QQuickItem::ItemIsFocusScope);
     d->init();
 
     if (d->applet) {
