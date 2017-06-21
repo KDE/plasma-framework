@@ -273,7 +273,6 @@ void DialogPrivate::updateVisibility(bool visible)
     if (mainItem) {
         mainItem->setVisible(visible);
     }
-
     if (visible) {
         if (visualParent && visualParent->window()) {
             q->setTransientParent(visualParent->window());
@@ -303,6 +302,12 @@ void DialogPrivate::updateVisibility(bool visible)
             }
             if (mainItemLayout) {
                 updateLayoutParameters();
+            }
+
+            //if is a wayland window that was hidden, we need
+            //to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
+            if (shellSurface) {
+                shellSurface->setPosition(q->position());
             }
         }
     }
@@ -354,7 +359,7 @@ void DialogPrivate::updateMinimumWidth()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    if (!componentComplete || !q->isVisible()) {
+    if (!componentComplete) {
         return;
     }
 
@@ -380,7 +385,7 @@ void DialogPrivate::updateMinimumHeight()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    if (!componentComplete || !q->isVisible()) {
+    if (!componentComplete) {
         return;
     }
 
@@ -406,7 +411,7 @@ void DialogPrivate::updateMaximumWidth()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    if (!componentComplete || !q->isVisible()) {
+    if (!componentComplete) {
         return;
     }
 
@@ -428,7 +433,7 @@ void DialogPrivate::updateMaximumHeight()
     Q_ASSERT(mainItem);
     Q_ASSERT(mainItemLayout);
 
-    if (!componentComplete || !q->isVisible()) {
+    if (!componentComplete) {
         return;
     }
 
@@ -447,7 +452,7 @@ void DialogPrivate::updateMaximumHeight()
 
 void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
 {
-    if (!componentComplete || !mainItem || !q->isVisible() || !mainItemLayout) {
+    if (!componentComplete || !mainItem || !mainItemLayout) {
         return;
     }
     Q_ASSERT(mainItem);
@@ -481,7 +486,7 @@ void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
 
 void DialogPrivate::updateLayoutParameters()
 {
-    if (!componentComplete || !mainItem || !q->isVisible() || !mainItemLayout) {
+    if (!componentComplete || !mainItem || !mainItemLayout) {
         return;
     }
 
@@ -598,7 +603,7 @@ void DialogPrivate::syncToMainItemSize()
 {
     Q_ASSERT(mainItem);
 
-    if (!componentComplete || !q->isVisible()) {
+    if (!componentComplete) {
         return;
     }
     if (mainItem->width() <= 0 || mainItem->height() <= 0) {
@@ -1037,7 +1042,7 @@ void Dialog::resizeEvent(QResizeEvent* re)
     QQuickWindow::resizeEvent(re);
 
     //A dialog can be resized even if no mainItem has ever been set
-    if (!isVisible() || !d->mainItem) {
+    if (!d->mainItem) {
         return;
     }
 
@@ -1048,6 +1053,7 @@ void Dialog::resizeEvent(QResizeEvent* re)
     auto margin = d->frameSvgItem->fixedMargins();
     d->mainItem->setPosition(QPointF(margin->left(),
                                 margin->top()));
+
     d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(),
             re->size().height() - margin->top() - margin->bottom()));
 
@@ -1164,10 +1170,13 @@ bool Dialog::event(QEvent *event)
          * see https://phabricator.kde.org/T6064
          */
 #if HAVE_KWAYLAND
-        if (!d->shellSurface) {
+        //sometimes non null regions arrive even for non visible windows
+        //for which surface creation would fail
+        if (!d->shellSurface && isVisible()) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
             d->setupWaylandIntegration();
             d->updateVisibility(true);
+            d->updateTheme();
         }
 #endif
 #if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
@@ -1311,14 +1320,6 @@ void Dialog::componentComplete()
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
     }
     d->updateTheme();
-
-    if (d->mainItem) {
-        d->syncToMainItemSize();
-    }
-
-    if (d->mainItemLayout) {
-        d->updateLayoutParameters();
-    }
 }
 
 bool Dialog::hideOnWindowDeactivate() const
@@ -1358,6 +1359,11 @@ void Dialog::setVisible(bool visible)
     if (d->componentComplete) {
         if (visible && d->visualParent) {
             setPosition(popupPosition(d->visualParent, size()));
+        }
+        //setting the main item visible before the show event arrives
+        //makes positioning work better
+        if (visible && d->mainItem) {
+            d->mainItem->setVisible(true);
         }
         QQuickWindow::setVisible(visible);
         if (visible) {
