@@ -157,7 +157,7 @@ void ToolTip::showToolTip()
     dlg->setVisualParent(this);
     dlg->setMainItem(mainItem());
     dlg->setInteractive(m_interactive);
-    dlg->show();
+    dlg->setVisible(true);
 }
 
 QString ToolTip::mainText() const
