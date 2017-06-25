@@ -304,11 +304,13 @@ void DialogPrivate::updateVisibility(bool visible)
                 updateLayoutParameters();
             }
 
+#ifdef HAVE_KWAYLAND
             //if is a wayland window that was hidden, we need
             //to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
             if (shellSurface) {
                 shellSurface->setPosition(q->position());
             }
+#endif
         }
     }
 
