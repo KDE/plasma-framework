@@ -122,7 +122,7 @@ public:
      * This allows the item data to be accessed (but not modified) from JavaScript.
      * It returns an Object with a property for each role.
      *
-     * @arg int i the row we want
+     * @param i the row we want
      */
     Q_INVOKABLE QVariantMap get(int i) const;
 
@@ -222,7 +222,7 @@ public:
      * This allows the item data to be accessed (but not modified) from JavaScript.
      * It returns an Object with a property for each role.
      *
-     * @arg int i the row we want
+     * @param i the row we want
      */
     Q_INVOKABLE QVariantMap get(int i) const;
 
