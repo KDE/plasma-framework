@@ -77,7 +77,7 @@ Item {
         if (event.key == Qt.Key_Right) {
             (priv.mirrored ? priv.goPreviousTab : priv.goNextTab)();
             event.accepted = true
-        } else if (event.key == Qt.Key_Left || priv.mirrored) {
+        } else if (event.key == Qt.Key_Left) {
             (priv.mirrored ? priv.goNextTab : priv.goPreviousTab)();
             event.accepted = true
         }
