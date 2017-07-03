@@ -201,8 +201,8 @@ public:
 
     /**
      * @returns The suggested screen position for the popup
-     * @arg item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
-     * @arg alignment alignment of the popup compared to the item
+     * @param item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
+     * @param size the size that the popup will have, which influences the final position
      */
     virtual QPoint popupPosition(QQuickItem *item, const QSize &size);
 
