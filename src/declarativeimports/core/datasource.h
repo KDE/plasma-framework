@@ -143,7 +143,7 @@ public:
 
     /**
      * @returns a Plasma::Service given a source name
-     * @arg QString source source name we want a service of
+     * @param source source name we want a service of
      */
     Q_INVOKABLE QObject *serviceForSource(const QString &source);
 
