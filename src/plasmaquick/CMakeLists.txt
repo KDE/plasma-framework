@@ -30,8 +30,8 @@ target_link_libraries(KF5PlasmaQuick
         Qt5::Quick
         Qt5::Qml
         KF5::Plasma
-    PRIVATE
         KF5::WindowSystem
+    PRIVATE
         KF5::KIOWidgets
         KF5::I18n
         KF5::IconThemes
