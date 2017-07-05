@@ -23,7 +23,7 @@ MACRO(PLASMA_UNIT_TESTS)
                set(libs Qt5::Qml Qt5::Test KF5::Plasma KF5::PlasmaQuick
                         KF5::Archive KF5::CoreAddons KF5::ConfigGui KF5::I18n
                         KF5::KIOCore KF5::Service KF5::IconThemes
-                        KF5::Declarative KF5::WindowSystem)
+                        KF5::Declarative)
                if(QT_QTOPENGL_FOUND)
                    list(APPEND libs Qt5::OpenGL)
                endif()
