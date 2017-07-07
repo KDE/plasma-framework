@@ -1066,6 +1066,14 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         return;
     }
 
+    // Bug 344205 keep panel visible while menu is open
+    const auto oldStatus = m_containment->status();
+    m_containment->setStatus(Plasma::Types::RequiresAttentionStatus);
+
+    connect(desktopMenu, &QMenu::aboutToHide, m_containment, [this, oldStatus] {
+        m_containment->setStatus(oldStatus);
+    });
+
     KAcceleratorManager::manage(desktopMenu);
 
     desktopMenu->popup(pos);
