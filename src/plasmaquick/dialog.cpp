@@ -209,7 +209,7 @@ void DialogPrivate::syncBorders(const QRect& geom)
 
     //Tooltips always have all the borders
     // floating windows have all borders
-    if ((q->flags() & Qt::ToolTip) != Qt::ToolTip && location != Plasma::Types::Floating) {
+    if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating) {
         if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
@@ -314,8 +314,7 @@ void DialogPrivate::updateVisibility(bool visible)
         }
     }
 
-
-    if (!(q->flags() & Qt::ToolTip) && type != Dialog::Notification) {
+    if (!q->flags().testFlag(Qt::ToolTip) && type != Dialog::Notification) {
         KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
 
         switch (location) {
@@ -675,7 +674,7 @@ void DialogPrivate::slotWindowPositionChanged()
 {
     // Tooltips always have all the borders
     // floating windows have all borders
-    if (!q->isVisible() || (q->flags() & Qt::ToolTip) || location == Plasma::Types::Floating) {
+    if (!q->isVisible() || q->flags().testFlag(Qt::ToolTip) || location == Plasma::Types::Floating) {
         return;
     }
 
