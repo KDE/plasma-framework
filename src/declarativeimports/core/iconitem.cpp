@@ -54,10 +54,10 @@ IconItem::IconItem(QQuickItem *parent)
       m_animValue(0)
 {
     m_animation = new QPropertyAnimation(this);
-    connect(m_animation, SIGNAL(valueChanged(QVariant)),
-            this, SLOT(valueChanged(QVariant)));
-    connect(m_animation, SIGNAL(finished()),
-            this, SLOT(animationFinished()));
+    connect(m_animation, &QPropertyAnimation::valueChanged,
+            this, &IconItem::valueChanged);
+    connect(m_animation, &QPropertyAnimation::finished,
+            this, &IconItem::animationFinished);
     m_animation->setTargetObject(this);
     m_animation->setEasingCurve(QEasingCurve::InOutQuad);
     m_animation->setDuration(250); //FIXME from theme
@@ -73,8 +73,8 @@ IconItem::IconItem(QQuickItem *parent)
     connect(this, &QQuickItem::windowChanged,
             this, &IconItem::schedulePixmapUpdate);
 
-    connect(this, SIGNAL(overlaysChanged()),
-            this, SLOT(schedulePixmapUpdate()));
+    connect(this, &IconItem::overlaysChanged,
+            this, &IconItem::schedulePixmapUpdate);
 
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
