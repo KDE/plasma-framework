@@ -92,9 +92,9 @@ void SvgItem::setSvg(Plasma::Svg *svg)
     updateDevicePixelRatio();
 
     if (svg) {
-        connect(svg, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
-        connect(svg, SIGNAL(repaintNeeded()), this, SIGNAL(naturalSizeChanged()));
-        connect(svg, SIGNAL(sizeChanged()), this, SIGNAL(naturalSizeChanged()));
+        connect(svg, &Svg::repaintNeeded, this, &SvgItem::updateNeeded);
+        connect(svg, &Svg::repaintNeeded, this, &SvgItem::naturalSizeChanged);
+        connect(svg, &Svg::sizeChanged, this, &SvgItem::naturalSizeChanged);
     }
 
     if (implicitWidth() <= 0) {

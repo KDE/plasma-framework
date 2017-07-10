@@ -452,11 +452,11 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
 
         if (!m_actionSignals) {
             m_actionSignals = new QSignalMapper(this);
-            connect(m_actionSignals, SIGNAL(mapped(QString)),
-                    appletScript(), SLOT(executeAction(QString)));
+            connect(m_actionSignals, static_cast<void(QSignalMapper::*)(const QString &)>(&QSignalMapper::mapped),
+                    appletScript(), &DeclarativeAppletScript::executeAction);
         }
 
-        connect(action, SIGNAL(triggered()), m_actionSignals, SLOT(map()));
+        connect(action, &QAction::triggered, m_actionSignals, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
         m_actionSignals->setMapping(action, name);
     }
 

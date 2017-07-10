@@ -263,7 +263,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     m_fixedMargins = new FrameSvgItemMargins(m_frameSvg, this);
     m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
-    connect(m_frameSvg, SIGNAL(repaintNeeded()), this, SLOT(doUpdate()));
+    connect(m_frameSvg, &FrameSvg::repaintNeeded, this, &FrameSvgItem::doUpdate);
     connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
