@@ -3,7 +3,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 Rectangle {
     width: 600
-    height: 200
+    height: 250
     color: "white"
 
     Flow {
@@ -97,6 +97,20 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Limit maximum width"
                 checked: true
+            }
+        }
+
+        PlasmaComponents.Button {
+            text: "Don't crash on null MenuItem action"
+            onClicked: noActionCrashMenu.open(0, height)
+
+            PlasmaComponents.Menu {
+                id: noActionCrashMenu
+
+                PlasmaComponents.MenuItem { text: "This is an item" }
+                PlasmaComponents.MenuItem { text: "Below me should NOT be an empty item"}
+                PlasmaComponents.MenuItem { action: null }
+                PlasmaComponents.MenuItem { text: "I am not empty" }
             }
         }
     }
