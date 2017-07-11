@@ -38,8 +38,24 @@ void QMenuItem::setAction(QAction *a)
     if (m_action != a) {
         if (m_action) {
             disconnect(m_action, 0, this, 0);
+
+            if (m_action->parent() == this) {
+                delete m_action;
+                m_action = nullptr;
+            }
         }
-        m_action = a;
+
+        if (a) {
+            m_action = a;
+        } else {
+            // don't end up with no action, create an invisible one instead
+            m_action = new QAction(this);
+            m_action->setVisible(false);
+        }
+
+        setVisible(m_action->isVisible());
+        setEnabled(m_action->isEnabled());
+
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
         connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
         connect(m_action, SIGNAL(toggled(bool)), this, SIGNAL(toggled(bool)));
