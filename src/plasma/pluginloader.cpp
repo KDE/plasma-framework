@@ -220,13 +220,17 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         allArgs << p.metadata().fileName() << appletId << args;
 
         if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
-            return new Containment(0, allArgs);
+            applet = new Containment(0, allArgs);
         } else {
-            return new Applet(0, allArgs);
+            applet = new Applet(0, allArgs);
         }
 
     }
 
+   const QString localePath = p.filePath("translations");
+    if (!localePath.isEmpty()) {
+        KLocalizedString::addDomainLocaleDir(QByteArray("plasma_applet_") + name.toLatin1(), localePath);
+    }
     return applet;
 }
 
