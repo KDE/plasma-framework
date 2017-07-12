@@ -33,6 +33,7 @@ T.Label {
     //TODO: from theme singleton?
     color: PlasmaCore.ColorScope.textColor
     linkColor: theme.linkColor
+    textFormat: Text.PlainText
 
     opacity: enabled? 1 : 0.6
 
