@@ -38,6 +38,8 @@
 **
 ****************************************************************************/
 
+.pragma library
+
 function rootObject() {
     var next = parent
     while (next && next.parent)
