@@ -19,7 +19,6 @@
 
 import QtQuick 2.1
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private/Config.js" as Config
 
 /**
  * An item delegate for the primitive ListView component.
@@ -117,7 +116,7 @@ Item {
         property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: background
         enabled: false
-        hoverEnabled: Config.mouseOverEnabled
+        hoverEnabled: true
 
         onClicked: listItem.clicked()
         onPressAndHold: listItem.pressAndHold()
