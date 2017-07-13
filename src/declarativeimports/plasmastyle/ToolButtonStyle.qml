@@ -28,6 +28,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "private" as Private
+import "private/Util.js" as Util
 
 QtQuickControlStyle.ButtonStyle {
     id: style
@@ -95,7 +96,8 @@ QtQuickControlStyle.ButtonStyle {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
                 Layout.minimumWidth: implicitWidth
-                text: QtQuickControlsPrivate.StyleHelpers.stylizeMnemonics(control.text)
+                text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
+                textFormat: Text.StyledText
                 font: control.font || theme.defaultFont
                 visible: control.text != ""
                 Layout.fillWidth: true
