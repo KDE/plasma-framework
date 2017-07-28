@@ -39,6 +39,7 @@ import org.kde.plasma.components 2.0
  *
  * See PlasmaComponents Label and primitive QML Text element API for additional
  * properties, methods and signals.
+ * @deprecated use org.kde.Kirigami.Heading instead
  */
 Label {
     id: root

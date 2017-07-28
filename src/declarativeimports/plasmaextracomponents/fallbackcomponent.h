@@ -24,6 +24,10 @@
 #include <QCache>
 #include <QStringList>
 
+/**
+ * Component that loads a qml file based on a chain of different fallback paths
+ * @deprecated this can be done with qmlregistertype on c++ side or a Loader on QML side
+ */
 class FallbackComponent : public QObject
 {
     Q_OBJECT

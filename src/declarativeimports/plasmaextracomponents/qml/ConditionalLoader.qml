@@ -24,6 +24,7 @@ import QtQuick 2.0
  * memory expensive) parts of the user interface load only when a certain
  * condition is satisfied.  For instance the contents of the tabs of a TabBar
  * can be loaded only when they become the current page.
+ * @deprecated use a Loader instead
  */
 FocusScope {
     id: root
