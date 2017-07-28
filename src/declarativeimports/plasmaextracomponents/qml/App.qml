@@ -29,6 +29,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
  * to the device.
  *
  * @remark App is experimental, its API might change.
+ * @deprecated: use org.kde.kirigami ApplicationWindow or QtQuick.Controls 2.0 ApplicationWindow
  *
  * Example usage:
  * @code

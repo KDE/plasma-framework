@@ -27,6 +27,11 @@ namespace Plasma
 class Theme;
 }
 
+//TODO: should be possible to remove without significant breakages as is just an image provider
+/**
+ * image provider for textures used for applications
+ * @deprecated don't use it
+ */
 class AppBackgroundProvider : public QQuickImageProvider
 {
 

@@ -46,6 +46,9 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 import "../components/private/PageStack.js" as Engine
 
+/**
+ * @deprecated use org.kde.kirigami PageRow instead
+ */
 Item {
     id: actualRoot
 

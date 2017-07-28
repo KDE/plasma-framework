@@ -20,7 +20,6 @@
 #include "plasmaextracomponentsplugin.h"
 
 #include "appbackgroundprovider_p.h"
-//#include "resourceinstance.h"
 #include "fallbackcomponent.h"
 
 #include <QtQml>
@@ -38,7 +37,6 @@ void PlasmaExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const cha
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-    //qmlRegisterType<ResourceInstance>(uri, 2, 0, "ResourceInstance");
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }
 
