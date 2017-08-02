@@ -1010,11 +1010,12 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     m_contextMenu = desktopMenu;
 
+    emit m_containment->contextualActionsAboutToShow();
+
     if (applet) {
         emit applet->contextualActionsAboutToShow();
         addAppletActions(desktopMenu, applet, event);
     } else {
-        emit m_containment->contextualActionsAboutToShow();
         addContainmentActions(desktopMenu, event);
     }
 
