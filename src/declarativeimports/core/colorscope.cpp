@@ -23,6 +23,7 @@
 
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QColor>
 
 QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, ColorScope *>();
 
