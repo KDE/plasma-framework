@@ -1042,6 +1042,16 @@ void Dialog::resizeEvent(QResizeEvent* re)
 {
     QQuickWindow::resizeEvent(re);
 
+    //it's a spontaneous event generated in qguiapplication.cpp QGuiApplicationPrivate::processWindowScreenChangedEvent
+    //QWindowSystemInterfacePrivate::GeometryChangeEvent gce(window, QHighDpi::fromNativePixels(window->handle()->geometry(), window), QRect());
+    //This happens before the first show event when there is more than one screen,
+    //right after the window has been created, the window is still 0x0,
+    //but the resize event gets delivered with 0x0 again and executed with all the bad side effects
+    //this seems to happen for every window when there are multiple screens, so something we have probably to watch out for in the future
+    if (re->size().isEmpty() || re->size() != re->oldSize()) {
+        return;
+    }
+
     //A dialog can be resized even if no mainItem has ever been set
     if (!d->mainItem) {
         return;
