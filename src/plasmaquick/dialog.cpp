@@ -1048,7 +1048,7 @@ void Dialog::resizeEvent(QResizeEvent* re)
     //right after the window has been created, the window is still 0x0,
     //but the resize event gets delivered with 0x0 again and executed with all the bad side effects
     //this seems to happen for every window when there are multiple screens, so something we have probably to watch out for in the future
-    if (re->size().isEmpty() || re->size() != re->oldSize()) {
+    if (re->size().isEmpty() || re->size() == re->oldSize()) {
         return;
     }
 
