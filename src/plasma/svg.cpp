@@ -188,11 +188,11 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         actualPath = actualPath.mid(7);
     }
 
-    bool isThemed = !QDir::isAbsolutePath(actualPath);
+    bool isThemed = !actualPath.isEmpty() && !QDir::isAbsolutePath(actualPath);
     bool inIconTheme = false;
 
     //an absolute path.. let's try if this actually an *icon* theme
-    if (!isThemed) {
+    if (!isThemed && !actualPath.isEmpty()) {
         const auto *iconTheme = KIconLoader::global()->theme();
         isThemed = inIconTheme = iconTheme && actualPath.startsWith(iconTheme->dir());
     }
@@ -222,7 +222,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     localRectCache.clear();
     elementsWithSizeHints.clear();
     bool oldFromCurrentTheme = fromCurrentTheme;
-    fromCurrentTheme = actualTheme()->currentThemeHasImage(imagePath);
+    fromCurrentTheme = !inIconTheme && isThemed && actualTheme()->currentThemeHasImage(imagePath);
 
     if (fromCurrentTheme != oldFromCurrentTheme) {
         emit q->fromCurrentThemeChanged(fromCurrentTheme);
