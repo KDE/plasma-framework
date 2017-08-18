@@ -31,7 +31,6 @@
 #include <QQmlExpression>
 #include <QQmlContext>
 #include <QQmlProperty>
-#include <QSignalMapper>
 
 #include <Plasma/PluginLoader>
 #include <kpackage/packageloader.h>
@@ -43,8 +42,7 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
       m_containmentInterface(parent),
       m_qmlObject(0),
       m_configuration(0),
-      m_configLoader(0),
-      m_actionSignals(0)
+      m_configLoader(0)
 {
     m_actions = new KActionCollection(this);
 
@@ -220,13 +218,9 @@ void WallpaperInterface::setAction(const QString &name, const QString &text, con
         action = new QAction(text, this);
         m_actions->addAction(name, action);
 
-        if (!m_actionSignals) {
-            m_actionSignals = new QSignalMapper(this);
-            connect(m_actionSignals, static_cast<void(QSignalMapper::*)(const QString &)>(&QSignalMapper::mapped),
-                    this, &WallpaperInterface::executeAction);
-        }
-        connect(action, &QAction::triggered, m_actionSignals, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        m_actionSignals->setMapping(action, name);
+        connect(action, &QAction::triggered, this, [this, name] {
+            executeAction(name);
+        });
     }
 
     if (!icon.isEmpty()) {
@@ -246,11 +240,7 @@ void WallpaperInterface::removeAction(const QString &name)
     QAction *action = m_actions->action(name);
 
     if (action) {
-        if (m_actionSignals) {
-            m_actionSignals->removeMappings(action);
-        }
         m_actions->removeAction(action);
-
         delete action;
     }
     setProperty("contextualActions", QVariant::fromValue(contextualActions()));

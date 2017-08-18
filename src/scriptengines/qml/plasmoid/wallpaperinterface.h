@@ -29,7 +29,6 @@ class KConfigLoader;
 class KActionCollection;
 
 class ContainmentInterface;
-class QSignalMapper;
 
 namespace KDeclarative
 {
@@ -104,7 +103,6 @@ private:
     KDeclarative::ConfigPropertyMap *m_configuration;
     KConfigLoader *m_configLoader;
     KActionCollection *m_actions;
-    QSignalMapper *m_actionSignals;
 
     static QHash<QObject *, WallpaperInterface *> s_rootObjects;
 };
