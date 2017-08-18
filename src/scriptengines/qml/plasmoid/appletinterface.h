@@ -33,7 +33,6 @@
 
 class QAction;
 class QmlAppletScript;
-class QSignalMapper;
 class QSizeF;
 
 namespace KDeclarative
@@ -454,7 +453,6 @@ private Q_SLOTS:
 private:
 
     QStringList m_actions;
-    QSignalMapper *m_actionSignals;
 
     KDeclarative::ConfigPropertyMap *m_configuration;
     DeclarativeAppletScript *m_appletScriptEngine;

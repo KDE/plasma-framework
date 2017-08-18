@@ -24,7 +24,6 @@
 #include <QDir>
 #include <QFile>
 #include <QIcon>
-#include <QSignalMapper>
 #include <QTimer>
 
 #include <kactioncollection.h>
@@ -49,7 +48,6 @@ Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
-      m_actionSignals(0),
       m_configuration(0),
       m_appletScriptEngine(script),
       m_toolTipTextFormat(0),
@@ -450,14 +448,9 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
         Q_ASSERT(!m_actions.contains(name));
         m_actions.append(name);
 
-        if (!m_actionSignals) {
-            m_actionSignals = new QSignalMapper(this);
-            connect(m_actionSignals, static_cast<void(QSignalMapper::*)(const QString &)>(&QSignalMapper::mapped),
-                    appletScript(), &DeclarativeAppletScript::executeAction);
-        }
-
-        connect(action, &QAction::triggered, m_actionSignals, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        m_actionSignals->setMapping(action, name);
+        connect(action, &QAction::triggered, this, [this, name] {
+            executeAction(name);
+        });
     }
 
     if (!icon.isEmpty()) {
@@ -475,15 +468,7 @@ void AppletInterface::removeAction(const QString &name)
 {
     Plasma::Applet *a = applet();
     QAction *action = a->actions()->action(name);
-
-    if (action) {
-        if (m_actionSignals) {
-            m_actionSignals->removeMappings(action);
-        }
-
-        delete action;
-    }
-
+    delete action;
     m_actions.removeAll(name);
 }
 
