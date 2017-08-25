@@ -55,6 +55,9 @@ public:
     void removeAllowedPath(const QString &path);
     QStringList allowedPaths() const;
 
+    bool forcePlasmaStyle() const;
+    void setForcePlasmaStyle(bool force);
+
     QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type) Q_DECL_OVERRIDE;
 
     static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)

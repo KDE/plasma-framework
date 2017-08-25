@@ -191,6 +191,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
     const auto pkg = corona->kPackage();
     if (pkg.isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine(), pkg);
+        interceptor->setForcePlasmaStyle(true);
         engine()->setUrlInterceptor(interceptor);
 
         KDeclarative::KDeclarative kdeclarative;

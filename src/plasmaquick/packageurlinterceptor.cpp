@@ -45,6 +45,7 @@ public:
     KPackage::Package package;
     QStringList allowedPaths;
     QQmlEngine *engine;
+    bool forcePlasmaStyle = false;
 
     //FIXME: those are going to be stuffed here and stay..
     // they should probably be removed when the last applet of that type is removed
@@ -81,9 +82,23 @@ QStringList PackageUrlInterceptor::allowedPaths() const
     return d->allowedPaths;
 }
 
+bool PackageUrlInterceptor::forcePlasmaStyle() const
+{
+    return d->forcePlasmaStyle;
+}
+
+void PackageUrlInterceptor::setForcePlasmaStyle(bool force)
+{
+    d->forcePlasmaStyle = force;
+}
+
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
     //qDebug() << "Intercepted URL:" << path << type;
+
+    if (d->forcePlasmaStyle && path.path().contains("Controls.2/org.kde.desktop/")) {
+        return QUrl::fromLocalFile(path.path().replace(QLatin1String("Controls.2/org.kde.desktop/"), QLatin1String("Controls.2/Plasma/")));
+    }
     QString pkgRoot;
     KPackage::Package package;
     if (d->package.isValid()) {
