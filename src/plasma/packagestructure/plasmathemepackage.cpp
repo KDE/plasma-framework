@@ -91,39 +91,6 @@ public:
         package->addFileDefinition("opaque/widgets/tooltip", QStringLiteral("opaque/widgets/tooltip.svgz"),
                                 i18n("Opaque background image for tooltips"));
 
-        package->addDirectoryDefinition("locolor/dialogs", QStringLiteral("locolor/dialogs/"),
-                                        i18n("Low color images for dialogs"));
-        package->addFileDefinition("locolor/dialogs/background", QStringLiteral("locolor/dialogs/background.svg"),
-                                i18n("Low color generic dialog background"));
-        package->addFileDefinition("locolor/dialogs/background", QStringLiteral("locolor/dialogs/background.svgz"),
-                                i18n("Low color generic dialog background"));
-        package->addFileDefinition("locolor/dialogs/shutdowndialog", QStringLiteral("locolor/dialogs/shutdowndialog.svg"),
-                                i18n("Low color theme for the logout dialog"));
-        package->addFileDefinition("locolor/dialogs/shutdowndialog", QStringLiteral("locolor/dialogs/shutdowndialog.svgz"),
-                                i18n("Low color theme for the logout dialog"));
-
-        package->addDirectoryDefinition("locolor/widgets", QStringLiteral("locolor/widgets/"), i18n("Images for widgets"));
-        package->addFileDefinition("locolor/widgets/background", QStringLiteral("locolor/widgets/background.svg"),
-                                i18n("Low color background image for widgets"));
-        package->addFileDefinition("locolor/widgets/background", QStringLiteral("locolor/widgets/background.svgz"),
-                                i18n("Low color background image for widgets"));
-        package->addFileDefinition("locolor/widgets/clock", QStringLiteral("locolor/widgets/clock.svg"),
-                                i18n("Low color analog clock face"));
-        package->addFileDefinition("locolor/widgets/clock", QStringLiteral("locolor/widgets/clock.svgz"),
-                                i18n("Low color analog clock face"));
-        package->addFileDefinition("locolor/widgets/panel-background", QStringLiteral("locolor/widgets/panel-background.svg"),
-                                i18n("Low color background image for panels"));
-        package->addFileDefinition("locolor/widgets/panel-background", QStringLiteral("locolor/widgets/panel-background.svgz"),
-                                i18n("Low color background image for panels"));
-        package->addFileDefinition("locolor/widgets/plot-background", QStringLiteral("locolor/widgets/plot-background.svg"),
-                                i18n("Low color background for graphing widgets"));
-        package->addFileDefinition("locolor/widgets/plot-background", QStringLiteral("locolor/widgets/plot-background.svgz"),
-                                i18n("Low color background for graphing widgets"));
-        package->addFileDefinition("locolor/widgets/tooltip", QStringLiteral("locolor/widgets/tooltip.svg"),
-                                i18n("Low color background image for tooltips"));
-        package->addFileDefinition("locolor/widgets/tooltip", QStringLiteral("locolor/widgets/tooltip.svgz"),
-                                i18n("Low color background image for tooltips"));
-
         package->addFileDefinition("colors", QStringLiteral("colors"), i18n("KColorScheme configuration file"));
 
         QStringList mimetypes;
