@@ -65,7 +65,6 @@ ThemePrivate::ThemePrivate(QObject *parent)
       pixmapCache(0),
       cacheSize(0),
       cachesToDiscard(NoCache),
-      locolor(false),
       compositingActive(KWindowSystem::self()->compositingActive()),
       backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast)),
       isDefault(true),
@@ -316,9 +315,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
     }
 
     QString type;
-    if (locolor) {
-        type = QStringLiteral("/locolor/");
-    } else if (!compositingActive) {
+    if (!compositingActive) {
         type = QStringLiteral("/opaque/");
     } else if (backgroundContrastActive) {
         type = QStringLiteral("/translucent/");

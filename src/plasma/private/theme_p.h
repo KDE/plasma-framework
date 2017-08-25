@@ -144,7 +144,6 @@ public:
     QString themeMetadataPath;
     QString iconThemeMetadataPath;
 
-    bool locolor : 1;
     bool compositingActive : 1;
     bool backgroundContrastActive : 1;
     bool isDefault : 1;
