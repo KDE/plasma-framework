@@ -173,7 +173,7 @@ void Service::setOperationsScheme(QIODevice *xml)
     //  KSharedConfig. We need a config object for the config loader even
     //  though we dont' actually want to use any config parts from it,
     //  we just want to share the KConfigLoader XML parsing.
-    KSharedConfigPtr config = KSharedConfig::openConfig(QStringLiteral("/dev/null"));
+    KSharedConfigPtr config = KSharedConfig::openConfig(QString(), KConfig::SimpleConfig);
     KConfigLoader loader(config, xml);
 
     foreach (const QString &group, loader.groupList()) {
