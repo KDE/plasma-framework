@@ -676,7 +676,9 @@ QObject *AppletQuickItem::testItem()
         }
 
         d->testItem = d->qmlObject->createObjectFromSource(url, QtQml::qmlContext(rootItem()));
-        d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject*>(this));
+        if (d->testItem) {
+            d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject*>(this));
+        }
     }
 
     return d->testItem;
