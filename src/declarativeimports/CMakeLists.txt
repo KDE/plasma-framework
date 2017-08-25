@@ -44,3 +44,4 @@ install(FILES plasmacomponents3/BusyIndicator.qml
     plasmacomponents3/qmldir
 
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
+install(DIRECTORY plasmacomponents3/private DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
