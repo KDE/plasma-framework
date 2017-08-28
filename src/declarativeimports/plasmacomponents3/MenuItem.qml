@@ -22,7 +22,7 @@ import QtQuick.Templates 2.0 as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 T.MenuItem {
-    id: control
+    id: controlRoot
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
@@ -39,24 +39,24 @@ T.MenuItem {
     hoverEnabled: true
 
     contentItem: Label {
-        leftPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
-        rightPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
+        leftPadding: !controlRoot.mirrored ? (controlRoot.indicator ? controlRoot.indicator.width : 0) + controlRoot.spacing : 0
+        rightPadding: controlRoot.mirrored ? (controlRoot.indicator ? controlRoot.indicator.width : 0) + controlRoot.spacing : 0
 
-        text: control.text
-        font: control.font
+        text: controlRoot.text
+        font: controlRoot.font
         color: theme.textColor
         elide: Text.ElideRight
-        visible: control.text
+        visible: controlRoot.text
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
     }
 
     indicator: CheckIndicator {
-        x: control.mirrored ? control.width - width - control.rightPadding : control.leftPadding
-        y: control.topPadding + (control.availableHeight - height) / 2
+        x: controlRoot.mirrored ? controlRoot.width - width - controlRoot.rightPadding : controlRoot.leftPadding
+        y: controlRoot.topPadding + (controlRoot.availableHeight - height) / 2
 
-        visible: control.checkable
-        checkState: control.checked ? Qt.Checked : 0
+        visible: controlRoot.checkable
+        control: controlRoot
     }
 
     background: Item {
@@ -68,7 +68,7 @@ T.MenuItem {
             prefix: "hover"
             colorGroup: PlasmaCore.ColorScope.colorGroup
             anchors.fill: parent
-            opacity: control.hovered && !control.pressed ? 1 : 0
+            opacity: controlRoot.hovered && !controlRoot.pressed ? 1 : 0
             Behavior on opacity {
                 NumberAnimation {
                     duration: units.longDuration
