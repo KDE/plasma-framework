@@ -37,13 +37,17 @@ PlasmaCore.FrameSvgItem {
         }
         elementId: "checkbox"
         opacity: {
-            switch (control.checkState) {
-            case Qt.Checked:
-                return 1;
-            case Qt.PartiallyChecked:
-                return 0.5;
-            default:
-                return 0;
+            if (typeof control.checkState !== "undefined") {
+                switch (control.checkState) {
+                case Qt.Checked:
+                    return 1;
+                case Qt.PartiallyChecked:
+                    return 0.5;
+                default:
+                    return 0;
+                }
+            } else {
+                return control.checked ? 1 : 0;
             }
         }
         anchors {
