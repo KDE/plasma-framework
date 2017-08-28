@@ -279,7 +279,7 @@ void AppletPrivate::askDestroy()
 
         if (!q->isContainment()) {
             deleteNotification->setTitle(i18n("Widget Removed"));
-            deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title()));
+            deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title().toHtmlEscaped()));
         } else if (asContainment && (asContainment->containmentType() == Types::PanelContainment || asContainment->containmentType() == Types::CustomPanelContainment)) {
             deleteNotification->setTitle(i18n("Panel Removed"));
             deleteNotification->setText(i18n("A panel has been removed."));
