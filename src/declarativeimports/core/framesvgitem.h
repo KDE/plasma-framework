@@ -203,8 +203,8 @@ public:
     void setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders);
     Plasma::FrameSvg::EnabledBorders enabledBorders() const;
 
-    FrameSvgItemMargins *margins() const;
-    FrameSvgItemMargins *fixedMargins() const;
+    FrameSvgItemMargins *margins();
+    FrameSvgItemMargins *fixedMargins();
 
     void setColorGroup(Plasma::Theme::ColorGroup group);
     Plasma::Theme::ColorGroup colorGroup() const;
