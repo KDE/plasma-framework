@@ -254,14 +254,13 @@ bool FrameSvgItemMargins::isFixed() const
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
+      m_margins(nullptr),
+      m_fixedMargins(nullptr),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_fastPath(true)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
-    m_margins = new FrameSvgItemMargins(m_frameSvg, this);
-    m_fixedMargins = new FrameSvgItemMargins(m_frameSvg, this);
-    m_fixedMargins->setFixed(true);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, &FrameSvg::repaintNeeded, this, &FrameSvgItem::doUpdate);
     connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
@@ -291,8 +290,12 @@ void FrameSvgItem::setImagePath(const QString &path)
     }
 
     emit imagePathChanged();
-    m_margins->update();
-    m_fixedMargins->update();
+    if (m_margins) {
+        m_margins->update();
+    }
+    if (m_fixedMargins) {
+        m_fixedMargins->update();
+    }
 
     if (isComponentComplete()) {
         applyPrefixes();
@@ -334,8 +337,12 @@ void FrameSvgItem::setPrefix(const QVariant &prefixes)
     }
 
     emit prefixChanged();
-    m_margins->update();
-    m_fixedMargins->update();
+    if (m_margins) {
+        m_margins->update();
+    }
+    if (m_fixedMargins) {
+        m_fixedMargins->update();
+    }
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
@@ -354,13 +361,20 @@ QString FrameSvgItem::usedPrefix() const
     return m_frameSvg->prefix();
 }
 
-FrameSvgItemMargins *FrameSvgItem::margins() const
+FrameSvgItemMargins *FrameSvgItem::margins()
 {
+    if (!m_margins) {
+        m_margins = new FrameSvgItemMargins(m_frameSvg, this);
+    }
     return m_margins;
 }
 
-FrameSvgItemMargins *FrameSvgItem::fixedMargins() const
+FrameSvgItemMargins *FrameSvgItem::fixedMargins()
 {
+    if (!m_fixedMargins) {
+        m_fixedMargins = new FrameSvgItemMargins(m_frameSvg, this);
+        m_fixedMargins->setFixed(true);
+    }
     return m_fixedMargins;
 }
 
@@ -404,7 +418,9 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
     m_textureChanged = true;
-    m_margins->update();
+    if (m_margins) {
+        m_margins->update();
+    }
     update();
 }
 
@@ -449,8 +465,12 @@ void FrameSvgItem::doUpdate()
     m_textureChanged = true;
 
     update();
-    m_margins->update();
-    m_fixedMargins->update();
+    if (m_margins) {
+        m_margins->update();
+    }
+    if (m_fixedMargins) {
+        m_fixedMargins->update();
+    }
     emit repaintNeeded();
 }
 
