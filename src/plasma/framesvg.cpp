@@ -323,7 +323,7 @@ QRegion FrameSvg::mask() const
     QRegion result;
 
     if (!obj) {
-        obj = new QRegion(QBitmap(d->alphaMask().alphaChannel().createMaskFromColor(Qt::black)));
+        obj = new QRegion(QBitmap(d->alphaMask().mask()));
         result = *obj;
         d->frame->cachedMasks.insert(id, obj);
     }
