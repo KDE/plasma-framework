@@ -175,13 +175,10 @@ void IconItem::setSource(const QVariant &source)
                 //try as a svg icon from plasma theme
                 m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.section('-', 0, 0));
                 m_svgIcon->setContainsMultipleImages(true);
-            //invalidate the image path to recalculate it later
-            } else {
-                m_svgIcon->setImagePath(QString());
             }
 
             //success?
-            if (m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
+            if (m_usesPlasmaTheme && m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
                 m_svgIconName = sourceString;
                 //ok, svg not available from the plasma theme
