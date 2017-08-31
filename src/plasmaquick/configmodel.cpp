@@ -57,6 +57,8 @@ public:
     QHash<QString, KQuickAddons::ConfigModule *> kcms;
 
     void appendCategory(ConfigCategory *c);
+    void removeCategory(ConfigCategory *c);
+    void removeCategoryAt(int index);
     void clear();
     QVariant get(int row) const;
 
@@ -151,6 +153,31 @@ void ConfigModelPrivate::appendCategory(ConfigCategory *c)
     QObject::connect(c, &ConfigCategory::visibleChanged, q, emitChange);
 
     q->endInsertRows();
+    emit q->countChanged();
+}
+
+void ConfigModelPrivate::removeCategory(ConfigCategory *c)
+{
+    const int index = categories.indexOf(c);
+    if (index > -1) {
+        removeCategoryAt(index);
+    }
+}
+
+void ConfigModelPrivate::removeCategoryAt(int index)
+{
+    if (index < 0 || index >= categories.count()) {
+        return;
+    }
+
+    q->beginRemoveRows(QModelIndex(), index, index);
+
+    ConfigCategory *c = categories.takeAt(index);
+    if (c->parent() == q) {
+        c->deleteLater();
+    }
+
+    q->endRemoveRows();
     emit q->countChanged();
 }
 
@@ -285,6 +312,21 @@ void ConfigModel::appendCategory(const QString &iconName, const QString &name,
     cat->setPluginName(pluginName);
     cat->setVisible(visible);
     d->appendCategory(cat);
+}
+
+void ConfigModel::appendCategory(ConfigCategory *category)
+{
+    d->appendCategory(category);
+}
+
+void ConfigModel::removeCategory(ConfigCategory *category)
+{
+    d->removeCategory(category);
+}
+
+void ConfigModel::removeCategoryAt(int index)
+{
+    d->removeCategoryAt(index);
 }
 
 void ConfigModel::clear()
