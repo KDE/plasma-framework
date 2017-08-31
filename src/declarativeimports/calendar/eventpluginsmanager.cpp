@@ -41,6 +41,7 @@ public:
         m_roles = QAbstractListModel::roleNames();
         m_roles.insert(Qt::EditRole, QByteArrayLiteral("checked"));
         m_roles.insert(Qt::UserRole, QByteArrayLiteral("configUi"));
+        m_roles.insert(Qt::UserRole + 1, QByteArrayLiteral("pluginPath"));
     };
 
     // make these two available to the manager
@@ -90,6 +91,8 @@ public:
                 const QString qmlFilePath = metadata.configUi;
                 return QString(pathRef % '/' % qmlFilePath);
             }
+            case Qt::UserRole + 1:
+                return currentPlugin;
             case Qt::EditRole:
                 return m_manager->m_enabledPlugins.contains(currentPlugin);
         }
