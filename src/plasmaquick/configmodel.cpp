@@ -135,6 +135,10 @@ void ConfigModelPrivate::clear()
 
 void ConfigModelPrivate::appendCategory(ConfigCategory *c)
 {
+    if (!c) {
+        return;
+    }
+
     q->beginInsertRows(QModelIndex(), categories.size(), categories.size());
     categories.append(c);
 
