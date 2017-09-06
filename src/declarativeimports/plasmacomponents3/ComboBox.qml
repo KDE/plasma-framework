@@ -65,6 +65,7 @@ T.ComboBox {
         text: control.displayText
         font: control.font
         color: theme.buttonTextColor
+        horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
@@ -94,6 +95,7 @@ T.ComboBox {
     }
 
     popup: T.Popup {
+        x: control.mirrored ? control.width - width : 0
         y: control.height
         width: Math.max(control.width, 150)
         implicitHeight: contentItem.implicitHeight
@@ -119,7 +121,7 @@ T.ComboBox {
             color: theme.viewBackgroundColor
             border.color: Qt.rgba(theme.textColor.r, theme.textColor.g, theme.textColor.b, 0.3)
             layer.enabled: true
-            
+
             layer.effect: DropShadow {
                 transparentBorder: true
                 radius: 4
