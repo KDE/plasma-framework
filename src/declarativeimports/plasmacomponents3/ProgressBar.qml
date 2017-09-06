@@ -30,10 +30,11 @@ T.ProgressBar {
     hoverEnabled: true
 
     contentItem: Item {
+        scale: control.mirrored ? -1 : 1
         PlasmaCore.FrameSvgItem {
             id: indicator
             height: parent.height
-            width: control.indeterminate ? units.gridUnit * 2 : parent.width * control.visualPosition
+            width: control.indeterminate ? units.gridUnit * 2 : parent.width * control.position
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup

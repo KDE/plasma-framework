@@ -95,6 +95,7 @@ T.RangeSlider {
         width: horizontal ? control.availableWidth : implicitWidth
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent
+        scale: horizontal && control.mirrored ? -1 : 1
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"

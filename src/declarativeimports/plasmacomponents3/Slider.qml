@@ -73,6 +73,7 @@ T.Slider {
         width: horizontal ? control.availableWidth : implicitWidth
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent
+        scale: horizontal && control.mirrored ? -1 : 1
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"
@@ -82,7 +83,7 @@ T.Slider {
             width: parent.horizontal ? control.position * parent.width : parent.width
             height: parent.horizontal ? parent.height : control.position * parent.height
         }
-        
+
         Repeater {
             id: repeater
             model: control.stepSize > 0 ? 1 + (control.to - control.from) / control.stepSize : 0
