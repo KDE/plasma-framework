@@ -92,6 +92,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
     // HACK make properties like "opacity" work that are in REVISION 1 of QWindow
     qmlRegisterRevision<QWindow, 1>(uri, 2, 0);
+    qmlRegisterRevision<QQuickItem, 1>(uri, 2, 0);
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
     qmlRegisterInterface<Plasma::Service>("Service");
