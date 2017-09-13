@@ -36,6 +36,7 @@ QtQuickControls.ScrollView {
 
     style: Styles.ScrollViewStyle{}
     frameVisible: true
+    activeFocusOnTab: false
 
     //START HACK
     //The following is a workaround for QTBUG-17051
