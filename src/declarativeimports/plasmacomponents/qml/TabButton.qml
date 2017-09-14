@@ -161,6 +161,7 @@ Item {
             id: label
 
             objectName: "label"
+            Accessible.ignored: true
 
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
             Layout.preferredWidth: internal.portrait ? root.width : implicitWidth
