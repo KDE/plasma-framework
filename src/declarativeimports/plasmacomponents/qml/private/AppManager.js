@@ -40,8 +40,8 @@
 
 .pragma library
 
-function rootObject() {
-    var next = parent
+function rootObject(item) {
+    var next = item.parent
     while (next && next.parent)
         next = next.parent
     return next

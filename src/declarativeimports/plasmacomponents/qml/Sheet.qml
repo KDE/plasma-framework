@@ -277,7 +277,7 @@ Item {
         }
 
         Component.onCompleted: {
-            rootItem = Utils.rootObject()
+            rootItem = Utils.rootObject(this)
         }
     }
 }
