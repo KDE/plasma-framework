@@ -55,33 +55,3 @@ function findParent(child, propertyName) {
         next = next.parent
     return next
 }
-
-function sceneX(item) {
-    // Binding may cause that this function is evaluated even when item is undefined,
-    // but in that case the Binding isn't active however so we can safely return 0
-    var x = 0
-    if (item) {
-        x = item.x
-        var p = item.parent
-        while (p) {
-            x += p.x
-            p = p.parent
-        }
-    }
-    return x
-}
-
-function sceneY(item) {
-    // Binding may cause that this function is evaluated even when item is undefined,
-    // but in that case the Binding isn't active however so we can safely return 0
-    var y = 0
-    if (item) {
-        y = item.y
-        var p = item.parent
-        while (p) {
-            y += p.y
-            p = p.parent
-        }
-    }
-    return y
-}
