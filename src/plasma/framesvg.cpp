@@ -837,7 +837,9 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
 
     QSize s = q->size();
     q->resize();
-    frame->cachedBackground = QPixmap();
+    if (!frame->cachedBackground.isNull()) {
+        frame->cachedBackground = QPixmap();
+    }
 
     //This has the same size regardless the border is enabled or not
     frame->fixedTopHeight = q->elementSize(frame->prefix % QLatin1String("top")).height();
