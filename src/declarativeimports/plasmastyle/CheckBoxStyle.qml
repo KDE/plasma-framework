@@ -29,6 +29,14 @@ QtQuickControlStyle.CheckBoxStyle {
 
     label: PlasmaComponents.Label {
         text: control.text
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.bottom
+            height: 1 * units.devicePixelRatio
+            color: theme.highlightColor
+            visible: control.activeFocus
+        }
     }
     background: Item {}
 
