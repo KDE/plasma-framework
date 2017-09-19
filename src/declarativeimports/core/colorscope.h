@@ -79,6 +79,12 @@ class ColorScope : public QQuickItem
      */
     Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY colorsChanged)
 
+    /**
+     * true if the scope inherits from its parent scope
+     * @since 5.39
+     */
+    Q_PROPERTY(bool inherit READ inherit WRITE setInherit NOTIFY inheritChanged)
+
 public:
 /// @cond INTERNAL_DOCS
     ColorScope(QQuickItem *parent = 0, QObject *parentObject = 0);
@@ -95,6 +101,9 @@ public:
     QColor neutralTextColor() const;
     QColor negativeTextColor() const;
 
+    bool inherit() const;
+    void setInherit(bool inherit);
+
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static ColorScope *qmlAttachedProperties(QObject *object);
 
@@ -106,6 +115,7 @@ public:
 Q_SIGNALS:
     void colorGroupChanged();
     void colorsChanged();
+    void inheritChanged();
 
 private:
     bool m_inherit;
