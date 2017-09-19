@@ -210,6 +210,21 @@ QColor ColorScope::negativeTextColor() const
     return m_theme.color(Plasma::Theme::NegativeTextColor, m_group);
 }
 
+bool ColorScope::inherit() const
+{
+    return m_inherit;
+}
+
+void ColorScope::setInherit(bool inherit)
+{
+    if (m_inherit == inherit) {
+        return;
+    }
+    m_inherit = inherit;
+    emit inheritChanged();
+    emit colorsChanged();
+}
+
 void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
