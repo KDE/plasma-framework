@@ -60,7 +60,7 @@ FrameSvg::FrameSvg(QObject *parent)
     : Svg(parent),
       d(new FrameSvgPrivate(this))
 {
-    connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateNeeded()));
+    connect(this, &FrameSvg::repaintNeeded, this, std::bind(&FrameSvgPrivate::updateNeeded, d));
     d->frame = nullptr;
 }
 
