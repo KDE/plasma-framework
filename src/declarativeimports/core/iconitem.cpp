@@ -619,7 +619,13 @@ void IconItem::loadPixmap()
     }
 
     //don't animate initial setting
-    if ((m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged && !m_blockNextAnimation) {
+    bool animated = (m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged && !m_blockNextAnimation;
+
+    if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
+        animated = false;
+    }
+
+    if (animated) {
         m_animValue = 0.0;
         m_animation->setStartValue((qreal)0);
         m_animation->setEndValue((qreal)1);
