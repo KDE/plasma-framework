@@ -462,6 +462,12 @@ void FrameSvgItem::doUpdate()
     bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % QLatin1String("hint-compose-over-border")) &&
                 m_frameSvg->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"));
     m_fastPath = !hasOverlay && !hasComposeOverBorder;
+
+    //software rendering (at time of writing Qt5.10) doesn't seem to like our tiling/stretching in the 9-tiles.
+    //also when using QPainter it's arguably faster to create and cache pixmaps of the whole frame, which is what the slow path does
+    if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
+        m_fastPath = false;
+    }
     m_textureChanged = true;
 
     update();
