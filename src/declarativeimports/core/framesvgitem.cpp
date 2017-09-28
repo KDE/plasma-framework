@@ -528,9 +528,10 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameNode* frameNode = static_cast<FrameNode*>(oldNode);
             QSize frameSize(width(), height());
             QRect geometry = frameNode->contentsRect(frameSize);
-            for(int i = 0; i<oldNode->childCount(); ++i) {
-                FrameItemNode* it = static_cast<FrameItemNode*>(oldNode->childAtIndex(i));
-                it->reposition(geometry, frameSize);
+            QSGNode *node = oldNode->firstChild();
+            while (node) {
+                static_cast<FrameItemNode *>(node)->reposition(geometry, frameSize);
+                node = node->nextSibling();
             }
 
             m_sizeChanged = false;
