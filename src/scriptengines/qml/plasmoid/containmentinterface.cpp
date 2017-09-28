@@ -1141,7 +1141,9 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", m_containment->title()), desktopMenu);
-    addContainmentActions(containmentMenu, event);
+    if (m_containment->containmentType() != Plasma::Types::DesktopContainment) {
+        addContainmentActions(containmentMenu, event);
+    }
 
     if (!containmentMenu->isEmpty()) {
         int enabled = 0;
