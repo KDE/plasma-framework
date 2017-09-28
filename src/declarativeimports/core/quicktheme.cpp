@@ -51,17 +51,17 @@ QColor QuickTheme::highlightedTextColor() const
 
 QColor QuickTheme::positiveTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::TextColor);
+    return Plasma::Theme::color(Plasma::Theme::PositiveTextColor);
 }
 
 QColor QuickTheme::neutralTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::TextColor);
+    return Plasma::Theme::color(Plasma::Theme::NeutralTextColor);
 }
 
 QColor QuickTheme::negativeTextColor() const
 {
-    return Plasma::Theme::color(Plasma::Theme::TextColor);
+    return Plasma::Theme::color(Plasma::Theme::NegativeTextColor);
 }
 
 QColor QuickTheme::backgroundColor() const
