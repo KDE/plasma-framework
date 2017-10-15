@@ -307,7 +307,7 @@ void DialogPrivate::updateVisibility(bool visible)
 #if HAVE_KWAYLAND
             //if is a wayland window that was hidden, we need
             //to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
-            if (shellSurface) {
+            if (shellSurface && type != Dialog::OnScreenDisplay) {
                 shellSurface->setPosition(q->position());
             }
 #endif
