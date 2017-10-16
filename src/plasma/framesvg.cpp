@@ -844,18 +844,20 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     //This has the same size regardless the border is enabled or not
     frame->fixedTopHeight = q->elementSize(frame->prefix % QLatin1String("top")).height();
 
+    int hintTopMargin = -1;
     if (q->hasElement(frame->prefix % QLatin1String("hint-top-margin"))) {
-        frame->fixedTopMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-margin")).height();
+        hintTopMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-margin")).height();
+        frame->fixedTopMargin = hintTopMargin;
     } else {
         frame->fixedTopMargin = frame->fixedTopHeight;
     }
 
     //The same, but its size depends from the margin being enabled
     if (frame->enabledBorders & FrameSvg::TopBorder) {
-        frame->topHeight = q->elementSize(frame->prefix % QLatin1String("top")).height();
+        frame->topHeight = frame->fixedTopHeight;
 
-        if (q->hasElement(frame->prefix % QLatin1String("hint-top-margin"))) {
-            frame->topMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-margin")).height();
+        if (hintTopMargin > -1) {
+            frame->topMargin = hintTopMargin;
         } else {
             frame->topMargin = frame->topHeight;
         }
@@ -865,17 +867,19 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
 
     frame->fixedLeftWidth = q->elementSize(frame->prefix % QLatin1String("left")).width();
 
+    int hintLeftMargin = -1;
     if (q->hasElement(frame->prefix % QLatin1String("hint-left-margin"))) {
-        frame->fixedLeftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-margin")).width();
+        hintLeftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-margin")).width();
+        frame->fixedLeftMargin = hintLeftMargin;
     } else {
         frame->fixedLeftMargin = frame->fixedLeftWidth;
     }
 
     if (frame->enabledBorders & FrameSvg::LeftBorder) {
-        frame->leftWidth = q->elementSize(frame->prefix % QLatin1String("left")).width();
+        frame->leftWidth = frame->fixedLeftWidth;
 
-        if (q->hasElement(frame->prefix % QLatin1String("hint-left-margin"))) {
-            frame->leftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-margin")).width();
+        if (hintLeftMargin > -1) {
+            frame->leftMargin = hintLeftMargin;
         } else {
             frame->leftMargin = frame->leftWidth;
         }
@@ -885,17 +889,19 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
 
     frame->fixedRightWidth = q->elementSize(frame->prefix % QLatin1String("right")).width();
 
+    int hintRightMargin = -1;
     if (q->hasElement(frame->prefix % QLatin1String("hint-right-margin"))) {
-        frame->fixedRightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-margin")).width();
+        hintRightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-margin")).width();
+        frame->fixedRightMargin = hintRightMargin;
     } else {
         frame->fixedRightMargin = frame->fixedRightWidth;
     }
 
     if (frame->enabledBorders & FrameSvg::RightBorder) {
-        frame->rightWidth = q->elementSize(frame->prefix % QLatin1String("right")).width();
+        frame->rightWidth = frame->fixedRightWidth;
 
-        if (q->hasElement(frame->prefix % QLatin1String("hint-right-margin"))) {
-            frame->rightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-margin")).width();
+        if (hintRightMargin > -1) {
+            frame->rightMargin = hintRightMargin;
         } else {
             frame->rightMargin = frame->rightWidth;
         }
@@ -905,17 +911,19 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
 
     frame->fixedBottomHeight = q->elementSize(frame->prefix % QLatin1String("bottom")).height();
 
+    int hintBottomMargin = -1;
     if (q->hasElement(frame->prefix % QLatin1String("hint-bottom-margin"))) {
-        frame->fixedBottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-margin")).height();
+        hintBottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-margin")).height();
+        frame->fixedBottomMargin = hintBottomMargin;
     } else {
         frame->fixedBottomMargin = frame->fixedBottomHeight;
     }
 
     if (frame->enabledBorders & FrameSvg::BottomBorder) {
-        frame->bottomHeight = q->elementSize(frame->prefix % QLatin1String("bottom")).height();
+        frame->bottomHeight = frame->fixedBottomHeight;
 
-        if (q->hasElement(frame->prefix % QLatin1String("hint-bottom-margin"))) {
-            frame->bottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-margin")).height();
+        if (hintBottomMargin > -1) {
+            frame->bottomMargin = hintBottomMargin;
         } else {
             frame->bottomMargin = frame->bottomHeight;
         }
