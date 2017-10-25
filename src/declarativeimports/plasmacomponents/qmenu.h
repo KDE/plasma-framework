@@ -184,6 +184,7 @@ private Q_SLOTS:
 private:
     void rebuildMenu();
     void openInternal(QPoint pos);
+    QQuickItem *parentItem() const;
 
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
