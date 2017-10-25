@@ -24,6 +24,8 @@
 #include <QQuickWindow>
 #include <QQuickItem>
 #include <QScreen>
+#include <QTimer>
+#include <QVersionNumber>
 
 #include <KAcceleratorManager>
 
@@ -424,23 +426,43 @@ Q_INVOKABLE void QMenuProxy::openRelative()
 
 void QMenuProxy::openInternal(QPoint pos)
 {
-    QQuickItem *parentItem = nullptr;
-
-    if (m_visualParent) {
-        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
-    } else {
-        parentItem = qobject_cast<QQuickItem *>(parent());
-    }
+    QQuickItem *parentItem = this->parentItem();
 
     if (parentItem && parentItem->window()) {
         //create the QWindow
         m_menu->winId();
         m_menu->windowHandle()->setTransientParent(parentItem->window());
+
+        // Workaround for QTBUG-59044
+        auto ungrabMouseHack = [this]() {
+            QQuickItem *parentItem = this->parentItem();
+            if (parentItem && parentItem->window() && parentItem->window()->mouseGrabberItem()) {
+                parentItem->window()->mouseGrabberItem()->ungrabMouse();
+            }
+        };
+
+        //pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
+        //post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
+        if (QVersionNumber::fromString(qVersion()) > QVersionNumber(5, 8, 0)) {
+            QTimer::singleShot(0, this, ungrabMouseHack);
+        } else {
+            ungrabMouseHack();
+        }
+        //end workaround
     }
 
     m_menu->popup(pos);
     m_status = DialogStatus::Open;
     emit statusChanged();
+}
+
+QQuickItem *QMenuProxy::parentItem() const
+{
+    if (m_visualParent) {
+        return qobject_cast<QQuickItem *>(m_visualParent.data());
+    }
+
+    return qobject_cast<QQuickItem *>(parent());
 }
 
 void QMenuProxy::close()
