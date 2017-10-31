@@ -314,6 +314,16 @@ Q_SIGNALS:
      */
     void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
 
+    /** This signal indicates the screen with the specified id was removed.
+     * @since 5.40
+     */
+    void screenRemoved(int id);
+
+    /** This signal indicates a new screen with the specified id was added.
+     * @since 5.40
+     */
+    void screenAdded(int id);
+
 #ifndef PLASMA_NO_DEPRECATED
     /**
      * Emitted when the package for this corona has been changed.
