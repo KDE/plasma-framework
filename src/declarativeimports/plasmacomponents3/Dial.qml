@@ -19,7 +19,6 @@
 
 import QtQuick 2.6
 import QtQuick.Templates 2.0 as T
-import QtQuick.Controls.impl 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 
@@ -29,13 +28,33 @@ T.Dial {
     implicitWidth: units.gridUnit * 5
     implicitHeight: implicitWidth
     hoverEnabled: true
+    onPositionChanged: canvas.requestPaint()
 
-    background: DialRing {
+    background:Canvas {
+        id: canvas
         width: control.availableWidth
         height: control.availableHeight
-        color: control.visualFocus ? theme.highlightColor : theme.textColor
-        progress: control.position
-        opacity: control.enabled ? 0.5 : 0.3
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.reset();
+
+            var centreX = width / 2;
+            var centreY = height / 2;
+
+            ctx.globalAlpha = 0.3;
+            ctx.beginPath();
+            ctx.strokeStyle = theme.textColor;
+            ctx.lineWidth=5;
+            ctx.arc(centreX, centreY, width/2.4, 0, 2*Math.PI, false);
+            ctx.stroke();
+            ctx.globalAlpha = 1;
+
+            ctx.beginPath();
+            ctx.strokeStyle = theme.highlightColor;
+            ctx.lineWidth=5;
+            ctx.arc(centreX, centreY, width/2.4, 0.7*Math.PI, 1.6*Math.PI * control.position - 1.25*Math.PI, false);
+            ctx.stroke();
+        }
     }
 
     PlasmaCore.Svg {
