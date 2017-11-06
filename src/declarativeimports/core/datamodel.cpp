@@ -562,13 +562,5 @@ QVariantMap DataModel::get(int row) const
     return map;
 }
 
-int DataModel::roleNameToId(const QString &name)
-{
-    if (!m_roleIds.contains(name)) {
-        return -1;
-    }
-    return m_roleIds.value(name);
-}
-
 }
 
