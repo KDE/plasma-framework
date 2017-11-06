@@ -200,8 +200,6 @@ public:
     void setSourceFilter(const QString &key);
     QString sourceFilter() const;
 
-    int roleNameToId(const QString &name); //FIXME TODO KF6: This should have been const.
-
     //Reimplemented
     QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
     QVariant headerData(int section, Qt::Orientation orientation,
