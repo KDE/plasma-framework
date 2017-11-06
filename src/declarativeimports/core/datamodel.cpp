@@ -53,6 +53,7 @@ void SortFilterModel::syncRoleNames()
 
     m_roleIds.clear();
     const QHash<int, QByteArray> rNames = roleNames();
+    m_roleIds.reserve(rNames.count());
     for (auto i = rNames.constBegin(); i != rNames.constEnd(); ++i) {
         m_roleIds[i.value()] = i.key();
     }
@@ -62,12 +63,9 @@ void SortFilterModel::syncRoleNames()
     setSortRole(m_sortRole);
 }
 
-int SortFilterModel::roleNameToId(const QString &name)
+int SortFilterModel::roleNameToId(const QString &name) const
 {
-    if (!m_roleIds.contains(name)) {
-        return Qt::DisplayRole;
-    }
-    return m_roleIds.value(name);
+    return m_roleIds.value(name, Qt::DisplayRole);
 }
 
 void SortFilterModel::setModel(QAbstractItemModel *model)
