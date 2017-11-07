@@ -29,6 +29,7 @@
 #include <QStringBuilder>
 #include <QTimer>
 #include <QThread>
+#include <QFontMetrics>
 
 #include "config-plasma.h"
 
