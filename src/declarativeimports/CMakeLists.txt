@@ -35,6 +35,9 @@ install(FILES plasmacomponents3/BusyIndicator.qml
     plasmacomponents3/ScrollBar.qml
     plasmacomponents3/Slider.qml
     plasmacomponents3/SpinBox.qml
+    plasmacomponents3/Switch.qml
+    plasmacomponents3/SwitchDelegate.qml
+    plasmacomponents3/SwitchIndicator.qml
     plasmacomponents3/TabBar.qml
     plasmacomponents3/TabButton.qml
     plasmacomponents3/TextArea.qml
