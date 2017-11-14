@@ -83,6 +83,9 @@ public:
     qreal horizontal() const;
     qreal vertical() const;
 
+    /// returns a vector with left, top, right, bottom
+    QVector<qreal> margins() const;
+
     void setFixed(bool fixed);
     bool isFixed() const;
 
