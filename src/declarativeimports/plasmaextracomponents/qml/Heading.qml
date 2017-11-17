@@ -48,14 +48,19 @@ Label {
     id: heading
 
     /**
+     * level: int
      * The level determines how big the section header is display, values
      * between 1 (big) and 5 (small) are accepted
      */
     property int level: 1
 
+    /**
+     * step: int
+     * adjust the point size in between a level and another.
+     */
     property int step: 2
 
-    height: Math.round(paintedHeight * 1.2)
+    lineHeight: 1.2
     font.pointSize: headerPointSize(level)
     font.weight: Font.Light
     wrapMode: Text.WordWrap
