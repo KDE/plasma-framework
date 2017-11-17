@@ -52,25 +52,30 @@ set (REQUIRED_QT_VERSION 5.7.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg)
 
-find_package(KF5Activities ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Archive ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5ConfigWidgets ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5DBusAddons ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Declarative ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5GlobalAccel ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5GuiAddons ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5I18n ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5IconThemes ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5KIO ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Service ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5WindowSystem ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5XmlGui ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Notifications ${KF5_DEP_VERSION} REQUIRED)
-find_package(KF5Package ${KF5_DEP_VERSION} REQUIRED)
+find_package(KF5 ${KF5_DEP_VERSION} REQUIRED
+    COMPONENTS
+        Activities
+        Archive
+        Config
+        ConfigWidgets
+        CoreAddons
+        DBusAddons
+        Declarative
+        GlobalAccel
+        GuiAddons
+        I18n
+        IconThemes
+        KIO
+        Service
+        WindowSystem
+        XmlGui
+        Notifications
+        Package
+    OPTIONAL_COMPONENTS
+        Wayland
+        DocTools
+)
 
-find_package(KF5Wayland ${KF5_DEP_VERSION})
 set_package_properties(KF5Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
                        TYPE OPTIONAL
                       )
@@ -78,7 +83,6 @@ if(KF5Wayland_FOUND)
   set(HAVE_KWAYLAND 1)
 endif()
 
-find_package(KF5DocTools ${KF5_DEP_VERSION})
 set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
                        TYPE OPTIONAL
                       )
