@@ -135,79 +135,37 @@ Plasma::Theme::ColorGroup ColorScope::colorGroup() const
 
 QColor ColorScope::textColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->textColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::TextColor, m_group);
+    return m_theme.color(Plasma::Theme::TextColor, colorGroup());
 }
 
 QColor ColorScope::highlightColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->highlightColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::HighlightColor, m_group);
+    return m_theme.color(Plasma::Theme::HighlightColor, colorGroup());
 }
 
 QColor ColorScope::highlightedTextColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->highlightedTextColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::HighlightedTextColor, m_group);
+    return m_theme.color(Plasma::Theme::HighlightedTextColor, colorGroup());
 }
 
 QColor ColorScope::backgroundColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->backgroundColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::BackgroundColor, m_group);
+    return m_theme.color(Plasma::Theme::BackgroundColor, colorGroup());
 }
 
 QColor ColorScope::positiveTextColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->positiveTextColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::PositiveTextColor, m_group);
+    return m_theme.color(Plasma::Theme::PositiveTextColor, colorGroup());
 }
 
 QColor ColorScope::neutralTextColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->neutralTextColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::NeutralTextColor, m_group);
+    return m_theme.color(Plasma::Theme::NeutralTextColor, colorGroup());
 }
 
 QColor ColorScope::negativeTextColor() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->negativeTextColor();
-        }
-    }
-    return m_theme.color(Plasma::Theme::NegativeTextColor, m_group);
+    return m_theme.color(Plasma::Theme::NegativeTextColor, colorGroup());
 }
 
 bool ColorScope::inherit() const
