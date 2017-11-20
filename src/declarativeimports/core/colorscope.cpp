@@ -34,11 +34,13 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
       m_parent(parentObject)
 {
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
+    connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 
     QQuickItem *parentItem = qobject_cast<QQuickItem *>(parentObject);
     if (parentItem) {
-        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::colorGroupChanged);
-        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::colorsChanged);
+        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::checkColorGroupChanged);
+    } else if (m_parent) {
+        m_parent->installEventFilter(this);
     }
 }
 
@@ -56,14 +58,41 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 
     ColorScope *s = new ColorScope(0, object);
     s_attachedScopes[object] = s;
-
-    s->setParent(object);
-
     s->m_inherit = true;
+    s->setParent(object);
+    s->checkColorGroupChanged();
+
     return s;
 }
 
-ColorScope *ColorScope::findParentScope() const
+bool ColorScope::eventFilter(QObject* watched, QEvent* event)
+{
+    Q_ASSERT(watched == m_parent && !qobject_cast<QQuickItem *>(watched));
+    if (event->type() == QEvent::ParentChange) {
+        checkColorGroupChanged();
+    }
+    return QQuickItem::eventFilter(watched, event);
+}
+
+void ColorScope::setParentScope(ColorScope* parentScope)
+{
+    if (parentScope == m_parentScope)
+        return;
+
+    if (m_parentScope) {
+        disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
+                this, &ColorScope::checkColorGroupChanged);
+    }
+
+    m_parentScope = parentScope;
+
+    if (parentScope) {
+        connect(parentScope, &ColorScope::colorGroupChanged,
+                this, &ColorScope::checkColorGroupChanged);
+    }
+}
+
+ColorScope *ColorScope::findParentScope()
 {
     QObject *p = 0;
     if (m_parent) {
@@ -76,12 +105,7 @@ ColorScope *ColorScope::findParentScope() const
     }
 
     if (!p || !m_parent) {
-        if (m_parentScope) {
-            disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
-                    this, &ColorScope::colorGroupChanged);
-            disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
-                    this, &ColorScope::colorsChanged);
-        }
+        setParentScope(nullptr);
         return 0;
     }
 
@@ -90,23 +114,7 @@ ColorScope *ColorScope::findParentScope() const
         c = qmlAttachedProperties(p);
     }
 
-    if (c != m_parentScope) {
-        if (m_parentScope) {
-            disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
-                    this, &ColorScope::colorGroupChanged);
-            disconnect(m_parentScope.data(), &ColorScope::colorsChanged,
-                    this, &ColorScope::colorsChanged);
-        }
-        if (c) {
-            connect(c, &ColorScope::colorGroupChanged,
-                    this, &ColorScope::colorGroupChanged);
-            connect(c, &ColorScope::colorsChanged,
-                    this, &ColorScope::colorsChanged);
-        }
-        //HACK
-        const_cast<ColorScope *>(this)->m_parentScope = c;
-    }
-
+    setParentScope(c);
 
     return m_parentScope;
 }
@@ -119,19 +127,12 @@ void ColorScope::setColorGroup(Plasma::Theme::ColorGroup group)
 
     m_group = group;
 
-    emit colorGroupChanged();
-    emit colorsChanged();
+    checkColorGroupChanged();
 }
 
 Plasma::Theme::ColorGroup ColorScope::colorGroup() const
 {
-    if (m_inherit) {
-        ColorScope *s = findParentScope();
-        if (s) {
-            return s->colorGroup();
-        }
-    }
-    return m_group;
+    return m_actualGroup;
 }
 
 QColor ColorScope::textColor() const
@@ -181,7 +182,7 @@ void ColorScope::setInherit(bool inherit)
     }
     m_inherit = inherit;
     emit inheritChanged();
-    emit colorsChanged();
+    checkColorGroupChanged();
 }
 
 void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
@@ -189,13 +190,26 @@ void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the representations if needed
         if (value.window) {
-            emit colorGroupChanged();
-            emit colorsChanged();
+            checkColorGroupChanged();
         }
     }
 
     QQuickItem::itemChange(change, value);
 }
 
+void ColorScope::checkColorGroupChanged()
+{
+    const auto last = m_actualGroup;
+    if (m_inherit) {
+        findParentScope();
+        m_actualGroup = m_parentScope ? m_parentScope->colorGroup() : m_group;
+    } else {
+        m_actualGroup = m_group;
+    }
+
+    if (m_actualGroup != last) {
+        Q_EMIT colorGroupChanged();
+    }
+}
 
 #include "moc_colorscope.cpp"

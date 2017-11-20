@@ -109,8 +109,10 @@ public:
 
 /// @endcond
 
-    ColorScope *findParentScope() const;
+    ColorScope *findParentScope();
     void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
+
+    bool eventFilter(QObject * watched, QEvent * event) override;
 
 Q_SIGNALS:
     void colorGroupChanged();
@@ -118,11 +120,15 @@ Q_SIGNALS:
     void inheritChanged();
 
 private:
+    void checkColorGroupChanged();
+    void setParentScope(ColorScope * parentScope);
+
     bool m_inherit;
     Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
     QPointer<ColorScope> m_parentScope;
-    QObject *m_parent;
+    QObject *const m_parent;
+    Plasma::Theme::ColorGroup m_actualGroup;
 
     static QHash<QObject *, ColorScope *> s_attachedScopes;
 };
