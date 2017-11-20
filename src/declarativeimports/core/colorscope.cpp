@@ -49,8 +49,9 @@ ColorScope::~ColorScope()
 
 ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 {
-    if (ColorScope::s_attachedScopes.contains(object)) {
-        return s_attachedScopes.value(object);
+    const auto cs = s_attachedScopes.value(object);
+    if (cs) {
+        return cs;
     }
 
     ColorScope *s = new ColorScope(0, object);
