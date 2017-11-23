@@ -2,6 +2,9 @@
 
 # Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
 
+include(CMakeFindDependencyMacro)
+find_package(KF5Plasma)
+
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaQuickTargets.cmake")
 
 set(PlasmaQuick_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
