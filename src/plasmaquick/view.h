@@ -41,6 +41,9 @@ namespace PlasmaQuick
 
 class ViewPrivate;
 
+/**
+ * Deprecated, use ContainmentView instead.
+ */
 class PLASMAQUICK_EXPORT View : public QQuickView
 {
     Q_OBJECT
