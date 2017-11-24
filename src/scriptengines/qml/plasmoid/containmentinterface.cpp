@@ -1003,6 +1003,12 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     //qDebug() << "Invoking menu for applet" << applet;
 
     QMenu *desktopMenu = new QMenu;
+
+    //this is a workaround where Qt now creates the menu widget
+    //in .exec before oxygen can polish it and set the following attribute
+    desktopMenu->setAttribute(Qt::WA_TranslucentBackground);
+    //end workaround
+
     if (desktopMenu->winId()) {
         desktopMenu->windowHandle()->setTransientParent(window());
     }
@@ -1018,12 +1024,6 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     } else {
         addContainmentActions(desktopMenu, event);
     }
-
-    //this is a workaround where Qt now creates the menu widget
-    //in .exec before oxygen can polish it and set the following attribute
-    desktopMenu->setAttribute(Qt::WA_TranslucentBackground);
-    //end workaround
-
 
     //this is a workaround where Qt will fail to realise a mouse has been released
 
