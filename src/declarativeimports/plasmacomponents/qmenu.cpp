@@ -38,6 +38,11 @@ QMenuProxy::QMenuProxy(QObject *parent)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
         m_menu = new QMenu(0);
+        // Breeze and Oxygen have rounded corners on menus. They set this attribute in polish()
+        // but at that time the underlying surface has already been created where setting this
+        // flag makes no difference anymore (Bug 385311)
+        m_menu->setAttribute(Qt::WA_TranslucentBackground);
+
         KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
         connect(m_menu, &QMenu::aboutToHide, [ = ]() {
