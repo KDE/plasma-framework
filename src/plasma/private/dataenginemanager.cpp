@@ -111,8 +111,6 @@ Plasma::DataEngine *DataEngineManager::engine(const QString &name) const
 
     Plasma::DataEngine::Dict::const_iterator it = d->engines.constFind(name);
     if (it != d->engines.constEnd()) {
-        // ref and return the engine
-        //Plasma::DataEngine *engine = *it;
         return *it;
     }
 
