@@ -34,9 +34,7 @@
 #include <QMenu>
 #include <QPointer>
 
-#if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
 #include <QPlatformSurfaceEvent>
-#endif
 
 #include <kwindowsystem.h>
 #include <KWindowSystem/KWindowInfo>
@@ -1190,14 +1188,12 @@ bool Dialog::event(QEvent *event)
             d->updateTheme();
         }
 #endif
-#if (QT_VERSION > QT_VERSION_CHECK(5, 5, 0))
     } else if (event->type() == QEvent::PlatformSurface) {
         const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
 
         if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
         }
-#endif
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {

@@ -223,12 +223,7 @@ void WindowThumbnail::releaseResources()
     Q_ASSERT(m_glxPixmap == XCB_PIXMAP_NONE || m_image == EGL_NO_IMAGE_KHR);
 #endif
 #if HAVE_GLX || HAVE_EGL
-    // NoStage is supported since Qt >= 5.6.x
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-        QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
-    #else
-        QQuickWindow::RenderStage m_renderStage = QQuickWindow::BeforeSynchronizingStage;
-    #endif
+    QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
 #endif
 
     //data is deleted in the render thread (with relevant GLX calls)

@@ -37,9 +37,6 @@ void DialogStateTest::cleanupTestCase()
 
 void DialogStateTest::windowState()
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 6, 0)
-    QSKIP("This test is broken with Qt 5.5");
-#endif
     for (int i = 0; i <= 100; ++i) {
         m_dialog->show();
 
