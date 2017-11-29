@@ -272,6 +272,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
         }
+        return QVariant();
     }
     default:
         return QVariant();

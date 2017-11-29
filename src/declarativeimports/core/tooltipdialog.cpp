@@ -22,9 +22,7 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QDebug>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
 #include <QPlatformSurfaceEvent>
-#endif
 
 #include <kdeclarative/qmlobjectsharedengine.h>
 #include <KWindowSystem>

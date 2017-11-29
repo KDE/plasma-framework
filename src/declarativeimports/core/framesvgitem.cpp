@@ -122,12 +122,9 @@ public:
     void updateTexture(const QSize &size, const QString &elementId)
     {
         QQuickWindow::CreateTextureOptions options;
-//Qt < 5.3.2. has a crash on some atlas textures
-#if (QT_VERSION > QT_VERSION_CHECK(5, 3, 2))
         if (m_fitMode != Tile) {
             options = QQuickWindow::TextureCanUseAtlas;
         }
-#endif
         setTexture(s_cache->loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId), options));
     }
 
