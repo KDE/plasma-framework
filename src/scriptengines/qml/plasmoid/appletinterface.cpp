@@ -93,6 +93,14 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::busyChanged,
             this, &AppletInterface::busyChanged);
 
+    connect(applet(), &Plasma::Applet::configurationRequiredChanged, this,
+            [this](bool configurationRequired, const QString &reason) {
+        Q_UNUSED(configurationRequired);
+        Q_UNUSED(reason);
+        emit configurationRequiredChanged();
+        emit configurationRequiredReasonChanged();
+    });
+
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
 
