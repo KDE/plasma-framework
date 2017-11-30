@@ -137,8 +137,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
 
         graphicObject->setFocus(true);
         //by resizing before adding, it will avoid some resizes in most cases
-        graphicObject->setProperty("width", q->width());
-        graphicObject->setProperty("height", q->height());
+        graphicObject->setSize(q->size());
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
             q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
