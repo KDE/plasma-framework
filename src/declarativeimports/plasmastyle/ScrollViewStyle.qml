@@ -72,12 +72,19 @@ QtQuickControlStyle.ScrollViewStyle {
         }
 
         PlasmaCore.SvgItem {
+            visible: {
+                if (flickableItem.hasOwnProperty("orientation")) {
+                    return (flickableItem.orientation === Qt.Vertical);
+                }
+
+                return false;
+            }
             svg: borderSvg
             z: 1000
             elementId: "border-top"
             width: 100
             height: naturalSize.height
-            opacity: flickableItem.atYBeginning ? 0 : 1
+            opacity: !visible || flickableItem.atYBeginning ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
                     duration: units.longDuration
@@ -91,12 +98,19 @@ QtQuickControlStyle.ScrollViewStyle {
             }
         }
         PlasmaCore.SvgItem {
+            visible: {
+                if (flickableItem.hasOwnProperty("orientation")) {
+                    return (flickableItem.orientation === Qt.Vertical);
+                }
+
+                return false;
+            }
             svg: borderSvg
             z: 1000
             elementId: "border-bottom"
             width: 100
             height: naturalSize.height
-            opacity: flickableItem.atYEnd ? 0 : 1
+            opacity: !visible || flickableItem.atYEnd ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
                     duration: units.longDuration
@@ -110,11 +124,18 @@ QtQuickControlStyle.ScrollViewStyle {
             }
         }
         PlasmaCore.SvgItem {
+            visible: {
+                if (flickableItem.hasOwnProperty("orientation")) {
+                    return (flickableItem.orientation === Qt.Horizontal);
+                }
+
+                return false;
+            }
             svg: borderSvg
             z: 1000
             elementId: "border-left"
             width: naturalSize.width
-            opacity: flickableItem.atXBeginning ? 0 : 1
+            opacity: !visible || flickableItem.atXBeginning ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
                     duration: units.longDuration
@@ -128,11 +149,18 @@ QtQuickControlStyle.ScrollViewStyle {
             }
         }
         PlasmaCore.SvgItem {
+            visible: {
+                if (flickableItem.hasOwnProperty("orientation")) {
+                    return (flickableItem.orientation === Qt.Horizontal);
+                }
+
+                return false;
+            }
             svg: borderSvg
             z: 1000
             elementId: "border-right"
             width: naturalSize.width
-            opacity: flickableItem.atXEnd ? 0 : 1
+            opacity: !visible || flickableItem.atXEnd ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
                     duration: units.longDuration
