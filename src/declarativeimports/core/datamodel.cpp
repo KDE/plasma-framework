@@ -110,7 +110,7 @@ void SortFilterModel::setFilterRegExp(const QString &exp)
         return;
     }
     QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
-    filterRegExpChanged(exp);
+    Q_EMIT filterRegExpChanged(exp);
 }
 
 QString SortFilterModel::filterRegExp() const
@@ -125,7 +125,7 @@ void SortFilterModel::setFilterString(const QString &filterString)
     }
     m_filterString = filterString;
     QSortFilterProxyModel::setFilterFixedString(filterString);
-    filterStringChanged(filterString);
+    Q_EMIT filterStringChanged(filterString);
 }
 
 QString SortFilterModel::filterString() const

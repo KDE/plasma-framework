@@ -183,7 +183,6 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
     }
 
     m_model = new EventPluginsModel(this);
-    Q_EMIT pluginsChanged();
 }
 
 EventPluginsManager::~EventPluginsManager()

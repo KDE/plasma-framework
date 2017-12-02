@@ -218,6 +218,11 @@ public:
      */
     virtual int screenForContainment(const Containment *containment) const;
 
+    /**
+     * @return The type of immutability of this Corona
+     */
+    Types::ImmutabilityType immutability() const;
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file. The results will be added to the
@@ -233,11 +238,6 @@ public Q_SLOTS:
      * @param config the file to save to, or the default config file if QString()
      */
     void saveLayout(const QString &config = QString()) const;
-
-    /**
-     * @return The type of immutability of this Corona
-     */
-    Types::ImmutabilityType immutability() const;
 
     /**
      * Sets the immutability type for this Corona (not immutable,

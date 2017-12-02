@@ -68,7 +68,7 @@ IconItem::IconItem(QQuickItem *parent)
             this, &IconItem::updateImplicitSize);
 
     connect(this, &QQuickItem::enabledChanged,
-            this, &IconItem::enabledChanged);
+            this, &IconItem::onEnabledChanged);
 
     connect(this, &QQuickItem::windowChanged,
             this, &IconItem::schedulePixmapUpdate);
@@ -525,7 +525,7 @@ void IconItem::valueChanged(const QVariant &value)
     update();
 }
 
-void IconItem::enabledChanged()
+void IconItem::onEnabledChanged()
 {
     m_allowNextAnimation = true;
     schedulePixmapUpdate();

@@ -877,8 +877,8 @@ bool ThemePrivate::eventFilter(QObject *watched, QEvent *event)
             colorsChanged();
         }
         if (event->type() == QEvent::ApplicationFontChange || event->type() == QEvent::FontChange) {
-            defaultFontChanged();
-            smallestFontChanged();
+            Q_EMIT defaultFontChanged();
+            Q_EMIT smallestFontChanged();
         }
     }
     return QObject::eventFilter(watched, event);

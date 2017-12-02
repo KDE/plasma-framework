@@ -145,7 +145,9 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
 
     const QString key = params.value(QStringLiteral("key")).toString();
     if (!key.isEmpty()) {
-        caller->data().insert(key, params[QStringLiteral("data")]);
+        QVariantMap data = caller->data();
+        data.insert(key, params[QStringLiteral("data")]);
+        caller->setData(data);
     }
 
     it.toFront();

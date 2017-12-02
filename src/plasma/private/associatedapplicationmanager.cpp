@@ -67,7 +67,6 @@ public:
     void updateActionNames()
     {
         QMimeDatabase mimeDb;
-        KService::List apps;
 
         QHash<const Plasma::Applet *, QList<QUrl> >::iterator i;
         for (i = urlLists.begin(); i != urlLists.end(); ++i) {

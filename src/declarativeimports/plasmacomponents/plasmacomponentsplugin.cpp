@@ -57,7 +57,7 @@ QQmlEngine *EngineBookKeeping::engine() const
         qWarning() << "No engines found, this should never happen";
         return 0;
     } else {
-        return m_engines.values().at(0);
+        return *m_engines.constBegin();
     }
 }
 

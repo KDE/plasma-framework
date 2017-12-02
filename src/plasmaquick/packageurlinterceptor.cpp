@@ -108,9 +108,10 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
             pkgRoot = QFileInfo(base + QStringLiteral("/plasma/plasmoids/")).canonicalFilePath();
             if (!pkgRoot.isEmpty() && path.path().startsWith(pkgRoot)) {
                 const QString pkgName = path.path().midRef(pkgRoot.length() + 1).split(QLatin1Char('/')).first().toString();
-#warning FIX double look-up
-                if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
-                    package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
+
+                auto it = PackageUrlInterceptorPrivate::s_packages.constFind(pkgName);
+                if (it != PackageUrlInterceptorPrivate::s_packages.constEnd()) {
+                    package = *it;
                 } else {
                     package = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet")).kPackage();
                     package.setPath(pkgName);
@@ -161,15 +162,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         //should never happen
         Q_ASSERT(!relativePath.isEmpty());
 
-        QStringList components = relativePath.split(QLatin1Char('/'));
-        //a path with less than 2 items should ever happen
-        Q_ASSERT(components.count() >= 2);
-
-        components.pop_front();
-        //obtain a string in the form foo/bar/baz.qml: ui/ gets discarded
-        const QString &filename = components.join(QStringLiteral("/"));
-
-        QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
+        const int firstSlash = relativePath.indexOf(QLatin1Char('/')) + 1;
+        const QString filename = firstSlash > 0 ? relativePath.mid(firstSlash) : relativePath;
+        const QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
 
         //qDebug() << "Returning" << ret;
 
