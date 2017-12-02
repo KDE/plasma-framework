@@ -182,6 +182,12 @@ QString SvgPrivate::cachePath(const QString &path, const QSize &size) const
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
 {
+    if (requestedPath == imagePath) {
+        return false;
+    }
+
+    requestedPath = imagePath;
+
     QString actualPath = imagePath;
     if (imagePath.startsWith(QLatin1String("file://"))) {
         //length of file://
