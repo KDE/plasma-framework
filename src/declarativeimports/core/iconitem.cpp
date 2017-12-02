@@ -145,6 +145,8 @@ void IconItem::setSource(const QVariant &source)
         return;
     }
 
+    const bool oldValid = isValid();
+
     m_source = source;
     QString sourceString = source.toString();
 
@@ -240,7 +242,10 @@ void IconItem::setSource(const QVariant &source)
     updateImplicitSize();
 
     emit sourceChanged();
-    emit validChanged();
+
+    if (isValid() != oldValid) {
+        emit validChanged();
+    }
 }
 
 QVariant IconItem::source() const
