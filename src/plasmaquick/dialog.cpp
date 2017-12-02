@@ -565,7 +565,7 @@ void DialogPrivate::updateInputShape()
         return;
     }
 
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+    if (KWindowSystem::isPlatformX11()) {
         xcb_connection_t *c = QX11Info::connection();
         static bool s_shapeExtensionChecked = false;
         static bool s_shapeAvailable = false;
