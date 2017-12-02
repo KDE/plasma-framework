@@ -243,7 +243,6 @@ private:
     QRegExp m_keyRoleFilterRE;
     QString m_sourceFilter;
     QRegExp m_sourceFilterRE;
-#warning QByteArray key?
     QMap<QString, QVector<QVariant> > m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
