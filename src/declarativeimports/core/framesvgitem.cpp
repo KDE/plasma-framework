@@ -621,7 +621,7 @@ void FrameSvgItem::applyPrefixes()
     }
 
     bool found = false;
-    for (const QString &prefix : m_prefixes) {
+    for (const QString &prefix : qAsConst(m_prefixes)) {
         if (m_frameSvg->hasElementPrefix(prefix)) {
             m_frameSvg->setElementPrefix(prefix);
             found = true;
@@ -630,7 +630,7 @@ void FrameSvgItem::applyPrefixes()
     }
     if (!found) {
         //this setElementPrefix is done to keep the same behavior as before, when it was a simple string
-        m_frameSvg->setElementPrefix(m_prefixes.last());
+        m_frameSvg->setElementPrefix(m_prefixes.constLast());
     }
     if (oldPrefix != m_frameSvg->prefix()) {
         emit usedPrefixChanged();

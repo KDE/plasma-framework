@@ -82,13 +82,13 @@ void StorageJob::start()
 
     QWeakPointer<StorageJob> me(this);
     if (operationName() == QLatin1String("save")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("retrieve")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("delete")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("expire")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(const QVariantMap &, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else {
         setError(true);
         setResult(false);

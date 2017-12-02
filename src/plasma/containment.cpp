@@ -148,7 +148,7 @@ void Containment::init()
     }
 
     //HACK: this is valid only in the systray case
-    connect(this, &Containment::configureRequested, [=] (Plasma::Applet *a) {
+    connect(this, &Containment::configureRequested, this, [=] (Plasma::Applet *a) {
         if (Plasma::Applet *p = qobject_cast<Plasma::Applet *>(parent())) {
             emit p->containment()->configureRequested(a);
         }

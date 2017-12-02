@@ -52,7 +52,6 @@ Q_SIGNALS:
     void formFactorChanged();
     void locationChanged();
     void contextChanged();
-    void uiReadyChanged(bool ready);
 
 private:
     AppletInterface *m_interface;

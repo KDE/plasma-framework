@@ -190,7 +190,7 @@ private Q_SLOTS:
     void schedulePixmapUpdate();
     void animationFinished();
     void valueChanged(const QVariant &value);
-    void enabledChanged();
+    void onEnabledChanged();
 
 private:
     void loadPixmap();

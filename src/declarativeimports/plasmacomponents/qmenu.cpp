@@ -45,7 +45,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
 
         KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
-        connect(m_menu, &QMenu::aboutToHide, [ = ]() {
+        connect(m_menu, &QMenu::aboutToHide, this, [ = ]() {
                 m_status = DialogStatus::Closed;
                 emit statusChanged();
         });
