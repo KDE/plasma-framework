@@ -70,9 +70,6 @@ IconItem::IconItem(QQuickItem *parent)
     connect(this, &QQuickItem::enabledChanged,
             this, &IconItem::onEnabledChanged);
 
-    connect(this, &QQuickItem::windowChanged,
-            this, &IconItem::schedulePixmapUpdate);
-
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
 
@@ -648,6 +645,8 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == ItemVisibleHasChanged && value.boolValue) {
         m_blockNextAnimation = true;
+    } else if (change == ItemSceneChange && value.window) {
+        schedulePixmapUpdate();
     }
 
     QQuickItem::itemChange(change, value);
