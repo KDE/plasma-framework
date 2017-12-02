@@ -423,8 +423,8 @@ void Containment::addApplet(Applet *applet)
         //change the group to its configloader, if any
         //FIXME: this is very, very brutal
         if (applet->configScheme()) {
-            const QString oldGroupPrefix = QString("Containments" + QString::number(currentContainment->id()) + "Applets");
-            const QString newGroupPrefix = QString("Containments" + QString::number(id()) + "Applets");
+            const QString oldGroupPrefix = QStringLiteral("Containments") + QString::number(currentContainment->id()) + QStringLiteral("Applets");
+            const QString newGroupPrefix = QStringLiteral("Containments") + QString::number(id()) + QStringLiteral("Applets");
 
             applet->configScheme()->setCurrentGroup(applet->configScheme()->currentGroup().replace(0, oldGroupPrefix.length(), newGroupPrefix));
 

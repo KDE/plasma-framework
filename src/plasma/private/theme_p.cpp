@@ -58,8 +58,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
       complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(0)),
-      defaultWallpaperTheme(DEFAULT_WALLPAPER_THEME),
-      defaultWallpaperSuffix(DEFAULT_WALLPAPER_SUFFIX),
+      defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME)),
+      defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX)),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
       defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
       pixmapCache(0),
@@ -151,10 +151,10 @@ KConfigGroup &ThemePrivate::config()
 #ifndef NDEBUG
                 // qCDebug(LOG_PLASMA) << "using theme for app" << app;
 #endif
-                groupName.append('-').append(app);
+                groupName.append(QLatin1Char('-')).append(app);
             }
         }
-        cfg = KConfigGroup(KSharedConfig::openConfig(themeRcFile), groupName);
+        cfg = KConfigGroup(KSharedConfig::openConfig(QFile::decodeName(themeRcFile)), groupName);
     }
 
     return cfg;
@@ -179,10 +179,10 @@ bool ThemePrivate::useCache()
             KDirWatch::self()->removeFile(themeMetadataPath);
         }
         if (isRegularTheme) {
-            themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QLatin1Literal("/metadata.desktop"));
+            themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QStringLiteral("/metadata.desktop"));
             const auto *iconTheme = KIconLoader::global()->theme();
             if (iconTheme) {
-                iconThemeMetadataPath = iconTheme->dir() + "index.theme";
+                iconThemeMetadataPath = iconTheme->dir() + QStringLiteral("index.theme");
             }
 
             Q_ASSERT(!themeMetadataPath.isEmpty() || themeName.isEmpty());
@@ -236,7 +236,7 @@ bool ThemePrivate::useCache()
             // the cache should be dropped; we need a way to detect system color change when the
             // application is not running.
             // check for expired cache
-            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + cacheFile + QLatin1String(".kcache");
+            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + cacheFile + QLatin1String(".kcache");
             if (!cacheFilePath.isEmpty()) {
                 const QFileInfo cacheFileInfo(cacheFilePath);
                 const QFileInfo metadataFileInfo(themeMetadataPath);
@@ -272,7 +272,7 @@ bool ThemePrivate::useCache()
             }
         }
 
-        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + '/' + svgElementsFileName;
+        const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + svgElementsFileName;
         svgElementsCache = KSharedConfig::openConfig(svgElementsFile, KConfig::SimpleConfig);
         QString currentIconThemePath;
         const auto *iconTheme = KIconLoader::global()->theme();
@@ -485,7 +485,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
 
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
-    elements[QStringLiteral("%fontfamily")] = font.family().split('[').first();
+    elements[QStringLiteral("%fontfamily")] = font.family().splitRef(QLatin1Char('[')).first().toString();
     elements[QStringLiteral("%smallfontsize")] = QStringLiteral("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
@@ -845,7 +845,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         apiMinor = 0;
         apiRevision = 0;
         if (!apiVersion.isEmpty()) {
-            QVector<QStringRef> parts = apiVersion.splitRef('.');
+            QVector<QStringRef> parts = apiVersion.splitRef(QLatin1Char('.'));
             if (!parts.isEmpty()) {
                 apiMajor = parts.value(0).toInt();
             }

@@ -51,7 +51,7 @@ public:
         QJsonDocument doc;
         doc.setArray(array);
 
-        QFile f(QStringLiteral("/tmp/debug-")+qgetenv("USER")+".json");
+        QFile f(QStringLiteral("/tmp/debug-") + QString::fromUtf8(qgetenv("USER")) + QStringLiteral(".json"));
         bool b = f.open(QFile::WriteOnly);
         Q_ASSERT(b);
         f.write(doc.toJson());
@@ -96,7 +96,7 @@ TimeTracker::TimeTracker(QObject* o)
 
 void TimeTracker::init()
 {
-    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(parent()->metaObject()->className(), parent()->objectName()) });
+    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(QString::fromUtf8(parent()->metaObject()->className()), parent()->objectName()) });
 
     QMetaMethod propChange = metaObject()->method(metaObject()->indexOfSlot("propertyChanged()"));
     Q_ASSERT(propChange.isValid() && metaObject()->indexOfSlot("propertyChanged()")>=0);
@@ -104,7 +104,7 @@ void TimeTracker::init()
     QObject* o = parent();
     for (int i = 0, pc = o->metaObject()->propertyCount(); i<pc; ++i) {
         QMetaProperty prop = o->metaObject()->property(i);
-        m_history.initial[prop.name()] = prop.read(o);
+        m_history.initial[QString::fromUtf8(prop.name())] = prop.read(o);
 
         if (prop.hasNotifySignal())
             connect(o, prop.notifySignal(), this, propChange);
@@ -133,7 +133,7 @@ void TimeTracker::propertyChanged()
             QString val;
             QDebug d(&val);
             d << prop.read(parent());
-            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(prop.name(), val.trimmed())});
+            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(QString::fromUtf8(prop.name()), val.trimmed())});
         }
     }
 }

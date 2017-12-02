@@ -81,14 +81,14 @@ void StorageThread::initializeDb(StorageJob *caller)
         m_db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), QStringLiteral("plasma-storage-%1").arg((quintptr)this));
         const QString storageDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
         QDir().mkpath(storageDir);
-        m_db.setDatabaseName(storageDir + QLatin1Char('/') + "plasma-storage2.db");
+        m_db.setDatabaseName(storageDir + QLatin1Char('/') + QStringLiteral("plasma-storage2.db"));
     }
 
     if (!m_db.open()) {
         qCWarning(LOG_PLASMA) << "Unable to open the plasma storage cache database: " << m_db.lastError();
     } else if (!m_db.tables().contains(caller->clientName())) {
         QSqlQuery query(m_db);
-        query.prepare(QStringLiteral("create table ") + caller->clientName() + " (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))");
+        query.prepare(QStringLiteral("create table ") + caller->clientName() + QStringLiteral(" (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))"));
         if (!query.exec()) {
             qCWarning(LOG_PLASMA) << "Unable to create table for" << caller->clientName();
             m_db.close();
@@ -122,12 +122,12 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         QSqlField field(QStringLiteral(":id"), QVariant::String);
         field.setValue(it.key());
         if (!ids.isEmpty()) {
-            ids.append(", ");
+            ids.append(QStringLiteral(", "));
         }
         ids.append(m_db.driver()->formatValue(field));
     }
 
-    query.prepare("delete from " + caller->clientName() + " where valueGroup = :valueGroup and id in (" + ids + ");");
+    query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup = :valueGroup and id in (") + ids + QStringLiteral(");"));
     query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
 
     if (!query.exec()) {
@@ -136,7 +136,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
         return;
     }
 
-    query.prepare("insert into " + caller->clientName() + " values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))");
+    query.prepare(QStringLiteral("insert into ") + caller->clientName() + QStringLiteral(" values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))"));
     query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
     query.bindValue(QStringLiteral(":txt"), QVariant());
     query.bindValue(QStringLiteral(":int"), QVariant());
@@ -218,20 +218,20 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
     //a bit redundant but should be the faster way with less string concatenation as possible
     if (params[QStringLiteral("key")].toString().isEmpty()) {
         //update modification time
-        query.prepare("update " + clientName + " set accessTime=date('now') where valueGroup=:valueGroup");
+        query.prepare(QStringLiteral("update ") + clientName + QStringLiteral(" set accessTime=date('now') where valueGroup=:valueGroup"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.exec();
 
-        query.prepare("select * from " + clientName + " where valueGroup=:valueGroup");
+        query.prepare(QStringLiteral("select * from ") + clientName + QStringLiteral(" where valueGroup=:valueGroup"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
     } else {
         //update modification time
-        query.prepare("update " + clientName + " set accessTime=date('now') where valueGroup=:valueGroup and id=:key");
+        query.prepare(QStringLiteral("update ") + clientName + QStringLiteral(" set accessTime=date('now') where valueGroup=:valueGroup and id=:key"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.bindValue(QStringLiteral(":key"), params[QStringLiteral("key")].toString());
         query.exec();
 
-        query.prepare("select * from " + clientName + " where valueGroup=:valueGroup and id=:key");
+        query.prepare(QStringLiteral("select * from ") + clientName + QStringLiteral(" where valueGroup=:valueGroup and id=:key"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.bindValue(QStringLiteral(":key"), params[QStringLiteral("key")].toString());
     }
@@ -288,10 +288,10 @@ void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariant
     QSqlQuery query(m_db);
 
     if (params[QStringLiteral("key")].toString().isEmpty()) {
-        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup");
+        query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup=:valueGroup"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
     } else {
-        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup and id=:key");
+        query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup=:valueGroup and id=:key"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.bindValue(QStringLiteral(":key"), params[QStringLiteral("key")].toString());
     }
@@ -317,11 +317,11 @@ void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &
 
     QSqlQuery query(m_db);
     if (valueGroup.isEmpty()) {
-        query.prepare("delete from " + caller->clientName() + " where accessTime < :date");
+        query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where accessTime < :date"));
         QDateTime time(QDateTime::currentDateTime().addSecs(-params[QStringLiteral("age")].toUInt()));
         query.bindValue(QStringLiteral(":date"), time.toTime_t());
     } else {
-        query.prepare("delete from " + caller->clientName() + " where valueGroup=:valueGroup and accessTime < :date");
+        query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup=:valueGroup and accessTime < :date"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         QDateTime time(QDateTime::currentDateTime().addSecs(-params[QStringLiteral("age")].toUInt()));
         query.bindValue(QStringLiteral(":date"), time.toTime_t());

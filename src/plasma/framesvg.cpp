@@ -132,7 +132,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
     } else {
         d->prefix = prefix;
         if (!d->prefix.isEmpty()) {
-            d->prefix += '-';
+            d->prefix += QLatin1Char('-');
         }
     }
     d->requestedPrefix = prefix;

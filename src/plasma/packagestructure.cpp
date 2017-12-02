@@ -116,7 +116,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
     } else {
         if (!servicePrefix.isEmpty()) {
             // and now we register it as a service =)
-            QString metaPath = path + "/metadata.desktop";
+            QString metaPath = path + QStringLiteral("/metadata.desktop");
             KDesktopFile df(metaPath);
             KConfigGroup cg = df.desktopGroup();
             const QString pluginName = cg.readEntry("X-KDE-PluginInfo-Name", QString());
@@ -132,7 +132,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
 
             //TODO: remove installation of the desktop file in kservices5 when possible
 
-            const QString serviceName = servicePrefix + pluginName + ".desktop";
+            const QString serviceName = servicePrefix + pluginName + QStringLiteral(".desktop");
 
             QString localServiceDirectory = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kservices5/");
             if (!QDir().mkpath(localServiceDirectory)) {
@@ -148,7 +148,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
                 qCDebug(LOG_PLASMA) << "Copying metadata went ok.";
                 // the icon in the installed file needs to point to the icon in the
                 // installation dir!
-                QString iconPath = path + '/' + cg.readEntry("Icon");
+                QString iconPath = path + QLatin1Char('/') + cg.readEntry("Icon");
                 QFile icon(iconPath);
                 if (icon.exists()) {
                     KDesktopFile df(service);
@@ -217,11 +217,11 @@ KJob *PackageStructure::install(Package *package, const QString &archivePath, co
 KJob *PackageStructure::uninstall(Package *package, const QString &packageRoot)
 {
     if (d->internalStructure && !qobject_cast<PackageStructureWrapper *>(d->internalStructure)) {
-        QString metaPath = package->path() + "/metadata.desktop";
+        QString metaPath = package->path() + QStringLiteral("/metadata.desktop");
         KDesktopFile df(metaPath);
         KConfigGroup cg = df.desktopGroup();
         const QString pluginName = cg.readEntry("X-KDE-PluginInfo-Name", QString());
-        const QString serviceName = package->servicePrefix() + pluginName + ".desktop";
+        const QString serviceName = package->servicePrefix() + pluginName + QStringLiteral(".desktop");
 
         KJob *job = d->internalStructure->uninstall(package->d->internalPackage, packageRoot);
         if (job) {

@@ -70,10 +70,10 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 
 void CoreBindingsPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.core"));
+    Q_ASSERT(uri == QByteArray("org.kde.plasma.core"));
 
-    qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", "");
-    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", "");
+    qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", {});
+    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", {});
 
     qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
     qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");

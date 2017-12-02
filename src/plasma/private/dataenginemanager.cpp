@@ -162,7 +162,7 @@ void DataEngineManager::unloadEngine(const QString &name)
 void DataEngineManager::timerEvent(QTimerEvent *)
 {
 #ifndef NDEBUG
-    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + "plasma_dataenginemanager_log";
+    QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QStringLiteral("/plasma_dataenginemanager_log");
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
         // qCDebug(LOG_PLASMA) << "faild to open" << path;
@@ -195,7 +195,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
                 out << "                       Relays: " << dc->d->relays.count() << endl;
                 QString times;
                 foreach (SignalRelay *relay, dc->d->relays) {
-                    times.append(' ').append(QString::number(relay->m_interval));
+                    times.append(QLatin1Char(' ') + QString::number(relay->m_interval));
                 }
                 out << "                       Relay Timeouts: " << times << ' '  << endl;
             }

@@ -56,7 +56,7 @@ void ChangeableMainScriptPackage::pathChanged(KPackage::Package *package)
     }
 
     KPluginMetaData md(package->metadata().metaDataFileName());
-    QString mainScript = md.value("X-Plasma-MainScript");
+    QString mainScript = md.value(QLatin1String("X-Plasma-MainScript"));
 
     if (!mainScript.isEmpty()) {
         package->addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
@@ -72,7 +72,7 @@ void GenericPackage::initPackage(KPackage::Package *package)
         QMutableStringListIterator it(platform);
         while (it.hasNext()) {
             it.next();
-            it.setValue("platformcontents/" + it.value());
+            it.setValue(QStringLiteral("platformcontents/") + it.value());
         }
 
         platform.append(QStringLiteral("contents"));

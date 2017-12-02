@@ -41,6 +41,6 @@ QImage AppBackgroundProvider::requestImage(const QString &id, QSize *size, const
 {
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)
-    return QImage(m_theme->backgroundPath(id % ".png"));
+    return QImage(m_theme->backgroundPath(id % QStringLiteral(".png")));
 }
 

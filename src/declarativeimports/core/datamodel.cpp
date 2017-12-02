@@ -55,7 +55,7 @@ void SortFilterModel::syncRoleNames()
     const QHash<int, QByteArray> rNames = roleNames();
     m_roleIds.reserve(rNames.count());
     for (auto i = rNames.constBegin(); i != rNames.constEnd(); ++i) {
-        m_roleIds[i.value()] = i.key();
+        m_roleIds[QString::fromUtf8(i.value())] = i.key();
     }
 
     setRoleNames(sourceModel()->roleNames());
@@ -193,7 +193,7 @@ QVariantMap SortFilterModel::get(int row) const
 
     const QHash<int, QByteArray> rNames = roleNames();
     for (auto i = rNames.begin(); i != rNames.end(); ++i) {
-        hash[i.value()] = data(idx, i.key());
+        hash[QString::fromUtf8(i.value())] = data(idx, i.key());
     }
 
     return hash;
@@ -439,7 +439,7 @@ void DataModel::removeSource(const QString &sourceName)
     if (m_keyRoleFilter.isEmpty()) {
         //source name in the map, linear scan
         for (int i = 0; i < m_items.value(QString()).count(); ++i) {
-            if (m_items.value(QString())[i].value<QVariantMap>().value("DataEngineSource") == sourceName) {
+            if (m_items.value(QString())[i].value<QVariantMap>().value(QStringLiteral("DataEngineSource")) == sourceName) {
                 beginRemoveRows(QModelIndex(), i, i);
                 m_items[QString()].remove(i);
                 endRemoveRows();
@@ -498,7 +498,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
         return source;
     } else {
-        return m_items.value(source).value(actualRow).value<QVariantMap>().value(m_roleNames.value(role));
+        return m_items.value(source).value(actualRow).value<QVariantMap>().value(QString::fromUtf8(m_roleNames.value(role)));
     }
 }
 
@@ -554,7 +554,7 @@ QVariantMap DataModel::get(int row) const
 
     const QHash<int, QByteArray> rNames = roleNames();
     for (auto i = rNames.constBegin(); i != rNames.constEnd(); ++i) {
-        map[i.value()] = data(idx, i.key());
+        map[QString::fromUtf8(i.value())] = data(idx, i.key());
     }
 
     return map;

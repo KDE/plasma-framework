@@ -81,16 +81,16 @@ void PlasmaComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *ur
 
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
+    Q_ASSERT(uri == QByteArray("org.kde.plasma.components"));
 
     qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
     qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 2, 0, "RangeModel");
 
-    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", "");
-    qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", "");
-    qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", "");
+    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", {});
+    qmlRegisterUncreatableType<PageOrientation>(uri, 2, 0, "PageOrientation", {});
+    qmlRegisterUncreatableType<PageStatus>(uri, 2, 0, "PageStatus", {});
 }
 
 #include "moc_plasmacomponentsplugin.cpp"

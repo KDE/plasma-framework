@@ -246,7 +246,7 @@ KSharedConfigPtr Corona::config() const
 
 Containment *Corona::createContainment(const QString &name, const QVariantList &args)
 {
-    if (d->immutability == Types::Mutable || args.contains("org.kde.plasma:force-create")) {
+    if (d->immutability == Types::Mutable || args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
         return d->addContainment(name, args, 0);
     }
 
@@ -364,7 +364,7 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
     KConfigGroup config(KSharedConfig::openConfig(), "General");
 
     if (QCoreApplication::instance()) {
-        configName = QCoreApplication::instance()->applicationName() + "-appletsrc";
+        configName = QCoreApplication::instance()->applicationName() + QStringLiteral("-appletsrc");
     } else {
         configName = QStringLiteral("plasma-appletsrc");
     }
@@ -484,7 +484,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             applet->init();
             delete applet;
         }
-        applet = containment = new Containment(q, 0, id);
+        applet = containment = new Containment(q, {}, id);
         //if it's a dummy containment, just say its ui is ready, not blocking the corona
         applet->updateConstraints(Plasma::Types::UiReadyConstraint);
 

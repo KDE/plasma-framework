@@ -198,7 +198,7 @@ void Service::registerOperationsScheme()
         return;
     }
 
-    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, PLASMA_RELATIVE_DATA_INSTALL_DIR "/services/" + d->name + ".operations");
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/services/") + d->name + QStringLiteral(".operations"));
 
     if (path.isEmpty()) {
 #ifndef NDEBUG

@@ -182,7 +182,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 
     //if name wasn't a path, pluginName == name
-    const QString pluginName = name.split('/').last();
+    const auto pluginName = name.splitRef(QLatin1Char('/')).last();
 
     // Look for C++ plugins first
     auto filter = [&pluginName](const KPluginMetaData &md) -> bool
@@ -452,7 +452,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         return Package();
     }
 
-    const QString hashkey = packageFormat + '%' + specialization;
+    const QString hashkey = packageFormat + QLatin1Char('%') + specialization;
     PackageStructure *structure = d->structures.value(hashkey).data();
 
     if (structure) {
@@ -528,7 +528,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
     //NOTE: it still produces kplugininfos from KServices because some user code expects
     //info.sevice() to be valid and would crash ohtherwise
     foreach (auto& md, plugins) {
-        auto pi = md.metaDataFileName().endsWith(".json") ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
+        auto pi = md.metaDataFileName().endsWith(QLatin1String(".json")) ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
         if (!pi.isValid()) {
             qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
             continue;
@@ -716,7 +716,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
     if (parentApp.isEmpty()) {
         constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
     } else {
-        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + '\'';
+        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
     }
 
     list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_dataEnginePluginDir, QStringLiteral("Plasma/DataEngine"), constraint));
@@ -735,7 +735,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
     if (parentApp.isEmpty()) {
         constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
     } else {
-        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + '\'';
+        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
     }
 
     list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, QStringLiteral("Plasma/ContainmentActions"), constraint));

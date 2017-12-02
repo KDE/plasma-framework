@@ -75,7 +75,7 @@ QString FallbackComponent::filePath(const QString &key)
             resolved = m_basePath + path + key;
         } else {
 
-            resolved = QStandardPaths::locate(QStandardPaths::GenericDataLocation, m_basePath + '/' + path + key);
+            resolved = QStandardPaths::locate(QStandardPaths::GenericDataLocation, m_basePath + QLatin1Char('/') + path + key);
         }
 
         m_possiblePaths.insert(path + key, new QString(resolved));

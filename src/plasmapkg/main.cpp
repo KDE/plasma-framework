@@ -77,7 +77,7 @@ int main(int argc, char **argv)
             params[typeIndex + 1] = typeFromLegacy(params.value(typeIndex + 1));
         } else {
             //user passed --type=typeName
-            typeIndex = params.indexOf(QRegularExpression("--type=.*"));
+            typeIndex = params.indexOf(QRegularExpression(QStringLiteral("--type=.*")));
             if (typeIndex > -1) {
                 params[typeIndex] = QStringLiteral("--type=") + typeFromLegacy(params.value(typeIndex).replace(QStringLiteral("--type="), QString()));
             }

@@ -96,7 +96,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 {
     //qDebug() << "Intercepted URL:" << path << type;
 
-    if (d->forcePlasmaStyle && path.path().contains("Controls.2/org.kde.desktop/")) {
+    if (d->forcePlasmaStyle && path.path().contains(QLatin1String("Controls.2/org.kde.desktop/"))) {
         return QUrl::fromLocalFile(path.path().replace(QLatin1String("Controls.2/org.kde.desktop/"), QLatin1String("Controls.2/Plasma/")));
     }
     QString pkgRoot;
@@ -105,9 +105,10 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         package = d->package;
     } else {
         foreach (const QString &base, QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)) {
-            pkgRoot = QFileInfo(base + "/plasma/plasmoids/").canonicalFilePath();
+            pkgRoot = QFileInfo(base + QStringLiteral("/plasma/plasmoids/")).canonicalFilePath();
             if (!pkgRoot.isEmpty() && path.path().startsWith(pkgRoot)) {
-                const QString pkgName = path.path().mid(pkgRoot.length() + 1).split('/').first();
+                const QString pkgName = path.path().midRef(pkgRoot.length() + 1).split(QLatin1Char('/')).first().toString();
+#warning FIX double look-up
                 if (PackageUrlInterceptorPrivate::s_packages.contains(pkgName)) {
                     package = PackageUrlInterceptorPrivate::s_packages.value(pkgName);
                 } else {

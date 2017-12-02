@@ -236,7 +236,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
     {
         const QString source = d->categories.at(index.row())->source();
         // Quick check if source is an absolute path or not
-        if (d->appletInterface && !source.isEmpty() && !(source.startsWith('/') && source.endsWith(QLatin1String("qml")))) {
+        if (d->appletInterface && !source.isEmpty() && !(source.startsWith(QLatin1Char('/')) && source.endsWith(QLatin1String("qml")))) {
             if(!d->appletInterface.data()->kPackage().isValid())
                 qWarning() << "wrong applet" << d->appletInterface.data()->pluginMetaData().name();
             return QUrl::fromLocalFile(d->appletInterface.data()->kPackage().filePath("ui", source));
