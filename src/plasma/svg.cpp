@@ -146,7 +146,7 @@ SvgPrivate::SvgPrivate(Svg *svg)
       colorGroup(Plasma::Theme::NormalColorGroup),
       lastModified(0),
       devicePixelRatio(1.0),
-      scaleFactor(1.0),
+      scaleFactor(s_lastScaleFactor),
       status(Svg::Status::Normal),
       multipleImages(false),
       themed(false),
@@ -700,6 +700,7 @@ void SvgPrivate::colorsChanged()
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
 QWeakPointer<Theme> SvgPrivate::s_systemColorsCache;
+qreal SvgPrivate::s_lastScaleFactor = 1.0;
 
 Svg::Svg(QObject *parent)
     : QObject(parent),
@@ -746,6 +747,7 @@ void Svg::setScaleFactor(qreal ratio)
     }
 
     d->scaleFactor = floor(ratio);
+    d->s_lastScaleFactor = d->scaleFactor;
     //not resize() because we want to do it unconditionally
     QRectF rect;
 
