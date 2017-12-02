@@ -127,7 +127,7 @@ void TestEngine::init()
     // QVariant::RectF
     setData(dsn, QStringLiteral("QRectF"), QVariant(QRectF(1.2, 3.4, 5.6, 7.8)));
     // QVariant::RegExp
-    setData(dsn, QStringLiteral("QRegExp"), QVariant(QRegExp("^KDE4$")));
+    setData(dsn, QStringLiteral("QRegExp"), QVariant(QRegExp(QStringLiteral("^KDE4$"))));
     // QVariant::Region
     setData(dsn, QStringLiteral("QRegion"), QVariant(QRegion(10, 20, 30, 40)));
     // QVariant::Size

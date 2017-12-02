@@ -186,7 +186,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 void AppletQuickItemPrivate::propagateSizeHint(const QByteArray &layoutProperty)
 {
     if (ownLayout && representationLayout) {
-        ownLayout->setProperty(layoutProperty, representationLayout->property(layoutProperty));
+        ownLayout->setProperty(layoutProperty.constData(), representationLayout->property(layoutProperty.constData()));
     }
 }
 
@@ -524,7 +524,7 @@ void AppletQuickItem::init()
             reason = d->applet->launchErrorMessage();
         } else if (d->applet->kPackage().isValid()) {
             foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
-                reason += error.toString() + '\n';
+                reason += error.toString() + QLatin1Char('\n');
             }
             reason = i18n("Error loading QML file: %1", reason);
         } else {

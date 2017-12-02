@@ -97,9 +97,9 @@ void ConfigViewPrivate::init()
     kdeclarative.setDeclarativeEngine(q->engine());
     const QString rootPath = applet.data()->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
     if (!rootPath.isEmpty()) {
-        kdeclarative.setTranslationDomain("plasma_applet_" + rootPath);
+        kdeclarative.setTranslationDomain(QStringLiteral("plasma_applet_") + rootPath);
     } else {
-        kdeclarative.setTranslationDomain("plasma_applet_" + applet.data()->pluginMetaData().pluginId());
+        kdeclarative.setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
     }
     kdeclarative.setupBindings();
 

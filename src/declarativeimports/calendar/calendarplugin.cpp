@@ -39,7 +39,7 @@ static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *sc
 
 void CalendarPlugin::registerTypes(const char *uri)
 {
-    Q_ASSERT(uri == QLatin1String("org.kde.plasma.calendar"));
+    Q_ASSERT(uri == QByteArray("org.kde.plasma.calendar"));
     qmlRegisterType<CalendarData>(uri, 2, 0, "CalendarData");
     qmlRegisterType<Calendar>(uri, 2, 0, "Calendar");
     qmlRegisterType<QAbstractItemModel>();

@@ -91,7 +91,7 @@ void QmlWallpaperPackage::initPackage(Plasma::Package *package)
         QMutableStringListIterator it(platform);
         while (it.hasNext()) {
             it.next();
-            it.setValue("platformcontents/" + it.value());
+            it.setValue(QStringLiteral("platformcontents/") + it.value());
         }
 
         platform.append(QStringLiteral("contents"));

@@ -196,7 +196,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         KDeclarative::KDeclarative kdeclarative;
         kdeclarative.setDeclarativeEngine(engine());
         //binds things like kconfig and icons
-        kdeclarative.setTranslationDomain("plasma_shell_" + pkg.metadata().pluginId());
+        kdeclarative.setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
         kdeclarative.setupBindings();
     } else {
         qWarning() << "Invalid home screen package";

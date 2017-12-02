@@ -197,13 +197,13 @@ QList<QAction *> WallpaperInterface::contextualActions() const
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 {
-    return KPluginMetaData::readStringList(m_pkg.metadata().rawData(), "X-Plasma-DropMimeTypes").contains(mimetype);
+    return KPluginMetaData::readStringList(m_pkg.metadata().rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
 }
 
 void WallpaperInterface::setUrl(const QUrl &url)
 {
     if (m_qmlObject->rootObject()) {
-        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QStringLiteral("setUrl").toLatin1(), Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
+        QMetaObject::invokeMethod(m_qmlObject->rootObject(), "setUrl", Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
     }
 }
 
@@ -254,7 +254,8 @@ QAction *WallpaperInterface::action(QString name) const
 void WallpaperInterface::executeAction(const QString &name)
 {
     if (m_qmlObject->rootObject()) {
-        QMetaObject::invokeMethod(m_qmlObject->rootObject(), QString("action_" + name).toLatin1(), Qt::DirectConnection);
+        const QByteArray actionName("action_" + name.toUtf8());
+        QMetaObject::invokeMethod(m_qmlObject->rootObject(), actionName.constData(), Qt::DirectConnection);
     }
 }
 

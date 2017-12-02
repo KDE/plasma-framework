@@ -65,7 +65,7 @@ void ComponentInstaller::installMissingComponent(const QString &type,
         QWidget *parent, bool force)
 {
 #ifdef PLASMA_ENABLE_PACKAGEKIT_SUPPORT
-    QString searchString = type + '-' + name;
+    QString searchString = type + QLatin1Char('-') + name;
 
     if (!force) {
         if (d->alreadyPrompted.contains(searchString)) {

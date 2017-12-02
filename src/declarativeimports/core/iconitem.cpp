@@ -175,7 +175,7 @@ void IconItem::setSource(const QVariant &source)
 
             if (m_usesPlasmaTheme) {
                 //try as a svg icon from plasma theme
-                m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.section('-', 0, 0));
+                m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.section(QLatin1Char('-'), 0, 0));
                 m_svgIcon->setContainsMultipleImages(true);
             }
 

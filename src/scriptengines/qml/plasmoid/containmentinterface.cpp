@@ -102,13 +102,13 @@ void ContainmentInterface::init()
         }
 
         if (defaults.isValid()) {
-            KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage("KPackage/GenericQML");
-            pkg.setDefaultPackageRoot("plasma/packages");
+            KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("KPackage/GenericQML"));
+            pkg.setDefaultPackageRoot(QStringLiteral("plasma/packages"));
 
             if (defaults.isValid()) {
                 pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
             } else {
-                pkg.setPath("org.kde.desktoptoolbox");
+                pkg.setPath(QStringLiteral("org.kde.desktoptoolbox"));
             }
 
             PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
@@ -121,7 +121,7 @@ void ContainmentInterface::init()
                     QObject *containmentGraphicObject = qmlObject()->rootObject();
 
                     QVariantHash toolboxProperties;
-                    toolboxProperties["parent"] = QVariant::fromValue(this);
+                    toolboxProperties[QStringLiteral("parent")] = QVariant::fromValue(this);
                     QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), 0, toolboxProperties);
                     if (toolBoxObject && containmentGraphicObject) {
                         containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
@@ -447,8 +447,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
     qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
 
     if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
-        QString data = mimeData->data(QStringLiteral("text/x-plasmoidservicename"));
-        const QStringList appletNames = data.split('\n', QString::SkipEmptyParts);
+        QString data = QString::fromUtf8( mimeData->data(QStringLiteral("text/x-plasmoidservicename")) );
+        const QStringList appletNames = data.split(QLatin1Char('\n'), QString::SkipEmptyParts);
         foreach (const QString &appletName, appletNames) {
             qDebug() << "adding" << appletName;
 
@@ -519,7 +519,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
             Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
-            setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
+            setAppletArgs(applet, pluginFormats[selectedPlugin], QString::fromUtf8(mimeData->data(pluginFormats[selectedPlugin])));
         } else {
             QMenu *choices = nullptr;
             if (!dropJob) {
@@ -545,7 +545,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
                 connect(action, &QAction::triggered, this, [this, x, y, mimeData, action]() {
                     const QString selectedPlugin = action->data().toString();
                     Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
-                    setAppletArgs(applet, selectedPlugin, mimeData->data(selectedPlugin));
+                    setAppletArgs(applet, selectedPlugin, QString::fromUtf8(mimeData->data(selectedPlugin)));
                 });
 
                 actionsToPlugins.insert(action, info.pluginId());
@@ -657,7 +657,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     dropJob->setApplicationActions(dropActions);
                 }
                 const QString &packagePath = tjob->url().toLocalFile();
-                connect(installPlasmaPackageAction, &QAction::triggered, this, [this, tjob, posi, packagePath]() {
+                connect(installPlasmaPackageAction, &QAction::triggered, this, [this, posi, packagePath]() {
                     using namespace KPackage;
                     PackageStructure *structure = PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"));
                     Package package(structure);
@@ -763,7 +763,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     dropActions << action;
                     actionsToWallpapers.insert(action, info.pluginId());
                     const QUrl url = tjob->url();
-                    connect(action, &QAction::triggered, this, [this, action, url]() {
+                    connect(action, &QAction::triggered, this, [this, url]() {
                         //set wallpapery stuff
                         if (m_wallpaperInterface && url.isValid()) {
                             m_wallpaperInterface->setUrl(url);
@@ -1041,7 +1041,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     //pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
     //post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
-    if (QVersionNumber::fromString(qVersion()) > QVersionNumber(5, 8, 0)) {
+    if (QVersionNumber::fromString(QLatin1String(qVersion())) > QVersionNumber(5, 8, 0)) {
         QTimer::singleShot(0, this, ungrabMouseHack);
     }
     else {

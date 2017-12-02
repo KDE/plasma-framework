@@ -433,7 +433,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
         if (!api.isEmpty()) {
             const QString path =
                 QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/" + dataEngineDescription.pluginName() + '/',
+                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginName(),
                                        QStandardPaths::LocateDirectory);
             package = new Package(PluginLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), api));
             package->setPath(path);

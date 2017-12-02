@@ -125,7 +125,7 @@ QString ContainmentActions::eventToString(QEvent *event)
         QMouseEvent *e = static_cast<QMouseEvent *>(event);
         int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
         QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-        trigger += mouse.valueToKey(e->button());
+        trigger += QString::fromLatin1(mouse.valueToKey(e->button()));
         modifiers = e->modifiers();
         break;
     }
@@ -134,14 +134,14 @@ QString ContainmentActions::eventToString(QEvent *event)
         int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
         QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
         trigger = QStringLiteral("wheel:");
-        trigger += orient.valueToKey(e->orientation());
+        trigger += QString::fromLatin1(orient.valueToKey(e->orientation()));
         modifiers = e->modifiers();
         break;
     }
     case QEvent::ContextMenu: {
         int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
         QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
-        trigger = mouse.valueToKey(Qt::RightButton);
+        trigger = QString::fromLatin1(mouse.valueToKey(Qt::RightButton));
         modifiers = Qt::NoModifier;
         break;
     }
@@ -151,8 +151,7 @@ QString ContainmentActions::eventToString(QEvent *event)
 
     int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
     QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
-    trigger += ';';
-    trigger += kbd.valueToKeys(modifiers);
+    trigger += QLatin1Char(';') + QString::fromLatin1(kbd.valueToKeys(modifiers));
 
     return trigger;
 }

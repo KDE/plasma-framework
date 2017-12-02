@@ -202,9 +202,7 @@ QString Theme::styleSheet(const QString &css) const
 QString Theme::wallpaperPath(const QSize &size) const
 {
     QString fullPath;
-    QString image = d->defaultWallpaperTheme;
-
-    image.append("/contents/images/%1x%2").append(d->defaultWallpaperSuffix);
+    QString image = d->defaultWallpaperTheme + QStringLiteral("/contents/images/%1x%2") + d->defaultWallpaperSuffix;
     QString defaultImage = image.arg(d->defaultWallpaperWidth).arg(d->defaultWallpaperHeight);
 
     if (size.isValid()) {
@@ -356,7 +354,7 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
 
     //Name starting by _ means the element is empty and we're asked for the size of
     //the whole image, so the whole image is never invalid
-    if (element.indexOf('_') <= 0) {
+    if (element.indexOf(QLatin1Char('_')) <= 0) {
         return false;
     }
 

@@ -174,8 +174,8 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     //It's valid, let's try to load the icon from within the package
     if (script) {
         //use the absolute path of the in-package icon as icon name
-        if (appletDescription.iconName().startsWith('/')) {
-            icon = package->filePath("", appletDescription.iconName().toUtf8());
+        if (appletDescription.iconName().startsWith(QLatin1Char('/'))) {
+            icon = package->filePath({}, appletDescription.iconName());
         }
     //package not valid, get rid of it
     } else {

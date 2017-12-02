@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     Plasma::PluginTest app(argc, argv, parser);
 
     const QString description = i18n("Plugin test app");
-    const char version[] = "2.0";
+    const QString version = QStringLiteral("2.0");
 
     app.setApplicationVersion(version);
     parser->addVersionOption();

@@ -643,10 +643,10 @@ QString AppletInterface::downloadPath(const QString &file)
 
 QString AppletInterface::downloadPath() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginMetaData().pluginId() + '/';
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/") + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
 
     if (!QFile::exists(downloadDir)) {
-        QDir dir(QChar('/'));
+        QDir dir({ QLatin1Char('/') });
         dir.mkpath(downloadDir);
     }
 
@@ -655,7 +655,7 @@ QString AppletInterface::downloadPath() const
 
 QStringList AppletInterface::downloadedFiles() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/Plasma/" + applet()->pluginMetaData().pluginId() + '/';
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/") + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
@@ -664,9 +664,10 @@ void AppletInterface::executeAction(const QString &name)
 {
     if (qmlObject()->rootObject()) {
         const QMetaObject *metaObj = qmlObject()->rootObject()->metaObject();
-        QString actionMethodName = QString("action_" + name);
-        if (metaObj->indexOfMethod(QMetaObject::normalizedSignature((actionMethodName + "()").toLatin1())) != -1) {
-            QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.toLatin1(), Qt::DirectConnection);
+        const QByteArray actionMethodName = "action_" + name.toUtf8();
+        const QByteArray actionFunctionName = actionMethodName + QByteArray("()");
+        if (metaObj->indexOfMethod(QMetaObject::normalizedSignature(actionFunctionName.constData()).constData()) != -1) {
+            QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.constData(), Qt::DirectConnection);
         } else {
             QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
         }

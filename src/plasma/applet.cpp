@@ -109,7 +109,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
     }
     d->icon = d->appletDescription.iconName();
 
-    if (args.contains("org.kde.plasma:force-create")) {
+    if (args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
         setProperty("org.kde.plasma:force-create", true);
     }
 

@@ -208,7 +208,7 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
     if (corona->kPackage().isValid()) {
         const auto info = corona->kPackage().metadata();
         if (info.isValid()) {
-            setTranslationDomain("plasma_shell_" + info.pluginId());
+            setTranslationDomain(QStringLiteral("plasma_shell_") + info.pluginId());
         } else {
             qWarning() << "Invalid corona package metadata";
         }

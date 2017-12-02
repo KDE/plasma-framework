@@ -309,7 +309,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE("(\\d+)-(\\d+)-(.+)", status, ratio));
+        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             if (sizeHintedKeyExpr.exactMatch(key)) {
@@ -347,8 +347,8 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
             }
 
             if (bestFit.isValid()) {
-                actualElementId = QString::number(bestFit.width()) % '-' %
-                                  QString::number(bestFit.height()) % '-' % elementId;
+                actualElementId = QString::number(bestFit.width()) % QLatin1Char('-') %
+                                  QString::number(bestFit.height()) % QLatin1Char('-') % elementId;
             }
         }
     }
@@ -456,7 +456,7 @@ void SvgPrivate::createRenderer()
     //qCDebug(LOG_PLASMA) << path << "**";
 
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup, status);
-    styleCrc = qChecksum(styleSheet.toUtf8(), styleSheet.size());
+    styleCrc = qChecksum(styleSheet.toUtf8().constData(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 

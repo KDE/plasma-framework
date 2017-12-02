@@ -192,7 +192,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         return 0;
     }
 
-    if (q->immutability() != Types::Mutable && !args.contains("org.kde.plasma:force-create")) {
+    if (q->immutability() != Types::Mutable && !args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
