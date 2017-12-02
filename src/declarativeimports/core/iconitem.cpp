@@ -73,9 +73,6 @@ IconItem::IconItem(QQuickItem *parent)
     connect(this, &QQuickItem::windowChanged,
             this, &IconItem::schedulePixmapUpdate);
 
-    connect(this, &IconItem::overlaysChanged,
-            this, &IconItem::schedulePixmapUpdate);
-
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
 
@@ -280,6 +277,7 @@ void IconItem::setOverlays(const QStringList &overlays)
         return;
     }
     m_overlays = overlays;
+    schedulePixmapUpdate();
     emit overlaysChanged();
 }
 
