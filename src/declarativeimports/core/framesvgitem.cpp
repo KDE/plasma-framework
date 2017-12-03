@@ -525,14 +525,30 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
             new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
-            new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
-            new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
-            new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
-            new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
+            if (enabledBorders() & (FrameSvg::TopBorder | FrameSvg::LeftBorder)) {
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            }
+            if (enabledBorders() & (FrameSvg::TopBorder | FrameSvg::RightBorder)) {
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+            }
+            if (enabledBorders() & FrameSvg::TopBorder) {
+                new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
+            }
+            if (enabledBorders() & FrameSvg::BottomBorder) {
+                new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
+            }
+            if (enabledBorders() & (FrameSvg::BottomBorder | FrameSvg::LeftBorder)) {
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+            }
+            if (enabledBorders() & (FrameSvg::BottomBorder | FrameSvg::RightBorder)) {
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+            }
+            if (enabledBorders() & FrameSvg::LeftBorder) {
+                new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
+            }
+            if (enabledBorders() & FrameSvg::RightBorder) {
+                new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
+            }
 
             m_sizeChanged = true;
             m_textureChanged = false;
