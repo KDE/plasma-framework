@@ -97,7 +97,6 @@ public:
 
     static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
     static QWeakPointer<Theme> s_systemColorsCache;
-    static qreal s_lastScaleFactor;
 
     Svg *q;
     QWeakPointer<Theme> theme;
