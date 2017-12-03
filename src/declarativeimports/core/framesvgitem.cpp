@@ -460,6 +460,10 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
 
 void FrameSvgItem::doUpdate()
 {
+    if (m_frameSvg->isRepaintBlocked()) {
+        return;
+    }
+
     CheckMarginsChange checkMargins(m_margins);
     CheckMarginsChange checkFixedMargins(m_fixedMargins);
 
