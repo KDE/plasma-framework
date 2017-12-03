@@ -33,6 +33,7 @@ QtQuickControlStyle.ComboBoxStyle {
         elide: Text.ElideRight
         color: theme.buttonTextColor
         verticalAlignment: Text.AlignTop
+        horizontalAlignment: Text.AlignLeft
     }
 
     background: Item {
