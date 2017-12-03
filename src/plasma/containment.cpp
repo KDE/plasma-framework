@@ -397,11 +397,11 @@ void Containment::addApplet(Applet *applet)
         return;
     }
 
-    if (d->applets.contains(applet)) {
 #ifndef NDEBUG
+    if (d->applets.contains(applet)) {
         // qCDebug(LOG_PLASMA) << "already have this applet!";
-#endif
     }
+#endif
 
     Containment *currentContainment = applet->containment();
 
