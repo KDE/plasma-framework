@@ -531,7 +531,7 @@ void AppletQuickItem::init()
             reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());
         }
 
-        d->qmlObject->setSource(QUrl::fromLocalFile(d->coronaPackage.filePath("appleterror")));
+        d->qmlObject->setSource(d->coronaPackage.fileUrl("appleterror"));
         d->qmlObject->completeInitialization();
 
         //even the error message QML may fail
@@ -576,20 +576,20 @@ void AppletQuickItem::init()
     //default compactRepresentation is a simple icon provided by the shell package
     if (!d->compactRepresentation) {
         d->compactRepresentation = new QQmlComponent(engine, this);
-        d->compactRepresentation->loadUrl(QUrl::fromLocalFile(d->coronaPackage.filePath("defaultcompactrepresentation")));
+        d->compactRepresentation->loadUrl(d->coronaPackage.fileUrl("defaultcompactrepresentation"));
         emit compactRepresentationChanged(d->compactRepresentation);
     }
 
     //default compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
-        QString compactExpanderPath = d->containmentPackage.filePath("compactapplet");
+        QUrl compactExpanderUrl = d->containmentPackage.fileUrl("compactapplet");
 
-        if (compactExpanderPath.isEmpty()) {
-            compactExpanderPath = d->coronaPackage.filePath("compactapplet");
+        if (compactExpanderUrl.isEmpty()) {
+            compactExpanderUrl = d->coronaPackage.fileUrl("compactapplet");
         }
 
-        d->compactRepresentationExpander->loadUrl(QUrl::fromLocalFile(compactExpanderPath));
+        d->compactRepresentationExpander->loadUrl(compactExpanderUrl);
     }
 
     d->compactRepresentationCheck();
@@ -671,7 +671,7 @@ QQmlComponent *AppletQuickItem::fullRepresentation()
 QObject *AppletQuickItem::testItem()
 {
     if (!d->testItem) {
-        const QUrl url = QUrl::fromLocalFile(d->appletPackage.filePath("test"));
+        const QUrl url(d->appletPackage.fileUrl("test"));
         if (url.isEmpty()) {
             return nullptr;
         }

@@ -38,7 +38,7 @@ CustomCorona::CustomCorona(QObject *parent)
     qmlRegisterUncreatableType<PlasmaQuick::ContainmentView>("org.kde.plasma.shell", 2, 0, "Desktop", QStringLiteral("It is not possible to create objects of type Desktop"));
 
     m_view = new PlasmaQuick::ContainmentView(this);
-    m_view->setSource(QUrl::fromLocalFile(package.filePath("views", QStringLiteral("Desktop.qml"))));
+    m_view->setSource(package.fileUrl("views", QStringLiteral("Desktop.qml")));
     m_view->show();
     
     load();
