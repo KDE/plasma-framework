@@ -516,7 +516,7 @@ void AppletQuickItem::init()
     QObject *o = c.create();
     o->deleteLater();
 
-    d->qmlObject->setSource(QUrl::fromLocalFile(d->applet->kPackage().filePath("mainscript")));
+    d->qmlObject->setSource(d->applet->kPackage().fileUrl("mainscript"));
 
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError() || d->applet->failedToLaunch()) {
         QString reason;
