@@ -738,8 +738,6 @@ Dialog::Dialog(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
-    setIcon(QIcon::fromTheme(QStringLiteral("plasma")));
-
     connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
     connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
 
