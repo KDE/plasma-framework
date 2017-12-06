@@ -80,7 +80,7 @@ void IconItemTest::initTestCase()
     m_view = new QQuickView();
     m_view->setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
     m_view->show();
-    QTest::qWaitForWindowExposed(m_view);
+    QVERIFY(QTest::qWaitForWindowExposed(m_view));
 
     if (!m_view->rootObject() || !m_view->rootObject()->grabToImage()) {
         QSKIP("Cannot grab item to image.");
@@ -435,7 +435,7 @@ void IconItemTest::windowChanged()
     QQuickView newView;
     newView.setSource(QUrl::fromLocalFile(QFINDTESTDATA("data/view.qml")));
     newView.show();
-    QTest::qWaitForWindowExposed(&newView);
+    QVERIFY(QTest::qWaitForWindowExposed(&newView));
 
     item->setProperty("visible", false);
     item->setParentItem(newView.rootObject());
