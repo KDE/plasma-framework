@@ -72,7 +72,7 @@ void DialogNativeTest::cleanupTestCase()
 
 void DialogNativeTest::size()
 {
-    QTest::qWaitForWindowExposed(m_dialog);
+    QVERIFY(QTest::qWaitForWindowExposed(m_dialog));
 
     QCOMPARE(m_content->width(), (qreal)100);
     QCOMPARE(m_content->height(), (qreal)100);
@@ -90,7 +90,7 @@ void DialogNativeTest::size()
 
 void DialogNativeTest::position()
 {
-    QTest::qWaitForWindowExposed(m_dialog);
+    QVERIFY(QTest::qWaitForWindowExposed(m_dialog));
 
     QCOMPARE(m_dialog->x(), 0);
     QCOMPARE(m_dialog->y(), 49);
