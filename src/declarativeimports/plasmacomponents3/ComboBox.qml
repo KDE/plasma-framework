@@ -110,6 +110,8 @@ T.ComboBox {
             currentIndex: control.highlightedIndex
             highlightRangeMode: ListView.ApplyRange
             highlightMoveDuration: 0
+            LayoutMirroring.enabled: true
+            LayoutMirroring.childrenInherit: true
             T.ScrollBar.vertical: Controls.ScrollBar { }
         }
         background: Rectangle {
