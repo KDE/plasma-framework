@@ -195,6 +195,8 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         plugins = KPluginLoader::findPlugins(QString(), filter);
     }
 
+    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
+
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
         if (!isPluginVersionCompatible(loader)) {
@@ -203,7 +205,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         KPluginFactory *factory = loader.factory();
         if (factory) {
             QVariantList allArgs;
-            allArgs << loader.metaData().toVariantMap() << appletId << args;
+            allArgs << QVariant::fromValue(p) << loader.metaData().toVariantMap() << appletId << args;
             applet = factory->create<Plasma::Applet>(0, allArgs);
         }
     }
@@ -212,12 +214,11 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
 
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 
         QVariantList allArgs;
-        allArgs << p.metadata().fileName() << appletId << args;
+        allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
         if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             applet = new Containment(0, allArgs);

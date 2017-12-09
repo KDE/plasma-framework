@@ -95,15 +95,21 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
     :  QObject(0),
-       d(new AppletPrivate(KPluginMetaData(), args.count() > 1 ? args[1].toInt() : 0, this))
+       d(new AppletPrivate(KPluginMetaData(), args.count() > 2 ? args[2].toInt() : 0, this))
 {
     setParent(parentObject);
     if (args.count() > 0) {
         const QVariant first = args.first();
-        if (first.canConvert<QString>()) {
-            d->appletDescription = KPluginMetaData(first.toString());
-        } else if (first.canConvert<QVariantMap>()) {
-            auto metadata = first.toMap().value(QStringLiteral("MetaData")).toMap();
+        if (first.canConvert<KPackage::Package>()) {
+            d->package = first.value<KPackage::Package>();
+        }
+    }
+    if (args.count() > 1) {
+        const QVariant second = args[1];
+        if (second.canConvert<QString>()) {
+            d->appletDescription = KPluginMetaData(second.toString());
+        } else if (second.canConvert<QVariantMap>()) {
+            auto metadata = second.toMap().value(QStringLiteral("MetaData")).toMap();
             d->appletDescription = KPluginMetaData(QJsonObject::fromVariantMap(metadata), {});
         }
     }
@@ -115,7 +121,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    d->init(QString(), args.mid(2));
+    d->init(QString(), args.mid(3));
     d->setupPackage();
 }
 
@@ -291,7 +297,7 @@ bool Applet::destroyed() const
 KConfigLoader *Applet::configScheme() const
 {
     if (!d->configLoader) {
-        const QString xmlPath = d->package ? d->package->filePath("mainconfigxml") : QString();
+        const QString xmlPath = d->package.isValid() ? d->package.filePath("mainconfigxml") : QString();
         KConfigGroup cfg = config();
         if (xmlPath.isEmpty()) {
             d->configLoader = new KConfigLoader(cfg, 0);
@@ -308,15 +314,13 @@ KConfigLoader *Applet::configScheme() const
 Package Applet::package() const
 {
     Package p;
-    if (d->package) {
-        p.d->internalPackage = new KPackage::Package(*d->package);
-    }
+    p.d->internalPackage = new KPackage::Package(d->package);
     return p;
 }
 
 KPackage::Package Applet::kPackage() const
 {
-    return d->package ? *d->package : KPackage::Package();
+    return d->package;
 }
 
 void Applet::updateConstraints(Plasma::Types::Constraints constraints)
