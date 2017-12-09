@@ -106,8 +106,6 @@ AppletPrivate::~AppletPrivate()
 
     delete script;
     script = 0;
-    delete package;
-    package = 0;
     delete configLoader;
     configLoader = 0;
     delete mainConfig;
@@ -147,23 +145,23 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         return;
     }
 
-    const QString packagePath = _packagePath.isEmpty() && !appletDescription.metaDataFileName().isEmpty() ? QFileInfo(appletDescription.metaDataFileName()).dir().path() : _packagePath;
-    QString path = appletDescription.rawData().value(QStringLiteral("X-Plasma-RootPath")).toString();
-    if (path.isEmpty()) {
-        path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
-    }
-    Plasma::Package p = PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), api);
-    p.setPath(path);
+    //A constructor may have set a valid package already
+    if (!package.isValid()) {
+        const QString packagePath = _packagePath.isEmpty() && !appletDescription.metaDataFileName().isEmpty() ? QFileInfo(appletDescription.metaDataFileName()).dir().path() : _packagePath;
+        QString path = appletDescription.rawData().value(QStringLiteral("X-Plasma-RootPath")).toString();
+        if (path.isEmpty()) {
+            path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
+        }
 
-    package = new KPackage::Package(*p.d->internalPackage);
+        package = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"));
+        package.setPath(path);
 
-    if (!package->isValid()) {
-        delete package;
-        package = 0;
-        q->setLaunchErrorMessage(i18nc("Package file, name of the widget",
-                                       "Could not open the %1 package required for the %2 widget.",
-                                       appletDescription.pluginId(), appletDescription.name()));
-        return;
+        if (!package.isValid()) {
+            q->setLaunchErrorMessage(i18nc("Package file, name of the widget",
+                                        "Could not open the %1 package required for the %2 widget.",
+                                        appletDescription.pluginId(), appletDescription.name()));
+            return;
+        }
     }
 
     // now we try and set up the script engine.
@@ -175,12 +173,10 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     if (script) {
         //use the absolute path of the in-package icon as icon name
         if (appletDescription.iconName().startsWith(QLatin1Char('/'))) {
-            icon = package->filePath({}, appletDescription.iconName());
+            icon = package.filePath({}, appletDescription.iconName());
         }
     //package not valid, get rid of it
     } else {
-        delete package;
-        package = 0;
         q->setLaunchErrorMessage(
             i18nc("API or programming language the widget was written in, name of the widget",
                   "Could not create a %1 ScriptEngine for the %2 widget.",
@@ -461,7 +457,7 @@ void AppletPrivate::setUiReady()
 // package exists and that we have a script engine
 void AppletPrivate::setupPackage()
 {
-    if (!package) {
+    if (!package.isValid()) {
         return;
     }
 
@@ -476,7 +472,7 @@ void AppletPrivate::setupPackage()
     //     KGlobal::dirs()->addResourceDir("locale", translationsPath);
     // }
 
-    if (!package->filePath("mainconfigui").isEmpty()) {
+    if (!package.filePath("mainconfigui").isEmpty()) {
         q->setHasConfigurationInterface(true);
     }
 }
