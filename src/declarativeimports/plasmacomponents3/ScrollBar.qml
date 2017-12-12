@@ -20,7 +20,7 @@
 import QtQuick 2.6
 import QtQuick.Templates 2.0 as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-
+import org.kde.kirigami 2.2 as Kirigami
 
 T.ScrollBar {
     id: control
@@ -28,7 +28,7 @@ T.ScrollBar {
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
 
-    hoverEnabled: true
+    hoverEnabled: !Kirigami.Settings.isMobile
 
     visible: control.size < 1.0
 
@@ -40,10 +40,10 @@ T.ScrollBar {
         visible: control.size < 1.0
 
         prefix: control.horizontal ? "background-horizontal" : "background-vertical"
-        opacity: control.hovered ? 1 : 0
+        opacity: Kirigami.Settings.isMobile ? (control.active ? 1 : 0) : (control.hovered ? 1 : 0)
         Behavior on opacity {
             OpacityAnimator {
-                duration: 250
+                duration: units.longDuration
             }
         }
     }
@@ -56,6 +56,12 @@ T.ScrollBar {
         visible: control.size < 1.0
 
         prefix: control.hovered ? "mouseover-slider" : "slider"
+        opacity: Kirigami.Settings.isMobile ? (control.active ? 1 : 0) : 1
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: units.longDuration
+            }
+        }
     }
 
     PlasmaCore.Svg {

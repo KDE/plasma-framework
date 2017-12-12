@@ -20,8 +20,8 @@
 import QtQuick 2.1
 //for Settings
 import QtQuick.Controls 1.0 as Controls
-import QtQuick.Controls.Private 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.2 as Kirigami
 
 PlasmaCore.FrameSvgItem {
     id: background
@@ -34,7 +34,7 @@ PlasmaCore.FrameSvgItem {
 
     PlasmaCore.FrameSvgItem {
         imagePath: "widgets/listitem"
-        visible: !Settings.isMobile
+        visible: !Kirigami.Settings.isMobile
         prefix: "hover"
         anchors.fill: parent
         opacity: control.hovered && !control.pressed ? 1 : 0
