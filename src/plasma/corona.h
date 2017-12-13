@@ -46,7 +46,7 @@ class PLASMA_EXPORT Corona : public QObject
     Q_PROPERTY(KPackage::Package kPackage READ kPackage NOTIFY kPackageChanged)
 
 public:
-    explicit Corona(QObject *parent = 0);
+    explicit Corona(QObject *parent = nullptr);
     ~Corona();
 
 #ifndef PLASMA_NO_DEPRECATED

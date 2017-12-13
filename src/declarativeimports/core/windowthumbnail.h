@@ -82,7 +82,7 @@ class WindowThumbnail : public QQuickItem, public QAbstractNativeEventFilter
     Q_PROPERTY(bool thumbnailAvailable READ thumbnailAvailable NOTIFY thumbnailAvailableChanged)
 
 public:
-    WindowThumbnail(QQuickItem *parent = 0);
+    WindowThumbnail(QQuickItem *parent = nullptr);
     virtual ~WindowThumbnail();
     bool nativeEventFilter(const QByteArray &eventType, void *message, long int *result) Q_DECL_OVERRIDE;
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) Q_DECL_OVERRIDE;

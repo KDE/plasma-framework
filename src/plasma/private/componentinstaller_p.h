@@ -74,7 +74,7 @@ public:
      * @param force whether to always prompt, even if recently prompted
      */
     void installMissingComponent(const QString &type, const QString &name,
-                                 QWidget *parent = 0, bool force = false);
+                                 QWidget *parent = nullptr, bool force = false);
 
 private:
     /**

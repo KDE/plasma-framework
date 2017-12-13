@@ -52,7 +52,7 @@ public:
     bool appletHasValidAssociatedApplication(const Plasma::Applet *applet) const;
 
 private:
-    AssociatedApplicationManager(QObject *parent = 0);
+    AssociatedApplicationManager(QObject *parent = nullptr);
     ~AssociatedApplicationManager();
 
     AssociatedApplicationManagerPrivate *const d;

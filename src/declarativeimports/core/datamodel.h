@@ -90,7 +90,7 @@ class SortFilterModel : public QSortFilterProxyModel
     friend class DataModel;
 
 public:
-    SortFilterModel(QObject *parent = 0);
+    SortFilterModel(QObject *parent = nullptr);
     ~SortFilterModel();
 
     void setModel(QAbstractItemModel *source);
@@ -182,7 +182,7 @@ class DataModel : public QAbstractItemModel
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
 public:
-    DataModel(QObject *parent = 0);
+    DataModel(QObject *parent = nullptr);
     ~DataModel();
 
     void setDataSource(QObject *source);

@@ -63,7 +63,7 @@ class ThemePrivate : public QObject
     Q_OBJECT
 
 public:
-    ThemePrivate(QObject *parent = 0);
+    ThemePrivate(QObject *parent = nullptr);
     ~ThemePrivate();
 
     KConfigGroup &config();

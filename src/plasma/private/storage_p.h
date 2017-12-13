@@ -38,7 +38,7 @@ public:
     StorageJob(const QString &destination,
                const QString &operation,
                const QVariantMap &parameters,
-               QObject *parent = 0);
+               QObject *parent = nullptr);
     ~StorageJob();
     void setData(const QVariantMap &data);
     QVariantMap data() const;
@@ -62,7 +62,7 @@ class Storage : public Plasma::Service
     Q_OBJECT
 
 public:
-    Storage(QObject *parent = 0);
+    Storage(QObject *parent = nullptr);
     ~Storage();
 
 protected:

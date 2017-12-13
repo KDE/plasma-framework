@@ -66,7 +66,7 @@ public:
      * @param parent      the parent object for this service
      */
     ServiceJob(const QString &destination, const QString &operation,
-               const QVariantMap &parameters, QObject *parent = 0);
+               const QVariantMap &parameters, QObject *parent = nullptr);
 
     /**
      * Destructor

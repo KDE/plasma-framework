@@ -56,7 +56,7 @@ public:
      * @param corona the corona of this view
      * @param parent the QWindow this View is parented to
      **/
-    PLASMA_DEPRECATED explicit View(Plasma::Corona *corona, QWindow *parent = 0);
+    PLASMA_DEPRECATED explicit View(Plasma::Corona *corona, QWindow *parent = nullptr);
     PLASMA_DEPRECATED virtual ~View();
 
     /**

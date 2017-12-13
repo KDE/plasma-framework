@@ -39,7 +39,7 @@ class SimpleCorona : public Plasma::Corona
     Q_OBJECT
 
 public:
-    explicit SimpleCorona(QObject * parent = 0);
+    explicit SimpleCorona(QObject * parent = nullptr);
     ~SimpleCorona();
 
     QRect screenGeometry(int) const Q_DECL_OVERRIDE;
@@ -51,7 +51,7 @@ class SimpleApplet : public Plasma::Applet
     Q_OBJECT
 
 public:
-    explicit SimpleApplet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleApplet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
 private:
     QTimer m_timer;
 };
@@ -61,7 +61,7 @@ class SimpleContainment : public Plasma::Containment
     Q_OBJECT
 
 public:
-    explicit SimpleContainment(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleContainment(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
 private:
     QTimer m_timer;
 };
@@ -71,7 +71,7 @@ class SimpleNoScreenContainment : public Plasma::Containment
     Q_OBJECT
 
 public:
-    explicit SimpleNoScreenContainment(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleNoScreenContainment(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
 };
 
 class CoronaTest : public QObject

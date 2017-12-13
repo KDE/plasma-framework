@@ -56,7 +56,7 @@ public:
 
     typedef QMap<QString, QVariant> Data;
 
-    DataSource(QObject *parent = 0);
+    DataSource(QObject *parent = nullptr);
 
     void classBegin() Q_DECL_OVERRIDE;
     void componentComplete() Q_DECL_OVERRIDE;
@@ -124,7 +124,7 @@ public:
      * All the data fetched by this dataengine.
      * This is a map of maps. At the first level, there are the source names, at the second, they keys set by the DataEngine
      */
-    Q_PROPERTY(QQmlPropertyMap *data READ data CONSTANT);
+    Q_PROPERTY(QQmlPropertyMap *data READ data CONSTANT)
     QQmlPropertyMap *data() const
     {
         return m_data;
@@ -135,7 +135,7 @@ public:
      * In order for a model to be present, besides being implemented in the DataEngine,
      * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
      */
-    Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT);
+    Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT)
     QQmlPropertyMap *models()  const
     {
         return m_models;

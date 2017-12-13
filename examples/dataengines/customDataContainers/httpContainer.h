@@ -40,7 +40,7 @@ class HttpContainer : public Plasma::DataContainer
     Q_OBJECT
 
 public:
-    HttpContainer(const QUrl &url, QObject *parent = 0);
+    HttpContainer(const QUrl &url, QObject *parent = nullptr);
 
     void fetchUrl(bool reload = true);
 

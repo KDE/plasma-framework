@@ -124,7 +124,7 @@ class IconItem : public QQuickItem
     Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth2 NOTIFY implicitWidthChanged2)
 
 public:
-    IconItem(QQuickItem *parent = 0);
+    explicit IconItem(QQuickItem *parent = nullptr);
     ~IconItem();
 
     void setSource(const QVariant &source);

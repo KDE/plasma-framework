@@ -167,7 +167,7 @@ public:
     };
     Q_ENUM(BackgroundHints)
 
-    Dialog(QQuickItem *parent = 0);
+    Dialog(QQuickItem *parent = nullptr);
     ~Dialog();
 
     //PROPERTIES ACCESSORS

@@ -85,7 +85,7 @@ class QuickTheme : public Plasma::Theme
     Q_PROPERTY(QColor complementaryNegativeTextColor READ buttonNegativeTextColor NOTIFY themeChangedProxy)
 
 public:
-    explicit QuickTheme(QObject *parent = 0);
+    explicit QuickTheme(QObject *parent = nullptr);
     ~QuickTheme();
 
 

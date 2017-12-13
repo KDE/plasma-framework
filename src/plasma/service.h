@@ -135,7 +135,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    Q_INVOKABLE ServiceJob *startOperationCall(const QVariantMap &description, QObject *parent = 0);
+    Q_INVOKABLE ServiceJob *startOperationCall(const QVariantMap &description, QObject *parent = nullptr);
 
     /**
      * Query to find if an operation is enabled or not.
@@ -167,7 +167,7 @@ protected:
      *
      * @param parent the parent object for this service
      */
-    explicit Service(QObject *parent = 0);
+    explicit Service(QObject *parent = nullptr);
 
     /**
      * Constructor for plugin loading

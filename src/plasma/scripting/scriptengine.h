@@ -59,7 +59,7 @@ public:
     virtual bool init();
 
 protected:
-    explicit ScriptEngine(QObject *parent = 0);
+    explicit ScriptEngine(QObject *parent = nullptr);
 
     /**
      * @return absolute path to the main script file for this plasmoid

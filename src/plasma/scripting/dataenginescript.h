@@ -49,7 +49,7 @@ public:
      * such set up that requires the DataEngine itself should be done
      * in the init() method.
      */
-    explicit DataEngineScript(QObject *parent = 0);
+    explicit DataEngineScript(QObject *parent = nullptr);
     ~DataEngineScript();
 
     /**

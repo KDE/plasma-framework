@@ -285,7 +285,7 @@ public:
     Q_ENUM(BackgroundHints)
 
 private:
-    Types(QObject *parent = 0);
+    Types(QObject *parent = nullptr);
 };
 
 /**

@@ -33,13 +33,13 @@ class ActionWidgetInterface : public ThemedWidgetInterface<T>
 public:
     ActionWidgetInterface(T *parent)
         : ThemedWidgetInterface<T>(parent),
-          action(0)
+          action(nullptr)
     {
     }
 
     virtual ~ActionWidgetInterface()
     {
-        setAction(0);
+        setAction(nullptr);
     }
 
     virtual void changed()
@@ -48,7 +48,7 @@ public:
 
     void clearAction()
     {
-        action = 0;
+        action = nullptr;
         syncToAction();
         changed();
     }
@@ -92,7 +92,7 @@ public:
         }
     }
 
-    QAction *action;
+    QAction *action = nullptr;
 };
 
 } // namespace Plasma

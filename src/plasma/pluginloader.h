@@ -126,7 +126,7 @@ public:
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
-    Service *loadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+    Service *loadService(const QString &name, const QVariantList &args, QObject *parent = nullptr);
 
     /**
      * Load a ContainmentActions plugin.
@@ -398,7 +398,7 @@ protected:
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
      **/
-    virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = 0);
+    virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = nullptr);
 
     /**
      * A re-implementable method that allows subclasses to override

@@ -59,7 +59,7 @@ public:
     /**
      * Default constructor for an empty or null containmentactions
      */
-    explicit ContainmentActions(QObject *parent = 0);
+    explicit ContainmentActions(QObject *parent = nullptr);
 
     ~ContainmentActions();
 

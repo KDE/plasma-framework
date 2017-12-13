@@ -32,7 +32,7 @@ class SharedAppFilter : public QObject
 {
    Q_OBJECT
 public:
-    SharedAppFilter(QObject *parent = 0);
+    SharedAppFilter(QObject *parent = nullptr);
     ~SharedAppFilter();
 
 Q_SIGNALS:
@@ -209,7 +209,7 @@ private Q_SLOTS:
     void updateSpacing();
 
 private:
-    Units(QObject *parent = 0);
+    Units(QObject *parent = nullptr);
     Units(Units const&) = delete; // Copy construct
     Units(Units&&) = delete; // Move construct
     Units& operator=(Units const&) = delete; // Copy assign

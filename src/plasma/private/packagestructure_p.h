@@ -34,7 +34,7 @@ class PackageStructureWrapper : public KPackage::PackageStructure {
     Q_OBJECT
 
 public:
-    PackageStructureWrapper(Plasma::PackageStructure *structure, QObject *parent = 0, const QVariantList &args = QVariantList());
+    PackageStructureWrapper(Plasma::PackageStructure *structure, QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
     ~PackageStructureWrapper();
 

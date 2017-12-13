@@ -62,7 +62,7 @@ class QRangeModel : public QObject
     Q_PROPERTY(bool inverted READ inverted WRITE setInverted NOTIFY invertedChanged)
 
 public:
-    QRangeModel(QObject *parent = 0);
+    explicit QRangeModel(QObject *parent = nullptr);
     virtual ~QRangeModel();
 
     void setRange(qreal min, qreal max);
