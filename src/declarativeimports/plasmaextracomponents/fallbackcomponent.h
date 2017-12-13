@@ -48,7 +48,7 @@ class FallbackComponent : public QObject
     Q_PROPERTY(QStringList candidates READ candidates WRITE setCandidates NOTIFY candidatesChanged)
 
 public:
-    FallbackComponent(QObject *parent = nullptr);
+    explicit FallbackComponent(QObject *parent = nullptr);
 
     /**
     * This method must be called after the the basePath and the candidates property

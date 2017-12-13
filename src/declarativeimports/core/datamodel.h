@@ -90,7 +90,7 @@ class SortFilterModel : public QSortFilterProxyModel
     friend class DataModel;
 
 public:
-    SortFilterModel(QObject *parent = nullptr);
+    explicit SortFilterModel(QObject *parent = nullptr);
     ~SortFilterModel();
 
     void setModel(QAbstractItemModel *source);

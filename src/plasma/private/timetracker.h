@@ -60,7 +60,7 @@ class PLASMA_EXPORT TimeTracker : QObject
 {
 Q_OBJECT
 public:
-    TimeTracker(QObject* applet);
+    explicit TimeTracker(QObject* applet);
     virtual ~TimeTracker();
 
 private Q_SLOTS:

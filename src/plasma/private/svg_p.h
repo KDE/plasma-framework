@@ -37,7 +37,7 @@ class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 public:
     typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
 
-    SharedSvgRenderer(QObject *parent = nullptr);
+    explicit SharedSvgRenderer(QObject *parent = nullptr);
     SharedSvgRenderer(
         const QString &filename,
         const QString &styleSheet,
