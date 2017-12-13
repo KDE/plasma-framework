@@ -33,7 +33,7 @@ class StorageThread : public QThread
 {
     Q_OBJECT
 public:
-    StorageThread(QObject *parent = 0);
+    StorageThread(QObject *parent = nullptr);
     ~StorageThread();
 
     void run() Q_DECL_OVERRIDE;

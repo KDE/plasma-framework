@@ -44,7 +44,7 @@ public:
         yearNumber
     };
 
-    explicit DaysModel(QObject *parent = 0);
+    explicit DaysModel(QObject *parent = nullptr);
     virtual ~DaysModel();
     void setSourceData(QList<DayData> *data);
     int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;

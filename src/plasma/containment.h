@@ -69,7 +69,7 @@ public:
      * @param containmentId a unique id used to differentiate between multiple
      *      instances of the same Applet type
      */
-    explicit Containment(QObject *parent = 0,
+    explicit Containment(QObject *parent = nullptr,
                          const QString &serviceId = QString(),
                          uint containmentId = 0);
 

@@ -239,7 +239,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
 
 public:
-    AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = 0);
+    AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface();
 
 //API not intended for the QML part

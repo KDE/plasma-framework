@@ -53,7 +53,7 @@ public:
      * @param corona the corona of this view
      * @param parent the QWindow this ContainmentView is parented to
      **/
-    explicit ContainmentView(Plasma::Corona *corona, QWindow *parent = 0);
+    explicit ContainmentView(Plasma::Corona *corona, QWindow *parent = nullptr);
     virtual ~ContainmentView();
 
     /**

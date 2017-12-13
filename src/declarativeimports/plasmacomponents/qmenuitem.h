@@ -48,7 +48,7 @@ class QMenuItem : public QQuickItem
     Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY toggled)
 
 public:
-    QMenuItem(QQuickItem *parent = 0);
+    QMenuItem(QQuickItem *parent = nullptr);
 
     QAction *action() const;
     void setAction(QAction *a);

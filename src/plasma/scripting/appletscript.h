@@ -57,7 +57,7 @@ public:
      * such set up that requires the Applet itself should be done
      * in the init() method.
      */
-    explicit AppletScript(QObject *parent = 0);
+    explicit AppletScript(QObject *parent = nullptr);
     ~AppletScript();
 
     /**

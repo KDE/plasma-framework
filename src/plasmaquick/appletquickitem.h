@@ -93,7 +93,7 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(QObject *rootItem READ rootItem CONSTANT)
 
 public:
-    AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = 0);
+    AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
     ~AppletQuickItem();
 
 ////API NOT SUPPOSED TO BE USED BY QML

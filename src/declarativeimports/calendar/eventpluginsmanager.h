@@ -38,7 +38,7 @@ class EventPluginsManager : public QObject
     Q_PROPERTY(QStringList enabledPlugins READ enabledPlugins WRITE setEnabledPlugins NOTIFY pluginsChanged)
 
 public:
-    EventPluginsManager(QObject *parent = 0);
+    explicit EventPluginsManager(QObject *parent = nullptr);
     ~EventPluginsManager();
 
     QList<CalendarEvents::CalendarEventsPlugin*> plugins() const;

@@ -73,7 +73,7 @@ public:
         VisibleRole,
         KCMRole
     };
-    ConfigModel(QObject *parent = 0);
+    ConfigModel(QObject *parent = nullptr);
     ~ConfigModel();
 
     /**

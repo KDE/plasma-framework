@@ -137,7 +137,7 @@ public:
     };
     Q_ENUM(DateMatchingPrecision)
 
-    explicit Calendar(QObject *parent = 0);
+    explicit Calendar(QObject *parent = nullptr);
 
     // Displayed date
     QDate displayedDate() const;

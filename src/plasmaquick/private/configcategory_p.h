@@ -49,7 +49,7 @@ class ConfigCategory : public QObject
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 
 public:
-    ConfigCategory(QObject *parent = 0);
+    ConfigCategory(QObject *parent = nullptr);
     ~ConfigCategory();
 
     QString name() const;

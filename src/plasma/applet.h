@@ -84,7 +84,7 @@ public:
      * @param appletId a unique id used to differentiate between multiple
      *      instances of the same Applet type
      */
-    explicit Applet(QObject *parent = 0, const QString &serviceId = QString(), uint appletId = 0);
+    explicit Applet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
 
     /**
      * @param parent the QObject this applet is parented to
@@ -95,7 +95,7 @@ public:
      *
      * @deprecated prefer using KPluginMetaData
      */
-    PLASMA_DEPRECATED explicit Applet(const KPluginInfo &info, QObject *parent = 0, uint appletId = 0);
+    PLASMA_DEPRECATED explicit Applet(const KPluginInfo &info, QObject *parent = nullptr, uint appletId = 0);
 
     /**
      * @param parent the QObject this applet is parented to
@@ -104,7 +104,7 @@ public:
      *      instances of the same Applet type
      * @since 5.27
      */
-    explicit Applet(const KPluginMetaData &metadata, QObject *parent = 0, uint appletId = 0);
+    explicit Applet(const KPluginMetaData &metadata, QObject *parent = nullptr, uint appletId = 0);
 
     ~Applet();
 

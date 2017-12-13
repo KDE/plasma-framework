@@ -101,7 +101,7 @@ class QMenuProxy : public QObject
     Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth RESET resetMaximumWidth NOTIFY maximumWidthChanged)
 
 public:
-    QMenuProxy(QObject *parent = 0);
+    explicit QMenuProxy(QObject *parent = nullptr);
     ~QMenuProxy();
 
     QQmlListProperty<QMenuItem> content();

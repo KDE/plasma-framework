@@ -85,7 +85,7 @@ public:
      *
      * @related Plasma::Theme
      */
-    explicit Svg(QObject *parent = 0);
+    explicit Svg(QObject *parent = nullptr);
     ~Svg();
 
     /**

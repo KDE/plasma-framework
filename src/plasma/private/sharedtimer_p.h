@@ -41,7 +41,7 @@ protected:
 
 private:
     friend class TimerDriveSingleton;
-    explicit TimerDrive(QObject *parent = 0);
+    explicit TimerDrive(QObject *parent = nullptr);
     ~TimerDrive();
     class Private;
     Private *const d;

@@ -52,7 +52,7 @@ class Application: public QObject
     Q_PROPERTY(bool running READ running WRITE setRunning NOTIFY runningChanged)
 
 public:
-    Application(QObject *parent = nullptr);
+    explicit Application(QObject *parent = nullptr);
     ~Application();
 
     QString application() const;

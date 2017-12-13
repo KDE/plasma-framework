@@ -29,7 +29,7 @@ class CustomCorona : public Plasma::Corona
     Q_OBJECT
 
 public:
-    explicit CustomCorona(QObject * parent = 0);
+    explicit CustomCorona(QObject * parent = nullptr);
     QRect screenGeometry(int id) const;
 
 public Q_SLOTS:

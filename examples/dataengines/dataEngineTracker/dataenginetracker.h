@@ -35,7 +35,7 @@ class DataEngineTracker : QObject
     Q_OBJECT
 
 public:
-    DataEngineTracker(Plasma::DataEngine *engine, QObject *parent = 0);
+    DataEngineTracker(Plasma::DataEngine *engine, QObject *parent = nullptr);
 
 public Q_SLOTS:
     void dataUpdated(const QString &source, const Plasma::DataEngine::Data &data);

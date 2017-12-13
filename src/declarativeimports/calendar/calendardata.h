@@ -47,7 +47,7 @@ public:
     Q_ENUM(Type)
     Q_DECLARE_FLAGS(Types, Type)
 
-    explicit CalendarData(QObject *parent = 0);
+    explicit CalendarData(QObject *parent = nullptr);
 
 Q_SIGNALS:
     void startDateChanged();

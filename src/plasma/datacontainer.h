@@ -73,7 +73,7 @@ public:
      * Constructs a default DataContainer that has no name or data
      * associated with it
      **/
-    explicit DataContainer(QObject *parent = 0);
+    explicit DataContainer(QObject *parent = nullptr);
     virtual ~DataContainer();
 
     /**

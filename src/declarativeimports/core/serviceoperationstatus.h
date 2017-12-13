@@ -53,7 +53,7 @@ class ServiceOperationStatus : public QObject
     Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
 
 public:
-    ServiceOperationStatus(QObject *parent = 0);
+    explicit ServiceOperationStatus(QObject *parent = nullptr);
     ~ServiceOperationStatus();
 
     void setService(Plasma::Service *service);

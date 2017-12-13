@@ -103,7 +103,7 @@ public:
      *
      * @related Plasma::Theme
      */
-    explicit FrameSvg(QObject *parent = 0);
+    explicit FrameSvg(QObject *parent = nullptr);
     ~FrameSvg();
 
     /**

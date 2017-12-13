@@ -93,7 +93,7 @@ public:
      * Default constructor. It will be the global theme configured in plasmarc
      * @param parent the parent object
      */
-    explicit Theme(QObject *parent = 0);
+    explicit Theme(QObject *parent = nullptr);
 
     /**
      * Construct a theme. It will be a custom theme instance of themeName.
@@ -101,7 +101,7 @@ public:
      * @param parent the parent object
      * @since 4.3
      */
-    explicit Theme(const QString &themeName, QObject *parent = 0);
+    explicit Theme(const QString &themeName, QObject *parent = nullptr);
 
     ~Theme();
 

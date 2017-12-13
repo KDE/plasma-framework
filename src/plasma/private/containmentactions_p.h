@@ -32,7 +32,7 @@ public:
         package(0),
         containment(0)
     {
-    };
+    }
 
     ContainmentActions *q;
 

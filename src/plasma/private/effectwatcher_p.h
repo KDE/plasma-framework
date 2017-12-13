@@ -34,7 +34,7 @@ class EffectWatcher: public QObject, public QAbstractNativeEventFilter
     Q_OBJECT
 
 public:
-    EffectWatcher(const QString &property, QObject *parent = 0);
+    EffectWatcher(const QString &property, QObject *parent = nullptr);
 
 protected:
     bool isEffectActive() const;

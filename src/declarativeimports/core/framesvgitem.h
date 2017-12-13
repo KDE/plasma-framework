@@ -74,7 +74,7 @@ class FrameSvgItemMargins : public QObject
 
 
 public:
-    FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent = 0);
+    FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent = nullptr);
 
     qreal left() const;
     qreal top() const;
@@ -192,7 +192,7 @@ public:
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
     /// @cond INTERNAL_DOCS
-    FrameSvgItem(QQuickItem *parent = 0);
+    FrameSvgItem(QQuickItem *parent = nullptr);
     ~FrameSvgItem();
 
     void setImagePath(const QString &path);

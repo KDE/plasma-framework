@@ -42,7 +42,7 @@ class PLASMA_EXPORT PackageStructure : public QObject
 
 public:
 
-    PLASMA_DEPRECATED explicit PackageStructure(QObject *parent = 0, const QVariantList &args = QVariantList());
+    PLASMA_DEPRECATED explicit PackageStructure(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
     ~PackageStructure();
 
