@@ -87,7 +87,7 @@ class ColorScope : public QQuickItem
 
 public:
 /// @cond INTERNAL_DOCS
-    explicit ColorScope(QQuickItem *parent = nullptr, QObject *parentObject = 0);
+    explicit ColorScope(QQuickItem *parent = nullptr, QObject *parentObject = nullptr);
     ~ColorScope();
 
     void setColorGroup(Plasma::Theme::ColorGroup group);

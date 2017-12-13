@@ -51,7 +51,7 @@ class WallpaperInterface : public QQuickItem
     Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
 
 public:
-    WallpaperInterface(ContainmentInterface *parent = nullptr);
+    explicit WallpaperInterface(ContainmentInterface *parent = nullptr);
     ~WallpaperInterface();
 
     /**

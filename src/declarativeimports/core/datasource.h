@@ -56,7 +56,7 @@ public:
 
     typedef QMap<QString, QVariant> Data;
 
-    DataSource(QObject *parent = nullptr);
+    explicit DataSource(QObject *parent = nullptr);
 
     void classBegin() Q_DECL_OVERRIDE;
     void componentComplete() Q_DECL_OVERRIDE;

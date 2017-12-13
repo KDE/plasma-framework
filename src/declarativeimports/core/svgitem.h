@@ -68,7 +68,7 @@ class SvgItem : public QQuickItem
 public:
 /// @cond INTERNAL_DOCS
 
-    SvgItem(QQuickItem *parent = nullptr);
+    explicit SvgItem(QQuickItem *parent = nullptr);
     ~SvgItem();
 
     void setElementId(const QString &elementID);
