@@ -7,6 +7,9 @@ add_subdirectory(calendar)
 
 install(DIRECTORY plasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls/Styles/Plasma)
 
+install(DIRECTORY kirigamiplasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/Plasma)
+
+install(DIRECTORY kirigamiplasmadesktopstyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/org.kde.desktop.plasma)
 
 #install the components as a QQC2 Style, as style for applications (mainly for Plasma Mobile)
 install(DIRECTORY plasmacomponents3/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2/Plasma PATTERN qmldir EXCLUDE)
