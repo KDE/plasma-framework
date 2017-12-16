@@ -104,7 +104,6 @@ public:
     QHash<QString, QRectF> localRectCache;
     QHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
-    QString requestedPath;
     QString themePath;
     QString path;
     QSizeF size;
