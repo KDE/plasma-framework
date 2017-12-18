@@ -133,7 +133,7 @@ void ConfigViewPrivate::init()
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
     //config model local of the applet
-    QQmlComponent *component = new QQmlComponent(q->engine(), QUrl::fromLocalFile(applet.data()->kPackage().filePath("configmodel")), q);
+    QQmlComponent *component = new QQmlComponent(q->engine(), applet.data()->kPackage().fileUrl("configmodel"), q);
     QObject *object = component->beginCreate(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
 
@@ -298,7 +298,7 @@ ConfigView::~ConfigView()
 
 void ConfigView::init()
 {
-    setSource(QUrl::fromLocalFile(d->corona->kPackage().filePath("appletconfigurationui")));
+    setSource(d->corona->kPackage().fileUrl("appletconfigurationui"));
 }
 
 Plasma::Applet *ConfigView::applet()

@@ -66,7 +66,7 @@ public:
         case QQmlAbstractUrlInterceptor::QmlFile:
             return QByteArray("ui");
         case QQmlAbstractUrlInterceptor::JavaScriptFile:
-            return QByteArray("scripts");
+            return QByteArray("code");
         default:
             break;
         }
@@ -80,8 +80,8 @@ public:
             return QByteArray("images");
             //FIXME: are those necessary? are they *always* catched by type?
         } else if (extension == QStringLiteral("js")) {
-            return QByteArray("scripts");
-        } else if (extension == QStringLiteral("qml")) {
+            return QByteArray("code");
+        } else if (extension == QStringLiteral("qml") || extension == QStringLiteral("qmldir")) {
             return QByteArray("ui");
             //everything else, throw it in "data"
         } else {

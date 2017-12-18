@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QRegularExpression>
 
 #include <Plasma/PluginLoader>
 #include <Plasma/Package>
@@ -46,13 +47,7 @@ public:
     QStringList allowedPaths;
     QQmlEngine *engine;
     bool forcePlasmaStyle = false;
-
-    //FIXME: those are going to be stuffed here and stay..
-    // they should probably be removed when the last applet of that type is removed
-    static QHash<QString, KPackage::Package> s_packages;
 };
-
-QHash<QString, KPackage::Package> PackageUrlInterceptorPrivate::s_packages = QHash<QString, KPackage::Package>();
 
 
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p)
@@ -96,86 +91,26 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 {
     //qDebug() << "Intercepted URL:" << path << type;
 
-    if (d->forcePlasmaStyle && path.path().contains(QLatin1String("Controls.2/org.kde.desktop/"))) {
-        return QUrl::fromLocalFile(path.path().replace(QLatin1String("Controls.2/org.kde.desktop/"), QLatin1String("Controls.2/Plasma/")));
-    }
-    QString pkgRoot;
-    KPackage::Package package;
-    if (d->package.isValid()) {
-        package = d->package;
-    } else {
-        foreach (const QString &base, QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation)) {
-            pkgRoot = QFileInfo(base + QStringLiteral("/plasma/plasmoids/")).canonicalFilePath();
-            if (!pkgRoot.isEmpty() && path.path().startsWith(pkgRoot)) {
-                const QString pkgName = path.path().midRef(pkgRoot.length() + 1).split(QLatin1Char('/')).first().toString();
-
-                auto it = PackageUrlInterceptorPrivate::s_packages.constFind(pkgName);
-                if (it != PackageUrlInterceptorPrivate::s_packages.constEnd()) {
-                    package = *it;
-                } else {
-                    package = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Applet")).kPackage();
-                    package.setPath(pkgName);
-                    PackageUrlInterceptorPrivate::s_packages[pkgName] = package;
-                }
-                break;
-            }
-        }
-    }
-    if (!package.isValid()) {
+    //we assume we never rewritten qml/qmldir files
+    if (path.path().endsWith(QStringLiteral("qml")) || path.path().endsWith(QStringLiteral("qmldir"))) {
         return path;
     }
+    const QString prefix = QString::fromUtf8(prefixForType(type, path.path()));
+    QRegularExpression match(QStringLiteral("/ui/(.*)"));
 
-    if (d->package.isValid() && path.scheme() == QStringLiteral("plasmapackage")) {
-        //FIXME: this is incorrect but works around a bug in qml in resolution of urls of qmldir files
-        if (type == QQmlAbstractUrlInterceptor::QmldirFile) {
-            return QUrl(d->package.filePath(0, path.path()));
-        } else {
-            return QUrl::fromLocalFile(d->package.filePath(0, path.path()));
-        }
-    }
+    QString plainPath = path.toString();
+    if (plainPath.contains(match)) {
+        QString rewritten = plainPath.replace(match, QStringLiteral("/%1/\\1").arg(prefix));
 
-    //TODO: security: permission for remote urls
-    if (!path.isLocalFile()) {
-        return path;
-    }
-
-    //if is just a normal string, no qml file was asked, allow it
-    if (type == QQmlAbstractUrlInterceptor::UrlString) {
-        return path;
-    }
-
-    //asked a file inside a package: let's rewrite the url!
-    if (path.path().startsWith(package.path())) {
-        //qDebug() << "Found URL in package" << path;
-
-        //tries to isolate the relative path asked relative to the contentsPrefixPath: like ui/foo.qml
-        QString relativePath;
-        foreach (const QString &prefix, package.contentsPrefixPaths()) {
-            QString root = package.path() + prefix;
-            if (path.path().startsWith(root)) {
-                //obtain a string in the form ui/foo/bar/baz.qml
-                relativePath = path.path().mid(root.length());
-                break;
-            }
-        }
-
-        //should never happen
-        Q_ASSERT(!relativePath.isEmpty());
-
-        const int firstSlash = relativePath.indexOf(QLatin1Char('/')) + 1;
-        const QString filename = firstSlash > 0 ? relativePath.mid(firstSlash) : relativePath;
-        const QUrl ret = QUrl::fromLocalFile(package.filePath(prefixForType(type, filename), filename));
-
-        //qDebug() << "Returning" << ret;
-
-        if (ret.path().isEmpty()) {
+        //search it in a resource or as a file on disk
+        if (!(rewritten.contains(QStringLiteral("qrc")) &&
+              QFile::exists(QStringLiteral(":") + QUrl(rewritten).path())) &&
+            !QFile::exists(QUrl(rewritten).path())) {
             return path;
         }
-        return ret;
-
-        //forbid to load random absolute paths
+        qWarning()<<"Warning: all files used by qml by the plasmoid should be in ui/. The file in the path" << rewritten << "was expected at" <<path;
+        return QUrl(rewritten);
     }
-
     return path;
 }
 
