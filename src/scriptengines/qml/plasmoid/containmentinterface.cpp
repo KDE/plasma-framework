@@ -122,7 +122,7 @@ void ContainmentInterface::init()
 
                     QVariantHash toolboxProperties;
                     toolboxProperties[QStringLiteral("parent")] = QVariant::fromValue(this);
-                    QObject *toolBoxObject = qmlObject()->createObjectFromSource(QUrl::fromLocalFile(pkg.filePath("mainscript")), 0, toolboxProperties);
+                    QObject *toolBoxObject = qmlObject()->createObjectFromSource(pkg.fileUrl("mainscript"), 0, toolboxProperties);
                     if (toolBoxObject && containmentGraphicObject) {
                         containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
                     }

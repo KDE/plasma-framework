@@ -41,7 +41,7 @@ void ConfigModelTest::configSchemeFromPackage()
     qmlRegisterType<PlasmaQuick::ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
 
     QQmlEngine engine;
-    QQmlComponent *component = new QQmlComponent(&engine, QUrl::fromLocalFile(applet->package().filePath("configmodel")), this);
+    QQmlComponent *component = new QQmlComponent(&engine, applet->kPackage().fileUrl("configmodel"), this);
     QObject *object = component->create(engine.rootContext());
     PlasmaQuick::ConfigModel *configModel = qobject_cast<PlasmaQuick::ConfigModel *>(object);
 
