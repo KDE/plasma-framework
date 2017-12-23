@@ -134,6 +134,27 @@ endif()
 
 #########################################################################
 
+set(Plasma_AUTOMOC_MACRO_NAMES
+    "K_EXPORT_PLASMA_SERVICE"
+    "K_EXPORT_PLASMA_SERVICE_WITH_JSON"
+    "K_EXPORT_PLASMA_APPLET"
+    "K_EXPORT_PLASMA_APPLET_WITH_JSON"
+    "K_EXPORT_PLASMA_PACKAGE"
+    "K_EXPORT_PLASMA_PACKAGE_WITH_JSON"
+    "K_EXPORT_PLASMA_APPLETSCRIPTENGINE"
+    "K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON"
+    "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE"
+    "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON"
+    "K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON"
+    "K_EXPORT_PLASMA_DATAENGINE"
+    "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
+)
+if(NOT CMAKE_VERSION VERSION_LESS "3.10.0")
+    # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
+    # 3.10+ lets us provide more macro names that require automoc.
+    list(APPEND CMAKE_AUTOMOC_MACRO_NAMES ${Plasma_AUTOMOC_MACRO_NAMES})
+endif()
+
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
 #add_definitions(-Wno-deprecated)

@@ -20,4 +20,10 @@ find_dependency(KF5Package "@KF5_DEP_VERSION@")
 find_dependency(KF5Service "@KF5_DEP_VERSION@")
 find_dependency(KF5WindowSystem "@KF5_DEP_VERSION@")
 
+if(NOT CMAKE_VERSION VERSION_LESS "3.10.0")
+    # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
+    # 3.10+ lets us provide more macro names that require automoc.
+    list(APPEND CMAKE_AUTOMOC_MACRO_NAMES @Plasma_AUTOMOC_MACRO_NAMES@)
+endif()
+
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaMacros.cmake")
