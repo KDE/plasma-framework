@@ -30,7 +30,7 @@
 #include <kwindoweffects.h>
 #include <KDirWatch>
 
-ToolTipDialog *ToolTip::s_dialog = 0;
+ToolTipDialog *ToolTip::s_dialog = nullptr;
 int ToolTip::s_dialogUsers  = 0;
 
 ToolTip::ToolTip(QQuickItem *parent)
@@ -70,7 +70,7 @@ ToolTip::~ToolTip()
 
     if (s_dialogUsers == 0) {
         delete s_dialog;
-        s_dialog = 0;
+        s_dialog = nullptr;
     }
 }
 

@@ -37,7 +37,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
       m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
-        m_menu = new QMenu(0);
+        m_menu = new QMenu(nullptr);
         // Breeze and Oxygen have rounded corners on menus. They set this attribute in polish()
         // but at that time the underlying surface has already been created where setting this
         // flag makes no difference anymore (Bug 385311)
@@ -91,7 +91,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
     //if the old parent was a QAction, disconnect the menu from it
     QAction *action = qobject_cast<QAction *>(m_visualParent.data());
     if (action) {
-        action->setMenu(0);
+        action->setMenu(nullptr);
         m_menu->clear();
     }
     //if parent is a QAction, become a submenu
@@ -336,7 +336,7 @@ void QMenuProxy::open(int x, int y)
     openInternal(pos.toPoint());
 }
 
-Q_INVOKABLE void QMenuProxy::openRelative()
+void QMenuProxy::openRelative()
 {
     QQuickItem *parentItem = nullptr;
 

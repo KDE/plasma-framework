@@ -29,7 +29,7 @@
 
 DaysModel::DaysModel(QObject *parent) :
     QAbstractListModel(parent),
-    m_pluginsManager(0),
+    m_pluginsManager(nullptr),
     m_lastRequestedEventsStartDate(QDate()),
     m_agendaNeedsUpdate(false)
 {

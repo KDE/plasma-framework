@@ -156,11 +156,11 @@ public:
     void setDays(int days);
 
     // Weeks
-    int weeks();
+    int weeks() const;
     void setWeeks(int weeks);
 
     // Start day
-    int firstDayOfWeek();
+    int firstDayOfWeek() const;
     void setFirstDayOfWeek(int day);
 
     // Error message

@@ -127,7 +127,7 @@ void Calendar::setDays(int days)
     }
 }
 
-int Calendar::weeks()
+int Calendar::weeks() const
 {
     return m_weeks;
 }
@@ -141,7 +141,7 @@ void Calendar::setWeeks(int weeks)
     }
 }
 
-int Calendar::firstDayOfWeek()
+int Calendar::firstDayOfWeek() const
 {
     // QML has Sunday as 0, so we need to accomodate here
     return m_firstDayOfWeek == 7 ? 0 : m_firstDayOfWeek;

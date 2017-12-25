@@ -28,9 +28,7 @@ DataSource::DataSource(QObject *parent)
     : QObject(parent),
       m_ready(false),
       m_interval(0),
-      m_intervalAlignment(Plasma::Types::NoAlignment),
-      m_dataEngine(0),
-      m_dataEngineConsumer(0)
+      m_intervalAlignment(Plasma::Types::NoAlignment)
 {
     m_models = new QQmlPropertyMap(this);
     m_data = new QQmlPropertyMap(this);
@@ -104,7 +102,7 @@ void DataSource::setEngine(const QString &e)
         m_dataEngine->disconnect(this);
         // Deleting the consumer triggers the reference counting
         delete m_dataEngineConsumer;
-        m_dataEngineConsumer = 0;
+        m_dataEngineConsumer = nullptr;
     }
 
     /*
@@ -222,7 +220,7 @@ QObject *DataSource::serviceForSource(const QString &source)
     if (!m_services.contains(source)) {
         Plasma::Service *service = m_dataEngine->serviceForSource(source);
         if (!service) {
-            return 0;
+            return nullptr;
         }
         m_services[source] = service;
     }

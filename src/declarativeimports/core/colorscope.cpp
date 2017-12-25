@@ -94,7 +94,7 @@ void ColorScope::setParentScope(ColorScope* parentScope)
 
 ColorScope *ColorScope::findParentScope()
 {
-    QObject *p = 0;
+    QObject *p = nullptr;
     if (m_parent) {
         QQuickItem *gp = qobject_cast<QQuickItem *>(m_parent);
         if (gp) {
@@ -106,7 +106,7 @@ ColorScope *ColorScope::findParentScope()
 
     if (!p || !m_parent) {
         setParentScope(nullptr);
-        return 0;
+        return nullptr;
     }
 
     ColorScope *c = qobject_cast<ColorScope *>(p);

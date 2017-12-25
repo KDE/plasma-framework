@@ -185,10 +185,10 @@ private:
     int m_interval;
     Plasma::Types::IntervalAlignment m_intervalAlignment;
     QString m_engine;
-    QQmlPropertyMap *m_data;
-    QQmlPropertyMap *m_models;
-    Plasma::DataEngine *m_dataEngine;
-    Plasma::DataEngineConsumer *m_dataEngineConsumer;
+    QQmlPropertyMap *m_data = nullptr;
+    QQmlPropertyMap *m_models = nullptr;
+    Plasma::DataEngine *m_dataEngine = nullptr;
+    Plasma::DataEngineConsumer *m_dataEngineConsumer = nullptr;
     QStringList m_sources;
     QStringList m_connectedSources;
     QStringList m_oldSources;

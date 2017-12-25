@@ -67,7 +67,7 @@ private:
     void loadPlugin(const QString &absolutePath);
 
     friend class EventPluginsModel;
-    EventPluginsModel *m_model;
+    EventPluginsModel *m_model = nullptr;
     QList<CalendarEvents::CalendarEventsPlugin*> m_plugins;
     struct PluginData {
         QString name;

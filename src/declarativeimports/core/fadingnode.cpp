@@ -25,8 +25,8 @@
 
 struct FadingMaterialState
 {
-   QSGTexture *source;
-   QSGTexture *target;
+   QSGTexture *source = nullptr;
+   QSGTexture *target = nullptr;
    qreal progress;
 };
 
@@ -41,7 +41,7 @@ public:
 
     void initialize() Q_DECL_OVERRIDE;
 private:
-    QOpenGLFunctions *glFuncs = 0;
+    QOpenGLFunctions *glFuncs  = nullptr;
     int m_progressId = 0;
 };
 
