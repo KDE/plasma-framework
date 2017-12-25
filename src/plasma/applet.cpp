@@ -126,7 +126,7 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 }
 
 Applet::Applet(const QString &packagePath, uint appletId)
-    : QObject(0),
+    : QObject(nullptr),
       d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
 {
     d->init(packagePath);

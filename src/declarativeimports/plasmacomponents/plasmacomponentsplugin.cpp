@@ -55,7 +55,7 @@ QQmlEngine *EngineBookKeeping::engine() const
     //for components creation, any engine will do, as long is valid
     if (m_engines.isEmpty()) {
         qWarning() << "No engines found, this should never happen";
-        return 0;
+        return nullptr;
     } else {
         return *m_engines.constBegin();
     }

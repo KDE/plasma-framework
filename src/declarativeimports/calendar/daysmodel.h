@@ -70,8 +70,8 @@ private Q_SLOTS:
 private:
     QModelIndex indexForDate(const QDate &date);
 
-    EventPluginsManager *m_pluginsManager;
-    QList<DayData> *m_data;
+    EventPluginsManager *m_pluginsManager = nullptr;
+    QList<DayData> *m_data = nullptr;
     QList<QObject*> m_qmlData;
     QDate m_lastRequestedAgendaDate;
     QList<CalendarEvents::CalendarEventsPlugin*> m_eventPlugins;
