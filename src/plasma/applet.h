@@ -170,6 +170,14 @@ public:
      */
     Types::Location location() const;
 
+    /**
+     * @return the preferred input mode, which will be the same
+     * for all applets.
+     * It's global to the device, which may be in Desktop(keyboard/mouse) or Tablet (only touchscreen) mode
+     * @since 5.42
+     */
+    Types::InputMode inputMode() const;
+
 //CONFIGURATION
     /**
     * Returns the KConfigGroup to access the applets configuration.
@@ -526,6 +534,14 @@ Q_SIGNALS:
      * @since 5.20
      */
     void configurationRequiredChanged(bool needsConfig, const QString &reason);
+
+    /**
+     * Emitted when the platform preferred input mode changed,
+     * such as when a transformable laptop goes from desktop
+     * to tablet mode
+     * @since 5.42
+     */
+    void inputModeChanged(Plasma::Types::InputMode mode);
 
 public Q_SLOTS:
 //BOOKKEEPING

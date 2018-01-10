@@ -331,6 +331,11 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     }
 }
 
+Types::InputMode Corona::inputMode() const
+{
+    return d->inputMode;
+}
+
 QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
 {
     QList<Plasma::Types::Location> freeEdges;
@@ -355,6 +360,7 @@ KActionCollection *Corona::actions() const
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Types::Mutable),
+      inputMode(Types::DesktopInputMode),
       config(0),
       configSyncTimer(new QTimer(corona)),
       actions(corona),

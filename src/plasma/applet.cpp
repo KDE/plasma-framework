@@ -613,6 +613,10 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::Types::LocationConstraint) {
         emit locationChanged(location());
     }
+
+    if (c & Plasma::Types::InputModeConstraint) {
+        emit inputModeChanged(inputMode());
+    }
 }
 
 QList<QAction *> Applet::contextualActions()
@@ -701,6 +705,12 @@ Types::Location Applet::location() const
 {
     Containment *c = containment();
     return c ? c->d->location : Plasma::Types::Desktop;
+}
+
+Types::InputMode Applet::inputMode() const
+{
+    Containment *c = containment();
+    return c && c->corona() ? c->corona()->inputMode() : Plasma::Types::DesktopInputMode;
 }
 
 bool Applet::hasConfigurationInterface() const

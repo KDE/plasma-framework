@@ -54,6 +54,7 @@ public:
     KPackage::Package package;
     KConfigGroup desktopDefaultsConfig;
     Types::ImmutabilityType immutability;
+    Types::InputMode inputMode;
     QString configName;
     KSharedConfigPtr config;
     QTimer *configSyncTimer;

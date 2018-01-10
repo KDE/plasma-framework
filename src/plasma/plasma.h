@@ -58,8 +58,9 @@ public:
         StartupCompletedConstraint = 16, /**< application startup has completed */
         ContextConstraint = 32, /**< the context (e.g. activity) has changed */
         UiReadyConstraint = 64, /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
+        InputModeConstraint = 128, /** Yhe preferred input mode changed, eg from Desktop to Tablet @since 5.42*/
         AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-                         ImmutableConstraint
+                         ImmutableConstraint | InputModeConstraint
     };
     Q_ENUM(Constraint)
     Q_DECLARE_FLAGS(Constraints, Constraint)
@@ -88,6 +89,16 @@ public:
                      for the desktop or the particular device. */
     };
     Q_ENUM(FormFactor)
+
+    /**
+     * The preferred input mode the device is in can influence how the UI looks, in Tabllet mode it will have bigger touch friendly controls and gestures will be preferred compared to Desktop mode where mouse and keyboard are preferred
+     * @since 5.42
+     */
+    enum InputMode {
+        DesktopInputMode = 1, /** Mouse and keyboard preferred */
+        TabletInputMode /** Touchscreen preferred (this includes tablets, phones or transformable laptops in tablet mode)*/
+    };
+    Q_ENUM(InputMode)
 
     /**
      * This enumeration describes the type of the Containment.

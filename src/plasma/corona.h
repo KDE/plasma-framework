@@ -223,6 +223,13 @@ public:
      */
     Types::ImmutabilityType immutability() const;
 
+    /**
+     * @return the preferred input mode for the whole corona.
+     * It's global to the device, which may be in Desktop(keyboard/mouse) or Tablet (only touchscreen) mode
+     * @since 5.42
+     */
+    Types::InputMode inputMode() const;
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file. The results will be added to the
@@ -313,6 +320,14 @@ Q_SIGNALS:
      * if your code's not in shells/ it probably shouldn't be using it.
      */
     void immutabilityChanged(Plasma::Types::ImmutabilityType immutability);
+
+    /**
+     * Emitted when the preferred input mode changed, such
+     * as a transformable laptop switched from laptop to tablet
+     * mode.
+     * @since 5.42
+     */
+    void inputModeChanged(Plasma::Types::InputMode);
 
     /** This signal indicates the screen with the specified id was removed.
      * @since 5.40
