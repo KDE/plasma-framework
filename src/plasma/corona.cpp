@@ -389,7 +389,13 @@ void CoronaPrivate::init()
     QObject::connect(Kirigami::TabletModeWatcher::self(), &Kirigami::TabletModeWatcher::tabletModeChanged,
             q, [this](bool tabletMode) {
                 inputMode = tabletMode ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
+                qWarning()<<"OOO"<<tabletMode<<inputMode;
                 emit q->inputModeChanged(inputMode);
+                for (auto c : containments) {
+                    for (auto a : c->applets()) {
+                        a->updateConstraints(Plasma::Types::InputModeConstraint);
+                    }
+                }
             });
 
     desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package.filePath("defaults")), "Desktop");

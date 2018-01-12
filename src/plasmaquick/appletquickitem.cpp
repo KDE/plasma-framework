@@ -428,6 +428,12 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
         // set the graphicObject dynamic property on applet
         d->applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
+    
+        setVisible(d->applet->shownInInputModes().contains(d->applet->inputMode()));
+        connect(d->applet, &Plasma::Applet::inputModeChanged, this, [this]() {
+    qWarning()<<"AAAAA"<<d->applet->inputMode()<<d->applet->shownInInputModes().contains(d->applet->inputMode());
+            setVisible(d->applet->shownInInputModes().contains(d->applet->inputMode()));
+        });
     }
 
     d->qmlObject->setInitializationDelayed(true);

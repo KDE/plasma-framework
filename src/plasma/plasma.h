@@ -95,7 +95,7 @@ public:
      * @since 5.42
      */
     enum InputMode {
-        DesktopInputMode = 1, /** Mouse and keyboard preferred */
+        DesktopInputMode = 0, /** Mouse and keyboard preferred */
         TabletInputMode /** Touchscreen preferred (this includes tablets, phones or transformable laptops in tablet mode)*/
     };
     Q_ENUM(InputMode)

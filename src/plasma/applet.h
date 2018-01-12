@@ -178,6 +178,8 @@ public:
      */
     Types::InputMode inputMode() const;
 
+    QList<Types::InputMode> shownInInputModes() const;
+
 //CONFIGURATION
     /**
     * Returns the KConfigGroup to access the applets configuration.

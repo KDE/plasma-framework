@@ -110,6 +110,7 @@ public:
     QTimer *deleteNotificationTimer;
 
     QString configurationRequiredReason;
+    QList<Types::InputMode> shownInInputModes;
 
     // a great green field of booleans :)
     bool hasConfigurationInterface : 1;

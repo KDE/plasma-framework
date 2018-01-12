@@ -191,6 +191,12 @@ void Applet::restore(KConfigGroup &group)
 {
 
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
+    d->shownInInputModes.clear();
+    QList<int> modes = group.readEntry("ShownInInputModes", QList<int>({Plasma::Types::DesktopInputMode, Plasma::Types::TabletInputMode}));
+    for (int m : modes) {
+        d->shownInInputModes << (Plasma::Types::InputMode)m;
+    }
+    
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
@@ -711,6 +717,11 @@ Types::InputMode Applet::inputMode() const
 {
     Containment *c = containment();
     return c && c->corona() ? c->corona()->inputMode() : Plasma::Types::DesktopInputMode;
+}
+
+QList<Types::InputMode> Applet::shownInInputModes() const
+{
+    return d->shownInInputModes;
 }
 
 bool Applet::hasConfigurationInterface() const
