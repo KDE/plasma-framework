@@ -238,6 +238,12 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
 
+    /**
+     * The preferred input mode for this device, Desktop or Tablet mode
+     * @since 5.42
+     */
+    Q_PROPERTY(Plasma::Types::InputMode inputMode READ inputMode NOTIFY inputModeChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface();
@@ -315,6 +321,8 @@ public:
     QVariantList availableScreenRegion() const;
 
     QRect availableScreenRect() const;
+
+    Plasma::Types::InputMode inputMode() const;
 
     static AppletInterface *qmlAttachedProperties(QObject *object)
     {
@@ -434,6 +442,7 @@ Q_SIGNALS:
     void associatedApplicationUrlsChanged();
     void availableScreenRegionChanged();
     void availableScreenRectChanged();
+    void inputModeChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();

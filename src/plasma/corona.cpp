@@ -36,6 +36,8 @@
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
 
+#include <Kirigami2/TabletModeWatcher>
+
 #include "containment.h"
 #include "pluginloader.h"
 #include "packagestructure.h"
@@ -383,6 +385,13 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
+    inputMode = Kirigami::TabletModeWatcher::self()->isTablet() ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
+    QObject::connect(Kirigami::TabletModeWatcher::self(), &Kirigami::TabletModeWatcher::tabletModeChanged,
+            q, [this](bool tabletMode) {
+                inputMode = tabletMode ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
+                emit q->inputModeChanged(inputMode);
+            });
+
     desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package.filePath("defaults")), "Desktop");
 
     configSyncTimer->setSingleShot(true);

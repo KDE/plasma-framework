@@ -128,6 +128,7 @@ PRIVATE
     KF5::GlobalAccel #Applet::setGlobalShortcut
     KF5::Notifications
     KF5::IconThemes
+    KF5::Kirigami2
     ${PLASMA_EXTRA_LIBS}
 )
 

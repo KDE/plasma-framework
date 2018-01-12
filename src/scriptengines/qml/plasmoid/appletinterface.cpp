@@ -127,6 +127,9 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
     }
 
+    connect(applet(), &Plasma::Applet::inputModeChanged,
+            this, &AppletInterface::inputModeChanged);
+
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
         //if both compactRepresentationItem and fullRepresentationItem exist,
         //the applet is in a popup
@@ -716,6 +719,13 @@ QRect AppletInterface::availableScreenRect() const
 
     return rect;
 }
+
+Plasma::Types::InputMode AppletInterface::inputMode() const
+{
+    return applet()->inputMode();
+}
+
+
 
 bool AppletInterface::event(QEvent *event)
 {
