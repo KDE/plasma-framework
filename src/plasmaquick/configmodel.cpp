@@ -269,6 +269,12 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
             if (!cm) {
                 qWarning() << "Error creating KCM object from plugin" << loader.fileName();
             }
+
+            if (QQmlContext *ctx = QQmlEngine::contextForObject(this)) {
+                // assign the ConfigModule the same QML context as we have so it can use the same QML engine as we do
+                QQmlEngine::setContextForObject(cm, ctx);
+            }
+
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
         }
