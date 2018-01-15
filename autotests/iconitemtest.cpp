@@ -514,6 +514,24 @@ void IconItemTest::implicitSize()
     QCOMPARE(item->implicitHeight(), qreal(64));
 }
 
+void IconItemTest::nonSquareImplicitSize()
+{
+    QQuickItem *item1 = createIconItem();
+
+    // Both file:///foo and /foo must behave the same
+    item1->setProperty("source", QFINDTESTDATA("data/test_nonsquare.png"));
+
+    QCOMPARE(item1->implicitWidth(), qreal(150));
+    QCOMPARE(item1->implicitHeight(), qreal(50));
+
+    QQuickItem *item2 = createIconItem();
+
+    item2->setProperty("source", QUrl::fromLocalFile(QFINDTESTDATA("data/test_nonsquare.png")));
+
+    QCOMPARE(item2->implicitWidth(), item1->implicitWidth());
+    QCOMPARE(item2->implicitHeight(), item1->implicitHeight());
+}
+
 void IconItemTest::roundToIconSize()
 {
     QQuickItem *item = createIconItem();

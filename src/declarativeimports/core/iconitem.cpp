@@ -150,11 +150,17 @@ void IconItem::setSource(const QVariant &source)
     }
 
     if (!sourceString.isEmpty()) {
-        //If a url in the form file:// is passed, take the image pointed by that from disk
+        // If a file:// URL or a absolute path is passed, take the image pointed by that from disk
+        QString localFile;
         if (sourceString.startsWith(QLatin1String("file:"))) {
-            const QUrl url(sourceString);
+            localFile = QUrl(sourceString).toLocalFile();
+        } else if (sourceString.startsWith(QLatin1Char('/'))) {
+            localFile = sourceString;
+        }
+
+        if (!localFile.isEmpty()) {
             m_icon = QIcon();
-            m_imageIcon = QImage(url.toLocalFile());
+            m_imageIcon = QImage(localFile);
             m_svgIconName.clear();
             delete m_svgIcon;
             m_svgIcon = 0;
