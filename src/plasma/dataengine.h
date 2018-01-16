@@ -103,8 +103,9 @@ public:
     /**
      * Connects a source to an object for data updates. The object must
      * have a slot with the following signature:
-     *
-     * dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
+     * @code
+     * void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+     * @endcode
      *
      * The data is a QHash of QVariants keyed by QString names, allowing
      * one data source to provide sets of related data.
@@ -129,8 +130,9 @@ public:
     /**
      * Connects all currently existing sources to an object for data updates.
      * The object must have a slot with the following signature:
-     *
-     * SLOT(dataUpdated(QString,Plasma::DataEngine::Data))
+     * @code
+     * void dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data);
+     * @endcode
      *
      * The data is a QHash of QVariants keyed by QString names, allowing
      * one data source to provide sets of related data.
