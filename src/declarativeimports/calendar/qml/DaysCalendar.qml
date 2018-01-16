@@ -90,8 +90,8 @@ Item {
     RowLayout {
         anchors {
             top: parent.top
-            left: parent.left
-            right: parent.right
+            left: canvas.left
+            right: canvas.right
         }
         spacing: units.smallSpacing
 
