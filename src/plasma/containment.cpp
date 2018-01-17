@@ -175,6 +175,7 @@ void Containment::restore(KConfigGroup &group)
     // qCDebug(LOG_PLASMA) << "    screen:" << group.readEntry("screen", d->screen);
     #endif
     */
+    Applet::restore(group);
     setLocation((Plasma::Types::Location)group.readEntry("location", (int)d->location));
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);

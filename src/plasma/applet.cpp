@@ -196,7 +196,6 @@ void Applet::restore(KConfigGroup &group)
     for (int m : modes) {
         d->shownInInputModes << (Plasma::Types::InputMode)m;
     }
-    
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
@@ -511,7 +510,11 @@ void Applet::setUserConfiguring(bool configuring)
 
 Types::ItemStatus Applet::status() const
 {
-    return d->itemStatus;
+    if (shownInInputModes().contains(inputMode())) {
+        return d->itemStatus;
+    } else {
+        return Types::HiddenStatus;
+    }
 }
 
 void Applet::setStatus(const Types::ItemStatus status)
@@ -622,6 +625,8 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::Types::InputModeConstraint) {
         emit inputModeChanged(inputMode());
+        //TODO: only emit when needed
+        emit statusChanged(status());
     }
 }
 
