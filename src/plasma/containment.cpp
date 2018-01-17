@@ -443,7 +443,8 @@ void Containment::addApplet(Applet *applet)
     });
     d->applets.insert(position, applet);
 
-    if (!d->uiReady) {
+    //ui of hidden applets will be created only when their status changes
+    if (!d->uiReady && applet->status() != Plasma::Types::HiddenStatus) {
         d->loadingApplets << applet;
     }
 

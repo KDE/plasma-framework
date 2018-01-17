@@ -25,6 +25,7 @@
 #include <QQmlEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
+#include <QQuickWindow>
 
 #include <QDebug>
 
@@ -68,6 +69,11 @@ void AppletQuickItemPrivate::init()
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->setUrlInterceptor(interceptor);
     }
+     QObject::connect(applet, &Plasma::Applet::statusChanged, q, [this](Plasma::Types::ItemStatus status) {
+         if(q->window() && q->window()->isVisible() && status != Plasma::Types::HiddenStatus && qmlObject->source().isEmpty()) {
+             q->init();
+         }
+     });
 }
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
@@ -807,7 +813,7 @@ void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the representations if needed
-        if (value.window) {
+        if (value.window && applet()->status() != Plasma::Types::HiddenStatus) {
             init();
         }
     }
