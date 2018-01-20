@@ -237,7 +237,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         path = actualTheme()->imagePath(themePath);
         themeFailed = path.isEmpty();
         QObject::connect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
-    } else if (QFile::exists(actualPath)) {
+    } else if (QFileInfo::exists(actualPath)) {
         QObject::connect(cacheAndColorsTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()), Qt::UniqueConnection);
         path = actualPath;
     } else {
@@ -251,7 +251,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
-    if ((themed && QFile::exists(path)) || QFile::exists(actualPath)) {
+    if ((themed && !path.isEmpty() && QFileInfo::exists(path)) || QFileInfo::exists(actualPath)) {
         QRectF rect;
 
         if (cacheAndColorsTheme()->findInRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), rect)) {
@@ -900,7 +900,7 @@ bool Svg::isValid() const
         return true;
     }
 
-    if (!QFile::exists(d->path)) {
+    if (d->path.isEmpty() || !QFileInfo::exists(d->path)) {
         return false;
     }
 
