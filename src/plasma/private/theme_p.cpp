@@ -192,7 +192,9 @@ bool ThemePrivate::useCache()
             if (!themeMetadataPath.isEmpty()) {
                 // now we record the theme version, if we can
                 const KPluginInfo pluginInfo(themeMetadataPath);
-                themeVersion = pluginInfo.version();
+                if (pluginInfo.isValid()) {
+                    themeVersion = pluginInfo.version();
+                }
                 if (!themeVersion.isEmpty()) {
                     cacheFile += QLatin1String("_v") + themeVersion;
                     currentCacheFileName = cacheFile + QLatin1String(".kcache");
