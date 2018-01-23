@@ -231,8 +231,10 @@ void DialogPrivate::updateTheme()
 {
     if (backgroundHints == Dialog::NoBackground) {
         frameSvgItem->setImagePath(QString());
-        KWindowEffects::enableBlurBehind(q->winId(), false);
-        KWindowEffects::enableBackgroundContrast(q->winId(), false);
+        if (q->isVisible()) {
+            KWindowEffects::enableBlurBehind(q->winId(), false);
+            KWindowEffects::enableBackgroundContrast(q->winId(), false);
+        }
         q->setMask(QRegion());
         DialogShadows::self()->removeWindow(q);
     } else {
@@ -242,13 +244,15 @@ void DialogPrivate::updateTheme()
             frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
         }
 
-        KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+        if (q->isVisible()) {
+            KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
 
-        KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
-                theme.backgroundContrast(),
-                theme.backgroundIntensity(),
-                theme.backgroundSaturation(),
-                frameSvgItem->frameSvg()->mask());
+            KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
+                    theme.backgroundContrast(),
+                    theme.backgroundIntensity(),
+                    theme.backgroundSaturation(),
+                    frameSvgItem->frameSvg()->mask());
+        }
 
         if (KWindowSystem::compositingActive()) {
             if (hasMask) {
