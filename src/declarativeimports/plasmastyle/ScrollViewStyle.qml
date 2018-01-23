@@ -28,7 +28,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 QtQuickControlStyle.ScrollViewStyle {
     property Flickable flickableItem: control.flickableItem
 
-    property real widthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * units.devicePixelRatio)
+    property real widthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width))
 
     property StyleItem __styleitem: StyleItem { elementType: "frame" }
     readonly property int __wheelScrollLines: __styleitem.styleHint("wheelScrollLines")

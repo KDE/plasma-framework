@@ -28,8 +28,8 @@ PlasmaCore.FrameSvgItem {
     imagePath:"widgets/scrollbar"
     prefix: internalLoader.isVertical ? "background-vertical" : "background-horizontal"
 
-    property int implicitWidth: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width * Math.max(1, Math.floor(units.devicePixelRatio)) : 12
-    property int implicitHeight: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").height * Math.max(1, Math.floor(units.devicePixelRatio)) : 12
+    property int implicitWidth: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : 12
+    property int implicitHeight: scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").height : 12
 
     opacity: 0
     Behavior on opacity {
