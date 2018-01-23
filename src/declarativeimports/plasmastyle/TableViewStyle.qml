@@ -34,7 +34,7 @@ QtQuickControlStyle.TableViewStyle {
     activateItemOnSingleClick: false
 
 
-    property real scrollbarWidthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * units.devicePixelRatio)
+    property real scrollbarWidthHint: Math.round( (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width))
 
     headerDelegate: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"

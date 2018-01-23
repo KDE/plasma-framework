@@ -28,8 +28,8 @@ PlasmaCore.FrameSvgItem {
     imagePath:"widgets/scrollbar"
     prefix: internalLoader.isVertical ? "background-vertical" : "background-horizontal"
 
-    property int implicitWidth: (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width) * Math.max(1, Math.floor(units.devicePixelRatio))
-    property int implicitHeight: (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").height : scrollbarSvg.elementSize("arrow-left").height) * Math.max(1, Math.floor(units.devicePixelRatio))
+    property int implicitWidth: (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").width : scrollbarSvg.elementSize("arrow-up").width)
+    property int implicitHeight: (scrollbarSvg.hasElement("hint-scrollbar-size") ? scrollbarSvg.elementSize("hint-scrollbar-size").height : scrollbarSvg.elementSize("arrow-left").height)
 
      Keys.onUpPressed: {
         if (!enabled || !internalLoader.isVertical)

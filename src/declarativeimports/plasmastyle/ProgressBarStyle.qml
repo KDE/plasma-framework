@@ -29,7 +29,7 @@ ProgressBarStyle {
 
     readonly property string imagePath: "widgets/bar_meter_horizontal"
 
-    readonly property real implicitHeight: barSvg.preferredHeight * Math.max(1, Math.floor(units.devicePixelRatio))
+    readonly property real implicitHeight: barSvg.preferredHeight
 
     PlasmaCore.Svg {
         id: barSvg
