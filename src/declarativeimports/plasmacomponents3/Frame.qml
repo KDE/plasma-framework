@@ -18,8 +18,8 @@
  */
 
 import QtQuick 2.6
-import QtQuick.Controls 2.0
-import QtQuick.Templates 2.0 as T
+import QtQuick.Controls @QQC2_VERSION@
+import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 T.Frame {
