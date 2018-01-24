@@ -19,7 +19,6 @@
 
 import QtQuick 2.1
 //for Settings
-import QtQuick.Controls 1.0 as Controls
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.2 as Kirigami
 

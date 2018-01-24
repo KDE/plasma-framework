@@ -18,7 +18,7 @@
  */
 
 import QtQuick 2.6
-import QtQuick.Templates 2.0 as T
+import QtQuick.Templates @QQC2_VERSION@ as T
 
 T.Container {
     id: control

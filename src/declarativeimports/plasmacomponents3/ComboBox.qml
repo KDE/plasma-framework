@@ -19,8 +19,8 @@
 
 import QtQuick 2.6
 import QtQuick.Window 2.2
-import QtQuick.Templates 2.0 as T
-import QtQuick.Controls 2.0 as Controls
+import QtQuick.Templates @QQC2_VERSION@ as T
+import QtQuick.Controls @QQC2_VERSION@ as Controls
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
