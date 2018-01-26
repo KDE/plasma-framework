@@ -27,14 +27,12 @@
 
 #include "customcorona.h"
 
-static const char version[] = "1.0";
-
 int main(int argc, char **argv)
 {
     QQuickWindow::setDefaultAlphaBuffer(true);
 
     QApplication app(argc, argv);
-    app.setApplicationVersion(version);
+    app.setApplicationVersion(QStringLiteral("1.0"));
     app.setOrganizationDomain(QStringLiteral("kde.org"));
 
     KDBusService service(KDBusService::Unique);

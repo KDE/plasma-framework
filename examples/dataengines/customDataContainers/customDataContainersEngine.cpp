@@ -49,7 +49,7 @@ bool DataContainersEngine::sourceRequestEvent(const QString &source)
     // the source to make sure it is indeed an http URL.
     QUrl url(source);
     qDebug() << "goin to fetch" << source << url << url.scheme();
-    if (!url.scheme().startsWith("http", Qt::CaseInsensitive)) {
+    if (!url.scheme().startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return false;
     }
 

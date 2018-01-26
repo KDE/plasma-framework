@@ -36,8 +36,8 @@ public:
     SourcesOnRequestEngine(QObject *parent, const QVariantList &args);
 
 protected:
-    bool sourceRequestEvent(const QString &source);
-    bool updateSourceEvent(const QString &source);
+    bool sourceRequestEvent(const QString &source) override;
+    bool updateSourceEvent(const QString &source) override;
 };
 
 #endif

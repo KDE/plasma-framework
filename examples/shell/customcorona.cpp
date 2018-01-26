@@ -44,8 +44,6 @@ CustomCorona::CustomCorona(QObject *parent)
     load();
 }
 
-
-
 QRect CustomCorona::screenGeometry(int id) const
 {
     Q_UNUSED(id);
@@ -56,7 +54,6 @@ QRect CustomCorona::screenGeometry(int id) const
 void CustomCorona::load()
 {
     loadLayout(QStringLiteral("exampleplasmashell-appletsrc"));
-
 
     bool desktopFound = false;
     for (auto c : containments()) {
@@ -69,7 +66,7 @@ void CustomCorona::load()
     if (!desktopFound) {
         qDebug() << "Loading default layout";
         Plasma::Containment *c = createContainment(QStringLiteral("org.kde.desktopcontainment"));
-        c->createApplet("org.kde.plasma.analogclock");
+        c->createApplet(QStringLiteral("org.kde.plasma.analogclock"));
         saveLayout(QStringLiteral("exampleplasmashell-appletsrc"));
     }
 
@@ -77,10 +74,9 @@ void CustomCorona::load()
     for (auto c : containments()) {
         if (c->containmentType() == Plasma::Types::DesktopContainment) {
             //example of a shell without a wallpaper
-            c->setWallpaper("null");
+            c->setWallpaper(QStringLiteral("null"));
             m_view->setContainment(c);
-            QAction *removeAction = c->actions()->action(QStringLiteral("remove"));
-            if(removeAction) {
+            if (QAction *removeAction = c->actions()->action(QStringLiteral("remove"))) {
                 removeAction->deleteLater();
             }
             break;
