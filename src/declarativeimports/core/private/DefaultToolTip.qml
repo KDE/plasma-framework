@@ -66,13 +66,12 @@ Item {
         }
 
         ColumnLayout {
+            Layout.maximumWidth: preferredTextWidth
 
             PlasmaExtras.Heading {
                 id: tooltipMaintext
                 level: 3
-                property int _width: Math.min(implicitWidth, preferredTextWidth)
-                Layout.minimumWidth: _width
-                Layout.maximumWidth: preferredTextWidth
+                Layout.fillWidth: true
                 elide: Text.ElideRight
                 wrapMode: Text.Wrap
                 text: toolTip ? toolTip.mainText : ""
@@ -80,9 +79,10 @@ Item {
             }
             PlasmaComponents.Label {
                 id: tooltipSubtext
-                property int _width: Math.min(implicitWidth, preferredTextWidth)
-                Layout.minimumWidth: _width
-                Layout.maximumWidth: preferredTextWidth
+                Layout.fillWidth: true
+                // Unset Label default height, confuses the layout engine completely
+                // either shifting the item vertically or letting it get too wide
+                height: undefined
                 wrapMode: Text.WordWrap
                 text: toolTip ? toolTip.subText : ""
                 textFormat: toolTip ? toolTip.textFormat : Text.AutoText
