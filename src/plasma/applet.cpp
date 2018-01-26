@@ -57,6 +57,9 @@
 #include "private/package_p.h"
 #include "debug_p.h"
 
+//FIXME: remove
+#include <QTimer>
+
 namespace Plasma
 {
 
@@ -522,6 +525,7 @@ void Applet::setStatus(const Types::ItemStatus status)
     if (status == d->itemStatus) {
         return;
     }
+
     d->itemStatus = status;
     emit statusChanged(status);
 }
@@ -624,6 +628,18 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::Types::InputModeConstraint) {
+        if (d->activationAction) {
+            //TODO: only when the status was hidden, if it was hidden, enable its global shortcut
+            if (status() != Types::HiddenStatus) {
+                //FIXME: the logic here is to have everything hidden before things are shown again, so potential shortcut collisions are avoided
+                QTimer::singleShot(0, this, [this]() {
+                    KGlobalAccel::self()->setShortcut(d->activationAction, {d->activationAction->shortcut()}, KGlobalAccel::NoAutoloading);
+                });
+            //if the new status is hidden, remove its global shortcut
+            } else if (status() == Types::HiddenStatus) {
+                KGlobalAccel::self()->removeAllShortcuts(d->activationAction);
+            }
+        }
         emit inputModeChanged(inputMode());
         //TODO: only emit when needed
         emit statusChanged(status());
@@ -696,7 +712,9 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
     d->globalShortcutEnabled = true;
     QList<QKeySequence> seqs;
     seqs << shortcut;
-    KGlobalAccel::self()->setShortcut(d->activationAction, seqs, KGlobalAccel::NoAutoloading);
+    if (status() != Types::HiddenStatus) {
+        KGlobalAccel::self()->setShortcut(d->activationAction, seqs, KGlobalAccel::NoAutoloading);
+    }
     d->globalShortcutChanged();
 }
 

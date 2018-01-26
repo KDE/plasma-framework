@@ -434,6 +434,12 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
         // set the graphicObject dynamic property on applet
         d->applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
+
+        connect(d->applet, &Plasma::Applet::statusChanged, this, [this]() {
+            if (d->applet->status() == Plasma::Types::HiddenStatus) {
+                setExpanded(false);
+            }
+        });
     }
 
     d->qmlObject->setInitializationDelayed(true);

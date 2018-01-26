@@ -385,13 +385,13 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
-    inputMode = Kirigami::TabletModeWatcher::self()->isTablet() ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
+    inputMode = Kirigami::TabletModeWatcher::self()->isTabletMode() ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
     QObject::connect(Kirigami::TabletModeWatcher::self(), &Kirigami::TabletModeWatcher::tabletModeChanged,
             q, [this](bool tabletMode) {
                 inputMode = tabletMode ? Types::InputMode::TabletInputMode : Types::InputMode::DesktopInputMode;
-                qWarning()<<"OOO"<<tabletMode<<inputMode;
                 emit q->inputModeChanged(inputMode);
                 for (auto c : containments) {
+                    c->updateConstraints(Plasma::Types::InputModeConstraint);
                     for (auto a : c->applets()) {
                         a->updateConstraints(Plasma::Types::InputModeConstraint);
                     }
