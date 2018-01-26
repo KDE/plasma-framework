@@ -51,7 +51,7 @@ bool SourcesOnRequestEngine::sourceRequestEvent(const QString &source)
 
     // We're going to reject any sources that start with the letter 'a'
     // to demonstrate how to reject a request in a DataEngine.
-    if (source.startsWith('a') || source.startsWith('A')) {
+    if (source.startsWith(QLatin1Char('a')) || source.startsWith(QLatin1Char('A'))) {
         return false;
     }
 
@@ -62,13 +62,13 @@ bool SourcesOnRequestEngine::sourceRequestEvent(const QString &source)
     // In such a case the DataEngine will remain happy and Do The Right Thing(tm)
     // but the visualization will not get the source connected to it as it
     // expects. So ALWAYS key the new data by the source string as below:
-    setData(source, "Update Count", 0);
+    setData(source, QStringLiteral("Update Count"), 0);
 
     if (!modelForSource(source)) {
         QStandardItemModel *m = new QStandardItemModel;
-        m->appendRow(new QStandardItem("Item1, first update"));
-        m->appendRow(new QStandardItem("Item2, first update"));
-        m->appendRow(new QStandardItem("Item3, first update"));
+        m->appendRow(new QStandardItem(QStringLiteral("Item1, first update")));
+        m->appendRow(new QStandardItem(QStringLiteral("Item2, first update")));
+        m->appendRow(new QStandardItem(QStringLiteral("Item3, first update")));
         setModel(source, m);
     }
 
@@ -92,15 +92,15 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
     // sourceRequestEvent, however, this will result in expected behavior: visualizations
     // connected to the sources which have setData called for them will be notified
     // of these changes.
-    const int updateCount = containerForSource(source)->data().value("Update Count").toInt() + 1;
-    setData(source, "Update Count", updateCount);
+    const int updateCount = containerForSource(source)->data().value(QStringLiteral("Update Count")).toInt() + 1;
+    setData(source, QStringLiteral("Update Count"), updateCount);
 
     QStandardItemModel *m = qobject_cast<QStandardItemModel *>(modelForSource(source));
     if (m) {
         m->clear();
-        m->appendRow(new QStandardItem(QString("Item1, update %1").arg(updateCount)));
-        m->appendRow(new QStandardItem(QString("Item2, update %1").arg(updateCount)));
-        m->appendRow(new QStandardItem(QString("Item3, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QStringLiteral("Item1, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QStringLiteral("Item2, update %1").arg(updateCount)));
+        m->appendRow(new QStandardItem(QStringLiteral("Item3, update %1").arg(updateCount)));
     }
 
     // Since we updated the source immediately here, we need to return true so the DataEngine

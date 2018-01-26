@@ -37,7 +37,7 @@ QList<QAction *> ContextTest::contextualActions()
     Plasma::Containment *c = containment();
     Q_ASSERT(c);
     QList<QAction *> actions;
-    actions << c->actions()->action("configure");
+    actions << c->actions()->action(QStringLiteral("configure"));
 
     return actions;
 }

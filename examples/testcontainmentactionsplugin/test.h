@@ -32,14 +32,14 @@ public:
 
     void init(const KConfigGroup &config);
 
-    QList<QAction *> contextualActions();
+    QList<QAction *> contextualActions() override;
 
-    void performNextAction();
-    void performPreviousAction();
+    void performNextAction() override;
+    void performPreviousAction() override;
 
-    QWidget *createConfigurationInterface(QWidget *parent);
-    void configurationAccepted();
-    void save(KConfigGroup &config);
+    QWidget *createConfigurationInterface(QWidget *parent) override;
+    void configurationAccepted() override;
+    void save(KConfigGroup &config) override;
 
 private:
     Ui::Config m_ui;

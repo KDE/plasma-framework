@@ -56,21 +56,21 @@ void SimpleEngine::init()
     // This is the simplest form, with  source name and one bit of data.
     // Note how the source name is not translated! They can be marked with
     // I18N_NOOP, however, if they should be translatable in a visualization.
-    setData("Simple Source", i18n("Very simple data"));
+    setData(QStringLiteral("Simple Source"), i18n("Very simple data"));
 
     // a source can have multiple entries, differentiated by key names,
     // which are also not translated:
-    setData("Multiple Source", "First", i18n("First"));
-    setData("Multiple Source", "Second", i18n("Second"));
+    setData(QStringLiteral("Multiple Source"), QStringLiteral("First"), i18n("First"));
+    setData(QStringLiteral("Multiple Source"), QStringLiteral("Second"), i18n("Second"));
 
     // We can also set the data up first and apply it all at once
     // Note how data types other than strings can be used as well; anything
     // that works with QVariant, in fact.
     Plasma::DataEngine::Data data;
-    data.insert("Cow", "mooo");
-    data.insert("Black", QColor(0, 0, 0));
-    data.insert("Time", QTime::currentTime());
-    setData("Another Source", data);
+    data.insert(QStringLiteral("Cow"), QStringLiteral("mooo"));
+    data.insert(QStringLiteral("Black"), QColor(0, 0, 0));
+    data.insert(QStringLiteral("Time"), QTime::currentTime());
+    setData(QStringLiteral("Another Source"), data);
 }
 
 // export the plugin; use the plugin name and the class name

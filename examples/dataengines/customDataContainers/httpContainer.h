@@ -33,7 +33,7 @@
 namespace KIO
 {
 class Job;
-};
+}
 
 class HttpContainer : public Plasma::DataContainer
 {

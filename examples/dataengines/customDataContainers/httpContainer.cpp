@@ -74,15 +74,15 @@ void HttpContainer::fetchFinished(KJob *job)
         // additional stats. Note that we don't include the source name, as that
         // is implied as this object *is* the DataContainer. setData is called
         // with just key/value pairs.
-        setData("Contents", m_data);
-        setData("Size", job->processedAmount(KJob::Bytes));
+        setData(QStringLiteral("Contents"), m_data);
+        setData(QStringLiteral("Size"), job->processedAmount(KJob::Bytes));
 
         // Since we only create TransferJobs, it's safe to just static_cast here.
         // In many real-world situations, this isn't the safest thing to do and a
         // qobject_cast with a test on the result is often safer and cleaner.
         KIO::TransferJob *tjob = static_cast<KIO::TransferJob *>(job);
-        setData("Error Page", tjob->isErrorPage());
-        setData("Mimetype", tjob->mimetype());
+        setData(QStringLiteral("Error Page"), tjob->isErrorPage());
+        setData(QStringLiteral("Mimetype"), tjob->mimetype());
 
         // Let DataContainer know we have data that needs storing
         setNeedsToBeStored(true);
