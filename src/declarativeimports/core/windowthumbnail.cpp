@@ -23,8 +23,12 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
+#include <QOpenGLExtraFunctions>
 #include <QQuickWindow>
 #include <QRunnable>
+
+#include <cmath>
 
 // X11
 #if HAVE_XCB_COMPOSITE
@@ -54,19 +58,29 @@ class DiscardGlxPixmapRunnable : public QRunnable {
 public:
     DiscardGlxPixmapRunnable(
         uint,
+        uint,
+        uint,
+        uint,
         QFunctionPointer,
         xcb_pixmap_t
     );
     void run() Q_DECL_OVERRIDE;
 private:
     uint m_texture;
+    uint m_mipmaps;
+    uint m_readFb;
+    uint m_drawFb;
     QFunctionPointer m_releaseTexImage;
     xcb_pixmap_t m_glxPixmap;
 };
 
-DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
+DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, uint mipmaps, uint readFb, uint drawFb,
+                                                   QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
     : QRunnable(),
     m_texture(texture),
+    m_mipmaps(mipmaps),
+    m_readFb(readFb),
+    m_drawFb(drawFb),
     m_releaseTexImage(deleteFunction),
     m_glxPixmap(pixmap)
 {}
@@ -77,7 +91,12 @@ void DiscardGlxPixmapRunnable::run()
         Display *d = QX11Info::display();
         ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
         glXDestroyPixmap(d, m_glxPixmap);
-        glDeleteTextures(1, &m_texture);
+
+        GLuint textures[] = { m_texture, m_mipmaps };
+        GLuint framebuffers[] = { m_readFb, m_drawFb };
+
+        glDeleteTextures(2, textures);
+        QOpenGLContext::currentContext()->functions()->glDeleteFramebuffers(2, framebuffers);
     }
 }
 #endif //HAVE_GLX
@@ -114,6 +133,27 @@ void DiscardEglPixmapRunnable::run()
 #endif//HAVE_EGL
 #endif //HAVE_XCB_COMPOSITE
 
+// QSGSimpleTextureNode does not support mipmap filtering, so this is the
+// only way to prevent it from setting TEXTURE_MIN_FILTER to LINEAR.
+class ThumbnailTexture : public QSGTexture
+{
+public:
+    ThumbnailTexture(int texture, const QSize &size) : m_texture(texture), m_size(size) {}
+    void bind() override final { glBindTexture(GL_TEXTURE_2D, m_texture); }
+    bool hasAlphaChannel() const override final { return true; }
+    bool hasMipmaps() const override final { return true; }
+    int textureId() const override final { return m_texture; }
+    QSize textureSize() const override final { return m_size; }
+
+private:
+    int m_texture;
+    QSize m_size;
+};
+
+
+// ------------------------------------------------------------------
+
+
 WindowTextureNode::WindowTextureNode()
     : QSGSimpleTextureNode()
 {
@@ -145,6 +185,9 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_damage(XCB_NONE)
     , m_pixmap(XCB_PIXMAP_NONE)
     , m_texture(0)
+    , m_mipmaps(0)
+    , m_readFb(0)
+    , m_drawFb(0)
 #if HAVE_GLX
     , m_glxPixmap(XCB_PIXMAP_NONE)
     , m_bindTexImage(nullptr)
@@ -234,6 +277,9 @@ void WindowThumbnail::releaseResources()
 #if HAVE_GLX
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
         window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture,
+                                                        m_mipmaps,
+                                                        m_readFb,
+                                                        m_drawFb,
                                                         m_releaseTexImage,
                                                         m_glxPixmap),
                                                         m_renderStage);
@@ -385,6 +431,22 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         if (!m_bindTexImage || !m_releaseTexImage) {
             return false;
         }
+
+        QOpenGLContext *ctx = QOpenGLContext::currentContext();
+
+        QOpenGLFunctions *funcs = ctx->functions();
+        QOpenGLExtraFunctions *extraFuncs = ctx->extraFunctions();
+
+        static bool haveTextureStorage = !ctx->isOpenGLES() &&
+                                          ctx->hasExtension(QByteArrayLiteral("GL_ARB_texture_storage"));
+
+        // Save the GL state
+        GLuint prevReadFb = 0, prevDrawFb = 0, prevTex2D = 0, prevScissorTest = 0;
+        funcs->glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, (GLint *) &prevReadFb);
+        funcs->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, (GLint *) &prevDrawFb);
+        funcs->glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint *) &prevTex2D);
+        funcs->glGetIntegerv(GL_SCISSOR_TEST, (GLint *) &prevScissorTest);
+
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
             xcb_connection_t *c = QX11Info::connection();
             auto attrCookie = xcb_get_window_attributes_unchecked(c, m_winId);
@@ -407,10 +469,64 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                 return false;
             }
 
-            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureCanUseAtlas));
+            const uint32_t width = geo->width;
+            const uint32_t height = geo->height;
+            const uint32_t levels = std::log2(std::min(width, height)) + 1;
+
+            funcs->glBindTexture(GL_TEXTURE_2D, m_mipmaps);
+            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, levels - 1);
+
+            if (haveTextureStorage)
+                extraFuncs->glTexStorage2D(GL_TEXTURE_2D, levels, GL_RGBA8, width, height);
+            else
+                funcs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+            GLuint framebuffers[2];
+            funcs->glGenFramebuffers(2, framebuffers);
+
+            m_readFb = framebuffers[0];
+            m_drawFb = framebuffers[1];
+
+            ThumbnailTexture *texture = new ThumbnailTexture(m_mipmaps, QSize(width, height));
+            textureNode->reset(texture);
         }
-        textureNode->texture()->bind();
+
+        funcs->glBindTexture(GL_TEXTURE_2D, m_texture);
         bindGLXTexture();
+
+        const QSize size = textureNode->texture()->textureSize();
+
+        // Blit the window texture to the mipmap texture
+        funcs->glBindFramebuffer(GL_READ_FRAMEBUFFER, m_readFb);
+        funcs->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_drawFb);
+
+        funcs->glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
+        funcs->glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_mipmaps, 0);
+
+        if (prevScissorTest)
+            glDisable(GL_SCISSOR_TEST);
+
+        extraFuncs->glBlitFramebuffer(0, 0, size.width(), size.height(),
+                                      0, 0, size.width(), size.height(),
+                                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+        // Regenerate the miplevels
+        funcs->glBindTexture(GL_TEXTURE_2D, m_mipmaps);
+        funcs->glGenerateMipmap(GL_TEXTURE_2D);
+
+        // Restore the GL state
+        funcs->glBindFramebuffer(GL_READ_FRAMEBUFFER, prevReadFb);
+        funcs->glBindFramebuffer(GL_DRAW_FRAMEBUFFER, prevDrawFb);
+
+        funcs->glBindTexture(GL_TEXTURE_2D, prevTex2D);
+
+        if (prevScissorTest)
+            glEnable(GL_SCISSOR_TEST);
+
         return true;
     }
     return false;
@@ -801,7 +917,11 @@ bool WindowThumbnail::loadGLXTexture()
         return false;
     }
 
-    glGenTextures(1, &m_texture);
+    GLuint textures[2];
+    glGenTextures(2, textures);
+
+    m_texture = textures[0];
+    m_mipmaps = textures[1];
 
     const int attrs[] = {
         GLX_TEXTURE_FORMAT_EXT, info->textureFormat,
