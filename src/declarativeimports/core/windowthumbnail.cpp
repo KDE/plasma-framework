@@ -385,13 +385,21 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         }
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
             xcb_connection_t *c = QX11Info::connection();
+            auto attrCookie = xcb_get_window_attributes_unchecked(c, m_winId);
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
+            QScopedPointer<xcb_get_window_attributes_reply_t, QScopedPointerPodDeleter> attr(xcb_get_window_attributes_reply(c, attrCookie, nullptr));
             QScopedPointer<xcb_get_geometry_reply_t, QScopedPointerPodDeleter> geo(xcb_get_geometry_reply(c, geometryCookie, nullptr));
+
+            if (attr.isNull()) {
+                return false;
+            }
 
             if (geo.isNull()) {
                 return false;
             }
+
             m_depth = geo->depth;
+            m_visualid = attr->visual;
 
             if (!loadGLXTexture()) {
                 return false;
@@ -564,22 +572,120 @@ void WindowThumbnail::bindGLXTexture()
     resetDamaged();
 }
 
-GLXFBConfig *getConfig(int depth, int *index)
+struct FbConfigInfo
 {
+    GLXFBConfig fbConfig;
+    int textureFormat;
+};
+
+struct GlxGlobalData
+{
+    GlxGlobalData() {
+	xcb_connection_t * const conn = QX11Info::connection();
+
+        // Fetch the render pict formats
+        reply = xcb_render_query_pict_formats_reply(conn,
+                        xcb_render_query_pict_formats_unchecked(conn), nullptr);
+
+        // Init the visual ID -> format ID hash table
+        for (auto screens = xcb_render_query_pict_formats_screens_iterator(reply); screens.rem; xcb_render_pictscreen_next(&screens)) {
+            for (auto depths = xcb_render_pictscreen_depths_iterator(screens.data); depths.rem; xcb_render_pictdepth_next(&depths)) {
+                const xcb_render_pictvisual_t *visuals = xcb_render_pictdepth_visuals(depths.data);
+                const int len = xcb_render_pictdepth_visuals_length(depths.data);
+
+                for (int i = 0; i < len; i++)
+                    visualPictFormatHash.insert(visuals[i].visual, visuals[i].format);
+            }
+        }
+
+        // Init the format ID -> xcb_render_directformat_t* hash table
+        const xcb_render_pictforminfo_t *formats = xcb_render_query_pict_formats_formats(reply);
+        const int len = xcb_render_query_pict_formats_formats_length(reply);
+
+        for (int i = 0; i < len; i++) {
+            if (formats[i].type == XCB_RENDER_PICT_TYPE_DIRECT)
+                formatInfoHash.insert(formats[i].id, &formats[i].direct);
+        }
+
+        // Init the visual ID -> depth hash table
+        const xcb_setup_t *setup = xcb_get_setup(conn);
+
+        for (auto screen = xcb_setup_roots_iterator(setup); screen.rem; xcb_screen_next(&screen)) {
+            for (auto depth = xcb_screen_allowed_depths_iterator(screen.data); depth.rem; xcb_depth_next(&depth)) {
+                const int len = xcb_depth_visuals_length(depth.data);
+                const xcb_visualtype_t *visuals = xcb_depth_visuals(depth.data);
+
+                for (int i = 0; i < len; i++)
+                    visualDepthHash.insert(visuals[i].visual_id, depth.data->depth);
+            }
+        }
+    }
+
+    ~GlxGlobalData() {
+        qDeleteAll(visualFbConfigHash);
+        std::free(reply);
+    }
+
+    xcb_render_query_pict_formats_reply_t *reply;
+    QHash<xcb_visualid_t, xcb_render_pictformat_t> visualPictFormatHash;
+    QHash<xcb_visualid_t, uint32_t> visualDepthHash;
+    QHash<xcb_visualid_t, FbConfigInfo *> visualFbConfigHash;
+    QHash<xcb_render_pictformat_t, const xcb_render_directformat_t *> formatInfoHash;
+};
+
+Q_GLOBAL_STATIC(GlxGlobalData, g_glxGlobalData)
+
+static xcb_render_pictformat_t findPictFormat(xcb_visualid_t visual)
+{
+    GlxGlobalData *d = g_glxGlobalData;
+    return d->visualPictFormatHash.value(visual);
+}
+
+static const xcb_render_directformat_t *findPictFormatInfo(xcb_render_pictformat_t format)
+{
+    GlxGlobalData *d = g_glxGlobalData;
+    return d->formatInfoHash.value(format);
+}
+
+static int visualDepth(xcb_visualid_t visual)
+{
+    GlxGlobalData *d = g_glxGlobalData;
+    return d->visualDepthHash.value(visual);
+}
+
+FbConfigInfo *getConfig(xcb_visualid_t visual)
+{
+    Display *dpy = QX11Info::display();
+    const xcb_render_pictformat_t format = findPictFormat(visual);
+    const xcb_render_directformat_t *direct = findPictFormatInfo(format);
+
+    if (!direct) {
+        return nullptr;
+    }
+
+    const int red_bits   = qPopulationCount(direct->red_mask);
+    const int green_bits = qPopulationCount(direct->green_mask);
+    const int blue_bits  = qPopulationCount(direct->blue_mask);
+    const int alpha_bits = qPopulationCount(direct->alpha_mask);
+
+    const int depth = visualDepth(visual);
+
+    const auto rgb_sizes = std::tie(red_bits, green_bits, blue_bits);
+
     const int attribs[] = {
-        GLX_RENDER_TYPE,              GLX_RGBA_BIT,
-        GLX_DRAWABLE_TYPE,            GLX_WINDOW_BIT | GLX_PIXMAP_BIT,
-        GLX_X_VISUAL_TYPE,            GLX_TRUE_COLOR,
-        GLX_X_RENDERABLE,             1,
-        GLX_CONFIG_CAVEAT,            int(GLX_DONT_CARE),
-        GLX_RED_SIZE,                 5,
-        GLX_GREEN_SIZE,               5,
-        GLX_BLUE_SIZE,                5,
-        GLX_ALPHA_SIZE,               0,
-        GLX_STENCIL_SIZE,             0,
-        GLX_DEPTH_SIZE,               0, // note: this is depth buffer and has nothing to do with the X depth
-        GLX_BIND_TO_TEXTURE_RGB_EXT,  (depth == 32) ? int(GLX_DONT_CARE) : 1,
-        GLX_BIND_TO_TEXTURE_RGBA_EXT, (depth == 32) ? 1 : int(GLX_DONT_CARE),
+        GLX_RENDER_TYPE,                  GLX_RGBA_BIT,
+        GLX_DRAWABLE_TYPE,                GLX_WINDOW_BIT | GLX_PIXMAP_BIT,
+        GLX_X_VISUAL_TYPE,                GLX_TRUE_COLOR,
+        GLX_X_RENDERABLE,                 True,
+        GLX_CONFIG_CAVEAT,                int(GLX_DONT_CARE), // The ARGB32 visual is marked non-conformant in Catalyst
+        GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT, int(GLX_DONT_CARE),
+        GLX_BUFFER_SIZE,                  red_bits + green_bits + blue_bits + alpha_bits,
+        GLX_RED_SIZE,                     red_bits,
+        GLX_GREEN_SIZE,                   green_bits,
+        GLX_BLUE_SIZE,                    blue_bits,
+        GLX_ALPHA_SIZE,                   alpha_bits,
+        GLX_STENCIL_SIZE,                 0,
+        GLX_DEPTH_SIZE,                   0,
         0
     };
 
@@ -588,36 +694,86 @@ GLXFBConfig *getConfig(int depth, int *index)
     }
 
     int count = 0;
-    GLXFBConfig *fbConfigs = glXChooseFBConfig(QX11Info::display(), QX11Info::appScreen(), attribs, &count);
+    GLXFBConfig *configs = glXChooseFBConfig(dpy, QX11Info::appScreen(), attribs, &count);
     if (count < 1) {
         return nullptr;
     }
 
-    for (int i = 0; i < count; ++i) {
-        int alphaSize = 0;
-        int bufferSize = 0;
-        glXGetFBConfigAttrib(QX11Info::display(), fbConfigs[i], GLX_BUFFER_SIZE, &bufferSize);
-        glXGetFBConfigAttrib(QX11Info::display(), fbConfigs[i], GLX_ALPHA_SIZE, &alphaSize);
-        if (bufferSize != depth && (bufferSize - alphaSize) != depth) {
-            continue;
-        }
-        XVisualInfo *vi = glXGetVisualFromFBConfig(QX11Info::display(), fbConfigs[i]);
-        if (!vi) {
-            // no visual for the fb config - skip
-            continue;
-        }
-        const int visualDepth = vi->depth;
-        XFree(vi);
+    struct FBConfig {
+        GLXFBConfig config;
+        int depth;
+        int stencil;
+        int format;
+    };
 
-        if (visualDepth != depth) {
-            // depth of the visual doesn't match our wanted depth - skip
+    QList<FBConfig> candidates;
+
+    for (int i = 0; i < count; i++) {
+        int red, green, blue;
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_RED_SIZE,   &red);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_GREEN_SIZE, &green);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BLUE_SIZE,  &blue);
+
+        if (std::tie(red, green, blue) != rgb_sizes)
             continue;
-        }
-        *index = i;
-        break;
+
+        xcb_visualid_t visual;
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_VISUAL_ID, (int *) &visual);
+
+        if (visualDepth(visual) != depth)
+            continue;
+
+        int bind_rgb, bind_rgba;
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &bind_rgba);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGB_EXT,  &bind_rgb);
+
+        if (!bind_rgb && !bind_rgba)
+            continue;
+
+        int texture_targets;
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_TARGETS_EXT, &texture_targets);
+
+        if ((texture_targets & GLX_TEXTURE_2D_BIT_EXT) == 0)
+            continue;
+
+        int depth, stencil;
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_DEPTH_SIZE,   &depth);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_STENCIL_SIZE, &stencil);
+
+        int texture_format;
+        if (alpha_bits)
+            texture_format = bind_rgba ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT;
+        else
+            texture_format = bind_rgb ? GLX_TEXTURE_FORMAT_RGB_EXT : GLX_TEXTURE_FORMAT_RGBA_EXT;
+
+        candidates.append(FBConfig{configs[i], depth, stencil, texture_format});
     }
 
-    return fbConfigs;
+    if (count > 0)
+        XFree(configs);
+
+    std::stable_sort(candidates.begin(), candidates.end(), [](const FBConfig &left, const FBConfig &right) {
+        if (left.depth < right.depth)
+            return true;
+
+        if (left.stencil < right.stencil)
+            return true;
+
+        return false;
+    });
+
+    FbConfigInfo *info = nullptr;
+
+    if (candidates.size() > 0) {
+        const FBConfig &candidate = candidates.front();
+
+        info = new FbConfigInfo;
+        info->fbConfig      = candidate.config;
+        info->textureFormat = candidate.format;
+    }
+
+
+    return info;
 }
 
 bool WindowThumbnail::loadGLXTexture()
@@ -627,51 +783,33 @@ bool WindowThumbnail::loadGLXTexture()
         return false;
     }
 
-    // this is a cache of the GLXFBConfig per depth
-    // it's kept as a method static to have it shared between multiple
-    // window thumbnails.
-    // As the GLXFBConfig might be context specific and we cannot be sure
-    // that the code might be entered from different contexts, the cache
-    // also maps the cached configs against the context.
-    static QHash<GLXContext, QMap<int, GLXFBConfig> > s_fbConfigs;
-    auto it = s_fbConfigs.find(glxContext);
-    if (it == s_fbConfigs.end()) {
-        // create a map entry for the current context
-        s_fbConfigs.insert(glxContext, QMap<int, GLXFBConfig>());
-        it = s_fbConfigs.find(glxContext);
-        if (it == s_fbConfigs.end()) {
-            // just for safety, should never ever happen
-            return false;
-        }
-    }
-    auto &configMap = it.value();
-    auto configIt = configMap.constFind(m_depth);
-    if (configIt == configMap.constEnd()) {
-        // try getting a new fbconfig for the current depth
-        int index = 0;
-        GLXFBConfig *fbConfigs = getConfig(m_depth, &index);
-        if (!fbConfigs) {
-            return false;
-        }
-        configMap.insert(m_depth, fbConfigs[index]);
-        XFree(fbConfigs);
+    FbConfigInfo *info = nullptr;
 
-        configIt = configMap.constFind(m_depth);
-        if (configIt == configMap.constEnd()) {
-            // just for safety, should never ever happen
-            return false;
-        }
+    auto &hashTable = g_glxGlobalData->visualFbConfigHash;
+    auto it = hashTable.constFind(m_visualid);
+
+    if (it != hashTable.constEnd()) {
+        info = *it;
+    } else {
+        info = getConfig(m_visualid);
+        hashTable.insert(m_visualid, info);
+    }
+
+    if (!info) {
+        return false;
     }
 
     glGenTextures(1, &m_texture);
 
-    // we assume that Texture_2D is supported as we have a QtQuick OpenGL context
-    int attrs[] = {
-        GLX_TEXTURE_FORMAT_EXT, (m_depth == 32) ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT,
+    const int attrs[] = {
+        GLX_TEXTURE_FORMAT_EXT, info->textureFormat,
         GLX_MIPMAP_TEXTURE_EXT, false,
-        GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT, XCB_NONE
+        GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
+        XCB_NONE
     };
-    m_glxPixmap = glXCreatePixmap(QX11Info::display(), configIt.value(), m_pixmap, attrs);
+
+    m_glxPixmap = glXCreatePixmap(QX11Info::display(), info->fbConfig, m_pixmap, attrs);
+
     return true;
 }
 #endif

@@ -132,6 +132,7 @@ private:
     bool loadGLXTexture();
     void bindGLXTexture();
     xcb_pixmap_t m_glxPixmap;
+    xcb_visualid_t m_visualid;
     QFunctionPointer m_bindTexImage;
     QFunctionPointer m_releaseTexImage;
 #endif // HAVE_GLX
