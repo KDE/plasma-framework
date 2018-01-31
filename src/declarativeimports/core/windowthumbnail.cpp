@@ -43,6 +43,8 @@ typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 #endif // HAVE_EGL
 #endif
 
+#include <cstdlib>
+
 namespace Plasma
 {
 
