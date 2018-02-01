@@ -106,6 +106,8 @@ QtObject {
      */
     readonly property int wheelScrollLines: __styleItem.styleHint("wheelScrollLines")
 
+    property int toolTipDelay: 700
+
     property variant fontMetrics: TextMetrics {
         text: "M"
         function roundedIconSize(size) {
