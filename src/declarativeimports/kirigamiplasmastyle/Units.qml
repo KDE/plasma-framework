@@ -99,6 +99,8 @@ QtObject {
      */
     property int wheelScrollLines: 3
 
+    property int toolTipDelay: 700
+
     /**
      * metrics used by the default font
      */
