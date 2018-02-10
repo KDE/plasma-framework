@@ -612,15 +612,16 @@ void FrameSvgItem::componentComplete()
 
 void FrameSvgItem::updateDevicePixelRatio()
 {
+    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
+
     //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
-    if (window()) {
-        m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(window()->devicePixelRatio())));
-    } else {
-        m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, floor(qApp->devicePixelRatio())));
+    const auto newDevicePixelRation = qMax<qreal>(1.0, floor(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
+
+    if (newDevicePixelRation != m_frameSvg->devicePixelRatio()) {
+        m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, newDevicePixelRation));
+        m_textureChanged = true;
     }
-    m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
-    m_textureChanged = true;
 }
 
 void FrameSvgItem::applyPrefixes()
@@ -655,6 +656,15 @@ void FrameSvgItem::applyPrefixes()
     if (oldPrefix != m_frameSvg->prefix()) {
         emit usedPrefixChanged();
     }
+}
+
+void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData & value)
+{
+    if (change == ItemSceneChange && value.window) {
+        updateDevicePixelRatio();
+    }
+
+    QQuickItem::itemChange(change, value);
 }
 
 } // Plasma namespace
