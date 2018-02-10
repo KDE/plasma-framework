@@ -563,6 +563,7 @@ void IconItem::loadPixmap()
         update();
         return;
     } else if (m_svgIcon) {
+        m_svgIcon->setDevicePixelRatio(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
         m_svgIcon->resize(size, size);
         if (!m_svgIconName.isEmpty() && m_svgIcon->hasElement(m_svgIconName)) {
             result = m_svgIcon->pixmap(m_svgIconName);

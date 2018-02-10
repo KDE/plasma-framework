@@ -227,7 +227,7 @@ public:
 
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) Q_DECL_OVERRIDE;
 
-
+    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData & data) override;
 
 protected:
     void classBegin() Q_DECL_OVERRIDE;
