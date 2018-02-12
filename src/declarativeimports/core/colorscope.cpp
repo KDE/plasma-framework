@@ -31,7 +31,8 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
     : QQuickItem(parent),
       m_inherit(false),
       m_group(Plasma::Theme::NormalColorGroup),
-      m_parent(parentObject)
+      m_parent(parentObject),
+      m_actualGroup(Plasma::Theme::NormalColorGroup)
 {
     connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
