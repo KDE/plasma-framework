@@ -482,7 +482,9 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
             delete oldNode;
 
             QSGTexture *source = window()->createTextureFromImage(m_iconPixmap.toImage());
+            source->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
             QSGTexture *target = window()->createTextureFromImage(m_oldIconPixmap.toImage());
+            target->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
             animatingNode = new FadingNode(source, target);
             m_sizeChanged = true;
             m_textureChanged = false;
