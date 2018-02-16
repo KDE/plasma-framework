@@ -110,7 +110,11 @@ T.ComboBox {
             currentIndex: control.highlightedIndex
             highlightRangeMode: ListView.ApplyRange
             highlightMoveDuration: 0
-            LayoutMirroring.enabled: true
+            // HACK: When the ComboBox is not inside a top-level Window, it's Popup does not inherit
+            // the LayoutMirroring options. This is a workaround to fix this by enforcing
+            // the LayoutMirroring options properly.
+            // QTBUG: https://bugreports.qt.io/browse/QTBUG-66446
+            LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
             LayoutMirroring.childrenInherit: true
             T.ScrollBar.vertical: Controls.ScrollBar { }
         }
