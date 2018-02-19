@@ -55,9 +55,27 @@ class AppletQuickItem;
 class AppletQuickItemPrivate
 {
 public:
+    //weight values for the logic for when or if to preload
+    enum PreloadWeights {
+        DefaultPreloadWeight = 50,
+        DefaultLauncherPreloadWeight = 100,
+        DelayedPreloadWeight = 25,
+        PreloadWeightIncrement = 5,
+        PreloadWeightDecrement = 8
+    };
+
+    enum PreloadPolicy {
+        Uninitialized = -1,
+        None = 0,
+        Adaptive = 1,
+        Aggressive = 2
+    };
+
     AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);
 
     void init();
+
+    int preloadWeight() const;
 
     QQuickItem *createCompactRepresentationItem();
     QQuickItem *createFullRepresentationItem();
@@ -80,6 +98,7 @@ public:
 
     AppletQuickItem *q;
 
+    static PreloadPolicy s_preloadPolicy;
     int switchWidth;
     int switchHeight;
 
