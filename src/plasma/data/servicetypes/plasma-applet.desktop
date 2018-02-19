@@ -83,6 +83,9 @@ Type=QString
 [PropertyDef::X-Plasma-Provides]
 Type=QStringList
 
+[PropertyDef::X-Plasma-PreloadWeight]
+Type=int
+
 [PropertyDef::X-Plasma-ConfigPlugins]
 Type=QStringList
 

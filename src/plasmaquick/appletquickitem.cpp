@@ -19,6 +19,7 @@
 
 #include "appletquickitem.h"
 #include "private/appletquickitem_p.h"
+#include "debug_p.h"
 
 #include <QQmlComponent>
 #include <QQmlExpression>
@@ -43,6 +44,7 @@ namespace PlasmaQuick
 
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
+AppletQuickItemPrivate::PreloadPolicy AppletQuickItemPrivate::s_preloadPolicy = AppletQuickItemPrivate::Uninitialized;
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
     : q(item),
@@ -52,6 +54,19 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       expanded(false),
       activationTogglesExpanded(false)
 {
+    if (s_preloadPolicy == Uninitialized) {
+        if (qEnvironmentVariableIsSet("PLASMA_PRELOAD_POLICY")) {
+            const QString policy = QString::fromUtf8(qgetenv("PLASMA_PRELOAD_POLICY")).toLower();
+            if (policy == QStringLiteral("aggressive")) {
+                s_preloadPolicy = Aggressive;
+            } else if (policy == QStringLiteral("none")) {
+                s_preloadPolicy = None;
+            //default as Adaptive
+            } else {
+                s_preloadPolicy = Adaptive;
+            }
+        }
+    }
 }
 
 void AppletQuickItemPrivate::init()
@@ -68,6 +83,21 @@ void AppletQuickItemPrivate::init()
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->setUrlInterceptor(interceptor);
     }
+}
+
+int AppletQuickItemPrivate::preloadWeight() const
+{
+    int defaultWeight;
+    const QStringList provides(KPluginMetaData::readStringList(applet->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides")));
+
+    //some applet types we want a bigger weight
+    if (provides.contains(QStringLiteral("org.kde.plasma.launchermenu"))) {
+        defaultWeight = DefaultLauncherPreloadWeight;
+    } else {
+        defaultWeight = DefaultPreloadWeight;
+    }
+    //default widgets to be barely preloaded
+    return qBound(0, applet->config().readEntry(QStringLiteral("PreloadWeight"), qMax(defaultWeight, applet->pluginMetaData().rawData().value(QStringLiteral("X-Plasma-PreloadWeight")).toInt())), 100);
 }
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
@@ -218,7 +248,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
 
     if (fullRepresentation && fullRepresentation != qmlObject->mainComponent()) {
         QVariantHash initialProperties;
-        initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
+        initialProperties[QStringLiteral("parent")] = QVariant();
         fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
     } else {
         fullRepresentation = qmlObject->mainComponent();
@@ -437,6 +467,11 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
 AppletQuickItem::~AppletQuickItem()
 {
+    //decrease weight
+    if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
+        d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), qMax(0, d->preloadWeight() - AppletQuickItemPrivate::PreloadWeightDecrement));
+    }
+
     //Here the order is important
     delete d->compactRepresentationItem;
     delete d->fullRepresentationItem;
@@ -598,6 +633,33 @@ void AppletQuickItem::init()
     d->compactRepresentationCheck();
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
     qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
+
+    //if we're expanded we don't care about preloading because it will already be the case
+    //as well as for containments
+    if (d->applet->isContainment() ||
+        d->expanded || d->preferredRepresentation == d->fullRepresentation) {
+        return;
+    }
+
+    if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
+        const int preloadWeight = d->preloadWeight();
+        qCInfo(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
+
+        //don't preload applets less then a certain weigth
+        if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
+            //spread the creation over a random delay to make it look
+            //plasma started already, and load the popup in the background
+            //without big noticeable freezes, the bigger the weight the smaller is likely
+            //to be the delay, smaller minimum walue, smaller spread
+            const int min = (100 - preloadWeight) * 20;
+            const int max = (100 - preloadWeight) * 100;
+            const int delay = qrand() % ((max + 1) - min) + min;
+            QTimer::singleShot(delay, this, [this, delay]() {
+                qCInfo(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
+                d->createFullRepresentationItem();
+            });
+        }
+    }
 }
 
 
@@ -726,6 +788,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     if (expanded) {
+        qint64 time = QDateTime::currentMSecsSinceEpoch();
         d->createFullRepresentationItem();
         if (!d->applet->isContainment() &&
                 (!d->preferredRepresentation ||
@@ -738,6 +801,14 @@ void AppletQuickItem::setExpanded(bool expanded)
         } else {
             d->fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(this));
         }
+
+        //increase on open, ignore containments
+        if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive && !d->applet->isContainment()) {
+            const int newWeight = qMin(d->preloadWeight() + AppletQuickItemPrivate::PreloadWeightIncrement, 100);
+            d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), newWeight);
+            qCInfo(LOG_PLASMAQUICK) << "Increasing score for" << d->applet->title() << "to" << newWeight;
+        }
+        qCInfo(LOG_PLASMAQUICK) << "Applet" << d->applet->title() << "opened after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
     }
 
     d->expanded = expanded;

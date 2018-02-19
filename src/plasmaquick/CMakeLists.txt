@@ -6,6 +6,7 @@ endif()
 
 set(plasmaquick_LIB_SRC
     appletquickitem.cpp
+    debug_p.cpp
     dialog.cpp
     dialogshadows.cpp
     view.cpp
@@ -19,6 +20,8 @@ set(plasmaquick_LIB_SRC
     ../declarativeimports/core/framesvgitem.cpp
     ../declarativeimports/core/units.cpp
 )
+
+ecm_qt_declare_logging_category(PlasmaQuick_LIB_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMAQUICK CATEGORY_NAME org.kde.plasmaquick)
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
