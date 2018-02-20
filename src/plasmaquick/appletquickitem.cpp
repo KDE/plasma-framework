@@ -55,17 +55,19 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       activationTogglesExpanded(false)
 {
     if (s_preloadPolicy == Uninitialized) {
+        //default as Adaptive
+        s_preloadPolicy = Adaptive;
+
         if (qEnvironmentVariableIsSet("PLASMA_PRELOAD_POLICY")) {
             const QString policy = QString::fromUtf8(qgetenv("PLASMA_PRELOAD_POLICY")).toLower();
             if (policy == QStringLiteral("aggressive")) {
                 s_preloadPolicy = Aggressive;
             } else if (policy == QStringLiteral("none")) {
                 s_preloadPolicy = None;
-            //default as Adaptive
-            } else {
-                s_preloadPolicy = Adaptive;
             }
         }
+
+        qCInfo(LOG_PLASMAQUICK) << "Applet preload policy set to" << s_preloadPolicy;
     }
 }
 
