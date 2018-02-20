@@ -26,6 +26,7 @@
 #include <QQmlEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
+#include <QQuickWindow>
 
 #include <QDebug>
 
@@ -286,6 +287,33 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
     compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject*>(createCompactRepresentationItem()));
 
     return compactRepresentationExpanderItem;
+}
+
+void AppletQuickItemPrivate::preloadForExpansion()
+{
+    qint64 time = 0;
+    if (QLoggingCategory::defaultCategory()->isInfoEnabled()) {
+        time = QDateTime::currentMSecsSinceEpoch();
+    }
+    createFullRepresentationItem();
+    if (!applet->isContainment() &&
+            (!preferredRepresentation ||
+                preferredRepresentation != fullRepresentation)) {
+        createCompactRepresentationExpanderItem();
+    }
+
+    if (compactRepresentationExpanderItem) {
+        compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject*>(createFullRepresentationItem()));
+    } else {
+        fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(q));
+    }
+
+    //preallocate nodes
+    if (fullRepresentationItem && fullRepresentationItem->window()) {
+        fullRepresentationItem->window()->create();
+    }
+
+    qCInfo(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
 }
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
@@ -658,7 +686,7 @@ void AppletQuickItem::init()
             const int delay = qrand() % ((max + 1) - min) + min;
             QTimer::singleShot(delay, this, [this, delay]() {
                 qCInfo(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
-                d->createFullRepresentationItem();
+                d->preloadForExpansion();
             });
         }
     }
@@ -790,27 +818,13 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     if (expanded) {
-        qint64 time = QDateTime::currentMSecsSinceEpoch();
-        d->createFullRepresentationItem();
-        if (!d->applet->isContainment() &&
-                (!d->preferredRepresentation ||
-                 d->preferredRepresentation != d->fullRepresentation)) {
-            d->createCompactRepresentationExpanderItem();
-        }
-
-        if (d->compactRepresentationExpanderItem) {
-            d->compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject*>(d->createFullRepresentationItem()));
-        } else {
-            d->fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(this));
-        }
-
+        d->preloadForExpansion();
         //increase on open, ignore containments
         if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive && !d->applet->isContainment()) {
             const int newWeight = qMin(d->preloadWeight() + AppletQuickItemPrivate::PreloadWeightIncrement, 100);
             d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), newWeight);
             qCInfo(LOG_PLASMAQUICK) << "Increasing score for" << d->applet->title() << "to" << newWeight;
         }
-        qCInfo(LOG_PLASMAQUICK) << "Applet" << d->applet->title() << "opened after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
     }
 
     d->expanded = expanded;

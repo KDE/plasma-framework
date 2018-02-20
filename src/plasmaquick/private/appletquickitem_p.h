@@ -80,6 +80,7 @@ public:
     QQuickItem *createCompactRepresentationItem();
     QQuickItem *createFullRepresentationItem();
     QQuickItem *createCompactRepresentationExpanderItem();
+    void preloadForExpansion();
 
     //look into item, and return the Layout attached property, if found
     void connectLayoutAttached(QObject *item);
