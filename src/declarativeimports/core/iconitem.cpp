@@ -39,7 +39,7 @@ IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_svgIcon(0),
       m_status(Plasma::Svg::Normal),
-      m_smooth(false),
+      m_smooth(true),
       m_active(false),
       m_animated(true),
       m_usesPlasmaTheme(true),
