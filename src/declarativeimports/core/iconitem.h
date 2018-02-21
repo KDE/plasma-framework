@@ -68,6 +68,7 @@ class IconItem : public QQuickItem
     /**
      * See QQuickItem::smooth
      */
+    //KF6 Remove, this just shadows QQuickItem::smooth
     Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
 
     /**
