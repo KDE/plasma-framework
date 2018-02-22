@@ -51,5 +51,13 @@ QtQuickControls.ScrollView {
         }
         contentItem.focus = true
     }
+    //we want plasmoid popups open as quick as possible at start.
+    //this makes sure things with big list views (kickoff, clipboard)
+    //are loaded when created, even before they are shown
+    Component.onCompleted: {
+        if (typeof contentItem.forceLayout === "function") {
+            contentItem.forceLayout();
+        }
+    }
     //end hack
 }
