@@ -296,7 +296,9 @@ void AppletQuickItemPrivate::preloadForExpansion()
         time = QDateTime::currentMSecsSinceEpoch();
     }
     createFullRepresentationItem();
-    if (!applet->isContainment() &&
+
+    // When not already expanded, also preload the expander
+    if (!expanded && !applet->isContainment() &&
             (!preferredRepresentation ||
                 preferredRepresentation != fullRepresentation)) {
         createCompactRepresentationExpanderItem();
