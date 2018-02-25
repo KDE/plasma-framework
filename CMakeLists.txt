@@ -99,13 +99,6 @@ if(X11_FOUND AND XCB_XCB_FOUND)
   #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
 endif()
 
-#FIXME: when we have a qca for qt5, reenable
-# find_package(QCA2 2.0.0 MODULE)
-set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
-                       URL "http://delta.affinix.com/qca"
-                       TYPE OPTIONAL
-                      )
-
 find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        URL "http://www.opengl.org"
