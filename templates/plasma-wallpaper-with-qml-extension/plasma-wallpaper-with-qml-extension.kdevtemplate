@@ -1,0 +1,5 @@
+[General]
+Name=Simple Plasma Wallpaper with QML extension
+Comment=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
+Category=Plasma/Wallpaper
+Icon=
