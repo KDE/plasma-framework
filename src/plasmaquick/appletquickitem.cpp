@@ -289,6 +289,28 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
     return compactRepresentationExpanderItem;
 }
 
+bool AppletQuickItemPrivate::appletShouldBeExpanded() const
+{
+    if (applet->isContainment()) {
+        return true;
+
+    } else {
+        if (switchWidth > 0 && switchHeight > 0) {
+            return q->width() > switchWidth && q->height() > switchHeight;
+
+            //if a size to switch wasn't set, determine what representation to always chose
+        } else {
+            //preferred representation set?
+            if (preferredRepresentation) {
+                return preferredRepresentation == fullRepresentation;
+                //Otherwise, base on FormFactor
+            } else {
+                return (applet->formFactor() != Plasma::Types::Horizontal && applet->formFactor() != Plasma::Types::Vertical);
+            }
+        }
+    }
+}
+
 void AppletQuickItemPrivate::preloadForExpansion()
 {
     qint64 time = 0;
@@ -304,7 +326,7 @@ void AppletQuickItemPrivate::preloadForExpansion()
         createCompactRepresentationExpanderItem();
     }
 
-    if (compactRepresentationExpanderItem) {
+    if (!appletShouldBeExpanded() && compactRepresentationExpanderItem) {
         compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject*>(createFullRepresentationItem()));
     } else {
         fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(q));
@@ -329,31 +351,14 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
         return;
     }
 
-    bool full = false;
+    bool full = appletShouldBeExpanded();
 
-    if (applet->isContainment()) {
-        full = true;
-
-    } else {
-        if (switchWidth > 0 && switchHeight > 0) {
-            full = q->width() > switchWidth && q->height() > switchHeight;
-            //if a size to switch wasn't set, determine what representation to always chose
-        } else {
-            //preferred representation set?
-            if (preferredRepresentation) {
-                full = preferredRepresentation == fullRepresentation;
-                //Otherwise, base on FormFactor
-            } else {
-                full = (applet->formFactor() != Plasma::Types::Horizontal && applet->formFactor() != Plasma::Types::Vertical);
-            }
-        }
-
-        if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem) ||
-                (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)
-           ) {
-            return;
-        }
+    if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem) ||
+            (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)
+        ) {
+        return;
     }
+
 
     //Expanded
     if (full) {

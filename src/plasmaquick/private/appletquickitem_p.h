@@ -80,6 +80,11 @@ public:
     QQuickItem *createCompactRepresentationItem();
     QQuickItem *createFullRepresentationItem();
     QQuickItem *createCompactRepresentationExpanderItem();
+
+    //true if the applet is at a size in which it should be expanded,
+    //false if is too small and should be an icon
+    bool appletShouldBeExpanded() const;
+    //ensures the popup is preloaded, don't expand yet
     void preloadForExpansion();
 
     //look into item, and return the Layout attached property, if found
