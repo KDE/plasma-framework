@@ -18,6 +18,9 @@
 
 #include "%{APPNAMELC}plugin.h"
 
+// KF
+#include <KLocalizedString>
+// Qt
 #include <QJSEngine>
 #include <QQmlEngine>
 #include <QQmlContext>
@@ -27,7 +30,7 @@ static QJSValue singletonTypeExampleProvider(QQmlEngine* engine, QJSEngine* scri
     Q_UNUSED(engine)
 
     QJSValue helloWorld = scriptEngine->newObject();
-    helloWorld.setProperty("text", QStringLiteral("Hello world!"));
+    helloWorld.setProperty("text", i18n("Hello world!"));
     return helloWorld;
 }
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
 
 project(plasma-%{APPNAMELC})
  
@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
+include(FeatureSummary)
 
 find_package(KF5 REQUIRED COMPONENTS
     Plasma
@@ -21,7 +22,10 @@ find_package(Qt5 CONFIG REQUIRED COMPONENTS
 )
 
 # plasmoid
-plasma_install_package(package org.kde.%{APPNAMELC})
+# TODO: adapt "org.kde.plasma" here & elsewhere if needed (see README)
+plasma_install_package(package org.kde.plasma.%{APPNAMELC})
 
 # qml extension plugin
 add_subdirectory(plugin)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

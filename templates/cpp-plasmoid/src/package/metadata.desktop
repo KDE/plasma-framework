@@ -85,14 +85,13 @@ X-KDE-Library=plasma_applet_%{APPNAMELC}
 
 X-KDE-PluginInfo-Author=%{AUTHOR}
 X-KDE-PluginInfo-Email=%{EMAIL}
-X-KDE-PluginInfo-Name=%{APPNAMELC}
+X-KDE-PluginInfo-Name=org.kde.plasma.%{APPNAMELC}
 X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=http://plasma.kde.org/
 X-KDE-PluginInfo-Category=Utilities
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
-X-KDE-PluginInfo-Name=org.kde.%{APPNAMELC}
 
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml

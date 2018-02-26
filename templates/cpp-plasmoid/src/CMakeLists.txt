@@ -1,4 +1,5 @@
-add_definitions(-DTRANSLATION_DOMAIN=\"plasma_applet_org.kde.%{APPNAMELC}\")
+# TODO: adapt "org.kde.plasma" here & elsewhere if needed (see README)
+add_definitions(-DTRANSLATION_DOMAIN=\"plasma_applet_org.kde.plasma.%{APPNAMELC}\")
 
 set(%{APPNAMELC}_SRCS
     %{APPNAMELC}.cpp
@@ -16,4 +17,4 @@ target_link_libraries(plasma_applet_%{APPNAMELC}
 
 install(TARGETS plasma_applet_%{APPNAMELC} DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/applets)
 
-plasma_install_package(package org.kde.%{APPNAMELC})
+plasma_install_package(package org.kde.plasma.%{APPNAMELC})

@@ -32,8 +32,7 @@ Item {
 
     PlasmaExtras.Title {
         anchors.centerIn: parent
-        // use i18nd in wallpaper QML, as the default textdomain is not setup at least in Plasma 5.7
         text: wallpaper.configuration.DisplayText ||
-              i18nd("plasma_wallpaper_org.kde.plasma.%{APPNAMELC}", "<Please configure a text to display>")
+              i18n("<Please configure a text to display>")
     }
 }

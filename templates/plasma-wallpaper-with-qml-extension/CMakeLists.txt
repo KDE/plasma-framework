@@ -22,6 +22,7 @@ find_package(Qt5 CONFIG REQUIRED COMPONENTS
 )
 
 # wallpaper applet
+# TODO: adapt "org.kde.plasma" here & elsewhere if needed (see README)
 plasma_install_package(package org.kde.plasma.%{APPNAMELC} wallpapers wallpaper)
 
 # qml extension plugin

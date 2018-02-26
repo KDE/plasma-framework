@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
 
 project(plasma-%{APPNAMELC})
  
@@ -7,4 +7,5 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 find_package(KF5Plasma REQUIRED)
 
-plasma_install_package(package org.kde.%{APPNAMELC})
+# TODO: adapt "org.kde.plasma" here & elsewhere if needed (see README)
+plasma_install_package(package org.kde.plasma.%{APPNAMELC})
