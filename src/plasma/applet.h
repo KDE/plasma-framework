@@ -252,7 +252,6 @@ public:
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
-     * Deprecated: please use kPackage()
      *
      * @deprecated use kPackage() instead
      * @return the Package object, or an invalid one if none
