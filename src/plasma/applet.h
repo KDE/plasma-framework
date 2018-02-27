@@ -318,8 +318,6 @@ public:
      * Returns a pointer to the applet if successful.
      * The caller takes responsibility for the applet, including
      * deleting it when no longer needed.
-     * Deprecated: use Containment::createApplet instead, you are not
-     * supposed to have applets without containments
      * If you instance a plasmoid with this deprecated API, the
      * automated default setup scripts won't be executed for that plasmoid
      *
@@ -328,6 +326,9 @@ public:
      *        assigned automatically.
      * @return a pointer to the loaded applet, or 0 on load failure
      * @since 4.3
+     *
+     * @deprecated use Containment::createApplet() instead, you are not
+     * supposed to have applets without containments
      **/
     PLASMA_DEPRECATED static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
 
