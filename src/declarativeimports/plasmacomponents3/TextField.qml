@@ -51,6 +51,7 @@ T.TextField {
         text: control.placeholderText
         font: control.font
         color: theme.viewTextColor
+        opacity: 0.5
         horizontalAlignment: control.horizontalAlignment
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
