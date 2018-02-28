@@ -92,7 +92,8 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     //qDebug() << "Intercepted URL:" << path << type;
 
     //we assume we never rewritten qml/qmldir files
-    if (path.path().endsWith(QStringLiteral("qml")) || path.path().endsWith(QStringLiteral("qmldir"))) {
+    if (path.path().endsWith(QStringLiteral("qml")) || path.path().endsWith(QStringLiteral("qmldir"))
+            || path.path().endsWith(QStringLiteral("/inline"))) {
         return path;
     }
     const QString prefix = QString::fromUtf8(prefixForType(type, path.path()));
