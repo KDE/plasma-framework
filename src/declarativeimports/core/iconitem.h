@@ -202,13 +202,10 @@ private:
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
     QString m_svgIconName;
-    QPixmap m_pixmapIcon;
     QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
     Plasma::Svg::Status m_status;
-
-    QSizeF m_implicitSize;
 
     bool m_smooth;
     bool m_active;
