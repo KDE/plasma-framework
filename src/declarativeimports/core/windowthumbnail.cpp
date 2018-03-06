@@ -371,7 +371,7 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
         icon = QIcon::fromTheme(QStringLiteral("plasma"));
     }
     QImage image = icon.pixmap(boundingRect().size().toSize()).toImage();
-    textureNode->reset(window()->createTextureFromImage(image));
+    textureNode->reset(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
 }
 
 #if HAVE_XCB_COMPOSITE
@@ -407,7 +407,7 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                 return false;
             }
 
-            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height)));
+            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureCanUseAtlas));
         }
         textureNode->texture()->bind();
         bindGLXTexture();
@@ -456,7 +456,7 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
                 size.setWidth(geo->width);
                 size.setHeight(geo->height);
             }
-            textureNode->reset(window()->createTextureFromId(m_texture, size));
+            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureCanUseAtlas));
         }
         textureNode->texture()->bind();
         bindEGLTexture();
