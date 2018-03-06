@@ -43,6 +43,8 @@ public:
 private:
     QOpenGLFunctions *glFuncs  = nullptr;
     int m_progressId = 0;
+    int m_sourceRectId = 0;
+    int m_targetRectId = 0;
 };
 
 
@@ -62,6 +64,8 @@ void FadingMaterialShader::updateState(const FadingMaterialState* newState, cons
     if (!oldState || oldState->source != newState->source) {
         glFuncs->glActiveTexture(GL_TEXTURE1);
         newState->source->bind();
+        QRectF rect = newState->source->normalizedTextureSubRect();
+        program()->setUniformValue(m_sourceRectId, QVector4D(rect.x(), rect.y(), rect.width(), rect.height()));
         // reset the active texture back to 0 after we changed it to something else
         glFuncs->glActiveTexture(GL_TEXTURE0);
     }
@@ -69,6 +73,8 @@ void FadingMaterialShader::updateState(const FadingMaterialState* newState, cons
     if (!oldState || oldState->target != newState->target) {
         glFuncs->glActiveTexture(GL_TEXTURE0);
         newState->target->bind();
+        QRectF rect = newState->target->normalizedTextureSubRect();
+        program()->setUniformValue(m_targetRectId, QVector4D(rect.x(), rect.y(), rect.width(), rect.height()));
     }
 
     if (!oldState || oldState->progress != newState->progress) {
@@ -87,7 +93,10 @@ void FadingMaterialShader::initialize()
     program()->bind();
     program()->setUniformValue("u_src", 0);
     program()->setUniformValue("u_target", 1);
+
     m_progressId = program()->uniformLocation("u_transitionProgress");
+    m_sourceRectId = program()->uniformLocation("u_src_rect");
+    m_targetRectId = program()->uniformLocation("u_target_rect");
 }
 
 

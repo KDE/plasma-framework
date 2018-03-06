@@ -481,9 +481,9 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         if (!animatingNode || m_textureChanged) {
             delete oldNode;
 
-            QSGTexture *source = window()->createTextureFromImage(m_iconPixmap.toImage());
+            QSGTexture *source = window()->createTextureFromImage(m_oldIconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
             source->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
-            QSGTexture *target = window()->createTextureFromImage(m_oldIconPixmap.toImage());
+            QSGTexture *target = window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
             target->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
             animatingNode = new FadingNode(source, target);
             m_sizeChanged = true;
