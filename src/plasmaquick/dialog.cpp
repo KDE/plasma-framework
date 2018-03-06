@@ -1319,11 +1319,6 @@ void Dialog::componentComplete()
 {
     d->componentComplete = true;
     QQuickWindow::setVisible(d->visible);
-    if (d->visible) {
-        // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
-        // See: https://bugreports.qt.io/browse/QTBUG-26978
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-    }
     d->updateTheme();
 }
 
@@ -1371,11 +1366,6 @@ void Dialog::setVisible(bool visible)
             d->mainItem->setVisible(true);
         }
         QQuickWindow::setVisible(visible);
-        if (visible) {
-            // FIXME TODO: We can remove this once we depend on Qt 5.6.1+.
-            // See: https://bugreports.qt.io/browse/QTBUG-26978
-            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
-        }
         //signal will be emitted and proxied from the QQuickWindow code
     } else {
         emit visibleChangedProxy();
