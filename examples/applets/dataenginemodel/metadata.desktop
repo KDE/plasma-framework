@@ -37,7 +37,6 @@ Comment[uk]=Приклад аплету, який демонструє вико�
 Comment[x-test]=xxExample applet that shows how to use Models embedded in DataEnginesxx
 Comment[zh_CN]=展示如何使用数据引擎内嵌的模型的样例小部件
 Comment[zh_TW]=顯示如何使用嵌入於資料引擎中的模型的範例小程式
-Encoding=UTF-8
 Keywords=
 Name=Dataengine model
 Name[ast]=Modelu de motor de datos

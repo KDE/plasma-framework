@@ -78,7 +78,6 @@ Comment[x-test]=xxExample showing how to display window thumbnailsxx
 Comment[zh_CN]=如何显示窗口缩略图的例子
 Comment[zh_TW]=顯示視窗縮圖的範例
 Icon=preferences-system-windows
-Encoding=UTF-8
 Keywords=
 Type=Service
 X-KDE-ParentApp=
