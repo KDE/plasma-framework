@@ -80,7 +80,6 @@ Comment[uk]=Тестова програма для спостереження з
 Comment[x-test]=xxA proof of concept media player controller qmlxx
 Comment[zh_CN]=媒体播放器控制器 QML 版本的概念验证
 Comment[zh_TW]=概念媒體播放控制器 qml 的證明
-Encoding=UTF-8
 Icon=applications-multimedia
 ServiceTypes=Plasma/Applet
 Type=Service
