@@ -1,8 +1,8 @@
 varying highp vec2 v_coord;
 uniform sampler2D u_src;
-uniform vec4 u_src_rect;
+uniform highp vec4 u_src_rect;
 uniform sampler2D u_target;
-uniform vec4 u_target_rect;
+uniform highp vec4 u_target_rect;
 uniform highp float u_transitionProgress;
 uniform lowp float qt_Opacity;
 void main() {
