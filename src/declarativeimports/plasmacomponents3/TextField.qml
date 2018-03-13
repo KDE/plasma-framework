@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Window 2.2
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -39,7 +40,10 @@ T.TextField {
     selectedTextColor: theme.highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter
     opacity: control.enabled ? 1 : 0.6
-    renderType: Text.NativeRendering
+
+    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+    // https://bugreports.qt.io/browse/QTBUG-67007
+    renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
 
     Label {
         id: placeholder

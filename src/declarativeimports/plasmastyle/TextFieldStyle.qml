@@ -18,6 +18,7 @@
 */
 
 import QtQuick 2.0
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
@@ -40,8 +41,10 @@ QtQuickControlStyle.TextFieldStyle {
      * more blurred with different rendring types.
      * Using Qt rendering, the dots will look more aligned and equally spaced.
      * Also if we are on mobile, make sure we use QtRendering
+     * Finally, use QtRendering if we're using a non-integer scale factor to work around
+     * https://bugreports.qt.io/browse/QTBUG-67007
      */
-    renderType: !QtQuickControlsPrivate.Settings.isMobile && control.echoMode == TextInput.Normal ? Text.NativeRendering : Text.QtRendering
+    renderType: !QtQuickControlsPrivate.Settings.isMobile && control.echoMode == TextInput.Normal && Screen.devicePixelRatio % 1 == 0 ? Text.NativeRendering : Text.QtRendering
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
