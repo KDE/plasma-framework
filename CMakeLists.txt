@@ -24,6 +24,7 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDEPackageAppTemplates)
 include(ECMGenerateQmlTypes)
+include(ECMSetupQtPluginMacroNames)
 
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
@@ -120,52 +121,26 @@ endif()
 
 #########################################################################
 
-# TODO: create ECM macro for automoc & json things
-set(Plasma_AUTOMOC_MACRO_NAMES_WITH_NO_JSON
-    "K_EXPORT_PLASMA_SERVICE"
-    "K_EXPORT_PLASMA_APPLET"
-    "K_EXPORT_PLASMA_PACKAGE"
-    "K_EXPORT_PLASMA_APPLETSCRIPTENGINE"
-    "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE"
-    "K_EXPORT_PLASMA_DATAENGINE"
+ecm_setup_qtplugin_macro_names(
+    JSON_NONE
+        "K_EXPORT_PLASMA_SERVICE"
+        "K_EXPORT_PLASMA_APPLET"
+        "K_EXPORT_PLASMA_PACKAGE"
+        "K_EXPORT_PLASMA_APPLETSCRIPTENGINE"
+        "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE"
+        "K_EXPORT_PLASMA_DATAENGINE"
+    JSON_ARG2
+        "K_EXPORT_PLASMA_PACKAGE_WITH_JSON"
+    JSON_ARG3
+        "K_EXPORT_PLASMA_SERVICE_WITH_JSON"
+        "K_EXPORT_PLASMA_APPLET_WITH_JSON"
+        "K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON"
+        "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON"
+        "K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON"
+        "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
+    CONFIG_CODE_VARIABLE
+        PACKAGE_SETUP_AUTOMOC_VARIABLES
 )
-set(Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG2
-    "K_EXPORT_PLASMA_PACKAGE_WITH_JSON"
-)
-set(Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG3
-    "K_EXPORT_PLASMA_SERVICE_WITH_JSON"
-    "K_EXPORT_PLASMA_APPLET_WITH_JSON"
-    "K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON"
-    "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON"
-    "K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON"
-    "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
-)
-set(Plasma_AUTOMOC_MACRO_NAMES
-    ${Plasma_AUTOMOC_MACRO_NAMES_WITH_NO_JSON}
-    ${Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG2}
-    ${Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG3}
-)
-if(NOT CMAKE_VERSION VERSION_LESS "3.10.0")
-    # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
-    # 3.10+ lets us provide more macro names that require automoc.
-    list(APPEND CMAKE_AUTOMOC_MACRO_NAMES ${Plasma_AUTOMOC_MACRO_NAMES})
-endif()
-if(NOT CMAKE_VERSION VERSION_LESS "3.9.0")
-    foreach(macro_name  ${Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG2})
-        # tell automoc how to find names of plugin metadata files
-        list(APPEND CMAKE_AUTOMOC_DEPEND_FILTERS
-            "${macro_name}"
-            "[\n^][ \t]*${macro_name}[ \t\n]*\\([^,]*,[ \t\n]*\"([^\"]+)\""
-        )
-    endforeach()
-    foreach(macro_name  ${Plasma_AUTOMOC_MACRO_NAMES_WITH_JSON_ARG3})
-        # tell automoc how to find names of plugin metadata files
-        list(APPEND CMAKE_AUTOMOC_DEPEND_FILTERS
-            "${macro_name}"
-            "[\n^][ \t]*${macro_name}[ \t\n]*\\([^,]*,[^,]*,[ \t\n]*\"([^\"]+)\""
-        )
-    endforeach()
-endif()
 
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
