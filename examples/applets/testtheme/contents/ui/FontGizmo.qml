@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.1
-
+import QtQuick.Window 2.2
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 
@@ -28,7 +28,9 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Text {
 
-    renderType: QtQuickControlsPrivate.Settings.isMobile ? Text.QtRendering : Text.NativeRendering
+    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+    // https://bugreports.qt.io/browse/QTBUG-67007
+    renderType: QtQuickControlsPrivate.Settings.isMobile || Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
     font.pointSize: 22
 
     //font.family: theme.defaultFont.family

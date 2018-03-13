@@ -39,6 +39,10 @@ T.ComboBox {
     rightPadding: surfaceNormal.margins.right
     bottomPadding: surfaceNormal.margins.bottom
 
+    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+    // https://bugreports.qt.io/browse/QTBUG-67007
+    renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+
     delegate: ItemDelegate {
         width: control.popup.width
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
