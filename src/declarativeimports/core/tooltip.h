@@ -189,7 +189,7 @@ Q_SIGNALS:
     void interactiveChanged();
 
 private Q_SLOTS:
-    void settingsChanged();
+    void settingsChanged(const QString &file);
 
 private:
     bool isValid() const;
