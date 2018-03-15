@@ -54,8 +54,8 @@ ToolTip::ToolTip(QQuickItem *parent)
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/plasmarc");
     KDirWatch::self()->addFile(configFile);
-    QObject::connect(KDirWatch::self(), SIGNAL(created(QString)), this, SLOT(settingsChanged()));
-    QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)), this, SLOT(settingsChanged()));
+    QObject::connect(KDirWatch::self(), &KDirWatch::created, this, &ToolTip::settingsChanged);
+    QObject::connect(KDirWatch::self(), &KDirWatch::dirty, this, &ToolTip::settingsChanged);
 }
 
 ToolTip::~ToolTip()
@@ -74,8 +74,12 @@ ToolTip::~ToolTip()
     }
 }
 
-void ToolTip::settingsChanged()
+void ToolTip::settingsChanged(const QString &file)
 {
+    if (!file.endsWith(QLatin1String("plasmarc"))) {
+        return;
+    }
+
     KSharedConfig::openConfig(QStringLiteral("plasmarc"))->reparseConfiguration();
     loadSettings();
 }
