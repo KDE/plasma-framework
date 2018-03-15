@@ -561,10 +561,6 @@ void DialogPrivate::updateInputShape()
     }
 
 #if HAVE_XCB_SHAPE
-    if (backgroundHints == Dialog::NoBackground) {
-        return;
-    }
-
     if (KWindowSystem::isPlatformX11()) {
         xcb_connection_t *c = QX11Info::connection();
         static bool s_shapeExtensionChecked = false;
