@@ -29,10 +29,6 @@ import "private" as Private
 QtQuickControlStyle.ComboBoxStyle {
     drowDownButtonWidth: units.iconSizes.small
 
-    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-    // https://bugreports.qt.io/browse/QTBUG-67007
-    renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-
     label: PlasmaComponents.Label {
         text: control.currentText
         elide: Text.ElideRight
