@@ -30,7 +30,18 @@ macro(plasma_install_package dir component)
       set(type applet)
    endif()
 
-   kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR} NO_DEPRECATED_WARNING)
+   list(LENGTH extra_macro_args num_extra_args)
+   set (extra_macro_args ${ARGN})
+   if (${num_extra_args} EQUAL 1)
+       list(GET extra_macro_args 0 bundle)
+   endif()
+
+   if(bundle)
+      kpackage_install_bundled_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR})
+   else()
+      kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR} NO_DEPRECATED_WARNING)
+   endif()
+
    install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
 
