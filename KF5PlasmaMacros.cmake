@@ -7,6 +7,7 @@ set(PLASMA_DATA_INSTALL_DIR "${KDE_INSTALL_DATADIR}/${PLASMA_RELATIVE_DATA_INSTA
 
 # plasma_install_package(path componentname [root] [type])
 #
+# Use plasma_install_bundled_package instead.
 # Installs a Plasma package to the system path
 # @arg path The source path to install from, location of metadata.desktop
 # @arg componentname The plugin name of the component, corresponding to the
@@ -30,17 +31,39 @@ macro(plasma_install_package dir component)
       set(type applet)
    endif()
 
-   list(LENGTH extra_macro_args num_extra_args)
-   set (extra_macro_args ${ARGN})
-   if (${num_extra_args} EQUAL 1)
-       list(GET extra_macro_args 0 bundle)
+   kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR} NO_DEPRECATED_WARNING)
+
+   install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
+endmacro()
+
+
+# plasma_install_bundled_package(path componentname [root] [type])
+#
+# Installs a Plasma package to the system path,
+# compressing all its files in a binary rcc qresources file.
+# @arg path The source path to install from, location of metadata.desktop
+# @arg componentname The plugin name of the component, corresponding to the
+#       X-KDE-PluginInfo-Name key in metadata.desktop
+# @arg root The subdirectory to install to, default: plasmoids
+# @arg type The type, default to applet, or applet, package, containment,
+#       wallpaper, shell, lookandfeel, etc.
+# @see Types column in kpackagetool5 --list-types
+#
+# Examples:
+# plasma_install_bundled_package(mywidget org.kde.plasma.mywidget) # installs an applet
+# plasma_install_bundled_package(declarativetoolbox org.kde.toolbox packages package) # installs a generic package
+#
+macro(plasma_install_bundled_package dir component)
+   set(root ${ARGV2})
+   set(type ${ARGV3})
+   if(NOT root)
+      set(root plasmoids)
+   endif()
+   if(NOT type)
+      set(type applet)
    endif()
 
-   if(bundle)
-      kpackage_install_bundled_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR})
-   else()
-      kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR} NO_DEPRECATED_WARNING)
-   endif()
+   kpackage_install_bundled_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR})
 
    install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
 endmacro()
