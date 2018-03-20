@@ -678,24 +678,29 @@ void AppletQuickItem::init()
         return;
     }
 
-    if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
-        const int preloadWeight = d->preloadWeight();
-        qCInfo(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
+    if (!d->applet->isContainment() && d->applet->containment()) {
+        connect(d->applet->containment(), &Plasma::Containment::uiReadyChanged,
+            this, [this](bool uiReady) {
+                if (uiReady && d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
+                    const int preloadWeight = d->preloadWeight();
+                    qCInfo(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
 
-        //don't preload applets less then a certain weigth
-        if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
-            //spread the creation over a random delay to make it look
-            //plasma started already, and load the popup in the background
-            //without big noticeable freezes, the bigger the weight the smaller is likely
-            //to be the delay, smaller minimum walue, smaller spread
-            const int min = (100 - preloadWeight) * 20;
-            const int max = (100 - preloadWeight) * 100;
-            const int delay = qrand() % ((max + 1) - min) + min;
-            QTimer::singleShot(delay, this, [this, delay]() {
-                qCInfo(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
-                d->preloadForExpansion();
+                    //don't preload applets less then a certain weigth
+                    if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
+                        //spread the creation over a random delay to make it look
+                        //plasma started already, and load the popup in the background
+                        //without big noticeable freezes, the bigger the weight the smaller is likely
+                        //to be the delay, smaller minimum walue, smaller spread
+                        const int min = (100 - preloadWeight) * 20;
+                        const int max = (100 - preloadWeight) * 100;
+                        const int delay = qrand() % ((max + 1) - min) + min;
+                        QTimer::singleShot(delay, this, [this, delay]() {
+                            qCInfo(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
+                            d->preloadForExpansion();
+                        });
+                    }
+                }
             });
-        }
     }
 }
 
