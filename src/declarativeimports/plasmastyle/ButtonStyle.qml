@@ -59,7 +59,6 @@ QtQuickControlStyle.ButtonStyle {
         PlasmaCore.IconItem {
             id: icon
             source: control.iconName || control.iconSource
-            anchors.verticalCenter: parent.verticalCenter
             Layout.minimumWidth: valid ? units.iconSizes.tiny : 0
             Layout.preferredWidth: valid ? units.iconSizes.small : 0
             visible: valid
@@ -72,7 +71,7 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaComponents.Label {
             id: label
-            anchors.verticalCenter: parent.verticalCenter
+            Layout.alignment: Qt.AlignVCenter
             text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
             textFormat: Text.StyledText
             font: control.font || theme.defaultFont
