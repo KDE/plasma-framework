@@ -89,9 +89,10 @@ Comment[uk]=Додаток для тестування
 Comment[x-test]=xxA dummy plugin for testingxx
 Comment[zh_CN]=测试用插件
 Comment[zh_TW]=測試用外掛程式
-Type=Service
 Icon=preferences-desktop-color
-ServiceTypes=Plasma/ContainmentActions
+
+Type=Service
+X-KDE-ServiceTypes=Plasma/ContainmentActions
 
 X-KDE-Library=plasma_containmentactions_test
 X-KDE-PluginInfo-Author=Chani

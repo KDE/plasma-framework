@@ -80,9 +80,9 @@ Comment[zh_TW]=以數個字描述您的應用程式的用途
 
 Icon=applications-system
 Type=Service
-ServiceTypes=Plasma/Applet
-
+X-KDE-ServiceTypes=Plasma/Applet
 X-KDE-Library=plasma_applet_%{APPNAMELC}
+
 X-KDE-PluginInfo-Author=%{AUTHOR}
 X-KDE-PluginInfo-Email=%{EMAIL}
 X-KDE-PluginInfo-Name=%{APPNAMELC}
