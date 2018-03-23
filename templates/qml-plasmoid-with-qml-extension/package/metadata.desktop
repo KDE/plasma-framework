@@ -94,4 +94,3 @@ X-KDE-PluginInfo-Name=org.kde.%{APPNAMELC}
 
 X-Plasma-API=declarativeappletscript
 X-Plasma-MainScript=ui/main.qml
-X-Plasma-DefaultSize=200,300
