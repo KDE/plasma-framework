@@ -57,4 +57,3 @@ X-KDE-ServiceTypes=Plasma/Applet
 X-Plasma-API=declarativeappletscript
 
 X-Plasma-MainScript=ui/main.qml
-X-Plasma-RemoteLocation=
