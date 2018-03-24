@@ -52,6 +52,7 @@ T.Button {
         implicitHeight: units.gridUnit * 1.6
         Private.ButtonShadow {
             anchors.fill: parent
+            visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
             state: {
                 if (control.pressed) {
                     return "hidden"
@@ -69,7 +70,7 @@ T.Button {
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "normal"
-            opacity: control.checked || control.pressed ? 0 : 1
+            opacity: (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: units.longDuration
