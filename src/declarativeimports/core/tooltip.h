@@ -187,6 +187,12 @@ Q_SIGNALS:
     void locationChanged();
     void activeChanged();
     void interactiveChanged();
+    /**
+     * Emitted just before the tooltip dialog is shown.
+     *
+     * @since 5.45
+     */
+    void aboutToShow();
 
 private Q_SLOTS:
     void settingsChanged(const QString &file);
