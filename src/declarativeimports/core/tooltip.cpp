@@ -130,6 +130,8 @@ void ToolTip::showToolTip()
         return;
     }
 
+    emit aboutToShow();
+
     ToolTipDialog *dlg = tooltipDialogInstance();
 
     if (!mainItem()) {
