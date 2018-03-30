@@ -122,11 +122,29 @@ public:
     Containment *createContainment(const QString &name, const QVariantList &args = QVariantList());
 
     /**
+     * Returns the Containment for a given physical screen and desktop, creating one
+     * if none exists
+     *
+     * @param screen number of the physical screen to locate
+     * @param activity the activity id of the containment we want,
+     *                 and empty string if the activity is not important
+     * @param defaultPluginIfNonExistent the plugin to load by default; "null" won't
+     * create it and "default" creates the default plugin
+     * @param defaultArgs optional arguments to pass in when creating a Containment if needed
+     * @since 5.45
+     */
+    Containment *containmentForScreen(int screen,
+                                      const QString &activity,
+                                      const QString &defaultPluginIfNonExistent,
+                                      const QVariantList &defaultArgs = QVariantList());
+
+    //TODO KF6: add activity here, can't be done now as the overload would get confused
+    /**
      * Returns the Containment, if any, for a given physical screen
      *
      * @param screen number of the physical screen to locate
      */
-    Containment *containmentForScreen(int screen) const;
+    PLASMA_DEPRECATED Containment *containmentForScreen(int screen) const;
 
     /**
      * Returns the Containment for a given physical screen and desktop, creating one
@@ -137,9 +155,25 @@ public:
      * Containment and "default" creates the default plugin
      * @param defaultArgs optional arguments to pass in when creating a Containment if needed
      */
-    Containment *containmentForScreen(int screen,
+    PLASMA_DEPRECATED PLASMA_DEPRECATED Containment *containmentForScreen(int screen,
                                       const QString &defaultPluginIfNonExistent,
                                       const QVariantList &defaultArgs = QVariantList());
+
+    /**
+     * Returns all containments which match a particular activity, for any screen
+     * @param activity the activity id we want
+     * @returns the list of matching containments if any, empty if activity is an empty string
+     * @since 5.45
+     */
+    QList<Containment *> containmentsForActivity(const QString &activity);
+
+    /**
+     * Returns all containments which match a particular screen, for any activity
+     * @param screen the screen number we want
+     * @returns the list of matching containments if any, empty if screen is < 0
+     * @since 5.45
+     */
+    QList<Containment *> containmentsForScreen(int screen);
 
     /**
      * Returns the number of screens available to plasma.

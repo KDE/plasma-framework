@@ -47,7 +47,7 @@ public:
     void syncConfig();
     void notifyContainmentsReady();
     void containmentReady(bool ready);
-    Containment *addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit = false);
+    Containment *addContainment(const QString &name, const QVariantList &args, uint id, int lastScreen, bool delayedInit = false);
     QList<Plasma::Containment *> importLayout(const KConfigGroup &conf, bool mergeConfig);
 
     Corona *q;

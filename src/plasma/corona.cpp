@@ -196,8 +196,8 @@ Containment *Corona::containmentForScreen(int screen) const
 {
     foreach (Containment *containment, d->containments) {
         if (containment->screen() == screen &&
-                (containment->containmentType() == Plasma::Types::DesktopContainment ||
-                 containment->containmentType() == Plasma::Types::CustomContainment)) {
+            (containment->containmentType() == Plasma::Types::DesktopContainment ||
+             containment->containmentType() == Plasma::Types::CustomContainment)) {
             return containment;
         }
     }
@@ -208,13 +208,30 @@ Containment *Corona::containmentForScreen(int screen) const
 Containment *Corona::containmentForScreen(int screen,
                                           const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
 {
-    Containment *containment = containmentForScreen(screen);
+    return containmentForScreen(screen, QString(), defaultPluginIfNonExistent, defaultArgs);
+}
+
+Containment *Corona::containmentForScreen(int screen,
+                                          const QString &activity,
+                                          const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
+{
+    Containment *containment = nullptr;
+
+    foreach (Containment *cont, d->containments) {
+        if (cont->lastScreen() == screen &&
+            (cont->activity().isEmpty() || cont->activity() == activity) &&
+            (cont->containmentType() == Plasma::Types::DesktopContainment ||
+             cont->containmentType() == Plasma::Types::CustomContainment)) {
+            containment = cont;
+        }
+    }
+
     if (!containment && !defaultPluginIfNonExistent.isEmpty()) {
         // screen requests are allowed to bypass immutability
         if (screen >= 0) {
             Plasma::Types::ImmutabilityType imm = d->immutability;
             d->immutability = Types::Mutable;
-            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, false);
+            containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, screen, false);
             if (containment) {
                // containment->setScreen(screen);
             }
@@ -223,6 +240,42 @@ Containment *Corona::containmentForScreen(int screen,
     }
 
     return containment;
+}
+
+QList<Containment *> Corona::containmentsForActivity(const QString &activity)
+{
+    QList<Containment *> conts;
+
+    if (activity.isEmpty()) {
+        return conts;
+    }
+
+    std::copy_if(d->containments.begin(),
+                 d->containments.end(),
+                 std::back_inserter(conts),
+                 [activity](Containment *cont) { return cont->activity() == activity && 
+                     (cont->containmentType() == Plasma::Types::DesktopContainment ||
+                      cont->containmentType() == Plasma::Types::CustomContainment);} );
+
+    return conts;
+}
+
+QList<Containment *> Corona::containmentsForScreen(int screen)
+{
+    QList<Containment *> conts;
+
+    if (screen < 0) {
+        return conts;
+    }
+
+    std::copy_if(d->containments.begin(),
+                 d->containments.end(),
+                 std::back_inserter(conts),
+                 [screen](Containment *cont) { return cont->lastScreen() == screen &&
+                     (cont->containmentType() == Plasma::Types::DesktopContainment ||
+                      cont->containmentType() == Plasma::Types::CustomContainment);} );
+
+    return conts;
 }
 
 QList<Containment *> Corona::containments() const
@@ -247,7 +300,7 @@ KSharedConfigPtr Corona::config() const
 Containment *Corona::createContainment(const QString &name, const QVariantList &args)
 {
     if (d->immutability == Types::Mutable || args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
-        return d->addContainment(name, args, 0);
+        return d->addContainment(name, args, -1, false);
     }
 
     return nullptr;
@@ -256,7 +309,7 @@ Containment *Corona::createContainment(const QString &name, const QVariantList &
 Containment *Corona::createContainmentDelayed(const QString &name, const QVariantList &args)
 {
     if (d->immutability == Types::Mutable) {
-        return d->addContainment(name, args, 0, true);
+        return d->addContainment(name, args, 0, -1, true);
     }
 
     return nullptr;
@@ -447,7 +500,7 @@ void CoronaPrivate::syncConfig()
     emit q->configSynced();
 }
 
-Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
+Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, int lastScreen, bool delayedInit)
 {
     QString pluginName = name;
     Containment *containment = nullptr;
@@ -485,6 +538,9 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             delete applet;
         }
         applet = containment = new Containment(q, {}, id);
+        if (lastScreen >= 0) {
+            containment->d->lastScreen = lastScreen;
+        }
         //if it's a dummy containment, just say its ui is ready, not blocking the corona
         applet->updateConstraints(Plasma::Types::UiReadyConstraint);
 
@@ -574,7 +630,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Adding Containment" << containmentConfig.readEntry("plugin", QString());
 #endif
-        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid);
+        Containment *c = addContainment(containmentConfig.readEntry("plugin", QString()), QVariantList(), cid, -1);
         if (!c) {
             continue;
         }
