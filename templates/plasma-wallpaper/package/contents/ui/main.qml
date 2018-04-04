@@ -19,10 +19,16 @@
 
 import QtQuick 2.1
 
+import org.kde.plasma.core 2.0
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
     id: root
+
+    Rectangle {
+        anchors.fill: parent
+        color: Theme.backgroundColor
+    }
 
     PlasmaExtras.Title {
         anchors.centerIn: parent
