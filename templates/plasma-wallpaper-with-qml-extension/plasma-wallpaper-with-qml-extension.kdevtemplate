@@ -1,6 +1,7 @@
 [General]
 Name=Simple Plasma Wallpaper with QML extension
 Name[ca]=Fons de pantalla senzill del Plasma amb extensió QML
+Name[ca@valencia]=Fons de pantalla senzill del Plasma amb extensió QML
 Name[en_GB]=Simple Plasma Wallpaper with QML extension
 Name[id]=Wallpaper Plasma sederhana dengan ektensi QML
 Name[it]=Semplice sfondo di Plasma con estensione QML
@@ -12,6 +13,7 @@ Name[x-test]=xxSimple Plasma Wallpaper with QML extensionxx
 Name[zh_TW]=含有 QML 副檔名的簡易 Plasma 桌布
 Comment=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[ca]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
+Comment[ca@valencia]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[en_GB]=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[id]=Sebuah wallpaper Plasma yang menggunakan suaian API yang disediakan oleh plugin ekstensi QML sendiri
 Comment[it]=Uno sfondo di Plasma che utilizza API personalizzate fornite da una propria estensione QML
