@@ -75,11 +75,8 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     if (containment) {
         QObject::disconnect(containment, 0, q, 0);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
-        if (oldGraphicObject) {
-//             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
-            //make sure the graphic object won't die with us
-            //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
-            oldGraphicObject->setParent(containment);
+        if (auto item = qobject_cast<QQuickItem*>(oldGraphicObject)) {
+            item->setVisible(false);
         }
         containment->reactToScreenChange();
     }
