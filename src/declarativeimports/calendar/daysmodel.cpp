@@ -218,9 +218,9 @@ void DaysModel::setPluginsManager(QObject *manager)
         return;
     }
 
-    if (m_pluginsManager != 0) {
+    if (m_pluginsManager) {
         m_pluginsManager->deleteLater();
-        m_pluginsManager = 0;
+        m_pluginsManager = nullptr;
     }
 
     m_pluginsManager = m;

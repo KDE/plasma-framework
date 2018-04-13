@@ -86,7 +86,7 @@ QSizeF SvgItem::naturalSize() const
 void SvgItem::setSvg(Plasma::Svg *svg)
 {
     if (m_svg) {
-        disconnect(m_svg.data(), 0, this, 0);
+        disconnect(m_svg.data(), nullptr, this, nullptr);
     }
     m_svg = svg;
     updateDevicePixelRatio();
@@ -138,7 +138,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     }
 
     //this is more than just an optimisation, uploading a null image to QSGAtlasTexture causes a crash
-    if (width() == 0 || height() == 0) {
+    if (width() == 0.0 || height() == 0.0) {
         delete oldNode;
         return nullptr;
     }

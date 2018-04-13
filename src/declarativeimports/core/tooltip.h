@@ -127,8 +127,8 @@ class ToolTip : public QQuickItem
 
 public:
 /// @cond INTERNAL_DOCS
-    ToolTip(QQuickItem *parent = nullptr);
-    ~ToolTip();
+    explicit ToolTip(QQuickItem *parent = nullptr);
+    ~ToolTip() Q_DECL_OVERRIDE;
 
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);

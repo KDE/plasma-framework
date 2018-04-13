@@ -32,8 +32,8 @@ class SharedAppFilter : public QObject
 {
    Q_OBJECT
 public:
-    SharedAppFilter(QObject *parent = nullptr);
-    ~SharedAppFilter();
+    explicit SharedAppFilter(QObject *parent = nullptr);
+    ~SharedAppFilter() Q_DECL_OVERRIDE;
 
 Q_SIGNALS:
     void fontChanged();

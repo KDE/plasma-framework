@@ -29,7 +29,7 @@
 
 ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
     : Dialog(parent),
-      m_qmlObject(0),
+      m_qmlObject(nullptr),
       m_hideTimeout(4000),
       m_interactive(false),
       m_owner(nullptr)

@@ -102,7 +102,7 @@ class QMenuProxy : public QObject
 
 public:
     explicit QMenuProxy(QObject *parent = nullptr);
-    ~QMenuProxy();
+    ~QMenuProxy() Q_DECL_OVERRIDE;
 
     QQmlListProperty<QMenuItem> content();
     int actionCount() const;

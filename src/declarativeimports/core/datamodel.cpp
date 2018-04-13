@@ -217,7 +217,7 @@ int SortFilterModel::mapRowFromSource(int row) const
 
 DataModel::DataModel(QObject *parent)
     : QAbstractItemModel(parent),
-      m_dataSource(0),
+      m_dataSource(nullptr),
       m_maxRoleId(Qt::UserRole + 1)
 {
     //There is one reserved role name: DataEngineSource
@@ -293,7 +293,7 @@ void DataModel::setDataSource(QObject *object)
     }
 
     if (m_dataSource) {
-        disconnect(m_dataSource, 0, this, 0);
+        disconnect(m_dataSource, nullptr, this, nullptr);
     }
 
     m_dataSource = source;

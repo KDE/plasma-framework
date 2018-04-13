@@ -126,7 +126,7 @@ class IconItem : public QQuickItem
 
 public:
     explicit IconItem(QQuickItem *parent = nullptr);
-    ~IconItem();
+    ~IconItem() Q_DECL_OVERRIDE;
 
     void setSource(const QVariant &source);
     QVariant source() const;
