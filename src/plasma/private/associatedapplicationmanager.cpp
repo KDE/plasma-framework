@@ -198,7 +198,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
 {
     if (d->applicationNames.contains(applet)) {
 #if !PLASMA_NO_KIO
-        bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), 0);
+        bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), nullptr);
         if (!success) {
             qCWarning(LOG_PLASMA) << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
         }
@@ -215,7 +215,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
 
     } else if (d->urlLists.contains(applet)) {
 #if !PLASMA_NO_KIO
-        KRun *krun = new KRun(d->urlLists.value(applet).first(), 0);
+        KRun *krun = new KRun(d->urlLists.value(applet).first(), nullptr);
         krun->setAutoDelete(true);
 #else
         QDesktopServices::openUrl(d->urlLists.value(applet).first());

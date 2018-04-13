@@ -106,7 +106,7 @@ public:
      */
     explicit Applet(const KPluginMetaData &metadata, QObject *parent = nullptr, uint appletId = 0);
 
-    ~Applet();
+    ~Applet() Q_DECL_OVERRIDE;
 
 //BOOKKEEPING
     /**

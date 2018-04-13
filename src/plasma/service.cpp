@@ -97,7 +97,7 @@ QVariantMap Service::operationDescription(const QString &operationName)
 ServiceJob *Service::startOperationCall(const QVariantMap &description, QObject *parent)
 {
     // TODO: nested groups?
-    ServiceJob *job = 0;
+    ServiceJob *job = nullptr;
     const QString op = !description.isEmpty() ? description.value(QStringLiteral("_name")).toString() : QString();
 
     if (d->operationsMap.isEmpty()) {

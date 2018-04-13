@@ -50,7 +50,7 @@
 namespace Plasma
 {
 
-static PluginLoader *s_pluginLoader = 0;
+static PluginLoader *s_pluginLoader = nullptr;
 
 class PluginLoaderPrivate
 {
@@ -168,10 +168,10 @@ PluginLoader *PluginLoader::self()
 Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     if (name.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
-    Applet *applet = d->isDefaultLoader ? 0 : internalLoadApplet(name, appletId, args);
+    Applet *applet = d->isDefaultLoader ? nullptr : internalLoadApplet(name, appletId, args);
     if (applet) {
         return applet;
     }
@@ -200,13 +200,13 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
         if (!isPluginVersionCompatible(loader)) {
-            return 0;
+            return nullptr;
         }
         KPluginFactory *factory = loader.factory();
         if (factory) {
             QVariantList allArgs;
             allArgs << QVariant::fromValue(p) << loader.metaData().toVariantMap() << appletId << args;
-            applet = factory->create<Plasma::Applet>(0, allArgs);
+            applet = factory->create<Plasma::Applet>(nullptr, allArgs);
         }
     }
     if (applet) {
@@ -221,9 +221,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
         if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
-            applet = new Containment(0, allArgs);
+            applet = new Containment(nullptr, allArgs);
         } else {
-            applet = new Applet(0, allArgs);
+            applet = new Applet(nullptr, allArgs);
         }
 
     }
@@ -237,7 +237,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
 {
-    DataEngine *engine = d->isDefaultLoader ? 0 : internalLoadDataEngine(name);
+    DataEngine *engine = d->isDefaultLoader ? nullptr : internalLoadDataEngine(name);
     if (engine) {
         return engine;
     }
@@ -254,7 +254,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
         KPluginFactory *factory = loader.factory();
         if (factory) {
-            engine = factory->create<Plasma::DataEngine>(0, argsWithMetaData);
+            engine = factory->create<Plasma::DataEngine>(nullptr, argsWithMetaData);
         }
     }
     if (engine) {
@@ -263,10 +263,10 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), name);
     if (!p.isValid()) {
-        return 0;
+        return nullptr;
     }
 
-    return new DataEngine(KPluginInfo(p.metadata().fileName()), 0);
+    return new DataEngine(KPluginInfo(p.metadata().fileName()), nullptr);
 }
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
@@ -334,7 +334,7 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
-    Service *service = d->isDefaultLoader ? 0 : internalLoadService(name, args, parent);
+    Service *service = d->isDefaultLoader ? nullptr : internalLoadService(name, args, parent);
     if (service) {
         return service;
     }
@@ -357,11 +357,11 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
         if (!isPluginVersionCompatible(loader)) {
-            return 0;
+            return nullptr;
         }
         KPluginFactory *factory = loader.factory();
         if (factory) {
-            service = factory->create<Plasma::Service>(0, args);
+            service = factory->create<Plasma::Service>(nullptr, args);
         }
     }
 
@@ -378,10 +378,10 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, const QString &name, const QVariantList &args)
 {
     if (name.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
-    ContainmentActions *actions = d->isDefaultLoader ? 0 : internalLoadContainmentActions(parent, name, args);
+    ContainmentActions *actions = d->isDefaultLoader ? nullptr : internalLoadContainmentActions(parent, name, args);
     if (actions) {
         return actions;
     }
@@ -415,14 +415,14 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 #ifndef NDEBUG
         qCDebug(LOG_PLASMA) << "offers is empty for " << name;
 #endif
-        return 0;
+        return nullptr;
     }
 
     KService::Ptr offer = offers.first();
     KPluginLoader plugin(*offer);
 
     if (!isPluginVersionCompatible(plugin)) {
-        return 0;
+        return nullptr;
     }
 
     QVariantList allArgs;
@@ -468,7 +468,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     //fallback to old structures
     } else {
         const QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, QStringLiteral("Plasma/PackageStructure"), constraint, 0);
+        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, QStringLiteral("Plasma/PackageStructure"), constraint, nullptr);
         if (structure) {
             structure->d->internalStructure = new PackageStructureWrapper(structure);
         }
@@ -762,13 +762,13 @@ Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, con
     Q_UNUSED(name)
     Q_UNUSED(appletId)
     Q_UNUSED(args)
-    return 0;
+    return nullptr;
 }
 
 DataEngine *PluginLoader::internalLoadDataEngine(const QString &name)
 {
     Q_UNUSED(name)
-    return 0;
+    return nullptr;
 }
 
 ContainmentActions *PluginLoader::internalLoadContainmentActions(Containment *containment, const QString &name, const QVariantList &args)
@@ -776,7 +776,7 @@ ContainmentActions *PluginLoader::internalLoadContainmentActions(Containment *co
     Q_UNUSED(containment)
     Q_UNUSED(name)
     Q_UNUSED(args)
-    return 0;
+    return nullptr;
 }
 
 Service *PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
@@ -784,7 +784,7 @@ Service *PluginLoader::internalLoadService(const QString &name, const QVariantLi
     Q_UNUSED(name)
     Q_UNUSED(args)
     Q_UNUSED(parent)
-    return 0;
+    return nullptr;
 }
 
 

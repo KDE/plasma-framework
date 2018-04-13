@@ -166,7 +166,7 @@ void DialogShadows::removeWindow(const QWindow *window)
     }
 
     d->m_windows.remove(window);
-    disconnect(window, 0, this, 0);
+    disconnect(window, nullptr, this, nullptr);
     d->clearShadow(window);
 
     if (d->m_windows.isEmpty()) {

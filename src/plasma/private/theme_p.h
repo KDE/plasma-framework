@@ -64,7 +64,7 @@ class ThemePrivate : public QObject
 
 public:
     explicit ThemePrivate(QObject *parent = nullptr);
-    ~ThemePrivate();
+    ~ThemePrivate() Q_DECL_OVERRIDE;
 
     KConfigGroup &config();
 

@@ -71,7 +71,7 @@ public:
     /**
      * Destructor
      */
-    ~ServiceJob();
+    ~ServiceJob() Q_DECL_OVERRIDE;
 
     /**
      * @return the subject that the job is acting on

@@ -76,7 +76,7 @@ public:
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     : q(view),
       applet(appl),
-      corona(0)
+      corona(nullptr)
 {
 }
 
@@ -239,7 +239,7 @@ void ConfigViewPrivate::mainItemLoaded()
     }
 
     //Extract the representation's Layout, if any
-    QObject *layout = 0;
+    QObject *layout = nullptr;
 
     //Search a child that has the needed Layout properties
     //HACK: here we are not type safe, but is the only way to access to a pointer of Layout

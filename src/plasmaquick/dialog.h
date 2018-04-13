@@ -167,8 +167,8 @@ public:
     };
     Q_ENUM(BackgroundHints)
 
-    Dialog(QQuickItem *parent = nullptr);
-    ~Dialog();
+    explicit Dialog(QQuickItem *parent = nullptr);
+    ~Dialog() Q_DECL_OVERRIDE;
 
     //PROPERTIES ACCESSORS
     QQuickItem *mainItem() const;

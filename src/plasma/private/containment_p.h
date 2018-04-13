@@ -73,7 +73,7 @@ public:
     /**
      * add the regular actions & keyboard shortcuts onto Applet's collection
      */
-    static void addDefaultActions(KActionCollection *actions, Containment *c = 0);
+    static void addDefaultActions(KActionCollection *actions, Containment *c = nullptr);
 
     void setUiReady();
     void setStarted();

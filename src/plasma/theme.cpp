@@ -97,8 +97,8 @@ Theme::~Theme()
         if (!ThemePrivate::globalThemeRefCount.deref()) {
             disconnect(ThemePrivate::globalTheme, 0, this, 0);
             delete ThemePrivate::globalTheme;
-            ThemePrivate::globalTheme = 0;
-            d = 0;
+            ThemePrivate::globalTheme = nullptr;
+            d = nullptr;
         }
     } else {
         if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
@@ -447,7 +447,7 @@ void Theme::setCacheLimit(int kbytes)
 {
     d->cacheSize = kbytes;
     delete d->pixmapCache;
-    d->pixmapCache = 0;
+    d->pixmapCache = nullptr;
 }
 
 KPluginInfo Theme::pluginInfo() const

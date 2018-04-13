@@ -108,7 +108,7 @@ void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
 Plasma::ServiceJob *Storage::createJob(const QString &operation, QVariantMap &parameters)
 {
     if (m_clientName.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     return new StorageJob(m_clientName, operation, parameters, this);

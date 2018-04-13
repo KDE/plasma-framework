@@ -60,13 +60,13 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
       oldImmutability(Types::Mutable),
       appletDescription(info),
       icon(appletDescription.iconName()),
-      mainConfig(0),
+      mainConfig(nullptr),
       pendingConstraints(Types::NoConstraint),
-      script(0),
-      package(0),
-      configLoader(0),
+      script(nullptr),
+      package(nullptr),
+      configLoader(nullptr),
       actions(AppletPrivate::defaultActions(applet)),
-      activationAction(0),
+      activationAction(nullptr),
       itemStatus(Types::UnknownStatus),
       modificationsTimer(nullptr),
       deleteNotificationTimer(nullptr),
@@ -105,11 +105,11 @@ AppletPrivate::~AppletPrivate()
     }
 
     delete script;
-    script = 0;
+    script = nullptr;
     delete configLoader;
-    configLoader = 0;
+    configLoader = nullptr;
     delete mainConfig;
-    mainConfig = 0;
+    mainConfig = nullptr;
     delete modificationsTimer;
 }
 
@@ -297,7 +297,7 @@ void AppletPrivate::askDestroy()
                             //when an applet gets transient, it's "systemimmutable"
                             emit q->immutabilityChanged(q->immutability());
                             delete containmentApplet->d->deleteNotificationTimer;
-                            containmentApplet->d->deleteNotificationTimer = 0;
+                            containmentApplet->d->deleteNotificationTimer = nullptr;
                         }
 
                         //make sure the applets are sorted by id
@@ -312,7 +312,7 @@ void AppletPrivate::askDestroy()
                     } else if (deleteNotificationTimer) {
                         deleteNotificationTimer->stop();
                         deleteNotificationTimer->deleteLater();
-                        deleteNotificationTimer = 0;
+                        deleteNotificationTimer = nullptr;
                     }
                 });
         QObject::connect(deleteNotification.data(), &KNotification::closed, q,
@@ -324,7 +324,7 @@ void AppletPrivate::askDestroy()
                     if (deleteNotificationTimer) {
                         deleteNotificationTimer->stop();
                         deleteNotificationTimer->deleteLater();
-                        deleteNotificationTimer = 0;
+                        deleteNotificationTimer = nullptr;
                     }
                 });
 
@@ -529,7 +529,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
     }
 
     Containment *c = q->containment();
-    Plasma::Applet *parentApplet = 0;
+    Plasma::Applet *parentApplet = nullptr;
     if (c) {
         parentApplet = qobject_cast<Plasma::Applet *>(c->parent());
     }
@@ -584,7 +584,7 @@ void AppletPrivate::resetConfigurationObject()
     mainConfig->deleteEntry("activityId");
     mainConfig->deleteGroup();
     delete mainConfig;
-    mainConfig = 0;
+    mainConfig = nullptr;
 
     Containment *cont = qobject_cast<Containment *>(q);
 

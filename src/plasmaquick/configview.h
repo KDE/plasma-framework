@@ -59,7 +59,7 @@ public:
      * @param parent the QWindow in which this ConfigView is parented to
      **/
     ConfigView(Plasma::Applet *applet, QWindow *parent = nullptr);
-    virtual ~ConfigView();
+    ~ConfigView() Q_DECL_OVERRIDE;
 
     virtual void init();
 

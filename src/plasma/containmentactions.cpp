@@ -90,7 +90,7 @@ void ContainmentActions::save(KConfigGroup &config)
 QWidget *ContainmentActions::createConfigurationInterface(QWidget *parent)
 {
     Q_UNUSED(parent);
-    return 0;
+    return nullptr;
 }
 
 void ContainmentActions::configurationAccepted()

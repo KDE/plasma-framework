@@ -46,9 +46,9 @@ namespace Plasma
 
 
 PackagePrivate::PackagePrivate()
-    : internalPackage(0),
-      fallbackPackage(0),
-      structure(0)
+    : internalPackage(nullptr),
+      fallbackPackage(nullptr),
+      structure(nullptr)
 {
 }
 

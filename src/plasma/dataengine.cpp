@@ -252,7 +252,7 @@ QAbstractItemModel *DataEngine::modelForSource(const QString &source)
     if (s) {
         return s->model();
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -417,8 +417,8 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
       updateTimerId(0),
       minPollingInterval(-1),
       valid(false),
-      script(0),
-      package(0)
+      script(nullptr),
+      package(nullptr)
 {
     updateTimer.start();
 
@@ -448,7 +448,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
                 //        << dataEngineDescription.name() << "DataEngine.";
 #endif
                 delete package;
-                package = 0;
+                package = nullptr;
             }
         }
     }
@@ -457,9 +457,9 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
 DataEnginePrivate::~DataEnginePrivate()
 {
     delete script;
-    script = 0;
+    script = nullptr;
     delete package;
-    package = 0;
+    package = nullptr;
 }
 
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)
@@ -509,7 +509,7 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
     }
 
     if (!createWhenMissing) {
-        return 0;
+        return nullptr;
     }
 
     //qCDebug(LOG_PLASMA) << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";

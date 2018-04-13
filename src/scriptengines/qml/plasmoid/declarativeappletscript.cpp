@@ -48,7 +48,7 @@
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent),
-      m_interface(0),
+      m_interface(nullptr),
       m_args(args)
 {
     //qmlRegisterType<AppletInterface>();

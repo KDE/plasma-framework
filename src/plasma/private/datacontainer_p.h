@@ -41,7 +41,7 @@ class DataContainerPrivate
 public:
     DataContainerPrivate(DataContainer *container)
         : q(container),
-          storage(NULL),
+          storage(nullptr),
           storageCount(0),
           dirty(false),
           cached(false),

@@ -40,9 +40,9 @@ QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash
 WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     : QQuickItem(parent),
       m_containmentInterface(parent),
-      m_qmlObject(0),
-      m_configuration(0),
-      m_configLoader(0)
+      m_qmlObject(nullptr),
+      m_configuration(nullptr),
+      m_configLoader(nullptr)
 {
     m_actions = new KActionCollection(this);
 
@@ -104,7 +104,7 @@ KConfigLoader *WallpaperInterface::configScheme()
         cfg = KConfigGroup(&cfg, m_wallpaperPlugin);
 
         if (xmlPath.isEmpty()) {
-            m_configLoader = new KConfigLoader(cfg, 0, this);
+            m_configLoader = new KConfigLoader(cfg, nullptr, this);
         } else {
             QFile file(xmlPath);
             m_configLoader = new KConfigLoader(cfg, &file, this);
@@ -140,8 +140,8 @@ void WallpaperInterface::syncWallpaperPackage()
 
     if (m_configLoader) m_configLoader->deleteLater();
     if (m_configuration) m_configuration->deleteLater();
-    m_configLoader = 0;
-    m_configuration = 0;
+    m_configLoader = nullptr;
+    m_configuration = nullptr;
     if (configScheme()) {
         m_configuration = new KDeclarative::ConfigPropertyMap(configScheme(), this);
     }
@@ -180,7 +180,7 @@ void WallpaperInterface::loadFinished()
         qWarning() << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
         s_rootObjects.remove(m_qmlObject->engine());
         m_qmlObject->deleteLater();
-        m_qmlObject = 0;
+        m_qmlObject = nullptr;
 
     } else {
         qWarning() << "Error loading the wallpaper, package not found";

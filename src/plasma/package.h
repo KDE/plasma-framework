@@ -92,7 +92,7 @@ public:
      * otherwise the structure is allowed to set up the Package's initial layout
      * @since 4.6
      */
-    PLASMA_DEPRECATED explicit Package(PackageStructure *structure = 0);
+    PLASMA_DEPRECATED explicit Package(PackageStructure *structure = nullptr);
 
     /**
      * Copy constructore

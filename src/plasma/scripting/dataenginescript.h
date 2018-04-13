@@ -50,7 +50,7 @@ public:
      * in the init() method.
      */
     explicit DataEngineScript(QObject *parent = nullptr);
-    ~DataEngineScript();
+    ~DataEngineScript() Q_DECL_OVERRIDE;
 
     /**
      * Sets the Plasma::DataEngine associated with this DataEngineScript

@@ -408,7 +408,7 @@ void Containment::addApplet(Applet *applet)
     if (currentContainment && currentContainment != this) {
         emit currentContainment->appletRemoved(applet);
 
-        disconnect(applet, 0, currentContainment, 0);
+        disconnect(applet, nullptr, currentContainment, nullptr);
         KConfigGroup oldConfig = applet->config();
         currentContainment->d->applets.removeAll(applet);
         applet->setParent(this);
@@ -521,13 +521,13 @@ QString Containment::wallpaper() const
 void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
 {
     KConfigGroup cfg = d->containmentActionsConfig();
-    ContainmentActions *plugin = 0;
+    ContainmentActions *plugin = nullptr;
 
     plugin = containmentActions().value(trigger);
     if (plugin && plugin->pluginInfo().pluginName() != pluginName) {
         containmentActions().remove(trigger);
         delete plugin;
-        plugin = 0;
+        plugin = nullptr;
     }
 
     if (pluginName.isEmpty()) {

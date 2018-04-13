@@ -73,7 +73,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     Plasma::Types::FormFactor oldForm = formFactor();
 
     if (containment) {
-        QObject::disconnect(containment, 0, q, 0);
+        QObject::disconnect(containment, nullptr, q, nullptr);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (auto item = qobject_cast<QQuickItem*>(oldGraphicObject)) {
             item->setVisible(false);

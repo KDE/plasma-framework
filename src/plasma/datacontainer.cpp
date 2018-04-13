@@ -164,7 +164,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
 
     if (pollingInterval < 1) {
         //qCDebug(LOG_PLASMA) << "    connecting directly";
-        d->relayObjects[visualization] = 0;
+        d->relayObjects[visualization] = nullptr;
         if (visualization->metaObject()->indexOfSlot("dataUpdated(QString,Plasma::DataEngine::Data)") >= 0) {
             connect(this, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),
                     visualization, SLOT(dataUpdated(QString,Plasma::DataEngine::Data)));
@@ -221,11 +221,11 @@ void DataContainer::setNeedsToBeStored(bool store)
 DataEngine *DataContainer::getDataEngine()
 {
     QObject *o = this;
-    DataEngine *de = NULL;
-    while (de == NULL) {
+    DataEngine *de = nullptr;
+    while (de == nullptr) {
         o = dynamic_cast<QObject *>(o->parent());
-        if (o == NULL) {
-            return NULL;
+        if (o == nullptr) {
+            return nullptr;
         }
         de = dynamic_cast<DataEngine *>(o);
     }
@@ -262,14 +262,14 @@ void DataContainerPrivate::storeJobFinished(KJob *)
     --storageCount;
     if (storageCount < 1) {
         storage->deleteLater();
-        storage = 0;
+        storage = nullptr;
     }
 }
 
 void DataContainerPrivate::retrieve()
 {
     DataEngine *de = q->getDataEngine();
-    if (de == NULL) {
+    if (de == nullptr) {
         return;
     }
 
@@ -407,7 +407,7 @@ void DataContainer::timerEvent(QTimerEvent *event)
             //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
             if (d->model) {
                 d->model.clear();
-                emit modelChanged(objectName(), 0);
+                emit modelChanged(objectName(), nullptr);
             }
             emit becameUnused(objectName());
         }

@@ -175,7 +175,6 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
             break;
         default:
             continue;
-            break;
         }
 
         if (binary) {

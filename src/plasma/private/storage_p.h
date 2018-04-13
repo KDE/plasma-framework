@@ -39,7 +39,7 @@ public:
                const QString &operation,
                const QVariantMap &parameters,
                QObject *parent = nullptr);
-    ~StorageJob();
+    ~StorageJob() Q_DECL_OVERRIDE;
     void setData(const QVariantMap &data);
     QVariantMap data() const;
     void start() Q_DECL_OVERRIDE;
@@ -62,8 +62,8 @@ class Storage : public Plasma::Service
     Q_OBJECT
 
 public:
-    Storage(QObject *parent = nullptr);
-    ~Storage();
+    explicit Storage(QObject *parent = nullptr);
+    ~Storage() Q_DECL_OVERRIDE;
 
 protected:
     Plasma::ServiceJob *createJob(const QString &operation, QVariantMap &parameters) Q_DECL_OVERRIDE;

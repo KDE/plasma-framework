@@ -104,7 +104,7 @@ public:
      * @related Plasma::Theme
      */
     explicit FrameSvg(QObject *parent = nullptr);
-    ~FrameSvg();
+    ~FrameSvg() Q_DECL_OVERRIDE;
 
     /**
      * Loads a new Svg

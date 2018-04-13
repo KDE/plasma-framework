@@ -29,7 +29,7 @@ class DataEnginePackage : public Plasma::ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    DataEnginePackage(QObject *parent = 0, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
+    DataEnginePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
 
     void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE
     {
