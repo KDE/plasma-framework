@@ -104,7 +104,7 @@ qreal QRangeModelPrivate::publicPosition(qreal position) const
     const qreal positionValueRatio = valueRange ? (max - min) / valueRange : 0;
     const qreal positionStep = stepSize * positionValueRatio;
 
-    if (positionStep == 0) {
+    if (positionStep == 0.0) {
         return (min < max) ? qBound(min, position, max) : qBound(max, position, min);
     }
 
@@ -146,7 +146,7 @@ qreal QRangeModelPrivate::publicValue(qreal value) const
     // QML bindings; a position that is initially invalid because it lays
     // outside the range, might become valid later if the range changes.
 
-    if (stepSize == 0) {
+    if (stepSize == 0.0) {
         return qBound(minimum, value, maximum);
     }
 
@@ -215,7 +215,7 @@ QRangeModel::QRangeModel(QRangeModelPrivate &dd, QObject *parent)
 QRangeModel::~QRangeModel()
 {
     delete d_ptr;
-    d_ptr = 0;
+    d_ptr = nullptr;
 }
 
 /*!

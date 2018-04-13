@@ -514,7 +514,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
     if (m_fastPath) {
         if (m_textureChanged) {
             delete oldNode;
-            oldNode = 0;
+            oldNode = nullptr;
         }
 
         if (!oldNode) {

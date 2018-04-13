@@ -57,7 +57,7 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
         return cs;
     }
 
-    ColorScope *s = new ColorScope(0, object);
+    ColorScope *s = new ColorScope(nullptr, object);
     s_attachedScopes[object] = s;
     s->m_inherit = true;
     s->setParent(object);

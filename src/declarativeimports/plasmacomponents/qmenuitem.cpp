@@ -22,7 +22,7 @@
 
 QMenuItem::QMenuItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_action(0),
+      m_action(nullptr),
       m_section(false)
 {
     setAction(new QAction(this));
@@ -37,7 +37,7 @@ void QMenuItem::setAction(QAction *a)
 {
     if (m_action != a) {
         if (m_action) {
-            disconnect(m_action, 0, this, 0);
+            disconnect(m_action, nullptr, this, nullptr);
 
             if (m_action->parent() == this) {
                 delete m_action;

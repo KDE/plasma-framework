@@ -42,7 +42,7 @@ public:
         m_roles.insert(Qt::EditRole, QByteArrayLiteral("checked"));
         m_roles.insert(Qt::UserRole, QByteArrayLiteral("configUi"));
         m_roles.insert(Qt::UserRole + 1, QByteArrayLiteral("pluginPath"));
-    };
+    }
 
     // make these two available to the manager
     void beginResetModel()

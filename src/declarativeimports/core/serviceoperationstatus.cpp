@@ -36,7 +36,7 @@ void ServiceOperationStatus::setService(Plasma::Service *service)
     }
 
     if (m_service) {
-        disconnect(m_service.data(), 0, this, 0);
+        disconnect(m_service.data(), nullptr, this, nullptr);
     }
     if (service) {
         connect(service, &Plasma::Service::operationEnabledChanged,

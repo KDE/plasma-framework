@@ -37,7 +37,7 @@
 
 IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_svgIcon(0),
+      m_svgIcon(nullptr),
       m_status(Plasma::Svg::Normal),
       m_smooth(true),
       m_active(false),
@@ -163,7 +163,7 @@ void IconItem::setSource(const QVariant &source)
             m_imageIcon = QImage(localFile);
             m_svgIconName.clear();
             delete m_svgIcon;
-            m_svgIcon = 0;
+            m_svgIcon = nullptr;
         } else {
             if (!m_svgIcon) {
                 m_svgIcon = new Plasma::Svg(this);
@@ -209,7 +209,7 @@ void IconItem::setSource(const QVariant &source)
                     }
                     m_svgIconName.clear();
                     delete m_svgIcon;
-                    m_svgIcon = 0;
+                    m_svgIcon = nullptr;
                     m_imageIcon = QImage();
                 }
             }
@@ -220,19 +220,19 @@ void IconItem::setSource(const QVariant &source)
         m_imageIcon = QImage();
         m_svgIconName.clear();
         delete m_svgIcon;
-        m_svgIcon = 0;
+        m_svgIcon = nullptr;
     } else if (source.canConvert<QImage>()) {
         m_icon = QIcon();
         m_imageIcon = source.value<QImage>();
         m_svgIconName.clear();
         delete m_svgIcon;
-        m_svgIcon = 0;
+        m_svgIcon = nullptr;
     } else {
         m_icon = QIcon();
         m_imageIcon = QImage();
         m_svgIconName.clear();
         delete m_svgIcon;
-        m_svgIcon = 0;
+        m_svgIcon = nullptr;
     }
 
     if (width() > 0 && height() > 0) {
@@ -470,7 +470,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 {
     Q_UNUSED(updatePaintNodeData)
 
-    if (m_iconPixmap.isNull() || width() == 0 || height() == 0) {
+    if (m_iconPixmap.isNull() || width() == 0.0 || height() == 0.0) {
         delete oldNode;
         return nullptr;
     }
