@@ -77,7 +77,7 @@ public:
 
     explicit DataEngine(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
-    ~DataEngine();
+    ~DataEngine() Q_DECL_OVERRIDE;
 
     /**
      * @return a list of all the data sources available via this DataEngine

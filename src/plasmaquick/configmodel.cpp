@@ -81,7 +81,7 @@ ConfigCategory *ConfigModelPrivate::categories_at(QQmlListProperty<ConfigCategor
 {
     ConfigModel *model = qobject_cast<ConfigModel *>(prop->object);
     if (!model || index >= model->d->categories.count() || index < 0) {
-        return 0;
+        return nullptr;
     }  else {
         return model->d->categories.at(index);
     }
@@ -95,7 +95,7 @@ void ConfigModelPrivate::categories_append(QQmlListProperty<ConfigCategory> *pro
     }
 
     if (o->parent() == prop->object) {
-        o->setParent(0);
+        o->setParent(nullptr);
     }
 
     o->setParent(prop->object);
@@ -126,7 +126,7 @@ void ConfigModelPrivate::clear()
 {
     q->beginResetModel();
     while (!categories.isEmpty()) {
-        categories.first()->setParent(0);
+        categories.first()->setParent(nullptr);
         categories.pop_front();
     }
     q->endResetModel();
@@ -357,7 +357,7 @@ Plasma::Applet *ConfigModel::applet() const
 
 QQmlListProperty<ConfigCategory> ConfigModel::categories()
 {
-    return QQmlListProperty<ConfigCategory>(this, 0, ConfigModelPrivate::categories_append,
+    return QQmlListProperty<ConfigCategory>(this, nullptr, ConfigModelPrivate::categories_append,
                                             ConfigModelPrivate::categories_count,
                                             ConfigModelPrivate::categories_at,
                                             ConfigModelPrivate::categories_clear);

@@ -38,7 +38,7 @@ AppletScript::AppletScript(QObject *parent)
     : ScriptEngine(parent),
       d(new AppletScriptPrivate)
 {
-    d->applet = 0;
+    d->applet = nullptr;
 }
 
 AppletScript::~AppletScript()

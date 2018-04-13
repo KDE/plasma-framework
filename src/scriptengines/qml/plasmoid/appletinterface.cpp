@@ -48,15 +48,15 @@ Q_DECLARE_METATYPE(AppletInterface *)
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
-      m_configuration(0),
+      m_configuration(nullptr),
       m_appletScriptEngine(script),
       m_toolTipTextFormat(0),
-      m_toolTipItem(0),
+      m_toolTipItem(nullptr),
       m_args(args),
       m_backgroundHints(Plasma::Types::StandardBackground),
       m_hideOnDeactivate(true),
       m_oldKeyboardShortcut(0),
-      m_dummyNativeInterface(0),
+      m_dummyNativeInterface(nullptr),
       m_positionBeforeRemoval(QPointF(-1, -1))
 {
     qmlRegisterType<QAction>();

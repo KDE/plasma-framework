@@ -49,7 +49,7 @@ class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlIntercepto
 {
 public:
     PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p);
-    virtual ~PackageUrlInterceptor();
+    ~PackageUrlInterceptor() Q_DECL_OVERRIDE;
 
     void addAllowedPath(const QString &path);
     void removeAllowedPath(const QString &path);

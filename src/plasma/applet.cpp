@@ -94,11 +94,11 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 }
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
-    :  QObject(0),
+    :  QObject(nullptr),
        d(new AppletPrivate(KPluginMetaData(), args.count() > 2 ? args[2].toInt() : 0, this))
 {
     setParent(parentObject);
-    if (args.count() > 0) {
+    if (!args.isEmpty()) {
         const QVariant first = args.first();
         if (first.canConvert<KPackage::Package>()) {
             d->package = first.value<KPackage::Package>();
@@ -264,7 +264,7 @@ KConfigGroup Applet::globalConfig() const
     QString group = isContainment() ? QStringLiteral("ContainmentGlobals") : QStringLiteral("AppletGlobals");
 
     Containment *cont = containment();
-    Corona *corona = 0;
+    Corona *corona = nullptr;
     if (cont) {
         corona = cont->corona();
     }
@@ -300,7 +300,7 @@ KConfigLoader *Applet::configScheme() const
         const QString xmlPath = d->package.isValid() ? d->package.filePath("mainconfigxml") : QString();
         KConfigGroup cfg = config();
         if (xmlPath.isEmpty()) {
-            d->configLoader = new KConfigLoader(cfg, 0);
+            d->configLoader = new KConfigLoader(cfg, nullptr);
         } else {
             QFile file(xmlPath);
             d->configLoader = new KConfigLoader(cfg, &file);
@@ -646,7 +646,7 @@ Containment *Applet::containment() const
     if (c && c->isContainment()) {
         return c;
     } else {
-        c = 0;
+        c = nullptr;
     }
 
     QObject *parent = this->parent();
@@ -794,7 +794,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 void Applet::timerEvent(QTimerEvent *event)

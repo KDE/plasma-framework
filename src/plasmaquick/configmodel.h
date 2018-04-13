@@ -73,8 +73,8 @@ public:
         VisibleRole,
         KCMRole
     };
-    ConfigModel(QObject *parent = nullptr);
-    ~ConfigModel();
+    explicit ConfigModel(QObject *parent = nullptr);
+    ~ConfigModel() Q_DECL_OVERRIDE;
 
     /**
      * add a new category in the model
@@ -109,7 +109,7 @@ public:
 
     /**
      * @param row the row for which the data will be returned
-     * @raturn the data of the specified row
+     * @return the data of the specified row
      **/
     Q_INVOKABLE QVariant get(int row) const;
 

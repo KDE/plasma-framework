@@ -86,7 +86,7 @@ public:
      * @related Plasma::Theme
      */
     explicit Svg(QObject *parent = nullptr);
-    ~Svg();
+    ~Svg() Q_DECL_OVERRIDE;
 
     /**
      * Set the device pixel ratio for the Svg. This is the ratio between

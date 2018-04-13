@@ -34,7 +34,7 @@ class DeclarativeAppletScript : public Plasma::AppletScript
 
 public:
     DeclarativeAppletScript(QObject *parent, const QVariantList &args);
-    ~DeclarativeAppletScript();
+    ~DeclarativeAppletScript() Q_DECL_OVERRIDE;
 
     QString filePath(const QString &type, const QString &file) const;
 

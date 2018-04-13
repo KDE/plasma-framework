@@ -35,7 +35,7 @@ namespace Plasma
 
 ScriptEngine::ScriptEngine(QObject *parent)
     : QObject(parent),
-      d(0)
+      d(nullptr)
 {
 }
 
@@ -80,7 +80,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
 {
     Q_UNUSED(parent);
 
-    ScriptEngine *engine = 0;
+    ScriptEngine *engine = nullptr;
 
     auto filter = [&language](const KPluginMetaData &md) -> bool
     {
@@ -94,12 +94,12 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
          || ((type & Types::DataEngineComponent) && !componentTypes.contains(QStringLiteral("DataEngine")))) {
 
             qCWarning(LOG_PLASMA) << "ScriptEngine" << plugins.first().name() << "does not provide Applet or DataEngine components, returning empty.";
-            return 0;
+            return nullptr;
         }
         KPluginLoader loader(plugins.first().fileName());
         KPluginFactory *factory = loader.factory();
         if (factory) {
-            engine = factory->create<Plasma::ScriptEngine>(0, args);
+            engine = factory->create<Plasma::ScriptEngine>(nullptr, args);
         } else {
             qCWarning(LOG_PLASMA) << "Unable to load" << plugins.first().name() << "ScriptEngine";
         }

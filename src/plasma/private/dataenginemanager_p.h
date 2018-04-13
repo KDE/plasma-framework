@@ -82,7 +82,7 @@ private:
      * preferred access mechanism.
      */
     DataEngineManager();
-    ~DataEngineManager();
+    ~DataEngineManager() Q_DECL_OVERRIDE;
 
     DataEngineManagerPrivate *const d;
 

@@ -40,7 +40,7 @@ namespace Plasma
 class NullEngine : public DataEngine
 {
 public:
-    NullEngine(QObject *parent = 0)
+    explicit NullEngine(QObject *parent = nullptr)
         : DataEngine(KPluginInfo(), parent)
     {
         setValid(false);
@@ -54,7 +54,7 @@ class DataEngineManagerPrivate
 {
 public:
     DataEngineManagerPrivate()
-        : nullEng(0)
+        : nullEng(nullptr)
     {}
 
     ~DataEngineManagerPrivate()

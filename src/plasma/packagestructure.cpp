@@ -72,7 +72,7 @@ void PackageStructureWrapper::pathChanged(KPackage::Package *package)
 KJob *PackageStructureWrapper::install(KPackage::Package *package, const QString &archivePath, const QString &packageRoot)
 {
     if (!m_struct || !s_packagesMap.contains(package)) {
-        return 0;
+        return nullptr;
     }
 
     return m_struct->install(s_packagesMap.value(package), archivePath, packageRoot);
@@ -81,7 +81,7 @@ KJob *PackageStructureWrapper::install(KPackage::Package *package, const QString
 KJob *PackageStructureWrapper::uninstall(KPackage::Package *package, const QString &packageRoot)
 {
     if (!m_struct || !s_packagesMap.contains(package)) {
-        return 0;
+        return nullptr;
     }
 
     return m_struct->uninstall(s_packagesMap.value(package), packageRoot);
@@ -211,7 +211,7 @@ KJob *PackageStructure::install(Package *package, const QString &archivePath, co
         return job;
     }
 
-    return 0;
+    return nullptr;
 }
 
 KJob *PackageStructure::uninstall(Package *package, const QString &packageRoot)
@@ -236,7 +236,7 @@ KJob *PackageStructure::uninstall(Package *package, const QString &packageRoot)
         return job;
     }
 
-    return 0;
+    return nullptr;
 }
 
 }

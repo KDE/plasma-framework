@@ -189,21 +189,21 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
 Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList &args, uint id)
 {
     if (!q->isContainment()) {
-        return 0;
+        return nullptr;
     }
 
     if (q->immutability() != Types::Mutable && !args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
 #ifndef NDEBUG
         // qCDebug(LOG_PLASMA) << "addApplet for" << name << "requested, but we're currently immutable!";
 #endif
-        return 0;
+        return nullptr;
     }
 
     Applet *applet = PluginLoader::self()->loadApplet(name, id, args);
 
     if (!applet) {
         qCWarning(LOG_PLASMA) << "Applet" << name << "could not be loaded.";
-        applet = new Applet(0, QString(), id);
+        applet = new Applet(nullptr, QString(), id);
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }
 

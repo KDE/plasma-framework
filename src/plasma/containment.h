@@ -85,7 +85,7 @@ public:
      */
     Containment(QObject *parent, const QVariantList &args);
 
-    ~Containment();
+    ~Containment() Q_DECL_OVERRIDE;
 
     /**
      * Reimplemented from Applet

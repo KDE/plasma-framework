@@ -70,13 +70,13 @@ public:
     DialogPrivate(Dialog *dialog)
         : q(dialog),
           location(Plasma::Types::BottomEdge),
-          frameSvgItem(0),
+          frameSvgItem(nullptr),
           hasMask(false),
           type(Dialog::Normal),
           hideOnWindowDeactivate(false),
           outputOnly(false),
           visible(false),
-          componentComplete(dialog->parent() == 0),
+          componentComplete(dialog->parent() == nullptr),
           backgroundHints(Dialog::StandardBackground)
     {
         hintsCommitTimer.setSingleShot(true);
@@ -584,7 +584,7 @@ void DialogPrivate::updateInputShape()
         if (outputOnly) {
             // set input shape, so that it doesn't accept any input events
             xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
-                                 XCB_CLIP_ORDERING_UNSORTED, q->winId(), 0, 0, 0, NULL);
+                                 XCB_CLIP_ORDERING_UNSORTED, q->winId(), 0, 0, 0, nullptr);
         } else {
             // delete the shape
             xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT,
@@ -727,7 +727,7 @@ void DialogPrivate::setupWaylandIntegration()
 
 
 Dialog::Dialog(QQuickItem *parent)
-    : QQuickWindow(parent ? parent->window() : 0),
+    : QQuickWindow(parent ? parent->window() : nullptr),
       d(new DialogPrivate(this))
 {
     setClearBeforeRendering(true);
@@ -774,12 +774,12 @@ void Dialog::setMainItem(QQuickItem *mainItem)
         d->hintsCommitTimer.stop();
 
         if (d->mainItem) {
-            disconnect(d->mainItem, 0, this, 0);
+            disconnect(d->mainItem, nullptr, this, nullptr);
             d->mainItem->setVisible(false);
         }
 
         if (d->mainItemLayout) {
-            disconnect(d->mainItemLayout, 0, this, 0);
+            disconnect(d->mainItemLayout, nullptr, this, nullptr);
         }
 
         d->mainItem = mainItem;
@@ -793,7 +793,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             d->slotMainItemSizeChanged();
 
             //Extract the representation's Layout, if any
-            QObject *layout = 0;
+            QObject *layout = nullptr;
             setMinimumSize(QSize(0, 0));
             setMaximumSize(QSize(DIALOGSIZE_MAX, DIALOGSIZE_MAX));
 
@@ -871,16 +871,12 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
             switch (d->location) {
             case Plasma::Types::TopEdge:
                 return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().y());
-                break;
             case Plasma::Types::LeftEdge:
                 return QPoint(screen->availableGeometry().x(), screen->availableGeometry().center().y() - size.height() / 2);
-                break;
             case Plasma::Types::RightEdge:
                 return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height() / 2);
-                break;
             case Plasma::Types::BottomEdge:
                 return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().bottom() - size.height());
-                break;
             //Default center in the screen
             default:
                 return screen->geometry().center() - QPoint(size.width() / 2, size.height() / 2);

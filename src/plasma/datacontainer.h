@@ -74,7 +74,7 @@ public:
      * associated with it
      **/
     explicit DataContainer(QObject *parent = nullptr);
-    virtual ~DataContainer();
+    ~DataContainer() Q_DECL_OVERRIDE;
 
     /**
      * Returns the data for this DataContainer

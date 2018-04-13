@@ -46,23 +46,23 @@ const char ThemePrivate::systemColorsTheme[] = "internal-system-colors";
 EffectWatcher *ThemePrivate::s_backgroundContrastEffectWatcher = nullptr;
 #endif
 
-ThemePrivate *ThemePrivate::globalTheme = 0;
+ThemePrivate *ThemePrivate::globalTheme = nullptr;
 QAtomicInt ThemePrivate::globalThemeRefCount = QAtomicInt();
 QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate *>();
 QHash<QString, QAtomicInt> ThemePrivate::themesRefCount = QHash<QString, QAtomicInt>();
 
 ThemePrivate::ThemePrivate(QObject *parent)
     : QObject(parent),
-      colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(0)),
-      selectionColorScheme(QPalette::Active, KColorScheme::Selection, KSharedConfigPtr(0)),
-      buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(0)),
-      viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(0)),
-      complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(0)),
+      colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(nullptr)),
+      selectionColorScheme(QPalette::Active, KColorScheme::Selection, KSharedConfigPtr(nullptr)),
+      buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(nullptr)),
+      viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(nullptr)),
+      complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(nullptr)),
       defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME)),
       defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX)),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
       defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-      pixmapCache(0),
+      pixmapCache(nullptr),
       cacheSize(0),
       cachesToDiscard(NoCache),
       compositingActive(KWindowSystem::self()->compositingActive()),
@@ -297,7 +297,7 @@ void ThemePrivate::onAppExitCleanup()
 {
     pixmapsToCache.clear();
     delete pixmapCache;
-    pixmapCache = 0;
+    pixmapCache = nullptr;
     cacheTheme = false;
 }
 
@@ -359,7 +359,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
     } else {
         // This deletes the object but keeps the on-disk cache for later use
         delete pixmapCache;
-        pixmapCache = 0;
+        pixmapCache = nullptr;
     }
 
     cachedDefaultStyleSheet = QString();
@@ -370,7 +370,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
         discoveries.clear();
         invalidElements.clear();
 
-        svgElementsCache = 0;
+        svgElementsCache = nullptr;
     }
 }
 
@@ -625,7 +625,7 @@ void ThemePrivate::saveSvgElementsCache()
 
 QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 {
-    const KColorScheme *scheme = 0;
+    const KColorScheme *scheme = nullptr;
 
     //Before 5.0 Plasma theme really only used Normal and Button
     //many old themes are built on this assumption and will break
@@ -793,7 +793,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     //qCDebug(LOG_PLASMA) << "we're going for..." << colorsFile << "*******************";
 
     if (colorsFile.isEmpty()) {
-        colors = 0;
+        colors = nullptr;
     } else {
         colors = KSharedConfig::openConfig(colorsFile);
     }

@@ -34,7 +34,7 @@ class StorageThread : public QThread
     Q_OBJECT
 public:
     explicit StorageThread(QObject *parent = nullptr);
-    ~StorageThread();
+    ~StorageThread() Q_DECL_OVERRIDE;
 
     void run() Q_DECL_OVERRIDE;
 

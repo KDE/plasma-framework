@@ -113,12 +113,12 @@ public:
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
-    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y, KIO::DropJob *dropJob = 0);
+    Q_INVOKABLE void processMimeData(QMimeData *data, int x, int y, KIO::DropJob *dropJob = nullptr);
 
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
      */
-    Q_INVOKABLE void processMimeData(QObject *data, int x, int y, KIO::DropJob *dropJob = 0);
+    Q_INVOKABLE void processMimeData(QObject *data, int x, int y, KIO::DropJob *dropJob = nullptr);
 
     /**
      * Search for a containment at those coordinates.

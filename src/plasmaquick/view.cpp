@@ -73,7 +73,7 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     Plasma::Types::FormFactor oldForm = formFactor();
 
     if (containment) {
-        QObject::disconnect(containment, 0, q, 0);
+        QObject::disconnect(containment, nullptr, q, nullptr);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
 //             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();

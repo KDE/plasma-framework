@@ -105,7 +105,7 @@ int AppletQuickItemPrivate::preloadWeight() const
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 {
-    QObject *layout = 0;
+    QObject *layout = nullptr;
 
     //Extract the representation's Layout, if any
     //No Item?
@@ -154,7 +154,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillHeight");
 
 
-    QObject *ownLayout = 0;
+    QObject *ownLayout = nullptr;
 
     foreach (QObject *child, q->children()) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
@@ -226,7 +226,7 @@ void AppletQuickItemPrivate::propagateSizeHint(const QByteArray &layoutProperty)
 QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
 {
     if (!compactRepresentation) {
-        return 0;
+        return nullptr;
     }
 
     if (compactRepresentationItem) {
@@ -260,7 +260,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
     }
 
     if (!fullRepresentationItem) {
-        return 0;
+        return nullptr;
     }
 
     emit q->fullRepresentationItemChanged(fullRepresentationItem);
@@ -271,7 +271,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
 QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
 {
     if (!compactRepresentationExpander) {
-        return 0;
+        return nullptr;
     }
 
     if (compactRepresentationExpanderItem) {
@@ -281,7 +281,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
     compactRepresentationExpanderItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentationExpander, QtQml::qmlContext(qmlObject->rootObject())));
 
     if (!compactRepresentationExpanderItem) {
-        return 0;
+        return nullptr;
     }
 
     compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject*>(createCompactRepresentationItem()));
@@ -541,7 +541,7 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
     if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(context)) {
         return AppletQuickItemPrivate::s_rootObjects.value(context);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

@@ -141,7 +141,7 @@ bool SharedSvgRenderer::load(
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
-      renderer(0),
+      renderer(nullptr),
       styleCrc(0),
       colorGroup(Plasma::Theme::NormalColorGroup),
       lastModified(0),
@@ -213,7 +213,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     if (isThemed && !themed && s_systemColorsCache) {
         // catch the case where we weren't themed, but now we are, and the colors cache was set up
         // ensure we are not connected to that theme previously
-        QObject::disconnect(s_systemColorsCache.data(), 0, q, 0);
+        QObject::disconnect(s_systemColorsCache.data(), nullptr, q, nullptr);
     }
 
     themed = isThemed;
@@ -503,7 +503,7 @@ void SvgPrivate::eraseRenderer()
         }
     }
 
-    renderer = 0;
+    renderer = nullptr;
     styleCrc = 0;
     localRectCache.clear();
     elementsWithSizeHints.clear();
@@ -770,7 +770,7 @@ void Svg::setColorGroup(Plasma::Theme::ColorGroup group)
     }
 
     d->colorGroup = group;
-    d->renderer = 0;
+    d->renderer = nullptr;
     emit colorGroupChanged();
     emit repaintNeeded();
 }
@@ -968,7 +968,7 @@ void Svg::setTheme(Plasma::Theme *theme)
     }
 
     if (d->theme) {
-        disconnect(d->theme.data(), 0, this, 0);
+        disconnect(d->theme.data(), nullptr, this, nullptr);
     }
 
     d->theme = theme;

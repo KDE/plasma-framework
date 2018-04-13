@@ -60,8 +60,8 @@
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args)
     : AppletInterface(parent, args),
-      m_wallpaperInterface(0),
-      m_activityInfo(0),
+      m_wallpaperInterface(nullptr),
+      m_activityInfo(nullptr),
       m_wheelDelta(0),
       m_editMode(false)
 {
@@ -122,7 +122,7 @@ void ContainmentInterface::init()
 
                     QVariantHash toolboxProperties;
                     toolboxProperties[QStringLiteral("parent")] = QVariant::fromValue(this);
-                    QObject *toolBoxObject = qmlObject()->createObjectFromSource(pkg.fileUrl("mainscript"), 0, toolboxProperties);
+                    QObject *toolBoxObject = qmlObject()->createObjectFromSource(pkg.fileUrl("mainscript"), nullptr, toolboxProperties);
                     if (toolBoxObject && containmentGraphicObject) {
                         containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
                     }
@@ -567,7 +567,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
 {
 #ifndef PLASMA_NO_KIO
-    QObject::disconnect(job, 0, this, 0);
+    QObject::disconnect(job, nullptr, this, nullptr);
     m_dropPoints.remove(job);
     QMenu *choices = m_dropMenus.take(job);
     m_dropJobs.remove(job);
@@ -881,7 +881,7 @@ void ContainmentInterface::loadWallpaper()
     } else {
         if (m_wallpaperInterface) {
             m_wallpaperInterface->deleteLater();
-            m_wallpaperInterface = 0;
+            m_wallpaperInterface = nullptr;
         }
     }
 }
@@ -989,14 +989,14 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
 
     //FIXME: very inefficient appletAt() implementation
-    Plasma::Applet *applet = 0;
+    Plasma::Applet *applet = nullptr;
     foreach (QObject *appletObject, m_appletInterfaces) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
             if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->posF()))) {
                 applet = ai->applet();
                 break;
             } else {
-                ai = 0;
+                ai = nullptr;
             }
         }
     }

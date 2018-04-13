@@ -31,7 +31,7 @@ class PLASMAQUICK_DEPRECATED_EXPORT ShellPluginLoader : public Plasma::PluginLoa
 {
 public:
     ShellPluginLoader();
-    ~ShellPluginLoader();
+    ~ShellPluginLoader() Q_DECL_OVERRIDE;
 
     static void init();
 

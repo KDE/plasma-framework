@@ -58,7 +58,7 @@ public:
      * in the init() method.
      */
     explicit AppletScript(QObject *parent = nullptr);
-    ~AppletScript();
+    ~AppletScript() Q_DECL_OVERRIDE;
 
     /**
      * Sets the applet associated with this AppletScript

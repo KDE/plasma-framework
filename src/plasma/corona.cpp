@@ -171,7 +171,7 @@ void Corona::loadLayout(const QString &configName)
 {
     if (!configName.isEmpty() && configName != d->configName) {
         // if we have a new config name passed in, then use that as the config file for this Corona
-        d->config = 0;
+        d->config = nullptr;
         d->configName = configName;
     }
 
@@ -202,7 +202,7 @@ Containment *Corona::containmentForScreen(int screen) const
         }
     }
 
-    return 0;
+    return nullptr;
 }
 
 Containment *Corona::containmentForScreen(int screen,
@@ -250,7 +250,7 @@ Containment *Corona::createContainment(const QString &name, const QVariantList &
         return d->addContainment(name, args, 0);
     }
 
-    return 0;
+    return nullptr;
 }
 
 Containment *Corona::createContainmentDelayed(const QString &name, const QVariantList &args)
@@ -259,7 +259,7 @@ Containment *Corona::createContainmentDelayed(const QString &name, const QVarian
         return d->addContainment(name, args, 0, true);
     }
 
-    return 0;
+    return nullptr;
 }
 
 int Corona::screenForContainment(const Containment *) const
@@ -355,7 +355,7 @@ KActionCollection *Corona::actions() const
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona),
       immutability(Types::Mutable),
-      config(0),
+      config(nullptr),
       configSyncTimer(new QTimer(corona)),
       actions(corona),
       containmentsStarting(0)
@@ -450,8 +450,8 @@ void CoronaPrivate::syncConfig()
 Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, bool delayedInit)
 {
     QString pluginName = name;
-    Containment *containment = 0;
-    Applet *applet = 0;
+    Containment *containment = nullptr;
+    Applet *applet = nullptr;
 
     // qCDebug(LOG_PLASMA) << "Loading" << name << args << id;
 

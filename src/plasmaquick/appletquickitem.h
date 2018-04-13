@@ -94,7 +94,7 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 
 public:
     AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
-    ~AppletQuickItem();
+    ~AppletQuickItem() Q_DECL_OVERRIDE;
 
 ////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
