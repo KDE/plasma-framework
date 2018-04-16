@@ -232,13 +232,14 @@ Containment *Corona::containmentForScreen(int screen,
             Plasma::Types::ImmutabilityType imm = d->immutability;
             d->immutability = Types::Mutable;
             containment = d->addContainment(defaultPluginIfNonExistent, defaultArgs, 0, screen, false);
-            if (containment) {
-               // containment->setScreen(screen);
-            }
+
             d->immutability = imm;
         }
     }
 
+    if (containment) {
+        containment->setActivity(activity);
+    }
     return containment;
 }
 
