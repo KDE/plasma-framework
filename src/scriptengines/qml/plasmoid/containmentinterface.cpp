@@ -706,13 +706,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 dropActions << action;
             }
             foreach (const auto &info, appletList) {
-                QAction *action;
+                const QString actionText = i18nc("Add widget", "Add %1", info.name());
+                QAction *action = new QAction(actionText, nullptr);
                 if (!info.iconName().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
-                } else {
-                    action = new QAction(info.name(), nullptr);
+                    action->setIcon(QIcon::fromTheme(info.iconName()));
                 }
-
                 if (choices) {
                     choices->addAction(action);
                 }
@@ -725,7 +723,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 });
             }
             {
-                QAction *action = new QAction(i18n("Icon"), nullptr);
+                QAction *action = new QAction(i18nc("Add icon widget", "Add Icon"), nullptr);
                 if (choices) {
                     choices->addAction(action);
                 }
@@ -754,11 +752,10 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 }
 
                 foreach (const KPluginMetaData &info, wallpaperList) {
-                    QAction *action;
+                    const QString actionText = i18nc("Set wallpaper", "Set %1", info.name());
+                    QAction *action = new QAction(actionText, nullptr);
                     if (!info.iconName().isEmpty()) {
-                        action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
-                    } else {
-                        action = new QAction(info.name(), nullptr);
+                        action->setIcon(QIcon::fromTheme(info.iconName()));
                     }
 
                     if (choices) {
@@ -785,13 +782,13 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 QAction *action;
                 if (choices) {
                     choices->addSection(i18n("Widgets"));
-                    action = choices->addAction(i18n("Icon"));
+                    action = choices->addAction(i18nc("Add icon widget", "Add Icon"));
                 } else {
                     QAction *sep = new QAction(i18n("Widgets"), nullptr);
                     sep->setSeparator(true);
                     dropActions << sep;
                     // we can at least create an icon as a link to the URL
-                    action = new QAction(i18n("Icon"), nullptr);
+                    action = new QAction(i18nc("Add icon widget", "Add Icon"), nullptr);
                     dropActions << action;
                 }
 
