@@ -301,7 +301,7 @@ KSharedConfigPtr Corona::config() const
 Containment *Corona::createContainment(const QString &name, const QVariantList &args)
 {
     if (d->immutability == Types::Mutable || args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
-        return d->addContainment(name, args, -1, false);
+        return d->addContainment(name, args, 0, -1, false);
     }
 
     return nullptr;
