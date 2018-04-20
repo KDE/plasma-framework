@@ -76,7 +76,7 @@ QtObject {
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
      */
-    property int largeSpacing: Math.floor(gridUnit/2)
+    property int largeSpacing: smallSpacing * 2
 
     /**
      * The ratio between physical and device-independent pixels. This value does not depend on the \
