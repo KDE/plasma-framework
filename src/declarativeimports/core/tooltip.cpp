@@ -355,6 +355,9 @@ void ToolTip::hoverLeaveEvent(QHoverEvent *event)
 
 bool ToolTip::childMouseEventFilter(QQuickItem *item, QEvent *event)
 {
+    if (event->type() == QEvent::MouseButtonPress) {
+        hideToolTip();
+    }
     return QQuickItem::childMouseEventFilter(item, event);
 }
 
