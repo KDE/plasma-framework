@@ -37,6 +37,8 @@ public:
         isCurrent = Qt::UserRole + 1,
         //containsHolidayItems,
         containsEventItems,
+        containsMajorEventItems,
+        containsMinorEventItems,
         //containsTodoItems,
         //containsJournalItems,
         dayNumber,
@@ -69,6 +71,8 @@ private Q_SLOTS:
 
 private:
     QModelIndex indexForDate(const QDate &date);
+    bool hasMajorEventAtDate(const QDate &date) const;
+    bool hasMinorEventAtDate(const QDate &date) const;
 
     EventPluginsManager *m_pluginsManager = nullptr;
     QList<DayData> *m_data = nullptr;

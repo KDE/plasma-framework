@@ -72,6 +72,10 @@ QVariant DaysModel::data(const QModelIndex &index, int role) const
             return currentData.isCurrent;
         case containsEventItems:
             return m_eventsData.contains(currentDate);
+        case containsMajorEventItems:
+            return hasMajorEventAtDate(currentDate);
+        case containsMinorEventItems:
+            return hasMinorEventAtDate(currentDate);
         case dayNumber:
             return currentData.dayNumber;
         case monthNumber:
@@ -112,8 +116,9 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
         m_agendaNeedsUpdate = true;
     }
 
-    // only the containsEventItems role may have changed
-    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0), {containsEventItems});
+    // only the containsEventItems roles may have changed
+    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0),
+                     {containsEventItems, containsMajorEventItems, containsMinorEventItems});
 
     Q_EMIT agendaUpdated(QDate::currentDate());
 }
@@ -138,7 +143,8 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
     Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems});
+            Q_EMIT dataChanged(changedIndex, changedIndex,
+                               {containsEventItems, containsMajorEventItems, containsMinorEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
@@ -164,7 +170,8 @@ void DaysModel::onEventRemoved(const QString &uid)
     Q_FOREACH (const QDate date, updatesList) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems});
+            Q_EMIT dataChanged(changedIndex, changedIndex,
+                               {containsEventItems, containsMajorEventItems, containsMinorEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
@@ -210,6 +217,30 @@ QModelIndex DaysModel::indexForDate(const QDate &date)
     return createIndex(daysTo, 0);
 }
 
+bool DaysModel::hasMajorEventAtDate(const QDate &date) const
+{
+    auto it = m_eventsData.find(date);
+    while (it != m_eventsData.end() && it.key() == date) {
+        if (!it.value().isMinor()) {
+            return true;
+        }
+        ++it;
+    }
+    return false;
+}
+
+bool DaysModel::hasMinorEventAtDate(const QDate &date) const
+{
+    auto it = m_eventsData.find(date);
+    while (it != m_eventsData.end() && it.key() == date) {
+        if (it.value().isMinor()) {
+            return true;
+        }
+        ++it;
+    }
+    return false;
+}
+
 void DaysModel::setPluginsManager(QObject *manager)
 {
     EventPluginsManager *m = qobject_cast<EventPluginsManager*>(manager);
@@ -242,6 +273,8 @@ QHash<int, QByteArray> DaysModel::roleNames() const
     return {
         {isCurrent, "isCurrent"},
         {containsEventItems, "containsEventItems"},
+        {containsMajorEventItems, "containsMajorEventItems"},
+        {containsMinorEventItems, "containsMinorEventItems"},
         {dayNumber, "dayNumber"},
         {monthNumber, "monthNumber"},
         {yearNumber, "yearNumber"}
