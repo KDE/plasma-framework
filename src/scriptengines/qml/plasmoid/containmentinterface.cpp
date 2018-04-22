@@ -422,6 +422,10 @@ void ContainmentInterface::setEditMode(bool edit)
         return;
     }
 
+    if (m_containment->immutability() != Plasma::Types::Mutable) {
+        return;
+    }
+
     m_editMode = edit;
     emit editModeChanged();
 }
