@@ -51,7 +51,7 @@ T.ToolButton {
     background: Item {
         visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
         //retrocompatibility with old controls
-        implicitWidth: units.gridUnit * 6
+        implicitWidth: units.gridUnit * 1.6
         implicitHeight: units.gridUnit * 1.6
         Private.ButtonShadow {
             anchors.fill: parent
