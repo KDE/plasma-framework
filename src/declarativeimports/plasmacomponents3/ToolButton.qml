@@ -49,6 +49,7 @@ T.ToolButton {
     }
 
     background: Item {
+        visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 6
         implicitHeight: units.gridUnit * 1.6
@@ -72,7 +73,7 @@ T.ToolButton {
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "normal"
-            opacity: (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
+            opacity: !control.flat && (!control.pressed || !control.checked) ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: units.longDuration
