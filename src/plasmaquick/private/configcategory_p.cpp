@@ -19,25 +19,6 @@
  */
 
 #include "configcategory_p.h"
-#include "configview.h"
-#include "configmodel.h"
-#include "Plasma/Applet"
-#include "Plasma/Containment"
-//#include "plasmoid/wallpaperinterface.h"
-#include "kdeclarative/configpropertymap.h"
-
-#include <QDebug>
-#include <QDir>
-#include <QQmlComponent>
-#include <QQmlEngine>
-#include <QQmlContext>
-#include <QQuickItem>
-
-#include <klocalizedstring.h>
-#include <kdeclarative/kdeclarative.h>
-
-#include <Plasma/Corona>
-#include <Plasma/PluginLoader>
 
 namespace PlasmaQuick
 {
