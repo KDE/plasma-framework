@@ -94,7 +94,8 @@ QtQuickControlStyle.ButtonStyle {
             PlasmaComponents.Label {
                 id: label
                 Layout.minimumWidth: implicitWidth
-                Layout.alignment: Qt.AlignVCenter
+                Layout.fillHeight: true
+                height: undefined
                 text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
                 textFormat: Text.StyledText
                 font: control.font || theme.defaultFont
@@ -102,6 +103,7 @@ QtQuickControlStyle.ButtonStyle {
                 Layout.fillWidth: true
                 color: (controlHovered || !flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
             }
 
