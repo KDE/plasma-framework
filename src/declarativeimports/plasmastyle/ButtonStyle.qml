@@ -71,14 +71,16 @@ QtQuickControlStyle.ButtonStyle {
 
         PlasmaComponents.Label {
             id: label
-            Layout.alignment: Qt.AlignVCenter
+            Layout.fillHeight: true
             text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
             textFormat: Text.StyledText
+            height: undefined
             font: control.font || theme.defaultFont
             visible: control.text != ""
             Layout.fillWidth: true
             color: theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
 
