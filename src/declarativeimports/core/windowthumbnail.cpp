@@ -440,19 +440,12 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         static bool haveTextureStorage = !ctx->isOpenGLES() &&
                                           ctx->hasExtension(QByteArrayLiteral("GL_ARB_texture_storage"));
 
-        static bool sRGB = !ctx->isOpenGLES() &&
-                            ctx->hasExtension(QByteArrayLiteral("GL_ARB_framebuffer_sRGB")) &&
-                            ctx->hasExtension(QByteArrayLiteral("GL_EXT_texture_sRGB_decode"));
-
         // Save the GL state
-        GLuint prevReadFb = 0, prevDrawFb = 0, prevTex2D = 0, prevScissorTest = 0, prevFramebufferSrgb = 0;
+        GLuint prevReadFb = 0, prevDrawFb = 0, prevTex2D = 0, prevScissorTest = 0;
         funcs->glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, (GLint *) &prevReadFb);
         funcs->glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, (GLint *) &prevDrawFb);
         funcs->glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint *) &prevTex2D);
         funcs->glGetIntegerv(GL_SCISSOR_TEST, (GLint *) &prevScissorTest);
-
-        if (sRGB)
-            funcs->glGetIntegerv(GL_FRAMEBUFFER_SRGB, (GLint *) &prevFramebufferSrgb);
 
         if (m_glxPixmap == XCB_PIXMAP_NONE) {
             xcb_connection_t *c = QX11Info::connection();
@@ -488,9 +481,9 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
             funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, levels - 1);
 
             if (haveTextureStorage)
-                extraFuncs->glTexStorage2D(GL_TEXTURE_2D, levels, sRGB ? GL_SRGB8_ALPHA8 : GL_RGBA8, width, height);
+                extraFuncs->glTexStorage2D(GL_TEXTURE_2D, levels, GL_RGBA8, width, height);
             else
-                funcs->glTexImage2D(GL_TEXTURE_2D, 0, sRGB ? GL_SRGB8_ALPHA8 : GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+                funcs->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
             GLuint framebuffers[2];
             funcs->glGenFramebuffers(2, framebuffers);
@@ -514,10 +507,6 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
         funcs->glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
         funcs->glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_mipmaps, 0);
 
-        // Disable sRGB encoding so there is no conversion in the blit
-        if (sRGB && prevFramebufferSrgb)
-            glDisable(GL_FRAMEBUFFER_SRGB);
-
         if (prevScissorTest)
             glDisable(GL_SCISSOR_TEST);
 
@@ -525,24 +514,9 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                                       0, 0, size.width(), size.height(),
                                       GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
-        funcs->glBindTexture(GL_TEXTURE_2D, m_mipmaps);
-
-        if (sRGB) {
-            // Enable sRGB encoding and decoding when generating the mipmaps
-            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_DECODE_EXT);
-            funcs->glEnable(GL_FRAMEBUFFER_SRGB);
-        }
-
         // Regenerate the miplevels
+        funcs->glBindTexture(GL_TEXTURE_2D, m_mipmaps);
         funcs->glGenerateMipmap(GL_TEXTURE_2D);
-
-        if (sRGB) {
-            // Disable sRGB decoding again, so the texture is rendered correctly in the QtQuick scene
-            funcs->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SRGB_DECODE_EXT, GL_SKIP_DECODE_EXT);
-
-            if (!prevFramebufferSrgb)
-                funcs->glDisable(GL_FRAMEBUFFER_SRGB);
-        }
 
         // Restore the GL state
         funcs->glBindFramebuffer(GL_READ_FRAMEBUFFER, prevReadFb);
