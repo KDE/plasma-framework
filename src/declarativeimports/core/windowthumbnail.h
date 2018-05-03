@@ -126,9 +126,6 @@ private:
 
 /*The following must *only* be used from the render thread*/
     uint m_texture;
-    uint m_mipmaps;
-    uint m_readFb;
-    uint m_drawFb;
 #if HAVE_GLX
     bool windowToTextureGLX(WindowTextureNode *textureNode);
     void resolveGLXFunctions();
