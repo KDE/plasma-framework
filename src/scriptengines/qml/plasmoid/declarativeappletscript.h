@@ -34,19 +34,19 @@ class DeclarativeAppletScript : public Plasma::AppletScript
 
 public:
     DeclarativeAppletScript(QObject *parent, const QVariantList &args);
-    ~DeclarativeAppletScript() Q_DECL_OVERRIDE;
+    ~DeclarativeAppletScript() override;
 
     QString filePath(const QString &type, const QString &file) const;
 
-    QList<QAction *> contextualActions() Q_DECL_OVERRIDE;
+    QList<QAction *> contextualActions() override;
 
-    void constraintsEvent(Plasma::Types::Constraints constraints) Q_DECL_OVERRIDE;
+    void constraintsEvent(Plasma::Types::Constraints constraints) override;
 
 public Q_SLOTS:
     void executeAction(const QString &name);
 
 protected:
-    bool init() Q_DECL_OVERRIDE;
+    bool init() override;
 
 Q_SIGNALS:
     void formFactorChanged();

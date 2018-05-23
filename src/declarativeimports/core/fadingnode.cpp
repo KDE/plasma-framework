@@ -37,9 +37,9 @@ public:
     FadingMaterialShader();
     using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
     virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
-    QList<QByteArray> attributes() const Q_DECL_OVERRIDE;
+    QList<QByteArray> attributes() const override;
 
-    void initialize() Q_DECL_OVERRIDE;
+    void initialize() override;
 private:
     QOpenGLFunctions *glFuncs  = nullptr;
     int m_progressId = 0;

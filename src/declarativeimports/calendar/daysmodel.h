@@ -49,14 +49,14 @@ public:
     explicit DaysModel(QObject *parent = nullptr);
     virtual ~DaysModel();
     void setSourceData(QList<DayData> *data);
-    int rowCount(const QModelIndex &parent) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex &index, int role) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
     Q_INVOKABLE void setPluginsManager(QObject *manager);
 
     Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
 
-    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+    QHash<int, QByteArray> roleNames() const override;
 
 Q_SIGNALS:
     void agendaUpdated(const QDate &updatedDate);

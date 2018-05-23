@@ -55,18 +55,18 @@ public:
         QAbstractListModel::endResetModel();
     }
 
-    virtual QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE
+    virtual QHash<int, QByteArray> roleNames() const override
     {
         return m_roles;
     }
 
-    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE
+    Q_INVOKABLE int rowCount(const QModelIndex &parent = QModelIndex()) const override
     {
         Q_UNUSED(parent);
         return m_manager->m_availablePlugins.size();
     }
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override
     {
         if (!index.isValid() && !m_manager) {
             return QVariant();
@@ -101,7 +101,7 @@ public:
 
     }
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) Q_DECL_OVERRIDE
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override
     {
         if (role != Qt::EditRole || !index.isValid()) {
             return false;

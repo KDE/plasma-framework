@@ -57,7 +57,7 @@ public:
         QFunctionPointer,
         xcb_pixmap_t
     );
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 private:
     uint m_texture;
     QFunctionPointer m_releaseTexImage;
@@ -90,7 +90,7 @@ public:
         QFunctionPointer,
         EGLImageKHR
     );
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 private:
     uint m_texture;
     QFunctionPointer m_eglDestroyImageKHR;

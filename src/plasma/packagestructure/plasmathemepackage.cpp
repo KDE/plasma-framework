@@ -30,7 +30,7 @@ class ThemePackage : public KPackage::PackageStructure
 public:
     ThemePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : KPackage::PackageStructure(parent, args) {}
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE
+    void initPackage(KPackage::Package *package) override
     {
         // by default the packages have "contents/" as contentsPrefixPaths
         // but for the themes we don't want that, so unset it.

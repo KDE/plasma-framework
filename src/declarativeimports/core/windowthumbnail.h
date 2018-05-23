@@ -84,8 +84,8 @@ class WindowThumbnail : public QQuickItem, public QAbstractNativeEventFilter
 public:
     WindowThumbnail(QQuickItem *parent = nullptr);
     virtual ~WindowThumbnail();
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long int *result) Q_DECL_OVERRIDE;
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) Q_DECL_OVERRIDE;
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long int *result) override;
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override;
 
     uint32_t winId() const;
     void setWinId(uint32_t winId);
@@ -100,7 +100,7 @@ Q_SIGNALS:
     void thumbnailAvailableChanged();
 
 protected:
-    void releaseResources() Q_DECL_OVERRIDE;
+    void releaseResources() override;
 
 private:
     void iconToTexture(WindowTextureNode *textureNode);

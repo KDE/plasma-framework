@@ -30,7 +30,7 @@ class ContainmentActionsPackage : public Plasma::ChangeableMainScriptPackage
 public:
     ContainmentActionsPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE
+    void initPackage(KPackage::Package *package) override
     {
         ChangeableMainScriptPackage::initPackage(package);
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/containmentactions/"));

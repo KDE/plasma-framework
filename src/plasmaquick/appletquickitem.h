@@ -94,7 +94,7 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 
 public:
     AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
-    ~AppletQuickItem() Q_DECL_OVERRIDE;
+    ~AppletQuickItem() override;
 
 ////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
@@ -157,9 +157,9 @@ protected:
     KDeclarative::QmlObject *qmlObject();
 
     //Reimplementation
-    void childEvent(QChildEvent *event) Q_DECL_OVERRIDE;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
-    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
+    void childEvent(QChildEvent *event) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void itemChange(ItemChange change, const ItemChangeData &value) override;
 
 private:
     AppletQuickItemPrivate *const d;

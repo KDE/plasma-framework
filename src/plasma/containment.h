@@ -85,12 +85,12 @@ public:
      */
     Containment(QObject *parent, const QVariantList &args);
 
-    ~Containment() Q_DECL_OVERRIDE;
+    ~Containment() override;
 
     /**
      * Reimplemented from Applet
      */
-    void init() Q_DECL_OVERRIDE;
+    void init() override;
 
     /**
      * Returns the type of containment
@@ -145,13 +145,13 @@ public:
      * @reimp
      * @sa Applet::save(KConfigGroup &)
      */
-    void save(KConfigGroup &group) const Q_DECL_OVERRIDE;
+    void save(KConfigGroup &group) const override;
 
     /**
      * @reimp
      * @sa Applet::restore(KConfigGroup &)
      */
-    void restore(KConfigGroup &group) Q_DECL_OVERRIDE;
+    void restore(KConfigGroup &group) override;
 
     /**
      * Sets wallpaper plugin.

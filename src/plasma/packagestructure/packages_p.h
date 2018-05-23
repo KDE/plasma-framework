@@ -34,8 +34,8 @@ class ChangeableMainScriptPackage : public KPackage::PackageStructure
 public:
     ChangeableMainScriptPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : KPackage::PackageStructure(parent, args) {}
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
-    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void initPackage(KPackage::Package *package) override;
+    void pathChanged(KPackage::Package *package) override;
 
 protected:
     virtual QString mainScriptConfigKey() const;
@@ -46,7 +46,7 @@ class GenericPackage : public ChangeableMainScriptPackage
     Q_OBJECT
 public:
     GenericPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void initPackage(KPackage::Package *package) override;
 };
 
 } // namespace Plasma

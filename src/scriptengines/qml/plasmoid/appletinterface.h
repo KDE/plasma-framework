@@ -240,7 +240,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
-    ~AppletInterface() Q_DECL_OVERRIDE;
+    ~AppletInterface() override;
 
 //API not intended for the QML part
 
@@ -441,11 +441,11 @@ Q_SIGNALS:
     void configurationRequiredReasonChanged();
 
 protected Q_SLOTS:
-    void init() Q_DECL_OVERRIDE;
+    void init() override;
 
 protected:
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private Q_SLOTS:
     void destroyedChanged(bool destroyed);

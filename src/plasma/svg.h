@@ -86,7 +86,7 @@ public:
      * @related Plasma::Theme
      */
     explicit Svg(QObject *parent = nullptr);
-    ~Svg() Q_DECL_OVERRIDE;
+    ~Svg() override;
 
     /**
      * Set the device pixel ratio for the Svg. This is the ratio between
@@ -501,7 +501,7 @@ Q_SIGNALS:
 
 private:
     SvgPrivate *const d;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
     Q_PRIVATE_SLOT(d, void themeChanged())
     Q_PRIVATE_SLOT(d, void colorsChanged())

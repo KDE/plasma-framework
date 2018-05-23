@@ -39,7 +39,7 @@ public:
 protected:
     bool isEffectActive() const;
 
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
 
 Q_SIGNALS:
     void effectChanged(bool on);

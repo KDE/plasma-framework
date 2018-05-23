@@ -34,9 +34,9 @@ class StorageThread : public QThread
     Q_OBJECT
 public:
     explicit StorageThread(QObject *parent = nullptr);
-    ~StorageThread() Q_DECL_OVERRIDE;
+    ~StorageThread() override;
 
-    void run() Q_DECL_OVERRIDE;
+    void run() override;
 
     static Plasma::StorageThread *self();
 

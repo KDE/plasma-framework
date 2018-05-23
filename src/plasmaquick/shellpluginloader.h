@@ -31,12 +31,12 @@ class PLASMAQUICK_DEPRECATED_EXPORT ShellPluginLoader : public Plasma::PluginLoa
 {
 public:
     ShellPluginLoader();
-    ~ShellPluginLoader() Q_DECL_OVERRIDE;
+    ~ShellPluginLoader() override;
 
     static void init();
 
 protected:
-    Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization) Q_DECL_OVERRIDE;
+    Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization) override;
 };
 
 #endif

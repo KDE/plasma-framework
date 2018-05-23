@@ -128,7 +128,7 @@ class ToolTip : public QQuickItem
 public:
 /// @cond INTERNAL_DOCS
     explicit ToolTip(QQuickItem *parent = nullptr);
-    ~ToolTip() Q_DECL_OVERRIDE;
+    ~ToolTip() override;
 
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
@@ -169,9 +169,9 @@ public Q_SLOTS:
 
 protected:
 /// @cond INTERNAL_DOCS
-    bool childMouseEventFilter(QQuickItem *item, QEvent *event) Q_DECL_OVERRIDE;
-    void hoverEnterEvent(QHoverEvent *event) Q_DECL_OVERRIDE;
-    void hoverLeaveEvent(QHoverEvent *event) Q_DECL_OVERRIDE;
+    bool childMouseEventFilter(QQuickItem *item, QEvent *event) override;
+    void hoverEnterEvent(QHoverEvent *event) override;
+    void hoverLeaveEvent(QHoverEvent *event) override;
 
     ToolTipDialog *tooltipDialogInstance();
 /// @endcond

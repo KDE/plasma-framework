@@ -44,7 +44,7 @@ class ToolTipDialog : public PlasmaQuick::Dialog
 
 public:
     explicit ToolTipDialog(QQuickItem *parent = nullptr);
-    ~ToolTipDialog() Q_DECL_OVERRIDE;
+    ~ToolTipDialog() override;
 
     QQuickItem *loadDefaultItem();
 
@@ -64,10 +64,10 @@ public:
     void setOwner(QObject *owner);
 
 protected:
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
-    bool event(QEvent *e) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+    void resizeEvent(QResizeEvent *re) override;
+    bool event(QEvent *e) override;
 
 private Q_SLOTS:
     void valueChanged(const QVariant &value);

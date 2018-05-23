@@ -59,7 +59,7 @@ public:
      * @param parent the QWindow in which this ConfigView is parented to
      **/
     ConfigView(Plasma::Applet *applet, QWindow *parent = nullptr);
-    ~ConfigView() Q_DECL_OVERRIDE;
+    ~ConfigView() override;
 
     virtual void init();
 
@@ -77,8 +77,8 @@ Q_SIGNALS:
     void appletGlobalShortcutChanged();
 
 protected:
-    void hideEvent(QHideEvent *ev) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *ev) override;
+    void resizeEvent(QResizeEvent *re) override;
 
 private:
     ConfigViewPrivate *const d;

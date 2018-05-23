@@ -106,7 +106,7 @@ public:
      */
     explicit Applet(const KPluginMetaData &metadata, QObject *parent = nullptr, uint appletId = 0);
 
-    ~Applet() Q_DECL_OVERRIDE;
+    ~Applet() override;
 
 //BOOKKEEPING
     /**
@@ -675,7 +675,7 @@ protected:
     /**
      * Reimplemented from QObject
      */
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
 
 private:
     /**

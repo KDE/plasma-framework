@@ -82,7 +82,7 @@ public:
 
     QSizeF naturalSize() const;
 
-    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) Q_DECL_OVERRIDE;
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override;
 /// @endcond
 
 Q_SIGNALS:
@@ -99,8 +99,8 @@ protected Q_SLOTS:
 
 private:
     void scheduleImageUpdate();
-    void updatePolish() Q_DECL_OVERRIDE;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+    void updatePolish() override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
     QWeakPointer<Plasma::Svg> m_svg;
     QString m_elementID;

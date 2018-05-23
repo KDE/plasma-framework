@@ -71,7 +71,7 @@ public:
     /**
      * Destructor
      */
-    ~ServiceJob() Q_DECL_OVERRIDE;
+    ~ServiceJob() override;
 
     /**
      * @return the subject that the job is acting on
@@ -105,7 +105,7 @@ public:
      * Default implementation of start, which simply sets the results to false.
      * This makes it easy to create a "failure" job.
      */
-    Q_INVOKABLE void start() Q_DECL_OVERRIDE;
+    Q_INVOKABLE void start() override;
 
 protected:
     /**

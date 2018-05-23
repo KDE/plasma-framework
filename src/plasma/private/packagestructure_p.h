@@ -38,12 +38,12 @@ public:
 
     ~PackageStructureWrapper();
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void initPackage(KPackage::Package *package) override;
 
-    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE;
+    void pathChanged(KPackage::Package *package) override;
 
-    KJob *install(KPackage::Package *package, const QString &archivePath, const QString &packageRoot) Q_DECL_OVERRIDE;
-    KJob *uninstall(KPackage::Package *package, const QString &packageRoot) Q_DECL_OVERRIDE;
+    KJob *install(KPackage::Package *package, const QString &archivePath, const QString &packageRoot) override;
+    KJob *uninstall(KPackage::Package *package, const QString &packageRoot) override;
 
 private:
     QPointer<Plasma::PackageStructure> m_struct;

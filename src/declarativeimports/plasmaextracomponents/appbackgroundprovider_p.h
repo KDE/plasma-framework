@@ -37,8 +37,8 @@ class AppBackgroundProvider : public QQuickImageProvider
 
 public:
     AppBackgroundProvider();
-    ~AppBackgroundProvider() Q_DECL_OVERRIDE;
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) Q_DECL_OVERRIDE;
+    ~AppBackgroundProvider() override;
+    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
 private:
     Plasma::Theme *m_theme;
 };

@@ -50,7 +50,7 @@ public:
      * in the init() method.
      */
     explicit DataEngineScript(QObject *parent = nullptr);
-    ~DataEngineScript() Q_DECL_OVERRIDE;
+    ~DataEngineScript() override;
 
     /**
      * Sets the Plasma::DataEngine associated with this DataEngineScript
@@ -101,14 +101,14 @@ protected:
     /**
      * @return absolute path to the main script file for this plasmoid
      */
-    QString mainScript() const Q_DECL_OVERRIDE;
+    QString mainScript() const override;
 
     /**
      * @return the Package associated with this plasmoid which can
      *         be used to request resources, such as images and
      *         interface files.
      */
-    Package package() const Q_DECL_OVERRIDE;
+    Package package() const override;
 
     /**
      * @return the KPluginInfo associated with this plasmoid

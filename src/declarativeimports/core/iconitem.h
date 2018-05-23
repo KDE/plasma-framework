@@ -126,7 +126,7 @@ class IconItem : public QQuickItem
 
 public:
     explicit IconItem(QQuickItem *parent = nullptr);
-    ~IconItem() Q_DECL_OVERRIDE;
+    ~IconItem() override;
 
     void setSource(const QVariant &source);
     QVariant source() const;
@@ -163,14 +163,14 @@ public:
     void setImplicitHeight2(int height);
     void setImplicitWidth2(int height);
 
-    void updatePolish() Q_DECL_OVERRIDE;
-    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) Q_DECL_OVERRIDE;
+    void updatePolish() override;
+    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) override;
 
-    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
+    void itemChange(ItemChange change, const ItemChangeData &value) override;
     void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+                         const QRectF &oldGeometry) override;
 
-    void componentComplete() Q_DECL_OVERRIDE;
+    void componentComplete() override;
 
 Q_SIGNALS:
     void overlaysChanged();

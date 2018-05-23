@@ -104,13 +104,13 @@ public:
      * @related Plasma::Theme
      */
     explicit FrameSvg(QObject *parent = nullptr);
-    ~FrameSvg() Q_DECL_OVERRIDE;
+    ~FrameSvg() override;
 
     /**
      * Loads a new Svg
      * @param imagePath the new file
      */
-    Q_INVOKABLE void setImagePath(const QString &path) Q_DECL_OVERRIDE;
+    Q_INVOKABLE void setImagePath(const QString &path) override;
 
     /**
      * Sets what borders should be painted

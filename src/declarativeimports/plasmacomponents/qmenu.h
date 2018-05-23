@@ -102,7 +102,7 @@ class QMenuProxy : public QObject
 
 public:
     explicit QMenuProxy(QObject *parent = nullptr);
-    ~QMenuProxy() Q_DECL_OVERRIDE;
+    ~QMenuProxy() override;
 
     QQmlListProperty<QMenuItem> content();
     int actionCount() const;
@@ -166,7 +166,7 @@ public:
     Q_INVOKABLE void removeMenuItem(QMenuItem *item);
 
 protected:
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
+    bool event(QEvent *event) override;
 
 Q_SIGNALS:
     void statusChanged();

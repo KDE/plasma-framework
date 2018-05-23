@@ -39,10 +39,10 @@ public:
                const QString &operation,
                const QVariantMap &parameters,
                QObject *parent = nullptr);
-    ~StorageJob() Q_DECL_OVERRIDE;
+    ~StorageJob() override;
     void setData(const QVariantMap &data);
     QVariantMap data() const;
-    void start() Q_DECL_OVERRIDE;
+    void start() override;
     QString clientName() const;
 
 protected Q_SLOTS:
@@ -63,10 +63,10 @@ class Storage : public Plasma::Service
 
 public:
     explicit Storage(QObject *parent = nullptr);
-    ~Storage() Q_DECL_OVERRIDE;
+    ~Storage() override;
 
 protected:
-    Plasma::ServiceJob *createJob(const QString &operation, QVariantMap &parameters) Q_DECL_OVERRIDE;
+    Plasma::ServiceJob *createJob(const QString &operation, QVariantMap &parameters) override;
 
 private:
     QString m_clientName;

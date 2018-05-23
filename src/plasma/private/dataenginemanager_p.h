@@ -74,7 +74,7 @@ protected:
     /**
      * Reimplemented from QObject
      **/
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
 
 private:
     /**
@@ -82,7 +82,7 @@ private:
      * preferred access mechanism.
      */
     DataEngineManager();
-    ~DataEngineManager() Q_DECL_OVERRIDE;
+    ~DataEngineManager() override;
 
     DataEngineManagerPrivate *const d;
 

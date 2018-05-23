@@ -31,7 +31,7 @@ class DataEnginePackage : public Plasma::ChangeableMainScriptPackage
 public:
     DataEnginePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE
+    void initPackage(KPackage::Package *package) override
     {
         ChangeableMainScriptPackage::initPackage(package);
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/"));

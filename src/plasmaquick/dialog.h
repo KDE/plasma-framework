@@ -168,7 +168,7 @@ public:
     Q_ENUM(BackgroundHints)
 
     explicit Dialog(QQuickItem *parent = nullptr);
-    ~Dialog() Q_DECL_OVERRIDE;
+    ~Dialog() override;
 
     //PROPERTIES ACCESSORS
     QQuickItem *mainItem() const;
@@ -229,14 +229,14 @@ protected:
     virtual void adjustGeometry(const QRect &geom);
 
     //Reimplementations
-    void classBegin() Q_DECL_OVERRIDE;
-    void componentComplete() Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *re) Q_DECL_OVERRIDE;
-    void focusInEvent(QFocusEvent *ev) Q_DECL_OVERRIDE;
-    void focusOutEvent(QFocusEvent *ev) Q_DECL_OVERRIDE;
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
-    void hideEvent(QHideEvent *event) Q_DECL_OVERRIDE;
-    bool event(QEvent *event) Q_DECL_OVERRIDE;
+    void classBegin() override;
+    void componentComplete() override;
+    void resizeEvent(QResizeEvent *re) override;
+    void focusInEvent(QFocusEvent *ev) override;
+    void focusOutEvent(QFocusEvent *ev) override;
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+    bool event(QEvent *event) override;
 
 private:
     friend class DialogPrivate;

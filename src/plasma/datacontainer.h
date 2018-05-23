@@ -74,7 +74,7 @@ public:
      * associated with it
      **/
     explicit DataContainer(QObject *parent = nullptr);
-    ~DataContainer() Q_DECL_OVERRIDE;
+    ~DataContainer() override;
 
     /**
      * Returns the data for this DataContainer
@@ -275,7 +275,7 @@ protected Q_SLOTS:
     /**
      * @reimp from QObject
      */
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
 
 private:
     friend class SignalRelay;

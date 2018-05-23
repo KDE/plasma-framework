@@ -218,20 +218,20 @@ public:
     Plasma::Svg::Status status() const;
 
     void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry) Q_DECL_OVERRIDE;
+                         const QRectF &oldGeometry) override;
 
     /**
      * Only to be used from inside this library, is not intended to be invokable
      */
     Plasma::FrameSvg *frameSvg() const;
 
-    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) Q_DECL_OVERRIDE;
+    QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) override;
 
     void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData & data) override;
 
 protected:
-    void classBegin() Q_DECL_OVERRIDE;
-    void componentComplete() Q_DECL_OVERRIDE;
+    void classBegin() override;
+    void componentComplete() override;
 
 /// @endcond
 

@@ -42,7 +42,7 @@ public:
     {
     }
 
-    void start() Q_DECL_OVERRIDE
+    void start() override
     {
         setErrorText(i18nc("Error message, tried to start an invalid service", "Invalid (null) service, can not perform any operations."));
         emitResult();
@@ -59,7 +59,7 @@ public:
         setName(QStringLiteral("NullService"));
     }
 
-    ServiceJob *createJob(const QString &operation, QVariantMap &) Q_DECL_OVERRIDE
+    ServiceJob *createJob(const QString &operation, QVariantMap &) override
     {
         return new NullServiceJob(destination(), operation, this);
     }

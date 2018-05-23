@@ -31,7 +31,7 @@ class PlasmoidPackage : public Plasma::GenericPackage
 public:
     PlasmoidPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : GenericPackage(parent, args) {}
 
-    void initPackage(KPackage::Package *package) Q_DECL_OVERRIDE
+    void initPackage(KPackage::Package *package) override
     {
         GenericPackage::initPackage(package);
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/"));
@@ -40,7 +40,7 @@ public:
         package->addFileDefinition("mainconfigxml", QStringLiteral("config/main.xml"), i18n("Configuration XML file"));
     }
 
-    void pathChanged(KPackage::Package *package) Q_DECL_OVERRIDE
+    void pathChanged(KPackage::Package *package) override
     {
         ChangeableMainScriptPackage::pathChanged(package);
 

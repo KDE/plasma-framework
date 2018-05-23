@@ -77,7 +77,7 @@ public:
 
     explicit DataEngine(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
-    ~DataEngine() Q_DECL_OVERRIDE;
+    ~DataEngine() override;
 
     /**
      * @return a list of all the data sources available via this DataEngine
@@ -392,7 +392,7 @@ protected:
     /**
      * Reimplemented from QObject
      **/
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
 
     /**
      * Sets the icon for this data engine

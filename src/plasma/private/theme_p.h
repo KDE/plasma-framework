@@ -64,7 +64,7 @@ class ThemePrivate : public QObject
 
 public:
     explicit ThemePrivate(QObject *parent = nullptr);
-    ~ThemePrivate() Q_DECL_OVERRIDE;
+    ~ThemePrivate() override;
 
     KConfigGroup &config();
 
@@ -119,7 +119,7 @@ public:
     KColorScheme buttonColorScheme;
     KColorScheme viewColorScheme;
     KColorScheme complementaryColorScheme;
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
     KConfigGroup cfg;
     QString defaultWallpaperTheme;
     QString defaultWallpaperSuffix;

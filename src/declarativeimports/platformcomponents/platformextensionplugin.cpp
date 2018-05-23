@@ -35,7 +35,7 @@ public:
     {
     }
 
-    void registerTypes(const char *uri) Q_DECL_OVERRIDE {
+    void registerTypes(const char *uri) override {
         Q_ASSERT(QLatin1String(uri) == QLatin1String("org.kde.plasma.platformcomponents"));
 
         qmlRegisterType<Application> (uri, 2, 0, "Application");

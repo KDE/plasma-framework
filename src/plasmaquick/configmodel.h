@@ -74,7 +74,7 @@ public:
         KCMRole
     };
     explicit ConfigModel(QObject *parent = nullptr);
-    ~ConfigModel() Q_DECL_OVERRIDE;
+    ~ConfigModel() override;
 
     /**
      * add a new category in the model
@@ -103,9 +103,9 @@ public:
     {
         return rowCount();
     }
-    int rowCount(const QModelIndex &index = QModelIndex()) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex &, int) const Q_DECL_OVERRIDE;
-    QHash<int, QByteArray> roleNames() const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &index = QModelIndex()) const override;
+    QVariant data(const QModelIndex &, int) const override;
+    QHash<int, QByteArray> roleNames() const override;
 
     /**
      * @param row the row for which the data will be returned

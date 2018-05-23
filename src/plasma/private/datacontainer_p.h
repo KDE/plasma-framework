@@ -124,7 +124,7 @@ Q_SIGNALS:
     void dataUpdated(const QString &, const Plasma::DataEngine::Data &);
 
 protected:
-    void timerEvent(QTimerEvent *event) Q_DECL_OVERRIDE;
+    void timerEvent(QTimerEvent *event) override;
 };
 
 } // Plasma namespace

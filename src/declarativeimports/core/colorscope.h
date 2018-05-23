@@ -88,7 +88,7 @@ class ColorScope : public QQuickItem
 public:
 /// @cond INTERNAL_DOCS
     explicit ColorScope(QQuickItem *parent = nullptr, QObject *parentObject = nullptr);
-    ~ColorScope() Q_DECL_OVERRIDE;
+    ~ColorScope() override;
 
     void setColorGroup(Plasma::Theme::ColorGroup group);
     Plasma::Theme::ColorGroup colorGroup() const;
@@ -110,7 +110,7 @@ public:
 /// @endcond
 
     ColorScope *findParentScope();
-    void itemChange(ItemChange change, const ItemChangeData &value) Q_DECL_OVERRIDE;
+    void itemChange(ItemChange change, const ItemChangeData &value) override;
 
     bool eventFilter(QObject * watched, QEvent * event) override;
 

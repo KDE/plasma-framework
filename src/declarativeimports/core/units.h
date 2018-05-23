@@ -33,13 +33,13 @@ class SharedAppFilter : public QObject
    Q_OBJECT
 public:
     explicit SharedAppFilter(QObject *parent = nullptr);
-    ~SharedAppFilter() Q_DECL_OVERRIDE;
+    ~SharedAppFilter() override;
 
 Q_SIGNALS:
     void fontChanged();
 
 protected:
-    bool eventFilter(QObject *watched, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 };
 
 /**

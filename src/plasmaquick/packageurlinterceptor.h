@@ -49,7 +49,7 @@ class PLASMAQUICK_EXPORT PackageUrlInterceptor: public QQmlAbstractUrlIntercepto
 {
 public:
     PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p);
-    ~PackageUrlInterceptor() Q_DECL_OVERRIDE;
+    ~PackageUrlInterceptor() override;
 
     void addAllowedPath(const QString &path);
     void removeAllowedPath(const QString &path);
@@ -58,7 +58,7 @@ public:
     bool forcePlasmaStyle() const;
     void setForcePlasmaStyle(bool force);
 
-    QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type) Q_DECL_OVERRIDE;
+    QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type) override;
 
     static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
     {
