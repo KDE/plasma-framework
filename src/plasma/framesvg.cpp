@@ -774,8 +774,12 @@ void FrameSvgPrivate::paintBorder(QPainter& p, FrameData* frame, const FrameSvg:
 
 void FrameSvgPrivate::paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& contentRect) const
 {
-    QString corner = frame->prefix % FrameSvgHelpers::borderToElementId(border);
-    if (frame->enabledBorders & border && q->hasElement(corner)) {
+    // Draw the corner only if both borders in both directions are enabled.
+    if ((frame->enabledBorders & border) != border) {
+        return;
+    }
+    const QString corner = frame->prefix % FrameSvgHelpers::borderToElementId(border);
+    if (q->hasElement(corner)) {
         q->paint(&p, FrameSvgHelpers::sectionRect(border, contentRect, frame->frameSize * q->devicePixelRatio()), corner);
     }
 }
