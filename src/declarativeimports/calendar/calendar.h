@@ -32,17 +32,23 @@
 class Calendar : public QObject
 {
     Q_OBJECT
-    /**
-     * This property is used to determine which data from which month to show, it ensures
-     * the day passed in the QDate is visible
-     */
-    Q_PROPERTY(QDate displayedDate READ displayedDate WRITE setDisplayedDate NOTIFY displayedDateChanged)
+    /* The conversion between QDate and JS Date is broken. The specification says that a date
+     * is represented by the start of the UTC day, but for negative to UTC timezones this results
+     * in wrong dates: Jan 2 in C++ -> Jan 2 (00:00) UTC -> Jan 1 (23:00) UTC-1 in JS.
+     * So use QDateTime for interfacing to always carry a timezone around.
+     * https://bugreports.qt.io/browse/QTBUG-29328 */
 
     /**
      * This property is used to determine which data from which month to show, it ensures
      * the day passed in the QDate is visible
      */
-    Q_PROPERTY(QDate today READ today WRITE setToday NOTIFY todayChanged)
+    Q_PROPERTY(QDateTime displayedDate READ displayedDate WRITE setDisplayedDate NOTIFY displayedDateChanged)
+
+    /**
+     * This property is used to determine which data from which month to show, it ensures
+     * the day passed in the QDate is visible
+     */
+    Q_PROPERTY(QDateTime today READ today WRITE setToday NOTIFY todayChanged)
 
     /**
      * This determines which kind of data types should be contained in
@@ -140,12 +146,13 @@ public:
     explicit Calendar(QObject *parent = nullptr);
 
     // Displayed date
-    QDate displayedDate() const;
+    QDateTime displayedDate() const;
     void setDisplayedDate(const QDate &dateTime);
+    void setDisplayedDate(const QDateTime &dateTime);
 
     // The day that represents "today"
-    QDate today() const;
-    void setToday(const QDate &dateTime);
+    QDateTime today() const;
+    void setToday(const QDateTime &dateTime);
 
     // Types
     int types() const;

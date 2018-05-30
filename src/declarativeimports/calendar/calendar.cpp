@@ -39,9 +39,9 @@ Calendar::Calendar(QObject *parent)
 //   connect(m_dayHelper, SIGNAL(calendarChanged()), this, SLOT(updateData()));
 }
 
-QDate Calendar::displayedDate() const
+QDateTime Calendar::displayedDate() const
 {
-    return m_displayedDate;
+    return QDateTime(m_displayedDate);
 }
 
 void Calendar::setDisplayedDate(const QDate &dateTime)
@@ -67,18 +67,24 @@ void Calendar::setDisplayedDate(const QDate &dateTime)
     }
 }
 
-QDate Calendar::today() const
+void Calendar::setDisplayedDate(const QDateTime &dateTime)
 {
-    return m_today;
+    setDisplayedDate(dateTime.date());
 }
 
-void Calendar::setToday(const QDate &dateTime)
+QDateTime Calendar::today() const
 {
-    if (dateTime == m_today) {
+    return QDateTime(m_today);
+}
+
+void Calendar::setToday(const QDateTime &dateTime)
+{
+    QDate date = dateTime.date();
+    if (date == m_today) {
         return;
     }
 
-    m_today = dateTime;
+    m_today = date;
     if (m_displayedDate.isNull()) {
         resetToToday();
     } else {
