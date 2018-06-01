@@ -450,6 +450,12 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
     qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
 
+    // Catch drops from a Task Manager and convert to usable URL.
+    if (!mimeData->hasUrls() && mimeData->hasFormat(QStringLiteral("text/x-orgkdeplasmataskmanager_taskurl"))) {
+        QList<QUrl> urls = {QUrl(QString::fromUtf8(mimeData->data(QStringLiteral("text/x-orgkdeplasmataskmanager_taskurl"))))};
+        mimeData->setUrls(urls);
+    }
+
     if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
         QString data = QString::fromUtf8( mimeData->data(QStringLiteral("text/x-plasmoidservicename")) );
         const QStringList appletNames = data.split(QLatin1Char('\n'), QString::SkipEmptyParts);
