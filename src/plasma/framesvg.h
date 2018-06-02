@@ -21,7 +21,7 @@
 #ifndef PLASMA_FRAMESVG_H
 #define PLASMA_FRAMESVG_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QPixmap>
 
 #include <plasma/plasma_export.h>
