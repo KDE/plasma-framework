@@ -480,20 +480,26 @@ QPixmap FrameSvgPrivate::alphaMask()
             updateSizes(maskFrame);
         }
 
+        const bool shouldUpdate = maskFrame->cachedBackground.isNull()
+            || maskFrame->enabledBorders != frame->enabledBorders
+            || maskFrame->frameSize != frameSize(frame);
+        if (!shouldUpdate) {
+            return maskFrame->cachedBackground;
+        }
+
         const QString oldKey = cacheId(maskFrame, maskPrefix);
         maskFrame->enabledBorders = frame->enabledBorders;
-        if (maskFrame->cachedBackground.isNull() || maskFrame->frameSize != frameSize(frame)) {
-            maskFrame->frameSize = frameSize(frame).toSize();
-            const QString newKey = cacheId(maskFrame, maskPrefix);
-            if (s_sharedFrames[q->theme()->d].contains(oldKey)) {
-                s_sharedFrames[q->theme()->d].remove(oldKey);
-                s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
-            }
-
-            maskFrame->cachedBackground = QPixmap();
-
-            generateBackground(maskFrame);
+        maskFrame->frameSize = frameSize(frame).toSize();
+        const QString newKey = cacheId(maskFrame, maskPrefix);
+        if (s_sharedFrames[q->theme()->d].contains(oldKey)) {
+            s_sharedFrames[q->theme()->d].remove(oldKey);
+            s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
         }
+
+        maskFrame->cachedBackground = QPixmap();
+
+        updateSizes(maskFrame);
+        generateBackground(maskFrame);
 
         return maskFrame->cachedBackground;
     }
