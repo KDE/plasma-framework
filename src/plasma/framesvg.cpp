@@ -449,9 +449,6 @@ QPixmap FrameSvgPrivate::alphaMask()
     if (maskPrefix.isNull()) {
         if (frame->cachedBackground.isNull()) {
             generateBackground(frame);
-            if (frame->cachedBackground.isNull()) {
-                return QPixmap();
-            }
         }
 
         return frame->cachedBackground;
@@ -496,10 +493,6 @@ QPixmap FrameSvgPrivate::alphaMask()
             maskFrame->cachedBackground = QPixmap();
 
             generateBackground(maskFrame);
-
-            if (maskFrame->cachedBackground.isNull()) {
-                return QPixmap();
-            }
         }
 
         return maskFrame->cachedBackground;
