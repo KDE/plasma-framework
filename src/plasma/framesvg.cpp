@@ -450,59 +450,74 @@ QPixmap FrameSvgPrivate::alphaMask()
         if (frame->cachedBackground.isNull()) {
             generateBackground(frame);
         }
-
         return frame->cachedBackground;
-    } else {
-        // We are setting the prefix only temporary to generate
-        // the needed mask image
-        const QString maskRequestedPrefix = requestedPrefix.isEmpty() ? QStringLiteral("mask") : maskPrefix % requestedPrefix;
-        maskPrefix = maskPrefix % prefix;
+    }
 
-        if (!maskFrame) {
-            const QString key = cacheId(frame, maskPrefix);
-            // see if we can find a suitable candidate in the shared frames
-            // if successful, ref and insert, otherwise create a new one
-            // and insert that into both the shared frames and our frames.
-            maskFrame = s_sharedFrames[q->theme()->d].value(key);
+    // We are setting the prefix only temporary to generate
+    // the needed mask image
+    const QString maskRequestedPrefix = requestedPrefix.isEmpty() ? QStringLiteral("mask") : maskPrefix % requestedPrefix;
+    maskPrefix = maskPrefix % prefix;
 
-            if (maskFrame) {
-                maskFrame->ref(q);
-            } else {
-                maskFrame = new FrameData(*frame, q);
-                maskFrame->prefix = maskPrefix;
-                maskFrame->requestedPrefix = maskRequestedPrefix;
-                maskFrame->theme = q->theme()->d;
-                maskFrame->imagePath = q->imagePath();
-                s_sharedFrames[q->theme()->d].insert(key, maskFrame);
-            }
-            maskFrame->enabledBorders = frame->enabledBorders;
-
-            updateSizes(maskFrame);
-        }
-
-        const bool shouldUpdate = maskFrame->cachedBackground.isNull()
-            || maskFrame->enabledBorders != frame->enabledBorders
-            || maskFrame->frameSize != frameSize(frame);
-        if (!shouldUpdate) {
+    if (!maskFrame) {
+        maskFrame = lookupOrCreateMaskFrame(frame, maskPrefix, maskRequestedPrefix);
+        if (!maskFrame->cachedBackground.isNull()) {
             return maskFrame->cachedBackground;
         }
-
-        const QString oldKey = cacheId(maskFrame, maskPrefix);
-        maskFrame->enabledBorders = frame->enabledBorders;
-        maskFrame->frameSize = frameSize(frame).toSize();
-        const QString newKey = cacheId(maskFrame, maskPrefix);
-        if (s_sharedFrames[q->theme()->d].contains(oldKey)) {
-            s_sharedFrames[q->theme()->d].remove(oldKey);
-            s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
-        }
-
-        maskFrame->cachedBackground = QPixmap();
-
         updateSizes(maskFrame);
         generateBackground(maskFrame);
-
         return maskFrame->cachedBackground;
     }
+
+    const bool shouldUpdate = maskFrame->enabledBorders != frame->enabledBorders
+        || maskFrame->frameSize != frameSize(frame);
+    if (shouldUpdate) {
+        if (maskFrame->refcount() == 1) {
+            const QString oldKey = cacheId(maskFrame, maskPrefix);
+            s_sharedFrames[q->theme()->d].remove(oldKey);
+            maskFrame->enabledBorders = frame->enabledBorders;
+            maskFrame->frameSize = frameSize(frame).toSize();
+            const QString newKey = cacheId(maskFrame, maskPrefix);
+            s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
+            maskFrame->cachedBackground = QPixmap();
+        } else {
+            maskFrame->deref(q);
+            maskFrame = lookupOrCreateMaskFrame(frame, maskPrefix, maskRequestedPrefix);
+            if (!maskFrame->cachedBackground.isNull()) {
+                return maskFrame->cachedBackground;
+            }
+        }
+        updateSizes(maskFrame);
+    }
+
+    if (maskFrame->cachedBackground.isNull()) {
+        generateBackground(maskFrame);
+    }
+
+    return maskFrame->cachedBackground;
+}
+
+FrameData *FrameSvgPrivate::lookupOrCreateMaskFrame(FrameData *frame, const QString &maskPrefix, const QString &maskRequestedPrefix)
+{
+    const QString key = cacheId(frame, maskPrefix);
+    FrameData *mask = s_sharedFrames[q->theme()->d].value(key);
+
+    // See if we can find a suitable candidate in the shared frames.
+    // If there is one, use it.
+    if (mask) {
+        mask->ref(q);
+        return mask;
+    }
+
+    mask = new FrameData(*frame, q);
+    mask->prefix = maskPrefix;
+    mask->requestedPrefix = maskRequestedPrefix;
+    mask->theme = q->theme()->d;
+    mask->imagePath = frame->imagePath;
+    mask->enabledBorders = frame->enabledBorders;
+    mask->frameSize = frameSize(frame).toSize();
+    s_sharedFrames[q->theme()->d].insert(key, mask);
+
+    return mask;
 }
 
 void FrameSvgPrivate::generateBackground(FrameData *frame)

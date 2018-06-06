@@ -172,6 +172,7 @@ public:
     void paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize);
     QRect contentGeometry(FrameData* frame, const QSize& size) const;
     void updateFrameData(UpdateType updateType = UpdateFrameAndMargins);
+    FrameData *lookupOrCreateMaskFrame(FrameData *frame, const QString &maskPrefix, const QString &maskRequestedPrefix);
 
     Types::Location location;
     QString prefix;
