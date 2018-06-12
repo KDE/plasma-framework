@@ -469,13 +469,15 @@ QPixmap FrameSvgPrivate::alphaMask()
     }
 
     const bool shouldUpdate = maskFrame->enabledBorders != frame->enabledBorders
-        || maskFrame->frameSize != frameSize(frame);
+        || maskFrame->frameSize != frameSize(frame)
+        || maskFrame->imagePath != frame->imagePath;
     if (shouldUpdate) {
         if (maskFrame->refcount() == 1) {
             const QString oldKey = cacheId(maskFrame, maskPrefix);
             s_sharedFrames[q->theme()->d].remove(oldKey);
             maskFrame->enabledBorders = frame->enabledBorders;
             maskFrame->frameSize = frameSize(frame).toSize();
+            maskFrame->imagePath = frame->imagePath;
             const QString newKey = cacheId(maskFrame, maskPrefix);
             s_sharedFrames[q->theme()->d].insert(newKey, maskFrame);
             maskFrame->cachedBackground = QPixmap();
