@@ -37,7 +37,7 @@ public:
     DataContainer *source(const QString &sourceName, bool createWhenMissing = true);
     void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval,
                        Plasma::Types::IntervalAlignment align, bool immediateCall = true);
-    DataContainer *requestSource(const QString &sourceName, bool *newSource = 0);
+    DataContainer *requestSource(const QString &sourceName, bool *newSource = nullptr);
     void internalUpdateSource(DataContainer *);
     void setupScriptSupport();
 

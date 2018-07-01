@@ -56,7 +56,7 @@ class PackageStructurePrivate
 public:
     PackageStructurePrivate(PackageStructure *str)
         : q(str),
-        internalStructure(0)
+        internalStructure(nullptr)
     {}
     ~PackageStructurePrivate()
     {}

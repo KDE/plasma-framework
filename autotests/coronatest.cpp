@@ -29,13 +29,13 @@ Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint apple
 {
     Q_UNUSED(args)
     if (name == QLatin1String("simpleapplet")) {
-        return new SimpleApplet(0, QString(), appletId);
+        return new SimpleApplet(nullptr, QString(), appletId);
     } else if (name == QLatin1String("simplecontainment")) {
-        return new SimpleContainment(0, QString(), appletId);
+        return new SimpleContainment(nullptr, QString(), appletId);
     } else if (name == QLatin1String("simplenoscreencontainment")) {
-        return new SimpleNoScreenContainment(0, QString(), appletId);
+        return new SimpleNoScreenContainment(nullptr, QString(), appletId);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

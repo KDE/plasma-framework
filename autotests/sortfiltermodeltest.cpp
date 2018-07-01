@@ -55,8 +55,8 @@ void SortFilterModelTest::setEmptyModel()
     QStandardItemModel model;
     filterModel.setModel(&model);
     QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel *>(&model));
-    filterModel.setModel(0);
-    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel *>(0));
+    filterModel.setModel(nullptr);
+    QCOMPARE(filterModel.sourceModel(), static_cast<QAbstractItemModel *>(nullptr));
 }
 
 void SortFilterModelTest::setFilterRegExp()

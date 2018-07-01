@@ -570,7 +570,7 @@ void WindowThumbnail::bindGLXTexture()
 {
     Display *d = QX11Info::display();
     ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
-    ((glXBindTexImageEXT_func)(m_bindTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT, NULL);
+    ((glXBindTexImageEXT_func)(m_bindTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT, nullptr);
     resetDamaged();
 }
 

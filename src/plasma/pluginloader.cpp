@@ -399,7 +399,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
         const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
         KPluginFactory *factory = loader.factory();
         if (factory) {
-            actions = factory->create<Plasma::ContainmentActions>(0, argsWithMetaData);
+            actions = factory->create<Plasma::ContainmentActions>(nullptr, argsWithMetaData);
         }
     }
     if (actions) {

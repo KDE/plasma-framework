@@ -48,8 +48,8 @@ public:
     Private(DialogShadows *shadows)
         : q(shadows)
 #if HAVE_X11
-        ,_connection(0x0),
-        _gc(0x0)
+        , _connection(nullptr)
+        , _gc(0x0)
         , m_isX11(KWindowSystem::isPlatformX11())
 #endif
     {
@@ -207,7 +207,7 @@ Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap &source)
 
     // do nothing for invalid pixmaps
     if (source.isNull()) {
-        return 0;
+        return nullptr;
     }
 
     /*
@@ -218,7 +218,7 @@ Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap &source)
 
 #if HAVE_X11
     if (!m_isX11) {
-        return 0;
+        return nullptr;
     }
 
     // check connection
@@ -235,7 +235,7 @@ Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap &source)
     // check gc
     if (!_gc) {
         _gc = xcb_generate_id(_connection);
-        xcb_create_gc(_connection, _gc, pixmap, 0, 0x0);
+        xcb_create_gc(_connection, _gc, pixmap, 0, nullptr);
     }
 
 //         // create explicitly shared QPixmap from it
@@ -260,7 +260,7 @@ Qt::HANDLE DialogShadows::Private::createPixmap(const QPixmap &source)
     return (Qt::HANDLE)pixmap;
 
 #else
-    return 0;
+    return nullptr;
 #endif
 
 }

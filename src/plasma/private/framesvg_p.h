@@ -52,7 +52,7 @@ public:
           stretchBorders(false),
           tileCenter(false),
           composeOverBorder(false),
-          theme(0)
+          theme(nullptr)
     {
         ref(svg);
     }
@@ -76,7 +76,7 @@ public:
           stretchBorders(false),
           tileCenter(false),
           composeOverBorder(false),
-          theme(0)
+          theme(nullptr)
     {
         ref(svg);
     }

@@ -676,7 +676,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     connect(installJob, &KJob::result, this, [this, packagePath, structure, posi](KJob *job) {
                         auto fail = [job](const QString &text) {
                             KNotification::event(QStringLiteral("plasmoidInstallationFailed"), i18n("Package Installation Failed"),
-                                                 text, QStringLiteral("dialog-error"), 0, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
+                                                 text, QStringLiteral("dialog-error"), nullptr, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
                         };
 
                         // if the applet is already installed, just add it to the containment

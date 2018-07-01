@@ -179,7 +179,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     }
 
     if (representationLayout) {
-        QObject::disconnect(representationLayout, 0, q, 0);
+        QObject::disconnect(representationLayout, nullptr, q, nullptr);
     }
 
     //Here we can't use the new connect syntax because we can't link against QtQuick layouts

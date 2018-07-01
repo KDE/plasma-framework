@@ -101,7 +101,7 @@ bool PluginTest::loadKPlugin()
         //QObject *o = factory->createPlugin("time");
         //qDebug() << " objec name:" << o->objectName();
         //Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
-        Plasma::DataEngine *time_engine = 0;
+        Plasma::DataEngine *time_engine = nullptr;
 //         Plasma::DataEngine *time_engine = factory->create(this, QVariantList());
         time_engine = factory->create<Plasma::DataEngine>(this, QVariantList());
 

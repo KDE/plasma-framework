@@ -95,7 +95,7 @@ Theme::~Theme()
 {
     if (d == ThemePrivate::globalTheme) {
         if (!ThemePrivate::globalThemeRefCount.deref()) {
-            disconnect(ThemePrivate::globalTheme, 0, this, 0);
+            disconnect(ThemePrivate::globalTheme, nullptr, this, nullptr);
             delete ThemePrivate::globalTheme;
             ThemePrivate::globalTheme = nullptr;
             d = nullptr;
@@ -117,7 +117,7 @@ void Theme::setThemeName(const QString &themeName)
     }
 
     if (d != ThemePrivate::globalTheme) {
-        disconnect(QCoreApplication::instance(), 0, d, 0);
+        disconnect(QCoreApplication::instance(), nullptr, d, nullptr);
         if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
             ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
             ThemePrivate::themes.remove(d->themeName);
