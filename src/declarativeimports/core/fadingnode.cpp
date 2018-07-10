@@ -62,19 +62,19 @@ QList<QByteArray> FadingMaterialShader::attributes() const
 void FadingMaterialShader::updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState)
 {
     if (!oldState || oldState->source != newState->source) {
-        glFuncs->glActiveTexture(GL_TEXTURE1);
+        glFuncs->glActiveTexture(GL_TEXTURE0);
         newState->source->bind();
         QRectF rect = newState->source->normalizedTextureSubRect();
         program()->setUniformValue(m_sourceRectId, QVector4D(rect.x(), rect.y(), rect.width(), rect.height()));
-        // reset the active texture back to 0 after we changed it to something else
-        glFuncs->glActiveTexture(GL_TEXTURE0);
     }
 
     if (!oldState || oldState->target != newState->target) {
-        glFuncs->glActiveTexture(GL_TEXTURE0);
+        glFuncs->glActiveTexture(GL_TEXTURE1);
         newState->target->bind();
         QRectF rect = newState->target->normalizedTextureSubRect();
         program()->setUniformValue(m_targetRectId, QVector4D(rect.x(), rect.y(), rect.width(), rect.height()));
+        // reset the active texture back to 0 after we changed it to something else
+        glFuncs->glActiveTexture(GL_TEXTURE0);
     }
 
     if (!oldState || oldState->progress != newState->progress) {
