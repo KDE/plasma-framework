@@ -181,8 +181,10 @@ if (BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-add_subdirectory(autotests)
-add_subdirectory(tests)
+if (BUILD_TESTING)
+    add_subdirectory(autotests)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(templates)
 
 ################ create PlasmaConfig.cmake and install it ###########################
