@@ -187,7 +187,7 @@ void Containment::restore(KConfigGroup &group)
     restoreContents(group);
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    if (isContainment()) {
+    if (isContainment() && KAuthorized::authorize(QStringLiteral("plasma/containment_actions"))) {
         KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
         cfg = KConfigGroup(&cfg, QString::number(containmentType()));
 
