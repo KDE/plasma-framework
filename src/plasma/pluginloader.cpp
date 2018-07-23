@@ -72,6 +72,16 @@ public:
     static QString s_plasmoidsPluginDir;
     static QString s_servicesPluginDir;
     static QString s_containmentActionsPluginDir;
+
+    // We only use this cache during start of the process to speed up many consecutive calls
+    // After that, we're too afraid to produce race conditions and it's not that time-critical anyway
+    // the 20 seconds here means that the cache is only used within 20sec during startup, after that,
+    // complexity goes up and we'd have to update the cache in order to avoid subtle bugs
+    // just not using the cache is way easier then, since it doesn't make *that* much of a difference,
+    // anyway
+    int maxCacheAge = 20;
+    qint64 pluginCacheAge = 0;
+    QHash<QString, QVector<KPluginMetaData>> pluginCache;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
@@ -180,19 +190,48 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         appletId = ++AppletPrivate::s_maxAppletId;
     }
 
+    const qint64 now = qRound64(QDateTime::currentMSecsSinceEpoch() / 1000.0);
+    bool useRuntimeCache = true;
+    if (now - d->pluginCacheAge > d->maxCacheAge && d->pluginCacheAge != 0) {
+        // cache is old and we're not within a few seconds of startup anymore
+        useRuntimeCache = false;
+        d->pluginCache.clear();
+    }
+
+    if (d->pluginCacheAge == 0) {
+        // Find all the plugins now, but only once
+        d->pluginCacheAge = now;
+
+        auto insertIntoCache = [this](const QString &pluginPath) {
+            KPluginMetaData metadata(pluginPath);
+            if (!metadata.isValid()) {
+                return;
+            }
+
+            d->pluginCache[metadata.pluginId()].append(metadata);
+        };
+
+        KPluginLoader::forEachPlugin(PluginLoaderPrivate::s_plasmoidsPluginDir, insertIntoCache);
+        // COMPAT CODE for applets installed into the toplevel plugins dir by mistake.
+        KPluginLoader::forEachPlugin(QString(), insertIntoCache);
+    }
 
     //if name wasn't a path, pluginName == name
-    const auto pluginName = name.splitRef(QLatin1Char('/')).last();
+    const QString pluginName = name.section(QLatin1Char('/'), -1);
 
-    // Look for C++ plugins first
-    auto filter = [&pluginName](const KPluginMetaData &md) -> bool
-    {
-        return md.pluginId() == pluginName;
-    };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_plasmoidsPluginDir, filter);
-    if (plugins.isEmpty()) {
+    QVector<KPluginMetaData> plugins;
+
+    if (useRuntimeCache) {
+        auto it = d->pluginCache.constFind(pluginName);
+        if (it != d->pluginCache.constEnd()) {
+            plugins = *it;
+        }
+    } else {
+        plugins = KPluginLoader::findPluginsById(PluginLoaderPrivate::s_plasmoidsPluginDir, pluginName);
         // COMPAT CODE for applets installed into the toplevel plugins dir by mistake.
-        plugins = KPluginLoader::findPlugins(QString(), filter);
+        if (plugins.isEmpty()) {
+            plugins = KPluginLoader::findPluginsById(QString(), pluginName);
+        }
     }
 
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
