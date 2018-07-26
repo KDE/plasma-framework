@@ -208,6 +208,10 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
     }
 
     q->addApplet(applet);
+    //mirror behavior of resorecontents: if an applet is not valid, set it immediately to uiReady
+    if (!applet->pluginMetaData().isValid()) {
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+    }
     return applet;
 }
 
