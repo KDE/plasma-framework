@@ -53,6 +53,9 @@ void DialogStateTest::windowState()
                 windowAdded = true;
                 break;
             }
+            if (windowAddedSpy.isEmpty()) {
+                QVERIFY(windowAddedSpy.wait());
+            }
         }
 
         QVERIFY(windowAdded);
