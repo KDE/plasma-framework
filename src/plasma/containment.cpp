@@ -124,12 +124,12 @@ void Containment::init()
     //btw, do we really want to use title() when it's a desktopcontainment?
     QAction *closeApplet = actions()->action(QStringLiteral("remove"));
     if (closeApplet) {
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", title()));
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove %1", title()));
     }
 
     QAction *configAction = actions()->action(QStringLiteral("configure"));
     if (configAction) {
-        configAction->setText(i18nc("%1 is the name of the applet", "%1 Settings", title()));
+        configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", title()));
     }
 
     QAction *appletBrowserAction = actions()->action(QStringLiteral("add widgets"));

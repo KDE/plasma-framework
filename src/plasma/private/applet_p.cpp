@@ -121,7 +121,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
 
     QAction *closeApplet = actions->action(QStringLiteral("remove"));
     if (closeApplet) {
-        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove this %1", q->title()));
+        closeApplet->setText(i18nc("%1 is the name of the applet", "Remove %1", q->title()));
     }
 
     QAction *configAction = actions->action(QStringLiteral("configure"));
