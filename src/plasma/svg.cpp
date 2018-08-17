@@ -693,7 +693,7 @@ void SvgPrivate::colorsChanged()
 }
 
 QHash<QString, SharedSvgRenderer::Ptr> SvgPrivate::s_renderers;
-QWeakPointer<Theme> SvgPrivate::s_systemColorsCache;
+QPointer<Theme> SvgPrivate::s_systemColorsCache;
 qreal SvgPrivate::s_lastScaleFactor = 1.0;
 
 Svg::Svg(QObject *parent)

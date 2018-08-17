@@ -21,7 +21,6 @@
 #define APPLETQUICKITEM_H
 
 #include <QQuickItem>
-#include <QWeakPointer>
 #include <QQmlComponent>
 #include <QQmlEngine>
 #include <QTimer>

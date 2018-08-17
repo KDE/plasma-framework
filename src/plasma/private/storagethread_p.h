@@ -22,7 +22,7 @@
 
 #include <QThread>
 #include <QSqlDatabase>
-#include <QWeakPointer>
+#include <QPointer>
 
 #include "storage_p.h"
 
@@ -43,10 +43,10 @@ public:
     void closeDb();
 
 public Q_SLOTS:
-    void save(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void retrieve(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void deleteEntry(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
-    void expire(QWeakPointer<StorageJob> caller, const QVariantMap &parameters);
+    void save(QPointer<StorageJob> caller, const QVariantMap &parameters);
+    void retrieve(QPointer<StorageJob> caller, const QVariantMap &parameters);
+    void deleteEntry(QPointer<StorageJob> caller, const QVariantMap &parameters);
+    void expire(QPointer<StorageJob> caller, const QVariantMap &parameters);
 
 Q_SIGNALS:
     void newResult(StorageJob *caller, const QVariant &result);

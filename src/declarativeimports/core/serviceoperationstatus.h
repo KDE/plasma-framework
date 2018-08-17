@@ -20,7 +20,7 @@
 #define SERVICEOPERATIONSTATUS_P
 
 #include <QObject>
-#include <QSharedPointer>
+#include <QPointer>
 
 #include "plasma/service.h"
 
@@ -74,7 +74,7 @@ private Q_SLOTS:
     void updateStatus();
 
 private:
-    QWeakPointer<Plasma::Service> m_service;
+    QPointer<Plasma::Service> m_service;
     QString m_operation;
     bool m_enabled;
 };

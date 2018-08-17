@@ -215,7 +215,7 @@ private:
     QHash<KJob *, KIO::DropJob *> m_dropJobs;
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
-    QWeakPointer<QMenu> m_contextMenu;
+    QPointer<QMenu> m_contextMenu;
     int m_wheelDelta;
     bool m_editMode : 1;
     friend class AppletInterface;

@@ -50,7 +50,7 @@ private Q_SLOTS:
 
 private:
     const QUrl m_url;
-    QWeakPointer<KJob> m_job;
+    QPointer<KJob> m_job;
     QByteArray m_data;
 };
 

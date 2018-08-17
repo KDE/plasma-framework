@@ -89,7 +89,7 @@ public:
     Storage *storage;
     QBasicTimer storageTimer;
     QBasicTimer checkUsageTimer;
-    QWeakPointer<QAbstractItemModel> model;
+    QPointer<QAbstractItemModel> model;
     int  storageCount;
     bool dirty : 1;
     bool cached : 1;

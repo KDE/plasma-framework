@@ -23,7 +23,7 @@
 #define TOOLTIPOBJECT_H
 
 #include <QQuickItem>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QtCore/QVariant>
 #include <Plasma/Plasma>
 
@@ -204,7 +204,7 @@ private:
     bool m_tooltipsEnabledGlobally;
     bool m_containsMouse;
     Plasma::Types::Location m_location;
-    QWeakPointer<QQuickItem> m_mainItem;
+    QPointer<QQuickItem> m_mainItem;
     QTimer *m_showTimer;
     QString m_mainText;
     QString m_subText;

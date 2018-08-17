@@ -97,7 +97,7 @@ void StorageThread::initializeDb(StorageJob *caller)
     m_db.transaction();
 }
 
-void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
+void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -200,7 +200,7 @@ void StorageThread::save(QWeakPointer<StorageJob> wcaller, const QVariantMap &pa
     emit newResult(caller, true);
 }
 
-void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
+void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -273,7 +273,7 @@ void StorageThread::retrieve(QWeakPointer<StorageJob> wcaller, const QVariantMap
     emit newResult(caller, result);
 }
 
-void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
+void StorageThread::deleteEntry(QPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {
@@ -303,7 +303,7 @@ void StorageThread::deleteEntry(QWeakPointer<StorageJob> wcaller, const QVariant
     emit newResult(caller, success);
 }
 
-void StorageThread::expire(QWeakPointer<StorageJob> wcaller, const QVariantMap &params)
+void StorageThread::expire(QPointer<StorageJob> wcaller, const QVariantMap &params)
 {
     StorageJob *caller = wcaller.data();
     if (!caller) {

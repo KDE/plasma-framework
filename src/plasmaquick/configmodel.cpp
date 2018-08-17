@@ -53,7 +53,7 @@ public:
 
     ConfigModel *q;
     QList<ConfigCategory *> categories;
-    QWeakPointer<Plasma::Applet> appletInterface;
+    QPointer<Plasma::Applet> appletInterface;
     QHash<QString, KQuickAddons::ConfigModule *> kcms;
 
     void appendCategory(ConfigCategory *c);

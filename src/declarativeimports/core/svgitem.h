@@ -102,7 +102,7 @@ private:
     void updatePolish() override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
-    QWeakPointer<Plasma::Svg> m_svg;
+    QPointer<Plasma::Svg> m_svg;
     QString m_elementID;
     bool m_smooth;
     bool m_textureChanged;

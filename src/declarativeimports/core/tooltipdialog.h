@@ -24,7 +24,6 @@
 
 #include <QTimer>
 #include <QQuickWindow>
-#include <QWeakPointer>
 #include <QtCore/QVariant>
 
 class QQuickItem;

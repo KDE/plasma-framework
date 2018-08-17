@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QRect>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QDeclarativeListProperty>
 #include <QDeclarativeItem>
 
@@ -83,10 +83,10 @@ protected:
 
 private:
     QGraphicsView *m_view;
-    QWeakPointer<QGraphicsObject> m_mainItem;
+    QPointer<QGraphicsObject> m_mainItem;
     DeclarativeItemContainer *m_declarativeItemContainer;
     QGraphicsScene *m_scene;
-    QWeakPointer<QObject> m_rootObject;
+    QPointer<QObject> m_rootObject;
     static uint s_numItems;
     Background *m_background;
 

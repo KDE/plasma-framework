@@ -19,6 +19,7 @@
 
 #include "pluginloader.h"
 
+#include <QPointer>
 #include <QStandardPaths>
 
 #include <QDebug>
@@ -64,7 +65,7 @@ public:
     static QString parentAppConstraint(const QString &parentApp = QString());
 
     static QSet<QString> s_customCategories;
-    QHash<QString, QWeakPointer<PackageStructure> > structures;
+    QHash<QString, QPointer<PackageStructure> > structures;
     bool isDefaultLoader;
 
     static QString s_dataEnginePluginDir;
@@ -144,7 +145,7 @@ PluginLoader::PluginLoader()
 
 PluginLoader::~PluginLoader()
 {
-    typedef QWeakPointer<PackageStructure> pswp;
+    typedef QPointer<PackageStructure> pswp;
     foreach (pswp wp, d->structures) {
         delete wp.data();
     }

@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QMenu>
+#include <QPointer>
 #include <QQmlListProperty>
 #include "qmenuitem.h"
 #include "enums.h"
@@ -189,7 +190,7 @@ private:
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
     DialogStatus::Status m_status;
-    QWeakPointer<QObject> m_visualParent;
+    QPointer<QObject> m_visualParent;
     Plasma::Types::PopupPlacement m_placement;
 };
 

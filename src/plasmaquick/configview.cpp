@@ -64,13 +64,13 @@ public:
     void mainItemLoaded();
 
     ConfigView *q;
-    QWeakPointer <Plasma::Applet> applet;
+    QPointer <Plasma::Applet> applet;
     ConfigModel *configModel;
     ConfigModel *kcmConfigModel;
     Plasma::Corona *corona;
 
     //Attached Layout property of mainItem, if any
-    QWeakPointer <QObject> mainItemLayout;
+    QPointer <QObject> mainItemLayout;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)

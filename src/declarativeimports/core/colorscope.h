@@ -21,7 +21,7 @@
 #define COLORSCOPE_H
 
 #include <QQuickItem>
-#include <QWeakPointer>
+#include <QPointer>
 #include <QtCore/QVariant>
 #include <Plasma/Plasma>
 #include <Plasma/Theme>

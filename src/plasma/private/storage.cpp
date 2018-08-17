@@ -48,7 +48,7 @@ StorageJob::StorageJob(const QString &destination,
     Plasma::StorageThread::self()->start();
     connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob*,QVariant)), this, SLOT(resultSlot(StorageJob*,QVariant)));
     qRegisterMetaType<StorageJob *>();
-    qRegisterMetaType<QWeakPointer<StorageJob> >();
+    qRegisterMetaType<QPointer<StorageJob> >();
 }
 
 StorageJob::~StorageJob()
@@ -80,15 +80,15 @@ void StorageJob::start()
         valueGroup = QStringLiteral("default");
     }
 
-    QWeakPointer<StorageJob> me(this);
+    QPointer<StorageJob> me(this);
     if (operationName() == QLatin1String("save")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "save", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("retrieve")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("delete")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("expire")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QWeakPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else {
         setError(true);
         setResult(false);

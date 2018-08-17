@@ -21,6 +21,7 @@
 #define PLASMA_SVG_P_H
 
 #include <QHash>
+#include <QPointer>
 #include <QSharedData>
 #include <QSvgRenderer>
 #include <QExplicitlySharedDataPointer>
@@ -96,11 +97,11 @@ public:
     void colorsChanged();
 
     static QHash<QString, SharedSvgRenderer::Ptr> s_renderers;
-    static QWeakPointer<Theme> s_systemColorsCache;
+    static QPointer<Theme> s_systemColorsCache;
     static qreal s_lastScaleFactor;
 
     Svg *q;
-    QWeakPointer<Theme> theme;
+    QPointer<Theme> theme;
     QHash<QString, QRectF> localRectCache;
     QHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
