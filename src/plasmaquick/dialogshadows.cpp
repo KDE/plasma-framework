@@ -611,7 +611,7 @@ void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::
     }
 
     QSize marginHint;
-    QMarginsF margins = QMarginsF(1, 1, 1, 1);
+    QMarginsF margins;
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
         marginHint = q->elementSize(QStringLiteral("shadow-hint-top-margin"));
         if (marginHint.isValid()) {
