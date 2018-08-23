@@ -141,6 +141,8 @@ void IconItem::setSource(const QVariant &source)
         return;
     }
 
+    disconnect(KIconLoader::global(), &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
+
     const bool oldValid = isValid();
 
     m_source = source;
@@ -209,6 +211,10 @@ void IconItem::setSource(const QVariant &source)
                     if (m_icon.isNull()) {
                         m_icon = QIcon::fromTheme(sourceString);
                     }
+
+                    //since QIcon is rendered by KIconLoader, watch for when its configuration changes now and reload as needed.
+                    connect(KIconLoader::global(), &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
+
                     m_svgIconName.clear();
                     delete m_svgIcon;
                     m_svgIcon = nullptr;
@@ -541,6 +547,12 @@ void IconItem::animationFinished()
     m_oldIconPixmap = QPixmap();
     m_textureChanged = true;
     update();
+}
+
+void IconItem::iconLoaderIconChanged(int group)
+{
+    Q_UNUSED(group);
+    schedulePixmapUpdate();
 }
 
 void IconItem::schedulePixmapUpdate()

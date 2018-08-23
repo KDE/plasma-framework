@@ -192,6 +192,7 @@ private Q_SLOTS:
     void animationFinished();
     void valueChanged(const QVariant &value);
     void onEnabledChanged();
+    void iconLoaderIconChanged(int group);
 
 private:
     void loadPixmap();
