@@ -43,8 +43,12 @@ QtQuickControlStyle.TextFieldStyle {
      * Also if we are on mobile, make sure we use QtRendering
      * Finally, use QtRendering if we're using a non-integer scale factor to work around
      * https://bugreports.qt.io/browse/QTBUG-67007
+     *
+     * color with an alpha is also broken. https://bugreports.qt.io/browse/QTBUG-70138
+     *
+     * Given we have so many issues, just enable QtRendering for now
      */
-    renderType: !QtQuickControlsPrivate.Settings.isMobile && control.echoMode == TextInput.Normal && Screen.devicePixelRatio % 1 == 0 ? Text.NativeRendering : Text.QtRendering
+    renderType: Text.QtRendering
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
