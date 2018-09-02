@@ -1,0 +1,821 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Dimitris Kardarakos <dimkard@gmail.com>, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2018-08-18 03:45+0200\n"
+"PO-Revision-Date: 2016-09-22 16:19+0200\n"
+"Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
+"Language-Team: Greek <kde-i18n-el@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 2.0\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Αργίες"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Γεγονότα"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Προς υλοποίηση"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Άλλα"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Σήμερα"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Επαναφορά ημερολογίου στη σημερινή μέρα"
+
+#: declarativeimports/calendar/qml/MonthView.qml:236
+#, kde-format
+msgid "Previous Month"
+msgstr "Προηγούμενος μήνας"
+
+#: declarativeimports/calendar/qml/MonthView.qml:237
+#, kde-format
+msgid "Next Month"
+msgstr "Επόμενος μήνας"
+
+#: declarativeimports/calendar/qml/MonthView.qml:264
+#, kde-format
+msgid "Previous Year"
+msgstr "Προηγούμενο έτος"
+
+#: declarativeimports/calendar/qml/MonthView.qml:265
+#, kde-format
+msgid "Next Year"
+msgstr "Επόμενο έτος"
+
+#: declarativeimports/calendar/qml/MonthView.qml:297
+#, kde-format
+msgid "Previous Decade"
+msgstr "Προηγούμενη δεκαετία"
+
+#: declarativeimports/calendar/qml/MonthView.qml:298
+#, kde-format
+msgid "Next Decade"
+msgstr "Επόμενη δεκαετία"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr "Εντάξει"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+#: plasma/applet.cpp:355
+#, kde-format
+msgid "Unknown"
+msgstr "Άγνωστο"
+
+#: plasma/applet.cpp:671
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Ενεργοποίηση γραφικού συστατικού %1"
+
+#: plasma/containment.cpp:127 plasma/private/applet_p.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "Remove this %1"
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Αφαίρεση του %1"
+
+#: plasma/containment.cpp:132 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr ""
+
+#: plasma/corona.cpp:371 plasma/corona.cpp:444
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Κλείδωμα γραφικών συστατικών"
+
+#: plasma/corona.cpp:371
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Ξεκλείδωμα γραφικών συστατικών"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Δημιουργία ή όχι λανθάνουσας μνήμης δίσκου για το θέμα."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Το μέγιστο μέγεθος της λανθάνουσας μνήμης του Θέματος στον δίσκο, σε "
+"kilobytes. Σημειώστε πως αυτά τα αρχεία έχουν μεγάλο βαθμό διασποράς, "
+"επομένως ενδέχεται να μη χρησιμοποιηθεί το μέγιστο μέγεθος. Συνεπώς, ο "
+"ορισμός ενός μεγάλου μεγέθους είναι συχνά μια αρκετά ασφαλής επιλογή."
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "Αρχεία δεδομένων"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Εκτελέσιμα σενάρια"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Περιγραφές υπηρεσιών"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "Μεταφράσεις"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "Κύριο αρχείο σεναρίου"
+
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr "Έλεγχοι"
+
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "Εικόνες"
+
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "Εικόνες με θέμα"
+
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Ορισμοί διαμόρφωσης"
+
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "Περιβάλλον χρήστη"
+
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr "Στιγμιότυπο οθόνης"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Εικόνες για διαλόγους"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Φόντο γενικού διαλόγου"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Θέμα για τον διάλογο αποσύνδεσης"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Πακέτα ταπετσαριών"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "Εικόνες για γραφικά συστατικά"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Εικόνα φόντου για γραφικά συστατικά"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "Πρόσοψη αναλογικού ρολογιού"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "Εικόνα φόντου για πίνακες"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Φόντο για γραφικά συστατικά σχεδίασης"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Εικόνα φόντου για υποδείξεις"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Αδιαφανείς εικόνες για διαλόγους"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Αδιαφανές φόντο γενικού διαλόγου"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Αδιαφανές θέμα για τον διάλογο αποσύνδεσης"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Αδιαφανείς εικόνες για γραφικά συστατικά"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Αδιαφανής εικόνα φόντου για πίνακες"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Αδιαφανής εικόνα φόντου για υποδείξεις"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Αρχείο διαμόρφωσης KColorScheme"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr ""
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Αρχείο διαμόρφωσης XML"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Προσαρμοσμένη επέκταση για συμπαγείς μικροεφαρμογές"
+
+#: plasma/pluginloader.cpp:101
+#, kde-format
+msgid "Accessibility"
+msgstr "Προσβασιμότητα"
+
+#: plasma/pluginloader.cpp:102
+#, kde-format
+msgid "Application Launchers"
+msgstr "Εκτελεστές εφαρμογών"
+
+#: plasma/pluginloader.cpp:103
+#, kde-format
+msgid "Astronomy"
+msgstr "Αστρονομία"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Date and Time"
+msgstr "Ημερομηνία και ώρα"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Development Tools"
+msgstr "Εργαλεία ανάπτυξης"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Education"
+msgstr "Εκπαίδευση"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Environment and Weather"
+msgstr "Περιβάλλον και καιρός"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Examples"
+msgstr "Παραδείγματα"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "File System"
+msgstr "Σύστημα αρχείων"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Fun and Games"
+msgstr "Διασκέδαση και παιχνίδια"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Graphics"
+msgstr "Γραφικά"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Mapping"
+msgstr ""
+
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Διάφορα"
+
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Multimedia"
+msgstr "Πολυμέσα"
+
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Online Services"
+msgstr "Διαδικτυακές υπηρεσίες"
+
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Productivity"
+msgstr "Παραγωγικότητα"
+
+#: plasma/pluginloader.cpp:118
+#, kde-format
+msgid "System Information"
+msgstr "Πληροφορίες συστήματος"
+
+#: plasma/pluginloader.cpp:119
+#, kde-format
+msgid "Utilities"
+msgstr "Εργαλεία"
+
+#: plasma/pluginloader.cpp:120
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "Παράθυρα και εργασίες"
+
+#: plasma/pluginloader.cpp:121
+#, kde-format
+msgid "Clipboard"
+msgstr "Πρόχειρο"
+
+#: plasma/pluginloader.cpp:122
+#, kde-format
+msgid "Tasks"
+msgstr "Εργασίες"
+
+#: plasma/pluginloader.cpp:651 plasma/pluginloader.cpp:652
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Διάφορα"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"Το γραφικό συστατικό %1 δεν καθορίζει ποιο ScriptEngine θα χρησιμοποιηθεί."
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr ""
+"Αδυναμία ανοίγματος του πακέτου %1 που απαιτείται για το γραφικό συστατικό "
+"%2."
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Αδυναμία δημιουργίας ενός ScriptEngine %1 για το γραφικό συστατικό %2."
+
+#: plasma/private/applet_p.cpp:187
+#, kde-format
+msgid "Alternatives..."
+msgstr "Εναλλακτικά..."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Widget Removed"
+msgstr "Το γραφικό συστατικό αφαιρέθηκε"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Το γραφικό συστατικό \"%1\" αφαιρέθηκε."
+
+#: plasma/private/applet_p.cpp:280
+#, kde-format
+msgid "Panel Removed"
+msgstr "Ο πίνακας αφαιρέθηκε"
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Ένας πίνακας αφαιρέθηκε."
+
+#: plasma/private/applet_p.cpp:284
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Η επιφάνεια εργασίας αφαιρέθηκε"
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Μια επιφάνεια εργασίας αφαιρέθηκε."
+
+#: plasma/private/applet_p.cpp:288
+#, kde-format
+msgid "Undo"
+msgstr "Αναίρεση"
+
+#: plasma/private/applet_p.cpp:378
+#, kde-format
+msgid "Widget Settings"
+msgstr "Ρυθμίσεις γραφικών συστατικών"
+
+#: plasma/private/applet_p.cpp:385
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Αφαίρεση αυτού του γραφικού συστατικού"
+
+#: plasma/private/applet_p.cpp:392
+#: plasma/private/associatedapplicationmanager.cpp:82
+#: plasma/private/associatedapplicationmanager.cpp:141
+#: plasma/private/associatedapplicationmanager.cpp:183
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Εκτέλεση της συσχετισμένης εφαρμογής"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Αποτυχία αρχικοποίησης σεναρίου"
+
+#: plasma/private/associatedapplicationmanager.cpp:79
+#: plasma/private/associatedapplicationmanager.cpp:180
+#, kde-format
+msgid "Open with %1"
+msgstr "Άνοιγμα με %1"
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Αφαίρεση αυτού του πίνακα"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Αφαίρεση αυτής της δραστηριότητας"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "Ρυθμίσεις δραστηριοτήτων"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Προσθήκη γραφικών συστατικών..."
+
+#: plasma/private/containment_p.cpp:207
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Αδυναμία εύρεσης του απαιτούμενου συστατικού: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Η κοινή χρήση ενός γραφικού συστατικού στο δίκτυο σας επιτρέπει την πρόσβαση "
+"σε αυτό από έναν άλλο υπολογιστή σαν απομακρυσμένο χειριστήριο."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Διαμοιρασμός αυτού του γραφικού συστατικού στο δίκτυο"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Να επιτρέπεται ελεύθερα σε όλους η πρόσβαση σε αυτό το συστατικό"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Άκυρη (null) υπηρεσία, αδυναμία εκτέλεσης οποιασδήποτε ενέργειας."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Σφάλμα κατά τη φόρτωση αρχείου QML: %1"
+
+#: plasmaquick/appletquickitem.cpp:606
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Σφάλμα φόρτωσης μικροεφαρμογής: δεν υπάρχει πακέτο.  %1"
+
+#: plasmaquick/configview.cpp:108
+#, kde-format
+msgid "%1 Settings"
+msgstr "Ρυθμίσεις του %1"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "Προκαθορισμένες ρυθμίσεις για θέμα, κλπ."
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "Θέμα χρωμάτων που θα χρησιμοποιηθεί στις εφαρμογές."
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Preview Images"
+msgstr "Προεπισκόπηση εικόνων"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "Προεπισκόπηση για τον διαχειριστή εισόδου"
+
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "Προεπισκόπηση για το κλείδωμα οθόνης"
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "Προεπισκόπηση για την εναλλαγή χρήστη"
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Προεπισκόπηση για την εναλλαγή εικονικής επιφάνειας εργασίας"
+
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "Προεπισκόπηση για την  οθόνη εκκίνησης"
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "Προεπισκόπηση για τον KRunner"
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "Προεπισκόπηση για τις διακοσμήσεις παραθύρου"
+
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "Προεπισκόπηση για την εναλλαγή παραθύρων"
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr "Διαχειριστής εισόδου"
+
+#: plasmaquick/private/packages.cpp:53
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "Κύριο σενάριο για τον διαχειριστή εισόδου"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr "Διάλογος αποσύνδεσης"
+
+#: plasmaquick/private/packages.cpp:56
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "Κύριο σενάριο για τον διάλογο αποσύνδεσης"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr "Κλείδωμα οθόνης"
+
+#: plasmaquick/private/packages.cpp:59
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "Κύριο σενάριο για το κλείδωμα οθόνης"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "Γραφικό περιβάλλον για γρήγορη εναλλαγή χρήστη"
+
+#: plasmaquick/private/packages.cpp:62
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "Κύριο σενάριο για την εναλλαγή χρήστη"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "Εναλλαγή εικονικής επιφάνειας εργασίας"
+
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Κύριο σενάριο για την εναλλαγή εικονικής επιφάνειας εργασίας"
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "Εμφάνιση ειδοποιήσεων στην οθόνη"
+
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Κύριο σενάριο για την εμφάνιση ειδοποιήσεων στην οθόνη"
+
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr "Οθόνη εκκίνησης"
+
+#: plasmaquick/private/packages.cpp:71
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "Κύριο σενάριο για την οθόνη εκκίνησης"
+
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr "KRunner UI"
+
+#: plasmaquick/private/packages.cpp:74
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "Κύριο σενάριο KRunner"
+
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr "Διακοσμήσεις παραθύρων"
+
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "Κύριο σενάριο για τις διακοσμήσεις παραθύρων"
+
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr "Πρόγραμμα εναλλαγής παραθύρων"
+
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "Κύριο σενάριο για την εναλλαγή παραθύρων"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:493
+#, kde-format
+msgid "Content dropped"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:497
+#, kde-format
+msgid "Fetching file type..."
+msgstr "Ανάκτηση τύπου αρχείου..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:660
+#, kde-format
+msgid "Plasma Package"
+msgstr "Πακέτο Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:658
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:664
+#, kde-format
+msgid "Install"
+msgstr "Εγκατάσταση"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:678
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Η εγκατάσταση του πακέτου απέτυχε"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:698
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:708
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:710
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:790
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:793
+#, kde-format
+msgid "Widgets"
+msgstr "Γραφικά συστατικά"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:732
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:791
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:797
+#, fuzzy, kde-format
+#| msgid "Icon"
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Εικονίδιο"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:748
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:750
+#, kde-format
+msgid "Wallpaper"
+msgstr "Ταπετσαρία"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:761
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:1150
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "Επιλογές του %1"
