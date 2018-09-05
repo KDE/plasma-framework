@@ -103,7 +103,7 @@ class Calendar : public QObject
     Q_PROPERTY(int year READ year NOTIFY yearChanged)
 
     /**
-     * If an error occured, it will be set in this string as human readable text.
+     * If an error occurred, it will be set in this string as human readable text.
      */
     Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
 

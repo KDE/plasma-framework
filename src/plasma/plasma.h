@@ -113,7 +113,7 @@ public:
         ConfigureAction = 100,   /**< The Action will make some kind of configuration ui to appear */
         ControlAction = 200,  /**< Generic control, similar to ConfigureAction TODO: better doc */
         MiscAction = 300,  /**< A type of action that doesn't fit in the oher categories */
-        DestructiveAction = 400,  /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separed from other actions */
+        DestructiveAction = 400,  /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separated from other actions */
         UserAction = DestructiveAction + 1000 /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
     };
     Q_ENUM(ActionType)

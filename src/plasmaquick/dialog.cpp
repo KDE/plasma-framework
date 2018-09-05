@@ -947,7 +947,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     QRect avail = item->window()->screen()->availableGeometry();
 
     if (outsideParentWindow && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
-        //make the panel look it's inside the panel, in order to not make it look cutted
+        //make the panel look it's inside the panel, in order to not make it look cut
         switch (d->location) {
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:

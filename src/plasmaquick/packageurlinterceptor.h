@@ -78,7 +78,7 @@ public:
                 extension == QStringLiteral("png") || extension == QStringLiteral("gif") ||
                 extension == QStringLiteral("jpg") || extension == QStringLiteral("jpeg")) {
             return QByteArray("images");
-            //FIXME: are those necessary? are they *always* catched by type?
+            //FIXME: are those necessary? are they *always* caught by type?
         } else if (extension == QStringLiteral("js")) {
             return QByteArray("code");
         } else if (extension == QStringLiteral("qml") || extension == QStringLiteral("qmldir")) {

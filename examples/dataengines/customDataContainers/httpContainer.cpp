@@ -91,7 +91,7 @@ void HttpContainer::fetchFinished(KJob *job)
         // data has been updated. This will cause visualizations to be updated.
         checkForUpdate();
 
-        // Clean up behind ourselves so there isn't unecessary memory usage
+        // Clean up behind ourselves so there isn't unnecessary memory usage
         m_data.clear();
     }
 }

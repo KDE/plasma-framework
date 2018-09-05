@@ -28,7 +28,7 @@ import QtQml 2.0
  * For standard item models, actions are created using the following model role names or properties
  *  display - a string contains the action name
  *  decoration - an icon to display
- *  separator - boolean that will add a seperator in the list
+ *  separator - boolean that will add a separator in the list
  *
  *
  *

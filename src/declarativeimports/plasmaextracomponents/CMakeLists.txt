@@ -31,7 +31,7 @@ ecm_generate_qmltypes(org.kde.plasma.extras 2.0 DESTINATION ${KDE_INSTALL_QMLDIR
 # The platform specific stuff, overwrites a copy of the desktop one
 # it does install some files on top of the old ones, has to be done
 # file by file since if some component from the generic set is more
-# recent than the specifc ones, it wouldn't be overwritten
+# recent than the specific ones, it wouldn't be overwritten
 
 #install(TARGETS plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 #install(FILES qml/qmldir DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)

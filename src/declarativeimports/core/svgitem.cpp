@@ -137,7 +137,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         return nullptr;
     }
 
-    //this is more than just an optimisation, uploading a null image to QSGAtlasTexture causes a crash
+    //this is more than just an optimization, uploading a null image to QSGAtlasTexture causes a crash
     if (width() == 0.0 || height() == 0.0) {
         delete oldNode;
         return nullptr;

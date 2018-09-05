@@ -402,7 +402,7 @@ public:
     bool fromCurrentTheme() const;
 
     /**
-     * Sets wether the Svg uses the global system theme for its colors or
+     * Sets whether the Svg uses the global system theme for its colors or
      * the Plasma theme. Default is False.
      *
      * @since 5.16

@@ -149,7 +149,7 @@ void Calendar::setWeeks(int weeks)
 
 int Calendar::firstDayOfWeek() const
 {
-    // QML has Sunday as 0, so we need to accomodate here
+    // QML has Sunday as 0, so we need to accommodate here
     return m_firstDayOfWeek == 7 ? 0 : m_firstDayOfWeek;
 }
 
@@ -160,7 +160,7 @@ void Calendar::setFirstDayOfWeek(int day)
     }
 
     if (m_firstDayOfWeek != day) {
-        // QML has Sunday as 0, so we need to accomodate here
+        // QML has Sunday as 0, so we need to accommodate here
         // for QDate functions which have Sunday as 7
         if (day == 0) {
             m_firstDayOfWeek = 7;

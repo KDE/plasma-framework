@@ -35,7 +35,7 @@ Item {
     signal next
 
     signal activated(int index, var date, var item)
-    // so it forwards it to the delegate which then emits activated with all the neccessary data
+    // so it forwards it to the delegate which then emits activated with all the necessary data
     signal activateHighlightedItem
 
     readonly property int gridColumns: showWeekNumbers ? calendarGrid.columns + 1 : calendarGrid.columns

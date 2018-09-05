@@ -685,7 +685,7 @@ void AppletQuickItem::init()
                     const int preloadWeight = d->preloadWeight();
                     qCInfo(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
 
-                    //don't preload applets less then a certain weigth
+                    //don't preload applets less then a certain weight
                     if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
                         //spread the creation over a random delay to make it look
                         //plasma started already, and load the popup in the background

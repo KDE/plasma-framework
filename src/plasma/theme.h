@@ -314,7 +314,7 @@ public:
     void releaseRectsCache(const QString &image);
 
     /**
-     * @return plugin info for this theme, with informations such as
+     * @return plugin info for this theme, with information such as
      * name, description, author, website etc
      * @since 5.0
      */
