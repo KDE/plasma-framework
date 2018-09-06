@@ -46,8 +46,9 @@ T.Slider {
         x: control.leftPadding + (horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
 
-        width: firstHandle.naturalSize.width
-        height: firstHandle.naturalSize.height
+        implicitWidth: firstHandle.naturalSize.width
+        implicitHeight: firstHandle.naturalSize.height
+
         Private.RoundShadow {
             anchors.fill: parent
             imagePath: "widgets/slider"
