@@ -88,4 +88,8 @@ QtObject {
             break;
         }
     }
+    function __propagateTextColor(object, color) {}
+    function __propagateBackgroundColor(object, color) {}
+    function __propagatePrimaryColor(object, color) {}
+    function __propagateAccentColor(object, color) {}
 }
