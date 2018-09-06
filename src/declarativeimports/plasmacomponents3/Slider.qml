@@ -25,14 +25,10 @@ import "private" as Private
 T.Slider {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-        Math.max(handle ? handle.implicitWidth : 0,
-                 handle ? handle.implicitWidth : 0) + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-        Math.max(handle ? handle.implicitHeight : 0,
-                 handle ? handle.implicitHeight : 0) + topPadding + bottomPadding)
+    implicitWidth: control.orientation === Qt.Horizontal ? units.gridUnit * 12 : units.gridUnit * 1.6
+    implicitHeight: control.orientation === Qt.Horizontal ? units.gridUnit * 1.6 : units.gridUnit * 12
 
-    padding: units.gridUnit
+
     snapMode: T.Slider.SnapOnRelease
 
     PlasmaCore.Svg {
@@ -81,8 +77,8 @@ T.Slider {
             prefix: "groove-highlight"
             x: parent.horizontal ? 0 : (parent.width - width) / 2
             y: parent.horizontal ? (parent.height - height) / 2 : control.visualPosition * parent.height
-            width: parent.horizontal ? control.position * parent.width : parent.width
-            height: parent.horizontal ? parent.height : control.position * parent.height
+            width: Math.max(margins.left + margins.right, parent.horizontal ? control.position * parent.width : parent.width)
+            height: Math.max(margins.top + margins.bottom, parent.horizontal ? parent.height : control.position * parent.height)
         }
 
         Repeater {
