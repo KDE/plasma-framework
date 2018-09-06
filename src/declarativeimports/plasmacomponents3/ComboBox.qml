@@ -92,6 +92,23 @@ T.ComboBox {
                 }
             }
         }
+
+        MouseArea {
+            anchors {
+                fill: parent
+                leftMargin: control.leftPadding
+                rightMargin: control.rightPadding
+            }
+            acceptedButtons: Qt.NoButton
+            onWheel: {
+                if (wheel.pixelDelta.y < 0 || wheel.angleDelta.y < 0) {
+                    control.currentIndex = Math.min(control.currentIndex + 1, delegateModel.count -1);
+                } else {
+                    control.currentIndex = Math.max(control.currentIndex - 1, 0);
+                }
+                control.activated(control.currentIndex);
+            }
+        }
     }
 
     popup: T.Popup {
