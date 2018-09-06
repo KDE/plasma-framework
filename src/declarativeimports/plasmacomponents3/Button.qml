@@ -18,6 +18,7 @@
  */
 
 import QtQuick 2.6
+import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
@@ -36,14 +37,23 @@ T.Button {
 
     hoverEnabled: true //Qt.styleHints.useHoverEffects TODO: how to make this work in 5.7?
 
-    contentItem: Label {
-        text: control.text
-        font: control.font
-        opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-        color: theme.buttonTextColor
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+    contentItem: RowLayout {
+        PlasmaCore.IconItem {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: source.length > 0
+            source: control.icon ? (control.icon.name || control.icon.source) : ""
+        }
+        Label {
+            visible: text.length > 0
+            text: control.text
+            font: control.font
+            opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
+            color: theme.buttonTextColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
     }
 
     background: Item {
