@@ -25,14 +25,8 @@ import "private" as Private
 T.RangeSlider {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-        Math.max(first.handle ? first.handle.implicitWidth : 0,
-                 second.handle ? second.handle.implicitWidth : 0) + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0,
-        Math.max(first.handle ? first.handle.implicitHeight : 0,
-                 second.handle ? second.handle.implicitHeight : 0) + topPadding + bottomPadding)
-
-    padding: units.gridUnit
+    implicitWidth: control.orientation === Qt.Horizontal ? units.gridUnit * 12 : units.gridUnit * 1.6
+    implicitHeight: control.orientation === Qt.Horizontal ? units.gridUnit * 1.6 : units.gridUnit * 12
 
     PlasmaCore.Svg {
         id: grooveSvg
@@ -45,10 +39,11 @@ T.RangeSlider {
         x: control.leftPadding + (horizontal ? control.first.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.first.visualPosition * (control.availableHeight - height))
 
-        width: firstHandle.naturalSize.width
-        height: firstHandle.naturalSize.height
+        width: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").width : firstHandle.width
+        height: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").height : firstHandle.height
+
         Private.RoundShadow {
-            anchors.fill: parent
+            anchors.fill: firstHandle
             imagePath: "widgets/slider"
             focusElement: parent.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
             hoverElement: parent.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
@@ -57,7 +52,9 @@ T.RangeSlider {
         }
         PlasmaCore.SvgItem {
             id: firstHandle
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: naturalSize.width
+            height: naturalSize.height
             svg: grooveSvg
             elementId: parent.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
         }
@@ -68,10 +65,11 @@ T.RangeSlider {
         x: control.leftPadding + (horizontal ? control.second.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.second.visualPosition * (control.availableHeight - height))
 
-        width: secondHandle.naturalSize.width
-        height: secondHandle.naturalSize.height
+        width: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").width : secondHandle.width
+        height: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").height : secondHandle.height
+
         Private.RoundShadow {
-            anchors.fill: parent
+            anchors.fill: secondHandle
             imagePath: "widgets/slider"
             focusElement: parent.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
             hoverElement: parent.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
@@ -80,7 +78,9 @@ T.RangeSlider {
         }
         PlasmaCore.SvgItem {
             id: secondHandle
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: naturalSize.width
+            height: naturalSize.height
             svg: grooveSvg
             elementId: parent.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
         }
@@ -89,6 +89,7 @@ T.RangeSlider {
     background: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/slider"
         prefix: "groove"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
         readonly property bool horizontal: control.orientation === Qt.Horizontal
         implicitWidth: horizontal ? units.gridUnit * 8 : margins.left + margins.right
         implicitHeight: horizontal ? margins.top + margins.bottom : units.gridUnit * 8
@@ -96,10 +97,12 @@ T.RangeSlider {
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent
         scale: horizontal && control.mirrored ? -1 : 1
+        opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             x: parent.horizontal ? control.first.position * parent.width : 0
             y: parent.horizontal ? 0 : control.second.visualPosition * parent.height
             width: parent.horizontal ? control.second.position * parent.width - control.first.position * parent.width : parent.width
