@@ -42,11 +42,11 @@ T.Slider {
         x: control.leftPadding + (horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2)
         y: control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height))
 
-        implicitWidth: firstHandle.naturalSize.width
-        implicitHeight: firstHandle.naturalSize.height
+        width: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").width : firstHandle.width
+        height: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").height : firstHandle.height
 
         Private.RoundShadow {
-            anchors.fill: parent
+            anchors.fill: firstHandle
             imagePath: "widgets/slider"
             focusElement: parent.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
             hoverElement: parent.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
@@ -55,7 +55,9 @@ T.Slider {
         }
         PlasmaCore.SvgItem {
             id: firstHandle
-            anchors.fill: parent
+            anchors.centerIn: parent
+            width: naturalSize.width
+            height: naturalSize.height
             svg: grooveSvg
             elementId: parent.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
         }
@@ -72,13 +74,14 @@ T.Slider {
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent
         scale: horizontal && control.mirrored ? -1 : 1
+        opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             colorGroup: PlasmaCore.ColorScope.colorGroup
             x: parent.horizontal ? 0 : (parent.width - width) / 2
-            y: parent.horizontal ? (parent.height - height) / 2 : control.visualPosition * parent.height
+            y: parent.horizontal ? (parent.height - height) / 2 : parent.height - height
             width: Math.max(margins.left + margins.right,
                             parent.horizontal 
                             ? control.visualPosition * (parent.width - control.handle.width) + control.handle.width/2
@@ -86,7 +89,7 @@ T.Slider {
             height: Math.max(margins.top + margins.bottom,
                              parent.horizontal
                              ? parent.height
-                             : control.visualPosition * (parent.width - control.handle.width) + control.handle.height/2)
+                             : parent.height - control.visualPosition * (parent.height + control.handle.height) + control.handle.height/2)
         }
 
         Repeater {
