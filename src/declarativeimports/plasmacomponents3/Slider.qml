@@ -64,6 +64,7 @@ T.Slider {
     background: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/slider"
         prefix: "groove"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
         readonly property bool horizontal: control.orientation === Qt.Horizontal
         implicitWidth: horizontal ? units.gridUnit * 8 : margins.left + margins.right
         implicitHeight: horizontal ? margins.top + margins.bottom : units.gridUnit * 8
@@ -75,6 +76,7 @@ T.Slider {
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             x: parent.horizontal ? 0 : (parent.width - width) / 2
             y: parent.horizontal ? (parent.height - height) / 2 : control.visualPosition * parent.height
             width: Math.max(margins.left + margins.right, parent.horizontal ? control.position * parent.width : parent.width)
