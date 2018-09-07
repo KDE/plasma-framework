@@ -79,8 +79,14 @@ T.Slider {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             x: parent.horizontal ? 0 : (parent.width - width) / 2
             y: parent.horizontal ? (parent.height - height) / 2 : control.visualPosition * parent.height
-            width: Math.max(margins.left + margins.right, parent.horizontal ? control.position * parent.width : parent.width)
-            height: Math.max(margins.top + margins.bottom, parent.horizontal ? parent.height : control.position * parent.height)
+            width: Math.max(margins.left + margins.right,
+                            parent.horizontal 
+                            ? control.visualPosition * (parent.width - control.handle.width) + control.handle.width/2
+                            : parent.width)
+            height: Math.max(margins.top + margins.bottom,
+                             parent.horizontal
+                             ? parent.height
+                             : control.visualPosition * (parent.width - control.handle.width) + control.handle.height/2)
         }
 
         Repeater {
