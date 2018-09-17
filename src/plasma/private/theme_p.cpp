@@ -219,7 +219,8 @@ bool ThemePrivate::useCache()
             QDir cacheDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
             cacheDir.setNameFilters(QStringList({cacheFileBase}));
 
-            for (const QFileInfo &file : cacheDir.entryInfoList()) {
+            const auto files = cacheDir.entryInfoList();
+            for (const QFileInfo &file : files) {
                 if (currentCacheFileName.isEmpty() ||
                         !file.absoluteFilePath().endsWith(currentCacheFileName)) {
                     QFile::remove(file.absoluteFilePath());
@@ -268,7 +269,8 @@ bool ThemePrivate::useCache()
         QDir cacheDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
         cacheDir.setNameFilters(QStringList({svgElementsFileNameBase + QLatin1Char('*')}));
 
-        for (const QFileInfo &file : cacheDir.entryInfoList()) {
+        const auto files = cacheDir.entryInfoList();
+        for (const QFileInfo &file : files) {
             if (!file.absoluteFilePath().endsWith(svgElementsFileName)) {
                 QFile::remove(file.absoluteFilePath());
             }
