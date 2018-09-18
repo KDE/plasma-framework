@@ -102,6 +102,7 @@ void GenericPackage::initPackage(KPackage::Package *package)
     mimetypes << QStringLiteral("text/plain");
     package->setMimeTypes("scripts", mimetypes);
     package->addFileDefinition("screenshot", QStringLiteral("screenshot.png"), i18n("Screenshot"));
+    package->addFileDefinition("preview", QStringLiteral("preview.svg"), i18n("SVG scalable preview"));
 
     package->addDirectoryDefinition("translations", QStringLiteral("locale"), i18n("Translations"));
 }
