@@ -60,6 +60,7 @@ T.Button {
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 1.6
         implicitHeight: units.gridUnit * 1.6
+        opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.Svg {
             id: buttonSvg
