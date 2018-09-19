@@ -163,8 +163,14 @@ void IconItem::setSource(const QVariant &source)
         }
 
         if (!localFile.isEmpty()) {
-            m_icon = QIcon();
-            m_imageIcon = QImage(localFile);
+            if (sourceString.endsWith(QLatin1String(".svg")) ||
+                sourceString.endsWith(QLatin1String(".svgz"))) {
+                m_icon = QIcon(localFile);
+                m_imageIcon = QImage();
+            } else {
+                m_icon = QIcon(localFile);
+                m_imageIcon = QImage();
+            }
             m_svgIconName.clear();
             delete m_svgIcon;
             m_svgIcon = nullptr;
