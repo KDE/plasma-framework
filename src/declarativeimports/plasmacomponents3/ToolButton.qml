@@ -44,6 +44,7 @@ T.ToolButton {
         PlasmaCore.IconItem {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }

@@ -21,6 +21,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
 T.Button {
@@ -35,12 +36,13 @@ T.Button {
     rightPadding: surfaceNormal.margins.right
     bottomPadding: surfaceNormal.margins.bottom
 
-    hoverEnabled: true //Qt.styleHints.useHoverEffects TODO: how to make this work in 5.7?
+    hoverEnabled: !Kirigami.Settings.isMobile
 
     contentItem: RowLayout {
         PlasmaCore.IconItem {
             Layout.fillWidth: true
             Layout.fillHeight: true
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
