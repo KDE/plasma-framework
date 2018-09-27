@@ -158,6 +158,7 @@ void ViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
             configView->hide();
             configView->deleteLater();
         } else {
+            configView->raise();
             configView->requestActivate();
             return;
         }

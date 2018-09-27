@@ -173,6 +173,7 @@ void ContainmentViewPrivate::showConfigurationInterface(Plasma::Applet *applet)
             configContainmentView->hide();
             configContainmentView->deleteLater();
         } else {
+            configContainmentView->raise();
             configContainmentView->requestActivate();
             return;
         }
