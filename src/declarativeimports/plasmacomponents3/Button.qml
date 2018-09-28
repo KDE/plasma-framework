@@ -36,7 +36,7 @@ T.Button {
     rightPadding: surfaceNormal.margins.right
     bottomPadding: surfaceNormal.margins.bottom
 
-    hoverEnabled: !Kirigami.Settings.isMobile
+    hoverEnabled: !Kirigami.Settings.tabletMode
 
     contentItem: RowLayout {
         PlasmaCore.IconItem {

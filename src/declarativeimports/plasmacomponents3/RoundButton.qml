@@ -21,24 +21,29 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
-T.Button {
+T.RoundButton {
     id: control
 
     implicitWidth: Math.max(background.implicitWidth,
                             contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
 
-    leftPadding: surfaceNormal.margins.left
-    topPadding: surfaceNormal.margins.top
-    rightPadding: surfaceNormal.margins.right
-    bottomPadding: surfaceNormal.margins.bottom
+    leftPadding: text.length > 0 ? surfaceNormal.margins.left : contentItem.extraSpace
+    topPadding: text.length > 0 ? surfaceNormal.margins.top : contentItem.extraSpace
+    rightPadding: text.length > 0 ? surfaceNormal.margins.right : contentItem.extraSpace
+    bottomPadding: text.length > 0 ? surfaceNormal.margins.bottom : contentItem.extraSpace
 
-    hoverEnabled: true //Qt.styleHints.useHoverEffects TODO: how to make this work in 5.7?
+    hoverEnabled: !Kirigami.Settings.tabletMode
 
     contentItem: RowLayout {
+        // This is the spacing which will make the icon a square inscribed in the circle with an extra smallspacing of margins
+        readonly property int extraSpace: width/2 - width/2*Math.sqrt(2)/2 + units.smallSpacing
         PlasmaCore.IconItem {
+            Layout.preferredWidth: units.iconSizes.smallMedium
+            Layout.preferredHeight: units.iconSizes.smallMedium
             Layout.fillWidth: true
             Layout.fillHeight: true
             visible: source.length > 0
