@@ -421,11 +421,11 @@ FrameSvgPrivate::~FrameSvgPrivate()
 #ifndef NDEBUG
             // qCDebug(LOG_PLASMA) << "          " << it2.key() << rc << it2.value();
 #endif
-            foreach (FrameSvg *data, it2.value()->references.keys()) {
 #ifndef NDEBUG
+            foreach (FrameSvg *data, it2.value()->references.keys()) {
                 qCDebug(LOG_PLASMA) << "            " << (void *)data << it2.value()->references[data];
-#endif
             }
+#endif
             shares += rc - 1;
         }
     }
