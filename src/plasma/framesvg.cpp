@@ -958,16 +958,16 @@ QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const
 
 void FrameData::ref(FrameSvg *svg)
 {
-    references[svg] = references[svg] + 1;
+    references[svg]++;
     //qCDebug(LOG_PLASMA) << this << svg << references[svg];
 }
 
 bool FrameData::deref(FrameSvg *svg)
 {
-    references[svg] = references[svg] - 1;
-    //qCDebug(LOG_PLASMA) << this << svg << references[svg];
-    if (references[svg] < 1) {
-        references.remove(svg);
+    auto it = references.find(svg);
+    (*it)--;
+    if (*it < 1) {
+        references.erase(it);
     }
 
     return references.isEmpty();
