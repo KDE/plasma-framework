@@ -39,7 +39,6 @@ Comment[zh_CN]=展示如何使用数据引擎内嵌的模型的样例小部件
 Comment[zh_TW]=顯示如何使用嵌入於資料引擎中的模型的範例小程式
 Keywords=
 Name=Dataengine model
-Name[ast]=Modelu de motor de datos
 Name[ca]=Model de «Dataengine»
 Name[ca@valencia]=Model de «Dataengine»
 Name[da]=Datamotor-model

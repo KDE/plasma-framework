@@ -42,7 +42,6 @@ Comment[x-test]=xxReport a bug in Plasmaxx
 Comment[zh_CN]=报告 Plasma 的错误
 Comment[zh_TW]=在 Plasma 中回報問題
 Keywords=plasma;bugzilla;bug;development;support;
-Keywords[ast]=plasma;bugzilla;fallu;desendolcu;sofitu;
 Keywords[ca]=plasma;bugzilla;error;desenvolupament;suport;
 Keywords[ca@valencia]=plasma;bugzilla;error;desenvolupament;suport;
 Keywords[da]=plasma;bugzilla;bug;udvikling;støtte;

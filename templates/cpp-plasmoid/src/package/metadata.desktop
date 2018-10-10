@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=%{APPNAME}
 Name[ar]=%{APPNAME}
-Name[ast]=%{APPNAME}
 Name[ca]=%{APPNAME}
 Name[ca@valencia]=%{APPNAME}
 Name[cs]=%{APPNAME}
@@ -40,7 +39,6 @@ Name[zh_CN]=%{APPNAME}
 Name[zh_TW]=%{APPNAME}
 Comment=what your app does in a few words
 Comment[ar]=ما يفعله تطبيقك ببضع كلمات
-Comment[ast]=lo que fai la to aplicación nunes pallabres
 Comment[ca]=Què fa aquesta aplicació en poques paraules
 Comment[ca@valencia]=Què fa aquesta aplicació en poques paraules
 Comment[da]=nogle få ord om hvad din app gør
