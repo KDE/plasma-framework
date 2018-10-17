@@ -40,13 +40,15 @@ T.Button {
 
     contentItem: RowLayout {
         PlasmaCore.IconItem {
+            id: icon
             Layout.fillWidth: true
             Layout.fillHeight: true
-            colorGroup: PlasmaCore.ColorScope.colorGroup
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
         Label {
+            Layout.fillWidth: !icon.visible
             visible: text.length > 0
             text: control.text
             font: control.font
