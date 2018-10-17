@@ -70,6 +70,7 @@ T.RoundButton {
         PlasmaCore.Svg {
             id: buttonSvg
             imagePath: "widgets/actionbutton"
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
 
         Private.RoundShadow {
