@@ -32,7 +32,7 @@ T.PageIndicator {
     spacing: units.largeSpacing
 
     delegate: Rectangle {
-        implicitWidth: units.gridUnit
+        implicitWidth: units.gridUnit/2
         implicitHeight: implicitWidth
 
         radius: width
