@@ -31,10 +31,6 @@
 
 #include "config-plasma.h"
 
-#if !PLASMA_NO_KIO
-#include <kio/job.h>
-#endif
-
 #include "applet.h"
 #include "containment.h"
 #include "containmentactions.h"

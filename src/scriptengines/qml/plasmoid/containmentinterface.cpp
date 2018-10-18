@@ -38,12 +38,9 @@
 #include <QMimeDatabase>
 #include <KNotification>
 
-#ifndef PLASMA_NO_KIO
-#include "kio/jobclasses.h" // for KIO::JobFlags
-#include "kio/job.h"
-#include "kio/scheduler.h"
 #include <KIO/DropJob>
-#endif
+#include <KIO/MimetypeJob>
+#include <KIO/TransferJob>
 
 #include <plasma.h>
 #include <Plasma/ContainmentActions>
@@ -469,8 +466,6 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         //      to create widgets out of the matching URLs, if any
         const QList<QUrl> urls = KUrlMimeData::urlsFromMimeData(mimeData);
         foreach (const QUrl &url, urls) {
-
-#ifndef PLASMA_NO_KIO
             QMimeDatabase db;
             const QMimeType &mime = db.mimeTypeForUrl(url);
             QString mimeName = mime.name();
@@ -499,7 +494,6 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
                 m_dropMenus[job] = choices;
             }
-#endif
         }
 
     } else {
@@ -576,27 +570,22 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
 void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
 {
-#ifndef PLASMA_NO_KIO
     QObject::disconnect(job, nullptr, this, nullptr);
     m_dropPoints.remove(job);
     QMenu *choices = m_dropMenus.take(job);
     m_dropJobs.remove(job);
     job->kill();
-#endif // PLASMA_NO_KIO
 }
 
 void ContainmentInterface::dropJobResult(KJob *job)
 {
-#ifndef PLASMA_NO_KIO
     if (job->error()) {
         qDebug() << "ERROR" << job->error() << ' ' << job->errorString();
     }
-#endif // PLASMA_NO_KIO
 }
 
 void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
-#ifndef PLASMA_NO_KIO
     qDebug() << "Mimetype Job returns." << mimetype;
 
     KIO::TransferJob *tjob = dynamic_cast<KIO::TransferJob *>(job);
@@ -818,7 +807,6 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         clearDataForMimeJob(tjob);
     }
-#endif // PLASMA_NO_KIO
 }
 
 void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)

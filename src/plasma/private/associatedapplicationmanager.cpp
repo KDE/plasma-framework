@@ -34,12 +34,7 @@
 #include <kactioncollection.h>
 #include <KMimeTypeTrader>
 
-#if !PLASMA_NO_KIO
-#include <krun.h>
-#else
-#include <QProcess>
-#include <QDesktopServices>
-#endif
+#include <KRun>
 
 #include "plasma/applet.h"
 
@@ -197,29 +192,13 @@ QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) con
 void AssociatedApplicationManager::run(Plasma::Applet *applet)
 {
     if (d->applicationNames.contains(applet)) {
-#if !PLASMA_NO_KIO
         bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), nullptr);
         if (!success) {
             qCWarning(LOG_PLASMA) << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
         }
-#else
-        QString execCommand = d->applicationNames.value(applet);
-
-        // Clean-up the %u and friends from the exec command (KRun expect them, not QProcess)
-        execCommand = execCommand.replace(QRegExp("%[a-z]"), QString());
-        execCommand = execCommand.trimmed();
-
-        QStringList parameters = d->urlLists.value(applet).toStringList();
-        QProcess::startDetached(execCommand, parameters);
-#endif
-
     } else if (d->urlLists.contains(applet)) {
-#if !PLASMA_NO_KIO
         KRun *krun = new KRun(d->urlLists.value(applet).first(), nullptr);
         krun->setAutoDelete(true);
-#else
-        QDesktopServices::openUrl(d->urlLists.value(applet).first());
-#endif
     }
 }
 

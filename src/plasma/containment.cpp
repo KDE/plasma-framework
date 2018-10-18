@@ -40,12 +40,6 @@
 #include <KConfigSkeleton>
 #include <KConfigLoader>
 
-#if !PLASMA_NO_KIO
-#include "kio/jobclasses.h" // for KIO::JobFlags
-#include "kio/job.h"
-#include "kio/scheduler.h"
-#endif
-
 #include "containmentactions.h"
 #include "corona.h"
 #include "pluginloader.h"
