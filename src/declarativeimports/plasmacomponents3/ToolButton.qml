@@ -38,6 +38,10 @@ T.ToolButton {
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
+    Kirigami.MnemonicData.enabled: control.enabled && control.visible
+    Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
+    Kirigami.MnemonicData.label: control.text
+
     flat: true
 
     contentItem: RowLayout {
@@ -50,7 +54,7 @@ T.ToolButton {
         }
         Label {
             visible: text.length > 0
-            text: control.text
+            text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
             color: theme.buttonTextColor

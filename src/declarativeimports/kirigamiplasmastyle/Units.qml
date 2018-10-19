@@ -21,7 +21,7 @@ pragma Singleton
 
 import QtQuick 2.4
 import org.kde.plasma.core 2.0 as PlasmaCore
-
+import org.kde.kirigami 2.4
 
 QtObject {
     /**
@@ -49,12 +49,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: units.iconSizes.small
-        property int smallMedium: units.iconSizes.smallMedium
-        property int medium: units.iconSizes.medium
-        property int large: units.iconSizes.large
-        property int huge: units.iconSizes.huge
-        property int enormous: units.iconSizes.enormous
+        property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
+        property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
+        property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
+        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
+        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
+        property int enormous: Math.floor(128 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1))
     }
 
     /**
@@ -63,7 +63,7 @@ QtObject {
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
      */
-    property int smallSpacing: units.smallSpacing
+    property int smallSpacing: Math.floor(gridUnit/4)
 
     /**
      * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
@@ -106,5 +106,20 @@ QtObject {
      */
     property variant fontMetrics: TextMetrics {
         text: "M"
+        function roundedIconSize(size) {
+            if (size < 16) {
+                return size;
+            } else if (size < 22) {
+                return 16;
+            } else if (size < 32) {
+                return 22;
+            } else if (size < 48) {
+                return 32;
+            } else if (size < 64) {
+                return 48;
+            } else {
+                return size;
+            }
+        }
     }
 }
