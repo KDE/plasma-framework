@@ -166,7 +166,7 @@ class FrameSvgItem : public QQuickItem
     /**
      * Set a color group for the FrameSvgItem.
      * if the Svg uses stylesheets and has elements
-     * that are eithe TextColor or BackgroundColor class,
+     * that are either TextColor or BackgroundColor class,
      * make them use ButtonTextColor/ButtonBackgroundColor
      * or ViewTextColor/ViewBackgroundColor, ComplementaryTextColor etc.
      */

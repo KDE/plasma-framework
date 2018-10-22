@@ -91,7 +91,7 @@ QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("pla
 
 QSet<QString> PluginLoaderPrivate::knownCategories()
 {
-    // this is to trick the tranlsation tools into making the correct
+    // this is to trick the translation tools into making the correct
     // strings for translation
     QSet<QString> categories = s_customCategories;
     categories << QStringLiteral(I18N_NOOP("Accessibility")).toLower()
@@ -563,7 +563,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
     const auto plugins = listAppletMetaData(category, parentApp);
 
     //NOTE: it still produces kplugininfos from KServices because some user code expects
-    //info.sevice() to be valid and would crash ohtherwise
+    //info.service() to be valid and would crash otherwise
     foreach (auto& md, plugins) {
         auto pi = md.metaDataFileName().endsWith(QLatin1String(".json")) ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
         if (!pi.isValid()) {

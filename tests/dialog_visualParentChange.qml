@@ -28,7 +28,7 @@ ColumnLayout {
     Controls.Label {
         Layout.maximumWidth: mainLayout.width
         wrapMode: Text.WordWrap
-        text: "Click on each coloured box to make a dialog popup. It should popup in the correct position. The popup should also move from one rectanlge to the other on hovering"
+        text: "Click on each coloured box to make a dialog popup. It should popup in the correct position. The popup should also move from one rectangle to the other on hovering"
     }
 
     RowLayout {

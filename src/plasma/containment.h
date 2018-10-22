@@ -42,7 +42,7 @@ class ContainmentPrivate;
  * Containment objects provide the means to group applets into functional sets.
  * They also provide the following:
  *
- * creation of focussing event
+ * creation of focusing event
  * - drawing of the background image (which can be interactive)
  * - form factors (e.g. panel, desktop, full screen, etc)
  * - applet layout management

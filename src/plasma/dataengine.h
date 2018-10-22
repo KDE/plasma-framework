@@ -20,9 +20,9 @@
 #ifndef PLASMA_DATAENGINE_H
 #define PLASMA_DATAENGINE_H
 
-#include <QtCore/QHash>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QHash>
+#include <QObject>
+#include <QStringList>
 
 #include <kplugininfo.h>
 #include <kservice.h>
@@ -321,7 +321,7 @@ protected:
      * doesn't exist then it is created. The source will have the key "HasModel" to easily indicate there is a model present.
      *
      * The ownership of the model is transferred to the DataContainer,
-     * so the model will be deletd when a new one is set or when the
+     * so the model will be deleted when a new one is set or when the
      * DataContainer itself is deleted. As the DataContainer, it will be
      * deleted when there won't be any
      * visualization associated to this source.

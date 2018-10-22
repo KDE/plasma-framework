@@ -24,7 +24,7 @@
 
 #include <QTimer>
 #include <QQuickWindow>
-#include <QtCore/QVariant>
+#include <QVariant>
 
 class QQuickItem;
 class QGraphicsWidget;

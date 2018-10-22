@@ -20,7 +20,7 @@
 #ifndef PLASMA_SHAREDTIMER_P_H
 #define PLASMA_SHAREDTIMER_P_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace Plasma
 {

@@ -81,7 +81,7 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 
     /**
      * True when the applet wants the activation signal act in toggle mode, i.e. while being expanded
-     * the signal shrinks the applet to its not exanded state instead of reexpanding it.
+     * the signal shrinks the applet to its not expanded state instead of reexpanding it.
      */
     Q_PROPERTY(bool activationTogglesExpanded WRITE setActivationTogglesExpanded READ isActivationTogglesExpanded NOTIFY activationTogglesExpandedChanged)
 

@@ -20,9 +20,9 @@
 #ifndef PLASMA_DATACONTAINER_H
 #define PLASMA_DATACONTAINER_H
 
-#include <QtCore/QHash>
-#include <QtCore/QObject>
-#include <QtCore/QTimer>
+#include <QHash>
+#include <QObject>
+#include <QTimer>
 
 #include <kjob.h>
 #include <plasma/plasma_export.h>
@@ -113,7 +113,7 @@ public:
      * that is intended to be a long list of items.
      *
      * The ownership of the model is transferred to the DataContainer,
-     * so the model will be deletd when a new one is set or when the
+     * so the model will be deleted when a new one is set or when the
      * DataContainer itself is deleted, so it will be deleted when there won't be any
      * visualization associated to this source.
      *

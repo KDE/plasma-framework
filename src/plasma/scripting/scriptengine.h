@@ -24,9 +24,9 @@
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QRect>
-#include <QtCore/QSizeF>
+#include <QObject>
+#include <QRect>
+#include <QSizeF>
 
 class QPainter;
 

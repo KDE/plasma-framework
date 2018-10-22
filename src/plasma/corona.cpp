@@ -28,7 +28,6 @@
 #include <QPainter>
 #include <QTimer>
 #include <QScreen>
-#include <QScreen>
 
 #include <cmath>
 

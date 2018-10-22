@@ -100,7 +100,7 @@ Item {
             property variant parentPos
             imagePath: fallbackComponent.svgPath
             property bool under: root.visualParent ? internal.parentPos.y + root.visualParent.height + height < dismissArea.height : true
-            //bindings won't work inside anchers definition
+            //bindings won't work inside anchors definition
             onUnderChanged: {
                 if (under) {
                     tipSvg.anchors.top = undefined

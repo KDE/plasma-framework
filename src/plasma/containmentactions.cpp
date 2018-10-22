@@ -27,8 +27,6 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QContextMenuEvent>
-#include <QMouseEvent>
-#include <QWheelEvent>
 
 #include <QDebug>
 #include <klocalizedstring.h>

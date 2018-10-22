@@ -165,7 +165,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
     QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QStringLiteral("/plasma_dataenginemanager_log");
     QFile f(path);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text)) {
-        // qCDebug(LOG_PLASMA) << "faild to open" << path;
+        // qCDebug(LOG_PLASMA) << "failed to open" << path;
         return;
     }
 

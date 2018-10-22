@@ -20,7 +20,7 @@
 #ifndef PLASMA_SERVICEJOB_H
 #define PLASMA_SERVICEJOB_H
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 #include <kjob.h>
 

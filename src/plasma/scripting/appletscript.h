@@ -20,9 +20,9 @@
 #ifndef PLASMA_APPLETSCRIPT_H
 #define PLASMA_APPLETSCRIPT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QRect>
-#include <QtCore/QSizeF>
+#include <QObject>
+#include <QRect>
+#include <QSizeF>
 
 #include <kplugininfo.h>
 

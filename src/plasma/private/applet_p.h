@@ -91,7 +91,7 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Types::Constraints pendingConstraints;
 
-    // sripting and package stuff
+    // scripting and package stuff
     AppletScript *script;
     KPackage::Package package;
     KConfigLoader *configLoader;

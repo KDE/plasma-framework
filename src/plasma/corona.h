@@ -222,7 +222,7 @@ public:
     QList<Plasma::Types::Location> freeEdges(int screen) const;
 
     /**
-     * The actions assocated with this Corona
+     * The actions associated with this Corona
      */
     KActionCollection *actions() const;
 
@@ -391,10 +391,10 @@ protected:
     /**
      * Loads a containment with delayed initialization, primarily useful
      * for implementations of loadDefaultLayout. The caller is responsible
-     * for all initializating, saving and notification of a new containment.
+     * for all initialization, saving and notification of a new containment.
      *
      * @param name the plugin name for the containment, as given by
-     *        KPluginInfo::pluginName(). If an empty string is passed in, the defalt
+     *        KPluginInfo::pluginName(). If an empty string is passed in, the default
      *        containment plugin will be used (usually DesktopContainment). If the
      *        string literal "null" is passed in, then no plugin will be loaded and
      *        a simple Containment object will be created instead.

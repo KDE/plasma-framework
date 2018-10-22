@@ -177,7 +177,7 @@ Item {
         // The number of ongoing transitions.
         property int ongoingTransitionCount: 0
 
-        //FIXME: there should be a way to access to theh without storing it in an ugly way
+        //FIXME: there should be a way to access to them without storing it in an ugly way
         property bool completed: false
 
         // Duration of transition animation (in ms)
@@ -354,7 +354,7 @@ Item {
                 }
             }
 
-            // Handles state change depening on transition animation status
+            // Handles state change depending on transition animation status
             function setState(newState)
             {
                 if (transitionAnimationRunning)

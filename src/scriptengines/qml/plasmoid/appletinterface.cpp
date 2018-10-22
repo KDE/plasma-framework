@@ -208,7 +208,7 @@ void AppletInterface::destroyedChanged(bool destroyed)
         }
 
         if (isAncestor) {
-            //Found? remove focus for the whole hierachy
+            //Found? remove focus for the whole hierarchy
             candidate = focus;
 
             while (candidate && candidate != this) {
@@ -294,8 +294,8 @@ QString AppletInterface::toolTipMainText() const
 
 void AppletInterface::setToolTipMainText(const QString &text)
 {
-    //Here we are abusing the differentce between a null and and empty string.
-    //by default is null so fallsback to the name
+    //Here we are abusing the difference between a null and an empty string.
+    //by default is null so falls back to the name
     //the fist time it gets set, an empty non null one is set, and won't fallback anymore
     if (!m_toolTipMainText.isNull() && m_toolTipMainText == text) {
         return;

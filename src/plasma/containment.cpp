@@ -34,7 +34,6 @@
 #include <qtemporaryfile.h>
 #include <qmimedatabase.h>
 
-#include <QDebug>
 #include <kauthorized.h>
 #include <klocalizedstring.h>
 #include <KConfigSkeleton>

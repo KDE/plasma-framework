@@ -22,8 +22,8 @@
 
 #include "config-plasma.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QMap>
+#include <QString>
 
 #if ENABLE_REMOTE_WIDGETS
 #include <QtCrypto>

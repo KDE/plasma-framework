@@ -519,7 +519,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
         if (seenPlugins.isEmpty()) {
             // do nothing
-        //directly create if only one offer only if the conteinment didn't pass an existing plugin
+        //directly create if only one offer only if the containment didn't pass an existing plugin
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
             Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));

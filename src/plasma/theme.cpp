@@ -78,7 +78,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     ThemePrivate::themesRefCount[themeName].ref();
     d = ThemePrivate::themes[themeName];
 
-    // turn off caching so we don't accidently trigger unnecessary disk activity at this point
+    // turn off caching so we don't accidentally trigger unnecessary disk activity at this point
     bool useCache = d->cacheTheme;
     d->cacheTheme = false;
     d->setThemeName(themeName, false, false);

@@ -20,7 +20,7 @@
 #ifndef PLASMA_SVG_H
 #define PLASMA_SVG_H
 
-#include <QtCore/QObject>
+#include <QObject>
 #include <QPixmap>
 
 #include <plasma/plasma_export.h>
@@ -104,14 +104,14 @@ public:
     qreal devicePixelRatio();
 
     /**
-     * Settng a scale factor greater than one it will result in final images scaled by it.
+     * Setting a scale factor greater than one it will result in final images scaled by it.
      * Unlike devicePixelRatio, every size and element rect will be scaled accordingly.
      * @return how much to scale the rendered image.
      */
     qreal scaleFactor() const;
 
     /**
-     * Settng a scale factor greater than one it will result in final images scaled by it.
+     * Setting a scale factor greater than one it will result in final images scaled by it.
      * Unlike devicePixelRatio, every size and element rect will be scaled accordingly.
      * The default value is 1.0 and the scale will be done rounded to the floor integer.
      * @param how much to scale the Svg
@@ -121,7 +121,7 @@ public:
     /**
      * Set a color group for the Svg.
      * if the Svg uses stylesheets and has elements
-     * that are eithe TextColor or BackgroundColor class,
+     * that are either TextColor or BackgroundColor class,
      * make them use ButtonTextColor/ButtonBackgroundColor
      * or ViewTextColor/ViewBackgroundColor
      */

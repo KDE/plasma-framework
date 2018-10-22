@@ -20,7 +20,7 @@
 #ifndef PLASMA_DATAENGINECONSUMER_H
 #define PLASMA_DATAENGINECONSUMER_H
 
-#include <QtCore/QUrl>
+#include <QUrl>
 
 #include <plasma/plasma_export.h>
 

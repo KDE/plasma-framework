@@ -527,7 +527,7 @@ void Applet::flushPendingConstraintsEvents()
         d->constraintsTimer.stop();
     }
 
-    //qCDebug(LOG_PLASMA) << "fushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //qCDebug(LOG_PLASMA) << "flushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
@@ -578,7 +578,7 @@ void Applet::flushPendingConstraintsEvents()
             action->setEnabled(canConfig);
         }
 
-        //an immutable constraint will alwasy happen at startup
+        //an immutable constraint will always happen at startup
         //make sure don't emit a change signal for nothing
         if (d->oldImmutability != immutability()) {
             emit immutabilityChanged(immutability());
@@ -586,7 +586,7 @@ void Applet::flushPendingConstraintsEvents()
         d->oldImmutability = immutability();
     }
 
-    // now take care of constraints in special subclass: Contaiment
+    // now take care of constraints in special subclass: Containment
     Containment *containment = qobject_cast<Plasma::Containment *>(this);
     if (containment) {
         containment->d->containmentConstraintsEvent(c);

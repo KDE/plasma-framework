@@ -19,10 +19,10 @@
 
 #include "testengine.h"
 
-#include <QtCore/QBitArray>
-#include <QtCore/QDate>
-#include <QtCore/QLocale>
-#include <QtCore/QUrl>
+#include <QBitArray>
+#include <QDate>
+#include <QLocale>
+#include <QUrl>
 #include <QBitmap>
 #include <QBrush>
 #include <QCursor>
@@ -117,7 +117,7 @@ void TestEngine::init()
     setData(dsn, QStringLiteral("QPixmap"), QVariant(QPixmap(12, 34)));
     // QVariant::Point
     setData(dsn, QStringLiteral("QPoint"), QVariant(QPoint(12, 34)));
-    // QVariant::PointArray (obsoloted in Qt4, see QPolygon)
+    // QVariant::PointArray (obsoleted in Qt4, see QPolygon)
     // QVariant::PointF
     setData(dsn, QStringLiteral("QPointF"), QVariant(QPointF(12.34, 56.78)));
     // QVariant::Polygon

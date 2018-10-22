@@ -171,7 +171,7 @@ Item{
             fill: parent
             leftMargin: -margins.left
             rightMargin: -margins.right
-            //FIXME: difference between actial border and shadow
+            //FIXME: difference between actual border and shadow
             topMargin: toolBar.y <= 0 ? -margins.top : -margins.top/2
             bottomMargin: toolBar.y >= toolBar.parent.height - toolBar.height ? -margins.bottom : -margins.bottom/2
         }

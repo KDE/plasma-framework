@@ -23,7 +23,7 @@
 
 #include <QGuiApplication>
 #include <QFont>
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <kplugininfo.h>
 #include <ksharedconfig.h>
@@ -242,7 +242,7 @@ public:
      * overwritten.
      * The actual insert is delayed for optimization reasons and the id
      * parameter is used to discard repeated inserts in the delay time, useful
-     * when for instance the graphics to inser comes from a quickly resizing
+     * when for instance the graphics to insert comes from a quickly resizing
      * object: the frames between the start and destination sizes aren't
      * useful in the cache and just cause overhead.
      *
@@ -300,16 +300,16 @@ public:
     /**
      * Discards all the information about a given image from the rectangle disk cache
      *
-     * @param image the path to the image the cache is assoiated with
+     * @param image the path to the image the cache is associated with
      **/
     void invalidateRectsCache(const QString &image);
 
     /**
      * Frees up memory used by cached information for a given image without removing
-     * the permenant record of it on disk.
+     * the permanent record of it on disk.
      * @see invalidateRectsCache
      *
-     * @param image the path to the image the cache is assoiated with
+     * @param image the path to the image the cache is associated with
      */
     void releaseRectsCache(const QString &image);
 

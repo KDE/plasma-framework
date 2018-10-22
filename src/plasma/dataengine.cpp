@@ -41,7 +41,6 @@
 #include "service.h"
 #include "scripting/dataenginescript.h"
 
-#include "private/datacontainer_p.h"
 #include "private/service_p.h"
 #include "private/storage_p.h"
 #include "config-plasma.h"

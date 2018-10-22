@@ -22,7 +22,7 @@
 
 #include <QQuickItem>
 #include <QPointer>
-#include <QtCore/QVariant>
+#include <QVariant>
 #include <Plasma/Plasma>
 #include <Plasma/Theme>
 

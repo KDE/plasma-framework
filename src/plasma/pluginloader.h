@@ -138,7 +138,7 @@ public:
      * @param parent the parent containment. @since 4.6 null is allowed.
      * @param name the plugin name, as returned by KPluginInfo::pluginName()
      * @param args to send the containmentactions extra arguments
-     * @return a ContaimentActions object
+     * @return a ContainmentActions object
      **/
     ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName,
             const QVariantList &args = QVariantList());
@@ -160,7 +160,7 @@ public:
      * Returns a list of all known applets.
      * This may skip applets based on security settings and ExcludeCategories in the application's config.
      *
-     * @param category Only applets matchin this category will be returned.
+     * @param category Only applets matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
@@ -290,7 +290,7 @@ public:
      * @param type Only containments with this string in X-Plasma-ContainmentType
      *             in their .desktop files will be returned. Common values are panel and
      *             desktop
-     * @param category Only containments matchin this category will be returned.
+     * @param category Only containments matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Miscellaneous" is passed in, then containments without a
      *                 Categories= entry are also returned.
@@ -414,7 +414,7 @@ protected:
      * @param parent the parent containment. @since 4.6 null is allowed.
      * @param name the plugin name, as returned by KPluginInfo::pluginName()
      * @param args to send the containmentactions extra arguments
-     * @return a ContaimentActions object
+     * @return a ContainmentActions object
      **/
     virtual ContainmentActions *internalLoadContainmentActions(Containment *parent, const QString &containmentActionsName, const QVariantList &args);
 

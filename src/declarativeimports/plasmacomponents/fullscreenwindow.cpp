@@ -185,7 +185,7 @@ void FullScreenWindow::setMainItem(QGraphicsObject *mainItem)
             mainItem->installEventFilter(this);
         }
 
-        //if this is called in Compenent.onCompleted we have to wait a loop the item is added to a scene
+        //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
         QTimer::singleShot(0, this, SLOT(syncViewToMainItem()));
     }
 }
@@ -196,7 +196,7 @@ void FullScreenWindow::syncViewToMainItem()
         return;
     }
 
-    //not have a scene? go up in the hyerarchy until we find something with a scene
+    //not have a scene? go up in the hierarchy until we find something with a scene
     QGraphicsScene *scene = m_mainItem.data()->scene();
     if (!scene) {
         QObject *parent = m_mainItem.data();

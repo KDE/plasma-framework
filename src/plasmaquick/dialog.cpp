@@ -52,7 +52,6 @@
 #include <KWayland/Client/surface.h>
 #endif
 
-#include <config-plasma.h>
 #if HAVE_XCB_SHAPE
 #include <QX11Info>
 #include <xcb/shape.h>
@@ -191,7 +190,7 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
      * more reliable anyways (could be tried to remove the whole Q_FOREACH
      * at this point)
      *
-     * imporant: screen can be a nullptr... see bug 345173
+     * important: screen can be a nullptr... see bug 345173
      */
     if (avail.isEmpty() && q->screen()) {
         avail = q->screen()->availableGeometry();

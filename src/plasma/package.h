@@ -20,7 +20,7 @@
 #ifndef PLASMA_PACKAGE_H
 #define PLASMA_PACKAGE_H
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include <kplugininfo.h>
 

@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2014 by Marco MArtin <mart@kde.org>
+*   Copyright (C) 2014 by Marco Martin <mart@kde.org>
 *
 *   This program is free software; you can redistribute it and/or modify
 *   it under the terms of the GNU Library General Public License as
@@ -37,7 +37,7 @@ QtQuickControlStyle.TextFieldStyle {
     placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
 
     /*
-     * Since the password echo is a circle woithout vertical or horizontal lines, it won't be
+     * Since the password echo is a circle without vertical or horizontal lines, it won't be
      * more blurred with different rendring types.
      * Using Qt rendering, the dots will look more aligned and equally spaced.
      * Also if we are on mobile, make sure we use QtRendering
@@ -52,7 +52,7 @@ QtQuickControlStyle.TextFieldStyle {
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
-        //QQC lineedits are only from the background (and if background is not set, just an arbirtary value of 25)
+        //QQC lineedits are only from the background (and if background is not set, just an arbirtrary value of 25)
         //Why? I don't know
 
         //In order to get the same height in both buttons and lineedits we need to apply the same rule here

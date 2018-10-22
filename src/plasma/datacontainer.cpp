@@ -175,7 +175,7 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
         }
     } else {
         //qCDebug(LOG_PLASMA) << "    connecting to a relay";
-        // we only want to do an imediate update if this is not the first object to connect to us
+        // we only want to do an immediate update if this is not the first object to connect to us
         // if it is the first visualization, then the source will already have been populated
         // engine's sourceRequested method
         bool immediateUpdate = connected || d->relayObjects.count() > 1;

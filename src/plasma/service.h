@@ -20,9 +20,9 @@
 #ifndef PLASMA_SERVICE_H
 #define PLASMA_SERVICE_H
 
-#include <QtCore/QHash>
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
+#include <QHash>
+#include <QObject>
+#include <QVariant>
 
 #include <kconfiggroup.h>
 
@@ -210,7 +210,7 @@ protected:
      * Enables a given service by name
      *
      * @param operation the name of the operation to enable or disable
-     * @param enable true if the operation should be enabld, false if disabled
+     * @param enable true if the operation should be enabled, false if disabled
      */
     void setOperationEnabled(const QString &operation, bool enable);
 
