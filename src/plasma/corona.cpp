@@ -414,7 +414,6 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
       containmentsStarting(0)
 {
     //TODO: make Package path configurable
-    KConfigGroup config(KSharedConfig::openConfig(), "General");
 
     if (QCoreApplication::instance()) {
         configName = QCoreApplication::instance()->applicationName() + QStringLiteral("-appletsrc");

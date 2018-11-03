@@ -690,7 +690,6 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         const QString &parentApp)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "General");
-    const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool
     {
         if (!md.serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {

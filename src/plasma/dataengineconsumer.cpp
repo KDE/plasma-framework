@@ -38,11 +38,9 @@ void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 {
 #ifndef NDEBUG
     // qCDebug(LOG_PLASMA) << "engine ready!";
-#endif
     QString engineName = job->parameters().value(QStringLiteral("EngineName")).toString();
     QString location = job->destination();
     QPair<QString, QString> pair(location, engineName);
-#ifndef NDEBUG
     // qCDebug(LOG_PLASMA) << "pair = " << pair;
 #endif
 }
