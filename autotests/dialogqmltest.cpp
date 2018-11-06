@@ -25,8 +25,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include <QtTest/QtTest>
-#include <QtTest/QSignalSpy>
+#include <QtTest>
+#include <QSignalSpy>
 
 
 //this test checks that we don't set visible to true until after we set the window flags

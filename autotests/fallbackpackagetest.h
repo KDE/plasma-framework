@@ -20,7 +20,7 @@
 
 #ifndef FALLBACKPACKAGETEST_H
 
-#include <QtTest/QtTest>
+#include <QtTest>
 
 #include "plasma/package.h"
 

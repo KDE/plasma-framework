@@ -24,7 +24,7 @@
 #include <QQmlContext>
 #include <QQmlComponent>
 #include <QQuickItemGrabResult>
-#include <QtTest/QSignalSpy>
+#include <QSignalSpy>
 
 #include <KIconLoader>
 #include <KIconEngine>

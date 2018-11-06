@@ -22,7 +22,7 @@
 #include <qtest.h>
 #include <QDebug>
 //#include <QJsonObject>
-#include <QtTest/QSignalSpy>
+#include <QSignalSpy>
 
 #include <kplugininfo.h>
 //#include <kplugintrader.h>

@@ -18,7 +18,7 @@
  */
 
 #include <QtQml>
-#include <QtQml/QQmlExtensionPlugin>
+#include <QQmlExtensionPlugin>
 #include <QDebug>
 
 #include "application.h"

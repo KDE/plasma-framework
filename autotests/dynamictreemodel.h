@@ -42,10 +42,10 @@
 #ifndef DYNAMICTREEMODEL_H
 #define DYNAMICTREEMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
+#include <QHash>
+#include <QList>
 
 class DynamicTreeModel : public QAbstractItemModel
 {
