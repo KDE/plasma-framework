@@ -1009,5 +1009,3 @@ void FrameSvg::setRepaintBlocked(bool blocked)
 }
 
 } // Plasma namespace
-
-#include "moc_framesvg.cpp"
