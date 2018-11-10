@@ -19,74 +19,74 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=59,64,69
-BackgroundNormal=29,34,39
-DecorationFocus=30,146,255
-DecorationHover=61,174,230
-ForegroundActive=246,116,0
-ForegroundInactive=175,176,179
-ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+BackgroundAlternate=77,77,77
+BackgroundNormal=49,54,59
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=61,174,233
+ForegroundInactive=189,195,199
+ForegroundLink=41,128,185
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
 ForegroundNormal=239,240,241
-ForegroundPositive=17,209,22
-ForegroundVisited=61,174,230
+ForegroundPositive=39,174,96
+ForegroundVisited=127,140,141
 
 [Colors:Selection]
-BackgroundAlternate=48,138,183
-BackgroundNormal=61,174,230
-DecorationFocus=30,146,255
-DecorationHover=61,174,230
-ForegroundActive=246,116,0
-ForegroundInactive=146,204,230
-ForegroundLink=252,252,252
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
-ForegroundNormal=252,252,252
-ForegroundPositive=17,209,22
-ForegroundVisited=252,252,252
+BackgroundAlternate=29,153,243
+BackgroundNormal=61,174,233
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=252,252,252
+ForegroundInactive=239,240,241
+ForegroundLink=253,188,75
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=239,240,241
+ForegroundPositive=39,174,96
+ForegroundVisited=189,195,199
 
 [Colors:Tooltip]
-BackgroundAlternate=59,64,69
+BackgroundAlternate=77,77,77
 BackgroundNormal=49,54,59
-DecorationFocus=30,146,255
-DecorationHover=61,174,230
-ForegroundActive=246,116,0
-ForegroundInactive=175,176,179
-ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=61,174,233
+ForegroundInactive=189,195,199
+ForegroundLink=41,128,185
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
 ForegroundNormal=239,240,241
-ForegroundPositive=17,209,22
-ForegroundVisited=61,174,230
+ForegroundPositive=39,174,96
+ForegroundVisited=127,140,141
 
 [Colors:View]
-BackgroundAlternate=59,64,69
-BackgroundNormal=59,64,69
-DecorationFocus=30,146,255
-DecorationHover=61,174,230
-ForegroundActive=246,116,0
-ForegroundInactive=175,176,179
-ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+BackgroundAlternate=49,54,59
+BackgroundNormal=35,38,41
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=61,174,233
+ForegroundInactive=189,195,199
+ForegroundLink=41,128,185
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
 ForegroundNormal=239,240,241
-ForegroundPositive=17,209,22
-ForegroundVisited=61,174,230
+ForegroundPositive=39,174,96
+ForegroundVisited=127,140,141
 
 [Colors:Window]
-BackgroundAlternate=59,64,69
+BackgroundAlternate=77,77,77
 BackgroundNormal=49,54,59
-DecorationFocus=30,146,255
-DecorationHover=61,174,230
-ForegroundActive=246,116,0
-ForegroundInactive=175,176,179
-ForegroundLink=61,174,230
-ForegroundNegative=237,21,21
-ForegroundNeutral=201,206,59
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=61,174,233
+ForegroundInactive=189,195,199
+ForegroundLink=41,128,185
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
 ForegroundNormal=239,240,241
-ForegroundPositive=17,209,22
-ForegroundVisited=61,174,230
+ForegroundPositive=39,174,96
+ForegroundVisited=127,140,141
 
 [Colors:Complementary]
 BackgroundAlternate=59,64,69
@@ -103,17 +103,17 @@ ForegroundPositive=17,209,22
 ForegroundVisited=61,174,230
 
 [General]
-ColorScheme=Plasma Next
-Name=Plasma Next
+ColorScheme=Breeze Dark
+Name=Breeze Dark
 shadeSortColumn=true
 
 [KDE]
-contrast=7
+contrast=4
 
 [WM]
-activeBackground=61,174,230
-activeBlend=252,252,252
-activeForeground=252,252,252
-inactiveBackground=123,124,126
-inactiveBlend=123,124,126
-inactiveForeground=252,252,252
+activeBackground=49,54,59
+activeBlend=255,255,255
+activeForeground=239,240,241
+inactiveBackground=49,54,59
+inactiveBlend=75,71,67
+inactiveForeground=127,140,141
