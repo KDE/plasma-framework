@@ -174,13 +174,13 @@ public:
     void updateFrameData(UpdateType updateType = UpdateFrameAndMargins);
     FrameData *lookupOrCreateMaskFrame(FrameData *frame, const QString &maskPrefix, const QString &maskRequestedPrefix);
 
-    Types::Location location;
+    Types::Location location = Types::Floating;
     QString prefix;
     //sometimes the prefix we requested is not available, so prefix will be emoty
     //keep track of the requested one anyways, we'll try again when the theme changes
     QString requestedPrefix;
 
-    FrameSvg *q;
+    FrameSvg * const q;
 
     QPoint overlayPos;
 
