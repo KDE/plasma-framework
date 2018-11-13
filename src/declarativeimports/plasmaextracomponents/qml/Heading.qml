@@ -62,7 +62,8 @@ Label {
 
     lineHeight: 1.2
     font.pointSize: headerPointSize(level)
-    font.weight: Font.Light
+    font.weight: level <= 4 ? Font.Light : Font.Normal
+    font.styleName: level <= 4 ? "Light" : "Regular"
     wrapMode: Text.WordWrap
 
     function headerPointSize(l) {
