@@ -58,7 +58,7 @@ Label {
      * step: int
      * adjust the point size in between a level and another.
      */
-    property int step: 2
+    property int step: 0
 
     lineHeight: 1.2
     font.pointSize: headerPointSize(level)
@@ -69,13 +69,17 @@ Label {
     function headerPointSize(l) {
         var n = theme.defaultFont.pointSize;
         var s;
-        if (l > 4) {
-            s = n
-        } else if (l < 2) {
-            s = n + (5*step)
-        } else {
-            s = n + ((5-level)*2)
+        switch (l) {
+        case 1:
+            return Math.round(n * 1.80) + step;
+        case 2:
+            return Math.round(n * 1.30) + step;
+        case 3:
+            return Math.round(n * 1.20) + step;
+        case 4:
+            return Math.round(n * 1.10) + step;
+        default:
+            return n + step;
         }
-        return s;
     }
 }
