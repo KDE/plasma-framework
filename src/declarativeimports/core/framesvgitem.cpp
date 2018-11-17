@@ -486,11 +486,9 @@ void FrameSvgItem::doUpdate()
 
     //software rendering (at time of writing Qt5.10) doesn't seem to like our tiling/stretching in the 9-tiles.
     //also when using QPainter it's arguably faster to create and cache pixmaps of the whole frame, which is what the slow path does
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 9, 0))
     if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
         m_fastPath = false;
     }
-#endif
     m_textureChanged = true;
 
     update();
