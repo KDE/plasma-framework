@@ -31,10 +31,7 @@ static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *sc
 {
     Q_UNUSED(scriptEngine)
 
-    EventPluginsManager *manager = new EventPluginsManager();
-    engine->setObjectOwnership(manager, QQmlEngine::CppOwnership);
-
-    return manager;
+    return new EventPluginsManager();
 }
 
 void CalendarPlugin::registerTypes(const char *uri)
