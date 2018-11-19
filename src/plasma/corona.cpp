@@ -75,9 +75,7 @@ Corona::~Corona()
 
 Plasma::Package Corona::package() const
 {
-    Package p;
-    p.d->internalPackage = new KPackage::Package(d->package);
-    return p;
+    return Package(d->package);
 }
 
 void Corona::setPackage(const Plasma::Package &package)
