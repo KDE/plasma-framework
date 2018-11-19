@@ -25,7 +25,6 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "package.h"
-#include "private/componentinstaller_p.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 #include "debug_p.h"
