@@ -90,7 +90,7 @@ void DataSource::setEngine(const QString &e)
         return;
     }
 
-    m_dataEngineConsumer = new Plasma::DataEngineConsumer();
+    m_dataEngineConsumer.reset(new Plasma::DataEngineConsumer());
     Plasma::DataEngine *engine = dataEngine(m_engine);
     if (!engine) {
         qWarning() << "DataEngine" << m_engine << "not found";
@@ -101,8 +101,7 @@ void DataSource::setEngine(const QString &e)
     if (m_dataEngine) {
         m_dataEngine->disconnect(this);
         // Deleting the consumer triggers the reference counting
-        delete m_dataEngineConsumer;
-        m_dataEngineConsumer = nullptr;
+        m_dataEngineConsumer.reset();
     }
 
     /*

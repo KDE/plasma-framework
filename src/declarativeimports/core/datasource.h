@@ -24,6 +24,7 @@
 #define DATASOURCE_H
 
 #include <QObject>
+#include <QScopedPointer>
 #include <QtQml>
 #include <QQmlPropertyMap>
 #include <QQmlParserStatus>
@@ -188,7 +189,7 @@ private:
     QQmlPropertyMap *m_data = nullptr;
     QQmlPropertyMap *m_models = nullptr;
     Plasma::DataEngine *m_dataEngine = nullptr;
-    Plasma::DataEngineConsumer *m_dataEngineConsumer = nullptr;
+    QScopedPointer<Plasma::DataEngineConsumer> m_dataEngineConsumer;
     QStringList m_sources;
     QStringList m_connectedSources;
     QStringList m_oldSources;
