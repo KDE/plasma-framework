@@ -134,8 +134,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
 ThemePrivate::~ThemePrivate()
 {
     saveSvgElementsCache();
-    QHash<QString, FrameData*> data = FrameSvgPrivate::s_sharedFrames.take(this);
-    qDeleteAll(data);
+    FrameSvgPrivate::s_sharedFrames.remove(this);
     delete pixmapCache;
 }
 

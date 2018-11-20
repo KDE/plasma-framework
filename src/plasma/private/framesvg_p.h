@@ -54,7 +54,6 @@ public:
           composeOverBorder(false),
           theme(nullptr)
     {
-        ref(svg);
     }
 
     FrameData(const FrameData &other, FrameSvg *svg)
@@ -78,16 +77,9 @@ public:
           composeOverBorder(false),
           theme(nullptr)
     {
-        ref(svg);
     }
 
     ~FrameData();
-
-    void ref(FrameSvg *svg);
-    bool deref(FrameSvg *svg);
-    bool removeRefs(FrameSvg *svg);
-    bool isUsed() const;
-    int refcount() const;
 
     QString imagePath;
     QString prefix;
@@ -98,6 +90,7 @@ public:
     static const int MAX_CACHED_MASKS = 10;
 
     QSize frameSize;
+    QString cacheId;
 
     //measures
     int topHeight;
@@ -132,7 +125,6 @@ public:
     bool tileCenter : 1;
     bool composeOverBorder : 1;
 
-    QHash<FrameSvg *, int> references;
     Plasma::ThemePrivate *theme;
 };
 
@@ -142,8 +134,6 @@ public:
     FrameSvgPrivate(FrameSvg *psvg)
         : q(psvg),
           overlayPos(0, 0),
-          frame(nullptr),
-          maskFrame(nullptr),
           enabledBorders(FrameSvg::AllBorders),
           cacheAll(false),
           repaintBlocked(false)
@@ -159,20 +149,22 @@ public:
         UpdateFrameAndMargins
     };
 
-    void generateBackground(FrameData *frame);
-    void generateFrameBackground(FrameData *frame);
+    void generateBackground(const QSharedPointer<FrameData> &frame);
+    void generateFrameBackground(const QSharedPointer<FrameData> &);
     QString cacheId(FrameData *frame, const QString &prefixToUse) const;
     void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
-    void updateSizes(FrameData *frame) const;
+    void updateSizes(FrameData* frame) const;
+    void updateSizes(const QSharedPointer<FrameData> &frame) const { return updateSizes(frame.data()); }
     void updateNeeded();
     void updateAndSignalSizes();
-    QSizeF frameSize(FrameData *frame) const;
-    void paintBorder(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QSize& originalSize, const QRect& output) const;
-    void paintCorner(QPainter& p, FrameData* frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
-    void paintCenter(QPainter& p, FrameData* frame, const QRect& contentRect, const QSize& fullSize);
-    QRect contentGeometry(FrameData* frame, const QSize& size) const;
+    QSizeF frameSize(const QSharedPointer<FrameData> &frame) const { return frameSize(frame.data()); }
+    QSizeF frameSize(FrameData* frame) const;
+    void paintBorder(QPainter& p, const QSharedPointer<FrameData> &frame, Plasma::FrameSvg::EnabledBorders border, const QSize& originalSize, const QRect& output) const;
+    void paintCorner(QPainter& p, const QSharedPointer<FrameData> &frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
+    void paintCenter(QPainter& p, const QSharedPointer<FrameData> &frame, const QRect& contentRect, const QSize& fullSize);
+    QRect contentGeometry(const QSharedPointer<FrameData> &frame, const QSize& size) const;
     void updateFrameData(UpdateType updateType = UpdateFrameAndMargins);
-    FrameData *lookupOrCreateMaskFrame(FrameData *frame, const QString &maskPrefix, const QString &maskRequestedPrefix);
+    QSharedPointer<FrameData> lookupOrCreateMaskFrame(const QSharedPointer<FrameData> &frame, const QString &maskPrefix, const QString &maskRequestedPrefix);
 
     Types::Location location = Types::Floating;
     QString prefix;
@@ -184,15 +176,15 @@ public:
 
     QPoint overlayPos;
 
-    FrameData *frame;
-    FrameData *maskFrame;
+    QSharedPointer<FrameData> frame;
+    QSharedPointer<FrameData> maskFrame;
 
     //those can differ from frame->enabledBorders if we are in a transition
     FrameSvg::EnabledBorders enabledBorders;
     //this can differ from frame->frameSize if we are in a transition
     QSize pendingFrameSize;
 
-    static QHash<ThemePrivate *, QHash<QString, FrameData *> > s_sharedFrames;
+    static QHash<ThemePrivate *, QHash<QString, QWeakPointer<FrameData>> > s_sharedFrames;
 
     bool cacheAll : 1;
     bool repaintBlocked : 1;
