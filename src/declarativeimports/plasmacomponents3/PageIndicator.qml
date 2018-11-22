@@ -29,7 +29,7 @@ T.PageIndicator {
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
     padding: units.smallSpacing
-    spacing: units.largeSpacing
+    spacing: units.smallSpacing
 
     delegate: Rectangle {
         implicitWidth: units.gridUnit/2
