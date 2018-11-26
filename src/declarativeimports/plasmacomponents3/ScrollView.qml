@@ -33,8 +33,8 @@ T.ScrollView {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
-    contentWidth: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentWidth : 0
-    contentHeight: scrollHelper.flickableItem ? scrollHelper.flickableItem.contentHeight : 0
+    contentWidth: verticalScrollBar.flickableItem ? verticalScrollBar.flickableItem.contentWidth : 0
+    contentHeight: verticalScrollBar.flickableItem ? verticalScrollBar.flickableItem.contentHeight : 0
 
     //create a background only after Component.onCompleted, see on the component creation below for explanation
     Component.onCompleted: {
@@ -55,6 +55,11 @@ T.ScrollView {
 
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
+        readonly property Flickable flickableItem: controlRoot.contentItem
+        onFlickableItemChanged: {
+            flickableItem.clip = true;
+            flickableItem.pixelAligned = true;
+        }
         parent: controlRoot
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
