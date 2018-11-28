@@ -21,12 +21,17 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.5 as Kirigami
 
 T.ToolTip {
     id: control
 
     x: parent ? (parent.width - implicitWidth) / 2 : 0
     y: -implicitHeight - 3
+
+    visible: Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered
+    delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 1000
+    timeout: 5000
 
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
