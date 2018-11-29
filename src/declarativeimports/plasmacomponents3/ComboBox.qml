@@ -23,6 +23,7 @@ import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@ as Controls
 import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
 T.ComboBox {
@@ -36,13 +37,13 @@ T.ComboBox {
     hoverEnabled: true
     topPadding: surfaceNormal.margins.top
     leftPadding: surfaceNormal.margins.left
-    rightPadding: surfaceNormal.margins.right
+    rightPadding: surfaceNormal.margins.right + units.gridUnit * 2
     bottomPadding: surfaceNormal.margins.bottom
 
     delegate: ItemDelegate {
         width: control.popup.width
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-        highlighted: control.highlightedIndex == index
+        highlighted: mouseArea.pressed ? listView.currentIndex == index : control.highlightedIndex == index
         property bool separatorVisible: false
     }
 
@@ -61,13 +62,127 @@ T.ComboBox {
         elementId: "down-arrow"
     }
 
-    contentItem: Label {
-        text: control.displayText
-        font: control.font
-        color: theme.buttonTextColor
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
-        elide: Text.ElideRight
+//     contentItem: Label {
+//         text: control.displayText
+//         font: control.font
+//         color: theme.buttonTextColor
+//         horizontalAlignment: Text.AlignLeft
+//         verticalAlignment: Text.AlignVCenter
+//         elide: Text.ElideRight
+//     }
+    contentItem: MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+        preventStealing: true
+        property int indexUnderMouse: -1
+        onWheel: {
+            if (wheel.pixelDelta.y < 0 || wheel.angleDelta.y < 0) {
+                control.currentIndex = Math.min(control.currentIndex + 1, delegateModel.count -1);
+            } else {
+                control.currentIndex = Math.max(control.currentIndex - 1, 0);
+            }
+            control.activated(control.currentIndex);
+        }
+        onPressed: {
+            indexUnderMouse = -1;
+            listView.currentIndex = control.highlightedIndex
+            control.down = true;
+            control.pressed = true;
+            control.popup.visible = !control.popup.visible;
+        }
+        onReleased: {
+            if (!containsMouse) {
+                control.down = false;
+                control.pressed = false;
+                control.popup.visible = false;
+            }
+            if (indexUnderMouse > -1) {
+                control.currentIndex = indexUnderMouse;
+            }
+        }
+        onCanceled: {
+            control.down = false;
+            control.pressed = false;
+        }
+        onPositionChanged: {
+            var pos = listView.mapFromItem(this, mouse.x, mouse.y);
+            indexUnderMouse = listView.indexAt(pos.x, pos.y);
+            listView.currentIndex = indexUnderMouse;
+            controlRoot.activated(indexUnderMouse);
+        }
+
+        Connections {
+            target: popup
+            onClosed: {
+                control.down = false;
+                control.pressed = false;
+            }
+        }
+        T.TextField {
+            id: textField
+            padding: 0
+            anchors {
+                fill:parent
+                leftMargin: control.leftPadding
+                rightMargin: control.rightPadding
+                topMargin: control.topPadding
+                bottomMargin: control.bottomPadding
+            }
+            text: control.editable ? control.editText : control.displayText
+
+            enabled: control.editable
+            autoScroll: control.editable
+            
+            readOnly: control.down || !control.hasOwnProperty("editable") || !control.editable
+            inputMethodHints: control.inputMethodHints
+            validator: control.validator
+
+            // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+            // https://bugreports.qt.io/browse/QTBUG-67007
+            renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+            color: control.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+            selectionColor: Kirigami.Theme.highlightColor
+            selectedTextColor: Kirigami.Theme.highlightedTextColor
+
+            selectByMouse: !Kirigami.Settings.tabletMode
+            cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : undefined
+
+            font: control.font
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignVCenter
+            opacity: control.enabled ? 1 : 0.3
+            onFocusChanged: {
+                if (focus) {
+                    Private.MobileTextActionsToolBar.controlRoot = textField;
+                }
+            }
+
+            onPressAndHold: {
+                if (!Kirigami.Settings.tabletMode) {
+                    return;
+                }
+                forceActiveFocus();
+                cursorPosition = positionAt(event.x, event.y);
+                selectWord();
+            }
+        }
+    }
+
+    Component {
+        id: mobileCursor
+        Private.MobileCursor {
+            target: textField
+        }
+    }
+
+    Private.MobileCursor {
+        target: textField
+        selectionStartHandle: true
+        property var rect: textField.positionToRectangle(textField.selectionStart)
+        //FIXME: this magic values seem to be always valid, for every font,every dpi, every scaling
+        x: rect.x + 5
+        y: rect.y + 6
     }
 
     background: PlasmaCore.FrameSvgItem {
@@ -75,10 +190,20 @@ T.ComboBox {
         //retrocompatibility with old controls
         implicitWidth: units.gridUnit * 6
         anchors.fill: parent
-        imagePath: "widgets/button"
-        prefix: control.pressed ? "pressed" : "normal"
+        readonly property bool editable: control.hasOwnProperty("editable") && control.editable
+        imagePath: editable ? "widgets/lineedit" : "widgets/button"
+        prefix: editable
+                ? "base"
+                : (control.pressed ? "pressed" : "normal")
+        Private.TextFieldFocus {
+            visible: parent.editable
+            z: -1
+            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
+            anchors.fill: parent
+        }
         Private.ButtonShadow {
             z: -1
+            visible: !parent.editable
             anchors.fill: parent
             state: {
                 if (control.pressed) {
@@ -120,7 +245,7 @@ T.ComboBox {
         bottomMargin: 6
 
         contentItem: ListView {
-            id: listview
+            id: listView
             clip: true
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null
