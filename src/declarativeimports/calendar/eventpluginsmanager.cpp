@@ -55,7 +55,7 @@ public:
         QAbstractListModel::endResetModel();
     }
 
-    virtual QHash<int, QByteArray> roleNames() const override
+    QHash<int, QByteArray> roleNames() const override
     {
         return m_roles;
     }

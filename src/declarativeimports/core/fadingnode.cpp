@@ -36,7 +36,7 @@ class FadingMaterialShader : public QSGSimpleMaterialShader<FadingMaterialState>
 public:
     FadingMaterialShader();
     using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
-    virtual void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
+    void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
     QList<QByteArray> attributes() const override;
 
     void initialize() override;
