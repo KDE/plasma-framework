@@ -766,7 +766,7 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
 
     FbConfigInfo *info = nullptr;
 
-    if (candidates.size() > 0) {
+    if (!candidates.isEmpty()) {
         const FBConfig &candidate = candidates.front();
 
         info = new FbConfigInfo;

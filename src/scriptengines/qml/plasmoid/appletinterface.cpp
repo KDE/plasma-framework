@@ -184,7 +184,7 @@ void AppletInterface::init()
 
     if (m_args.count() == 1) {
         emit externalData(QString(), m_args.first());
-    } else if (m_args.count() > 0) {
+    } else if (!m_args.isEmpty()) {
         emit externalData(QString(), m_args);
     }
 }
