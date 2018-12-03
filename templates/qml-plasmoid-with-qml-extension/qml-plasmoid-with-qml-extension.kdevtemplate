@@ -37,6 +37,7 @@ Comment=A template for a Plasma applet which uses custom API provided by an own 
 Comment[ca]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[ca@valencia]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[da]=En skabelon til en Plasma-applet som bruger tilpasset API leveret af ens eget QML-udvidelsesplugin
+Comment[de]=Vorlage für ein Plasma-Miniprogramm, das ein eigenes QML-Erweiterungsmodul verwendet.
 Comment[en_GB]=A template for a Plasma applet which uses custom API provided by an own QML extension plugin
 Comment[es]=Una plantilla para una miniaplicación de Plasma que usa la API común proporcionada por un complemento de extensión QML propio
 Comment[eu]=Plasma aplikaziotxo baterako txantiloi bat, QML hedapen plugin propio baten API pertsonalizatu bat erabiltzen duena

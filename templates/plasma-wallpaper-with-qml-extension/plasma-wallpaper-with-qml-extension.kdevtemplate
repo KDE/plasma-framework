@@ -30,6 +30,7 @@ Comment=A Plasma wallpaper which uses custom API provided by an own QML extensio
 Comment[ca]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[ca@valencia]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[da]=Et Plasma-baggrundsbillede der bruger et tilpasset API via et eget QML-udvidelsesplugin
+Comment[de]=Ein Plasma-Hintergrundbild, das eine benutzerdefinierte Programmierschnittstelle (API) eines eigenen QML-Erweiterungsmoduls verwendet.
 Comment[en_GB]=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[es]=Un fondo de escritorio para Plasma que usa la API personalizada proporcionada por un complemento propio de extensión QML
 Comment[eu]=Plasma horma-paper bat, QML hedapen plugin propio baten API pertsonalizatu bat erabiltzen duena
