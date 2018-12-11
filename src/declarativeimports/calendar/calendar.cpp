@@ -109,7 +109,7 @@ int Calendar::types() const
 
 void Calendar::setTypes(int types)
 {
-    if (m_types == types) {
+    if (m_types == static_cast<Types>(types)) {
         return;
     }
 
