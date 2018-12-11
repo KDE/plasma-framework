@@ -29,6 +29,7 @@
 
 static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
+    Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
 
     return new EventPluginsManager();
