@@ -33,8 +33,8 @@ class FullScreenSheet : public FullScreenWindow
     Q_PROPERTY(QString rejectButtonText READ rejectButtonText WRITE setRejectButtonText NOTIFY rejectButtonTextChanged)
 
 public:
-    FullScreenSheet(QDeclarativeItem *parent = nullptr);
-    ~FullScreenSheet();
+    explicit FullScreenSheet(QDeclarativeItem *parent = nullptr);
+    ~FullScreenSheet() override;
 
     QString title() const;
     void setTitle(const QString &text);

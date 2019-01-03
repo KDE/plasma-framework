@@ -69,7 +69,7 @@ public:
 /// @cond INTERNAL_DOCS
 
     explicit SvgItem(QQuickItem *parent = nullptr);
-    ~SvgItem();
+    ~SvgItem() override;
 
     void setElementId(const QString &elementID);
     QString elementId() const;

@@ -91,7 +91,7 @@ class SortFilterModel : public QSortFilterProxyModel
 
 public:
     explicit SortFilterModel(QObject *parent = nullptr);
-    ~SortFilterModel();
+    ~SortFilterModel() override;
 
     void setModel(QAbstractItemModel *source);
 
