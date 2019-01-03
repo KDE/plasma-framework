@@ -32,6 +32,7 @@ PinchArea {
 
     property alias selectedMonth: calendarBackend.monthName
     property alias selectedYear: calendarBackend.year
+    property alias firstDayOfWeek: calendarBackend.firstDayOfWeek
 
     property QtObject date
     property date currentDate
