@@ -67,11 +67,6 @@ IconItem::IconItem(QQuickItem *parent)
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged,
             this, &IconItem::updateImplicitSize);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    connect(this, &QQuickItem::enabledChanged,
-            this, &IconItem::onEnabledChanged);
-#endif
-
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
 
@@ -672,10 +667,8 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == ItemVisibleHasChanged && value.boolValue) {
         m_blockNextAnimation = true;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     } else if (change == ItemEnabledHasChanged) {
         onEnabledChanged();
-#endif
     } else if (change == ItemSceneChange && value.window) {
         schedulePixmapUpdate();
     }

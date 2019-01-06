@@ -1365,10 +1365,8 @@ void Dialog::setVisible(bool visible)
             d->mainItem->setVisible(true);
         }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // Bug 381242: Qt remembers minimize state and re-applies it when showing
         setWindowStates(windowStates() & ~Qt::WindowMinimized);
-#endif
         QQuickWindow::setVisible(visible);
         //signal will be emitted and proxied from the QQuickWindow code
     } else {
