@@ -267,9 +267,6 @@ void DialogPrivate::updateTheme()
 
 void DialogPrivate::updateVisibility(bool visible)
 {
-    if (mainItem) {
-        mainItem->setVisible(visible);
-    }
     if (visible) {
         if (visualParent && visualParent->window()) {
             q->setTransientParent(visualParent->window());
@@ -782,7 +779,6 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
         if (d->mainItem) {
             disconnect(d->mainItem, nullptr, this, nullptr);
-            d->mainItem->setVisible(false);
             d->mainItem->setParentItem(nullptr);
         }
 
@@ -793,7 +789,6 @@ void Dialog::setMainItem(QQuickItem *mainItem)
         d->mainItem = mainItem;
 
         if (mainItem) {
-            d->mainItem->setVisible(isVisible());
             mainItem->setParentItem(contentItem());
 
             connect(mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
@@ -1359,11 +1354,6 @@ void Dialog::setVisible(bool visible)
     if (d->componentComplete) {
         if (visible && d->visualParent) {
             setPosition(popupPosition(d->visualParent, size()));
-        }
-        //setting the main item visible before the show event arrives
-        //makes positioning work better
-        if (visible && d->mainItem) {
-            d->mainItem->setVisible(true);
         }
 
         // Bug 381242: Qt remembers minimize state and re-applies it when showing
