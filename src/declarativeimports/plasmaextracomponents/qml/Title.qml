@@ -43,7 +43,5 @@ import org.kde.plasma.components 2.0
  */
 Label {
     id: root
-
-    font.weight: Font.Light
     font.pointSize: theme.defaultFont.pointSize*2
 }
