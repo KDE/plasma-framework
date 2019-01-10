@@ -783,6 +783,7 @@ void Dialog::setMainItem(QQuickItem *mainItem)
         if (d->mainItem) {
             disconnect(d->mainItem, nullptr, this, nullptr);
             d->mainItem->setVisible(false);
+            d->mainItem->setParentItem(nullptr);
         }
 
         if (d->mainItemLayout) {
