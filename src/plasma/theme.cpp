@@ -59,8 +59,8 @@ Theme::Theme(QObject *parent)
 
     d->settingsChanged(false);
     if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                d, SLOT(onAppExitCleanup()));
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+                d, &ThemePrivate::onAppExitCleanup);
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     connect(d, &ThemePrivate::defaultFontChanged, this, &Theme::defaultFontChanged);
@@ -85,8 +85,8 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->cacheTheme = useCache;
     d->fixedName = true;
     if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                d, SLOT(onAppExitCleanup()));
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+                d, &ThemePrivate::onAppExitCleanup);
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
@@ -131,8 +131,8 @@ void Theme::setThemeName(const QString &themeName)
         ThemePrivate::themesRefCount[themeName].ref();
         d = ThemePrivate::themes[themeName];
         if (QCoreApplication::instance()) {
-            connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()),
-                    d, SLOT(onAppExitCleanup()));
+            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+                    d, &ThemePrivate::onAppExitCleanup);
         }
         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
