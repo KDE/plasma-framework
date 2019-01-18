@@ -22,6 +22,7 @@
 
 #include <QQuickItem>
 #include <QPointer>
+#include <QSharedPointer>
 #include <QVariant>
 #include <Plasma/Plasma>
 #include <Plasma/Theme>
@@ -124,13 +125,16 @@ private:
     void setParentScope(ColorScope * parentScope);
 
     bool m_inherit;
-    Plasma::Theme m_theme;
     Plasma::Theme::ColorGroup m_group;
     QPointer<ColorScope> m_parentScope;
     QObject *const m_parent;
     Plasma::Theme::ColorGroup m_actualGroup;
 
     static QHash<QObject *, ColorScope *> s_attachedScopes;
+
+    static QWeakPointer<Plasma::Theme> s_theme;
+    QSharedPointer<Plasma::Theme> m_theme;
+
 };
 
 QML_DECLARE_TYPEINFO(ColorScope, QML_HAS_ATTACHED_PROPERTIES)

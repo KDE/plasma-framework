@@ -27,6 +27,8 @@
 
 QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, ColorScope *>();
 
+QWeakPointer<Plasma::Theme> ColorScope::s_theme;
+
 ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
     : QQuickItem(parent),
       m_inherit(false),
@@ -34,7 +36,15 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
       m_parent(parentObject),
       m_actualGroup(Plasma::Theme::NormalColorGroup)
 {
-    connect(&m_theme, &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
+    m_theme = s_theme.toStrongRef();
+    if (!m_theme) {
+        QSharedPointer<Plasma::Theme> themePtr(new Plasma::Theme);
+        s_theme = themePtr;
+        m_theme = s_theme.toStrongRef();
+    }
+
+    connect(s_theme.data(), &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
+
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 
     QQuickItem *parentItem = qobject_cast<QQuickItem *>(parentObject);
@@ -138,37 +148,37 @@ Plasma::Theme::ColorGroup ColorScope::colorGroup() const
 
 QColor ColorScope::textColor() const
 {
-    return m_theme.color(Plasma::Theme::TextColor, colorGroup());
+    return m_theme->color(Plasma::Theme::TextColor, colorGroup());
 }
 
 QColor ColorScope::highlightColor() const
 {
-    return m_theme.color(Plasma::Theme::HighlightColor, colorGroup());
+    return m_theme->color(Plasma::Theme::HighlightColor, colorGroup());
 }
 
 QColor ColorScope::highlightedTextColor() const
 {
-    return m_theme.color(Plasma::Theme::HighlightedTextColor, colorGroup());
+    return m_theme->color(Plasma::Theme::HighlightedTextColor, colorGroup());
 }
 
 QColor ColorScope::backgroundColor() const
 {
-    return m_theme.color(Plasma::Theme::BackgroundColor, colorGroup());
+    return m_theme->color(Plasma::Theme::BackgroundColor, colorGroup());
 }
 
 QColor ColorScope::positiveTextColor() const
 {
-    return m_theme.color(Plasma::Theme::PositiveTextColor, colorGroup());
+    return m_theme->color(Plasma::Theme::PositiveTextColor, colorGroup());
 }
 
 QColor ColorScope::neutralTextColor() const
 {
-    return m_theme.color(Plasma::Theme::NeutralTextColor, colorGroup());
+    return m_theme->color(Plasma::Theme::NeutralTextColor, colorGroup());
 }
 
 QColor ColorScope::negativeTextColor() const
 {
-    return m_theme.color(Plasma::Theme::NegativeTextColor, colorGroup());
+    return m_theme->color(Plasma::Theme::NegativeTextColor, colorGroup());
 }
 
 bool ColorScope::inherit() const
