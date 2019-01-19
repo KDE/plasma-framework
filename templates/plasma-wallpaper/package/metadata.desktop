@@ -38,11 +38,12 @@ Name[uk]=%{APPNAME}
 Name[x-test]=xx%{APPNAME}xx
 Name[zh_CN]=%{APPNAME}
 Name[zh_TW]=%{APPNAME}
+Comment=
 
 Type=Service
 Icon=plasma
-
 X-KDE-ServiceTypes=Plasma/Wallpaper
+
 X-KDE-PluginInfo-Author=%{AUTHOR}
 X-KDE-PluginInfo-Email=%{EMAIL}
 X-KDE-PluginInfo-Name=org.kde.plasma.%{APPNAMELC}
