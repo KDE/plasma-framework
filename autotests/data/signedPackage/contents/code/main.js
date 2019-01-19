@@ -5,7 +5,7 @@
 //
 // More documentation can be found here:
 //
-// http://techbase.kde.org/Development/Tutorials/Plasma/JavaScript/API#Extensions
+// https://techbase.kde.org/Development/Tutorials/Plasma/JavaScript/API#Extensions
 
 output = new TextEdit
 output.readOnly = true
@@ -18,7 +18,7 @@ layout.addItem(output)
 // to security restrictions) we won't have a plasmoid.get, so let's check for it
 // before using it!
 if (plasmoid.getUrl) {
-    var getJob = plasmoid.getUrl("http://dot.kde.org/rss.xml");
+    var getJob = plasmoid.getUrl("https://dot.kde.org/rss.xml");
     function recv(job, data)
     {
         if (job == getJob) {

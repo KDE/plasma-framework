@@ -14,7 +14,7 @@ endif()
 #find_package(KdepimLibs 4.5.60)
 #find_package(Gpgme)
 #set_package_properties(KDEPIMLIBS PROPERTIES DESCRIPTION "KDE PIM libraries"
-#                       URL "http://www.kde.org" TYPE OPTIONAL
+#                       URL "https://www.kde.org" TYPE OPTIONAL
 #                       PURPOSE "Needed for building several Plasma DataEngines")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)

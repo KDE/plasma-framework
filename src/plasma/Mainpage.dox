@@ -6,14 +6,14 @@ widgets (Plasma::Applet) that can be organised into managed groupings
 abstraction layer (Plasma::DataEngine) and a corresponding service interaction
 layer (Plasma::Service) to make implementing widgets easier.
 
-The <a href="http://doc.qt.io/qt-5/qtquick-index.html">Qt Quick
-framework</a> and set of <a href="http://api.kde.org/frameworks-api/frameworks5-apidocs/">KDE Frameworks</a>
+The <a href="https://doc.qt.io/qt-5/qtquick-index.html">Qt Quick
+framework</a> and set of <a href="https://api.kde.org/frameworks">KDE Frameworks</a>
 provide the underpinning for Plasma framework.  As a result, it should
 work anywhere that Qt does.
 
 Although Plasma framework is developed for the use of the Plasma desktop shell,
 currently known as Plasma 5, it is general enough to be useful in other applications.
-<a href="http://amarok.kde.org">Amarok</a> is using it for its context
+<a href="https://amarok.kde.org">Amarok</a> is using it for its context
 view, allowing for pluggable widgets to display and interact with the music
 collection, such as "current track" and "tag cloud" widgets.
 
@@ -35,7 +35,7 @@ Other important classes are:
 
 
 The
-<a href="http://techbase.kde.org/Development/Tutorials/Plasma">Plasma tutorials</a>
+<a href="https://techbase.kde.org/Development/Tutorials/Plasma">Plasma tutorials</a>
 on TechBase provide a good introduction to writing plugins, such as widgets and
 data engines, for libplasma-based applications.
 

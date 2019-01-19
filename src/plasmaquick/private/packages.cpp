@@ -30,7 +30,7 @@
 
 void LookAndFeelPackage::initPackage(Plasma::Package *package)
 {
-    // http://community.kde.org/Plasma/lookAndFeelPackage#
+    // https://community.kde.org/Plasma/lookAndFeelPackage
     package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/"));
 
     //Defaults

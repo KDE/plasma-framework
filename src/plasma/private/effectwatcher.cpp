@@ -65,7 +65,7 @@ bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message
     // A faster comparison than eventType != "xcb_generic_event_t"
     // given that eventType can only have the following values:
     // "xcb_generic_event_t", "windows_generic_MSG" and "mac_generic_NSEvent"
-    // According to http://doc.qt.io/qt-5/qabstractnativeeventfilter.html
+    // According to https://doc.qt.io/qt-5/qabstractnativeeventfilter.html
     if (eventType[0] != 'x') {
         return false;
     }

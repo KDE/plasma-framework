@@ -84,12 +84,12 @@ set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate doc
 #optional features
 find_package(X11 MODULE)
 set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
-                       URL "http://www.x.org"
+                       URL "https://www.x.org/"
                        TYPE OPTIONAL
                       )
 find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE XFIXES RENDER)
 set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
-                       URL "http://xcb.freedesktop.org"
+                       URL "https://xcb.freedesktop.org/"
                        TYPE OPTIONAL
                       )
 if(X11_FOUND AND XCB_XCB_FOUND)
@@ -101,7 +101,7 @@ endif()
 
 find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
-                       URL "http://www.opengl.org"
+                       URL "https://www.opengl.org/"
                        TYPE OPTIONAL
                       )
 
