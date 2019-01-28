@@ -20,17 +20,10 @@
 #define PLASMA_DIALOGSHADOWS_H
 
 #include <QSet>
+#include <KWindowEffects>
 
 #include "plasma/framesvg.h"
 #include "plasma/svg.h"
-
-namespace KWayland
-{
-    namespace Client
-    {
-        class PlasmaShell;
-    }
-}
 
 class DialogShadows : public Plasma::Svg
 {
@@ -42,21 +35,11 @@ public:
 
     static DialogShadows *self();
 
-    void addWindow(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders = Plasma::FrameSvg::AllBorders);
-    void removeWindow(const QWindow *window);
-
-    void setEnabledBorders(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders = Plasma::FrameSvg::AllBorders);
-
-    bool enabled() const;
-
-    KWayland::Client::PlasmaShell *waylandPlasmaShellInterface() const;
-
+    void addWindow(QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders = Plasma::FrameSvg::AllBorders);
+    void removeWindow(QWindow *window);
+    void updateShadows();
 private:
-    class Private;
-    Private *const d;
-
-    Q_PRIVATE_SLOT(d, void updateShadows())
-    Q_PRIVATE_SLOT(d, void windowDestroyed(QObject *deletedObject))
+    KWindowEffects::ShadowData m_shadow;
 };
 
 #endif

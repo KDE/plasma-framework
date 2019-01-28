@@ -709,7 +709,7 @@ void DialogPrivate::setupWaylandIntegration()
     }
 
     using namespace KWayland::Client;
-    PlasmaShell *interface = DialogShadows::self()->waylandPlasmaShellInterface();
+    PlasmaShell *interface = nullptr; //DialogShadows::self()->waylandPlasmaShellInterface();
     if (!interface) {
         return;
     }
