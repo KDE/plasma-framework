@@ -477,16 +477,36 @@ bool Theme::backgroundContrastEnabled() const
 
 qreal Theme::backgroundContrast() const
 {
+    if (qIsNaN(d->backgroundContrast)) {
+        // Make up sensible default values, based on the background color
+        // If we're using a dark background color, darken the background
+        if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
+            return 0.45;
+        // for a light theme lighten up the background
+        } else {
+            return 0.3;
+        }
+    }
     return d->backgroundContrast;
 }
 
 qreal Theme::backgroundIntensity() const
 {
+    if (qIsNaN(d->backgroundIntensity)) {
+        if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
+            return 0.45;
+        } else {
+            return 1.9;
+        }
+    }
     return d->backgroundIntensity;
 }
 
 qreal Theme::backgroundSaturation() const
 {
+    if (qIsNaN(d->backgroundSaturation)) {
+        return 1.7;
+    }
     return d->backgroundSaturation;
 }
 

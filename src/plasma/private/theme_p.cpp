@@ -71,9 +71,9 @@ ThemePrivate::ThemePrivate(QObject *parent)
       useGlobal(true),
       hasWallpapers(false),
       fixedName(false),
-      backgroundContrast(0),
-      backgroundIntensity(0),
-      backgroundSaturation(0),
+      backgroundContrast(qQNaN()),
+      backgroundIntensity(qQNaN()),
+      backgroundSaturation(qQNaN()),
       backgroundContrastEnabled(true),
       apiMajor(1),
       apiMinor(0),
@@ -728,23 +728,9 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
         cg = KConfigGroup(metadata, "ContrastEffect");
         backgroundContrastEnabled = cg.readEntry("enabled", false);
 
-        //if (backgroundContrastEnabled) {
-        // Make up sensible default values, based on the background color
-        // This works for a light theme -- lighting up the background
-        qreal _contrast = 0.3;
-        qreal _intensity = 1.9;
-        qreal _saturation = 1.7;
-
-        // If we're using a dark background color, darken the background
-        if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
-            _contrast = 0.45;
-            _intensity = 0.45;
-            _saturation = 1.7;
-        }
-        backgroundContrast = cg.readEntry("contrast", _contrast);
-        backgroundIntensity = cg.readEntry("intensity", _intensity);
-        backgroundSaturation = cg.readEntry("saturation", _saturation);
-        //}
+        backgroundContrast = cg.readEntry("contrast", qQNaN());
+        backgroundIntensity = cg.readEntry("intensity", qQNaN());
+        backgroundSaturation = cg.readEntry("saturation", qQNaN());
     } else {
         backgroundContrastEnabled = false;
     }
