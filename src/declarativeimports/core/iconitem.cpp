@@ -556,6 +556,13 @@ void IconItem::iconLoaderIconChanged(int group)
     schedulePixmapUpdate();
 }
 
+void IconItem::windowVisibleChanged(bool visible)
+{
+    if (visible) {
+        m_blockNextAnimation = true;
+    }
+}
+
 void IconItem::schedulePixmapUpdate()
 {
     polish();
@@ -670,7 +677,15 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
     } else if (change == ItemEnabledHasChanged) {
         onEnabledChanged();
     } else if (change == ItemSceneChange && value.window) {
+        if (m_window) {
+            disconnect(m_window.data(), &QWindow::visibleChanged, this, &IconItem::windowVisibleChanged);
+        }
+        m_window = value.window;
+        if (m_window) {
+            connect(m_window.data(), &QWindow::visibleChanged, this, &IconItem::windowVisibleChanged);
+        }
         schedulePixmapUpdate();
+
     }
 
     QQuickItem::itemChange(change, value);

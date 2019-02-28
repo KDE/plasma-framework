@@ -24,6 +24,7 @@
 #include <QIcon>
 #include <QQuickItem>
 #include <QPixmap>
+#include <QPointer>
 #include <QVariant>
 #include <QTimer>
 
@@ -193,6 +194,7 @@ private Q_SLOTS:
     void valueChanged(const QVariant &value);
     void onEnabledChanged();
     void iconLoaderIconChanged(int group);
+    void windowVisibleChanged(bool visible);
 
 private:
     void loadPixmap();
@@ -231,6 +233,8 @@ private:
     //animation on pixmap change
     QPropertyAnimation *m_animation;
     qreal m_animValue;
+
+    QPointer<QWindow> m_window;
 };
 
 #endif
