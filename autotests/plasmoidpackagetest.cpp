@@ -33,7 +33,7 @@
 
 void PlasmoidPackageTest::initTestCase()
 {
-    QStandardPaths::enableTestMode(true);
+    QStandardPaths::setTestModeEnabled(true);
 }
 
 void PlasmoidPackageTest::init()

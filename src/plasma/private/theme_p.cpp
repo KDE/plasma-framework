@@ -244,8 +244,8 @@ bool ThemePrivate::useCache()
                 const QFileInfo metadataFileInfo(themeMetadataPath);
                 const QFileInfo iconThemeMetadataFileInfo(iconThemeMetadataPath);
 
-                cachesTooOld = (cacheFileInfo.lastModified().toTime_t() < metadataFileInfo.lastModified().toTime_t()) ||
-                        (cacheFileInfo.lastModified().toTime_t() < iconThemeMetadataFileInfo.lastModified().toTime_t());
+                cachesTooOld = (cacheFileInfo.lastModified().toSecsSinceEpoch() < metadataFileInfo.lastModified().toSecsSinceEpoch()) ||
+                        (cacheFileInfo.lastModified().toSecsSinceEpoch() < iconThemeMetadataFileInfo.lastModified().toSecsSinceEpoch());
             }
         }
 

@@ -987,7 +987,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     Plasma::Applet *applet = nullptr;
     foreach (QObject *appletObject, m_appletInterfaces) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
-            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->posF()))) {
+            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->localPos()))) {
                 applet = ai->applet();
                 break;
             } else {

@@ -265,7 +265,7 @@ void Containment::restoreContents(KConfigGroup &group)
 
     //restore the applets ordered by id
     QStringList groups = applets.groupList();
-    qSort(groups.begin(), groups.end());
+    std::sort(groups.begin(), groups.end());
 
     // Sort the applet configs in order of geometry to ensure that applets
     // are added from left to right or top to bottom for a panel containment
@@ -275,7 +275,7 @@ void Containment::restoreContents(KConfigGroup &group)
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
     }
-    qStableSort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
+    std::stable_sort(appletConfigs.begin(), appletConfigs.end(), appletConfigLessThan);
 
     QMutableListIterator<KConfigGroup> it(appletConfigs);
     while (it.hasNext()) {

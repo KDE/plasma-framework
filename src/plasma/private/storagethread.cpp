@@ -320,12 +320,12 @@ void StorageThread::expire(QPointer<StorageJob> wcaller, const QVariantMap &para
     if (valueGroup.isEmpty()) {
         query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where accessTime < :date"));
         QDateTime time(QDateTime::currentDateTime().addSecs(-params[QStringLiteral("age")].toUInt()));
-        query.bindValue(QStringLiteral(":date"), time.toTime_t());
+        query.bindValue(QStringLiteral(":date"), time.toSecsSinceEpoch());
     } else {
         query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup=:valueGroup and accessTime < :date"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         QDateTime time(QDateTime::currentDateTime().addSecs(-params[QStringLiteral("age")].toUInt()));
-        query.bindValue(QStringLiteral(":date"), time.toTime_t());
+        query.bindValue(QStringLiteral(":date"), time.toSecsSinceEpoch());
     }
 
     const bool success = query.exec();

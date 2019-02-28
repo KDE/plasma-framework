@@ -186,7 +186,7 @@ int Calendar::currentWeek() const
 
 QString Calendar::dayName(int weekday) const
 {
-    return QDate::shortDayName(weekday);
+    return QLocale::system().dayName(weekday, QLocale::ShortFormat);
 }
 
 QString Calendar::monthName() const

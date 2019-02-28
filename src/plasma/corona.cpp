@@ -599,7 +599,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 
     KConfigGroup containmentsGroup(&conf, "Containments");
     QStringList groups = containmentsGroup.groupList();
-    qSort(groups.begin(), groups.end());
+    std::sort(groups.begin(), groups.end());
 
     foreach (const QString &group, groups) {
         KConfigGroup containmentConfig(&containmentsGroup, group);

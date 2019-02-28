@@ -688,7 +688,10 @@ QVariantList AppletInterface::availableScreenRegion() const
         reg = applet()->containment()->corona()->availableScreenRegion(screenId);
     }
 
-    foreach (QRect rect, reg.rects()) {
+    auto it = reg.begin();
+    const auto itEnd = reg.end();
+    for (; it != itEnd; ++it) {
+        QRect rect = *it;
         //make it relative
         QRect geometry = applet()->containment()->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());

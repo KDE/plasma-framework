@@ -24,7 +24,7 @@
 
 void StorageTest::initTestCase()
 {
-    QStandardPaths::enableTestMode(true);
+    QStandardPaths::setTestModeEnabled(true);
 
     m_data.insert(QStringLiteral("String 1"), "Fork");
     m_data.insert(QStringLiteral("String 2"), "Spoon");

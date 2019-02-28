@@ -58,9 +58,13 @@ void SortFilterModel::syncRoleNames()
         m_roleIds[QString::fromUtf8(i.value())] = i.key();
     }
 
-    setRoleNames(sourceModel()->roleNames());
     setFilterRole(m_filterRole);
     setSortRole(m_sortRole);
+}
+
+QHash<int,QByteArray> SortFilterModel::roleNames() const
+{
+    return sourceModel()->roleNames();
 }
 
 int SortFilterModel::roleNameToId(const QString &name) const
@@ -419,8 +423,6 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
         }
     }
 
-    setRoleNames(m_roleNames);
-
     if (firstRun) {
         endResetModel();
     } else if (delta > 0) {
@@ -430,6 +432,11 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     }
     emit dataChanged(createIndex(sourceIndex, 0),
                      createIndex(sourceIndex + qMin(list.length(), oldLength), 0));
+}
+
+QHash<int, QByteArray> DataModel::roleNames() const
+{
+    return m_roleNames;
 }
 
 void DataModel::removeSource(const QString &sourceName)

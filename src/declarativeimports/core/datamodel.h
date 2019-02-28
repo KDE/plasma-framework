@@ -139,7 +139,8 @@ Q_SIGNALS:
 
 protected:
     int roleNameToId(const QString &name) const;
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;    
+    QHash<int, QByteArray> roleNames() const override;
 
 protected Q_SLOTS:
     void syncRoleNames();
@@ -227,7 +228,7 @@ public:
 protected:
     void setItems(const QString &sourceName, const QVariantList &list);
     inline int countItems() const;
-
+    QHash<int, QByteArray> roleNames() const override;
 Q_SIGNALS:
     void countChanged();
     void sourceModelChanged(QObject *);

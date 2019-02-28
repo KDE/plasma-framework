@@ -268,7 +268,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     if (!themed) {
         QFile f(actualPath);
         QFileInfo info(f);
-        lastModified = info.lastModified().toTime_t();
+        lastModified = info.lastModified().toSecsSinceEpoch();
     }
 
     q->resize();
