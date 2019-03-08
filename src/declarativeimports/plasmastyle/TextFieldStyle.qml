@@ -17,7 +17,7 @@
 *   51 Franklin Street, Fifth Floor, Boston, MA  2.010-1301, USA.
 */
 
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.0
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
@@ -57,9 +57,16 @@ QtQuickControlStyle.TextFieldStyle {
 
         //In order to get the same height in both buttons and lineedits we need to apply the same rule here
 
-        implicitHeight: Math.max(control.cursorRectangle.height * 1.6, control.cursorRectangle.height + base.margins.top + base.margins.bottom)
+        implicitHeight: Math.max(metrics.height * 1.6,
+                                 metrics.height + base.margins.top + base.margins.bottom)
         implicitWidth: theme.mSize(theme.defaultFont).width * 12
         opacity: control.enabled ? 1 : 0.6
+
+        TextMetrics {
+            id: metrics
+            text: "M"
+            font: control.font
+        }
 
         Private.TextFieldFocus {
             id: hover
