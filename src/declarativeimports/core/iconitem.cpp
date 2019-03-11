@@ -187,6 +187,7 @@ void IconItem::setSource(const QVariant &source)
             //success?
             if (m_usesPlasmaTheme && m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
                 m_icon = QIcon();
+                m_imageIcon = QImage();
                 m_svgIconName = sourceString;
                 //ok, svg not available from the plasma theme
             } else {
