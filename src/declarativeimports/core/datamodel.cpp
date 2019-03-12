@@ -64,7 +64,10 @@ void SortFilterModel::syncRoleNames()
 
 QHash<int,QByteArray> SortFilterModel::roleNames() const
 {
-    return sourceModel()->roleNames();
+    if (sourceModel()) {
+       return sourceModel()->roleNames();
+    }
+    return {};
 }
 
 int SortFilterModel::roleNameToId(const QString &name) const
