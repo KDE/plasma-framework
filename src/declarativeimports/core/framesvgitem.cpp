@@ -281,18 +281,23 @@ FrameSvgItem::~FrameSvgItem()
 class CheckMarginsChange
 {
 public:
-    CheckMarginsChange(FrameSvgItemMargins *margins)
-        : m_oldMargins(margins ? margins->margins() : QVector<qreal>()), m_margins(margins)
+    CheckMarginsChange(QVector<qreal>& oldMargins, FrameSvgItemMargins *marginsObject)
+        : m_oldMargins(oldMargins), m_marginsObject(marginsObject)
     {}
 
-    ~CheckMarginsChange() {
-        if (m_margins && m_margins->margins() != m_oldMargins) {
-            m_margins->update();
+    ~CheckMarginsChange()
+    {
+        const QVector<qreal> oldMarginsBefore = m_oldMargins;
+        m_oldMargins = m_marginsObject ? m_marginsObject->margins() : QVector<qreal>();
+
+        if (oldMarginsBefore != m_oldMargins) {
+            m_marginsObject->update();
         }
     }
 
-    const QVector<qreal> m_oldMargins;
-    FrameSvgItemMargins *const m_margins;
+private:
+    QVector<qreal>& m_oldMargins;
+    FrameSvgItemMargins *const m_marginsObject;
 };
 
 void FrameSvgItem::setImagePath(const QString &path)
@@ -301,8 +306,8 @@ void FrameSvgItem::setImagePath(const QString &path)
         return;
     }
 
-    CheckMarginsChange checkMargins(m_margins);
-    CheckMarginsChange checkFixedMargins(m_fixedMargins);
+    CheckMarginsChange checkMargins(m_oldMargins, m_margins);
+    CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
 
     updateDevicePixelRatio();
     m_frameSvg->setImagePath(path);
@@ -345,8 +350,8 @@ void FrameSvgItem::setPrefix(const QVariant &prefixes)
         return;
     }
 
-    CheckMarginsChange checkMargins(m_margins);
-    CheckMarginsChange checkFixedMargins(m_fixedMargins);
+    CheckMarginsChange checkMargins(m_oldMargins, m_margins);
+    CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
 
     m_prefixes = prefixList;
     applyPrefixes();
@@ -432,7 +437,7 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
         return;
     }
 
-    CheckMarginsChange checkMargins(m_margins);
+    CheckMarginsChange checkMargins(m_oldMargins, m_margins);
 
     m_frameSvg->setEnabledBorders(borders);
     emit enabledBordersChanged();
@@ -466,8 +471,8 @@ void FrameSvgItem::doUpdate()
         return;
     }
 
-    CheckMarginsChange checkMargins(m_margins);
-    CheckMarginsChange checkFixedMargins(m_fixedMargins);
+    CheckMarginsChange checkMargins(m_oldMargins, m_margins);
+    CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
 
     //if the theme changed, the available prefix may have changed as well
     applyPrefixes();
@@ -601,8 +606,8 @@ void FrameSvgItem::classBegin()
 
 void FrameSvgItem::componentComplete()
 {
-    CheckMarginsChange checkMargins(m_margins);
-    CheckMarginsChange checkFixedMargins(m_fixedMargins);
+    CheckMarginsChange checkMargins(m_oldMargins, m_margins);
+    CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
 
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));

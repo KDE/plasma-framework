@@ -255,6 +255,9 @@ private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
+    // logged margins to check for changes
+    QVector<qreal> m_oldMargins;
+    QVector<qreal> m_oldFixedMargins;
     QStringList m_prefixes;
     bool m_textureChanged;
     bool m_sizeChanged;
