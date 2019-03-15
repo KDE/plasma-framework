@@ -145,11 +145,13 @@ public:
 
             //if tiling horizontally
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
-                textureRect.setWidth(nodeRect.width() / m_elementNativeSize.width());
+                // cmp. CSS3's border-image-repeat: "repeat", though with first tile not centered, but aligned to left
+                textureRect.setWidth((qreal) nodeRect.width() / m_elementNativeSize.width());
             }
             //if tiling vertically
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
-                textureRect.setHeight(nodeRect.height() / m_elementNativeSize.height());
+                // cmp. CSS3's border-image-repeat: "repeat", though with first tile not centered, but aligned to top
+                textureRect.setHeight((qreal) nodeRect.height() / m_elementNativeSize.height());
             }
         } else if (m_fitMode == Stretch) {
             QString prefix = m_frameSvg->frameSvg()->actualPrefix();
