@@ -49,7 +49,7 @@ void DataSource::componentComplete()
 void DataSource::setConnectedSources(const QStringList &sources)
 {
     bool sourcesChanged = false;
-    foreach (const QString &source, sources) {
+    for (const QString &source : sources) {
         if (!m_connectedSources.contains(source)) {
             sourcesChanged = true;
             if (m_dataEngine) {
@@ -60,7 +60,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
         }
     }
 
-    foreach (const QString &source, m_connectedSources) {
+    for (const QString &source : qAsConst(m_connectedSources)) {
         if (!sources.contains(source)) {
             m_data->clear(source);
             sourcesChanged = true;
@@ -161,7 +161,7 @@ void DataSource::setupData()
     qDeleteAll(m_services);
     m_services.clear();
 
-    foreach (const QString &source, m_connectedSources) {
+    for (const QString &source : qAsConst(m_connectedSources)) {
         m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
         emit sourceConnected(source);
     }

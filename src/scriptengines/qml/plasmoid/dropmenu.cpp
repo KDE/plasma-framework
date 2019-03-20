@@ -77,9 +77,7 @@ void DropMenu::show()
         m_dropJob->setApplicationActions(m_dropActions);
         m_dropJob->showMenu(m_dropPoint);
     } else if (m_menu) {
-        foreach (QAction *action, m_dropActions) {
-            m_menu->addAction(action);
-        }
+        m_menu->addActions(m_dropActions);
         m_menu->popup(m_dropPoint);
     }
 }

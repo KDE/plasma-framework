@@ -117,7 +117,8 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 
     //Search a child that has the needed Layout properties
     //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-    foreach (QObject *child, item->children()) {
+    const auto lstChildren = item->children();
+    for (QObject *child : lstChildren) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
                 child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
@@ -158,7 +159,8 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 
     QObject *ownLayout = nullptr;
 
-    foreach (QObject *child, q->children()) {
+    const auto children = q->children();
+    for (QObject *child : children) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
                 child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
@@ -606,7 +608,8 @@ void AppletQuickItem::init()
         if (d->applet->failedToLaunch()) {
             reason = d->applet->launchErrorMessage();
         } else if (d->applet->kPackage().isValid()) {
-            foreach (QQmlError error, d->qmlObject->mainComponent()->errors()) {
+            const auto errors = d->qmlObject->mainComponent()->errors();
+            for (QQmlError error : errors) {
                 reason += error.toString() + QLatin1Char('\n');
             }
             reason = i18n("Error loading QML file: %1", reason);

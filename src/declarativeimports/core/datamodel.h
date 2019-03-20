@@ -261,7 +261,7 @@ private:
 int DataModel::countItems() const
 {
     int count = 0;
-    foreach (const QVector<QVariant> &v, m_items) {
+    for (const QVector<QVariant> &v : qAsConst(m_items)) {
         count += v.count();
     }
     return count;

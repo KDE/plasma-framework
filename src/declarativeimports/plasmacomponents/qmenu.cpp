@@ -99,7 +99,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
     if (action) {
         action->setMenu(m_menu);
         m_menu->clear();
-        foreach (QMenuItem *item, m_items) {
+        for (QMenuItem *item : qAsConst(m_items)) {
             if (item->section()) {
                 if (!item->isVisible()) {
                     continue;
@@ -289,7 +289,7 @@ void QMenuProxy::rebuildMenu()
 {
     m_menu->clear();
 
-    foreach (QMenuItem *item, m_items) {
+    for (QMenuItem *item : qAsConst(m_items)) {
         if (item->section()) {
             if (!item->isVisible()) {
                 continue;

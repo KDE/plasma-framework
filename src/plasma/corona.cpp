@@ -110,7 +110,8 @@ void Corona::saveLayout(const QString &configName) const
 
 void Corona::exportLayout(KConfigGroup &config, QList<Containment *> containments)
 {
-    foreach (const QString &group, config.groupList()) {
+    const auto groupList = config.groupList();
+    for (const QString &group : groupList) {
         KConfigGroup cg(&config, group);
         cg.deleteGroup();
     }
@@ -121,14 +122,15 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment *> containment
 
     KConfigGroup dest(&config, "Containments");
     KConfigGroup dummy;
-    foreach (Plasma::Containment *c, containments) {
+    for (Plasma::Containment *c : qAsConst(containments)) {
         c->save(dummy);
         c->config().reparent(&dest);
 
         //ensure the containment is unlocked
         //this is done directly because we have to bypass any Types::SystemImmutable checks
         c->Applet::d->immutability = Types::Mutable;
-        foreach (Applet *a, c->applets()) {
+        const auto lstApplet = c->applets();
+        for (Applet *a : lstApplet) {
             a->d->immutability = Types::Mutable;
         }
 
@@ -191,7 +193,7 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
 
 Containment *Corona::containmentForScreen(int screen) const
 {
-    foreach (Containment *containment, d->containments) {
+    for (Containment *containment : qAsConst(d->containments)) {
         if (containment->screen() == screen &&
             (containment->containmentType() == Plasma::Types::DesktopContainment ||
              containment->containmentType() == Plasma::Types::CustomContainment)) {
@@ -214,7 +216,7 @@ Containment *Corona::containmentForScreen(int screen,
 {
     Containment *containment = nullptr;
 
-    foreach (Containment *cont, d->containments) {
+    for (Containment *cont : qAsConst(d->containments)) {
         if (cont->lastScreen() == screen &&
             (cont->activity().isEmpty() || cont->activity() == activity) &&
             (cont->containmentType() == Plasma::Types::DesktopContainment ||
@@ -435,7 +437,8 @@ QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
     freeEdges << Plasma::Types::TopEdge << Plasma::Types::BottomEdge
               << Plasma::Types::LeftEdge << Plasma::Types::RightEdge;
 
-    foreach (Containment *containment, containments()) {
+    const auto containments = this->containments();
+    for (Containment *containment : containments) {
         if (containment->screen() == screen &&
                 freeEdges.contains(containment->location())) {
             freeEdges.removeAll(containment->location());
@@ -519,7 +522,7 @@ void CoronaPrivate::toggleImmutability()
 void CoronaPrivate::saveLayout(KSharedConfigPtr cg) const
 {
     KConfigGroup containmentsGroup(cg, "Containments");
-    foreach (const Containment *containment, containments) {
+    for (const Containment *containment : containments) {
         QString cid = QString::number(containment->id());
         KConfigGroup containmentConfig(&containmentsGroup, cid);
         containment->save(containmentConfig);
@@ -528,7 +531,7 @@ void CoronaPrivate::saveLayout(KSharedConfigPtr cg) const
 
 void CoronaPrivate::updateContainmentImmutability()
 {
-    foreach (Containment *c, containments) {
+    for (Containment *c : qAsConst(containments)) {
         // we need to tell each containment that immutability has been altered
         c->updateConstraints(Types::ImmutableConstraint);
     }
@@ -651,7 +654,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
     QList<Plasma::Containment *> newContainments;
     QSet<uint> containmentsIds;
 
-    foreach (Containment *containment, containments) {
+    for (Containment *containment : qAsConst(containments)) {
         containmentsIds.insert(containment->id());
     }
 
@@ -659,7 +662,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
     QStringList groups = containmentsGroup.groupList();
     std::sort(groups.begin(), groups.end());
 
-    foreach (const QString &group, groups) {
+    for (const QString &group : qAsConst(groups)) {
         KConfigGroup containmentConfig(&containmentsGroup, group);
 
         if (containmentConfig.entryMap().isEmpty()) {
@@ -708,7 +711,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 void CoronaPrivate::notifyContainmentsReady()
 {
     containmentsStarting = 0;
-    foreach (Containment *containment, containments) {
+    for (Containment *containment : qAsConst(containments)) {
         if (!containment->isUiReady() && containment->screen() >= 0) {
             ++containmentsStarting;
             QObject::connect(containment, &Plasma::Containment::uiReadyChanged, q, [this](bool ready) { containmentReady(ready); } );

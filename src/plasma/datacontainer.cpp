@@ -353,7 +353,7 @@ void DataContainer::checkForUpdate()
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
-        foreach (SignalRelay *relay, d->relays) {
+        for (SignalRelay *relay : qAsConst(d->relays)) {
             relay->checkQueueing();
         }
 
@@ -368,7 +368,7 @@ void DataContainer::forceImmediateUpdate()
         emit dataUpdated(objectName(), d->data);
     }
 
-    foreach (SignalRelay *relay, d->relays) {
+    for (SignalRelay *relay : qAsConst(d->relays)) {
         relay->forceImmediateUpdate();
     }
 }

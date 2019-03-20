@@ -141,7 +141,7 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
             [](const KPluginMetaData &md) {
                 return md.serviceTypes().contains(QLatin1String("PlasmaCalendar/Plugin"));
             });
-    Q_FOREACH (const KPluginMetaData &plugin, plugins) {
+    for (const KPluginMetaData &plugin : qAsConst(plugins)) {
         m_availablePlugins.insert(plugin.fileName(),
                                   { plugin.name(),
                                     plugin.description(),
@@ -152,7 +152,7 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
 
     // Fallback for legacy pre-KPlugin plugins so we can still load them
     const QStringList paths = QCoreApplication::libraryPaths();
-    Q_FOREACH (const QString &libraryPath, paths) {
+    for (const QString &libraryPath : paths) {
         const QString path(libraryPath + QStringLiteral("/plasmacalendarplugins"));
         QDir dir(path);
 
@@ -160,9 +160,9 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
             continue;
         }
 
-        QStringList entryList = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+        const QStringList entryList = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
 
-        Q_FOREACH (const QString &fileName, entryList) {
+        for (const QString &fileName : entryList) {
             const QString absolutePath = dir.absoluteFilePath(fileName);
             if (m_availablePlugins.contains(absolutePath)) {
                 continue;
@@ -217,7 +217,7 @@ void EventPluginsManager::setEnabledPlugins(QStringList &pluginsList)
     }
 
     // Now load all the plugins left in pluginsList
-    Q_FOREACH (const QString &pluginPath, pluginsList) {
+    for (const QString &pluginPath : qAsConst(pluginsList)) {
         loadPlugin(pluginPath);
     }
 

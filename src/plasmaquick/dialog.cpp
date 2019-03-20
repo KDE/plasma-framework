@@ -179,7 +179,8 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     //        we simply iterate over the virtual screens and pick the one our QWindow
     //        says it's at.
     QRect avail;
-    Q_FOREACH (QScreen *screen, QGuiApplication::screens()) {
+    const auto screens = QGuiApplication::screens();
+    for (QScreen *screen : screens) {
         //we check geometry() but then take availableGeometry()
         //to reliably check in which screen a position is, we need the full
         //geometry, including areas for panels
@@ -875,7 +876,8 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
             //Search a child that has the needed Layout properties
             //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-            foreach (QObject *child, mainItem->children()) {
+            const auto lstChild = mainItem->children();
+            for (QObject *child : lstChild) {
                 //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
                 if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
                         child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&

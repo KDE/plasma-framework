@@ -201,7 +201,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
                 auto filter = [&provides](const KPluginMetaData &md) -> bool
                 {
                     const QStringList provided = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-Provides"));
-                    foreach (const QString &p, provides) {
+                    for (const QString &p : provides) {
                         if (provided.contains(p)) {
                             return true;
                         }
@@ -246,7 +246,8 @@ void AppletPrivate::setDestroyed(bool destroyed)
 
     Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
     if (asContainment) {
-        foreach(Applet *a , asContainment->applets())
+        const auto lstApplets = asContainment->applets();
+        for (Applet *a : lstApplets)
         a->d->setDestroyed(destroyed);
     }
 }
@@ -411,10 +412,9 @@ void AppletPrivate::updateShortcuts()
     if (q->isContainment()) {
         //a horrible hack to avoid clobbering corona settings
         //we pull them out, then read, then put them back
-        QList<QString> names;
         QList<QAction *> qactions;
-        names << QStringLiteral("add sibling containment") << QStringLiteral("configure shortcuts") << QStringLiteral("lock widgets");
-        foreach (const QString &name, names) {
+        const QList<QString> names = { QStringLiteral("add sibling containment"), QStringLiteral("configure shortcuts"), QStringLiteral("lock widgets")};
+        for (const QString &name : names) {
             QAction *a = actions->action(name);
             actions->takeAction(a); //FIXME this is stupid, KActionCollection needs a takeAction(QString) method
             qactions << a;

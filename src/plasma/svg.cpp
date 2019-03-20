@@ -312,13 +312,13 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         // and store them locally.
         const QRegularExpression sizeHintedKeyExpr(QLatin1String("^") + CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio) + QLatin1String("$"));
 
-        foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
+	const auto lst = cacheAndColorsTheme()->listCachedRectKeys(path);
+        for (const QString &key : lst) {
             const auto match = sizeHintedKeyExpr.match(key);
             if (match.hasMatch()) {
                 QString baseElementId = match.captured(3);
                 QSize sizeHint(match.capturedRef(1).toInt(),
                                match.capturedRef(2).toInt());
-
                 if (sizeHint.isValid()) {
                     elementsWithSizeHints.insert(baseElementId, sizeHint);
                 }

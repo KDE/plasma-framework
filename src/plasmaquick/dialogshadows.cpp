@@ -452,7 +452,7 @@ void DialogShadows::Private::freeX11Pixmaps()
         return;
     }
 
-    foreach (const QPixmap &pixmap, m_shadowPixmaps) {
+    for (const QPixmap &pixmap : qAsConst(m_shadowPixmaps)) {
         if (!pixmap.isNull()) {
             XFreePixmap(display, reinterpret_cast<unsigned long>(createPixmap(pixmap)));
         }

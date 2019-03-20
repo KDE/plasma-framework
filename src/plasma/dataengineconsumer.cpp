@@ -80,7 +80,7 @@ DataEngineConsumer::DataEngineConsumer()
 
 DataEngineConsumer::~DataEngineConsumer()
 {
-    foreach (const QString &engine, d->loadedEngines) {
+    for (const QString &engine : qAsConst(d->loadedEngines)) {
         DataEngineManager::self()->unloadEngine(engine);
     }
 

@@ -235,7 +235,8 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 QObject *ContainmentInterface::containmentAt(int x, int y)
 {
     QObject *desktop = nullptr;
-    foreach (Plasma::Containment *c, m_containment->corona()->containments()) {
+    const auto lst = m_containment->corona()->containments();
+    for (Plasma::Containment *c : lst) {
         ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
 
         if (contInterface && contInterface->isVisible()) {
@@ -459,7 +460,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
     if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
         QString data = QString::fromUtf8( mimeData->data(QStringLiteral("text/x-plasmoidservicename")) );
         const QStringList appletNames = data.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-        foreach (const QString &appletName, appletNames) {
+        for (const QString &appletName : appletNames) {
             qDebug() << "adding" << appletName;
 
             metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRectF, QRectF(x, y, -1, -1)));
@@ -477,7 +478,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
         QMimeDatabase db;
         QMimeType firstMimetype = db.mimeTypeForUrl(urls.at(0));
-        foreach (const QUrl &url, urls) {
+        for (const QUrl &url : urls) {
             if (firstMimetype != db.mimeTypeForUrl(url)) {
                 m_dropMenu->setMultipleMimetypes(true);
                 break;
@@ -496,14 +497,14 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
     } else {
         bool deleteDropMenu = true;
 
-        QStringList formats = mimeData->formats();
+        const QStringList formats = mimeData->formats();
         QHash<QString, KPluginMetaData> seenPlugins;
         QHash<QString, QString> pluginFormats;
 
-        foreach (const QString &format, formats) {
+        for (const QString &format : formats) {
             const auto plugins = Plasma::PluginLoader::self()->listAppletMetaDataForMimeType(format);
 
-            foreach (const auto &plugin, plugins) {
+            for (const auto &plugin : plugins) {
                 if (seenPlugins.contains(plugin.pluginId())) {
                     continue;
                 }
@@ -525,7 +526,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             setAppletArgs(applet, pluginFormats[selectedPlugin], QString::fromUtf8(mimeData->data(pluginFormats[selectedPlugin])));
         } else {
             QHash<QAction *, QString> actionsToPlugins;
-            foreach (const auto &info, seenPlugins) {
+            for (const auto &info : qAsConst(seenPlugins)) {
                 QAction *action;
                 if (!info.iconName().isEmpty()) {
                     action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), m_dropMenu);
@@ -664,7 +665,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             action->setSeparator(true);
             m_dropMenu->addAction(action);
 
-            foreach (const auto &info, appletList) {
+            for (const auto &info : qAsConst(appletList)) {
                 const QString actionText = i18nc("Add widget", "Add %1", info.name());
                 QAction *action = new QAction(actionText, m_dropMenu);
                 if (!info.iconName().isEmpty()) {
@@ -696,11 +697,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 m_dropMenu->addAction(action);
 
                 QMap<QString, KPluginMetaData> sorted;
-                foreach (const auto &info, appletList) {
+                for (const auto &info : qAsConst(appletList)) {
                     sorted.insert(info.name(), info);
                 }
 
-                foreach (const KPluginMetaData &info, wallpaperList) {
+                for (const KPluginMetaData &info : qAsConst(wallpaperList)) {
                     const QString actionText = i18nc("Set wallpaper", "Set %1", info.name());
                     QAction *action = new QAction(actionText, m_dropMenu);
                     if (!info.iconName().isEmpty()) {
@@ -836,7 +837,8 @@ QList<QObject *> ContainmentInterface::actions() const
     //use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     int i = 0;
-    foreach (QAction *a, m_containment->actions()->actions()) {
+    auto listActions = m_containment->actions()->actions();
+    for (QAction *a : qAsConst(listActions)) {
         if (!actionOrder.contains(a->objectName())) {
             //FIXME QML visualizations don't support menus for now, *and* there is no way to
             //distinguish them on QML side
@@ -850,7 +852,8 @@ QList<QObject *> ContainmentInterface::actions() const
     }
 
     i = 0;
-    foreach (QAction *a, m_containment->corona()->actions()->actions()) {
+    listActions = m_containment->corona()->actions()->actions();
+    for (QAction *a : qAsConst(listActions)) {
         if (a->objectName() == QLatin1String("lock widgets") || a->menu()) {
             //It is up to the Containment to decide if the user is allowed or not
             //to lock/unluck the widgets, so corona should not add one when there is none
@@ -868,7 +871,7 @@ QList<QObject *> ContainmentInterface::actions() const
     }
     QList<QObject *> actionList = actions.values();
 
-    foreach (const QString &name, actionOrder) {
+    for (const QString &name : qAsConst(actionOrder)) {
         QAction *a = orderedActions.value(name);
         if (a && !a->menu()) {
             actionList << a;
@@ -917,7 +920,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     //FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = nullptr;
-    foreach (QObject *appletObject, m_appletInterfaces) {
+    for (QObject *appletObject : qAsConst(m_appletInterfaces)) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
             if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->localPos()))) {
                 applet = ai->applet();
@@ -1045,7 +1048,8 @@ void ContainmentInterface::keyPressEvent(QKeyEvent *event)
 
 void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
-    foreach (QAction *action, applet->contextualActions()) {
+    const auto listActions = applet->contextualActions();
+    for (QAction *action : listActions) {
         if (action) {
             desktopMenu->addAction(action);
         }

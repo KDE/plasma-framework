@@ -128,7 +128,7 @@ bool PluginTest::loadFromPlasma()
     bool ok = false;
     const QStringList allEngines = Plasma::PluginLoader::self()->listAllEngines();
     qDebug() << "All engines: " << allEngines;
-    foreach (const QString &e, allEngines) {
+    for (const QString &e : allEngines) {
         Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine(e);
         if (engine) {
             engine->connectSource(QStringLiteral("Europe/Amsterdam"), this);

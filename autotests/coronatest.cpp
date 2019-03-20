@@ -142,7 +142,8 @@ void CoronaTest::restore()
     m_corona->loadLayout(QStringLiteral("plasma-test-appletsrc"));
     QCOMPARE(m_corona->containments().count(), 3);
 
-    foreach (auto cont, m_corona->containments()) {
+    const auto containments = m_corona->containments();
+    for (auto cont : containments) {
         switch (cont->id()) {
         case 1:
             QCOMPARE(cont->applets().count(), 2);
@@ -208,9 +209,11 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::UserImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::UserImmutable);
 
-    foreach (Plasma::Containment *cont, m_corona->containments()) {
+    auto containments = m_corona->containments();
+    for (Plasma::Containment *cont : qAsConst(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::UserImmutable);
-        foreach (Plasma::Applet *app, cont->applets()) {
+        const auto lstApplets = cont->applets();
+        for (Plasma::Applet *app : lstApplets) {
             QCOMPARE(app->immutability(), Plasma::Types::UserImmutable);
         }
     }
@@ -218,9 +221,11 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::Mutable);
 
-    foreach (Plasma::Containment *cont, m_corona->containments()) {
+    containments = m_corona->containments();
+    for (Plasma::Containment *cont : qAsConst(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::Mutable);
-        foreach (Plasma::Applet *app, cont->applets()) {
+        const auto lstApplets = cont->applets();
+        for (Plasma::Applet *app : lstApplets) {
             QCOMPARE(app->immutability(), Plasma::Types::Mutable);
         }
     }
@@ -228,9 +233,11 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::SystemImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
-    foreach (Plasma::Containment *cont, m_corona->containments()) {
+    containments = m_corona->containments();
+    for (Plasma::Containment *cont : qAsConst(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
-        foreach (Plasma::Applet *app, cont->applets()) {
+        const auto lstApplets = cont->applets();
+        for (Plasma::Applet *app : lstApplets) {
             QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
         }
     }
@@ -239,9 +246,11 @@ void CoronaTest::immutability()
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
-    foreach (Plasma::Containment *cont, m_corona->containments()) {
+    containments = m_corona->containments();
+    for (Plasma::Containment *cont : qAsConst(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
-        foreach (Plasma::Applet *app, cont->applets()) {
+        const auto lstApplets = cont->applets();
+        for (Plasma::Applet *app : lstApplets) {
             QCOMPARE(app->immutability(), Plasma::Types::SystemImmutable);
         }
     }

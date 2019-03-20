@@ -191,7 +191,8 @@ void Containment::restore(KConfigGroup &group)
 
         //qCDebug(LOG_PLASMA) << cfg.keyList();
         if (cfg.exists()) {
-            foreach (const QString &key, cfg.keyList()) {
+            const auto keyList =  cfg.keyList();
+            for (const QString &key : keyList) {
                 //qCDebug(LOG_PLASMA) << "loading" << key;
                 setContainmentActions(key, cfg.readEntry(key, QString()));
             }
@@ -213,7 +214,8 @@ void Containment::restore(KConfigGroup &group)
             }
             if (defaultActionsCfg.isValid()) {
                 defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
-                foreach (const QString &key, defaultActionsCfg.keyList()) {
+                const auto keyList = defaultActionsCfg.keyList();
+                for (const QString &key : keyList) {
                     setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
                 }
             }
@@ -258,7 +260,7 @@ void Containment::save(KConfigGroup &g) const
 void Containment::saveContents(KConfigGroup &group) const
 {
     KConfigGroup applets(&group, "Applets");
-    foreach (const Applet *applet, d->applets) {
+    for (const Applet *applet : qAsConst(d->applets)) {
         KConfigGroup appletConfig(&applets, QString::number(applet->id()));
         applet->save(appletConfig);
     }
@@ -275,7 +277,7 @@ void Containment::restoreContents(KConfigGroup &group)
     // Sort the applet configs in order of geometry to ensure that applets
     // are added from left to right or top to bottom for a panel containment
     QList<KConfigGroup> appletConfigs;
-    foreach (const QString &appletGroup, groups) {
+    for (const QString &appletGroup : qAsConst(groups)) {
         //qCDebug(LOG_PLASMA) << "reading from applet group" << appletGroup;
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
@@ -299,7 +301,8 @@ void Containment::restoreContents(KConfigGroup &group)
     if (Containment::applets().isEmpty()) {
         d->appletsUiReady = true;
     }
-    foreach (Applet *applet, Containment::applets()) {
+    const auto lstApplets = Containment::applets();
+    for (Applet *applet : lstApplets) {
         if (!applet->pluginMetaData().isValid()) {
             applet->updateConstraints(Plasma::Types::UiReadyConstraint);
         }
@@ -361,7 +364,7 @@ void Containment::setLocation(Types::Location location)
 
     d->location = location;
 
-    foreach (Applet *applet, d->applets) {
+    for (Applet *applet : qAsConst(d->applets)) {
         applet->updateConstraints(Plasma::Types::LocationConstraint);
     }
 
@@ -426,7 +429,8 @@ void Containment::addApplet(Applet *applet)
 
             applet->configScheme()->setCurrentGroup(applet->configScheme()->currentGroup().replace(0, oldGroupPrefix.length(), newGroupPrefix));
 
-            foreach (KConfigSkeletonItem *item, applet->configScheme()->items()) {
+            const auto items = applet->configScheme()->items();
+            for (KConfigSkeletonItem *item : items) {
                 item->setGroup(item->group().replace(0, oldGroupPrefix.length(), newGroupPrefix));
             }
         }

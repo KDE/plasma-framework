@@ -134,7 +134,7 @@ PluginLoader::PluginLoader()
 PluginLoader::~PluginLoader()
 {
     typedef QPointer<PackageStructure> pswp;
-    foreach (pswp wp, d->structures) {
+    for (pswp wp : qAsConst(d->structures)) {
         delete wp.data();
     }
     delete d;
@@ -272,12 +272,12 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
         plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
-    foreach (auto& plugin, plugins) {
+    for (auto& plugin : qAsConst(plugins)) {
         engines << plugin.pluginId();
     }
 
     const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages(QStringLiteral("Plasma/DataEngine"));
-    for (auto& plugin : packagePlugins) {
+    for (const auto &plugin : packagePlugins) {
         engines << plugin.pluginId();
     }
 
@@ -507,7 +507,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 
     //NOTE: it still produces kplugininfos from KServices because some user code expects
     //info.service() to be valid and would crash otherwise
-    foreach (auto& md, plugins) {
+    for (const auto &md : plugins) {
         auto pi = md.metaDataFileName().endsWith(QLatin1String(".json")) ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
         if (!pi.isValid()) {
             qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
@@ -548,9 +548,9 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
     QList<KPluginMetaData> filtered;
-    foreach (const KPluginMetaData &md, allApplets) {
-        QStringList urlPatterns = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns"));
-        foreach (const QString &glob, urlPatterns) {
+    for (const KPluginMetaData &md : allApplets) {
+        const QStringList urlPatterns = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns"));
+        for (const QString &glob : urlPatterns) {
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
@@ -585,7 +585,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
 
 
     QStringList categories;
-    foreach (auto& plugin, allApplets) {
+    for (auto &plugin : allApplets) {
         if (plugin.category().isEmpty()) {
             if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
                 categories << i18nc("misc category", "Miscellaneous");
@@ -669,12 +669,12 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 
 QStringList PluginLoader::listContainmentTypes()
 {
-    KPluginInfo::List containmentInfos = listContainments();
+    const KPluginInfo::List containmentInfos = listContainments();
     QSet<QString> types;
 
-    foreach (const KPluginInfo &containmentInfo, containmentInfos) {
-        QStringList theseTypes = containmentInfo.service()->property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
-        foreach (const QString &type, theseTypes) {
+    for (const KPluginInfo &containmentInfo : containmentInfos) {
+        const QStringList theseTypes = containmentInfo.service()->property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
+        for (const QString &type : theseTypes) {
             types.insert(type);
         }
     }
@@ -715,14 +715,14 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
     list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, QStringLiteral("Plasma/ContainmentActions"), constraint));
 
     QSet<QString> knownPlugins;
-    foreach (const KPluginInfo &p, list) {
+    for (const KPluginInfo &p : qAsConst(list)) {
         knownPlugins.insert(p.pluginName());
     }
 
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
-    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
-    foreach (KService::Ptr s, offers) {
+    const KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
+    for (KService::Ptr s : offers) {
         if (!knownPlugins.contains(s->pluginKeyword())) {
             list.append(KPluginInfo(s));
         }
@@ -795,14 +795,14 @@ static KPluginInfo::List standardInternalInfo(const QString &type, const QString
                         QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/internal/") + type + QLatin1String("/*.desktop"),
                         QStandardPaths::LocateFile);
 
-    KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
+    const KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
 
     if (category.isEmpty() || allInfo.isEmpty()) {
         return allInfo;
     }
 
     KPluginInfo::List matchingInfo;
-    foreach (const KPluginInfo &info, allInfo) {
+    for (const KPluginInfo &info : allInfo) {
         if (info.category().compare(category, Qt::CaseInsensitive) == 0) {
             matchingInfo << info;
         }

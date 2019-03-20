@@ -260,7 +260,8 @@ void Package::setMimeTypes(const char *key, QStringList mimeTypes)
 QList<const char *> Package::directories() const
 {
     QList<const char *> dirs;
-    foreach (const auto &data, d->internalPackage->directories()) {
+    const auto directories = d->internalPackage->directories();
+    for (const auto &data : directories) {
         dirs << data.constData();
     }
 
@@ -270,7 +271,8 @@ QList<const char *> Package::directories() const
 QList<const char *> Package::requiredDirectories() const
 {
     QList<const char *> dirs;
-    foreach (const auto &data, d->internalPackage->requiredDirectories()) {
+    const auto directories = d->internalPackage->requiredDirectories();
+    for (const auto &data : directories) {
         dirs << data.constData();
     }
 
@@ -280,7 +282,8 @@ QList<const char *> Package::requiredDirectories() const
 QList<const char *> Package::files() const
 {
     QList<const char *> files;
-    foreach (const auto &data, d->internalPackage->files()) {
+    const auto lstFiles = d->internalPackage->files();
+    for (const auto &data : lstFiles) {
         files << data.constData();
     }
 
@@ -290,7 +293,8 @@ QList<const char *> Package::files() const
 QList<const char *> Package::requiredFiles() const
 {
     QList<const char *> files;
-    foreach (const auto &data, d->internalPackage->requiredFiles()) {
+    const auto lstFiles = d->internalPackage->requiredFiles();
+    for (const auto &data : lstFiles) {
         files << data.constData();
     }
 

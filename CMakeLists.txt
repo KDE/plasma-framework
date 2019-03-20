@@ -39,7 +39,7 @@ if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
    set(KDE_NO_DEPRECATED TRUE)
    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DKDE_NO_DEPRECATED")
 endif()
-
+add_definitions(-DQT_NO_FOREACH)
 ################# now find all used packages #################
 
 set (REQUIRED_QT_VERSION 5.12.0)

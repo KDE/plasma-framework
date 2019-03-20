@@ -268,7 +268,8 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
         QVariantList list;
 
         if (!m_dataSource->data()->isEmpty()) {
-            foreach (const QString &key, m_dataSource->data()->keys()) {
+            const auto lst = m_dataSource->data()->keys();
+            for (const QString &key : lst) {
                 if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(key)) {
                     continue;
                 }
@@ -317,7 +318,8 @@ void DataModel::setDataSource(QObject *object)
 
     m_dataSource = source;
 
-    foreach (const QString &key, m_dataSource->data()->keys()) {
+    const auto keys = m_dataSource->data()->keys();
+    for (const QString &key : keys) {
         dataUpdated(key, m_dataSource->data()->value(key).value<Plasma::DataEngine::Data>());
     }
 
@@ -408,7 +410,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
 
     if (!list.isEmpty()) {
         if (list.first().canConvert<QVariantMap>()) {
-            foreach (const QVariant &item, list) {
+            for (const QVariant &item : list) {
                 const QVariantMap &vh = item.value<QVariantMap>();
                 QMapIterator<QString, QVariant> it(vh);
                 while (it.hasNext()) {
@@ -422,7 +424,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
                 }
             }
         } else {
-            foreach (const QVariant &item, list) {
+            for (const QVariant &item : list) {
                 const QVariantMap &vh = item.value<QVariantMap>();
                 QMapIterator<QString, QVariant> it(vh);
                 while (it.hasNext()) {

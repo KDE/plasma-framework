@@ -825,7 +825,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
             fallbackThemes.append(fallback);
 
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % fallback % QLatin1String("/metadata.desktop")));
+            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % fallback % QStringLiteral("/metadata.desktop")));
             KConfig metadata(metadataPath, KConfig::SimpleConfig);
             KConfigGroup cg(&metadata, "Settings");
             fallback = cg.readEntry("FallbackTheme", QString());
@@ -835,8 +835,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             fallbackThemes.append(QLatin1String(ThemePrivate::defaultTheme));
         }
 
-        foreach (const QString &theme, fallbackThemes) {
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop")));
+        for (const QString &theme : qAsConst(fallbackThemes)) {
+            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));
             KConfig metadata(metadataPath, KConfig::SimpleConfig);
             processWallpaperSettings(&metadata);
         }

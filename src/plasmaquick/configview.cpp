@@ -163,7 +163,7 @@ void ConfigViewPrivate::init()
             configModel = new ConfigModel(q);
         }
 
-        foreach (const QString &kcm, kcms) {
+        for (const QString &kcm : qAsConst(kcms)) {
             KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + kcm));
             KPluginMetaData md(loader.fileName());
 
@@ -246,7 +246,8 @@ void ConfigViewPrivate::mainItemLoaded()
 
     //Search a child that has the needed Layout properties
     //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-    foreach (QObject *child, q->rootObject()->children()) {
+    const auto children = q->rootObject()->children();
+    for (QObject *child : children) {
         //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
                 child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&

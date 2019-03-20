@@ -176,10 +176,12 @@ void Service::setOperationsScheme(QIODevice *xml)
     KSharedConfigPtr config = KSharedConfig::openConfig(QStringLiteral("/dev/null"), KConfig::SimpleConfig);
     KConfigLoader loader(config, xml);
 
-    foreach (const QString &group, loader.groupList()) {
+    const auto groupList = loader.groupList();
+    for (const QString &group : groupList) {
         d->operationsMap[group][QStringLiteral("_name")] = group;
     }
-    foreach (KConfigSkeletonItem *item,  loader.items()) {
+    const auto itemsList = loader.items();
+    for (KConfigSkeletonItem *item : itemsList) {
         d->operationsMap[item->group()][item->key()] = item->property();
     }
 }

@@ -438,7 +438,7 @@ QList<QAction *> AppletInterface::contextualActions() const
         return actions;
     }
 
-    foreach (const QString &name, m_actions) {
+    for (const QString &name : qAsConst(m_actions)) {
         QAction *action = a->actions()->action(name);
 
         if (action) {
@@ -504,7 +504,8 @@ void AppletInterface::removeAction(const QString &name)
 
 void AppletInterface::clearActions()
 {
-    Q_FOREACH (const QString &action, m_actions) {
+    const auto oldActionsList = m_actions;
+    for (const QString &action : oldActionsList) {
         removeAction(action);
     }
 }
@@ -767,7 +768,7 @@ bool AppletInterface::event(QEvent *event)
         }
 
         bool keySequenceUsed = false;
-        foreach (auto a, actions) {
+        for (auto a : qAsConst(actions)) {
 
             if (a->shortcut().isEmpty()) {
                 continue;

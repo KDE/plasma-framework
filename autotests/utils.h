@@ -31,13 +31,15 @@ static void copyPath(const QString &src, const QString &dst)
 {
     QDir dir(src);
 
-    foreach (const auto &d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    const auto dirList = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const auto &d : dirList ) {
         QString dst_path = dst + QLatin1Char('/') + d;
         dir.mkpath(dst_path);
         copyPath(src + QLatin1Char('/') + d, dst_path);
     }
 
-    foreach (const auto &f, dir.entryList(QDir::Files)) {
+    const auto entryList = dir.entryList(QDir::Files);
+    for (const auto &f : entryList) {
         QFile::copy(src + QLatin1Char('/') + f, dst + QLatin1Char('/') + f);
     }
 }

@@ -98,7 +98,8 @@ void DaysModel::update()
     const QDate modelFirstDay(m_data->at(0).yearNumber, m_data->at(0).monthNumber, m_data->at(0).dayNumber);
 
     if (m_pluginsManager) {
-        Q_FOREACH (CalendarEvents::CalendarEventsPlugin *eventsPlugin, m_pluginsManager->plugins()) {
+        const auto plugins = m_pluginsManager->plugins();
+        for (CalendarEvents::CalendarEventsPlugin *eventsPlugin : plugins) {
             eventsPlugin->loadEventsForDateRange(modelFirstDay, modelFirstDay.addDays(42));
         }
     }
@@ -140,7 +141,7 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
         m_agendaNeedsUpdate = true;
     }
 
-    Q_FOREACH (const QDate date, updatesList) {
+    for (const QDate date : qAsConst(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex,
@@ -167,7 +168,7 @@ void DaysModel::onEventRemoved(const QString &uid)
         m_agendaNeedsUpdate = true;
     }
 
-    Q_FOREACH (const QDate date, updatesList) {
+    for (const QDate date : qAsConst(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex,
@@ -195,7 +196,7 @@ QList<QObject*> DaysModel::eventsForDate(const QDate &date)
         return b.type() > a.type() || b.startDateTime() > a.startDateTime();
     });
 
-    Q_FOREACH (const CalendarEvents::EventData &event, events) {
+    for (const CalendarEvents::EventData &event : qAsConst(events)) {
         m_qmlData << new EventDataDecorator(event, this);
     }
 

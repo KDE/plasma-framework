@@ -41,7 +41,7 @@ public:
     void print() {
         QJsonArray array;
 
-        Q_FOREACH(const ObjectHistory& history, m_data) {
+        for (const ObjectHistory &history : qAsConst(m_data)) {
             array.append(QJsonObject {
                 { QStringLiteral("events"), serializeEvents(history.events) },
                 { QStringLiteral("initial"), QJsonValue::fromVariant(history.initial) }
@@ -68,7 +68,7 @@ private:
     QJsonArray serializeEvents(const QVector<TimeEvent>& events) const {
         QJsonArray ret;
         Q_ASSERT(!events.isEmpty());
-        foreach(const TimeEvent& ev, events) {
+        for (const TimeEvent &ev : events) {
             ret.append(QJsonObject {
                 { QStringLiteral("comment"), ev.comment },
                 { QStringLiteral("time"), ev.moment.toMSecsSinceEpoch() - *s_beginning }
