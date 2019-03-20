@@ -380,6 +380,22 @@ public:
      */
     qreal backgroundSaturation() const;
 
+    /** This method allows Plasma to enable and disable the blurring
+     * of what is behind the background for a given theme. The
+     * value is read from the "enabled" key in the "BlurBehindEffect"
+     * group in the Theme's metadata file. Default is @c true.
+     *
+     * The configuration in the metadata.desktop file of the theme
+     * could look like this:
+     * \code
+     * [BlurBehindEffect]
+     * enabled=false
+     * \endcode
+     * @return Whether or not to enable blurring of what is behind
+     * @since 5.57
+     */
+    bool blurBehindEnabled() const;
+
     /**
      * Returns the size of the letter "M" as rendered on the screen with the given font.
      * This values gives you a base size that:

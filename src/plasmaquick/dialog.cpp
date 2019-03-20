@@ -241,7 +241,7 @@ void DialogPrivate::updateTheme()
             frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
         }
 
-        KWindowEffects::enableBlurBehind(q->winId(), true, frameSvgItem->frameSvg()->mask());
+        KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->frameSvg()->mask());
 
         KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
                 theme.backgroundContrast(),

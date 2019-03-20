@@ -510,6 +510,11 @@ qreal Theme::backgroundSaturation() const
     return d->backgroundSaturation;
 }
 
+bool Theme::blurBehindEnabled() const
+{
+    return d->blurBehindEnabled;
+}
+
 }
 
 #include "moc_theme.cpp"

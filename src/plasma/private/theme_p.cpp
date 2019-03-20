@@ -75,6 +75,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       backgroundIntensity(qQNaN()),
       backgroundSaturation(qQNaN()),
       backgroundContrastEnabled(true),
+      blurBehindEnabled(true),
       apiMajor(1),
       apiMinor(0),
       apiRevision(0)
@@ -736,6 +737,17 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     }
 }
 
+void ThemePrivate::processBlurBehindSettings(KConfigBase *metadata)
+{
+    KConfigGroup cg;
+    if (metadata->hasGroup("BlurBehindEffect")) {
+        cg = KConfigGroup(metadata, "BlurBehindEffect");
+        blurBehindEnabled = cg.readEntry("enabled", true);
+    } else {
+        blurBehindEnabled = true;
+    }
+}
+
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings, bool emitChanged)
 {
     QString theme = tempThemeName;
@@ -800,6 +812,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         pluginInfo = KPluginInfo(metadataPath);
 
         processContrastSettings(&metadata);
+        processBlurBehindSettings(&metadata);
 
         processWallpaperSettings(&metadata);
 
