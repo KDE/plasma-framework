@@ -328,7 +328,7 @@ void AppletQuickItemPrivate::preloadForExpansion()
 
     if (!appletShouldBeExpanded() && compactRepresentationExpanderItem) {
         compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject*>(createFullRepresentationItem()));
-    } else {
+    } else if (fullRepresentationItem) {
         fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(q));
     }
 
