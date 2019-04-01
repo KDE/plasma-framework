@@ -337,7 +337,7 @@ void AppletQuickItemPrivate::preloadForExpansion()
         fullRepresentationItem->window()->create();
     }
 
-    qCInfo(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
+    qCDebug(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
 }
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
@@ -685,7 +685,7 @@ void AppletQuickItem::init()
             this, [this](bool uiReady) {
                 if (uiReady && d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
                     const int preloadWeight = d->preloadWeight();
-                    qCInfo(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
+                    qCDebug(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
 
                     //don't preload applets less then a certain weight
                     if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
@@ -697,7 +697,7 @@ void AppletQuickItem::init()
                         const int max = (100 - preloadWeight) * 100;
                         const int delay = qrand() % ((max + 1) - min) + min;
                         QTimer::singleShot(delay, this, [this, delay]() {
-                            qCInfo(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
+                            qCDebug(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
                             d->preloadForExpansion();
                         });
                     }
@@ -837,7 +837,7 @@ void AppletQuickItem::setExpanded(bool expanded)
         if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive && !d->applet->isContainment()) {
             const int newWeight = qMin(d->preloadWeight() + AppletQuickItemPrivate::PreloadWeightIncrement, 100);
             d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), newWeight);
-            qCInfo(LOG_PLASMAQUICK) << "Increasing score for" << d->applet->title() << "to" << newWeight;
+            qCDebug(LOG_PLASMAQUICK) << "Increasing score for" << d->applet->title() << "to" << newWeight;
         }
     }
 
