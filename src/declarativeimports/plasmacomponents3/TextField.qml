@@ -48,7 +48,7 @@ T.TextField {
 
     selectByMouse: !Kirigami.Settings.tabletMode
 
-    cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : undefined
+    cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : null
     Component {
         id: mobileCursor
         Private.MobileCursor {
