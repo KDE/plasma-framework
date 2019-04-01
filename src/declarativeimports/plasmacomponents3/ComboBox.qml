@@ -141,7 +141,7 @@ T.ComboBox {
             // Work around Qt bug where NativeRendering breaks for non-integer scale factors
             // https://bugreports.qt.io/browse/QTBUG-67007
             renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-            color: control.enabled ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
+            color: PlasmaCore.ColorScope.textColor
             selectionColor: Kirigami.Theme.highlightColor
             selectedTextColor: Kirigami.Theme.highlightedTextColor
 
