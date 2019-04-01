@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="43"
+   height="42"
+   id="svg2318"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docbase="/opt/svn/playground-plasma/applets/system-monitor"
+   sodipodi:docname="analog_meter.svgz"
+   inkscape:output_extension="org.inkscape.output.svgz.inkscape"
+   version="1.0">
+  <defs
+     id="defs2320">
+    <linearGradient
+       id="linearGradient3155">
+      <stop
+         id="stop3157"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop3159"
+         offset="1"
+         style="stop-color:#d7d7d1;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3018">
+      <stop
+         style="stop-color:#3bf000;stop-opacity:1;"
+         offset="0"
+         id="stop3020" />
+      <stop
+         style="stop-color:#f00000;stop-opacity:1;"
+         offset="1"
+         id="stop3022" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2922">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop2924" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop2926" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3026">
+      <stop
+         style="stop-color:#959595;stop-opacity:1;"
+         offset="0"
+         id="stop3028" />
+      <stop
+         id="stop3034"
+         offset="0.5"
+         style="stop-color:#222222;stop-opacity:1;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop3030" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3026"
+       id="radialGradient2434"
+       gradientUnits="userSpaceOnUse"
+       cx="1671.954"
+       cy="715.07227"
+       fx="1671.454"
+       fy="713.69727"
+       r="2.4748738" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2922"
+       id="linearGradient4133"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.7241379,0,0,0.7241379,-1218.2242,-474.62208)"
+       x1="1713.2789"
+       y1="638.75189"
+       x2="1713.2789"
+       y2="701.56329" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3018"
+       id="linearGradient4136"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1663.5,-800.54958)"
+       x1="1666.6144"
+       y1="812.64105"
+       x2="1703.2393"
+       y2="812.64105" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3155"
+       id="linearGradient4139"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.7241379,0,0,0.7241379,-1218.2242,-474.62208)"
+       x1="1708.088"
+       y1="700.20984"
+       x2="1707.9362"
+       y2="683.18262" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.50196078"
+     inkscape:pageshadow="2"
+     inkscape:zoom="18.190476"
+     inkscape:cx="10.216824"
+     inkscape:cy="8.0033073"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1272"
+     inkscape:window-height="944"
+     inkscape:window-x="215"
+     inkscape:window-y="30"
+     width="43px"
+     height="42px"
+     showgrid="false" />
+  <metadata
+     id="metadata2323">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="background">
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         id="path3050"
+         d="M 20.4062,0.325422 C 9.3156,0.888212 0.4999,10.095652 0.5,21.325422 C 0.5,25.476442 1.7314,29.316232 3.8125,32.575422 L 39.187501,32.575422 C 41.268601,29.316232 42.500001,25.476432 42.500001,21.325422 C 42.500001,9.733422 33.091901,0.325402 21.5,0.325422 C 21.1378,0.325422 20.764,0.307272 20.4062,0.325422 z "
+         style="fill:url(#linearGradient4139);fill-opacity:1;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         style="fill:url(#linearGradient4136);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
+         d="M 22.9468,2.770502 C 13.6013,1.885442 5.0788,8.200072 3.1144,17.350492 C 5.5846,9.938182 13.0677,5.117862 21.067,6.286952 C 22.426,6.485572 23.7094,6.853762 24.925401,7.352652 C 25.168601,7.441292 25.397001,7.548352 25.634501,7.651422 C 25.684901,7.674992 25.744101,7.678572 25.794101,7.702632 C 25.839201,7.722892 25.877801,7.756392 25.922701,7.777162 C 26.364901,7.981892 26.796601,8.215382 27.215601,8.467892 C 28.077201,8.987262 28.909101,9.573842 29.655501,10.274082 C 29.690001,10.304862 29.718801,10.340882 29.752701,10.371912 C 29.785601,10.403292 29.817501,10.438072 29.849901,10.469752 C 30.004501,10.619962 30.164001,10.770332 30.312701,10.927662 C 33.079701,13.702672 34.835701,17.444932 35.096301,21.495042 L 39.738601,21.392982 C 39.816201,12.278922 33.172401,4.264972 23.9021,2.910122 C 23.5858,2.863882 23.2616,2.800322 22.9468,2.770502 z "
+         id="path3046" />
+      <path
+         sodipodi:type="arc"
+         style="opacity:0.89583333;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
+         id="path4141"
+         sodipodi:cx="1671.954"
+         sodipodi:cy="715.07227"
+         sodipodi:rx="2.4748738"
+         sodipodi:ry="2.4748738"
+         d="M 1674.4289 715.07227 A 2.4748738 2.4748738 0 1 1  1669.4791,715.07227 A 2.4748738 2.4748738 0 1 1  1674.4289 715.07227 z"
+         transform="matrix(0.25,0,0,0.25,-396.45625,-176.08354)"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         sodipodi:type="arc"
+         style="opacity:0.89600004;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
+         id="path3056"
+         sodipodi:cx="1671.954"
+         sodipodi:cy="715.07227"
+         sodipodi:rx="2.4748738"
+         sodipodi:ry="2.4748738"
+         d="M 1674.4289 715.07227 A 2.4748738 2.4748738 0 1 1  1669.4791,715.07227 A 2.4748738 2.4748738 0 1 1  1674.4289 715.07227 z"
+         transform="matrix(0.25,0,0,0.25,-415.50603,-156.18302)" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         transform="matrix(0.25,0,0,0.25,-377.38033,-156.18302)"
+         d="M 1674.4289 715.07227 A 2.4748738 2.4748738 0 1 1  1669.4791,715.07227 A 2.4748738 2.4748738 0 1 1  1674.4289 715.07227 z"
+         sodipodi:ry="2.4748738"
+         sodipodi:rx="2.4748738"
+         sodipodi:cy="715.07227"
+         sodipodi:cx="1671.954"
+         id="path3058"
+         style="opacity:0.89583333;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+         id="path3052"
+         d="M 21.4999,0.321882 C 9.9079,0.321882 0.4999,9.729882 0.4999,21.321882 C 0.4999,22.292942 0.5758,23.237022 0.7035,24.173182 C 6.8689,19.596382 14.1188,16.977062 21.862,16.977062 C 29.332001,16.977052 36.321101,19.438072 42.341501,23.720592 C 42.432601,22.927402 42.499901,22.139332 42.499901,21.321882 C 42.499901,9.729882 33.091901,0.321882 21.4999,0.321882 z "
+         style="opacity:0.59925082;fill:url(#linearGradient4133);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1" />
+    </g>
+    <rect
+       style="opacity:1;fill:#0000ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:3.19400001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.50196078"
+       id="label0"
+       width="43"
+       height="8"
+       x="0"
+       y="34" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.66161613"
+       id="rotatecenter"
+       sodipodi:cx="-30.223391"
+       sodipodi:cy="37.943497"
+       sodipodi:rx="6.8988175"
+       sodipodi:ry="5.7490144"
+       d="M -23.324573 37.943497 A 6.8988175 5.7490144 0 1 1  -37.122208,37.943497 A 6.8988175 5.7490144 0 1 1  -23.324573 37.943497 z"
+       transform="matrix(0.1449524,0,0,0.1739429,25.880953,16.399998)" />
+    <rect
+       style="opacity:1;fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.66161613"
+       id="rotateminmax"
+       width="260"
+       height="100"
+       x="0"
+       y="52" />
+    <rect
+       style="opacity:1;fill:#0000ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:3.19400001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.50196078"
+       id="label1"
+       width="30.465969"
+       height="6.7905755"
+       x="6.2670159"
+       y="25.253925" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 22.293313,24.404071 L 21.482904,42.785546 L 20.461768,24.53146 L 21.507195,22.927609 L 22.293313,24.404071 z "
+       id="pointer"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="pointer-shadow"
+       d="M 22.744047,24.015581 L 21.534765,43.720104 L 20.011038,24.152139 L 21.571011,22.432847 L 22.744047,24.015581 z"
+       style="fill:#000000;fill-opacity:0.20329671;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/rect2996.png"
+       transform="translate(-1650.4541,-692.03486)"
+       d="M 1674.4289 715.07227 A 2.4748738 2.4748738 0 1 1  1669.4791,715.07227 A 2.4748738 2.4748738 0 1 1  1674.4289 715.07227 z"
+       sodipodi:ry="2.4748738"
+       sodipodi:rx="2.4748738"
+       sodipodi:cy="715.07227"
+       sodipodi:cx="1671.954"
+       id="foreground"
+       style="opacity:0.94270833;fill:url(#radialGradient2434);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:1.08779998;stroke-opacity:1"
+       sodipodi:type="arc" />
+  </g>
+</svg>

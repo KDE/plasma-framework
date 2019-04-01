@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   id="svg7229"
+   height="22"
+   width="22">
+  <metadata
+     id="metadata45">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7231">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#31363b;
+      }
+      .ColorScheme-Background{
+        color:#eff0f1;
+      }
+      .ColorScheme-ViewText {
+        color:#31363b;
+      }
+      .ColorScheme-ViewBackground{
+        color:#ffffff;
+      }
+      .ColorScheme-ViewHover {
+        color:#000000;
+      }
+      .ColorScheme-ViewFocus{
+        color:#5a5a5a;
+      }
+      .ColorScheme-ButtonText {
+        color:#31363b;
+      }
+      .ColorScheme-ButtonBackground{
+        color:#E9E8E8;
+      }
+      .ColorScheme-ButtonHover {
+        color:#1489ff;
+      }
+      .ColorScheme-ButtonFocus{
+        color:#2B74C7;
+      }
+</style>
+  </defs>
+  <g
+     transform="translate(-214.53572,-404.50504)"
+     id="layer1">
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-playback-pause"
+       transform="matrix(1.4999765,0,0,1.4999765,209.03579,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6666775"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-0"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 12.777771,1036.0463 3.555542,0 0,10.6318 -3.555542,0 z m -7.1110849,0 3.5555439,0 0,10.6318 -3.5555439,0 z"
+         style="fill:currentColor"
+         id="rect3287-9" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-playback-start"
+       transform="matrix(1.4999765,0,0,1.4999765,233.03531,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6669974"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-1"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 6.3409805,1046.6916 9.3180385,-5.3294 -9.3180385,-5.3294 z"
+         style="fill:currentColor"
+         id="path3357-8" />
+    </g>
+    <g
+       style="fill:#31363b"
+       id="media-playback-stop"
+       transform="matrix(1.4999765,0,0,1.4999765,257.03484,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6673107"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-3"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 5.6673064,1036.0324 10.6653876,0 0,10.6596 -10.6653876,0 z"
+         style="fill:currentColor"
+         id="rect3274-5" />
+    </g>
+    <g
+       id="media-record"
+       transform="matrix(1.4999765,0,0,1.4999765,281.03438,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6676176"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-03"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <rect
+         style="fill:#da4453"
+         id="rect3274-0"
+         width="10.661418"
+         height="10.664993"
+         x="5.669291"
+         y="1036.0297"
+         ry="5.3324966" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-seek-backward"
+       transform="matrix(1.4999765,0,0,1.4999765,305.03389,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6679442"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-07"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 10.999999,1046.6926 -5.3316726,-5.3304 5.3316726,-5.3304 z m 5.33167,0 -5.33167,-5.3304 5.33167,-5.3304 z"
+         style="fill:currentColor"
+         id="path4148-6" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-seek-forward"
+       transform="matrix(1.4999765,0,0,1.4999765,329.08783,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6319835"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-2"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 11.000001,1046.6956 5.362127,-5.3334 -5.362127,-5.3334 z m -5.3621229,0 5.3621229,-5.3334 -5.3621229,-5.3334 z"
+         style="fill:currentColor"
+         id="path4148-8" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-skip-backward"
+       transform="matrix(1.4999765,0,0,1.4999765,353.03297,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6685574"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-9"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         id="rect3356-04"
+         d="m 5.6605034,1036.0318 0,10.6605 3.561,0 0,-5.3304 0,-5.3301 z m 3.561,5.3301 7.1220046,5.3304 0,-10.6605 z"
+         style="fill:currentColor" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-skip-forward"
+       transform="matrix(1.4999765,0,0,1.4999765,377.03248,-1146.5136)">
+      <rect
+         y="1034.0287"
+         x="3.668884"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-7"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 12.774348,1036.0314 3.548696,0 0,10.6616 -3.548696,0 z m -7.0973961,10.6616 7.0974011,-5.3308 -7.0974011,-5.3308 z"
+         style="fill:currentColor"
+         id="rect3402-4" />
+    </g>
+    <g
+       id="media-eject"
+       transform="matrix(1.2499744,0,0,1.2499744,404.28584,-886.17115)">
+      <rect
+         y="1032.5621"
+         x="1.7999408"
+         height="17.600325"
+         width="17.600361"
+         id="rect3003"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         id="path6"
+         class="ColorScheme-Text"
+         d="m 10.600116,1034.9592 -7.1958529,8.5375 14.3917059,0 -7.195853,-8.5375 z m -7.1958529,10.5656 0,2.2406 14.3917059,0 0,-2.2406 -14.3917059,0 z"
+         style="fill:currentColor" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-playback-paused"
+       transform="matrix(1.4999765,0,0,1.4999765,209.03579,-1122.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6666775"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-0-3"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 11.666692,1039.3621 1.333385,0 0,4.0002 -1.333385,0 z m -2.6667693,0 1.3333853,0 0,4.0002 -1.3333853,0 z M 11,1036.0287 c -2.9547808,0 -5.3335394,2.3787 -5.3335394,5.3335 0,2.9548 2.3787586,5.3335 5.3335394,5.3335 2.954781,0 5.333539,-2.3787 5.333539,-5.3335 0,-2.9548 -2.378758,-5.3335 -5.333539,-5.3335 z m 0,0.6667 c 2.585433,0 4.666847,2.0813 4.666847,4.6668 0,2.5855 -2.081414,4.6668 -4.666847,4.6668 -2.5854332,0 -4.666847,-2.0813 -4.666847,-4.6668 0,-2.5855 2.0814138,-4.6668 4.666847,-4.6668 z"
+         style="fill:currentColor;fill-opacity:1;stroke:none"
+         id="rect3287-9-5" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-playback-playing"
+       transform="matrix(1.4999765,0,0,1.4999765,233.03531,-1122.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6669974"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-1-2"
+         style="opacity:0.01000001;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         class="ColorScheme-Text"
+         d="m 9.6665342,1043.3624 2.6669318,-2.0002 -2.6669318,-2.0002 z M 11,1036.0283 c -2.9549601,0 -5.333863,2.3789 -5.333863,5.3339 0,2.955 2.3789029,5.3339 5.333863,5.3339 2.95496,0 5.333863,-2.3789 5.333863,-5.3339 0,-2.955 -2.378903,-5.3339 -5.333863,-5.3339 z m 0,0.6668 c 2.58559,0 4.66713,2.0815 4.66713,4.6671 0,2.5856 -2.08154,4.6671 -4.66713,4.6671 -2.5855901,0 -4.6671301,-2.0815 -4.6671301,-4.6671 0,-2.5856 2.08154,-4.6671 4.6671301,-4.6671 z"
+         style="fill:currentColor;fill-opacity:1;stroke:none"
+         id="path3357-8-9" />
+    </g>
+    <g
+       class="ColorScheme-Text"
+       style="fill:currentColor"
+       id="media-playback-stopped"
+       transform="matrix(1.4999765,0,0,1.4999765,257.03484,-1122.5136)">
+      <rect
+         y="1034.0287"
+         x="3.6673107"
+         height="14.666837"
+         width="14.666897"
+         id="rect3003-3-2"
+         style="opacity:0.01;fill:#ed1515;fill-opacity:0.00392157;stroke:none" />
+      <path
+         id="path41"
+         d="m 8.9999227,1039.3621 4.0001543,0 0,4.0002 -4.0001543,0 z M 11,1036.0287 c -2.9547808,0 -5.3335394,2.3787 -5.3335394,5.3335 0,2.9548 2.3787586,5.3335 5.3335394,5.3335 2.954781,0 5.333539,-2.3787 5.333539,-5.3335 0,-2.9548 -2.378758,-5.3335 -5.333539,-5.3335 z m 0,0.6667 c 2.585433,0 4.666847,2.0813 4.666847,4.6668 0,2.5855 -2.081414,4.6668 -4.666847,4.6668 -2.5854332,0 -4.666847,-2.0813 -4.666847,-4.6668 0,-2.5855 2.0814138,-4.6668 4.666847,-4.6668 z"
+         class="ColorScheme-Text"
+         style="fill:currentColor" />
+    </g>
+  </g>
+</svg>

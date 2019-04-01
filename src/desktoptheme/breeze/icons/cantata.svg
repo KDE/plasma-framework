@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 54 32"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="cantata.svgz">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1769"
+     inkscape:window-height="961"
+     id="namedview14"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="27"
+     inkscape:cy="16"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata20">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#31363b;
+      }
+      </style>
+  </defs>
+  <g
+     id="22-22-cantata">
+    <path
+       id="path7"
+       class="ColorScheme-Text"
+       d="m 11,12.999863 a 7.9998002,8 0 0 0 -8,8 7.9998002,8 0 0 0 8,8 7.9998002,8 0 0 0 8,-8 7.9998002,8 0 0 0 -8,-8 z m 0,1 a 7,7 0 0 1 7,7 7,7 0 0 1 -7,7 7,7 0 0 1 -7,-7 7,7 0 0 1 7,-7 z"
+       style="fill:currentColor;fill-opacity:0.6;stroke:none" />
+    <path
+       id="path9"
+       class="ColorScheme-Text"
+       d="m 10,12.999863 0,11.044922 c -0.83718,-0.3612 -1.8093231,-0.263585 -2.8457031,0.166016 -1.73476,0.7184 -2.7294463,2.293178 -2.2226563,3.517578 0.50678,1.2248 2.3253869,1.636768 4.0605469,0.917968 1.3687605,-0.5684 2.2070315,-2.045546 2.2070315,-2.935546 l 0,-8.710938 c 0,0 3.201172,0.39961 3.201172,3.599609 0,2.4 -0.800832,3.201172 -2.800782,5.201172 1.99995,-1.2 3.59961,-2.801172 3.59961,-5.201172 0,-3.199999 -2.469183,-4.639084 -3.101563,-5.271484 -0.39999,-0.4 -0.898437,-1.927734 -0.898437,-1.927734 L 10,12.999863 Z"
+       style="fill:currentColor;fill-opacity:1;stroke:none" />
+    <path
+       id="path11"
+       d="M 0 10 L 0 32 L 22 32 L 22 10 L 0 10 z "
+       style="opacity:1;fill:none" />
+  </g>
+  <g
+     id="cantata"
+     inkscape:label="#cantata">
+    <path
+       id="path13"
+       class="ColorScheme-Text"
+       d="M 38,3.9999997 A 12,12 0 0 0 26,16 12,12 0 0 0 38,28 12,12 0 0 0 50,16 12,12 0 0 0 38,3.9999997 Z m 0,1 A 11,11 0 0 1 49,16 11,11 0 0 1 38,27 11,11 0 0 1 27,16 11,11 0 0 1 38,4.9999997 Z"
+       style="fill:currentColor;fill-opacity:0.6;stroke:none" />
+    <path
+       id="path15"
+       class="ColorScheme-Text"
+       d="m 37.002213,3.9999999 0,16.9938711 c -1.255763,-0.541606 -3.213967,-0.827849 -4.768528,-0.183681 -2.602125,1.077213 -3.764563,3.471449 -3.004382,5.307377 0.760165,1.836516 3.158478,2.4213 5.761203,1.343499 2.053128,-0.852293 3.045682,-3.113787 3.042522,-4.448302 L 38.002208,9.9978365 c 0,0 5.100556,0.5991185 5.100556,5.3973565 0,3.59867 -1.100655,4.599059 -4.100562,7.597957 C 42.002109,21.19381 44.301,18.993863 44.301,15.395193 44.301,10.596955 40.597247,8.4391233 39.648682,7.4908763 39.048701,6.891092 38.301035,4.6003359 38.301035,4.6003359 Z"
+       style="fill:currentColor;fill-opacity:1;stroke:none" />
+    <path
+       id="path18"
+       d="M 22 0 L 22 32 L 54 32 L 54 0 L 22 0 z "
+       style="opacity:1;fill:none" />
+  </g>
+</svg>

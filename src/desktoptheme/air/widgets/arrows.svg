@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="48"
+   height="48"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="arrows.svgz">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#6d9bd4"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.313708"
+     inkscape:cx="14.859061"
+     inkscape:cy="21.409018"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1119"
+     inkscape:window-height="714"
+     inkscape:window-x="336"
+     inkscape:window-y="147"
+     inkscape:window-maximized="0"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <inkscape:grid
+       snapvisiblegridlinesonly="true"
+       enabled="true"
+       visible="true"
+       empspacing="5"
+       id="grid2816"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#000000;
+      }
+      .ColorScheme-Background{
+        color:#E9E8E8;
+      }
+      .ColorScheme-ViewText {
+        color:#000000;
+      }
+      .ColorScheme-ViewBackground{
+        color:#ffffff;
+      }
+      .ColorScheme-ViewHover {
+        color:#000000;
+      }
+      .ColorScheme-ViewFocus{
+        color:#5a5a5a;
+      }
+      .ColorScheme-ButtonText {
+        color:#000000;
+      }
+      .ColorScheme-ButtonBackground{
+        color:#E9E8E8;
+      }
+      .ColorScheme-ButtonHover {
+        color:#1489ff;
+      }
+      .ColorScheme-ButtonFocus{
+        color:#2B74C7;
+      }
+</style>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-1004.3622)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       id="up-arrow">
+      <rect
+         y="1009.3622"
+         x="11"
+         height="14"
+         width="14"
+         id="rect2992"
+         style="opacity:0;fill:#7d7d7d;fill-opacity:1;stroke:none" />
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path5477-8"
+         d="m 14,1017.3622 3.5,-4 3.5,4 z"
+         style="fill:currentColor"
+         inkscape:connector-curvature="0"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="right-arrow"
+       transform="matrix(0,1,-1,0,1048.3622,1011.3622)">
+      <rect
+         style="opacity:0;fill:#7d7d7d;fill-opacity:1;stroke:none"
+         id="rect3791"
+         width="14"
+         height="14"
+         x="11"
+         y="1009.3622" />
+      <path
+         class="ColorScheme-Text"
+         inkscape:connector-curvature="0"
+         style="fill:currentColor"
+         d="m 14,1017.3622 3.5,-4 3.5,4 z"
+         id="path3793"
+         sodipodi:nodetypes="cccc" />
+    </g>
+    <g
+       transform="matrix(-1,0,0,-1,36.034658,2060.7244)"
+       id="down-arrow">
+      <rect
+         y="1009.3622"
+         x="11"
+         height="14"
+         width="14"
+         id="rect3797"
+         style="opacity:0;fill:#7d7d7d;fill-opacity:1;stroke:none" />
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path3799"
+         d="m 14,1017.3622 3.5,-4 3.5,4 z"
+         style="fill:currentColor"
+         inkscape:connector-curvature="0"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="left-arrow"
+       transform="matrix(0,-1,1,0,-1013.3622,1047.3622)">
+      <rect
+         style="opacity:0;fill:#7d7d7d;fill-opacity:1;stroke:none"
+         id="rect3803"
+         width="14"
+         height="14"
+         x="11"
+         y="1009.3622" />
+      <path
+         class="ColorScheme-Text"
+         inkscape:connector-curvature="0"
+         style="fill:currentColor"
+         d="m 14,1017.3622 3.5,-4 3.5,4 z"
+         id="path3805"
+         sodipodi:nodetypes="cccc" />
+    </g>
+  </g>
+</svg>

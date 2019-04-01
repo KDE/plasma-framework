@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 54 32"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="akonadi.svgz">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1623"
+     inkscape:window-height="1011"
+     id="namedview12"
+     showgrid="false"
+     inkscape:zoom="7.375"
+     inkscape:cx="3.0677968"
+     inkscape:cy="16"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata18">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#31363b;
+      }
+      </style>
+  </defs>
+  <g
+     id="22-22-akonadi">
+    <path
+       id="path7"
+       class="ColorScheme-Text"
+       d="M 11 13 C 6.5817084 13 2.9999808 13.895432 3 15 L 3 18.994141 L 3 19 L 3 22.994141 L 3 23 L 3 27 C 2.9999808 28.104568 6.5817084 29 11 29 C 15.418292 29 19.000019 28.104568 19 27 L 19 23 L 19 19 L 19 15 C 19.000019 13.895432 15.418292 13 11 13 z M 11 14 C 14.865993 14 18 14.447715 18 15 C 18 15.552285 14.865993 16 11 16 C 7.1340068 16 4 15.552285 4 15 C 4 14.447715 7.1340068 14 11 14 z M 18 15.962891 L 18 18.033203 L 18 19 C 18 19.552285 14.865993 20 11 20 C 7.1340068 20 4 19.552285 4 19 L 4 18.037109 L 4 15.966797 C 5.4074293 16.603987 8.0884558 16.999708 11 17 C 13.91485 16.9989 16.596667 16.601589 18 15.962891 z M 18 19.962891 L 18 22.033203 L 18 23 C 18 23.552285 14.865993 24 11 24 C 7.1340068 24 4 23.552285 4 23 L 4 22.037109 L 4 19.966797 C 6.0449242 20.765443 8.2553846 20.932052 10.433594 20.994141 C 10.622063 20.997741 10.810982 20.9997 11 21 C 11.266763 21.000065 11.533372 20.996834 11.798828 20.990234 C 13.831395 20.881706 16.098876 20.799866 17.992188 19.966797 L 18 19.962891 z M 18 23.962891 L 18 27 C 18 27.552285 14.865993 28 11 28 C 7.1340068 28 4 27.552285 4 27 L 4 23.966797 C 4.1292021 24.025157 4.2700031 24.081873 4.421875 24.136719 C 6.3560885 24.779777 8.4074965 24.936388 10.433594 24.994141 C 10.622063 24.997741 10.810982 24.9997 11 25 C 11.266763 25.000065 11.533372 24.996834 11.798828 24.990234 C 13.831392 24.881703 16.098888 24.799913 17.992188 23.966797 L 18 23.962891 z "
+       style="fill:currentColor;fill-opacity:1;stroke:none" />
+    <path
+       id="path9"
+       d="M 0 10 L 0 32 L 22 32 L 22 10 L 0 10 z "
+       style="opacity:1;fill:none" />
+  </g>
+  <g
+     id="akonadi">
+    <path
+       id="path12"
+       class="ColorScheme-Text"
+       d="M 38 4 A 12 3 0 0 0 26 7 L 26 25 A 12 3 0 0 0 38 28 A 12 3 0 0 0 50 25 L 50 19 L 50 13 L 50 7 A 12 3 0 0 0 38 4 z M 38 5 A 11 2 0 0 1 49 7 A 11 2 0 0 1 38 9 A 11 2 0 0 1 27 7 A 11 2 0 0 1 38 5 z M 49 8.1914062 L 49 13 A 11 2 0 0 1 38 15 A 11 2 0 0 1 27 13 L 27 8.1953125 A 12 3 0 0 0 38 10 A 12 3 0 0 0 49 8.1914062 z M 49 14.191406 L 49 19 A 11 2 0 0 1 38 21 A 11 2 0 0 1 27 19 L 27 14.195312 A 12 3 0 0 0 38 16 A 12 3 0 0 0 49 14.191406 z M 49 20.191406 L 49 25 A 11 2 0 0 1 38 27 A 11 2 0 0 1 27 25 L 27 20.195312 A 12 3 0 0 0 38 22 A 12 3 0 0 0 49 20.191406 z "
+       style="fill:currentColor;fill-opacity:1;stroke:none" />
+    <path
+       id="path14"
+       d="M 22 0 L 22 32 L 54 32 L 54 0 L 22 0 z "
+       style="opacity:1;fill:none" />
+  </g>
+</svg>

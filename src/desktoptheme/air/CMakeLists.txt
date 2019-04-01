@@ -1,24 +1,24 @@
 
 install(FILES colors metadata.desktop DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/)
 
-FILE(GLOB widgets widgets/*.svgz)
-install( FILES ${widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/widgets/ )
+FILE(GLOB widgets widgets/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH widgets FILES ${widgets})
 
-FILE(GLOB dialogs dialogs/*.svgz)
-install( FILES ${dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/dialogs/ )
+FILE(GLOB dialogs dialogs/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH dialogs FILES ${dialogs})
 
-FILE(GLOB opaque_dialogs opaque/dialogs/*.svgz)
-install( FILES ${opaque_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/opaque/dialogs/ )
+FILE(GLOB opaque_dialogs opaque/dialogs/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH opaque/dialogs FILES ${opaque_dialogs})
 
-FILE(GLOB opaque_widgets opaque/widgets/*.svgz)
-install( FILES ${opaque_widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/opaque/widgets/ )
+FILE(GLOB opaque_widgets opaque/widgets/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH opaque/widgets FILES ${opaque_widgets})
 
-FILE(GLOB translucent_widgets translucent/widgets/*.svgz)
-install( FILES ${translucent_widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/translucent/widgets/ )
+FILE(GLOB translucent_widgets translucent/widgets/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH translucent/widgets FILES ${translucent_widgets})
 
-FILE(GLOB translucent_dialogs translucent/dialogs/*.svgz)
-install( FILES ${translucent_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/translucent/dialogs/ )
+FILE(GLOB translucent_dialogs translucent/dialogs/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH translucent/dialogs FILES ${translucent_dialogs})
 
-FILE(GLOB icons icons/*.svgz)
-install( FILES ${icons} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/air/icons/ )
+FILE(GLOB icons icons/*.svg)
+plasma_install_desktoptheme_svgs(air SUBPATH icons FILES ${icons})
 

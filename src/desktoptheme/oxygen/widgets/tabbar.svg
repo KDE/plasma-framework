@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="tabbar.svgz">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#7fa6cd"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.6192332"
+     inkscape:cx="396.18982"
+     inkscape:cy="705.5199"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-global="true"
+     inkscape:window-width="1651"
+     inkscape:window-height="990"
+     inkscape:window-x="29"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       color="#0000ff"
+       opacity="0.01960784"
+       empcolor="#0000ff"
+       empopacity="0.03921569" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#31363b;
+      }
+      .ColorScheme-Background{
+        color:#eff0f1;
+      }
+      .ColorScheme-ViewText {
+        color:#31363b;
+      }
+      .ColorScheme-ViewBackground{
+        color:#fcfcfc;
+      }
+      .ColorScheme-ViewHover {
+        color:#3daee9;
+      }
+      .ColorScheme-ViewFocus{
+        color:#3daee9;
+      }
+      .ColorScheme-ButtonText {
+        color:#31363b;
+      }
+      .ColorScheme-ButtonBackground{
+        color:#eff0f1;
+      }
+      .ColorScheme-ButtonHover {
+        color:#3daee9;
+      }
+      .ColorScheme-ButtonFocus{
+        color:#3daee9;
+      }
+</style>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11160"
+       id="radialGradient11220"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,2.0008594,-0.07118252,-15.081936)"
+       cx="37.499996"
+       cy="14.998932"
+       fx="37.499996"
+       fy="14.998932"
+       r="2.5000048" />
+    <linearGradient
+       id="linearGradient11160">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="0"
+         id="stop11162" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop11164" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11144"
+       id="radialGradient11208"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.0344796,0,0,0.04549353,6.1038093,-19.739153)"
+       cx="185.50665"
+       cy="796.50342"
+       fx="185.50665"
+       fy="796.50342"
+       r="72.506653" />
+    <linearGradient
+       id="linearGradient11144">
+      <stop
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         id="stop11146" />
+      <stop
+         id="stop11154"
+         style="stop-color:#ffffff;stop-opacity:0.74901961;"
+         offset="0.49243662" />
+      <stop
+         id="stop11150"
+         style="stop-color:#ffffff;stop-opacity:0.49803922;"
+         offset="0.69101065" />
+      <stop
+         offset="0.84550536"
+         style="stop-color:#ffffff;stop-opacity:0.24705882;"
+         id="stop11152" />
+      <stop
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         id="stop11148" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       y="467.12659"
+       x="-233.82362"
+       height="41.12067"
+       width="41.362885"
+       id="hint-stretch-borders"
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none" />
+    <g
+       id="active-tab-bottom"
+       transform="matrix(5,0,0,0.99323964,243.98315,416.35612)">
+      <rect
+         height="1.0068054"
+         x="10.000004"
+         y="15.993194"
+         width="5"
+         id="rect11182"
+         style="opacity:0.7;fill:url(#radialGradient11208);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="active-tab-center"
+       transform="matrix(5,0,0,4.9978547,119.33912,356.62913)">
+      <rect
+         height="5.0021462"
+         x="34.928806"
+         y="9.926671"
+         width="5.0000095"
+         id="rect11196"
+         style="opacity:0.3;fill:url(#radialGradient11220);fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

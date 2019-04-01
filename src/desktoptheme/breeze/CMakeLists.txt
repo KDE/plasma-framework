@@ -1,24 +1,24 @@
 
 install(FILES metadata.desktop DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/)
 
-FILE(GLOB widgets widgets/*.svgz)
-install( FILES ${widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/widgets/ )
+FILE(GLOB widgets widgets/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH widgets FILES ${widgets})
 
-FILE(GLOB dialogs dialogs/*.svgz)
-install( FILES ${dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/dialogs/ )
+FILE(GLOB dialogs dialogs/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH dialogs FILES ${dialogs})
 
-FILE(GLOB opaque_dialogs opaque/dialogs/*.svgz)
-install( FILES ${opaque_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/opaque/dialogs/ )
+FILE(GLOB opaque_dialogs opaque/dialogs/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH opaque/dialogs FILES ${opaque_dialogs})
 
-FILE(GLOB opaque_widgets opaque/widgets/*.svgz)
-install( FILES ${opaque_widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/opaque/widgets/ )
+FILE(GLOB opaque_widgets opaque/widgets/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH opaque/widgets FILES ${opaque_widgets})
 
-FILE(GLOB translucent_widgets translucent/widgets/*.svgz)
-install( FILES ${translucent_widgets} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/translucent/widgets/ )
+FILE(GLOB translucent_widgets translucent/widgets/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH translucent/widgets FILES ${translucent_widgets})
 
-FILE(GLOB translucent_dialogs translucent/dialogs/*.svgz)
-install( FILES ${translucent_dialogs} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/translucent/dialogs/ )
+FILE(GLOB translucent_dialogs translucent/dialogs/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH translucent/dialogs FILES ${translucent_dialogs})
 
-FILE(GLOB icons icons/*.svgz)
-install( FILES ${icons} DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/icons/ )
+FILE(GLOB icons icons/*.svg)
+plasma_install_desktoptheme_svgs(default SUBPATH icons FILES ${icons})
 

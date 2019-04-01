@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   id="svg3869"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="phone.svgz"
+   viewBox="0 0 32 32">
+  <defs
+     id="defs3871">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#31363b;
+      }
+      .ColorScheme-Background {
+        color:#eff0f1;
+      }
+      .ColorScheme-Highlight {
+        color:#3daee9;
+      }
+      .ColorScheme-ViewText {
+        color:#31363b;
+      }
+      .ColorScheme-ViewBackground {
+        color:#fcfcfc;
+      }
+      .ColorScheme-ViewHover {
+        color:#93cee9;
+      }
+      .ColorScheme-ViewFocus{
+        color:#3daee9;
+      }
+      .ColorScheme-ButtonText {
+        color:#31363b;
+      }
+      .ColorScheme-ButtonBackground {
+        color:#eff0f1;
+      }
+      .ColorScheme-ButtonHover {
+        color:#93cee9;
+      }
+      .ColorScheme-ButtonFocus{
+        color:#3daee9;
+      }
+      </style>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.8515625"
+     inkscape:cx="-4.4604338"
+     inkscape:cy="-1.1661618"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4132"
+       originx="5"
+       originy="4.9999826" />
+    <sodipodi:guide
+       position="7,25"
+       orientation="18,0"
+       id="guide4138" />
+    <sodipodi:guide
+       position="7,7"
+       orientation="0,18"
+       id="guide4140" />
+    <sodipodi:guide
+       position="25,7"
+       orientation="-18,0"
+       id="guide4142" />
+    <sodipodi:guide
+       position="25,25"
+       orientation="0,-18"
+       id="guide4144" />
+    <sodipodi:guide
+       position="8,24"
+       orientation="16,0"
+       id="guide4146" />
+    <sodipodi:guide
+       position="8,8"
+       orientation="0,16"
+       id="guide4148" />
+    <sodipodi:guide
+       position="24,8"
+       orientation="-16,0"
+       id="guide4150" />
+    <sodipodi:guide
+       position="24,24"
+       orientation="0,-16"
+       id="guide4152" />
+    <sodipodi:guide
+       position="2,29.999997"
+       orientation="28,0"
+       id="guide4265" />
+    <sodipodi:guide
+       position="2,1.9999974"
+       orientation="0,28"
+       id="guide4267" />
+    <sodipodi:guide
+       position="30,1.9999974"
+       orientation="-28,0"
+       id="guide4269" />
+    <sodipodi:guide
+       position="30,29.999997"
+       orientation="0,-28"
+       id="guide4271" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3874">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-321,-529.36218)">
+    <g
+       id="phone">
+      <rect
+         y="529.36218"
+         x="321"
+         height="32"
+         width="32"
+         id="rect4436"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
+         d="M 8 2 L 8 26 L 8 27 L 8 30 L 24 30 L 24 2 L 8 2 z M 13 3 L 19 3 L 19 4 L 13 4 L 13 3 z M 9 5 L 23 5 L 23 28 L 9 28 L 9 5 z "
+         transform="translate(321,529.36218)"
+         id="path4167"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="16-16-phone"
+       inkscape:label="#16-16-phone">
+      <rect
+         y="537.36218"
+         x="303"
+         height="16"
+         width="16"
+         id="rect4442"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.10079043;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
+         d="M -14 10 L -14 22 L -6 22 L -6 10 L -14 10 z M -11 11 L -9 11 L -9 12 L -11 12 L -11 11 z M -13 13 L -7 13 L -7 20 L -13 20 L -13 13 z "
+         transform="translate(321,529.36218)"
+         id="path4193"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="22-22-phone"
+       transform="translate(-1,0)"
+       inkscape:label="#22-22-phone">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.13858683;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4444"
+         width="22"
+         height="22"
+         x="356"
+         y="534.36218" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 40 8 L 40 24 L 50 24 L 50 8 L 40 8 z M 43 9 L 47 9 L 47 10 L 43 10 L 43 9 z M 41 11 L 49 11 L 49 23 L 41 23 L 41 11 z "
+         transform="translate(322,529.36218)"
+         id="path4181"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="phone-battery"
+       transform="translate(0,32)">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4162"
+         width="32"
+         height="32"
+         x="321"
+         y="529.36218" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
+         d="M 8 34 L 8 58 L 8 59 L 8 62 L 24 62 L 24 34 L 8 34 z M 13 35 L 19 35 L 19 36 L 13 36 L 13 35 z M 9 37 L 23 37 L 23 59 L 23 60 L 9 60 L 9 59 L 9 37 z M 16.5 41 L 12.5 49 L 15 49 L 15 55 L 19.5 47 L 16.5 47 L 16.5 41 z "
+         transform="translate(321,497.36218)"
+         id="path4214"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       id="16-16-phone-battery"
+       transform="translate(0,32)">
+      <rect
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.10079043;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4168"
+         width="16"
+         height="16"
+         x="303"
+         y="537.36218" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
+         d="m -14,42 0,12 8,0 0,-12 z m 3,1 2,0 0,1 -2,0 z m -2,2 6,0 0,7 -3,0 -3,0 z m 3,6 1,-3 -1,0 0,-2 -1,3 1,0 z"
+         transform="translate(321,497.36218)"
+         id="path4201"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccccccccccccccccccccc"
+         class="ColorScheme-Text" />
+    </g>
+    <g
+       transform="translate(-1,32)"
+       id="22-22-phone-battery">
+      <rect
+         y="534.36218"
+         x="356"
+         height="22"
+         width="22"
+         id="rect4174"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:0.13858683;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <path
+         style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 40 40 L 40 56 L 50 56 L 50 40 L 40 40 z M 43 41 L 47 41 L 47 42 L 43 42 L 43 41 z M 41 43 L 49 43 L 49 55 L 41 55 L 41 43 z M 45 45 L 43 50 L 45 50 L 45 53 L 47 48 L 45 48 L 45 45 z "
+         transform="translate(322,497.36218)"
+         id="path4239"
+         class="ColorScheme-Text" />
+    </g>
+  </g>
+</svg>
