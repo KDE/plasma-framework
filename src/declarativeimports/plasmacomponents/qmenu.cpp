@@ -274,13 +274,14 @@ void QMenuProxy::removeMenuItem(QMenuItem *item)
 
 void QMenuProxy::itemTriggered(QAction *action)
 {
-    QMenuItem *item = qobject_cast<QMenuItem *>(action);
-    if (item) {
-        emit triggered(item);
-        int index = m_items.indexOf(item);
-        if (index > -1) {
-            emit triggeredIndex(index);
+    for (int i = 0; i < m_items.count(); ++i) {
+        QMenuItem *item = m_items.at(i);
+        if (item->action() == action) {
+            emit triggered(item);
+            emit triggeredIndex(i);
+            break;
         }
+
     }
 }
 
