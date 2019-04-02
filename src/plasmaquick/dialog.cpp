@@ -1208,7 +1208,7 @@ bool Dialog::event(QEvent *event)
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked
      * on the mouse edge, forward the click in the containment boundaries
      */
-    if (d->mainItem) {
+    if (d->mainItem && !d->mainItem->size().isEmpty()) {
         switch (event->type()) {
             case QEvent::MouseMove:
             case QEvent::MouseButtonPress:
