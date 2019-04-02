@@ -183,6 +183,12 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(Plasma::Svg::Status status READ status WRITE setStatus NOTIFY statusChanged)
 
+    /**
+     * The mask that tightly contains the painted areas
+     * @since 5.58
+     */
+    Q_PROPERTY(QRegion mask READ mask NOTIFY maskChanged)
+
 public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
@@ -220,6 +226,8 @@ public:
     void geometryChanged(const QRectF &newGeometry,
                          const QRectF &oldGeometry) override;
 
+    QRegion mask() const;
+
     /**
      * Only to be used from inside this library, is not intended to be invokable
      */
@@ -244,6 +252,7 @@ Q_SIGNALS:
     void repaintNeeded();
     void statusChanged();
     void usedPrefixChanged();
+    void maskChanged();
 
 private Q_SLOTS:
     void doUpdate();

@@ -241,13 +241,13 @@ void DialogPrivate::updateTheme()
             frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
         }
 
-        KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->frameSvg()->mask());
+        KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->mask());
 
         KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
                 theme.backgroundContrast(),
                 theme.backgroundIntensity(),
                 theme.backgroundSaturation(),
-                frameSvgItem->frameSvg()->mask());
+                frameSvgItem->mask());
 
         if (KWindowSystem::compositingActive()) {
             if (hasMask) {
@@ -256,7 +256,7 @@ void DialogPrivate::updateTheme()
             }
         } else {
             hasMask = true;
-            q->setMask(frameSvgItem->frameSvg()->mask());
+            q->setMask(frameSvgItem->mask());
         }
         if (q->isVisible()) {
             DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());

@@ -272,6 +272,7 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
+    connect(m_frameSvg, &Svg::sizeChanged, this, &FrameSvgItem::maskChanged);
 }
 
 FrameSvgItem::~FrameSvgItem()
@@ -453,6 +454,12 @@ Plasma::FrameSvg::EnabledBorders FrameSvgItem::enabledBorders() const
 bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
 {
     return m_frameSvg->hasElementPrefix(prefix);
+}
+
+
+QRegion FrameSvgItem::mask() const
+{
+    return m_frameSvg->mask();
 }
 
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
