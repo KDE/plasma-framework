@@ -574,7 +574,7 @@ int AppletInterface::screen() const
 
 QRect AppletInterface::screenGeometry() const
 {
-    if (!applet() || !applet()->containment()) {
+    if (!applet() || !applet()->containment() || !applet()->containment()->corona()) {
         return QRect();
     }
     return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
