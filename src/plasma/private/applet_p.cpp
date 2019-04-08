@@ -184,7 +184,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     }
 
     if (!q->isContainment()) {
-        QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("preferences-desktop-default-applications")), i18n("Alternatives..."), q);
+        QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("widget-alternatives")), i18n("Show Alternatives..."), q);
         a->setVisible(false);
         q->actions()->addAction(QStringLiteral("alternatives"), a);
         QObject::connect(a, &QAction::triggered, [this] {
