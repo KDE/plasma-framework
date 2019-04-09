@@ -68,7 +68,7 @@ T.TextArea {
         selectWord();
     }
 
-    MobileTextSelection.MobileCursor {
+    Private.MobileCursor {
         target: control
         selectionStartHandle: true
         property var rect: target.positionToRectangle(target.selectionStart)

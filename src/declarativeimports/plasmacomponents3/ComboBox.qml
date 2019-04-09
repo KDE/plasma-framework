@@ -176,7 +176,7 @@ T.ComboBox {
         }
     }
 
-    MobileTextSelection.MobileCursor {
+    Private.MobileCursor {
         target: textField
         selectionStartHandle: true
         property var rect: textField.positionToRectangle(textField.selectionStart)
