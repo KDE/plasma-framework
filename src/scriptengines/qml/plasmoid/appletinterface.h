@@ -278,6 +278,14 @@ public:
     Q_INVOKABLE QAction *action(QString name) const;
 
     /**
+     * Should be called before retrieving any action
+     * to ensure contents are up to date
+     * @see contextualActionsAboutToShow
+     * @since 5.58
+     */
+    Q_INVOKABLE void prepareContextualActions();
+
+    /**
      * FIXME: remove?
      * Retrieve the path of a file from the Plasmoid package
      * @param fileName the package-recognized name, such as "mainscript"

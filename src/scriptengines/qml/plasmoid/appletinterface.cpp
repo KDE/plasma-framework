@@ -784,6 +784,11 @@ bool AppletInterface::event(QEvent *event)
     return AppletQuickItem::event(event);
 }
 
+void AppletInterface::prepareContextualActions()
+{
+    emit applet()->contextualActionsAboutToShow();
+}
+
 bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
@@ -825,7 +830,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
             if (desktopMenu->winId()) {
                 desktopMenu->windowHandle()->setTransientParent(window());
             }
-            emit applet()->contextualActionsAboutToShow();
+            prepareContextualActions();
             ci->addAppletActions(desktopMenu, applet(), event);
 
             if (!desktopMenu->isEmpty()) {
