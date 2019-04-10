@@ -1,7 +1,5 @@
  
-singleton MobileTextActionsToolBar 1.0 MobileTextActionsToolBar.qml
 ButtonShadow 1.0 ButtonShadow.qml
 DefaultListItemBackground 1.0 DefaultListItemBackground.qml
-MobileCursor 1.0 MobileCursor.qml
 RoundShadow 1.0 RoundShadow.qml
 TextFieldFocus 1.0 TextFieldFocus.qml

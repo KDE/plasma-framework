@@ -25,6 +25,7 @@ import QtGraphicalEffects 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
+import "mobiletextselection" as MobileTextSelection
 
 T.ComboBox {
     id: control
@@ -154,7 +155,7 @@ T.ComboBox {
             opacity: control.enabled ? 1 : 0.3
             onFocusChanged: {
                 if (focus) {
-                    Private.MobileTextActionsToolBar.controlRoot = textField;
+                    MobileTextSelection.MobileTextActionsToolBar.controlRoot = textField;
                 }
             }
 
@@ -176,7 +177,7 @@ T.ComboBox {
         }
     }
 
-    Private.MobileCursor {
+    MobileTextSelection.MobileCursor {
         target: textField
         selectionStartHandle: true
         property var rect: textField.positionToRectangle(textField.selectionStart)

@@ -70,4 +70,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/BusyIndicator.qml
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
 
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/private DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/mobiletextselection DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
+
 

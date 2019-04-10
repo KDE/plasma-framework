@@ -24,6 +24,7 @@ import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private" as Private
 import org.kde.kirigami 2.5 as Kirigami
+import "mobiletextselection" as MobileTextSelection
 
 T.TextField {
     id: control
@@ -51,13 +52,13 @@ T.TextField {
     cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : null
     Component {
         id: mobileCursor
-        Private.MobileCursor {
+        MobileTextSelection.MobileCursor {
             target: control
         }
     }
     onFocusChanged: {
         if (focus) {
-            Private.MobileTextActionsToolBar.controlRoot = control;
+            MobileTextSelection.MobileTextActionsToolBar.controlRoot = control;
         }
     }
 
