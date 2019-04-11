@@ -804,4 +804,11 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
   </g>
+  <rect
+     id="hint-hands-shadow-offset-to-south"
+     style="opacity:1;fill:#008000;fill-opacity:1;stroke:none"
+     width="4"
+     height="2"
+     x="100"
+     y="70" />
 </svg>
