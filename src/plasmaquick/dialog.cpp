@@ -898,7 +898,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     }
 
     //if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock
-    const KWindowInfo winInfo = KWindowSystem::windowInfo(item->window()->winId(), NET::WMWindowType);
+    const KWindowInfo winInfo(item->window()->winId(), NET::WMWindowType);
     const bool outsideParentWindow = ((winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint))
             && item->window()->mask().isNull();
 
