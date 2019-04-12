@@ -2,10 +2,17 @@
 option(GZIP_DESKTOPTHEME_SVG "Install Desktop Theme SVG files as .svgz." ON)
 
 if (GZIP_DESKTOPTHEME_SVG)
-    find_package(gzip)
-    set_package_properties(gzip PROPERTIES
-        TYPE REQUIRED
-    )
+    if(WIN32)
+        find_package(7z)
+        set_package_properties(7z PROPERTIES
+            TYPE REQUIRED
+        )
+    else()
+        find_package(gzip)
+        set_package_properties(gzip PROPERTIES
+            TYPE REQUIRED
+        )
+    endif()
 endif()
 
 # Helper function, private for now
@@ -55,16 +62,29 @@ function(PLASMA_INSTALL_DESKTOPTHEME_SVGS theme_name)
         if (GZIP_DESKTOPTHEME_SVG)
             set(_gzipped_file_displayname "${desktoptheme_COMPONENTDIR}/${_fileName}z")
             set(_gzipped_file "${CMAKE_CURRENT_BINARY_DIR}/${desktoptheme_GZIPDIR}/${_fileName}z")
-            add_custom_command(
-                OUTPUT ${_gzipped_file}
-                COMMAND ${gzip_EXECUTABLE}
-                ARGS
-                    -9
-                    -c
-                    ${_src_file} > ${_gzipped_file}
-                DEPENDS ${_src_file}
-                COMMENT "Gzipping ${_gzipped_file_displayname}"
-            )
+            if(WIN32)
+                add_custom_command(
+                    OUTPUT ${_gzipped_file}
+                    COMMAND ${7z_EXECUTABLE}
+                    ARGS
+                        a
+                        -tgzip
+                        ${_gzipped_file} ${_src_file}
+                    DEPENDS ${_src_file}
+                    COMMENT "Gzipping ${_gzipped_file_displayname}"
+                )
+            else()
+                add_custom_command(
+                    OUTPUT ${_gzipped_file}
+                    COMMAND ${gzip_EXECUTABLE}
+                    ARGS
+                        -9
+                        -c
+                        ${_src_file} > ${_gzipped_file}
+                    DEPENDS ${_src_file}
+                    COMMENT "Gzipping ${_gzipped_file_displayname}"
+                )
+            endif()
         else()
             set(_gzipped_file "${_src_file}")
         endif()
