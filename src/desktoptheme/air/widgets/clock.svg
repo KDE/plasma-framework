@@ -740,4 +740,47 @@
       </g>
     </g>
   </g>
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-hourhand-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-hourhandshadow-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-minutehand-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-minutehandshadow-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-secondhand-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <circle
+       style="opacity:0.875;fill:#008000;fill-opacity:1;stroke:none"
+       id="hint-secondhandshadow-rotation-center-offset"
+       r="2"
+       cx="100"
+       cy="100" />
+  <rect
+     id="hint-hands-shadow-offset-to-south"
+     style="opacity:1;fill:#008000;fill-opacity:1;stroke:none"
+     width="4"
+     height="2"
+     x="100"
+     y="80" />
 </svg>
