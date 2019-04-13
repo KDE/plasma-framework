@@ -67,12 +67,6 @@ class IconItem : public QQuickItem
     Q_PROPERTY(QStringList overlays READ overlays WRITE setOverlays NOTIFY overlaysChanged)
 
     /**
-     * See QQuickItem::smooth
-     */
-    //KF6 Remove, this just shadows QQuickItem::smooth
-    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
-
-    /**
      * Apply a visual indication that this icon is active.
      * Typically used to indicate that it is hovered
      */
@@ -140,9 +134,6 @@ public:
 
     bool isActive() const;
     void setActive(bool active);
-
-    void setSmooth(const bool smooth);
-    bool smooth() const;
 
     bool isAnimated() const;
     void setAnimated(bool animated);

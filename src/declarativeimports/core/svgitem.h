@@ -60,11 +60,6 @@ class SvgItem : public QQuickItem
      */
     Q_PROPERTY(QSizeF naturalSize READ naturalSize NOTIFY naturalSizeChanged)
 
-    /**
-     * If true enable antialiasing in paint: default off, better quality but less performance.
-     */
-    Q_PROPERTY(bool smooth READ smooth WRITE setSmooth NOTIFY smoothChanged)
-
 public:
 /// @cond INTERNAL_DOCS
 
@@ -77,9 +72,6 @@ public:
     void setSvg(Plasma::Svg *svg);
     Plasma::Svg *svg() const;
 
-    void setSmooth(const bool smooth);
-    bool smooth() const;
-
     QSizeF naturalSize() const;
 
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override;
@@ -89,7 +81,6 @@ Q_SIGNALS:
     void elementIdChanged();
     void svgChanged();
     void naturalSizeChanged();
-    void smoothChanged();
 
 protected Q_SLOTS:
 /// @cond INTERNAL_DOCS
@@ -104,7 +95,6 @@ private:
 
     QPointer<Plasma::Svg> m_svg;
     QString m_elementID;
-    bool m_smooth;
     bool m_textureChanged;
     QImage m_image;
 };

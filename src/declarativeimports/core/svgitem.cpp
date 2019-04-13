@@ -36,7 +36,6 @@ namespace Plasma
 
 SvgItem::SvgItem(QQuickItem *parent)
     : QQuickItem(parent),
-      m_smooth(false),
       m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
@@ -115,20 +114,6 @@ Plasma::Svg *SvgItem::svg() const
     return m_svg.data();
 }
 
-void SvgItem::setSmooth(const bool smooth)
-{
-    if (smooth == m_smooth) {
-        return;
-    }
-    m_smooth = smooth;
-    emit smoothChanged();
-}
-
-bool SvgItem::smooth() const
-{
-    return m_smooth;
-}
-
 QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData);
@@ -146,7 +131,6 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
     ManagedTextureNode *textureNode = static_cast<ManagedTextureNode *>(oldNode);
     if (!textureNode) {
         textureNode = new ManagedTextureNode;
-        textureNode->setFiltering(QSGTexture::Linear);
         m_textureChanged = true;
     }
 
@@ -164,14 +148,13 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         }
 
         QSharedPointer<QSGTexture> texture(window()->createTextureFromImage(m_image, QQuickWindow::TextureCanUseAtlas));
-        if (m_smooth) {
-            texture->setFiltering(QSGTexture::Linear);
-        }
         textureNode->setTexture(texture);
         m_textureChanged = false;
 
         textureNode->setRect(0, 0, width(), height());
     }
+
+    textureNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
 
     return textureNode;
 }

@@ -39,7 +39,6 @@ IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_svgIcon(nullptr),
       m_status(Plasma::Svg::Normal),
-      m_smooth(true),
       m_active(false),
       m_animated(true),
       m_usesPlasmaTheme(true),
@@ -320,20 +319,6 @@ void IconItem::setActive(bool active)
     emit activeChanged();
 }
 
-void IconItem::setSmooth(const bool smooth)
-{
-    if (smooth == m_smooth) {
-        return;
-    }
-    m_smooth = smooth;
-    update();
-}
-
-bool IconItem::smooth() const
-{
-    return m_smooth;
-}
-
 bool IconItem::isAnimated() const
 {
     return m_animated;
@@ -492,9 +477,9 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
             delete oldNode;
 
             QSGTexture *source = window()->createTextureFromImage(m_oldIconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
-            source->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
+            source->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
             QSGTexture *target = window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
-            target->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
+            target->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
             animatingNode = new FadingNode(source, target);
             m_sizeChanged = true;
             m_textureChanged = false;
@@ -516,11 +501,11 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         if (!textureNode || m_textureChanged) {
             delete oldNode;
             textureNode = new ManagedTextureNode;
-            textureNode->setFiltering(m_smooth ? QSGTexture::Linear : QSGTexture::Nearest);
             textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas)));
             m_sizeChanged = true;
             m_textureChanged = false;
         }
+        textureNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
 
         if (m_sizeChanged) {
             const QSize newSize = paintedSize();
