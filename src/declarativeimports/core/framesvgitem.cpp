@@ -85,13 +85,14 @@ public:
         Tile
     };
 
-    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)
+    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGTexture::Filtering filtering, QSGNode* parent)
         : ManagedTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
         , m_lastParent(parent)
         , m_fitMode(fitMode)
     {
+        setFiltering(filtering);
         m_lastParent->appendChildNode(this);
 
         if (m_fitMode == Tile) {
@@ -523,6 +524,8 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         return nullptr;
     }
 
+    const QSGTexture::Filtering filtering = smooth() ? QSGTexture::Linear : QSGTexture::Nearest;
+
     if (m_fastPath) {
         if (m_textureChanged) {
             delete oldNode;
@@ -540,30 +543,30 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
             FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
 
-            new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode);
+            new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, filtering, oldNode);
             if (enabledBorders() & (FrameSvg::TopBorder | FrameSvg::LeftBorder)) {
-                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, filtering, oldNode);
             }
             if (enabledBorders() & (FrameSvg::TopBorder | FrameSvg::RightBorder)) {
-                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+                new FrameItemNode(this, FrameSvg::TopBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, filtering, oldNode);
             }
             if (enabledBorders() & FrameSvg::TopBorder) {
-                new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, oldNode);
+                new FrameItemNode(this, FrameSvg::TopBorder, borderFitMode, filtering, oldNode);
             }
             if (enabledBorders() & FrameSvg::BottomBorder) {
-                new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, oldNode);
+                new FrameItemNode(this, FrameSvg::BottomBorder, borderFitMode, filtering, oldNode);
             }
             if (enabledBorders() & (FrameSvg::BottomBorder | FrameSvg::LeftBorder)) {
-                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, oldNode);
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::LeftBorder, FrameItemNode::FastStretch, filtering, oldNode);
             }
             if (enabledBorders() & (FrameSvg::BottomBorder | FrameSvg::RightBorder)) {
-                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
+                new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, filtering, oldNode);
             }
             if (enabledBorders() & FrameSvg::LeftBorder) {
-                new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
+                new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, filtering, oldNode);
             }
             if (enabledBorders() & FrameSvg::RightBorder) {
-                new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
+                new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, filtering, oldNode);
             }
 
             m_sizeChanged = true;
@@ -587,7 +590,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         if (!textureNode) {
             delete oldNode;
             textureNode = new ManagedTextureNode;
-            textureNode->setFiltering(QSGTexture::Nearest);
+            textureNode->setFiltering(filtering);
             m_textureChanged = true; //force updating the texture on our newly created node
             oldNode = textureNode;
         }
