@@ -55,7 +55,7 @@ T.TextArea {
     cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : null
     Component {
         id: mobileCursor
-        Private.MobileCursor {
+        MobileTextSelection.MobileCursor {
             target: control
         }
     }

@@ -172,7 +172,7 @@ T.ComboBox {
 
     Component {
         id: mobileCursor
-        Private.MobileCursor {
+        MobileTextSelection.MobileCursor {
             target: textField
         }
     }

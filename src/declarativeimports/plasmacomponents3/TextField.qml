@@ -70,7 +70,7 @@ T.TextField {
         cursorPosition = positionAt(event.x, event.y);
         selectWord();
     }
-    Private.MobileCursor {
+    MobileTextSelection.MobileCursor {
         target: control
         selectionStartHandle: true
         property var rect: target.positionToRectangle(target.selectionStart)
