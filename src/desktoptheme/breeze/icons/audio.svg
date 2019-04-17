@@ -12,7 +12,7 @@
     <g id="audio-volume-muted">
         <path id="path30" d="m66 0h22v22h-22z" fill="none"/>
         <path id="path32" d="m77 3-5 5v6l5 5h1v-16zm-8 5v6h2v-6z" class="ColorScheme-Text" fill="currentColor"/>
-        <path id="path34" d="m83 7a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4zm0 1a3 3 0 0 1 3 3 3 3 0 0 1-0.557 1.736l-4.177-4.176a3 3 0 0 1 1.734-0.56zm-2.443 1.264 4.177 4.177a3 3 0 0 1-1.734 0.559 3 3 0 0 1-3-3 3 3 0 0 1 0.557-1.736z" class="ColorScheme-NegativeText" fill="currentColor" fill-rule="evenodd"/>
+        <path id="path34" d="m83 7a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4zm0 1a3 3 0 0 1 3 3 3 3 0 0 1-0.557 1.736l-4.177-4.176a3 3 0 0 1 1.734-0.56zm-2.443 1.264 4.177 4.177a3 3 0 0 1-1.734 0.559 3 3 0 0 1-3-3 3 3 0 0 1 0.557-1.736z" class="ColorScheme-NegativeText" fill="currentColor"/>
     </g>
     <g id="audio-volume-low">
         <path id="path2" d="m44 0h22v22h-22z" fill="none"/>
@@ -24,9 +24,11 @@
     </g>
     <g id="audio-volume-medium">
         <path id="path12" d="m22 0h22v22h-22z" fill="none"/>
-        <path id="path16" d="m35.865 3.537-0.244 0.977a7 7 0 0 1 4.379 6.486 7 7 0 0 1-4.38 6.479l0.243 0.974a8 8 0 0 0 5.137-7.453 8 8 0 0 0-5.135-7.463z" opacity=".25"/>
-        <path id="path14" d="m36.324 7.281-0.539 0.862a4 4 0 0 1 1.215 2.857 4 4 0 0 1-1.21 2.861l0.538 0.864a5 5 0 0 0 1.672-3.725 5 5 0 0 0-1.676-3.719z" class="ColorScheme-Text" fill="currentColor"/>
-        <path id="path18" d="m33 3-5 5v6l5 5h1v-16zm-8 5v6h2v-6z" class="ColorScheme-Text" fill="currentColor"/>
+        <g class="ColorScheme-Text" fill="currentColor">
+            <path id="path16" d="m35.865 3.537-0.244 0.977a7 7 0 0 1 4.379 6.486 7 7 0 0 1-4.38 6.479l0.243 0.974a8 8 0 0 0 5.137-7.453 8 8 0 0 0-5.135-7.463z" opacity=".25"/>
+            <path id="path14" d="m36.324 7.281-0.539 0.862a4 4 0 0 1 1.215 2.857 4 4 0 0 1-1.21 2.861l0.538 0.864a5 5 0 0 0 1.672-3.725 5 5 0 0 0-1.676-3.719z"/>
+            <path id="path18" d="m33 3-5 5v6l5 5h1v-16zm-8 5v6h2v-6z"/>
+        </g>
     </g>
     <g id="audio-volume-high">
         <path id="path22" d="m0 0h22v22h-22z" fill="none"/>
