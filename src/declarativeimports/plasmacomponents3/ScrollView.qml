@@ -24,6 +24,7 @@ import QtQuick 2.9
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.9 as Kirigami
 
 T.ScrollView {
     id: controlRoot
@@ -33,8 +34,6 @@ T.ScrollView {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
-    contentWidth: verticalScrollBar.flickableItem ? verticalScrollBar.flickableItem.contentWidth : 0
-    contentHeight: verticalScrollBar.flickableItem ? verticalScrollBar.flickableItem.contentHeight : 0
 
     //create a background only after Component.onCompleted, see on the component creation below for explanation
     Component.onCompleted: {
@@ -44,14 +43,19 @@ T.ScrollView {
     }
 
  
-    data: [  Component {
-                id: backgroundComponent
-                Rectangle {
-                    color: theme.viewBackgroundColor
-                    visible: false
-                    anchors.fill:parent
-                }
-            }]
+    data: [
+        Kirigami.WheelHandler {
+            target: controlRoot.contentItem
+        },
+        Component {
+            id: backgroundComponent
+            Rectangle {
+                color: theme.viewBackgroundColor
+                visible: false
+                anchors.fill:parent
+            }
+        }
+    ]
 
     ScrollBar.vertical: ScrollBar {
         id: verticalScrollBar
