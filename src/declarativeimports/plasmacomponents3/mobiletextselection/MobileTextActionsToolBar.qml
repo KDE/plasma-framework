@@ -33,6 +33,7 @@ Popup {
     modal: false
     focus: false
     closePolicy: Popup.NoAutoClose
+    property bool shouldBeVisible: false
 
     x: controlRoot ? Math.min(Math.max(0, controlRoot.mapToItem(root.parent, controlRoot.positionToRectangle(controlRoot.selectionStart).x, 0).x - root.width/2), controlRoot.Window.contentItem.width - root.width) : 0
 
@@ -50,7 +51,7 @@ Popup {
     }
 
 
-    visible: controlRoot ? Kirigami.Settings.tabletMode && (controlRoot.selectedText.length > 0 || controlRoot.canPaste) : false
+    visible: controlRoot ? shouldBeVisible && Kirigami.Settings.tabletMode && (controlRoot.selectedText.length > 0 || controlRoot.canPaste) : false
 
     width: contentItem.implicitWidth + leftPadding + rightPadding
 
@@ -58,7 +59,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-cut"
-            visible: controlRoot.selectedText.length > 0
+            visible: controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
             onClicked: {
                 controlRoot.cut();
             }
@@ -66,7 +67,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-copy"
-            visible: controlRoot.selectedText.length > 0
+            visible: controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
             onClicked: {
                 controlRoot.copy();
             }
@@ -74,6 +75,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-paste"
+            visible: controlRoot.canPaste
             onClicked: {
                 controlRoot.paste();
             }
