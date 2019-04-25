@@ -137,6 +137,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     , m_winId(0)
     , m_paintedSize(QSizeF())
     , m_thumbnailAvailable(false)
+    , m_redirecting(false)
     , m_damaged(false)
     , m_depth(0)
 #if HAVE_XCB_COMPOSITE
@@ -160,33 +161,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
 #endif
 {
     setFlag(ItemHasContents);
-    connect(this, &QQuickItem::windowChanged, [this](QQuickWindow * window) {
-        if (!window) {
-            return;
-        }
-        // restart the redirection, it might not have been active yet
-        stopRedirecting();
-        startRedirecting();
-        update();
-    });
-    connect(this, &QQuickItem::enabledChanged, [this]() {
-        if (!isEnabled()) {
-            stopRedirecting();
-            releaseResources();
-        } else if (isVisible()) {
-            startRedirecting();
-            update();
-        }
-    });
-    connect(this, &QQuickItem::visibleChanged, [this]() {
-        if (!isVisible()) {
-            stopRedirecting();
-            releaseResources();
-        } else if (isEnabled()) {
-            startRedirecting();
-            update();
-        }
-    });
+
     if (QGuiApplication *gui = dynamic_cast<QGuiApplication *>(QCoreApplication::instance())) {
         m_xcb = (gui->platformName() == QStringLiteral("xcb"));
         if (m_xcb) {
@@ -213,6 +188,42 @@ WindowThumbnail::~WindowThumbnail()
     if (m_xcb) {
         QCoreApplication::instance()->removeNativeEventFilter(this);
         stopRedirecting();
+    }
+}
+
+void WindowThumbnail::itemChange(ItemChange change, const ItemChangeData &data)
+{
+    switch (change) {
+    case ItemSceneChange:
+        if (m_scene) {
+            disconnect(m_scene.data(), &QWindow::visibleChanged, this, &WindowThumbnail::sceneVisibilityChanged);
+        }
+        m_scene = data.window;
+        if (m_scene) {
+            connect(m_scene.data(), &QWindow::visibleChanged, this, &WindowThumbnail::sceneVisibilityChanged);
+            // restart the redirection, it might not have been active yet
+            stopRedirecting();
+            if (startRedirecting()) {
+                update();
+            }
+        }
+        break;
+
+    case ItemEnabledHasChanged:
+        Q_FALLTHROUGH();
+    case ItemVisibleHasChanged:
+        if (data.boolValue) {
+            if (startRedirecting()) {
+                update();
+            }
+        } else {
+            stopRedirecting();
+            releaseResources();
+        }
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -843,7 +854,10 @@ void WindowThumbnail::stopRedirecting()
     if (m_winId == XCB_WINDOW_NONE) {
         return;
     }
-    xcb_composite_unredirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
+    if (m_redirecting) {
+        xcb_composite_unredirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
+    }
+    m_redirecting = false;
     if (m_damage == XCB_NONE) {
         return;
     }
@@ -852,14 +866,14 @@ void WindowThumbnail::stopRedirecting()
 #endif
 }
 
-void WindowThumbnail::startRedirecting()
+bool WindowThumbnail::startRedirecting()
 {
-    if (!m_xcb || !m_composite || !window() || window()->winId() == m_winId) {
-        return;
+    if (!m_xcb || !m_composite || !window() || !window()->isVisible() || window()->winId() == m_winId || !isEnabled() || !isVisible()) {
+        return false;
     }
 #if HAVE_XCB_COMPOSITE
     if (m_winId == XCB_WINDOW_NONE) {
-        return;
+        return false;
     }
     xcb_connection_t *c = QX11Info::connection();
 
@@ -868,6 +882,7 @@ void WindowThumbnail::startRedirecting()
 
     // redirect the window
     xcb_composite_redirect_window(c, m_winId, XCB_COMPOSITE_REDIRECT_AUTOMATIC);
+    m_redirecting = true;
 
     // generate the damage handle
     m_damage = xcb_generate_id(c);
@@ -883,6 +898,9 @@ void WindowThumbnail::startRedirecting()
     xcb_change_window_attributes(c, m_winId, XCB_CW_EVENT_MASK, &events);
     // force to update the texture
     m_damaged = true;
+    return true;
+#else
+    return false;
 #endif
 }
 
@@ -893,6 +911,18 @@ void WindowThumbnail::setThumbnailAvailable(bool thumbnailAvailable)
     if (m_thumbnailAvailable != thumbnailAvailable) {
         m_thumbnailAvailable = thumbnailAvailable;
         emit thumbnailAvailableChanged();
+    }
+}
+
+void WindowThumbnail::sceneVisibilityChanged(bool visible)
+{
+    if (visible) {
+        if (startRedirecting()) {
+            update();
+        }
+    } else {
+        stopRedirecting();
+        releaseResources();
     }
 }
 

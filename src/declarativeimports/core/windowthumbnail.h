@@ -27,6 +27,8 @@
 #include <QAbstractNativeEventFilter>
 #include <QSGSimpleTextureNode>
 #include <QQuickItem>
+#include <QPointer>
+#include <QWindow>
 // xcb
 #if HAVE_XCB_COMPOSITE
 #include <xcb/damage.h>
@@ -100,21 +102,25 @@ Q_SIGNALS:
     void thumbnailAvailableChanged();
 
 protected:
+    void itemChange(ItemChange change, const ItemChangeData &data) override;
     void releaseResources() override;
 
 private:
     void iconToTexture(WindowTextureNode *textureNode);
     void windowToTexture(WindowTextureNode *textureNode);
-    void startRedirecting();
+    bool startRedirecting();
     void stopRedirecting();
     void resetDamaged();
     void setThumbnailAvailable(bool thumbnailAvailable);
+    void sceneVisibilityChanged(bool visible);
 
     bool m_xcb;
     bool m_composite;
+    QPointer<QWindow> m_scene;
     uint32_t m_winId;
     QSizeF m_paintedSize;
     bool m_thumbnailAvailable;
+    bool m_redirecting;
     bool m_damaged;
     int m_depth;
 #if HAVE_XCB_COMPOSITE
