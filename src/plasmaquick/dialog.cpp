@@ -308,7 +308,7 @@ void DialogPrivate::updateVisibility(bool visible)
         }
     }
 
-    if (!q->flags().testFlag(Qt::ToolTip) && type != Dialog::Notification) {
+    if (!q->flags().testFlag(Qt::ToolTip) && type != Dialog::Notification && type != Dialog::CriticalNotification) {
         KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
 
         switch (location) {
@@ -341,7 +341,7 @@ void DialogPrivate::updateVisibility(bool visible)
             q->setFlags(Qt::FramelessWindowHint | q->flags());
         }
 
-        if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay) {
+        if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
             KWindowSystem::setOnAllDesktops(q->winId(), true);
         } else {
             KWindowSystem::setOnAllDesktops(q->winId(), false);
@@ -1091,7 +1091,7 @@ void Dialog::setType(WindowType type)
         }
     }
 
-    if (type == Dock || type == Notification || type == OnScreenDisplay) {
+    if (type == Dock || type == Notification || type == OnScreenDisplay || type == CriticalNotification) {
         KWindowSystem::setOnAllDesktops(winId(), true);
     } else {
         KWindowSystem::setOnAllDesktops(winId(), false);

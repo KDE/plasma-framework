@@ -157,7 +157,8 @@ public:
         PopupMenu = NET::PopupMenu,
         Tooltip = NET::Tooltip,
         Notification = NET::Notification,
-        OnScreenDisplay = NET::OnScreenDisplay
+        OnScreenDisplay = NET::OnScreenDisplay,
+        CriticalNotification = NET::CriticalNotification
     };
     Q_ENUM(WindowType)
 
