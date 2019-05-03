@@ -168,7 +168,6 @@ Q_SIGNALS:
     void overlaysChanged();
     void activeChanged();
     void sourceChanged();
-    void smoothChanged();
     void animatedChanged();
     void usesPlasmaThemeChanged();
     void roundToIconSizeChanged();
@@ -201,7 +200,6 @@ private:
     QVariant m_source;
     Plasma::Svg::Status m_status;
 
-    bool m_smooth;
     bool m_active;
     bool m_animated;
     bool m_usesPlasmaTheme;
