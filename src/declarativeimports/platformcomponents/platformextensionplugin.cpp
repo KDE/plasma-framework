@@ -27,7 +27,7 @@
 class PlatformComponentsPlugin: public QQmlExtensionPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.kde.plasma.platformcomponents")
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
     PlatformComponentsPlugin(QObject *parent = nullptr)
