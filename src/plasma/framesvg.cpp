@@ -555,11 +555,13 @@ void FrameSvgPrivate::generateFrameBackground(const QSharedPointer<FrameData> &f
     // Sides
     const int leftHeight = q->elementSize(frame->prefix % QLatin1String("left")).height();
     paintBorder(p, frame, FrameSvg::LeftBorder, QSize(frame->leftWidth, leftHeight) * q->devicePixelRatio(), contentRect);
-    paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, leftHeight) * q->devicePixelRatio(), contentRect);
+    const int rightHeight = q->elementSize(frame->prefix % QLatin1String("right")).height();
+    paintBorder(p, frame, FrameSvg::RightBorder, QSize(frame->rightWidth, rightHeight) * q->devicePixelRatio(), contentRect);
 
     const int topWidth = q->elementSize(frame->prefix % QLatin1String("top")).width();
     paintBorder(p, frame, FrameSvg::TopBorder, QSize(topWidth, frame->topHeight) * q->devicePixelRatio(), contentRect);
-    paintBorder(p, frame, FrameSvg::BottomBorder, QSize(topWidth, frame->bottomHeight) * q->devicePixelRatio(), contentRect);
+    const int bottomWidth = q->elementSize(frame->prefix % QLatin1String("bottom")).width();
+    paintBorder(p, frame, FrameSvg::BottomBorder, QSize(bottomWidth, frame->bottomHeight) * q->devicePixelRatio(), contentRect);
     p.end();
 
     frame->cachedBackground.setDevicePixelRatio(q->devicePixelRatio());
