@@ -227,8 +227,9 @@ public:
     Q_INVOKABLE bool hasElementPrefix(Plasma::Types::Location location) const;
 
     /**
-     * Returns the prefix for SVG elements of the FrameSvg
+     * Returns the prefix for SVG elements of the FrameSvg (including a '-' at the end if not empty)
      * @return the prefix
+     * @sa actualPrefix()
      */
     Q_INVOKABLE QString prefix();
 
@@ -288,7 +289,8 @@ public:
     Q_INVOKABLE void paintFrame(QPainter *painter, const QPointF &pos = QPointF(0, 0));
 
     /**
-     * @returns the prefix that is actually used
+     * @returns the prefix that is actually used (including a '-' at the end if not empty)
+     * @sa prefix()
      */
     QString actualPrefix() const;
 
