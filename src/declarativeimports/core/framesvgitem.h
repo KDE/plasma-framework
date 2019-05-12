@@ -120,7 +120,7 @@ class FrameSvgItem : public QQuickItem
 
     /**
      * prefix for the 9 piece svg, like "pushed" or "normal" for the button
-     * see https://techbase.kde.org/Development/Tutorials/Plasma/ThemeDetails
+     * see https://techbase.kde.org/Development/Tutorials/Plasma5/ThemeDetails
      * for a list of paths and prefixes
      * It can also be an array of strings, specifying a fallback chain in case
      * the first element isn't found in the theme, eg ["toolbutton-normal", "normal"]
