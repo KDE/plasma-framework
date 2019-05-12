@@ -212,7 +212,7 @@ public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
      * to draw a frame
-     * @param prefix the given prefix we want to check if drawable
+     * @param prefix the given prefix we want to check if drawable (can have trailing '-' since 5.59)
      */
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 

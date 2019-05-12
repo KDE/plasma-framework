@@ -144,9 +144,12 @@ bool FrameSvg::hasElementPrefix(const QString &prefix) const
     //because it could make sense for certain themes to not have all the elements
     if (prefix.isEmpty()) {
         return hasElement(QStringLiteral("center"));
-    } else {
-        return hasElement(prefix % QLatin1String("-center"));
     }
+    if (prefix.endsWith(QLatin1Char('-'))) {
+        return hasElement(prefix % QLatin1String("center"));
+    }
+
+    return hasElement(prefix % QLatin1String("-center"));
 }
 
 bool FrameSvg::hasElementPrefix(Plasma::Types::Location location) const
