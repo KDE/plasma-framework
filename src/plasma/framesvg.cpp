@@ -339,9 +339,11 @@ void FrameSvg::clearCache()
 {
     if (d->frame) {
         d->frame->cachedBackground = QPixmap();
+        d->frame->cachedMasks.clear();
     }
     if (d->maskFrame) {
         d->maskFrame->cachedBackground = QPixmap();
+        d->maskFrame->cachedMasks.clear();
     }
 }
 
