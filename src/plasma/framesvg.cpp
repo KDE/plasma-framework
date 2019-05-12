@@ -452,7 +452,7 @@ QSharedPointer<FrameData> FrameSvgPrivate::lookupOrCreateMaskFrame(const QShared
 
 void FrameSvgPrivate::generateBackground(const QSharedPointer<FrameData> &frame)
 {
-    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(frame->requestedPrefix)) {
+    if (!frame->cachedBackground.isNull() || !q->hasElementPrefix(frame->prefix)) {
         return;
     }
 
