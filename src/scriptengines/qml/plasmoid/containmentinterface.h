@@ -54,6 +54,7 @@ class ContainmentInterface : public AppletInterface
 
     /**
      * List of applets this containment has: the containments
+     * KF6: this should be AppletQuickItem *
      */
     Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
 
