@@ -272,7 +272,6 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
-    connect(m_frameSvg, &Svg::sizeChanged, this, &FrameSvgItem::maskChanged);
 }
 
 FrameSvgItem::~FrameSvgItem()
@@ -507,6 +506,7 @@ void FrameSvgItem::doUpdate()
 
     update();
 
+    emit maskChanged();
     emit repaintNeeded();
 }
 
