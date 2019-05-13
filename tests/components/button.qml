@@ -96,11 +96,15 @@ Rectangle
         }
 
         Label {
-            text: "button and textfield should have the same height"
+            text: "button (with or without icon) and textfield should have the same height"
         }
 
         RowLayout {
             PlasmaComponents.Button {
+                text: "test"
+            }
+            PlasmaComponents.Button {
+                iconSource: "application-menu"
                 text: "test"
             }
             PlasmaComponents.TextField {
