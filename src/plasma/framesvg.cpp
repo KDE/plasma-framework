@@ -298,10 +298,14 @@ QPixmap FrameSvg::alphaMask() const
 
 QRegion FrameSvg::mask() const
 {
+    QRegion result;
+    if (!d->frame) {
+        return result;
+    }
+
     QString id = d->cacheId(d->frame.data(), QString());
 
     QRegion* obj = d->frame->cachedMasks.object(id);
-    QRegion result;
 
     if (!obj) {
         obj = new QRegion(QBitmap(d->alphaMask().mask()));
