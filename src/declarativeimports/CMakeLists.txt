@@ -22,11 +22,10 @@ FILE(GLOB_RECURSE inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
 
     #for each file, replace @QQC2_VERSION@ with the version we found
 FOREACH(infileName ${inFiles})
-    configure_package_config_file(
+    configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/${infileName}"
         "${CMAKE_CURRENT_BINARY_DIR}/${infileName}"
-        INSTALL_DESTINATION  "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Plasma"
-        PATH_VARS  QQC2_VERSION
+        @ONLY
     )
 ENDFOREACH(infileName)
 
