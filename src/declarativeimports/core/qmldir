@@ -1,6 +1,2 @@
 module org.kde.plasma.core
 plugin corebindingsplugin
-
-ToolTip 2.0 ToolTip.qml
-
-
