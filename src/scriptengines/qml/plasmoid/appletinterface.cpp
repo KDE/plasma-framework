@@ -125,6 +125,10 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
             }
         });
 
+        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
+                this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
+                this, &ContainmentInterface::availableScreenRectChanged);
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {

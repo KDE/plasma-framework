@@ -167,13 +167,6 @@ void ContainmentInterface::init()
             this, &ContainmentInterface::actionsChanged);
     connect(m_containment.data()->actions(), &KActionCollection::removed,
             this, &ContainmentInterface::actionsChanged);
-
-    if (m_containment->corona()) {
-        connect(m_containment->corona(), &Plasma::Corona::availableScreenRegionChanged,
-                this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(m_containment->corona(), &Plasma::Corona::availableScreenRectChanged,
-                this, &ContainmentInterface::availableScreenRectChanged);
-    }
 }
 
 QList <QObject *> ContainmentInterface::applets()
