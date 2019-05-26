@@ -53,6 +53,7 @@ T.ToolButton {
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
         Label {
+            Layout.fillWidth: true
             visible: text.length > 0
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
