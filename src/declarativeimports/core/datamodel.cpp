@@ -179,7 +179,7 @@ void SortFilterModel::setSortRole(const QString &role)
         sort(-1, Qt::AscendingOrder);
     } else if (sourceModel()) {
         QSortFilterProxyModel::setSortRole(roleNameToId(role));
-        sort(0, sortOrder());
+        sort(sortColumn(), sortOrder());
     }
 }
 
@@ -190,7 +190,19 @@ QString SortFilterModel::sortRole() const
 
 void SortFilterModel::setSortOrder(const Qt::SortOrder order)
 {
-    sort(0, order);
+    if (order == sortOrder()) {
+        return;
+    }
+    sort(sortColumn(), order);
+}
+
+void SortFilterModel::setSortColumn(int column)
+{
+    if (column == sortColumn()) {
+        return;
+    }
+    sort(column, sortOrder());
+    emit sortColumnChanged();
 }
 
 QVariantMap SortFilterModel::get(int row) const

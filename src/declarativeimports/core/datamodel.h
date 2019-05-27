@@ -83,6 +83,11 @@ class SortFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder)
 
     /**
+     * Specify which column shoud be used for sorting
+     */
+    Q_PROPERTY(int sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
+
+    /**
      * How many items are in this model
      */
     Q_PROPERTY(int count READ count NOTIFY countChanged)
@@ -112,6 +117,8 @@ public:
 
     void setSortOrder(const Qt::SortOrder order);
 
+    void setSortColumn(int column);
+
     int count() const
     {
         return QSortFilterProxyModel::rowCount();
@@ -132,6 +139,7 @@ public:
 
 Q_SIGNALS:
     void countChanged();
+    void sortColumnChanged();
     void sourceModelChanged(QObject *);
     void filterRegExpChanged(const QString &);
     Q_REVISION(1) void filterStringChanged(const QString &);
