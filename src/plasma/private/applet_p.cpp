@@ -187,7 +187,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("widget-alternatives")), i18n("Show Alternatives..."), q);
         a->setVisible(false);
         q->actions()->addAction(QStringLiteral("alternatives"), a);
-        QObject::connect(a, &QAction::triggered, [this] {
+        QObject::connect(a, &QAction::triggered, q, [this] {
             if (q->containment()) {
                 emit q->containment()->appletAlternativesRequested(q);
             }
@@ -287,7 +287,7 @@ void AppletPrivate::askDestroy()
 
         actions.append(i18n("Undo"));
         deleteNotification->setActions(actions);
-        QObject::connect(deleteNotification.data(), &KNotification::action1Activated,
+        QObject::connect(deleteNotification.data(), &KNotification::action1Activated, q,
                 [=]() {
                     setDestroyed(false);
                     if (!q->isContainment() && q->containment()) {

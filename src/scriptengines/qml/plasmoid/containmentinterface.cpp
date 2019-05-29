@@ -150,7 +150,7 @@ void ContainmentInterface::init()
 
     connect(m_containment.data(), &Plasma::Containment::activityChanged,
             this, &ContainmentInterface::activityChanged);
-    connect(m_containment.data(), &Plasma::Containment::activityChanged,
+    connect(m_containment.data(), &Plasma::Containment::activityChanged, this,
             [ = ]() {
                 delete m_activityInfo;
                 m_activityInfo = new KActivities::Info(m_containment->activity(), this);
@@ -656,7 +656,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
                     KJob *installJob = package.update(packagePath);
                     connect(installJob, &KJob::result, this, [this, packagePath, structure, posi](KJob *job) {
-                        auto fail = [job](const QString &text) {
+                        auto fail = [](const QString &text) {
                             KNotification::event(QStringLiteral("plasmoidInstallationFailed"), i18n("Package Installation Failed"),
                                                  text, QStringLiteral("dialog-error"), nullptr, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
                         };

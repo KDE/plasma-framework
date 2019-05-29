@@ -171,7 +171,7 @@ void AppletInterface::init()
 
     applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
 
-    connect(applet(), &Plasma::Applet::activated,
+    connect(applet(), &Plasma::Applet::activated, this,
     [ = ]() {
         // in case the applet doesn't want to get shrinked on reactivation,
         // we always expand it again (only in order to conform with legacy behaviour)
