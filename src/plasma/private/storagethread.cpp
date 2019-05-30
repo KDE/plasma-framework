@@ -110,9 +110,12 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
         valueGroup = QStringLiteral("default");
     }
     QSqlQuery query(m_db);
+
+    QVariantMap data = caller->data();
     if (params.value(QStringLiteral("key")).toString().isNull()) {
-        caller->data().insert(params.value(QStringLiteral("key")).toString(), params.value(QStringLiteral("data")));
+        data.insert(params.value(QStringLiteral("key")).toString(), params.value(QStringLiteral("data")));
     }
+    caller->setData(data);
 
     QMapIterator<QString, QVariant> it(caller->data());
 
