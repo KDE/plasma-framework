@@ -53,6 +53,7 @@ T.Button {
         }
         Label {
             Layout.fillWidth: !icon.visible
+            Layout.fillHeight: true
             visible: text.length > 0
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
