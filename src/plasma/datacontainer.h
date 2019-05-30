@@ -244,7 +244,7 @@ Q_SIGNALS:
      * @param source  the datacontainer the update was requested for.  Useful
      *                for classes that update the data for several containers.
      **/
-    void updateRequested(Plasma::DataContainer *source);
+    void updateRequested(DataContainer *source);
 
 protected:
     /**
