@@ -109,7 +109,6 @@ void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
     //qCDebug(LOG_PLASMA) << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
-        emit q->statusChanged(appletStatus);
         return;
     }
 
