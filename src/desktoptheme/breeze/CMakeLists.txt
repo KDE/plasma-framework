@@ -1,5 +1,14 @@
 
-install(FILES metadata.desktop DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default/)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/metadata.desktop.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/metadata.desktop"
+    @ONLY
+)
+
+install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/metadata.desktop"
+    DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default
+)
 
 FILE(GLOB widgets widgets/*.svg)
 plasma_install_desktoptheme_svgs(default SUBPATH widgets FILES ${widgets})
