@@ -81,7 +81,7 @@ public:
     void eraseRenderer();
 
     QRectF elementRect(const QString &elementId);
-    QRectF findAndCacheElementRect(const QString &elementId);
+    QRectF findAndCacheElementRect(const QString &elementId, const QString &cacheId);
     QMatrix matrixForElement(const QString &elementId);
 
     void checkColorHints();

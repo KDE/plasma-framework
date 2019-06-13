@@ -32,6 +32,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 #include <QBuffer>
+#include <QRegularExpression>
 
 #include <kcolorscheme.h>
 #include <kconfiggroup.h>
@@ -87,6 +88,7 @@ bool SharedSvgRenderer::load(
     // Apply the style sheet.
     if (!styleSheet.isEmpty() && contents.contains("current-color-scheme")) {
         QByteArray processedContents;
+        processedContents.reserve(contents.size());
         QXmlStreamReader reader(contents);
 
         QBuffer buffer(&processedContents);
@@ -117,19 +119,18 @@ bool SharedSvgRenderer::load(
 
     // Search the SVG to find and store all ids that contain size hints.
     const QString contentsAsString(QString::fromLatin1(contents));
-    QRegExp idExpr(QLatin1String("id\\s*=\\s*(['\"])(\\d+-\\d+-.*)\\1"));
-    idExpr.setMinimal(true);
+    static const QRegularExpression idExpr(QLatin1String("id\\s*?=\\s*?(['\"])(\\d+?-\\d+?-.*?)\\1"));
+    Q_ASSERT(idExpr.isValid());
 
-    int pos = 0;
-    while ((pos = idExpr.indexIn(contentsAsString, pos)) != -1) {
-        QString elementId = idExpr.cap(2);
+    auto matchIt = idExpr.globalMatch(contentsAsString);
+    while (matchIt.hasNext()) {
+        auto match = matchIt.next();
+        QString elementId = match.captured(2);
 
         QRectF elementRect = boundsOnElement(elementId);
         if (elementRect.isValid()) {
             interestingElements.insert(elementId, elementRect);
         }
-
-        pos += idExpr.matchedLength();
     }
 
     return true;
@@ -542,22 +543,23 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     } else if (found) {
         localRectCache.insert(id, rect);
     } else {
-        rect = findAndCacheElementRect(elementId);
+        rect = findAndCacheElementRect(elementId, id);
     }
 
     return rect;
 }
 
-QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
+QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId, const QString &id)
 {
     //we need to check the id before createRenderer(), otherwise it may generate a different id compared to the previous cacheId)( call
-    const QString id = cacheId(elementId);
     createRenderer();
 
-    if (localRectCache.contains(id)) {
-        return localRectCache.value(id);
+    const auto it = localRectCache.constFind(id);
+    if (it != localRectCache.constEnd()) {
+        return *it;
     }
 
+    //This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
     QRectF elementRect = renderer->elementExists(elementId) ?
                          renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
                          QRectF();
@@ -570,6 +572,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
                          elementRect.width() * dx, elementRect.height() * dy);
 
     cacheAndColorsTheme()->insertIntoRectsCache(path, id, elementRect);
+    localRectCache.insert(id, elementRect);
 
     return elementRect;
 }
