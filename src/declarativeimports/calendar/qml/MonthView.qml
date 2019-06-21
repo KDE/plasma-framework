@@ -166,6 +166,16 @@ PinchArea {
         }
     }
 
+    // NOTE: this MouseArea is a workaround on a PinchArea quirk:
+    // When the pich is done spanning multiple child mouseareas it on't work:
+    // a MouseArea on top of all the child mouseareas that just refuses events makes the pincharea work.
+    // BUG: https://bugreports.qt.io/browse/QTBUG-76569
+    MouseArea {
+        anchors.fill: parent
+        z: 1
+        onPressed: mouse.accepted = false
+    }
+
     StackView {
         id: stack
 
