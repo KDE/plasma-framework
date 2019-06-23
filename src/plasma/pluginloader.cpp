@@ -58,7 +58,6 @@ public:
     }
 
     static QSet<QString> knownCategories();
-    static QString parentAppConstraint(const QString &parentApp = QString());
 
     static QSet<QString> s_customCategories;
     QHash<QString, QPointer<PackageStructure> > structures;
@@ -117,21 +116,6 @@ QSet<QString> PluginLoaderPrivate::knownCategories()
                << QStringLiteral(I18N_NOOP("Clipboard")).toLower()
                << QStringLiteral(I18N_NOOP("Tasks")).toLower();
     return categories;
-}
-
-QString PluginLoaderPrivate::parentAppConstraint(const QString &parentApp)
-{
-    if (parentApp.isEmpty()) {
-        QCoreApplication *app = QCoreApplication::instance();
-        if (!app) {
-            return QString();
-        }
-
-        return QStringLiteral("((not exist [X-KDE-ParentApp] or [X-KDE-ParentApp] == '') or [X-KDE-ParentApp] == '%1')")
-               .arg(app->applicationName());
-    }
-
-    return QStringLiteral("[X-KDE-ParentApp] == '%1'").arg(parentApp);
 }
 
 PluginLoader::PluginLoader()
@@ -535,7 +519,7 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
         filter = [excluded, parentApp](const KPluginMetaData &md) -> bool
         {
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-            return (pa.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
+            return (parentApp.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
         };
     } else { //specific category (this could be an excluded one - is that bad?)
 
@@ -543,9 +527,9 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
         {
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
             if (category == QLatin1String("Miscellaneous")) {
-                return (pa.isEmpty() || pa == parentApp) && (md.category() == category || md.category().isEmpty());
+                return (parentApp.isEmpty() || pa == parentApp) && (md.category() == category || md.category().isEmpty());
             } else {
-                return (pa.isEmpty() || pa == parentApp) && md.category() == category;
+                return (parentApp.isEmpty() || pa == parentApp) && md.category() == category;
             }
         };
     }
@@ -600,7 +584,7 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool
     {
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (pa.isEmpty() || pa == parentApp) && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
+        return (parentApp.isEmpty() || pa == parentApp) && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
@@ -634,7 +618,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
     auto filter = [&parentApp, &excluded, visibleOnly](const KPluginMetaData &md) -> bool
     {
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (pa.isEmpty() || pa == parentApp)
+        return (parentApp.isEmpty() || pa == parentApp)
             && (excluded.isEmpty() || excluded.contains(md.value(QStringLiteral("X-KDE-PluginInfo-Category"))))
             && (!visibleOnly || !md.isHidden());
     };
@@ -695,8 +679,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
         if (!md.serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
             return false;
         }
-        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        if (!pa.isEmpty() && pa != parentApp) {
+        if (!parentApp.isEmpty() && md.value(QStringLiteral("X-KDE-ParentApp")) != parentApp) {
             return false;
         }
 
@@ -749,9 +732,7 @@ KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
     }
 
     QString constraint;
-    if (parentApp.isEmpty()) {
-        constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
-    } else {
+    if (!parentApp.isEmpty()) {
         constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
     }
 
@@ -768,9 +749,7 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
     }
 
     QString constraint;
-    if (parentApp.isEmpty()) {
-        constraint = QStringLiteral("not exist [X-KDE-ParentApp]");
-    } else {
+    if (!parentApp.isEmpty()) {
         constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
     }
 

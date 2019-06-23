@@ -82,8 +82,7 @@ public:
      * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only dataengines not specifically
-     *                  registered to an application.
+     *                  list of all dataengines.
      */
     static QStringList listAllEngines(const QString &parentApp = QString());
 
@@ -93,8 +92,7 @@ public:
      * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only dataengines not specifically
-     *                  registered to an application.
+     *                  list of all dataengines.
      * @return list of dataengines
      **/
     static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
@@ -110,8 +108,7 @@ public:
      * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only dataengines not specifically
-     *                  registered to an application.
+     *                  list of all dataengines in specified categories.
      * @return list of dataengines
      * @since 4.3
      **/
@@ -169,8 +166,7 @@ public:
      * @param parentApp the application to filter applets on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
-     *                  registered to an application.
+     *                  list of all applets in specified category.
      * @return list of applets
      *
      * @deprecated use listAppletMetaData. Doesn't support metadata.json packages.
@@ -190,8 +186,7 @@ public:
      * @param parentApp the application to filter applets on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
-     *                  registered to an application.
+     *                  list of all applets in specified categories.
      * @return list of applets
      *
      * @since 5.28
@@ -236,8 +231,7 @@ public:
      * @param parentApp the application to filter applets on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only applets not specifically
-     *                  registered to an application.
+     *                  list of all Applets.
      * @return list of categories
      * @param visibleOnly true if it should only return applets that are marked as visible
      */
@@ -277,8 +271,7 @@ public:
      * @param parentApp the application to filter containments on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only containments not specifically
-     *                  registered to an application.
+     *                  list of all containments.
      * @return list of containments
      **/
     static KPluginInfo::List listContainments(const QString &category = QString(),
@@ -299,8 +292,7 @@ public:
      * @param parentApp the application to filter containments on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only containments not specifically
-     *                  registered to an application.
+     *                  list of all containments, matching categories/type.
      * @return list of containments
      **/
     static KPluginInfo::List listContainmentsOfType(const QString &type,
@@ -325,8 +317,7 @@ public:
      * @param parentApp the application to filter dataengines on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only dataengines not specifically
-     *                  registered to an application.
+     *                  list of all dataengines
      * @return list of dataengines
      **/
     KPluginInfo::List listDataEngineInfo(const QString &parentApp = QString());
@@ -337,8 +328,7 @@ public:
      * @param parentApp the application to filter ContainmentActions on. Uses the
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
-     *                  list containing only ContainmentActions not specifically
-     *                  registered to an application.
+     *                  list of all ContainmentActions.
      * @return list of ContainmentActions
      **/
     KPluginInfo::List listContainmentActionsInfo(const QString &parentApp);
