@@ -91,13 +91,7 @@ FocusScope {
 
     Item {
         id: buttonCutter
-        anchors {
-            fill: parent
-            leftMargin: 1
-            topMargin: 1
-            rightMargin: (buttonsLayout.visible && layout.isHorizontal? buttonsLayout.width : 0) + 1
-            bottomMargin: (buttonsLayout.visible && !layout.isHorizontal? buttonsLayout.height : 0) + 1
-        }
+        anchors.fill: parent
         clip: true
 
         PlasmaCore.FrameSvgItem {
