@@ -54,7 +54,7 @@ Theme::Theme(QObject *parent)
     if (!ThemePrivate::globalTheme) {
         ThemePrivate::globalTheme = new ThemePrivate;
     }
-    ThemePrivate::globalThemeRefCount.ref();
+    ThemePrivate::globalTheme->ref.ref();
     d = ThemePrivate::globalTheme;
 
     d->settingsChanged(false);
@@ -70,13 +70,13 @@ Theme::Theme(QObject *parent)
 Theme::Theme(const QString &themeName, QObject *parent)
     : QObject(parent)
 {
-    if (!ThemePrivate::themes.contains(themeName)) {
-        ThemePrivate::themes[themeName] = new ThemePrivate;
-        ThemePrivate::themesRefCount[themeName] = QAtomicInt();
+    auto& priv = ThemePrivate::themes[themeName];
+    if (!priv) {
+        priv = new ThemePrivate;
     }
 
-    ThemePrivate::themesRefCount[themeName].ref();
-    d = ThemePrivate::themes[themeName];
+    priv->ref.ref();
+    d = priv;
 
     // turn off caching so we don't accidentally trigger unnecessary disk activity at this point
     bool useCache = d->cacheTheme;
@@ -94,18 +94,15 @@ Theme::Theme(const QString &themeName, QObject *parent)
 Theme::~Theme()
 {
     if (d == ThemePrivate::globalTheme) {
-        if (!ThemePrivate::globalThemeRefCount.deref()) {
+        if (!d->ref.deref()) {
             disconnect(ThemePrivate::globalTheme, nullptr, this, nullptr);
             delete ThemePrivate::globalTheme;
             ThemePrivate::globalTheme = nullptr;
             d = nullptr;
         }
     } else {
-        if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
-            ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
-            ThemePrivate::themes.remove(d->themeName);
-            ThemePrivate::themesRefCount.remove(d->themeName);
-            delete themePrivate;
+        if (!d->ref.deref()) {
+            delete ThemePrivate::themes.take(d->themeName);
         }
     }
 }
@@ -118,18 +115,16 @@ void Theme::setThemeName(const QString &themeName)
 
     if (d != ThemePrivate::globalTheme) {
         disconnect(QCoreApplication::instance(), nullptr, d, nullptr);
-        if (!ThemePrivate::themesRefCount[d->themeName].deref()) {
-            ThemePrivate *themePrivate = ThemePrivate::themes[d->themeName];
-            ThemePrivate::themes.remove(d->themeName);
-            ThemePrivate::themesRefCount.remove(d->themeName);
-            delete themePrivate;
+        if (!d->ref.deref()) {
+            delete ThemePrivate::themes.take(d->themeName);
         }
-        if (!ThemePrivate::themes.contains(themeName)) {
-            ThemePrivate::themes[themeName] = new ThemePrivate;
-            ThemePrivate::themesRefCount[themeName] = QAtomicInt();
+
+        auto& priv = ThemePrivate::themes[themeName];
+        if (!priv) {
+            priv = new ThemePrivate;
         }
-        ThemePrivate::themesRefCount[themeName].ref();
-        d = ThemePrivate::themes[themeName];
+        priv->ref.ref();
+        d = priv;
         if (QCoreApplication::instance()) {
             connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
                     d, &ThemePrivate::onAppExitCleanup);
@@ -300,8 +295,9 @@ bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModif
 
     if (d->useCache()) {
         const QString id = d->keysToCache.value(key);
-        if (d->pixmapsToCache.contains(id)) {
-            pix = d->pixmapsToCache.value(id);
+        const auto it = d->pixmapsToCache.constFind(id);
+        if (it != d->pixmapsToCache.constEnd()) {
+            pix = *it;
             return !pix.isNull();
         }
 
@@ -325,14 +321,9 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix)
 void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QString &id)
 {
     if (d->useCache()) {
-        d->pixmapsToCache.insert(id, pix);
-
-        if (d->idsToCache.contains(id)) {
-            d->keysToCache.remove(d->idsToCache[id]);
-        }
-
-        d->keysToCache.insert(key, id);
-        d->idsToCache.insert(id, key);
+        d->pixmapsToCache[id] = pix;
+        d->keysToCache[key] = id;
+        d->idsToCache[id] = key;
 
         //always start timer in d->pixmapSaveTimer's thread
         QMetaObject::invokeMethod(d->pixmapSaveTimer, "start", Qt::QueuedConnection);

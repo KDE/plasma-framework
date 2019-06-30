@@ -310,13 +310,14 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        QRegExp sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio));
+        static const QRegularExpression sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE(QStringLiteral("$(\\d+)-(\\d+)-(.+)^"), status, ratio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
-            if (sizeHintedKeyExpr.exactMatch(key)) {
-                QString baseElementId = sizeHintedKeyExpr.cap(3);
-                QSize sizeHint(sizeHintedKeyExpr.cap(1).toInt(),
-                               sizeHintedKeyExpr.cap(2).toInt());
+            const auto match = sizeHintedKeyExpr.match(key);
+            if (match.hasMatch()) {
+                QString baseElementId = match.captured(3);
+                QSize sizeHint(match.capturedRef(1).toInt(),
+                               match.capturedRef(2).toInt());
 
                 if (sizeHint.isValid()) {
                     elementsWithSizeHints.insertMulti(baseElementId, sizeHint);
@@ -333,12 +334,12 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     // Look at the size hinted elements and try to find the smallest one with an
     // identical aspect ratio.
     if (s.isValid() && !elementId.isEmpty()) {
-        QList<QSize> elementSizeHints = elementsWithSizeHints.values(elementId);
+        const QList<QSize> elementSizeHints = elementsWithSizeHints.values(elementId);
 
         if (!elementSizeHints.isEmpty()) {
             QSize bestFit(-1, -1);
 
-            Q_FOREACH (QSize hint, elementSizeHints) {
+            for (const QSize &hint : elementSizeHints) {
 
                 if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio &&
                         (!bestFit.isValid() ||
@@ -368,11 +369,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         return QPixmap();
     }
 
-    QString id = cachePath(path, size);
-
-    if (!actualElementId.isEmpty()) {
-        id.append(actualElementId);
-    }
+    const QString id = cachePath(path, size) + actualElementId;
 
     //qCDebug(LOG_PLASMA) << "id is " << id;
 

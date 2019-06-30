@@ -58,7 +58,7 @@ enum CacheType {
 Q_DECLARE_FLAGS(CacheTypes, CacheType)
 Q_DECLARE_OPERATORS_FOR_FLAGS(CacheTypes)
 
-class ThemePrivate : public QObject
+class ThemePrivate : public QObject, public QSharedData
 {
     Q_OBJECT
 
@@ -107,9 +107,7 @@ public:
 #endif
 //Ref counting of ThemePrivate instances
     static ThemePrivate *globalTheme;
-    static QAtomicInt globalThemeRefCount;
     static QHash<QString, ThemePrivate *> themes;
-    static QHash<QString, QAtomicInt> themesRefCount;
 
     QString themeName;
     KPluginInfo pluginInfo;

@@ -47,9 +47,7 @@ EffectWatcher *ThemePrivate::s_backgroundContrastEffectWatcher = nullptr;
 #endif
 
 ThemePrivate *ThemePrivate::globalTheme = nullptr;
-QAtomicInt ThemePrivate::globalThemeRefCount = QAtomicInt();
 QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate *>();
-QHash<QString, QAtomicInt> ThemePrivate::themesRefCount = QHash<QString, QAtomicInt>();
 
 ThemePrivate::ThemePrivate(QObject *parent)
     : QObject(parent),
