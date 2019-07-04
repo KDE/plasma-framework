@@ -28,21 +28,13 @@ namespace Plasma
 class ContainmentActionsPrivate
 {
 public:
-    ContainmentActionsPrivate(const QVariant& arg, ContainmentActions *containmentActions) :
-        q(containmentActions),
-        containmentActionsDescription(arg.canConvert<KPluginMetaData>() ? arg.value<KPluginMetaData>() : KPluginInfo(KService::serviceByStorageId(arg.toString())).toMetaData()),
-        package(nullptr),
-        containment(nullptr)
+    ContainmentActionsPrivate(const QVariant& arg, ContainmentActions */*containmentActions*/)
+        : containmentActionsDescription(arg.canConvert<KPluginMetaData>() ? arg.value<KPluginMetaData>() : KPluginInfo(KService::serviceByStorageId(arg.toString())).toMetaData())
     {
     }
 
-    ContainmentActions *q;
-
-    QString currentTrigger;
     const KPluginMetaData containmentActionsDescription;
-    Package *package;
-    KServiceAction mode;
-    Containment *containment;
+    Containment *containment = nullptr;
 };
 
 } // namespace Plasma
