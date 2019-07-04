@@ -310,7 +310,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        static const QRegularExpression sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE(QStringLiteral("$(\\d+)-(\\d+)-(.+)^"), status, ratio));
+        const QRegularExpression sizeHintedKeyExpr(CACHE_ID_NATURAL_SIZE(QStringLiteral("$(\\d+)-(\\d+)-(.+)^"), status, ratio));
 
         foreach (const QString &key, cacheAndColorsTheme()->listCachedRectKeys(path)) {
             const auto match = sizeHintedKeyExpr.match(key);
