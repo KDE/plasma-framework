@@ -416,10 +416,9 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
-        const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
         KPluginFactory *factory = loader.factory();
         if (factory) {
-            actions = factory->create<Plasma::ContainmentActions>(nullptr, argsWithMetaData);
+            actions = factory->create<Plasma::ContainmentActions>(nullptr, {QVariant::fromValue(plugins.first())});
         }
     }
     if (actions) {

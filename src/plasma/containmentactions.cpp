@@ -37,14 +37,13 @@ namespace Plasma
 {
 
 ContainmentActions::ContainmentActions(QObject *parentObject)
-    : d(new ContainmentActionsPrivate(KService::serviceByStorageId(QString()), this))
+    : d(new ContainmentActionsPrivate({}, this))
 {
     setParent(parentObject);
 }
 
 ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList &args)
-    : d(new ContainmentActionsPrivate(KService::serviceByStorageId(args.count() > 0 ?
-                                      args[0].toString() : QString()), this))
+    : d(new ContainmentActionsPrivate(args.value(0), this))
 {
     setParent(parentObject);
 
@@ -64,7 +63,7 @@ ContainmentActions::~ContainmentActions()
 
 KPluginInfo ContainmentActions::pluginInfo() const
 {
-    return d->containmentActionsDescription;
+    return KPluginInfo(d->containmentActionsDescription);
 }
 
 Containment *ContainmentActions::containment()

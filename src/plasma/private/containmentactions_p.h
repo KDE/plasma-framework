@@ -20,15 +20,17 @@
 #ifndef PLASMA_CONTAINMENTACTIONSPRIVATE_H
 #define PLASMA_CONTAINMENTACTIONSPRIVATE_H
 
+#include <KPluginMetaData>
+
 namespace Plasma
 {
 
 class ContainmentActionsPrivate
 {
 public:
-    ContainmentActionsPrivate(KService::Ptr service, ContainmentActions *containmentActions) :
+    ContainmentActionsPrivate(const QVariant& arg, ContainmentActions *containmentActions) :
         q(containmentActions),
-        containmentActionsDescription(service),
+        containmentActionsDescription(arg.canConvert<KPluginMetaData>() ? arg.value<KPluginMetaData>() : KPluginInfo(KService::serviceByStorageId(arg.toString())).toMetaData()),
         package(nullptr),
         containment(nullptr)
     {
@@ -37,7 +39,7 @@ public:
     ContainmentActions *q;
 
     QString currentTrigger;
-    KPluginInfo containmentActionsDescription;
+    const KPluginMetaData containmentActionsDescription;
     Package *package;
     KServiceAction mode;
     Containment *containment;
