@@ -1,0 +1,813 @@
+# Fuminobu Takeyama <ftake@geeko.jp>, 2016.
+# Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2011, 2016.
+# Tomohiro Hyakutake <tomhioo@outlook.jp>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasmapkg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-07-05 02:52+0200\n"
+"PO-Revision-Date: 2019-05-22 15:06+0900\n"
+"Last-Translator: Tomohiro Hyakutake <tomhioo@outlook.jp>\n"
+"Language-Team: Japanese <kde-jp@kde.org>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Generator: Lokalize 19.04.1\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "休日"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "イベント"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "To-Do"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "その他"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "今日"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "カレンダーを今日に戻す"
+
+#: declarativeimports/calendar/qml/MonthView.qml:247
+#, kde-format
+msgid "Previous Month"
+msgstr "前の月"
+
+#: declarativeimports/calendar/qml/MonthView.qml:248
+#, kde-format
+msgid "Next Month"
+msgstr "次の月"
+
+#: declarativeimports/calendar/qml/MonthView.qml:275
+#, kde-format
+msgid "Previous Year"
+msgstr "前の年"
+
+#: declarativeimports/calendar/qml/MonthView.qml:276
+#, kde-format
+msgid "Next Year"
+msgstr "次の年"
+
+#: declarativeimports/calendar/qml/MonthView.qml:308
+#, kde-format
+msgid "Previous Decade"
+msgstr "前の10年"
+
+#: declarativeimports/calendar/qml/MonthView.qml:309
+#, kde-format
+msgid "Next Decade"
+msgstr "次の10年"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: plasma/applet.cpp:355
+#, kde-format
+msgid "Unknown"
+msgstr "不明"
+
+#: plasma/applet.cpp:671
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "%1 ウィジェットを有効化"
+
+#: plasma/containment.cpp:120 plasma/private/applet_p.cpp:124
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "%1 を削除"
+
+#: plasma/containment.cpp:125 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "%1 を設定..."
+
+#: plasma/corona.cpp:368 plasma/corona.cpp:440
+#, kde-format
+msgid "Lock Widgets"
+msgstr "ウィジェットをロック"
+
+#: plasma/corona.cpp:368
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "ウィジェットのロックを解除"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "データファイル"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "実行可能スクリプト"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "サービスの説明"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "翻訳"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "メインスクリプトファイル"
+
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr "テスト"
+
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "画像"
+
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "テーマ画像"
+
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "設定の定義"
+
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "ユーザインターフェース"
+
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr "スクリーンショット"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "ダイアログの画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "一般ダイアログの背景"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "ログアウトダイアログのテーマ"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "壁紙パッケージ"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "ウィジェットの画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "ウィジェットの背景画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "アナログ時計の文字盤"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "パネルの背景画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "グラフウィジェットの背景"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "ツールチップの背景画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "ダイアログの不透明な画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "一般ダイアログの不透明な背景"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "ログアウトダイアログの不透明なテーマ"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "ウィジェットの不透明な画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "パネルの不透明な背景画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "ツールチップの不透明な背景画像"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme 設定ファイル"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "UI ページモデルの設定"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "設定 XML ファイル"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr ""
+
+#: plasma/pluginloader.cpp:96
+#, kde-format
+msgid "Accessibility"
+msgstr "アクセシビリティ"
+
+#: plasma/pluginloader.cpp:97
+#, kde-format
+msgid "Application Launchers"
+msgstr "アプリケーションランチャー"
+
+#: plasma/pluginloader.cpp:98
+#, kde-format
+msgid "Astronomy"
+msgstr "天文"
+
+#: plasma/pluginloader.cpp:99
+#, kde-format
+msgid "Date and Time"
+msgstr "日付と時間"
+
+#: plasma/pluginloader.cpp:100
+#, kde-format
+msgid "Development Tools"
+msgstr "開発ツール"
+
+#: plasma/pluginloader.cpp:101
+#, kde-format
+msgid "Education"
+msgstr "教育"
+
+#: plasma/pluginloader.cpp:102
+#, kde-format
+msgid "Environment and Weather"
+msgstr "環境と天気"
+
+#: plasma/pluginloader.cpp:103
+#, kde-format
+msgid "Examples"
+msgstr "例"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "File System"
+msgstr "ファイルシステム"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Fun and Games"
+msgstr "ゲーム・気晴らし"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Graphics"
+msgstr "グラフィック"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Language"
+msgstr "言語"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Mapping"
+msgstr "地図"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "Miscellaneous"
+msgstr "その他"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Multimedia"
+msgstr "マルチメディア"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Online Services"
+msgstr "オンラインサービス"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "Productivity"
+msgstr "プロダクティビティ"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "System Information"
+msgstr "システム情報"
+
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Utilities"
+msgstr "ユーティリティ"
+
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "ウィンドウとタスク"
+
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Clipboard"
+msgstr "クリップボード"
+
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Tasks"
+msgstr "タスク"
+
+#: plasma/pluginloader.cpp:630 plasma/pluginloader.cpp:631
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "その他"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "%1 ウィジェットで使用するスクリプトエンジンが定義されていません"
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "%2 ウィジェットに必要なパッケージ %1 を開けませんでした。"
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "%2 ウィジェットのための %1 スクリプトエンジンを作成できませんでした。"
+
+#: plasma/private/applet_p.cpp:187
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "代替を表示..."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Widget Removed"
+msgstr "ウィジェットの削除"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "\"%1\" ウィジェットが削除されました。"
+
+#: plasma/private/applet_p.cpp:280
+#, kde-format
+msgid "Panel Removed"
+msgstr "パネルの削除"
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "A panel has been removed."
+msgstr "パネルが削除されました。"
+
+#: plasma/private/applet_p.cpp:284
+#, kde-format
+msgid "Desktop Removed"
+msgstr "デスクトップの削除"
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "デスクトップが削除されました。"
+
+#: plasma/private/applet_p.cpp:288
+#, kde-format
+msgid "Undo"
+msgstr "元に戻す"
+
+#: plasma/private/applet_p.cpp:378
+#, kde-format
+msgid "Widget Settings"
+msgstr "ウィジェットの設定"
+
+#: plasma/private/applet_p.cpp:385
+#, kde-format
+msgid "Remove this Widget"
+msgstr "このウィジェットを削除"
+
+#: plasma/private/applet_p.cpp:392
+#: plasma/private/associatedapplicationmanager.cpp:77
+#: plasma/private/associatedapplicationmanager.cpp:136
+#: plasma/private/associatedapplicationmanager.cpp:178
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "関連するアプリケーションを実行"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "スクリプトの初期化に失敗しました"
+
+#: plasma/private/associatedapplicationmanager.cpp:74
+#: plasma/private/associatedapplicationmanager.cpp:175
+#, kde-format
+msgid "Open with %1"
+msgstr "%1 で開く"
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "このパネルを削除"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "このアクティビティを削除"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "アクティビティの設定"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "ウィジェットを追加..."
+
+#: plasma/private/containment_p.cpp:206
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "要求されたコンポーネントが見つかりませんでした: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"ネットワークでウィジェットを共有すると、他のコンピュータからこのウィジェット"
+"にアクセスして遠隔操作することができます。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "このウィジェットをネットワークで共有する"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "誰でも自由にこのウィジェットにアクセスできるようにする"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "無効な (ヌル) サービスです。何もできません。"
+
+#: plasmaquick/appletquickitem.cpp:606
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:608
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr ""
+
+#: plasmaquick/configview.cpp:108
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 の設定"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Preview Images"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr "ログインマネージャ"
+
+#: plasmaquick/private/packages.cpp:53
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr "ログアウト画面"
+
+#: plasmaquick/private/packages.cpp:56
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:59
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:62
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:71
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr "KRunner UI"
+
+#: plasmaquick/private/packages.cpp:74
+#, kde-format
+msgid "Main Script KRunner"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:481
+#, kde-format
+msgid "Content dropped"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:485
+#, kde-format
+msgid "Fetching file type..."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:639
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma パッケージ"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:640
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:646
+#, kde-format
+msgid "Install"
+msgstr "インストール"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:660
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "パッケージのインストールに失敗"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:680
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:690
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:692
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:772
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:775
+#, kde-format
+msgid "Widgets"
+msgstr "ウィジェット"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:773
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:779
+#, fuzzy, kde-format
+#| msgid "Icon"
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "アイコン"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:730
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:732
+#, kde-format
+msgid "Wallpaper"
+msgstr "壁紙"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:743
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:1131
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "%1 のオプション"
