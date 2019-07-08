@@ -20,7 +20,7 @@
 #include "scripting/scriptengine.h"
 
 #include <QDebug>
-#include <kservice.h>
+#include <QGlobalStatic>
 
 #include "applet.h"
 #include "dataengine.h"
@@ -31,6 +31,23 @@
 
 namespace Plasma
 {
+
+static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::function<bool(const KPluginMetaData &)> filter)
+{
+    QVector<KPluginMetaData> ret;
+    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
+    ret.reserve(plugins.size());
+    for (const auto &plugin : plugins) {
+        if (!filter(plugin))
+            continue;
+        const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
+        if (((types & Types::AppletComponent)     && componentTypes.contains(QStringLiteral("Applet")))
+          ||((types & Types::DataEngineComponent) && componentTypes.contains(QStringLiteral("DataEngine")))) {
+            ret << plugin;
+        }
+    }
+    return ret;
+}
 
 ScriptEngine::ScriptEngine(QObject *parent)
     : QObject(parent),
@@ -61,44 +78,42 @@ QString ScriptEngine::mainScript() const
 QStringList knownLanguages(Types::ComponentTypes types)
 {
     QStringList languages;
-    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
+    const QVector<KPluginMetaData> plugins = listEngines(types, [] (const KPluginMetaData &) -> bool { return true;});
 
-    foreach (const auto &plugin, plugins) {
-        const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && componentTypes.contains(QStringLiteral("Applet")))
-          ||((types & Types::DataEngineComponent) && componentTypes.contains(QStringLiteral("DataEngine")))) {
-            languages << plugin.value(QStringLiteral("X-Plasma-API"));
-        }
-    }
+    for (const auto &plugin : plugins)
+        languages << plugin.value(QStringLiteral("X-Plasma-API"));
 
     return languages;
 }
+
+typedef QHash<QString, QSharedPointer<KPluginLoader>> EngineCache;
+Q_GLOBAL_STATIC(EngineCache, engines)
 
 ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent,
     const QVariantList &args = QVariantList())
 {
     Q_UNUSED(parent);
 
-    ScriptEngine *engine = nullptr;
+    {
+        auto it = engines->constFind(language);
+        if (it != engines->constEnd()) {
+            return (*it)->factory()->create<Plasma::ScriptEngine>(nullptr, args);
+        }
+    }
 
+    ScriptEngine *engine = nullptr;
     auto filter = [&language](const KPluginMetaData &md) -> bool
     {
         return md.value(QStringLiteral("X-Plasma-API")) == language;
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
 
+    const QVector<KPluginMetaData> plugins = listEngines(type, filter);
     if (!plugins.isEmpty()) {
-        const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((type & Types::AppletComponent)     && !componentTypes.contains(QStringLiteral("Applet")))
-         || ((type & Types::DataEngineComponent) && !componentTypes.contains(QStringLiteral("DataEngine")))) {
-
-            qCWarning(LOG_PLASMA) << "ScriptEngine" << plugins.first().name() << "does not provide Applet or DataEngine components, returning empty.";
-            return nullptr;
-        }
-        KPluginLoader loader(plugins.first().fileName());
-        KPluginFactory *factory = loader.factory();
+        QSharedPointer<KPluginLoader> loader(new KPluginLoader(plugins.first().fileName()));
+        KPluginFactory *factory = loader->factory();
         if (factory) {
             engine = factory->create<Plasma::ScriptEngine>(nullptr, args);
+            engines->insert(language, loader);
         } else {
             qCWarning(LOG_PLASMA) << "Unable to load" << plugins.first().name() << "ScriptEngine";
         }
