@@ -739,6 +739,7 @@ void AppletQuickItem::setSwitchWidth(int width)
     }
 
     d->switchWidth = width;
+    d->compactRepresentationCheck();
     emit switchWidthChanged(width);
 }
 
@@ -754,6 +755,7 @@ void AppletQuickItem::setSwitchHeight(int height)
     }
 
     d->switchHeight = height;
+    d->compactRepresentationCheck();
     emit switchHeightChanged(height);
 }
 
