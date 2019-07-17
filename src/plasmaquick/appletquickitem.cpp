@@ -51,6 +51,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
     : q(item),
       switchWidth(-1),
       switchHeight(-1),
+      initComplete(false),
       applet(a),
       expanded(false),
       activationTogglesExpanded(false)
@@ -342,6 +343,10 @@ void AppletQuickItemPrivate::preloadForExpansion()
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
 {
+    if (!initComplete) {
+        return;
+    }
+
     if (!qmlObject->rootObject()) {
         return;
     }
@@ -669,6 +674,7 @@ void AppletQuickItem::init()
         d->compactRepresentationExpander->loadUrl(compactExpanderUrl);
     }
 
+    d->initComplete = true;
     d->compactRepresentationCheck();
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
     qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
