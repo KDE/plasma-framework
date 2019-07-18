@@ -223,7 +223,7 @@ void AppletPrivate::cleanUpAndDelete()
 {
     // reimplemented in the UI specific library
     if (configLoader) {
-        configLoader->setDefaults();
+        configLoader->clearItems();
     }
 
     resetConfigurationObject();
