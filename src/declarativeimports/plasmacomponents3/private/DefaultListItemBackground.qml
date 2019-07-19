@@ -49,7 +49,7 @@ PlasmaCore.FrameSvgItem {
             top: parent.top
         }
         height: naturalSize.height
-        visible: separatorVisible && (listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !itemMouse.pressed))
+        visible: separatorVisible && (listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !listItem.pressed))
     }
 }
 
