@@ -53,6 +53,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/BusyIndicator.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RadioIndicator.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RangeSlider.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ScrollBar.qml
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ScrollView.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Slider.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/SpinBox.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Switch.qml
@@ -62,6 +63,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/BusyIndicator.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TabButton.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TextArea.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TextField.qml
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolTip.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolBar.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolButton.qml
     ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/qmldir

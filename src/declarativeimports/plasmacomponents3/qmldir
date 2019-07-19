@@ -21,6 +21,7 @@ RadioButton 3.0 RadioButton.qml
 RadioDelegate 3.0 RadioDelegate.qml
 RangeSlider 3.0 RangeSlider.qml
 ScrollBar 3.0 ScrollBar.qml
+ScrollView 3.0 ScrollView.qml
 Slider 3.0 Slider.qml
 SpinBox 3.0 SpinBox.qml
 SwitchDelegate 3.0 SwitchDelegate.qml
