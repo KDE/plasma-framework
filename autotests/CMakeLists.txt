@@ -36,22 +36,12 @@ ENDMACRO(PLASMA_UNIT_TESTS)
 PLASMA_UNIT_TESTS(
     dialogqmltest
     dialogstatetest
-    fallbackpackagetest
-    packagestructuretest
     pluginloadertest
     framesvgtest
     iconitemtest
     themetest
     configmodeltest
-    #    plasmoidpackagetest
 )
-
-set(storagetest_libs Qt5::Gui Qt5::Test Qt5::Sql KF5::KIOCore KF5::Plasma KF5::CoreAddons)
-if(QT_QTOPENGL_FOUND)
-    list(APPEND storagetest_libs Qt5::OpenGL)
-endif()
-set(storagetest_srcs storagetest.cpp ../src/plasma/private/storage.cpp ../src/plasma/private/storagethread.cpp ../src/plasma/debug_p.cpp)
-ecm_add_test(${storagetest_srcs} TEST_NAME plasma-storagetest LINK_LIBRARIES ${storagetest_libs})
 
 if(HAVE_X11)
     set(dialognativetest_srcs dialognativetest.cpp)
