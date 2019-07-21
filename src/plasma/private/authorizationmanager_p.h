@@ -25,10 +25,6 @@
 #include <QMap>
 #include <QString>
 
-#if ENABLE_REMOTE_WIDGETS
-#include <QtCrypto>
-#endif
-
 #include <kconfiggroup.h>
 
 #include <authorizationmanager.h>
@@ -67,10 +63,6 @@ public:
     Credentials getCredentials(const QString &id = QString());
     void addCredentials(const Credentials &identity);
     void saveRules();
-
-#if ENABLE_REMOTE_WIDGETS
-    QCA::Initializer            initializer;
-#endif
 
     AuthorizationManager        *q;
     Jolie::Server               *server;
