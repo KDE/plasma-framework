@@ -48,7 +48,7 @@ BusyIndicatorStyle {
             id: rotationAnimator
             from: 0
             to: 360
-            duration: 1500
+            duration: 2000
             running: control.running && control.visible && control.opacity > 0;
             loops: Animation.Infinite
         }
