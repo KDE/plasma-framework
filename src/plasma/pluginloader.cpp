@@ -180,9 +180,17 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     // Need to pass the empty directory because it's where plasmoids used to be
-    const auto plugins = d->plasmoidCache.findPluginsById(name, { PluginLoaderPrivate::s_plasmoidsPluginDir, {} });
+    auto plugins = d->plasmoidCache.findPluginsById(name, { PluginLoaderPrivate::s_plasmoidsPluginDir, {} });
 
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
+
+    // If the applet is using another applet package, search for the plugin of the other applet
+    if (plugins.isEmpty()) {
+        const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
+        if (!parentPlugin.isEmpty()) {
+            plugins = d->plasmoidCache.findPluginsById(parentPlugin, { PluginLoaderPrivate::s_plasmoidsPluginDir, {} });
+        }
+    }
 
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
