@@ -316,7 +316,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
         }
     }
 
-    QString type;
+    QString type = QStringLiteral("/");
     if (!compositingActive) {
         type = QStringLiteral("/opaque/");
     } else if (backgroundContrastActive) {
