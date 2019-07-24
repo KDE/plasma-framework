@@ -33,6 +33,8 @@
 #include "plasma/theme.h"
 #include "plasma/svg.h"
 
+#include "utils.h"
+
 static bool imageIsEmpty(const QImage &img)
 {
     for (int i = 0; i < img.width(); ++i) {
@@ -47,20 +49,8 @@ static bool imageIsEmpty(const QImage &img)
 
 void IconItemTest::initTestCase()
 {
-    if (qgetenv("XDG_DATA_DIRS").isEmpty()) {
-        QWARN("\n"
-              "  !!!\n"
-              "  Switching QStandardPaths into testing mode.\n"
-              "  Make sure xdg data can be found or set XDG_DATA_DIRS.\n"
-              "  !!!\n");
-    }
-
-    // make our theme in search path
-    qputenv("XDG_DATA_DIRS",
-            qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
-
-    // set default icon theme to test-theme
-    QStandardPaths::setTestModeEnabled(true);
+    Plasma::TestUtils::installPlasmaTheme();
+    qputenv("XDG_DATA_DIRS",  qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
 
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 

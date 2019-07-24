@@ -18,39 +18,15 @@
 *********************************************************************************/
 
 #include "dialognativetest.h"
+
+#include "utils.h"
+
 #include <KWindowSystem>
-
-void copyPath(const QString &src, const QString &dst)
-{
-    QDir dir(src);
-    Q_ASSERT(dir.exists());
-
-    foreach (const auto &d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        QString dst_path = dst + QLatin1Char('/') + d;
-        dir.mkpath(dst_path);
-        copyPath(src + QLatin1Char('/') + d, dst_path);
-    }
-
-    foreach (const auto &f, dir.entryList(QDir::Files)) {
-        QFile::copy(src + QLatin1Char('/') + f, dst + QLatin1Char('/') + f);
-    }
-}
 
 void DialogNativeTest::initTestCase()
 {
     QStandardPaths::setTestModeEnabled(true);
-    {
-        const auto qttestPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).constFirst();
-        Q_ASSERT(!qttestPath.isEmpty());
-        QDir themePath(qttestPath + QLatin1String("/plasma/desktoptheme/default"));
-
-        auto data = QFINDTESTDATA("../src/desktoptheme/breeze/metadata.desktop");
-        QFileInfo f(data);
-        QVERIFY(f.dir().mkpath(themePath.path()));
-
-        copyPath(f.dir().filePath("default.gzipped"), themePath.path());
-        QFile::copy(f.dir().filePath("metadata.desktop"), themePath.filePath("metadata.desktop"));
-    }
+    Plasma::TestUtils::installPlasmaTheme();
 
     m_cacheDir = QDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation));
     m_cacheDir.removeRecursively();
