@@ -25,9 +25,9 @@
 namespace Plasma {
 namespace TestUtils {
 
-static void copyPath(const QString &src, const QString &dst) {
+static void copyPath(const QString &src, const QString &dst)
+{
     QDir dir(src);
-    Q_ASSERT(dir.exists());
 
     foreach (const auto &d, dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         QString dst_path = dst + QLatin1Char('/') + d;
@@ -40,18 +40,27 @@ static void copyPath(const QString &src, const QString &dst) {
     }
 }
 
-static void installPlasmaTheme() {
+static void installPlasmaTheme(const QString &theme = QStringLiteral("breeze"))
+{
+    QString destinationTheme = (theme == QLatin1String("breeze") ? QStringLiteral("default") : theme);
+
     QStandardPaths::setTestModeEnabled(true);
     const auto qttestPath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).constFirst();
     Q_ASSERT(!qttestPath.isEmpty());
-    QDir themePath(qttestPath + QLatin1String("/plasma/desktoptheme/default"));
+    QDir themePath(qttestPath + QLatin1String("/plasma/desktoptheme/") + destinationTheme);
 
-    auto data = QFINDTESTDATA("../src/desktoptheme/breeze/metadata.desktop");
+    auto data = QFINDTESTDATA("../src/desktoptheme/" + theme + "/metadata.desktop");
     QFileInfo f(data);
     QVERIFY(f.dir().mkpath(themePath.path()));
 
     copyPath(f.dir().filePath("default.gzipped"), themePath.path());
     QFile::copy(f.dir().filePath("metadata.desktop"), themePath.filePath("metadata.desktop"));
+
+    const QString colorsFile = QFINDTESTDATA("../src/desktoptheme/" + theme + "/colors");
+    if (!colorsFile.isEmpty()) {
+            QFile::copy(colorsFile, themePath.filePath("colors"));
+    }
+
 }
 
 } //TestUtils

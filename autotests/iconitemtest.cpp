@@ -49,7 +49,10 @@ static bool imageIsEmpty(const QImage &img)
 
 void IconItemTest::initTestCase()
 {
-    Plasma::TestUtils::installPlasmaTheme();
+    Plasma::TestUtils::installPlasmaTheme("breeze");
+    Plasma::TestUtils::installPlasmaTheme("breeze-light");
+    Plasma::TestUtils::installPlasmaTheme("breeze-dark");
+
     qputenv("XDG_DATA_DIRS",  qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
 
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
