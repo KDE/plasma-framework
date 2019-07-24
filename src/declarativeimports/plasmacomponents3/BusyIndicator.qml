@@ -53,7 +53,7 @@ T.BusyIndicator {
             id: rotationAnimator
             from: 0
             to: 360
-            duration: 1500
+            duration: 2000
             running: control.running && indicatorItem.visible && indicatorItem.opacity > 0;
             loops: Animation.Infinite
         }
