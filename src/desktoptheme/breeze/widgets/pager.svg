@@ -563,7 +563,7 @@
      class="ColorScheme-Text"
      inkscape:label="#rect3172" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="13"
      x="-14"
      height="1"
@@ -578,7 +578,7 @@
      height="1"
      x="-13"
      y="13"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3176" />
   <rect
      style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
@@ -587,7 +587,7 @@
      height="1"
      x="-3"
      y="13"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3178" />
   <rect
      style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
@@ -596,10 +596,10 @@
      height="1"
      x="-14"
      y="21"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3180" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="21"
      x="-13"
      height="1"
@@ -608,7 +608,7 @@
      style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
      inkscape:label="#rect3182" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="21"
      x="-3"
      height="1"
@@ -623,10 +623,10 @@
      height="7"
      x="-14"
      y="14"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3186" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="14"
      x="-3"
      height="7"
@@ -635,7 +635,7 @@
      style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
      inkscape:label="#rect3188" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="14"
      x="-13"
      height="7"
@@ -650,10 +650,10 @@
      height="1"
      x="-14"
      y="25"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3175" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="25"
      x="-13"
      height="1"
@@ -662,7 +662,7 @@
      style="opacity:0.6;fill:currentColor;fill-opacity:1;stroke:none"
      inkscape:label="#rect3177" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="25"
      x="-3"
      height="1"
@@ -671,7 +671,7 @@
      style="opacity:0.6;fill:currentColor;fill-opacity:1;stroke:none"
      inkscape:label="#rect3179" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="33"
      x="-14"
      height="1"
@@ -686,7 +686,7 @@
      height="1"
      x="-13"
      y="33"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3183" />
   <rect
      style="opacity:0.6;fill:currentColor;fill-opacity:1;stroke:none"
@@ -695,10 +695,10 @@
      height="1"
      x="-3"
      y="33"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3185" />
   <rect
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      y="26"
      x="-14"
      height="7"
@@ -713,7 +713,7 @@
      height="7"
      x="-3"
      y="26"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3189" />
   <rect
      style="opacity:0.6;fill:currentColor;fill-opacity:1;stroke:none"
@@ -722,6 +722,6 @@
      height="7"
      x="-13"
      y="26"
-     class="ColorScheme-Highlight"
+     class="ColorScheme-ButtonFocus"
      inkscape:label="#rect3191" />
 </svg>

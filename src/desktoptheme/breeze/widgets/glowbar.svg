@@ -2,70 +2,70 @@
 <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="56" viewBox="0 0 56 56" id="svg2" version="1.1">
     <defs id="defs4">
         <linearGradient id="linearGradient1576">
-            <stop class="ColorScheme-Highlight" id="stop1572" offset="0" style="stop-color:#3daee9;stop-opacity:0.87450981" />
-            <stop style="stop-color:#3daee9;stop-opacity:0.627451" offset="0.5" id="stop1578" class="ColorScheme-Highlight" />
-            <stop class="ColorScheme-Highlight" id="stop1574" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1572" offset="0" style="stop-color:#3daee9;stop-opacity:0.87450981" />
+            <stop style="stop-color:#3daee9;stop-opacity:0.627451" offset="0.5" id="stop1578" class="ColorScheme-ButtonFocus" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1574" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient1568">
-            <stop class="ColorScheme-Highlight" id="stop1564" offset="0" style="stop-color:#3daee9;stop-opacity:0.87450981" />
-            <stop style="stop-color:#3daee9;stop-opacity:0.627451" offset="0.5" id="stop1570" class="ColorScheme-Highlight" />
-            <stop class="ColorScheme-Highlight" id="stop1566" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1564" offset="0" style="stop-color:#3daee9;stop-opacity:0.87450981" />
+            <stop style="stop-color:#3daee9;stop-opacity:0.627451" offset="0.5" id="stop1570" class="ColorScheme-ButtonFocus" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1566" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient1560">
-            <stop style="stop-color:#3daee9;stop-opacity:0.87450981" offset="0" id="stop1556" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1558" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:0.87450981" offset="0" id="stop1556" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1558" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient id="linearGradient1554">
-            <stop style="stop-color:#3daee9;stop-opacity:0.87450981" offset="0" id="stop1550" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1552" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:0.87450981" offset="0" id="stop1550" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1552" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient id="linearGradient1454">
-            <stop class="ColorScheme-Highlight" id="stop1446" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" id="stop1452" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1446" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1452" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient1444">
-            <stop class="ColorScheme-Highlight" id="stop1436" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" id="stop1442" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1436" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1442" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient1267">
-            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1259" class="ColorScheme-Highlight" />
-            <stop id="stop1261" offset="0.66666514" style="stop-color:#3daee9;stop-opacity:0.74901962;" class="ColorScheme-Highlight" />
-            <stop id="stop1263" offset="0.79166669" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1265" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1259" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1261" offset="0.66666514" style="stop-color:#3daee9;stop-opacity:0.74901962;" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1263" offset="0.79166669" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1265" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient id="linearGradient1247">
-            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1239" class="ColorScheme-Highlight" />
-            <stop id="stop1241" offset="0.66666669" style="stop-color:#3daee9;stop-opacity:0.667" class="ColorScheme-Highlight" />
-            <stop id="stop1243" offset="0.79166669" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1245" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1239" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1241" offset="0.66666669" style="stop-color:#3daee9;stop-opacity:0.667" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1243" offset="0.79166669" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1245" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient id="linearGradient1233">
-            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1225" class="ColorScheme-Highlight" />
-            <stop id="stop1227" offset="0.625" style="stop-color:#3daee9;stop-opacity:0.75" class="ColorScheme-Highlight" />
-            <stop id="stop1229" offset="0.82999998" style="stop-color:#3daee9;stop-opacity:0.5" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1231" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop1225" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1227" offset="0.625" style="stop-color:#3daee9;stop-opacity:0.75" class="ColorScheme-ButtonFocus" />
+            <stop id="stop1229" offset="0.82999998" style="stop-color:#3daee9;stop-opacity:0.5" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop1231" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient id="linearGradient1054">
-            <stop class="ColorScheme-Highlight" id="stop1046" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.58999997" id="stop1048" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.79166669" id="stop1050" />
-            <stop class="ColorScheme-Highlight" id="stop1052" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1046" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.58999997" id="stop1048" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.79166669" id="stop1050" />
+            <stop class="ColorScheme-ButtonFocus" id="stop1052" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient997">
-            <stop class="ColorScheme-Highlight" id="stop989" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" id="stop995" offset="1" style="stop-color:#3daee9;stop-opacity:0.67" />
+            <stop class="ColorScheme-ButtonFocus" id="stop989" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop995" offset="1" style="stop-color:#3daee9;stop-opacity:0.67" />
         </linearGradient>
         <linearGradient id="linearGradient987">
-            <stop class="ColorScheme-Highlight" id="stop979" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.55555403" id="stop981" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.77777624" id="stop983" />
-            <stop class="ColorScheme-Highlight" id="stop985" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop979" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.55555403" id="stop981" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.77777624" id="stop983" />
+            <stop class="ColorScheme-ButtonFocus" id="stop985" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <linearGradient id="linearGradient975">
-            <stop class="ColorScheme-Highlight" id="stop967" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.66666669" id="stop969" />
-            <stop class="ColorScheme-Highlight" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.82999998" id="stop971" />
-            <stop class="ColorScheme-Highlight" id="stop973" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
+            <stop class="ColorScheme-ButtonFocus" id="stop967" offset="0" style="stop-color:#3daee9;stop-opacity:1;" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.74901962;" offset="0.66666669" id="stop969" />
+            <stop class="ColorScheme-ButtonFocus" style="stop-color:#3daee9;stop-opacity:0.49803922;" offset="0.82999998" id="stop971" />
+            <stop class="ColorScheme-ButtonFocus" id="stop973" offset="1" style="stop-color:#3daee9;stop-opacity:0;" />
         </linearGradient>
         <style type="text/css" id="current-color-scheme">
       .ColorScheme-Text {
@@ -114,10 +114,10 @@
       }
       </style>
         <linearGradient id="linearGradient4211">
-            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop4213" class="ColorScheme-Highlight" />
-            <stop id="stop4221" offset="0.60000002" style="stop-color:#3daee9;stop-opacity:0.74901962;" class="ColorScheme-Highlight" />
-            <stop id="stop4219" offset="0.80000001" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-Highlight" />
-            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop4215" class="ColorScheme-Highlight" />
+            <stop style="stop-color:#3daee9;stop-opacity:1;" offset="0" id="stop4213" class="ColorScheme-ButtonFocus" />
+            <stop id="stop4221" offset="0.60000002" style="stop-color:#3daee9;stop-opacity:0.74901962;" class="ColorScheme-ButtonFocus" />
+            <stop id="stop4219" offset="0.80000001" style="stop-color:#3daee9;stop-opacity:0.49803922;" class="ColorScheme-ButtonFocus" />
+            <stop style="stop-color:#3daee9;stop-opacity:0;" offset="1" id="stop4215" class="ColorScheme-ButtonFocus" />
         </linearGradient>
         <linearGradient xlink:href="#linearGradient1576" id="linearGradient888" x1="28" y1="926.36218" x2="28" y2="914.36218" gradientUnits="userSpaceOnUse" gradientTransform="translate(0,-2.8217188e-5)" />
         <linearGradient xlink:href="#linearGradient1576" id="linearGradient888-2" x1="28.000004" y1="926.36218" x2="28" y2="914.36218" gradientUnits="userSpaceOnUse" gradientTransform="translate(904.36215,-960.36221)" />

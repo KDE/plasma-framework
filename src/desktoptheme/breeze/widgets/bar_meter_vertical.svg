@@ -73,14 +73,14 @@
     <path style="opacity:1;fill:#bdc3c7;fill-opacity:1;stroke:none" d="m 14,15 0,3 2,0 0,-3 -2,0 z" transform="translate(0,904.36218)" id="bar-inactive-bottom" inkscape:connector-curvature="0"/>
     <path style="opacity:1;fill:#bdc3c7;fill-opacity:1;stroke:none" d="m 16,12 -2,0 0,2 2,0 0,-2 z" id="bar-inactive-center" transform="translate(0,904.36218)" inkscape:connector-curvature="0"/>
     <path style="opacity:1;fill:#bdc3c7;fill-opacity:1;stroke:none" d="m 14,8 0,3 2,0 0,-3 -2,0 z" transform="translate(0,904.36218)" id="bar-inactive-top" inkscape:connector-curvature="0"/>
-    <path id="bar-active-bottomright" d="m 17,931.36218 0,3 c 1.661989,0 3,-1.33801 3,-3 l -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-right" d="m 17,928.36218 0,2 3,0 0,-2 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-topright" d="m 17,924.36218 0,3 3,0 c 0,-1.66199 -1.338011,-3 -3,-3 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-bottomleft" d="m 10,931.36218 c 0,1.66199 1.338011,3 3,3 l 0,-3 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-left" d="m 10,928.36218 0,2 3,0 0,-2 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-topleft" d="m 13,924.36218 c -1.661989,0 -3,1.33801 -3,3 l 3,0 0,-3 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-bottom" d="m 14,931.36218 0,3 2,0 0,-3 -2,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-center" d="m 16,928.36218 -2,0 0,2 2,0 0,-2 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
-    <path id="bar-active-top" d="m 14,924.36218 0,3 2,0 0,-3 -2,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-Highlight"/>
+    <path id="bar-active-bottomright" d="m 17,931.36218 0,3 c 1.661989,0 3,-1.33801 3,-3 l -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-right" d="m 17,928.36218 0,2 3,0 0,-2 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-topright" d="m 17,924.36218 0,3 3,0 c 0,-1.66199 -1.338011,-3 -3,-3 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-bottomleft" d="m 10,931.36218 c 0,1.66199 1.338011,3 3,3 l 0,-3 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-left" d="m 10,928.36218 0,2 3,0 0,-2 -3,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-topleft" d="m 13,924.36218 c -1.661989,0 -3,1.33801 -3,3 l 3,0 0,-3 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-bottom" d="m 14,931.36218 0,3 2,0 0,-3 -2,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-center" d="m 16,928.36218 -2,0 0,2 2,0 0,-2 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
+    <path id="bar-active-top" d="m 14,924.36218 0,3 2,0 0,-3 -2,0 z" style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none" inkscape:connector-curvature="0" class="ColorScheme-ButtonFocus"/>
   </g>
 </svg>

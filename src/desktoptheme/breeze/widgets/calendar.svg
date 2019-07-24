@@ -122,7 +122,7 @@
        d="m 30,918.36218 -16,16 16,0 z"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:connector-curvature="0"
-       class="ColorScheme-Highlight"
+       class="ColorScheme-ButtonFocus"
        sodipodi:nodetypes="cccc" />
   </g>
 </svg>

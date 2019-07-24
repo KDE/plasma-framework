@@ -378,7 +378,7 @@
         <path
            id="path6-7-2-2"
            d="m 10.583335,255.72498 c -0.586317,0 -1.0583337,0.47202 -1.0583337,1.05833 0,0.58632 0.4720167,1.05834 1.0583337,1.05834 0.586317,0 1.058333,-0.47202 1.058333,-1.05834 0,-0.58631 -0.472016,-1.05833 -1.058333,-1.05833 z"
-           class="ColorScheme-Highlight"
+           class="ColorScheme-ButtonFocus"
            style="fill:currentColor;fill-opacity:1;stroke:none"
            inkscape:connector-curvature="0" />
         <path
@@ -405,7 +405,7 @@
         <path
            id="path6-7-2-0-5"
            d="m 10.583336,255.72498 c -0.5863174,0 -1.0583341,0.47202 -1.0583341,1.05833 0,0.58632 0.4720167,1.05834 1.0583341,1.05834 0.586316,0 1.058332,-0.47202 1.058332,-1.05834 0,-0.58631 -0.472016,-1.05833 -1.058332,-1.05833 z"
-           class="ColorScheme-Highlight"
+           class="ColorScheme-ButtonFocus"
            style="fill:currentColor;fill-opacity:1;stroke:none"
            inkscape:connector-curvature="0" />
         <path

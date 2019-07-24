@@ -148,7 +148,7 @@
          cx="8"
          id="path4152"
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
-         class="ColorScheme-Highlight"
+         class="ColorScheme-ButtonFocus"
          d="m 15,912.36218 c 0,3.866 -3.134007,7 -7,7 -3.8659932,0 -7,-3.134 -7,-7 0,-3.86599 3.1340068,-7 7,-7 3.865993,0 7,3.13401 7,7 z" />
       <circle
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
@@ -164,7 +164,7 @@
          cx="8"
          id="circle4158"
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
-         class="ColorScheme-Highlight"
+         class="ColorScheme-ButtonFocus"
          d="m 13,912.36218 c 0,2.76143 -2.238576,5 -5,5 -2.7614237,0 -5,-2.23857 -5,-5 0,-2.76142 2.2385763,-5 5,-5 2.761424,0 5,2.23858 5,5 z" />
     </g>
     <g
@@ -184,7 +184,7 @@
          width="14"
          id="rect4160"
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
-         class="ColorScheme-Highlight" />
+         class="ColorScheme-ButtonFocus" />
       <rect
          y="906.36218"
          x="20"
@@ -201,7 +201,7 @@
          width="10"
          id="rect4164"
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
-         class="ColorScheme-Highlight" />
+         class="ColorScheme-ButtonFocus" />
     </g>
   </g>
 </svg>
