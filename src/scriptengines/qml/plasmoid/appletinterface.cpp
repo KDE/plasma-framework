@@ -169,7 +169,9 @@ void AppletInterface::init()
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
     emit busyChanged();
 
-    applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+    updateUiReadyConstraint();
+
+    connect(this, &AppletInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
 
     connect(applet(), &Plasma::Applet::activated, this,
     [ = ]() {
@@ -851,5 +853,16 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
     return AppletQuickItem::eventFilter(watched, event);
 }
 
+void AppletInterface::updateUiReadyConstraint()
+{
+    if (!isLoading()) {
+        applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+    }
+}
+
+bool AppletInterface::isLoading() const
+{
+    return m_loading;
+}
 
 #include "moc_appletinterface.cpp"

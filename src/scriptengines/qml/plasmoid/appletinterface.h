@@ -238,6 +238,8 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
 
+    Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -448,12 +450,23 @@ Q_SIGNALS:
     void configurationRequiredChanged();
     void configurationRequiredReasonChanged();
 
+    void isLoadingChanged();
+
 protected Q_SLOTS:
     void init() override;
 
 protected:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+
+   /*
+   * Returns true if this plasmoid or a dependent feature (i.e wallpaper) is loading
+   */
+    virtual bool isLoading() const;
+   /*
+   * Set UIReadyConstraint if we're not currently loading
+   */
+    void updateUiReadyConstraint();
 
 private Q_SLOTS:
     void destroyedChanged(bool destroyed);
@@ -474,6 +487,7 @@ private:
     QVariantList m_args;
     Plasma::Types::BackgroundHints m_backgroundHints;
     bool m_hideOnDeactivate : 1;
+    bool m_loading = false;
     //this is used to build an emacs style shortcut
     int m_oldKeyboardShortcut;
     QObject *m_dummyNativeInterface;

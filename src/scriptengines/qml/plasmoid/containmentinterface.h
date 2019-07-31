@@ -168,6 +168,8 @@ protected:
     void addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event);
     void addContainmentActions(QMenu *desktopMenu, QEvent *event);
 
+    virtual bool isLoading() const override;
+
 Q_SIGNALS:
     /**
      * Emitted when an applet is added

@@ -49,6 +49,7 @@ class WallpaperInterface : public QQuickItem
 
     Q_PROPERTY(QString pluginName READ pluginName NOTIFY packageChanged)
     Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
+    Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
 public:
     explicit WallpaperInterface(ContainmentInterface *parent = nullptr);
@@ -86,9 +87,12 @@ public:
 
     static WallpaperInterface *qmlAttachedProperties(QObject *object);
 
+    bool isLoading() const;
+
 Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
+    void isLoadingChanged();
 
 private Q_SLOTS:
     void syncWallpaperPackage();
@@ -103,6 +107,7 @@ private:
     KDeclarative::ConfigPropertyMap *m_configuration;
     KConfigLoader *m_configLoader;
     KActionCollection *m_actions;
+    bool m_loading = false;
 
     static QHash<QObject *, WallpaperInterface *> s_rootObjects;
 };

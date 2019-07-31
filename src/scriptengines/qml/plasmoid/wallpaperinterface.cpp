@@ -266,4 +266,10 @@ WallpaperInterface * WallpaperInterface::qmlAttachedProperties(QObject* object)
     return object->parent() ? nullptr : s_rootObjects.value(QtQml::qmlEngine(object));
 }
 
+bool WallpaperInterface::isLoading() const
+{
+    return m_loading;
+}
+
+
 #include "moc_wallpaperinterface.cpp"

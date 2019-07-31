@@ -88,6 +88,10 @@ void ContainmentInterface::init()
             this, &ContainmentInterface::activityNameChanged);
     emit activityNameChanged();
 
+    if (!m_containment->wallpaper().isEmpty()) {
+        loadWallpaper();
+    }
+
     AppletInterface::init();
 
     //Create the ToolBox
@@ -143,10 +147,6 @@ void ContainmentInterface::init()
         QQmlExpression expr(qmlObject()->engine()->rootContext(), qmlObject()->rootObject(), QStringLiteral("parent"));
         QQmlProperty prop(qmlObject()->rootObject(), QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
-    }
-
-    if (!m_containment->wallpaper().isEmpty()) {
-        loadWallpaper();
     }
 
     connect(m_containment.data(), &Plasma::Containment::activityChanged,
@@ -861,6 +861,8 @@ void ContainmentInterface::loadWallpaper()
         //Qml seems happier if the parent gets set in this way
         m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 
+        connect(m_wallpaperInterface, &WallpaperInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
+
         //set anchors
         QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, QStringLiteral("parent"));
         QQmlProperty prop(m_wallpaperInterface, QStringLiteral("anchors.fill"));
@@ -1216,5 +1218,15 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
 
     return;
 }
+
+bool ContainmentInterface::isLoading() const
+{
+    bool loading = AppletInterface::isLoading();
+    if (m_wallpaperInterface) {
+        loading |= m_wallpaperInterface->isLoading();
+    }
+    return loading;
+}
+
 
 #include "moc_containmentinterface.cpp"
