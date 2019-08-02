@@ -80,7 +80,7 @@ QtQuickControlStyle.ButtonStyle {
                 Layout.maximumHeight: Layout.minimumWidth
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 active: style.controlHovered
-                colorGroup: controlHovered || !flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
+                colorGroup: !flat ? PlasmaCore.Theme.ButtonColorGroup : PlasmaCore.ColorScope.colorGroup
             }
 
             //NOTE: this is used only to check elements existence
