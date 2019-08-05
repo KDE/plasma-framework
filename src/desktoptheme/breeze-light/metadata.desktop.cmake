@@ -40,6 +40,7 @@ Name[zh_TW]=Breeze Light
 Comment=Breeze Light by the KDE VDG
 Comment[ca]=Brisa clara pel VDG del KDE
 Comment[ca@valencia]=Brisa clara pel VDG del KDE
+Comment[cs]=Breeze Light od KDE VDG
 Comment[da]=Breeze Light af KDE VDG
 Comment[de]=Breeze-Hell von der KDE VDG
 Comment[en_GB]=Breeze Light by the KDE VDG
