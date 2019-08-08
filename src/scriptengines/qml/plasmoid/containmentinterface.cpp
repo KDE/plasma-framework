@@ -28,6 +28,7 @@
 #include <QQmlProperty>
 #include <QMimeData>
 #include <QVersionNumber>
+#include <QScreen>
 
 #include <kactioncollection.h>
 #include <KAcceleratorManager>
