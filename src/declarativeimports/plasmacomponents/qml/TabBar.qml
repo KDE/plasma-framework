@@ -171,11 +171,7 @@ FocusScope {
         }
     }
 
-    onCurrentTabChanged: updateTabPosition()
-    onWidthChanged: updateTabPosition()
-    onHeightChanged: updateTabPosition()
-
-    function updateTabPosition() {
+    onCurrentTabChanged: {
         if (!currentTab) {
             return;
         }
@@ -183,6 +179,16 @@ FocusScope {
             tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width);
         } else {
             tabBarLayout.y = Math.max(Math.min(0, -(currentTab.y + currentTab.height/2) + tabbarScroller.height/2), -tabBarLayout.height + tabbarScroller.height);
+        }
+    }
+
+    onWidthChanged: {
+        if (currentTab) {
+            if (layout.isHorizontal) {
+                tabBarLayout.x = Math.max(Math.min(0, -(currentTab.x + currentTab.width/2) + tabbarScroller.width/2), -tabBarLayout.width + tabbarScroller.width);
+            } else {
+                tabBarLayout.y = Math.max(Math.min(0, -(currentTab.y + currentTab.height/2) + tabbarScroller.height/2), -tabBarLayout.height + tabbarScroller.height);
+            }
         }
     }
 
