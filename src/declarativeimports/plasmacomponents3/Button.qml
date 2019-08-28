@@ -43,23 +43,15 @@ T.Button {
     Kirigami.MnemonicData.label: control.text
 
     contentItem: RowLayout {
-        Item {
-            Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium + Kirigami.Units.largeSpacing
-            Layout.fillWidth: !label.visible
+        PlasmaCore.IconItem {
+            id: icon
+            Layout.fillWidth: true
             Layout.fillHeight: true
-            visible: icon.source.length > 0
-            PlasmaCore.IconItem {
-                id: icon
-                anchors.centerIn: parent
-                visible: parent.visible
-                height: Kirigami.Units.iconSizes.smallMedium
-                width:  Kirigami.Units.iconSizes.smallMedium
-                colorGroup: PlasmaCore.Theme.ButtonColorGroup
-                source: control.icon ? (control.icon.name || control.icon.source) : ""
-            }
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            visible: source.length > 0
+            source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
         Label {
-            id: label
             Layout.fillWidth: !icon.visible
             Layout.fillHeight: true
             visible: text.length > 0
