@@ -45,23 +45,14 @@ T.ToolButton {
     flat: true
 
     contentItem: RowLayout {
-
-        Item {
-            Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium + Kirigami.Units.largeSpacing
-            Layout.fillWidth: !label.visible
-            visible: icon.source.length > 0
-            PlasmaCore.IconItem {
-                id: icon
-                anchors.centerIn: parent
-                height: Kirigami.Units.iconSizes.smallMedium
-                width:  Kirigami.Units.iconSizes.smallMedium
-                colorGroup: PlasmaCore.ColorScope.colorGroup
-                source: control.icon ? (control.icon.name || control.icon.source) : ""
-            }
+        PlasmaCore.IconItem {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            visible: source.length > 0
+            source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
-
         Label {
-            id: label
             Layout.fillWidth: true
             visible: text.length > 0
             text: control.Kirigami.MnemonicData.richTextLabel
