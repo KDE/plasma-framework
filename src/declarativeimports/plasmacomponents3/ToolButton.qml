@@ -24,6 +24,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
+
 T.ToolButton {
     id: control
 
@@ -46,10 +47,13 @@ T.ToolButton {
 
     contentItem: RowLayout {
         PlasmaCore.IconItem {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            colorGroup: PlasmaCore.ColorScope.colorGroup
+            id: icon
             visible: source.length > 0
+            Layout.fillWidth: control.icon.width <= 0
+            Layout.fillHeight: control.icon.height <= 0
+            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : -1
+            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : -1
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
         Label {
