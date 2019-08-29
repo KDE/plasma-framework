@@ -136,8 +136,8 @@ Storage::Storage(QObject *parent)
         }
     }
 
-    m_clientName = m_clientName.replace(QLatin1Char('.'), QLatin1Char('_'));
-    m_clientName = m_clientName.replace(QLatin1Char('-'), QLatin1Char('_'));
+    m_clientName.replace(QLatin1Char('.'), QLatin1Char('_'));
+    m_clientName.replace(QLatin1Char('-'), QLatin1Char('_'));
 
     setName(QStringLiteral("storage"));
 }

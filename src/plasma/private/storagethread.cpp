@@ -246,11 +246,11 @@ void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &pa
 
     if (success) {
         QSqlRecord rec = query.record();
-        const int keyColumn = rec.indexOf(QStringLiteral("id"));
-        const int textColumn = rec.indexOf(QStringLiteral("txt"));
-        const int intColumn = rec.indexOf(QStringLiteral("int"));
-        const int floatColumn = rec.indexOf(QStringLiteral("float"));
-        const int binaryColumn = rec.indexOf(QStringLiteral("binary"));
+        const int keyColumn = rec.indexOf(QLatin1String("id"));
+        const int textColumn = rec.indexOf(QLatin1String("txt"));
+        const int intColumn = rec.indexOf(QLatin1String("int"));
+        const int floatColumn = rec.indexOf(QLatin1String("float"));
+        const int binaryColumn = rec.indexOf(QLatin1String("binary"));
 
         QVariantMap data;
         while (query.next()) {

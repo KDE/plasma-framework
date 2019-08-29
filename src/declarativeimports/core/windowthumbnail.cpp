@@ -163,7 +163,7 @@ WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     setFlag(ItemHasContents);
 
     if (QGuiApplication *gui = dynamic_cast<QGuiApplication *>(QCoreApplication::instance())) {
-        m_xcb = (gui->platformName() == QStringLiteral("xcb"));
+        m_xcb = (gui->platformName() == QLatin1String("xcb"));
         if (m_xcb) {
             gui->installNativeEventFilter(this);
 #if HAVE_XCB_COMPOSITE

@@ -186,7 +186,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     QString actualPath = imagePath;
     if (imagePath.startsWith(QLatin1String("file://"))) {
         //length of file://
-        actualPath = actualPath.mid(7);
+        actualPath.remove(0, 7);
     }
 
     bool isThemed = !actualPath.isEmpty() && !QDir::isAbsolutePath(actualPath);

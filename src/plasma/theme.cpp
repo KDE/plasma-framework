@@ -149,12 +149,12 @@ QString Theme::imagePath(const QString &name) const
         return QString();
     }
 
-    const QString svgzName = name % QLatin1Literal(".svgz");
+    const QString svgzName = name % QLatin1String(".svgz");
     QString path = d->findInTheme(svgzName, d->themeName);
 
     if (path.isEmpty()) {
         // try for an uncompressed svg file
-        const QString svgName = name % QLatin1Literal(".svg");
+        const QString svgName = name % QLatin1String(".svg");
         path = d->findInTheme(svgName, d->themeName);
 
         // search in fallback themes if necessary
@@ -215,10 +215,10 @@ QString Theme::wallpaperPath(const QSize &size) const
     //      to override the theme?
     if (d->hasWallpapers) {
         // check in the theme first
-        fullPath = d->findInTheme(QLatin1Literal("wallpapers/") % image, d->themeName);
+        fullPath = d->findInTheme(QLatin1String("wallpapers/") % image, d->themeName);
 
         if (fullPath.isEmpty()) {
-            fullPath = d->findInTheme(QLatin1Literal("wallpapers/") % defaultImage, d->themeName);
+            fullPath = d->findInTheme(QLatin1String("wallpapers/") % defaultImage, d->themeName);
         }
     }
 
@@ -256,8 +256,8 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !(d->findInTheme(name % QLatin1Literal(".svgz"), d->themeName, false).isEmpty()) ||
-           !(d->findInTheme(name % QLatin1Literal(".svg"), d->themeName, false).isEmpty());
+    return !(d->findInTheme(name % QLatin1String(".svgz"), d->themeName, false).isEmpty()) ||
+           !(d->findInTheme(name % QLatin1String(".svg"), d->themeName, false).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
@@ -337,7 +337,7 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
     }
 
     KConfigGroup imageGroup(d->svgElementsCache, image);
-    rect = imageGroup.readEntry(element % QLatin1Literal("Size"), QRectF());
+    rect = imageGroup.readEntry(element % QLatin1String("Size"), QRectF());
 
     if (rect.isValid()) {
         return true;
@@ -394,7 +394,7 @@ void Theme::insertIntoRectsCache(const QString &image, const QString &element, c
 
     if (rect.isValid()) {
         KConfigGroup imageGroup(d->svgElementsCache, image);
-        imageGroup.writeEntry(element % QLatin1Literal("Size"), rect);
+        imageGroup.writeEntry(element % QLatin1String("Size"), rect);
     } else {
         QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
         if (it == d->invalidElements.end()) {

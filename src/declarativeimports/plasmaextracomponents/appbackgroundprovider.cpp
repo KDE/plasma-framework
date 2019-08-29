@@ -19,7 +19,7 @@
 
 #include "appbackgroundprovider_p.h"
 
-#include <QLatin1Literal>
+#include <QLatin1String>
 #include <QPixmap>
 #include <QSize>
 #include <QStandardPaths>

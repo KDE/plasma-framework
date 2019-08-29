@@ -787,7 +787,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
     if (md.isValid()) {
         QStringList types = md.serviceTypes();
 
-        if (types.contains(QStringLiteral("Plasma/Containment"))) {
+        if (types.contains(QLatin1String("Plasma/Containment"))) {
             return new Containment(md, appletId);
         } else {
             return new Applet(md, nullptr, appletId);

@@ -92,8 +92,8 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     //qDebug() << "Intercepted URL:" << path << type;
 
     //we assume we never rewritten qml/qmldir files
-    if (path.path().endsWith(QStringLiteral("qml")) || path.path().endsWith(QStringLiteral("qmldir"))
-            || path.path().endsWith(QStringLiteral("/inline"))) {
+    if (path.path().endsWith(QLatin1String("qml")) || path.path().endsWith(QStringLiteral("qmldir"))
+            || path.path().endsWith(QLatin1String("/inline"))) {
         return path;
     }
     const QString prefix = QString::fromUtf8(prefixForType(type, path.path()));
@@ -104,7 +104,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         QString rewritten = plainPath.replace(match, QStringLiteral("/%1/\\1").arg(prefix));
 
         //search it in a resource or as a file on disk
-        if (!(rewritten.contains(QStringLiteral("qrc")) &&
+        if (!(rewritten.contains(QLatin1String("qrc")) &&
               QFile::exists(QStringLiteral(":") + QUrl(rewritten).path())) &&
             !QFile::exists(QUrl(rewritten).path())) {
             return path;

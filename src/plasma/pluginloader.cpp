@@ -215,7 +215,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         QVariantList allArgs;
         allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
-        if (p.metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
+        if (p.metadata().serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
             applet = new Containment(nullptr, allArgs);
         } else {
             applet = new Applet(nullptr, allArgs);
@@ -637,7 +637,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type,
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool
     {
-        if (!md.serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
+        if (!md.serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
             return false;
         }
         if (!parentApp.isEmpty() && md.value(QStringLiteral("X-KDE-ParentApp")) != parentApp) {

@@ -915,7 +915,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
     i = 0;
     foreach (QAction *a, m_containment->corona()->actions()->actions()) {
-        if (a->objectName() == QStringLiteral("lock widgets") || a->menu()) {
+        if (a->objectName() == QLatin1String("lock widgets") || a->menu()) {
             //It is up to the Containment to decide if the user is allowed or not
             //to lock/unluck the widgets, so corona should not add one when there is none
             //(user is not allow) and it shouldn't add another one when there is already

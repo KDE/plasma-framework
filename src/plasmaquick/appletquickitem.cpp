@@ -62,9 +62,9 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
 
         if (qEnvironmentVariableIsSet("PLASMA_PRELOAD_POLICY")) {
             const QString policy = QString::fromUtf8(qgetenv("PLASMA_PRELOAD_POLICY")).toLower();
-            if (policy == QStringLiteral("aggressive")) {
+            if (policy == QLatin1String("aggressive")) {
                 s_preloadPolicy = Aggressive;
-            } else if (policy == QStringLiteral("none")) {
+            } else if (policy == QLatin1String("none")) {
                 s_preloadPolicy = None;
             }
         }
@@ -95,7 +95,7 @@ int AppletQuickItemPrivate::preloadWeight() const
     const QStringList provides(KPluginMetaData::readStringList(applet->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides")));
 
     //some applet types we want a bigger weight
-    if (provides.contains(QStringLiteral("org.kde.plasma.launchermenu"))) {
+    if (provides.contains(QLatin1String("org.kde.plasma.launchermenu"))) {
         defaultWeight = DefaultLauncherPreloadWeight;
     } else {
         defaultWeight = DefaultPreloadWeight;

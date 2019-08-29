@@ -47,7 +47,7 @@ public:
         if (!package->metadata().isValid()) {
             return;
         }
-        if (package->metadata().serviceTypes().contains(QStringLiteral("Plasma/Containment"))) {
+        if (package->metadata().serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
             package->addFileDefinition("compactapplet", QStringLiteral("applet/CompactApplet.qml"), i18n("Custom expander for compact applets"));
         } else {
             package->removeDefinition("compactapplet");

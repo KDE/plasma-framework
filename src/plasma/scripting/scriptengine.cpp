@@ -41,8 +41,8 @@ static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::fu
         if (!filter(plugin))
             continue;
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && componentTypes.contains(QStringLiteral("Applet")))
-          ||((types & Types::DataEngineComponent) && componentTypes.contains(QStringLiteral("DataEngine")))) {
+        if (((types & Types::AppletComponent)     && componentTypes.contains(QLatin1String("Applet")))
+          ||((types & Types::DataEngineComponent) && componentTypes.contains(QLatin1String("DataEngine")))) {
             ret << plugin;
         }
     }

@@ -27,31 +27,31 @@
 
 QString typeFromLegacy(const QString &type)
 {
-    if (type == QStringLiteral("plasmoid")) {
+    if (type == QLatin1String("plasmoid")) {
         return QStringLiteral("Plasma/Applet");
-    } else if (type == QStringLiteral("package")) {
+    } else if (type == QLatin1String("package")) {
         return QStringLiteral("Plasma/Generic");
-    } else if (type == QStringLiteral("theme")) {
+    } else if (type == QLatin1String("theme")) {
         return QStringLiteral("Plasma/Theme");
-    } else if (type == QStringLiteral("wallpaper")) {
+    } else if (type == QLatin1String("wallpaper")) {
         return QStringLiteral("Plasma/ImageWallpaper");
-    } else if (type == QStringLiteral("dataengine")) {
+    } else if (type == QLatin1String("dataengine")) {
         return QStringLiteral("Plasma/DataEngine");
-    } else if (type == QStringLiteral("runner")) {
+    } else if (type == QLatin1String("runner")) {
         return QStringLiteral("Plasma/Runner");
-    } else if (type == QStringLiteral("wallpaperplugin")) {
+    } else if (type == QLatin1String("wallpaperplugin")) {
         return QStringLiteral("Plasma/Wallpaper");
-    } else if (type == QStringLiteral("lookandfeel")) {
+    } else if (type == QLatin1String("lookandfeel")) {
         return QStringLiteral("Plasma/LookAndFeel");
-    } else if (type == QStringLiteral("shell")) {
+    } else if (type == QLatin1String("shell")) {
         return QStringLiteral("Plasma/Shell");
-    } else if (type == QStringLiteral("layout-template")) {
+    } else if (type == QLatin1String("layout-template")) {
         return QStringLiteral("Plasma/LayoutTemplate");
-    } else if (type == QStringLiteral("kwineffect")) {
+    } else if (type == QLatin1String("kwineffect")) {
         return QStringLiteral("KWin/Effect");
-    } else if (type == QStringLiteral("windowswitcher")) {
+    } else if (type == QLatin1String("windowswitcher")) {
         return QStringLiteral("KWin/WindowSwitcher");
-    } else if (type == QStringLiteral("kwinscript")) {
+    } else if (type == QLatin1String("kwinscript")) {
         return QStringLiteral("KWin/Script");
     } else {
         return type;
@@ -67,12 +67,12 @@ int main(int argc, char **argv)
     //plasmapkg2 had some hardcoded types, kpackagetool5 requires the servicetype passed as the type parameter
     //convert between the two
     //user passed -t typeName
-    int typeIndex = params.indexOf(QStringLiteral("-t"));
+    int typeIndex = params.indexOf(QLatin1String("-t"));
     if (typeIndex > -1 && params.length() > typeIndex + 1) {
         params[typeIndex + 1] = typeFromLegacy(params.value(typeIndex + 1));
     } else {
         //user passed --type typeName
-        typeIndex = params.indexOf(QStringLiteral("--type"));
+        typeIndex = params.indexOf(QLatin1String("--type"));
         if (typeIndex > -1 && params.length() > typeIndex + 1) {
             params[typeIndex + 1] = typeFromLegacy(params.value(typeIndex + 1));
         } else {
