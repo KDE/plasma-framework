@@ -37,6 +37,11 @@ void DialogStateTest::cleanupTestCase()
 
 void DialogStateTest::windowState()
 {
+    if (QGuiApplication::platformName() == "wayland") {
+        QEXPECT_FAIL("windowState", "KWindowSystem::windowAdded doesn't work on wayland", Continue);
+        return;
+    }
+
     for (int i = 0; i <= 100; ++i) {
         m_dialog->show();
 
