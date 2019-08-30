@@ -32,13 +32,13 @@ SortFilterModel::SortFilterModel(QObject *parent)
 {
     setObjectName(QStringLiteral("SortFilterModel"));
     setDynamicSortFilter(true);
-    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(modelReset()),
-            this, SIGNAL(countChanged()));
-    connect(this,  SIGNAL(countChanged()), this, SLOT(syncRoleNames()));
+    connect(this, &QAbstractItemModel::rowsInserted,
+            this, &SortFilterModel::countChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved,
+            this, &SortFilterModel::countChanged);
+    connect(this, &QAbstractItemModel::modelReset,
+            this, &SortFilterModel::countChanged);
+    connect(this,  &SortFilterModel::countChanged, this, &SortFilterModel::syncRoleNames);
 }
 
 SortFilterModel::~SortFilterModel()
@@ -82,13 +82,13 @@ void SortFilterModel::setModel(QAbstractItemModel *model)
     }
 
     if (sourceModel()) {
-        disconnect(sourceModel(), SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
+        disconnect(sourceModel(), &QAbstractItemModel::modelReset, this, &SortFilterModel::syncRoleNames);
     }
 
     QSortFilterProxyModel::setSourceModel(model);
 
     if (model) {
-        connect(model, SIGNAL(modelReset()), this, SLOT(syncRoleNames()));
+        connect(model, &QAbstractItemModel::modelReset, this, &SortFilterModel::syncRoleNames);
         syncRoleNames();
     }
 
@@ -245,12 +245,12 @@ DataModel::DataModel(QObject *parent)
     ++m_maxRoleId;
 
     setObjectName(QStringLiteral("DataModel"));
-    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this, SIGNAL(countChanged()));
-    connect(this, SIGNAL(modelReset()),
-            this, SIGNAL(countChanged()));
+    connect(this, &QAbstractItemModel::rowsInserted,
+            this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved,
+            this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::modelReset,
+            this, &DataModel::countChanged);
 }
 
 DataModel::~DataModel()

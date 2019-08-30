@@ -88,7 +88,7 @@ TimeTracker::TimeTracker(QObject* o)
     QTimer* t = new QTimer(this);
     t->setInterval(2000);
     t->setSingleShot(false);
-    connect(t, SIGNAL(timeout()), this, SLOT(sync()));
+    connect(t, &QTimer::timeout, this, &TimeTracker::sync);
     t->start();
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);

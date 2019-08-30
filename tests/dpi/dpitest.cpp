@@ -43,7 +43,7 @@ DPITest::DPITest(int &argc, char **argv, QCommandLineParser *parser) :
 {
     d = new DPITestPrivate;
     d->parser = parser;
-    QTimer::singleShot(0, this, SLOT(runMain()));
+    QTimer::singleShot(0, this, &DPITest::runMain);
 }
 
 DPITest::~DPITest()

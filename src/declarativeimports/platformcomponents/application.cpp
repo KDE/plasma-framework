@@ -30,8 +30,8 @@ Application::Private::Private(Application *parent)
     , q(parent)
 {
     connect(
-        &process, SIGNAL(stateChanged(QProcess::ProcessState)),
-        this,     SLOT(stateChanged(QProcess::ProcessState))
+        &process, &QProcess::stateChanged,
+        this,     &Private::stateChanged
     );
     connect(
         &process, SIGNAL(error(QProcess::ProcessError)),

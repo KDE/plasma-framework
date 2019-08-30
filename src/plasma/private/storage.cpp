@@ -46,7 +46,7 @@ StorageJob::StorageJob(const QString &destination,
       m_clientName(destination)
 {
     Plasma::StorageThread::self()->start();
-    connect(Plasma::StorageThread::self(), SIGNAL(newResult(StorageJob*,QVariant)), this, SLOT(resultSlot(StorageJob*,QVariant)));
+    connect(Plasma::StorageThread::self(), &Plasma::StorageThread::newResult, this, &StorageJob::resultSlot);
     qRegisterMetaType<StorageJob *>();
     qRegisterMetaType<QPointer<StorageJob> >();
 }

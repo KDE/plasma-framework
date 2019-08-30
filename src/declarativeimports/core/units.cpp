@@ -77,7 +77,7 @@ Units::Units(QObject *parent)
     updateSpacing(); // updates gridUnit and *Spacing properties
 
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
-    QObject::connect(s_sharedAppFilter, SIGNAL(fontChanged()), this, SLOT(updateSpacing()));
+    QObject::connect(s_sharedAppFilter, &SharedAppFilter::fontChanged, this, &Units::updateSpacing);
 
     const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc();
     KDirWatch::self()->addFile(configFile);

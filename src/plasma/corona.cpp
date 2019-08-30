@@ -561,10 +561,10 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
 
     QObject::connect(containment, SIGNAL(destroyed(QObject*)),
                      q, SLOT(containmentDestroyed(QObject*)));
-    QObject::connect(containment, SIGNAL(configNeedsSaving()),
-                     q, SLOT(requestConfigSync()));
-    QObject::connect(containment, SIGNAL(screenChanged(int)),
-                     q, SIGNAL(screenOwnerChanged(int)));
+    QObject::connect(containment, &Applet::configNeedsSaving,
+                     q, &Corona::requestConfigSync);
+    QObject::connect(containment, &Containment::screenChanged,
+                     q, &Corona::screenOwnerChanged);
 
     if (!delayedInit) {
         containment->init();

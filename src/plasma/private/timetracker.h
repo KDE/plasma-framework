@@ -56,7 +56,7 @@ struct ObjectHistory
  * as the process has quit.
  */
 
-class PLASMA_EXPORT TimeTracker : QObject
+class PLASMA_EXPORT TimeTracker : public QObject
 {
 Q_OBJECT
 public:

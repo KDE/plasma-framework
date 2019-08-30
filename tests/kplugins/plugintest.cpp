@@ -62,7 +62,7 @@ PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser) :
 {
     d = new PluginTestPrivate;
     d->parser = parser;
-    QTimer::singleShot(0, this, SLOT(runMain()));
+    QTimer::singleShot(0, this, &PluginTest::runMain);
 }
 
 PluginTest::~PluginTest()

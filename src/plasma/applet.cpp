@@ -557,7 +557,7 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
         if (runAssociatedApplication) {
-            connect(runAssociatedApplication, SIGNAL(triggered(bool)), this, SLOT(runAssociatedApplication()), Qt::UniqueConnection);
+            connect(runAssociatedApplication, &QAction::triggered, this, &Applet::runAssociatedApplication, Qt::UniqueConnection);
         }
 
         d->updateShortcuts();
@@ -670,7 +670,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
         d->activationAction = new QAction(this);
         d->activationAction->setText(i18n("Activate %1 Widget", title()));
         d->activationAction->setObjectName(QStringLiteral("activate widget %1").arg(id())); // NO I18N
-        connect(d->activationAction, SIGNAL(triggered()), this, SIGNAL(activated()));
+        connect(d->activationAction, &QAction::triggered, this, &Applet::activated);
         connect(d->activationAction, SIGNAL(changed()),
                 this, SLOT(globalShortcutChanged()));
     } else if (d->activationAction->shortcut() == shortcut) {

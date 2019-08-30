@@ -63,8 +63,8 @@ QQmlEngine *EngineBookKeeping::engine() const
 
 void EngineBookKeeping::insertEngine(QQmlEngine *engine)
 {
-    connect(engine, SIGNAL(destroyed(QObject*)),
-            this, SLOT(engineDestroyed(QObject*)));
+    connect(engine, &QObject::destroyed,
+            this, &EngineBookKeeping::engineDestroyed);
     m_engines.insert(engine);
 }
 

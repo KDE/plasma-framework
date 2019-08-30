@@ -597,7 +597,7 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
                 if (newSource) {
                     *newSource = true;
                 }
-                QObject::connect(s, SIGNAL(becameUnused(QString)), q, SLOT(removeSource(QString)));
+                QObject::connect(s, &DataContainer::becameUnused, q, &DataEngine::removeSource);
                 emit q->sourceAdded(sourceName);
             }
         }

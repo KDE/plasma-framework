@@ -412,7 +412,7 @@ void Containment::addApplet(Applet *applet)
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
 
-        disconnect(applet, SIGNAL(activated()), currentContainment, SIGNAL(activated()));
+        disconnect(applet, &Applet::activated, currentContainment, &Applet::activated);
         //change the group to its configloader, if any
         //FIXME: this is very, very brutal
         if (applet->configScheme()) {
@@ -439,10 +439,10 @@ void Containment::addApplet(Applet *applet)
         d->loadingApplets << applet;
     }
 
-    connect(applet, SIGNAL(configNeedsSaving()), this, SIGNAL(configNeedsSaving()));
+    connect(applet, &Applet::configNeedsSaving, this, &Applet::configNeedsSaving);
     connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted(Plasma::Applet*)));
     connect(applet, SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SLOT(checkStatus(Plasma::Types::ItemStatus)));
-    connect(applet, SIGNAL(activated()), this, SIGNAL(activated()));
+    connect(applet, &Applet::activated, this, &Applet::activated);
 
     if (!currentContainment) {
         const bool isNew = applet->d->mainConfigGroup()->entryMap().isEmpty();

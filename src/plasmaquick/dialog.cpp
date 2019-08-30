@@ -741,8 +741,8 @@ Dialog::Dialog(QQuickItem *parent)
         }
     });
 
-    connect(this, SIGNAL(visibleChanged(bool)),
-            this, SIGNAL(visibleChangedProxy()));
+    connect(this, &QWindow::visibleChanged,
+            this, &Dialog::visibleChangedProxy);
     connect(this, SIGNAL(visibleChanged(bool)),
             this, SLOT(updateInputShape()));
     connect(this, SIGNAL(outputOnlyChanged()),

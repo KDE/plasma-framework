@@ -116,12 +116,12 @@ void DataSource::setEngine(const QString &e)
      * recommendations engine.
      */
     m_dataEngine = engine;
-    connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SLOT(updateSources()), Qt::QueuedConnection);
-    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(updateSources()));
+    connect(m_dataEngine, &DataEngine::sourceAdded, this, &DataSource::updateSources, Qt::QueuedConnection);
+    connect(m_dataEngine, &DataEngine::sourceRemoved, this, &DataSource::updateSources);
 
-    connect(m_dataEngine, SIGNAL(sourceAdded(QString)), this, SIGNAL(sourceAdded(QString)), Qt::QueuedConnection);
-    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SLOT(removeSource(QString)));
-    connect(m_dataEngine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
+    connect(m_dataEngine, &DataEngine::sourceAdded, this, &DataSource::sourceAdded, Qt::QueuedConnection);
+    connect(m_dataEngine, &DataEngine::sourceRemoved, this, &DataSource::removeSource);
+    connect(m_dataEngine, &DataEngine::sourceRemoved, this, &DataSource::sourceRemoved);
 
     updateSources();
 

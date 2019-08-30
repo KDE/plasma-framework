@@ -472,7 +472,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             KIO::MimetypeJob *job = KIO::mimetype(url, flags);
             m_dropPoints[job] = QPoint(x, y);
 
-            QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(dropJobResult(KJob*)));
+            QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
             QObject::connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
                              this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
 

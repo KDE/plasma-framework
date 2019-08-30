@@ -158,8 +158,8 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
             }
         }
     } else {
-        connect(visualization, SIGNAL(destroyed(QObject*)),
-                this, SLOT(disconnectVisualization(QObject*))); //, Qt::QueuedConnection);
+        connect(visualization, &QObject::destroyed,
+                this, &DataContainer::disconnectVisualization); //, Qt::QueuedConnection);
     }
 
     if (pollingInterval < 1) {
@@ -312,8 +312,8 @@ void DataContainerPrivate::populateFromStoredData(KJob *job)
 void DataContainer::disconnectVisualization(QObject *visualization)
 {
     QMap<QObject *, SignalRelay *>::iterator objIt = d->relayObjects.find(visualization);
-    disconnect(visualization, SIGNAL(destroyed(QObject*)),
-               this, SLOT(disconnectVisualization(QObject*))); //, Qt::QueuedConnection);
+    disconnect(visualization, &QObject::destroyed,
+               this, &DataContainer::disconnectVisualization); //, Qt::QueuedConnection);
 
     if (objIt == d->relayObjects.end() || !objIt.value()) {
         // it is connected directly to the DataContainer itself

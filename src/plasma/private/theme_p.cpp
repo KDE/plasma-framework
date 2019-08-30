@@ -84,18 +84,18 @@ ThemePrivate::ThemePrivate(QObject *parent)
     pixmapSaveTimer = new QTimer(this);
     pixmapSaveTimer->setSingleShot(true);
     pixmapSaveTimer->setInterval(600);
-    QObject::connect(pixmapSaveTimer, SIGNAL(timeout()), this, SLOT(scheduledCacheUpdate()));
+    QObject::connect(pixmapSaveTimer, &QTimer::timeout, this, &ThemePrivate::scheduledCacheUpdate);
 
     rectSaveTimer = new QTimer(this);
     rectSaveTimer->setSingleShot(true);
     //2 minutes
     rectSaveTimer->setInterval(2 * 60 * 1000);
-    QObject::connect(rectSaveTimer, SIGNAL(timeout()), this, SLOT(saveSvgElementsCache()));
+    QObject::connect(rectSaveTimer, &QTimer::timeout, this, &ThemePrivate::saveSvgElementsCache);
 
     updateNotificationTimer = new QTimer(this);
     updateNotificationTimer->setSingleShot(true);
     updateNotificationTimer->setInterval(100);
-    QObject::connect(updateNotificationTimer, SIGNAL(timeout()), this, SLOT(notifyOfChanged()));
+    QObject::connect(updateNotificationTimer, &QTimer::timeout, this, &ThemePrivate::notifyOfChanged);
 
     if (QPixmap::defaultDepth() > 8) {
 #if HAVE_X11
@@ -200,11 +200,11 @@ bool ThemePrivate::useCache()
 
                 // watch the metadata file for changes at runtime
                 KDirWatch::self()->addFile(themeMetadataPath);
-                QObject::connect(KDirWatch::self(), SIGNAL(created(QString)),
-                                 this, SLOT(settingsFileChanged(QString)),
+                QObject::connect(KDirWatch::self(), &KDirWatch::created,
+                                 this, &ThemePrivate::settingsFileChanged,
                                  Qt::UniqueConnection);
-                QObject::connect(KDirWatch::self(), SIGNAL(dirty(QString)),
-                                 this, SLOT(settingsFileChanged(QString)),
+                QObject::connect(KDirWatch::self(), &KDirWatch::dirty,
+                                 this, &ThemePrivate::settingsFileChanged,
                                  Qt::UniqueConnection);
 
                 if (!iconThemeMetadataPath.isEmpty()) {
