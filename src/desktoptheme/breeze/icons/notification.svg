@@ -15,26 +15,26 @@
         <circle id="circle-blue" cx="12" cy="12" r="8" class="ColorScheme-ButtonFocus" fill="currentColor"/>
     </g>
     <g id="notification-inactive" transform="translate(-1 -1)">
-        <path id="path6" d="m1 1h22v22h-22z" fill="none"/>
-        <path id="bell" d="m12 4a1 1 0 0 0 -1 1 1 1 0 0 0 .0098.128906 3.9999999 3.9999999 0 0 0 -3.0098 3.871094c0 3-1 4-3 6v1h7 7v-1c-2-2-3-3-3-6a3.9999999 3.9999999 0 0 0 -3.009766-3.871094 1 1 0 0 0 .009766-.128906 1 1 0 0 0 -1-1zm.269531 13a2 2 0 0 0 -.269531 1 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 -.271484-1z" class="ColorScheme-Text" fill="currentColor"/>
+        <path d="m1 1h22v22h-22z" fill="none"/>
+        <path d="m10.269531 17a2 2 0 0 0-0.2695312 1 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-0.271484-1zm1.7304688-13a1 1 0 0 0-1 1 1 1 0 0 0 0.0098 0.1289062 3.9999999 3.9999999 0 0 0-3.0098 3.8710938c0 3-1 4-3 6v1h14v-1c-2-2-3-3-3-6a3.9999999 3.9999999 0 0 0-3.009766-3.8710938 1 1 0 0 0 0.009766-0.1289062 1 1 0 0 0-1-1zm0 2a3 3 0 0 1 3 3c0 3 0.585938 4 2.585938 6h-11.171876c2-2 2.5859375-3 2.5859375-6a3 3 0 0 1 3-3z" class="ColorScheme-Text" fill="currentColor" fill-rule="evenodd"/>
     </g>
     <g id="notification-progress-inactive" transform="translate(39 39)">
         <path id="path10" d="m1 1h22v22h-22z" fill="none"/>
         <circle id="circle-transparent" cx="12" cy="12" r="8" class="ColorScheme-Text" fill="currentColor" opacity=".4"/>
     </g>
     <g id="notification-active" transform="translate(-1 39)">
-        <path id="path14" d="m1 1h22v22h-22z" fill="none"/>
-        <path id="path16" d="m12 4.0000003a1 1 0 0 0 -1 1 1 1 0 0 0 .0098.128906 3.9999999 3.9999999 0 0 0 -3.0098 3.871094c0 2.9999997-1 3.9999997-3 5.9999997v1h14v-1c-2-2-3-3-3-5.9999997a3.9999999 3.9999999 0 0 0 -3.009766-3.871094 1 1 0 0 0 .0098-.128906 1 1 0 0 0 -1-1zm.269531 13a2 2 0 0 0 -.269531 1 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0 -.271484-1z" class="ColorScheme-Text" fill="currentColor"/>
-        <path id="path890" d="m6.3457031 3.345703a7.9999995 7.9999995 0 0 0 -2.3457031 5.654297h1a7 7 0 0 1 2.0527344-4.947266zm11.3085939 0-.707031.707031a7 7 0 0 1 2.052734 4.947266h1a7.9999995 7.9999995 0 0 0 -2.345703-5.654297zm-1.416016 1.416016-.708984.708984a5 5 0 0 1 1.470703 3.529297h1a6 6 0 0 0 -1.761719-4.238281zm-8.472656.003906a6 6 0 0 0 -1.765625 4.234375h1a5 5 0 0 1 1.4667969-3.533203z" class="ColorScheme-Text" fill="currentColor" fill-rule="evenodd"/>
+        <path d="m1 1h22v22h-22z" fill="none"/>
+        <path d="m6.3457031 3.345703a7.9999995 7.9999995 0 0 0 -2.3457031 5.654297h1a7 7 0 0 1 2.0527344-4.947266zm11.3085939 0-.707031.707031a7 7 0 0 1 2.052734 4.947266h1a7.9999995 7.9999995 0 0 0 -2.345703-5.654297zm-1.416016 1.416016-.708984.708984a5 5 0 0 1 1.470703 3.529297h1a6 6 0 0 0 -1.761719-4.238281zm-8.472656.003906a6 6 0 0 0 -1.765625 4.234375h1a5 5 0 0 1 1.4667969-3.533203z" class="ColorScheme-Text" fill="currentColor" fill-rule="evenodd"/>
+        <path d="m10.269531 17a2 2 0 0 0-0.269531 1 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-0.271484-1zm1.730469-13a1 1 0 0 0-1 1 1 1 0 0 0 0.0098 0.128906 3.9999999 3.9999999 0 0 0-3.0098 3.871094c0 3-1 4-3 6v1h14v-1c-2-2-3-3-3-6a3.9999999 3.9999999 0 0 0-3.009766-3.871094 1 1 0 0 0 0.009766-0.128906 1 1 0 0 0-1-1zm0 2a3 3 0 0 1 3 3c0 3 0.585938 4 2.585938 6h-11.171876c2-2 2.5859375-3 2.5859375-6a3 3 0 0 1 3-3z" class="ColorScheme-Text" fill="currentColor" fill-rule="evenodd"/>
     </g>
     <path id="expander-bottom" d="m-18 23 2-2 2 2z" class="ColorScheme-Text" fill="currentColor"/>
     <path id="expander-top" d="m-18 17 2 2 2-2z" class="ColorScheme-Text" fill="currentColor"/>
     <path id="expander-right" d="m-13 18-2 2 2 2z" class="ColorScheme-Text" fill="currentColor"/>
     <path id="expander-left" d="m-19 18 2 2-2 2z" class="ColorScheme-Text" fill="currentColor"/>
     <g id="notification-disabled" transform="translate(-1 -41)">
-        <path id="path23" d="m1 1h22v22h-22z" fill="none"/>
-        <path id="bell-split" d="m12 4a1 1 0 0 0 -1 1 1 1 0 0 0 .009766.128906 3.9999999 3.9999999 0 0 0 -2.2402348 1.519532l9.3515628 9.351562h.878906v-1c-2-2-3-3-3-6a3.9999999 3.9999999 0 0 0 -3.009766-3.871094 1 1 0 0 0 .009766-.128906 1 1 0 0 0 -1-1zm-4.0527344 6.068359c-.2253625 2.204726-1.2061347 3.19051-2.9472656 4.931641v1h7 1.878906zm4.3222654 6.931641a2 2 0 0 0 -.269531 1 2 2 0 0 0 2 2 2 2 0 0 0 1.996094-1.882812l-1.117188-1.117188z" class="ColorScheme-Text" fill="currentColor"/>
-        <path id="strikethrough" d="m4 4.707031 15.292969 15.292969.707031-.707031-15.2929688-15.292969z" class="ColorScheme-NegativeText" fill="currentColor"/>
+        <path d="m1 1h22v22h-22z" fill="none"/>
+        <path id="strikethrough" d="m4 4.707031 15.292969 15.292969.707031-.707031-15.2929688-15.292969z" fill="#da4453"/>
+        <path d="m12 4a1 1 0 0 0-1 1 1 1 0 0 0 0.009766 0.128906 3.9999999 3.9999999 0 0 0-2.2402348 1.519532l0.7167969 0.716796a3 3 0 0 1 2.5136719-1.365234 3 3 0 0 1 3 3c0 3 0.585938 4 2.585938 6h-0.464844l1 1h0.878906v-1c-2-2-3-3-3-6a3.9999999 3.9999999 0 0 0-3.009766-3.871094 1 1 0 0 0 0.009766-0.128906 1 1 0 0 0-1-1zm-4.0527344 6.068359c-0.2253625 2.204726-1.2061347 3.19051-2.9472656 4.931641v1h8.878906l-1-1h-6.4648435c1.4796441-1.479644 2.1821771-2.415859 2.4492187-4.015625zm2.3222656 6.931641a2 2 0 0 0-0.2695312 1 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-0.271484-1z" class="ColorScheme-Text" fill="currentColor" fill-rule="evenodd"/>
     </g>
     <g id="notification-empty" transform="translate(39 -41)">
         <path id="path28" d="m1 1h22v22h-22z" fill="none"/>
