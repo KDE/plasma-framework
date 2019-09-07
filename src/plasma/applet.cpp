@@ -141,6 +141,10 @@ Applet::~Applet()
     //let people know that i will die
     emit appletDeleted(this);
 
+    // ConfigLoader is deleted when AppletPrivate closes not Applet
+    // It saves on closure and emits a signal.
+    // disconnect early to avoid a crash. See  411221
+    disconnect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
     delete d;
 }
 
