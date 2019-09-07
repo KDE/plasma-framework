@@ -1,0 +1,814 @@
+# translation of libplasma.po to Slovak
+# Roman Paholik <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016.
+# Mthw <jari_45@hotmail.com>, 2019.
+# Matej Mrenica <matejm98mthw@gmail.com>, 2019.
+msgid ""
+msgstr ""
+"Project-Id-Version: libplasma\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-08-20 02:48+0200\n"
+"PO-Revision-Date: 2019-07-05 10:41+0200\n"
+"Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
+"Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 19.04.2\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Prázdniny"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Udalosti"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Úloha"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Iné"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Dnes"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Vynulovať kalendár na dnes"
+
+#: declarativeimports/calendar/qml/MonthView.qml:247
+#, kde-format
+msgid "Previous Month"
+msgstr "Predchádzajúci mesiac"
+
+#: declarativeimports/calendar/qml/MonthView.qml:248
+#, kde-format
+msgid "Next Month"
+msgstr "Nasledujúci mesiac"
+
+#: declarativeimports/calendar/qml/MonthView.qml:275
+#, kde-format
+msgid "Previous Year"
+msgstr "Predchádzajúci rok"
+
+#: declarativeimports/calendar/qml/MonthView.qml:276
+#, kde-format
+msgid "Next Year"
+msgstr "Nasledujúci rok"
+
+#: declarativeimports/calendar/qml/MonthView.qml:308
+#, kde-format
+msgid "Previous Decade"
+msgstr "Predošlá dekáda"
+
+#: declarativeimports/calendar/qml/MonthView.qml:309
+#, kde-format
+msgid "Next Decade"
+msgstr "Ďalšia dekáda"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr "Zrušiť"
+
+#: plasma/applet.cpp:355
+#, kde-format
+msgid "Unknown"
+msgstr "Neznáme"
+
+#: plasma/applet.cpp:671
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktivovať widget %1"
+
+#: plasma/containment.cpp:120 plasma/private/applet_p.cpp:124
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Odstrániť %1"
+
+#: plasma/containment.cpp:125 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Nastaviť %1..."
+
+#: plasma/corona.cpp:368 plasma/corona.cpp:440
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Zamknúť widgety"
+
+#: plasma/corona.cpp:368
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Odomknúť widgety"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Či vytvoriť cache na disku pre tému."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Maximálna veľkosť cache na disku pre tému v kilobajtoch. Tieto súbory sú "
+"dosť riedke, teda maximálna veľkosť sa nemusí použiť. Nastavenie väčšej "
+"veľkosti je však bezpečné."
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "Dátové súbory"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Spustiteľné skripty"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Popisy služby"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "Preklady"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "Hlavný súbor skriptu"
+
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr "Testy"
+
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "Obrázky"
+
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "Témované obrázky"
+
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Definície konfigurácie"
+
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "Užívateľské rozhranie"
+
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr "Snímka obrazovky"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Obrázky pre dialógy"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Všeobecné pozadie dialógu"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Téma pre dialóg odhlásenia"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Balíky tapiet"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "Obrázky pre widgety"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Obrázok pozadia pre widgety"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "Vzhľad analógových hodín"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "Obrázok pozadia pre panely"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Pozadie pre widgety s grafom"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Obrázok pozadia pre rady"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Nepriehľadné obrázky pre dialógy"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Všeobecné nepriehľadné pozadie dialógu"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Nepriehľadná téma pre dialóg odhlásenia"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Nepriehľadné obrázky pre widgety"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Nepriehľadný obrázok pozadia pre panely"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Nepriehľadný obrázok pozadia pre rady"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Konfiguračný súbor KColorScheme"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Nastavene modelu UI stránok"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Konfiguračný XML súbor"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Vlastný expander pre kompaktné applety"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Accessibility"
+msgstr "Prístupnosť"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Application Launchers"
+msgstr "Spúšťače aplikácií"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Astronomy"
+msgstr "Astronómia"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Date and Time"
+msgstr "Dátum a čas"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Development Tools"
+msgstr "Vývojové nástroje"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "Education"
+msgstr "Vzdelávanie"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Environment and Weather"
+msgstr "Prostredie a počasie"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Examples"
+msgstr "Príklady"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "File System"
+msgstr "Súborový systém"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Fun and Games"
+msgstr "Zábava a hry"
+
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Graphics"
+msgstr "Grafika"
+
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Language"
+msgstr "Jazyk"
+
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Mapping"
+msgstr "Kartografia"
+
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Rôzne"
+
+#: plasma/pluginloader.cpp:118
+#, kde-format
+msgid "Multimedia"
+msgstr "Multimédiá"
+
+#: plasma/pluginloader.cpp:119
+#, kde-format
+msgid "Online Services"
+msgstr "Online služby"
+
+#: plasma/pluginloader.cpp:120
+#, kde-format
+msgid "Productivity"
+msgstr "Produktivita"
+
+#: plasma/pluginloader.cpp:121
+#, kde-format
+msgid "System Information"
+msgstr "Informácie o systéme"
+
+#: plasma/pluginloader.cpp:122
+#, kde-format
+msgid "Utilities"
+msgstr "Nástroje"
+
+#: plasma/pluginloader.cpp:123
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "Okná a úlohy"
+
+#: plasma/pluginloader.cpp:124
+#, kde-format
+msgid "Clipboard"
+msgstr "Schránka"
+
+#: plasma/pluginloader.cpp:125
+#, kde-format
+msgid "Tasks"
+msgstr "Úlohy"
+
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Rôzne"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Widget %1 nedefinuje, ktorý ScriptEngine sa má použiť."
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Nepodarilo sa otvoriť balík %1 potrebný pre widget %2."
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Nepodarilo sa vytvoriť skriptovacie rozhranie %1 pre widget %2."
+
+#: plasma/private/applet_p.cpp:187
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Zobraziť Alternatívy..."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Widget Removed"
+msgstr "Widget odstránený"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Widget \"%1\" bol odstránený."
+
+#: plasma/private/applet_p.cpp:280
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panel odstránený"
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Panel bol odstránený."
+
+#: plasma/private/applet_p.cpp:284
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Plocha odstránená"
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Plocha bola odstránená."
+
+#: plasma/private/applet_p.cpp:288
+#, kde-format
+msgid "Undo"
+msgstr "Späť"
+
+#: plasma/private/applet_p.cpp:378
+#, kde-format
+msgid "Widget Settings"
+msgstr "Nastavenie widgetu"
+
+#: plasma/private/applet_p.cpp:385
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Odstrániť tento widget"
+
+#: plasma/private/applet_p.cpp:392
+#: plasma/private/associatedapplicationmanager.cpp:77
+#: plasma/private/associatedapplicationmanager.cpp:136
+#: plasma/private/associatedapplicationmanager.cpp:178
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Spustiť asociovanú aplikáciu"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Inicializácia skriptu zlyhala"
+
+#: plasma/private/associatedapplicationmanager.cpp:74
+#: plasma/private/associatedapplicationmanager.cpp:175
+#, kde-format
+msgid "Open with %1"
+msgstr "Otvoriť pomocou %1"
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Odstrániť tento panel"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Odstrániť túto aktivitu"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "Nastavenie aktivity"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Pridať widgety..."
+
+#: plasma/private/containment_p.cpp:206
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Nepodarilo sa nájsť požadovaný komponent: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Zdieľanie widgetu v sieti umožňuje vzdialený prístup a ovládanie tohto "
+"widgetu z iného počítača."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Zdieľať tento widget v sieti"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Povoliť všetkým voľný prístup k tomuto widgetu"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Neplatná (prázdna) služba, nie je možné vykonať žiadnu operáciu."
+
+#: plasmaquick/appletquickitem.cpp:611
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Chyba čítania súboru QML: %1"
+
+#: plasmaquick/appletquickitem.cpp:613
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Chyba načítania appletu: balík neexistuje. %1"
+
+#: plasmaquick/configview.cpp:108
+#, kde-format
+msgid "%1 Settings"
+msgstr "Nastavenia %1"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "Predvolené nastavenia pre tému atď."
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "Farebná schéma na použitie pre aplikácie."
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Preview Images"
+msgstr "Náhľad obrázkov"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "Náhľad pre správcu prihlásenia"
+
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "Náhľad pre zamknutie obrazovky"
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "Náhľad pre prepínač používateľov"
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Náhľad pre prepínač virtuálnych plôch"
+
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "Náhľad pre úvodnú obrazovku"
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "Náhľad pre KRunner"
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "Náhľad pre dekorácie okien"
+
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "Náhľad pre prepínač okien"
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr "Správca prihlásenia"
+
+#: plasmaquick/private/packages.cpp:53
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "Hlavný skript pre správcu prihlásenia"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr "Dialóg odhlásenia"
+
+#: plasmaquick/private/packages.cpp:56
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "Hlavný skript pre dialóg odhlásenia"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr "Zamykač obrazovky"
+
+#: plasmaquick/private/packages.cpp:59
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "Hlavný skript pre zamknutie obrazovky"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "UI pre rýchle prepínanie používateľov"
+
+#: plasmaquick/private/packages.cpp:62
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "Hlavný skript pre prepínač používateľov"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "Prepínač virtuálnych plôch"
+
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Hlavný skript pre prepínač virtuálnych plôch"
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "Upozornenia na obrazovke"
+
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Hlavný skript pre upozornenia na obrazovke"
+
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr "Úvodná obrazovka"
+
+#: plasmaquick/private/packages.cpp:71
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "Hlavný skript pre úvodnú obrazovku"
+
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr "KRunner UI"
+
+#: plasmaquick/private/packages.cpp:74
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "Hlavný skript KRunner"
+
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr "Dekorácie okien"
+
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "Hlavný skript pre dekorácie okien"
+
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr "Prepínač okien"
+
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "Hlavný skript pre prepínač používateľov"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:482
+#, kde-format
+msgid "Content dropped"
+msgstr "Obsah zahodený"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:486
+#, kde-format
+msgid "Fetching file type..."
+msgstr "Sťahuje sa typ súboru..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:640
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma balík"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:641
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgid "Install"
+msgstr "Inštalovať"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Inštalácia balíčka zlyhala"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:681
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Balík, ktorý ste pustili, je neplatný."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:691
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:773
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:776
+#, kde-format
+msgid "Widgets"
+msgstr "Widgety"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:698
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Pridať %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:774
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:780
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Pridať ikonu"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:731
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:733
+#, kde-format
+msgid "Wallpaper"
+msgstr "Tapeta"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:744
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Nastaviť %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:1134
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "%1 Options"
+msgstr "Voľby %1"
