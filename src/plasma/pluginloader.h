@@ -147,7 +147,7 @@ public:
      * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
      *
      * @return a Package object matching name, or an invalid package on failure
-     * @deprecated since 5.29 use KPackage::PackageLoader::loadPackage
+     * @deprecated Since 5.29, use KPackage::PackageLoader::loadPackage(const QString& packageFormat, const QString& packagePath) instead.
      **/
 #ifndef PLASMA_NO_DEPRECATED
     PLASMA_DEPRECATED Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
@@ -169,7 +169,8 @@ public:
      *                  list of all applets in specified category.
      * @return list of applets
      *
-     * @deprecated use listAppletMetaData. Doesn't support metadata.json packages.
+     * @deprecated  Doesn't support metadata.json packages.
+     * Since 5.28, use listAppletMetaData(const QString &category, const QString &parentApp) instead.
      **/
     PLASMA_DEPRECATED KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
 
@@ -198,7 +199,7 @@ public:
      *
      * @return list of applets
      *
-     * @deprecated use listAppletMetaDataForMimeType instead
+     * @deprecated Since 5.36, use listAppletMetaDataForMimeType(const QString &mimetype) instead.
      **/
     PLASMA_DEPRECATED KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
 
@@ -214,7 +215,7 @@ public:
      *
      * @return list of applets
      *
-     * @deprecated use listAppletMetaDataForUrl instead
+     * @deprecated Since 5.36, use listAppletMetaDataForUrl(const QUrl &url) instead.
      **/
     PLASMA_DEPRECATED KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
 
