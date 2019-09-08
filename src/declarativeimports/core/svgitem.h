@@ -45,12 +45,12 @@ class SvgItem : public QQuickItem
 
     /**
      * Svg class that is the source of the image, use it like that:
-     * <code>
+     * @code
      * SvgItem {
      *     svg: Svg {imagePath: "widgets/arrows"}
      *     elementId: "arrow-left"
      * }
-     * </code>
+     * @endcode
      * Instead of a Svg declaration it can also be the id of a Svg declared elsewhere, useful to share Svg instances.
      */
     Q_PROPERTY(Plasma::Svg *svg READ svg WRITE setSvg NOTIFY svgChanged)

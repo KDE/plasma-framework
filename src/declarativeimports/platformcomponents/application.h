@@ -29,12 +29,12 @@
  * Class which handles an application execution.
  *
  * Example:
- * <code>
+ * @code
  * Application {
  *     application: "xterm"
  *     running: terminalRunningCheckbox.checked
  * }
- * </code>
+ * @endcode
  */
 class Application: public QObject
 {

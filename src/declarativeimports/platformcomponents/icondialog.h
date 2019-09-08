@@ -31,7 +31,7 @@
  * @deprecated Use IconDialog from org.kde.kquickcontrolsaddons
  *
  * Example:
- * <code>
+ * @code
  * IconDialog {
  *   id: iconDialog
  * }
@@ -39,7 +39,7 @@
  * ...
  *
  * icon = iconDialog.openDialog()
- * </code>
+ * @endcode
  */
 class IconDialog: public QObject
 {
