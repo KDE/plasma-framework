@@ -24,7 +24,7 @@ import QtQuick 2.1
 import QtQml 2.0
 
 /**
- * A ModelMenu creates a context menu with items populated from a model or a QList<QAction*>
+ * A ModelContextMenu creates a context menu with items populated from a model or a QList<QAction*>.
  * For standard item models, actions are created using the following model role names or properties:
  * @li @c display - a string contains the action name
  * @li @c decoration - an icon to display
@@ -35,7 +35,7 @@ import QtQml 2.0
  * Example code:
  *
  * @code
- * ModelMenu {
+ * ModelContextMenu {
  *     id: menu
  *     visualParent: someButton
  *     model: myModel
