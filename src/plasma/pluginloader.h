@@ -207,6 +207,7 @@ public:
      * Returns a list of all known applets associated with a certain mimetype.
      *
      * @return list of applets
+     * @since 5.36
      **/
     QList<KPluginMetaData> listAppletMetaDataForMimeType(const QString &mimetype);
 
@@ -223,6 +224,7 @@ public:
      * Returns a list of all known applets associated with a certain URL.
      *
      * @return list of applets
+     * @since 5.36
      **/
     QList<KPluginMetaData> listAppletMetaDataForUrl(const QUrl &url);
 
