@@ -48,6 +48,7 @@ QtControls.TextField {
     // this takes into account kiosk restriction
     readonly property bool __effectiveRevealPasswordButtonShown: revealPasswordButtonShown
                                                               && KAuthorized.authorize("lineedit_reveal_password")
+                                                              && (echoMode == TextInput.Normal || textField.length > 0)
 
     //Deprecated/unsupported api
     /**
@@ -92,7 +93,7 @@ QtControls.TextField {
 
         PlasmaCore.IconItem {
             id: showPasswordButton
-            source: __effectiveRevealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "hint" : "visibility") : ""
+            source: __effectiveRevealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "visibility": "hint") : ""
             height: Math.max(textField.height * 0.8, units.iconSizes.small)
             width: height
             opacity: (__effectiveRevealPasswordButtonShown && textField.enabled) ? 1 : 0
@@ -105,6 +106,7 @@ QtControls.TextField {
             }
             MouseArea {
                 anchors.fill: parent
+                enabled: __effectiveRevealPasswordButtonShown
                 onClicked: {
                     textField.echoMode = (textField.echoMode == TextInput.Normal ? TextInput.Password : TextInput.Normal)
                     textField.forceActiveFocus()
