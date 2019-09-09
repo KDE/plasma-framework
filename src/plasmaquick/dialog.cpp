@@ -1238,7 +1238,7 @@ bool Dialog::event(QEvent *event)
             if (!d->mainItemContainsPosition(we->pos())) {
                 QWheelEvent we2(d->positionAdjustedForMainItem(we->pos()),
                                 d->positionAdjustedForMainItem(we->pos()) + position(),
-                                we->pixelDelta(), we->angleDelta(), we->delta(),
+                                we->pixelDelta(), we->angleDelta(), we->angleDelta().y(),
                                 we->orientation(), we->buttons(), we->modifiers(), we->phase());
 
                 if (isVisible()) {

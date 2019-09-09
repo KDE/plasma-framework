@@ -1082,7 +1082,7 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
         return;
     }
 
-    m_wheelDelta += event->delta();
+    m_wheelDelta += event->angleDelta().y();
 
     // Angle delta 120 for common "one click"
     // See: https://doc.qt.io/qt-5/qml-qtquick-wheelevent.html#angleDelta-prop
