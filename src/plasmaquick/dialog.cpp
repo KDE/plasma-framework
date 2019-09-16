@@ -139,6 +139,7 @@ public:
 
     void setupWaylandIntegration();
 
+    void applyType();
 
     Dialog *q;
     Plasma::Types::Location location;
@@ -721,6 +722,36 @@ void DialogPrivate::setupWaylandIntegration()
 #endif
 }
 
+void DialogPrivate::applyType()
+{
+    if (type != Dialog::Normal) {
+        KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
+    } else {
+        q->setFlags(Qt::FramelessWindowHint | q->flags());
+    }
+    //an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
+    //see bug 370433
+    if (type == Dialog::OnScreenDisplay) {
+        q->setFlags((q->flags() & ~Qt::Dialog) | Qt::Window);
+    }
+
+    if (backgroundHints == Dialog::NoBackground) {
+        frameSvgItem->setImagePath(QString());
+    } else {
+        if (type == Dialog::Tooltip) {
+            frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
+        } else {
+            frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
+        }
+    }
+
+    if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
+        KWindowSystem::setOnAllDesktops(q->winId(), true);
+    } else {
+        KWindowSystem::setOnAllDesktops(q->winId(), false);
+    }
+}
+
 
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : nullptr),
@@ -1021,6 +1052,7 @@ QObject *Dialog::margins() const
 void Dialog::setFramelessFlags(Qt::WindowFlags flags)
 {
     setFlags(Qt::FramelessWindowHint | flags);
+    d->applyType();
     emit flagsChanged();
 }
 
@@ -1070,33 +1102,7 @@ void Dialog::setType(WindowType type)
     }
 
     d->type = type;
-    if (d->type != Normal) {
-        KWindowSystem::setType(winId(), (NET::WindowType)type);
-    } else {
-        setFlags(Qt::FramelessWindowHint | flags());
-    }
-    //an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
-    //see bug 370433
-    if (type == OnScreenDisplay) {
-        setFlags((flags() & ~Qt::Dialog) | Qt::Window);
-    }
-
-    if (d->backgroundHints == Dialog::NoBackground) {
-        d->frameSvgItem->setImagePath(QString());
-    } else {
-        if (d->type == Tooltip) {
-            d->frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
-        } else {
-            d->frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
-        }
-    }
-
-    if (type == Dock || type == Notification || type == OnScreenDisplay || type == CriticalNotification) {
-        KWindowSystem::setOnAllDesktops(winId(), true);
-    } else {
-        KWindowSystem::setOnAllDesktops(winId(), false);
-    }
-
+    d->applyType();
     emit typeChanged();
 }
 
