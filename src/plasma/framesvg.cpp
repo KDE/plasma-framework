@@ -625,7 +625,7 @@ void FrameSvgPrivate::updateFrameData(UpdateType updateType)
         if (newFd) {
             //qCDebug(LOG_PLASMA) << "FOUND IT!" << newFd->refcount;
             // we've found a match, use that one
-            Q_ASSERT(newKey == newFd.data()->cacheId);
+            Q_ASSERT(newKey == newFd.lock()->cacheId);
             frame = newFd;
             return;
         }

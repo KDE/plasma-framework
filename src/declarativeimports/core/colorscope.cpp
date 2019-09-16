@@ -43,7 +43,7 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
         m_theme = s_theme.toStrongRef();
     }
 
-    connect(s_theme.data(), &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
+    connect(m_theme.data(), &Plasma::Theme::themeChanged, this, &ColorScope::colorsChanged);
 
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 

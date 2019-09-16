@@ -131,7 +131,13 @@ QString ContainmentActions::eventToString(QEvent *event)
         int o = QObject::staticQtMetaObject.indexOfEnumerator("Orientations");
         QMetaEnum orient = QObject::staticQtMetaObject.enumerator(o);
         trigger = QStringLiteral("wheel:");
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
         trigger += QString::fromLatin1(orient.valueToKey(e->orientation()));
+#else
+        // ContainmentInterface::wheelEvent uses angleDelta.y()
+        // To support both, should we just remove this orientation string?
+        trigger += QStringLiteral("Vertical");
+#endif
         modifiers = e->modifiers();
         break;
     }
