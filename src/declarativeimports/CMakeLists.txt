@@ -33,44 +33,8 @@ ENDFOREACH(infileName)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2/Plasma)
 
 #install some of the componets as a separate import, to be used in plasmoids (some of them like ApplicationWindow are of no use for plasmoids)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/BusyIndicator.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Button.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/CheckBox.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/CheckDelegate.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/CheckIndicator.qml
-    #combobox is not in a new window, but maybe better already than the broken qqc1 combobox?
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ComboBox.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Container.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Control.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Dial.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Frame.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/GroupBox.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ItemDelegate.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Label.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ProgressBar.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RadioButton.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RadioDelegate.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RadioIndicator.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/RangeSlider.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ScrollBar.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ScrollView.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Slider.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/SpinBox.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/Switch.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/SwitchDelegate.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/SwitchIndicator.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TabBar.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TabButton.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TextArea.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/TextField.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolTip.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolBar.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ToolButton.qml
-    ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/qmldir
-
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
 
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/private DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/mobiletextselection DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
 
 
