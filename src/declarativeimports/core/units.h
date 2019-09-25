@@ -26,6 +26,8 @@
 
 #include <Plasma/Theme>
 
+#include <KConfigWatcher>
+
 class QQuickItem;
 
 class SharedAppFilter : public QObject
@@ -205,7 +207,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void iconLoaderSettingsChanged();
-    void settingsFileChanged(const QString &file);
     void updateSpacing();
 
 private:
@@ -216,7 +217,7 @@ private:
     Units& operator=(Units &&) = delete; // Move assign
 
     void updateDevicePixelRatio();
-    void updatePlasmaRCSettings();
+    void updateAnimationSpeed();
     /**
      * @return The dpi-adjusted size for a given icon size
      */
@@ -232,6 +233,7 @@ private:
     int m_smallSpacing;
     int m_largeSpacing;
 
+    KConfigWatcher::Ptr m_animationSpeedWatcher;
     int m_longDuration;
 };
 

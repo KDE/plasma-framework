@@ -30,11 +30,9 @@
 #include <QFontMetrics>
 #include <cmath>
 
-#include <KDirWatch>
+#include <KConfigWatcher>
 #include <KIconLoader>
 
-QString plasmarc() { return QStringLiteral("plasmarc"); }
-QString groupName() { return QStringLiteral("Units"); }
 const int defaultLongDuration = 120;
 
 
@@ -79,15 +77,14 @@ Units::Units(QObject *parent)
     connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &Units::iconLoaderSettingsChanged);
     QObject::connect(s_sharedAppFilter, &SharedAppFilter::fontChanged, this, &Units::updateSpacing);
 
-    const QString configFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QLatin1Char('/') + plasmarc();
-    KDirWatch::self()->addFile(configFile);
-
-    // Catch both, direct changes to the config file ...
-    connect(KDirWatch::self(), &KDirWatch::dirty, this, &Units::settingsFileChanged);
-    // ... but also remove/recreate cycles, like KConfig does it
-    connect(KDirWatch::self(), &KDirWatch::created, this, &Units::settingsFileChanged);
-    // read configuration
-    updatePlasmaRCSettings();
+    m_animationSpeedWatcher = KConfigWatcher::create(KSharedConfig::openConfig());
+    connect(m_animationSpeedWatcher.data(), &KConfigWatcher::configChanged, this,
+        [this](const KConfigGroup &group, const QByteArrayList &names) {
+            if (group.name() == QLatin1String("KDE") && names.contains(QByteArrayLiteral("AnimationDurationFactor"))) {
+                updateAnimationSpeed();
+            }
+    });
+    updateAnimationSpeed();
 }
 
 Units::~Units()
@@ -101,21 +98,20 @@ Units &Units::instance()
     return units;
 }
 
-void Units::settingsFileChanged(const QString &file)
+void Units::updateAnimationSpeed()
 {
-    if (file.endsWith(plasmarc())) {
-        KSharedConfigPtr cfg = KSharedConfig::openConfig(plasmarc());
-        cfg->reparseConfiguration();
-        updatePlasmaRCSettings();
-    }
-}
+    KConfigGroup generalCfg = KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("KDE"));
+    const qreal animationSpeedModifier = qMax(0.0, generalCfg.readEntry("AnimationDurationFactor", 1.0));
 
-void Units::updatePlasmaRCSettings()
-{
-    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(plasmarc()), groupName());
+    // Read the old longDuration value for compatibility
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(QStringLiteral("plasmarc")), QStringLiteral("Units"));
+    int longDuration = cfg.readEntry("longDuration", defaultLongDuration);
+
+    longDuration = qRound(longDuration * animationSpeedModifier);
+
     // Animators with a duration of 0 do not fire reliably
     // see Bug 357532 and QTBUG-39766
-    const int longDuration = qMax(1, cfg.readEntry("longDuration", defaultLongDuration));
+    longDuration = qMax(1, longDuration);
 
     if (longDuration != m_longDuration) {
         m_longDuration = longDuration;
