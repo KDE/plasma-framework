@@ -380,6 +380,26 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
         cg.writeEntry("immutability", (int)d->immutability);
         requestConfigSync();
     }
+
+    if (d->immutability != Types::Mutable) {
+        d->editMode = false;
+        emit editModeChanged();
+    }
+}
+
+void Corona::setEditMode(bool edit)
+{
+    if (d->immutability != Plasma::Types::Mutable || edit == d->editMode) {
+        return;
+    }
+
+    d->editMode = edit;
+    emit editModeChanged();
+}
+
+bool Corona::isEditMode() const
+{
+    return d->editMode;
 }
 
 QList<Plasma::Types::Location> Corona::freeEdges(int screen) const

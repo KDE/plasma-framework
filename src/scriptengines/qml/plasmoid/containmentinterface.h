@@ -79,10 +79,11 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
     /**
-     * True when the containment is in an edit mode that allows to move
+     * True when the Plasma Shell is in an edit mode that allows to move
      * things around: it's different from userConfiguring as it's about
      * editing plasmoids inside the containment, rather than the containment
-     * settings dialog itself
+     * settings dialog itself.
+     * This is global for the whole Plasma process, all containments will have the same value for editMode
      */
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
 
@@ -149,6 +150,11 @@ public:
      * @return the toLeft point of the rectangle
      */
     Q_INVOKABLE QPointF adjustToAvailableScreenRegion(int x, int y, int w, int h) const;
+
+    /**
+     * @returns a named action from global Corona's actions
+     */
+    Q_INVOKABLE QAction *globalAction(QString name) const;
 
     bool isEditMode() const;
     void setEditMode(bool edit);
@@ -220,7 +226,6 @@ private:
     QPointer<Plasma::Containment> m_containment;
     QPointer<QMenu> m_contextMenu;
     int m_wheelDelta;
-    bool m_editMode : 1;
     friend class AppletInterface;
 };
 

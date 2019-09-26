@@ -60,8 +60,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
     : AppletInterface(parent, args),
       m_wallpaperInterface(nullptr),
       m_activityInfo(nullptr),
-      m_wheelDelta(0),
-      m_editMode(false)
+      m_wheelDelta(0)
 {
     m_containment = static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
 
@@ -71,6 +70,9 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
             this, &ContainmentInterface::appletRemovedForward);
     connect(m_containment.data(), &Plasma::Containment::appletAdded,
             this, &ContainmentInterface::appletAddedForward);
+
+    connect(m_containment->corona(), &Plasma::Corona::editModeChanged,
+            this, &ContainmentInterface::editModeChanged);
 
     if (!m_appletInterfaces.isEmpty()) {
         emit appletsChanged();
@@ -402,23 +404,19 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     return rect.topLeft();
 }
 
+QAction *ContainmentInterface::globalAction(QString name) const
+{
+    return m_containment->corona()->actions()->action(name);
+}
+
 bool ContainmentInterface::isEditMode() const
 {
-    return m_editMode;
+    return m_containment->corona()->isEditMode();
 }
 
 void ContainmentInterface::setEditMode(bool edit)
 {
-    if (edit == m_editMode) {
-        return;
-    }
-
-    if (m_containment->immutability() != Plasma::Types::Mutable) {
-        return;
-    }
-
-    m_editMode = edit;
-    emit editModeChanged();
+    m_containment->corona()->setEditMode(edit);
 }
 
 void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y, KIO::DropJob *dropJob)

@@ -60,6 +60,7 @@ public:
     QList<Containment *> containments;
     KActionCollection actions;
     int containmentsStarting;
+    bool editMode = false;
 };
 
 }

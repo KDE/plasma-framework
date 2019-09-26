@@ -257,6 +257,21 @@ public:
      */
     Types::ImmutabilityType immutability() const;
 
+    /**
+     * Set the Corona globally into "edit mode" 
+     * Only when the corona is of mutable type can be set of edit mode.
+     * This indicates the UI to make easy for the user to manipulate applets.
+     * @param edit
+     * @since 5.63
+     */
+    void setEditMode(bool edit);
+
+    /**
+     * @returns true if the corona is in edit mode
+     * @since 5.63
+     */
+    bool isEditMode() const;
+
 public Q_SLOTS:
     /**
      * Load applet layout from a config file. The results will be added to the
@@ -357,6 +372,13 @@ Q_SIGNALS:
      * @since 5.40
      */
     void screenAdded(int id);
+
+    /**
+     * emitted when the editMode state changes
+     * @see isEditMode()
+     * @since 5.63
+     */
+    void editModeChanged();
 
 #ifndef PLASMA_NO_DEPRECATED
     /**
