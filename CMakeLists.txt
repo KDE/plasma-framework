@@ -12,13 +12,14 @@ feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKA
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
-include(GenerateExportHeader)
-include(ECMGenerateHeaders)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+
+include(GenerateExportHeader)
+include(ECMGenerateHeaders)
 include(CMakePackageConfigHelpers)
 include(ECMSetupVersion)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDEPackageAppTemplates)
