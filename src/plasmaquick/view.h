@@ -36,13 +36,15 @@
 // We mean it.
 //
 
+#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 12)
+
 namespace PlasmaQuick
 {
 
 class ViewPrivate;
 
 /**
- * Deprecated, use ContainmentView instead.
+ * @deprecated Since 5.12, use ContainmentView instead.
  */
 class PLASMAQUICK_EXPORT View : public QQuickView
 {
@@ -56,77 +58,78 @@ public:
      * @param corona the corona of this view
      * @param parent the QWindow this View is parented to
      **/
-    PLASMA_DEPRECATED explicit View(Plasma::Corona *corona, QWindow *parent = nullptr);
-    PLASMA_DEPRECATED virtual ~View();
+    PLASMAQUICK_DEPRECATED_VERSION(5, 12, "Use ContainmentView")
+    explicit View(Plasma::Corona *corona, QWindow *parent = nullptr);
+    virtual ~View();
 
     /**
      * @return the corona of this view
      **/
-    PLASMA_DEPRECATED Plasma::Corona *corona() const;
+    Plasma::Corona *corona() const;
 
     /**
      * @return the KConfigGroup of this view
      **/
-    PLASMA_DEPRECATED virtual KConfigGroup config() const;
+    virtual KConfigGroup config() const;
 
     /**
      * sets the containment for this view
      * @param cont the containment of this view
      **/
-    PLASMA_DEPRECATED void setContainment(Plasma::Containment *cont);
+    void setContainment(Plasma::Containment *cont);
 
     /**
      * @return the containment of this View
      **/
-    PLASMA_DEPRECATED Plasma::Containment *containment() const;
+    Plasma::Containment *containment() const;
 
     /**
      * @return the location of this View
      **/
-    PLASMA_DEPRECATED Plasma::Types::Location location() const;
+    Plasma::Types::Location location() const;
 
     /**
      * Sets the location of the View
      * @param location the location of the View
      **/
-    PLASMA_DEPRECATED void setLocation(Plasma::Types::Location location);
+    void setLocation(Plasma::Types::Location location);
 
     /**
      * @return the formfactor of the View
      **/
-    PLASMA_DEPRECATED Plasma::Types::FormFactor formFactor() const;
+    Plasma::Types::FormFactor formFactor() const;
 
     /**
      * @return the screenGeometry of the View
      **/
-    PLASMA_DEPRECATED QRectF screenGeometry();
+    QRectF screenGeometry();
 
 protected Q_SLOTS:
     /**
      * It will be called when the configuration is requested
      */
-    PLASMA_DEPRECATED virtual void showConfigurationInterface(Plasma::Applet *applet);
+    virtual void showConfigurationInterface(Plasma::Applet *applet);
 
 Q_SIGNALS:
     /**
      * emitted when the location is changed
      **/
-    PLASMA_DEPRECATED void locationChanged(Plasma::Types::Location location);
+    void locationChanged(Plasma::Types::Location location);
 
     /**
      * emitted when the formfactor is changed
      **/
-    PLASMA_DEPRECATED void formFactorChanged(Plasma::Types::FormFactor formFactor);
+    void formFactorChanged(Plasma::Types::FormFactor formFactor);
 
     /**
      * emitted when the containment is changed
      **/
-    PLASMA_DEPRECATED void containmentChanged();
+    void containmentChanged();
 
     /**
      * emitted when the screenGeometry is changed
      **/
-    PLASMA_DEPRECATED void screenGeometryChanged();
+    void screenGeometryChanged();
 
 private:
     ViewPrivate *const d;
@@ -135,5 +138,7 @@ private:
 };
 
 }
+
+#endif // PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 12)
 
 #endif // View_H

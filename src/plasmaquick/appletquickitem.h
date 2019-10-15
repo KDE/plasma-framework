@@ -101,11 +101,17 @@ public:
     //Make the constructor lighter and delay the actual instantiation of the qml in the applet
     virtual void init();
 
-    PLASMA_DEPRECATED Plasma::Package appletPackage() const;
-    PLASMA_DEPRECATED void setAppletPackage(const Plasma::Package &package);
+#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 36)
+    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
+    Plasma::Package appletPackage() const;
+    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
+    void setAppletPackage(const Plasma::Package &package);
 
-    PLASMA_DEPRECATED Plasma::Package coronaPackage() const;
-    PLASMA_DEPRECATED void setCoronaPackage(const Plasma::Package &package);
+    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
+    Plasma::Package coronaPackage() const;
+    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
+    void setCoronaPackage(const Plasma::Package &package);
+#endif
 
     QQuickItem *compactRepresentationItem();
     QQuickItem *fullRepresentationItem();

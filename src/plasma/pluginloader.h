@@ -140,6 +140,7 @@ public:
     ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName,
             const QVariantList &args = QVariantList());
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 30)
     /**
      * Load a Package plugin.
      *
@@ -147,12 +148,13 @@ public:
      * @param specialization used to find script extensions for the given format, e.g. "QML" for "Plasma/Applet"
      *
      * @return a Package object matching name, or an invalid package on failure
-     * @deprecated Since 5.29, use KPackage::PackageLoader::loadPackage(const QString& packageFormat, const QString& packagePath) instead.
+     * @deprecated Since 5.30, use KPackage::PackageLoader::loadPackage(const QString& packageFormat, const QString& packagePath) instead.
      **/
-#ifndef PLASMA_NO_DEPRECATED
-    PLASMA_DEPRECATED Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
+    PLASMA_DEPRECATED_VERSION(5, 30, "Use KPackage::PackageLoader::loadPackage(const QString&, const QString&")
+    Package loadPackage(const QString &packageFormat, const QString &specialization = QString());
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
     /**
      * Returns a list of all known applets.
      * This may skip applets based on security settings and ExcludeCategories in the application's config.
@@ -169,10 +171,12 @@ public:
      *                  list of all applets in specified category.
      * @return list of applets
      *
-     * @deprecated  Doesn't support metadata.json packages.
-     * Since 5.28, use listAppletMetaData(const QString &category, const QString &parentApp) instead.
+     * @deprecated Since 5.28. Doesn't support metadata.json packages.
+     * Use listAppletMetaData(const QString &category, const QString &parentApp) instead.
      **/
-    PLASMA_DEPRECATED KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
+    PLASMA_DEPRECATED_VERSION(5, 28, "Use PluginLoader::listAppletMetaData(const QString &, const QString &)")
+    KPluginInfo::List listAppletInfo(const QString &category, const QString &parentApp = QString());
+#endif
 
     /**
      * Returns a list of all known applets.
@@ -194,6 +198,7 @@ public:
      **/
     QList<KPluginMetaData> listAppletMetaData(const QString &category, const QString &parentApp = QString());
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 36)
     /**
      * Returns a list of all known applets associated with a certain mimetype.
      *
@@ -201,7 +206,9 @@ public:
      *
      * @deprecated Since 5.36, use listAppletMetaDataForMimeType(const QString &mimetype) instead.
      **/
-    PLASMA_DEPRECATED KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
+    PLASMA_DEPRECATED_VERSION(5, 36, "Use PluginLoader::listAppletMetaDataForMimeType(const QString &)")
+    KPluginInfo::List listAppletInfoForMimeType(const QString &mimetype);
+#endif
 
     /**
      * Returns a list of all known applets associated with a certain mimetype.
@@ -211,6 +218,7 @@ public:
      **/
     QList<KPluginMetaData> listAppletMetaDataForMimeType(const QString &mimetype);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 36)
     /**
      * Returns a list of all known applets associated with a certain URL.
      *
@@ -218,7 +226,9 @@ public:
      *
      * @deprecated Since 5.36, use listAppletMetaDataForUrl(const QUrl &url) instead.
      **/
-    PLASMA_DEPRECATED KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+    PLASMA_DEPRECATED_VERSION(5, 36, "Use PluginLoader::listAppletMetaDataForUrl(const QUrl &)")
+    KPluginInfo::List listAppletInfoForUrl(const QUrl &url);
+#endif
 
     /**
      * Returns a list of all known applets associated with a certain URL.
@@ -423,11 +433,10 @@ protected:
      * @param parent the parent object, if any, for the service
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
-     * @deprecated since 5.29
+     * @deprecated since 5.30, use KPackage API
      **/
-#ifndef PLASMA_NO_DEPRECATED
-    virtual PLASMA_DEPRECATED Package internalLoadPackage(const QString &name, const QString &specialization);
-#endif
+    PLASMA_DEPRECATED_VERSION(5, 30, "Use KPackage API")
+    virtual Package internalLoadPackage(const QString &name, const QString &specialization);
 
     /**
      * A re-implementable method that allows subclasses to provide additional applets

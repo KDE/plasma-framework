@@ -86,6 +86,7 @@ public:
      */
     explicit Applet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
     /**
      * @param parent the QObject this applet is parented to
      * @param info the plugin information object for this Applet
@@ -93,9 +94,11 @@ public:
      *      instances of the same Applet type
      * @since 4.6
      *
-     * @deprecated prefer using KPluginMetaData
+     * @deprecated Since 5.28, prefer using KPluginMetaData
      */
-    PLASMA_DEPRECATED explicit Applet(const KPluginInfo &info, QObject *parent = nullptr, uint appletId = 0);
+    PLASMA_DEPRECATED_VERSION(5, 28, "Use Applet(const KPluginMetaData &, QObject *, uint")
+    explicit Applet(const KPluginInfo &info, QObject *parent = nullptr, uint appletId = 0);
+#endif
 
     /**
      * @param parent the QObject this applet is parented to
@@ -248,15 +251,16 @@ public:
     void setUserConfiguring(bool configuring);
 
 //UTILS
-#ifndef PLASMA_NO_DEPRECATED
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
      *
-     * @deprecated use kPackage() instead
      * @return the Package object, or an invalid one if none
+     * @deprecated Since 5.6, use kPackage() instead
      **/
-    PLASMA_DEPRECATED Package package() const;
+    PLASMA_DEPRECATED_VERSION(5, 6, "Use Applet::kPackage()")
+    Package package() const;
 #endif
 
     /**
@@ -278,13 +282,16 @@ public:
     void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
 
 //METADATA
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
     /**
      * @return metadata information about this plugin
      * @see KPluginInfo, pluginMetaData
      * @since 5.0
-     * @deprecated use pluginMetaData instead
+     * @deprecated Since 5.28, use pluginMetaData instead
      */
-    PLASMA_DEPRECATED KPluginInfo pluginInfo() const;
+    PLASMA_DEPRECATED_VERSION(5, 28, "Use Applet::pluginMetaData()")
+    KPluginInfo pluginInfo() const;
+#endif
 
     /**
      * @return metadata information about this plugin
@@ -311,6 +318,7 @@ public:
      */
     void setTitle(const QString &title);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 19)
     /**
      * Attempts to load an applet from a package
      *
@@ -326,10 +334,12 @@ public:
      * @return a pointer to the loaded applet, or 0 on load failure
      * @since 4.3
      *
-     * @deprecated use Containment::createApplet() instead, you are not
+     * @deprecated Since 5.19, use Containment::createApplet() instead, you are not
      * supposed to have applets without containments
      **/
-    PLASMA_DEPRECATED static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
+    PLASMA_DEPRECATED_VERSION(5, 19, "Use Containment::createApplet(...)")
+    static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
+#endif
 
     /**
      * @returns The icon name related to this applet

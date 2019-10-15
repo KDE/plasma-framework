@@ -24,12 +24,15 @@
 
 #include <plasmaquick/plasmaquick_export.h>
 
+#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 25)
+
 /**
- * @deprecated, don't use
+ * @deprecated Since 5.25, use Plasma::PluginLoader
  */
-class PLASMAQUICK_DEPRECATED_EXPORT ShellPluginLoader : public Plasma::PluginLoader
+class PLASMAQUICK_EXPORT ShellPluginLoader : public Plasma::PluginLoader
 {
 public:
+    PLASMAQUICK_DEPRECATED_VERSION(5, 25, "Use PluginLoader")
     ShellPluginLoader();
     ~ShellPluginLoader() override;
 
@@ -38,5 +41,7 @@ public:
 protected:
     Plasma::Package internalLoadPackage(const QString &packageFormat, const QString &specialization) override;
 };
+
+#endif // PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 25)
 
 #endif

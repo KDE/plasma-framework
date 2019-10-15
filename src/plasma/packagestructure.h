@@ -29,7 +29,7 @@
 #include <plasma/package.h>
 #include <plasma/version.h>
 
-#ifndef PLASMA_NO_DEPRECATED
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
 
 namespace Plasma
 {
@@ -42,7 +42,8 @@ class PLASMA_EXPORT PackageStructure : public QObject
 
 public:
 
-    PLASMA_DEPRECATED explicit PackageStructure(QObject *parent = nullptr, const QVariantList &args = QVariantList());
+    PLASMA_DEPRECATED_VERSION(5, 6, "Use KPackage API")
+    explicit PackageStructure(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
     ~PackageStructure();
 
@@ -57,13 +58,13 @@ public:
      * @param package the Package to set up. The object is empty of all definition when
      *        first passed in.
      */
-    PLASMA_DEPRECATED virtual void initPackage(Package *package);
+    virtual void initPackage(Package *package);
 
     /**
      * Called whenever the path changes so that subclasses may take
      * package specific actions.
      */
-    PLASMA_DEPRECATED virtual void pathChanged(Package *package);
+    virtual void pathChanged(Package *package);
 
     /**
      * Installs a package matching this package structure. By default installs a
@@ -76,7 +77,7 @@ public:
      *                    installed to
      * @return KJob* to track the installation status
      **/
-    PLASMA_DEPRECATED virtual KJob *install(Package *package, const QString &archivePath, const QString &packageRoot);
+    virtual KJob *install(Package *package, const QString &archivePath, const QString &packageRoot);
 
     /**
      * Uninstalls a package matching this package structure.
@@ -87,7 +88,7 @@ public:
      * @param packageRoot path to the directory where the package should be installed to
      * @return KJob* to track the installation status
      */
-    PLASMA_DEPRECATED virtual KJob *uninstall(Package *package, const QString &packageRoot);
+    virtual KJob *uninstall(Package *package, const QString &packageRoot);
 
 private:
     PackageStructurePrivate *d;
@@ -111,6 +112,6 @@ private:
     K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#endif
+#endif // PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
 
 #endif

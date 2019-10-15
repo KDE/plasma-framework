@@ -87,6 +87,16 @@ ecm_qt_declare_logging_category(Plasma_LIB_SRCS HEADER debug_p.h IDENTIFIER LOG_
 
 add_library(KF5Plasma ${Plasma_LIB_SRCS})
 add_library(KF5::Plasma ALIAS KF5Plasma)
+ecm_generate_export_header(KF5Plasma
+    EXPORT_FILE_NAME plasma/plasma_export.h
+    BASE_NAME Plasma
+    # GROUP_BASE_NAME KF <- enable once all of KF modules use ecm_generate_export_header
+    VERSION ${KF5_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46
+)
+# TODO: add support for EXCLUDE_DEPRECATED_BEFORE_AND_AT to all Plasma libs
+# needs fixing of undeprecated API being still implemented using own deprecated API
 
 if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} XCB::XCB)
@@ -138,9 +148,6 @@ set_target_properties(KF5Plasma PROPERTIES
                       )
 
 ########### install files ###############
-generate_export_header(KF5Plasma
-    BASE_NAME Plasma
-    EXPORT_FILE_NAME plasma/plasma_export.h)
 ecm_generate_headers(Plasma_CamelCase_HEADERS
     HEADER_NAMES
         Applet

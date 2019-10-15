@@ -420,7 +420,6 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     return actions;
 }
 
-#ifndef PLASMA_NO_DEPRECATED
 Package PluginLoader::loadPackage(const QString &packageFormat, const QString &specialization)
 {
     if (!d->isDefaultLoader) {
@@ -467,7 +466,6 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
     return Package();
 }
-#endif
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
 {
@@ -763,14 +761,12 @@ Service *PluginLoader::internalLoadService(const QString &name, const QVariantLi
 }
 
 
-#ifndef PLASMA_NO_DEPRECATED
 Package PluginLoader::internalLoadPackage(const QString &name, const QString &specialization)
 {
     Q_UNUSED(name);
     Q_UNUSED(specialization);
     return Package();
 }
-#endif
 
 KPluginInfo::List PluginLoader::internalAppletInfo(const QString &category) const
 {

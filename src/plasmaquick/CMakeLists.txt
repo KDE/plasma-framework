@@ -73,7 +73,15 @@ set_target_properties(KF5PlasmaQuick PROPERTIES
 
 install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
-generate_export_header(KF5PlasmaQuick BASE_NAME PlasmaQuick)
+ecm_generate_export_header(KF5PlasmaQuick
+    BASE_NAME PlasmaQuick
+    # GROUP_BASE_NAME KF <- enable once all of KF modules use ecm_generate_export_header
+    VERSION ${KF5_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    DEPRECATION_VERSIONS 5.12 5.25 5.36
+)
+# TODO: add support for EXCLUDE_DEPRECATED_BEFORE_AND_AT to all Plasma libs
+# needs fixing of undeprecated API being still implemented using own deprecated API
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
