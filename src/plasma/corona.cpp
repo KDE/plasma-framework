@@ -372,6 +372,25 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
         }
     }
 
+    action = d->actions.action(QStringLiteral("edit mode"));
+    if (action) {
+        switch (d->immutability) {
+        case Types::UserImmutable:
+            action->setEnabled(false);
+            action->setVisible(true);
+            break;
+        case Types::SystemImmutable:
+            action->setEnabled(false);
+            action->setVisible(false);
+            break;
+        case Types::Mutable:
+        default:
+            action->setEnabled(true);
+            action->setVisible(true);
+            break;
+        }
+    }
+
     if (d->immutability != Types::SystemImmutable) {
         KConfigGroup cg(config(), "General");
 
@@ -382,19 +401,27 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     }
 
     if (d->immutability != Types::Mutable) {
-        d->editMode = false;
-        emit editModeChanged();
+        setEditMode(false);
     }
 }
 
 void Corona::setEditMode(bool edit)
 {
-    if (d->immutability != Plasma::Types::Mutable || edit == d->editMode) {
+    if (edit == d->editMode || (edit && d->immutability != Plasma::Types::Mutable)) {
         return;
     }
 
+    QAction *editAction = d->actions.action(QStringLiteral("edit mode"));
+    if (editAction) {
+        if (edit) {
+            editAction->setText(i18n("Finish Customizing Layout"));
+        } else {
+            editAction->setText(i18n("Customize Layout..."));
+        }
+    }
+
     d->editMode = edit;
-    emit editModeChanged();
+    emit editModeChanged(edit);
 }
 
 bool Corona::isEditMode() const
@@ -467,6 +494,17 @@ void CoronaPrivate::init()
     //fake containment/applet actions
     KActionCollection *containmentActions = AppletPrivate::defaultActions(q); //containment has to start with applet stuff
     ContainmentPrivate::addDefaultActions(containmentActions); //now it's really containment
+
+    QAction *editAction = actions.add<QAction>(QStringLiteral("edit mode"));
+    QObject::connect(editAction, &QAction::triggered, q, [this] () {
+        q->setEditMode(!q->isEditMode());
+    });
+    editAction->setText(i18n("Customize Layout..."));
+    editAction->setAutoRepeat(true);
+    editAction->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
+    editAction->setData(Plasma::Types::ControlAction);
+    editAction->setShortcut(QKeySequence(QStringLiteral("alt+d, e")));
+    editAction->setShortcutContext(Qt::ApplicationShortcut);
 }
 
 void CoronaPrivate::toggleImmutability()
