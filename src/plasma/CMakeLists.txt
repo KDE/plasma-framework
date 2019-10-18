@@ -119,8 +119,13 @@ PRIVATE
     ${PLASMA_EXTRA_LIBS}
 )
 
+set(Plasma_BUILD_INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/Plasma
+)
 target_include_directories(KF5Plasma PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..;${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/Plasma>"
+  "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
 )
 target_include_directories(KF5Plasma INTERFACE
   "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5};${KF5_INCLUDE_INSTALL_DIR}/Plasma>"
@@ -217,6 +222,8 @@ if(BUILD_QCH)
             Qt5Gui_QCH
             KF5Service_QCH
             KF5Package_QCH
+        INCLUDE_DIRS
+            ${Plasma_BUILD_INCLUDE_DIRS}
         BLANK_MACROS
             PLASMA_EXPORT
             PLASMA_DEPRECATED
