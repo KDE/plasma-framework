@@ -75,7 +75,7 @@ install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF5_INSTALL_TARGET
 
 ecm_generate_export_header(KF5PlasmaQuick
     BASE_NAME PlasmaQuick
-    # GROUP_BASE_NAME KF <- enable once all of KF modules use ecm_generate_export_header
+    GROUP_BASE_NAME KF
     VERSION ${KF5_VERSION}
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.12 5.25 5.36

@@ -90,7 +90,7 @@ add_library(KF5::Plasma ALIAS KF5Plasma)
 ecm_generate_export_header(KF5Plasma
     EXPORT_FILE_NAME plasma/plasma_export.h
     BASE_NAME Plasma
-    # GROUP_BASE_NAME KF <- enable once all of KF modules use ecm_generate_export_header
+    GROUP_BASE_NAME KF
     VERSION ${KF5_VERSION}
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46
