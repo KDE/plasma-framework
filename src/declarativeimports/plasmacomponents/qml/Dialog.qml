@@ -108,6 +108,11 @@ Item {
     property int location: PlasmaCore.Types.Floating
 
     /**
+     * Hide dialog when focus is lost.
+     */
+    property bool hideOnWindowDeactivate: false
+
+    /**
      * This signal is emitted when the user accepts the dialog's request or the
      * accept() method is called.
      *
@@ -256,6 +261,7 @@ Item {
             id: coreDialog
             //windowFlags: Qt.Popup
             visualParent: root.visualParent
+            hideOnWindowDeactivate: root.hideOnWindowDeactivate
             location: root.location
             visible: false
             onVisibleChanged: {
