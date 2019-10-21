@@ -1129,34 +1129,9 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
         }
     }
 
-    QMenu *containmentMenu = new QMenu(i18nc("%1 is the name of the containment", "%1 Options", m_containment->title()), desktopMenu);
     if (m_containment->containmentType() != Plasma::Types::DesktopContainment) {
-        addContainmentActions(containmentMenu, event);
-    }
-
-    if (!containmentMenu->isEmpty()) {
-        int enabled = 0;
-        //count number of real actions
-        QListIterator<QAction *> actionsIt(containmentMenu->actions());
-        while (enabled < 3 && actionsIt.hasNext()) {
-            QAction *action = actionsIt.next();
-            if (action->isVisible() && !action->isSeparator()) {
-                ++enabled;
-            }
-        }
-
-        if (enabled) {
-            //if there is only one, don't create a submenu
-            if (enabled < 2) {
-                foreach (QAction *action, containmentMenu->actions()) {
-                    if (action->isVisible() && !action->isSeparator()) {
-                        desktopMenu->addAction(action);
-                    }
-                }
-            } else {
-                desktopMenu->addMenu(containmentMenu);
-            }
-        }
+        desktopMenu->addSeparator();
+        addContainmentActions(desktopMenu, event);
     }
 
     if (m_containment->immutability() == Plasma::Types::Mutable &&
