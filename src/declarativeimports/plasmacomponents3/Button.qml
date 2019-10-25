@@ -52,7 +52,7 @@ T.Button {
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
         Label {
-            Layout.fillWidth: !icon.visible
+            Layout.fillWidth: true
             Layout.fillHeight: true
             visible: text.length > 0
             text: control.Kirigami.MnemonicData.richTextLabel
