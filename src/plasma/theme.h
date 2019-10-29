@@ -78,7 +78,8 @@ public:
         HighlightedTextColor = 7,/**< color contrasting with HighlightColor, to be used for instance with */
         PositiveTextColor = 8, /**< color of foreground objects with a "positive message" connotation (usually green) */
         NeutralTextColor = 9, /**< color of foreground objects with a "neutral message" connotation (usually yellow) */
-        NegativeTextColor = 10 /**< color of foreground objects with a "negative message" connotation (usually red) */
+        NegativeTextColor = 10, /**< color of foreground objects with a "negative message" connotation (usually red) */
+        DisabledTextColor = 11 /**< color of disabled text @since 5.64 */
     };
 
     enum ColorGroup {

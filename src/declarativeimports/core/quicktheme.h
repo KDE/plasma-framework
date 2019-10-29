@@ -56,6 +56,7 @@ class QuickTheme : public Plasma::Theme
     Q_PROPERTY(QColor positiveTextColor READ positiveTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor NOTIFY themeChangedProxy)
 
     Q_PROPERTY(QColor buttonTextColor READ buttonTextColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor buttonBackgroundColor READ buttonBackgroundColor NOTIFY themeChangedProxy)
@@ -125,6 +126,12 @@ public:
      * @since 5.22
      */
     QColor negativeTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's disabled text color
+     * @since 5.64
+     */
+    QColor disabledTextColor() const;
 
     /**
      * @return The theme's colorscheme's background color

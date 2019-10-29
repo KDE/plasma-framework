@@ -692,6 +692,8 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         return scheme->foreground(KColorScheme::NeutralText).color();
     case Theme::NegativeTextColor:
         return scheme->foreground(KColorScheme::NegativeText).color();
+    case Theme::DisabledTextColor:
+        return scheme->foreground(KColorScheme::InactiveText).color();
     }
 
     return QColor();

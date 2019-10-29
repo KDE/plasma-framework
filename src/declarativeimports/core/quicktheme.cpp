@@ -64,6 +64,11 @@ QColor QuickTheme::negativeTextColor() const
     return Plasma::Theme::color(Plasma::Theme::NegativeTextColor);
 }
 
+QColor QuickTheme::disabledTextColor() const
+{
+    return Plasma::Theme::color(Plasma::Theme::DisabledTextColor);
+}
+
 QColor QuickTheme::backgroundColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::BackgroundColor);
