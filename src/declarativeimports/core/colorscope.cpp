@@ -181,6 +181,11 @@ QColor ColorScope::negativeTextColor() const
     return m_theme->color(Plasma::Theme::NegativeTextColor, colorGroup());
 }
 
+QColor ColorScope::disabledTextColor() const
+{
+    return m_theme->color(Plasma::Theme::DisabledTextColor, colorGroup());
+}
+
 bool ColorScope::inherit() const
 {
     return m_inherit;

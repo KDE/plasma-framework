@@ -81,6 +81,11 @@ class ColorScope : public QQuickItem
     Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY colorsChanged)
 
     /**
+     * Color of disabled text @since 5.64
+     */
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor NOTIFY colorsChanged)
+
+    /**
      * true if the scope inherits from its parent scope
      * @since 5.39
      */
@@ -101,6 +106,7 @@ public:
     QColor positiveTextColor() const;
     QColor neutralTextColor() const;
     QColor negativeTextColor() const;
+    QColor disabledTextColor() const;
 
     bool inherit() const;
     void setInherit(bool inherit);
