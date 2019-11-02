@@ -1,0 +1,839 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# GunChleoc <fios@foramnagaidhlig.net>, 2015, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-10-22 02:44+0200\n"
+"PO-Revision-Date: 2016-04-30 12:08+0100\n"
+"Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
+"Language-Team: Fòram na Gàidhlig\n"
+"Language: gd\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 || n==11) ? 0 : (n==2 || n==12) ? 1 : "
+"(n > 2 && n < 20) ? 2 : 3;\n"
+"X-Generator: Virtaal 0.7.1\n"
+"X-Project-Style: kde\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Saor-làithean"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Tachartasan"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Rud ri dhèanamh"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Eile"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "An-diugh"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Ath-suidhich am mìosachan air an-diugh"
+
+#: declarativeimports/calendar/qml/MonthView.qml:247
+#, kde-format
+msgid "Previous Month"
+msgstr "Am mìos roimhe"
+
+#: declarativeimports/calendar/qml/MonthView.qml:248
+#, kde-format
+msgid "Next Month"
+msgstr "An ath-mhìos"
+
+#: declarativeimports/calendar/qml/MonthView.qml:275
+#, kde-format
+msgid "Previous Year"
+msgstr "Am bliadhna roimhe"
+
+#: declarativeimports/calendar/qml/MonthView.qml:276
+#, kde-format
+msgid "Next Year"
+msgstr "An ath-bhliadhna"
+
+#: declarativeimports/calendar/qml/MonthView.qml:308
+#, kde-format
+msgid "Previous Decade"
+msgstr "An deichead roimhe"
+
+#: declarativeimports/calendar/qml/MonthView.qml:309
+#, kde-format
+msgid "Next Decade"
+msgstr "An ath-dheichead"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr "Ceart ma-thà"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr "Sguir dheth"
+
+#: plasma/applet.cpp:359
+#, kde-format
+msgid "Unknown"
+msgstr "Chan eil fhios"
+
+#: plasma/applet.cpp:675
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Gnìomhach Widget %1"
+
+#: plasma/containment.cpp:120 plasma/private/applet_p.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "Remove this %1"
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Thoir air falbh an %1 seo"
+
+#: plasma/containment.cpp:126
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "Edit %1..."
+msgstr ""
+
+#: plasma/containment.cpp:129 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr ""
+
+#: plasma/corona.cpp:368 plasma/corona.cpp:487
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Glais na Widgets"
+
+#: plasma/corona.cpp:368
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Thoir a' ghlas far Widgets"
+
+#: plasma/corona.cpp:417
+#, kde-format
+msgid "Finish Customizing Layout"
+msgstr ""
+
+#: plasma/corona.cpp:419 plasma/corona.cpp:502
+#, kde-format
+msgid "Customize Layout..."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+"Co-dhiù an dèid tasgadan a chruthachadh air an diosg airson an ùrlair seo "
+"gus nach dèid."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Am meud as motha ann an cileabaidht aig an tasgadan air an diosg airson an "
+"ùrlair. Thoir an aire gu bheil na faidhlichean seo gann, mar sin dh'fhaoidte "
+"nach dèid am meud as motha a chleachdadh. Bidh e gu math sàbhailte mar a "
+"trice ma shònraicheas tu meud nas motha."
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "Faidhlichean dàta"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Sgriobtaichean so-ghnìomhach"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Tuairisgeulan sheirbheisean"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "Eadar-theangachaidhean"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "Prìomh-fhaidhle an sgriobt"
+
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr "Deuchainnean"
+
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "Dealbhan"
+
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "Dealbhan ùrlair"
+
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Mìneachaidhean rèiteachaidh"
+
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "Eadar-aghaidh"
+
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr "Glacadh-sgrìn"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Dealbhan airson còmhraidhean"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Cùlaibh còmhraidh coitcheann"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Ùrlar airson còmhradh clàraidh a-mach"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Pacaidean phàipearan-balla"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "Dealbhan airson widgets"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Dealbhan cùlaibh airson widgets"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "Uaireadair aodannail"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "Dealbhan cùlaibh airson panailean"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Cùlaibh airson grafaigeachd widgets"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Dealbhan cùlaibh airson gliocasan-sgrìn"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Dealbhan do-lèirsinneach airson còmhraidhean"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Cùlaibh còmhraidh do-lèirsinneach coitcheann"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Ùrlar do-lèirsinneach airson còmhradh clàraidh a-mach"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Dealbhan do-lèirsinneach airson widgets"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Dealbhan cùlaibh do-lèirsinneach airson panailean"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Dealbhan cùlaibh do-lèirsinneach airson gliocasan-sgrìn"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Faidhle rèiteachadh KColorScheme"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Modal duilleig airson rèiteachadh UI"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Faidhle rèiteachaidh XML"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Meudaichear gnàthaichte dha dh'aplaidean teannta"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Accessibility"
+msgstr "So-ruigsinneachd"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Application Launchers"
+msgstr "Lòinsearan aplacaidean"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Astronomy"
+msgstr "Reul-eòlas"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Date and Time"
+msgstr "Ceann-là 's àm"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Development Tools"
+msgstr "Innealan leasachaidh"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "Education"
+msgstr "Foghlam"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Environment and Weather"
+msgstr "An t-àrainneachd 's an aimsir"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Examples"
+msgstr "Buill-eisimpleir"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "File System"
+msgstr "Siostam fhaidhlichean"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Fun and Games"
+msgstr "Tlachd is geamannan"
+
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Graphics"
+msgstr "Grafaigeachd"
+
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Language"
+msgstr "Cànan"
+
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Mapping"
+msgstr "Mapachadh"
+
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Eile"
+
+#: plasma/pluginloader.cpp:118
+#, kde-format
+msgid "Multimedia"
+msgstr "Ioma-mheadhanan"
+
+#: plasma/pluginloader.cpp:119
+#, kde-format
+msgid "Online Services"
+msgstr "Seirbheisean air loidhne"
+
+#: plasma/pluginloader.cpp:120
+#, kde-format
+msgid "Productivity"
+msgstr "Dèanadas"
+
+#: plasma/pluginloader.cpp:121
+#, kde-format
+msgid "System Information"
+msgstr "Fiosrachadh an t-siostaim"
+
+#: plasma/pluginloader.cpp:122
+#, kde-format
+msgid "Utilities"
+msgstr "Goireasan"
+
+#: plasma/pluginloader.cpp:123
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "Uinneagan is saothraichean"
+
+#: plasma/pluginloader.cpp:124
+#, kde-format
+msgid "Clipboard"
+msgstr "Stòr-bhòrd"
+
+#: plasma/pluginloader.cpp:125
+#, kde-format
+msgid "Tasks"
+msgstr "Saothraichean"
+
+#: plasma/pluginloader.cpp:590 plasma/pluginloader.cpp:591
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Eile"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"Cha do shònraich an widget %1 dè an ScriptEngine a thèid a chleachdadh."
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr ""
+"Cha b' urrainn dhuinn pacaid %1 fhosgladh a tha riatanach airson an widget "
+"%2."
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr ""
+"Cha b' urrainn dhuinn ScriptEngine %1 a chruthachadh airson an widget %2."
+
+#: plasma/private/applet_p.cpp:187
+#, fuzzy, kde-format
+#| msgid "Alternatives..."
+msgid "Show Alternatives..."
+msgstr "Roghainnean eile..."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Widget Removed"
+msgstr "Chaidh widget a thoirt air falbh"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Chaidh an widget \"%1\" a thoirt air falbh."
+
+#: plasma/private/applet_p.cpp:280
+#, kde-format
+msgid "Panel Removed"
+msgstr "Chaidh panail a thoirt air falbh"
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Chaidh panail a thoirt air falbh."
+
+#: plasma/private/applet_p.cpp:284
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Chaidh deasg a thoirt air falbh"
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Chaidh deasg a thoirt air falbh."
+
+#: plasma/private/applet_p.cpp:288
+#, kde-format
+msgid "Undo"
+msgstr "Neo-dhèan"
+
+#: plasma/private/applet_p.cpp:378
+#, kde-format
+msgid "Widget Settings"
+msgstr "Roghainnean an widget"
+
+#: plasma/private/applet_p.cpp:385
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Thoir air falbh an widget seo"
+
+#: plasma/private/applet_p.cpp:392
+#: plasma/private/associatedapplicationmanager.cpp:77
+#: plasma/private/associatedapplicationmanager.cpp:136
+#: plasma/private/associatedapplicationmanager.cpp:178
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Ruith an aplacaid co-cheangailte"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Dh'fhàillig le tòiseachadh an sgriobt"
+
+#: plasma/private/associatedapplicationmanager.cpp:74
+#: plasma/private/associatedapplicationmanager.cpp:175
+#, kde-format
+msgid "Open with %1"
+msgstr "Fosgail le %1"
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Thoir air falbh a' phanail seo"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Thoir air falbh a' ghnìomhachd seo"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "Roghainnean na gnìomhachd"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Cuir widgets ris..."
+
+#: plasma/private/containment_p.cpp:206
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Cha do lorg sinn a' cho-phàirt a dh'iarr thu: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Ma cho-roinneas tu widget air an lìonra, 's urrainn dhut an widget "
+"inntrigeadh o choimpiutair eile mar inneal-smachd cèin."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Co-roinn an widget seo air an lìonra"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Leig leis a h-uile duine an widget seo inntrigeadh gu saor"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr ""
+"Seirbheis mhì-dhligheach (null), chan urrainn dhuinn obrachadh sam bith a "
+"dhèanamh."
+
+#: plasmaquick/appletquickitem.cpp:611
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Mearachd a' luchdadh faidhle QML: %1"
+
+#: plasmaquick/appletquickitem.cpp:613
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Mearachd a' luchdadh aplaid: chan eil a' phacaid ann. %1"
+
+#: plasmaquick/configview.cpp:108
+#, kde-format
+msgid "%1 Settings"
+msgstr "Roghainnean %1"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "Bun-roghainnean airson an ùrlair is msaa."
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "An sgeama dhathan a thèid a chleachdadh airson aplacaidean."
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Preview Images"
+msgstr "Dealbhan ro-sheallaidh"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "Ro-shealladh air manaidsear a' chlàraidh a-steach"
+
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "Ro-shealladh air an sgrìn-ghlasaidh"
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "Ro-shealladh air suidsear nan cleachdaichean"
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Ro-shealladh air suidsear nan deasgan bhiortail"
+
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "Ro-shealladh air an sgrìn splash"
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "Ro-shealladh air KRunner"
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "Ro-shealladh air sgeadachadh nan uinneagan"
+
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "Ro-shealladh air suidsear nan uinneagan"
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr "Manaidsear a' chlàraidh a-steach"
+
+#: plasmaquick/private/packages.cpp:53
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "Prìomh-sgriobt airson manaidsear a' chlàraidh a-steach"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr "Còmhradh a' chlàraidh a-mach"
+
+#: plasmaquick/private/packages.cpp:56
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "Prìomh-sgriobt airson còmhradh a' chlàraidh a-mach"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr "Inneal-glasaidh na sgrìn"
+
+#: plasmaquick/private/packages.cpp:59
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "Prìomh-sgriobt airson inneal-glasaidh na sgrìn"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "Eadar-aghaidh airson grad-suidse nan cleachdaichean"
+
+#: plasmaquick/private/packages.cpp:62
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "Prìomh-sgriobt airson suidsear nan cleachdaichean"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "Suidsear nan deasgan bhiortail"
+
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Prìomh-sgriobt airson suidsear nan deasgan bhiortail"
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "Brathan air an sgrìn"
+
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Prìomh-sgriobt airson brathan air an sgrìn"
+
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr "Sgrìn splash"
+
+#: plasmaquick/private/packages.cpp:71
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "Prìomh-sgriobt airson na sgrìn splash"
+
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr "Eadar-aghaidh KRunner"
+
+#: plasmaquick/private/packages.cpp:74
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "Prìomh-sgriobt KRunner"
+
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr "Sgeadachadh nan uinneagan"
+
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "Prìomh-sgriobt airson sgeadachadh nan uinneagan"
+
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr "Suidsear nan uinneagan"
+
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "Prìomh-sgriobt airson suidsear nan uinneagan"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:480
+#, kde-format
+msgid "Content dropped"
+msgstr "Chaidh an t-susbaint a leigeil às"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:484
+#, kde-format
+msgid "Fetching file type..."
+msgstr "A' faighinn seòrsa an fhaidhle..."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:638
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:641
+#, kde-format
+msgid "Plasma Package"
+msgstr "Pacaid Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:639
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:645
+#, kde-format
+msgid "Install"
+msgstr "Stàlaich"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:659
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Dh’fhàillig le stàladh na pacaide"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:679
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Tha a' phacaid a leig thu às mì-dligheach."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:689
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:691
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:771
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:774
+#, kde-format
+msgid "Widgets"
+msgstr "Widgets"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:696
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:713
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:772
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:778
+#, fuzzy, kde-format
+#| msgid "Icon"
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Ìomhaigheag"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:731
+#, kde-format
+msgid "Wallpaper"
+msgstr "Pàipear-balla"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:742
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
