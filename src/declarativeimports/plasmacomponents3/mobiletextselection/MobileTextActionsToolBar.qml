@@ -59,7 +59,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-cut"
-            visible: controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
+            visible: controlRoot && controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
             onClicked: {
                 controlRoot.cut();
             }
@@ -67,7 +67,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-copy"
-            visible: controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
+            visible: controlRoot && controlRoot.selectedText.length > 0 && (!controlRoot.hasOwnProperty("echoMode") || controlRoot.echoMode === TextInput.Normal)
             onClicked: {
                 controlRoot.copy();
             }
@@ -75,7 +75,7 @@ Popup {
         ToolButton {
             focusPolicy: Qt.NoFocus
             icon.name: "edit-paste"
-            visible: controlRoot.canPaste
+            visible: controlRoot && controlRoot.canPaste
             onClicked: {
                 controlRoot.paste();
             }
