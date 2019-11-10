@@ -175,7 +175,7 @@ void AppletInterface::init()
 
     connect(applet(), &Plasma::Applet::activated, this,
     [ = ]() {
-        // in case the applet doesn't want to get shrinked on reactivation,
+        // in case the applet doesn't want to get shrunk on reactivation,
         // we always expand it again (only in order to conform with legacy behaviour)
         bool activate = !( isExpanded() && isActivationTogglesExpanded() );
 

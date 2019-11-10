@@ -16,8 +16,8 @@
 *   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,      *
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
-#ifndef DIALOGTEST_H
-#define DIALOGTEST_H
+#ifndef DIALOGSTATETEST_H
+#define DIALOGSTATETEST_H
 
 #include <QtTest>
 

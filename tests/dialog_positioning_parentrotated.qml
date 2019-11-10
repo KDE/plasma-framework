@@ -32,7 +32,7 @@ ColumnLayout
     height: units.gridUnit * 20
     Controls.Label {
         id: label
-        text: "Press the buttom and make sure the popup is on the correct place"
+        text: "Press the button and make sure the popup is on the correct place"
         wrapMode: Text.WordWrap
     }
     PlasmaComponents.Button {

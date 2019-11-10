@@ -83,7 +83,7 @@ class SortFilterModel : public QSortFilterProxyModel
     Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder WRITE setSortOrder)
 
     /**
-     * Specify which column shoud be used for sorting
+     * Specify which column should be used for sorting
      */
     Q_PROPERTY(int sortColumn READ sortColumn WRITE setSortColumn NOTIFY sortColumnChanged)
 

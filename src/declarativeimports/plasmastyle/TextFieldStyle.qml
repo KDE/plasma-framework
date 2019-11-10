@@ -52,7 +52,7 @@ QtQuickControlStyle.TextFieldStyle {
 
     background: Item {
         //QQC button heights are max(backgroundHeight, label + margins).
-        //QQC lineedits are only from the background (and if background is not set, just an arbirtrary value of 25)
+        //QQC lineedits are only from the background (and if background is not set, just an arbitrary value of 25)
         //Why? I don't know
 
         //In order to get the same height in both buttons and lineedits we need to apply the same rule here

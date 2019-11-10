@@ -21,8 +21,8 @@
  *  A data engine meant to test the Plasma data engine explorer.
  */
 
-#ifndef __TESTDATAENGINE_H__
-#define __TESTDATAENGINE_H__
+#ifndef __TESTENGINE_H__
+#define __TESTENGINE_H__
 
 #include "plasma/dataengine.h"
 
@@ -44,4 +44,4 @@ protected:
     bool sourceRequestEvent(const QString &source) override;
 };
 
-#endif // __TESTDATAENGINE_H__
+#endif // __TESTENGINE_H__

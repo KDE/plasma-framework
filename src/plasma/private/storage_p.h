@@ -20,8 +20,8 @@
 // 02110-1301  USA                                                     //
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef PLASMA_STORAGE_H
-#define PLASMA_STORAGE_H
+#ifndef PLASMA_STORAGE_P_H
+#define PLASMA_STORAGE_P_H
 
 #include <QSqlDatabase>
 
@@ -72,4 +72,4 @@ private:
     QString m_clientName;
 };
 
-#endif //PLASMA_STORAGE_H
+#endif //PLASMA_STORAGE_P_H

@@ -44,7 +44,7 @@ class FullScreenWindow : public QDeclarativeItem
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
 
 public:
-    explcit FullScreenWindow(QDeclarativeItem *parent = nullptr);
+    explicit FullScreenWindow(QDeclarativeItem *parent = nullptr);
     ~FullScreenWindow() override;
 
     QGraphicsObject *mainItem() const;

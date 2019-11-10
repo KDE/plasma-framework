@@ -17,8 +17,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef BLURWATCHER_H
-#define BLURWATCHER_H
+#ifndef EFFECTWATCHER_P_H
+#define EFFECTWATCHER_P_H
 
 #include <QObject>
 

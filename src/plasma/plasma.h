@@ -169,19 +169,19 @@ public:
     enum PopupPlacement {
         FloatingPopup = 0,            /**< Free floating, non attached popup */
         TopPosedLeftAlignedPopup,     /**< Popup positioned on the top, aligned
-                                     to the left of the wigdet */
+                                     to the left of the widget */
         TopPosedRightAlignedPopup,    /**< Popup positioned on the top, aligned
                                      to the right of the widget */
         LeftPosedTopAlignedPopup,     /**< Popup positioned on the left, aligned
-                                     to the top of the wigdet */
+                                     to the top of the widget */
         LeftPosedBottomAlignedPopup,  /**< Popup positioned on the left, aligned
                                      to the bottom of the widget */
         BottomPosedLeftAlignedPopup,  /**< Popup positioned on the bottom, aligned
-                                     to the left of the wigdet */
+                                     to the left of the widget */
         BottomPosedRightAlignedPopup, /**< Popup positioned on the bottom, aligned
                                      to the right of the widget */
         RightPosedTopAlignedPopup,    /**< Popup positioned on the right, aligned
-                                     to the top of the wigdet */
+                                     to the top of the widget */
         RightPosedBottomAlignedPopup  /**< Popup positioned on the right, aligned
                                      to the bottom of the widget */
     };

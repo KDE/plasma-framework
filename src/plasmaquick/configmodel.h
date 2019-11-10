@@ -85,7 +85,7 @@ public:
 
     Q_INVOKABLE void appendCategory(const QString &iconName, const QString &name,
                         const QString &path, const QString &pluginName, bool visible);
-    // QML Engine isn't particularily smart resolving namespaces, hence fully qualified signature
+    // QML Engine isn't particularly smart resolving namespaces, hence fully qualified signature
     Q_INVOKABLE void appendCategory(PlasmaQuick::ConfigCategory *category);
 
     Q_INVOKABLE void removeCategory(PlasmaQuick::ConfigCategory *category);

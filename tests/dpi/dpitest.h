@@ -17,8 +17,8 @@
 *   Boston, MA 02110-1301, USA.                                               *
 *******************************************************************************/
 
-#ifndef PLUGINTEST_H
-#define PLUGINTEST_H
+#ifndef DPITEST_H
+#define DPITEST_H
 
 #include <QCoreApplication>
 #include <QGuiApplication>

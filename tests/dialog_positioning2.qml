@@ -29,7 +29,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 ColumnLayout
 {
     Controls.Label {
-        text: "Press the buttom and make sure the popup is on the correct place"
+        text: "Press the button and make sure the popup is on the correct place"
         wrapMode: Text.WordWrap
     }
     PlasmaComponents.Button {

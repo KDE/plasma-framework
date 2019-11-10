@@ -443,7 +443,7 @@ public:
      * the TextColor will become HighlightedText color and BackgroundColor
      * will become HighlightColor, making the svg graphics (for instance an icon)
      * will look correct together selected text
-     * Supported statuss as of 5.23 are Normal and Selected
+     * Supported statuses as of 5.23 are Normal and Selected
      * @since 5.23
      */
     void setStatus(Svg::Status status);

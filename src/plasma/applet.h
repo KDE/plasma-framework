@@ -393,7 +393,7 @@ public:
     void setGlobalShortcut(const QKeySequence &shortcut);
 
     /**
-     * @return the global shortcut associated with this wiget, or
+     * @return the global shortcut associated with this widget, or
      * an empty shortcut if no global shortcut is associated.
      */
     QKeySequence globalShortcut() const;
@@ -510,7 +510,7 @@ Q_SIGNALS:
 
     /**
      * Emitted when activation is requested due to, for example, a global
-     * keyboard shortcut. By default the wiget is given focus.
+     * keyboard shortcut. By default the widget is given focus.
      */
     void activated();
 

@@ -55,7 +55,7 @@ public:
      * Accessor for the associated Package object if any.
      * A Corona package defines how Containments are laid out in a View,
      * ToolBoxes, default layout, error messages
-     * and in genelal all the furniture specific of a particular
+     * and in general all the furniture specific of a particular
      * device form factor.
      *
      * @return the Package object, or an invalid one if none

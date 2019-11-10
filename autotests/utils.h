@@ -16,6 +16,8 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
 */
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <QString>
 #include <QDir>
@@ -65,3 +67,5 @@ static void installPlasmaTheme(const QString &theme = QStringLiteral("breeze"))
 
 } //TestUtils
 } //Plasma
+
+#endif
