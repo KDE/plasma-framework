@@ -52,6 +52,7 @@ Comment[eu]=Breeze argia, KDE VDGk egina
 Comment[fi]=Breeze Light KDE VDG:ltä
 Comment[fr]=Breeze clair, par KDE VDG
 Comment[gl]=Breeze claro de KDE VDG
+Comment[hu]=Breeze Light a KDE VDG-től
 Comment[id]=Breeze Terang oleh KDE VDG
 Comment[it]=Brezza chiaro del KDE VDG
 Comment[ko]=KDE 시각 디자인 그룹에서 제작한 Breeze Light
