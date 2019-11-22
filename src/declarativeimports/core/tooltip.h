@@ -28,7 +28,6 @@
 #include <Plasma/Plasma>
 
 class QQuickItem;
-class QGraphicsWidget;
 class ToolTipDialog;
 
 /**

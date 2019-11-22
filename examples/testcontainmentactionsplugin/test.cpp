@@ -19,8 +19,6 @@
 
 #include "test.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
 
 #include <QDebug>
 #include <KActionCollection>

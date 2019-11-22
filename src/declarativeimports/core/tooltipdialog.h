@@ -27,7 +27,6 @@
 #include <QVariant>
 
 class QQuickItem;
-class QGraphicsWidget;
 
 namespace KDeclarative
 {
