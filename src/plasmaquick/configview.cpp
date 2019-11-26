@@ -128,6 +128,7 @@ void ConfigViewPrivate::init()
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), pkg);
         interceptor->addAllowedPath(applet.data()->kPackage().path());
         q->engine()->setUrlInterceptor(interceptor);
+        new QQmlFileSelector(q->engine(), q->engine());
     }
 
     q->setResizeMode(QQuickView::SizeViewToRootObject);
