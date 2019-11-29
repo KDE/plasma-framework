@@ -24,6 +24,7 @@
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QColor>
+#include <QQuickWindow>
 
 #include <PlasmaQuick/AppletQuickItem>
 
@@ -50,8 +51,17 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 
     if (parentObject && qobject_cast<QQuickItem *>(parentObject)) {
+        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::windowChanged,
+            this, [this, parentObject]() {
+                findParentScope();
+                checkColorGroupChanged();
+            });
+
         connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::parentChanged,
-            this, &ColorScope::checkColorGroupChanged);
+            this, [this, parentObject]() {
+                findParentScope();
+                checkColorGroupChanged();
+            });
     } else if (parent) {
         connect(parent, &QQuickItem::parentChanged,
             this, &ColorScope::checkColorGroupChanged);
@@ -116,6 +126,7 @@ ColorScope *ColorScope::findParentScope()
             return s;
         }
     }
+
     return nullptr;
 }
 
@@ -195,6 +206,7 @@ void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
     if (change == QQuickItem::ItemSceneChange) {
         //we have a window: create the representations if needed
         if (value.window) {
+            findParentScope();
             checkColorGroupChanged();
         }
     }
