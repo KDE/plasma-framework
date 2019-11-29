@@ -43,14 +43,14 @@ T.Dial {
 
             ctx.globalAlpha = 0.3;
             ctx.beginPath();
-            ctx.strokeStyle = theme.textColor;
+            ctx.strokeStyle = control.PlasmaCore.ColorScope.textColor;
             ctx.lineWidth=5;
             ctx.arc(centreX, centreY, width/2.4, 0, 2*Math.PI, false);
             ctx.stroke();
             ctx.globalAlpha = 1;
 
             ctx.beginPath();
-            ctx.strokeStyle = theme.highlightColor;
+            ctx.strokeStyle = control.PlasmaCore.ColorScope.highlightColor;
             ctx.lineWidth=5;
             ctx.arc(centreX, centreY, width/2.4, 0.7*Math.PI, 1.6*Math.PI * control.position - 1.25*Math.PI, false);
             ctx.stroke();

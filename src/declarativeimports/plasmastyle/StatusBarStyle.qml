@@ -40,7 +40,7 @@ QtQuickControlStyle.StatusBarStyle {
             anchors.top: parent.top
             width: parent.width
             height: 1
-            color: theme.textColor
+            color: PlasmaCore.ColorScope.textColor
             opacity: 0.1
         }
     }

@@ -271,7 +271,7 @@ T.ComboBox {
             }
             radius: 2
             color: theme.viewBackgroundColor
-            border.color: Qt.rgba(theme.textColor.r, theme.textColor.g, theme.textColor.b, 0.3)
+            border.color: Qt.rgba(PlasmaCore.ColorScope.textColor.r, PlasmaCore.ColorScope.textColor.g, PlasmaCore.ColorScope.textColor.b, 0.3)
             layer.enabled: true
 
             layer.effect: DropShadow {

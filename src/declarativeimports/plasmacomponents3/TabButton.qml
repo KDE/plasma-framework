@@ -39,7 +39,7 @@ T.TabButton {
         font: control.font
         elide: Text.ElideRight
         opacity: enabled ? 1 : 0.3
-        color: theme.textColor
+        color: PlasmaCore.ColorScope.textColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }

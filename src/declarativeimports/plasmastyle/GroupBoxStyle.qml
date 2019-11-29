@@ -28,7 +28,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 Style  {
     id: styleRoot
 
-    property color textColor: theme.textColor
+    property color textColor: PlasmaCore.ColorScope.textColor
 
     property Component checkbox: PlasmaComponents.CheckBox {
         checked: control.checked
