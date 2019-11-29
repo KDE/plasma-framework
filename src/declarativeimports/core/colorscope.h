@@ -119,8 +119,6 @@ public:
     ColorScope *findParentScope();
     void itemChange(ItemChange change, const ItemChangeData &value) override;
 
-    bool eventFilter(QObject * watched, QEvent * event) override;
-
 Q_SIGNALS:
     void colorGroupChanged();
     void colorsChanged();

@@ -25,6 +25,8 @@
 #include <QQmlEngine>
 #include <QColor>
 
+#include <PlasmaQuick/AppletQuickItem>
+
 QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, ColorScope *>();
 
 QWeakPointer<Plasma::Theme> ColorScope::s_theme;
@@ -47,11 +49,12 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
 
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 
-    QQuickItem *parentItem = qobject_cast<QQuickItem *>(parentObject);
-    if (parentItem) {
-        connect(parentItem, &QQuickItem::parentChanged, this, &ColorScope::checkColorGroupChanged);
-    } else if (m_parent) {
-        m_parent->installEventFilter(this);
+    if (parentObject && qobject_cast<QQuickItem *>(parentObject)) {
+        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::parentChanged,
+            this, &ColorScope::checkColorGroupChanged);
+    } else if (parent) {
+        connect(parent, &QQuickItem::parentChanged,
+            this, &ColorScope::checkColorGroupChanged);
     }
 }
 
@@ -76,15 +79,6 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
     return s;
 }
 
-bool ColorScope::eventFilter(QObject* watched, QEvent* event)
-{
-    Q_ASSERT(watched == m_parent && !qobject_cast<QQuickItem *>(watched));
-    if (event->type() == QEvent::ParentChange) {
-        checkColorGroupChanged();
-    }
-    return QQuickItem::eventFilter(watched, event);
-}
-
 void ColorScope::setParentScope(ColorScope* parentScope)
 {
     if (parentScope == m_parentScope)
@@ -105,29 +99,24 @@ void ColorScope::setParentScope(ColorScope* parentScope)
 
 ColorScope *ColorScope::findParentScope()
 {
-    QObject *p = nullptr;
-    if (m_parent) {
-        QQuickItem *gp = qobject_cast<QQuickItem *>(m_parent);
-        if (gp) {
-            p = gp->parentItem();
-        } else {
-            p = m_parent->parent();
+    QQuickItem *candidate = qobject_cast<QQuickItem *>(parentItem());
+    if (!candidate) {
+        candidate = qobject_cast<QQuickItem *>(parent());
+    }
+    while (candidate) {
+        candidate = candidate->parentItem();
+        ColorScope *s = qobject_cast<ColorScope *>(candidate);
+        if (!s) {
+            // Make sure AppletInterface always has a ColorScope
+            s = static_cast<ColorScope *>(qmlAttachedPropertiesObject<ColorScope>(candidate, qobject_cast<PlasmaQuick::AppletQuickItem *>(candidate)));
+        }
+
+        if (s) {
+            setParentScope(s);
+            return s;
         }
     }
-
-    if (!p || !m_parent) {
-        setParentScope(nullptr);
-        return nullptr;
-    }
-
-    ColorScope *c = qobject_cast<ColorScope *>(p);
-    if (!c) {
-        c = qmlAttachedProperties(p);
-    }
-
-    setParentScope(c);
-
-    return m_parentScope;
+    return nullptr;
 }
 
 void ColorScope::setColorGroup(Plasma::Theme::ColorGroup group)

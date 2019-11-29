@@ -280,9 +280,13 @@ public:
         NoBackground = 0,         /**< Not drawing a background under the applet, the applet has its own implementation */
         StandardBackground = 1,   /**< The standard background from the theme is drawn */
         TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
+        ShadowBackground = 4, /**< The applet won't have a svg background but a drop shadow of its content done via a shader */
+        ConfigurableBackground = 8, /** If the hint has this flag, the user is able to configure this background */
         DefaultBackground = StandardBackground /**< Default settings: both standard background */
     };
     Q_ENUM(BackgroundHints)
+    //TODO KF6: BackgroundHint and BackgroundHints
+    Q_DECLARE_FLAGS(BackgroundFlags, BackgroundHints)
 
 private:
     Types(QObject *parent = nullptr);
@@ -311,5 +315,5 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::BackgroundFlags)
 #endif // multiple inclusion guard
