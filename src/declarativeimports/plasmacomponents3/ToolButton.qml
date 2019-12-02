@@ -56,13 +56,20 @@ T.ToolButton {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             source: control.icon ? (control.icon.name || control.icon.source) : ""
         }
+        //NOTE: this is used only to check element's existence
+        PlasmaCore.FrameSvgItem {
+            id: buttonsurfaceChecker
+            visible: false
+            imagePath: "widgets/button"
+            prefix: control.flat ? ["toolbutton-hover", "normal"] : "normal"
+        }
         Label {
             Layout.fillWidth: true
             visible: text.length > 0
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            color: theme.buttonTextColor
+            color: (control.hovered || !control.flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
