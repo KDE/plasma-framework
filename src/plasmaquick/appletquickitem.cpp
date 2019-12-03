@@ -27,7 +27,6 @@
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QQuickWindow>
-#include <QQmlFileSelector>
 
 #include <QDebug>
 
@@ -87,7 +86,6 @@ void AppletQuickItemPrivate::init()
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->setUrlInterceptor(interceptor);
-        new QQmlFileSelector(qmlObject->engine(), qmlObject->engine());
     }
 }
 
