@@ -53,8 +53,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_toolTipTextFormat(0),
       m_toolTipItem(nullptr),
       m_args(args),
-      m_backgroundHints(Plasma::Types::StandardBackground),
-      m_userBackgroundHints(Plasma::Types::StandardBackground),
       m_hideOnDeactivate(true),
       m_oldKeyboardShortcut(0),
       m_dummyNativeInterface(nullptr),
@@ -94,6 +92,13 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::busyChanged,
             this, &AppletInterface::busyChanged);
 
+    connect(applet(), &Plasma::Applet::backgroundHintsChanged,
+            this, &AppletInterface::backgroundHintsChanged);
+    connect(applet(), &Plasma::Applet::effectiveBackgroundHintsChanged,
+            this, &AppletInterface::effectiveBackgroundHintsChanged);
+    connect(applet(), &Plasma::Applet::userBackgroundHintsChanged,
+            this, &AppletInterface::userBackgroundHintsChanged);
+    
     connect(applet(), &Plasma::Applet::configurationRequiredChanged, this,
             [this](bool configurationRequired, const QString &reason) {
         Q_UNUSED(configurationRequired);
@@ -193,19 +198,6 @@ void AppletInterface::init()
         emit externalData(QString(), m_args.first());
     } else if (!m_args.isEmpty()) {
         emit externalData(QString(), m_args);
-    }
-
-    QByteArray hintsString = applet()->config().readEntry("UserBackgroundHints", QString()).toUtf8();
-    QMetaEnum hintEnum = QMetaEnum::fromType<Plasma::Types::BackgroundHints>();
-    bool ok;
-    int value = hintEnum.keyToValue(hintsString.constData(), &ok);
-    if (ok) {
-        m_userBackgroundHints = Plasma::Types::BackgroundHints(value);
-        m_userBackgroundHintsInitialized = true;
-        emit userBackgroundHintsChanged();
-        if (m_backgroundHints & Plasma::Types::ConfigurableBackground) {
-            emit effectiveBackgroundHintsChanged();
-        }
     }
 }
 
@@ -400,59 +392,27 @@ void AppletInterface::setBusy(bool busy)
 
 Plasma::Types::BackgroundHints AppletInterface::backgroundHints() const
 {
-    return m_backgroundHints;
+    return applet()->backgroundHints();
 }
 
 void AppletInterface::setBackgroundHints(Plasma::Types::BackgroundHints hint)
 {
-    if (m_backgroundHints == hint) {
-        return;
-    }
-
-    Plasma::Types::BackgroundHints oldeffectiveHints = effectiveBackgroundHints();
-
-    m_backgroundHints = hint;
-    emit backgroundHintsChanged();
-
-    if (oldeffectiveHints != effectiveBackgroundHints()) {
-        emit effectiveBackgroundHintsChanged();
-    }
+    applet()->setBackgroundHints(hint);
 }
 
 Plasma::Types::BackgroundHints AppletInterface::effectiveBackgroundHints() const
 {
-    if (m_userBackgroundHintsInitialized
-        && (m_backgroundHints & Plasma::Types::ConfigurableBackground)) {
-        return m_userBackgroundHints;
-    } else {
-        return m_backgroundHints;
-    }
+    return applet()->effectiveBackgroundHints();
 }
 
 Plasma::Types::BackgroundHints AppletInterface::userBackgroundHints() const
 {
-    return m_userBackgroundHints;
+    return applet()->userBackgroundHints();
 }
 
 void AppletInterface::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
 {
-    if (m_userBackgroundHints == hint && m_userBackgroundHintsInitialized) {
-        return;
-    }
-
-    m_userBackgroundHints = hint;
-    m_userBackgroundHintsInitialized = true;
-    QMetaEnum hintEnum = QMetaEnum::fromType<Plasma::Types::BackgroundHints>();
-    applet()->config().writeEntry("UserBackgroundHints", hintEnum.valueToKey(m_userBackgroundHints));
-    if (applet()->containment() && applet()->containment()->corona()) {
-        applet()->containment()->corona()->requestConfigSync();
-    }
-
-    emit userBackgroundHintsChanged();
-
-    if (m_backgroundHints & Plasma::Types::ConfigurableBackground) {
-        emit effectiveBackgroundHintsChanged();
-    }
+    applet()->setUserBackgroundHints(hint);
 }
 
 void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)

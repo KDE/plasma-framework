@@ -111,7 +111,11 @@ public:
 
     QString configurationRequiredReason;
 
+    Types::BackgroundHints backgroundHints = Types::DefaultBackground;
+    Types::BackgroundHints userBackgroundHints = Types::DefaultBackground;
+
     // a great green field of booleans :)
+    bool userBackgroundHintsInitialized = false;
     bool hasConfigurationInterface : 1;
     bool failed : 1;
     bool transient : 1;

@@ -75,6 +75,21 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy NOTIFY busyChanged FINAL)
 
+    /**
+     * How the applet wants its background to be drawn. The containment may chose to ignore this hint.
+     */
+    Q_PROPERTY(Plasma::Types::BackgroundHints backgroundHints WRITE setBackgroundHints READ backgroundHints NOTIFY backgroundHintsChanged FINAL)
+
+    /**
+     * The containment (and/or the user) may decide to use another kind of background instead (if supported by the applet)
+     */
+    Q_PROPERTY(Plasma::Types::BackgroundHints userBackgroundHints WRITE setUserBackgroundHints READ userBackgroundHints NOTIFY userBackgroundHintsChanged FINAL)
+
+    /**
+     * The effective background hints the applet has, internally decided how to mix with userBackgroundHints
+     */
+    Q_PROPERTY(Plasma::Types::BackgroundHints effectiveBackgroundHints READ effectiveBackgroundHints NOTIFY effectiveBackgroundHintsChanged FINAL)
+
 public:
 //CONSTRUCTORS
     /**
@@ -370,6 +385,38 @@ public:
      */
     void setBusy(bool busy);
 
+    /**
+     * How the applet wants its background to be drawn. The containment may chose to ignore this hint.
+     * @since 5.65
+     */
+    Plasma::Types::BackgroundHints backgroundHints() const;
+
+    /**
+     * Sets the applet background hints. Only Applet implementations should write this property
+     * @since 5.65
+     */
+    void setBackgroundHints(Plasma::Types::BackgroundHints hint);
+
+    /**
+     * The containment (and/or the user) may decide to use another kind of background instead if supported by the applet.
+     * In order for an applet to support user configuration of the
+     * background, it needs to have the Plasma::Types::ConfigurableBackground flag set in its backgroundHints
+     * @since 5.65
+     */
+    Plasma::Types::BackgroundHints userBackgroundHints() const;
+
+    /**
+     * Sets the hints the user wished the background style for the applet to be.
+     * @since 5.65
+     */
+    void setUserBackgroundHints(Plasma::Types::BackgroundHints hint);
+
+    /**
+     * The effective background hints the applet will have: it will follow userBackgroundHints only if backgroundHints has the Plasma::Types::ConfigurableBackground flag set
+     * @since 5.65
+     */
+    Plasma::Types::BackgroundHints effectiveBackgroundHints() const;
+
 //ACTIONS
     /**
      * Returns a list of context-related QAction instances.
@@ -484,6 +531,24 @@ Q_SIGNALS:
      */
     void busyChanged(bool busy);
 
+    /**
+     * Emitted when the background hints have changed
+     * @since 5.65
+     */
+    void backgroundHintsChanged();
+
+    /**
+     * Emitted when the user background hints have changed
+     * @since 5.65
+     */
+    void userBackgroundHintsChanged();
+
+    /**
+     * Emitted when the effective background hints have changed
+     * @since 5.65
+     */
+    void effectiveBackgroundHintsChanged();
+
 //CONFIGURATION
     /**
      * Emitted when an applet has changed values in its configuration
@@ -578,6 +643,7 @@ public Q_SLOTS:
     /**
      * Called when applet configuration values have changed.
      */
+    //TODO KF6: make it not a slot anymore and protected
     virtual void configChanged();
 
 //UTILS

@@ -502,9 +502,6 @@ private:
     int m_toolTipTextFormat;
     QPointer<QQuickItem> m_toolTipItem;
     QVariantList m_args;
-    Plasma::Types::BackgroundHints m_backgroundHints;
-    Plasma::Types::BackgroundHints m_userBackgroundHints;
-    bool m_userBackgroundHintsInitialized = false;
     bool m_hideOnDeactivate : 1;
     bool m_loading = false;
     //this is used to build an emacs style shortcut

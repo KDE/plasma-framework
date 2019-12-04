@@ -32,6 +32,7 @@
 #include <QList>
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QMetaEnum>
 
 #include <kactioncollection.h>
 #include <kauthorized.h>
@@ -223,6 +224,21 @@ void Applet::restore(KConfigGroup &group)
         //TODO: implement; the shortcut
     }
     */
+
+    // User background hints
+    // TODO support flags in the config
+    QByteArray hintsString = config().readEntry("UserBackgroundHints", QString()).toUtf8();
+    QMetaEnum hintEnum = QMetaEnum::fromType<Plasma::Types::BackgroundHints>();
+    bool ok;
+    int value = hintEnum.keyToValue(hintsString.constData(), &ok);
+    if (ok) {
+        d->userBackgroundHints = Plasma::Types::BackgroundHints(value);
+        d->userBackgroundHintsInitialized = true;
+        emit userBackgroundHintsChanged();
+        if (d->backgroundHints & Plasma::Types::ConfigurableBackground) {
+            emit effectiveBackgroundHintsChanged();
+        }
+    }
 }
 
 void Applet::setLaunchErrorMessage(const QString &message)
@@ -398,6 +414,64 @@ void Applet::setBusy(bool busy)
     d->busy = busy;
     emit busyChanged(busy);
 }
+
+Plasma::Types::BackgroundHints Applet::backgroundHints() const
+{
+    return d->backgroundHints;
+}
+
+void Applet::setBackgroundHints(Plasma::Types::BackgroundHints hint)
+{
+    if (d->backgroundHints == hint) {
+        return;
+    }
+
+    Plasma::Types::BackgroundHints oldeffectiveHints = effectiveBackgroundHints();
+
+    d->backgroundHints = hint;
+    emit backgroundHintsChanged();
+
+    if (oldeffectiveHints != effectiveBackgroundHints()) {
+        emit effectiveBackgroundHintsChanged();
+    }
+}
+
+Plasma::Types::BackgroundHints Applet::effectiveBackgroundHints() const
+{
+    if (d->userBackgroundHintsInitialized
+        && (d->backgroundHints & Plasma::Types::ConfigurableBackground)) {
+        return d->userBackgroundHints;
+    } else {
+        return d->backgroundHints;
+    }
+}
+
+Plasma::Types::BackgroundHints Applet::userBackgroundHints() const
+{
+    return d->userBackgroundHints;
+}
+
+void Applet::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
+{
+    if (d->userBackgroundHints == hint && d->userBackgroundHintsInitialized) {
+        return;
+    }
+
+    d->userBackgroundHints = hint;
+    d->userBackgroundHintsInitialized = true;
+    QMetaEnum hintEnum = QMetaEnum::fromType<Plasma::Types::BackgroundHints>();
+    config().writeEntry("UserBackgroundHints", hintEnum.valueToKey(d->userBackgroundHints));
+    if (containment() && containment()->corona()) {
+        containment()->corona()->requestConfigSync();
+    }
+
+    emit userBackgroundHintsChanged();
+
+    if (d->backgroundHints & Plasma::Types::ConfigurableBackground) {
+        emit effectiveBackgroundHintsChanged();
+    }
+}
+
 
 KPluginInfo Applet::pluginInfo() const
 {
