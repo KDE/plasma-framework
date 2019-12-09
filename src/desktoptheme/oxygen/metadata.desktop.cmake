@@ -21,6 +21,7 @@ Name[id]=Oxygen
 Name[it]=Oxygen
 Name[ko]=Oxygen
 Name[lt]=Oxygen
+Name[lv]=Skābeklis
 Name[mr]=ऑक्सीजन
 Name[nb]=Oxygen
 Name[nds]=Oxygen

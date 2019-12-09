@@ -20,6 +20,7 @@ Name[id]=Breeze Gelap
 Name[it]=Brezza scuro
 Name[ko]=어두운 Breeze
 Name[lt]=Breeze tamsus
+Name[lv]=Tumšā brīze
 Name[nb]=Mørk bris
 Name[nds]=Breeze düüster
 Name[nl]=Breeze Dark

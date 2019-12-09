@@ -20,6 +20,7 @@ Name[id]=Breeze Terang
 Name[it]=Brezza chiaro
 Name[ko]=Breeze Light
 Name[lt]=Breeze šviesus
+Name[lv]=Gaišā brīze
 Name[nl]=Breeze Light
 Name[nn]=Breeze lys
 Name[pl]=Jasna Bryza

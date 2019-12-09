@@ -20,6 +20,7 @@ Name[id]=Breeze
 Name[it]=Brezza
 Name[ko]=Breeze
 Name[lt]=Breeze
+Name[lv]=Brīze
 Name[nb]=Bris
 Name[nds]=Breeze
 Name[nl]=Breeze
