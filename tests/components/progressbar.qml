@@ -2,14 +2,9 @@ import QtQuick 2.0
 
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-Rectangle {
+ComponentBase {
     id: root
-
     property int orientation: orientationCombo.model[orientationCombo.currentIndex].value
-
-    color: "white"
-    width: 900
-    height: 600
 
     Flow {
         anchors.fill: parent

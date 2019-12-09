@@ -2,12 +2,8 @@ import QtQuick 2.0
 
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
-Rectangle {
+ComponentBase {
     id: root
-    color: "white"
-    width: 800
-    height: 300
-
     property string longText: "This is a longer sentence"
 
     Flow {

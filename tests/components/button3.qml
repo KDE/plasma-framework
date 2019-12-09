@@ -3,19 +3,14 @@ import QtQuick 2.0
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import QtQuick.Layouts 1.2
 
-Rectangle
-{
-    width: 500
-    height: 500
-    color: "white"
-
+ComponentBase {
     Grid {
         anchors.fill: parent
         anchors.margins: 20
         spacing: 20
         columns: 2
 
-        Label {
+        PlasmaComponents.Label {
             text: "icon + text"
         }
 
@@ -24,7 +19,7 @@ Rectangle
             text: "test"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "icon alone, should look small and square"
         }
 
@@ -32,7 +27,7 @@ Rectangle
             icon.name: "list-remove"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "text alone, should be about 12 chars wide"
         }
 
@@ -41,7 +36,7 @@ Rectangle
         }
 
 
-        Label {
+        PlasmaComponents.Label {
             text: "long text, should expand to fit"
         }
 
@@ -50,7 +45,7 @@ Rectangle
             text: "This is a really really really really long button"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "long text but constrained, should be 150px and elided"
         }
 
@@ -61,7 +56,7 @@ Rectangle
         }
 
 
-        Label {
+        PlasmaComponents.Label {
             text: "button (with or without icon) and textfield should have the same height"
         }
 
@@ -77,7 +72,7 @@ Rectangle
             }
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "minimum width property. Should be two letters wide"
         }
 

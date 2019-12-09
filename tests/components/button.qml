@@ -4,12 +4,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.2
 
-Rectangle
-{
-    width: 500
-    height: 500
-    color: "white"
-
+ComponentBase {
     Grid {
         anchors.fill: parent
         anchors.margins: 20

@@ -1,10 +1,7 @@
 import QtQuick 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
-Rectangle {
-    width: 600
-    height: 250
-    color: "white"
+ComponentBase {
 
     Flow {
         anchors.fill: parent

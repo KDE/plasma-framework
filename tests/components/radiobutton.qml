@@ -4,26 +4,21 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.2
 
-Rectangle
-{
-    width: 500
-    height: 500
-    color: "white"
-
+ComponentBase {
     Grid {
         anchors.fill: parent
         anchors.margins: 20
         spacing: 4
         columns: 2
 
-        Label {
+        PlasmaComponents.Label {
             text: "text"
         }
         PlasmaComponents.RadioButton {
             text: "Some awesome radiobutton"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "focus"
         }
         PlasmaComponents.RadioButton {
@@ -31,7 +26,7 @@ Rectangle
             focus: true
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "checked"
         }
         PlasmaComponents.RadioButton {
@@ -39,7 +34,7 @@ Rectangle
             checked: true
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "disabled"
         }
         PlasmaComponents.RadioButton {
@@ -47,7 +42,7 @@ Rectangle
             enabled: false
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "disabled and checked"
         }
         PlasmaComponents.RadioButton {
