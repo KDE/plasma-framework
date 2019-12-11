@@ -365,4 +365,44 @@
        r="0.5"
        class="ColorScheme-Background" />
   </g>
+  <g
+     id="user-desktop"
+     transform="translate(-3,27)"
+     inkscape:label="#user-desktop">
+    <g
+       transform="translate(-19,-27)">
+      <rect
+         style="fill:none;fill-opacity:1;stroke:none"
+         width="22"
+         height="22"
+         x="-88"
+         y="0" />
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m -104,-24 v 16 h 16 v -16 z m 1,1 h 14 v 14 h -14 z m 1,12 v 1 h 12 v -1 z"
+       class="ColorScheme-Text"/>
+  </g>
+  <g
+     id="16-16-user-desktop"
+     transform="translate(9.0000001,-1.0000004)">
+    <g
+       transform="matrix(0.72727273,0,0,0.72727273,-57.181818,25.636364)">
+      <g
+         transform="translate(-19,-27)">
+        <rect
+           y="0"
+           x="-88"
+           height="22"
+           width="22"
+           style="fill:none;fill-opacity:1;stroke:none" />
+      </g>
+    </g>
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m -133,8 v 12 h 12 V 8 Z m 1,1 h 10 v 9 1 h -10 v -1 z m 1,8 v 1 h 8 v -1 z"
+       class="ColorScheme-Text" />
+  </g>
 </svg>
