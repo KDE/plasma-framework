@@ -67,7 +67,6 @@ T.Button {
 
     background: Item {
         //retrocompatibility with old controls
-        implicitWidth: units.gridUnit * 6
         implicitHeight: units.gridUnit * 1.6
         Private.ButtonShadow {
             anchors.fill: parent
