@@ -109,12 +109,19 @@ void ColorScope::setParentScope(ColorScope* parentScope)
 
 ColorScope *ColorScope::findParentScope()
 {
-    QQuickItem *candidate = qobject_cast<QQuickItem *>(parentItem());
+    QObject *candidate = parentItem();
     if (!candidate) {
-        candidate = qobject_cast<QQuickItem *>(parent());
+        candidate = parent();
     }
+
     while (candidate) {
-        candidate = candidate->parentItem();
+        auto *quickCandidate = qobject_cast<QQuickItem *>(candidate);
+        if (quickCandidate && quickCandidate->parentItem()) {
+            candidate = quickCandidate->parentItem();
+        } else {
+            candidate = candidate->parent();
+        }
+
         ColorScope *s = qobject_cast<ColorScope *>(candidate);
         if (!s) {
             // Make sure AppletInterface always has a ColorScope
