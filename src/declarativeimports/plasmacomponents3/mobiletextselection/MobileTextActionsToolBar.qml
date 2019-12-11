@@ -35,18 +35,18 @@ Popup {
     closePolicy: Popup.NoAutoClose
     property bool shouldBeVisible: false
 
-    x: controlRoot ? Math.min(Math.max(0, controlRoot.mapToItem(root.parent, controlRoot.positionToRectangle(controlRoot.selectionStart).x, 0).x - root.width/2), controlRoot.Window.contentItem.width - root.width) : 0
+    x: parent ? Math.min(Math.max(0, controlRoot.mapToItem(root.parent, controlRoot.positionToRectangle(controlRoot.selectionStart).x, 0).x - root.width/2), parent.width - root.width) : 0
 
     y: {
-        if (!controlRoot) {
+        if (!parent) {
             return false;
         }
         var desiredY = controlRoot.mapToItem(root.parent, 0, controlRoot.positionToRectangle(controlRoot.selectionStart).y).y  - root.height;
 
         if (desiredY >= 0) {
-            return Math.min(desiredY, controlRoot.Window.contentItem.height - root.height);
+            return Math.min(desiredY, parent.height - root.height);
         } else {
-            return Math.min(Math.max(0, controlRoot.mapToItem(root.parent, 0, controlRoot.positionToRectangle(controlRoot.selectionEnd).y + Math.round(units.gridUnit*1.5)).y), controlRoot.Window.contentItem.height - root.height);
+            return Math.min(Math.max(0, controlRoot.mapToItem(root.parent, 0, controlRoot.positionToRectangle(controlRoot.selectionEnd).y + Math.round(units.gridUnit*1.5)).y), parent.height - root.height);
         }
     }
 

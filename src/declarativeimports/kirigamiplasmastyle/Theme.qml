@@ -53,13 +53,13 @@ QtObject {
 
     property color selectionTextColor: theme.highlightedTextColor
     property color selectionBackgroundColor: theme.highlightColor
-    property color selectionAlternateBackgroundColor: Qt.darker(theme.selectionBackgroundColor, 1.05)
+    property color selectionAlternateBackgroundColor: Qt.darker(theme.highlightColor, 1.05)
     property color selectionHoverColor: theme.buttonHoverColor
     property color selectionFocusColor: theme.buttonFocusColor
 
     property color tooltipTextColor: theme.complementaryTextColor
     property color tooltipBackgroundColor: theme.complementaryBackgroundColor
-    property color tooltipAlternateBackgroundColor: Qt.darker(theme.tooltipBackgroundColor, 1.05)
+    property color tooltipAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
     property color tooltipHoverColor: theme.complementaryHoverColor
     property color tooltipFocusColor: theme.complementaryFocusColor
 

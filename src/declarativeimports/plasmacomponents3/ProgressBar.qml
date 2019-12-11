@@ -70,11 +70,5 @@ T.ProgressBar {
         imagePath: "widgets/bar_meter_horizontal"
         prefix: "bar-inactive"
         colorGroup: PlasmaCore.ColorScope.colorGroup
-        onRepaintNeeded: {
-            implicitHeight = barSvg.elementSize("hint-bar-size").height
-            if (implicitHeight == 0) {
-                implicitHeight = barSvg.elementSize("bar-inactive-top").height + barSvg.elementSize("bar-inactive-bottom").height
-            }
-        }
     }
 }
