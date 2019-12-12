@@ -1,7 +1,6 @@
 import QtQuick 2.0
 
-import org.kde.plasma.components 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0
 
 ComponentBase {
     Flow {
@@ -17,10 +16,12 @@ ComponentBase {
 
         ComboBox {
             model:demoModel
+            textRole: "text"
         }
         ComboBox {
             editable: true
             model: demoModel
+            textRole: "text"
         }
     }
 }
