@@ -29,7 +29,7 @@ T.ToolTip {
     x: parent ? (parent.width - implicitWidth) / 2 : 0
     y: -implicitHeight - 3
 
-    visible: Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered
+    visible: parent && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
     delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 1000
     timeout: 5000
 
