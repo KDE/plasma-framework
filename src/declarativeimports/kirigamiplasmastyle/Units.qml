@@ -99,7 +99,7 @@ QtObject {
      */
     property int wheelScrollLines: 3
 
-    property int toolTipDelay: 700
+    property int toolTipDelay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 700
 
     /**
      * metrics used by the default font

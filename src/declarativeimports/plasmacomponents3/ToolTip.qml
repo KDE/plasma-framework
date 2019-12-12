@@ -30,7 +30,7 @@ T.ToolTip {
     y: -implicitHeight - 3
 
     visible: parent && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
-    delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 1000
+    delay: Kirigami.Units.toolTipDelay
     timeout: 5000
 
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
