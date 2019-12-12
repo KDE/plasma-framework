@@ -45,6 +45,7 @@ T.ProgressBar {
             id: anim
             loops: Animation.Infinite
 
+            alwaysRunToEnd: true
             running: control.indeterminate && control.visible
 
             PropertyAnimation {
