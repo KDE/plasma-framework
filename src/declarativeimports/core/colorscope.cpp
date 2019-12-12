@@ -52,13 +52,13 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
 
     if (parentObject && qobject_cast<QQuickItem *>(parentObject)) {
         connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::windowChanged,
-            this, [this, parentObject]() {
+            this, [this]() {
                 findParentScope();
                 checkColorGroupChanged();
             });
 
         connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::parentChanged,
-            this, [this, parentObject]() {
+            this, [this]() {
                 findParentScope();
                 checkColorGroupChanged();
             });
