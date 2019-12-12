@@ -38,7 +38,9 @@ T.ProgressBar {
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup
+            visible: width > indicator.fixedMargins.left
         }
+
         SequentialAnimation {
             id: anim
             loops: Animation.Infinite
