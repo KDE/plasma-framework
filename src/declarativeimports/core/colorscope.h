@@ -133,6 +133,7 @@ private:
     QPointer<ColorScope> m_parentScope;
     QObject *const m_parent;
     Plasma::Theme::ColorGroup m_actualGroup;
+    bool m_deleting = false;
 
     static QHash<QObject *, ColorScope *> s_attachedScopes;
 

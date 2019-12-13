@@ -70,6 +70,7 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
 
 ColorScope::~ColorScope()
 {
+    m_deleting = true;
     s_attachedScopes.remove(m_parent);
 }
 
@@ -127,8 +128,7 @@ ColorScope *ColorScope::findParentScope()
             // Make sure AppletInterface always has a ColorScope
             s = static_cast<ColorScope *>(qmlAttachedPropertiesObject<ColorScope>(candidate, qobject_cast<PlasmaQuick::AppletQuickItem *>(candidate)));
         }
-
-        if (s) {
+        if (s && !s->m_deleting) {
             setParentScope(s);
             return s;
         }
