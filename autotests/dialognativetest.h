@@ -19,7 +19,7 @@
 #ifndef DIALOGNATIVETEST_H
 #define DIALOGNATIVETEST_H
 
-#include <QtTest>
+#include <QTest>
 #include <QQuickView>
 #include <QQuickItem>
 

@@ -19,7 +19,7 @@
 #ifndef THEMETEST_H
 #define THEMETEST_H
 
-#include <QtTest>
+#include <QTest>
 
 #include "plasma/theme.h"
 #include "plasma/svg.h"

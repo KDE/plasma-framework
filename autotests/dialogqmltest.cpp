@@ -25,7 +25,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include <QtTest>
+#include <QTest>
 #include <QSignalSpy>
 
 

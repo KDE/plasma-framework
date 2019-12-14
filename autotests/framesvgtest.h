@@ -19,7 +19,7 @@
 #ifndef FRAMESVGTEST_H
 #define FRAMESVGTEST_H
 
-#include <QtTest>
+#include <QTest>
 
 
 #include "plasma/framesvg.h"

@@ -43,7 +43,7 @@
 
 #include "modeltest.h"
 
-#include <QtTest>
+#include <QTest>
 //#undef Q_ASSERT
 //#define Q_ASSERT  QVERIFY
 

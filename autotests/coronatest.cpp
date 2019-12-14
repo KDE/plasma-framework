@@ -23,7 +23,8 @@
 #include <QStandardPaths>
 #include <QAction>
 #include <QApplication>
-
+#include <QSignalSpy>
+#include <QProcess>
 Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
                                    const QVariantList &args)
 {

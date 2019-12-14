@@ -26,7 +26,7 @@
 #include <QStandardItemModel>
 #include <QStringListModel>
 #include <QSignalSpy>
-#include <QtTest>
+#include <QTest>
 
 using namespace Plasma;
 

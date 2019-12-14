@@ -19,7 +19,7 @@
 
 #ifndef PACKAGETEST_H
 
-#include <QtTest>
+#include <QTest>
 
 #include "plasma/package.h"
 #include "plasma/packagestructure.h"

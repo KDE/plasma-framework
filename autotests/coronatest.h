@@ -19,7 +19,7 @@
 #ifndef CORONATEST_H
 #define CORONATEST_H
 
-#include <QtTest>
+#include <QTest>
 
 #include <QTimer>
 

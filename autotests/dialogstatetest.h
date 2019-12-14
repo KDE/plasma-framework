@@ -19,7 +19,7 @@
 #ifndef DIALOGSTATETEST_H
 #define DIALOGSTATETEST_H
 
-#include <QtTest>
+#include <QTest>
 
 #include "plasmaquick/dialog.h"
 

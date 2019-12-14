@@ -21,7 +21,7 @@
 
 #include <QQuickItem>
 #include <QQuickView>
-#include <QtTest>
+#include <QTest>
 
 namespace Plasma
 {

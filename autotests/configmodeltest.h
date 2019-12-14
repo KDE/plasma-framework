@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <QtTest>
+#include <QTest>
 
 namespace Plasma
 {

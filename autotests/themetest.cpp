@@ -20,6 +20,7 @@
 #include "themetest.h"
 #include <QStandardPaths>
 #include <QApplication>
+#include <QSignalSpy>
 
 #include <KIconLoader>
 #include <KIconTheme>
