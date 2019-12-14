@@ -198,7 +198,8 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         kdeclarative.setDeclarativeEngine(engine());
         //binds things like kconfig and icons
         kdeclarative.setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
-        kdeclarative.setupBindings();
+        kdeclarative.setupContext();
+        KDeclarative::KDeclarative::setupEngine(engine()); // ### how to make sure to do this only once per engine?
     } else {
         qWarning() << "Invalid home screen package";
     }

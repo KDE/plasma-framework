@@ -101,7 +101,8 @@ void ConfigViewPrivate::init()
     } else {
         kdeclarative.setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
     }
-    kdeclarative.setupBindings();
+    kdeclarative.setupContext();
+    KDeclarative::KDeclarative::setupEngine(q->engine()); // ### how to make sure to do this only once per engine?
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);

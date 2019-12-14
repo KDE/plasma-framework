@@ -224,7 +224,7 @@ void Package::setContentsPrefixPaths(const QStringList &prefixPaths)
 
 QString Package::contentsHash() const
 {
-    return d->internalPackage->contentsHash();
+    return QString::fromLocal8Bit(d->internalPackage->cryptographicHash(QCryptographicHash::Sha1));
 }
 
 void Package::addDirectoryDefinition(const char *key, const QString &path, const QString &name)

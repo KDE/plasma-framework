@@ -64,7 +64,8 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     if (!engine->rootContext()->contextObject()) {
         KDeclarative::KDeclarative kdeclarative;
         kdeclarative.setDeclarativeEngine(engine);
-        kdeclarative.setupBindings();
+        kdeclarative.setupContext();
+        KDeclarative::KDeclarative::setupEngine(engine);
     }
 }
 

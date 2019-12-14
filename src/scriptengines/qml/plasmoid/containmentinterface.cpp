@@ -166,9 +166,7 @@ void ContainmentInterface::init()
     connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
             this, &ContainmentInterface::containmentTypeChanged);
 
-    connect(m_containment.data()->actions(), &KActionCollection::inserted,
-            this, &ContainmentInterface::actionsChanged);
-    connect(m_containment.data()->actions(), &KActionCollection::removed,
+    connect(m_containment.data()->actions(), &KActionCollection::changed,
             this, &ContainmentInterface::actionsChanged);
 }
 
