@@ -57,6 +57,10 @@
 #include <xcb/shape.h>
 #endif
 
+#if HAVE_X11
+#include <QtPlatformHeaders/QXcbWindowFunctions>
+#endif
+
 //Unfortunately QWINDOWSIZE_MAX is not exported
 #define DIALOGSIZE_MAX ((1<<24)-1)
 
@@ -336,17 +340,7 @@ void DialogPrivate::updateVisibility(bool visible)
     if (visible) {
         q->raise();
 
-        if (type != Dialog::Normal) {
-            KWindowSystem::setType(q->winId(), (NET::WindowType)type);
-        } else {
-            q->setFlags(Qt::FramelessWindowHint | q->flags());
-        }
-
-        if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
-            KWindowSystem::setOnAllDesktops(q->winId(), true);
-        } else {
-            KWindowSystem::setOnAllDesktops(q->winId(), false);
-        }
+        applyType();
     }
 }
 
@@ -725,7 +719,44 @@ void DialogPrivate::setupWaylandIntegration()
 void DialogPrivate::applyType()
 {
     if (type != Dialog::Normal) {
-        KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
+        /*QXcbWindowFunctions::WmWindowType*/ int wmType = 0;
+
+#if HAVE_X11
+        if (KWindowSystem::isPlatformX11()) {
+            switch (type) {
+                case Dialog::Normal:
+                    Q_UNREACHABLE();
+                    break;
+                case Dialog::Dock:
+                    wmType = QXcbWindowFunctions::WmWindowType::Dock;
+                    break;
+                case Dialog::DialogWindow:
+                    wmType = QXcbWindowFunctions::WmWindowType::Dialog;
+                    break;
+                case Dialog::PopupMenu:
+                    wmType = QXcbWindowFunctions::WmWindowType::PopupMenu;
+                    break;
+                case Dialog::Tooltip:
+                    wmType = QXcbWindowFunctions::WmWindowType::Tooltip;
+                    break;
+                case Dialog::Notification:
+                    wmType = QXcbWindowFunctions::WmWindowType::Notification;
+                    break;
+                case Dialog::OnScreenDisplay:
+                case Dialog::CriticalNotification:
+                    // Not supported by Qt
+                    break;
+            }
+
+            if (wmType) {
+                QXcbWindowFunctions::setWmWindowType(q, static_cast<QXcbWindowFunctions::WmWindowType>(wmType));
+            }
+        }
+#endif
+
+        if (!wmType) {
+            KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
+        }
     } else {
         q->setFlags(Qt::FramelessWindowHint | q->flags());
     }
