@@ -1,6 +1,6 @@
 # find_package(KActivities QUIET CONFIG)
 # set_package_properties(KActivities PROPERTIES DESCRIPTION "Library and infrastructure for using Activities from applications"
-#                        URL "https://projects.kde.org/kactivities"
+#                        URL "https://commits.kde.org/kactivities"
 #                        TYPE REQUIRED
 #                        PURPOSE "Provides the ability to access activities from QML."
 #                       )
