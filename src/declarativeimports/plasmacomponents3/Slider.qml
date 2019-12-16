@@ -28,7 +28,7 @@ T.Slider {
     implicitWidth: control.orientation === Qt.Horizontal ? units.gridUnit * 12 : units.gridUnit * 1.6
     implicitHeight: control.orientation === Qt.Horizontal ? units.gridUnit * 1.6 : units.gridUnit * 12
 
-
+    wheelEnabled: true
     snapMode: T.Slider.SnapOnRelease
 
     PlasmaCore.Svg {
@@ -94,14 +94,16 @@ T.Slider {
 
         Repeater {
             id: repeater
-            model: control.stepSize > 0 ? 1 + (control.to - control.from) / control.stepSize : 0
+            readonly property int stepCount: (control.to - control.from) / control.stepSize
+            model: control.stepSize && stepCount < 20 ? 1 + stepCount : 0
             anchors.fill: parent
 
             Rectangle {
                 color: PlasmaCore.ColorScope.textColor
+                opacity: 0.3
                 width: background.horizontal ? units.devicePixelRatio : units.gridUnit/2
                 height: background.horizontal ? units.gridUnit/2 : units.devicePixelRatio
-                y: background.horizontal ? background.height : handle.height / 2 + index * ((repeater.height - handle.height) / (repeater.count > 1 ? repeater.count - 1 : 1))
+                y: background.horizontal ? background.height + units.devicePixelRatio : handle.height / 2 + index * ((repeater.height - handle.height) / (repeater.count > 1 ? repeater.count - 1 : 1))
                 x: background.horizontal ? handle.width / 2 + index * ((repeater.width - handle.width) / (repeater.count > 1 ? repeater.count - 1 : 1)) : background.width
             }
         }
