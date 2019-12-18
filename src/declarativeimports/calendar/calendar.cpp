@@ -199,9 +199,12 @@ QString Calendar::monthName() const
     // locale and take the month name from that.
     //
     // See https://bugs.kde.org/show_bug.cgi?id=353715
-    const QString lang = QLocale().uiLanguages().at(0);
-    // If lang is empty, it will create just a system locale
-    QLocale langLocale(lang);
+
+    QLocale langLocale;
+
+    if (QLocale().uiLanguages().length() > 0) {
+        langLocale = QLocale(QLocale().uiLanguages().at(0));
+    }
     return langLocale.standaloneMonthName(m_displayedDate.month());
 }
 
