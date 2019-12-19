@@ -427,7 +427,7 @@ void Theme::releaseRectsCache(const QString &image)
     if (it != d->invalidElements.end()) {
         if (d->useCache()) {
             KConfigGroup imageGroup(d->svgElementsCache, it.key());
-            imageGroup.writeEntry("invalidElements", it.value().toList());
+            imageGroup.writeEntry("invalidElements", it.value().values());
         }
 
         d->invalidElements.erase(it);

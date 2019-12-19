@@ -605,7 +605,7 @@ void PluginLoader::setCustomAppletCategories(const QStringList &categories)
 
 QStringList PluginLoader::customAppletCategories() const
 {
-    return PluginLoaderPrivate::s_customCategories.toList();
+    return PluginLoaderPrivate::s_customCategories.values();
 }
 
 QString PluginLoader::appletCategory(const QString &appletName)
@@ -679,7 +679,7 @@ QStringList PluginLoader::listContainmentTypes()
         }
     }
 
-    return types.toList();
+    return types.values();
 }
 
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)

@@ -615,7 +615,7 @@ void ThemePrivate::saveSvgElementsCache()
         while (it.hasNext()) {
             it.next();
             KConfigGroup imageGroup(svgElementsCache, it.key());
-            imageGroup.writeEntry("invalidElements", it.value().toList()); //FIXME: add QSet support to KConfig
+            imageGroup.writeEntry("invalidElements", it.value().values()); //FIXME: add QSet support to KConfig
         }
 
         //Pretty drastic, but this is executed only very rarely
