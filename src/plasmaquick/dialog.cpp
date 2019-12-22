@@ -760,6 +760,7 @@ void DialogPrivate::applyType()
     } else {
         q->setFlags(Qt::FramelessWindowHint | q->flags());
     }
+
     //an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
     //see bug 370433
     if (type == Dialog::OnScreenDisplay) {
@@ -781,6 +782,12 @@ void DialogPrivate::applyType()
     } else {
         KWindowSystem::setOnAllDesktops(q->winId(), false);
     }
+
+#if HAVE_KWAYLAND
+    if (shellSurface) {
+        shellSurface->setPanelTakesFocus(!q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
+    }
+#endif
 }
 
 
