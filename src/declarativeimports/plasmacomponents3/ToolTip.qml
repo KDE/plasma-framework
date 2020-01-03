@@ -26,7 +26,7 @@ import org.kde.kirigami 2.5 as Kirigami
 T.ToolTip {
     id: control
 
-    x: parent ? (parent.width - implicitWidth) / 2 : 0
+    x: parent ? Math.round((parent.width - implicitWidth) / 2) : 0
     y: -implicitHeight - 3
 
     visible: parent && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
