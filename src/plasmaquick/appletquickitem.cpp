@@ -27,6 +27,7 @@
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QRandomGenerator>
 
 #include <QDebug>
 
@@ -701,7 +702,7 @@ void AppletQuickItem::init()
                         //to be the delay, smaller minimum walue, smaller spread
                         const int min = (100 - preloadWeight) * 20;
                         const int max = (100 - preloadWeight) * 100;
-                        const int delay = qrand() % ((max + 1) - min) + min;
+                        const int delay = QRandomGenerator::global()->bounded((max + 1) - min) + min;
                         QTimer::singleShot(delay, this, [this, delay]() {
                             qCDebug(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
                             d->preloadForExpansion();

@@ -22,6 +22,7 @@
 
 #include <QDebug>
 #include <QAbstractItemModel>
+#include <QRandomGenerator>
 
 #include "plasma.h"
 #include "debug_p.h"
@@ -195,11 +196,9 @@ void DataContainer::connectVisualization(QObject *visualization, uint pollingInt
 
 void DataContainer::setStorageEnabled(bool store)
 {
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
     d->enableStorage = store;
     if (store) {
-        QTimer::singleShot(qrand() % (2000 + 1), this, SLOT(retrieve()));
+        QTimer::singleShot(QRandomGenerator::global()->bounded(2000 + 1), this, SLOT(retrieve()));
     }
 }
 

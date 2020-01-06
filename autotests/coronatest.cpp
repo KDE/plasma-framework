@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QSignalSpy>
+#include <QRandomGenerator>
 #include <QProcess>
 Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
                                    const QVariantList &args)
@@ -67,12 +68,9 @@ int SimpleCorona::screenForContainment(const Plasma::Containment *c) const
 SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
     : Plasma::Applet(parent, serviceId, appletId)
 {
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
-
     //updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
-    m_timer.setInterval(qrand() % ((500 + 1) - 100) + 100);
+    m_timer.setInterval(QRandomGenerator::global()->bounded((500 + 1) - 100) + 100);
     m_timer.start();
     connect(&m_timer, &QTimer::timeout, [=]() {
         updateConstraints(Plasma::Types::UiReadyConstraint);
@@ -83,12 +81,9 @@ SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appl
 SimpleContainment::SimpleContainment(QObject *parent , const QString &serviceId, uint appletId)
     : Plasma::Containment(parent, serviceId, appletId)
 {
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
-
     //updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
-    m_timer.setInterval(qrand() % ((500 + 1) - 100) + 100);
+    m_timer.setInterval(QRandomGenerator::global()->bounded((500 + 1) - 100) + 100);
     m_timer.start();
     connect(&m_timer, &QTimer::timeout, [=]() {
         updateConstraints(Plasma::Types::UiReadyConstraint);
