@@ -168,38 +168,38 @@ void DataEngineManager::timerEvent(QTimerEvent *)
     QTextStream out(&f);
 
     QHashIterator<QString, DataEngine *> it(d->engines);
-    out << "================================== " << QLocale().toString(QDateTime::currentDateTime()) << endl;
+    out << "================================== " << QLocale().toString(QDateTime::currentDateTime()) << '\n';
     while (it.hasNext()) {
         it.next();
         DataEngine *engine = it.value();
-        out << "DataEngine: " << it.key() << ' ' << engine << endl;
-        out << "            Claimed # of sources: " << engine->sources().count() << endl;
-        out << "            Actual # of sources: " << engine->containerDict().count() << endl;
-        out << endl << "            Source Details" << endl;
+        out << "DataEngine: " << it.key() << ' ' << engine << '\n';
+        out << "            Claimed # of sources: " << engine->sources().count() << '\n';
+        out << "            Actual # of sources: " << engine->containerDict().count() << '\n';
+        out << "\n            Source Details" << '\n';
 
         foreach (DataContainer *dc, engine->containerDict()) {
-            out << "                * " << dc->objectName() << endl;
-            out << "                       Data count: " << dc->d->data.count() << endl;
-            out << "                       Stored: " << dc->isStorageEnabled() << ' ' << endl;
+            out << "                * " << dc->objectName() << '\n';
+            out << "                       Data count: " << dc->d->data.count() << '\n';
+            out << "                       Stored: " << dc->isStorageEnabled() << " \n";
             const int directs = dc->receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
             if (directs > 0) {
-                out << "                       Direction Connections: " << directs << ' ' << endl;
+                out << "                       Direction Connections: " << directs << " \n";
             }
 
             const int relays = dc->d->relays.count();
             if (relays > 0) {
-                out << "                       Relays: " << dc->d->relays.count() << endl;
+                out << "                       Relays: " << dc->d->relays.count() << '\n';
                 QString times;
                 foreach (SignalRelay *relay, dc->d->relays) {
                     times.append(QLatin1Char(' ') + QString::number(relay->m_interval));
                 }
-                out << "                       Relay Timeouts: " << times << ' '  << endl;
+                out << "                       Relay Timeouts: " << times << " \n";
             }
         }
 
-        out << endl << "-----" << endl;
+        out << "\n-----\n";
     }
-    out << endl << endl;
+    out << "\n\n";
 #endif
 //    killTimer(event->timerId());
 }
