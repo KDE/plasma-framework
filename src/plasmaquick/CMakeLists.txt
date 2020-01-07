@@ -21,6 +21,10 @@ set(plasmaquick_LIB_SRC
     ../declarativeimports/core/units.cpp
 )
 
+if(HAVE_KWAYLAND)
+    set(plasmaquick_LIB_SRC ${plasmaquick_LIB_SRC} waylandintegration.cpp)
+endif()
+
 ecm_qt_declare_logging_category(PlasmaQuick_LIB_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMAQUICK CATEGORY_NAME org.kde.plasmaquick)
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})

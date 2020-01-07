@@ -48,6 +48,7 @@
 #include <QDebug>
 
 #if HAVE_KWAYLAND
+#include "waylandintegration_p.h"
 #include <KWayland/Client/plasmashell.h>
 #include <KWayland/Client/surface.h>
 #endif
@@ -704,7 +705,7 @@ void DialogPrivate::setupWaylandIntegration()
     }
 
     using namespace KWayland::Client;
-    PlasmaShell *interface = DialogShadows::self()->waylandPlasmaShellInterface();
+    PlasmaShell *interface = WaylandIntegration::self()->waylandPlasmaShell();
     if (!interface) {
         return;
     }

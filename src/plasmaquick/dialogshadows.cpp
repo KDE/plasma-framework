@@ -32,12 +32,10 @@
 #endif
 
 #if HAVE_KWAYLAND
-#include <KWayland/Client/connection_thread.h>
-#include <KWayland/Client/registry.h>
+#include "waylandintegration_p.h"
 #include <KWayland/Client/shadow.h>
 #include <KWayland/Client/shm_pool.h>
 #include <KWayland/Client/surface.h>
-#include <KWayland/Client/plasmashell.h>
 #endif
 
 #include <qdebug.h>
@@ -53,7 +51,6 @@ public:
         , m_isX11(KWindowSystem::isPlatformX11())
 #endif
     {
-        setupWaylandIntegration();
     }
 
     ~Private()
@@ -80,8 +77,6 @@ public:
     void windowDestroyed(QObject *deletedObject);
     void setupData(Plasma::FrameSvg::EnabledBorders enabledBorders);
 
-    void setupWaylandIntegration();
-
     DialogShadows *q;
     QList<QPixmap> m_shadowPixmaps;
 
@@ -104,10 +99,6 @@ public:
 
 #if HAVE_KWAYLAND
     struct Wayland {
-        KWayland::Client::ShadowManager *manager = nullptr;
-        KWayland::Client::ShmPool *shmPool = nullptr;
-        KWayland::Client::PlasmaShell *plasmaShell = nullptr;
-
         QList<KWayland::Client::Buffer::Ptr> shadowBuffers;
     };
     Wayland m_wayland;
@@ -308,9 +299,9 @@ void DialogShadows::Private::setupPixmaps()
     m_emptyHorizontalPix = initEmptyPixmap(QSize(q->elementSize(QStringLiteral("shadow-top")).width(), 1));
 
 #if HAVE_KWAYLAND
-    if (m_wayland.shmPool) {
+    if (KWayland::Client::ShmPool *shmPool = WaylandIntegration::self()->waylandShmPool()) {
         for (auto it = m_shadowPixmaps.constBegin(); it != m_shadowPixmaps.constEnd(); ++it) {
-            m_wayland.shadowBuffers << m_wayland.shmPool->createBuffer(it->toImage());
+            m_wayland.shadowBuffers << shmPool->createBuffer(it->toImage());
         }
     }
 #endif
@@ -524,7 +515,7 @@ void DialogShadows::Private::updateShadow(const QWindow *window, Plasma::FrameSv
     }
 #endif
 #if HAVE_KWAYLAND
-    if (m_wayland.manager) {
+    if (WaylandIntegration::self()->waylandShadowManager()) {
         updateShadowWayland(window, enabledBorders);
     }
 #endif
@@ -553,7 +544,7 @@ void DialogShadows::Private::updateShadowX11(const QWindow *window, Plasma::Fram
 void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
 {
 #if HAVE_KWAYLAND
-    if (!m_wayland.shmPool) {
+    if (!WaylandIntegration::self()->waylandShmPool()) {
         return;
     }
     if (m_wayland.shadowBuffers.isEmpty()) {
@@ -564,7 +555,8 @@ void DialogShadows::Private::updateShadowWayland(const QWindow *window, Plasma::
     if (!surface) {
         return;
     }
-    auto shadow = m_wayland.manager->createShadow(surface, surface);
+    KWayland::Client::ShadowManager *manager = WaylandIntegration::self()->waylandShadowManager();
+    auto shadow = manager->createShadow(surface, surface);
 
     //shadow-top
     if (enabledBorders & Plasma::FrameSvg::TopBorder) {
@@ -666,7 +658,7 @@ void DialogShadows::Private::clearShadow(const QWindow *window)
     }
 #endif
 #if HAVE_KWAYLAND
-    if (m_wayland.manager) {
+    if (WaylandIntegration::self()->waylandShadowManager()) {
         clearShadowWayland(window);
     }
 #endif
@@ -688,7 +680,8 @@ void DialogShadows::Private::clearShadowWayland(const QWindow *window)
     if (!surface) {
         return;
     }
-    m_wayland.manager->removeShadow(surface);
+    KWayland::Client::ShadowManager *manager = WaylandIntegration::self()->waylandShadowManager();
+    manager->removeShadow(surface);
     surface->commit(KWayland::Client::Surface::CommitFlag::None);
 #endif
 }
@@ -696,50 +689,6 @@ void DialogShadows::Private::clearShadowWayland(const QWindow *window)
 bool DialogShadows::enabled() const
 {
     return hasElement(QStringLiteral("shadow-left"));
-}
-
-KWayland::Client::PlasmaShell *DialogShadows::waylandPlasmaShellInterface() const
-{
-#if HAVE_KWAYLAND
-    return d->m_wayland.plasmaShell;
-#else
-    return nullptr;
-#endif
-}
-
-void DialogShadows::Private::setupWaylandIntegration()
-{
-#if HAVE_KWAYLAND
-    if (!KWindowSystem::isPlatformWayland()) {
-        return;
-    }
-    using namespace KWayland::Client;
-    ConnectionThread *connection = ConnectionThread::fromApplication(q);
-    if (!connection) {
-        return;
-    }
-    Registry *registry = new Registry(q);
-    registry->create(connection);
-    connect(registry, &Registry::shadowAnnounced, q,
-        [this, registry] (quint32 name, quint32 version) {
-            m_wayland.manager = registry->createShadowManager(name, version, q);
-            updateShadows();
-        }, Qt::QueuedConnection
-    );
-    connect(registry, &Registry::shmAnnounced, q,
-        [this, registry] (quint32 name, quint32 version) {
-            m_wayland.shmPool = registry->createShmPool(name, version, q);
-            updateShadows();
-        }, Qt::QueuedConnection
-    );
-    connect(registry, &Registry::plasmaShellAnnounced, q,
-        [this, registry] (quint32 name, quint32 version) {
-            m_wayland.plasmaShell = registry->createPlasmaShell(name, version, q);
-        }
-    );
-    registry->setup();
-    connection->roundtrip();
-#endif
 }
 
 #include "moc_dialogshadows_p.cpp"
