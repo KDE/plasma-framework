@@ -67,6 +67,7 @@ QtQuickControlStyle.ButtonStyle {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             active: control.hovered
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
 
         PlasmaComponents.Label {
@@ -78,10 +79,14 @@ QtQuickControlStyle.ButtonStyle {
             font: control.font || theme.defaultFont
             visible: control.text != ""
             Layout.fillWidth: true
-            color: theme.buttonTextColor
+            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? theme.highlightedTextColor : theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+            PlasmaCore.Svg {
+                id: buttonSvg
+                imagePath: "widgets/button"
+            }
         }
 
         PlasmaExtras.ConditionalLoader {
@@ -136,14 +141,13 @@ QtQuickControlStyle.ButtonStyle {
             }
         }
 
-
         //This code is duplicated here and Button and ToolButton
         //maybe we can make an AbstractButton class?
         PlasmaCore.FrameSvgItem {
             id: surfaceNormal
             anchors.fill: parent
             imagePath: "widgets/button"
-            prefix: "normal"
+            prefix: control.activeFocus ? ["focus-background", "normal"] : "normal"
         }
 
         PlasmaCore.FrameSvgItem {

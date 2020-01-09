@@ -13,17 +13,17 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    width="220"
    height="212"
-   sodipodi:docname="button.svgz"
+   sodipodi:docname="button.svg"
    inkscape:output_extension="org.inkscape.output.svgz.inkscape"
    inkscape:export-filename="/home/diau/svn/playground-plasma/desktoptheme/air/widgets/button.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    version="1.0">
   <sodipodi:namedview
-     inkscape:window-height="1026"
+     inkscape:window-height="1015"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
      inkscape:pageopacity="1"
@@ -35,8 +35,8 @@
      pagecolor="#eff0f1"
      id="base"
      inkscape:zoom="4.0000001"
-     inkscape:cx="269.69606"
-     inkscape:cy="116.52482"
+     inkscape:cx="87.520446"
+     inkscape:cy="134.44093"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:current-layer="svg2"
@@ -96,6 +96,28 @@
   <defs
      id="defs5">
     <linearGradient
+       id="linearGradient2965">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.09803922"
+         offset="0"
+         id="stop2961" />
+      <stop
+         style="stop-color:#f6f6f6;stop-opacity:0.114"
+         offset="1"
+         id="stop2963" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4455">
+      <stop
+         style="stop-color:#000000;stop-opacity:0.02745098;"
+         offset="0"
+         id="stop2956" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop2958" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient6476"
        osb:paint="solid">
       <stop
@@ -140,26 +162,6 @@
        inkscape:collect="always"
        xlink:href="#linearGradient4134-0"
        id="linearGradient3426"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-823.80709,948.58403)"
-       x1="160"
-       y1="-159"
-       x2="160"
-       y2="-138" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4134-0"
-       id="linearGradient3480"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-879.80709,948.58403)"
-       x1="160"
-       y1="-159"
-       x2="160"
-       y2="-138" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4134-0"
-       id="linearGradient3482"
        gradientUnits="userSpaceOnUse"
        gradientTransform="translate(-823.80709,948.58403)"
        x1="160"
@@ -245,7 +247,7 @@
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4455"
+       xlink:href="#linearGradient4455-3"
        id="linearGradient3941"
        x1="162"
        y1="-13"
@@ -253,7 +255,7 @@
        y2="-48"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       id="linearGradient4455">
+       id="linearGradient4455-3">
       <stop
          id="stop4908"
          offset="0"
@@ -283,6 +285,15 @@
        id="linearGradient6300"
        xlink:href="#linearGradient4134-0"
        inkscape:collect="always" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2965"
+       id="linearGradient1139"
+       gradientUnits="userSpaceOnUse"
+       x1="162"
+       y1="-13"
+       x2="162"
+       y2="-48" />
   </defs>
   <g
      id="pressed-left"
@@ -886,7 +897,7 @@
        sodipodi:cy="-159"
        sodipodi:cx="160"
        id="path3434"
-       style="opacity:0.01000001;fill:#fafafa;fill-opacity:1;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:1;stroke:none"
        sodipodi:type="arc" />
   </g>
   <g
@@ -908,7 +919,7 @@
        class="ColorScheme-ButtonFocus" />
     <path
        sodipodi:type="arc"
-       style="opacity:0.01000001;fill:#afb4b9;fill-opacity:0.39215686;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:0.39215686;stroke:none"
        id="path3440"
        sodipodi:cx="160"
        sodipodi:cy="-159"
@@ -932,7 +943,7 @@
        style="opacity:0.5;fill:currentColor;stroke:none"
        class="ColorScheme-ButtonFocus" />
     <rect
-       style="opacity:0.01000001;fill:url(#linearGradient3480);fill-opacity:1;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:1;stroke:none"
        id="rect3446"
        width="1"
        height="21"
@@ -960,7 +971,7 @@
        style="opacity:0.5;fill:currentColor;stroke:none"
        class="ColorScheme-ButtonFocus" />
     <rect
-       style="opacity:0.01000001;fill:#fafafa;fill-opacity:1;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:1;stroke:none"
        id="rect3452"
        width="55"
        height="1"
@@ -993,7 +1004,7 @@
        height="1"
        width="55"
        id="rect3458"
-       style="opacity:0.01000001;fill:#afb4b9;fill-opacity:0.39215686;stroke:none" />
+       style="opacity:0.01000001;fill:none;fill-opacity:0.39215686;stroke:none" />
     <rect
        class="ColorScheme-ButtonFocus"
        y="812.58398"
@@ -1022,7 +1033,7 @@
        class="ColorScheme-ButtonFocus" />
     <path
        sodipodi:type="arc"
-       style="opacity:0.01000001;fill:#fafafa;fill-opacity:1;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:1;stroke:none"
        id="path3464"
        sodipodi:cx="160"
        sodipodi:cy="-159"
@@ -1060,7 +1071,7 @@
        sodipodi:cy="-159"
        sodipodi:cx="160"
        id="path3470"
-       style="opacity:0.01000001;fill:#afb4b9;fill-opacity:0.39215686;stroke:none"
+       style="opacity:0.01000001;fill:none;fill-opacity:0.39215686;stroke:none"
        sodipodi:type="arc" />
   </g>
   <g
@@ -1082,7 +1093,7 @@
        height="21"
        width="1"
        id="rect3476"
-       style="opacity:0.01000001;fill:url(#linearGradient3482);fill-opacity:1;stroke:none" />
+       style="opacity:0.01000001;fill:none;fill-opacity:1;stroke:none" />
     <rect
        class="ColorScheme-ButtonFocus"
        y="789.58398"
@@ -1094,7 +1105,7 @@
        transform="scale(-1,1)" />
   </g>
   <rect
-     style="fill:currentColor;fill-opacity:0.01000001;stroke:none"
+     style="fill:none;fill-opacity:0.01000001;stroke:none"
      id="focus-center"
      width="105"
      height="34.999943"
@@ -1991,4 +2002,501 @@
      height="6"
      x="282.5"
      y="199.00005" />
+  <g
+     inkscape:label="#g5038"
+     transform="translate(716.8072,-665.58403)"
+     id="focus-background-topleft">
+    <path
+       class="ColorScheme-ButtonFocus"
+       inkscape:connector-curvature="0"
+       style="fill:currentColor;stroke:none"
+       d="m -719.80709,777.58403 c -1.10457,0 -2,0.89543 -2,2 h 1 c 0,-0.55228 0.44772,-1 1,-1 z"
+       id="path1077" />
+    <path
+       transform="matrix(-0.5,0,0,-0.5,-639.80709,700.08403)"
+       sodipodi:end="1.5707963"
+       sodipodi:start="0"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:ry="2"
+       sodipodi:rx="2"
+       sodipodi:cy="-159"
+       sodipodi:cx="160"
+       id="path1079"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ButtonBackground" />
+    <path
+       id="path2983"
+       d="m -719.80709,777.58403 c -1.10457,0 -2,0.89543 -2,2 h 1 c 0,-0.55228 0.44772,-1 1,-1 z"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       inkscape:connector-curvature="0"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5026"
+     id="focus-background-bottomleft"
+     transform="translate(716.8072,-661.58404)">
+    <path
+       class="ColorScheme-ButtonFocus"
+       id="path1083"
+       d="m -719.80709,812.58403 c -1.10457,0 -2,-0.89543 -2,-2 h 1 c 0,0.55228 0.44772,1 1,1 z"
+       style="fill:currentColor;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:type="arc"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       id="path1085"
+       sodipodi:cx="160"
+       sodipodi:cy="-159"
+       sodipodi:rx="2"
+       sodipodi:ry="2"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:start="0"
+       sodipodi:end="1.5707963"
+       transform="matrix(-0.5,0,0,0.5,-639.80709,890.08403)" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       d="m -719.80709,812.58403 c -1.10457,0 -2,-0.89543 -2,-2 h 1 c 0,0.55228 0.44772,1 1,1 z"
+       id="path2979"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5042"
+     transform="matrix(1,0,0,1.666664,716.8072,-1201.9712)"
+     id="focus-background-left">
+    <rect
+       class="ColorScheme-ButtonFocus"
+       style="fill:currentColor;stroke:none"
+       id="rect1089"
+       width="1"
+       height="21"
+       x="-721.80719"
+       y="789.58398" />
+    <rect
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       id="rect1091"
+       width="1"
+       height="21"
+       x="-720.80719"
+       y="789.58398"
+       class="ColorScheme-ButtonBackground" />
+    <rect
+       y="789.58398"
+       x="-721.80719"
+       height="21"
+       width="1"
+       id="rect2981"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5054"
+     transform="matrix(1.9090909,0,0,1,1371.1774,-665.58403)"
+     id="focus-background-top">
+    <rect
+       class="ColorScheme-ButtonFocus"
+       style="fill:currentColor;stroke:none"
+       id="rect1095"
+       width="55"
+       height="1"
+       x="-719.80719"
+       y="777.58398" />
+    <rect
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       id="rect1097"
+       width="55"
+       height="1"
+       x="-719.80719"
+       y="778.58398"
+       class="ColorScheme-ButtonBackground" />
+    <rect
+       y="777.58398"
+       x="-719.80719"
+       height="1"
+       width="55"
+       id="rect2973"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5050"
+     transform="matrix(1.9090909,0,0,1,1371.1774,-661.58404)"
+     id="focus-background-bottom">
+    <rect
+       class="ColorScheme-ButtonFocus"
+       y="811.58398"
+       x="-719.80719"
+       height="1"
+       width="55"
+       id="rect1101"
+       style="fill:currentColor;stroke:none" />
+    <rect
+       y="810.58398"
+       x="-719.80719"
+       height="1"
+       width="55"
+       id="rect1103"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none" />
+    <rect
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       id="rect2977"
+       width="55"
+       height="1"
+       x="-719.80719"
+       y="811.58398"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5034"
+     transform="translate(766.80717,-665.58403)"
+     id="focus-background-topright">
+    <path
+       class="ColorScheme-ButtonFocus"
+       id="path1107"
+       d="m -664.80709,777.58403 c 1.10457,0 2,0.89543 2,2 h -1 c 0,-0.55228 -0.44772,-1 -1,-1 z"
+       style="fill:currentColor;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       sodipodi:type="arc"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       id="path1109"
+       sodipodi:cx="160"
+       sodipodi:cy="-159"
+       sodipodi:rx="2"
+       sodipodi:ry="2"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:start="0"
+       sodipodi:end="1.5707963"
+       transform="matrix(0.5,0,0,-0.5,-744.80709,700.08403)"
+       class="ColorScheme-ButtonBackground" />
+    <path
+       inkscape:connector-curvature="0"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       d="m -664.80709,777.58403 c 1.10457,0 2,0.89543 2,2 h -1 c 0,-0.55228 -0.44772,-1 -1,-1 z"
+       id="path2971"
+       class="ColorScheme-ButtonFocus" />
+  </g>
+  <g
+     inkscape:label="#g5030"
+     transform="translate(766.80717,-661.58404)"
+     id="focus-background-bottomright">
+    <path
+       transform="matrix(0.5,0,0,0.5,-744.80709,890.08403)"
+       sodipodi:end="1.5707963"
+       sodipodi:start="0"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:ry="2"
+       sodipodi:rx="2"
+       sodipodi:cy="-159"
+       sodipodi:cx="160"
+       id="path1113"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ButtonBackground" />
+    <path
+       id="path1115"
+       d="m -664.80709,812.58403 c 1.10457,0 2,-0.89543 2,-2 h -1 c 0,0.55228 -0.44772,1 -1,1 z"
+       style="fill:currentColor;stroke:none"
+       inkscape:connector-curvature="0"
+       class="ColorScheme-ButtonFocus" />
+    <path
+       class="ColorScheme-ButtonFocus"
+       inkscape:connector-curvature="0"
+       style="color:#3daee9;fill:#000000;stroke:none;fill-opacity:0.14117648"
+       d="m -664.80709,812.58403 c 1.10457,0 2,-0.89543 2,-2 h -1 c 0,0.55228 -0.44772,1 -1,1 z"
+       id="path2975" />
+  </g>
+  <g
+     inkscape:label="#g5046"
+     transform="matrix(1,0,0,1.666664,766.80717,-1201.9712)"
+     id="focus-background-right">
+    <rect
+       y="789.58398"
+       x="-664.80713"
+       height="21"
+       width="1"
+       id="rect1119"
+       style="color:#eff0f1;opacity:0;fill:#000000;fill-opacity:0.50196078;stroke:none"
+       class="ColorScheme-ButtonBackground" />
+    <rect
+       transform="scale(-1,1)"
+       style="fill:currentColor;stroke:none"
+       id="rect1121"
+       width="1"
+       height="21"
+       x="662.80713"
+       y="789.58398"
+       class="ColorScheme-ButtonFocus" />
+    <rect
+       class="ColorScheme-ButtonFocus"
+       y="789.58398"
+       x="662.80713"
+       height="21"
+       width="1"
+       id="rect2969"
+       style="color:#3daee9;fill:#000000;fill-opacity:0.14117648;stroke:none"
+       transform="scale(-1,1)" />
+  </g>
+  <g
+     transform="translate(-112.99996,161.99995)"
+     id="focus-background-center">
+    <rect
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       id="rect1125"
+       width="105"
+       height="34.999943"
+       x="109.99997"
+       y="-47.999954"
+       inkscape:label="#rect4146"
+       class="ColorScheme-ButtonFocus" />
+    <rect
+       inkscape:label="#rect4146"
+       y="-47.999954"
+       x="109.99997"
+       height="34.999943"
+       width="105"
+       id="rect1127"
+       style="color:#eff0f1;fill:url(#linearGradient1139);fill-opacity:1;stroke:none" />
+  </g>
+  <rect
+     y="145"
+     x="48.500008"
+     height="6"
+     width="2"
+     id="focus-background-hint-bottom-margin"
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+  <rect
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="focus-background-hint-top-margin"
+     width="2"
+     height="6"
+     x="48.500008"
+     y="112.00001" />
+  <rect
+     y="-4.9999638"
+     x="-131.99997"
+     height="6"
+     width="2"
+     id="focus-background-hint-left-margin"
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     transform="rotate(-90)" />
+  <rect
+     transform="rotate(-90)"
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="focus-background-hint-right-margin"
+     width="2"
+     height="6"
+     x="-131.99997"
+     y="98.000038" />
+  <rect
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     id="focus-background-hint-compose-over-border"
+     width="3"
+     height="3"
+     x="-14.999997"
+     y="127"
+     ry="0" />
+  <path
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+     d="m 14.254101,88.249998 v 13.943832 h 33.9959 V 88.249998 Z"
+     id="mask-focus-background-center"
+     inkscape:connector-curvature="0" />
+  <g
+     id="mask-focus-background-left"
+     transform="translate(-49.738299,130.24995)">
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       d="m 62,-41.999954 v 14 h 1 l -0.0117,-14 z"
+       id="path2987" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path2989"
+       d="M 61,-41.999984 V -28 h 1 v -13.999984 z"
+       style="fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:none" />
+  </g>
+  <g
+     id="mask-focus-background-top"
+     transform="matrix(0.25951067,0,0,1,-2.8736045,132.23421)">
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path2993"
+       d="m 66.00001,-45.984214 2e-6,1 H 197.00001 v -1 z"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:none"
+       d="m 66,-46.984214 v 1 h 131 v -1 z"
+       id="path2995" />
+  </g>
+  <g
+     id="mask-focus-background-right"
+     transform="translate(-150.73829,130.29497)">
+    <path
+       sodipodi:nodetypes="ccccc"
+       inkscape:connector-curvature="0"
+       id="path2999"
+       d="m 200.9883,-42.044974 0.0117,14.01377 -1.01171,-0.01377 v -14 z"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#000000;fill-opacity:0;fill-rule:nonzero;stroke:none"
+       d="M 202.00001,-41.984204 V -28 h -1 v -13.984204 z"
+       id="path3001" />
+    <path
+       id="path3003"
+       d="m 201,-41.986174 v 13.95497 h -1 v -13.95497 z"
+       style="fill:#ffffff;fill-opacity:0;fill-rule:nonzero;stroke:none"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     id="mask-focus-background-bottom"
+     transform="matrix(0.25951067,0,0,1,-2.8701035,128.29497)">
+    <path
+       sodipodi:nodetypes="ccccc"
+       id="path3007"
+       d="m 65.970715,-25.044974 0.01349,1.04498 130.984195,-0.0625 -0.0135,-0.98248 z"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#000000;fill-opacity:0;stroke:none"
+       id="rect3009"
+       width="131"
+       height="1.0000023"
+       x="66"
+       y="-23.999954" />
+  </g>
+  <g
+     transform="translate(-21.749999,66.249998)"
+     id="mask-focus-background-topleft">
+    <path
+       class="ColorScheme-ButtonBackground"
+       sodipodi:type="arc"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       id="path3013"
+       sodipodi:cx="160"
+       sodipodi:cy="-159"
+       sodipodi:rx="2"
+       sodipodi:ry="2"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:start="0"
+       sodipodi:end="1.5707963"
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)" />
+    <rect
+       style="opacity:0;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect3015"
+       width="1"
+       height="1"
+       x="33"
+       y="19" />
+  </g>
+  <g
+     transform="rotate(90,9.0000011,61.249999)"
+     id="mask-focus-background-topright">
+    <path
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)"
+       sodipodi:end="1.5707963"
+       sodipodi:start="0"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:ry="2"
+       sodipodi:rx="2"
+       sodipodi:cy="-159"
+       sodipodi:cx="160"
+       id="path3019"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ButtonBackground" />
+    <rect
+       y="19"
+       x="33"
+       height="1"
+       width="1"
+       id="rect3021"
+       style="opacity:0;fill:#000000;fill-opacity:1;stroke:none" />
+    <path
+       class="ColorScheme-ButtonBackground"
+       sodipodi:type="arc"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       id="path3023"
+       sodipodi:cx="160"
+       sodipodi:cy="-159"
+       sodipodi:rx="2"
+       sodipodi:ry="2"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:start="0"
+       sodipodi:end="1.5707963"
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)" />
+  </g>
+  <g
+     transform="matrix(1,0,0,-1,-21.749999,124.25)"
+     id="mask-focus-background-bottomleft">
+    <path
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)"
+       sodipodi:end="1.5707963"
+       sodipodi:start="0"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:ry="2"
+       sodipodi:rx="2"
+       sodipodi:cy="-159"
+       sodipodi:cx="160"
+       id="path3027"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ButtonBackground" />
+    <rect
+       y="19"
+       x="33"
+       height="1"
+       width="1"
+       id="rect3029"
+       style="opacity:0;fill:#000000;fill-opacity:1;stroke:none" />
+  </g>
+  <g
+     id="mask-focus-background-bottomright"
+     transform="matrix(0,-1,-1,0,70.250001,138.25)">
+    <path
+       class="ColorScheme-ButtonBackground"
+       sodipodi:type="arc"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       id="path3033"
+       sodipodi:cx="160"
+       sodipodi:cy="-159"
+       sodipodi:rx="2"
+       sodipodi:ry="2"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:start="0"
+       sodipodi:end="1.5707963"
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)" />
+    <rect
+       style="opacity:0;fill:#000000;fill-opacity:1;stroke:none"
+       id="rect3035"
+       width="1"
+       height="1"
+       x="33"
+       y="19" />
+    <path
+       transform="matrix(-0.5,0,0,-0.5,115,-58.5)"
+       sodipodi:end="1.5707963"
+       sodipodi:start="0"
+       d="m 162,-159 a 2,2 0 0 1 -2,2 l 0,-2 z"
+       sodipodi:ry="2"
+       sodipodi:rx="2"
+       sodipodi:cy="-159"
+       sodipodi:cx="160"
+       id="path3037"
+       style="color:#eff0f1;fill:#000000;fill-opacity:1;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ButtonBackground" />
+  </g>
+  <rect
+     ry="0"
+     y="134.75"
+     x="-14.999997"
+     height="3"
+     width="3"
+     id="hint-focus-highlighted-background"
+     style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
 </svg>
