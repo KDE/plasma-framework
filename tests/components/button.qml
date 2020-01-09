@@ -36,6 +36,15 @@ ComponentBase {
             text: "test"
         }
 
+        Label {
+            text: "This should look highlighted on load"
+        }
+
+        PlasmaComponents.Button {
+            text: "test"
+            focus: true
+        }
+
 
         Label {
             text: "long text, should expand to fit"
