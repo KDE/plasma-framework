@@ -1124,8 +1124,13 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
         }
     }
 
-    if (m_containment->containmentType() != Plasma::Types::DesktopContainment) {
-        desktopMenu->addSeparator();
+    desktopMenu->addSeparator();
+    if (m_containment->containmentType() == Plasma::Types::DesktopContainment) {
+        auto action = m_containment->corona()->actions()->action(QStringLiteral("edit mode"));
+        if (action) {
+            desktopMenu->addAction(action);
+        }
+    } else {
         addContainmentActions(desktopMenu, event);
     }
 
