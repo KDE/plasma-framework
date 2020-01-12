@@ -67,7 +67,7 @@ public:
     typedef QMapIterator<QString, QVariant> DataIterator;
     typedef QHash<QString, DataContainer *> SourceDict;
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**
      * Constructor.
      *
@@ -86,7 +86,7 @@ public:
      * @param parent The parent object.
      * @param plugin metadata that describes the engine
      *
-     * @since 5.62
+     * @since 5.67
      */
     explicit DataEngine(const KPluginMetaData &plugin, QObject *parent = nullptr);
 
@@ -110,7 +110,7 @@ public:
      */
     Q_INVOKABLE virtual Service *serviceForSource(const QString &source);
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**
      * @return description of the plugin that implements this DataEngine
      *
@@ -123,7 +123,7 @@ public:
     /**
      * @return description of the plugin that implements this DataEngine
      *
-     * @since 5.62
+     * @since 5.67
      */
     KPluginMetaData metadata() const;
 

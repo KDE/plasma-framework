@@ -123,7 +123,7 @@ protected:
     /**
      * @return the KPluginMetaData associated with this dataengine
      *
-     * @since 5.62
+     * @since 5.67
      */
     KPluginMetaData metadata() const;
 

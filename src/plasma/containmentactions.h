@@ -64,7 +64,7 @@ public:
 
     ~ContainmentActions();
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**
      * @return the plugin info for this ContainmentActions instance,
      *         including name, pluginName and icon
@@ -79,7 +79,7 @@ public:
     /**
      * @return metadata for this ContainmentActions instance
      *         including name, pluginName and icon
-     * @since 5.62
+     * @since 5.67
      */
     KPluginMetaData metadata() const;
 

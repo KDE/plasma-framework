@@ -316,7 +316,7 @@ public:
      */
     void releaseRectsCache(const QString &image);
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**
      * @return plugin info for this theme, with information such as
      * name, description, author, website etc
@@ -331,7 +331,7 @@ public:
     /**
      * @return metadata for this theme, with information such as
      * name, description, author, website etc
-     * @since 5.64
+     * @since 5.67
      */
     KPluginMetaData metadata() const;
 
