@@ -110,10 +110,22 @@ protected:
      */
     Package package() const override;
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**
-     * @return the KPluginInfo associated with this plasmoid
+     * @return the KPluginInfo associated with this dataengine
+     *
+     * @deprecated since 5.67 use metadata()
      */
+    PLASMA_DEPRECATED_VERSION(5, 67, "Use KPluginMetaData metadata()")
     KPluginInfo description() const;
+#endif
+
+    /**
+     * @return the KPluginMetaData associated with this dataengine
+     *
+     * @since 5.62
+     */
+    KPluginMetaData metadata() const;
 
     void setData(const QString &source, const QString &key,
                  const QVariant &value);

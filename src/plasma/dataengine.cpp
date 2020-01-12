@@ -49,6 +49,10 @@ namespace Plasma
 {
 
 DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
+    : DataEngine(plugin.toMetaData(), parent)
+{}
+
+DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
     : QObject(parent),
       d(new DataEnginePrivate(this, plugin))
 {
@@ -63,7 +67,7 @@ DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent),
-      d(new DataEnginePrivate(this, KPluginInfo(args), args))
+      d(new DataEnginePrivate(this, KPluginInfo(args).toMetaData(), args))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -99,6 +103,11 @@ Service *DataEngine::serviceForSource(const QString &source)
 }
 
 KPluginInfo DataEngine::pluginInfo() const
+{
+    return KPluginInfo(d->dataEngineDescription);
+}
+
+KPluginMetaData DataEngine::metadata() const
 {
     return d->dataEngineDescription;
 }
@@ -408,9 +417,9 @@ void DataEngine::setStorageEnabled(const QString &source, bool store)
 }
 
 // Private class implementations
-DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, const QVariantList &args)
+DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, const QVariantList &args)
     : q(e),
-      dataEngineDescription(info),
+      dataEngineDescription(md),
       refCount(-1), // first ref
       checkSourcesTimerId(0),
       updateTimerId(0),
@@ -427,12 +436,12 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginInfo &info, con
     }
 
     if (dataEngineDescription.isValid()) {
-        QString api = dataEngineDescription.property(QStringLiteral("X-Plasma-API")).toString();
+        QString api = dataEngineDescription.value(QStringLiteral("X-Plasma-API"));
 
         if (!api.isEmpty()) {
             const QString path =
                 QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginName(),
+                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginId(),
                                        QStandardPaths::LocateDirectory);
             package = new Package(PluginLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), api));
             package->setPath(path);

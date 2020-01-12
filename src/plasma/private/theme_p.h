@@ -30,6 +30,7 @@
 #include <kimagecache.h>
 #include <kshareddatacache.h>
 #include <kwindowsystem.h>
+#include <KPluginMetaData>
 #include <QTimer>
 
 #include <config-plasma.h>
@@ -110,7 +111,7 @@ public:
     static QHash<QString, ThemePrivate *> themes;
 
     QString themeName;
-    KPluginInfo pluginInfo;
+    KPluginMetaData pluginMetaData;
     QList<QString> fallbackThemes;
     KSharedConfigPtr colors;
     KColorScheme colorScheme;

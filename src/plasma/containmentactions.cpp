@@ -66,6 +66,11 @@ KPluginInfo ContainmentActions::pluginInfo() const
     return KPluginInfo(d->containmentActionsDescription);
 }
 
+KPluginMetaData ContainmentActions::metadata() const
+{
+    return d->containmentActionsDescription;
+}
+
 Containment *ContainmentActions::containment()
 {
     if (d->containment) {

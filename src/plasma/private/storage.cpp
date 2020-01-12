@@ -131,7 +131,7 @@ Storage::Storage(QObject *parent)
 
         Plasma::DataEngine *engine = qobject_cast<Plasma::DataEngine *>(parentObject);
         if (engine) {
-            m_clientName = engine->pluginInfo().pluginName();
+            m_clientName = engine->metadata().pluginId();
             break;
         }
     }

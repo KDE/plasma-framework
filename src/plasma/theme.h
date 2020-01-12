@@ -30,6 +30,8 @@
 
 #include <plasma/plasma_export.h>
 
+class KPluginMetaData;
+
 namespace Plasma
 {
 
@@ -314,12 +316,24 @@ public:
      */
     void releaseRectsCache(const QString &image);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
     /**
      * @return plugin info for this theme, with information such as
      * name, description, author, website etc
      * @since 5.0
+     *
+     * @deprecated since 5.67, use KPluginMetaData
      */
+    PLASMA_DEPRECATED_VERSION(5, 67, "Use KPluginMetaData metadata()")
     KPluginInfo pluginInfo() const;
+#endif
+
+    /**
+     * @return metadata for this theme, with information such as
+     * name, description, author, website etc
+     * @since 5.64
+     */
+    KPluginMetaData metadata() const;
 
     /**
      * @return The default application font

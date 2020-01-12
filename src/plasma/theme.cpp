@@ -443,7 +443,7 @@ void Theme::setCacheLimit(int kbytes)
 
 KPluginInfo Theme::pluginInfo() const
 {
-    return d->pluginInfo;
+    return KPluginInfo(d->pluginMetaData);
 }
 
 QFont Theme::defaultFont() const

@@ -809,7 +809,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     if (realTheme) {
         const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop")));
         KConfig metadata(metadataPath, KConfig::SimpleConfig);
-        pluginInfo = KPluginInfo(metadataPath);
+        pluginMetaData = KPluginMetaData(metadataPath);
 
         processContrastSettings(&metadata);
         processBlurBehindSettings(&metadata);

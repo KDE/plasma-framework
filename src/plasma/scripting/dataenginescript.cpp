@@ -90,8 +90,13 @@ Package DataEngineScript::package() const
 
 KPluginInfo DataEngineScript::description() const
 {
+    return KPluginInfo(metadata());
+}
+
+KPluginMetaData DataEngineScript::metadata() const
+{
     Q_ASSERT(d->dataEngine);
-    return d->dataEngine->d->dataEngineDescription;
+    return d->dataEngine->metadata();
 }
 
 void DataEngineScript::setData(const QString &source, const QString &key,

@@ -28,6 +28,7 @@
 #include <plasma/version.h>
 
 class QAction;
+class KPluginMetaData;
 
 namespace Plasma
 {
@@ -63,12 +64,24 @@ public:
 
     ~ContainmentActions();
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 64)
     /**
      * @return the plugin info for this ContainmentActions instance,
      *         including name, pluginName and icon
      * @since 5.0
+     *
+     * @deprecated since 5.67, use metadata
      */
+    PLASMA_DEPRECATED_VERSION(5, 67, "use metadata()")
     KPluginInfo pluginInfo() const;
+#endif
+
+    /**
+     * @return metadata for this ContainmentActions instance
+     *         including name, pluginName and icon
+     * @since 5.62
+     */
+    KPluginMetaData metadata() const;
 
     /**
      * This method should be called once the plugin is loaded or settings are changed.
