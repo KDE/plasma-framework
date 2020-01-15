@@ -20,46 +20,108 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.10 as Kirigami
 
 T.ScrollBar {
-    id: control
+    id: controlRoot
 
     implicitWidth: background.implicitWidth
     implicitHeight: background.implicitHeight
 
     hoverEnabled: !Kirigami.Settings.isMobile
 
-    visible: control.size < 1.0
+    visible: controlRoot.size < 1.0
 
-    background: PlasmaCore.FrameSvgItem {
-        imagePath:"widgets/scrollbar"
+    interactive: !Kirigami.Settings.tabletMode
+
+    background: Item {
+        visible: controlRoot.size < 1.0 && controlRoot.interactive
         implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
         implicitHeight: implicitWidth
-        colorGroup: PlasmaCore.ColorScope.colorGroup
-        visible: control.size < 1.0
+        Rectangle {
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+            }
+            // the separator line doesn't work yet with the plasmoids design
+            visible: typeof plasmoid === "undefined"
+            width: units.devicePixelRatio
+            color: PlasmaCore.ColorScope.textColor
+            opacity: 0.1
+        }
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            imagePath:"widgets/scrollbar"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
 
-        prefix: control.horizontal ? "background-horizontal" : "background-vertical"
-        opacity: Kirigami.Settings.isMobile ? (control.active ? 1 : 0) : (control.hovered ? 1 : 0)
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: units.longDuration
+            prefix: controlRoot.horizontal ? "background-horizontal" : "background-vertical"
+            opacity: controlRoot.hovered
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: units.longDuration
+                }
             }
         }
     }
 
-    contentItem: PlasmaCore.FrameSvgItem {
-        imagePath:"widgets/scrollbar"
-        implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
-        implicitHeight: implicitWidth
-        colorGroup: PlasmaCore.ColorScope.colorGroup
-        visible: control.size < 1.0
+    onPositionChanged: {
+        disappearTimer.restart();
+        handleGraphics.handleState = Math.min(1, handleGraphics.handleState + 0.1)
+    }
 
-        prefix: control.hovered ? "mouseover-slider" : "slider"
-        opacity: Kirigami.Settings.isMobile ? (control.active ? 1 : 0) : 1
-        Behavior on opacity {
-            OpacityAnimator {
-                duration: units.longDuration
+    contentItem: Item {
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            imagePath:"widgets/scrollbar"
+
+            implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
+            visible: controlRoot.interactive && controlRoot.size < 1.0
+            implicitHeight: implicitWidth
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+
+            prefix: controlRoot.hovered ? "mouseover-slider" : "slider"
+        }
+        Rectangle {
+            id: handleGraphics
+
+            property real handleState: 0
+
+            visible: !controlRoot.interactive
+            x: Math.round(controlRoot.orientation == Qt.Vertical
+                ? (parent.width - width) - (parent.width/2 - width/2) * handleState
+                : 0)
+            
+            y: Math.round(controlRoot.orientation == Qt.Horizontal
+                ? (parent.height - height) - (parent.height/2 - height/2) * handleState
+                : 0)
+
+            NumberAnimation {
+                id: resetAnim
+                target: handleGraphics
+                property: "handleState"
+                from: handleGraphics.handleState
+                to: 0
+                duration: Kirigami.Units.longDuration
+                easing.type: Easing.InOutQuad
+            }
+
+            width: Math.round(controlRoot.orientation == Qt.Vertical
+                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
+                    : parent.width)
+            height: Math.round(controlRoot.orientation == Qt.Horizontal
+                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
+                    : parent.height)
+            radius: Math.min(width, height)
+            color: PlasmaCore.ColorScope.textColor
+            opacity: 0.3
+            Timer {
+                id: disappearTimer
+                interval: 1000
+                onTriggered: {
+                    resetAnim.restart();
+                    handleGraphics.handleState = 0;
+                }
             }
         }
     }
