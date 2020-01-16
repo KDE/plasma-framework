@@ -102,7 +102,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * This allows to set custom full QML items as the tooltip.
      * It will ignore all texts set by setToolTipMainText or setToolTipSubText
      *
-     * @since: 5.19
+     * @since 5.19
      */
     Q_PROPERTY(QQuickItem *toolTipItem READ toolTipItem WRITE setToolTipItem NOTIFY toolTipItemChanged)
 
