@@ -320,7 +320,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
                                match.capturedRef(2).toInt());
 
                 if (sizeHint.isValid()) {
-                    elementsWithSizeHints.insertMulti(baseElementId, sizeHint);
+                    elementsWithSizeHints.insert(baseElementId, sizeHint);
                 }
             }
         }

@@ -103,7 +103,7 @@ public:
     Svg *q;
     QPointer<Theme> theme;
     QHash<QString, QRectF> localRectCache;
-    QHash<QString, QSize> elementsWithSizeHints;
+    QMultiHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
     QString themePath;
     QString path;
