@@ -31,7 +31,7 @@ PlasmaCore.SvgItem {
     opacity: control.enabled ? 1 : 0.6
 
     implicitWidth: implicitHeight
-    implicitHeight: units.gridUnit
+    implicitHeight: units.iconSizes.small
 
     PlasmaCore.SvgItem {
         id: checkmark

@@ -51,8 +51,8 @@ QtQuickControlStyle.RadioButtonStyle {
         elementId: "normal"
         opacity: control.enabled ? 1 : 0.6
 
-        width: height
-        height: theme.mSize(theme.defaultFont).height * 1.6
+        width: units.iconSizes.small
+        height: width
 
         PlasmaCore.SvgItem {
             id: checkmark

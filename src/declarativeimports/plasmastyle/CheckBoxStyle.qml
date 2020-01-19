@@ -45,8 +45,8 @@ QtQuickControlStyle.CheckBoxStyle {
     indicator: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"
         prefix: "normal"
-        width: theme.mSize(theme.defaultFont).height + margins.left
-        height: theme.mSize(theme.defaultFont).height + margins.top
+        width: units.iconSizes.small
+        height: width
         opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.SvgItem {
