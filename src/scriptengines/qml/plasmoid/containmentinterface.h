@@ -28,6 +28,7 @@
 #include "appletinterface.h"
 
 class WallpaperInterface;
+class DropMenu;
 
 namespace KIO
 {
@@ -218,13 +219,10 @@ private:
 
     WallpaperInterface *m_wallpaperInterface;
     QList<QObject *> m_appletInterfaces;
-    QHash<KJob *, QPoint> m_dropPoints;
-    QHash<KJob *, QMenu *> m_dropMenus;
-    QHash<KJob *, QJSValue *> m_dropCallbacks;
-    QHash<KJob *, KIO::DropJob *> m_dropJobs;
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QPointer<QMenu> m_contextMenu;
+    QPointer<DropMenu> m_dropMenu;
     int m_wheelDelta;
     friend class AppletInterface;
 };

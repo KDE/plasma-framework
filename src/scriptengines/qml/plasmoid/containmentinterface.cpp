@@ -21,6 +21,7 @@
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
+#include "dropmenu.h"
 #include <kdeclarative/qmlobject.h>
 
 #include <QClipboard>
@@ -29,6 +30,7 @@
 #include <QMimeData>
 #include <QVersionNumber>
 #include <QScreen>
+#include <QApplication>
 
 #include <kactioncollection.h>
 #include <KAcceleratorManager>
@@ -433,6 +435,17 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         return;
     }
 
+    if (m_dropMenu) {
+        if (dropJob) {
+            dropJob->kill();
+        }
+        return;
+    }
+    m_dropMenu = QPointer<DropMenu>(new DropMenu(dropJob, QPoint(x, y), this));
+    if (dropJob) {
+        dropJob->setParent(m_dropMenu);
+    }
+
     //const QMimeData *mimeData = data;
 
     qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
@@ -451,42 +464,38 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
             metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRectF, QRectF(x, y, -1, -1)));
         }
+        delete m_dropMenu.data();
     } else if (mimeData->hasUrls()) {
         //TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
         const QList<QUrl> urls = KUrlMimeData::urlsFromMimeData(mimeData);
+        m_dropMenu->setUrls(urls);
+
+        if (!urls.at(0).isLocalFile()) {
+            QApplication::setOverrideCursor(Qt::WaitCursor);
+        }
+
+        QMimeDatabase db;
+        QMimeType firstMimetype = db.mimeTypeForUrl(urls.at(0));
         foreach (const QUrl &url, urls) {
-            QMimeDatabase db;
-            const QMimeType &mime = db.mimeTypeForUrl(url);
-            QString mimeName = mime.name();
-            QVariantList args;
-            args << url.url();
-            qDebug() << "can decode" << mimeName << args;
-
-            // It may be a directory or a file, let's stat
-            KIO::JobFlags flags = KIO::HideProgressInfo;
-            KIO::MimetypeJob *job = KIO::mimetype(url, flags);
-            m_dropPoints[job] = QPoint(x, y);
-
-            QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
-            QObject::connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
-                             this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
-
-            if (dropJob) {
-                m_dropJobs[job] = dropJob;
-            } else {
-                QMenu *choices = new QMenu(i18n("Content dropped"));
-                if (choices->winId()) {
-                    choices->windowHandle()->setTransientParent(window());
-                }
-                choices->addAction(QIcon::fromTheme(QStringLiteral("process-working")), i18n("Fetching file type..."));
-                choices->popup(window() ? window()->mapToGlobal(QPoint(x, y)) : QPoint(x, y));
-
-                m_dropMenus[job] = choices;
+            if (firstMimetype != db.mimeTypeForUrl(url)) {
+                m_dropMenu->setMultipleMimetypes(true);
+                break;
             }
         }
 
+        // It may be a directory or a file, let's stat
+        KIO::JobFlags flags = KIO::HideProgressInfo;
+        KIO::MimetypeJob *job = KIO::mimetype(m_dropMenu->urls().at(0), flags);
+        job->setParent(m_dropMenu.data());
+
+        QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
+        QObject::connect(job, SIGNAL(mimetype(KIO::Job*, QString)),
+                this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
+
     } else {
+        bool deleteDropMenu = true;
+
         QStringList formats = mimeData->formats();
         QHash<QString, KPluginMetaData> seenPlugins;
         QHash<QString, QString> pluginFormats;
@@ -508,33 +517,22 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         QString selectedPlugin;
 
         if (seenPlugins.isEmpty()) {
-            // do nothing
+        //do nothing
         //directly create if only one offer only if the containment didn't pass an existing plugin
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
             Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
             setAppletArgs(applet, pluginFormats[selectedPlugin], QString::fromUtf8(mimeData->data(pluginFormats[selectedPlugin])));
         } else {
-            QMenu *choices = nullptr;
-            if (!dropJob) {
-                choices = new QMenu();
-                if (choices->winId()) {
-                    choices->windowHandle()->setTransientParent(window());
-                }
-            }
-            QList<QAction *> extraActions;
             QHash<QAction *, QString> actionsToPlugins;
             foreach (const auto &info, seenPlugins) {
                 QAction *action;
                 if (!info.iconName().isEmpty()) {
-                    action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), nullptr);
+                    action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), m_dropMenu);
                 } else {
-                    action = new QAction(info.name(), nullptr);
+                    action = new QAction(info.name(), m_dropMenu);
                 }
-                extraActions << action;
-                if (choices) {
-                    choices->addAction(action);
-                }
+                m_dropMenu->addAction(action);
                 action->setData(info.pluginId());
                 connect(action, &QAction::triggered, this, [this, x, y, mimeData, action]() {
                     const QString selectedPlugin = action->data().toString();
@@ -544,16 +542,13 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 
                 actionsToPlugins.insert(action, info.pluginId());
             }
+            m_dropMenu->show();
+            deleteDropMenu = false;
+        }
 
-            //if the menu was created by ourselves, delete it
-            if (choices) {
-                QAction *choice = choices->exec(window() ? window()->mapToGlobal(QPoint(x, y)) : QPoint(x, y));
-
-                delete choices;
-            } else {
-                Q_ASSERT(dropJob);
-                dropJob->setApplicationActions(extraActions);
-            }
+        if (deleteDropMenu) {
+            // in case m_dropMenu has not been shown
+            delete m_dropMenu.data();
         }
     }
 }
@@ -561,16 +556,20 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
 void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
 {
     QObject::disconnect(job, nullptr, this, nullptr);
-    m_dropPoints.remove(job);
-    QMenu *choices = m_dropMenus.take(job);
-    m_dropJobs.remove(job);
     job->kill();
+
+    m_dropMenu->show();
+
+    if (!m_dropMenu->urls().at(0).isLocalFile()) {
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void ContainmentInterface::dropJobResult(KJob *job)
 {
     if (job->error()) {
         qDebug() << "ERROR" << job->error() << ' ' << job->errorString();
+        clearDataForMimeJob(dynamic_cast<KIO::Job *>(job));
     }
 }
 
@@ -584,6 +583,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         clearDataForMimeJob(job);
         return;
     }
+
     QList<KPluginMetaData> appletList = Plasma::PluginLoader::self()->listAppletMetaDataForUrl(tjob->url());
     if (mimetype.isEmpty() && appletList.isEmpty()) {
         clearDataForMimeJob(job);
@@ -591,27 +591,10 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         return;
     } else {
 
-        QPoint posi; // will be overwritten with the event's position
-        if (m_dropPoints.contains(tjob)) {
-            posi = m_dropPoints.value(tjob);
-            qDebug() << "Received a suitable dropEvent at" << posi;
-        } else {
-            qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
-            clearDataForMimeJob(job);
-            return;
-        }
+        qDebug() << "Received a suitable dropEvent at " << m_dropMenu->dropPoint();
+        qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
 
-        QMenu *choices = m_dropMenus.value(tjob);
-        QList<QAction *> dropActions;
-        KIO::DropJob *dropJob = m_dropJobs.value(tjob);
-
-        if (!choices && !dropJob) {
-            qDebug() << "Bailing out. No QMenu or drop job found for this job.";
-            clearDataForMimeJob(job);
-            return;
-        }
-
-        qDebug() << "Creating menu for:" << mimetype  << posi;
+        qDebug() << "Creating menu for: " << mimetype;
 
         appletList << Plasma::PluginLoader::self()->listAppletMetaDataForMimeType(mimetype);
 
@@ -629,30 +612,24 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         const bool isPlasmaPackage = (mimetype == QLatin1String("application/x-plasma"));
 
-        if (!appletList.isEmpty() || !wallpaperList.isEmpty() || isPlasmaPackage) {
+        if ((!appletList.isEmpty() || !wallpaperList.isEmpty() || isPlasmaPackage) && !m_dropMenu->isMultipleMimetypes()) {
             QAction *installPlasmaPackageAction = nullptr;
             if (isPlasmaPackage) {
-                if (choices) {
-                    choices->addSection(i18n("Plasma Package"));
-                    installPlasmaPackageAction = choices->addAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"));
-                } else {
-                    QAction *action = new QAction(i18n("Plasma Package"), nullptr);
-                    action->setSeparator(true);
-                    dropActions << action;
+                QAction *action = new QAction(i18n("Plasma Package"), m_dropMenu);
+                action->setSeparator(true);
+                m_dropMenu->addAction(action);
 
-                    installPlasmaPackageAction = new QAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"), nullptr);
-                    Q_ASSERT(dropJob);
-                    dropActions << installPlasmaPackageAction;
-                    dropJob->setApplicationActions(dropActions);
-                }
+                installPlasmaPackageAction = new QAction(QIcon::fromTheme(QStringLiteral("application-x-plasma")), i18n("Install"), m_dropMenu);
+                m_dropMenu->addAction(installPlasmaPackageAction);
+
                 const QString &packagePath = tjob->url().toLocalFile();
-                connect(installPlasmaPackageAction, &QAction::triggered, this, [this, posi, packagePath]() {
+                connect(installPlasmaPackageAction, &QAction::triggered, this, [this, packagePath]() {
                     using namespace KPackage;
                     PackageStructure *structure = PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"));
                     Package package(structure);
 
                     KJob *installJob = package.update(packagePath);
-                    connect(installJob, &KJob::result, this, [this, packagePath, structure, posi](KJob *job) {
+                    connect(installJob, &KJob::result, this, [this, packagePath, structure](KJob *job) {
                         auto fail = [](const QString &text) {
                             KNotification::event(QStringLiteral("plasmoidInstallationFailed"), i18n("Package Installation Failed"),
                                                  text, QStringLiteral("dialog-error"), nullptr, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
@@ -678,58 +655,45 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                             return;
                         }
 
-                        createApplet(package.metadata().pluginId(), QVariantList(), QRect(posi, QSize(-1,-1)));
+                        createApplet(package.metadata().pluginId(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
                     });
                 });
             }
 
-            if (choices) {
-                choices->addSection(i18n("Widgets"));
-            } else {
-                QAction *action = new QAction(i18n("Widgets"), nullptr);
-                action->setSeparator(true);
-                dropActions << action;
-            }
+            QAction *action = new QAction(i18n("Widgets"), m_dropMenu);
+            action->setSeparator(true);
+            m_dropMenu->addAction(action);
+
             foreach (const auto &info, appletList) {
                 const QString actionText = i18nc("Add widget", "Add %1", info.name());
-                QAction *action = new QAction(actionText, nullptr);
+                QAction *action = new QAction(actionText, m_dropMenu);
                 if (!info.iconName().isEmpty()) {
                     action->setIcon(QIcon::fromTheme(info.iconName()));
                 }
-                if (choices) {
-                    choices->addAction(action);
-                }
-                dropActions << action;
+                m_dropMenu->addAction(action);
                 action->setData(info.pluginId());
                 const QUrl url = tjob->url();
-                connect(action, &QAction::triggered, this, [this, action, posi, mimetype, url]() {
-                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(posi, QSize(-1,-1)));
+                connect(action, &QAction::triggered, this, [this, action, mimetype, url]() {
+                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
             {
-                QAction *action = new QAction(i18nc("Add icon widget", "Add Icon"), nullptr);
-                if (choices) {
-                    choices->addAction(action);
-                }
-                dropActions << action;
+                QAction *action = new QAction(i18nc("Add icon widget", "Add Icon"), m_dropMenu);
+                m_dropMenu->addAction(action);
                 action->setData(QStringLiteral("org.kde.plasma.icon"));
                 const QUrl url = tjob->url();
-                connect(action, &QAction::triggered, this, [this, action, posi, mimetype, url](){
-                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(posi, QSize(-1,-1)));
+                connect(action, &QAction::triggered, this, [this, action, mimetype, url](){
+                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
 
             QHash<QAction *, QString> actionsToWallpapers;
             if (!wallpaperList.isEmpty())  {
-                if (choices) {
-                    choices->addSection(i18n("Wallpaper"));
-                } else {
-                    QAction *action = new QAction(i18n("Wallpaper"), nullptr);
-                    action->setSeparator(true);
-                    dropActions << action;
-                }
+                QAction *action = new QAction(i18n("Wallpaper"), m_dropMenu);
+                action->setSeparator(true);
+                m_dropMenu->addAction(action);
 
                 QMap<QString, KPluginMetaData> sorted;
                 foreach (const auto &info, appletList) {
@@ -738,15 +702,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
                 foreach (const KPluginMetaData &info, wallpaperList) {
                     const QString actionText = i18nc("Set wallpaper", "Set %1", info.name());
-                    QAction *action = new QAction(actionText, nullptr);
+                    QAction *action = new QAction(actionText, m_dropMenu);
                     if (!info.iconName().isEmpty()) {
                         action->setIcon(QIcon::fromTheme(info.iconName()));
                     }
-
-                    if (choices) {
-                        choices->addAction(action);
-                    }
-                    dropActions << action;
+                    m_dropMenu->addAction(action);
                     actionsToWallpapers.insert(action, info.pluginId());
                     const QUrl url = tjob->url();
                     connect(action, &QAction::triggered, this, [this, url]() {
@@ -757,44 +717,27 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     });
                 }
             }
-
         } else {
             //case in which we created the menu ourselves, just the "fetching type entry, directly create the icon applet
-            if (choices) {
-                Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(posi, QSize(-1,-1)));
+            if (!m_dropMenu->isDropjobMenu()) {
+                Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
                 setAppletArgs(applet, mimetype, tjob->url().toString());
             } else {
                 QAction *action;
-                if (choices) {
-                    choices->addSection(i18n("Widgets"));
-                    action = choices->addAction(i18nc("Add icon widget", "Add Icon"));
-                } else {
-                    QAction *sep = new QAction(i18n("Widgets"), nullptr);
-                    sep->setSeparator(true);
-                    dropActions << sep;
-                    // we can at least create an icon as a link to the URL
-                    action = new QAction(i18nc("Add icon widget", "Add Icon"), nullptr);
-                    dropActions << action;
-                }
+                QAction *sep = new QAction(i18n("Widgets"), m_dropMenu);
+                sep->setSeparator(true);
+                m_dropMenu->addAction(sep);
+                // we can at least create an icon as a link to the URL
+                action = new QAction(i18nc("Add icon widget", "Add Icon"), m_dropMenu);
+                m_dropMenu->addAction(action);
 
                 const QUrl url = tjob->url();
-                connect(action, &QAction::triggered, this, [this, posi, mimetype, url](){
-                    Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(posi, QSize(-1,-1)));
+                connect(action, &QAction::triggered, this, [this, mimetype, url](){
+                    Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
         }
-
-        if (choices) {
-            // HACK If the QMenu becomes empty at any point after the "determining mimetype"
-            // popup was shown, it self-destructs, does not matter if we call clear() or remove
-            // the action manually, hence we remove the aforementioned item after we populated the menu
-            choices->removeAction(choices->actions().at(0));
-            choices->exec();
-        } else {
-            dropJob->setApplicationActions(dropActions);
-        }
-
         clearDataForMimeJob(tjob);
     }
 }
