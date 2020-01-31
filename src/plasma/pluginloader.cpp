@@ -861,7 +861,7 @@ QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QStri
         auto insertIntoCache = [this](const QString &pluginPath) {
             KPluginMetaData metadata(pluginPath);
             if (!metadata.isValid()) {
-                qCWarning(LOG_PLASMA) << "invalid metadata" << pluginPath;
+                qCDebug(LOG_PLASMA) << "invalid metadata" << pluginPath;
                 return;
             }
 
