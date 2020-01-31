@@ -1085,7 +1085,7 @@
        transform="translate(0,-2.0185303e-5)"
        id="topleft">
       <path
-         style="color:#eff0f1;opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 16,6 c -2,0 -3,1 -3,3 v 2 1 h 4 1 1 V 11 7 6 h -1 1 z"
          transform="translate(0,904.36218)"
          id="rect4159"
@@ -1097,7 +1097,7 @@
        transform="translate(0,-2.0185303e-5)"
        id="topright">
       <path
-         style="color:#eff0f1;opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 51,6 v 1 4 1 h 1 1 3 1 V 11 9 C 57,7 56,6 54,6 h -1 -1 z"
          transform="translate(0,904.36218)"
          id="rect4177"
@@ -1110,7 +1110,7 @@
        id="bottomleft">
       <path
          inkscape:connector-curvature="0"
-         style="color:#eff0f1;opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 19,954.36218 v -1 -4 -1 h -1 -1 -3 -1 v 1 2 c 0,2 1,3 3,3 h 1 1 z"
          id="path5048"
          class="ColorScheme-Background"
@@ -1122,7 +1122,7 @@
       <path
          id="rect4177-6"
          d="m 51,954.36218 v -1 -4 -1 h 1 1 3 1 v 1 2 c 0,2 -1,3 -3,3 h -1 -1 z"
-         style="color:#eff0f1;opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.9;fill:currentColor;fill-opacity:1;stroke:none"
          inkscape:connector-curvature="0"
          class="ColorScheme-Background"
          sodipodi:nodetypes="cccccccccssccc" />
