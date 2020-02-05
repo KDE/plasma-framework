@@ -24,7 +24,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 
-Item {
+PlasmaCore.ColorScope {
     id: tooltipContentItem
 
     property Item toolTip
@@ -37,6 +37,8 @@ Item {
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
+    colorGroup: PlasmaCore.Theme.NormalColorGroup
+    inherit: false
 
     RowLayout {
 
