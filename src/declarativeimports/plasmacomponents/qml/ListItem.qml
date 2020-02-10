@@ -32,12 +32,11 @@ Item {
     default property alias content: paddingItem.data
 
     /**
-     * type:bool Holds if the item emits signals related to mouse interaction.
-     *
+     * type: bool
+     * True if the item emits signals related to mouse interaction.
      * The default value is false.
      */
     property alias enabled: itemMouse.enabled
-    //item has been clicked or pressed+hold
 
     /**
      * This signal is emitted when there is a click.
@@ -61,15 +60,12 @@ Item {
      * If true makes the list item look as checked or pressed. It has to be set
      * from the code, it won't change by itself.
      */
-    //plasma extension
-    //always look pressed?
     property bool checked: false
 
     /**
      * If true the item will be a delegate for a section, so will look like a
-     * "title" for the otems under it.
+     * "title" for the items under it.
      */
-    //is this to be used as section delegate?
     property bool sectionDelegate: false
 
     /**
@@ -97,7 +93,6 @@ Item {
 
         anchors.fill: parent
         visible: listItem.ListView.view ? listItem.ListView.view.highlight === null : true
-        Behavior on opacity { NumberAnimation { duration: units.longDuration } }
     }
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}
@@ -113,7 +108,6 @@ Item {
 
     MouseArea {
         id: itemMouse
-        property bool changeBackgroundOnPress: !listItem.checked && !listItem.sectionDelegate
         anchors.fill: background
         enabled: false
         hoverEnabled: true
