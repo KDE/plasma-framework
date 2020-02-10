@@ -54,14 +54,14 @@ PlasmaCore.ColorScope {
             id: tooltipImage
             source: toolTip ? toolTip.image : ""
             visible: toolTip != null && toolTip.image != ""
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
         PlasmaCore.IconItem {
             id: tooltipIcon
             animated: false
             source: toolTip ? toolTip.icon : ""
-            Layout.alignment: Qt.AlignTop
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             visible: toolTip != null && toolTip.icon != "" && toolTip.image == "" && valid
             Layout.preferredWidth: units.iconSizes.medium
             Layout.preferredHeight: units.iconSizes.medium
