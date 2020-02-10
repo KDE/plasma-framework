@@ -42,7 +42,8 @@ T.Button {
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
     Kirigami.MnemonicData.label: control.text
 
-    contentItem: RowLayout {
+    contentItem: GridLayout {
+        columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
         PlasmaCore.IconItem {
             id: icon
             Layout.fillWidth: true

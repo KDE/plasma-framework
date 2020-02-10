@@ -45,18 +45,17 @@ T.ToolButton {
 
     flat: true
 
-    contentItem: RowLayout {
+    contentItem: GridLayout {
+        columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
         PlasmaCore.IconItem {
             id: icon
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0
-            Layout.fillWidth: control.icon.width <= 0
-            Layout.fillHeight: control.icon.height <= 0
-            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : -1
-            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : -1
-            colorGroup: PlasmaCore.ColorScope.colorGroup
             source: control.icon ? (control.icon.name || control.icon.source) : ""
+            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
-        //NOTE: this is used only to check element's existence
         PlasmaCore.FrameSvgItem {
             id: buttonsurfaceChecker
             visible: false
