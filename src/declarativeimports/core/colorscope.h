@@ -28,6 +28,110 @@
 #include <Plasma/Theme>
 
 class QQuickItem;
+class ColorScope;
+
+class ColorScopeAttached : public QObject
+{
+    Q_OBJECT
+
+    /**
+     * Specifies the color group to use for this ColorScope
+     */
+    Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
+
+    /**
+     * The main foreground color within this colorscope
+     */
+    Q_PROPERTY(QColor textColor READ textColor NOTIFY colorsChanged)
+
+    /**
+     * The highlight color within this colorscope
+     */
+    Q_PROPERTY(QColor highlightColor READ highlightColor NOTIFY colorsChanged)
+
+    /**
+     * The highlighted text color within this colorscope
+     */
+    Q_PROPERTY(QColor highlightedTextColor READ highlightedTextColor NOTIFY colorsChanged)
+
+    /**
+     * The background color that should be used within this colorscope
+     */
+    Q_PROPERTY(QColor backgroundColor READ backgroundColor NOTIFY colorsChanged)
+
+    /**
+     * Color of foreground objects with a "positive message" connotation (usually green)
+     */
+    Q_PROPERTY(QColor positiveTextColor READ positiveTextColor NOTIFY colorsChanged)
+
+    /**
+     * Color of foreground objects with a "neutral message" connotation (usually yellow)
+     */
+    Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY colorsChanged)
+ 
+    /**
+     * Color of foreground objects with a "negative message" connotation (usually red)
+     */
+    Q_PROPERTY(QColor negativeTextColor READ negativeTextColor NOTIFY colorsChanged)
+
+    /**
+     * Color of disabled text @since 5.64
+     */
+    Q_PROPERTY(QColor disabledTextColor READ disabledTextColor NOTIFY colorsChanged)
+
+    /**
+     * true if the scope inherits from its parent scope
+     * @since 5.39
+     */
+    Q_PROPERTY(bool inherit READ inherit WRITE setInherit NOTIFY inheritChanged)
+
+public:
+    ColorScopeAttached(QObject *parent);
+    ~ColorScopeAttached();
+
+    void setColorGroup(Plasma::Theme::ColorGroup group);
+    Plasma::Theme::ColorGroup colorGroup() const;
+
+    QColor textColor() const;
+    QColor highlightColor() const;
+    QColor highlightedTextColor() const;
+    QColor backgroundColor() const;
+    QColor positiveTextColor() const;
+    QColor neutralTextColor() const;
+    QColor negativeTextColor() const;
+    QColor disabledTextColor() const;
+
+    bool inherit() const;
+    void setInherit(bool inherit);
+
+/// @endcond
+
+    ColorScopeAttached *findParentScope();
+
+    void checkColorGroupChanged();
+
+Q_SIGNALS:
+    void colorGroupChanged();
+    void colorsChanged();
+    void inheritChanged();
+
+private:
+    
+    void setParentScope(ColorScopeAttached * parentScope);
+
+    bool m_inherit;
+    Plasma::Theme::ColorGroup m_group;
+    QPointer<ColorScopeAttached> m_parentScope;
+    QObject *const m_parent;
+    Plasma::Theme::ColorGroup m_actualGroup;
+    bool m_deleting = false;
+
+    static QHash<QObject *, ColorScopeAttached *> s_attachedScopes;
+
+    static QWeakPointer<Plasma::Theme> s_theme;
+    QSharedPointer<Plasma::Theme> m_theme;
+    friend class ColorScope;
+};
 
 /**
  * @class ColorScope
@@ -93,7 +197,7 @@ class ColorScope : public QQuickItem
 
 public:
 /// @cond INTERNAL_DOCS
-    explicit ColorScope(QQuickItem *parent = nullptr, QObject *parentObject = nullptr);
+    explicit ColorScope(QQuickItem *parent = nullptr);
     ~ColorScope() override;
 
     void setColorGroup(Plasma::Theme::ColorGroup group);
@@ -112,7 +216,7 @@ public:
     void setInherit(bool inherit);
 
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
-    static ColorScope *qmlAttachedProperties(QObject *object);
+    static ColorScopeAttached *qmlAttachedProperties(QObject *object);
 
 /// @endcond
 
@@ -125,20 +229,7 @@ Q_SIGNALS:
     void inheritChanged();
 
 private:
-    void checkColorGroupChanged();
-    void setParentScope(ColorScope * parentScope);
-
-    bool m_inherit;
-    Plasma::Theme::ColorGroup m_group;
-    QPointer<ColorScope> m_parentScope;
-    QObject *const m_parent;
-    Plasma::Theme::ColorGroup m_actualGroup;
-    bool m_deleting = false;
-
-    static QHash<QObject *, ColorScope *> s_attachedScopes;
-
-    static QWeakPointer<Plasma::Theme> s_theme;
-    QSharedPointer<Plasma::Theme> m_theme;
+    ColorScopeAttached *m_ownAttached;
 
 };
 

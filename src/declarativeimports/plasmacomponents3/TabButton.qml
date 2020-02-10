@@ -34,14 +34,29 @@ T.TabButton {
 
     hoverEnabled: true
 
-    contentItem: Label {
-        text: control.text
-        font: control.font
-        elide: Text.ElideRight
-        opacity: enabled ? 1 : 0.3
-        color: PlasmaCore.ColorScope.textColor
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
+    contentItem: GridLayout {
+        columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
+        PlasmaCore.IconItem {
+            id: icon
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            visible: source.length > 0
+            source: control.icon ? (control.icon.name || control.icon.source) : ""
+            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+        }
+        Label {
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            visible: text.length > 0
+            text: control.Kirigami.MnemonicData.richTextLabel
+            font: control.font
+            opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
+            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            elide: Text.ElideRight
+        }
     }
 
     background: Item {}
