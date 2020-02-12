@@ -69,7 +69,7 @@ Label {
         var s;
         switch (l) {
         case 1:
-            return Math.round(n * 1.80) + step;
+            return Math.round(n * 1.50) + step;
         case 2:
             return Math.round(n * 1.30) + step;
         case 3:

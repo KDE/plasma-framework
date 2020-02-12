@@ -43,5 +43,6 @@ import org.kde.plasma.components 2.0
  */
 Label {
     id: root
-    font.pointSize: theme.defaultFont.pointSize*2
+    // Match size of level 1 Heading
+    font.pointSize: Math.round(theme.defaultFont.pointSize * 1.50)
 }
