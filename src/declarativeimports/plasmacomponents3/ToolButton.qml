@@ -54,7 +54,7 @@ T.ToolButton {
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         PlasmaCore.FrameSvgItem {
             id: buttonsurfaceChecker

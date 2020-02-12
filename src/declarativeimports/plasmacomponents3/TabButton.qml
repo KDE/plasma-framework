@@ -49,7 +49,7 @@ T.TabButton {
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         Label {
             Layout.fillWidth: true
@@ -58,7 +58,7 @@ T.TabButton {
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
+            color: control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
