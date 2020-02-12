@@ -35,9 +35,10 @@ PlasmaComponents.Page {
         anchors.fill: parent
         spacing: _s
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             width: parent.width
             elide: Text.ElideRight
+            level: 1
             text: "Icons"
         }
         PlasmaComponents.Label {

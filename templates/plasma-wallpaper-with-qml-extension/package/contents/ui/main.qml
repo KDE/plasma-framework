@@ -38,8 +38,9 @@ Item {
     ColumnLayout {
         anchors.centerIn: parent
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             Layout.alignment: Qt.AlignCenter
+            level: 1
             text: wallpaper.configuration.DisplayText ||
                   i18n("<Please configure a text to display>")
         }

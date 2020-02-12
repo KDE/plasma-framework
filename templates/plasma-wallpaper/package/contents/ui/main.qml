@@ -30,8 +30,9 @@ Item {
         color: Theme.backgroundColor
     }
 
-    PlasmaExtras.Title {
+    PlasmaExtras.Heading {
         anchors.centerIn: parent
+        level: 1
         text: wallpaper.configuration.DisplayText ||
               i18n("<Please configure a text to display>")
     }

@@ -43,9 +43,10 @@ Item {
             right: parent.right
         }
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             width: parent.width
             elide: Text.ElideRight
+            level: 1
             text: "Scaling Test"
             font.pointSize: cheatLabel.font.pointSize * 2
         }

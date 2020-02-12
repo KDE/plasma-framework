@@ -35,8 +35,9 @@ PlasmaComponents.Page {
     Column {
         spacing: _s/2
         anchors.fill: parent
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             width: parent.width
+            level: 1
             text: "Dialogs"
         }
         Row {

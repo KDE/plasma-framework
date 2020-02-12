@@ -115,7 +115,7 @@ Column {
             }
         }
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
 
             font.weight: lightCheck.checked ? Font.Light : Font.Normal
             font.family: fontCheck.text

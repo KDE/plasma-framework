@@ -40,9 +40,10 @@ Item {
         //anchors.fill: parent
         //spacing: units.smallSpacing/2
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             width: parent.width
             elide: Text.ElideRight
+            level: 1
             text: "Theme & DPI Test"
         }
 

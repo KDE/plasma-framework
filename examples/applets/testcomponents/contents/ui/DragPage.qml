@@ -39,11 +39,11 @@ PlasmaComponents.Page {
         margins: _s
     }
 
-    PlasmaExtras.Title {
+    PlasmaExtras.Heading {
         id: dlabel
 
         anchors { left: parent.left; right: parent.right; top: parent.top; }
-
+        level: 1
         text: "Drag & Drop"
     }
 

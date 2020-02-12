@@ -41,9 +41,10 @@ PlasmaComponents.Page {
         //anchors.fill: parent
         //spacing: _s / 4
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             width: parent.width
             elide: Text.ElideRight
+            level: 1
             text: "Theme"
         }
 

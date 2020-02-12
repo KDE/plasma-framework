@@ -40,8 +40,9 @@ Item {
     Column {
         anchors.fill: parent
         spacing: 12
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
             id: tx
+            level: 1
             text: "Test Dialog"
         }
         PlasmaComponents.TextArea {

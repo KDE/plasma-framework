@@ -32,7 +32,8 @@ PlasmaComponents.Page {
             iconSource: "go-previous"
             onClicked: pageStack.pop()
         }
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
+            level: 1
             text: "Typography"
         }
     }
@@ -55,7 +56,8 @@ PlasmaComponents.Page {
                 }
                 spacing: 12
 
-                PlasmaExtras.Title {
+                PlasmaExtras.Heading {
+                    level: 1
                     text: "A Title"
                 }
 

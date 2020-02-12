@@ -48,7 +48,8 @@ Item {
             margins: units.largeSpacing
         }
 
-        PlasmaExtras.Title {
+        PlasmaExtras.Heading {
+            level: 1
             text: i18n("Reporting Bugs")
         }
         PlasmaExtras.Heading {

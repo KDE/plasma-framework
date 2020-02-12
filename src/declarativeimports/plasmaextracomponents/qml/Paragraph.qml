@@ -32,7 +32,7 @@ import org.kde.plasma.components 2.0
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
  * [...]
  * Column {
- *     PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
+ *     PlasmaExtras.Heading { text: "Fruit sweetness on the rise"; level: 1 }
  *     PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
  *     PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
  *   [...]

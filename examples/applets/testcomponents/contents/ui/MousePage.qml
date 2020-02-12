@@ -31,8 +31,9 @@ PlasmaComponents.Page {
         fill: parent
         margins: _s
     }
-    PlasmaExtras.Title {
+    PlasmaExtras.Heading {
         id: mellabel
+        level: 1
         text: "MouseEventListener"
         anchors { left: parent.left; right: parent.right; top: parent.top }
     }
