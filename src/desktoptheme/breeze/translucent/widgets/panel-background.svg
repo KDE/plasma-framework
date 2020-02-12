@@ -1025,28 +1025,28 @@
        sodipodi:nodetypes="cccccccccssccc"
        class="ColorScheme-Background"
        inkscape:connector-curvature="0"
-       style="color:#eff0f1;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
        d="m 158.49999,954.61232 v -1.37503 -5.5001 -1.37503 h 1.37503 1.37502 4.12508 1.37503 v 1.37503 2.75005 c 0,2.75005 -1.37503,4.12508 -4.12508,4.12508 h -1.37503 -1.37502 z"
        id="mask-bottomright" />
     <path
        sodipodi:nodetypes="cccccccccssccc"
        class="ColorScheme-Background"
        inkscape:connector-curvature="0"
-       style="color:#eff0f1;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
        d="m 131,954.6123 v -1.37503 -5.5001 -1.37503 h -1.37503 -1.37502 -4.12508 -1.37503 v 1.37503 2.75005 c 0,2.75005 1.37503,4.12508 4.12508,4.12508 h 1.37503 1.37502 z"
        id="mask-bottomleft" />
     <path
        sodipodi:nodetypes="cccccccccssccc"
        class="ColorScheme-Background"
        inkscape:connector-curvature="0"
-       style="color:#eff0f1;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
        d="m 131.00016,910.61202 v 1.37503 5.5001 1.37503 h -1.37503 -1.37502 -4.12508 -1.37503 v -1.37503 -2.75005 c 0,-2.75005 1.37503,-4.12508 4.12508,-4.12508 h 1.37503 1.37502 z"
        id="mask-topleft" />
     <path
        sodipodi:nodetypes="cccccccccssccc"
        class="ColorScheme-Background"
        inkscape:connector-curvature="0"
-       style="color:#eff0f1;opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
+       style="opacity:1;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.37502706"
        d="m 158.49998,910.61202 v 1.37503 5.5001 1.37503 h 1.37503 1.37502 4.12508 1.37503 v -1.37503 -2.75005 c 0,-2.75005 -1.37503,-4.12508 -4.12508,-4.12508 h -1.37503 -1.37502 z"
        id="mask-topright" />
     <g
