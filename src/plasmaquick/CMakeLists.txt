@@ -25,7 +25,13 @@ if(HAVE_KWAYLAND)
     set(plasmaquick_LIB_SRC ${plasmaquick_LIB_SRC} waylandintegration.cpp)
 endif()
 
-ecm_qt_declare_logging_category(PlasmaQuick_LIB_SRCS HEADER debug_p.h IDENTIFIER LOG_PLASMAQUICK CATEGORY_NAME org.kde.plasmaquick)
+ecm_qt_declare_logging_category(PlasmaQuick_LIB_SRCS
+    HEADER debug_p.h
+    IDENTIFIER LOG_PLASMAQUICK
+    CATEGORY_NAME org.kde.plasmaquick
+    DESCRIPTION "Plasma Quick lib"
+    EXPORT PLASMA
+)
 
 add_library(KF5PlasmaQuick SHARED ${plasmaquick_LIB_SRC})
 add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
