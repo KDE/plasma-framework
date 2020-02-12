@@ -63,6 +63,7 @@ T.TabButton {
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
+    }
 
     background: Item {}
 }
