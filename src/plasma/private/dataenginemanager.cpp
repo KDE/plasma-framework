@@ -40,7 +40,7 @@ class NullEngine : public DataEngine
 {
 public:
     explicit NullEngine(QObject *parent = nullptr)
-        : DataEngine(KPluginInfo(), parent)
+        : DataEngine(KPluginMetaData(), parent)
     {
         setValid(false);
 
