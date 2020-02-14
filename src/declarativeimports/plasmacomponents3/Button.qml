@@ -45,8 +45,12 @@ T.Button {
     contentItem: RowLayout {
         PlasmaCore.IconItem {
             id: icon
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+
+            Layout.fillWidth: control.icon.width <= 0
+            Layout.fillHeight: control.icon.height <= 0
+            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
+            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
+
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0
             source: control.icon ? (control.icon.name || control.icon.source) : ""
