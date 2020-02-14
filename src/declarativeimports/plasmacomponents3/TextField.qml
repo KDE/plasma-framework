@@ -32,7 +32,7 @@ T.TextField {
     implicitWidth: Math.max(units.gridUnit * 8,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
                             || contentWidth + leftPadding + rightPadding
-    implicitHeight: units.gridUnit * 1.6
+    implicitHeight: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
 
     padding: 6
 

@@ -45,8 +45,7 @@ T.TabButton {
         PlasmaCore.IconItem {
             id: icon
 
-            Layout.fillWidth: control.icon.width <= 0
-            Layout.fillHeight: control.icon.height <= 0
+            Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
             Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 

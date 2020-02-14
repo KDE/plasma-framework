@@ -50,8 +50,7 @@ T.ToolButton {
         PlasmaCore.IconItem {
             id: icon
 
-            Layout.fillWidth: control.icon.width <= 0
-            Layout.fillHeight: control.icon.height <= 0
+            Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
             Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 
@@ -60,12 +59,7 @@ T.ToolButton {
             source: control.icon ? (control.icon.name || control.icon.source) : ""
             status: control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
-        PlasmaCore.FrameSvgItem {
-            id: buttonsurfaceChecker
-            visible: false
-            imagePath: "widgets/button"
-            prefix: control.flat ? ["toolbutton-hover", "normal"] : "normal"
-        }
+        
         Label {
             Layout.fillWidth: true
             visible: text.length > 0
@@ -76,13 +70,20 @@ T.ToolButton {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
+
+            PlasmaCore.FrameSvgItem {
+                id: buttonsurfaceChecker
+                visible: false
+                imagePath: "widgets/button"
+                prefix: control.flat ? ["toolbutton-hover", "normal"] : "normal"
+            }
         }
     }
 
     background: Item {
         //retrocompatibility with old controls
-        implicitWidth: units.gridUnit * 1.6
-        implicitHeight: units.gridUnit * 1.6
+        implicitWidth: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
+        implicitHeight: implicitWidth
         Private.ButtonShadow {
             anchors.fill: parent
             visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)

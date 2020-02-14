@@ -46,8 +46,7 @@ T.Button {
         PlasmaCore.IconItem {
             id: icon
 
-            Layout.fillWidth: control.icon.width <= 0
-            Layout.fillHeight: control.icon.height <= 0
+            Layout.alignment: Qt.AlignCenter
             Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
             Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
 
@@ -72,7 +71,8 @@ T.Button {
 
     background: Item {
         //retrocompatibility with old controls
-        implicitHeight: units.gridUnit * 1.6
+        implicitWidth: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
+        implicitHeight: implicitWidth
         Private.ButtonShadow {
             anchors.fill: parent
             visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
