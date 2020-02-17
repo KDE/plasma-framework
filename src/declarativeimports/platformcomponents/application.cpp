@@ -113,7 +113,7 @@ void Application::start()
         return;
     }
 
-    d->process.start(d->application);
+    d->process.start(d->application, QStringList());
 }
 
 void Application::terminate()
