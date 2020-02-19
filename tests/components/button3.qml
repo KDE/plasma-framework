@@ -87,7 +87,42 @@ ComponentBase {
         RowLayout {
             PlasmaComponents.Button {
                 text: "AA"
-//                 implicitWidth: minimumWidth FIXME, there is no equivalent?
+                implicitWidth: Layout.minimumWidth
+            }
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                text: "AA"
+                implicitWidth: Layout.minimumWidth
+            }
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                implicitWidth: Layout.minimumWidth
+            }
+        }
+
+        PlasmaComponents.Label {
+            text: "Display property"
+        }
+        RowLayout {
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                text: "Icon Only"
+                display: PlasmaComponents.Button.IconOnly
+            }
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                text: "Text Beside Icon"
+                display: PlasmaComponents.Button.TextBesideIcon
+            }
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                text: "Text Under Icon"
+                display: PlasmaComponents.Button.TextUnderIcon
+            }
+            PlasmaComponents.Button {
+                icon.name: "application-menu"
+                text: "Text Only"
+                display: PlasmaComponents.Button.TextOnly
             }
         }
 

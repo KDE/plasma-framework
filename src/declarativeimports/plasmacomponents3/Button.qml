@@ -31,6 +31,8 @@ T.Button {
                             contentItem.implicitWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
 
+    Layout.minimumWidth: contentItem.implicitWidth + leftPadding + rightPadding
+
     leftPadding: surfaceNormal.margins.left
     topPadding: surfaceNormal.margins.top
     rightPadding: surfaceNormal.margins.right
@@ -42,28 +44,41 @@ T.Button {
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
     Kirigami.MnemonicData.label: control.text
 
-    contentItem: RowLayout {
+    PlasmaCore.ColorScope.inherit: flat
+    PlasmaCore.ColorScope.colorGroup: flat ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
+
+    contentItem: GridLayout {
+        columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
         PlasmaCore.IconItem {
             id: icon
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
-            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
+
+            Layout.fillWidth: control.display === T.Button.TextUnderIcon
+            Layout.fillHeight: control.display !== T.Button.TextUnderIcon
+
+            Layout.minimumWidth: units.iconSizes.tiny
+            Layout.minimumHeight: units.iconSizes.tiny
+            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
+            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
+
+            implicitWidth: Layout.maximumWidth
+            implicitHeight: Layout.maximumHeight
 
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
-            visible: source.length > 0
+            visible: source.length > 0 && control.display !== T.Button.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: !control.flat && buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         Label {
+            id: label
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            visible: text.length > 0
+            visible: text.length > 0 && control.display !== T.Button.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
             color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: control.display !== T.Button.TextUnderIcon && icon.visible ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
@@ -71,8 +86,8 @@ T.Button {
 
     background: Item {
         //retrocompatibility with old controls
-        implicitWidth: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
-        implicitHeight: implicitWidth
+        implicitWidth: label.visible ? units.gridUnit * 6 : implicitHeight
+        implicitHeight: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
         Private.ButtonShadow {
             anchors.fill: parent
             visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)

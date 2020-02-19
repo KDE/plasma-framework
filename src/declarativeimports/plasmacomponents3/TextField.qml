@@ -32,7 +32,7 @@ T.TextField {
     implicitWidth: Math.max(units.gridUnit * 8,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
                             || contentWidth + leftPadding + rightPadding
-    implicitHeight: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
+    implicitHeight: background.implicitHeight
 
     padding: 6
 
@@ -100,6 +100,13 @@ T.TextField {
     }
 
     background: Item {
+        implicitHeight: Math.max(Math.floor(metrics.height * 1.6) + Math.floor(metrics.height * 1.6) % 2,
+                                 metrics.height + base.margins.top + base.margins.bottom)
+        TextMetrics {
+            id: metrics
+            text: "M"
+            font: control.font
+        }
         Private.TextFieldFocus {
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
             anchors.fill: parent

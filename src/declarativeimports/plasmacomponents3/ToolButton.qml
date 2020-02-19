@@ -45,27 +45,41 @@ T.ToolButton {
 
     flat: true
 
+    PlasmaCore.ColorScope.inherit: flat
+    PlasmaCore.ColorScope.colorGroup: flat ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
+    
     contentItem: GridLayout {
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
+
         PlasmaCore.IconItem {
             id: icon
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
-            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 
-            colorGroup: PlasmaCore.Theme.ButtonColorGroup
-            visible: source.length > 0
+            Layout.fillWidth: control.display === T.AbstractButton.TextUnderIcon
+            Layout.fillHeight: control.display !== T.AbstractButton.TextUnderIcon
+
+            Layout.minimumWidth: units.iconSizes.tiny
+            Layout.minimumHeight: units.iconSizes.tiny
+            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
+            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
+
+            implicitWidth: Layout.maximumWidth
+            implicitHeight: Layout.maximumHeight
+
+            colorGroup: control.PlasmaCore.ColorScope.colorGroup
+            visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: !control.flat && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         
         Label {
+            id: label
             Layout.fillWidth: true
-            visible: text.length > 0
+            visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
-            opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
+            opacity: width > 0 ? (enabled || control.highlighted || control.checked ? 1 : 0.4) : 0
             color: (control.hovered || !control.flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

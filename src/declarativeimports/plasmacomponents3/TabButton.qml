@@ -46,18 +46,26 @@ T.TabButton {
             id: icon
 
             Layout.alignment: Qt.AlignCenter
-            Layout.preferredWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
-            Layout.preferredHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 
-            colorGroup: PlasmaCore.Theme.ButtonColorGroup
-            visible: source.length > 0
+            Layout.fillWidth: control.display === T.AbstractButton.TextUnderIcon
+            Layout.fillHeight: control.display !== T.AbstractButton.TextUnderIcon
+
+            Layout.minimumWidth: units.iconSizes.tiny
+            Layout.minimumHeight: units.iconSizes.tiny
+            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
+            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
+
+            implicitWidth: Layout.maximumWidth
+            implicitHeight: Layout.maximumHeight
+
+            colorGroup: control.PlasmaCore.ColorScope.colorGroup
+            visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         Label {
+            id: label
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            visible: text.length > 0
+            visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
