@@ -47,16 +47,17 @@ T.TabButton {
 
             Layout.alignment: Qt.AlignCenter
 
-            Layout.fillWidth: control.display === T.AbstractButton.TextUnderIcon
-            Layout.fillHeight: control.display !== T.AbstractButton.TextUnderIcon
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            Layout.minimumWidth: units.iconSizes.tiny
-            Layout.minimumHeight: units.iconSizes.tiny
-            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
-            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
+            Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
+            Layout.minimumHeight: Math.min(parent.width, parent.height, implicitHeight)
 
-            implicitWidth: Layout.maximumWidth
-            implicitHeight: Layout.maximumHeight
+            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : Number.POSITIVE_INFINITY
+            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : Number.POSITIVE_INFINITY
+
+            implicitWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
+            implicitHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 
             colorGroup: control.PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly

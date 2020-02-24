@@ -80,6 +80,43 @@ ComponentBase {
                 icon.name: "list-remove"
             }
         }
+        PlasmaComponents.Label {
+            text: "Fixed size and stretching size buttons"
+        }
+        GridLayout {
+            id: layout
+            rows: 2
+            columns:2
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            PlasmaComponents.ToolButton {
+                id: closeButton
+                icon.name: "window-close"
+                text: "Text"
+            }
+            PlasmaComponents.ToolButton {
+                id: closeButton2
+                icon.name: "window-close"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                icon.width: units.iconSizes.small
+                icon.height: units.iconSizes.small
+                text: "Text"
+            }
+            PlasmaComponents.ToolButton {
+                id: closeButton3
+                icon.name: "window-close"
+                Layout.fillHeight: true
+                text: "Text"
+            }
+            PlasmaComponents.ToolButton {
+                id: closeButton4
+                icon.name: "window-close"
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                text: "Text"
+            }
+        }
     }
 }
 

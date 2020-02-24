@@ -54,16 +54,17 @@ T.Button {
 
             Layout.alignment: Qt.AlignCenter
 
-            Layout.fillWidth: control.display === T.Button.TextUnderIcon
-            Layout.fillHeight: control.display !== T.Button.TextUnderIcon
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-            Layout.minimumWidth: units.iconSizes.tiny
-            Layout.minimumHeight: units.iconSizes.tiny
-            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
-            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
+            Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
+            Layout.minimumHeight: Math.min(parent.width, parent.height, implicitHeight)
 
-            implicitWidth: Layout.maximumWidth
-            implicitHeight: Layout.maximumHeight
+            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : Number.POSITIVE_INFINITY
+            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : Number.POSITIVE_INFINITY
+
+            implicitWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.small
+            implicitHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.small
 
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0 && control.display !== T.Button.TextOnly
