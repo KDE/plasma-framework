@@ -194,6 +194,12 @@ QString Theme::styleSheet(const QString &css) const
     return d->processStyleSheet(css, Svg::Status::Normal);
 }
 
+
+QPalette Theme::palette() const
+{
+    return d->palette;
+}
+
 QString Theme::wallpaperPath(const QSize &size) const
 {
     QString fullPath;

@@ -119,6 +119,7 @@ public:
     KColorScheme buttonColorScheme;
     KColorScheme viewColorScheme;
     KColorScheme complementaryColorScheme;
+    QPalette palette;
     bool eventFilter(QObject *watched, QEvent *event) override;
     KConfigGroup cfg;
     QString defaultWallpaperTheme;

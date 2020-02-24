@@ -400,6 +400,7 @@ void ThemePrivate::colorsChanged()
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     selectionColorScheme = KColorScheme(QPalette::Active, KColorScheme::Selection, colors);
+    palette = KColorScheme::createApplicationPalette(colors);
     scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     emit applicationPaletteChange();
 }
@@ -802,6 +803,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
+    palette = KColorScheme::createApplicationPalette(colors);
     const QString wallpaperPath = QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();
 

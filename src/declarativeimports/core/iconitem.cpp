@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QPaintEngine>
 #include <QPainter>
+#include <QPalette>
 #include <QPropertyAnimation>
 #include <QPixmap>
 #include <QSGSimpleTextureNode>
@@ -33,6 +34,7 @@
 
 #include "fadingnode_p.h"
 #include <QuickAddons/ManagedTextureNode>
+#include "theme.h"
 #include "units.h"
 
 IconItem::IconItem(QQuickItem *parent)
@@ -595,7 +597,9 @@ void IconItem::loadPixmap()
             result = m_svgIcon->pixmap();
         }
     } else if (!m_icon.isNull()) {
+        KIconLoader::global()->setCustomPalette(Plasma::Theme().palette());
         result = m_icon.pixmap(QSize(size, size) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
+        KIconLoader::global()->resetPalette();
     } else if (!m_imageIcon.isNull()) {
         result = QPixmap::fromImage(m_imageIcon);
     } else {

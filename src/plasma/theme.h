@@ -67,6 +67,8 @@ class PLASMA_EXPORT Theme : public QObject
     // stylesheet
     Q_PROPERTY(QString styleSheet READ styleSheet NOTIFY themeChanged)
 
+    Q_PROPERTY(QPalette palette READ palette NOTIFY themeChanged)
+
 public:
     enum ColorRole {
         TextColor = 0, /**<  the text color to be used by items resting on the background */
@@ -214,6 +216,12 @@ public:
      * @since 4.5
      */
     QString styleSheet(const QString &css = QString()) const;
+
+    /**
+     * Returns a QPalette with the colors set as defined by the theme.
+     * @since 5.68
+     */
+    QPalette palette() const;
 
     /**
      * This is an overloaded member provided to check with file timestamp
