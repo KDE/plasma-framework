@@ -35,8 +35,8 @@
 
 DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent)
     : QObject(parent),
-    m_dropJob(dropJob),
-    m_dropPoint(dropPoint) 
+    m_dropPoint(dropPoint),
+    m_dropJob(dropJob)
 {
     if (!dropJob) {
         m_menu = new QMenu(i18n("Content dropped"));
