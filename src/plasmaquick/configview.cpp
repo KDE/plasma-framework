@@ -53,7 +53,7 @@ class ConfigViewPrivate
 {
 public:
     ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view);
-    ~ConfigViewPrivate();
+    ~ConfigViewPrivate() = default;
 
     void init();
 

@@ -24,6 +24,7 @@
 #include <QQuickWindow>
 #include <QPoint>
 #include <QQmlParserStatus>
+#include <QScopedPointer>
 
 #include <Plasma/Plasma>
 #include <Plasma/Theme>
@@ -241,7 +242,7 @@ protected:
 
 private:
     friend class DialogPrivate;
-    DialogPrivate *const d;
+    const QScopedPointer<DialogPrivate> d;
 
     Q_PRIVATE_SLOT(d, void updateInputShape())
     Q_PRIVATE_SLOT(d, void updateTheme())

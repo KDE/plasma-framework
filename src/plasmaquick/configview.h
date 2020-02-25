@@ -21,6 +21,7 @@
 #define CONFIGVIEW_H
 
 #include <QQuickView>
+#include <QScopedPointer>
 
 #include <plasmaquick/plasmaquick_export.h>
 
@@ -81,7 +82,7 @@ protected:
     void resizeEvent(QResizeEvent *re) override;
 
 private:
-    ConfigViewPrivate *const d;
+    QScopedPointer<ConfigViewPrivate> const d;
 
     Q_PRIVATE_SLOT(d, void updateMinimumWidth())
     Q_PRIVATE_SLOT(d, void updateMinimumHeight())
