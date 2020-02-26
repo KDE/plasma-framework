@@ -835,6 +835,9 @@ Dialog::~Dialog()
     if (!QCoreApplication::instance()->closingDown()) {
         DialogShadows::self()->removeWindow(this);
     }
+
+    // Prevent signals from super-class destructor invoking our now-destroyed slots
+    disconnect(this, nullptr, this, nullptr);
 }
 
 QQuickItem *Dialog::mainItem() const
