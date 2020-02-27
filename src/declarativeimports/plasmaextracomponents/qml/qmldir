@@ -9,6 +9,7 @@ PageRow 2.0 PageRow.qml
 ScrollArea 2.0 ScrollArea.qml
 Title 2.0 Title.qml
 DescriptiveLabel 2.0 DescriptiveLabel.qml
+PlasmoidHeading 2.0 PlasmoidHeading.qml
 
 ActivateAnimation 2.0 animations/ActivateAnimation.qml
 AppearAnimation 2.0 animations/AppearAnimation.qml
