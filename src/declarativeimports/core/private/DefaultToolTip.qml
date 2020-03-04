@@ -57,16 +57,6 @@ PlasmaCore.ColorScope {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
-        PlasmaCore.IconItem {
-            id: tooltipIcon
-            animated: false
-            source: toolTip ? toolTip.icon : ""
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: toolTip != null && toolTip.icon != "" && toolTip.image == "" && valid
-            Layout.preferredWidth: units.iconSizes.medium
-            Layout.preferredHeight: units.iconSizes.medium
-        }
-
         ColumnLayout {
             Layout.maximumWidth: preferredTextWidth
 
