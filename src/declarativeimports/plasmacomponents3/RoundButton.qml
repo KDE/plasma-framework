@@ -75,14 +75,14 @@ T.RoundButton {
 
         Private.RoundShadow {
             id: roundShadow
-            visible: !control.flat || control.activeFocus
+            visible: !control.flat || control.activeFocus || control.highlighted
             anchors.fill: parent
             state: {
                 if (control.pressed) {
                     return "hidden"
                 } else if (control.hovered) {
                     return "hover"
-                } else if (control.activeFocus) {
+                } else if (control.activeFocus || control.highlighted) {
                     return "focus"
                 } else {
                     return "shadow"
