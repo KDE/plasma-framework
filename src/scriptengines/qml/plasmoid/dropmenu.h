@@ -56,7 +56,6 @@ public:
 private:
     QPoint m_dropPoint;
     QMenu *m_menu = nullptr;
-    QJSValue *m_dropCallback = nullptr;
     KIO::DropJob *m_dropJob = nullptr;
     QList<QAction *> m_dropActions = QList<QAction *>();
     QList<QUrl> m_urls = QList<QUrl>();

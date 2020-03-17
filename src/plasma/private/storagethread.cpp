@@ -161,7 +161,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
 
         QString field;
         bool binary = false;
-        switch (QMetaType::Type(it.value().type())) {
+        switch (it.value().type()) {
         case QVariant::String:
             field = QStringLiteral(":txt");
             break;
@@ -169,7 +169,6 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
             field = QStringLiteral(":int");
             break;
         case QVariant::Double:
-        case QMetaType::Float:
             field = QStringLiteral(":float");
             break;
         case QVariant::ByteArray:
