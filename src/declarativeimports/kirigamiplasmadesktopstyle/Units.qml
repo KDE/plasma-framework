@@ -99,12 +99,6 @@ QtObject {
      */
     property int shortDuration: units.shortDuration
 
-    /**
-     * units.veryLongDuration should be used for specialty animations that benefit
-     * from being even longer than longDuration.
-     */
-    property int veryLongDuration: units.veryLongDuration
-
     readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
 
     /**

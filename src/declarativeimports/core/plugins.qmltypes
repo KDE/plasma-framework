@@ -882,7 +882,6 @@ Module {
         Property { name: "devicePixelRatio"; type: "double"; isReadonly: true }
         Property { name: "longDuration"; type: "int"; isReadonly: true }
         Property { name: "shortDuration"; type: "int"; isReadonly: true }
-        Property { name: "veryLongDuration"; type: "int"; isReadonly: true }
         Signal { name: "spacingChanged" }
         Signal { name: "durationChanged" }
         Method {
