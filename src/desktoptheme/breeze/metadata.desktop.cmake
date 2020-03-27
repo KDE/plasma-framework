@@ -67,6 +67,7 @@ Comment[pt]=Brisa da VDG do KDE
 Comment[pt_BR]=Breeze pelo KDE VDG
 Comment[ru]=Breeze от KDE VDG
 Comment[sk]=Vánok od KDE VDG
+Comment[sl]=Sapica (Breeze) od KDE VDG
 Comment[sv]=Breeze av KDE:s visuella designgrupp
 Comment[tg]=Насим аз KDE VDG
 Comment[uk]=Breeze, автори — KDE VDG

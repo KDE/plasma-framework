@@ -67,6 +67,7 @@ Comment[pt]=Brisa Escuro da VDG do KDE
 Comment[pt_BR]=Breeze Dark pelo KDE VDG
 Comment[ru]=Тёмный вариант Breeze от KDE VDG
 Comment[sk]=Vánok Tmavý od KDE VDG
+Comment[sl]=Sapica temna (Breeze Dark) od KDE VDG
 Comment[sv]=Breeze mörk av KDE:s visuella designgrupp
 Comment[tg]=Насими торик аз KDE VDG
 Comment[uk]=Темна Breeze, автори — KDE VDG
