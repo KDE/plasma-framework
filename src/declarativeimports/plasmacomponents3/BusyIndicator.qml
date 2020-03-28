@@ -32,6 +32,7 @@ T.BusyIndicator {
 
     contentItem: PlasmaCore.SvgItem {
         id: indicatorItem
+        visible: control.running
         svg: PlasmaCore.Svg {
             imagePath: "widgets/busywidget"
             colorGroup: PlasmaCore.ColorScope.colorGroup
