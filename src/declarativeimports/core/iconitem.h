@@ -31,6 +31,8 @@
 #include <plasma/svg.h>
 
 class QPropertyAnimation;
+class IconItemSource;
+class SvgSource;
 
 /**
  * @class IconItem
@@ -192,10 +194,7 @@ private:
     void updateImplicitSize();
 
     //all the ways we can set an source. Only one of them will be valid
-    QIcon m_icon;
-    Plasma::Svg *m_svgIcon;
-    QString m_svgIconName;
-    QImage m_imageIcon;
+    QScopedPointer<IconItemSource> m_iconItemSource;
     //this contains the raw variant it was passed
     QVariant m_source;
     Plasma::Svg::Status m_status;
@@ -224,6 +223,9 @@ private:
     qreal m_animValue;
 
     QPointer<QWindow> m_window;
+
+    // to access schedulePixmapUpdate private slot
+    friend class SvgSource;
 };
 
 #endif
