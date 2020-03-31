@@ -34,3 +34,4 @@ ToolBar 3.0 ToolBar.qml
 ToolButton 3.0 ToolButton.qml
 ToolTip 3.0 ToolTip.qml
 RoundButton 3.0 RoundButton.qml
+Page 3.0 Page.qml
