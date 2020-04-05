@@ -94,6 +94,12 @@ QtObject {
     property int shortDuration: units.shortDuration
 
     /**
+     * units.veryLongDuration should be used for specialty animations that benefit
+     * from being even longer than longDuration.
+     */
+    property int veryLongDuration: units.veryLongDuration
+
+    /**
      * How much the mouse scroll wheel scrolls, expressed in lines of text.
      * Note: this is strictly for classical mouse wheels, touchpads 2 figer scrolling won't be affected
      */

@@ -132,6 +132,12 @@ class Units : public QObject
      */
     Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
 
+    /**
+     * units.veryLongDuration should be used for specialty animations that benefit
+     * from being even longer than longDuration.
+     */
+    Q_PROPERTY(int veryLongDuration READ veryLongDuration NOTIFY durationChanged)
+
 public:
 /// @cond INTERNAL_DOCS
 
@@ -187,6 +193,12 @@ public:
      * @since 5.0
      */
     int shortDuration() const;
+
+    /**
+     * @return Duration for very long animations, in milliseconds.
+     * @since 5.69
+     */
+    int veryLongDuration() const;
 /// @endcond
 
     /**
