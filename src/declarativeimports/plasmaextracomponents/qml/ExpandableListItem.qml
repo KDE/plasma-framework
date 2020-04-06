@@ -67,7 +67,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *             isDefault: model.isDefault
  *             defaultActionButtonAction: Action {
  *                 icon.name: model.isPaused ? "media-playback-start" : "media-playback-pause"
- *                 text: model.isPaused ? i18n("Resume") : i18n("Pause")
+ *                 text: model.isPaused ? "Resume" : "Pause"
  *                 onTriggered: {
  *                     if (model.isPaused) {
  *                         model.resume(model.name);
@@ -79,7 +79,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *             contextualActionsModel: [
  *                 Action {
  *                     icon.name: "configure"
- *                     text: i18n("Configure...")
+ *                     text: "Configure..."
  *                     onTriggered: model.configure(model.name);
  *                 }
  *             ]
@@ -186,17 +186,17 @@ MouseArea {
      * @code
      * contextualActionsModel: [
      *     Action {
-     *         text: i18n("Do something")
+     *         text: "Do something"
      *         icon.name: "document-edit"
      *         onTriggered: doSomething()
      *     }
      *     Action {
-     *         text: i18n("Do something else")
+     *         text: "Do something else"
      *         icon.name: "draw-polygon"
      *         onTriggered: doSomethingElse()
      *     }
      *     Action {
-     *         text: i18n("Do something completely different")
+     *         text: "Do something completely different"
      *         icon.name: "games-highscores"
      *         onTriggered: doSomethingCompletelyDifferent()
      *     }
@@ -217,17 +217,17 @@ MouseArea {
      * @code
      * contextMenu: PlasmaComponents.Menu {
      *     PlasmaComponents.MenuItem {
-     *         text: i18n("Do something")
+     *         text: "Do something"
      *         icon: "document-edit"
      *         onClicked: doSomething()
      *     }
      *     PlasmaComponents.MenuItem {
-     *         text: i18n("Do something else")
+     *         text: "Do something else"
      *         icon: "draw-polygon"
      *         onClicked: doSomethingElse()
      *     }
      *     PlasmaComponents.MenuItem {
-     *         text: i18n("Do something completely different")
+     *         text: "Do something completely different"
      *         icon: "games-highscores"
      *         onClicked: doSomethingCompletelyDifferent()
      *     }
