@@ -294,7 +294,7 @@ MouseArea {
      */
     function collapse() {
         expandedView.visible = false
-        listItem.itemExpanded(null)
+        listItem.itemCollapsed(listItem)
     }
 
     /*
@@ -306,6 +306,7 @@ MouseArea {
     }
 
     signal itemExpanded(variant item)
+    signal itemCollapsed(variant item)
 
     width: parent.width // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
