@@ -67,17 +67,5 @@ import QtQuick.Templates 2.12 as T
         id: headingSvg
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
-        enabledBorders: {
-            var borders = new Array()
-            borders |= PlasmaCore.FrameSvg.LeftBorder
-            borders |= PlasmaCore.FrameSvg.RightBorder
-            if (plasmoid.location !== PlasmaCore.Types.TopEdge || location != PlasmoidHeading.Location.Header) {
-                borders |= PlasmaCore.FrameSvg.TopBorder
-            }
-            if (plasmoid.location !== PlasmaCore.Types.BottomEdge || location != PlasmoidHeading.Location.Footer) {
-                borders |= PlasmaCore.FrameSvg.BottomBorder
-            }
-            return borders
-        }
     }
  }
