@@ -178,6 +178,16 @@ MouseArea {
     property bool defaultActionButtonVisible: true
 
     /*
+     * showDefaultActionButtonWhenBusy : bool
+     * Whether to continue showing the default action button while the busy
+     * indicator is visible. Useful for cancelable actions that could take a few
+     * seconds and show a busy indicator while processing.
+     *
+     * Optional; defaults to false
+     */
+    property bool showDefaultActionButtonWhenBusy: false
+
+    /*
      * contextualActionsModel: list<QtObject>
      * A list of Action objects that describes additional actions that can be
      * performed on this list item. The actions should define appropriate
@@ -421,20 +431,7 @@ MouseArea {
                 }
             }
 
-            // Default action button
-            PlasmaComponents3.Button {
-                id: defaultActionButton
-
-                enabled: listItem.isEnabled
-                visible: defaultActionButtonAction
-                         && listItem.defaultActionButtonVisible
-                         && listItem.containsMouse
-                         && !busyIndicator.visible
-
-                icon.width: units.iconSizes.smallMedium
-                icon.height: units.iconSizes.smallMedium
-            }
-
+            // Busy indicator
             PlasmaComponents3.BusyIndicator {
                 id: busyIndicator
 
@@ -443,6 +440,20 @@ MouseArea {
                 // Otherwise it makes the list item taller when it appears
                 Layout.maximumHeight: defaultActionButton.implicitHeight
                 Layout.maximumWidth: Layout.maximumHeight
+            }
+
+            // Default action button
+            PlasmaComponents3.Button {
+                id: defaultActionButton
+
+                enabled: listItem.isEnabled
+                visible: defaultActionButtonAction
+                         && listItem.defaultActionButtonVisible
+                         && listItem.containsMouse
+                         && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
+
+                icon.width: units.iconSizes.smallMedium
+                icon.height: units.iconSizes.smallMedium
             }
 
             // Expand/collapse button
