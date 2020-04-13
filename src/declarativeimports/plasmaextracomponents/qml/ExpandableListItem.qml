@@ -460,10 +460,7 @@ MouseArea {
             PlasmaComponents3.Button {
                 visible: listItem.containsMouse
 
-                // TODO: "collapse-all" and "expand-all" would be more
-                // semantically appropriate, but they have an extra horizontal
-                // line and don't look right here
-                icon.name: expandedView.visible? "go-up" : "go-down"
+                icon.name: expandedView.visible? "collapse" : "expand"
                 icon.width: units.iconSizes.smallMedium
                 icon.height: units.iconSizes.smallMedium
 
