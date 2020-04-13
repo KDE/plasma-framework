@@ -40,7 +40,7 @@ T.BusyIndicator {
         elementId: "busywidget"
 
         implicitWidth:  units.gridUnit * 2
-        implicitHeight: width
+        implicitHeight: units.gridUnit * 2
 
         Connections {
             target: control
