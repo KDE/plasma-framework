@@ -17,7 +17,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-import QtQuick 2.6
+import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents // for Highlight
@@ -89,7 +89,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * [...]
  * @endcode
  */
-MouseArea {
+Item {
     id: listItem
 
     /*
@@ -321,171 +321,182 @@ MouseArea {
     width: parent.width // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
 
-    acceptedButtons: Qt.LeftButton | Qt.RightButton
-    hoverEnabled: true
-    cursorShape: Qt.PointingHandCursor // To indicate that the whole thing is clickable
-
-    onContainsMouseChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
-
     onIsEnabledChanged: if (!listItem.isEnabled) { collapse() }
 
-    onClicked: {
-        // Item is disabled: do nothing
-        if (!listItem.isEnabled) return
+    // Handle left clicks and taps
+    TapHandler {
+        enabled: listItem.isEnabled
 
-        // Left click: toggle expanded state
-        if (mouse.button & Qt.LeftButton) {
+        acceptedButtons: Qt.LeftButton
+
+        onSingleTapped: {
+            listItem.ListView.view.currentIndex = index
             listItem.toggleExpanded()
         }
+    }
 
-        // Right-click: show context menu, if defined
-        if (contextMenu != undefined) {
-            if (mouse.button & Qt.RightButton) {
+    // We still need a MouseArea to handle mouse hover and right-click
+    MouseArea {
+        id: clickAndHoverHandler
+
+        anchors.fill: parent
+
+        enabled: listItem.isEnabled
+
+        acceptedButtons: Qt.RightButton
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor // To indicate that the whole thing is clickable
+
+        onContainsMouseChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
+
+        // Handle right-click, if so defined
+        onClicked: {
+            if (contextMenu != undefined) {
                 contextMenu.visualParent = parent
                 contextMenu.prepare();
                 contextMenu.open(mouse.x, mouse.y)
                 return
             }
         }
-    }
 
-    ColumnLayout {
-        id: mainLayout
+        ColumnLayout {
+            id: mainLayout
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-        spacing: 0
+            spacing: 0
 
-        RowLayout {
-            id: mainRowLayout
+            RowLayout {
+                id: mainRowLayout
 
-            Layout.fillWidth: true
-            Layout.margins: units.smallSpacing
-            // Otherwise it becomes taller when the button appears
-            Layout.minimumHeight: defaultActionButton.height
-
-            // Icon and optional emblem
-            PlasmaCore.IconItem {
-                id: listItemIcon
-
-                usesPlasmaTheme: listItem.iconUsesPlasmaSVG
-
-                implicitWidth: units.iconSizes.medium
-                implicitHeight: units.iconSizes.medium
-
-                PlasmaCore.IconItem {
-                    id: iconEmblem
-
-                    visible: source != undefined && source.length > 0
-
-                    anchors.right: parent.right
-                    anchors.bottom: parent.bottom
-
-                    implicitWidth: units.iconSizes.small
-                    implicitHeight: units.iconSizes.small
-                }
-            }
-
-            // Title and subtitle
-            ColumnLayout {
                 Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
+                Layout.margins: units.smallSpacing
+                // Otherwise it becomes taller when the button appears
+                Layout.minimumHeight: defaultActionButton.height
 
-                spacing: 0
+                // Icon and optional emblem
+                PlasmaCore.IconItem {
+                    id: listItemIcon
 
-                PlasmaExtras.Heading {
-                    id: listItemTitle
+                    usesPlasmaTheme: listItem.iconUsesPlasmaSVG
 
-                    visible: text.length > 0
+                    implicitWidth: units.iconSizes.medium
+                    implicitHeight: units.iconSizes.medium
 
-                    Layout.fillWidth: true
+                    PlasmaCore.IconItem {
+                        id: iconEmblem
 
-                    level: 5
+                        visible: source != undefined && source.length > 0
 
-                    textFormat: listItem.allowStyledText ? Text.StyledText : Text.PlainText
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
 
-                    // Even if it's the default item, only make it bold when
-                    // there's more than one item in the list, or else there's
-                    // only one item and it's bold, which is a little bit weird
-                    font.weight: listItem.isDefault && listItem.ListView.count > 1
-                                          ? Font.Bold
-                                          : Font.Normal
+                        implicitWidth: units.iconSizes.small
+                        implicitHeight: units.iconSizes.small
+                    }
                 }
 
-                PlasmaComponents3.Label {
-                    id: listItemSubtitle
-
-                    enabled: false
-                    visible: text.length > 0
-
+                // Title and subtitle
+                ColumnLayout {
                     Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
 
-                    textFormat: listItem.allowStyledText ? Text.StyledText : Text.PlainText
-                    elide: Text.ElideRight
-                    maximumLineCount: subtitleCanWrap ? 9999 : 1
-                    wrapMode: subtitleCanWrap ? Text.WordWrap : Text.NoWrap
+                    spacing: 0
+
+                    PlasmaExtras.Heading {
+                        id: listItemTitle
+
+                        visible: text.length > 0
+
+                        Layout.fillWidth: true
+
+                        level: 5
+
+                        textFormat: listItem.allowStyledText ? Text.StyledText : Text.PlainText
+                        elide: Text.ElideRight
+                        maximumLineCount: 1
+
+                        // Even if it's the default item, only make it bold when
+                        // there's more than one item in the list, or else there's
+                        // only one item and it's bold, which is a little bit weird
+                        font.weight: listItem.isDefault && listItem.ListView.count > 1
+                                            ? Font.Bold
+                                            : Font.Normal
+                    }
+
+                    PlasmaComponents3.Label {
+                        id: listItemSubtitle
+
+                        enabled: false
+                        visible: text.length > 0
+
+                        Layout.fillWidth: true
+
+                        textFormat: listItem.allowStyledText ? Text.StyledText : Text.PlainText
+                        elide: Text.ElideRight
+                        maximumLineCount: subtitleCanWrap ? 9999 : 1
+                        wrapMode: subtitleCanWrap ? Text.WordWrap : Text.NoWrap
+                    }
+                }
+
+                // Busy indicator
+                PlasmaComponents3.BusyIndicator {
+                    id: busyIndicator
+
+                    visible: listItem.isBusy
+
+                    // Otherwise it makes the list item taller when it appears
+                    Layout.maximumHeight: defaultActionButton.implicitHeight
+                    Layout.maximumWidth: Layout.maximumHeight
+                }
+
+                // Default action button
+                PlasmaComponents3.Button {
+                    id: defaultActionButton
+
+                    enabled: listItem.isEnabled
+                    visible: defaultActionButtonAction
+                            && listItem.defaultActionButtonVisible
+                            && (clickAndHoverHandler.containsMouse || expandedView.visible)
+                            && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
+
+                    icon.width: units.iconSizes.smallMedium
+                    icon.height: units.iconSizes.smallMedium
+                }
+
+                // Expand/collapse button
+                PlasmaComponents3.Button {
+                    visible: clickAndHoverHandler.containsMouse
+
+                    icon.name: expandedView.visible? "collapse" : "expand"
+                    icon.width: units.iconSizes.smallMedium
+                    icon.height: units.iconSizes.smallMedium
+
+                    onClicked: listItem.toggleExpanded()
                 }
             }
 
-            // Busy indicator
-            PlasmaComponents3.BusyIndicator {
-                id: busyIndicator
 
-                visible: listItem.isBusy
+            // Expanded view, by default showing the actions list
+            Loader {
+                id: expandedView
 
-                // Otherwise it makes the list item taller when it appears
-                Layout.maximumHeight: defaultActionButton.implicitHeight
-                Layout.maximumWidth: Layout.maximumHeight
-            }
+                visible: false
+                opacity: visible ? 1.0 : 0
 
-            // Default action button
-            PlasmaComponents3.Button {
-                id: defaultActionButton
+                active: customExpandedViewContent != undefined
+                sourceComponent: customExpandedViewContent
 
-                enabled: listItem.isEnabled
-                visible: defaultActionButtonAction
-                         && listItem.defaultActionButtonVisible
-                         && listItem.containsMouse
-                         && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
+                Layout.fillWidth: true
+                Layout.margins: units.smallSpacing
 
-                icon.width: units.iconSizes.smallMedium
-                icon.height: units.iconSizes.smallMedium
-            }
-
-            // Expand/collapse button
-            PlasmaComponents3.Button {
-                visible: listItem.containsMouse
-
-                icon.name: expandedView.visible? "collapse" : "expand"
-                icon.width: units.iconSizes.smallMedium
-                icon.height: units.iconSizes.smallMedium
-
-                onClicked: listItem.toggleExpanded()
-            }
-        }
-
-
-        // Expanded view, by default showing the actions list
-        Loader {
-            id: expandedView
-
-            visible: false
-            opacity: visible ? 1.0 : 0
-
-            active: customExpandedViewContent != undefined
-            sourceComponent: customExpandedViewContent
-
-            Layout.fillWidth: true
-            Layout.margins: units.smallSpacing
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: units.veryLongDuration
-                    easing.type: Easing.InOutCubic
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: units.veryLongDuration
+                        easing.type: Easing.InOutCubic
+                    }
                 }
             }
         }
