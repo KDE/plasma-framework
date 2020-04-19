@@ -69,6 +69,7 @@ PlasmaCore.ColorScope {
 
         ColumnLayout {
             Layout.maximumWidth: preferredTextWidth
+            spacing: 0
 
             PlasmaExtras.Heading {
                 id: tooltipMaintext
