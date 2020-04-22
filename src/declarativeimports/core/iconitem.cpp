@@ -598,7 +598,7 @@ void IconItem::loadPixmap()
         }
     } else if (!m_icon.isNull()) {
         KIconLoader::global()->setCustomPalette(Plasma::Theme().palette());
-        result = m_icon.pixmap(QSize(size, size) * (window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
+        result = m_icon.pixmap(window(), QSize(size, size));
         KIconLoader::global()->resetPalette();
     } else if (!m_imageIcon.isNull()) {
         result = QPixmap::fromImage(m_imageIcon);
