@@ -53,7 +53,6 @@ protected:
         return m_iconItem->window();
     }
 
-private:
     IconItem *m_iconItem;
 };
 
@@ -194,6 +193,10 @@ public:
                 delete m_svgIcon;
             }
         }
+    }
+
+    ~SvgSource() {
+        QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
     }
 
     bool isValid() const override
