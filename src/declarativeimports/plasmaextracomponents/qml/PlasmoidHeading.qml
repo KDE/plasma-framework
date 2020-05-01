@@ -65,6 +65,7 @@ import QtQuick.Templates 2.12 as T
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
+        visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
     }
