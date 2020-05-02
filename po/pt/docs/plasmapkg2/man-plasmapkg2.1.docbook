@@ -1,0 +1,277 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Portuguese "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Gestor de Pacotes do Plasma</title>
+<date
+>2014-04-25</date>
+<releaseinfo
+>Plataformas 5.0</releaseinfo>
+<productname
+>Plataformas do KDE</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>Instalar, listar, remover pacotes do Plasma</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> localização</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> tipo</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> localização</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> nome</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> localização</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> nome</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> localização</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descrição</title>
+<para
+>O <command
+>plasmapkg2</command
+> é uma ferramenta da linha de comandos para instalar, listar e remover pacotes do Plasma.</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Opções</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+> localização</replaceable
+></term>
+<listitem
+><para
+>Gera um código SHA1 para o pacote disponível na <quote
+>localização</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Para instalar ou remover, funciona para os pacotes instalados em todos os utilizadores.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+>tipo</replaceable
+></term>
+<listitem
+><para
+>O tipo do modelo, &eg; theme, wallpaper, plasmoid, dataengine, runner, layout-template, &etc; [plasmoid].</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+>localização</replaceable
+></term>
+<listitem
+><para
+>Instala o pacote disponível na <quote
+>localização</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+> nome</replaceable
+></term>
+<listitem
+><para
+>Mostra informações sobre o pacote <quote
+>nome</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+>localização</replaceable
+></term>
+<listitem
+><para
+>Actualiza o pacote disponível na <quote
+>localização</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Enumera os pacotes instalados.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>Apresenta todos os tipos de pacotes conhecidos que podem ser instalados.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+>nome</replaceable
+></term>
+<listitem
+><para
+>Remove o pacote chamado <quote
+>nome</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+>localização</replaceable
+></term>
+<listitem
+><para
+>A localização absoluta da pasta de topo dos pacotes. Se não for indicada, então será feita uma pesquisa nas pastas de dados padrão desta sessão do &plasma; em alternativa.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Veja Também</title>
+
+<para
+>Existe mais documentação do utilizador disponível em <ulink url="help:/plasma-desktop"
+>help:/plasma-desktop</ulink
+> (quer através deste <acronym
+>URL</acronym
+> no &konqueror;, quer através do comando <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Autores</title>
+<para
+>O <command
+>plasmapkg2</command
+> foi feito por <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+>.</para>
+</refsect1>
+
+</refentry>
