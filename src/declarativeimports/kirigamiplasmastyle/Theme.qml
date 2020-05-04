@@ -70,6 +70,7 @@ QtObject {
     property color complementaryFocusColor: theme.complementaryFocusColor
 
     property variant defaultFont: theme.defaultFont
+    property variant smallFont: theme.smallestFont
 
     function __propagateColorSet(object, context) {
         object.PlasmaCore.ColorScope.inherit = false;
