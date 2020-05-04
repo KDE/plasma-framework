@@ -431,6 +431,7 @@ Item {
 
                         enabled: false
                         visible: text.length > 0
+                        font: theme.smallestFont
 
                         Layout.fillWidth: true
 
