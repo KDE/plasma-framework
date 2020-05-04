@@ -50,7 +50,7 @@ PlasmaComponents.Page {
 
         PlasmaComponents.Label {
             text: "This is the smallest readable Font."
-            font.pointSize: theme.smallestFont.pointSize
+            font: theme.smallestFont
 
         }
         Row {

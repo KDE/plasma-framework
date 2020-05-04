@@ -62,7 +62,7 @@ Column {
 
     FontGizmo {
         id: giz1
-        font.pointSize: theme.smallestFont.pointSize
+        font: theme.smallestFont
         //font.family: "Oxygen-Sans"
     }
 
