@@ -52,15 +52,15 @@ import QtQuick.Templates 2.12 as T
     property int location: PlasmoidHeading.Location.Header
 
     Layout.fillWidth: true
-    bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.margins.top
-    topPadding: location == PlasmoidHeading.Location.Footer ? headingSvg.margins.bottom : 0
+    bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.fixedMargins.top
+    topPadding: location == PlasmoidHeading.Location.Footer ? headingSvg.fixedMargins.bottom : 0
 
     implicitHeight: contentHeight + topPadding + bottomPadding
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
     leftInset: -headingSvg.fixedMargins.left
     rightInset: -headingSvg.fixedMargins.right
-    topInset: location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.margins.top
+    topInset: location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.fixedMargins.top
     bottomInset: location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
 
     background: PlasmaCore.FrameSvgItem {
@@ -68,5 +68,17 @@ import QtQuick.Templates 2.12 as T
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
+        enabledBorders: {
+            var borders = 0
+            borders |= PlasmaCore.FrameSvg.LeftBorder
+            borders |= PlasmaCore.FrameSvg.RightBorder
+            if (plasmoid.location !== PlasmaCore.Types.TopEdge || location != PlasmoidHeading.Location.Header) {
+                borders |= PlasmaCore.FrameSvg.TopBorder
+            }
+            if (plasmoid.location !== PlasmaCore.Types.BottomEdge || location != PlasmoidHeading.Location.Footer) {
+                borders |= PlasmaCore.FrameSvg.BottomBorder
+            }
+            return borders
+        }
     }
  }
