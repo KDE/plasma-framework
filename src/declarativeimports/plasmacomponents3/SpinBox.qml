@@ -1,6 +1,6 @@
 
 
-import QtQuick 2.6
+import QtQuick 2.14
 import QtQuick.Controls @QQC2_VERSION@ 
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -23,6 +23,9 @@ T.SpinBox {
     }
 
     contentItem: TextInput {
+        id: textField
+        property int originalValue
+
         text: control.textFromValue(control.value, control.locale)
         opacity: control.enabled ? 1 : 0.6
 
@@ -36,6 +39,57 @@ T.SpinBox {
         readOnly: !control.editable
         validator: control.validator
         inputMethodHints: Qt.ImhFormattedNumbersOnly
+
+        // Allow adjusting the value by scrolling over it
+        MouseArea {
+            anchors.fill: parent
+
+            // Because we're stomping the Text Input's own mouse handling
+            cursorShape: Qt.IBeamCursor
+
+            // Have to cache the original value for the drag handler
+            onPressed: {
+                textField.originalValue = control.value
+                // Because we're stomping the Text Input's own mouse handling
+                mouse.accepted = false
+            }
+            onWheel: {
+                if (wheel.angleDelta.y > 0 && control.value <= control.to) {
+                    control.value += control.stepSize
+                    control.valueModified()
+                } else if (wheel.angleDelta.y < 0 && control.value >= control.from) {
+                    control.value -= control.stepSize
+                    control.valueModified()
+                }
+            }
+        }
+
+        // Allow adjusting the value by dragging it
+        DragHandler {
+            // How many pixels you have to drag to change the value by one unit
+            // of 'control.stepSize'; bigger magnitudes will require more movement
+            // to achieve the same change in spinbox value
+            property int magnitude: units.gridUnit
+
+            target: null // Don't actually move anything, we just want drag data
+            xAxis.enabled: true
+            yAxis.enabled: true
+
+            onTranslationChanged: {
+                // Allow dragging along both X and Y axis, and use whichever one
+                // is bigger
+                var distance
+                if (Math.abs(translation.y) > Math.abs(translation.x)) {
+                    // Invert the value since the origin is in the top left corner,
+                    // but we want dragging up make the value bigger
+                    distance = -translation.y
+                } else {
+                    distance = translation.x
+                }
+                control.value = textField.originalValue + (Math.floor(distance / magnitude) * control.stepSize)
+                control.valueModified()
+            }
+        }
     }
 
     up.indicator: Item {
