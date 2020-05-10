@@ -502,13 +502,18 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
 
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
 {
-    KPluginInfo::List list;
     const auto plugins = listAppletMetaData(category, parentApp);
 
+#if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
+    KPluginInfo::List list;
     //NOTE: it still produces kplugininfos from KServices because some user code expects
     //info.service() to be valid and would crash otherwise
     for (const auto &md : plugins) {
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
+QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
         auto pi = md.metaDataFileName().endsWith(QLatin1String(".json")) ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
+QT_WARNING_POP
         if (!pi.isValid()) {
             qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
             continue;
@@ -516,6 +521,9 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
         list << pi;
     }
     return list;
+#else
+    return KPluginInfo::fromMetaData(plugins.toVector());
+#endif
 }
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
@@ -673,7 +681,7 @@ QStringList PluginLoader::listContainmentTypes()
     QSet<QString> types;
 
     for (const KPluginInfo &containmentInfo : containmentInfos) {
-        const QStringList theseTypes = containmentInfo.service()->property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
+        const QStringList theseTypes = containmentInfo.property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
         for (const QString &type : theseTypes) {
             types.insert(type);
         }
@@ -719,14 +727,20 @@ KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parent
         knownPlugins.insert(p.pluginName());
     }
 
+#if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
     const KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
     for (KService::Ptr s : offers) {
         if (!knownPlugins.contains(s->pluginKeyword())) {
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
+QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
             list.append(KPluginInfo(s));
+QT_WARNING_POP
         }
     }
+#endif
     return list;
 }
 
