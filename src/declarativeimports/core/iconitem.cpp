@@ -196,7 +196,9 @@ public:
     }
 
     ~SvgSource() {
-        QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
+        if (m_svgIcon) {
+            QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
+        }
     }
 
     bool isValid() const override
