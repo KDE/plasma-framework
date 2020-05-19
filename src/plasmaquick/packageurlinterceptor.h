@@ -60,13 +60,13 @@ public:
 
     QUrl intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type) override;
 
-    static inline QByteArray prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
+    static inline QString prefixForType(QQmlAbstractUrlInterceptor::DataType type, const QString &fileName)
     {
         switch (type) {
         case QQmlAbstractUrlInterceptor::QmlFile:
-            return QByteArray("ui");
+            return QStringLiteral("ui");
         case QQmlAbstractUrlInterceptor::JavaScriptFile:
-            return QByteArray("code");
+            return QStringLiteral("code");
         default:
             break;
         }
@@ -74,18 +74,18 @@ public:
         //failed by type, let's try by extension
         const QString &extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')) + 1).toLower();
 
-        if (extension == QLatin1String("svg") || extension == QStringLiteral("svgz") ||
-                extension == QLatin1String("png") || extension == QStringLiteral("gif") ||
-                extension == QLatin1String("jpg") || extension == QStringLiteral("jpeg")) {
-            return QByteArray("images");
+        if (extension == QLatin1String("svg") || extension == QLatin1String("svgz")
+            || extension == QLatin1String("png") || extension == QLatin1String("gif")
+            || extension == QLatin1String("jpg") || extension == QLatin1String("jpeg")) {
+            return QStringLiteral("images");
             //FIXME: are those necessary? are they *always* caught by type?
         } else if (extension == QLatin1String("js")) {
-            return QByteArray("code");
-        } else if (extension == QLatin1String("qml") || extension == QStringLiteral("qmldir")) {
-            return QByteArray("ui");
+            return QStringLiteral("code");
+        } else if (extension == QLatin1String("qml") || extension == QLatin1String("qmldir")) {
+            return QStringLiteral("ui");
             //everything else, throw it in "data"
         } else {
-            return QByteArray("data");
+            return QStringLiteral("data");
         }
     }
 
