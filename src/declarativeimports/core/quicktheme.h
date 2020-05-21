@@ -81,9 +81,18 @@ class QuickTheme : public Plasma::Theme
     Q_PROPERTY(QColor complementaryHoverColor READ complementaryHoverColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryFocusColor READ complementaryFocusColor NOTIFY themeChangedProxy)
     Q_PROPERTY(QColor complementaryHighlightedTextColor READ complementaryHighlightedTextColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor complementaryPositiveTextColor READ buttonPositiveTextColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor complementaryNeutralTextColor READ buttonNeutralTextColor NOTIFY themeChangedProxy)
-    Q_PROPERTY(QColor complementaryNegativeTextColor READ buttonNegativeTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor complementaryPositiveTextColor READ complementaryPositiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor complementaryNeutralTextColor READ complementaryNeutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor complementaryNegativeTextColor READ complementaryNegativeTextColor NOTIFY themeChangedProxy)
+
+    Q_PROPERTY(QColor headerTextColor READ headerTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerBackgroundColor READ headerBackgroundColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerHoverColor READ headerHoverColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerFocusColor READ headerFocusColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerHighlightedTextColor READ headerHighlightedTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerPositiveTextColor READ headerPositiveTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerNeutralTextColor READ headerNeutralTextColor NOTIFY themeChangedProxy)
+    Q_PROPERTY(QColor headerNegativeTextColor READ headerNegativeTextColor NOTIFY themeChangedProxy)
 
 public:
     explicit QuickTheme(QObject *parent = nullptr);
@@ -294,6 +303,55 @@ public:
      * @since 5.22
      */
     QColor complementaryNegativeTextColor() const;
+
+
+    /**
+     * @return The theme's colorscheme's text color of "header" areas
+     * @since 5.0
+     */
+    QColor headerTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's background color of "header" areas
+     * @since 5.0
+     */
+    QColor headerBackgroundColor() const;
+
+    /**
+     * @return The theme's colorscheme's color of hovered "header" areas
+     * @since 5.0
+     */
+    QColor headerHoverColor() const;
+
+    /**
+     * @return The theme's colorscheme's color of focused "header" areas
+     * @since 5.0
+     */
+    QColor headerFocusColor() const;
+
+    /**
+     * @return The theme's colorscheme's highlighted text color for "header" areas
+     * @since 5.22
+     */
+    QColor headerHighlightedTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's positive text color of header
+     * @since 5.22
+     */
+    QColor headerPositiveTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's neutral text color of header
+     * @since 5.22
+     */
+    QColor headerNeutralTextColor() const;
+
+    /**
+     * @return The theme's colorscheme's negative text color of header
+     * @since 5.22
+     */
+    QColor headerNegativeTextColor() const;
 
 Q_SIGNALS:
     void themeChangedProxy();

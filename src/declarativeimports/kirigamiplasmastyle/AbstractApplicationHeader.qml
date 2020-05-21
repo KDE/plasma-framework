@@ -14,7 +14,8 @@ import "../../private" as KirigamiPrivate
 T.AbstractApplicationHeader {
     id: root
 
-    Kirigami.Theme.inherit: true
+    Kirigami.Theme.inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Header
 
     background: Rectangle {
         color: Kirigami.Theme.backgroundColor

@@ -90,7 +90,8 @@ public:
         NormalColorGroup = 0,
         ButtonColorGroup = 1,
         ViewColorGroup = 2,
-        ComplementaryColorGroup = 3
+        ComplementaryColorGroup = 3,
+        HeaderColorGroup
     };
     Q_ENUM(ColorGroup)
 
