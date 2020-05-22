@@ -25,7 +25,6 @@
 #include <QFileInfo>
 #include <QFileSelector>
 #include <QStandardPaths>
-#include <QRegularExpression>
 
 #include <Plasma/PluginLoader>
 #include <Plasma/Package>
@@ -102,34 +101,38 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
 {
     //qDebug() << "Intercepted URL:" << path << type;
 
+    const QString urlPath = path.path();
     // Don't intercept qmldir files, to prevent double interception
-    if (path.path().endsWith(QStringLiteral("qmldir"))) {
+    if (urlPath.endsWith(QLatin1String("qmldir"))) {
         return path;
     }
     // We assume we never rewritten qml/qmldir files
-    if (path.path().endsWith(QLatin1String("qml"))
-            || path.path().endsWith(QLatin1String("/inline"))) {
+    if (urlPath.endsWith(QLatin1String("qml"))
+        || urlPath.endsWith(QLatin1String("/inline"))) {
         return d->selector->select(path);
     }
-    const QString prefix = QString::fromUtf8(prefixForType(type, path.path()));
-    QRegularExpression match(QStringLiteral("/ui/(.*)"));
+    const QString prefix = QString::fromUtf8(prefixForType(type, urlPath));
     // TODO KF6: Kill this hack
+    const QLatin1String marker("/ui/");
     QString plainPath = path.toString();
-    if (plainPath.contains(match)) {
-        QString rewritten = plainPath.replace(match, QStringLiteral("/%1/\\1").arg(prefix));
+    const int index = plainPath.indexOf(marker);
+    if (index != -1) {
+        plainPath = plainPath.leftRef(index)
+                    + QLatin1Char('/') + prefix + QLatin1Char('/') + plainPath.midRef(index + marker.size());
 
+        const QUrl url = QUrl(plainPath);
+        const QString newPath = url.path();
         //search it in a resource or as a file on disk
-        if (!(rewritten.contains(QLatin1String("qrc")) &&
-              QFile::exists(QStringLiteral(":") + QUrl(rewritten).path())) &&
-            !QFile::exists(QUrl(rewritten).path())) {
+        if (!(plainPath.contains(QLatin1String("qrc")) && QFile::exists(QLatin1Char(':') + newPath))
+            && !QFile::exists(newPath)) {
             return d->selector->select(path);
         }
-        qWarning()<<"Warning: all files used by qml by the plasmoid should be in ui/. The file in the path" << rewritten << "was expected at" <<path;
+        qWarning() <<"Warning: all files used by qml by the plasmoid should be in ui/. The file in the path"
+                   << plainPath << "was expected at" << path;
         // This deprecated code path doesn't support selectors
-        return QUrl(rewritten);
+        return url;
     }
     return d->selector->select(path);
 }
 
 }
-
