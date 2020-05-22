@@ -33,8 +33,10 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <KMimeTypeTrader>
-
-#include <KRun>
+#include <KIO/ApplicationLauncherJob>
+#include <KIO/OpenUrlJob>
+#include <KIO/JobUiDelegate>
+#include <KNotificationJobUiDelegate>
 
 #include "plasma/applet.h"
 
@@ -192,13 +194,22 @@ QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) con
 void AssociatedApplicationManager::run(Plasma::Applet *applet)
 {
     if (d->applicationNames.contains(applet)) {
-        bool success = KRun::run(d->applicationNames.value(applet), d->urlLists.value(applet), nullptr);
-        if (!success) {
-            qCWarning(LOG_PLASMA) << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet);
-        }
+        const QString exec = d->applicationNames.value(applet);
+        KService::Ptr service(new KService(exec, exec, QString() /*icon*/));
+        KIO::ApplicationLauncherJob *job = new KIO::ApplicationLauncherJob(service);
+        job->setUrls(d->urlLists.value(applet));
+        job->setUiDelegate(new KNotificationJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled));
+        connect(job, &KJob::result, this, [this, applet](KJob *job) {
+            if (job->error()) {
+                qCWarning(LOG_PLASMA) << "couldn't run" << d->applicationNames.value(applet) << d->urlLists.value(applet) << job->errorString();
+            }
+        });
+        job->start();
     } else if (d->urlLists.contains(applet)) {
-        KRun *krun = new KRun(d->urlLists.value(applet).first(), nullptr);
-        krun->setAutoDelete(true);
+        KIO::OpenUrlJob *job = new KIO::OpenUrlJob(d->urlLists.value(applet).first());
+        // TODO use a KNotifications-based ui delegate that supports the Open With dialog
+        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+        job->start();
     }
 }
 

@@ -125,7 +125,7 @@ PRIVATE
     KF5::GuiAddons #kimagecache
     KF5::I18n
     KF5::KIOCore    #ServiceJob
-    KF5::KIOWidgets  #KRun
+    KF5::KIOWidgets  #KIO::JobUiDelegate
     KF5::WindowSystem #compositingActive
     KF5::Declarative #runtimePlatform
     KF5::XmlGui   #KActionCollection
