@@ -78,6 +78,7 @@ PlasmaCore.ColorScope {
                 elide: Text.ElideRight
                 wrapMode: Text.Wrap
                 text: toolTip ? toolTip.mainText : ""
+                textFormat: Text.PlainText
                 visible: text != ""
             }
             PlasmaComponents.Label {
