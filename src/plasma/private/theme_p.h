@@ -119,6 +119,7 @@ public:
     KColorScheme buttonColorScheme;
     KColorScheme viewColorScheme;
     KColorScheme complementaryColorScheme;
+    KColorScheme headerColorScheme;
     QPalette palette;
     bool eventFilter(QObject *watched, QEvent *event) override;
     KConfigGroup cfg;

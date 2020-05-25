@@ -208,7 +208,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return applet;
     }
 
-
     if (!applet) {
         //qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
 

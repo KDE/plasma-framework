@@ -56,6 +56,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(nullptr)),
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(nullptr)),
       complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(nullptr)),
+      headerColorScheme(QPalette::Active, KColorScheme::Header, KSharedConfigPtr(nullptr)),
       defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME)),
       defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX)),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -486,6 +487,15 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%complementaryneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarynegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ComplementaryColorGroup).name();
 
+        elements[QStringLiteral("%headertextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerhovercolor")] = color(Theme::HoverColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerfocuscolor")] = color(Theme::FocusColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerpositivetextcolor")] = color(Theme::PositiveTextColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headernegativetextcolor")] = color(Theme::NegativeTextColor, Theme::HeaderColorGroup).name();
+
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
     elements[QStringLiteral("%fontfamily")] = font.family().splitRef(QLatin1Char('[')).first().toString();
@@ -536,6 +546,16 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
             stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
             stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%complementarynegativetextcolor"));
             break;
+        case Theme::HeaderColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%headertextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%headerbackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%headerhovercolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%headerhighlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%headerpositivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%headerneutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%headernegativetextcolor"));
+            break;
         default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
@@ -573,6 +593,15 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
         stylesheet += skel.arg(QStringLiteral("ComplementaryPositiveText"), QStringLiteral("%complementarypositivetextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryNeutralText"), QStringLiteral("%complementaryneutraltextcolor"));
         stylesheet += skel.arg(QStringLiteral("ComplementaryNegativeText"), QStringLiteral("%complementarynegativetextcolor"));
+
+        stylesheet += skel.arg(QStringLiteral("HeaderText"), QStringLiteral("%headertextcolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderBackground"), QStringLiteral("%headerbackgroundcolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderHover"), QStringLiteral("%headerhovercolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderFocus"), QStringLiteral("%headerfocuscolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderHighlightedText"), QStringLiteral("%headerhighlightedtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderPositiveText"), QStringLiteral("%headerpositivetextcolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderNeutralText"), QStringLiteral("%headerneutraltextcolor"));
+        stylesheet += skel.arg(QStringLiteral("HeaderNegativeText"), QStringLiteral("%headernegativetextcolor"));
 
         stylesheet = processStyleSheet(stylesheet, status);
         if (status == Svg::Status::Selected) {
@@ -649,6 +678,11 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
     //this doesn't have a real kcolorscheme
     case Theme::ComplementaryColorGroup: {
         scheme = &complementaryColorScheme;
+        break;
+    }
+
+    case Theme::HeaderColorGroup: {
+        scheme = &headerColorScheme;
         break;
     }
 
@@ -803,6 +837,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
+    headerColorScheme = KColorScheme(QPalette::Active, KColorScheme::Header, colors);
     palette = KColorScheme::createApplicationPalette(colors);
     const QString wallpaperPath = QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();

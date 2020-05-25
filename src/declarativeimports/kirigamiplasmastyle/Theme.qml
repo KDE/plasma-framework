@@ -69,6 +69,12 @@ QtObject {
     property color complementaryHoverColor: theme.complementaryHoverColor
     property color complementaryFocusColor: theme.complementaryFocusColor
 
+    property color headerTextColor: theme.headerTextColor
+    property color headerBackgroundColor: theme.headerBackgroundColor
+    property color headerAlternateBackgroundColor: Qt.darker(theme.headerBackgroundColor, 1.05)
+    property color headerHoverColor: theme.headerHoverColor
+    property color headerFocusColor: theme.headerFocusColor
+
     property variant defaultFont: theme.defaultFont
     property variant smallFont: theme.smallestFont
 
@@ -92,6 +98,9 @@ QtObject {
             break;
         case Kirigami.Theme.Complementary:
             object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.ComplementaryColorGroup;
+            break;
+        case Kirigami.Theme.Header:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.HeaderColorGroup;
             break;
         }
     }
