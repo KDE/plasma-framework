@@ -36,5 +36,17 @@ T.ToolBar {
         imagePath: "widgets/toolbar"
         colorGroup: PlasmaCore.ColorScope.colorGroup
         enabledBorders: control.position == T.ToolBar.Header ?  PlasmaCore.FrameSvgItem.BottomBorder : PlasmaCore.FrameSvgItem.TopBorder
+        PlasmaCore.SvgItem {
+            svg: PlasmaCore.Svg {
+                imagePath: "widgets/listitem"
+            }
+            elementId: "separator"
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: control.position == T.ToolBar.Footer || (control.parent.footer && control.parent.footer == control) ? parent.top : undefined
+                bottom: control.position == T.ToolBar.Footer || (control.parent.footer && control.parent.footer == control) ? undefined : parent.bottom
+            }
+        }
     }
 }
