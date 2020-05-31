@@ -1,5 +1,6 @@
 [General]
 Name=Plasma QML Applet with QML extension
+Name[az]=QML əlavəsi ilə Plasma QML əlavəsi
 Name[ca]=Miniaplicació QML del Plasma amb una extensió QML
 Name[ca@valencia]=Miniaplicació QML del Plasma amb una extensió QML
 Name[cs]=Aplet QML Plasma s rozšířením QML
@@ -38,6 +39,7 @@ Name[x-test]=xxPlasma QML Applet with QML extensionxx
 Name[zh_CN]=带 QML 扩展的 Plasma QML 小部件
 Name[zh_TW]=含有 QML 副檔名的 Plasma QML 小程式
 Comment=A template for a Plasma applet which uses custom API provided by an own QML extension plugin
+Comment[az]=QML əlavəsi kimi təqdim edilən öz APİ -sini istifadə edən Plasma üçün divar kağızı nümunələri
 Comment[ca]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[ca@valencia]=Una plantilla per a una miniaplicació Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió QML
 Comment[da]=En skabelon til en Plasma-applet som bruger tilpasset API leveret af ens eget QML-udvidelsesplugin

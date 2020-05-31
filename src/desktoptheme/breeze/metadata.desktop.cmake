@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Breeze
 Name[ar]=نسيم
+Name[az]=Breeze
 Name[ca]=Brisa
 Name[ca@valencia]=Brisa
 Name[cs]=Breeze
@@ -43,6 +44,7 @@ Name[x-test]=xxBreezexx
 Name[zh_CN]=微风
 Name[zh_TW]=Breeze
 Comment=Breeze by the KDE VDG
+Comment[az]=KDE VDG tərəfindən Breeze
 Comment[ca]=Brisa, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa pel VDG del KDE
 Comment[cs]=Breeze od KDE VDG

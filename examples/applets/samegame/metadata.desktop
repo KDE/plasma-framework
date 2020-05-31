@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Same game (QML)
 Name[ar]=نفس اللعبة (QML)
+Name[az]=Same oyunu (QML)
 Name[bs]=Ista igra (QML)
 Name[ca]=Joc Same (QML)
 Name[ca@valencia]=Joc Same (QML)
@@ -43,6 +44,7 @@ Name[zh_CN]=相同游戏 (QML)
 Name[zh_TW]=Same game (QML)
 Comment=The Same game QML Qt demo converted as plasmoid
 Comment[ar]=نسخة «نفس اللعبة» ب‍QML في «كيوت» محوّلة كبلازمويد
+Comment[az]=Same oyunu QML-də Plasma vidjeti formasında
 Comment[bs]=Ista igra QML Qt demo preobraćen kao plazmoid
 Comment[ca]=La demo Qt en QML del joc Same convertit com a plasmoide
 Comment[ca@valencia]=La demo Qt en QML del joc Same convertit com a plasmoide

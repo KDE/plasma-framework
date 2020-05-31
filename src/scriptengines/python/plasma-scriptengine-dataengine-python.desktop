@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Python data engine
 Name[ar]=محرّك بيانات بايثون
+Name[az]=Python məlumat mənbəyi
 Name[ca]=Motor de dades en Python
 Name[ca@valencia]=Motor de dades en Python
 Name[cs]=Rozhraní v Pythonu
@@ -45,6 +46,7 @@ Name[zh_CN]=Python 数据引擎
 Name[zh_TW]=Python 資料引擎
 Comment=Plasma data engine support for Python
 Comment[ar]=دعم محرّك بيانات «بلازما» ل‍«بايثون»
+Comment[az]=Python üçün dəstəklənən Plasma məlumat mənbəyi
 Comment[ca]=Implementació d'un motor de dades del Plasma per a Python
 Comment[ca@valencia]=Implementació d'un motor de dades del Plasma per a Python
 Comment[cs]=Podpora datového rozhraní Plasmy v Pythonu

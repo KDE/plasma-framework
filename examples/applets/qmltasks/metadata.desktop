@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Poor Man's Tasks
 Name[ar]=مهام الرجل الفقير
+Name[az]="Yazıq adam" tapşırıqları
 Name[bs]=Zadaci siromašnog čovjeka
 Name[ca]=Tasques senzilles
 Name[ca@valencia]=Tasques senzilles
@@ -42,6 +43,7 @@ Name[zh_CN]=穷人的任务栏
 Name[zh_TW]=窮人的工作
 Comment=Example showing how to write your own tasks Widget
 Comment[ar]=مثال يُظهر كيفية كتابة ودجات المهام
+Comment[az]=Tapşırıqlar siyahısı ilə vidjet nümunələri
 Comment[bs]=Primjer prikazuje kako da napišete svoj vlastiti podsjetnik zadataka
 Comment[ca]=Exemple que mostra com escriure el vostre propi estri de tasques
 Comment[ca@valencia]=Exemple que mostra com escriure el vostre propi giny («widget») de tasques

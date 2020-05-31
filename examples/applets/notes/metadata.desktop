@@ -1,5 +1,6 @@
 [Desktop Entry]
 Comment=Example on how to manage Drop data
+Comment[az]=Daşınan elementlərlə işləmə nümunəsi
 Comment[bs]=Primjer upravljanja ispuštenim podacima
 Comment[ca]=Exemple de com gestionar dades «Drop»
 Comment[ca@valencia]=Exemple de com gestionar dades «Drop»
@@ -42,6 +43,7 @@ Comment[zh_TW]=如何管理 Drop 資料的範例
 Keywords=
 Name=Example notes
 Name[ar]=ملاحظات مثال
+Name[az]=Qeydlərlə nümunə
 Name[bs]=Primjer bilješke
 Name[ca]=Notes d'exemple
 Name[ca@valencia]=Notes d'exemple

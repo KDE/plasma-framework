@@ -2,6 +2,7 @@
 [General]
 Name=Simple Plasma Wallpaper
 Name[ar]=خلفيّة بلازما بسيطة
+Name[az]=Sadə Plasma Divar kağızı
 Name[ca]=Fons de pantalla senzill del Plasma
 Name[ca@valencia]=Fons de pantalla senzill del Plasma
 Name[cs]=Jednoduchá tapeta pro prostředí Plasma
@@ -41,6 +42,7 @@ Name[x-test]=xxSimple Plasma Wallpaperxx
 Name[zh_CN]=简单 Plasma 壁纸
 Name[zh_TW]=簡易 Plasma 桌布
 Comment=Simple Plasma Wallpaper template: a Plasma wallpaper template displaying a text
+Comment[az]=Sadə Plasma Divar kağızı nümunəsi: Plasma divar kağızı nümunəsi timsalında mətn görünür
 Comment[ca]=Plantilla de fons de pantalla senzill del Plasma: una plantilla de fons de pantalla del Plasma que mostra un text
 Comment[ca@valencia]=Plantilla de fons de pantalla senzill del Plasma: una plantilla de fons de pantalla del Plasma que mostra un text
 Comment[da]=Simpel skabelon til Plasma-baggrundsbillede: En skabelon til et Plasma-baggrundsbillede som viser en tekst

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Breeze Light
 Name[ar]=نسيم فاتح
+Name[az]=Breze İşıqlı variant
 Name[ca]=Brisa clara
 Name[ca@valencia]=Brisa clara
 Name[cs]=Breeze Světlé
@@ -41,6 +42,7 @@ Name[x-test]=xxBreeze Lightxx
 Name[zh_CN]=亮色微风
 Name[zh_TW]=Breeze Light
 Comment=Breeze Light by the KDE VDG
+Comment[az]=KDE VDG tərəfindən İşıqlı Breeze
 Comment[ca]=Brisa clara, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa clara pel VDG del KDE
 Comment[cs]=Breeze Light od KDE VDG

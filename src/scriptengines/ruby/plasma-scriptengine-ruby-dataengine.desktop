@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Ruby Widget
 Name[ar]=ودجة روبي
+Name[az]=Ruby Vidjeti
 Name[ca]=Estri en Ruby
 Name[ca@valencia]=Giny («Widget») en Ruby
 Name[cs]=Ruby widget
@@ -45,6 +46,7 @@ Name[zh_CN]=Ruby 部件
 Name[zh_TW]=Ruby 元件
 Comment=Native Plasma widget written in Ruby
 Comment[ar]=ودجة «بلازما» أصيلة مكتوبة ب‍«روبي»
+Comment[az]=Ruby -də yazılmış yerli plazma widgetı
 Comment[ca]=Estri nadiu del Plasma escrit en Ruby
 Comment[ca@valencia]=Giny («Widget») nadiu del Plasma escrit en Ruby
 Comment[cs]=Nativní plasmoid napsaný v Ruby

@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ContainmentActions
 
 Comment=Plasma ContainmentActions
+Comment[az]=Plasma tutumu üçün hərəkətlər
 Comment[bs]=Plazma radnje sadržilaca
 Comment[ca]=«ContainmentActions» del Plasma
 Comment[ca@valencia]=«ContainmentActions» del Plasma

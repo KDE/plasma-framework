@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Basic App
 Comment[ar]=تطبيق أساسيّ
+Comment[az]=Əsas Tətbiqlər
 Comment[ca]=Aplicació bàsica
 Comment[ca@valencia]=Aplicació bàsica
 Comment[da]=Basal app
@@ -40,6 +41,7 @@ Comment[zh_CN]=基础小程序
 Comment[zh_TW]=基本應用程式
 Name=Bug
 Name[ar]=علّة
+Name[az]=Xəta
 Name[ca]=Error
 Name[ca@valencia]=Error
 Name[cs]=Chyba

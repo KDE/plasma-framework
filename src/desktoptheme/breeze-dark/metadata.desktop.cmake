@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Breeze Dark
 Name[ar]=نسيم داكن
+Name[az]=Breeze Tünd variant
 Name[ca]=Brisa fosca
 Name[ca@valencia]=Brisa fosca
 Name[cs]=Breeze Tmavé
@@ -43,6 +44,7 @@ Name[x-test]=xxBreeze Darkxx
 Name[zh_CN]=暗色微风
 Name[zh_TW]=Breeze Dark
 Comment=Breeze Dark by the KDE VDG
+Comment[az]=KDE VDG tərəfindən Tünd Breeze
 Comment[ca]=Brisa fosca, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa fosca pel VDG del KDE
 Comment[cs]=Breeze Dark od KDE VDG

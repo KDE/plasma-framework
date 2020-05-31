@@ -1,6 +1,7 @@
 [Desktop Entry]
 Keywords=
 Name=Shader Test
+Name[az]=Şeyderin testi
 Name[bs]=Šader test
 Name[ca]=Prova les ombres
 Name[ca@valencia]=Prova les ombres
@@ -42,6 +43,7 @@ Name[x-test]=xxShader Testxx
 Name[zh_CN]=着色器测试
 Name[zh_TW]=陰影測試
 Comment=Futzing with Visual Effects
+Comment[az]=Vizual Effektlər nümunəsi
 Comment[bs]=Futzing sa vizuelnim efektima
 Comment[ca]=Jugant amb els efectes visuals
 Comment[ca@valencia]=Jugant amb els efectes visuals

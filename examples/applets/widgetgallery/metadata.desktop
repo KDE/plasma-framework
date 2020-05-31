@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Widgets gallery
 Name[ar]=معرض للودجات
+Name[az]=Vidjetlər Qalareyası
 Name[bs]=galerija dodataka
 Name[ca]=Galeria d'estris
 Name[ca@valencia]=Galeria dels ginys («widgets»)
@@ -43,6 +44,7 @@ Name[x-test]=xxWidgets galleryxx
 Name[zh_CN]=部件浏览器
 Name[zh_TW]=元件集
 Comment=gallery of widgets done with Plasma QtComponents
+Comment[az]=Plasmada QtComponents köməyi ilə reallaşan vidjetlər qalareyası
 Comment[bs]=galerija dodataka urađena sa plazma Qt komponentama
 Comment[ca]=Galeria d'estris fets amb el «QtComponents» del Plasma
 Comment[ca@valencia]=Galeria dels ginys («widgets») fets amb el «QtComponents» del Plasma

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Oxygen
 Name[ar]=أكسجين
+Name[az]=Oxygen
 Name[bs]=kiseonik
 Name[ca]=Oxygen
 Name[ca@valencia]=Oxygen
@@ -48,6 +49,7 @@ Name[zh_CN]=Oxygen
 Name[zh_TW]=Oxygen
 Comment=Theme done in the Oxygen style
 Comment[ar]=سمة مصنوعة بنمط «أكسجين»
+Comment[az]=Mövzu Oxygen stilində hazırlanıb
 Comment[bs]=Tema urađena u stilu Kiseonika
 Comment[ca]=Tema fet en l'estil Oxygen
 Comment[ca@valencia]=Tema fet en l'estil Oxygen
