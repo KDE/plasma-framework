@@ -1,6 +1,6 @@
 
 
-import QtQuick 2.14
+import QtQuick 2.12
 import QtQuick.Controls @QQC2_VERSION@ 
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
