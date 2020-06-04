@@ -323,7 +323,7 @@ public:
     /**
      * @returns A path where it is safe to write on disk downloaded files.
      * @param file that name of the file to download (unused).
-     * @deprecated Use downloadPath() instead.
+     * @deprecated Since 5,23, use downloadPath() instead.
      */
     Q_INVOKABLE PLASMA_DEPRECATED QString downloadPath(const QString &file);
 
