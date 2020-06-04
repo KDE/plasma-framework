@@ -35,10 +35,6 @@ ecm_setup_version(PROJECT
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
                   SOVERSION 5)
 
-if(KDE_PLATFORM_FEATURE_DISABLE_DEPRECATED)
-   set(KDE_NO_DEPRECATED TRUE)
-   set(CMAKE_AUTOMOC_MOC_OPTIONS "-DKDE_NO_DEPRECATED")
-endif()
 add_definitions(-DQT_NO_FOREACH)
 ################# now find all used packages #################
 
