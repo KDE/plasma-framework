@@ -262,6 +262,12 @@ Item {
     property var customExpandedViewContent: actionsListComponent
 
     /*
+     * The actual instance of the custom view content, if loaded
+     * @since 5.72
+     */
+    property alias customExpandedViewContentItem: expandedView.item
+
+    /*
      * isBusy: bool
      * Whether or not to display a busy indicator on the list item. Set to true
      * while the item should be non-interactive because things are processing.
