@@ -23,6 +23,10 @@ import QtQuick 2.4
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.4
 
+/**
+ * A set of values to define semantically sizes and durations
+ * @inherit QtQuick.QtObject
+ */
 QtObject {
     /**
      * The fundamental unit of space that should be used for sizes, expressed in pixels.
@@ -105,6 +109,11 @@ QtObject {
      */
     property int wheelScrollLines: 3
 
+    /**
+     * time in ms by which the display of tooltips will be delayed.
+     *
+     * @sa ToolTip.delay property
+     */
     property int toolTipDelay: Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 700
 
     /**

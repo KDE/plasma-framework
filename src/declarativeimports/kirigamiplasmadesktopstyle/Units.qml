@@ -27,6 +27,10 @@ import org.kde.kirigami 2.4
 pragma Singleton
 
 
+/**
+ * A set of values to define semantically sizes and durations
+ * @inherit QtQuick.QtObject
+ */
 QtObject {
     id: unitsRoot
 
@@ -85,7 +89,7 @@ QtObject {
      * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
-    property real devicePixelRatio: Math.max(1, (fontMetrics.font.pixelSize / fontMetrics.font.pointSize))
+    property real devicePixelRatio: Math.max(1, ((fontMetrics.font.pixelSize*0.75) / fontMetrics.font.pointSize))
 
     /**
      * units.longDuration should be used for longer, screen-covering animations, for opening and
@@ -113,8 +117,16 @@ QtObject {
      */
     readonly property int wheelScrollLines: __styleItem.styleHint("wheelScrollLines")
 
+    /**
+     * time in ms by which the display of tooltips will be delayed.
+     *
+     * @sa ToolTip.delay property
+     */
     property int toolTipDelay: 700
 
+    /**
+     * metrics used by the default font
+     */
     property variant fontMetrics: TextMetrics {
         text: "M"
         function roundedIconSize(size) {
