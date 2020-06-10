@@ -8,4 +8,7 @@ install(
     FILES colors "${CMAKE_CURRENT_BINARY_DIR}/metadata.desktop"
     DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/breeze-light
 )
-
+install(
+    DIRECTORY widgets
+    DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/breeze-light
+)
