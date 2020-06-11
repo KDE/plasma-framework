@@ -28,8 +28,6 @@ namespace Client
 {
 class PlasmaShell;
 class Registry;
-class ShadowManager;
-class ShmPool;
 }
 }
 
@@ -42,8 +40,6 @@ public:
     ~WaylandIntegration() override;
 
     KWayland::Client::PlasmaShell *waylandPlasmaShell();
-    KWayland::Client::ShadowManager *waylandShadowManager();
-    KWayland::Client::ShmPool *waylandShmPool();
 
     static WaylandIntegration *self();
 
@@ -52,8 +48,6 @@ private:
 
     QPointer<KWayland::Client::Registry> m_registry;
     QPointer<KWayland::Client::PlasmaShell> m_waylandPlasmaShell;
-    QPointer<KWayland::Client::ShadowManager> m_waylandShadowManager;
-    QPointer<KWayland::Client::ShmPool> m_waylandShmPool;
 
     Q_DISABLE_COPY(WaylandIntegration)
 };

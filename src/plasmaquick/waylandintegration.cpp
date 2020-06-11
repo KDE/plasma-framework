@@ -27,8 +27,6 @@
 #include <KWayland/Client/connection_thread.h>
 #include <KWayland/Client/plasmashell.h>
 #include <KWayland/Client/registry.h>
-#include <KWayland/Client/shadow.h>
-#include <KWayland/Client/shm_pool.h>
 
 #include <QCoreApplication>
 
@@ -69,47 +67,6 @@ KWayland::Client::PlasmaShell *WaylandIntegration::waylandPlasmaShell()
     }
 
     return m_waylandPlasmaShell;
-}
-
-KWayland::Client::ShadowManager *WaylandIntegration::waylandShadowManager()
-{
-    if (!m_waylandShadowManager && m_registry) {
-        const KWayland::Client::Registry::AnnouncedInterface interface =
-                m_registry->interface(KWayland::Client::Registry::Interface::Shadow);
-
-        if (interface.name == 0) {
-            qCWarning(LOG_PLASMAQUICK) << "The compositor does not support the shadow protocol";
-            return nullptr;
-        }
-
-        m_waylandShadowManager = m_registry->createShadowManager(interface.name, interface.version, qApp);
-
-        connect(m_waylandShadowManager, &KWayland::Client::ShadowManager::removed, this, [this]() {
-            m_waylandShadowManager->deleteLater();
-        });
-    }
-
-    return m_waylandShadowManager;
-}
-
-KWayland::Client::ShmPool *WaylandIntegration::waylandShmPool()
-{
-    if (!m_waylandShmPool && m_registry) {
-        const KWayland::Client::Registry::AnnouncedInterface interface =
-                m_registry->interface(KWayland::Client::Registry::Interface::Shm);
-
-        if (interface.name == 0) {
-            return nullptr;
-        }
-
-        m_waylandShmPool = m_registry->createShmPool(interface.name, interface.version, qApp);
-
-        connect(m_waylandShmPool, &KWayland::Client::ShmPool::removed, this, [this]() {
-            m_waylandShmPool->deleteLater();
-        });
-    }
-
-    return m_waylandShmPool;
 }
 
 WaylandIntegration *WaylandIntegration::self()
