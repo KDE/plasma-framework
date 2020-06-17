@@ -475,7 +475,7 @@ Item {
 
                 // Expand/collapse button
                 PlasmaComponents3.Button {
-                    visible: clickAndHoverHandler.containsMouse
+                    visible: clickAndHoverHandler.containsMouse || expandedView.visible
 
                     icon.name: expandedView.visible? "collapse" : "expand"
                     icon.width: units.iconSizes.smallMedium
