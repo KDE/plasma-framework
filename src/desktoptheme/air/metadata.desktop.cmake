@@ -44,7 +44,6 @@ Name[tg]=Ҳаво
 Name[tr]=Air
 Name[ug]=ھاۋا
 Name[uk]=Air
-Name[x-test]=xxAirxx
 Name[zh_CN]=大气
 Name[zh_TW]=Air
 Comment=A breath of fresh air
@@ -92,7 +91,6 @@ Comment[tg]=Нафаскашии ҳавои тоза
 Comment[tr]=Temiz havadan bir nefes
 Comment[ug]=ساپ ھاۋادىن نەپەسلىنىش
 Comment[uk]=Ковток свіжого повітря
-Comment[x-test]=xxA breath of fresh airxx
 Comment[zh_CN]=呼吸清新空气
 Comment[zh_TW]=吸一口新鮮空氣
 

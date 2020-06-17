@@ -41,7 +41,6 @@
                 "Name[tg]": "Аарон Сейго (Aaron Seigo)",
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
-                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -85,7 +84,6 @@
         "Name[tg]": "Мавзӯи Plasma",
         "Name[tr]": "Plasma Teması",
         "Name[uk]": "Тема Плазми",
-        "Name[x-test]": "xxPlasma Themexx",
         "Name[zh_CN]": "Plasma 主题",
         "Name[zh_TW]": "Plasma 主題",
         "ServiceTypes": [

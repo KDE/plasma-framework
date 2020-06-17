@@ -38,7 +38,6 @@ Name[sv]=Breeze ljus
 Name[tg]=Насими равшан
 Name[tr]=Hafif Esinti
 Name[uk]=Світла Breeze
-Name[x-test]=xxBreeze Lightxx
 Name[zh_CN]=亮色微风
 Name[zh_TW]=Breeze Light
 Comment=Breeze Light by the KDE VDG
@@ -72,7 +71,6 @@ Comment[sl]=Sapica (svetla) (Breeze Light) od KDE VDG
 Comment[sv]=Breeze ljus av KDE:s visuella designgrupp
 Comment[tg]=Насими равшан аз KDE VDG
 Comment[uk]=Світла Breeze, автори — KDE VDG
-Comment[x-test]=xxBreeze Light by the KDE VDGxx
 Comment[zh_CN]=亮色微风，由 KDE VDG 创作
 Comment[zh_TW]=由 KDE VDG 團隊製作的 Breeze Light
 

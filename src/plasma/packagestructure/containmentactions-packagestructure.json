@@ -41,7 +41,6 @@
                 "Name[tg]": "Аарон Сейго (Aaron Seigo)",
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
-                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -83,7 +82,6 @@
         "Name[tg]": "Амалҳои дарбаргиранда",
         "Name[tr]": "Sınırlama Eylemleri",
         "Name[uk]": "Дії з контейнерами",
-        "Name[x-test]": "xxContainment Actionsxx",
         "Name[zh_CN]": "容器动作",
         "Name[zh_TW]": "遏止動作",
         "ServiceTypes": [
