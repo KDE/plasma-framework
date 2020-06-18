@@ -100,7 +100,7 @@ Item {
 
             Layout.fillWidth: true
 
-            level: 1
+            level: 2
             elide: Text.ElideRight
             font.capitalization: Font.Capitalize
             //SEE QTBUG-58307
