@@ -44,6 +44,7 @@ Name[sv]=Plasma-paket
 Name[tg]=Бастаи Plasma
 Name[tr]=Plasma Paketi
 Name[uk]=Пакунок Плазми
+Name[x-test]=xxPlasma Packagexx
 Name[zh_CN]=Plasma 包
 Name[zh_TW]=Plasma 套件包
 Comment=Generic Plasma Package
@@ -88,6 +89,7 @@ Comment[sv]=Generellt Plasma-paket
 Comment[tg]=Бастаи умумии Plasma
 Comment[tr]=Genel Plasma Paketi
 Comment[uk]=Типовий пакунок Плазми
+Comment[x-test]=xxGeneric Plasma Packagexx
 Comment[zh_CN]=通用 Plasma 包
 Comment[zh_TW]=一般 Plasma 套件包
 

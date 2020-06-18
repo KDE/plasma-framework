@@ -38,6 +38,7 @@ Name[sv]=%{APPNAME}
 Name[tg]=%{APPNAME}
 Name[tr]=%{APPNAME}
 Name[uk]=%{APPNAME}
+Name[x-test]=xx%{APPNAME}xx
 Name[zh_CN]=%{APPNAME}
 Name[zh_TW]=%{APPNAME}
 Comment=what your app does in a few words
@@ -77,6 +78,7 @@ Comment[sv]=vad programmet gör med några få ord
 Comment[tg]=Тавсифи мухтасареро нависед, ки барномаи шумо чӣ кор мекунад
 Comment[tr]=uygulamanızın yaptığı şey, birkaç sözcükte
 Comment[uk]=призначення вашої програми у декількох словах
+Comment[x-test]=xxwhat your app does in a few wordsxx
 Comment[zh_CN]=简单几个词概括您的小程序的功能
 Comment[zh_TW]=以數個字描述您的應用程式的用途
 

@@ -44,6 +44,7 @@ Name[tg]=Oxygen
 Name[tr]=Oxygen
 Name[ug]=ئوكسېگىن
 Name[uk]=Oxygen
+Name[x-test]=xxOxygenxx
 Name[zh_CN]=Oxygen
 Name[zh_TW]=Oxygen
 Comment=Theme done in the Oxygen style
@@ -90,6 +91,7 @@ Comment[tg]=Мавзӯъ дар асоси услуби Oxygen
 Comment[tr]=Oxygen biçimi ile yapılmış tema
 Comment[ug]=ئوكسېگىن ئۇسلۇبىدىكى ئۆرنەك
 Comment[uk]=Тема в стилі Oxygen
+Comment[x-test]=xxTheme done in the Oxygen stylexx
 Comment[zh_CN]=Oxygen 风格的主题
 Comment[zh_TW]=以 Oxygen 樣式完成的外觀主題
 

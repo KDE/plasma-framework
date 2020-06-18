@@ -41,6 +41,7 @@
                 "Name[tg]": "Аарон Сейго (Aaron Seigo)",
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
+                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -84,6 +85,7 @@
         "Name[tg]": "Низоми иттилоотӣ",
         "Name[tr]": "Veri Motoru",
         "Name[uk]": "Рушій даних",
+        "Name[x-test]": "xxData Enginexx",
         "Name[zh_CN]": "数据引擎",
         "Name[zh_TW]": "資料引擎",
         "ServiceTypes": [

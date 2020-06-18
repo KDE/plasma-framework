@@ -40,6 +40,7 @@ Name[sv]=Breeze mörk
 Name[tg]=Насими торик
 Name[tr]=Esintili Koyu
 Name[uk]=Темна Breeze
+Name[x-test]=xxBreeze Darkxx
 Name[zh_CN]=暗色微风
 Name[zh_TW]=Breeze Dark
 Comment=Breeze Dark by the KDE VDG
@@ -72,6 +73,7 @@ Comment[sl]=Sapica temna (Breeze Dark) od KDE VDG
 Comment[sv]=Breeze mörk av KDE:s visuella designgrupp
 Comment[tg]=Насими торик аз KDE VDG
 Comment[uk]=Темна Breeze, автори — KDE VDG
+Comment[x-test]=xxBreeze Dark by the KDE VDGxx
 Comment[zh_CN]=暗色微风，由 KDE VDG 创作
 Comment[zh_TW]=由 KDE VDG 團隊製作的 Breeze Dark
 
