@@ -7,6 +7,7 @@ ExpandableListItem 2.0 ExpandableListItem.qml
 Heading 2.0 Heading.qml
 Paragraph 2.0 Paragraph.qml
 PageRow 2.0 PageRow.qml
+PlaceholderMessage 2.0 PlaceholderMessage.qml
 ScrollArea 2.0 ScrollArea.qml
 Title 2.0 Title.qml
 DescriptiveLabel 2.0 DescriptiveLabel.qml
