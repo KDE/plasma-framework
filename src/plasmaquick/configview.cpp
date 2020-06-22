@@ -164,11 +164,13 @@ void ConfigViewPrivate::init()
         }
 
         for (const QString &kcm : qAsConst(kcms)) {
+            // Only look for KCMs in the "kcms_" folder where new QML KCMs live
+            // because we don't support loading QWidgets KCMs
             KPluginLoader loader(KPluginLoader::findPlugin(QLatin1String("kcms/") + kcm));
             KPluginMetaData md(loader.fileName());
 
             if (!md.isValid()) {
-                qWarning() << "Could not find" << kcm << "specified in X-Plasma-ConfigPlugins";
+                qWarning() << "Could not find" << kcm << "requested by X-Plasma-ConfigPlugins. Ensure that it exists, is a QML KCM, and lives in the 'kcms/' subdirectory.";
                 continue;
             }
 
