@@ -4,6 +4,7 @@ import QtQuick 2.12
 import QtQuick.Controls @QQC2_VERSION@ 
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents3
 import "private" as Private
 
 T.SpinBox {
@@ -103,7 +104,7 @@ T.SpinBox {
             }
             imagePath: "widgets/button"
             prefix: up.pressed ? "pressed" : "normal"
-            Label {
+            PlasmaComponents3.Label {
                 anchors.centerIn: parent
                 text: "+"
             }
@@ -121,7 +122,7 @@ T.SpinBox {
             }
             imagePath: "widgets/button"
             prefix: down.pressed ? "pressed" : "normal"
-            Label {
+            PlasmaComponents3.Label {
                 anchors.centerIn: parent
                 text: "-"
             }
