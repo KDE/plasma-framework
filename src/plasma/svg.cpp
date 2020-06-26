@@ -492,7 +492,12 @@ void SvgPrivate::createRenderer()
 
 void SvgPrivate::eraseRenderer()
 {
-    if (renderer && renderer->ref.load() == 2) {
+    if (renderer &&
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        renderer->ref.loadRelaxed() == 2) {
+#else
+        renderer->ref.load() == 2) {
+#endif
         // this and the cache reference it
         s_renderers.erase(s_renderers.find(styleCrc + path));
 
