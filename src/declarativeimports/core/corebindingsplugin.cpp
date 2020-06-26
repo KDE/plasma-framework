@@ -96,9 +96,17 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterRevision<QQuickItem, 1>(uri, 2, 0);
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    qmlRegisterInterface<Plasma::Service>(uri, 1);
+#else
     qmlRegisterInterface<Plasma::Service>("Service");
+#endif
     qRegisterMetaType<Plasma::Service *>("Service");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    qmlRegisterInterface<Plasma::ServiceJob>(uri, 1);
+#else
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
+#endif
     qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -114,7 +122,11 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 #endif
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    qmlRegisterInterface<Plasma::DataSource>(uri, 1);
+#else
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
+#endif
     qRegisterMetaType<Plasma::DataSource *>("DataSource");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
