@@ -359,7 +359,12 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
 
     QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
     if (it == d->invalidElements.end()) {
-        QSet<QString> elements = imageGroup.readEntry("invalidElements", QStringList()).toSet();
+        const QStringList elementList = imageGroup.readEntry("invalidElements", QStringList());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        const QSet<QString> elements(elementList.begin(), elementList.end());
+#else
+        const QSet<QString> elements = elementList.toSet();
+#endif
         d->invalidElements.insert(image, elements);
         invalid = elements.contains(element);
     } else {
