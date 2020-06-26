@@ -101,9 +101,17 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
     qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
+#else
     qmlRegisterType<QAbstractItemModel>();
+#endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    qmlRegisterAnonymousType<QQmlPropertyMap>(uri, 1);
+#else
     qmlRegisterType<QQmlPropertyMap>();
+#endif
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");

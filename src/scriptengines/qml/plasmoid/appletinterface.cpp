@@ -58,7 +58,11 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
       m_dummyNativeInterface(nullptr),
       m_positionBeforeRemoval(QPointF(-1, -1))
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
+#else
     qmlRegisterType<QAction>();
+#endif
 
     connect(this, &AppletInterface::configNeedsSaving,
             applet(), &Plasma::Applet::configNeedsSaving);
