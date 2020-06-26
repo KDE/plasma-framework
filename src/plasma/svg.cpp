@@ -564,7 +564,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId, const QStri
     //This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
     QRectF elementRect = renderer->elementExists(elementId) ?
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                         renderer->transformForElement(elementId).toAffine().map(renderer->boundsOnElement(elementId)).boundingRect() :
+                         renderer->transformForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
 #else
                          renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
 #endif
