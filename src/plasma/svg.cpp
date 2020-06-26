@@ -583,16 +583,6 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId, const QStri
     return elementRect;
 }
 
-QMatrix SvgPrivate::matrixForElement(const QString &elementId)
-{
-    createRenderer();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    return renderer->transformForElement(elementId).toAffine();
-#else
-    return renderer->matrixForElement(elementId);
-#endif
-}
-
 void SvgPrivate::checkColorHints()
 {
     if (elementRect(QStringLiteral("hint-apply-color-scheme")).isValid()) {
