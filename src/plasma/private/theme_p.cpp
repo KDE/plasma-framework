@@ -871,7 +871,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         }
 
         for (const QString &theme : qAsConst(fallbackThemes)) {
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1Literal(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));
+            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));
             KConfig metadata(metadataPath, KConfig::SimpleConfig);
             processWallpaperSettings(&metadata);
         }
