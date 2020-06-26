@@ -59,7 +59,11 @@ QMenuProxy::~QMenuProxy()
 
 QQmlListProperty<QMenuItem> QMenuProxy::content()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    return QQmlListProperty<QMenuItem>(this, &m_items);
+#else
     return QQmlListProperty<QMenuItem>(this, m_items);
+#endif
 }
 
 int QMenuProxy::actionCount() const
