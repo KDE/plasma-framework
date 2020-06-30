@@ -468,9 +468,6 @@ Item {
                             && listItem.defaultActionButtonVisible
                             && (clickAndHoverHandler.containsMouse || expandedView.visible)
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
-
-                    icon.width: units.iconSizes.smallMedium
-                    icon.height: units.iconSizes.smallMedium
                 }
 
                 // Expand/collapse button
@@ -478,8 +475,6 @@ Item {
                     visible: clickAndHoverHandler.containsMouse || expandedView.visible
 
                     icon.name: expandedView.visible? "collapse" : "expand"
-                    icon.width: units.iconSizes.smallMedium
-                    icon.height: units.iconSizes.smallMedium
 
                     onClicked: listItem.toggleExpanded()
                 }
