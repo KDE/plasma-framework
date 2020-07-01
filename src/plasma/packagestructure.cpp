@@ -32,7 +32,7 @@
 #include <KDesktopFile>
 #include <QDir>
 #include <QFile>
-#include <QDBusInterface>
+#include <QDBusConnection>
 #include <QDBusPendingCall>
 
 namespace Plasma
@@ -160,8 +160,9 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             }
         }
     }
-    QDBusInterface sycoca(QStringLiteral("org.kde.kded5"), QStringLiteral("/kbuildsycoca"));
-    sycoca.asyncCall(QStringLiteral("recreate"));
+    const auto call = QDBusMessage::createMethodCall(QStringLiteral("org.kde.kded5"), QStringLiteral("/kbuildsycoca"),
+        QStringLiteral("org.kde.kbuildsycoca"), QStringLiteral("recreate"));
+    QDBusConnection::sessionBus().asyncCall(call);
 }
 
 
