@@ -112,8 +112,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 #endif
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
-    qmlRegisterInterface<Plasma::DataSource>("DataSource");
-
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 }
 
