@@ -26,7 +26,7 @@ ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
 
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
-    connect(m_showTimer, &QTimer::timeout, [ = ]() {
+    connect(m_showTimer, &QTimer::timeout, this, [this]() {
         setVisible(false);
     });
 }

@@ -482,8 +482,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         job->setParent(m_dropMenu.data());
 
         QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
-        QObject::connect(job, SIGNAL(mimetype(KIO::Job*, QString)),
-                this, SLOT(mimeTypeRetrieved(KIO::Job*,QString)));
+        QObject::connect(job, QOverload<KIO::Job *, const QString &>::of(&KIO::MimetypeJob::mimetype),
+                this, &ContainmentInterface::mimeTypeRetrieved);
 
     } else {
         bool deleteDropMenu = true;
