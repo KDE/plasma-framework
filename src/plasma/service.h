@@ -135,7 +135,7 @@ public:
      * @return a started ServiceJob; the consumer may connect to relevant
      *         signals before returning to the event loop
      */
-    Q_INVOKABLE Plasma::ServiceJob *startOperationCall(const QVariantMap &description, QObject *parent = nullptr);
+    Q_INVOKABLE ServiceJob *startOperationCall(const QVariantMap &description, QObject *parent = nullptr);
 
     /**
      * Query to find if an operation is enabled or not.
