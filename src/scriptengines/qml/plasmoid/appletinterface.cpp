@@ -44,8 +44,6 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobject.h>
 
-Q_DECLARE_METATYPE(AppletInterface *)
-
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent),
       m_configuration(nullptr),

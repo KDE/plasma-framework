@@ -172,6 +172,4 @@ private:
     K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-Q_DECLARE_METATYPE(Plasma::ContainmentActions *)
-
 #endif // PLASMA_CONTAINMENTACTIONS_H

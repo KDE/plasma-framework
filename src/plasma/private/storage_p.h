@@ -54,9 +54,6 @@ private:
 };
 //End StorageJob
 
-Q_DECLARE_METATYPE(StorageJob *)
-Q_DECLARE_METATYPE(QPointer<StorageJob>)
-
 class Storage : public Plasma::Service
 {
     Q_OBJECT

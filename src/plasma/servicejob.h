@@ -122,7 +122,5 @@ private:
 
 } // namespace Plasma
 
-Q_DECLARE_METATYPE(Plasma::ServiceJob *)
-
 #endif // multiple inclusion guard
 
