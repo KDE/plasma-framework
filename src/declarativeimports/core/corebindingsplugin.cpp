@@ -97,9 +97,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
     qmlRegisterInterface<Plasma::Service>("Service");
-    qRegisterMetaType<Plasma::Service *>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
-    qRegisterMetaType<Plasma::ServiceJob *>("ServiceJob");
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
@@ -115,7 +113,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterInterface<Plasma::DataSource>("DataSource");
-    qRegisterMetaType<Plasma::DataSource *>("DataSource");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 }
