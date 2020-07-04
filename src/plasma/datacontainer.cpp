@@ -353,7 +353,9 @@ void DataContainer::checkForUpdate()
     if (d->dirty) {
         emit dataUpdated(objectName(), d->data);
 
-        for (SignalRelay *relay : qAsConst(d->relays)) {
+        //copy as checkQueueing can result in deletion of the relay
+        const auto relays = d->relays;
+        for (SignalRelay *relay : relays) {
             relay->checkQueueing();
         }
 
