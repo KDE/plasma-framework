@@ -34,11 +34,11 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
-#include <kcolorscheme.h>
-#include <kconfiggroup.h>
+#include <KColorScheme>
+#include <KConfigGroup>
 #include <QDebug>
-#include <kfilterdev.h>
-#include <kiconeffect.h>
+#include <KFilterDev>
+#include <KIconEffect>
 #include <KIconLoader>
 #include <KIconTheme>
 

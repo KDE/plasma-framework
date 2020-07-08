@@ -31,11 +31,11 @@
 #include <QContextMenuEvent>
 #include <QMimeData>
 #include <QPainter>
-#include <qtemporaryfile.h>
-#include <qmimedatabase.h>
+#include <QTemporaryFile>
+#include <QMimeDatabase>
 
-#include <kauthorized.h>
-#include <klocalizedstring.h>
+#include <KAuthorized>
+#include <KLocalizedString>
 #include <KConfigSkeleton>
 #include <KConfigLoader>
 

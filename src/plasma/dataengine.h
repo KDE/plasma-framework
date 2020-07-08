@@ -24,8 +24,8 @@
 #include <QObject>
 #include <QStringList>
 
-#include <kplugininfo.h>
-#include <kservice.h>
+#include <KPluginInfo>
+#include <KService>
 
 #include <plasma/version.h>
 #include <plasma/plasma.h>

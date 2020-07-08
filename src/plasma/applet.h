@@ -26,8 +26,8 @@
 #include <QKeySequence>
 #include <QUrl>
 
-#include <kconfiggroup.h>
-#include <kplugininfo.h>
+#include <KConfigGroup>
+#include <KPluginInfo>
 
 #include <plasma/plasma.h>
 #include <plasma/version.h>

@@ -25,8 +25,8 @@
 #include <QFont>
 #include <QObject>
 
-#include <kplugininfo.h>
-#include <ksharedconfig.h>
+#include <KPluginInfo>
+#include <KSharedConfig>
 
 #include <plasma/plasma_export.h>
 

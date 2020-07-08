@@ -23,7 +23,7 @@
 
 #include <plasma/theme.h>
 
-#include <qcommandlineparser.h>
+#include <QCommandLineParser>
 #include <QStringList>
 #include <QTimer>
 #include <iostream>

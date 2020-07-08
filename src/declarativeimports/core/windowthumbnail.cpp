@@ -18,7 +18,7 @@
  */
 #include "windowthumbnail.h"
 // KF5
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 // Qt
 #include <QGuiApplication>
 #include <QIcon>

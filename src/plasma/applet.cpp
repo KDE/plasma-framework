@@ -34,17 +34,17 @@
 #include <QMessageBox>
 #include <QMetaEnum>
 
-#include <kactioncollection.h>
-#include <kauthorized.h>
-#include <kcolorscheme.h>
-#include <kdesktopfile.h>
+#include <KActionCollection>
+#include <KAuthorized>
+#include <KColorScheme>
+#include <KDesktopFile>
 #include <QDebug>
-#include <kglobalaccel.h>
-#include <kplugininfo.h>
-#include <klocalizedstring.h>
-#include <kservice.h>
+#include <KGlobalAccel>
+#include <KPluginInfo>
+#include <KLocalizedString>
+#include <KService>
 #include <KConfigLoader>
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 
 #include "containment.h"
 #include "corona.h"

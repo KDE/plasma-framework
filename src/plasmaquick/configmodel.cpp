@@ -33,7 +33,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
 #include <KQuickAddons/ConfigModule>
 

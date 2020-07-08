@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QVariant>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <plasma/plasma_export.h>
 #include <plasma/plasma.h>

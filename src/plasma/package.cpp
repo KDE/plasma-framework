@@ -22,19 +22,19 @@
 
 #include "package.h"
 
-#include <qtemporarydir.h>
+#include <QTemporaryDir>
 
-#include <karchive.h>
+#include <KArchive>
 #include <QDebug>
-#include <kdesktopfile.h>
-#include <ktar.h>
+#include <KDesktopFile>
+#include <KTar>
 #include <kzip.h>
 #include <KJob>
 
 #include "config-plasma.h"
 
-#include <qstandardpaths.h>
-#include <qmimedatabase.h>
+#include <QStandardPaths>
+#include <QMimeDatabase>
 
 #include "packagestructure.h"
 #include "pluginloader.h"

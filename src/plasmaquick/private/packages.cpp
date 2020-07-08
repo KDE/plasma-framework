@@ -22,7 +22,7 @@
 
 #include <QDebug>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Package>

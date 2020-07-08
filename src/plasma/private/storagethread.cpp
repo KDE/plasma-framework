@@ -29,7 +29,7 @@
 #include <QDataStream>
 
 #include <QDebug>
-#include <qstandardpaths.h>
+#include <QStandardPaths>
 #include "debug_p.h"
 
 namespace Plasma

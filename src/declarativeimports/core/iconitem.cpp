@@ -28,8 +28,8 @@
 #include <QSGSimpleTextureNode>
 #include <QQuickWindow>
 
-#include <kiconloader.h>
-#include <kiconeffect.h>
+#include <KIconLoader>
+#include <KIconEffect>
 #include <KIconTheme>
 
 #include "fadingnode_p.h"

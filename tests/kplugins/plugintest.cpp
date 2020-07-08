@@ -19,23 +19,23 @@
 
 #include "plugintest.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <QDebug>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kshell.h>
-#include <ksycoca.h>
-#include <klocalizedstring.h>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KShell>
+#include <KSycoca>
+#include <KLocalizedString>
 
 #include <plasma/applet.h>
 #include <plasma/packagestructure.h>
 #include <plasma/package.h>
 #include <plasma/pluginloader.h>
 #include <plasma/dataengine.h>
-#include <kjob.h>
+#include <KJob>
 
-#include <qcommandlineparser.h>
+#include <QCommandLineParser>
 #include <QDir>
 #include <QDBusInterface>
 #include <QFileInfo>

@@ -24,7 +24,7 @@
 
 #include <QDebug>
 
-#include <qstandardpaths.h>
+#include <QStandardPaths>
 
 #include "datacontainer.h"
 #include "pluginloader.h"

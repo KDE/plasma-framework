@@ -24,8 +24,8 @@
 //#include <QJsonObject>
 #include <QSignalSpy>
 
-#include <kplugininfo.h>
-//#include <kplugintrader.h>
+#include <KPluginInfo>
+//#include <KPluginTrader>
 
 #include <plasma/pluginloader.h>
 #include <plasma/dataengineconsumer.h>

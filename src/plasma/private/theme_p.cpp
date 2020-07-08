@@ -29,8 +29,8 @@
 #include <QFontDatabase>
 #include <QDir>
 
-#include <kdirwatch.h>
-#include <kwindoweffects.h>
+#include <KDirWatch>
+#include <KWindowEffects>
 #include <KIconLoader>
 #include <KIconTheme>
 

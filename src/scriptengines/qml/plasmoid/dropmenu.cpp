@@ -31,7 +31,7 @@
 #include <QList>
 
 #include <KIO/DropJob>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent)
     : QObject(parent),

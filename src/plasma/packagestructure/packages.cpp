@@ -24,9 +24,9 @@
 #include <QFileInfo>
 #include <QDebug>
 
-#include <kconfiggroup.h>
-#include <kdesktopfile.h>
-#include <klocalizedstring.h>
+#include <KConfigGroup>
+#include <KDesktopFile>
+#include <KLocalizedString>
 
 #include <kdeclarative/kdeclarative.h>
 #include "packages_p.h"

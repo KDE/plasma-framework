@@ -21,7 +21,7 @@
 #ifndef CONTAINMENT_P_H
 #define CONTAINMENT_P_H
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <QSet>
 
 #include "plasma.h"

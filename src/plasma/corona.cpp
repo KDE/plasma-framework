@@ -32,8 +32,8 @@
 #include <cmath>
 
 #include <QDebug>
-#include <klocalizedstring.h>
-#include <kwindowsystem.h>
+#include <KLocalizedString>
+#include <KWindowSystem>
 
 #include "containment.h"
 #include "pluginloader.h"

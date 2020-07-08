@@ -33,15 +33,15 @@
 
 #include "config-plasma.h"
 
-#include <kcolorscheme.h>
-#include <kconfiggroup.h>
+#include <KColorScheme>
+#include <KConfigGroup>
 #include <QDebug>
-#include <kdirwatch.h>
-#include <kimagecache.h>
-#include <ksharedconfig.h>
-#include <kwindoweffects.h>
-#include <kwindowsystem.h>
-#include <qstandardpaths.h>
+#include <KDirWatch>
+#include <KImageCache>
+#include <KSharedConfig>
+#include <KWindowEffects>
+#include <KWindowSystem>
+#include <QStandardPaths>
 
 #include "debug_p.h"
 

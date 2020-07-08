@@ -26,12 +26,12 @@
 #include <QTimer>
 
 #include <QDebug>
-#include <kservice.h>
-#include <ksharedconfig.h>
+#include <KService>
+#include <KSharedConfig>
 #include <KConfigLoader>
 #include <KConfigSkeleton>
 
-#include <qstandardpaths.h>
+#include <QStandardPaths>
 
 #include "version.h"
 #include "pluginloader.h"

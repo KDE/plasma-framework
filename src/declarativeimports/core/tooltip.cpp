@@ -27,7 +27,7 @@
 #include <QDebug>
 
 #include "framesvgitem.h"
-#include <kwindoweffects.h>
+#include <KWindowEffects>
 #include <KDirWatch>
 
 ToolTipDialog *ToolTip::s_dialog = nullptr;

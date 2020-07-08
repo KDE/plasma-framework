@@ -25,8 +25,8 @@
 #include <QAction>
 #include <QBasicTimer>
 
-#include <kactioncollection.h>
-#include <kconfigskeleton.h>
+#include <KActionCollection>
+#include <KConfigSkeleton>
 #include <KNotification>
 
 #include <KPackage/Package>

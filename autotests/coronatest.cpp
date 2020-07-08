@@ -18,8 +18,8 @@
 *********************************************************************************/
 
 #include "coronatest.h"
-#include <ksycoca.h>
-#include <kactioncollection.h>
+#include <KSycoca>
+#include <KActionCollection>
 #include <QStandardPaths>
 #include <QAction>
 #include <QApplication>

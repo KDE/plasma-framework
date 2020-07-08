@@ -22,7 +22,7 @@
 
 #include <plasma/package.h>
 #include <plasma/plasma.h>
-#include <kplugininfo.h>
+#include <KPluginInfo>
 
 namespace Plasma
 {

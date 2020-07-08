@@ -28,8 +28,8 @@
 #include <QWidget>
 #include <QSet>
 
-#include <kplugininfo.h>
-#include <klocalizedstring.h>
+#include <KPluginInfo>
+#include <KLocalizedString>
 
 namespace Plasma
 {

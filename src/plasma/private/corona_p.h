@@ -22,7 +22,7 @@
 
 #include <QTimer>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 
 #include "package.h"
 

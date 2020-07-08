@@ -27,9 +27,9 @@
 #include <QTimer>
 #include <QWidget>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <Plasma/Applet>
 #include <Plasma/Corona>

@@ -26,10 +26,10 @@
 #include <QIcon>
 #include <QTimer>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <QDebug>
-#include <kservice.h>
-#include <klocalizedstring.h>
+#include <KService>
+#include <KLocalizedString>
 #include <KConfigLoader>
 
 #include <Plasma/Plasma>

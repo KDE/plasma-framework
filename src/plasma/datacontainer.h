@@ -24,7 +24,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include <kjob.h>
+#include <KJob>
 #include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
 

@@ -23,8 +23,8 @@
 #include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobjectsharedengine.h>
 
-#include <kactioncollection.h>
-#include <kdesktopfile.h>
+#include <KActionCollection>
+#include <KDesktopFile>
 #include <KConfigLoader>
 
 #include <QDebug>

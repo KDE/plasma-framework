@@ -36,12 +36,12 @@
 
 #include <QPlatformSurfaceEvent>
 
-#include <kwindowsystem.h>
+#include <KWindowSystem>
 #include <KWindowSystem/KWindowInfo>
 
 #include <kquickaddons/quickviewsharedengine.h>
 
-#include <kwindoweffects.h>
+#include <KWindowEffects>
 #include <Plasma/Plasma>
 #include <Plasma/Corona>
 

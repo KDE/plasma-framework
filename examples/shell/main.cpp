@@ -19,8 +19,8 @@
  */
 
 #include <QApplication>
-#include <qcommandlineparser.h>
-#include <qcommandlineoption.h>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 #include <KDBusService>
 #include <KLocalizedString>

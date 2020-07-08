@@ -22,7 +22,7 @@
 
 #include <QStringList>
 
-#include <kplugininfo.h>
+#include <KPluginInfo>
 
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>

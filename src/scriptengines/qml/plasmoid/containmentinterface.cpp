@@ -32,12 +32,12 @@
 #include <QScreen>
 #include <QApplication>
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <KAcceleratorManager>
-#include <kauthorized.h>
+#include <KAuthorized>
 #include <QDebug>
-#include <klocalizedstring.h>
-#include <kurlmimedata.h>
+#include <KLocalizedString>
+#include <KUrlMimeData>
 #include <QMimeDatabase>
 #include <KNotification>
 

@@ -31,7 +31,7 @@
 
 #include <QDebug>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>

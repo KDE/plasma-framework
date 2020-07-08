@@ -24,7 +24,7 @@
 #include <QRect>
 #include <QSizeF>
 
-#include <kplugininfo.h>
+#include <KPluginInfo>
 
 #include <plasma/containment.h>
 #include <plasma/plasma_export.h>

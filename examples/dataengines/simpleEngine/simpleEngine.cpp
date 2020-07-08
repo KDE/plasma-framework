@@ -26,7 +26,7 @@
 #include <QColor>
 #include <QTime>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "simpleEngine.h"
 

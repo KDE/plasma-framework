@@ -26,10 +26,10 @@
 #include <QHash>
 
 #include <QDebug>
-#include <kcolorscheme.h>
-#include <kimagecache.h>
-#include <kshareddatacache.h>
-#include <kwindowsystem.h>
+#include <KColorScheme>
+#include <KImageCache>
+#include <KSharedDataCache>
+#include <KWindowSystem>
 #include <KPluginMetaData>
 #include <QTimer>
 

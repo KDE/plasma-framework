@@ -25,7 +25,7 @@
 #include <QMap>
 #include <QString>
 
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <authorizationmanager.h>
 #include <credentials.h>

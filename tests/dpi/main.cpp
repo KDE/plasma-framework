@@ -20,8 +20,8 @@
 
 #include <QScreen>
 #include <plasma/theme.h>
-#include <qcommandlineparser.h>
-#include <qcommandlineoption.h>
+#include <QCommandLineParser>
+#include <QCommandLineOption>
 
 #include <KLocalizedString>
 

@@ -29,7 +29,7 @@
 #include <QContextMenuEvent>
 
 #include <QDebug>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include "version.h"
 

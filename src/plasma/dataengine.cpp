@@ -31,9 +31,9 @@
 #include <QDebug>
 #include <QStandardPaths>
 
-#include <kplugininfo.h>
-#include <kservice.h>
-#include <klocalizedstring.h>
+#include <KPluginInfo>
+#include <KService>
+#include <KLocalizedString>
 
 #include "datacontainer.h"
 #include "package.h"

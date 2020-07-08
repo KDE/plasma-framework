@@ -26,7 +26,7 @@
 #include <config-plasma.h>
 
 #include <QFile>
-#include <qstandardpaths.h>
+#include <QStandardPaths>
 #include <QTimer>
 #include <QJsonArray>
 #include <QDir>
@@ -34,9 +34,9 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-#include <klocalizedstring.h>
-#include <kkeysequencewidget.h>
-#include <kglobalaccel.h>
+#include <KLocalizedString>
+#include <KKeySequenceWidget>
+#include <KGlobalAccel>
 #include <KConfigLoader>
 #include <kpackage/packageloader.h>
 

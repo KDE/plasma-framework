@@ -20,12 +20,13 @@
 #include "timetracker.h"
 #include <containment.h>
 #include <QDateTime>
-#include <qmetaobject.h>
+#include <QMetaObject>
 #include <QFile>
 #include <QDebug>
-#include <qjsondocument.h>
-#include <qjsonarray.h>
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QTimer>
+#include <QMetaProperty>
 
 using namespace Plasma;
 

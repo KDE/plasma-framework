@@ -29,9 +29,9 @@
 #include <QMimeDatabase>
 #include <KSycoca>
 
-#include <qstandardpaths.h>
-#include <klocalizedstring.h>
-#include <kactioncollection.h>
+#include <QStandardPaths>
+#include <KLocalizedString>
+#include <KActionCollection>
 #include <KMimeTypeTrader>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/OpenUrlJob>

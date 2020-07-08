@@ -23,9 +23,9 @@
 #include <QStandardPaths>
 
 #include <QDebug>
-#include <kservice.h>
-#include <kservicetypetrader.h>
-#include <kplugintrader.h>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KPluginTrader>
 #include <KPluginLoader>
 #include <kpackage/packageloader.h>
 

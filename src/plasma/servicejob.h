@@ -22,7 +22,7 @@
 
 #include <QVariant>
 
-#include <kjob.h>
+#include <KJob>
 
 #include <plasma/plasma_export.h>
 

@@ -22,10 +22,10 @@
 
 #include "private/containment_p.h"
 
-#include <kactioncollection.h>
+#include <KActionCollection>
 #include <QDebug>
-#include <klocalizedstring.h>
-#include <kwindowsystem.h>
+#include <KLocalizedString>
+#include <KWindowSystem>
 
 #include "config-plasma.h"
 

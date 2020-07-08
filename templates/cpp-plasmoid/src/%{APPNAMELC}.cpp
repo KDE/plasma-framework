@@ -4,7 +4,7 @@
 */
 
 #include "%{APPNAMELC}.h"
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 %{APPNAME}::%{APPNAME}(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),

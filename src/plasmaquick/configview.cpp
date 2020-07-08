@@ -33,7 +33,7 @@
 #include <QQuickItem>
 
 #include <KAuthorized>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
 #include <KQuickAddons/ConfigModule>

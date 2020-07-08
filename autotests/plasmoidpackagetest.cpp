@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QFile>
 #include <kzip.h>
-#include <kjob.h>
+#include <KJob>
 #include <QStandardPaths>
 
 #include <QDebug>

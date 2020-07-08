@@ -22,7 +22,7 @@
 #ifndef PLASMA_CONTAINMENT_H
 #define PLASMA_CONTAINMENT_H
 
-#include <ksharedconfig.h>
+#include <KSharedConfig>
 #include <plasma/applet.h>
 
 namespace Plasma
