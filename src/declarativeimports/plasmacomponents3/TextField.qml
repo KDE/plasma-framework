@@ -29,6 +29,24 @@ import "mobiletextselection" as MobileTextSelection
 T.TextField {
     id: control
 
+    /**
+     * Whether the button to clear the text from TextField is visible.
+     * @since 5.73
+     */
+    property bool clearButtonShown: false
+
+    /**
+     * Whether to show a button that allows the user to reveal the password in
+     * plain text. This only makes sense if the echoMode is set to Password.
+     * @since 5.73
+     */
+    property bool revealPasswordButtonShown: false
+
+    // this takes into account kiosk restriction
+    readonly property bool __effectiveRevealPasswordButtonShown: revealPasswordButtonShown
+                                                              && KAuthorized.authorize("lineedit_reveal_password")
+                                                              && (echoMode == TextInput.Normal || textField.length > 0)
+
     implicitWidth: Math.max(units.gridUnit * 8,
                             placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
                             || contentWidth + leftPadding + rightPadding
@@ -97,6 +115,58 @@ T.TextField {
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
+    }
+
+    Row {
+        anchors.right: control.right
+        anchors.rightMargin: control.rightPadding
+        anchors.verticalCenter: control.verticalCenter
+
+        PlasmaCore.IconItem {
+            id: showPasswordButton
+            source: __effectiveRevealPasswordButtonShown ? (control.echoMode === TextInput.Normal ? "visibility": "hint") : ""
+            height: Math.max(control.height * 0.8, units.iconSizes.small)
+            width: height
+            opacity: (__effectiveRevealPasswordButtonShown && control.enabled) ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                enabled: __effectiveRevealPasswordButtonShown
+                onClicked: {
+                    control.echoMode = (control.echoMode == TextInput.Normal ? TextInput.Password : TextInput.Normal)
+                    control.forceActiveFocus()
+                }
+            }
+        }
+
+        PlasmaCore.IconItem {
+            id: clearButton
+            //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
+            source: clearButtonShown ? (LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl") : ""
+            height: Math.max(control.height * 0.8, units.iconSizes.small)
+            width: height
+            opacity: (control.length > 0 && clearButtonShown && control.enabled) ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    control.text = ""
+                    control.forceActiveFocus()
+                }
+            }
+        }
     }
 
     background: Item {
