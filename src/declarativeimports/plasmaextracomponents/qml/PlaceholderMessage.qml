@@ -186,7 +186,7 @@ ColumnLayout {
      * @since 5.72
      * @see Icon::source
      */
-    property string iconName: string
+    property string iconName
 
     /**
      * helpfulAction: QtQuickControls2 Action
