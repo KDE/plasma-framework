@@ -27,9 +27,10 @@ import "private" as Private
 T.RoundButton {
     id: control
 
-    implicitWidth: Math.max(background.implicitWidth,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
+                            + leftPadding + rightPadding
+    implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
+                            + topPadding + bottomPadding
 
     leftPadding: text.length > 0 ? surfaceNormal.margins.left : contentItem.extraSpace
     topPadding: text.length > 0 ? surfaceNormal.margins.top : contentItem.extraSpace
@@ -62,9 +63,6 @@ T.RoundButton {
     }
 
     background: Item {
-        //retrocompatibility with old controls
-        implicitWidth: units.gridUnit * 1.6
-        implicitHeight: units.gridUnit * 1.6
         opacity: control.enabled ? 1 : 0.6
 
         PlasmaCore.Svg {

@@ -47,12 +47,17 @@ T.TextField {
                                                               && KAuthorized.authorize("lineedit_reveal_password")
                                                               && (echoMode == TextInput.Normal || textField.length > 0)
 
-    implicitWidth: Math.max(units.gridUnit * 8,
-                            placeholderText ? placeholder.implicitWidth + leftPadding + rightPadding : 0)
-                            || contentWidth + leftPadding + rightPadding
-    implicitHeight: background.implicitHeight
+    implicitWidth: Math.max((placeholderText ? placeholder.implicitWidth : 0),
+                            units.gridUnit * 8,
+                            contentWidth)
+                            + base.margins.left + base.margins.right
+    implicitHeight: Math.max(units.gridUnit, contentHeight)
+                            + topPadding + bottomPadding
 
-    padding: 6
+    leftPadding: base.margins.left
+    topPadding: base.margins.top
+    rightPadding: base.margins.right
+    bottomPadding: base.margins.bottom
 
     color: theme.viewTextColor
     selectionColor: theme.highlightColor
@@ -170,13 +175,6 @@ T.TextField {
     }
 
     background: Item {
-        implicitHeight: Math.max(Math.floor(metrics.height * 1.6) + Math.floor(metrics.height * 1.6) % 2,
-                                 metrics.height + base.margins.top + base.margins.bottom)
-        TextMetrics {
-            id: metrics
-            text: "M"
-            font: control.font
-        }
         Private.TextFieldFocus {
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
             anchors.fill: parent

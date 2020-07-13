@@ -30,9 +30,10 @@ import "mobiletextselection" as MobileTextSelection
 T.ComboBox {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0,
-                            contentItem.implicitWidth + leftPadding + rightPadding) + indicator.implicitWidth + rightPadding
-    implicitHeight: units.gridUnit * 1.6
+    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
+                             + leftPadding + rightPadding + indicator.implicitWidth + rightPadding
+    implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
+                            + topPadding + bottomPadding
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     hoverEnabled: true
@@ -191,8 +192,6 @@ T.ComboBox {
 
     background: PlasmaCore.FrameSvgItem {
         id: surfaceNormal
-        //retrocompatibility with old controls
-        implicitWidth: units.gridUnit * 6
         anchors.fill: parent
         readonly property bool editable: control.hasOwnProperty("editable") && control.editable
         imagePath: editable ? "widgets/lineedit" : "widgets/button"

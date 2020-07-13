@@ -28,14 +28,19 @@ import "private" as Private
 T.ToolButton {
     id: control
 
-    implicitWidth: Math.max(background.implicitWidth,
-                            contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background.implicitHeight, contentItem.implicitHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
+                            + leftPadding + rightPadding
+    implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
+                            + topPadding + bottomPadding
 
-    leftPadding: surfaceNormal.margins.left
-    topPadding: surfaceNormal.margins.top
-    rightPadding: surfaceNormal.margins.right
-    bottomPadding: surfaceNormal.margins.bottom
+    // for flat toolbuttons, we want to use margins from the pressed state since
+    // those are the ones which are appropriate for a button without a buttonlike
+    // appearance where we increase the size of the icon compared to buttonlike
+    // buttons
+    leftPadding: control.flat ? surfacePressed.margins.left : surfaceNormal.margins.left
+    topPadding: control.flat ? surfacePressed.margins.top : surfaceNormal.margins.top
+    rightPadding: control.flat ? surfacePressed.margins.right : surfaceNormal.margins.right
+    bottomPadding: control.flat ? surfacePressed.margins.bottom : surfaceNormal.margins.bottom
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
@@ -47,7 +52,7 @@ T.ToolButton {
 
     PlasmaCore.ColorScope.inherit: flat
     PlasmaCore.ColorScope.colorGroup: flat ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
-    
+
     contentItem: GridLayout {
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
 
@@ -58,6 +63,11 @@ T.ToolButton {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
+            // The default icon size is smallMedium (22px) which means the
+            // content item will be too large and undesirably increase the size
+            // of the item itself, so we apply negative margins to make it take
+            // up as little space as a small icon would
+            Layout.margins: -((implicitHeight - units.iconSizes.small) / 2)
 
             Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
             Layout.minimumHeight: Math.min(parent.width, parent.height, implicitHeight)
@@ -96,9 +106,6 @@ T.ToolButton {
     }
 
     background: Item {
-        //retrocompatibility with old controls
-        implicitWidth: Math.floor(units.gridUnit * 1.6) + Math.floor(units.gridUnit * 1.6) % 2
-        implicitHeight: implicitWidth
         Private.ButtonShadow {
             anchors.fill: parent
             visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
@@ -128,9 +135,10 @@ T.ToolButton {
             }
         }
         PlasmaCore.FrameSvgItem {
+            id: surfacePressed
             anchors.fill: parent
             imagePath: "widgets/button"
-            prefix: "pressed"
+            prefix: control.flat ? "toolbutton-pressed" : "pressed"
             opacity: control.checked || control.pressed ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
