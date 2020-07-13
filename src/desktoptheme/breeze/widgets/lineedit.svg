@@ -12,10 +12,10 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    width="17"
    height="57"
-   sodipodi:docname="lineedit.svgz"
+   sodipodi:docname="lineedit.svg"
    inkscape:output_extension="org.inkscape.output.svgz.inkscape"
    inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/wether.png"
    inkscape:export-xdpi="90"
@@ -33,11 +33,11 @@
      bordercolor="#666666"
      pagecolor="#eff0f1"
      id="base"
-     inkscape:zoom="11.313708"
-     inkscape:cx="35.802262"
-     inkscape:cy="60.119287"
-     inkscape:window-x="0"
-     inkscape:window-y="57"
+     inkscape:zoom="7.9999996"
+     inkscape:cx="87.589032"
+     inkscape:cy="67.382431"
+     inkscape:window-x="325"
+     inkscape:window-y="34"
      inkscape:current-layer="svg2"
      showgrid="true"
      showguides="true"
@@ -385,14 +385,6 @@
        x="150"
        y="-36"
        class="ColorScheme-Text" />
-    <rect
-       class="ColorScheme-Text"
-       y="-37"
-       x="150"
-       height="1"
-       width="80"
-       id="rect3916"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none" />
   </g>
   <g
      id="base-topleft"
@@ -410,7 +402,7 @@
        transform="matrix(2,0,0,2,-150,36)"
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:ry="1"
        sodipodi:rx="1"
        sodipodi:cy="-35"
@@ -420,22 +412,9 @@
        sodipodi:type="arc"
        class="ColorScheme-Text" />
     <path
-       class="ColorScheme-Text"
-       sodipodi:type="arc"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="path3081"
-       sodipodi:cx="150"
-       sodipodi:cy="-35"
-       sodipodi:rx="1"
-       sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
-       sodipodi:start="3.1415927"
-       sodipodi:end="4.712389"
-       transform="matrix(3,0,0,3,-300,70.999999)" />
-    <path
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:ry="1"
        sodipodi:rx="1"
        sodipodi:cy="-35"
@@ -481,7 +460,7 @@
        height="1"
        width="80"
        id="rect4049"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        class="ColorScheme-ViewFocus" />
     <rect
        y="-36"
@@ -492,7 +471,7 @@
        style="fill:url(#linearGradient4077);fill-opacity:1;stroke:none" />
     <rect
        class="ColorScheme-ViewFocus"
-       style="fill:currentColor;fill-opacity:1;stroke:none;opacity:0.5"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        id="rect4015"
        width="80"
        height="1"
@@ -504,28 +483,28 @@
      transform="translate(-115,44)"
      inkscape:label="#g4067">
     <path
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,6 0,1 c 1.10457,0 2,0.8954305 2,2 l 1,0 c 0,-1.6568542 -1.34315,-3 -3,-3 z"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,6 v 1 c 1.10457,0 2,0.8954305 2,2 h 1 c 0,-1.6568542 -1.34315,-3 -3,-3 z"
        transform="translate(115,-44)"
        id="path3948-61"
        class="ColorScheme-ViewFocus"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,7 0,1 c 0.55228,0 1,0.4477153 1,1 l 1,0 c 0,-1.1045695 -0.89543,-2 -2,-2 z"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,7 v 1 c 0.55228,0 1,0.4477153 1,1 h 1 c 0,-1.1045695 -0.89543,-2 -2,-2 z"
        transform="translate(115,-44)"
        id="path3863"
        class="ColorScheme-ViewFocus"
        inkscape:connector-curvature="0" />
     <path
-       style="color:#3daee9;fill:url(#linearGradient3877);fill-opacity:1;stroke:none"
+       style="fill:url(#linearGradient3877);fill-opacity:1;stroke:none"
        d="M 115 8 L 115 9 L 115 11 L 116 11 L 116 9 C 116 8.4477153 115.55228 8 115 8 z "
        transform="translate(115,-44)"
        id="rect4069" />
     <rect
        class="ColorScheme-ViewFocus"
        transform="scale(-1,1)"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        id="rect3861"
        width="1"
        height="2"
@@ -537,7 +516,7 @@
        height="2"
        width="1"
        id="rect4038"
-       style="fill:currentColor;fill-opacity:1;stroke:none;opacity:0.5"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        transform="scale(-1,1)"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -570,14 +549,6 @@
        x="150"
        y="-35"
        class="ColorScheme-ViewHover" />
-    <rect
-       class="ColorScheme-ViewHover"
-       y="-36"
-       x="150"
-       height="1"
-       width="80"
-       id="rect3924"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000" />
   </g>
   <g
      transform="translate(-115,90)"
@@ -592,16 +563,10 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        class="ColorScheme-ViewHover" />
-    <path
-       class="ColorScheme-ViewFocus"
-       id="path3927"
-       d="m 230,-36 0,1.5 c 0.82842,0 1.5,0.671573 1.5,1.5 l 1.5,0 c 0,-1.656853 -1.34315,-3 -3,-3 z"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        style="fill:currentColor;fill-opacity:1;stroke:none"
@@ -622,7 +587,7 @@
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="base-hint-top-margin"
      width="2"
-     height="6.0000038"
+     height="5"
      x="73"
      y="-39" />
   <rect
@@ -710,38 +675,16 @@
        style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:label="#rect4010"
        class="ColorScheme-Text" />
-    <rect
-       class="ColorScheme-Text"
-       inkscape:label="#rect4010"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="rect3132"
-       width="1"
-       height="20"
-       x="32"
-       y="-35" />
   </g>
   <rect
      y="-27"
      x="32"
      height="1.9999999"
-     width="6"
+     width="5"
      id="base-hint-left-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <g
      id="base-topright">
-    <path
-       class="ColorScheme-Text"
-       sodipodi:type="arc"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="path3914"
-       sodipodi:cx="150"
-       sodipodi:cy="-35"
-       sodipodi:rx="1"
-       sodipodi:ry="1"
-       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
-       sodipodi:start="3.1415927"
-       sodipodi:end="4.712389"
-       transform="matrix(-2.9999999,0,0,2.9999999,564.99999,68.999998)" />
     <rect
        transform="scale(-1,1)"
        class="ColorScheme-ViewBackground"
@@ -786,37 +729,15 @@
        id="rect3863"
        style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
        class="ColorScheme-Text" />
-    <rect
-       class="ColorScheme-Text"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="rect3912"
-       width="1"
-       height="1"
-       x="-118"
-       y="-36"
-       transform="scale(-1,1)" />
   </g>
   <g
      id="base-bottomright"
      transform="matrix(-1,0,0,1,265,-2)">
     <path
-       class="ColorScheme-Text"
-       sodipodi:type="arc"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="path3908"
-       sodipodi:cx="150"
-       sodipodi:cy="-35"
-       sodipodi:rx="1"
-       sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
-       sodipodi:start="3.1415927"
-       sodipodi:end="4.712389"
-       transform="matrix(3,0,0,-3,-300,-118)" />
-    <path
        transform="matrix(2,0,0,-2,-150,-83)"
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:ry="1"
        sodipodi:rx="1"
        sodipodi:cy="-35"
@@ -835,7 +756,7 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389" />
   </g>
@@ -860,20 +781,11 @@
        height="20"
        x="33"
        y="-35" />
-    <rect
-       y="-35"
-       x="32"
-       height="20"
-       width="1"
-       id="rect3910"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       inkscape:label="#rect4010"
-       class="ColorScheme-Text" />
   </g>
   <rect
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="base-hint-right-margin"
-     width="5.9999914"
+     width="5"
      height="2"
      x="112"
      y="-27" />
@@ -897,38 +809,17 @@
        width="80"
        id="rect3907"
        style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
-    <rect
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       id="rect3906"
-       width="80"
-       height="1"
-       x="150"
-       y="-37"
-       class="ColorScheme-Text" />
   </g>
   <rect
      y="-18"
      x="73"
-     height="6.0000062"
+     height="5"
      width="2"
      id="base-hint-bottom-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <g
      transform="translate(-115,-2)"
      id="base-bottomleft">
-    <path
-       transform="matrix(2.9999999,0,0,-3,-299.99999,-118)"
-       sodipodi:end="4.712389"
-       sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
-       sodipodi:ry="1"
-       sodipodi:rx="1"
-       sodipodi:cy="-35"
-       sodipodi:cx="150"
-       id="path3902"
-       style="opacity:0.01000000000000000;color:#31363b;fill:#eff0f1;fill-opacity:0.00392157;stroke:none"
-       sodipodi:type="arc"
-       class="ColorScheme-Text" />
     <path
        class="ColorScheme-Text"
        sodipodi:type="arc"
@@ -938,14 +829,14 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        transform="matrix(2,0,0,-2,-150,-83)" />
     <path
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:ry="1"
        sodipodi:rx="1"
        sodipodi:cy="-35"
@@ -976,13 +867,13 @@
        height="20"
        width="1"
        id="rect3865"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:label="#rect4065"
        class="ColorScheme-ViewFocus" />
     <rect
        class="ColorScheme-ViewFocus"
        inkscape:label="#rect4065"
-       style="fill:currentColor;fill-opacity:1;stroke:none;opacity:0.5"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        id="rect4040"
        width="1"
        height="20"
@@ -1011,13 +902,13 @@
        height="20"
        width="1"
        id="rect3865-0"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:label="#rect4065"
        class="ColorScheme-ViewFocus" />
     <rect
        class="ColorScheme-ViewFocus"
        inkscape:label="#rect4065"
-       style="fill:currentColor;fill-opacity:1;stroke:none;opacity:0.5"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        id="rect4070"
        width="1"
        height="20"
@@ -1030,8 +921,8 @@
      inkscape:label="#g3951">
     <path
        id="path3946"
-       d="m 116,31 c 0,0.552285 -0.44772,1 -1,1 l 0,1 c 1.10457,0 2,-0.895431 2,-2 l -1,0 z"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 116,31 c 0,0.552285 -0.44772,1 -1,1 v 1 c 1.10457,0 2,-0.895431 2,-2 z"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        class="ColorScheme-ViewFocus"
        inkscape:connector-curvature="0" />
     <path
@@ -1050,8 +941,8 @@
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,34 0,-1 c 1.10457,0 2,-0.895431 2,-2 l 1,0 c 0,1.656854 -1.34315,3 -3,3 z"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,34 v -1 c 1.10457,0 2,-0.895431 2,-2 h 1 c 0,1.656854 -1.34315,3 -3,3 z"
        id="path3948-61-5"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -1070,7 +961,7 @@
     <rect
        class="ColorScheme-ViewFocus"
        inkscape:label="#rect4063"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        id="rect4063-1"
        width="80"
        height="1"
@@ -1082,7 +973,7 @@
        height="1"
        width="80"
        id="rect4060"
-       style="fill:currentColor;fill-opacity:1;stroke:none;opacity:0.5"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:label="#rect4063"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -1093,13 +984,13 @@
     <path
        inkscape:connector-curvature="0"
        id="path3946-0"
-       d="m 116,31 c 0,0.552285 -0.44772,1 -1,1 l 0,1 c 1.10457,0 2,-0.895431 2,-2 l -1,0 z"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 116,31 c 0,0.552285 -0.44772,1 -1,1 v 1 c 1.10457,0 2,-0.895431 2,-2 z"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        class="ColorScheme-ViewFocus" />
     <path
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:ry="1"
        sodipodi:rx="1"
        sodipodi:cy="-35"
@@ -1112,8 +1003,8 @@
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,34 0,-1 c 1.10457,0 2,-0.895431 2,-2 l 1,0 c 0,1.656854 -1.34315,3 -3,3 z"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,34 v -1 c 1.10457,0 2,-0.895431 2,-2 h 1 c 0,1.656854 -1.34315,3 -3,3 z"
        id="path3948-61-50"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -1123,28 +1014,28 @@
      inkscape:label="#g4067">
     <path
        inkscape:connector-curvature="0"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,6 0,1 c 1.10457,0 2,0.8954305 2,2 l 1,0 c 0,-1.6568542 -1.34315,-3 -3,-3 z"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,6 v 1 c 1.10457,0 2,0.8954305 2,2 h 1 c 0,-1.6568542 -1.34315,-3 -3,-3 z"
        transform="translate(115,-44)"
        id="path3948-61-7"
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
-       d="m 115,7 0,1 c 0.55228,0 1,0.4477153 1,1 l 1,0 c 0,-1.1045695 -0.89543,-2 -2,-2 z"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
+       d="m 115,7 v 1 c 0.55228,0 1,0.4477153 1,1 h 1 c 0,-1.1045695 -0.89543,-2 -2,-2 z"
        transform="translate(115,-44)"
        id="path3863-9"
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="color:#3daee9;fill:url(#linearGradient3877-7);fill-opacity:1.0;stroke:none"
+       style="fill:url(#linearGradient3877-7);fill-opacity:1.0;stroke:none"
        d="m 115,8 0,1 0,2 1,0 0,-2 c 0,-0.5522847 -0.44772,-1 -1,-1 z"
        transform="translate(115,-44)"
        id="rect4069-3" />
     <rect
        class="ColorScheme-ViewFocus"
        transform="scale(-1,1)"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.4;fill:currentColor;fill-opacity:1;stroke:none"
        id="rect3861-8"
        width="1"
        height="2"
@@ -1156,7 +1047,7 @@
        height="2"
        width="1"
        id="rect4038-0"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
        transform="scale(-1,1)"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -1173,16 +1064,10 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        class="ColorScheme-ViewHover" />
-    <path
-       class="ColorScheme-ViewFocus"
-       id="path3922"
-       d="m 230,-36 0,1.5 c 0.82842,0 1.5,0.671573 1.5,1.5 l 1.5,0 c 0,-1.656853 -1.34315,-3 -3,-3 z"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        style="fill:currentColor;fill-opacity:1;stroke:none"
@@ -1213,16 +1098,6 @@
        transform="scale(-1,1)"
        inkscape:label="#rect4107"
        class="ColorScheme-ViewHover" />
-    <rect
-       class="ColorScheme-ViewHover"
-       inkscape:label="#rect4107"
-       transform="scale(-1,1)"
-       y="57"
-       x="-118"
-       height="20"
-       width="1"
-       id="rect3929"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000" />
   </g>
   <g
      id="hover-left"
@@ -1245,26 +1120,11 @@
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:label="#rect4095"
        class="ColorScheme-ViewHover" />
-    <rect
-       class="ColorScheme-ViewHover"
-       inkscape:label="#rect4095"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       id="rect3937"
-       width="1"
-       height="20"
-       x="32.00256"
-       y="57" />
   </g>
   <g
      transform="matrix(1,0,0,-1,-115,44)"
      id="hover-bottomright"
      inkscape:label="#g4109">
-    <path
-       class="ColorScheme-ViewFocus"
-       id="path3931"
-       d="m 230,-36 0,1.5 c 0.82842,0 1.5,0.671573 1.5,1.5 l 1.5,0 c 0,-1.656853 -1.34315,-3 -3,-3 z"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       inkscape:connector-curvature="0" />
     <path
        transform="matrix(-1,0,0,1,380,2)"
        sodipodi:type="arc"
@@ -1274,7 +1134,7 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        class="ColorScheme-ViewHover" />
@@ -1306,26 +1166,11 @@
        y="77"
        inkscape:label="#rect4105"
        class="ColorScheme-ViewHover" />
-    <rect
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       id="rect3933"
-       width="80"
-       height="1"
-       x="35"
-       y="78.997444"
-       inkscape:label="#rect4105"
-       class="ColorScheme-ViewHover" />
   </g>
   <g
      transform="matrix(-1,0,0,-1,265,44)"
      id="hover-bottomleft"
      inkscape:label="#g4109">
-    <path
-       class="ColorScheme-ViewFocus"
-       id="path3935"
-       d="m 230,-35.997444 0,1.498722 c 0.82771,0 1.49872,0.671 1.49872,1.498722 l 1.49872,0 c 0,-1.655442 -1.342,-2.997444 -2.99744,-2.997444 z"
-       style="color:#3daee9;fill:#eff0f1;fill-opacity:0.00392157;stroke:none;opacity:0.01000000000000000"
-       inkscape:connector-curvature="0" />
     <path
        transform="matrix(-1,0,0,1,380,2)"
        sodipodi:type="arc"
@@ -1335,7 +1180,7 @@
        sodipodi:cy="-35"
        sodipodi:rx="1"
        sodipodi:ry="1"
-       d="m 149,-35 c 0,-0.552285 0.44772,-1 1,-1 l 0,1 z"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
        sodipodi:start="3.1415927"
        sodipodi:end="4.712389"
        class="ColorScheme-ViewHover" />
