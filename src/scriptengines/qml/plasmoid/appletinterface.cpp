@@ -884,4 +884,9 @@ bool AppletInterface::isLoading() const
     return m_loading;
 }
 
+KPluginMetaData AppletInterface::metaData() const
+{
+    return applet()->pluginMetaData();
+}
+
 #include "moc_appletinterface.cpp"

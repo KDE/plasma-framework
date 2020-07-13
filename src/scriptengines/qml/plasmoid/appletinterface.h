@@ -25,6 +25,8 @@
 #include <QQuickItem>
 #include <QQuickView>
 
+#include <KPluginMetaData>
+
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
@@ -250,6 +252,12 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
+    /**
+     * The metadata of the applet.
+     * @since 5.73
+     */
+    Q_PROPERTY(KPluginMetaData metaData READ metaData CONSTANT)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -415,6 +423,8 @@ public:
 
     QString configurationRequiredReason() const;
     void setConfigurationRequiredReason(const QString &reason);
+
+    KPluginMetaData metaData() const;
 
 Q_SIGNALS:
     /**
