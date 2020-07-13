@@ -34,10 +34,10 @@
      pagecolor="#eff0f1"
      id="base"
      inkscape:zoom="7.9999996"
-     inkscape:cx="87.589032"
+     inkscape:cx="64.714031"
      inkscape:cy="67.382431"
-     inkscape:window-x="325"
-     inkscape:window-y="34"
+     inkscape:window-x="24"
+     inkscape:window-y="44"
      inkscape:current-layer="svg2"
      showgrid="true"
      showguides="true"
@@ -587,7 +587,7 @@
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="base-hint-top-margin"
      width="2"
-     height="5"
+     height="6"
      x="73"
      y="-39" />
   <rect
@@ -680,7 +680,7 @@
      y="-27"
      x="32"
      height="1.9999999"
-     width="5"
+     width="6"
      id="base-hint-left-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <g
@@ -785,7 +785,7 @@
   <rect
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="base-hint-right-margin"
-     width="5"
+     width="6"
      height="2"
      x="112"
      y="-27" />
@@ -813,7 +813,7 @@
   <rect
      y="-18"
      x="73"
-     height="5"
+     height="6"
      width="2"
      id="base-hint-bottom-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
