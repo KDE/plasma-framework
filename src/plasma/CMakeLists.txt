@@ -86,7 +86,8 @@ kconfig_add_kcfg_files(Plasma_LIB_SRCS data/kconfigxt/libplasma-theme-global.kcf
 ecm_qt_declare_logging_category(Plasma_LIB_SRCS
     HEADER debug_p.h
     IDENTIFIER LOG_PLASMA
-    CATEGORY_NAME org.kde.plasma
+    CATEGORY_NAME kf.plasma.core
+    OLD_CATEGORY_NAMES org.kde.plasma
     DESCRIPTION "Plasma Core lib"
     EXPORT PLASMA
 )

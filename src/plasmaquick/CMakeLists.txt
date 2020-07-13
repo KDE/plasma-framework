@@ -28,7 +28,8 @@ endif()
 ecm_qt_declare_logging_category(PlasmaQuick_LIB_SRCS
     HEADER debug_p.h
     IDENTIFIER LOG_PLASMAQUICK
-    CATEGORY_NAME org.kde.plasmaquick
+    CATEGORY_NAME kf.plasma.quick
+    OLD_CATEGORY_NAMES org.kde.plasmaquick
     DESCRIPTION "Plasma Quick lib"
     EXPORT PLASMA
 )
