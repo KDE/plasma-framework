@@ -351,7 +351,6 @@ Item {
 
         acceptedButtons: Qt.RightButton
         hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor // To indicate that the whole thing is clickable
 
         onContainsMouseChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
 
