@@ -98,7 +98,7 @@ Item {
         text: dualButton.text
 
         // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-        // https://bugreports.qt.io/browse/QTBUG-67007
+        // https://bugreports.qt.io/browse/QTBUG-70481
         renderType: QtQuickControlsPrivate.Settings.isMobile || Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
         anchors {
             top: parent.top

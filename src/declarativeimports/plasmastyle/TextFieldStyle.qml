@@ -42,7 +42,7 @@ QtQuickControlStyle.TextFieldStyle {
      * Using Qt rendering, the dots will look more aligned and equally spaced.
      * Also if we are on mobile, make sure we use QtRendering
      * Finally, use QtRendering if we're using a non-integer scale factor to work around
-     * https://bugreports.qt.io/browse/QTBUG-67007
+     * https://bugreports.qt.io/browse/QTBUG-70481
      *
      * color with an alpha is also broken. https://bugreports.qt.io/browse/QTBUG-70138
      *

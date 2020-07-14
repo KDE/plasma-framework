@@ -30,7 +30,7 @@ T.Label {
     activeFocusOnTab: false
 
     // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-    // https://bugreports.qt.io/browse/QTBUG-67007
+    // https://bugreports.qt.io/browse/QTBUG-70481
     renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
 
     //font data is the system one by default
