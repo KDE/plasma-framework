@@ -108,7 +108,8 @@ T.ToolButton {
     background: Item {
         Private.ButtonShadow {
             anchors.fill: parent
-            visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
+            visible:  (!control.flat || control.hovered || control.activeFocus) && (!control.pressed || !control.checked)
+
             state: {
                 if (control.pressed) {
                     return "hidden"
@@ -117,7 +118,7 @@ T.ToolButton {
                 } else if (control.activeFocus) {
                     return "focus"
                 } else {
-                    return "shadow"
+                    return control.flat ? "shadow" : "hidden"
                 }
             }
         }
