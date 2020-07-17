@@ -1198,7 +1198,7 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
 
     QQuickWindow::showEvent(event);
 }
@@ -1225,7 +1225,7 @@ bool Dialog::event(QEvent *event)
         //sometimes non null regions arrive even for non visible windows
         //for which surface creation would fail
         if (!d->shellSurface && isVisible()) {
-            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
             d->setupWaylandIntegration();
             d->updateVisibility(true);
             d->updateTheme();
@@ -1235,7 +1235,7 @@ bool Dialog::event(QEvent *event)
         const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
 
         if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager);
+            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
         }
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
