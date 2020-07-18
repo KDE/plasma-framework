@@ -138,7 +138,7 @@
        class="ColorScheme-Text"
        id="path4250"
        d="M 11,25 C 6.845,25 3.09406,26.67156 0.38281,29.38281 L 1.0918,30.0918 C 3.6223,27.5613 7.122,26 11,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 18.90594,26.67156 15.155,25 11,25 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4252"
@@ -166,12 +166,12 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 33,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 23.0918,30.0918 C 25.6223,27.5613 29.122,26 33,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 40.90594,26.67156 37.155,25 33,25 Z"
        id="path4262" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 33,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 27.72938,31.11437 30.23,30 33,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 38.79691,30.22659 36.047,29 33,29 Z"
        id="path4264" />
     <path
@@ -198,17 +198,17 @@
        class="ColorScheme-Text"
        id="path4274"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4276"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4278"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4280"
@@ -227,22 +227,22 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
        id="path4405" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
        id="path4407" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
        id="path4409" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,37 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
        id="path4411" />
   </g>
@@ -260,22 +260,22 @@
        class="ColorScheme-Text"
        id="path4418"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4420"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4422"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4424"
        d="m 55,37 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
   </g>
   <g
      transform="translate(0,20)"
@@ -336,7 +336,7 @@
        id="path4316" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="M 11,47 C 6.845,47 3.09406,48.67156 0.38281,51.38281 L 1.0918,52.0918 C 3.6223,49.5613 7.122,48 11,48 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 18.90594,48.67156 15.155,47 11,47 Z"
        id="path4318" />
     <path
@@ -375,12 +375,12 @@
        class="ColorScheme-Text"
        id="path4308"
        d="m 33,51 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 27.72938,53.11437 30.23,52 33,52 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 38.79691,52.22659 36.047,51 33,51 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4310"
        d="m 33,47 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 23.0918,52.0918 C 25.6223,49.5613 29.122,48 33,48 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 40.90594,48.67156 37.155,47 33,47 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4359"
@@ -405,17 +405,17 @@
        id="path4296" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,55 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,56.66941 53.338,56 55,56 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,55.77967 56.939,55 55,55 Z"
        id="path4298" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,51 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,53.11437 52.23,52 55,52 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,52.22659 58.047,51 55,51 Z"
        id="path4300" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,47 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,52.0918 C 47.6223,49.5613 51.122,48 55,48 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,48.67156 59.155,47 55,47 Z"
        id="path4302" />
     <path
@@ -439,22 +439,22 @@
        class="ColorScheme-Text"
        id="path4533"
        d="m 55,59 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4535"
        d="m 55,55 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,56.66941 53.338,56 55,56 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,55.77967 56.939,55 55,55 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4537"
        d="m 55,51 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,53.11437 52.23,52 55,52 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,52.22659 58.047,51 55,51 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4539"
        d="m 55,47 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,52.0918 C 47.6223,49.5613 51.122,48 55,48 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,48.67156 59.155,47 55,47 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4541"
@@ -474,22 +474,22 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,59 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
        id="path4547" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,55 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,56.66941 53.338,56 55,56 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,55.77967 56.939,55 55,55 Z"
        id="path4549" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,51 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,53.11437 52.23,52 55,52 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,52.22659 58.047,51 55,51 Z"
        id="path4551" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,47 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,52.0918 C 47.6223,49.5613 51.122,48 55,48 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,48.67156 59.155,47 55,47 Z"
        id="path4553" />
     <path
@@ -567,7 +567,7 @@
        class="ColorScheme-Text"
        id="path4321"
        d="M 11,69 C 6.845,69 3.09406,70.67156 0.38281,73.38281 L 1.0918,74.0918 C 3.6223,71.5613 7.122,70 11,70 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 18.90594,70.67156 15.155,69 11,69 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        id="path4350"
        d="m 18,78 v 5 h 2 v -5 z m 1,6 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 z"
@@ -595,12 +595,12 @@
        id="path4297" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 33,73 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 27.72938,75.11437 30.23,74 33,74 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 38.79691,74.22659 36.047,73 33,73 Z"
        id="path4301" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 33,69 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 23.0918,74.0918 C 25.6223,71.5613 29.122,70 33,70 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 40.90594,70.67156 37.155,69 33,69 Z"
        id="path4305" />
     <path
@@ -627,17 +627,17 @@
        class="ColorScheme-Text"
        id="path4288"
        d="m 55,77 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,78.66941 53.338,78 55,78 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,77.77967 56.939,77 55,77 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4290"
        d="m 55,73 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,75.11437 52.23,74 55,74 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,74.22659 58.047,73 55,73 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4292"
        d="m 55,69 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,74.0918 C 47.6223,71.5613 51.122,70 55,70 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,70.67156 59.155,69 55,69 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        id="path4354"
        d="m 62,78 v 5 h 2 v -5 z m 1,6 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 z"
@@ -655,22 +655,22 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,81 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
        id="path4561" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,77 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,78.66941 53.338,78 55,78 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,77.77967 56.939,77 55,77 Z"
        id="path4563" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,73 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,75.11437 52.23,74 55,74 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,74.22659 58.047,73 55,73 Z"
        id="path4565" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,69 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,74.0918 C 47.6223,71.5613 51.122,70 55,70 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,70.67156 59.155,69 55,69 Z"
        id="path4567" />
     <path
@@ -692,22 +692,22 @@
        class="ColorScheme-Text"
        id="path4575"
        d="m 55,81 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4577"
        d="m 55,77 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,78.66941 53.338,78 55,78 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,77.77967 56.939,77 55,77 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4579"
        d="m 55,73 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,75.11437 52.23,74 55,74 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,74.22659 58.047,73 55,73 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4581"
        d="m 55,69 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,74.0918 C 47.6223,71.5613 51.122,70 55,70 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,70.67156 59.155,69 55,69 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        id="path4583"
        d="m 62,78 v 5 h 2 v -5 z m 1,6 a 1,1 0 0 0 -1,1 1,1 0 0 0 1,1 1,1 0 0 0 1,-1 1,1 0 0 0 -1,-1 z"
@@ -889,7 +889,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="M 11,25 C 6.845,25 3.09406,26.67156 0.38281,29.38281 L 1.0918,30.0918 C 3.6223,27.5613 7.122,26 11,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 18.90594,26.67156 15.155,25 11,25 Z"
        id="path4444" />
     <path
@@ -922,12 +922,12 @@
        class="ColorScheme-Text"
        id="path4456"
        d="m 33,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 23.0918,30.0918 C 25.6223,27.5613 29.122,26 33,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 40.90594,26.67156 37.155,25 33,25 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4458"
        d="m 33,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 27.72938,31.11437 30.23,30 33,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 38.79691,30.22659 36.047,29 33,29 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4460"
@@ -951,17 +951,17 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
        id="path4468" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
        id="path4470" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
        id="path4472" />
     <path
@@ -984,22 +984,22 @@
        class="ColorScheme-Text"
        id="path4494"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4496"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4498"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
     <path
        class="ColorScheme-Text"
        id="path4500"
        d="m 55,37 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none" />
   </g>
   <g
      id="network-wireless-connected-00"
@@ -1013,22 +1013,22 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
        id="path4506" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
        id="path4508" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
        id="path4510" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 55,37 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
        id="path4512" />
   </g>
@@ -1047,22 +1047,22 @@
        id="g4527">
       <path
          class="ColorScheme-Text"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 40.97466,12.02235 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 l 0.70899,0.70899 c 2.5305,-2.5305 6.0302,-4.0918 9.9082,-4.0918 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 48.8806,13.69391 45.12966,12.02235 40.97466,12.02235 Z"
          id="path4519" />
       <path
          class="ColorScheme-Text"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 40.97466,16.02235 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 c 1.8075,-1.80751 4.30812,-2.92188 7.07812,-2.92188 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 c -1.98825,-1.98825 -4.73816,-3.21484 -7.78516,-3.21484 z"
          id="path4521" />
       <path
          class="ColorScheme-Text"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 40.97466,20.02235 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 c 1.0845,-1.0845 2.58409,-1.75391 4.24609,-1.75391 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 c -1.26525,-1.26525 -3.01608,-2.04492 -4.95508,-2.04492 z"
          id="path4523" />
       <path
          class="ColorScheme-Text"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 40.97466,24.02235 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
          id="path4525" />
     </g>
@@ -1253,7 +1253,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 3,-3 16,-16 0,16 z"
        id="path4227" />
     <path
@@ -1275,7 +1275,7 @@
        class="ColorScheme-Text"
        id="path4229"
        d="M 25,-3 41,-19 V -3 Z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1293,7 +1293,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 47,-3 63,-19 V -3 Z"
        id="path4233" />
     <path
@@ -1315,7 +1315,7 @@
        class="ColorScheme-Text"
        id="path4315"
        d="M 69,-3 85,-19 V -3 Z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1336,7 +1336,7 @@
        class="ColorScheme-Text"
        id="path4330"
        d="m 113,-3 16,-16 v 16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
   <g
      id="network-mobile-100-locked">
@@ -1371,7 +1371,7 @@
        class="ColorScheme-Text"
        id="path4762"
        d="m 19,-41 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1394,7 +1394,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 41,-41 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path4768" />
     <path
@@ -1421,7 +1421,7 @@
        class="ColorScheme-Text"
        id="path4774"
        d="m 63,-41 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1444,7 +1444,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 85,-41 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path4780" />
     <path
@@ -1471,7 +1471,7 @@
        class="ColorScheme-Text"
        id="path4786"
        d="m 107,-41 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1510,7 +1510,7 @@
     <path
        id="path4822"
        d="m 3,-47 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path4824"
@@ -1533,7 +1533,7 @@
        id="rect4828"
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25,-47 16,-16 0,16 z"
        id="path4830"
        class="ColorScheme-Text" />
@@ -1560,7 +1560,7 @@
     <path
        id="path4838"
        d="m 47,-47 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path4840"
@@ -1583,7 +1583,7 @@
        x="66"
        y="-66" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 69,-47 16,-16 0,16 z"
        id="path4846"
        class="ColorScheme-Text" />
@@ -1608,7 +1608,7 @@
        x="88"
        y="-66" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 91,-47 16,-16 0,16 z"
        id="path4854"
        class="ColorScheme-Text" />
@@ -1654,7 +1654,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19,-85 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path4864" />
     <path
@@ -1686,7 +1686,7 @@
        class="ColorScheme-Text"
        id="path4870"
        d="m 41,-85 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1714,7 +1714,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 63,-85 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path4876" />
     <path
@@ -1746,7 +1746,7 @@
        class="ColorScheme-Text"
        id="path4882"
        d="m 85,-85 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -1774,7 +1774,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 107,-85 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path4888" />
     <path
@@ -1820,7 +1820,7 @@
     <path
        id="path5090"
        d="m 3,-91 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5092"
@@ -1843,7 +1843,7 @@
        id="rect5096"
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25,-91 16,-16 0,16 z"
        id="path5098"
        class="ColorScheme-Text" />
@@ -1870,7 +1870,7 @@
     <path
        id="path5106"
        d="m 47,-91 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5108"
@@ -1893,7 +1893,7 @@
        x="66"
        y="-110" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 69,-91 16,-16 0,16 z"
        id="path5114"
        class="ColorScheme-Text" />
@@ -1918,7 +1918,7 @@
        x="88"
        y="-110" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 91,-91 16,-16 0,16 z"
        id="path5122"
        class="ColorScheme-Text" />
@@ -1964,7 +1964,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19,-129 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5132" />
     <path
@@ -1996,7 +1996,7 @@
        class="ColorScheme-Text"
        id="path5138"
        d="m 41,-129 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2024,7 +2024,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 63,-129 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5144" />
     <path
@@ -2056,7 +2056,7 @@
        class="ColorScheme-Text"
        id="path5150"
        d="m 85,-129 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2084,7 +2084,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 107,-129 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5156" />
     <path
@@ -2129,7 +2129,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 3,-135 16,-16 0,16 z"
        id="path5224" />
     <path
@@ -2156,7 +2156,7 @@
        class="ColorScheme-Text"
        id="path5232"
        d="m 25,-135 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2179,7 +2179,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 47,-135 16,-16 0,16 z"
        id="path5238" />
     <path
@@ -2206,7 +2206,7 @@
        class="ColorScheme-Text"
        id="path5244"
        d="m 69,-135 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2231,7 +2231,7 @@
        class="ColorScheme-Text"
        id="path5250"
        d="m 91,-135 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        id="path5361"
@@ -2276,7 +2276,7 @@
        class="ColorScheme-Text"
        id="path5260"
        d="m 19,-173 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2304,7 +2304,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 41,-173 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5266" />
     <path
@@ -2336,7 +2336,7 @@
        class="ColorScheme-Text"
        id="path5272"
        d="m 63,-173 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2364,7 +2364,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 85,-173 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5278" />
     <path
@@ -2396,7 +2396,7 @@
        class="ColorScheme-Text"
        id="path5284"
        d="m 107,-173 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2440,7 +2440,7 @@
     <path
        id="path5377"
        d="m 3,-179 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5379"
@@ -2463,7 +2463,7 @@
        id="rect5383"
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25,-179 16,-16 0,16 z"
        id="path5385"
        class="ColorScheme-Text" />
@@ -2490,7 +2490,7 @@
     <path
        id="path5393"
        d="m 47,-179 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5395"
@@ -2513,7 +2513,7 @@
        x="66"
        y="-198" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 69,-179 16,-16 0,16 z"
        id="path5401"
        class="ColorScheme-Text" />
@@ -2538,7 +2538,7 @@
        x="88"
        y="-198" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 91,-179 16,-16 0,16 z"
        id="path5409"
        class="ColorScheme-Text" />
@@ -2584,7 +2584,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19,-217 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5419" />
     <path
@@ -2616,7 +2616,7 @@
        class="ColorScheme-Text"
        id="path5425"
        d="m 41,-217 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2644,7 +2644,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 63,-217 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5431" />
     <path
@@ -2676,7 +2676,7 @@
        class="ColorScheme-Text"
        id="path5437"
        d="m 85,-217 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2704,7 +2704,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 107,-217 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5443" />
     <path
@@ -2749,7 +2749,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 3,-223 16,-16 0,16 z"
        id="path5523" />
     <path
@@ -2776,7 +2776,7 @@
        class="ColorScheme-Text"
        id="path5529"
        d="m 25,-223 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2799,7 +2799,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 47,-223 16,-16 0,16 z"
        id="path5535" />
     <path
@@ -2826,7 +2826,7 @@
        class="ColorScheme-Text"
        id="path5541"
        d="m 69,-223 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -2851,7 +2851,7 @@
        class="ColorScheme-Text"
        id="path5547"
        d="m 91,-223 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        id="path5657"
@@ -2896,7 +2896,7 @@
        class="ColorScheme-Text"
        id="path5557"
        d="m 19,-261 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2924,7 +2924,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 41,-261 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5563" />
     <path
@@ -2956,7 +2956,7 @@
        class="ColorScheme-Text"
        id="path5569"
        d="m 63,-261 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2984,7 +2984,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 85,-261 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5575" />
     <path
@@ -3016,7 +3016,7 @@
        class="ColorScheme-Text"
        id="path5581"
        d="m 107,-261 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -3060,7 +3060,7 @@
     <path
        id="path5667"
        d="m 3,-267 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5669"
@@ -3083,7 +3083,7 @@
        id="rect5671"
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25,-267 16,-16 0,16 z"
        id="path5673"
        class="ColorScheme-Text" />
@@ -3110,7 +3110,7 @@
     <path
        id="path5679"
        d="m 47,-267 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5681"
@@ -3133,7 +3133,7 @@
        x="66"
        y="-286" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 69,-267 16,-16 0,16 z"
        id="path5685"
        class="ColorScheme-Text" />
@@ -3158,7 +3158,7 @@
        x="88"
        y="-286" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 91,-267 16,-16 0,16 z"
        id="path5691"
        class="ColorScheme-Text" />
@@ -3204,7 +3204,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19,-305 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5701" />
     <path
@@ -3236,7 +3236,7 @@
        class="ColorScheme-Text"
        id="path5707"
        d="m 41,-305 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -3264,7 +3264,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 63,-305 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5713" />
     <path
@@ -3296,7 +3296,7 @@
        class="ColorScheme-Text"
        id="path5719"
        d="m 85,-305 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -3324,7 +3324,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 107,-305 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5725" />
     <path
@@ -3372,7 +3372,7 @@
     <path
        id="path5864"
        d="m 3,-355 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5866"
@@ -3396,7 +3396,7 @@
        id="rect5868"
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 25,-355 16,-16 0,16 z"
        id="path5870"
        class="ColorScheme-Text" />
@@ -3424,7 +3424,7 @@
     <path
        id="path5876"
        d="m 47,-355 16,-16 0,16 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        class="ColorScheme-Text" />
     <path
        id="path5878"
@@ -3448,7 +3448,7 @@
        x="66"
        y="-374" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 69,-355 16,-16 0,16 z"
        id="path5882"
        class="ColorScheme-Text" />
@@ -3474,7 +3474,7 @@
        x="88"
        y="-374" />
     <path
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 91,-355 16,-16 0,16 z"
        id="path5888"
        class="ColorScheme-Text" />
@@ -3522,7 +3522,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 19,-393 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5898" />
     <path
@@ -3555,7 +3555,7 @@
        class="ColorScheme-Text"
        id="path5904"
        d="m 41,-393 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -3584,7 +3584,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 63,-393 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5910" />
     <path
@@ -3617,7 +3617,7 @@
        class="ColorScheme-Text"
        id="path5916"
        d="m 85,-393 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -3646,7 +3646,7 @@
        style="opacity:0.55;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        class="ColorScheme-Text"
-       style="opacity:0.50;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 107,-393 -16,16 11,0 0,-3 1,-1 0,-2 1,-1 1,-1 2,0 0,-8 z"
        id="path5922" />
     <path
@@ -3759,25 +3759,25 @@
            id="rect1561"
            style="opacity:0.2;fill:none;fill-opacity:1;stroke:none;stroke-width:3.56737041px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
         <path
-           style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+           style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
            d="m 55,25 c -4.155,0 -7.90594,1.67156 -10.61719,4.38281 L 45.0918,30.0918 C 47.6223,27.5613 51.122,26 55,26 c 3.878,0 7.3777,1.5613 9.9082,4.0918 l 0.70899,-0.70899 C 62.90594,26.67156 59.155,25 55,25 Z"
            id="path1563"
            class="ColorScheme-Text"
            inkscape:connector-curvature="0" />
         <path
-           style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+           style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
            d="m 55,29 c -3.047,0 -5.79691,1.22659 -7.78516,3.21484 l 0.70704,0.70704 C 49.72938,31.11437 52.23,30 55,30 c 2.77,0 5.27062,1.11437 7.07813,2.92188 l 0.70703,-0.70704 C 60.79691,30.22659 58.047,29 55,29 Z"
            id="path1565"
            class="ColorScheme-Text"
            inkscape:connector-curvature="0" />
         <path
-           style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+           style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
            d="m 55,33 c -1.939,0 -3.68983,0.77967 -4.95508,2.04492 l 0.70899,0.70899 C 51.83841,34.66941 53.338,34 55,34 c 1.662,0 3.16159,0.66941 4.24609,1.75391 l 0.70899,-0.70899 C 58.68983,33.77967 56.939,33 55,33 Z"
            id="path1567"
            class="ColorScheme-Text"
            inkscape:connector-curvature="0" />
         <path
-           style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+           style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
            d="m 55,37 c -1.107996,0 -2,0.892004 -2,2 0,1.107996 0.892004,2 2,2 1.107996,0 2,-0.892004 2,-2 0,-1.107996 -0.892004,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
            id="path1569"
            class="ColorScheme-Text"
@@ -3804,7 +3804,7 @@
     <path
        id="path4439-7"
        d="m 165,55 -16,16 h 12.90234 l -0.85351,-0.853516 2.15234,-2.15039 -2.15234,-2.152344 1.30859,-1.306641 0.45899,-0.460937 2.15234,2.152344 0.0312,-0.03125 z"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccccccccc"
        class="ColorScheme-Text" />
@@ -3827,7 +3827,7 @@
      transform="translate(-226,-76)">
     <path
        sodipodi:nodetypes="cccssccccccccccccssccccccccccccccccccccccccccc"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;stroke:none"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
        d="m 185,79 v 6 h 2 v 7 c 0,1.662 1.338,3 3,3 h 1 1 2 v -5 h -5 v 1 1 h 1 1 V 93 93.726562 94 h -1 c -1.108,0 -2,-0.892 -2,-2 v -7 h 2 v -6 z m 6,0 v 1 h 9 v 7 h 1 v -8 h -1 z m -5,1 h 3 v 4 h -3 z m 1,1 v 2 h 1 v -2 z m -2,5 v 6 h 1 v -6 z"
        id="path1595"
        class="ColorScheme-Text"
@@ -3864,7 +3864,7 @@
        style="opacity:1;fill:none;fill-opacity:1;stroke:none" />
     <path
        sodipodi:nodetypes="ccccccscccccccccccccccccccccccccscccccccscccccccccccccccccccccccccscccccccccc"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m -134,37 c -2.76142,0 -5,2.238576 -5,5 h 1 c 0,-2.209139 1.79086,-4 4,-4 z m 3,0 c 0,0 -1,0 -1,3 v 2.5 l -1.09961,0.550781 V 43 h -0.80078 v 0.550781 H -134 V 43.75 l -2,1 v -0.5 h -0.0996 v -0.550781 h -0.80078 V 44.25 H -137 v 1 l -2,1 v 1 l 2.1914,-0.273438 0.10938,0.273438 h 0.39844 l 0.14257,-0.355469 2.75196,-0.34375 h 0.10547 l 0.006,-0.01367 L -132,46.125 V 49 c 0,0.487991 0.24052,0.971967 0.48438,1.34375 L -134,52 v 1 l 3,-1 2,0.671875 v -1.34375 l -1.48437,-0.984375 C -130.24052,49.971967 -130,49.487991 -130,49 v -2.875 l 1.29492,0.162109 0.006,0.01367 h 0.10547 l 2.75195,0.34375 0.14258,0.355469 h 0.39844 L -125.19136,46.72656 -123,47 v -1 l -2,-1 v -1 h -0.0996 v -0.550781 h -0.80078 V 44 H -126 v 0.5 l -2,-1 v -0.199219 h -0.0996 V 42.75 h -0.80078 v 0.05078 L -130,42.5 V 40 c 0,-3 -1,-3 -1,-3 z m -3,2 c -1.65685,0 -3,1.343146 -3,3 h 1 c 0,-1.104569 0.89543,-2 2,-2 z m 0,2 c 0,0 -1,0 -1,1 h 1 z"
        id="path1648"
        class="ColorScheme-Text"
@@ -3885,19 +3885,19 @@
          y="67.75" />
       <path
          inkscape:connector-curvature="0"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 253,70.75 c -4.155,0 -7.90594,1.671562 -10.61719,4.382812 l 0.70899,0.708985 C 245.6223,73.311297 249.122,71.75 253,71.75 c 1.69618,0 3.31246,0.313499 4.81445,0.861328 l 0.78125,-0.779297 C 256.86662,71.139948 254.98194,70.75 253,70.75 Z m 7.98828,2.306641 -0.72851,0.728515 c 0.96232,0.583504 1.85746,1.265664 2.64843,2.056641 l 0.70899,-0.708985 c -0.79015,-0.790152 -1.67788,-1.47827 -2.62891,-2.076171 z"
          id="path4506-3"
          class="ColorScheme-Text" />
       <path
          inkscape:connector-curvature="0"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 253,74.75 c -3.047,0 -5.79691,1.226594 -7.78516,3.214844 l 0.70703,0.707031 C 247.72937,76.864365 250.23,75.75 253,75.75 c 0.52789,0 1.04149,0.05283 1.54688,0.130859 l 0.85937,-0.861328 C 254.63141,74.847689 253.82805,74.75 253,74.75 Z m 5.0625,1.232422 -0.74805,0.75 c 1.02987,0.491318 1.96689,1.142666 2.76367,1.939453 l 0.70704,-0.707031 c -0.79457,-0.794566 -1.71446,-1.460811 -2.72266,-1.982422 z"
          id="path4508-5"
          class="ColorScheme-Text" />
       <path
          inkscape:connector-curvature="0"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          d="m 251.51953,78.908203 c -1.3423,0.286856 -2.54134,0.953446 -3.47461,1.886719 l 0.70899,0.708984 c 0.28116,-0.28116 0.59127,-0.532975 0.92382,-0.753906 z m 3.48438,0.132813 -0.82422,0.824218 c 1.18703,0.234927 2.24547,0.817737 3.0664,1.638672 l 0.70899,-0.708984 c -0.81012,-0.810119 -1.82098,-1.419124 -2.95117,-1.753906 z"
          id="path4510-6"
          class="ColorScheme-Text" />
@@ -3905,7 +3905,7 @@
          inkscape:connector-curvature="0"
          id="path4512-2"
          d="m 253,82.75 c -1.108,0 -2,0.892004 -2,2 0,1.107996 0.892,2 2,2 1.108,0 2,-0.892004 2,-2 0,-1.107996 -0.892,-2 -2,-2 z m 0,1 c 0.554,0 1,0.446 1,1 0,0.554 -0.446,1 -1,1 -0.554,0 -1,-0.446 -1,-1 0,-0.554 0.446,-1 1,-1 z"
-         style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+         style="opacity:0.35;fill:currentColor;fill-opacity:1;stroke:none"
          class="ColorScheme-Text" />
       <rect
          style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
@@ -3939,7 +3939,7 @@
        class="ColorScheme-Text"
        id="path1820"
        d="m -134,37 c -2.76142,0 -5,2.238576 -5,5 h 1 c 0,-2.209139 1.79086,-4 4,-4 z m 3,0 c 0,0 -1,0 -1,3 v 2.5 l -1.09961,0.550781 V 43 h -0.80078 v 0.550781 H -134 V 43.75 l -2,1 v -0.5 h -0.0996 v -0.550781 h -0.80078 V 44.25 H -137 v 1 l -2,1 v 1 l 2.1914,-0.273438 0.10938,0.273438 h 0.39844 l 0.14257,-0.355469 2.75196,-0.34375 h 0.10547 l 0.006,-0.01367 L -132,46.125 V 49 c 0,0.487991 0.24052,0.971967 0.48438,1.34375 L -134,52 v 1 l 3,-1 2,0.671875 v -1.34375 l -1.48437,-0.984375 C -130.24052,49.971967 -130,49.487991 -130,49 v -2.875 l 1.29492,0.162109 0.006,0.01367 h 0.10547 l 2.75195,0.34375 0.14258,0.355469 h 0.39844 L -125.19136,46.72656 -123,47 v -1 l -2,-1 v -1 h -0.0996 v -0.550781 h -0.80078 V 44 H -126 v 0.5 l -2,-1 v -0.199219 h -0.0996 V 42.75 h -0.80078 v 0.05078 L -130,42.5 V 40 c 0,-3 -1,-3 -1,-3 z m -3,2 c -1.65685,0 -3,1.343146 -3,3 h 1 c 0,-1.104569 0.89543,-2 2,-2 z m 0,2 c 0,0 -1,0 -1,1 h 1 z"
-       style="opacity:0.5;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="opacity:0.35;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        sodipodi:nodetypes="ccccccscccccccccccccccccccccccccscccccccscccccccccccccccccccccccccscccccccccc" />
   </g>
 </svg>
