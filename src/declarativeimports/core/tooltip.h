@@ -132,8 +132,6 @@ public:
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
-    void showToolTip();
-
     QString mainText() const;
     void setMainText(const QString &mainText);
 
@@ -161,6 +159,13 @@ public:
 /// @endcond
 
 public Q_SLOTS:
+
+    /**
+     * Shows the tooltip.
+     * @since 5.73
+     */
+    void showToolTip();
+
     /**
      * Hides the tooltip if shown. Does not affect whether the tooltip area is active.
      */
