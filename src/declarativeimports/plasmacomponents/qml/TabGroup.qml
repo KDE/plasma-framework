@@ -213,11 +213,11 @@ FocusScope {
                         ParallelAnimation {
                             OpacityAnimator {
                                 easing.type: Easing.InQuad
-                                duration: units.longDuration
+                                duration: PlasmaCore.Units.longDuration
                             }
                             XAnimator {
                                 easing.type: Easing.InQuad
-                                duration: units.longDuration
+                                duration: PlasmaCore.Units.longDuration
                             }
                         }
                         ScriptAction { script: {incomingDone(); root.clip = false} }
@@ -230,11 +230,11 @@ FocusScope {
                         ParallelAnimation {
                             OpacityAnimator {
                                 easing.type: Easing.InQuad
-                                duration: units.longDuration
+                                duration: PlasmaCore.Units.longDuration
                             }
                             XAnimator {
                                 easing.type: Easing.InQuad
-                                duration: units.longDuration
+                                duration: PlasmaCore.Units.longDuration
                             }
                         }
                         ScriptAction { script: outgoingDone() }

@@ -76,7 +76,7 @@ Item {
     Behavior on scale {
         id: scaleBehavior
         ScaleAnimator {
-            duration: units.longDuration
+            duration: PlasmaCore.Units.longDuration
         }
     }
 
@@ -93,7 +93,7 @@ Item {
             left: canvas.left
             right: canvas.right
         }
-        spacing: units.smallSpacing
+        spacing: PlasmaCore.Units.smallSpacing
 
         PlasmaExtras.Heading {
             id: heading
@@ -193,7 +193,7 @@ Item {
             ctx.reset();
             ctx.save();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.strokeStyle = theme.textColor;
+            ctx.strokeStyle = PlasmaCore.Theme.textColor;
             ctx.lineWidth = root.borderWidth
             ctx.globalAlpha = 1.0;
 
@@ -284,7 +284,7 @@ Item {
                 verticalAlignment: Text.AlignVCenter
                 opacity: 0.4
                 text: modelData
-                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
+                font.pixelSize: Math.max(PlasmaCore.Theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
             }
         }
     }
@@ -313,7 +313,7 @@ Item {
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
                 text: Qt.locale(Qt.locale().uiLanguages[0]).dayName(((calendarBackend.firstDayOfWeek + index) % days.count), Locale.ShortFormat)
-                font.pixelSize: Math.max(theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
+                font.pixelSize: Math.max(PlasmaCore.Theme.smallestFont.pixelSize, daysCalendar.cellHeight / 3)
                 opacity: 0.4
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

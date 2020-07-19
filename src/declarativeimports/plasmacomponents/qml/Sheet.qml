@@ -191,8 +191,8 @@ Item {
 
         mainItem: Item {
             id: mainItem
-            width: theme.mSize(theme.defaultFont).width * 40
-            height: Math.max(titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8, theme.mSize(theme.defaultFont).height * 25)
+            width: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 40
+            height: Math.max(titleBar.childrenRect.height + contentItem.childrenRect.height + buttonsRow.childrenRect.height + 8, PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 25)
 
             // Consume all key events that are not processed by children
             Keys.onPressed: event.accepted = true
@@ -225,7 +225,7 @@ Item {
                         id: titleLabel
                         elide: Text.ElideRight
                         height: paintedHeight
-                        font.pointSize: theme.defaultFont.pointSize * 1.1
+                        font.pointSize: PlasmaCore.Theme.defaultFont.pointSize * 1.1
                         font.weight: Font.Bold
                         style: Text.Raised
                         styleColor: Qt.rgba(1,1,1,0.8)
@@ -261,7 +261,7 @@ Item {
                     bottom: parent.bottom
                     horizontalCenter: parent.horizontalCenter
                     //the bottom margin is disabled but we want it anyways
-                    bottomMargin: theme.mSize(theme.defaultFont).height*0.6
+                    bottomMargin: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*0.6
                 }
 
                 PlasmaComponents.Button {

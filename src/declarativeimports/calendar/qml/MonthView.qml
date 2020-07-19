@@ -185,21 +185,21 @@ PinchArea {
             pushTransition: StackViewTransition {
                 NumberAnimation {
                     target: exitItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "opacity"
                     from: 1
                     to: 0
                 }
                 NumberAnimation {
                     target: enterItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "opacity"
                     from: 0
                     to: 1
                 }
                 NumberAnimation {
                     target: enterItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "transformScale"
                     from: 1.5
                     to: 1
@@ -208,21 +208,21 @@ PinchArea {
             popTransition: StackViewTransition {
                 NumberAnimation {
                     target: exitItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "opacity"
                     from: 1
                     to: 0
                 }
                 NumberAnimation {
                     target: exitItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "transformScale"
                     // so no matter how much you scaled, it would still fly towards you
                     to: exitItem.transformScale * 1.5
                 }
                 NumberAnimation {
                     target: enterItem
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     property: "opacity"
                     from: 0
                     to: 1

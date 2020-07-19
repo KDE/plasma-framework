@@ -181,8 +181,8 @@ Item {
             priv.tabBar = Utils.findParent(root, "currentTab")
             var childCount = root.children.length
             var visibleChildCount = childCount
-            var contentWidth = theme.mSize(theme.defaultFont).width * 3
-            var contentHeight = theme.mSize(theme.defaultFont).height * 2
+            var contentWidth = PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 3
+            var contentHeight = PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 2
             var maxChildSize = 0
             if (childCount != 0) {
                 //not too much efficient but the loop over children needs to be done two times to get the proper child width
@@ -192,7 +192,7 @@ Item {
                     }
                 }
 
-                var maxAllowedSize = theme.mSize(theme.defaultFont).width * 24
+                var maxAllowedSize = PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 24
                 var itemWidth = Math.min(maxAllowedSize, (root.width - (visibleChildCount-1)*10) / visibleChildCount)
                 var itemHeight = Math.min(maxAllowedSize, (root.height - (visibleChildCount-1)*10) / visibleChildCount)
 

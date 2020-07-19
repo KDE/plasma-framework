@@ -25,7 +25,7 @@ SequentialAnimation {
     objectName: "disappearAnimation"
 
     property Item targetItem
-    property int duration: units.longDuration
+    property int duration: PlasmaCore.Units.longDuration
 
     ParallelAnimation {
         OpacityAnimator {

@@ -100,8 +100,8 @@ PlasmaComponents.CommonDialog {
     content: Item {
         id: contentItem
         property alias filterText: filterField.filterText
-        implicitWidth: theme.mSize(theme.defaultFont).width * 40
-        implicitHeight: theme.mSize(theme.defaultFont).height * 12
+        implicitWidth: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 40
+        implicitHeight: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 12
         height: implicitHeight
 
         TextField {

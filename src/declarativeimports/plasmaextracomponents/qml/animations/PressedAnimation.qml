@@ -26,7 +26,7 @@ SequentialAnimation {
     objectName: "pressedAnimation"
 
     property Item targetItem
-    property int duration: units.shortDuration
+    property int duration: PlasmaCore.Units.shortDuration
 
     // Fast scaling while we're animation == more FPS
     ScriptAction { script: targetItem.smooth = false }

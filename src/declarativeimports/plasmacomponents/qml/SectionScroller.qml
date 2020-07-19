@@ -82,7 +82,7 @@ Item {
     implicitWidth: scrollBar.implicitWidth
     Behavior on opacity {
         NumberAnimation {
-            duration: units.longDuration
+            duration: PlasmaCore.Units.longDuration
         }
     }
 
@@ -140,7 +140,7 @@ Item {
         opacity: sectionLabel.text && scrollBar.pressed ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
             }
         }
     }

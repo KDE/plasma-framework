@@ -74,7 +74,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.core"));
 
     qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", {});
-    qmlRegisterUncreatableType<Units>(uri, 2, 0, "Units", {});
+    qmlRegisterSingletonType<Units>(uri, 2, 0, "Units", [=](QQmlEngine*, QJSEngine*) -> QObject* { return &Units::instance(); });
 
     qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
     qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
@@ -82,7 +82,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::FrameSvgItem>(uri, 2, 0, "FrameSvgItem");
 
     //qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
-    qmlRegisterUncreatableType<Plasma::QuickTheme>(uri, 2, 0, "Theme", QStringLiteral("It is not possible to instantiate Theme directly."));
+    qmlRegisterSingletonType<Plasma::QuickTheme>(uri, 2, 0, "Theme", [=](QQmlEngine* engine, QJSEngine*) -> QObject* { return new Plasma::QuickTheme(engine); });
     qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
     qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");

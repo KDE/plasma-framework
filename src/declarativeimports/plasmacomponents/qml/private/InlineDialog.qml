@@ -47,7 +47,7 @@ Item {
     SequentialAnimation {
         id: appearAnimation
         NumberAnimation {
-            duration: units.longDuration
+            duration: PlasmaCore.Units.longDuration
             easing.type: Easing.InOutQuad
             target: dismissArea
             properties: "opacity"
@@ -71,7 +71,7 @@ Item {
         PlasmaExtras.FallbackComponent {
             id: fallbackComponent
             basePath: "desktoptheme"
-            candidates: [theme.themeName, "default"]
+            candidates: [PlasmaCore.Theme.themeName, "default"]
             property string svgPath: fallbackComponent.filePath("/dialogs/background.svgz")
         }
         Connections {

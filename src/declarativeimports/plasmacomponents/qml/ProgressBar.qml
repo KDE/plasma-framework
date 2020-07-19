@@ -37,8 +37,8 @@ import QtQuick.Controls.Styles.Plasma 2.0 as Styles
  * @inherit QtQuick.Controls.ProgressBar
  */
 ProgressBar {
-    width: Math.floor(units.gridUnit * (orientation === Qt.Vertical ? 1.6 : 10))
-    height: Math.floor(units.gridUnit * (orientation === Qt.Vertical ? 10 : 1.6))
+    width: Math.floor(PlasmaCore.Units.gridUnit * (orientation === Qt.Vertical ? 1.6 : 10))
+    height: Math.floor(PlasmaCore.Units.gridUnit * (orientation === Qt.Vertical ? 10 : 1.6))
     opacity: enabled ? 1.0 : 0.5
 
     style: Styles.ProgressBarStyle {}

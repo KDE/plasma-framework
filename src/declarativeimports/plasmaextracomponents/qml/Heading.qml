@@ -65,7 +65,7 @@ Label {
     wrapMode: Text.WordWrap
 
     function headerPointSize(l) {
-        var n = theme.defaultFont.pointSize;
+        var n = PlasmaCore.Theme.defaultFont.pointSize;
         var s;
         switch (l) {
         case 1:

@@ -72,15 +72,15 @@ QtControls.TextArea {
 
     // Overriding QtQuick.Item activeFocus property.
     //property alias activeFocus: textEdit.activeFocus
-    implicitWidth: theme.mSize(theme.defaultFont).width*25 + style.textMargin
-    implicitHeight: theme.mSize(theme.defaultFont).height*8 + style.textMargin
+    implicitWidth: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width*25 + style.textMargin
+    implicitHeight: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*8 + style.textMargin
 
     Label {
         anchors.centerIn: parent
         width: Math.min(implicitWidth, parent.width)
         text: textArea.placeholderText
         visible: textArea.text == "" && !textArea.activeFocus
-        color: theme.viewTextColor
+        color: PlasmaCore.Theme.viewTextColor
         horizontalAlignment: Text.AlignHCenter
         opacity: 0.5
     }

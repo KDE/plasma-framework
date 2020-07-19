@@ -122,7 +122,7 @@ Item {
         clip: true
         width: navigationWidth + space
         Behavior on width {
-            NumberAnimation { duration: units.longDuration; easing.type: Easing.InOutExpo; }
+            NumberAnimation { duration: PlasmaCore.Units.longDuration; easing.type: Easing.InOutExpo; }
         }
 
         Item {

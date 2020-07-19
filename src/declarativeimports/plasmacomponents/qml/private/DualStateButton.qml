@@ -58,7 +58,7 @@ Item {
     property alias shadow: shadowLoader.sourceComponent
 
     width: surfaceLoader.width + label.paintedWidth
-    height: theme.mSize(theme.defaultFont).height*1.6
+    height: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled buttons
     opacity: dualButton.enabled ? 1.0 : 0.5
@@ -108,7 +108,7 @@ Item {
             //FIXME: see how this margin will be set
             leftMargin: height/4
         }
-        color: theme.textColor
+        color: PlasmaCore.Theme.textColor
         verticalAlignment: Text.AlignVCenter
     }
 

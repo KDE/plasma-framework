@@ -64,7 +64,7 @@ MouseArea {
         // this is needed here as the text is first rendered, counting with the default root.cellHeight
         // then root.cellHeight actually changes to whatever it should be, but the Label does not pick
         // it up after that, so we need to change it explicitly after the cell size changes
-        label.font.pixelSize = Math.max(theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
+        label.font.pixelSize = Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
     }
 
     Rectangle {
@@ -79,8 +79,8 @@ MouseArea {
                 0
             }
         }
-        Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
-        color: theme.textColor
+        Behavior on opacity { NumberAnimation { duration: PlasmaCore.Units.shortDuration*2 } }
+        color: PlasmaCore.Theme.textColor
     }
 
     Rectangle {
@@ -96,8 +96,8 @@ MouseArea {
             }
         }
         visible: !today
-        Behavior on opacity { NumberAnimation { duration: units.shortDuration*2 } }
-        color: theme.highlightColor
+        Behavior on opacity { NumberAnimation { duration: PlasmaCore.Units.shortDuration*2 } }
+        color: PlasmaCore.Theme.highlightColor
         z: todayRect.z - 1
     }
 
@@ -114,7 +114,7 @@ MouseArea {
         id: label
         anchors {
             fill: todayRect
-            margins: units.smallSpacing
+            margins: PlasmaCore.Units.smallSpacing
         }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
@@ -123,14 +123,14 @@ MouseArea {
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
         fontSizeMode: Text.HorizontalFit
-        font.pixelSize: Math.max(theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
+        font.pixelSize: Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
         // Plasma component set point size, this code wants to set pixel size
         // Setting both results in a warning
         // -1 is an undocumented same as unset (see qquickvaluetypes)
         font.pointSize: -1
-        color: today ? theme.backgroundColor : theme.textColor
+        color: today ? PlasmaCore.Theme.backgroundColor : PlasmaCore.Theme.textColor
         Behavior on color {
-            ColorAnimation { duration: units.shortDuration * 2 }
+            ColorAnimation { duration: PlasmaCore.Units.shortDuration * 2 }
         }
     }
 }

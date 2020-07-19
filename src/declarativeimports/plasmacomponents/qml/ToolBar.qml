@@ -40,7 +40,7 @@ Item{
     Behavior on height {
         PropertyAnimation { 
             id: heightAnimation
-            duration: units.longDuration
+            duration: PlasmaCore.Units.longDuration
         }
     }
     z: 1000
@@ -201,19 +201,19 @@ Item{
             Behavior on opacity {
                 PropertyAnimation {
                     id: containerAOpacityAnimation
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
             Behavior on y {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
         }
@@ -223,18 +223,18 @@ Item{
             height: parent.height
             opacity: 0
             Behavior on opacity {
-                PropertyAnimation { duration: units.longDuration }
+                PropertyAnimation { duration: PlasmaCore.Units.longDuration }
             }
             Behavior on x {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
             Behavior on y {
                 enabled: containerA.animationsEnabled
                 PropertyAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
         }

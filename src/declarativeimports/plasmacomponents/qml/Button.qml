@@ -49,7 +49,7 @@ QtControls.Button {
      *
      * See also Qt documentation for font type.
      */
-    property font font: theme.defaultFont
+    property font font: PlasmaCore.Theme.defaultFont
 
     /*
      * overrides iconsource for compatibility

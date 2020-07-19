@@ -94,8 +94,8 @@ Item {
     Accessible.checked: checked
     Accessible.name: text
 
-    implicitWidth: Math.max(label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? units.iconSizes.small : 0)), height)
-    implicitHeight: 20//label.implicitHeight + (internal.portrait ? (iconSource != null ? units.iconSizes.small : 0) : 0)
+    implicitWidth: Math.max(label.implicitWidth + (internal.portrait ? 0 : (iconSource != null ? PlasmaCore.Units.iconSizes.small : 0)), height)
+    implicitHeight: 20//label.implicitHeight + (internal.portrait ? (iconSource != null ? PlasmaCore.Units.iconSizes.small : 0) : 0)
 
     opacity: enabled ? 1 : 0.6
     //long notation to not make it overwritten by implementations
@@ -122,7 +122,7 @@ Item {
 
         property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
-        property bool portrait: (root != undefined) && (label != undefined) &&  label.text != "" && root.height >= label.paintedHeight + units.iconSizes.small
+        property bool portrait: (root != undefined) && (label != undefined) &&  label.text != "" && root.height >= label.paintedHeight + PlasmaCore.Units.iconSizes.small
 
         function click() {
             root.clicked()
@@ -152,7 +152,7 @@ Item {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
-            implicitWidth: internal.portrait ? Math.max(units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(units.iconSizes.small, root.height)
+            implicitWidth: internal.portrait ? Math.max(PlasmaCore.Units.iconSizes.small, root.height - (label.text ? label.height : 0)) : Math.max(PlasmaCore.Units.iconSizes.small, root.height)
             implicitHeight: implicitWidth
 
         }

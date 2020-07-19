@@ -59,8 +59,8 @@ QtControls.Slider {
      */
     property bool inverted: false
 
-    width: slider.isVertical ? theme.mSize(theme.defaultFont).height*1.6 : 200
-    height: slider.isVertical ? 200 : theme.mSize(theme.defaultFont).height*1.6
+    width: slider.isVertical ? PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6 : 200
+    height: slider.isVertical ? 200 : PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6
     // TODO: needs to define if there will be specific graphics for
     //     disabled sliders
     opacity: enabled ? 1.0 : 0.5

@@ -80,7 +80,7 @@ Column {
      */
     property Item checkedButton;
 
-    spacing: theme.defaultFont.pointSize
+    spacing: PlasmaCore.Theme.defaultFont.pointSize
 
     Component.onCompleted: {
         Behavior.create(root, {direction: Qt.Vertical});

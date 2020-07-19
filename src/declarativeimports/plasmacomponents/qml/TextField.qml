@@ -94,13 +94,13 @@ QtControls.TextField {
         PlasmaCore.IconItem {
             id: showPasswordButton
             source: __effectiveRevealPasswordButtonShown ? (textField.echoMode === TextInput.Normal ? "visibility": "hint") : ""
-            height: Math.max(textField.height * 0.8, units.iconSizes.small)
+            height: Math.max(textField.height * 0.8, PlasmaCore.Units.iconSizes.small)
             width: height
             opacity: (__effectiveRevealPasswordButtonShown && textField.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -118,13 +118,13 @@ QtControls.TextField {
             id: clearButton
             //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
             source: clearButtonShown ? (LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl") : ""
-            height: Math.max(textField.height * 0.8, units.iconSizes.small)
+            height: Math.max(textField.height * 0.8, PlasmaCore.Units.iconSizes.small)
             width: height
             opacity: (textField.length > 0 && clearButtonShown && textField.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

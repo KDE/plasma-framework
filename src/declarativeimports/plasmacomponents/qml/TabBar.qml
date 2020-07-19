@@ -126,13 +126,13 @@ FocusScope {
             Behavior on x {
                 PropertyAnimation {
                     easing.type: Easing.InQuad
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
             Behavior on y {
                 PropertyAnimation {
                     easing.type: Easing.InQuad
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
         }
@@ -203,9 +203,9 @@ FocusScope {
                 buttonsLayout.width = buttonsLayout.implicitWidth
                 buttonsLayout.height = buttonsLayout.implicitHeight
 
-                tabBarLayout.width = (tabBarLayout.implicitWidth - tabbarScroller.width <= units.gridUnit * 4) ? tabbarScroller.width : tabBarLayout.implicitWidth;
+                tabBarLayout.width = (tabBarLayout.implicitWidth - tabbarScroller.width <= PlasmaCore.Units.gridUnit * 4) ? tabbarScroller.width : tabBarLayout.implicitWidth;
             } else {
-                tabBarLayout.width = units.gridUnit * 5;
+                tabBarLayout.width = PlasmaCore.Units.gridUnit * 5;
             }
         }
         function syncHeight() {
@@ -213,9 +213,9 @@ FocusScope {
                 buttonsLayout.width = buttonsLayout.implicitWidth
                 buttonsLayout.height = buttonsLayout.implicitHeight
 
-                tabBarLayout.height = (tabBarLayout.implicitHeight - tabbarScroller.height <= units.gridUnit * 4) ? tabbarScroller.height : tabBarLayout.implicitHeight;
+                tabBarLayout.height = (tabBarLayout.implicitHeight - tabbarScroller.height <= PlasmaCore.Units.gridUnit * 4) ? tabbarScroller.height : tabBarLayout.implicitHeight;
             } else {
-                tabBarLayout.height = units.gridUnit * 5;
+                tabBarLayout.height = PlasmaCore.Units.gridUnit * 5;
             }
         }
 
@@ -243,13 +243,13 @@ FocusScope {
 
             Behavior on x {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
             Behavior on y {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

@@ -85,7 +85,7 @@ Item {
     /**
      * Should page transitions be animated? Default is true.
      */
-    property bool animate: units.longDuration > 1
+    property bool animate: PlasmaCore.Units.longDuration > 1
 
     /**
      * The page to be automatically loaded when this PageStack component gets
@@ -271,7 +271,7 @@ Item {
             property int stackWidth: Math.max(root.width, root.height)
 
             // Duration of transition animation (in ms)
-            property int transitionDuration: Math.max(1, units.longDuration / 2)
+            property int transitionDuration: Math.max(1, PlasmaCore.Units.longDuration / 2)
 
             // Flag that indicates the container should be cleaned up after the transition has ended.
             property bool cleanupAfterTransition: false

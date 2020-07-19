@@ -57,8 +57,8 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *         clip: true
  *         model: myModel
  *         highlight: PlasmaComponents.Highlight {}
- *         highlightMoveDuration: units.longDuration
- *         highlightResizeDuration: units.longDuration
+ *         highlightMoveDuration: PlasmaCore.Units.longDuration
+ *         highlightResizeDuration: PlasmaCore.Units.longDuration
  *         delegate: PlasmaExtras.ExpandableListItem {
  *             icon: model.iconName
  *             iconEmblem: model.isPaused ? "emblem-pause" : ""
@@ -377,7 +377,7 @@ Item {
                 id: mainRowLayout
 
                 Layout.fillWidth: true
-                Layout.margins: units.smallSpacing
+                Layout.margins: PlasmaCore.Units.smallSpacing
                 // Otherwise it becomes taller when the button appears
                 Layout.minimumHeight: defaultActionButton.height
 
@@ -387,8 +387,8 @@ Item {
 
                     usesPlasmaTheme: listItem.iconUsesPlasmaSVG
 
-                    implicitWidth: units.iconSizes.medium
-                    implicitHeight: units.iconSizes.medium
+                    implicitWidth: PlasmaCore.Units.iconSizes.medium
+                    implicitHeight: PlasmaCore.Units.iconSizes.medium
 
                     PlasmaCore.IconItem {
                         id: iconEmblem
@@ -398,8 +398,8 @@ Item {
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
 
-                        implicitWidth: units.iconSizes.small
-                        implicitHeight: units.iconSizes.small
+                        implicitWidth: PlasmaCore.Units.iconSizes.small
+                        implicitHeight: PlasmaCore.Units.iconSizes.small
                     }
                 }
 
@@ -436,7 +436,7 @@ Item {
 
                         enabled: false
                         visible: text.length > 0
-                        font: theme.smallestFont
+                        font: PlasmaCore.Theme.smallestFont
 
                         Layout.fillWidth: true
 
@@ -491,11 +491,11 @@ Item {
                 sourceComponent: customExpandedViewContent
 
                 Layout.fillWidth: true
-                Layout.margins: units.smallSpacing
+                Layout.margins: PlasmaCore.Units.smallSpacing
 
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: units.veryLongDuration
+                        duration: PlasmaCore.Units.veryLongDuration
                         easing.type: Easing.InOutCubic
                     }
                 }
@@ -521,10 +521,10 @@ Item {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.leftMargin: listItemIcon.width + units.smallSpacing
-                anchors.rightMargin: listItemIcon.width + units.smallSpacing * 2
+                anchors.leftMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing
+                anchors.rightMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing * 2
 
-                height: (units.iconSizes.smallMedium + units.smallSpacing * 2) * actionsList.count
+                height: (PlasmaCore.Units.iconSizes.smallMedium + PlasmaCore.Units.smallSpacing * 2) * actionsList.count
 
                 focus: true
                 clip: true
@@ -539,7 +539,7 @@ Item {
                     enabled: model.enabled
 
                     width: actionsList.width
-                    height: actionItemLayout.height + units.smallSpacing * 2
+                    height: actionItemLayout.height + PlasmaCore.Units.smallSpacing * 2
 
                     hoverEnabled: true
 
@@ -556,14 +556,14 @@ Item {
                         enabled: model.enabled
 
                         anchors.left: parent.left
-                        anchors.leftMargin: units.smallSpacing
+                        anchors.leftMargin: PlasmaCore.Units.smallSpacing
                         anchors.right: parent.right
-                        anchors.rightMargin: units.smallSpacing
+                        anchors.rightMargin: PlasmaCore.Units.smallSpacing
                         anchors.verticalCenter: parent.verticalCenter
 
                         PlasmaCore.IconItem {
-                            implicitWidth: units.iconSizes.smallMedium
-                            implicitHeight: units.iconSizes.smallMedium
+                            implicitWidth: PlasmaCore.Units.iconSizes.smallMedium
+                            implicitHeight: PlasmaCore.Units.iconSizes.smallMedium
 
                             source: model.icon.name
                         }

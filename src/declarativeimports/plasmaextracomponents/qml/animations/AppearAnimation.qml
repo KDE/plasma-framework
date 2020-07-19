@@ -25,7 +25,7 @@ SequentialAnimation {
     objectName: "appearAnimation"
 
     property Item targetItem
-    property int duration: units.longDuration
+    property int duration: PlasmaCore.Units.longDuration
 
     // Animators run on the render thread so they kick in slightly delayed
     // so explicitly set the item's opacity to 0 before starting the animation

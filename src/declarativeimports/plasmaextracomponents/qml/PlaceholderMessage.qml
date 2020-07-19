@@ -40,6 +40,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  ** Shows how to use PlaceholderMessage to implement a "this view is empty" message
  * import QtQuick 2.12
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  * ListView {
  *     id: listView
@@ -48,7 +49,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (units.largeSpacing * 4)
+ *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
  *
  *         visible: listView.count == 0
  *
@@ -61,6 +62,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * import QtQuick 2.12
  * import QtQuick.Controls 2.12 as QQC2
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  * ListView {
  *     id: listView
@@ -69,7 +71,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (units.largeSpacing * 4)
+ *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
  *
  *         visible: listView.count == 0
  *
@@ -90,6 +92,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  ** Shows how to use PlaceholderMessage to implement a "there was a problem here" message
  * import org.kde.plasma.components 3.0 as PlasmaComponents3
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  * PlasmaComponents3.Page {
  *     id: root
@@ -97,7 +100,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (units.largeSpacing * 4)
+ *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
  *
  *         visible: root.networkConnected
  *
@@ -109,6 +112,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * @code{.qml}
  * import org.kde.plasma.components 3.0 as PlasmaComponents3
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  ** Shows how to use PlaceholderMessage to implement a loading indicator
  * PlasmaComponents3.Page {
@@ -118,7 +122,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (units.largeSpacing * 4)
+ *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
  *
  *         visible: root.loading
  *
@@ -126,7 +130,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *         text: "Loading this awesome app"
  *
  *         PlasmaComponents3.ProgressBar {
- *             Layout.preferredWidth: units.gridUnit * 20
+ *             Layout.preferredWidth: PlasmaCore.Units.gridUnit * 20
  *             value: root.completionStatus
  *             from: 0
  *             to: 100
@@ -138,6 +142,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * import QtQuick.Controls 2.12 as QQC2
  * import org.kde.plasma.components 3.0 as PlasmaComponents3
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ * import org.kde.plasma.core 2.0 as PlasmaCore
  *
  ** Shows how to use PlaceholderMessage to implement a "Here's what you do next" button
  * PlasmaComponents3.Page {
@@ -145,7 +150,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (units.largeSpacing * 4)
+ *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
  *
  *         visible: root.loading
  *
@@ -199,15 +204,15 @@ ColumnLayout {
      */
     property alias helpfulAction: actionButton.action
 
-    spacing: units.largeSpacing
+    spacing: PlasmaCore.Units.largeSpacing
 
     PlasmaCore.IconItem {
         visible: source != undefined
         opacity: 0.5
 
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredWidth: units.iconSizes.huge
-        Layout.preferredHeight: units.iconSizes.huge
+        Layout.preferredWidth: PlasmaCore.Units.iconSizes.huge
+        Layout.preferredHeight: PlasmaCore.Units.iconSizes.huge
 
         source: root.iconName || null
     }

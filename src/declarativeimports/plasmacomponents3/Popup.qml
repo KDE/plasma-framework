@@ -60,7 +60,7 @@ T.Popup {
     contentItem: Item { }
 
     background: PlasmaCore.FrameSvgItem {
-        implicitWidth: units.gridUnit * 12
+        implicitWidth: PlasmaCore.Units.gridUnit * 12
         imagePath: "widgets/background"
     }
 }
