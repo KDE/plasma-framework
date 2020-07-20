@@ -108,14 +108,16 @@ T.ToolButton {
     background: Item {
         Private.ButtonShadow {
             anchors.fill: parent
-            visible:  (!control.flat || control.hovered || control.activeFocus) && (!control.pressed || !control.checked)
+            readonly property bool keyboardFocus: control.activeFocus &&
+                (control.focusReason == Qt.TabFocusReason || control.focusReason == Qt.BacktabFocusReason)
+            visible:  (!control.flat || control.hovered || keyboardFocus) && (!control.pressed || !control.checked)
 
             state: {
                 if (control.pressed) {
                     return "hidden"
                 } else if (control.hovered) {
                     return "hover"
-                } else if (control.activeFocus) {
+                } else if (keyboardFocus) {
                     return "focus"
                 } else {
                     return control.flat ? "shadow" : "hidden"
