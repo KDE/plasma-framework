@@ -28,6 +28,7 @@
 #include <KPluginTrader>
 #include <KPluginLoader>
 #include <kpackage/packageloader.h>
+#include <kdeclarative/kdeclarative.h>
 
 #include "config-plasma.h"
 
@@ -468,22 +469,57 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
 {
+    auto platforms = KDeclarative::KDeclarative::runtimePlatform();
+    // For now desktop always lists everything
+    if (platforms.contains(QStringLiteral("desktop"))) {
+        platforms.clear();
+    }
+
     //FIXME: this assumes we are always use packages.. no pure c++
     std::function<bool(const KPluginMetaData&)> filter;
     if (category.isEmpty()) { //use all but the excluded categories
         KConfigGroup group(KSharedConfig::openConfig(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
 
-        filter = [excluded, parentApp](const KPluginMetaData &md) -> bool
+        filter = [excluded, parentApp, platforms](const KPluginMetaData &md) -> bool
         {
+            if (!platforms.isEmpty() && !md.formFactors().isEmpty()) {
+                bool found = false;
+                for (const auto &plat : platforms) {
+                    if (md.formFactors().contains(plat)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    return false;
+                }
+            }
+
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
             return (parentApp.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
         };
     } else { //specific category (this could be an excluded one - is that bad?)
 
-        filter = [category, parentApp](const KPluginMetaData &md) -> bool
+        filter = [category, parentApp, platforms](const KPluginMetaData &md) -> bool
         {
+            if (!platforms.isEmpty() && !md.formFactors().isEmpty()) {
+                bool found = false;
+                for (const auto &plat : platforms) {
+                    if (md.formFactors().contains(plat)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    return false;
+                }
+            }
+
             const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
+
             if (category == QLatin1String("Miscellaneous")) {
                 return (parentApp.isEmpty() || pa == parentApp) && (md.category() == category || md.category().isEmpty());
             } else {
