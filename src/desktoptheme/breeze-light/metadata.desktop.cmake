@@ -24,6 +24,7 @@ Name[lt]=Breeze šviesus
 Name[lv]=Gaišā brīze
 Name[nl]=Breeze Light
 Name[nn]=Breeze lys
+Name[pa]=ਬਰੀਜ਼ ਹਲਕਾ
 Name[pl]=Jasna Bryza
 Name[pt]=Brisa Clara
 Name[pt_BR]=Breeze Light
