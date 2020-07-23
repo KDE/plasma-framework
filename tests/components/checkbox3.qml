@@ -18,6 +18,21 @@ ComponentBase {
         }
 
         PlasmaComponents.Label {
+            text: "icon"
+        }
+        PlasmaComponents.CheckBox {
+            icon.name: "start-here-kde-plasma"
+        }
+
+        PlasmaComponents.Label {
+            text: "text plus icon"
+        }
+        PlasmaComponents.CheckBox {
+            text: "text"
+            icon.name: "start-here-kde-plasma"
+        }
+
+        PlasmaComponents.Label {
             text: "focus"
         }
         PlasmaComponents.CheckBox {
