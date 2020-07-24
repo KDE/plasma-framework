@@ -137,8 +137,8 @@ bool SharedSvgRenderer::load(
 }
 
 #define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, status, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(int(devicePixelRatio))
-#define CACHE_ID_NATURAL_SIZE(id, status, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(int(devicePixelRatio))
+#define CACHE_ID_WITH_SIZE(size, id, status, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
+#define CACHE_ID_NATURAL_SIZE(id, status, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
