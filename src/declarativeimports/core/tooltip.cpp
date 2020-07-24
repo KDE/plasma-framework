@@ -41,6 +41,7 @@ ToolTip::ToolTip(QQuickItem *parent)
       m_textFormat(Qt::AutoText),
       m_active(true),
       m_interactive(false),
+      m_timeout(4000),
       m_usingDialog(false)
 {
     setAcceptHoverEvents(true);
@@ -158,6 +159,7 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
+    dlg->setHideTimeout(m_timeout);
     dlg->setOwner(this);
     dlg->setLocation(location);
     dlg->setVisualParent(this);
@@ -255,6 +257,11 @@ void ToolTip::setInteractive(bool interactive)
     m_interactive = interactive;
 
     emit interactiveChanged();
+}
+
+void ToolTip::setTimeout(int timeout)
+{
+    m_timeout = timeout;
 }
 
 void ToolTip::hideToolTip()

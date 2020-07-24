@@ -124,6 +124,12 @@ class ToolTip : public QQuickItem
      */
     Q_PROPERTY(bool interactive MEMBER m_interactive WRITE setInteractive NOTIFY interactiveChanged)
 
+    /**
+     * Timeout in milliseconds after which the tooltip will hide itself.
+     * Set this value to -1 to never hide the tooltip automatically.
+     */
+    Q_PROPERTY(int timeout MEMBER m_timeout WRITE setTimeout)
+
 public:
 /// @cond INTERNAL_DOCS
     explicit ToolTip(QQuickItem *parent = nullptr);
@@ -156,6 +162,8 @@ public:
     void setActive(bool active);
 
     void setInteractive(bool interactive);
+
+    void setTimeout(int timeout);
 /// @endcond
 
 public Q_SLOTS:
@@ -218,6 +226,7 @@ private:
     bool m_active;
     bool m_interactive;
     int m_interval;
+    int m_timeout;
 
     //ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
     //are deleted too later after some stuff in the qml runtime has already been deleted,

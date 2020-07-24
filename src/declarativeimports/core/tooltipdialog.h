@@ -55,6 +55,9 @@ public:
     bool interactive();
     void setInteractive(bool interactive);
 
+    int hideTimeout() const;
+    void setHideTimeout(int timeout);
+
     /**
      * Basically the last one who has shown the dialog
      */

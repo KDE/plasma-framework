@@ -70,8 +70,9 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
 
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
-    m_showTimer->start(m_hideTimeout);
-
+    if (m_hideTimeout > 0) {
+        m_showTimer->start(m_hideTimeout);
+    }
     Dialog::showEvent(event);
 }
 
@@ -140,6 +141,16 @@ void ToolTipDialog::setInteractive(bool interactive)
 void ToolTipDialog::valueChanged(const QVariant &value)
 {
     setPosition(value.toPoint());
+}
+
+void ToolTipDialog::setHideTimeout(int timeout)
+{
+    m_hideTimeout = timeout;
+}
+
+int ToolTipDialog::hideTimeout() const
+{
+    return m_hideTimeout;
 }
 
 #include "moc_tooltipdialog.cpp"
