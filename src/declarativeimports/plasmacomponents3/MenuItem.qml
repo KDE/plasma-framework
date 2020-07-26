@@ -79,7 +79,6 @@ T.MenuItem {
 
             text: controlRoot.Kirigami.MnemonicData.richTextLabel
             font: controlRoot.font
-            color: (controlRoot.highlighted || controlRoot.hovered) ? Kirigami.Theme.highlightedTextColor : Kirigami.Theme.textColor
             elide: Text.ElideRight
             visible: controlRoot.text
             horizontalAlignment: Text.AlignLeft
@@ -115,10 +114,16 @@ T.MenuItem {
             prefix: "hover"
             colorGroup: PlasmaCore.ColorScope.colorGroup
             anchors.fill: parent
-            opacity: (controlRoot.highlighted || controlRoot.hovered) && !controlRoot.pressed ? 1 : 0
+            opacity: {
+                if (controlRoot.highlighted || controlRoot.hovered || controlRoot.pressed) {
+                    return 1
+                } else {
+                    return 0
+                }
+            }
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: units.shortDuration
                 }
             }
         }
