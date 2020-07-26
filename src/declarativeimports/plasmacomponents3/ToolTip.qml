@@ -45,7 +45,9 @@ T.ToolTip {
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
     contentItem: Label {
-        text: control.text
+        // Strip out ampersands right before non-whitespace characters, i.e.
+        // those used to determine the alt key shortcut
+        text: control.text.replace(/&(?=\S)/g, "")
         font: control.font
         color: PlasmaCore.ColorScope.textColor
     }
