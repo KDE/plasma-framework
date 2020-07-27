@@ -40,6 +40,8 @@ T.ToolTip {
     }
 
     background: PlasmaCore.FrameSvgItem {
+        height: Math.max(implicitHeight, control.height)
+        width: Math.max(implicitWidth, control.width)
         imagePath: "widgets/background"
     }
 }
