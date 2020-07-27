@@ -41,6 +41,7 @@
 import QtQuick 2.2
 import "private/TabGroup.js" as Engine
 
+import org.kde.plasma.core 2.0 as PlasmaCore
 import "." 2.0 as PlasmaComponents
 
 /**

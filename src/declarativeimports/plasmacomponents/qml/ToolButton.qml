@@ -22,6 +22,8 @@ import QtQuick 2.1
 import QtQuick.Controls 1.2 as QtControls
 import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 /**
  * A plasma theme based toolbutton.
  *

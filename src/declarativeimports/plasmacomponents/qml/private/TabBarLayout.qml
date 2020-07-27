@@ -58,6 +58,8 @@ import QtQuick 2.1
 import org.kde.kquickcontrolsaddons 2.0
 import "AppManager.js" as Utils
 
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 Item {
     id: root
 
