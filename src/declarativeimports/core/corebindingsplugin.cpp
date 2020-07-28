@@ -74,7 +74,10 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.core"));
 
     qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", {});
-    qmlRegisterSingletonType<Units>(uri, 2, 0, "Units", [](QQmlEngine*, QJSEngine*) -> QObject* { return &Units::instance(); });
+    qmlRegisterSingletonType<Units>(uri, 2, 0, "Units", [](QQmlEngine *engine, QJSEngine*) -> QObject* {
+        engine->setObjectOwnership(&Units::instance(), QQmlEngine::CppOwnership);
+        return &Units::instance();
+    });
 
     qmlRegisterType<Plasma::Svg>(uri, 2, 0, "Svg");
     qmlRegisterType<Plasma::FrameSvg>(uri, 2, 0, "FrameSvg");
