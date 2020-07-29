@@ -27,7 +27,7 @@ import "private" as Private
 T.Button {
     id: control
 
-    implicitWidth: Math.max( (label.visible ? units.gridUnit * 6 : units.gridUnit), contentItem.implicitWidth)
+    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
                             + leftPadding + rightPadding
     implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
                             + topPadding + bottomPadding

@@ -113,17 +113,6 @@ QtQuickControlStyle.ButtonStyle {
     }
 
     background: Item {
-
-        implicitHeight: Math.floor(Math.max(theme.mSize(theme.defaultFont).height*1.6, style.minimumHeight))
-
-        implicitWidth: {
-            if (control.text.length == 0) {
-                height;
-            } else {
-                theme.mSize(theme.defaultFont).width*12
-            }
-        }
-
         opacity: enabled ? 1.0 : 0.5
 
         Private.ButtonShadow {

@@ -29,7 +29,7 @@ ComponentBase {
         }
 
         Label {
-            text: "text alone, should be about 12 chars wide"
+            text: "text alone, should be about as wide as the text itself"
         }
 
         PlasmaComponents.Button {
