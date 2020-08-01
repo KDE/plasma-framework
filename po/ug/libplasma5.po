@@ -1,0 +1,826 @@
+# Uyghur translation for libplasma.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Gheyret Kenji <gheyret@gmail.com>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libplasma\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-07-23 02:05+0200\n"
+"PO-Revision-Date: 2013-09-08 07:05+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
+"Language: ug\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr ""
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr ""
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:247
+#, kde-format
+msgid "Previous Month"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:248
+#, kde-format
+msgid "Next Month"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:275
+#, kde-format
+msgid "Previous Year"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:276
+#, kde-format
+msgid "Next Year"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:308
+#, kde-format
+msgid "Previous Decade"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:309
+#, kde-format
+msgid "Next Decade"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr ""
+
+#: plasma/applet.cpp:375
+#, kde-format
+msgid "Unknown"
+msgstr "نامەلۇم"
+
+#: plasma/applet.cpp:749
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "%1 Widget نى ئاكتىپلا"
+
+#: plasma/containment.cpp:120 plasma/private/applet_p.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "Remove this %1"
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "بۇ %1 نى چىقىرىۋەت"
+
+#: plasma/containment.cpp:126
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "Edit %1..."
+msgstr ""
+
+#: plasma/containment.cpp:129 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr ""
+
+#: plasma/corona.cpp:370 plasma/corona.cpp:490
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Widget قۇلۇپلا"
+
+#: plasma/corona.cpp:370
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "ۋىجېتلارنى قۇلۇپسىزلا"
+
+#: plasma/corona.cpp:419
+#, kde-format
+msgid "Finish Customizing Layout"
+msgstr ""
+
+#: plasma/corona.cpp:421 plasma/corona.cpp:505
+#, kde-format
+msgid "Customize Layout..."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "سانلىق-مەلۇمات ھۆججەتلىرى"
+
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "ئىجراچان قوليازمىلار"
+
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "مۇلازىمەت چۈشەندۈرۈشى"
+
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "تەرجىمىسى"
+
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr ""
+
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "سۈرەتلەر"
+
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "ئۆرنەكلىك سۈرەتلەر"
+
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "سەپلىمە ئېنىقلىمىسى"
+
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "كۆرۈنمەيۈز"
+
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr ""
+
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "سۆزلەشكۈنىڭ سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "ئادەتتىكى سۆزلەشكۈ تەگلىكى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "تىزىمدىن چىقىش سۆزلەشكۈنىڭ ئۆرنەكى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "تام قەغەز بوغچالارى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "widget نىڭ سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "widget نىڭ تەگلىك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "تەقلىدىي سائەت يۈزى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "تاختىنىڭ تەگلىك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "گرافىكىلىق widget نىڭ تەگلىكى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "قورال ئەسكەرتىشىنىڭ تەگلىك سۈرىتى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "سۆزلەشكۈنىڭ سۈزۈك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "ئادەتتىكى سۆزلەشكۈنىڭ سۈزۈك تەگلىكى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "تىزىمدىن چىقىش سۆزلەشكۈنىڭ سۈزۈك ئۆرنەكى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "widget نىڭ سۈزۈك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "تاختىنىڭ سۈزۈك تەگلىك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "قورال ئەسكەرتىشىنىڭ سۈزۈك تەگلىك سۈرەتلىرى"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme سەپلىمە ھۆججىتى"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr ""
+
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "سەپلىمە XML ھۆججەت"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr ""
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Accessibility"
+msgstr "ياردەم ئىقتىدارى"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Application Launchers"
+msgstr "پروگرامما ئىجرا قىلغۇچ"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Astronomy"
+msgstr "ئاسترونومىيە"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Date and Time"
+msgstr "چېسلا ۋە ۋاقىت"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "Development Tools"
+msgstr "ئىجادكارلار قورالى"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Education"
+msgstr "مائارىپ"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Environment and Weather"
+msgstr "مۇھىت ۋە ھاۋارايى"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "Examples"
+msgstr "مىساللار"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "File System"
+msgstr "ھۆججەت سىستېمىسى"
+
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Fun and Games"
+msgstr "ئويۇن ۋە تاماشا"
+
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Graphics"
+msgstr "گرافىك"
+
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Language"
+msgstr "تىل"
+
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Mapping"
+msgstr "خەرىتىلە"
+
+#: plasma/pluginloader.cpp:118
+#, kde-format
+msgid "Miscellaneous"
+msgstr "باشقىلار"
+
+#: plasma/pluginloader.cpp:119
+#, kde-format
+msgid "Multimedia"
+msgstr "كۆپ ۋاسىتە"
+
+#: plasma/pluginloader.cpp:120
+#, kde-format
+msgid "Online Services"
+msgstr "توردىكى مۇلازىمەتلەر"
+
+#: plasma/pluginloader.cpp:121
+#, kde-format
+msgid "Productivity"
+msgstr "ئىشلەپچىقىرىش ئۈنۈمى"
+
+#: plasma/pluginloader.cpp:122
+#, kde-format
+msgid "System Information"
+msgstr "سىستېما ئۇچۇرى"
+
+#: plasma/pluginloader.cpp:123
+#, kde-format
+msgid "Utilities"
+msgstr "قوراللار"
+
+#: plasma/pluginloader.cpp:124
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "كۆزنەك ۋە ۋەزىپىلەر"
+
+#: plasma/pluginloader.cpp:125
+#, kde-format
+msgid "Clipboard"
+msgstr ""
+
+#: plasma/pluginloader.cpp:126
+#, kde-format
+msgid "Tasks"
+msgstr ""
+
+#: plasma/pluginloader.cpp:633 plasma/pluginloader.cpp:634
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "باشقىلار"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "%2 widget قا زۆرۈر بولغان %1 بوغچىنى ئاچالمىدى."
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "%2 widget نىڭ %1 قوليازما ماتورىنى قۇرالمىدى."
+
+#: plasma/private/applet_p.cpp:187
+#, kde-format
+msgid "Show Alternatives..."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "Widget Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:279
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Panel Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:282
+#, kde-format
+msgid "A panel has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "Desktop Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:286
+#, kde-format
+msgid "A desktop has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:289
+#, kde-format
+msgid "Undo"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:379
+#, kde-format
+msgid "Widget Settings"
+msgstr "Widget تەڭشەكلەر"
+
+#: plasma/private/applet_p.cpp:386
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Widget نى چىقىرىۋەت"
+
+#: plasma/private/applet_p.cpp:393
+#: plasma/private/associatedapplicationmanager.cpp:79
+#: plasma/private/associatedapplicationmanager.cpp:138
+#: plasma/private/associatedapplicationmanager.cpp:180
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "باغلىنىشلىق پروگراممىنى ئىجرا قىل"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "قوليازمىنى دەسلەپلەشتۈرەلمىدى"
+
+#: plasma/private/associatedapplicationmanager.cpp:76
+#: plasma/private/associatedapplicationmanager.cpp:177
+#, kde-format
+msgid "Open with %1"
+msgstr ""
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "بۇ تاختىنى چىقىرىۋەت"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "بۇ پائالىيەتنى چىقىرىۋەت"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "پائالىيەت تەڭشىكى"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Widget قوش…"
+
+#: plasma/private/containment_p.cpp:206
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "لازىملىق بۆلەكنى تاپالمىدى: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"توردا widget ھەمبەھىر سىزنىڭ باشقا كومپيۇتېردىمۇ بۇ widget نى يىراقتىن "
+"زىيارەت قىلىشىڭىزغا يول قويىدۇ."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "بۇ widget نى توردا ھەمبەھىرلە"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "ھەر قانداق ئىشلەتكۈچىنىڭ بۇ widget نى ئەركىن زىيارەت قىلىشىغا يول قوي"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "ئىناۋەتسىز (null) مۇلازىمەت، ھەر قانداق مەشغۇلاتنى ئىجرا قىلالمايدۇ."
+
+#: plasmaquick/appletquickitem.cpp:615
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:617
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr ""
+
+#: plasmaquick/configview.cpp:109
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "%1 Settings"
+msgid "%1 Settings"
+msgstr "%1 تەڭشىكى"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:42
+#, fuzzy, kde-format
+#| msgid "Themed Images"
+msgid "Preview Images"
+msgstr "ئۆرنەكلىك سۈرەتلەر"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:53
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script for Login Manager"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:56
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script for Logout Dialog"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:59
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script for Lock Screen"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:62
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script for User Switcher"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:71
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script for Splash Screen"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:74
+#, fuzzy, kde-format
+#| msgid "Main Script File"
+msgid "Main Script KRunner"
+msgstr "ئاساسىي قوليازما ھۆججىتى"
+
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr ""
+
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:623
+#, fuzzy, kde-format
+#| msgid "Plasma Package Manager"
+msgid "Plasma Package"
+msgstr "پلازما بوغچا باشقۇرغۇچ"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:627
+#, kde-format
+msgid "Install"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:639
+#, fuzzy, kde-format
+#| msgid "Script initialization failed"
+msgid "Package Installation Failed"
+msgstr "قوليازمىنى دەسلەپلەشتۈرەلمىدى"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:659
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:668
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:732
+#, fuzzy, kde-format
+#| msgid "Lock Widgets"
+msgid "Widgets"
+msgstr "Widget قۇلۇپلا"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:736
+#, fuzzy, kde-format
+#| msgid "Icon"
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "سىنبەلگە"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:699
+#, fuzzy, kde-format
+#| msgid "Wallpaper packages"
+msgid "Wallpaper"
+msgstr "تام قەغەز بوغچالارى"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:709
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:42
+#, kde-format
+msgid "Content dropped"
+msgstr ""
