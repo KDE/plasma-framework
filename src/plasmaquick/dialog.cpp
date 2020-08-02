@@ -1095,6 +1095,8 @@ QObject *Dialog::margins() const
 
 void Dialog::setFramelessFlags(Qt::WindowFlags flags)
 {
+    if (d->type == Dialog::Normal)
+        flags |= Qt::Dialog;
     setFlags(Qt::FramelessWindowHint | flags);
     d->applyType();
     emit flagsChanged();
@@ -1179,7 +1181,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         }
 
         const QWindow *focusWindow = QGuiApplication::focusWindow();
-        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || focusWindow->type() & Qt::Popup);
+        bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || (focusWindow->type() & Qt::Popup) == Qt::Popup);
 
         const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
 
