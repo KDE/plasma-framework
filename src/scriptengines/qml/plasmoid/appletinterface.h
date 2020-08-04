@@ -250,6 +250,11 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
+    /**
+     * When false the plasmoid will ignore the margins when contained in a panel
+     */
+    Q_PROPERTY(bool applyMargins READ applyMargins WRITE setApplyMarginsProperty NOTIFY applyMarginsChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -415,6 +420,8 @@ public:
 
     QString configurationRequiredReason() const;
     void setConfigurationRequiredReason(const QString &reason);
+    bool applyMargins() const;
+    void setApplyMarginsProperty(bool applyMargins);
 
 Q_SIGNALS:
     /**
@@ -461,6 +468,7 @@ Q_SIGNALS:
     void associatedApplicationUrlsChanged();
     void availableScreenRegionChanged();
     void availableScreenRectChanged();
+    void applyMarginsChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();
@@ -511,6 +519,7 @@ private:
     friend class ContainmentInterface;
     //This is used by ContainmentInterface
     QPointF m_positionBeforeRemoval;
+    bool m_apply_margins = true;
 };
 
 QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)

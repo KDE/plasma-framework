@@ -618,6 +618,16 @@ bool AppletInterface::hideOnWindowDeactivate() const
     return m_hideOnDeactivate;
 }
 
+void AppletInterface::setApplyMarginsProperty(bool margins)
+{
+	m_apply_margins = margins;
+}
+
+bool AppletInterface::applyMargins() const
+{
+	return m_apply_margins;
+}
+
 QKeySequence AppletInterface::globalShortcut() const
 {
     return applet()->globalShortcut();
