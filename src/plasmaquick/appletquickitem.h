@@ -177,7 +177,6 @@ private:
     Q_PRIVATE_SLOT(d, void maximumHeightChanged())
     Q_PRIVATE_SLOT(d, void fillWidthChanged())
     Q_PRIVATE_SLOT(d, void fillHeightChanged())
-
 };
 
 }
