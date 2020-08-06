@@ -24,15 +24,17 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.ToolBar {
     id: control
 
-    implicitWidth: contentWidth + leftPadding + rightPadding
-    implicitHeight: contentHeight + topPadding + bottomPadding
+    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
     contentWidth: contentChildren[0].implicitWidth
     contentHeight: contentChildren[0].implicitHeight
 
+    padding: units.smallSpacing
     contentItem: Item { }
 
     background: PlasmaCore.FrameSvgItem {
+        implicitHeight: 40
         imagePath: "widgets/toolbar"
         colorGroup: PlasmaCore.ColorScope.colorGroup
         enabledBorders: control.position == T.ToolBar.Header ?  PlasmaCore.FrameSvgItem.BottomBorder : PlasmaCore.FrameSvgItem.TopBorder
