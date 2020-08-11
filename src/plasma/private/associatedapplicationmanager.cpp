@@ -32,7 +32,7 @@
 #include <QStandardPaths>
 #include <KLocalizedString>
 #include <KActionCollection>
-#include <KMimeTypeTrader>
+#include <KApplicationTrader>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/OpenUrlJob>
 #include <KIO/JobUiDelegate>
@@ -70,7 +70,7 @@ public:
             QAction *a = i.key()->actions()->action(QStringLiteral("run associated application"));
             if (a) {
                 const QString mimeType = mimeDb.mimeTypeForUrl(i.value().first()).name();
-                const KService::List apps = KMimeTypeTrader::self()->query(mimeType);
+                const KService::List apps = KApplicationTrader::queryByMimeType(mimeType);
                 if (!apps.isEmpty()) {
                     a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                     a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
@@ -171,7 +171,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
         if (a) {
             QMimeDatabase mimeDb;
             const QString mimeType = mimeDb.mimeTypeForUrl(urls.first()).name();
-            const KService::List apps = KMimeTypeTrader::self()->query(mimeType);
+            const KService::List apps = KApplicationTrader::queryByMimeType(mimeType);
             if (!apps.isEmpty()) {
                 a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                 a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
