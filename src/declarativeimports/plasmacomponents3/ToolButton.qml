@@ -119,8 +119,10 @@ T.ToolButton {
                     return "hover"
                 } else if (keyboardFocus) {
                     return "focus"
+                } else if (control.flat) {
+                    return "hidden"
                 } else {
-                    return control.flat ? "hidden" : "shadow"
+                    return "shadow"
                 }
             }
         }
