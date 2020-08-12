@@ -120,7 +120,7 @@ T.ToolButton {
                 } else if (keyboardFocus) {
                     return "focus"
                 } else {
-                    return control.flat ? "shadow" : "hidden"
+                    return control.flat ? "hidden" : "shadow"
                 }
             }
         }
