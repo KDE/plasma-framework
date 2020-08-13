@@ -80,11 +80,8 @@
     <path id="shadow-center" d="m 180,30 h 22 v 22 h -22 z" fill-opacity="0.00392199" fill-rule="evenodd" opacity="0.00100002" />
     <path sodipodi:nodetypes="ccccc" id="shadow-left" d="m 174,30 v 22 h 3 V 30 Z" fill-opacity="0.00392199" fill-rule="evenodd" opacity="0.00100002" />
     <path sodipodi:nodetypes="ccccc" id="shadow-top" d="m 180,24 v 3 h 22 v -3 z" fill-opacity="0.00392199" fill-rule="evenodd" opacity="0.00100002" />
-    <path style="stroke-width:0.999997" id="shadow-hint-top-margin" d="m 190,24 h 2 v 1e-6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999997" id="shadow-hint-bottom-margin" d="m 190,58 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999997" id="shadow-hint-right-margin" d="m 208,40 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
+
     <path id="shadow-topleft" d="m 177,24 c -1.662,0 -3,1.338 -3,3 h 3 z" fill-opacity="0.00392199" fill-rule="evenodd" opacity="0.00100002" sodipodi:nodetypes="cccc" />
-    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="shadow-hint-left-margin" width="0.001" height="2" x="174" y="40" />
     <g id="normal-center">
         <path d="m180 68h22v22h-22z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-rule="evenodd" id="path34" />
         <rect style="fill:url(#linearGradient1133-3);fill-opacity:1;fill-rule:evenodd" id="c" width="22" height="22" x="180" y="68" />
@@ -129,10 +126,6 @@
         <path id="rect829-6-2-1-2" transform="scale(-1)" d="m -26,-30 h 22 v 1 h -22 z" class="ColorScheme-ButtonText" fill="currentColor" opacity="0.3" />
         <rect style="fill:url(#linearGradient1148-3-3);fill-opacity:1;fill-rule:evenodd" id="l" width="2" height="22" x="-30" y="4" transform="rotate(-90)" />
     </g>
-    <path style="stroke-width:0.999996" id="normal-hint-top-margin" d="m 190,62 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="normal-hint-bottom-margin" d="m 190,90 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="normal-hint-left-margin" d="m 174,78 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="normal-hint-right-margin" d="m 202,78 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
     <path id="mask-normal-center" d="m56 68h22v22h-22z" fill-rule="evenodd" />
     <path id="mask-normal-bottomright" d="m 82,94 v 2 c 1.108,0 2,-0.892 2,-2 z" fill-rule="evenodd" />
     <path id="mask-normal-bottom" d="m 56,94 v 2 h 22 v -2 z" fill-rule="evenodd" />
@@ -175,10 +168,6 @@
         <path id="rect829-6-2-1-2-8" transform="scale(-1)" d="m -26,-30 h 22 v 1 h -22 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
     <path id="hover-center" d="m180 106h22v22h-22z" fill-opacity=".003922" fill-rule="evenodd" opacity=".001" />
-    <rect id="hover-hint-top-margin" x="190" y="100" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="hover-hint-bottom-margin" x="190" y="133" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="hover-hint-right-margin" x="207" y="116" width="0.001" height="2" fill="#ff00ff" fill-rule="evenodd" />
-    <rect y="116" x="174" height="2" width="0.001" id="hover-hint-left-margin" style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:1" />
     <g transform="translate(0,2)" id="focus-bottom" fill-rule="evenodd">
         <path id="rect829-6-5-2-9" transform="scale(-1)" d="m -202,-170 h 22 v 2 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
@@ -219,10 +208,6 @@
         <path id="rect829-6-2-6-6-9-9-0" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
         <path id="path1565-4-90-2-9-3" d="m 180,170 v 1 h 22 v -1 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
     </g>
-    <path id="focus-hint-top-margin" d="m 190,137 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="focus-hint-bottom-margin" d="m 190,172 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="focus-hint-left-margin" d="m 173,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="focus-hint-right-margin" d="m 208,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
     <path opacity="0.00100002" fill-rule="evenodd" fill-opacity="0.00392199" d="m 180,144 h 22 v 22 h -22 z" id="focus-center" />
     <g id="focus-background-center">
         <path d="m118 144h22v22h-22z" class="ColorScheme-ButtonFocus" fill="currentColor" fill-rule="evenodd" id="path208" />
@@ -268,10 +253,6 @@
         <path id="rect829-6-2-1-2-8-3-6" transform="scale(-1)" d="m -26,-30 h 22 v 1 h -22 z" class="ColorScheme-ButtonText" fill="currentColor" opacity="0.3" />
         <rect style="fill:url(#linearGradient1133-0-5);fill-opacity:1;fill-rule:evenodd" id="fl" width="2" height="22" x="-30" y="4" transform="rotate(-90)" />
     </g>
-    <path style="stroke-width:0.999996" id="focus-background-hint-top-margin" d="m 128,138 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="focus-background-hint-bottom-margin" d="m 128,166 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="focus-background-hint-left-margin" d="m 112,154 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="focus-background-hint-right-margin" d="m 140,154 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
     <path id="mask-focus-background-center" d="m56 144h22v22h-22z" fill-rule="evenodd" />
     <path id="mask-focus-background-bottomright" d="m 82,170 v 2 c 1.108,0 2,-0.892 2,-2 z" fill-rule="evenodd" />
     <path id="mask-focus-background-bottom" d="m 56,170 v 2 h 22 v -2 z" fill-rule="evenodd" />
@@ -314,10 +295,6 @@
         <path id="rect829-6-26-0-8-9" transform="scale(-1)" d="m -26,-30 h 22 v 2 h -22 z" class="ColorScheme-ButtonHover" fill="currentColor" />
         <path id="rect829-6-2-1-2-8-3" transform="scale(-1)" d="m -26,-30 h 22 v 1 h -22 z" class="ColorScheme-ButtonText" fill="currentColor" opacity="0.3" />
     </g>
-    <path style="stroke-width:0.999996" id="pressed-hint-top-margin" d="m 190,176 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="pressed-hint-bottom-margin" d="m 190,204 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="pressed-hint-left-margin" d="m 174,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="pressed-hint-right-margin" d="m 202,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
     <g id="toolbutton-hover-bottom" transform="translate(238,142)" fill-rule="evenodd">
         <path id="path1565-7-9" d="m 4,-11 v 3 h 22 v -3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1565-4" d="m 4,-9 v 1 h 22 v -1 z" class="ColorScheme-ButtonHover" fill="currentColor" />
@@ -351,10 +328,6 @@
         <path id="path1561-6-4" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
     <path id="toolbutton-hover-center" d="m242 106h22v22h-22z" fill-opacity=".003922" fill-rule="evenodd" opacity=".001" />
-    <rect id="toolbutton-hover-hint-top-margin" x="252" y="100" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="toolbutton-hover-hint-bottom-margin" x="252" y="133" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="toolbutton-hover-hint-right-margin" x="269" y="116" width="0.001" height="2" fill="#ff00ff" fill-rule="evenodd" />
-    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="toolbutton-hover-hint-left-margin" width="0.001" height="2" x="236" y="116" />
     <g id="toolbutton-focus-bottom" transform="translate(62,2)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-8" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-3" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
@@ -395,10 +368,6 @@
         <path id="rect1509-7-9-6-2-2-0-8-5" d="m 241,170 v -3 h -3 c 0,1.662 1.338,3 3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4-7-3" d="m 239,167 c 0,1.108 0.892,2 2,2 v 1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
     </g>
-    <path id="toolbutton-focus-hint-top-margin" d="m 252,137 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-bottom-margin" d="m 252,172 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-left-margin" d="m 235,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-right-margin" d="m 270,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
     <path opacity="0.00100002" fill-rule="evenodd" fill-opacity="0.00392199" d="m 242,144 h 22 v 22 h -22 z" id="toolbutton-focus-center" />
     <path id="toolbutton-pressed-top" d="m 242,176 v 3 h 22 v -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
     <path id="toolbutton-pressed-topleft" d="m 239,176 c -1.662,0 -3,1.338 -3,3 h 3 v -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
@@ -409,10 +378,6 @@
     <path id="toolbutton-pressed-topright" d="m 270,179 c 0,-1.662 -1.338,-3 -3,-3 v 3 h 2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
     <path id="toolbutton-pressed-left" d="m 236,204 h 3 v -22 h -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
     <path id="toolbutton-pressed-bottomleft" d="m 236,207 c 0,1.662 1.338,3 3,3 v -3 h -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-top-margin" d="m 252,176 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-bottom-margin" d="m 252,204 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-left-margin" d="m 236,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-right-margin" d="m 264,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
     <text id="text2130" x="36" y="82" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128" x="36" y="82" font-size="10" text-anchor="end">normal</tspan></text>
     <text id="text2130-0" x="36" y="120" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128-4" x="36" y="120" font-size="10" text-anchor="end">hover</tspan></text>
     <text id="text2130-0-2" x="36" y="158" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128-4-9" x="36" y="158" font-size="10" text-anchor="end">focus</tspan></text>
@@ -437,4 +402,65 @@
     <text id="text1171" y="-68" x="96" style="font-size:21.3333px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px" xml:space="preserve"><tspan id="tspan1169" sodipodi:role="line" /></text>
     <path style="stroke-width:0.999997" fill-rule="evenodd" fill="#00ff00" d="M -64,0 H -8 V 16 H -64 Z" id="rect1134-36" />
     <text word-spacing="0" text-anchor="middle" letter-spacing="0" font-size="10px" font-family="'Noto Sans'" y="12" x="-36" id="text2130-0-2-0-4-7-0"><tspan text-anchor="middle" font-size="10px" y="12" x="-36" id="tspan2128-4-9-4-3-5-62">other hints</tspan></text>
+
+    <style>
+        .hint {
+            fill: red;
+            fill-opacity: 0.2;
+        }
+    </style>
+
+    <!-- Normal Hint Margin -->
+    <rect class="hint" id="normal-hint-top-margin"    height="6" width="2"  x="190" y="62"/>
+    <rect class="hint" id="normal-hint-bottom-margin" height="6" width="2"  x="190" y="90"/>
+    <rect class="hint" id="normal-hint-left-margin"   width="6"  height="2" x="174" y="78"/>
+    <rect class="hint" id="normal-hint-right-margin"  width="6"  height="2" x="202" y="78"/>
+
+    <!-- Shadow Hint Margin -->
+    <rect class="hint" id="shadow-hint-top-margin"    width="2"  height="1"  x="190" y="23"/>
+    <rect class="hint" id="shadow-hint-bottom-margin" width="2"  height="1"  x="190" y="58"/>
+    <rect class="hint" id="shadow-hint-left-margin"   height="2" width="1"   y="40" x="173"/>
+    <rect class="hint" id="shadow-hint-right-margin"  height="2" width="1"   y="40" x="208"/>
+
+    <!-- Hover Hint Margin -->
+    <rect class="hint" id="hover-hint-top-margin"    width="2"  height="0.001" x="190" y="100"/>
+    <rect class="hint" id="hover-hint-bottom-margin" width="2"  height="0.001" x="190" y="133"/>
+    <rect class="hint" id="hover-hint-left-margin"   height="2" width="0.001"  x="116" y="116"/>
+    <rect class="hint" id="hover-hint-right-margin"  height="2" width="0.001"  x="207" y="116"/>
+
+    <!-- Focus Hint Margin -->
+    <rect class="hint" id="focus-hint-top-margin"    width="2"  height="1" x="190" y="137"/>
+    <rect class="hint" id="focus-hint-bottom-margin" width="2"  height="1" x="190" y="172"/>
+    <rect class="hint" id="focus-hint-left-margin"   height="2" width="1"  x="173" y="154"/>
+    <rect class="hint" id="focus-hint-right-margin"  height="2" width="1"  x="208" y="154"/>
+
+    <!-- Focus Background Hint Margin -->
+    <rect class="hint" id="focus-background-hint-top-margin"    height="6" width="2" x="128" y="138"/>
+    <rect class="hint" id="focus-background-hint-bottom-margin" height="6" width="2" x="128" y="166"/>
+    <rect class="hint" id="focus-background-hint-left-margin"   width="6" height="2" x="112" y="154"/> <!-- these two seem suspect -->
+    <rect class="hint" id="focus-background-hint-right-margin"  width="6" height="2" x="140" y="154"/>
+    
+    <!-- Pressed Hint Margin -->
+    <rect class="hint" id="pressed-hint-top-margin"    height="6" width="2"  x="190" y="176"/>
+    <rect class="hint" id="pressed-hint-bottom-margin" height="6" width="2"  x="190" y="204"/>
+    <rect class="hint" id="pressed-hint-left-margin"   width="6"  height="2" y="192" x="174"/>
+    <rect class="hint" id="pressed-hint-right-margin"  width="6"  height="2" y="192" x="202"/>
+
+    <!-- Toolbutton Hover Hint Margin -->
+    <rect class="hint" id="toolbutton-hover-hint-top-margin"    height="6" width="2" x="252" y="100"/>
+    <rect class="hint" id="toolbutton-hover-hint-bottom-margin" height="6" width="2" x="252" y="128"/>
+    <rect class="hint" id="toolbutton-hover-hint-left-margin"   width="6" height="2" y="116" x="236"/> <!-- these seem suspect as well -->
+    <rect class="hint" id="toolbutton-hover-hint-right-margin"  width="6" height="2" y="116" x="264"/>
+
+    <!-- Toolbutton Focus Hint Margin -->
+    <rect class="hint" id="toolbutton-focus-hint-top-margin"    width="2"  height="1" x="252" y="137"/>
+    <rect class="hint" id="toolbutton-focus-hint-bottom-margin" width="2"  height="1" x="252" y="172"/>
+    <rect class="hint" id="toolbutton-focus-hint-left-margin"   height="2" width="1"  y="154" x="235"/> <!-- to complete the suspectness chain... -->
+    <rect class="hint" id="toolbutton-focus-hint-right-margin"  height="2" width="1"  y="154" x="270"/>
+
+    <!-- Toolbutton Pressed Hint Margin -->
+    <rect class="hint" id="toolbutton-pressed-hint-top-margin"    height="6" width="2"  x="252" y="176"/>
+    <rect class="hint" id="toolbutton-pressed-hint-bottom-margin" height="6" width="2"  x="252" y="204"/>
+    <rect class="hint" id="toolbutton-pressed-hint-left-margin"   width="6"  height="2" y="192" x="236"/> <!-- just kidding this is the real end -->
+    <rect class="hint" id="toolbutton-pressed-hint-right-margin"  width="6"  height="2" y="192" x="264"/>
 </svg>
