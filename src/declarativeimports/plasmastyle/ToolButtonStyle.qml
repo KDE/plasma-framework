@@ -397,10 +397,10 @@ QtQuickControlStyle.ButtonStyle {
             ]
 
             Component.onCompleted: {
-                padding.top = surfaceNormal.margins.top
-                padding.left = surfaceNormal.margins.left
-                padding.right = surfaceNormal.margins.right
-                padding.bottom = surfaceNormal.margins.bottom
+                padding.top = control.flat ? surfacePressed.margins.top : surfaceNormal.margins.top
+                padding.left = control.flat ? surfacePressed.margins.left : surfaceNormal.margins.left
+                padding.right = control.flat ? surfacePressed.margins.right : surfaceNormal.margins.right
+                padding.bottom = control.flat ? surfacePressed.margins.bottom : surfaceNormal.margins.bottom
             }
         }
     }
