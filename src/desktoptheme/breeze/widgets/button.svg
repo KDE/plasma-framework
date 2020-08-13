@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="svg2" viewBox="0 0 288 224" version="1.1" sodipodi:docname="button.svg" inkscape:version="1.1-dev (d80adc983d, 2020-06-15)">
+<svg id="svg2" viewBox="0 0 288 224" version="1.1" sodipodi:docname="button.svg" inkscape:version="1.1-dev (fd3c08463d, 2020-08-12)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
     <defs id="defs319">
         <linearGradient inkscape:collect="always" id="normal-gradient">
             <stop style="stop-color:#000000;stop-opacity:0.02745098" offset="0" id="stop1138" />
@@ -351,10 +351,10 @@
         <path id="path1561-6-4" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
     <path id="toolbutton-hover-center" d="m242 106h22v22h-22z" fill-opacity=".003922" fill-rule="evenodd" opacity=".001" />
-    <rect id="toolbutton-hover-hint-top-margin" x="252" y="100" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="toolbutton-hover-hint-bottom-margin" x="252" y="133" width="2" height="0.001" fill="#ff00ff" fill-rule="evenodd" />
-    <rect id="toolbutton-hover-hint-right-margin" x="269" y="116" width="0.001" height="2" fill="#ff00ff" fill-rule="evenodd" />
-    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="toolbutton-hover-hint-left-margin" width="0.001" height="2" x="236" y="116" />
+    <rect id="toolbutton-hover-hint-top-margin" x="252" y="100" width="2" height="6" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
+    <rect id="toolbutton-hover-hint-bottom-margin" x="252" y="128" width="2" height="6" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
+    <rect id="toolbutton-hover-hint-right-margin" x="264" y="116" width="6" height="2" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
+    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.999997" id="toolbutton-hover-hint-left-margin" width="6" height="2" x="236" y="116" />
     <g id="toolbutton-focus-bottom" transform="translate(62,2)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-8" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-3" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
@@ -426,11 +426,11 @@
     <text id="text2130-0-2-0-4-7" x="192" y="-28" font-family="'Noto Sans'" font-size="10px" letter-spacing="0" text-anchor="middle" word-spacing="0"><tspan id="tspan2128-4-9-4-3-5" x="192" y="-28" font-size="10px" text-anchor="middle">margin hint</tspan></text>
     <path style="stroke-width:1" id="pressed-hint-compose-over-border" d="m -12,192 h 3.9999999 v 4 H -12 Z" fill="#00ff00" fill-rule="evenodd" />
     <text transform="translate(200,64)" style="text-align:start;text-anchor:start;white-space:pre;inline-size:600" word-spacing="0" text-anchor="middle" letter-spacing="0" font-size="10px" font-family="'Noto Sans'" y="-56" x="96" id="text2130-0-2-0-4-7-3" xml:space="preserve"><tspan x="96" y="-56"><tspan style="font-size:10px;text-align:start;text-anchor:start">NOTE: Some margin hints have 0.001 width or height because you can't use exactly 0!
-</tspan></tspan><tspan x="96" y="-43.500003"><tspan style="font-size:10px;text-align:start;text-anchor:start">NOTE: shadow, hover and focus (not focus-background) use negative margins!
-</tspan></tspan><tspan x="96" y="-31.000003"><tspan style="font-size:10px;text-align:start;text-anchor:start">This behavior is implemented in at least the following files (please keep this up to date, fix the problem or find a better place to </tspan></tspan><tspan x="96" y="-18.500003"><tspan style="font-size:10px;text-align:start;text-anchor:start">put this info):
-</tspan></tspan><tspan x="96" y="-6.000003"><tspan style="font-size:10px;text-align:start;text-anchor:start">plasma-framework/src/declarativeimports/plasmacomponents3/private/ButtonShadow.qml
-</tspan></tspan><tspan x="96" y="6.499997"><tspan style="font-size:10px;text-align:start;text-anchor:start">
-</tspan></tspan><tspan x="96" y="18.999997"><tspan style="font-size:10px;text-align:start;text-anchor:start">We should add support for a negative margins hint to FrameSvg and document it instead of requiring people to read source </tspan></tspan><tspan x="96" y="31.499997"><tspan style="font-size:10px;text-align:start;text-anchor:start">code in order to know these things. Unfortunately, not sure if we can change the code of ButtonShadow since it would break </tspan></tspan><tspan x="96" y="43.999997"><tspan style="font-size:10px;text-align:start;text-anchor:start">themes that rely on this undocumented behaviour. Maybe in KF6.</tspan></tspan></text>
+</tspan></tspan><tspan x="96" y="-43.5000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">NOTE: shadow, hover and focus (not focus-background) use negative margins!
+</tspan></tspan><tspan x="96" y="-31.0000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">This behavior is implemented in at least the following files (please keep this up to date, fix the problem or find a better place to </tspan></tspan><tspan x="96" y="-18.5000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">put this info):
+</tspan></tspan><tspan x="96" y="-6.00000304728"><tspan style="font-size:10px;text-align:start;text-anchor:start">plasma-framework/src/declarativeimports/plasmacomponents3/private/ButtonShadow.qml
+</tspan></tspan><tspan x="96" y="6.49999695272"><tspan style="font-size:10px;text-align:start;text-anchor:start">
+</tspan></tspan><tspan x="96" y="18.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">We should add support for a negative margins hint to FrameSvg and document it instead of requiring people to read source </tspan></tspan><tspan x="96" y="31.4999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">code in order to know these things. Unfortunately, not sure if we can change the code of ButtonShadow since it would break </tspan></tspan><tspan x="96" y="43.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">themes that rely on this undocumented behaviour. Maybe in KF6.</tspan></tspan></text>
     <path fill-rule="evenodd" fill="#00ff00" d="m -12,76 h 3.9999999 v 4 H -12 Z" id="normal-hint-compose-over-border" style="stroke-width:1" />
     <path style="stroke-width:1" id="focus-background-hint-compose-over-border" d="m -12,152 h 3.9999999 v 4 H -12 Z" fill="#00ff00" fill-rule="evenodd" />
     <path fill-rule="evenodd" fill="#00ff00" d="m -20,152 h 4 v 4 h -4 z" id="hint-focus-highlighted-background" style="stroke-width:1" />
