@@ -1,9 +1,9 @@
 /*
- *  SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
- *  SPDY-FileCopyrightText: 2020 Jonah Brüchert <jbb@kaidan.im>
- *
- *  SPDX-License-Identifier: LGPL-2.0-or-later
- */
+    SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDY-FileCopyrightText: 2020 Jonah Brüchert <jbb@kaidan.im>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 import QtQuick 2.5
 import org.kde.kirigami 2.4 as Kirigami
