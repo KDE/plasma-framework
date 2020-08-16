@@ -21,10 +21,10 @@ T.Button {
 
     Layout.minimumWidth: contentItem.implicitWidth + leftPadding + rightPadding
 
-    leftPadding: surfaceNormal.margins.left
-    topPadding: surfaceNormal.margins.top
-    rightPadding: surfaceNormal.margins.right
-    bottomPadding: surfaceNormal.margins.bottom
+    leftPadding: background.leftMargin
+    topPadding: background.topMargin
+    rightPadding: background.rightMargin
+    bottomPadding: background.bottomMargin
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
@@ -36,7 +36,16 @@ T.Button {
     PlasmaCore.ColorScope.colorGroup: flat ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
 
     contentItem: GridLayout {
+
+        /* Even though keyboardFocus is already defined as a property
+         * in the background, it's null when it reaches the contentItem.
+         * That means it has to be created here too unless a solution is found.
+         */
+        property bool keyboardFocus: control.activeFocus &&
+        (control.focusReason == Qt.TabFocusReason || control.focusReason == Qt.BacktabFocusReason)
+
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
+
         PlasmaCore.IconItem {
             id: icon
 
@@ -57,7 +66,7 @@ T.Button {
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
             visible: source.length > 0 && control.display !== T.Button.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: !control.flat && buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: !control.flat && buttonSvg.hasElement("hint-focus-highlighted-background") && contentItem.keyboardFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
         Label {
             id: label
@@ -66,57 +75,18 @@ T.Button {
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
+            color: buttonSvg.hasElement("hint-focus-highlighted-background") && contentItem.keyboardFocus && !control.down ? PlasmaCore.Theme.highlightedTextColor : PlasmaCore.Theme.buttonTextColor
             horizontalAlignment: control.display !== T.Button.TextUnderIcon && icon.visible ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-        }
-    }
-
-    background: Item {
-        Private.ButtonShadow {
-            anchors.fill: parent
-            visible: (!control.flat || control.hovered) && (!control.pressed || !control.checked)
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (control.activeFocus) {
-                    return "focus"
-                } else {
-                    return "shadow"
-                }
-            }
         }
         PlasmaCore.Svg {
             id: buttonSvg
             imagePath: "widgets/button"
         }
-        PlasmaCore.FrameSvgItem {
-            id: surfaceNormal
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: control.activeFocus ? ["focus-background", "normal"] : "normal"
-            opacity: (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
-        PlasmaCore.FrameSvgItem {
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: "pressed"
-            opacity: control.checked || control.pressed ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
+    }
+
+    background: Private.ButtonBackground {
+        parentControl: control
     }
 }

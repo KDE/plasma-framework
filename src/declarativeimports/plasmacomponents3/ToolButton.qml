@@ -11,7 +11,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
-
 T.ToolButton {
     id: control
 
@@ -20,14 +19,12 @@ T.ToolButton {
     implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
                             + topPadding + bottomPadding
 
-    // for flat toolbuttons, we want to use margins from the pressed state since
-    // those are the ones which are appropriate for a button without a buttonlike
-    // appearance where we increase the size of the icon compared to buttonlike
-    // buttons
-    leftPadding: control.flat ? surfacePressed.margins.left : surfaceNormal.margins.left
-    topPadding: control.flat ? surfacePressed.margins.top : surfaceNormal.margins.top
-    rightPadding: control.flat ? surfacePressed.margins.right : surfaceNormal.margins.right
-    bottomPadding: control.flat ? surfacePressed.margins.bottom : surfaceNormal.margins.bottom
+    Layout.minimumWidth: contentItem.implicitWidth + leftPadding + rightPadding
+
+    leftPadding: background.leftMargin
+    topPadding: background.topMargin
+    rightPadding: background.rightMargin
+    bottomPadding: background.bottomMargin
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
@@ -41,6 +38,14 @@ T.ToolButton {
     PlasmaCore.ColorScope.colorGroup: flat ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
 
     contentItem: GridLayout {
+
+        /* Even though keyboardFocus is already defined as a property
+         * in the background, it's null when it reaches the contentItem.
+         * That means it has to be created here too unless a solution is found.
+         */
+        property bool keyboardFocus: control.activeFocus &&
+        (control.focusReason == Qt.TabFocusReason || control.focusReason == Qt.BacktabFocusReason)
+
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
 
         PlasmaCore.IconItem {
@@ -65,12 +70,12 @@ T.ToolButton {
             implicitWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
             implicitHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
 
-            colorGroup: control.PlasmaCore.ColorScope.colorGroup
+            colorGroup: PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            status: !control.flat && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+            status: !control.flat && contentItem.keyboardFocus && !control.pressed && !control.checked ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
         }
-        
+
         Label {
             id: label
             Layout.fillWidth: true
@@ -82,7 +87,6 @@ T.ToolButton {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
-
             PlasmaCore.FrameSvgItem {
                 id: buttonsurfaceChecker
                 visible: false
@@ -92,52 +96,7 @@ T.ToolButton {
         }
     }
 
-    background: Item {
-        Private.ButtonShadow {
-            anchors.fill: parent
-            readonly property bool keyboardFocus: control.activeFocus &&
-                (control.focusReason == Qt.TabFocusReason || control.focusReason == Qt.BacktabFocusReason)
-            visible:  (!control.flat || control.hovered || keyboardFocus) && (!control.pressed || !control.checked)
-
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (keyboardFocus) {
-                    return "focus"
-                } else if (control.flat) {
-                    return "hidden"
-                } else {
-                    return "shadow"
-                }
-            }
-        }
-        PlasmaCore.FrameSvgItem {
-            id: surfaceNormal
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: "normal"
-            opacity: !control.flat && (!control.pressed || !control.checked) ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
-        PlasmaCore.FrameSvgItem {
-            id: surfacePressed
-            anchors.fill: parent
-            imagePath: "widgets/button"
-            prefix: control.flat ? "toolbutton-pressed" : "pressed"
-            opacity: control.checked || control.pressed ? 1 : 0
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
+    background: Private.ButtonBackground {
+        parentControl: control
     }
 }
