@@ -1,13 +1,14 @@
 import QtQuick 2.0
-
-import org.kde.plasma.components 3.0 as PlasmaComponents
 import QtQuick.Layouts 1.2
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 3.0 as PlasmaComponents
 
 ComponentBase {
-    Grid {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+    id: root
+    title: "PlasmaComponents 3 Button"
+    contentItem: GridLayout {
+        rowSpacing: PlasmaCore.Units.smallSpacing
+        columnSpacing: PlasmaCore.Units.largeSpacing
         columns: 2
 
         PlasmaComponents.Label {
@@ -15,7 +16,7 @@ ComponentBase {
         }
 
         PlasmaComponents.Button {
-            icon.name: "list-remove"
+            icon.name: "start-here-kde-plasma"
             text: "test"
         }
 
@@ -24,7 +25,7 @@ ComponentBase {
         }
 
         PlasmaComponents.Button {
-            icon.name: "list-remove"
+            icon.name: "start-here-kde-plasma"
         }
 
         PlasmaComponents.Label {
@@ -49,7 +50,7 @@ ComponentBase {
         }
 
         PlasmaComponents.Button {
-            icon.name: "list-remove"
+            icon.name: "start-here-kde-plasma"
             text: "This is a really really really really long button"
         }
 
@@ -58,9 +59,9 @@ ComponentBase {
         }
 
         PlasmaComponents.Button {
-            icon.name: "list-remove"
+            icon.name: "start-here-kde-plasma"
             text: "This is a really really really really long button"
-            width: 150
+            Layout.maximumWidth: 150
         }
 
 

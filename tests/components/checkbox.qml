@@ -1,24 +1,25 @@
 import QtQuick 2.0
-
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 1.2
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 ComponentBase {
-    Grid {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 4
+    id: root
+    title: "Plasma Components 2 CheckBox"
+    contentItem: GridLayout {
+        rowSpacing: PlasmaCore.Units.smallSpacing
+        columnSpacing: PlasmaCore.Units.largeSpacing
         columns: 2
 
-        Label {
+        PlasmaComponents.Label {
             text: "text"
         }
         PlasmaComponents.CheckBox {
             text: "Some awesome checkbox"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "focus"
         }
         PlasmaComponents.CheckBox {
@@ -26,7 +27,7 @@ ComponentBase {
             focus: true
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "checked"
         }
         PlasmaComponents.CheckBox {
@@ -34,7 +35,7 @@ ComponentBase {
             checkedState: Qt.Checked
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "tri-state"
         }
         PlasmaComponents.CheckBox {
@@ -42,7 +43,7 @@ ComponentBase {
             checkedState: Qt.PartiallyChecked
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "disabled"
         }
         PlasmaComponents.CheckBox {
@@ -50,7 +51,7 @@ ComponentBase {
             enabled: false
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "disabled and checked"
         }
         PlasmaComponents.CheckBox {

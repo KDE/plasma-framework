@@ -1,17 +1,16 @@
 import QtQuick 2.0
-
-import org.kde.plasma.components 2.0 as PlasmaComponents
-
+import QtQuick.Layouts 1.12
 import QtQuick.Controls 1.3
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 ComponentBase {
     id: root
+    title: "Plasma Components 2 TextField"
     property string longText: "This is a longer sentence"
 
-    Flow {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+    contentItem: Flow {
+        spacing: PlasmaCore.Units.gridUnit
 
         PlasmaComponents.TextField {
             placeholderText: longText

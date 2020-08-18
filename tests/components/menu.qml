@@ -1,12 +1,13 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.12
+import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
 ComponentBase {
-
-    Flow {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+    id: root
+    title: "Plasma Components 2 ComboBox"
+    contentItem: ColumnLayout {
+        spacing: PlasmaCore.Units.largeSpacing
 
         PlasmaComponents.Button {
             text: "Simple menu"
@@ -66,8 +67,8 @@ ComponentBase {
             }
         }
 
-        Row {
-            spacing: units.smallSpacing
+        RowLayout {
+            spacing: PlasmaCore.Units.smallSpacing
 
             PlasmaComponents.Button {
                 id: minMaxButton
