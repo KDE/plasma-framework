@@ -49,6 +49,7 @@ T.CheckBox {
         }
 
         Label {
+            Layout.fillWidth: true
             text: control.text
             font: control.font
             color: PlasmaCore.ColorScope.textColor
