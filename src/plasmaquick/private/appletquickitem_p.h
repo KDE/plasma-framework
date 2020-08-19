@@ -121,6 +121,9 @@ public:
     bool activationTogglesExpanded : 1;
     bool initComplete: 1;
 
+    bool refreshCompact = false;
+    bool refreshFull = false;
+
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };
 

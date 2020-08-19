@@ -348,10 +348,12 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
     bool full = appletShouldBeExpanded();
 
-    if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem) ||
-            (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)
-        ) {
-        return;
+	if (!refreshCompact && !refreshFull) {
+        if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem) ||
+                (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)
+            ) {
+            return;
+        }	
     }
 
 
@@ -387,6 +389,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
         //Icon
     } else {
+    	qDebug() << "create compact repr...";
         QQuickItem *compactItem = createCompactRepresentationItem();
         QQuickItem *compactExpanderItem = createCompactRepresentationExpanderItem();
 
@@ -557,6 +560,15 @@ void AppletQuickItem::init()
     AppletQuickItemPrivate::s_rootObjects[d->qmlObject->rootContext()] = this;
 
     Q_ASSERT(d->applet);
+
+    connect(this, &AppletQuickItem::compactRepresentationChanged, [=]() {
+    	d->refreshCompact = true;
+    	d->compactRepresentationCheck();
+    });
+    connect(this, &AppletQuickItem::fullRepresentationChanged, [=]() {
+    	d->refreshFull = true;
+    	d->compactRepresentationCheck();
+    });
 
     //Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
