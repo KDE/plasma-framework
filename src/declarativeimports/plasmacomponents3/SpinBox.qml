@@ -1,4 +1,8 @@
-
+/*
+ * SPDX-FileCopyrightText: 2017 Marco Martin <notmart@gmail.com>
+ * SPDX-FileCopyrightText: 2020 Nate Graham <nate@kde.org>
+ * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+ */
 
 import QtQuick 2.12
 import QtQuick.Controls @QQC2_VERSION@ 
