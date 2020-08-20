@@ -17,6 +17,11 @@ PlasmaCore.FrameSvgItem {
     implicitHeight: implicitWidth
     opacity: control.enabled ? 1 : 0.6
 
+    Private.ButtonShadow {
+        anchors.fill: parent
+        showShadow: !control.pressed
+    }
+
     PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {
             id: checkmarkSvg
@@ -47,9 +52,14 @@ PlasmaCore.FrameSvgItem {
             }
         }
     }
-    Private.ButtonShadow {
-        z: -1
+
+    Private.ButtonFocus {
         anchors.fill: parent
-        state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
+        showFocus: control.activeFocus && !control.pressed
+    }
+
+    Private.ButtonHover {
+        anchors.fill: parent
+        showHover: control.hovered && !control.pressed
     }
 }
