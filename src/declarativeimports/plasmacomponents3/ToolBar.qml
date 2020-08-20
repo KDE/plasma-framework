@@ -11,14 +11,12 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.ToolBar {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
-
-    contentWidth: contentChildren[0].implicitWidth
-    contentHeight: contentChildren[0].implicitHeight
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
 
     padding: units.smallSpacing
-    contentItem: Item { }
 
     background: PlasmaCore.FrameSvgItem {
         implicitHeight: 40
