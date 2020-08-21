@@ -1,12 +1,17 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.2
+/*
+ * SPDX-FileCopyrightText: 2020 Noah Davis <noahadvs@gmail.com>
+ * SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+ */
+
+import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 ComponentBase {
     id: root
-    title: "PlasmaComponents 3 Button"
+    title: "Plasma Components 3 RoundButton"
     contentItem: ColumnLayout {
         GridLayout {
             rowSpacing: PlasmaCore.Units.smallSpacing
@@ -17,7 +22,7 @@ ComponentBase {
                 text: "icon + text"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "test"
             }
@@ -26,7 +31,7 @@ ComponentBase {
                 text: "icon alone, should look small and square"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
             }
 
@@ -34,7 +39,7 @@ ComponentBase {
                 text: "text alone, should be about as wide as the text itself"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 text: "test"
             }
 
@@ -42,7 +47,7 @@ ComponentBase {
                 text: "This should look highlighted on load"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 text: "test"
                 focus: true
             }
@@ -51,7 +56,7 @@ ComponentBase {
                 text: "long text, should expand to fit"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "This is a really really really really long button"
             }
@@ -60,7 +65,7 @@ ComponentBase {
                 text: "long text but constrained, should be 150px and elided"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "This is a really really really really long button"
                 Layout.maximumWidth: 150
@@ -72,10 +77,10 @@ ComponentBase {
             }
 
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     text: "test"
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "test"
                 }
@@ -88,16 +93,16 @@ ComponentBase {
             }
 
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     text: "AA"
                     implicitWidth: Layout.minimumWidth
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "AA"
                     implicitWidth: Layout.minimumWidth
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     implicitWidth: Layout.minimumWidth
                 }
@@ -107,27 +112,28 @@ ComponentBase {
                 text: "Display property"
             }
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Icon Only"
-                    display: PlasmaComponents.Button.IconOnly
+                    display: PlasmaComponents.RoundButton.IconOnly
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Beside Icon"
-                    display: PlasmaComponents.Button.TextBesideIcon
+                    display: PlasmaComponents.RoundButton.TextBesideIcon
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Under Icon"
-                    display: PlasmaComponents.Button.TextUnderIcon
+                    display: PlasmaComponents.RoundButton.TextUnderIcon
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Only"
-                    display: PlasmaComponents.Button.TextOnly
+                    display: PlasmaComponents.RoundButton.TextOnly
                 }
             }
+
         }
         PlasmaExtras.Heading {
             text: "Flat Buttons"
@@ -141,7 +147,7 @@ ComponentBase {
                 text: "icon + text"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "test"
                 flat: true
@@ -151,7 +157,7 @@ ComponentBase {
                 text: "icon alone, should look small and square"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 flat: true
             }
@@ -160,7 +166,7 @@ ComponentBase {
                 text: "text alone, should be about as wide as the text itself"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 text: "test"
                 flat: true
             }
@@ -169,7 +175,7 @@ ComponentBase {
                 text: "long text, should expand to fit"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "This is a really really really really long button"
                 flat: true
@@ -179,7 +185,7 @@ ComponentBase {
                 text: "long text but constrained, should be 150px and elided"
             }
 
-            PlasmaComponents.Button {
+            PlasmaComponents.RoundButton {
                 icon.name: "start-here-kde-plasma"
                 text: "This is a really really really really long button"
                 Layout.maximumWidth: 150
@@ -192,11 +198,11 @@ ComponentBase {
             }
 
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     text: "test"
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "test"
                     flat: true
@@ -210,18 +216,18 @@ ComponentBase {
             }
 
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     text: "AA"
                     implicitWidth: Layout.minimumWidth
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "AA"
                     implicitWidth: Layout.minimumWidth
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     implicitWidth: Layout.minimumWidth
                     flat: true
@@ -232,32 +238,31 @@ ComponentBase {
                 text: "Display property"
             }
             RowLayout {
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Icon Only"
-                    display: PlasmaComponents.Button.IconOnly
+                    display: PlasmaComponents.RoundButton.IconOnly
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Beside Icon"
-                    display: PlasmaComponents.Button.TextBesideIcon
+                    display: PlasmaComponents.RoundButton.TextBesideIcon
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Under Icon"
-                    display: PlasmaComponents.Button.TextUnderIcon
+                    display: PlasmaComponents.RoundButton.TextUnderIcon
                     flat: true
                 }
-                PlasmaComponents.Button {
+                PlasmaComponents.RoundButton {
                     icon.name: "application-menu"
                     text: "Text Only"
-                    display: PlasmaComponents.Button.TextOnly
+                    display: PlasmaComponents.RoundButton.TextOnly
                     flat: true
                 }
             }
         }
     }
 }
-
