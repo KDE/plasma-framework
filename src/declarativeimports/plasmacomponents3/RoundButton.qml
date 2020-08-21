@@ -52,6 +52,8 @@ T.RoundButton {
     background: Item {
         opacity: control.enabled ? 1 : 0.6
 
+        // Round Button
+
         PlasmaCore.Svg {
             id: buttonSvg
             imagePath: "widgets/actionbutton"
@@ -87,27 +89,22 @@ T.RoundButton {
             }
         }
 
+        // Normal Button
+        // TODO: Make round button always round?
+
+        readonly property bool useNormalButton: control.text.length > 0
+
         Private.ButtonShadow {
             anchors.fill: parent
-            visible: control.text.length > 0 && (!control.flat || control.hovered) && (!control.pressed || !control.checked)
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (control.activeFocus) {
-                    return "focus"
-                } else {
-                    return "shadow"
-                }
-            }
+            showShadow: background.useNormalButton && !control.flat && (!control.pressed || !control.checked)
         }
+
         PlasmaCore.FrameSvgItem {
             id: surfaceNormal
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "normal"
-            opacity: control.text.length > 0 && (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
+            opacity: background.useNormalButton && (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: units.longDuration
@@ -115,11 +112,22 @@ T.RoundButton {
                 }
             }
         }
+
+        Private.ButtonFocus {
+            anchors.fill: parent
+            showFocus: background.useNormalButton && control.activeFocus && !control.pressed
+        }
+
+        Private.ButtonHover {
+            anchors.fill: parent
+            showHover: background.useNormalButton && control.hovered && !control.pressed
+        }
+
         PlasmaCore.FrameSvgItem {
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "pressed"
-            visible: control.text.length > 0
+            visible: background.useNormalButton
             opacity: control.checked || control.pressed ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
