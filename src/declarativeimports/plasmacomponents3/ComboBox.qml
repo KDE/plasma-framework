@@ -185,27 +185,27 @@ T.ComboBox {
         prefix: editable
                 ? "base"
                 : (control.pressed ? "pressed" : "normal")
+
+        Private.ButtonShadow {
+            anchors.fill: parent
+            showShadow: !parent.editable && !control.pressed
+        }
+
         Private.TextFieldFocus {
             visible: parent.editable
             z: -1
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
             anchors.fill: parent
         }
-        Private.ButtonShadow {
-            z: -1
-            visible: !parent.editable
+
+        Private.ButtonFocus {
             anchors.fill: parent
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (control.activeFocus) {
-                    return "focus"
-                } else {
-                    return "shadow"
-                }
-            }
+            showFocus: control.activeFocus && !control.pressed
+        }
+
+        Private.ButtonHover {
+            anchors.fill: parent
+            showHover: control.hovered && !control.pressed
         }
 
         MouseArea {
