@@ -62,8 +62,8 @@ public:
                          ImmutableConstraint
     };
     Q_ENUM(Constraint)
-
     Q_DECLARE_FLAGS(Constraints, Constraint)
+
     /**
 	 * This enumeration lists the various hints that an applet can pass to its
 	 * constraint regarding the way that it is represented
