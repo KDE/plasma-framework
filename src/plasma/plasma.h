@@ -62,7 +62,17 @@ public:
                          ImmutableConstraint
     };
     Q_ENUM(Constraint)
+
     Q_DECLARE_FLAGS(Constraints, Constraint)
+    /**
+	 * This enumeration lists the various hints that an applet can pass to its
+	 * constraint regarding the way that it is represented
+     */
+    enum ConstraintHints {
+		NoHint = 0,
+		CanFillArea = 1 /**< The applet can fill the area and ignore constraint margins*/
+    };
+    Q_ENUM(ConstraintHints)
 
     /**
      * The FormFactor enumeration describes how a Plasma::Applet should arrange

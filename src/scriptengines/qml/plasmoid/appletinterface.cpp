@@ -618,14 +618,14 @@ bool AppletInterface::hideOnWindowDeactivate() const
     return m_hideOnDeactivate;
 }
 
-void AppletInterface::setApplyMarginsProperty(bool margins)
+void AppletInterface::setConstraintHints(Plasma::Types::ConstraintHints hints)
 {
-	m_apply_margins = margins;
+	m_constraintHints = hints;
 }
 
-bool AppletInterface::applyMargins() const
+Plasma::Types::ConstraintHints AppletInterface::constraintHints() const
 {
-	return m_apply_margins;
+	return m_constraintHints;
 }
 
 QKeySequence AppletInterface::globalShortcut() const
