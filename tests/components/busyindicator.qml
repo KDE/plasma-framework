@@ -11,15 +11,31 @@ ComponentBase {
 
         PlasmaComponents.Label {
             wrapMode: Text.WordWrap
-            text: "When checking and unchecking the checkbox, " +
-                  "the busy indicator should resume where it has " +
-                  "paused and not glitch around."
+            text: "The BusyIndicator should have a height of 16px and should have a 1:1 aspect ratio"
+            Layout.preferredWidth: Math.max(busyIndicatorLayout.width, root.implicitHeaderWidth)
+        }
+        PlasmaComponents.BusyIndicator {
+            Layout.preferredHeight: 16
+        }
+
+        PlasmaComponents.Label {
+            wrapMode: Text.WordWrap
+            text: "The BusyIndicator should use its implicit size."
+            Layout.preferredWidth: Math.max(busyIndicatorLayout.width, root.implicitHeaderWidth)
+        }
+        PlasmaComponents.BusyIndicator {}
+
+        PlasmaComponents.Label {
+            wrapMode: Text.WordWrap
+            text: "The BusyIndicator should maintain a 1:1 aspect ratio, pause when unchecked and resume when checked."
         }
 
         RowLayout {
             spacing: PlasmaCore.Units.gridUnit
 
             PlasmaComponents.BusyIndicator {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 running: runningButton.checked
             }
 
