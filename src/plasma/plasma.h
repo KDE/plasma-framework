@@ -297,10 +297,11 @@ PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
  **/
 PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Flip)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ComponentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::BackgroundFlags)
+
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Flip)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::BackgroundFlags)
 #endif // multiple inclusion guard

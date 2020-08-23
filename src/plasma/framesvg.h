@@ -305,8 +305,8 @@ private:
     //Q_PRIVATE_SLOT(d, void updateSizes())
 };
 
-} // Plasma namespace
+Q_DECLARE_OPERATORS_FOR_FLAGS(FrameSvg::EnabledBorders)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::FrameSvg::EnabledBorders)
+} // Plasma namespace
 
 #endif // multiple inclusion guard
