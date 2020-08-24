@@ -244,7 +244,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged)
 
-	/**
+    /**
      * The metadata of the applet.
      * @since 5.73
      */
