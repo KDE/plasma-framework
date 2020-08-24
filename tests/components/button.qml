@@ -1,42 +1,43 @@
 import QtQuick 2.0
-
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.2
+import QtQuick.Controls 1.2
+import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents
 
 ComponentBase {
-    Grid {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+    id: root
+    title: "Plasma Components 2 Button"
+    contentItem: GridLayout {
+        rowSpacing: PlasmaCore.Units.smallSpacing
+        columnSpacing: PlasmaCore.Units.largeSpacing
         columns: 2
 
-        Label {
+        PlasmaComponents.Label {
             text: "icon + text"
         }
 
         PlasmaComponents.Button {
-            iconSource: "list-remove"
+            iconSource: "start-here-kde-plasma"
             text: "test"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "icon alone, should look small and square"
         }
 
         PlasmaComponents.Button {
-            iconSource: "list-remove"
+            iconSource: "start-here-kde-plasma"
         }
 
-        Label {
-            text: "text alone, should be about 12 chars wide"
+        PlasmaComponents.Label {
+            text: "text alone, should be about as wide as the text itself"
         }
 
         PlasmaComponents.Button {
             text: "test"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "This should look highlighted on load"
         }
 
@@ -46,26 +47,26 @@ ComponentBase {
         }
 
 
-        Label {
+        PlasmaComponents.Label {
             text: "long text, should expand to fit"
         }
 
         PlasmaComponents.Button {
-            iconSource: "list-remove"
+            iconSource: "start-here-kde-plasma"
             text: "This is a really really really really long button"
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "long text but constrained, should be 150px and elided"
         }
 
         PlasmaComponents.Button {
-            iconSource: "list-remove"
+            iconSource: "start-here-kde-plasma"
             text: "This is a really really really really long button"
-            width: 150
+            Layout.maximumWidth: 150
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "button with menu"
         }
 
@@ -99,7 +100,7 @@ ComponentBase {
             }
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "button (with or without icon) and textfield should have the same height"
         }
 
@@ -115,7 +116,7 @@ ComponentBase {
             }
         }
 
-        Label {
+        PlasmaComponents.Label {
             text: "minimum width property. Should be two letters wide"
         }
 

@@ -1,21 +1,20 @@
 import QtQuick 2.0
-
+import QtQuick.Layouts 1.12
 import org.kde.plasma.core 2.0 as PlasmaCore
-
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
 ComponentBase {
-    PlasmaComponents.TabBar {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
-
+    id: root
+    title: "Plasma Components 3 TabBar with TabButtons"
+    contentItem: PlasmaComponents.TabBar {
+        implicitWidth: tabButton2.implicitWidth*4
         PlasmaComponents.TabButton {
             icon.name: "application-menu"
             text: "Icon Only"
             display: PlasmaComponents.TabButton.IconOnly
         }
         PlasmaComponents.TabButton {
+            id: tabButton2
             icon.name: "application-menu"
             text: "Text Beside Icon"
             display: PlasmaComponents.TabButton.TextBesideIcon

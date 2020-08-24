@@ -1,33 +1,51 @@
 import QtQuick 2.0
+import QtQuick.Layouts 1.12
+import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
 ComponentBase {
-    Column {
-        anchors.fill: parent
-        anchors.margins: 20
-        spacing: 20
+    id: root
+    title: "Plasma Components 3 BusyIndicator"
+    contentItem: ColumnLayout {
+        spacing: PlasmaCore.Units.gridUnit
 
         PlasmaComponents.Label {
-            width: parent.width
             wrapMode: Text.WordWrap
-            text: "When checking and unchecking the checkbox, " +
-                  "the busy indicator should resume where it has " +
-                  "paused and not glitch around"
+            text: "The BusyIndicator should have a height of 16px and should have a 1:1 aspect ratio"
+            Layout.preferredWidth: Math.max(busyIndicatorLayout.width, root.implicitHeaderWidth)
+        }
+        PlasmaComponents.BusyIndicator {
+            Layout.preferredHeight: 16
         }
 
-        Row {
-            spacing: 20
+        PlasmaComponents.Label {
+            wrapMode: Text.WordWrap
+            text: "The BusyIndicator should use its implicit size."
+            Layout.preferredWidth: Math.max(busyIndicatorLayout.width, root.implicitHeaderWidth)
+        }
+        PlasmaComponents.BusyIndicator {}
+
+        PlasmaComponents.Label {
+            wrapMode: Text.WordWrap
+            text: "The BusyIndicator should maintain a 1:1 aspect ratio, disappear when unchecked and restart when checked."
+            Layout.preferredWidth: Math.max(busyIndicatorLayout.width, root.implicitHeaderWidth)
+        }
+
+        RowLayout {
+            id: busyIndicatorLayout
+            spacing: PlasmaCore.Units.gridUnit
 
             PlasmaComponents.BusyIndicator {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
                 running: runningButton.checked
             }
 
             PlasmaComponents.CheckBox {
                 id: runningButton
                 text: "Running"
+                checked: true
             }
         }
-
     }
-
 }

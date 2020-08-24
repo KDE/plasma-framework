@@ -1,21 +1,8 @@
 /*
- *   Copyright 2018 Marco Martin <mart@kde.org>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU Library General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+    SPDX-FileCopyrightText: 2018 Marco Martin <mart@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
@@ -65,6 +52,8 @@ T.RoundButton {
     background: Item {
         opacity: control.enabled ? 1 : 0.6
 
+        // Round Button
+
         PlasmaCore.Svg {
             id: buttonSvg
             imagePath: "widgets/actionbutton"
@@ -100,27 +89,22 @@ T.RoundButton {
             }
         }
 
+        // Normal Button
+        // TODO: Make round button always round?
+
+        readonly property bool useNormalButton: control.text.length > 0
+
         Private.ButtonShadow {
             anchors.fill: parent
-            visible: control.text.length > 0 && (!control.flat || control.hovered) && (!control.pressed || !control.checked)
-            state: {
-                if (control.pressed) {
-                    return "hidden"
-                } else if (control.hovered) {
-                    return "hover"
-                } else if (control.activeFocus) {
-                    return "focus"
-                } else {
-                    return "shadow"
-                }
-            }
+            showShadow: background.useNormalButton && !control.flat && (!control.pressed || !control.checked)
         }
+
         PlasmaCore.FrameSvgItem {
             id: surfaceNormal
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "normal"
-            opacity: control.text.length > 0 && (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
+            opacity: background.useNormalButton && (!control.flat || control.hovered) && (!control.pressed || !control.checked) ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {
                     duration: units.longDuration
@@ -128,11 +112,22 @@ T.RoundButton {
                 }
             }
         }
+
+        Private.ButtonFocus {
+            anchors.fill: parent
+            showFocus: background.useNormalButton && control.activeFocus && !control.pressed
+        }
+
+        Private.ButtonHover {
+            anchors.fill: parent
+            showHover: background.useNormalButton && control.hovered && !control.pressed
+        }
+
         PlasmaCore.FrameSvgItem {
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "pressed"
-            visible: control.text.length > 0
+            visible: background.useNormalButton
             opacity: control.checked || control.pressed ? 1 : 0
             Behavior on opacity {
                 OpacityAnimator {

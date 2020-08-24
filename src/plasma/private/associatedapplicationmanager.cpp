@@ -1,21 +1,8 @@
 /*
- *   Copyright 2009 Marco Martin <notmart@gmail.com>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+    SPDX-FileCopyrightText: 2009 Marco Martin <notmart@gmail.com>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 #include "associatedapplicationmanager_p.h"
 
@@ -32,7 +19,7 @@
 #include <QStandardPaths>
 #include <KLocalizedString>
 #include <KActionCollection>
-#include <KMimeTypeTrader>
+#include <KApplicationTrader>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/OpenUrlJob>
 #include <KIO/JobUiDelegate>
@@ -70,7 +57,7 @@ public:
             QAction *a = i.key()->actions()->action(QStringLiteral("run associated application"));
             if (a) {
                 const QString mimeType = mimeDb.mimeTypeForUrl(i.value().first()).name();
-                const KService::List apps = KMimeTypeTrader::self()->query(mimeType);
+                const KService::List apps = KApplicationTrader::queryByMimeType(mimeType);
                 if (!apps.isEmpty()) {
                     a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                     a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));
@@ -171,7 +158,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
         if (a) {
             QMimeDatabase mimeDb;
             const QString mimeType = mimeDb.mimeTypeForUrl(urls.first()).name();
-            const KService::List apps = KMimeTypeTrader::self()->query(mimeType);
+            const KService::List apps = KApplicationTrader::queryByMimeType(mimeType);
             if (!apps.isEmpty()) {
                 a->setIcon(QIcon::fromTheme(apps.first()->icon()));
                 a->setText(i18n("Open with %1", apps.first()->genericName().isEmpty() ? apps.first()->genericName() : apps.first()->name()));

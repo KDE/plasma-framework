@@ -1,26 +1,25 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.4
-
 import org.kde.plasma.core 2.0 as PlasmaCore
-
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
 ComponentBase {
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: 20
+    id: root
+    title: "Plasma Components 3 ToolButton"
+
+    contentItem: ColumnLayout {
         Flow {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: 20
+            spacing: PlasmaCore.Units.gridUnit
 
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
                 text: "test"
                 flat: true
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
                 flat: true
             }
             PlasmaComponents.ToolButton {
@@ -28,12 +27,12 @@ ComponentBase {
                 flat: true
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
                 text: "test"
                 flat: false
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
                 flat: false
             }
             PlasmaComponents.ToolButton {
@@ -68,16 +67,16 @@ ComponentBase {
                 text: "They should always be square:"
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
             }
             PlasmaComponents.ToolButton {
-                icon.name: "list-remove"
+                icon.name: "start-here-kde-plasma"
             }
         }
         PlasmaComponents.Label {
@@ -99,8 +98,8 @@ ComponentBase {
                 icon.name: "window-close"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                icon.width: units.iconSizes.small
-                icon.height: units.iconSizes.small
+                icon.width: PlasmaCore.Units.iconSizes.small
+                icon.height: PlasmaCore.Units.iconSizes.small
                 text: "Text"
             }
             PlasmaComponents.ToolButton {

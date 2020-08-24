@@ -1,21 +1,8 @@
 /*
- *   Copyright 2005 by Aaron Seigo <aseigo@kde.org>
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU Library General Public License as
- *   published by the Free Software Foundation; either version 2, or
- *   (at your option) any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details
- *
- *   You should have received a copy of the GNU Library General Public
- *   License along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+    SPDX-FileCopyrightText: 2005 Aaron Seigo <aseigo@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.0-or-later
+*/
 
 #ifndef PLASMA_DEFS_H
 #define PLASMA_DEFS_H
@@ -320,10 +307,11 @@ PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
  **/
 PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Flip)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ComponentTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::BackgroundFlags)
+
 } // Plasma namespace
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Constraints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::Flip)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::ComponentTypes)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Plasma::Types::BackgroundFlags)
 #endif // multiple inclusion guard

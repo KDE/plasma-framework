@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(KF5_VERSION "5.73.0") # handled by release scripts
+set(KF5_VERSION "5.74.0") # handled by release scripts
 set(KF5_DEP_VERSION "5.73.0") # handled by release scripts
 project(Plasma VERSION ${KF5_VERSION})
 
@@ -138,7 +138,7 @@ ecm_setup_qtplugin_macro_names(
         PACKAGE_SETUP_AUTOMOC_VARIABLES
 )
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054600)
+add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054900)
 
 #add_definitions(-Wno-deprecated)
 
