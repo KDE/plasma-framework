@@ -66,6 +66,15 @@ ComponentBase {
                 Layout.maximumWidth: 150
             }
 
+            PlasmaComponents.Label {
+                text: "disabled icon + text"
+            }
+
+            PlasmaComponents.Button {
+                icon.name: "start-here-kde-plasma"
+                text: "test"
+                enabled: false
+            }
 
             PlasmaComponents.Label {
                 text: "button (with or without icon) and textfield should have the same height"
@@ -80,26 +89,6 @@ ComponentBase {
                     text: "test"
                 }
                 PlasmaComponents.TextField {
-                }
-            }
-
-            PlasmaComponents.Label {
-                text: "minimum width property. Should be two letters wide"
-            }
-
-            RowLayout {
-                PlasmaComponents.Button {
-                    text: "AA"
-                    implicitWidth: Layout.minimumWidth
-                }
-                PlasmaComponents.Button {
-                    icon.name: "application-menu"
-                    text: "AA"
-                    implicitWidth: Layout.minimumWidth
-                }
-                PlasmaComponents.Button {
-                    icon.name: "application-menu"
-                    implicitWidth: Layout.minimumWidth
                 }
             }
 
@@ -186,6 +175,16 @@ ComponentBase {
                 flat: true
             }
 
+            PlasmaComponents.Label {
+                text: "disabled icon + text"
+            }
+
+            PlasmaComponents.Button {
+                icon.name: "start-here-kde-plasma"
+                text: "test"
+                flat: true
+                enabled: false
+            }
 
             PlasmaComponents.Label {
                 text: "button (with or without icon) and textfield should have the same height"
@@ -202,29 +201,6 @@ ComponentBase {
                     flat: true
                 }
                 PlasmaComponents.TextField {
-                }
-            }
-
-            PlasmaComponents.Label {
-                text: "minimum width property. Should be two letters wide"
-            }
-
-            RowLayout {
-                PlasmaComponents.Button {
-                    text: "AA"
-                    implicitWidth: Layout.minimumWidth
-                    flat: true
-                }
-                PlasmaComponents.Button {
-                    icon.name: "application-menu"
-                    text: "AA"
-                    implicitWidth: Layout.minimumWidth
-                    flat: true
-                }
-                PlasmaComponents.Button {
-                    icon.name: "application-menu"
-                    implicitWidth: Layout.minimumWidth
-                    flat: true
                 }
             }
 
