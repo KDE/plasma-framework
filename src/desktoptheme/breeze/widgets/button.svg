@@ -318,101 +318,101 @@
     <path style="stroke-width:0.999996" id="pressed-hint-bottom-margin" d="m 190,204 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
     <path style="stroke-width:0.999996" id="pressed-hint-left-margin" d="m 174,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
     <path style="stroke-width:0.999996" id="pressed-hint-right-margin" d="m 202,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <g id="toolbutton-hover-bottom" transform="translate(238,142)" fill-rule="evenodd">
+    <g id="toolbutton-hover-bottom" transform="translate(238,140)" fill-rule="evenodd">
         <path id="path1565-7-9" d="m 4,-11 v 3 h 22 v -3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1565-4" d="m 4,-9 v 1 h 22 v -1 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-bottomright" transform="translate(240,142)" fill-rule="evenodd">
+    <g id="toolbutton-hover-bottomright" transform="translate(238,140)" fill-rule="evenodd">
         <path id="rect1509-7-9-6-2-2" d="m 27,-8 v -3 h 3 c 0,1.662 -1.338,3 -3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-right" transform="translate(240,140)" fill-rule="evenodd">
+    <g id="toolbutton-hover-right" transform="translate(238,140)" fill-rule="evenodd">
         <path id="path1565-7-8-1" d="m 27,-12 h 3 v -22 h -3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1559-2" d="m 29,-34 v 22 h 1 v -22 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-top" transform="rotate(180,134,46)" fill-rule="evenodd">
+    <g id="toolbutton-hover-top" transform="rotate(180,134,47)" fill-rule="evenodd">
         <path id="path1565-7-9-8" d="m 4,-11 v 3 h 22 v -3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1565-4-9" d="m 4,-9 v 1 h 22 v -1 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-topleft" transform="rotate(180,133,46)" fill-rule="evenodd">
+    <g id="toolbutton-hover-topleft" transform="rotate(180,134,47)" fill-rule="evenodd">
         <path id="rect1509-7-9-6-2-2-8" d="m 27,-8 v -3 h 3 c 0,1.662 -1.338,3 -3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-8" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-left" transform="rotate(180,133,47)" fill-rule="evenodd">
+    <g id="toolbutton-hover-left" transform="rotate(180,134,47)" fill-rule="evenodd">
         <path id="path1565-7-8-1-6" d="m 27,-12 h 3 v -22 h -3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1559-2-8" d="m 29,-34 v 22 h 1 v -22 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-topright" transform="matrix(1,0,0,-1,240,92)" fill-rule="evenodd">
+    <g id="toolbutton-hover-topright" transform="matrix(1,0,0,-1,238,94)" fill-rule="evenodd">
         <path id="rect1509-7-9-6-2-2-83" d="m 27,-8 v -3 h 3 c 0,1.662 -1.338,3 -3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-3" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
-    <g id="toolbutton-hover-bottomleft" transform="matrix(-1,0,0,1,266,142)" fill-rule="evenodd">
+    <g id="toolbutton-hover-bottomleft" transform="matrix(-1,0,0,1,268,140)" fill-rule="evenodd">
         <path id="rect1509-7-9-6-2-2-0" d="m 27,-8 v -3 h 3 c 0,1.662 -1.338,3 -3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4" d="m 29,-11 c 0,1.108 -0.892,2 -2,2 v 1 c 1.662,0 3,-1.338 3,-3 z" class="ColorScheme-ButtonHover" fill="currentColor" />
     </g>
     <path id="toolbutton-hover-center" d="m242 106h22v22h-22z" fill-opacity=".003922" fill-rule="evenodd" opacity=".001" />
-    <rect id="toolbutton-hover-hint-top-margin" x="252" y="100" width="2" height="6" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
-    <rect id="toolbutton-hover-hint-bottom-margin" x="252" y="128" width="2" height="6" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
-    <rect id="toolbutton-hover-hint-right-margin" x="264" y="116" width="6" height="2" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999997" />
-    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.999997" id="toolbutton-hover-hint-left-margin" width="6" height="2" x="236" y="116" />
-    <g id="toolbutton-focus-bottom" transform="translate(62,2)" fill-rule="evenodd">
+    <rect id="toolbutton-hover-hint-top-margin" x="252" y="102" width="2" height="4" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999996" />
+    <rect id="toolbutton-hover-hint-bottom-margin" x="252" y="128" width="2" height="4" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999996" />
+    <rect id="toolbutton-hover-hint-right-margin" x="264" y="116" width="4" height="2" fill="#ff00ff" fill-rule="evenodd" style="stroke-width:0.999996" />
+    <rect style="fill:#ff00ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.999996" id="toolbutton-hover-hint-left-margin" width="4" height="2" x="238" y="116" />
+    <g id="toolbutton-focus-bottom" transform="translate(62)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-8" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-3" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
         <path id="path1565-4-90-2-7" d="m 180,170 v 1 h 22 v -1 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
     </g>
-    <g id="toolbutton-focus-top" transform="matrix(1,0,0,-1,62,308)" fill-rule="evenodd">
+    <g id="toolbutton-focus-top" transform="matrix(1,0,0,-1,62,310)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-5-3" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-2-7" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
         <path id="path1565-4-90-2-0-8" d="m 180,170 v 1 h 22 v -1 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
     </g>
-    <g id="toolbutton-focus-right" transform="rotate(-90,223,123)" fill-rule="evenodd">
+    <g id="toolbutton-focus-right" transform="rotate(-90,222,124)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-0-4" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-9-1" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
         <path id="path1565-4-90-2-9-9" d="m 180,170 v 1 h 22 v -1 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
     </g>
-    <g id="toolbutton-focus-left" transform="matrix(0,-1,-1,0,406,346)" fill-rule="evenodd">
+    <g id="toolbutton-focus-left" transform="matrix(0,-1,-1,0,408,346)" fill-rule="evenodd">
         <path id="rect829-6-5-2-9-0-1-9" transform="scale(-1)" d="m -202,-170 h 22 v 3 h -22 z" class="ColorScheme-ButtonBackground" fill="currentColor" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="rect829-6-2-6-6-9-9-0-8" transform="scale(-1)" d="m -202,-170 h 22 v 1 h -22 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
         <path id="path1565-4-90-2-9-3-8" d="m 180,170 v 1 h 22 v -1 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
     </g>
-    <g transform="translate(-2,2)" id="toolbutton-focus-bottomleft" fill-rule="evenodd">
+    <g id="toolbutton-focus-bottomleft" fill-rule="evenodd">
         <path id="rect2974" d="m 237,167 c 0,2.216 1.784,4 4,4 v -1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
         <path id="rect1509-7-9-6-2-2-0-8" d="m 241,170 v -3 h -3 c 0,1.662 1.338,3 3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4-7" d="m 239,167 c 0,1.108 0.892,2 2,2 v 1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
     </g>
-    <g id="toolbutton-focus-topleft" transform="matrix(1,0,0,-1,-2,308)" fill-rule="evenodd">
+    <g id="toolbutton-focus-topleft" transform="matrix(1,0,0,-1,0,310)" fill-rule="evenodd">
         <path id="rect2974-6" d="m 237,167 c 0,2.216 1.784,4 4,4 v -1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
         <path id="rect1509-7-9-6-2-2-0-8-7" d="m 241,170 v -3 h -3 c 0,1.662 1.338,3 3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4-7-6" d="m 239,167 c 0,1.108 0.892,2 2,2 v 1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
     </g>
-    <g id="toolbutton-focus-topright" transform="rotate(180,254,154)" fill-rule="evenodd">
+    <g id="toolbutton-focus-topright" transform="rotate(180,253,155)" fill-rule="evenodd">
         <path id="rect2974-9" d="m 237,167 c 0,2.216 1.784,4 4,4 v -1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
         <path id="rect1509-7-9-6-2-2-0-8-75" d="m 241,170 v -3 h -3 c 0,1.662 1.338,3 3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4-7-9" d="m 239,167 c 0,1.108 0.892,2 2,2 v 1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
     </g>
-    <g id="toolbutton-focus-bottomright" transform="matrix(-1,0,0,1,508,2)" fill-rule="evenodd">
+    <g id="toolbutton-focus-bottomright" transform="matrix(-1,0,0,1,506,0)" fill-rule="evenodd">
         <path id="rect2974-8" d="m 237,167 c 0,2.216 1.784,4 4,4 v -1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" opacity="0.2" />
         <path id="rect1509-7-9-6-2-2-0-8-5" d="m 241,170 v -3 h -3 c 0,1.662 1.338,3 3,3 z" fill-opacity="0.00392199" opacity="0.00100002" />
         <path id="path1561-6-4-7-3" d="m 239,167 c 0,1.108 0.892,2 2,2 v 1 c -1.662,0 -3,-1.338 -3,-3 z" class="ColorScheme-ButtonFocus" fill="currentColor" />
     </g>
-    <path id="toolbutton-focus-hint-top-margin" d="m 252,137 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-bottom-margin" d="m 252,172 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-left-margin" d="m 235,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path id="toolbutton-focus-hint-right-margin" d="m 270,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path id="toolbutton-focus-hint-top-margin" d="m 252,139 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path id="toolbutton-focus-hint-bottom-margin" d="m 252,170 h 2 v 1 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path id="toolbutton-focus-hint-left-margin" d="m 237,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path id="toolbutton-focus-hint-right-margin" d="m 268,154 h 1 v 2 h -1 z" fill="#ff00ff" fill-rule="evenodd" />
     <path opacity="0.00100002" fill-rule="evenodd" fill-opacity="0.00392199" d="m 242,144 h 22 v 22 h -22 z" id="toolbutton-focus-center" />
-    <path id="toolbutton-pressed-top" d="m 242,176 v 3 h 22 v -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-topleft" d="m 239,176 c -1.662,0 -3,1.338 -3,3 h 3 v -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-top" d="m 242,178 v 3 h 22 v -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-topleft" d="m 241,178 c -1.662,0 -3,1.338 -3,3 h 3 v -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
     <path id="toolbutton-pressed-center" d="m242 182h22v22h-22z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-bottom" d="m 264,210 v -3 h -22 v 3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-bottomright" d="m 267,210 c 1.662,0 3,-1.338 3,-3 h -3 v 2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-right" d="m 270,182 h -3 v 22 h 3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-topright" d="m 270,179 c 0,-1.662 -1.338,-3 -3,-3 v 3 h 2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-left" d="m 236,204 h 3 v -22 h -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path id="toolbutton-pressed-bottomleft" d="m 236,207 c 0,1.662 1.338,3 3,3 v -3 h -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-top-margin" d="m 252,176 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-bottom-margin" d="m 252,204 h 2 v 6 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-left-margin" d="m 236,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
-    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-right-margin" d="m 264,192 h 6 v 2 h -6 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-bottom" d="m 264,208 v -3 h -22 v 3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-bottomright" d="m 265,208 c 1.662,0 3,-1.338 3,-3 h -3 v 2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-right" d="m 268,182 h -3 v 22 h 3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-topright" d="m 268,181 c 0,-1.662 -1.338,-3 -3,-3 v 3 h 2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-left" d="m 238,204 h 3 v -22 h -3 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path id="toolbutton-pressed-bottomleft" d="m 238,205 c 0,1.662 1.338,3 3,3 v -3 h -2 z" class="ColorScheme-ButtonHover" fill="currentColor" fill-rule="evenodd" />
+    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-top-margin" d="m 252,178 h 2 v 4 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-bottom-margin" d="m 252,204 h 2 v 4 h -2 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-left-margin" d="m 238,192 h 4 v 2 h -4 z" fill="#ff00ff" fill-rule="evenodd" />
+    <path style="stroke-width:0.999996" id="toolbutton-pressed-hint-right-margin" d="m 264,192 h 4 v 2 h -4 z" fill="#ff00ff" fill-rule="evenodd" />
     <text id="text2130" x="36" y="82" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128" x="36" y="82" font-size="10" text-anchor="end">normal</tspan></text>
     <text id="text2130-0" x="36" y="120" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128-4" x="36" y="120" font-size="10" text-anchor="end">hover</tspan></text>
     <text id="text2130-0-2" x="36" y="158" font-family="Noto Sans" font-size="10" letter-spacing="0" text-anchor="end" word-spacing="0"><tspan id="tspan2128-4-9" x="36" y="158" font-size="10" text-anchor="end">focus</tspan></text>
@@ -429,8 +429,10 @@
 </tspan></tspan><tspan x="96" y="-43.5000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">NOTE: shadow, hover and focus (not focus-background) use negative margins!
 </tspan></tspan><tspan x="96" y="-31.0000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">This behavior is implemented in at least the following files (please keep this up to date, fix the problem or find a better place to </tspan></tspan><tspan x="96" y="-18.5000030473"><tspan style="font-size:10px;text-align:start;text-anchor:start">put this info):
 </tspan></tspan><tspan x="96" y="-6.00000304728"><tspan style="font-size:10px;text-align:start;text-anchor:start">plasma-framework/src/declarativeimports/plasmacomponents3/private/ButtonShadow.qml
-</tspan></tspan><tspan x="96" y="6.49999695272"><tspan style="font-size:10px;text-align:start;text-anchor:start">
-</tspan></tspan><tspan x="96" y="18.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">We should add support for a negative margins hint to FrameSvg and document it instead of requiring people to read source </tspan></tspan><tspan x="96" y="31.4999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">code in order to know these things. Unfortunately, not sure if we can change the code of ButtonShadow since it would break </tspan></tspan><tspan x="96" y="43.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">themes that rely on this undocumented behaviour. Maybe in KF6.</tspan></tspan></text>
+</tspan></tspan><tspan x="96" y="6.49999695272"><tspan style="font-size:10px;text-align:start;text-anchor:start">plasma-framework/src/declarativeimports/plasmacomponents3/private/ButtonHover.qml
+</tspan></tspan><tspan x="96" y="18.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">plasma-framework/src/declarativeimports/plasmacomponents3/private/ButtonFocus.qml
+</tspan></tspan><tspan x="96" y="31.4999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">
+</tspan></tspan><tspan x="96" y="43.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">We should add support for a negative margins hint to FrameSvg and document it instead of requiring people to read source </tspan></tspan><tspan x="96" y="56.4999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">code in order to know these things. Unfortunately, not sure if we can change the code of ButtonShadow since it would break </tspan></tspan><tspan x="96" y="68.9999969527"><tspan style="font-size:10px;text-align:start;text-anchor:start">themes that rely on this undocumented behaviour. Maybe in KF6.</tspan></tspan></text>
     <path fill-rule="evenodd" fill="#00ff00" d="m -12,76 h 3.9999999 v 4 H -12 Z" id="normal-hint-compose-over-border" style="stroke-width:1" />
     <path style="stroke-width:1" id="focus-background-hint-compose-over-border" d="m -12,152 h 3.9999999 v 4 H -12 Z" fill="#00ff00" fill-rule="evenodd" />
     <path fill-rule="evenodd" fill="#00ff00" d="m -20,152 h 4 v 4 h -4 z" id="hint-focus-highlighted-background" style="stroke-width:1" />
