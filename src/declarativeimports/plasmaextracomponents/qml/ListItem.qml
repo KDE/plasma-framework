@@ -30,7 +30,7 @@ Kirigami.AbstractListItem {
      *
      * Whether this ListItem renders as a section header.
      */
-    property bool sectionDelegate: true
+    property bool sectionDelegate: false
 
     /**
      * containsMouse: bool
