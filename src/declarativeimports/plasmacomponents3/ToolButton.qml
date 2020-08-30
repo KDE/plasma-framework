@@ -14,10 +14,10 @@ import "private" as Private
 T.ToolButton {
     id: control
 
-    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
-                            + leftPadding + rightPadding
-    implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
-                            + topPadding + bottomPadding
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
 
     Layout.minimumWidth: contentItem.implicitWidth + leftPadding + rightPadding
 
@@ -96,7 +96,5 @@ T.ToolButton {
         }
     }
 
-    background: Private.ButtonBackground {
-        parentControl: control
-    }
+    background: Private.ButtonBackground {}
 }
