@@ -19,8 +19,6 @@ T.ToolButton {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    Layout.minimumWidth: contentItem.implicitWidth + leftPadding + rightPadding
-
     leftPadding: background.leftMargin
     topPadding: background.topMargin
     rightPadding: background.rightMargin
