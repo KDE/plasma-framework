@@ -20,6 +20,9 @@ GridLayout {
     PlasmaCore.ColorScope.inherit: true
 
     columns: parent.display == T.Button.TextBesideIcon ? 2 : 1
+    
+    rowSpacing: parent.spacing
+    columnSpacing: rowSpacing
 
     PlasmaCore.IconItem {
         id: icon

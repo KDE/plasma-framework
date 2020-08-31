@@ -26,6 +26,8 @@ T.Button {
     rightPadding: background.rightMargin
     bottomPadding: background.bottomMargin
 
+    spacing: PlasmaCore.Units.smallSpacing
+
     hoverEnabled: !Kirigami.Settings.tabletMode
 
     Kirigami.MnemonicData.enabled: control.enabled && control.visible
