@@ -103,7 +103,6 @@ X-KDE-PluginInfo-Name=air
 X-KDE-PluginInfo-Version=@KF5_VERSION@
 X-KDE-PluginInfo-Website=https://plasma.kde.org
 X-KDE-PluginInfo-Category=
-X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 X-Plasma-API=5.0
