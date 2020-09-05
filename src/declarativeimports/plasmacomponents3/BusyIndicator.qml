@@ -31,6 +31,15 @@ T.BusyIndicator {
         implicitWidth: PlasmaCore.Units.gridUnit * 2
         implicitHeight: implicitWidth
 
+        visible: opacity > 0
+        opacity: control.running ? 1.0 : 0.0
+        Behavior on opacity {
+            OpacityAnimator {
+                duration: PlasmaCore.Units.shortDuration
+                easing.type: Easing.OutQuad
+            }
+        }
+
         PlasmaCore.SvgItem {
             id: busyIndicatorSvgItem
 
@@ -52,69 +61,8 @@ T.BusyIndicator {
                 to: 360
                 duration: 2000
                 loops: Animation.Infinite
+                running: visible
             }
         }
     }
-
-    state: control.running ? "running" : "hidden"
-
-    states: [
-        State {
-            name: "hidden"
-            PropertyChanges {
-                target: contentItem
-                opacity: 0
-            }
-        },
-        State {
-            name: "running"
-            PropertyChanges {
-                target: contentItem
-                opacity: 1
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            from: "*"
-            to: "hidden"
-            SequentialAnimation {
-                OpacityAnimator {
-                    duration: PlasmaCore.Units.shortDuration
-                    easing.type: Easing.OutQuad
-                }
-                PropertyAction {
-                    target: contentItem
-                    property: "visible"
-                    value: false
-                }
-            }
-            PropertyAction {
-                target: rotationAnimator
-                property: "running"
-                value: false
-            }
-        },
-        Transition {
-            from: "*"
-            to: "running"
-            PropertyAction {
-                target: rotationAnimator
-                property: "running"
-                value: true
-            }
-            SequentialAnimation {
-                PropertyAction {
-                    target: contentItem
-                    property: "visible"
-                    value: true
-                }
-                OpacityAnimator {
-                    duration: PlasmaCore.Units.shortDuration
-                    easing.type: Easing.OutQuad
-                }
-            }
-        }
-    ]
 }
