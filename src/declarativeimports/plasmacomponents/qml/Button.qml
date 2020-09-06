@@ -18,6 +18,8 @@ import QtQuick 2.1
 import QtQuick.Controls 1.2 as QtControls
 import QtQuick.Controls.Styles.Plasma 2.0 as Styles
 
+import org.kde.plasma.core 2.0 as PlasmaCore
+
 /**
  * The push button is perhaps the most commonly used widget in any graphical user interface.
  * Pushing (or clicking) a button commands the computer to perform some action
