@@ -1091,6 +1091,7 @@ void Dialog::setFramelessFlags(Qt::WindowFlags flags)
 
 void Dialog::adjustGeometry(const QRect &geom)
 {
+    setPosition(geom.topLeft()); //Only important on wayland where setGeometry will only resize
     setGeometry(geom);
 }
 
