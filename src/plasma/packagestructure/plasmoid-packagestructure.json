@@ -41,6 +41,7 @@
                 "Name[tg]": "Аарон Сейго (Aaron Seigo)",
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
+                "Name[vi]": "Aaron Seigo",
                 "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
@@ -85,6 +86,7 @@
         "Name[tg]": "Plasmoid",
         "Name[tr]": "Plasmoid",
         "Name[uk]": "Плазмоїд",
+        "Name[vi]": "Plasmoid",
         "Name[x-test]": "xxPlasmoidxx",
         "Name[zh_CN]": "小部件",
         "Name[zh_TW]": "元件",

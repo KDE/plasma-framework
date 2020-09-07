@@ -39,6 +39,7 @@ Name[sv]=%{APPNAME}
 Name[tg]=%{APPNAME}
 Name[tr]=%{APPNAME}
 Name[uk]=%{APPNAME}
+Name[vi]=%{APPNAME}
 Name[x-test]=xx%{APPNAME}xx
 Name[zh_CN]=%{APPNAME}
 Name[zh_TW]=%{APPNAME}
