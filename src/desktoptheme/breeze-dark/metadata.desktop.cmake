@@ -30,6 +30,7 @@ Name[pa]=ਬਰੀਜ਼ ਗੂੜ੍ਹਾ
 Name[pl]=Ciemna bryza
 Name[pt]=Brisa Escura
 Name[pt_BR]=Breeze Dark
+Name[ro]=Briză, întunecat
 Name[ru]=Breeze, тёмный вариант
 Name[sk]=Vánok Tmavý
 Name[sl]=Sapica (temna)

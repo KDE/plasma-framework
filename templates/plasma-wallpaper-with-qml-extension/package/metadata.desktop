@@ -28,6 +28,7 @@ Name[pa]=%{APPNAME}
 Name[pl]=%{APPNAME}
 Name[pt]=%{APPNAME}
 Name[pt_BR]=%{APPNAME}
+Name[ro]=%{APPNAME}
 Name[ru]=%{APPNAME}
 Name[sk]=%{APPNAME}
 Name[sl]=%{APPNAME}

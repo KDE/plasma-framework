@@ -28,6 +28,7 @@ Name[pa]=ਬਰੀਜ਼ ਹਲਕਾ
 Name[pl]=Jasna Bryza
 Name[pt]=Brisa Clara
 Name[pt_BR]=Breeze Light
+Name[ro]=Briză, luminos
 Name[ru]=Breeze, светлый вариант
 Name[sk]=Vánok Svetlý
 Name[sl]=Sapica (svetla) (Breeze Light)
