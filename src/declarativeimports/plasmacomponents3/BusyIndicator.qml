@@ -41,8 +41,6 @@ T.BusyIndicator {
         }
 
         PlasmaCore.SvgItem {
-            id: busyIndicatorSvgItem
-
             /* Do not use `anchors.fill: parent` in here or else
              * the aspect ratio won't always be 1:1.
              */
@@ -56,7 +54,6 @@ T.BusyIndicator {
             elementId: "busywidget"
 
             RotationAnimator on rotation {
-                id: rotationAnimator
                 from: 0
                 to: 360
                 duration: 2000
