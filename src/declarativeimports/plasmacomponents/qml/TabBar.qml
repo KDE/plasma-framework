@@ -92,13 +92,13 @@ FocusScope {
             }
             Behavior on x {
                 PropertyAnimation {
-                    easing.type: Easing.InQuad
+                    easing.type: Easing.OutCubic
                     duration: PlasmaCore.Units.longDuration
                 }
             }
             Behavior on y {
                 PropertyAnimation {
-                    easing.type: Easing.InQuad
+                    easing.type: Easing.OutCubic
                     duration: PlasmaCore.Units.longDuration
                 }
             }
