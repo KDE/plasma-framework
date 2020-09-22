@@ -220,6 +220,10 @@ public:
      * @param lastModified if non-zero, the time stamp is also checked on the file,
      *                     and must be newer than the timestamp to be loaded
      *
+     * @note Since KF 5.75, a lastModified value of 0 is deprecated. If used, it
+     *       will now always return false. Use a proper file timestamp instead
+     *       so modification can be properly tracked.
+     *
      * @return true when pixmap was found and loaded from cache, false otherwise
      * @since 4.3
      **/
