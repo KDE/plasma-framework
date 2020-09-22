@@ -123,9 +123,17 @@ bool SharedSvgRenderer::load(
     return true;
 }
 
-#define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, status, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
-#define CACHE_ID_NATURAL_SIZE(id, status, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
+uint qHash(const Plasma::SvgPrivate::CacheId &id)
+{
+    uint result = 0;
+    result ^= ::qHash(id.width) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= ::qHash(id.height) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= ::qHash(id.elementName) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= ::qHash(id.status) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= ::qHash(id.dpr) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    result ^= ::qHash(id.colorGroup) + 0x9e3779b9 + (result << 6) + (result >> 2);
+    return result;
+}
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
@@ -155,17 +163,16 @@ SvgPrivate::~SvgPrivate()
 //This function is meant for the rects cache
 QString SvgPrivate::cacheId(const QString &elementId) const
 {
-    if (size.isValid() && size != naturalSize) {
-        return CACHE_ID_WITH_SIZE(size, elementId, status, devicePixelRatio);
-    } else {
-        return CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
-    }
+    auto idSize = size.isValid() && size != naturalSize ? size : QSizeF{-1.0, -1.0};
+    auto cacheId = CacheId{idSize.width(), idSize.height(), elementId, status, devicePixelRatio, -1};
+    return QString::number(qHash(cacheId));
 }
 
 //This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &path, const QSize &size) const
 {
-    return CACHE_ID_WITH_SIZE(size, path, status, devicePixelRatio) % QLSEP % QString::number(colorGroup);
+    auto cacheId = CacheId{double(size.width()), double(size.height()), path, status, devicePixelRatio, colorGroup};
+    return QString::number(qHash(cacheId));
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -297,9 +304,10 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     if (elementsWithSizeHints.isEmpty()) {
         // Fetch all size hinted element ids from the theme's rect cache
         // and store them locally.
-        const QRegularExpression sizeHintedKeyExpr(QLatin1String("^") + CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio) + QLatin1String("$"));
+//         const QRegularExpression sizeHintedKeyExpr(QLatin1String("^") + CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio) + QLatin1String("$"));
+        const QRegularExpression sizeHintedKeyExpr(QLatin1String(".*"));
 
-	const auto lst = cacheAndColorsTheme()->listCachedRectKeys(path);
+        const auto lst = cacheAndColorsTheme()->listCachedRectKeys(path);
         for (const QString &key : lst) {
             const auto match = sizeHintedKeyExpr.match(key);
             if (match.hasMatch()) {
@@ -400,7 +408,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     }
 
     if (cacheRendering) {
-        cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
+        cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLatin1Char('_') % actualElementId);
     }
 
     return p;
@@ -463,7 +471,8 @@ void SvgPrivate::createRenderer()
                 const QString &elementId = i.key();
                 const QRectF &elementRect = i.value();
 
-                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
+//                 const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
+                const QString cacheId = QString::number(qHash(CacheId{-1.0, -1.0, elementId, status, devicePixelRatio, -1}));
                 localRectCache.insert(cacheId, elementRect);
                 cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId, elementRect);
             }

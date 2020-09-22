@@ -48,6 +48,15 @@ private:
 class SvgPrivate
 {
 public:
+    struct CacheId {
+        double width;
+        double height;
+        QString elementName;
+        int status;
+        double dpr;
+        int colorGroup;
+    };
+
     SvgPrivate(Svg *svg);
     ~SvgPrivate();
 
@@ -89,6 +98,7 @@ public:
     Svg *q;
     QPointer<Theme> theme;
     QHash<QString, QRectF> localRectCache;
+//     QHash<CacheId, QRectF> localRectCache;
     QMultiHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
     QString themePath;
@@ -112,6 +122,8 @@ public:
 };
 
 }
+
+uint qHash(const Plasma::SvgPrivate::CacheId &id);
 
 #endif
 
