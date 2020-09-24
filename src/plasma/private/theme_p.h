@@ -107,6 +107,7 @@ public:
     KColorScheme viewColorScheme;
     KColorScheme complementaryColorScheme;
     KColorScheme headerColorScheme;
+    KColorScheme tooltipColorScheme;
     QPalette palette;
     bool eventFilter(QObject *watched, QEvent *event) override;
     KConfigGroup cfg;

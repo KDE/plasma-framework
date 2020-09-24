@@ -78,7 +78,8 @@ public:
         ButtonColorGroup = 1,
         ViewColorGroup = 2,
         ComplementaryColorGroup = 3,
-        HeaderColorGroup
+        HeaderColorGroup,
+        ToolTipColorGroup
     };
     Q_ENUM(ColorGroup)
 
