@@ -42,7 +42,7 @@ GridLayout {
 
         implicitWidth: root.parent.icon.width > 0 ? root.parent.icon.width : defaultIconSize
         implicitHeight: root.parent.icon.height > 0 ? root.parent.icon.height : defaultIconSize
-
+        colorGroup: parent.PlasmaCore.ColorScope.colorGroup
         visible: source.length > 0 && root.parent.display !== T.Button.TextOnly
         source: root.parent.icon ? (root.parent.icon.name || root.parent.icon.source) : ""
         status: usingFocusBackground ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
