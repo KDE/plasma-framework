@@ -55,6 +55,10 @@ import QtQuick.Templates 2.12 as T
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
+
+        colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
+        PlasmaCore.ColorScope.inherit: false
+
         enabledBorders: {
             var borders = 0
             borders |= PlasmaCore.FrameSvg.LeftBorder
