@@ -868,7 +868,7 @@ QRectF Svg::elementRect(const QString &elementId) const
 
 bool Svg::hasElement(const QString &elementId) const
 {
-    if (d->path.isNull() && d->themePath.isNull()) {
+    if (elementId.isEmpty() || (d->path.isNull() && d->themePath.isNull())) {
         return false;
     }
 

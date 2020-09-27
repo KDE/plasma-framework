@@ -108,7 +108,7 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 
 void FrameSvg::setElementPrefix(const QString &prefix)
 {
-    if (!hasElement(prefix % QLatin1String("-center"))) {
+    if (prefix.isEmpty() || !hasElement(prefix % QLatin1String("-center"))) {
         d->prefix.clear();
     } else {
         d->prefix = prefix;
