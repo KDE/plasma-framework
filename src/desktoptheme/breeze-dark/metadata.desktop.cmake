@@ -71,6 +71,7 @@ Comment[pa]=ਕੇਡੀਈ ਵੀਡੀਜੀ ਵਲੋਂ ਬਰੀਜ਼ ਗੂ�
 Comment[pl]=Ciemna bryza autorstwa KDE VDG
 Comment[pt]=Brisa Escuro da VDG do KDE
 Comment[pt_BR]=Breeze Dark pelo KDE VDG
+Comment[ro]=Briză, întunecat, de KDE VDG
 Comment[ru]=Тёмный вариант Breeze от KDE VDG
 Comment[sk]=Vánok Tmavý od KDE VDG
 Comment[sl]=Sapica temna (Breeze Dark) od KDE VDG

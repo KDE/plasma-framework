@@ -69,6 +69,7 @@ Comment[nn]=Breeze lys frå KDE VDG
 Comment[pl]=Jasna Bryza autorstwa KDE VDG
 Comment[pt]=Brisa Claro da VDG do KDE
 Comment[pt_BR]=Breeze Light pelo KDE VDG
+Comment[ro]=Briză, luminos, de KDE VDG
 Comment[ru]=Светлый вариант Breeze от KDE VDG
 Comment[sk]=Vánok Svetlý od KDE VDG
 Comment[sl]=Sapica (svetla) (Breeze Light) od KDE VDG
