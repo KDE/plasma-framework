@@ -8,11 +8,9 @@
 
 #include <qtest.h>
 #include <QDebug>
-//#include <QJsonObject>
 #include <QSignalSpy>
 
 #include <KPluginInfo>
-//#include <KPluginTrader>
 
 #include <plasma/pluginloader.h>
 #include <plasma/dataengineconsumer.h>
