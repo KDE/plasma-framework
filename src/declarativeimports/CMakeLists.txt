@@ -12,8 +12,7 @@ install(DIRECTORY kirigamiplasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde
 install(DIRECTORY kirigamiplasmadesktopstyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/org.kde.desktop.plasma)
 
 
-math(EXPR QQC2_VERSION "${Qt5QuickControls2_VERSION_MINOR} - 7")
-set(QQC2_VERSION "2.${QQC2_VERSION}")
+set(QQC2_VERSION "2.${Qt5QuickControls2_VERSION_MINOR}")
 
 
 # Find all the source qml files

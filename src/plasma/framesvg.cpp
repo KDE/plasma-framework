@@ -61,7 +61,7 @@ void FrameSvg::setImagePath(const QString &path)
     setContainsMultipleImages(true);
     Svg::d->setImagePath(path);
     if (!d->repaintBlocked) {
-        d->updateFrameData();
+        d->updateFrameData(Svg::d->lastModified);
     }
 }
 
@@ -74,7 +74,7 @@ void FrameSvg::setEnabledBorders(const EnabledBorders borders)
     d->enabledBorders = borders;
 
     if (!d->repaintBlocked) {
-        d->updateFrameData();
+        d->updateFrameData(Svg::d->lastModified);
     }
 }
 
@@ -108,7 +108,7 @@ void FrameSvg::setElementPrefix(Plasma::Types::Location location)
 
 void FrameSvg::setElementPrefix(const QString &prefix)
 {
-    if (!hasElement(prefix % QLatin1String("-center"))) {
+    if (prefix.isEmpty() || !hasElement(prefix % QLatin1String("-center"))) {
         d->prefix.clear();
     } else {
         d->prefix = prefix;
@@ -121,7 +121,7 @@ void FrameSvg::setElementPrefix(const QString &prefix)
     d->location = Types::Floating;
 
     if (!d->repaintBlocked) {
-        d->updateFrameData();
+        d->updateFrameData(Svg::d->lastModified);
     }
 }
 
@@ -179,7 +179,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     d->pendingFrameSize = size.toSize();
 
     if (!d->repaintBlocked) {
-        d->updateFrameData(FrameSvgPrivate::UpdateFrame);
+        d->updateFrameData(Svg::d->lastModified, FrameSvgPrivate::UpdateFrame);
     }
 }
 
@@ -437,6 +437,7 @@ QSharedPointer<FrameData> FrameSvgPrivate::lookupOrCreateMaskFrame(const QShared
     mask->enabledBorders = frame->enabledBorders;
     mask->frameSize = frameSize(frame).toSize();
     mask->cacheId = key;
+    mask->lastModified = frame->lastModified;
     s_sharedFrames[q->theme()->d].insert(key, mask);
 
     return mask;
@@ -455,10 +456,10 @@ void FrameSvgPrivate::generateBackground(const QSharedPointer<FrameData> &frame)
     const bool overlayAvailable = !frame->prefix.startsWith(QLatin1String("mask-")) && q->hasElement(frame->prefix % QLatin1String("overlay"));
     QPixmap overlay;
     if (q->isUsingRenderingCache()) {
-        frameCached = q->theme()->findInCache(id, frame->cachedBackground) && !frame->cachedBackground.isNull();
+        frameCached = q->theme()->findInCache(id, frame->cachedBackground, frame->lastModified) && !frame->cachedBackground.isNull();
 
         if (overlayAvailable) {
-            overlayCached = q->theme()->findInCache(QLatin1String("overlay_") % id, overlay) && !overlay.isNull();
+            overlayCached = q->theme()->findInCache(QLatin1String("overlay_") % id, overlay, frame->lastModified) && !overlay.isNull();
         }
     }
 
@@ -579,7 +580,7 @@ QRect FrameSvgPrivate::contentGeometry(const QSharedPointer<FrameData> &frame, c
     return contentRect;
 }
 
-void FrameSvgPrivate::updateFrameData(UpdateType updateType)
+void FrameSvgPrivate::updateFrameData(uint lastModified, UpdateType updateType)
 {
     auto fd = frame;
     QString newKey;
@@ -629,6 +630,7 @@ void FrameSvgPrivate::updateFrameData(UpdateType updateType)
     fd->enabledBorders = enabledBorders;
     fd->frameSize = pendingFrameSize;
     fd->imagePath = q->imagePath();
+    fd->lastModified = lastModified;
     //was fd just created empty now?
     if (newKey.isEmpty()) {
         newKey = cacheId(fd.data(), prefix);
@@ -875,7 +877,7 @@ void FrameSvg::setRepaintBlocked(bool blocked)
     d->repaintBlocked = blocked;
 
     if (!blocked) {
-        d->updateFrameData();
+        d->updateFrameData(Svg::d->lastModified);
     }
 }
 

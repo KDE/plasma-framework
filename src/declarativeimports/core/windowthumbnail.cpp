@@ -376,7 +376,7 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
 #if HAVE_GLX
 bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
 {
-    if (glXGetCurrentContext()) {
+    if (window()->openglContext()) {
         if (!m_openGLFunctionsResolved) {
             resolveGLXFunctions();
         }

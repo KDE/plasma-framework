@@ -44,6 +44,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(nullptr)),
       complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(nullptr)),
       headerColorScheme(QPalette::Active, KColorScheme::Header, KSharedConfigPtr(nullptr)),
+      tooltipColorScheme(QPalette::Active, KColorScheme::Tooltip, KSharedConfigPtr(nullptr)),
       defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME)),
       defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX)),
       defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
@@ -388,6 +389,9 @@ void ThemePrivate::colorsChanged()
     buttonColorScheme = KColorScheme(QPalette::Active, KColorScheme::Button, colors);
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     selectionColorScheme = KColorScheme(QPalette::Active, KColorScheme::Selection, colors);
+    complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
+    headerColorScheme = KColorScheme(QPalette::Active, KColorScheme::Header, colors);
+    tooltipColorScheme = KColorScheme(QPalette::Active, KColorScheme::Tooltip, colors);
     palette = KColorScheme::createApplicationPalette(colors);
     scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     emit applicationPaletteChange();
@@ -464,6 +468,15 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%viewpositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ViewColorGroup).name();
+    
+    elements[QStringLiteral("%tooltiptextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltipbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltiphovercolor")] = color(Theme::HoverColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltipfocuscolor")] = color(Theme::FocusColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltiphighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltippositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltipneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltipnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ToolTipColorGroup).name();
 
     elements[QStringLiteral("%complementarytextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarybackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
@@ -543,6 +556,16 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
             stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%headerneutraltextcolor"));
             stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%headernegativetextcolor"));
             break;
+        case Theme::ToolTipColorGroup:
+            stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%tooltiptextcolor"));
+            stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%tooltipbackgroundcolor"));
+
+            stylesheet += skel.arg(QStringLiteral("Highlight"), QStringLiteral("%tooltiphovercolor"));
+            stylesheet += skel.arg(QStringLiteral("HighlightedText"), QStringLiteral("%tooltiphighlightedtextcolor"));
+            stylesheet += skel.arg(QStringLiteral("PositiveText"), QStringLiteral("%tooltippositivetextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NeutralText"), QStringLiteral("%tooltipneutraltextcolor"));
+            stylesheet += skel.arg(QStringLiteral("NegativeText"), QStringLiteral("%tooltipnegativetextcolor"));
+            break;
         default:
             stylesheet += skel.arg(QStringLiteral("Text"), QStringLiteral("%textcolor"));
             stylesheet += skel.arg(QStringLiteral("Background"), QStringLiteral("%backgroundcolor"));
@@ -589,6 +612,15 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
         stylesheet += skel.arg(QStringLiteral("HeaderPositiveText"), QStringLiteral("%headerpositivetextcolor"));
         stylesheet += skel.arg(QStringLiteral("HeaderNeutralText"), QStringLiteral("%headerneutraltextcolor"));
         stylesheet += skel.arg(QStringLiteral("HeaderNegativeText"), QStringLiteral("%headernegativetextcolor"));
+        
+        stylesheet += skel.arg(QStringLiteral("TootipText"), QStringLiteral("%tooltiptextcolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipBackground"), QStringLiteral("%tooltipbackgroundcolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipHover"), QStringLiteral("%tooltiphovercolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipFocus"), QStringLiteral("%tooltipfocuscolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipHighlightedText"), QStringLiteral("%tooltiphighlightedtextcolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipPositiveText"), QStringLiteral("%tooltippositivetextcolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipNeutralText"), QStringLiteral("%tooltipneutraltextcolor"));
+        stylesheet += skel.arg(QStringLiteral("TootipNegativeText"), QStringLiteral("%tooltipnegativetextcolor"));
 
         stylesheet = processStyleSheet(stylesheet, status);
         if (status == Svg::Status::Selected) {
@@ -670,6 +702,11 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 
     case Theme::HeaderColorGroup: {
         scheme = &headerColorScheme;
+        break;
+    }
+    
+    case Theme::ToolTipColorGroup: {
+        scheme = &tooltipColorScheme;
         break;
     }
 
@@ -825,6 +862,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     viewColorScheme = KColorScheme(QPalette::Active, KColorScheme::View, colors);
     complementaryColorScheme = KColorScheme(QPalette::Active, KColorScheme::Complementary, colors);
     headerColorScheme = KColorScheme(QPalette::Active, KColorScheme::Header, colors);
+    tooltipColorScheme = KColorScheme(QPalette::Active, KColorScheme::Tooltip, colors);
     palette = KColorScheme::createApplicationPalette(colors);
     const QString wallpaperPath = QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/wallpapers/");
     hasWallpapers = !QStandardPaths::locate(QStandardPaths::GenericDataLocation, wallpaperPath, QStandardPaths::LocateDirectory).isEmpty();

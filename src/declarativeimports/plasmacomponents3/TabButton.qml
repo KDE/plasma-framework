@@ -56,8 +56,8 @@ T.TabButton {
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
+            color: PlasmaCore.ColorScope.textColor
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            color: control.activeFocus && !control.down ? theme.highlightedTextColor : theme.buttonTextColor
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight

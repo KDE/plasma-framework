@@ -253,11 +253,8 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
         }
     }
 
-    if (!themed) {
-        QFile f(actualPath);
-        QFileInfo info(f);
-        lastModified = info.lastModified().toSecsSinceEpoch();
-    }
+    QFileInfo info(path);
+    lastModified = info.lastModified().toSecsSinceEpoch();
 
     q->resize();
     emit q->imagePathChanged();
@@ -871,7 +868,7 @@ QRectF Svg::elementRect(const QString &elementId) const
 
 bool Svg::hasElement(const QString &elementId) const
 {
-    if (d->path.isNull() && d->themePath.isNull()) {
+    if (elementId.isEmpty() || (d->path.isNull() && d->themePath.isNull())) {
         return false;
     }
 

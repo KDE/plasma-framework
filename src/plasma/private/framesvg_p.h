@@ -75,6 +75,7 @@ public:
     QPixmap cachedBackground;
     QCache<QString, QRegion> cachedMasks;
     static const int MAX_CACHED_MASKS = 10;
+    uint lastModified = 0;
 
     QSize frameSize;
     QString cacheId;
@@ -150,7 +151,7 @@ public:
     void paintCorner(QPainter& p, const QSharedPointer<FrameData> &frame, Plasma::FrameSvg::EnabledBorders border, const QRect& output) const;
     void paintCenter(QPainter& p, const QSharedPointer<FrameData> &frame, const QRect& contentRect, const QSize& fullSize);
     QRect contentGeometry(const QSharedPointer<FrameData> &frame, const QSize& size) const;
-    void updateFrameData(UpdateType updateType = UpdateFrameAndMargins);
+    void updateFrameData(uint lastModified, UpdateType updateType = UpdateFrameAndMargins);
     QSharedPointer<FrameData> lookupOrCreateMaskFrame(const QSharedPointer<FrameData> &frame, const QString &maskPrefix, const QString &maskRequestedPrefix);
 
     Types::Location location = Types::Floating;

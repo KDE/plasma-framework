@@ -9,6 +9,7 @@ import QtQuick.Window 2.2
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kconfig 1.0
 import "private" as Private
 import org.kde.kirigami 2.5 as Kirigami
 import "mobiletextselection" as MobileTextSelection

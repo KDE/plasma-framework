@@ -41,7 +41,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
       switchHeight(-1),
       applet(a),
       expanded(false),
-      activationTogglesExpanded(false),
+      activationTogglesExpanded(true),
       initComplete(false)
 {
     if (s_preloadPolicy == Uninitialized) {

@@ -20,14 +20,14 @@ T.ToolTip {
     delay: Kirigami.Units.toolTipDelay
     timeout: 5000
 
-    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
-    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
 
     margins: units.gridUnit
-    leftPadding: background.margins.left
-    topPadding: background.margins.top
-    rightPadding: background.margins.right
-    bottomPadding: background.margins.bottom
+    leftPadding: backgroundItem.margins.left
+    topPadding: backgroundItem.margins.top
+    rightPadding: backgroundItem.margins.right
+    bottomPadding: backgroundItem.margins.bottom
 
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
@@ -36,10 +36,34 @@ T.ToolTip {
         // those used to determine the alt key shortcut
         text: control.text.replace(/&(?=\S)/g, "")
         font: control.font
-        color: PlasmaCore.ColorScope.textColor
+        PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ToolTipColorGroup
+        PlasmaCore.ColorScope.inherit: false
     }
 
-    background: PlasmaCore.FrameSvgItem {
-        imagePath: "widgets/background"
+    background: Item {
+        implicitHeight: PlasmaCore.Units.gridUnit + backgroundItem.margins.top + backgroundItem.margins.bottom
+        implicitWidth: PlasmaCore.Units.gridUnit + backgroundItem.margins.left + backgroundItem.margins.right
+
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            anchors.leftMargin: -margins.left
+            anchors.rightMargin: -margins.right
+            anchors.topMargin: -margins.top
+            anchors.bottomMargin: -margins.bottom
+            imagePath: "widgets/tooltip"
+            prefix: "shadow"
+            colorGroup: PlasmaCore.Theme.ToolTipColorGroup
+            PlasmaCore.ColorScope.inherit: false
+        }
+
+        PlasmaCore.FrameSvgItem {
+            id: backgroundItem
+            anchors.fill: parent
+            // Because the transparent one doesn't match the appearance of all
+            // other ones
+            imagePath: "opaque/widgets/tooltip"
+            colorGroup: PlasmaCore.Theme.ToolTipColorGroup
+            PlasmaCore.ColorScope.inherit: false
+        }
     }
 }

@@ -10,5 +10,5 @@ install(
 )
 install(
     FILES ${PROJECT_BINARY_DIR}/src/desktoptheme/breeze/default.gzipped/widgets/plasmoidheading.svgz
-    DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/breeze-light
+    DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/breeze-light/widgets
 )

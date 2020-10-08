@@ -75,8 +75,10 @@ void ThemeTest::loadSvgIcon()
 
     QString cacheId = CACHE_ID_WITH_SIZE(QSize(48, 48), iconPath, Plasma::Svg::Normal, m_svg->devicePixelRatio()) % QLSEP % QString::number(m_svg->colorGroup());
 
+    QFileInfo info(iconPath);
+
     QPixmap result;
-    QVERIFY(m_svg->theme()->findInCache(cacheId, result));
+    QVERIFY(m_svg->theme()->findInCache(cacheId, result, info.lastModified().toSecsSinceEpoch()));
 
     QSignalSpy spy(m_svg, SIGNAL(repaintNeeded()));
     QVERIFY(spy.isValid());

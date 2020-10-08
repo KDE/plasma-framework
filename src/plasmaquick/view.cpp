@@ -14,6 +14,8 @@
 #include <QScreen>
 #include <QQmlEngine>
 
+#include <KLocalizedContext>
+
 #include "plasma/pluginloader.h"
 #include <packageurlinterceptor.h>
 #include <kdeclarative/kdeclarative.h>
@@ -182,11 +184,11 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         interceptor->setForcePlasmaStyle(true);
         engine()->setUrlInterceptor(interceptor);
 
-        KDeclarative::KDeclarative kdeclarative;
-        kdeclarative.setDeclarativeEngine(engine());
+        KLocalizedContext *localizedContextObject = new KLocalizedContext(engine());
+        localizedContextObject->setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
+        engine()->rootContext()->setContextObject(localizedContextObject);
+
         //binds things like kconfig and icons
-        kdeclarative.setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
-        kdeclarative.setupContext();
         KDeclarative::KDeclarative::setupEngine(engine()); // ### how to make sure to do this only once per engine?
     } else {
         qWarning() << "Invalid home screen package";

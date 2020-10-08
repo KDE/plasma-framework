@@ -21,6 +21,7 @@
 
 #include <KAuthorized>
 #include <KLocalizedString>
+#include <KLocalizedContext>
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
 #include <KQuickAddons/ConfigModule>
@@ -80,15 +81,15 @@ void ConfigViewPrivate::init()
 
     applet.data()->setUserConfiguring(true);
 
-    KDeclarative::KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(q->engine());
+    KLocalizedContext *localizedContextObject = new KLocalizedContext(q->engine());
     const QString rootPath = applet.data()->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
     if (!rootPath.isEmpty()) {
-        kdeclarative.setTranslationDomain(QStringLiteral("plasma_applet_") + rootPath);
+        localizedContextObject->setTranslationDomain(QStringLiteral("plasma_applet_") + rootPath);
     } else {
-        kdeclarative.setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
+        localizedContextObject->setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
     }
-    kdeclarative.setupContext();
+    q->engine()->rootContext()->setContextObject(localizedContextObject);
+
     KDeclarative::KDeclarative::setupEngine(q->engine()); // ### how to make sure to do this only once per engine?
 
     //FIXME: problem on nvidia, all windows should be transparent or won't show

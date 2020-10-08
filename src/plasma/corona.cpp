@@ -403,9 +403,9 @@ void Corona::setEditMode(bool edit)
     QAction *editAction = d->actions.action(QStringLiteral("edit mode"));
     if (editAction) {
         if (edit) {
-            editAction->setText(i18n("Finish Customizing Layout"));
+            editAction->setText(i18n("Exit Edit Mode"));
         } else {
-            editAction->setText(i18n("Customize Layout..."));
+            editAction->setText(i18n("Enter Edit Mode"));
         }
     }
 
@@ -489,7 +489,7 @@ void CoronaPrivate::init()
     QObject::connect(editAction, &QAction::triggered, q, [this] () {
         q->setEditMode(!q->isEditMode());
     });
-    editAction->setText(i18n("Customize Layout..."));
+    editAction->setText(i18n("Enter Edit Mode"));
     editAction->setAutoRepeat(true);
     editAction->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
     editAction->setData(Plasma::Types::ControlAction);
