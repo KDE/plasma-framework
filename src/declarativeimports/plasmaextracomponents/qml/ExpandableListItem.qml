@@ -421,9 +421,11 @@ Item {
                     PlasmaComponents3.Label {
                         id: listItemSubtitle
 
-                        enabled: false
                         visible: text.length > 0
                         font: PlasmaCore.Theme.smallestFont
+
+                        // Otherwise colored text can be hard to see
+                        opacity: color === PlasmaCore.Theme.textColor ? 0.7 : 1.0
 
                         Layout.fillWidth: true
 
