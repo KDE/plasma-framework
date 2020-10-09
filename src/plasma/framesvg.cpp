@@ -179,7 +179,7 @@ void FrameSvg::resizeFrame(const QSizeF &size)
     d->pendingFrameSize = size.toSize();
 
     if (!d->repaintBlocked) {
-        d->updateFrameData(FrameSvgPrivate::UpdateFrame);
+        d->updateFrameData(Svg::d->lastModified, FrameSvgPrivate::UpdateFrame);
     }
 }
 

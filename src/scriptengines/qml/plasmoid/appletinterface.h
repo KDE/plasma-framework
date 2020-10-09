@@ -240,6 +240,11 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
     /**
+     * When false the plasmoid will ignore the margins when contained in a panel
+     */
+    Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged)
+
+    /**
      * The metadata of the applet.
      * @since 5.73
      */
@@ -410,6 +415,8 @@ public:
 
     QString configurationRequiredReason() const;
     void setConfigurationRequiredReason(const QString &reason);
+    Plasma::Types::ConstraintHints constraintHints() const;
+    void setConstraintHints(Plasma::Types::ConstraintHints constraintHints);
 
     KPluginMetaData metaData() const;
 
@@ -458,6 +465,7 @@ Q_SIGNALS:
     void associatedApplicationUrlsChanged();
     void availableScreenRegionChanged();
     void availableScreenRectChanged();
+    void constraintHintsChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();
@@ -508,6 +516,7 @@ private:
     friend class ContainmentInterface;
     //This is used by ContainmentInterface
     QPointF m_positionBeforeRemoval;
+    Plasma::Types::ConstraintHints m_constraintHints = Plasma::Types::ConstraintHints::NoHint;
 };
 
 QML_DECLARE_TYPEINFO(AppletInterface, QML_HAS_ATTACHED_PROPERTIES)

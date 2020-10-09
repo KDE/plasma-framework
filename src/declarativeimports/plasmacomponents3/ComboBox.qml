@@ -32,7 +32,7 @@ T.ComboBox {
     delegate: ItemDelegate {
         width: control.popup.width
         text: control.textRole ? (Array.isArray(control.model) ? modelData[control.textRole] : model[control.textRole]) : modelData
-        highlighted: mouseArea.pressed ? listView.currentIndex == index : control.highlightedIndex == index
+        highlighted: control.highlightedIndex == index
         property bool separatorVisible: false
     }
 
@@ -51,113 +51,55 @@ T.ComboBox {
         elementId: "down-arrow"
     }
 
-//     contentItem: Label {
-//         text: control.displayText
-//         font: control.font
-//         color: theme.buttonTextColor
-//         horizontalAlignment: Text.AlignLeft
-//         verticalAlignment: Text.AlignVCenter
-//         elide: Text.ElideRight
-//     }
-    contentItem: MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton
-        preventStealing: true
-        property int indexUnderMouse: -1
-        onWheel: {
-            if (wheel.pixelDelta.y < 0 || wheel.angleDelta.y < 0) {
-                control.currentIndex = Math.min(control.currentIndex + 1, delegateModel.count -1);
-            } else {
-                control.currentIndex = Math.max(control.currentIndex - 1, 0);
+    contentItem: T.TextField {
+        id: textField
+        padding: 0
+        anchors {
+            fill:parent
+            leftMargin: control.leftPadding
+            rightMargin: control.rightPadding
+            topMargin: control.topPadding
+            bottomMargin: control.bottomPadding
+        }
+        text: control.editable ? control.editText : control.displayText
+
+        enabled: control.editable
+        autoScroll: control.editable
+        
+        readOnly: control.down || !control.hasOwnProperty("editable") || !control.editable
+        inputMethodHints: control.inputMethodHints
+        validator: control.validator
+
+        // Work around Qt bug where NativeRendering breaks for non-integer scale factors
+        // https://bugreports.qt.io/browse/QTBUG-70481
+        renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
+        color: PlasmaCore.ColorScope.textColor
+        selectionColor: Kirigami.Theme.highlightColor
+        selectedTextColor: Kirigami.Theme.highlightedTextColor
+
+        selectByMouse: !Kirigami.Settings.tabletMode
+        cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : undefined
+
+        font: control.font
+        horizontalAlignment: Text.AlignLeft
+        verticalAlignment: Text.AlignVCenter
+        opacity: control.enabled ? 1 : 0.3
+        onFocusChanged: {
+            if (focus) {
+                MobileTextSelection.MobileTextActionsToolBar.controlRoot = textField;
             }
-            control.activated(control.currentIndex);
-        }
-        onPressed: {
-            indexUnderMouse = -1;
-            listView.currentIndex = control.highlightedIndex
-            control.down = true;
-            control.pressed = true;
-            control.popup.visible = !control.popup.visible;
-        }
-        onReleased: {
-            if (!containsMouse) {
-                control.down = false;
-                control.pressed = false;
-                control.popup.visible = false;
-            }
-            if (indexUnderMouse > -1) {
-                control.currentIndex = indexUnderMouse;
-            }
-        }
-        onCanceled: {
-            control.down = false;
-            control.pressed = false;
-        }
-        onPositionChanged: {
-            var pos = listView.mapFromItem(this, mouse.x, mouse.y);
-            indexUnderMouse = listView.indexAt(pos.x, pos.y);
-            listView.currentIndex = indexUnderMouse;
-            controlRoot.activated(indexUnderMouse);
         }
 
-        Connections {
-            target: popup
-            onClosed: {
-                control.down = false;
-                control.pressed = false;
+        onTextChanged: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = false;
+        onPressed: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = true;
+
+        onPressAndHold: {
+            if (!Kirigami.Settings.tabletMode) {
+                return;
             }
-        }
-        T.TextField {
-            id: textField
-            padding: 0
-            anchors {
-                fill:parent
-                leftMargin: control.leftPadding
-                rightMargin: control.rightPadding
-                topMargin: control.topPadding
-                bottomMargin: control.bottomPadding
-            }
-            text: control.editable ? control.editText : control.displayText
-
-            enabled: control.editable
-            autoScroll: control.editable
-            
-            readOnly: control.down || !control.hasOwnProperty("editable") || !control.editable
-            inputMethodHints: control.inputMethodHints
-            validator: control.validator
-
-            // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-            // https://bugreports.qt.io/browse/QTBUG-70481
-            renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
-            color: PlasmaCore.ColorScope.textColor
-            selectionColor: Kirigami.Theme.highlightColor
-            selectedTextColor: Kirigami.Theme.highlightedTextColor
-
-            selectByMouse: !Kirigami.Settings.tabletMode
-            cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : undefined
-
-            font: control.font
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            opacity: control.enabled ? 1 : 0.3
-            onFocusChanged: {
-                if (focus) {
-                    MobileTextSelection.MobileTextActionsToolBar.controlRoot = textField;
-                }
-            }
-
-            onTextChanged: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = false;
-            onPressed: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = true;
-
-            onPressAndHold: {
-                if (!Kirigami.Settings.tabletMode) {
-                    return;
-                }
-                forceActiveFocus();
-                cursorPosition = positionAt(event.x, event.y);
-                selectWord();
-            }
+            forceActiveFocus();
+            cursorPosition = positionAt(event.x, event.y);
+            selectWord();
         }
     }
 

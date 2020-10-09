@@ -25,6 +25,7 @@ T.BusyIndicator {
     padding: 0
 
     contentItem: Item {
+        id: baseItem
         /* implicitWidth and implicitHeight won't work unless they come
          * from a child of the contentItem. No idea why.
          */
@@ -61,7 +62,7 @@ T.BusyIndicator {
                 to: 360
                 duration: 2000
                 loops: Animation.Infinite
-                running: visible
+                running: control.running || baseItem.opacity > 0
             }
         }
     }

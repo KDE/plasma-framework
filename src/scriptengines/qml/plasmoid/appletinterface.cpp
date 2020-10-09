@@ -605,6 +605,16 @@ bool AppletInterface::hideOnWindowDeactivate() const
     return m_hideOnDeactivate;
 }
 
+void AppletInterface::setConstraintHints(Plasma::Types::ConstraintHints hints)
+{
+	m_constraintHints = hints;
+}
+
+Plasma::Types::ConstraintHints AppletInterface::constraintHints() const
+{
+	return m_constraintHints;
+}
+
 QKeySequence AppletInterface::globalShortcut() const
 {
     return applet()->globalShortcut();
