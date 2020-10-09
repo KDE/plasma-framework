@@ -51,6 +51,7 @@ import QtQuick.Templates 2.12 as T
     bottomInset: location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
 
     PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
+    PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
