@@ -54,13 +54,6 @@ T.ComboBox {
     contentItem: T.TextField {
         id: textField
         padding: 0
-        anchors {
-            fill:parent
-            leftMargin: control.leftPadding
-            rightMargin: control.rightPadding
-            topMargin: control.topPadding
-            bottomMargin: control.bottomPadding
-        }
         text: control.editable ? control.editText : control.displayText
 
         enabled: control.editable
