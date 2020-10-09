@@ -16,7 +16,7 @@ import QtQuick.Templates 2.12 as T
   * @inherit QtQuick.Templates.Frame
   */
  T.Frame {
-
+    id: control
      /**
       * Possible positions of the heading element
       */
@@ -50,13 +50,15 @@ import QtQuick.Templates 2.12 as T
     topInset: location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.fixedMargins.top
     bottomInset: location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
 
+    PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
+
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
 
-        colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
+        colorGroup: control.PlasmaCore.ColorScope.colorGroup
         PlasmaCore.ColorScope.inherit: false
 
         enabledBorders: {
