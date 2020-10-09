@@ -18,7 +18,7 @@
 
 <refnamediv>
 <refname><command>plasmapkg2</command></refname>
-<refpurpose>Install, list, remove Plasma packages</refpurpose>
+<refpurpose>Install, list, remove &plasma; packages</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
@@ -41,7 +41,7 @@
 <refsect1>
 <title>Description</title>
 <para><command>plasmapkg2</command> is a command line tool to
-install, list, remove Plasma packages.</para>
+install, list, remove &plasma; packages.</para>
 
 </refsect1>
 
@@ -100,7 +100,7 @@ directories for this &plasma; session will be searched instead.</para></listitem
 
 <para>More detailed user documentation is available from <ulink
 url="help:/plasma-desktop">help:/plasma-desktop</ulink>
-(either enter this <acronym>URL</acronym> into &konqueror;, or run
+(either enter this &URL; into &konqueror;, or run
 <userinput><command>khelpcenter</command>
 <parameter>help:/plasma-desktop</parameter></userinput>).</para>
 
