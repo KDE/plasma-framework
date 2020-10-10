@@ -287,7 +287,7 @@ Item {
      * Show the expanded view, growing the list item to its taller size.
      */
     function expand() {
-        expandedView.visible = true
+        expandedView.active = true
         listItem.itemExpanded(listItem)
     }
 
@@ -296,7 +296,7 @@ Item {
      * Hide the expanded view and collapse the list item to its shorter size.
      */
     function collapse() {
-        expandedView.visible = false
+        expandedView.active = false
         listItem.itemCollapsed(listItem)
     }
 
@@ -305,7 +305,7 @@ Item {
      * Expand or collapse the list item depending on its current state.
      */
     function toggleExpanded() {
-        expandedView.visible ? listItem.collapse() : listItem.expand()
+        expandedView.active ? listItem.collapse() : listItem.expand()
     }
 
     signal itemExpanded(variant item)
@@ -454,7 +454,7 @@ Item {
                     enabled: listItem.isEnabled
                     visible: defaultActionButtonAction
                             && listItem.defaultActionButtonVisible
-                            && (clickAndHoverHandler.containsMouse || expandedView.visible)
+                            && (clickAndHoverHandler.containsMouse || expandedView.active)
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
                 }
 
@@ -462,7 +462,7 @@ Item {
                 PlasmaComponents3.Button {
                     visible: clickAndHoverHandler.containsMouse || expandedView.visible
 
-                    icon.name: expandedView.visible? "collapse" : "expand"
+                    icon.name: expandedView.active? "collapse" : "expand"
 
                     onClicked: listItem.toggleExpanded()
                 }
@@ -473,10 +473,10 @@ Item {
             Loader {
                 id: expandedView
 
-                visible: false
-                opacity: visible ? 1.0 : 0
+                visible: active
+                opacity: active ? 1.0 : 0
 
-                active: customExpandedViewContent != undefined
+                active: false
                 sourceComponent: customExpandedViewContent
 
                 Layout.fillWidth: true
