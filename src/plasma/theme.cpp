@@ -472,6 +472,11 @@ bool Theme::backgroundContrastEnabled() const
     return d->backgroundContrastEnabled;
 }
 
+bool Theme::adaptiveTransparencyEnabled() const
+{
+    return d->adaptiveTransparencyEnabled;
+}
+
 qreal Theme::backgroundContrast() const
 {
     if (qIsNaN(d->backgroundContrast)) {

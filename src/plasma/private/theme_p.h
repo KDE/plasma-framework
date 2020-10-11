@@ -64,6 +64,7 @@ public:
     void setThemeName(const QString &themeName, bool writeSettings, bool emitChanged);
     void processWallpaperSettings(KConfigBase *metadata);
     void processContrastSettings(KConfigBase *metadata);
+	void processAdaptiveTransparencySettings(KConfigBase *metadata);
     void processBlurBehindSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css, Plasma::Svg::Status status);
@@ -146,6 +147,7 @@ public:
     qreal backgroundIntensity;
     qreal backgroundSaturation;
     bool backgroundContrastEnabled;
+	bool adaptiveTransparencyEnabled;
     bool blurBehindEnabled;
 
     //Version number of Plasma the Theme has been designed for
