@@ -64,7 +64,7 @@ public:
     void setThemeName(const QString &themeName, bool writeSettings, bool emitChanged);
     void processWallpaperSettings(KConfigBase *metadata);
     void processContrastSettings(KConfigBase *metadata);
-	void processAdaptiveTransparencySettings(KConfigBase *metadata);
+    void processAdaptiveTransparencySettings(KConfigBase *metadata);
     void processBlurBehindSettings(KConfigBase *metadata);
 
     const QString processStyleSheet(const QString &css, Plasma::Svg::Status status);
