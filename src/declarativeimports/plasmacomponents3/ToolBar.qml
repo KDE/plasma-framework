@@ -11,17 +11,20 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.ToolBar {
     id: control
 
-    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
 
-    contentWidth: contentChildren[0].implicitWidth
-    contentHeight: contentChildren[0].implicitHeight
+    leftPadding: background.leftMargin
+    topPadding: background.topMargin
+    rightPadding: background.rightMargin
+    bottomPadding: background.bottomMargin
 
-    padding: units.smallSpacing
     contentItem: Item { }
 
     background: PlasmaCore.FrameSvgItem {
-        implicitHeight: 40
+        implicitHeight: 40 // TODO: Find a good way to sync this with the size of (Button or ToolButton) + padding
         imagePath: "widgets/toolbar"
         colorGroup: PlasmaCore.ColorScope.colorGroup
         enabledBorders: control.position == T.ToolBar.Header ?  PlasmaCore.FrameSvgItem.BottomBorder : PlasmaCore.FrameSvgItem.TopBorder
