@@ -215,12 +215,6 @@ public:
     bool isEmpty() const;
 
     /**
-     * @return the name of the icon for this data engine; and empty string
-     *         is returned if there is no associated icon.
-     **/
-    QString icon() const;
-
-    /**
      * Accessor for the associated Package object if any.
      *
      * @return the Package object, or 0 if none
@@ -407,11 +401,6 @@ protected:
      * Reimplemented from QObject
      **/
     void timerEvent(QTimerEvent *event) override;
-
-    /**
-     * Sets the icon for this data engine
-     **/
-    void setIcon(const QString &icon);
 
     /**
      * Sets a source to be stored for easy retrieval

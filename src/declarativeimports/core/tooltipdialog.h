@@ -33,9 +33,6 @@ public:
 
     QQuickItem *loadDefaultItem();
 
-    Plasma::Types::Direction direction() const;
-    void setDirection(Plasma::Types::Direction loc);
-
     void dismiss();
     void keepalive();
 
