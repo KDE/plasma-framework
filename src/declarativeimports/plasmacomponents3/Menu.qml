@@ -50,6 +50,23 @@ T.Menu {
         T.ScrollBar.vertical: ScrollBar {}
     }
 
+    Connections {
+        target: control.contentItem.contentItem
+
+@DISABLE_AT_QT_5_14@ onChildrenChanged: {
+@DISABLE_UNDER_QT_5_14@ function onChildrenChanged() {
+            for (var i in control.contentItem.contentItem.children) {
+                var child = control.contentItem.contentItem.children[i];
+                if (child.checkable) {
+                    control.contentItem.hasCheckables = true;
+                }
+                if (child.icon && child.icon.hasOwnProperty("name") && (child.icon.name.length > 0 || child.icon.source.length > 0)) {
+                    control.contentItem.hasIcons = true;
+                }
+            }
+        }
+    }
+
     enter: Transition {
         NumberAnimation {
             property: "opacity"

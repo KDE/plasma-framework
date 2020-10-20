@@ -15,6 +15,7 @@ ItemDelegate 3.0 ItemDelegate.qml
 Label 3.0 Label.qml
 MenuItem 3.0 MenuItem.qml
 Menu 3.0 Menu.qml
+MenuSeparator 3.0 MenuSeparator.qml
 Popup 3.0 Popup.qml
 ProgressBar 3.0 ProgressBar.qml
 RadioButton 3.0 RadioButton.qml
