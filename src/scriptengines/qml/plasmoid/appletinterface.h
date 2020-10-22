@@ -21,6 +21,7 @@
 #include "declarativeappletscript.h"
 
 class QAction;
+class QActionGroup;
 class QmlAppletScript;
 class QSizeF;
 
@@ -250,6 +251,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(KPluginMetaData metaData READ metaData CONSTANT)
 
+    Q_PROPERTY(QList<QObject *> contextualActions READ contextualActionsObjects NOTIFY contextualActionsChanged)
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -257,6 +259,9 @@ public:
 //API not intended for the QML part
 
     DeclarativeAppletScript *appletScript() const;
+
+    // This is for QML which only supports QList<QObject *>
+    QList<QObject *> contextualActionsObjects() const;
 
     QList<QAction *> contextualActions() const;
 
@@ -272,6 +277,8 @@ public:
     Q_INVOKABLE void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     Q_INVOKABLE void setActionSeparator(const QString &name);
+
+    Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
     /**
      * Add an action to the Plasmoid contextual menu.
      * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called instead.
@@ -466,6 +473,7 @@ Q_SIGNALS:
     void availableScreenRegionChanged();
     void availableScreenRectChanged();
     void constraintHintsChanged();
+    void contextualActionsChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();
@@ -496,6 +504,7 @@ private Q_SLOTS:
 private:
 
     QStringList m_actions;
+    QHash<QString, QActionGroup *> m_actionGroups;
 
     KDeclarative::ConfigPropertyMap *m_configuration;
     DeclarativeAppletScript *m_appletScriptEngine;
