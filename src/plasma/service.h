@@ -173,7 +173,7 @@ protected:
 
     /**
      * By default this is based on the file in plasma/services/name.operations, but can be
-     * reimplented to use a different mechanism.
+     * reimplemented to use a different mechanism.
      *
      * It should result in a call to setOperationsScheme(QIODevice *);
      */
