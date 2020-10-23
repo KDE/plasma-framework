@@ -10,7 +10,6 @@
 #include "private/dataengineconsumer_p.h"
 
 #include <QSet>
-#include <QUrl>
 
 #include <QDebug>
 

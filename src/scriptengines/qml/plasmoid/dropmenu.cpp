@@ -11,7 +11,6 @@
 
 #include <QApplication>
 #include <QUrl>
-#include <QPoint>
 #include <QMenu>
 #include <QJSValue>
 #include <QAction>

@@ -10,7 +10,6 @@
 #include "tooltipdialog.h"
 
 #include <QQmlEngine>
-#include <QQuickItem>
 #include <QDebug>
 
 #include "framesvgitem.h"

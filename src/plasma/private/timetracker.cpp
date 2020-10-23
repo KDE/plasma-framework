@@ -6,7 +6,6 @@
 
 #include "timetracker.h"
 #include <containment.h>
-#include <QDateTime>
 #include <QMetaObject>
 #include <QFile>
 #include <QDebug>

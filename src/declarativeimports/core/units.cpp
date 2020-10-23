@@ -17,7 +17,6 @@
 #include <QFontMetrics>
 #include <cmath>
 
-#include <KConfigWatcher>
 #include <KIconLoader>
 
 const int defaultLongDuration = 250;

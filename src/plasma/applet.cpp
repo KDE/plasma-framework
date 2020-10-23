@@ -27,7 +27,6 @@
 #include <KDesktopFile>
 #include <QDebug>
 #include <KGlobalAccel>
-#include <KPluginInfo>
 #include <KLocalizedString>
 #include <KService>
 #include <KConfigLoader>

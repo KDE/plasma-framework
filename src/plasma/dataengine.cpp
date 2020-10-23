@@ -18,8 +18,6 @@
 #include <QDebug>
 #include <QStandardPaths>
 
-#include <KPluginInfo>
-#include <KService>
 #include <KLocalizedString>
 
 #include "datacontainer.h"

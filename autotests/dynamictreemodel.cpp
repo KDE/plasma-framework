@@ -9,8 +9,6 @@
 
 #include "dynamictreemodel.h"
 
-#include <QHash>
-#include <QList>
 #include <QTimer>
 
 DynamicTreeModel::DynamicTreeModel(QObject *parent)

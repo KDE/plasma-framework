@@ -15,7 +15,6 @@
 
 #include <Plasma/PluginLoader>
 #include <Plasma/Package>
-#include <KPackage/Package>
 
 #include <kdeclarative/kdeclarative.h>
 

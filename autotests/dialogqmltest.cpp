@@ -6,13 +6,11 @@
 
 #include "dialogqmltest.h"
 
-#include "plasmaquick/dialog.h"
 #include <plasma.h>
 
 #include <QQmlEngine>
 #include <QQmlContext>
 
-#include <QTest>
 #include <QSignalSpy>
 
 

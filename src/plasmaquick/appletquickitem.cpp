@@ -8,9 +8,7 @@
 #include "private/appletquickitem_p.h"
 #include "debug_p.h"
 
-#include <QQmlComponent>
 #include <QQmlExpression>
-#include <QQmlEngine>
 #include <QQmlProperty>
 #include <QQmlContext>
 #include <QQuickWindow>

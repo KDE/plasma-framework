@@ -29,7 +29,6 @@
 #include <kquickaddons/quickviewsharedengine.h>
 
 #include <KWindowEffects>
-#include <Plasma/Plasma>
 #include <Plasma/Corona>
 
 #include <QDebug>

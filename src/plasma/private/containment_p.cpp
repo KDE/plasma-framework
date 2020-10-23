@@ -9,15 +9,12 @@
 
 #include "private/containment_p.h"
 
-#include <KActionCollection>
 #include <QDebug>
 #include <KLocalizedString>
 #include <KWindowSystem>
 
 #include "config-plasma.h"
 
-#include "containmentactions.h"
-#include "corona.h"
 #include "pluginloader.h"
 
 #include "private/applet_p.h"

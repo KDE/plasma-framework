@@ -8,7 +8,6 @@
 #include "private/theme_p.h"
 
 #include <QFile>
-#include <QFont>
 #include <QFontDatabase>
 #include <QFileInfo>
 #include <QMutableListIterator>
@@ -25,7 +24,6 @@
 #include <QDebug>
 #include <KDirWatch>
 #include <KImageCache>
-#include <KSharedConfig>
 #include <KWindowEffects>
 #include <KWindowSystem>
 #include <QStandardPaths>

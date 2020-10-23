@@ -11,7 +11,6 @@
 #include <QPainter>
 #include <QPalette>
 #include <QPropertyAnimation>
-#include <QPixmap>
 #include <QSGSimpleTextureNode>
 #include <QQuickWindow>
 

@@ -7,7 +7,6 @@
 
 #include <QQmlComponent>
 #include <QQmlContext>
-#include <QQmlEngine>
 #include <QQmlExpression>
 #include <QQmlProperty>
 #include <QFile>
