@@ -42,7 +42,6 @@
 
 #include <kactivities/info.h>
 
-#include "kdeclarative/configpropertymap.h"
 #include <packageurlinterceptor.h>
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args)
