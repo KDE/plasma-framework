@@ -33,7 +33,7 @@ T.TextField {
     // this takes into account kiosk restriction
     readonly property bool __effectiveRevealPasswordButtonShown: revealPasswordButtonShown
                                                               && KAuthorized.authorize("lineedit_reveal_password")
-                                                              && (echoMode == TextInput.Normal || textField.length > 0)
+                                                              && (echoMode == TextInput.Normal || control.text.length > 0)
 
     implicitWidth: Math.max((placeholderText ? placeholder.implicitWidth : 0),
                             units.gridUnit * 8,
