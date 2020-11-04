@@ -328,10 +328,8 @@ Item {
         }
     }
 
-    // We still need a MouseArea to handle mouse hover and right-click
+    // We still need a MouseArea to handle right-click
     MouseArea {
-        id: clickAndHoverHandler
-
         anchors.fill: parent
 
         enabled: listItem.isEnabled
@@ -448,20 +446,17 @@ Item {
                 }
 
                 // Default action button
-                PlasmaComponents3.Button {
+                PlasmaComponents3.ToolButton {
                     id: defaultActionButton
 
                     enabled: listItem.isEnabled
                     visible: defaultActionButtonAction
                             && listItem.defaultActionButtonVisible
-                            && (clickAndHoverHandler.containsMouse || expandedView.active)
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
                 }
 
                 // Expand/collapse button
-                PlasmaComponents3.Button {
-                    visible: clickAndHoverHandler.containsMouse || expandedView.visible
-
+                PlasmaComponents3.ToolButton {
                     icon.name: expandedView.active? "collapse" : "expand"
 
                     onClicked: listItem.toggleExpanded()
