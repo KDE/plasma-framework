@@ -42,8 +42,8 @@ import QtQuick.Templates 2.12 as T
     bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.fixedMargins.top
     topPadding: location == PlasmoidHeading.Location.Footer ? headingSvg.fixedMargins.bottom : 0
 
-    implicitHeight: contentHeight + topPadding + bottomPadding
-    contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
 
     leftInset: -headingSvg.fixedMargins.left
     rightInset: -headingSvg.fixedMargins.right
