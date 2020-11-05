@@ -13,6 +13,7 @@ ScrollArea 2.0 ScrollArea.qml
 Title 2.0 Title.qml
 DescriptiveLabel 2.0 DescriptiveLabel.qml
 PlasmoidHeading 2.0 PlasmoidHeading.qml
+BasicPlasmoidHeading 2.0 BasicPlasmoidHeading.qml
 
 ActivateAnimation 2.0 animations/ActivateAnimation.qml
 AppearAnimation 2.0 animations/AppearAnimation.qml

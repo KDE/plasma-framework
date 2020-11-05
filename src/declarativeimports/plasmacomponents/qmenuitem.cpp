@@ -50,6 +50,7 @@ void QMenuItem::setAction(QAction *a)
 
         connect(this, &QQuickItem::visibleChanged, this, &QMenuItem::updateAction);
         connect(this, &QQuickItem::enabledChanged, this, &QMenuItem::updateAction);
+        connect(this, &QObject::destroyed, this, &QMenuItem::deleteLater);
 
         emit actionChanged();
     }
