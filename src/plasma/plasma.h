@@ -95,7 +95,6 @@ public:
         NoContainmentType = -1,  /**< @internal */
         DesktopContainment = 0,  /**< A desktop containment */
         PanelContainment,        /**< A desktop panel */
-
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific */
         CustomPanelContainment = 128, /**< A customized desktop panel */

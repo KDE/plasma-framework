@@ -114,9 +114,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
         connect(applet()->containment(), &Plasma::Containment::screenChanged,
                 this, &AppletInterface::screenGeometryChanged);
 
-        connect(applet()->containment(), &Plasma::Containment::containmentTypeChanged,
-                this, &AppletInterface::containmentTypeChanged);
-
         connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
             if (id == applet()->containment()->screen()) {
                 emit screenGeometryChanged();
@@ -233,15 +230,6 @@ Plasma::Types::FormFactor AppletInterface::formFactor() const
 Plasma::Types::Location AppletInterface::location() const
 {
     return applet()->location();
-}
-
-Plasma::Types::ContainmentType AppletInterface::containmentType() const
-{
-    if (applet()->containment()) {
-        return applet()->containment()->containmentType();
-    } else {
-        return Plasma::Types::NoContainmentType;
-    }
 }
 
 QString AppletInterface::currentActivity() const
