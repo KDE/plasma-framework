@@ -98,6 +98,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
     connect(applet(), &Plasma::Applet::activated,
             this, &AppletInterface::activated);
+    connect(applet(), &Plasma::Applet::containmentDisplayHintsChanged,
+            this, &AppletInterface::containmentDisplayHintsChanged);
 
     connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
             this, &AppletInterface::formFactorChanged);
@@ -230,6 +232,11 @@ Plasma::Types::FormFactor AppletInterface::formFactor() const
 Plasma::Types::Location AppletInterface::location() const
 {
     return applet()->location();
+}
+
+Plasma::Types::ContainmentDisplayHints AppletInterface::containmentDisplayHints() const
+{
+    return applet()->containmentDisplayHints();
 }
 
 QString AppletInterface::currentActivity() const

@@ -343,6 +343,16 @@ void Containment::setFormFactor(Types::FormFactor formFactor)
     emit formFactorChanged(formFactor);
 }
 
+void Containment::setContainmentDisplayHints(Types::ContainmentDisplayHints hints)
+{
+    if (d->containmentDisplayHints == hints) {
+        return;
+    }
+
+    d->containmentDisplayHints = hints;
+    emit containmentDisplayHintsChanged(hints);
+}
+
 void Containment::setLocation(Types::Location location)
 {
     if (d->location == location) {

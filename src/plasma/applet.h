@@ -58,6 +58,7 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(Plasma::Types::ImmutabilityType immutability READ immutability WRITE setImmutability NOTIFY immutabilityChanged)
     Q_PROPERTY(Plasma::Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
+    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints NOTIFY containmentDisplayHintsChanged)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy NOTIFY busyChanged FINAL)
@@ -174,6 +175,12 @@ public:
      * @see Plasma::Types::Location
      */
     Types::Location location() const;
+
+    /**
+     * @return Display hints that come from the containment that suggest the applet how to look and behave.
+     * @since 5.77
+     */
+    Types::ContainmentDisplayHints containmentDisplayHints() const;
 
 //CONFIGURATION
     /**
@@ -581,6 +588,8 @@ Q_SIGNALS:
      * Emitted when the location changes
      */
     void locationChanged(Plasma::Types::Location location);
+
+    void containmentDisplayHintsChanged(Plasma::Types::ContainmentDisplayHints hints);
 
     /**
      * Emitted when setConfigurationRequired was called

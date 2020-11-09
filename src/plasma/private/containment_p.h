@@ -69,6 +69,8 @@ public:
     Containment *q;
     Types::FormFactor formFactor;
     Types::Location location;
+    Types::ContainmentDisplayHints containmentDisplayHints = Types::NoContainmentDisplayHint;
+
     QList<Applet *> applets;
     //Applets still considered not ready
     QSet <Applet *> loadingApplets;

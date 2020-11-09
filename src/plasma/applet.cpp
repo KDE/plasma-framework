@@ -704,6 +704,13 @@ Types::FormFactor Applet::formFactor() const
     return c ? c->d->formFactor : Plasma::Types::Planar;
 }
 
+Types::ContainmentDisplayHints Applet::containmentDisplayHints() const
+{
+    Containment *c = containment();
+
+    return c ? c->d->containmentDisplayHints : Plasma::Types::NoContainmentDisplayHint;
+}
+
 Containment *Applet::containment() const
 {
     Containment *c = qobject_cast<Containment *>(const_cast<Applet *>(this));

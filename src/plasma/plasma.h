@@ -87,6 +87,20 @@ public:
     Q_ENUM(FormFactor)
 
     /**
+     * Display hints that come from the containment that suggest the applet how to look and behave.
+     * @since 5.77
+     */
+    enum ContainmentDisplayHint {
+        NoContainmentDisplayHint = 0,
+        ContainmentDrawsPlasmoidHeading = 1, /**< The containment will draw an titlebar-looking header for the applets, so the applets shouldn't attempt to paint a similar thing **/
+        ContainmentForcesSquarePlasmoids = 2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
+        DesktopFullyCovered = 4 /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
+    };
+    Q_ENUM(ContainmentDisplayHint)
+    Q_DECLARE_FLAGS(ContainmentDisplayHints, ContainmentDisplayHint)
+    Q_FLAG(ContainmentDisplayHints)
+
+    /**
      * This enumeration describes the type of the Containment.
      * DesktopContainments represent main containments that will own a screen in a mutually exclusive fashion,
      * while PanelContainments are accessories which can be present multiple per screen.
@@ -95,6 +109,7 @@ public:
         NoContainmentType = -1,  /**< @internal */
         DesktopContainment = 0,  /**< A desktop containment */
         PanelContainment,        /**< A desktop panel */
+
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific */
         CustomPanelContainment = 128, /**< A customized desktop panel */
@@ -307,6 +322,7 @@ PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
  **/
 PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ComponentTypes)

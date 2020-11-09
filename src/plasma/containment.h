@@ -287,6 +287,14 @@ public Q_SLOTS:
     void setFormFactor(Plasma::Types::FormFactor formFactor);
 
     /**
+     * Set Display hints that come from the containment that suggest the applet how to look and behave.
+     *
+     * @param hints the new hints, as bitwise OR
+     * @since 5.77
+     */
+    void setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints);
+
+    /**
      * Sets the type of this containment.
      */
     void setContainmentType(Plasma::Types::ContainmentType type);
