@@ -246,9 +246,6 @@ void QMenuProxy::addMenuItem(QMenuItem *item, QMenuItem *before)
         m_menu->addAction(item->action());
         m_items << item;
     }
-    connect(item, &QMenuItem::destroyed, this, [this, item]() {
-        removeMenuItem(item);
-    });
 }
 
 void QMenuProxy::addSection(const QString &text)

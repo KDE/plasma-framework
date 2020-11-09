@@ -113,12 +113,6 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(Plasma::Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
 
     /**
-     * Type of the containment we're in
-     * @since 5.76
-     */
-    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType NOTIFY containmentTypeChanged)
-
-    /**
      * Location for the plasmoid
      */
     Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
@@ -381,8 +375,6 @@ public:
 
     Plasma::Types::Location location() const;
 
-    Plasma::Types::ContainmentType containmentType() const;
-
     QString currentActivity() const;
 
     QObject *configuration() const;
@@ -466,7 +458,6 @@ Q_SIGNALS:
     void toolTipItemChanged();
     void formFactorChanged();
     void locationChanged();
-    void containmentTypeChanged();
     void contextChanged();
     void immutabilityChanged();
     void statusChanged();
