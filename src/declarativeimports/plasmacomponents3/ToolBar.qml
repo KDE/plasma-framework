@@ -16,10 +16,10 @@ T.ToolBar {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    leftPadding: background.leftMargin
-    topPadding: background.topMargin
-    rightPadding: background.rightMargin
-    bottomPadding: background.bottomMargin
+    leftPadding: background.margins.left
+    topPadding: background.margins.top
+    rightPadding: background.margins.right
+    bottomPadding: background.margins.bottom
 
     contentItem: Item { }
 
