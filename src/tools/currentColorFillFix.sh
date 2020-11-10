@@ -19,5 +19,5 @@ echo Processing $file
 
 /usr/bin/perl -p -i -e "s/color:#[^;]*;(.*)fill:currentColor/\1fill:currentColor/g" $file.svg
 
-gzip $file.svg
+gzip -n $file.svg
 mv $file.svg.gz $file.svgz

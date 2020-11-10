@@ -282,6 +282,6 @@ rm transform.xsl
 
 mv temp.svg $file.svg
 if [ $isSvgz = 1 ]; then
-    gzip $file.svg
+    gzip -n $file.svg
     mv $file.svg.gz $file.svgz
 fi
