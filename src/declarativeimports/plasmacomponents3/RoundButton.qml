@@ -28,7 +28,7 @@ T.RoundButton {
 
     contentItem: RowLayout {
         // This is the spacing which will make the icon a square inscribed in the circle with an extra smallspacing of margins
-        readonly property int extraSpace: width/2 - width/2*Math.sqrt(2)/2 + units.smallSpacing
+        readonly property int extraSpace: implicitWidth/2 - implicitWidth/2*Math.sqrt(2)/2 + units.smallSpacing
         PlasmaCore.IconItem {
             Layout.preferredWidth: units.iconSizes.smallMedium
             Layout.preferredHeight: units.iconSizes.smallMedium
