@@ -21,7 +21,7 @@ T.ProgressBar {
         PlasmaCore.FrameSvgItem {
             id: indicator
             height: parent.height
-            width: control.indeterminate ? units.gridUnit * 2 : parent.width * control.position
+            width: parent.width * control.position
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -34,6 +34,9 @@ T.ProgressBar {
 
             alwaysRunToEnd: true
             running: control.indeterminate && control.visible
+
+            onStarted: indicator.width =  units.gridUnit * 2
+            onStopped: indicator.width = parent.width * control.position
 
             PropertyAnimation {
                 target: indicator
