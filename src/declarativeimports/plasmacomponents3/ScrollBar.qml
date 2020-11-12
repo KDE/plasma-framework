@@ -75,8 +75,11 @@ T.ScrollBar {
             property real handleState: 0
 
             visible: !controlRoot.interactive
+
             x: Math.round(controlRoot.orientation == Qt.Vertical
-                ? (parent.width - width) - (parent.width/2 - width/2) * handleState
+                ? (Qt.application.layoutDirection === Qt.LeftToRight
+                    ? (parent.width - width) - (parent.width/2 - width/2) * handleState
+                    : (parent.width/2 - width/2) * handleState)
                 : 0)
             
             y: Math.round(controlRoot.orientation == Qt.Horizontal
