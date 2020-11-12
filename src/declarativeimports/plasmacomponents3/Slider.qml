@@ -71,7 +71,9 @@ T.Slider {
             y: parent.horizontal ? (parent.height - height) / 2 : parent.height - height
             width: Math.max(margins.left + margins.right,
                             parent.horizontal 
-                            ? control.visualPosition * (parent.width - control.handle.width) + control.handle.width/2
+                            ? (Qt.application.layoutDirection === Qt.LeftToRight
+                                ? control.visualPosition * (parent.width - control.handle.width) + control.handle.width/2
+                                : parent.width - control.visualPosition * (parent.width - control.handle.width) - control.handle.width/2)
                             : parent.width)
             height: Math.max(margins.top + margins.bottom,
                              parent.horizontal
