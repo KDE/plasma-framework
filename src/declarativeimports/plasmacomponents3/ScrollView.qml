@@ -20,6 +20,10 @@ T.ScrollView {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
+    leftPadding: background.visible && background.hasOwnProperty("leftPadding") ? background.leftPadding : 0
+    topPadding: background.visible && background.hasOwnProperty("topPadding") ? background.topPadding : 0
+    rightPadding: background.visible && background.hasOwnProperty("rightPadding") ? background.rightPadding : 0
+    bottomPadding: background.visible && background.hasOwnProperty("bottomPadding") ? background.bottomPadding : 0
 
     //create a background only after Component.onCompleted, see on the component creation below for explanation
     Component.onCompleted: {
@@ -27,7 +31,6 @@ T.ScrollView {
             controlRoot.background = backgroundComponent.createObject(controlRoot);
         }
     }
-
  
     data: [
         Kirigami.WheelHandler {
@@ -35,10 +38,14 @@ T.ScrollView {
         },
         Component {
             id: backgroundComponent
-            Rectangle {
-                color: theme.viewBackgroundColor
-                visible: false
+
+            Frame {
                 anchors.fill:parent
+                visible: false
+                Rectangle {
+                    color: theme.viewBackgroundColor
+                    anchors.fill: parent
+                }
             }
         }
     ]
