@@ -42,9 +42,9 @@ T.TextField {
     implicitHeight: Math.max(units.gridUnit, contentHeight)
                             + topPadding + bottomPadding
 
-    leftPadding: base.margins.left
+    leftPadding: base.margins.left + (LayoutMirroring.enabled ? inlineButtonRow.width : 0)
     topPadding: base.margins.top
-    rightPadding: base.margins.right
+    rightPadding: base.margins.right + (LayoutMirroring.enabled ? 0 : inlineButtonRow.width)
     bottomPadding: base.margins.bottom
 
     color: theme.viewTextColor
@@ -111,8 +111,9 @@ T.TextField {
     }
 
     Row {
+        id: inlineButtonRow
         anchors.right: control.right
-        anchors.rightMargin: control.rightPadding
+        anchors.rightMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: control.verticalCenter
 
         PlasmaCore.IconItem {
