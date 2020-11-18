@@ -16,10 +16,10 @@ T.ToolBar {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    leftPadding: background.leftMargin
-    topPadding: background.topMargin
-    rightPadding: background.rightMargin
-    bottomPadding: background.bottomMargin
+    leftPadding: background.margins.left
+    topPadding: background.margins.top
+    rightPadding: background.margins.right
+    bottomPadding: background.margins.bottom
 
     contentItem: Item { }
 
@@ -27,7 +27,6 @@ T.ToolBar {
         implicitHeight: 40 // TODO: Find a good way to sync this with the size of (Button or ToolButton) + padding
         imagePath: "widgets/toolbar"
         colorGroup: PlasmaCore.ColorScope.colorGroup
-        enabledBorders: control.position == T.ToolBar.Header ?  PlasmaCore.FrameSvgItem.BottomBorder : PlasmaCore.FrameSvgItem.TopBorder
         PlasmaCore.SvgItem {
             svg: PlasmaCore.Svg {
                 imagePath: "widgets/listitem"

@@ -48,7 +48,6 @@ T.ScrollView {
         readonly property Flickable flickableItem: controlRoot.contentItem
         onFlickableItemChanged: {
             flickableItem.clip = true;
-            flickableItem.pixelAligned = true;
         }
         parent: controlRoot
         x: controlRoot.mirrored ? 0 : controlRoot.width - width

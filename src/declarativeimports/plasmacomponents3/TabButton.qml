@@ -32,7 +32,7 @@ T.TabButton {
         PlasmaCore.IconItem {
             id: icon
 
-            Layout.alignment: Qt.AlignCenter
+            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignRight
 
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -52,7 +52,7 @@ T.TabButton {
         }
         Label {
             id: label
-            Layout.fillWidth: true
+            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon || icon.source.length === 0 ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignLeft
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
