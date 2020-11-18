@@ -167,7 +167,8 @@ private:
 FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent)
     : QObject(parent),
       m_frameSvg(frameSvg),
-      m_fixed(false)
+      m_fixed(false),
+      m_shadow(false)
 {
     //qDebug() << "margins at: " << left() << top() << right() << bottom();
 }
@@ -176,6 +177,8 @@ qreal FrameSvgItemMargins::left() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::LeftMargin);
+    } else if(m_shadow){
+        return m_frameSvg->shadowMarginSize(Types::LeftMargin);
     } else {
         return m_frameSvg->marginSize(Types::LeftMargin);
     }
@@ -185,6 +188,8 @@ qreal FrameSvgItemMargins::top() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::TopMargin);
+    } else if(m_shadow){
+        return m_frameSvg->shadowMarginSize(Types::TopMargin);
     } else {
         return m_frameSvg->marginSize(Types::TopMargin);
     }
@@ -194,6 +199,8 @@ qreal FrameSvgItemMargins::right() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::RightMargin);
+    } else if(m_shadow){
+        return m_frameSvg->shadowMarginSize(Types::RightMargin);
     } else {
         return m_frameSvg->marginSize(Types::RightMargin);
     }
@@ -203,6 +210,8 @@ qreal FrameSvgItemMargins::bottom() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::BottomMargin);
+    } else if(m_shadow){
+        return m_frameSvg->shadowMarginSize(Types::BottomMargin);
     } else {
         return m_frameSvg->marginSize(Types::BottomMargin);
     }
@@ -245,10 +254,26 @@ bool FrameSvgItemMargins::isFixed() const
     return m_fixed;
 }
 
+void FrameSvgItemMargins::setShadow(bool shadow)
+{
+    if (shadow == m_shadow) {
+        return;
+    }
+
+    m_shadow = shadow;
+    emit marginsChanged();
+}
+
+bool FrameSvgItemMargins::isShadow() const
+{
+    return m_shadow;
+}
+
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_margins(nullptr),
       m_fixedMargins(nullptr),
+      m_shadowMargins(nullptr),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_fastPath(true)
@@ -295,6 +320,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
+    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
 
     updateDevicePixelRatio();
     m_frameSvg->setImagePath(path);
@@ -339,6 +365,7 @@ void FrameSvgItem::setPrefix(const QVariant &prefixes)
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
+    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
 
     m_prefixes = prefixList;
     applyPrefixes();
@@ -385,6 +412,15 @@ FrameSvgItemMargins *FrameSvgItem::fixedMargins()
         m_fixedMargins->setFixed(true);
     }
     return m_fixedMargins;
+}
+
+FrameSvgItemMargins *FrameSvgItem::shadowMargins()
+{
+    if (!m_shadowMargins) {
+        m_shadowMargins = new FrameSvgItemMargins(m_frameSvg, this);
+        m_shadowMargins->setShadow(true);
+    }
+    return m_shadowMargins;
 }
 
 void FrameSvgItem::setColorGroup(Plasma::Theme::ColorGroup group)
@@ -474,6 +510,7 @@ void FrameSvgItem::doUpdate()
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
+    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
 
     //if the theme changed, the available prefix may have changed as well
     applyPrefixes();
@@ -618,6 +655,7 @@ void FrameSvgItem::componentComplete()
 {
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
+    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
 
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));

@@ -152,6 +152,14 @@ public:
     Q_INVOKABLE qreal fixedMarginSize(const Plasma::Types::MarginEdge edge) const;
 
     /**
+     * Returns the shadows margin size given the margin edge we want.
+     * @param edge the margin edge we want, top, bottom, left or right
+     * @return the margin size
+     * @since 5.77
+     */
+    Q_INVOKABLE qreal shadowMarginSize(const Plasma::Types::MarginEdge edge) const;
+
+    /**
      * Convenience method that extracts the size of the four margins
      * in the four output parameters
      * Compared to getMargins(), this doesn't depend whether the margins are enabled or not

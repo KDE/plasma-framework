@@ -218,6 +218,45 @@ qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
     }
 }
 
+qreal FrameSvg::shadowMarginSize(const Plasma::Types::MarginEdge edge) const
+{
+    switch (edge) {
+        case Plasma::Types::TopMargin: {
+            const QSize marginHint = this->elementSize(QStringLiteral("shadow-hint-top-margin"));
+            if (marginHint.isValid()) {
+                return marginHint.height();
+            } else {
+                return .0;
+            }
+        }
+        case Plasma::Types::LeftMargin: {
+            const QSize marginHint = this->elementSize(QStringLiteral("shadow-hint-left-margin"));
+            if (marginHint.isValid()) {
+                return marginHint.width();
+            } else {
+                return .0;
+            }
+        }
+        case Plasma::Types::RightMargin: {
+            const QSize marginHint = this->elementSize(QStringLiteral("shadow-hint-right-margin"));
+            if (marginHint.isValid()) {
+                return marginHint.width();
+            } else {
+                return .0;
+            }
+        }
+        //Plasma::BottomMargin
+        default: {
+            const QSize marginHint = this->elementSize(QStringLiteral("shadow-hint-bottom-margin"));
+            if (marginHint.isValid()) {
+                return marginHint.height();
+            } else {
+                return .0;
+            }
+        }
+    }
+}
+
 qreal FrameSvg::fixedMarginSize(const Plasma::Types::MarginEdge edge) const
 {
     if (!d->frame) {

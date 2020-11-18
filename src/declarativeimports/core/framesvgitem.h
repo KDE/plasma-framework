@@ -75,6 +75,9 @@ public:
     void setFixed(bool fixed);
     bool isFixed() const;
 
+    void setShadow(bool shadow);
+    bool isShadow() const;
+
 public Q_SLOTS:
     void update();
 
@@ -84,6 +87,7 @@ Q_SIGNALS:
 private:
     FrameSvg *m_frameSvg;
     bool m_fixed;
+    bool m_shadow;
 };
 
 
@@ -133,6 +137,14 @@ class FrameSvgItem : public QQuickItem
      * @see FrameSvgItemMargins
      */
     Q_PROPERTY(QObject *fixedMargins READ fixedMargins CONSTANT)
+
+    /**
+     * The margins of the shadow
+     * read only
+     * @see FrameSvgItemMargins
+     * @since 5.77
+     */
+    Q_PROPERTY(QObject *shadowMargins READ shadowMargins CONSTANT)
 
     /**
      * The borders that will be rendered, it's a flag combination of:
@@ -200,6 +212,7 @@ public:
 
     FrameSvgItemMargins *margins();
     FrameSvgItemMargins *fixedMargins();
+    FrameSvgItemMargins *shadowMargins();
 
     void setColorGroup(Plasma::Theme::ColorGroup group);
     Plasma::Theme::ColorGroup colorGroup() const;
@@ -250,9 +263,11 @@ private:
     Plasma::FrameSvg *m_frameSvg;
     FrameSvgItemMargins *m_margins;
     FrameSvgItemMargins *m_fixedMargins;
+    FrameSvgItemMargins *m_shadowMargins;
     // logged margins to check for changes
     QVector<qreal> m_oldMargins;
     QVector<qreal> m_oldFixedMargins;
+    QVector<qreal> m_oldShadowMargins;
     QStringList m_prefixes;
     bool m_textureChanged;
     bool m_sizeChanged;
