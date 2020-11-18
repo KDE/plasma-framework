@@ -58,7 +58,7 @@ public:
     enum ConstraintHints {
 		NoHint = 0,
 		CanFillArea = 1, /**< The applet can fill the area and ignore constraint margins*/
-		MarginAreasSeparator = 3, /**< The applet acts as a separator between the standard and slim panel margin areas*/
+		MarginAreasSeparator = CanFillArea | 2, /**< The applet acts as a separator between the standard and slim panel margin areas*/
     };
     Q_ENUM(ConstraintHints)
 
