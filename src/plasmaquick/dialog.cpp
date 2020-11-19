@@ -1456,6 +1456,7 @@ void Dialog::setBackgroundHints(Dialog::BackgroundHints hints)
 
     d->backgroundHints = hints;
     d->updateTheme();
+    d->updateLayoutParameters();
     emit backgroundHintsChanged();
 }
 
