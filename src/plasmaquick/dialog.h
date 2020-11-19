@@ -150,11 +150,13 @@ public:
     };
     Q_ENUM(WindowType)
 
-    enum BackgroundHints {
+    enum BackgroundHint {
         NoBackground = 0,         /**< Not drawing a background under the applet, the dialog has its own implementation */
-        StandardBackground = 1   /**< The standard background from the theme is drawn */
+        StandardBackground = 1,   /**< The standard background from the theme is drawn */
+        DiscardBackgroundMargins = 2   /**< Don't constrain dialogs main QML item within dialogs margins. */
     };
-    Q_ENUM(BackgroundHints)
+    Q_DECLARE_FLAGS(BackgroundHints, BackgroundHint)
+    Q_FLAG(BackgroundHints)
 
     explicit Dialog(QQuickItem *parent = nullptr);
     ~Dialog() override;
@@ -243,6 +245,8 @@ private:
 
     Q_PRIVATE_SLOT(d, void slotMainItemSizeChanged())
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Dialog::BackgroundHints)
 
 }
 
