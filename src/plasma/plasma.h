@@ -58,7 +58,6 @@ public:
     enum ConstraintHints { //TODO KF6 ConstraintHints -> ConstraintHint
 		NoHint = 0,
 		CanFillArea = 1, /**< The CompactRepresentation can fill the area and ignore constraint margins*/ // (TODO: KF6 CanFillArea -> CompactRepresentationFillArea)
-		FullRepresentationFillArea = 2 /**< The FullRepresentation can fill the area and ignore constraint margins*/
     };
     Q_DECLARE_FLAGS(ConstraintFlags, ConstraintHints)
     Q_FLAG(ConstraintFlags)
