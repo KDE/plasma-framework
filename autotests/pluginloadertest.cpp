@@ -45,7 +45,7 @@ void PluginTest::listAppletCategories()
 
 void PluginTest::listContainmentActions()
 {
-    const KPluginInfo::List plugins = Plasma::PluginLoader::self()->listContainmentActionsInfo(QStringLiteral("plasma-shell"));
+    const QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
     qDebug() << "Categories: " << plugins.count();
     //QVERIFY(plugins.count() > 0 || m_buildonly);
 }

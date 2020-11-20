@@ -756,41 +756,51 @@ QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &par
     return plugins;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
 KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parentApp)
 {
-    KPluginInfo::List list;
+    return KPluginInfo::fromMetaData(listContainmentActionsMetaData(parentApp));
+}
+#endif
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
-        list = internalContainmentActionsInfo();
-    }
+QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QString &parentApp)
+{
+    auto filter = [&parentApp](const KPluginMetaData &md) -> bool
+    {
+        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
+    };
 
-    QString constraint;
-    if (!parentApp.isEmpty()) {
-        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
-    }
-
-    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_containmentActionsPluginDir, QStringLiteral("Plasma/ContainmentActions"), constraint));
-
-    QSet<QString> knownPlugins;
-    for (const KPluginInfo &p : qAsConst(list)) {
-        knownPlugins.insert(p.pluginName());
+    QVector<KPluginMetaData> plugins;
+    if (parentApp.isEmpty()) {
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir);
+    } else {
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
     }
 
 #if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
     //FIXME: this is only for backwards compatibility, but probably will have to stay
     //for the time being
+    QSet<QString> knownPlugins;
+    for (const KPluginMetaData &p : qAsConst(plugins)) {
+        knownPlugins.insert(p.pluginId());
+    }
+    QString constraint;
+    if (!parentApp.isEmpty()) {
+        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
+    }
     const KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
     for (KService::Ptr s : offers) {
         if (!knownPlugins.contains(s->pluginKeyword())) {
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
 QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
-            list.append(KPluginInfo(s));
+            plugins.append(KPluginInfo(s).toMetaData());
 QT_WARNING_POP
         }
     }
 #endif
-    return list;
+
+    return plugins;
 }
 
 Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
