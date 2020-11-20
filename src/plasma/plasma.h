@@ -55,12 +55,13 @@ public:
 	 * This enumeration lists the various hints that an applet can pass to its
 	 * constraint regarding the way that it is represented
      */
-    enum ConstraintHints {
+    enum ConstraintHints { //TODO KF6 ConstraintHints -> ConstraintHint
 		NoHint = 0,
-		CanFillArea = 1, /**< The applet can fill the area and ignore constraint margins*/
+		CanFillArea = 1, /**< The CompactRepresentation can fill the area and ignore constraint margins*/ // (TODO: KF6 CanFillArea -> CompactRepresentationFillArea)
 		MarginAreasSeparator = CanFillArea | 2, /**< The applet acts as a separator between the standard and slim panel margin areas*/
     };
-    Q_ENUM(ConstraintHints)
+    Q_DECLARE_FLAGS(ConstraintFlags, ConstraintHints)
+    Q_FLAG(ConstraintFlags)
 
     /**
      * The FormFactor enumeration describes how a Plasma::Applet should arrange
@@ -325,6 +326,7 @@ PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location locati
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ConstraintFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Flip)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ComponentTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::BackgroundFlags)

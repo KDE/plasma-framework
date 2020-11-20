@@ -97,7 +97,7 @@ PlasmoidHeading {
                 }
             }
             PlasmaComponents.ToolTip {
-                text: actionsButton.singleAction ? actionsButton.singleAction.text : i18n("More actions")
+                text: actionsButton.singleAction ? actionsButton.singleAction.text : i18nd("libplasma5", "More actions")
             }
             PC2.Menu {
                 id: configMenu

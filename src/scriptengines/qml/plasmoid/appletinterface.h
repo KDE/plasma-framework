@@ -247,7 +247,8 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
     /**
-     * When false the plasmoid will ignore the margins when contained in a panel
+     * The hints that the applet gives to its constraint,
+     * such as asking to fill all the available space ignoring margins.
      */
     Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged)
 

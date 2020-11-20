@@ -486,15 +486,10 @@ void DialogPrivate::updateLayoutParameters()
         q->resize(finalSize);
     }
 
-    if (q->backgroundHints().testFlag(Dialog::DiscardBackgroundMargins)) {
-        mainItem->setPosition(QPointF(0, 0));
-        mainItem->setSize(QSizeF(q->width(), q->height()));
-    } else {
-        mainItem->setPosition(QPointF(margin->left(),
+    mainItem->setPosition(QPointF(margin->left(),
                         margin->top()));
-        mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(),
+    mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(),
                         q->height() - margin->top() - margin->bottom()));
-    }
 
     frameSvgItem->setSize(QSizeF(q->width(),
                             q->height()));
@@ -642,12 +637,8 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
 
-    if (q->backgroundHints().testFlag(Dialog::DiscardBackgroundMargins)) {
-        mainItem->setPosition(QPointF(0, 0));
-    } else {
-        mainItem->setPosition(QPointF(frameSvgItem->fixedMargins()->left(),
+    mainItem->setPosition(QPointF(frameSvgItem->fixedMargins()->left(),
                             frameSvgItem->fixedMargins()->top()));
-    }
 
     updateTheme();
 }
@@ -665,15 +656,9 @@ void DialogPrivate::slotWindowPositionChanged()
 
     if (mainItem) {
         auto margin = frameSvgItem->fixedMargins();
-        if (q->backgroundHints().testFlag(Dialog::DiscardBackgroundMargins)) {
-            mainItem->setPosition(QPointF(0, 0));
-            mainItem->setSize(QSizeF(q->width(), q->height()));
-        } else {
-            mainItem->setPosition(QPointF(margin->left(),
-                            margin->top()));
-            mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(),
-                            q->height() - margin->top() - margin->bottom()));
-        }
+        mainItem->setPosition(QPoint(margin->left(), margin->top()));
+        mainItem->setSize(QSize(q->width() - margin->left() - margin->right(),
+                                q->height() - margin->top() - margin->bottom()));
     }
 }
 
@@ -1132,15 +1117,11 @@ void Dialog::resizeEvent(QResizeEvent* re)
     d->frameSvgItem->setSize(QSizeF(re->size().width(),
                                 re->size().height()));
     auto margin = d->frameSvgItem->fixedMargins();
-    if (backgroundHints().testFlag(Dialog::DiscardBackgroundMargins)) {
-        d->mainItem->setPosition(QPointF(0, 0));
-        d->mainItem->setSize(QSizeF(re->size().width(), re->size().height()));
-    } else {
-        d->mainItem->setPosition(QPointF(margin->left(),
-                        margin->top()));
-        d->mainItem->setSize(QSizeF(re->size().width() - margin->left() - margin->right(),
-                        re->size().height() - margin->top() - margin->bottom()));
-    }
+    d->mainItem->setPosition(QPointF(margin->left(),
+                                margin->top()));
+
+    d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(),
+            re->size().height() - margin->top() - margin->bottom()));
 
     QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
     QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
