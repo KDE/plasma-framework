@@ -62,12 +62,6 @@ class IconItem : public QQuickItem
     Q_PROPERTY(bool active READ isActive WRITE setActive NOTIFY activeChanged)
 
     /**
-     * Apply a visual indication that this icon is selected.
-     * @since 5.77
-     */
-    Q_PROPERTY(bool selected READ isSelected WRITE setSelected NOTIFY selectedChanged)
-
-    /**
      * Sets the image in a selected status.
      * Svgs can be colored with system color themes, if the status is selected,
      * the TextColor will become HighlightedText color and BackgroundColor
@@ -130,9 +124,6 @@ public:
     bool isActive() const;
     void setActive(bool active);
 
-    bool isSelected() const;
-    void setSelected(bool selected);
-
     bool isAnimated() const;
     void setAnimated(bool animated);
 
@@ -165,7 +156,6 @@ public:
 Q_SIGNALS:
     void overlaysChanged();
     void activeChanged();
-    void selectedChanged();
     void sourceChanged();
     void animatedChanged();
     void usesPlasmaThemeChanged();
@@ -197,7 +187,6 @@ private:
     Plasma::Svg::Status m_status;
 
     bool m_active;
-    bool m_selected;
     bool m_animated;
     bool m_usesPlasmaTheme;
     bool m_roundToIconSize;

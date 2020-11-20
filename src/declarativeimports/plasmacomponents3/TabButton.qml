@@ -49,7 +49,7 @@ T.TabButton {
             colorGroup: control.PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
             source: control.icon ? (control.icon.name || control.icon.source) : ""
-            selected: control.visualFocus
+            active: control.visualFocus
         }
         Label {
             id: label

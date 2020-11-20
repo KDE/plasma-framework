@@ -252,7 +252,6 @@ IconItem::IconItem(QQuickItem *parent)
       m_iconItemSource(new NullSource(this)),
       m_status(Plasma::Svg::Normal),
       m_active(false),
-      m_selected(false),
       m_animated(true),
       m_usesPlasmaTheme(true),
       m_roundToIconSize(true),
@@ -447,26 +446,6 @@ void IconItem::setActive(bool active)
         schedulePixmapUpdate();
     }
     emit activeChanged();
-}
-
-bool IconItem::isSelected() const
-{
-    return m_selected;
-}
-
-void IconItem::setSelected(bool selected)
-{
-    if (m_selected == selected) {
-        return;
-    }
-
-    m_selected = selected;
-
-    if (isComponentComplete()) {
-        m_allowNextAnimation = true;
-        schedulePixmapUpdate();
-    }
-    emit selectedChanged();
 }
 
 bool IconItem::isAnimated() const
@@ -747,8 +726,6 @@ void IconItem::loadPixmap()
         result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::DisabledState);
     } else if (m_active) {
         result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
-    } else if (m_selected) {
-        result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::SelectedState);
     }
 
     const QSize oldPaintedSize = paintedSize();
