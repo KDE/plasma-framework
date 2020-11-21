@@ -270,10 +270,12 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
     return engines;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
 KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 {
     return PluginLoader::self()->listDataEngineInfo(parentApp);
 }
+#endif
 
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
@@ -715,21 +717,28 @@ QStringList PluginLoader::listContainmentTypes()
     return types.values();
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
 {
-    KPluginInfo::List list;
+    return KPluginInfo::fromMetaData(listDataEngineMetaData(parentApp));
+}
+#endif
 
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
-        list = internalDataEngineInfo();
+QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &parentApp)
+{
+    auto filter = [&parentApp](const KPluginMetaData &md) -> bool
+    {
+        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
+    };
+
+    QVector<KPluginMetaData> plugins;
+    if (parentApp.isEmpty()) {
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
+    } else {
+        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
-    QString constraint;
-    if (!parentApp.isEmpty()) {
-        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
-    }
-
-    list.append(KPluginTrader::self()->query(PluginLoaderPrivate::s_dataEnginePluginDir, QStringLiteral("Plasma/DataEngine"), constraint));
-    return list;
+    return plugins;
 }
 
 KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parentApp)

@@ -11,6 +11,7 @@
 #include <QSignalSpy>
 
 #include <KPluginInfo>
+#include <KPluginMetaData>
 
 #include <plasma/pluginloader.h>
 #include <plasma/dataengineconsumer.h>
@@ -24,7 +25,7 @@ PluginTest::PluginTest()
 
 void PluginTest::listEngines()
 {
-    KPluginInfo::List plugins = Plasma::PluginLoader::listEngineInfo();
+    QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listDataEngineMetaData();
 //     foreach (const KPluginInfo& info, plugins) {
         //qDebug() << " Found DataEngine: " << info.pluginName() << info.name();
 //     }

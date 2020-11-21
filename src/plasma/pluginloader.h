@@ -73,6 +73,7 @@ public:
      */
     static QStringList listAllEngines(const QString &parentApp = QString());
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 77)
     /**
      * Returns a list of all known dataengines.
      *
@@ -81,8 +82,11 @@ public:
      *                  The default value of QString() will result in a
      *                  list of all dataengines.
      * @return list of dataengines
+     * @deprecated since 5.77, use listDataEngineMetaData instead.
      **/
+    PLASMA_DEPRECATED_VERSION(5, 77, "Use listDataEngineMetaData instead")
     static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
+#endif
 
     /**
      * Returns a list of all known dataengines filtering by category.
@@ -311,6 +315,7 @@ public:
      **/
     static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 77)
     /**
      * Returns a list of all known dataengines.
      *
@@ -319,8 +324,23 @@ public:
      *                  The default value of QString() will result in a
      *                  list of all dataengines
      * @return list of dataengines
+     * @deprecated since 5.77, use listDataEngineMetaData()
      **/
+    PLASMA_DEPRECATED_VERSION(5, 77, "Use listDataEngineMetaData()")
     KPluginInfo::List listDataEngineInfo(const QString &parentApp = QString());
+#endif
+
+    /**
+     * Returns a list of all known dataengines.
+     *
+     * @param parentApp the application to filter dataengines on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list of all dataengines
+     * @return list of dataengines
+     * @since 5.77
+     **/
+    QVector<KPluginMetaData> listDataEngineMetaData(const QString &parentApp = QString());
 
     /**
      * Returns a list of all known ContainmentActions.
