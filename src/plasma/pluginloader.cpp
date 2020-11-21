@@ -435,13 +435,28 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         structure->d->internalStructure = internalStructure;
     //fallback to old structures
     } else {
-        const QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(packageFormat);
-        structure = KPluginTrader::createInstanceFromQuery<Plasma::PackageStructure>(PluginLoaderPrivate::s_packageStructurePluginDir, QStringLiteral("Plasma/PackageStructure"), constraint, nullptr);
-        if (structure) {
-            structure->d->internalStructure = new PackageStructureWrapper(structure);
+
+        auto filter = [packageFormat](const KPluginMetaData &md) -> bool
+        {
+            return md.value(QStringLiteral("X-KDE-PluginInfo-Name")) == packageFormat;
+        };
+
+        const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_packageStructurePluginDir, filter);
+
+        if (!plugins.isEmpty()) {
+            KPluginLoader loader(plugins.first().fileName());
+            KPluginFactory* factory = loader.factory();
+            if (!factory) {
+                qWarning() << "Error loading plugin:" << loader.errorString();
+            } else {
+                structure = factory->create<Plasma::PackageStructure>();
+            }
+
+            if (structure) {
+                structure->d->internalStructure = new PackageStructureWrapper(structure);
+            }
         }
     }
-
 
     if (structure) {
         d->structures.insert(hashkey, structure);
