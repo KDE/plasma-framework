@@ -116,7 +116,7 @@
         <rect id="thick-right-margin" transform="rotate(90)" x="932.36218" y="-55.999985" width="3.9999771" height="7.9999847" fill="#f0f"/>
         <rect id="thick-hint-left-margin" transform="rotate(90)" x="928.36218" y="-22" width="4.0000229" height="8.0000076" fill="#f0f"/>
         <rect id="hint-bottom-margin" x="34" y="949.36218" width="4" height="4.0002136" fill="#800080"/>
-        <rect id="slim-hint-right-margin" transform="rotate(90)" x="928.36218" y="-55.999985" width="3.9999771" height="3.9999847" fill="#800080"/>
+        <rect id="hint-right-margin" transform="rotate(90)" x="928.36218" y="-55.999985" width="3.9999771" height="3.9999847" fill="#800080"/>
         <rect id="hint-left-margin" transform="rotate(90)" x="932.36218" y="-18" width="4.0000229" height="4.0000076" fill="#800080"/>
         <rect id="hint-top-margin" x="30" y="911.36218" width="4.0000019" height="3.9999795" fill="#800080"/>
         <rect id="thick-center" x="-5.6843419e-14" y="960.36218" width="2" height="2"/>
