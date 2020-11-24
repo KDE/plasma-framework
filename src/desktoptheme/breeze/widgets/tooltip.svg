@@ -656,6 +656,10 @@
        x="930.36218"
        y="-25.000004"
        transform="matrix(0,1,-1,0,0,0)" />
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-top-margin" width="4" height="6.0000248" x="33" y="904.36218"/>
+    <rect y="954.36218" x="33" height="5.9999752" width="4" id="hint-inset-bottom-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+    <rect y="-63" x="930.36218" height="6.0000153" width="4" id="hint-inset-right-margin" style="fill:#00ff00;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-left-margin" width="4" height="6.0000038" x="930.36218" y="-13.000004" transform="matrix(0,1,-1,0,0,0)"/>
     <g
        id="shadow-top"
        transform="translate(56.99998,1.7232666e-5)"
@@ -1015,6 +1019,10 @@
        width="4.0000229"
        id="shadow-hint-left-margin"
        style="fill:#ff00ff;fill-opacity:1;stroke:none;stroke-width:0.99999994" />
+    <rect y="904.36218" x="97" height="5.9999771" width="4" id="shadow-hint-inset-top-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="shadow-hint-inset-bottom-margin" width="4" height="6.0000229" x="97" y="954.36218"/>
+    <rect transform="matrix(0,1,-1,0,0,0)" style="fill:#00ff00;fill-opacity:1;stroke:none" id="shadow-hint-inset-right-margin" width="3.9999769" height="5.9999771" x="936.36218" y="-119.99998"/>
+    <rect transform="matrix(0,1,-1,0,0,0)" y="-70" x="936.36218" height="6" width="4.0000229" id="shadow-hint-inset-left-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
     <rect
        y="910.11212"
        x="131.99985"
