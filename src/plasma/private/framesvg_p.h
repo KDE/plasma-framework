@@ -104,6 +104,12 @@ public:
     int fixedRightMargin;
     int fixedBottomMargin;
 
+    //margins, we only have the hint for shadows
+    int shadowTopMargin;
+    int shadowLeftMargin;
+    int shadowRightMargin;
+    int shadowBottomMargin;
+
     qreal devicePixelRatio;
 
     //size of the svg where the size of the "center"
