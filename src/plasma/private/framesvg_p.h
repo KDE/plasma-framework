@@ -104,11 +104,11 @@ public:
     int fixedRightMargin;
     int fixedBottomMargin;
 
-    //margins, we only have the hint for shadows
-    int shadowTopMargin;
-    int shadowLeftMargin;
-    int shadowRightMargin;
-    int shadowBottomMargin;
+    //margins, we only have the hint for insets
+    int insetTopMargin;
+    int insetLeftMargin;
+    int insetRightMargin;
+    int insetBottomMargin;
 
     qreal devicePixelRatio;
 

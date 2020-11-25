@@ -163,15 +163,15 @@ public:
     Q_INVOKABLE void getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
     /**
-     * Returns the shadows margin size given the margin edge we want.
+     * Returns the insets margin size given the margin edge we want.
      * @param edge the margin edge we want, top, bottom, left or right
      * @return the margin size
      * @since 5.77
      */
-    Q_INVOKABLE qreal shadowMarginSize(const Plasma::Types::MarginEdge edge) const;
+    Q_INVOKABLE qreal insetMarginSize(const Plasma::Types::MarginEdge edge) const;
 
     /**
-     * Convenience method that extracts the size of the four shadow margins
+     * Convenience method that extracts the size of the four inset margins
      * in the four output parameters
      * @param left left margin size
      * @param top top margin size
@@ -179,7 +179,7 @@ public:
      * @param bottom bottom margin size
      * @since 5.77
      */
-    Q_INVOKABLE void getShadowMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
+    Q_INVOKABLE void getInsetMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
     /**
      * @return the rectangle of the center element, taking the margins into account.

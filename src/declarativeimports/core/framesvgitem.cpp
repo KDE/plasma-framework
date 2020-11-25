@@ -168,7 +168,7 @@ FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *pa
     : QObject(parent),
       m_frameSvg(frameSvg),
       m_fixed(false),
-      m_shadow(false)
+      m_inset(false)
 {
     //qDebug() << "margins at: " << left() << top() << right() << bottom();
 }
@@ -177,8 +177,8 @@ qreal FrameSvgItemMargins::left() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::LeftMargin);
-    } else if(m_shadow){
-        return m_frameSvg->shadowMarginSize(Types::LeftMargin);
+    } else if(m_inset){
+        return m_frameSvg->insetMarginSize(Types::LeftMargin);
     } else {
         return m_frameSvg->marginSize(Types::LeftMargin);
     }
@@ -188,8 +188,8 @@ qreal FrameSvgItemMargins::top() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::TopMargin);
-    } else if(m_shadow){
-        return m_frameSvg->shadowMarginSize(Types::TopMargin);
+    } else if(m_inset){
+        return m_frameSvg->insetMarginSize(Types::TopMargin);
     } else {
         return m_frameSvg->marginSize(Types::TopMargin);
     }
@@ -199,8 +199,8 @@ qreal FrameSvgItemMargins::right() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::RightMargin);
-    } else if(m_shadow){
-        return m_frameSvg->shadowMarginSize(Types::RightMargin);
+    } else if(m_inset){
+        return m_frameSvg->insetMarginSize(Types::RightMargin);
     } else {
         return m_frameSvg->marginSize(Types::RightMargin);
     }
@@ -210,8 +210,8 @@ qreal FrameSvgItemMargins::bottom() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::BottomMargin);
-    } else if(m_shadow){
-        return m_frameSvg->shadowMarginSize(Types::BottomMargin);
+    } else if(m_inset){
+        return m_frameSvg->insetMarginSize(Types::BottomMargin);
     } else {
         return m_frameSvg->marginSize(Types::BottomMargin);
     }
@@ -254,26 +254,26 @@ bool FrameSvgItemMargins::isFixed() const
     return m_fixed;
 }
 
-void FrameSvgItemMargins::setShadow(bool shadow)
+void FrameSvgItemMargins::setInset(bool inset)
 {
-    if (shadow == m_shadow) {
+    if (inset == m_inset) {
         return;
     }
 
-    m_shadow = shadow;
+    m_inset = inset;
     emit marginsChanged();
 }
 
-bool FrameSvgItemMargins::isShadow() const
+bool FrameSvgItemMargins::isInset() const
 {
-    return m_shadow;
+    return m_inset;
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     : QQuickItem(parent),
       m_margins(nullptr),
       m_fixedMargins(nullptr),
-      m_shadowMargins(nullptr),
+      m_insetMargins(nullptr),
       m_textureChanged(false),
       m_sizeChanged(false),
       m_fastPath(true)
@@ -320,7 +320,7 @@ void FrameSvgItem::setImagePath(const QString &path)
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
-    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
+    CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
     updateDevicePixelRatio();
     m_frameSvg->setImagePath(path);
@@ -365,7 +365,7 @@ void FrameSvgItem::setPrefix(const QVariant &prefixes)
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
-    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
+    CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
     m_prefixes = prefixList;
     applyPrefixes();
@@ -414,13 +414,13 @@ FrameSvgItemMargins *FrameSvgItem::fixedMargins()
     return m_fixedMargins;
 }
 
-FrameSvgItemMargins *FrameSvgItem::shadowMargins()
+FrameSvgItemMargins *FrameSvgItem::inset()
 {
-    if (!m_shadowMargins) {
-        m_shadowMargins = new FrameSvgItemMargins(m_frameSvg, this);
-        m_shadowMargins->setShadow(true);
+    if (!m_insetMargins) {
+        m_insetMargins = new FrameSvgItemMargins(m_frameSvg, this);
+        m_insetMargins->setInset(true);
     }
-    return m_shadowMargins;
+    return m_insetMargins;
 }
 
 void FrameSvgItem::setColorGroup(Plasma::Theme::ColorGroup group)
@@ -510,7 +510,7 @@ void FrameSvgItem::doUpdate()
 
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
-    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
+    CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
     //if the theme changed, the available prefix may have changed as well
     applyPrefixes();
@@ -655,7 +655,7 @@ void FrameSvgItem::componentComplete()
 {
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
-    CheckMarginsChange checkShadowMargins(m_oldShadowMargins, m_shadowMargins);
+    CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
     QQuickItem::componentComplete();
     m_frameSvg->resizeFrame(QSize(width(), height()));
