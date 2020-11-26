@@ -38,7 +38,7 @@ ecm_setup_version(PROJECT
 add_definitions(-DQT_NO_FOREACH)
 ################# now find all used packages #################
 
-set (REQUIRED_QT_VERSION 5.12.0)
+set (REQUIRED_QT_VERSION 5.13.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
 
