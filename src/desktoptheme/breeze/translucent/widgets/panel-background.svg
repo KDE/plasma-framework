@@ -225,10 +225,10 @@
         <g id="bottomright" transform="translate(-1.0000017,-4.280249e-5)">
             <path id="rect4177-6" class="ColorScheme-Background" d="m51 954.36218v-6h6v3c0 2-1 3-3 3h-2z" fill="currentColor" opacity=".75"/>
         </g>
-        <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-top-margin" width="4" height="6.0000248" x="33" y="904.36218"/>
-        <rect y="954.36218" x="33" height="5.9999752" width="4" id="hint-inset-bottom-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
-        <rect y="-62" x="930.36218" height="6.0000153" width="4" id="hint-inset-right-margin" style="fill:#00ff00;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
-        <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-left-margin" width="4" height="6.0000038" x="930.36218" y="-12.000004" transform="matrix(0,1,-1,0,0,0)"/>
+        <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-top-margin" width="4" height="0.000001" x="33" y="904.36218"/>
+        <rect y="954.36218" x="33" height="0.000001" width="4" id="hint-inset-bottom-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+        <rect y="-62" x="930.36218" height="0.000001" width="4" id="hint-inset-right-margin" style="fill:#00ff00;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
+        <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-left-margin" width="4" height="0.000001" x="930.36218" y="-12.000004" transform="matrix(0,1,-1,0,0,0)"/>
         <rect id="thick-hint-top-margin" x="34" y="910.36218" width="4.0000019" height="8.0000048" fill="#f0f"/>
         <rect id="thick-hint-bottom-margin" x="30" y="946.36218" width="4" height="8.0001907" fill="#f0f"/>
         <rect id="thick-right-margin" transform="rotate(90)" x="932.36218" y="-55.999985" width="3.9999771" height="7.9999847" fill="#f0f"/>

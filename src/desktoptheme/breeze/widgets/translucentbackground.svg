@@ -143,10 +143,10 @@
     <rect y="942.36218" x="33" height="5.9999752" width="4" id="hint-bottom-margin" style="fill:#ff00ff;fill-opacity:1;stroke:none"/>
     <rect y="-51" x="930.36218" height="6.0000153" width="4" id="hint-right-margin" style="fill:#ff00ff;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
     <rect style="fill:#ff00ff;fill-opacity:1;stroke:none" id="hint-left-margin" width="4" height="6.0000038" x="930.36218" y="-25.000004" transform="matrix(0,1,-1,0,0,0)"/>
-    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-top-margin" width="4" height="6.0000248" x="33" y="904.36218"/>
-    <rect y="954.36218" x="33" height="5.9999752" width="4" id="hint-inset-bottom-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
-    <rect y="-63" x="930.36218" height="6.0000153" width="4" id="hint-inset-right-margin" style="fill:#00ff00;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
-    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-left-margin" width="4" height="6.0000038" x="930.36218" y="-13.000004" transform="matrix(0,1,-1,0,0,0)"/>
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-top-margin" width="4" height="0.000001" x="33" y="904.36218"/>
+    <rect y="954.36218" x="33" height="0.000001" width="4" id="hint-inset-bottom-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+    <rect y="-63" x="930.36218" height="0.000001" width="4" id="hint-inset-right-margin" style="fill:#00ff00;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-left-margin" width="4" height="0.000001" x="930.36218" y="-13.000004" transform="matrix(0,1,-1,0,0,0)"/>
     <g id="shadow-top" transform="translate(58,0)">
       <rect transform="matrix(0,-1,-1,0,0,0)" style="opacity:1;fill:none;fill-opacity:1;stroke:none" id="rect4820" width="6" height="32" x="-916.36218" y="-50.999985"/>
       <rect transform="matrix(0,-1,-1,0,0,0)" style="opacity:1;fill:url(#linearGradient4920);fill-opacity:1;stroke:none" id="rect4822" width="6" height="32" x="-910.36218" y="-50.999985"/>

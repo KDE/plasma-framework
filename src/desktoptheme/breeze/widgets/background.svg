@@ -151,10 +151,10 @@
     <rect y="948.36218" x="33" height="12" width="4" id="hint-bottom-margin" style="fill:#ff00ff;fill-opacity:1;stroke:none"/>
     <rect y="-62.999985" x="930.36218" height="11.999999" width="4" id="hint-right-margin" style="fill:#ff00ff;fill-opacity:1;stroke:none" transform="matrix(0,1,-1,0,0,0)"/>
     <rect style="fill:#ff00ff;fill-opacity:1;stroke:none" id="hint-left-margin" width="4" height="11.999999" x="930.36218" y="-19.000004" transform="matrix(0,1,-1,0,0,0)"/>
-    <rect y="904.36218" x="38" height="6" width="4" id="hint-inset-top-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
-    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-bottom-margin" width="4" height="6" x="38" y="954.36218"/>
-    <rect transform="matrix(0,1,-1,0,0,0)" style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-right-margin" width="4" height="6" x="935.36218" y="-62.999985"/>
-    <rect transform="matrix(0,1,-1,0,0,0)" y="-13.000004" x="935.36218" height="6" width="4" id="hint-inset-left-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+    <rect y="904.36218" x="38" height="6.000001" width="4" id="hint-inset-top-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
+    <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-bottom-margin" width="4" height="6.000001" x="38" y="954.36218"/>
+    <rect transform="matrix(0,1,-1,0,0,0)" style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-inset-right-margin" width="4" height="6.000001" x="935.36218" y="-62.999985"/>
+    <rect transform="matrix(0,1,-1,0,0,0)" y="-13.000004" x="935.36218" height="6.000001" width="4" id="hint-inset-left-margin" style="fill:#00ff00;fill-opacity:1;stroke:none"/>
     <g id="shadow-top" transform="translate(58,0)">
       <rect transform="matrix(0,-1,-1,0,0,0)" style="opacity:1;fill:none;fill-opacity:1;stroke:none" id="rect4820" width="6" height="32" x="-916.36218" y="-50.999985"/>
       <rect transform="matrix(0,-1,-1,0,0,0)" style="opacity:1;fill:url(#linearGradient4920);fill-opacity:1;stroke:none" id="rect4822" width="6" height="32" x="-910.36218" y="-50.999985"/>
