@@ -218,7 +218,7 @@ qreal FrameSvg::marginSize(const Plasma::Types::MarginEdge edge) const
     }
 }
 
-qreal FrameSvg::insetMarginSize(const Plasma::Types::MarginEdge edge) const
+qreal FrameSvg::insetSize(const Plasma::Types::MarginEdge edge) const
 {
     if (!d->frame) {
         return .0;
@@ -296,7 +296,7 @@ void FrameSvg::getFixedMargins(qreal &left, qreal &top, qreal &right, qreal &bot
     bottom = d->frame->fixedBottomMargin;
 }
 
-void FrameSvg::getInsetMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const
+void FrameSvg::getInset(qreal &left, qreal &top, qreal &right, qreal &bottom) const
 {
     if (!d->frame || d->frame->noBorderPadding) {
         left = top = right = bottom = 0;

@@ -168,7 +168,7 @@ public:
      * @return the margin size
      * @since 5.77
      */
-    Q_INVOKABLE qreal insetMarginSize(const Plasma::Types::MarginEdge edge) const;
+    Q_INVOKABLE qreal insetSize(const Plasma::Types::MarginEdge edge) const;
 
     /**
      * Convenience method that extracts the size of the four inset margins
@@ -179,7 +179,7 @@ public:
      * @param bottom bottom margin size
      * @since 5.77
      */
-    Q_INVOKABLE void getInsetMargins(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
+    Q_INVOKABLE void getInset(qreal &left, qreal &top, qreal &right, qreal &bottom) const;
 
     /**
      * @return the rectangle of the center element, taking the margins into account.

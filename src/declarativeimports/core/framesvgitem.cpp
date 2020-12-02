@@ -178,7 +178,7 @@ qreal FrameSvgItemMargins::left() const
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::LeftMargin);
     } else if(m_inset){
-        return m_frameSvg->insetMarginSize(Types::LeftMargin);
+        return m_frameSvg->insetSize(Types::LeftMargin);
     } else {
         return m_frameSvg->marginSize(Types::LeftMargin);
     }
@@ -189,7 +189,7 @@ qreal FrameSvgItemMargins::top() const
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::TopMargin);
     } else if(m_inset){
-        return m_frameSvg->insetMarginSize(Types::TopMargin);
+        return m_frameSvg->insetSize(Types::TopMargin);
     } else {
         return m_frameSvg->marginSize(Types::TopMargin);
     }
@@ -200,7 +200,7 @@ qreal FrameSvgItemMargins::right() const
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::RightMargin);
     } else if(m_inset){
-        return m_frameSvg->insetMarginSize(Types::RightMargin);
+        return m_frameSvg->insetSize(Types::RightMargin);
     } else {
         return m_frameSvg->marginSize(Types::RightMargin);
     }
@@ -211,7 +211,7 @@ qreal FrameSvgItemMargins::bottom() const
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::BottomMargin);
     } else if(m_inset){
-        return m_frameSvg->insetMarginSize(Types::BottomMargin);
+        return m_frameSvg->insetSize(Types::BottomMargin);
     } else {
         return m_frameSvg->marginSize(Types::BottomMargin);
     }

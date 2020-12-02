@@ -139,7 +139,7 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(QObject *fixedMargins READ fixedMargins CONSTANT)
 
     /**
-     * The margins of the inset
+     * The inset of the frame
      * read only
      * @see FrameSvgItemMargins
      * @since 5.77
