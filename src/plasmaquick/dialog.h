@@ -90,6 +90,13 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
     Q_PROPERTY(QObject *margins READ margins CONSTANT)
 
     /**
+     * Margins where the dialog background actually starts, excluiding things like shadows or borders
+     * @see DialogMargins
+     * @since 5.77
+     */
+    Q_PROPERTY(QObject *inset READ inset CONSTANT)
+
+    /**
      * Plasma Location of the dialog window. Useful if this dialog is a popup for a panel
      */
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)
@@ -170,6 +177,7 @@ public:
     void setLocation(Plasma::Types::Location location);
 
     QObject *margins() const;
+    QObject *inset() const;
 
     void setFramelessFlags(Qt::WindowFlags flags);
 

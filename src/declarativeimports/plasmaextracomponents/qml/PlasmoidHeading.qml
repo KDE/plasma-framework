@@ -39,22 +39,25 @@ import QtQuick.Templates 2.12 as T
     property int location: PlasmoidHeading.Location.Header
 
     Layout.fillWidth: true
-    bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.fixedMargins.top
-    topPadding: location == PlasmoidHeading.Location.Footer ? headingSvg.fixedMargins.bottom : 0
+    bottomPadding: !headingSvg.applicationFormFactor && location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.fixedMargins.bottom
+    topPadding: headingSvg.applicationFormFactor || location == PlasmoidHeading.Location.Footer ? headingSvg.fixedMargins.bottom : 0
+    leftPadding: headingSvg.applicationFormFactor ? headingSvg.fixedMargins.left : 0
+    rightPadding: headingSvg.applicationFormFactor ? headingSvg.fixedMargins.right : 0
 
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
 
-    leftInset: -headingSvg.fixedMargins.left
-    rightInset: -headingSvg.fixedMargins.right
-    topInset: location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.fixedMargins.top
-    bottomInset: location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
+    leftInset: headingSvg.applicationFormFactor ? 0 : -headingSvg.fixedMargins.left
+    rightInset: headingSvg.applicationFormFactor ? 0 : -headingSvg.fixedMargins.right
+    topInset: headingSvg.applicationFormFactor || location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.fixedMargins.top
+    bottomInset: !headingSvg.applicationFormFactor && location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
 
     PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
     PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
+        readonly property bool applicationFormFactor: typeof plasmoid !== "undefined" && plasmoid.formFactor === PlasmaCore.Types.Application
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
