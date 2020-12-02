@@ -162,17 +162,34 @@ QtQuickControlStyle.ScrollViewStyle {
         }
     }
 
-    scrollBarBackground: PlasmaCore.FrameSvgItem {
-        imagePath:"widgets/scrollbar"
-        prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
+    scrollBarBackground: Item {
         implicitWidth: widthHint
-        colorGroup: PlasmaCore.ColorScope.colorGroup
-        opacity: styleData.hovered ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: units.longDuration
-                easing.type: Easing.InOutQuad
+        PlasmaCore.FrameSvgItem {
+            anchors.fill: parent
+            imagePath:"widgets/scrollbar"
+            prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            opacity: styleData.hovered ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: units.longDuration
+                    easing.type: Easing.InOutQuad
+                }
             }
+        }
+        Rectangle {
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                topMargin: -units.smallSpacing
+                bottomMargin: -units.smallSpacing
+            }
+            // the separator line doesn't work yet with the plasmoids design
+            //visible: typeof plasmoid === "undefined"
+            width: units.devicePixelRatio
+            color: PlasmaCore.ColorScope.textColor
+            opacity: 0.1
         }
     }
 

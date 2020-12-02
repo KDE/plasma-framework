@@ -32,7 +32,7 @@ T.ScrollBar {
                 left: parent.left
             }
             // the separator line doesn't work yet with the plasmoids design
-            visible: typeof plasmoid === "undefined"
+            //visible: typeof plasmoid === "undefined"
             width: units.devicePixelRatio
             color: PlasmaCore.ColorScope.textColor
             opacity: 0.1

@@ -57,8 +57,17 @@ Kirigami.AbstractListItem {
     background: PlasmaCore.FrameSvgItem {
         id : __background
         imagePath: "widgets/listitem"
-        prefix: (__listItem.sectionDelegate ? "section" :
-                (__listItem.pressed || __listItem.checked) ? "pressed" : "normal")
+        prefix: {
+            if (__listItem.sectionDelegate) {
+                return "section";
+            } else if (__listItem.hoverEnabled && __listItem.hovered) {
+                return "hover";
+            } else if (__listItem.pressed || __listItem.checked) {
+                return "pressed";
+            } else {
+                return "normal";
+            }
+        }
 
         anchors.fill: parent
         visible: __listItem.ListView.view ? __listItem.ListView.view.highlight === null : true
