@@ -810,8 +810,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->topMargin = frame->topHeight = 0;
     }
 
-    if (q->hasElement(frame->prefix % QLatin1String("hint-inset-top-margin"))) {
-        frame->insetTopMargin = q->elementSize(frame->prefix % QLatin1String("hint-inset-top-margin")).height();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-top-inset"))) {
+        frame->insetTopMargin = q->elementSize(frame->prefix % QLatin1String("hint-top-inset")).height();
     } else {
         frame->insetTopMargin = -1;
     }
@@ -831,8 +831,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->leftMargin = frame->leftWidth = 0;
     }
 
-    if (q->hasElement(frame->prefix % QLatin1String("hint-inset-left-margin"))) {
-        frame->insetLeftMargin = q->elementSize(frame->prefix % QLatin1String("hint-inset-left-margin")).width();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-left-inset"))) {
+        frame->insetLeftMargin = q->elementSize(frame->prefix % QLatin1String("hint-left-inset")).width();
     } else {
         frame->insetLeftMargin = -1;
     }
@@ -852,8 +852,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->rightMargin = frame->rightWidth = 0;
     }
 
-    if (q->hasElement(frame->prefix % QLatin1String("hint-inset-right-margin"))) {
-        frame->insetRightMargin = q->elementSize(frame->prefix % QLatin1String("hint-inset-right-margin")).width();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-right-inset"))) {
+        frame->insetRightMargin = q->elementSize(frame->prefix % QLatin1String("hint-right-inset")).width();
     } else {
         frame->insetRightMargin = -1;
     }
@@ -873,8 +873,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->bottomMargin = frame->bottomHeight = 0;
     }
 
-    if (q->hasElement(frame->prefix % QLatin1String("hint-inset-bottom-margin"))) {
-        frame->insetBottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-inset-bottom-margin")).height();
+    if (q->hasElement(frame->prefix % QLatin1String("hint-bottom-inset"))) {
+        frame->insetBottomMargin = q->elementSize(frame->prefix % QLatin1String("hint-bottom-inset")).height();
     } else {
         frame->insetBottomMargin = -1;
     }
