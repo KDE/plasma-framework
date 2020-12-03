@@ -872,6 +872,12 @@ QList<QObject *> ContainmentInterface::actions() const
     return actionList;
 }
 
+void ContainmentInterface::setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints)
+{
+    m_containment->setContainmentDisplayHints(hints);
+}
+
+
 //PROTECTED--------------------
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)

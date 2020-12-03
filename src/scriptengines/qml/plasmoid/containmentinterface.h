@@ -75,6 +75,8 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
 
+    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY containmentDisplayHintsChanged)
+
 public:
     ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
 
@@ -99,6 +101,8 @@ public:
     QString activityName() const;
 
     QList<QObject *> actions() const;
+
+    void setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints);
 
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
