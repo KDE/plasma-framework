@@ -6,11 +6,11 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
-import QtQuick.Window 2.2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.components 2.0 as PlasmaExtras
+import "private" as Private
 
  /**
   * Item to be used as root item for representations (full and compact) of plasmoids.
@@ -50,20 +50,8 @@ import org.kde.plasma.components 2.0 as PlasmaExtras
     topPadding: header ? 0 : backgroundMetrics.getMargin("top")
     bottomPadding: footer ? 0 : backgroundMetrics.getMargin("bottom")
 
-    PlasmaCore.FrameSvgItem {
+    Private.BackgroundMetrics {
         id: backgroundMetrics
-        visible: false
-        imagePath: {
-            if (control.Window.window && (control.Window.window instanceof PlasmaCore.Dialog)) {
-                return "dialogs/background";
-            } else if (plasmoid.formFactor == PlasmaCore.Types.Planar) {
-                return "widgets/background";
-            // panels and other formfactors are explicitly not supported
-            } else {
-                return "";
-            }
-        }
-        readonly property bool hasInset: backgroundMetrics.inset.left >= 0 && backgroundMetrics.inset.right >= 0 && backgroundMetrics.inset.top >= 0 && backgroundMetrics.inset.bottom >= 0
         function getMargin(margin) {
             if (!hasInset) {
                 return 0;

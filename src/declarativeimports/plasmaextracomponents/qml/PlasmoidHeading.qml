@@ -9,6 +9,7 @@ import QtQuick.Layouts 1.12
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import QtQuick.Templates 2.12 as T
+import "private" as Private
 
  /**
   * Item to be used as a header or footer in plasmoids
@@ -39,25 +40,24 @@ import QtQuick.Templates 2.12 as T
     property int location: PlasmoidHeading.Location.Header
 
     Layout.fillWidth: true
-    bottomPadding: !headingSvg.applicationFormFactor && location == PlasmoidHeading.Location.Footer ? 0 : headingSvg.fixedMargins.bottom
-    topPadding: headingSvg.applicationFormFactor || location == PlasmoidHeading.Location.Footer ? headingSvg.fixedMargins.bottom : 0
-    leftPadding: headingSvg.applicationFormFactor ? headingSvg.fixedMargins.left : 0
-    rightPadding: headingSvg.applicationFormFactor ? headingSvg.fixedMargins.right : 0
+    bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
+    topPadding: location == PlasmoidHeading.Location.Footer ? -backgroundMetrics.getMargin("top") : 0
+    leftPadding: -backgroundMetrics.getMargin("left")
+    rightPadding: -backgroundMetrics.getMargin("right")
 
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
 
-    leftInset: headingSvg.applicationFormFactor ? 0 : -headingSvg.fixedMargins.left
-    rightInset: headingSvg.applicationFormFactor ? 0 : -headingSvg.fixedMargins.right
-    topInset: headingSvg.applicationFormFactor || location == PlasmoidHeading.Location.Footer ? 0 : -headingSvg.fixedMargins.top
-    bottomInset: !headingSvg.applicationFormFactor && location == PlasmoidHeading.Location.Footer ? -headingSvg.fixedMargins.bottom : 0
+    leftInset: backgroundMetrics.getMargin("left")
+    rightInset: backgroundMetrics.getMargin("right")
+    topInset: location == PlasmoidHeading.Location.Footer ? 0 : backgroundMetrics.getMargin("top")
+    bottomInset: location == PlasmoidHeading.Location.Footer ? backgroundMetrics.getMargin("bottom") : 0
 
     PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
     PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
-        readonly property bool applicationFormFactor: typeof plasmoid !== "undefined" && plasmoid.formFactor === PlasmaCore.Types.Application
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
         prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
@@ -76,6 +76,16 @@ import QtQuick.Templates 2.12 as T
                 borders |= PlasmaCore.FrameSvg.BottomBorder
             }
             return borders
+        }
+        Private.BackgroundMetrics {
+            id: backgroundMetrics
+            function getMargin(margin) {
+                if (!hasInset) {
+                    return -headingSvg.fixedMargins[margin];
+                } else {
+                    return -backgroundMetrics.fixedMargins[margin] + backgroundMetrics.inset[margin]
+                }
+            }
         }
     }
  }
