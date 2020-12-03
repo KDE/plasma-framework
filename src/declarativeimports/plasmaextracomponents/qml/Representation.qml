@@ -47,8 +47,8 @@ import "private" as Private
 
     leftPadding: backgroundMetrics.getMargin("left")
     rightPadding: backgroundMetrics.getMargin("right")
-    topPadding: header ? 0 : backgroundMetrics.getMargin("top")
-    bottomPadding: footer ? 0 : backgroundMetrics.getMargin("bottom")
+    topPadding: header && header.visible ? 0 : backgroundMetrics.getMargin("top")
+    bottomPadding: footer && footer.visible ? 0 : backgroundMetrics.getMargin("bottom")
 
     Private.BackgroundMetrics {
         id: backgroundMetrics
