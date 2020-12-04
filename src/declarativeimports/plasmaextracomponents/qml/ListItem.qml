@@ -80,10 +80,12 @@ Kirigami.AbstractListItem {
             anchors {
                 left: parent.left
                 right: parent.right
-                top: parent.top
+                bottom: parent.bottom
+                leftMargin: PlasmaCore.Units.smallSpacing
+                rightMargin: PlasmaCore.Units.smallSpacing
             }
             height: naturalSize.height
-            visible: __listItem.separatorVisible && (__listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !__listItem.checked && !__listItem.pressed))
+            visible: __listItem.separatorVisible && !__listItem.checked && !__listItem.pressed && !__listItem.hovered
         }
     }
 }
