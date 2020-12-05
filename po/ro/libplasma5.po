@@ -1,0 +1,818 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Sergiu Bivol <sergiu@cip.md>, 2014, 2015, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-11-24 02:13+0100\n"
+"PO-Revision-Date: 2020-11-12 23:42+0000\n"
+"Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
+"Language-Team: Romanian\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Lokalize 19.12.3\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Sărbători"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Evenimente"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Obiective"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Altele"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:147
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Azi"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:149
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Reinițializează calendarul la azi"
+
+#: declarativeimports/calendar/qml/MonthView.qml:236
+#, kde-format
+msgid "Previous Month"
+msgstr "Luna trecută"
+
+#: declarativeimports/calendar/qml/MonthView.qml:237
+#, kde-format
+msgid "Next Month"
+msgstr "Luna viitoare"
+
+#: declarativeimports/calendar/qml/MonthView.qml:264
+#, kde-format
+msgid "Previous Year"
+msgstr "Anul trecut"
+
+#: declarativeimports/calendar/qml/MonthView.qml:265
+#, kde-format
+msgid "Next Year"
+msgstr "Anul viitor"
+
+#: declarativeimports/calendar/qml/MonthView.qml:297
+#, kde-format
+msgid "Previous Decade"
+msgstr "Decada trecută"
+
+#: declarativeimports/calendar/qml/MonthView.qml:298
+#, kde-format
+msgid "Next Decade"
+msgstr "Decada viitoare"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "Bine"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Renunță"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:100
+#, kde-format
+msgid "More actions"
+msgstr "Acțiuni suplimentare"
+
+#: plasma/applet.cpp:361
+#, kde-format
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: plasma/applet.cpp:742
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Activează controlul %1"
+
+#: plasma/containment.cpp:107 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Elimină %1"
+
+#: plasma/containment.cpp:113
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "Edit %1..."
+msgstr "Modificare %1..."
+
+#: plasma/containment.cpp:116 plasma/private/applet_p.cpp:116
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Configurare %1..."
+
+#: plasma/corona.cpp:357 plasma/corona.cpp:477
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Blochează controalele"
+
+#: plasma/corona.cpp:357
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Deblochează controalele"
+
+#: plasma/corona.cpp:406
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Ieși din regim de modificare"
+
+#: plasma/corona.cpp:408 plasma/corona.cpp:492
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Intră în regim de modificare"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Dacă să fie creată sau nu o prestocare pe disc a tematicii."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Dimensiunea maximă pe disc a prestocării tematicilor, în kilo-octeți. "
+"Rețineți că acestea sunt fișiere „împrăștiate” (engleză: sparse), deci "
+"dimensiunea maximă poate să nu fie utilizată. Stabilirea unei dimensiuni mai "
+"mari este de obicei sigură."
+
+#: plasma/packagestructure/dataenginepackage.cpp:26
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Data Files"
+msgstr "Fișiere cu date"
+
+#: plasma/packagestructure/dataenginepackage.cpp:28
+#: plasma/packagestructure/packages.cpp:87 plasmaquick/private/packages.cpp:106
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Scripturi executabile"
+
+#: plasma/packagestructure/dataenginepackage.cpp:33
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Descriere servicii"
+
+#: plasma/packagestructure/dataenginepackage.cpp:36
+#: plasma/packagestructure/packages.cpp:93 plasmaquick/private/packages.cpp:111
+#, kde-format
+msgid "Translations"
+msgstr "Traduceri"
+
+#: plasma/packagestructure/packages.cpp:29
+#: plasma/packagestructure/packages.cpp:49 plasmaquick/private/packages.cpp:73
+#: plasmaquick/private/packages.cpp:118
+#, kde-format
+msgid "Main Script File"
+msgstr "Fișier-script principal"
+
+#: plasma/packagestructure/packages.cpp:30
+#, kde-format
+msgid "Tests"
+msgstr "Teste"
+
+#: plasma/packagestructure/packages.cpp:71 plasmaquick/private/packages.cpp:90
+#, kde-format
+msgid "Images"
+msgstr "Imagini"
+
+#: plasma/packagestructure/packages.cpp:72 plasmaquick/private/packages.cpp:91
+#, kde-format
+msgid "Themed Images"
+msgstr "Imagini tematice"
+
+#: plasma/packagestructure/packages.cpp:78 plasmaquick/private/packages.cpp:97
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Definiții de configurare"
+
+#: plasma/packagestructure/packages.cpp:83 plasmaquick/private/packages.cpp:102
+#, kde-format
+msgid "User Interface"
+msgstr "Interfață cu utilizatorul"
+
+#: plasma/packagestructure/packages.cpp:91
+#, kde-format
+msgid "Screenshot"
+msgstr "Captură de ecran"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:27
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Imagini pentru dialoguri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:29
+#: plasma/packagestructure/plasmathemepackage.cpp:31
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Fundal universal pentru dialoguri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:33
+#: plasma/packagestructure/plasmathemepackage.cpp:35
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Tematică pentru dialogul de ieșire"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:37
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Pachete cu fundaluri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:39
+#, kde-format
+msgid "Images for widgets"
+msgstr "Imagini pentru controale"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:41
+#: plasma/packagestructure/plasmathemepackage.cpp:43
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Imagine de fundal pentru controale"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:45
+#: plasma/packagestructure/plasmathemepackage.cpp:47
+#, kde-format
+msgid "Analog clock face"
+msgstr "Mutra ceasului analog"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:49
+#: plasma/packagestructure/plasmathemepackage.cpp:51
+#, kde-format
+msgid "Background image for panels"
+msgstr "Imagine de fundal pentru panouri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:53
+#: plasma/packagestructure/plasmathemepackage.cpp:55
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Fundal pentru controale grafice"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:57
+#: plasma/packagestructure/plasmathemepackage.cpp:59
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Fundal pentru indicii"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:61
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Imagini opace pentru dialoguri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:63
+#: plasma/packagestructure/plasmathemepackage.cpp:65
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Fundal generic opac pentru dialoguri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:67
+#: plasma/packagestructure/plasmathemepackage.cpp:69
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Tematică opacă pentru dialogul de ieșire din sistem"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:71
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Imagini opace pentru controale"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:73
+#: plasma/packagestructure/plasmathemepackage.cpp:75
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Imagine de fundal opacă pentru panouri"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:77
+#: plasma/packagestructure/plasmathemepackage.cpp:79
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Imagine de fundal opacă pentru indicii"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:81
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Fișier de configurare KColorScheme"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:26
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Model de pagină pentru interfața de configurare"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:27
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Fișier de configurare XML"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:38
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Expandor personalizat pentru miniaplicații compacte"
+
+#: plasma/pluginloader.cpp:92
+#, kde-format
+msgid "Accessibility"
+msgstr "Accesibilitate"
+
+#: plasma/pluginloader.cpp:93
+#, kde-format
+msgid "Application Launchers"
+msgstr "Lansatori de aplicații"
+
+#: plasma/pluginloader.cpp:94
+#, kde-format
+msgid "Astronomy"
+msgstr "Astronomie"
+
+#: plasma/pluginloader.cpp:95
+#, kde-format
+msgid "Date and Time"
+msgstr "Data și ora"
+
+#: plasma/pluginloader.cpp:96
+#, kde-format
+msgid "Development Tools"
+msgstr "Unelte de dezvoltare"
+
+#: plasma/pluginloader.cpp:97
+#, kde-format
+msgid "Education"
+msgstr "Educație"
+
+#: plasma/pluginloader.cpp:98
+#, kde-format
+msgid "Environment and Weather"
+msgstr "Mediu și vreme"
+
+#: plasma/pluginloader.cpp:99
+#, kde-format
+msgid "Examples"
+msgstr "Exemple"
+
+#: plasma/pluginloader.cpp:100
+#, kde-format
+msgid "File System"
+msgstr "Sistem de fișiere"
+
+#: plasma/pluginloader.cpp:101
+#, kde-format
+msgid "Fun and Games"
+msgstr "Distracție și jocuri"
+
+#: plasma/pluginloader.cpp:102
+#, kde-format
+msgid "Graphics"
+msgstr "Grafică"
+
+#: plasma/pluginloader.cpp:103
+#, kde-format
+msgid "Language"
+msgstr "Limbă"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Mapping"
+msgstr "Cartografie"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Online Services"
+msgstr "Servicii online"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Productivity"
+msgstr "Productivitate"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "System Information"
+msgstr "Informații despre sistem"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Utilities"
+msgstr "Utilitare"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "Ferestre și sarcini"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "Clipboard"
+msgstr "Clipboard"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Tasks"
+msgstr "Sarcini"
+
+#: plasma/pluginloader.cpp:636 plasma/pluginloader.cpp:637
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: plasma/private/applet_p.cpp:131
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Controlul grafic „%1” nu a definit un ScriptEngine de utilizat."
+
+#: plasma/private/applet_p.cpp:148
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Nu s-a putut deschide pachetul %1 necesar pentru controlul grafic %2."
+
+#: plasma/private/applet_p.cpp:169
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Nu s-a putut crea un ScriptEngine %1 pentru controlul grafic %2."
+
+#: plasma/private/applet_p.cpp:174
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Arată alternative..."
+
+#: plasma/private/applet_p.cpp:265
+#, kde-format
+msgid "Widget Removed"
+msgstr "Control eliminat"
+
+#: plasma/private/applet_p.cpp:266
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Controlul grafic „%1” a fost eliminat."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panou eliminat"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Un panou a fost eliminat."
+
+#: plasma/private/applet_p.cpp:272
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Birou eliminat"
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "A fost eliminat un birou."
+
+#: plasma/private/applet_p.cpp:276
+#, kde-format
+msgid "Undo"
+msgstr "Desfă"
+
+#: plasma/private/applet_p.cpp:366
+#, kde-format
+msgid "Widget Settings"
+msgstr "Configurări control"
+
+#: plasma/private/applet_p.cpp:373
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Elimină acest control"
+
+#: plasma/private/applet_p.cpp:380
+#: plasma/private/associatedapplicationmanager.cpp:66
+#: plasma/private/associatedapplicationmanager.cpp:125
+#: plasma/private/associatedapplicationmanager.cpp:167
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Rulează aplicația asociată"
+
+#: plasma/private/applet_p.cpp:471
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Inițializarea scriptului a eșuat"
+
+#: plasma/private/associatedapplicationmanager.cpp:63
+#: plasma/private/associatedapplicationmanager.cpp:164
+#, kde-format
+msgid "Open with %1"
+msgstr "Deschide cu %1"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Elimină acest panou"
+
+#: plasma/private/containment_p.cpp:62
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Elimină această activitate"
+
+#: plasma/private/containment_p.cpp:68
+#, kde-format
+msgid "Activity Settings"
+msgstr "Configurări activitate"
+
+#: plasma/private/containment_p.cpp:74
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Adăugare controale..."
+
+#: plasma/private/containment_p.cpp:190
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Nu s-a putut găsi componenta cerută: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Partajarea unui control grafic în rețea vă permite să accesați acest control "
+"de pe alt calculator ca telecomandă."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Partajează acest control în rețea"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Permite tuturor să acceseze liber acest control"
+
+#: plasma/private/service_p.h:34
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Serviciu nevalid (nul), nu se pot efectua operații de niciun fel."
+
+#: plasmaquick/appletquickitem.cpp:600
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Eroare la încărcarea fișierului QML: %1"
+
+#: plasmaquick/appletquickitem.cpp:602
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Eroare la încărcarea miniaplicației: pachet inexistent. %1"
+
+#: plasmaquick/configview.cpp:97
+#, kde-format
+msgid "%1 Settings"
+msgstr "Configurări %1"
+
+#: plasmaquick/private/packages.cpp:24
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "Configurări implicite pentru tematică, etc."
+
+#: plasmaquick/private/packages.cpp:26
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "Schemă de culori de folosit pentru aplicații."
+
+#: plasmaquick/private/packages.cpp:29
+#, kde-format
+msgid "Preview Images"
+msgstr "Previzualizare imagini"
+
+#: plasmaquick/private/packages.cpp:30
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "Previzualizare pentru gestionarul de autentificare"
+
+#: plasmaquick/private/packages.cpp:31
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "Previzualizare pentru ecranul de blocare"
+
+#: plasmaquick/private/packages.cpp:32
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "Previzualizare pentru comutatorul de utilizatori"
+
+#: plasmaquick/private/packages.cpp:33
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Previzualizare pentru comutatorul de birouri virtuale"
+
+#: plasmaquick/private/packages.cpp:34
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "Previzualizare pentru ecranul de întâmpinare"
+
+#: plasmaquick/private/packages.cpp:35
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "Previzualizare pentru KRunner"
+
+#: plasmaquick/private/packages.cpp:36
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "Previzualizare pentru decorațiile ferestrelor"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "Previzualizare pentru comutatorul de ferestre"
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Login Manager"
+msgstr "Gestionar de autentificare"
+
+#: plasmaquick/private/packages.cpp:40
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "Script principal pentru gestionarul de autentificare"
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Logout Dialog"
+msgstr "Ecran de ieșire"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "Script principal pentru dialogul de ieșire"
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Screenlocker"
+msgstr "Blocare ecran"
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "Script principal pentru ecranul de blocare"
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "Interfață pentru comutare rapidă între utilizatori"
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "Script principal pentru comutare între utilizatori"
+
+#: plasmaquick/private/packages.cpp:51
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "Comutator de birouri virtuale"
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "Script principal pentru comutatorul de birouri virtuale"
+
+#: plasmaquick/private/packages.cpp:54
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "Notificări afișate pe ecran"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "Script principal pentru notificări pe ecran"
+
+#: plasmaquick/private/packages.cpp:57
+#, kde-format
+msgid "Splash Screen"
+msgstr "Ecran de întâmpinare"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "Script principal pentru ecranul de întâmpinare"
+
+#: plasmaquick/private/packages.cpp:60
+#, kde-format
+msgid "KRunner UI"
+msgstr "Interfață KRunner"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "Script principal KRunner"
+
+#: plasmaquick/private/packages.cpp:63
+#, kde-format
+msgid "Window Decoration"
+msgstr "Decorații de fereastră"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "Script principal pentru decorații de fereastră"
+
+#: plasmaquick/private/packages.cpp:66
+#, kde-format
+msgid "Window Switcher"
+msgstr "Comutator de ferestre"
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "Script principal pentru comutare între ferestre"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:609
+#, kde-format
+msgid "Plasma Package"
+msgstr "Pachet Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:613
+#, kde-format
+msgid "Install"
+msgstr "Instalează"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:625
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Instalarea pachetului a eșuat"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:645
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Pachetul pe care tocmai l-ați lăsat nu e valid."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:654
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:718
+#, kde-format
+msgid "Widgets"
+msgstr "Controale grafice"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:659
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Adaugă %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:722
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Adaugă pictogramă"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:685
+#, kde-format
+msgid "Wallpaper"
+msgstr "Tapet"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:695
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Stabilește %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Conținut lăsat"
