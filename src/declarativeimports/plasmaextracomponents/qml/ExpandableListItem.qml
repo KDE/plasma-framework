@@ -520,10 +520,10 @@ Item {
                 delegate: MouseArea {
                     id: actionItem
 
-                    enabled: model.enabled
+                    visible: model.enabled
 
                     width: actionsList.width
-                    height: actionItemLayout.height + PlasmaCore.Units.smallSpacing * 2
+                    height: visible ? actionItemLayout.height + PlasmaCore.Units.smallSpacing * 2 : 0
 
                     hoverEnabled: true
 
