@@ -82,10 +82,6 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
 
 AppletPrivate::~AppletPrivate()
 {
-    if (activationAction && globalShortcutEnabled) {
-        //qCDebug(LOG_PLASMA) << "resetting global action for" << q->title() << activationAction->objectName();
-        KGlobalAccel::self()->removeAllShortcuts(activationAction);
-    }
 
     if (deleteNotification) {
         deleteNotification->close();
@@ -214,6 +210,11 @@ void AppletPrivate::cleanUpAndDelete()
     }
 
     resetConfigurationObject();
+
+    if (activationAction && globalShortcutEnabled) {
+        //qCDebug(LOG_PLASMA) << "resetting global action for" << q->title() << activationAction->objectName();
+        KGlobalAccel::self()->removeAllShortcuts(activationAction);
+    }
 
     if (q->isContainment()) {
         // prematurely emit our destruction if we are a Containment,
