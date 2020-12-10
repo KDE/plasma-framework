@@ -2,7 +2,7 @@
 Name=Declarative widget
 Name[az]=Deklarativ vidjet
 Name[bs]=Deklarativna grafička kontrola
-Name[ca]=Estri declaratiu
+Name[ca]=Giny declaratiu
 Name[ca@valencia]=Giny («Widget») declaratiu
 Name[cs]=Deklarativní widget
 Name[da]=Erklærende widget
@@ -50,7 +50,7 @@ Name[zh_TW]=宣告元件
 Comment=Native Plasma widget written in QML and JavaScript
 Comment[az]=QML və JavaScript-də yazılmış yerli plazma widgetı
 Comment[bs]=Prirodna Plasma grafička kontrola pisana u QML i JavaScript
-Comment[ca]=Estri nadiu del Plasma escrit en QML i JavaScript
+Comment[ca]=Giny nadiu del Plasma escrit en QML i JavaScript
 Comment[ca@valencia]=Giny («Widget») nadiu del Plasma escrit en QML i JavaScript
 Comment[cs]=Nativní Plasma widget napsaný v  QML a JavaScriptu
 Comment[da]=Hjemmehørende Plasma-widget skrevet i QML og JavaScript
