@@ -13,7 +13,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  * derivates)
  *
  * Provides built-in animation of Behavior on opacity Easing.OutQuad for a
- * duration of 250 (defined in PlasmaCore.Units.longDuration).
+ * duration of 50ms (defined in PlasmaCore.Units.veryShortDuration).
  *
  * (TODO, make optional? e.g. animate: false)
  *
@@ -44,7 +44,7 @@ Item {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: PlasmaCore.Units.longDuration
+            duration: PlasmaCore.Units.veryShortDuration
             easing.type: Easing.OutQuad
         }
     }
@@ -64,7 +64,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: PlasmaCore.Units.longDuration
+                duration: PlasmaCore.Units.veryShortDuration
                 easing.type: Easing.OutQuad
             }
         }
