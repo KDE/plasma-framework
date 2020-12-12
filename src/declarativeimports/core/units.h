@@ -120,6 +120,12 @@ class Units : public QObject
     Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
 
     /**
+     * units.veryShortDuration should be used for elements that should animate near instantly,
+     * but should have a hint of smoothness
+     */
+    Q_PROPERTY(int veryShortDuration READ veryShortDuration NOTIFY durationChanged)
+
+    /**
      * units.veryLongDuration should be used for specialty animations that benefit
      * from being even longer than longDuration.
      */
@@ -186,6 +192,12 @@ public:
      * @since 5.69
      */
     int veryLongDuration() const;
+
+    /**
+     * @return Duration for instantaneous animations, in milliseconds.
+     * @since 5.78
+     */
+    int veryShortDuration() const;
 /// @endcond
 
     /**

@@ -96,6 +96,12 @@ QtObject {
      */
     property int veryLongDuration: units.veryLongDuration
 
+     /**                                                                                                                                                                                                              
+      * units.veryShortDuration should be used for elements that should have a hint of smoothness,                                                                                                                
+      * but otherwise animate near instantly.                                                                                                                                                                         
+      */                                                                                                                                                                                                              
+     property int veryShortDuration: units.veryShortDuration
+
     readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
 
     /**

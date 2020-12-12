@@ -261,6 +261,11 @@ int Units::shortDuration() const
     return qMax(1, qRound(m_longDuration * 0.6));
 }
 
+int Units::veryShortDuration() const
+{
+	return qRound(m_longDuration * 0.3);
+}
+
 int Units::veryLongDuration() const
 {
     return m_longDuration * 2;
