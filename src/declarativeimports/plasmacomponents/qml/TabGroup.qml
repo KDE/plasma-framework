@@ -158,7 +158,7 @@ FocusScope {
                     PropertyChanges {
                         target: tabContainerItem
                         opacity: 0.0
-                        x: -root.width
+                        x: LayoutMirroring.enabled ? root.width : -root.width
                     }
                 },
                 State {
@@ -166,12 +166,27 @@ FocusScope {
                     PropertyChanges {
                         target: tabContainerItem
                         opacity: 0.0
-                        x: root.width
+                        x: LayoutMirroring.enabled ? -root.width : root.width
                     }
                 },
 
-                State { name: "HiddenLeft"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: root.width } },
-                State { name: "HiddenRight"; PropertyChanges { target: tabContainerItem; opacity: 0.0; x: -root.width } }
+                State {
+                    name: "HiddenLeft"
+                    PropertyChanges {
+                        target: tabContainerItem
+                        opacity: 0.0
+                        x: LayoutMirroring.enabled ? -root.width : root.width
+                    }
+                },
+
+                State {
+                    name: "HiddenRight"
+                    PropertyChanges {
+                        target: tabContainerItem
+                        opacity: 0.0
+                        x: LayoutMirroring.enabled ? root.width : -root.width
+                    }
+                }
             ]
 
             transitions:  [
