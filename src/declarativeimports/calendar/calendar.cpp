@@ -322,7 +322,10 @@ void Calendar::nextDecade()
 
 void Calendar::previousDecade()
 {
-    setDisplayedDate(m_displayedDate.addYears(-10));
+    // Negative years don't make sense
+    if (m_displayedDate.year() >= 10) {
+        setDisplayedDate(m_displayedDate.addYears(-10));
+    }
 }
 
 void Calendar::nextYear()
@@ -332,7 +335,10 @@ void Calendar::nextYear()
 
 void Calendar::previousYear()
 {
-    setDisplayedDate(m_displayedDate.addYears(-1));
+    // Negative years don't make sense
+    if (m_displayedDate.year() >= 0) {
+        setDisplayedDate(m_displayedDate.addYears(-1));
+    }
 }
 
 void Calendar::nextMonth()
