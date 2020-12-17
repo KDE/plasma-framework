@@ -48,11 +48,24 @@ private:
 class SvgPrivate
 {
 public:
+    struct CacheId {
+        double width;
+        double height;
+        QString filePath;
+        QString elementName;
+        int status;
+        double devicePixelRatio;
+        double scaleFactor;
+        int colorGroup;
+        uint extraFlags; //Not used here, used for enabledborders in FrameSvg
+        uint lastModified;
+    };
+
     SvgPrivate(Svg *svg);
     ~SvgPrivate();
 
     //This function is meant for the rects cache
-    QString cacheId(const QString &elementId) const;
+    CacheId cacheId(const QString &elementId) const;
 
     //This function is meant for the pixmap cache
     QString cachePath(const QString &path, const QSize &size) const;
@@ -68,7 +81,7 @@ public:
     void eraseRenderer();
 
     QRectF elementRect(const QString &elementId);
-    QRectF findAndCacheElementRect(const QString &elementId, const QString &cacheId);
+    QRectF findAndCacheElementRect(const QString &elementId);
 
     void checkColorHints();
 
@@ -88,8 +101,6 @@ public:
 
     Svg *q;
     QPointer<Theme> theme;
-    QHash<QString, QRectF> localRectCache;
-    QMultiHash<QString, QSize> elementsWithSizeHints;
     SharedSvgRenderer::Ptr renderer;
     QString themePath;
     QString path;
@@ -111,7 +122,56 @@ public:
     bool themeFailed : 1;
 };
 
+
+class SvgRectsCache : public QObject {
+    Q_OBJECT
+public:
+    SvgRectsCache(QObject *parent = nullptr);
+
+    static SvgRectsCache *instance();
+
+    void insert(SvgPrivate::CacheId cacheId, const QRectF &rect, unsigned int lastModified);
+    void insert(uint id, const QString &filePath, const QRectF &rect, unsigned int lastModified);
+    // Those 2 methods are the same, the second uses the integer id produced by hashed CacheId
+    bool findElementRect(SvgPrivate::CacheId cacheId, QRectF &rect);
+    bool findElementRect(uint id, const QString &filePath, QRectF &rect);
+
+    void loadImageFromCache(const QString &path, uint lastModified);
+    void dropImageFromCache(const QString &path);
+    void expireCache(const QString &path);
+
+    void setNaturalSize(const QString &path, qreal scaleFactor, const QSizeF &size);
+    QSizeF naturalSize(const QString &path, qreal scaleFactor);
+
+    QList<QSize> sizeHintsForId(const QString &path, const QString &id);
+    void insertSizeHintForId(const QString &path, const QString &id, const QSize &size);
+
+    QString iconThemePath();
+    void setIconThemePath(const QString &path);
+
+    QStringList cachedKeysForPath(const QString &path) const;
+
+    void updateLastModified(const QString &filePath, unsigned int lastModified);
+
+    static const uint s_seed;
+
+private:
+    QTimer *m_configSyncTimer = nullptr;
+    QString m_iconThemePath;
+    KSharedConfigPtr m_svgElementsCache;
+    /* 
+     * We are indexing in the hash cache ids by their "digested" uint out of qHash(CacheId)
+     * because we need to serialize it and unserialize it to a config file,
+     * which is more efficient to do that with the uint directly rather than a CacheId struct serialization
+     */
+    QHash<uint, QRectF> m_localRectCache;
+    QHash<QString, QSet<unsigned int>> m_invalidElements;
+    QHash<QString, QList<QSize>> m_sizeHintsForId;
+};
+
 }
+
+uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed = 0);
 
 #endif
 

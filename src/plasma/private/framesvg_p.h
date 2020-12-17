@@ -16,6 +16,8 @@
 
 #include <Plasma/Theme>
 
+#include "svg_p.h"
+
 namespace Plasma
 {
 
@@ -73,12 +75,12 @@ public:
     QString requestedPrefix;
     FrameSvg::EnabledBorders enabledBorders;
     QPixmap cachedBackground;
-    QCache<QString, QRegion> cachedMasks;
+    QCache<uint, QRegion> cachedMasks;
     static const int MAX_CACHED_MASKS = 10;
     uint lastModified = 0;
 
     QSize frameSize;
-    QString cacheId;
+    uint cacheId;
 
     //measures
     int topHeight;
@@ -145,7 +147,7 @@ public:
 
     void generateBackground(const QSharedPointer<FrameData> &frame);
     void generateFrameBackground(const QSharedPointer<FrameData> &);
-    QString cacheId(FrameData *frame, const QString &prefixToUse) const;
+    SvgPrivate::CacheId cacheId(FrameData *frame, const QString &prefixToUse) const;
     void cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay);
     void updateSizes(FrameData* frame) const;
     void updateSizes(const QSharedPointer<FrameData> &frame) const { return updateSizes(frame.data()); }
@@ -178,7 +180,7 @@ public:
     //this can differ from frame->frameSize if we are in a transition
     QSize pendingFrameSize;
 
-    static QHash<ThemePrivate *, QHash<QString, QWeakPointer<FrameData>> > s_sharedFrames;
+    static QHash<ThemePrivate *, QHash<uint, QWeakPointer<FrameData>> > s_sharedFrames;
 
     bool cacheAll : 1;
     bool repaintBlocked : 1;

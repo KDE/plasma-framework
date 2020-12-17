@@ -6,6 +6,7 @@
 
 #include "theme.h"
 #include "private/theme_p.h"
+#include "private/svg_p.h"
 
 #include <QFile>
 #include <QFontDatabase>
@@ -38,11 +39,11 @@ Theme::Theme(QObject *parent)
 {
     if (!ThemePrivate::globalTheme) {
         ThemePrivate::globalTheme = new ThemePrivate;
+        ThemePrivate::globalTheme->settingsChanged(false);
     }
     ThemePrivate::globalTheme->ref.ref();
     d = ThemePrivate::globalTheme;
 
-    d->settingsChanged(false);
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
                 d, &ThemePrivate::onAppExitCleanup);
@@ -335,36 +336,13 @@ bool Theme::findInRectsCache(const QString &image, const QString &element, QRect
         return false;
     }
 
-    KConfigGroup imageGroup(d->svgElementsCache, image);
-    rect = imageGroup.readEntry(element % QLatin1String("Size"), QRectF());
-
-    if (rect.isValid()) {
-        return true;
-    }
-
-    //Name starting by _ means the element is empty and we're asked for the size of
-    //the whole image, so the whole image is never invalid
-    if (element.indexOf(QLatin1Char('_')) <= 0) {
+    bool ok = false;
+    uint id = element.toLong(&ok);
+    if (!ok) {
         return false;
     }
 
-    bool invalid = false;
-
-    QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
-    if (it == d->invalidElements.end()) {
-        const QStringList elementList = imageGroup.readEntry("invalidElements", QStringList());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        const QSet<QString> elements(elementList.begin(), elementList.end());
-#else
-        const QSet<QString> elements = elementList.toSet();
-#endif
-        d->invalidElements.insert(image, elements);
-        invalid = elements.contains(element);
-    } else {
-        invalid = it.value().contains(element);
-    }
-
-    return invalid;
+    return SvgRectsCache::instance()->findElementRect(id, image, rect);
 }
 
 QStringList Theme::listCachedRectKeys(const QString &image) const
@@ -373,21 +351,7 @@ QStringList Theme::listCachedRectKeys(const QString &image) const
         return QStringList();
     }
 
-    KConfigGroup imageGroup(d->svgElementsCache, image);
-    QStringList keys = imageGroup.keyList();
-
-    QMutableListIterator<QString> i(keys);
-    while (i.hasNext()) {
-        QString key = i.next();
-        if (key.endsWith(QLatin1String("Size"))) {
-            // The actual cache id used from outside doesn't end on "Size".
-            key.resize(key.size() - 4);
-            i.setValue(key);
-        } else {
-            i.remove();
-        }
-    }
-    return keys;
+    return SvgRectsCache::instance()->cachedKeysForPath(image);
 }
 
 void Theme::insertIntoRectsCache(const QString &image, const QString &element, const QRectF &rect)
@@ -396,46 +360,26 @@ void Theme::insertIntoRectsCache(const QString &image, const QString &element, c
         return;
     }
 
-    if (rect.isValid()) {
-        KConfigGroup imageGroup(d->svgElementsCache, image);
-        imageGroup.writeEntry(element % QLatin1String("Size"), rect);
-    } else {
-        QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
-        if (it == d->invalidElements.end()) {
-            d->invalidElements[image].insert(element);
-        } else if (!it.value().contains(element)) {
-            if (it.value().count() > 1000) {
-                it.value().erase(it.value().begin());
-            }
-
-            it.value().insert(element);
-        }
+    bool ok = false;
+    uint id = element.toLong(&ok);
+    if (!ok) {
+        return;
     }
 
-    QMetaObject::invokeMethod(d->rectSaveTimer, "start");
+    uint secs = QDateTime::currentSecsSinceEpoch();
+    SvgRectsCache::instance()->insert(id, image, rect, secs);
 }
 
 void Theme::invalidateRectsCache(const QString &image)
 {
-    if (d->useCache()) {
-        KConfigGroup imageGroup(d->svgElementsCache, image);
-        imageGroup.deleteGroup();
-    }
-
-    d->invalidElements.remove(image);
+    
+    SvgRectsCache::instance()->dropImageFromCache(image);
 }
 
 void Theme::releaseRectsCache(const QString &image)
 {
-    QHash<QString, QSet<QString> >::iterator it = d->invalidElements.find(image);
-    if (it != d->invalidElements.end()) {
-        if (d->useCache()) {
-            KConfigGroup imageGroup(d->svgElementsCache, it.key());
-            imageGroup.writeEntry("invalidElements", it.value().values());
-        }
-
-        d->invalidElements.erase(it);
-    }
+    Q_UNUSED(image);
+    // No op: the internal svg cache always writes the invalid elements in the proper place
 }
 
 void Theme::setCacheLimit(int kbytes)

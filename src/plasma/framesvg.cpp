@@ -27,7 +27,7 @@
 namespace Plasma
 {
 
-QHash<ThemePrivate *, QHash<QString, QWeakPointer<FrameData>> > FrameSvgPrivate::s_sharedFrames;
+QHash<ThemePrivate *, QHash<uint, QWeakPointer<FrameData>> > FrameSvgPrivate::s_sharedFrames;
 
 // Any attempt to generate a frame whose width or height is larger than this
 // will be rejected
@@ -332,7 +332,7 @@ QRegion FrameSvg::mask() const
         return result;
     }
 
-    QString id = d->cacheId(d->frame.data(), QString());
+    uint id = qHash(d->cacheId(d->frame.data(), QString()), SvgRectsCache::s_seed);
 
     QRegion* obj = d->frame->cachedMasks.object(id);
 
@@ -459,7 +459,7 @@ QPixmap FrameSvgPrivate::alphaMask()
 
 QSharedPointer<FrameData> FrameSvgPrivate::lookupOrCreateMaskFrame(const QSharedPointer<FrameData> &frame, const QString &maskPrefix, const QString &maskRequestedPrefix)
 {
-    const QString key = cacheId(frame.data(), maskPrefix);
+    const uint key = qHash(cacheId(frame.data(), maskPrefix));
     QSharedPointer<FrameData> mask = s_sharedFrames[q->theme()->d].value(key);
 
     // See if we can find a suitable candidate in the shared frames.
@@ -488,17 +488,19 @@ void FrameSvgPrivate::generateBackground(const QSharedPointer<FrameData> &frame)
         return;
     }
 
-    const QString id = cacheId(frame.data(), frame->prefix);
+    const uint id = qHash(cacheId(frame.data(), frame->prefix));
 
     bool frameCached = !frame->cachedBackground.isNull();
     bool overlayCached = false;
+    //TODO KF6: Kill Overlays
     const bool overlayAvailable = !frame->prefix.startsWith(QLatin1String("mask-")) && q->hasElement(frame->prefix % QLatin1String("overlay"));
     QPixmap overlay;
     if (q->isUsingRenderingCache()) {
-        frameCached = q->theme()->findInCache(id, frame->cachedBackground, frame->lastModified) && !frame->cachedBackground.isNull();
+        frameCached = q->theme()->findInCache(QString::number(id), frame->cachedBackground, frame->lastModified) && !frame->cachedBackground.isNull();
 
         if (overlayAvailable) {
-            overlayCached = q->theme()->findInCache(QLatin1String("overlay_") % id, overlay, frame->lastModified) && !overlay.isNull();
+            const uint overlayId = qHash(cacheId(frame.data(), frame->prefix % QLatin1String("overlay")));
+            overlayCached = q->theme()->findInCache(QString::number(overlayId), overlay, frame->lastModified) && !overlay.isNull();
         }
     }
 
@@ -622,10 +624,10 @@ QRect FrameSvgPrivate::contentGeometry(const QSharedPointer<FrameData> &frame, c
 void FrameSvgPrivate::updateFrameData(uint lastModified, UpdateType updateType)
 {
     auto fd = frame;
-    QString newKey;
+    uint newKey = 0;
 
     if (fd) {
-        const QString oldKey = fd->cacheId;
+        const uint oldKey = fd->cacheId;
 
         const QString oldPath = fd->imagePath;
         const FrameSvg::EnabledBorders oldBorders = fd->enabledBorders;
@@ -635,7 +637,7 @@ void FrameSvgPrivate::updateFrameData(uint lastModified, UpdateType updateType)
         fd->frameSize = pendingFrameSize;
         fd->imagePath = q->imagePath();
 
-        newKey = cacheId(fd.data(), prefix);
+        newKey = qHash(cacheId(fd.data(), prefix));
 
         //reset frame to old values
         fd->enabledBorders = oldBorders;
@@ -671,8 +673,8 @@ void FrameSvgPrivate::updateFrameData(uint lastModified, UpdateType updateType)
     fd->imagePath = q->imagePath();
     fd->lastModified = lastModified;
     //was fd just created empty now?
-    if (newKey.isEmpty()) {
-        newKey = cacheId(fd.data(), prefix);
+    if (newKey == 0) {
+        newKey = qHash(cacheId(fd.data(), prefix));
     }
 
     // we know it isn't in s_sharedFrames due to the check above, so insert it now
@@ -752,11 +754,10 @@ void FrameSvgPrivate::paintCorner(QPainter& p, const QSharedPointer<FrameData> &
     }
 }
 
-QString FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) const
+SvgPrivate::CacheId FrameSvgPrivate::cacheId(FrameData *frame, const QString &prefixToSave) const
 {
     const QSize size = frameSize(frame).toSize();
-    const QLatin1Char s('_');
-    return QString::number(frame->enabledBorders) % s % QString::number(size.width()) % s % QString::number(size.height()) % s % QString::number(q->scaleFactor()) % s % QString::number(q->devicePixelRatio()) % s % prefixToSave % s % frame->imagePath;
+    return SvgPrivate::CacheId{double(size.width()), double(size.height()), frame->imagePath,  prefixToSave, q->status(), q->scaleFactor(), q->devicePixelRatio(), q->colorGroup(), frame->enabledBorders, q->Svg::d->lastModified};
 }
 
 void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &background, const QPixmap &overlay)
@@ -770,15 +771,16 @@ void FrameSvgPrivate::cacheFrame(const QString &prefixToSave, const QPixmap &bac
         return;
     }
 
-    const QString id = cacheId(frame.data(), prefixToSave);
+    const uint id = qHash(cacheId(frame.data(), prefixToSave));
 
     //qCDebug(LOG_PLASMA)<<"Saving to cache frame"<<id;
 
-    q->theme()->insertIntoCache(id, background, QString::number((qint64)q, 16) % prefixToSave);
+    q->theme()->insertIntoCache(QString::number(id), background, QString::number((qint64)q, 16) % prefixToSave);
 
     if (!overlay.isNull()) {
         //insert overlay
-        q->theme()->insertIntoCache(QLatin1String("overlay_") % id, overlay, QString::number((qint64)q, 16) % prefixToSave % QLatin1String("overlay"));
+        const uint overlayId = qHash(cacheId(frame.data(), frame->prefix % QLatin1String("overlay")));
+        q->theme()->insertIntoCache(QString::number(overlayId), overlay, QString::number((qint64)q, 16) % prefixToSave % QLatin1String("overlay"));
     }
 }
 

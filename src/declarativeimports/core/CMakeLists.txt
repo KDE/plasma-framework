@@ -33,6 +33,7 @@ target_link_libraries(corebindingsplugin
         KF5::Declarative
         KF5::IconThemes
         KF5::I18n
+        Qt5::Svg
         KF5::Service #for kplugininfo.h
         KF5::WindowSystem
         KF5::Plasma

@@ -34,9 +34,36 @@
 #include "theme.h"
 #include "debug_p.h"
 
+uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
+{
+    std::array<uint, 10> parts = {
+        ::qHash(id.width),
+        ::qHash(id.height),
+        ::qHash(id.elementName),
+        ::qHash(id.filePath),
+        ::qHash(id.status),
+        ::qHash(id.devicePixelRatio),
+        ::qHash(id.scaleFactor),
+        ::qHash(id.colorGroup),
+        ::qHash(id.extraFlags),
+        ::qHash(id.lastModified)
+    };
+    return qHashRange(parts.begin(), parts.end(), seed);
+}
+
+
 namespace Plasma
 {
 
+class SvgRectsCacheSingleton
+{
+public:
+    SvgRectsCache self;
+};
+
+Q_GLOBAL_STATIC(SvgRectsCacheSingleton, privateSvgRectsCacheSelf)
+
+const uint SvgRectsCache::s_seed = 0x9e3779b9;
 
 SharedSvgRenderer::SharedSvgRenderer(QObject *parent)
     : QSvgRenderer(parent)
@@ -123,9 +150,217 @@ bool SharedSvgRenderer::load(
     return true;
 }
 
-#define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, status, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
-#define CACHE_ID_NATURAL_SIZE(id, status, devicePixelRatio) QLatin1String("Natural") % QLSEP % id % QLSEP % QString::number(status) % QLSEP % QString::number(devicePixelRatio)
+SvgRectsCache::SvgRectsCache(QObject *parent)
+    : QObject(parent)
+{
+    const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + QStringLiteral("plasma-svgelements");
+    m_svgElementsCache = KSharedConfig::openConfig(svgElementsFile, KConfig::SimpleConfig);
+
+    m_configSyncTimer = new QTimer(this);
+    m_configSyncTimer->setSingleShot(true);
+    m_configSyncTimer->setInterval(5000);
+    connect(m_configSyncTimer, &QTimer::timeout,
+            this, [this]() {
+                m_svgElementsCache->sync();
+            });
+}
+
+SvgRectsCache *SvgRectsCache::instance()
+{
+    return &privateSvgRectsCacheSelf()->self;
+}
+
+void SvgRectsCache::insert(Plasma::SvgPrivate::CacheId cacheId, const QRectF &rect, unsigned int lastModified)
+{
+    insert(qHash(cacheId, SvgRectsCache::s_seed), cacheId.filePath, rect, lastModified);
+}
+
+void SvgRectsCache::insert(uint id, const QString &filePath, const QRectF &rect, unsigned int lastModified)
+{
+    if (m_localRectCache.contains(id)) {
+        return;
+    }
+
+    m_localRectCache.insert(id, rect);
+
+    KConfigGroup imageGroup(m_svgElementsCache, filePath);
+    imageGroup.writeEntry("LastModified", lastModified);
+    if (rect.isValid()) {
+        imageGroup.writeEntry(QString::number(id), rect);
+    } else {
+        m_invalidElements[filePath] << id;
+        imageGroup.writeEntry("Invalidelements", m_invalidElements[filePath].values());
+    }
+    m_configSyncTimer->start();
+}
+
+bool SvgRectsCache::findElementRect(Plasma::SvgPrivate::CacheId cacheId, QRectF &rect)
+{
+    return findElementRect(qHash(cacheId, SvgRectsCache::s_seed), cacheId.filePath, rect);
+}
+
+bool SvgRectsCache::findElementRect(uint id, const QString &filePath, QRectF &rect)
+{
+    auto it = m_localRectCache.find(id);
+
+    if (it == m_localRectCache.end()) {
+        if (m_invalidElements.contains(filePath) && m_invalidElements[filePath].contains(id)) {
+            rect = QRectF();
+            return true;
+        }
+        return false;
+    }
+
+    rect = *it;
+
+    return true;
+}
+
+void SvgRectsCache::loadImageFromCache(const QString &path, uint lastModified)
+{
+    if (path.isEmpty()) {
+        return;
+    }
+
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+
+    unsigned int savedTime = imageGroup.readEntry("LastModified", 0);
+
+    if (lastModified > savedTime) {
+        imageGroup.deleteGroup();
+        m_configSyncTimer->start();
+        return;
+    }
+
+    auto list = imageGroup.readEntry("Invalidelements", QList<unsigned int>());
+    m_invalidElements[path] = QSet<unsigned int>(list.begin(), list.end());
+
+    for (const auto &key : imageGroup.keyList()) {
+        bool ok = false;
+        if (ok) {
+            const QRectF rect = imageGroup.readEntry(key, QRectF());
+            m_localRectCache.insert(key.toUInt(), rect);
+        }
+    }
+}
+
+void SvgRectsCache::dropImageFromCache(const QString &path)
+{
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+    imageGroup.deleteGroup();
+    m_configSyncTimer->start();
+}
+
+QList<QSize> SvgRectsCache::sizeHintsForId(const QString &path, const QString &id)
+{
+    const QString pathId = path % id;
+
+    if (!m_sizeHintsForId.contains(pathId)) {
+        KConfigGroup imageGroup(m_svgElementsCache, path);
+        const QStringList &encoded = imageGroup.readEntry(id, QStringList());
+        QList<QSize> sizes;
+        for (const auto &token : encoded) {
+            const auto &parts = token.split(QLatin1Char('x'));
+            if (parts.size() != 2) {
+                continue;
+            }
+            QSize size = QSize(parts[0].toDouble(), parts[1].toDouble());
+            if (!size.isEmpty()) {
+                sizes << size;
+            }
+        }
+        m_sizeHintsForId[pathId] = sizes;
+        return sizes;
+    }
+
+    return m_sizeHintsForId.value(pathId);
+}
+
+void SvgRectsCache::insertSizeHintForId(const QString &path, const QString &id, const QSize &size)
+{
+    //TODO: need to make this more efficient
+    auto sizeListToString = [] (const QList<QSize> &list) {
+        QString ret;
+        for (const auto &s : list) {
+            ret += QString::number(s.width()) % QLatin1Char('x') % QString::number(s.height()) % QLatin1Char(',');
+        }
+        return ret;
+    };
+    m_sizeHintsForId[path % id].append(size);
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+    imageGroup.writeEntry(id, sizeListToString(m_sizeHintsForId[path % id]));
+    m_configSyncTimer->start();
+}
+
+QString SvgRectsCache::iconThemePath()
+{
+    if (!m_iconThemePath.isEmpty()) {
+        return m_iconThemePath;
+    }
+
+    KConfigGroup imageGroup(m_svgElementsCache, QStringLiteral("General"));
+    m_iconThemePath = imageGroup.readEntry(QStringLiteral("IconThemePath"), QString());
+
+    return m_iconThemePath;
+}
+
+void SvgRectsCache::setIconThemePath(const QString &path)
+{
+    m_iconThemePath = path;
+    KConfigGroup imageGroup(m_svgElementsCache, QStringLiteral("General"));
+    imageGroup.writeEntry(QStringLiteral("IconThemePath"), path);
+    m_configSyncTimer->start();
+}
+
+void SvgRectsCache::expireCache(const QString &path)
+{
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+
+    unsigned int savedTime = imageGroup.readEntry("LastModified", QDateTime().toSecsSinceEpoch());
+    QFileInfo info(path);
+    if (info.exists()) {
+        unsigned int lastModified = info.lastModified().toSecsSinceEpoch();
+        if (lastModified <= savedTime) {
+            return;
+        }
+    }
+
+    imageGroup.deleteGroup();
+}
+
+void SvgRectsCache::setNaturalSize(const QString &path, qreal scaleFactor, const QSizeF &size)
+{
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+
+    // FIXME: needs something faster, perhaps even sprintf
+    imageGroup.writeEntry(QStringLiteral("NaturalSize_") % QString::number(scaleFactor), size);
+    m_configSyncTimer->start();
+}
+
+QSizeF SvgRectsCache::naturalSize(const QString &path, qreal scaleFactor)
+{
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+
+    // FIXME: needs something faster, perhaps even sprintf
+    return imageGroup.readEntry(QStringLiteral("NaturalSize_") % QString::number(scaleFactor), QSizeF());
+}
+
+QStringList SvgRectsCache::cachedKeysForPath(const QString &path) const
+{
+    KConfigGroup imageGroup(m_svgElementsCache, path);
+    QStringList list = imageGroup.keyList();
+    QStringList filtered;
+
+    std::copy_if (list.begin(), list.end(), std::back_inserter(filtered), [](const QString element){bool ok; element.toLong(&ok); return ok;} );
+    return filtered;
+}
+
+void SvgRectsCache::updateLastModified(const QString &filePath, unsigned int lastModified)
+{
+    KConfigGroup imageGroup(m_svgElementsCache, filePath);
+    imageGroup.writeEntry("LastModified", lastModified);
+    m_configSyncTimer->start();    
+}
 
 SvgPrivate::SvgPrivate(Svg *svg)
     : q(svg),
@@ -153,19 +388,17 @@ SvgPrivate::~SvgPrivate()
 }
 
 //This function is meant for the rects cache
-QString SvgPrivate::cacheId(const QString &elementId) const
+SvgPrivate::CacheId SvgPrivate::cacheId(const QString &elementId) const
 {
-    if (size.isValid() && size != naturalSize) {
-        return CACHE_ID_WITH_SIZE(size, elementId, status, devicePixelRatio);
-    } else {
-        return CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
-    }
+    auto idSize = size.isValid() && size != naturalSize ? size : QSizeF{-1.0, -1.0};
+    return CacheId{idSize.width(), idSize.height(), path, elementId, status, devicePixelRatio, scaleFactor, -1, 0, lastModified};
 }
 
 //This function is meant for the pixmap cache
-QString SvgPrivate::cachePath(const QString &path, const QSize &size) const
+QString SvgPrivate::cachePath(const QString &id, const QSize &size) const
 {
-    return CACHE_ID_WITH_SIZE(size, path, status, devicePixelRatio) % QLSEP % QString::number(colorGroup);
+    auto cacheId = CacheId{double(size.width()), double(size.height()), path, id, status, devicePixelRatio, scaleFactor, colorGroup, 0, lastModified};
+    return QString::number(qHash(cacheId, SvgRectsCache::s_seed));
 }
 
 bool SvgPrivate::setImagePath(const QString &imagePath)
@@ -207,8 +440,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     themed = isThemed;
     path.clear();
     themePath.clear();
-    localRectCache.clear();
-    elementsWithSizeHints.clear();
+
     bool oldFromCurrentTheme = fromCurrentTheme;
     fromCurrentTheme = !inIconTheme && isThemed && actualTheme()->currentThemeHasImage(imagePath);
 
@@ -234,6 +466,12 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 #endif
     }
 
+    QFileInfo info(path);
+
+    lastModified = info.lastModified().toSecsSinceEpoch();
+
+    SvgRectsCache::instance()->loadImageFromCache(path, lastModified);
+
     // check if svg wants colorscheme applied
     checkColorHints();
 
@@ -242,19 +480,13 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     if ((themed && !path.isEmpty() && QFileInfo::exists(path)) || QFileInfo::exists(actualPath)) {
         QRectF rect;
 
-        if (cacheAndColorsTheme()->findInRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), rect)) {
-            naturalSize = rect.size();
-        } else {
+        naturalSize = SvgRectsCache::instance()->naturalSize(path, scaleFactor);
+        if (naturalSize.isEmpty()) {
             createRenderer();
             naturalSize = renderer->defaultSize() * scaleFactor;
-            //qCDebug(LOG_PLASMA) << "natural size for" << path << "from renderer is" << naturalSize;
-            cacheAndColorsTheme()->insertIntoRectsCache(path, QStringLiteral("_Natural_%1").arg(scaleFactor), QRectF(QPointF(0, 0), naturalSize));
-            //qCDebug(LOG_PLASMA) << "natural size for" << path << "from cache is" << naturalSize;
+            SvgRectsCache::instance()->setNaturalSize(path, scaleFactor, naturalSize);
         }
     }
-
-    QFileInfo info(path);
-    lastModified = info.lastModified().toSecsSinceEpoch();
 
     q->resize();
     emit q->imagePathChanged();
@@ -291,39 +523,15 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     QSize size;
     QString actualElementId;
 
-    if (elementsWithSizeHints.isEmpty()) {
-        // Fetch all size hinted element ids from the theme's rect cache
-        // and store them locally.
-        const QRegularExpression sizeHintedKeyExpr(QLatin1String("^") + CACHE_ID_NATURAL_SIZE(QStringLiteral("(\\d+)-(\\d+)-(.+)"), status, ratio) + QLatin1String("$"));
-
-	const auto lst = cacheAndColorsTheme()->listCachedRectKeys(path);
-        for (const QString &key : lst) {
-            const auto match = sizeHintedKeyExpr.match(key);
-            if (match.hasMatch()) {
-                QString baseElementId = match.captured(3);
-                QSize sizeHint(match.capturedRef(1).toInt(),
-                               match.capturedRef(2).toInt());
-                if (sizeHint.isValid()) {
-                    elementsWithSizeHints.insert(baseElementId, sizeHint);
-                }
-            }
-        }
-
-        if (elementsWithSizeHints.isEmpty()) {
-            // Make sure we won't query the theme unnecessarily.
-            elementsWithSizeHints.insert(QString(), QSize());
-        }
-    }
-
     // Look at the size hinted elements and try to find the smallest one with an
     // identical aspect ratio.
     if (s.isValid() && !elementId.isEmpty()) {
-        const QList<QSize> elementSizeHints = elementsWithSizeHints.values(elementId);
+        const QList<QSize> elementSizeHints = SvgRectsCache::instance()->sizeHintsForId(path, elementId);
 
         if (!elementSizeHints.isEmpty()) {
-            QSize bestFit(-1, -1);
+            QSizeF bestFit(-1, -1);
 
-            for (const QSize &hint : elementSizeHints) {
+            for (const auto &hint : elementSizeHints) {
 
                 if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio &&
                         (!bestFit.isValid() ||
@@ -353,9 +561,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         return QPixmap();
     }
 
-    const QString id = cachePath(path, size) + actualElementId;
-
-    //qCDebug(LOG_PLASMA) << "id is " << id;
+    const QString id = cachePath(actualElementId, size);
 
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
@@ -363,11 +569,6 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
         //qCDebug(LOG_PLASMA) << "found cached version of " << id << p.size();
         return p;
     }
-
-    //qCDebug(LOG_PLASMA) << "didn't find cached version of " << id << ", so re-rendering";
-
-    //qCDebug(LOG_PLASMA) << "size for " << actualElementId << " is " << s;
-    // we have to re-render this puppy
 
     createRenderer();
 
@@ -397,8 +598,10 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     }
 
     if (cacheRendering) {
-        cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLSEP % actualElementId);
+        cacheAndColorsTheme()->insertIntoCache(id, p, QString::number((qint64)q, 16) % QLatin1Char('_') % actualElementId);
     }
+
+    SvgRectsCache::instance()->updateLastModified(path, lastModified);
 
     return p;
 }
@@ -409,7 +612,6 @@ void SvgPrivate::createRenderer()
         return;
     }
 
-    //qCDebug(LOG_PLASMA) << kBacktrace();
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet *>(q->parent());
         //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
@@ -433,17 +635,12 @@ void SvgPrivate::createRenderer()
         }
     }
 
-    //qCDebug(LOG_PLASMA) << "********************************";
-    //qCDebug(LOG_PLASMA) << "FAIL! **************************";
-    //qCDebug(LOG_PLASMA) << path << "**";
-
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup, status);
     styleCrc = qChecksum(styleSheet.toUtf8().constData(), styleSheet.size());
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 
     if (it != s_renderers.constEnd()) {
-        //qCDebug(LOG_PLASMA) << "gots us an existing one!";
         renderer = it.value();
     } else {
         if (path.isEmpty()) {
@@ -455,14 +652,19 @@ void SvgPrivate::createRenderer()
             // Add interesting elements to the theme's rect cache.
             QHashIterator<QString, QRectF> i(interestingElements);
 
+            QRegularExpression sizeHintedKeyExpr(QStringLiteral("^(\\d+)-(\\d+)-(.+)$"));
+
             while (i.hasNext()) {
                 i.next();
                 const QString &elementId = i.key();
+                QString originalId = i.key();
                 const QRectF &elementRect = i.value();
 
-                const QString cacheId = CACHE_ID_NATURAL_SIZE(elementId, status, devicePixelRatio);
-                localRectCache.insert(cacheId, elementRect);
-                cacheAndColorsTheme()->insertIntoRectsCache(path, cacheId, elementRect);
+                originalId.replace(sizeHintedKeyExpr, QStringLiteral("\\3"));
+                SvgRectsCache::instance()->insertSizeHintForId(path, originalId, elementRect.size().toSize());
+
+                const CacheId cacheId({-1.0, -1.0, path, elementId, status, devicePixelRatio, scaleFactor, -1, 0, lastModified});
+                SvgRectsCache::instance()->insert(cacheId, elementRect, lastModified);
             }
         }
 
@@ -484,16 +686,10 @@ void SvgPrivate::eraseRenderer()
 #endif
         // this and the cache reference it
         s_renderers.erase(s_renderers.find(styleCrc + path));
-
-        if (theme) {
-            theme.data()->releaseRectsCache(path);
-        }
     }
 
     renderer = nullptr;
     styleCrc = 0;
-    localRectCache.clear();
-    elementsWithSizeHints.clear();
 }
 
 QRectF SvgPrivate::elementRect(const QString &elementId)
@@ -515,35 +711,23 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
         return QRectF();
     }
 
-    const QString id = cacheId(elementId);
-    const auto it = localRectCache.constFind(id);
-    if (it != localRectCache.constEnd()) {
-        return *it;
-    }
-
     QRectF rect;
-    bool found = cacheAndColorsTheme()->findInRectsCache(path, id, rect);
+    const CacheId cacheId = SvgPrivate::cacheId(elementId);
+    bool found = SvgRectsCache::instance()->findElementRect(cacheId, rect);
     //This is a corner case where we are *sure* the element is not valid
-    if (found && rect == QRectF()) {
-        return rect;
-    } else if (found) {
-        localRectCache.insert(id, rect);
-    } else {
-        rect = findAndCacheElementRect(elementId, id);
+    if (!found) {
+        rect = findAndCacheElementRect(elementId);
     }
 
     return rect;
 }
 
-QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId, const QString &id)
+QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
 {
     //we need to check the id before createRenderer(), otherwise it may generate a different id compared to the previous cacheId)( call
-    createRenderer();
+    const CacheId cacheId = SvgPrivate::cacheId(elementId);
 
-    const auto it = localRectCache.constFind(id);
-    if (it != localRectCache.constEnd()) {
-        return *it;
-    }
+    createRenderer();
 
     //This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
     QRectF elementRect = renderer->elementExists(elementId) ?
@@ -560,9 +744,7 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId, const QStri
 
     elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
                          elementRect.width() * dx, elementRect.height() * dy);
-
-    cacheAndColorsTheme()->insertIntoRectsCache(path, id, elementRect);
-    localRectCache.insert(id, elementRect);
+    SvgRectsCache::instance()->insert(cacheId, elementRect, lastModified);
 
     return elementRect;
 }
@@ -642,7 +824,6 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
         res.setHeight(res.height() + offset);
     }
 
-    //qCDebug(LOG_PLASMA)<<"Aligning Rects, origin:"<<orig<<"destination:"<<dst<<"result:"<<res;
     return res;
 }
 
@@ -732,9 +913,8 @@ void Svg::setScaleFactor(qreal ratio)
     //not resize() because we want to do it unconditionally
     QRectF rect;
 
-    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QStringLiteral("_Natural_%1").arg(d->scaleFactor), rect)) {
-        d->naturalSize = rect.size();
-    } else {
+    d->naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
+    if (d->naturalSize.isEmpty()) {
         d->createRenderer();
         d->naturalSize = d->renderer->defaultSize() * d->scaleFactor;
     }
@@ -840,7 +1020,6 @@ void Svg::resize(const QSizeF &size)
     }
 
     d->size = size;
-    d->localRectCache.clear();
     emit sizeChanged();
 }
 
@@ -852,7 +1031,6 @@ void Svg::resize()
     }
 
     d->size = d->naturalSize;
-    d->localRectCache.clear();
     emit sizeChanged();
 }
 
@@ -883,14 +1061,14 @@ bool Svg::isValid() const
 
     //try very hard to avoid creation of a parser
     QRectF rect;
-    if (d->cacheAndColorsTheme()->findInRectsCache(d->path, QStringLiteral("_Natural_%1").arg(d->scaleFactor), rect)) {
+    QSizeF naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
+    if (!naturalSize.isEmpty()) {
         return true;
     }
 
     if (d->path.isEmpty() || !QFileInfo::exists(d->path)) {
         return false;
     }
-
     d->createRenderer();
     return d->renderer->isValid();
 }
@@ -908,7 +1086,6 @@ bool Svg::containsMultipleImages() const
 void Svg::setImagePath(const QString &svgFilePath)
 {
     if (d->setImagePath(svgFilePath)) {
-        //qCDebug(LOG_PLASMA) << "repaintNeeded";
         emit repaintNeeded();
     }
 }
