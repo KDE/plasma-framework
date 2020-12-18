@@ -1278,24 +1278,13 @@ bool Dialog::event(QEvent *event)
         case QEvent::Wheel: {
             QWheelEvent *we = static_cast<QWheelEvent *>(event);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-            const QPoint pos = we->pos();
-#else
             const QPoint pos = we->position().toPoint();
-#endif
 
             if (!d->mainItemContainsPosition(pos)) {
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-                QWheelEvent we2(d->positionAdjustedForMainItem(pos),
-                                d->positionAdjustedForMainItem(pos) + position(),
-                                we->pixelDelta(), we->angleDelta(), we->angleDelta().y(),
-                                we->orientation(), we->buttons(), we->modifiers(), we->phase());
-#else
                 QWheelEvent we2(d->positionAdjustedForMainItem(pos),
                                 d->positionAdjustedForMainItem(pos) + position(),
                                 we->pixelDelta(), we->angleDelta(),
                                 we->buttons(), we->modifiers(), we->phase(), false /*inverted*/);
-#endif
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &we2);

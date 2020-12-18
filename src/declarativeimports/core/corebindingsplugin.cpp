@@ -110,17 +110,9 @@ QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
 QT_WARNING_POP
 
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
-#else
-    qmlRegisterType<QAbstractItemModel>();
-#endif
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     qmlRegisterAnonymousType<QQmlPropertyMap>(uri, 1);
-#else
-    qmlRegisterType<QQmlPropertyMap>();
-#endif
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");

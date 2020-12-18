@@ -28,11 +28,7 @@ Calendar::Calendar(QObject *parent)
 
 QDateTime Calendar::displayedDate() const
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     return m_displayedDate.startOfDay();
-#else
-    return QDateTime(m_displayedDate);
-#endif
 }
 
 void Calendar::setDisplayedDate(const QDate &dateTime)
@@ -65,11 +61,7 @@ void Calendar::setDisplayedDate(const QDateTime &dateTime)
 
 QDateTime Calendar::today() const
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     return m_today.startOfDay();
-#else
-    return QDateTime(m_today);
-#endif
 }
 
 void Calendar::setToday(const QDateTime &dateTime)

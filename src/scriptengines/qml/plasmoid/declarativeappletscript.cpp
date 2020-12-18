@@ -49,11 +49,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
             QStringLiteral("Do not create objects of type Wallpaper"));
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>("org.kde.plasma.plasmoid", 1);
-#else
-    qmlRegisterType<KDeclarative::ConfigPropertyMap>();
-#endif
 }
 
 DeclarativeAppletScript::~DeclarativeAppletScript()

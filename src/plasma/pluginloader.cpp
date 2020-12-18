@@ -646,11 +646,7 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
 
 void PluginLoader::setCustomAppletCategories(const QStringList &categories)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     PluginLoaderPrivate::s_customCategories = QSet<QString>(categories.begin(), categories.end());
-#else
-    PluginLoaderPrivate::s_customCategories = QSet<QString>::fromList(categories);
-#endif
 }
 
 QStringList PluginLoader::customAppletCategories() const
