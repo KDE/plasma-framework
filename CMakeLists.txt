@@ -38,7 +38,7 @@ ecm_setup_version(PROJECT
 add_definitions(-DQT_NO_FOREACH)
 ################# now find all used packages #################
 
-set (REQUIRED_QT_VERSION 5.13.0)
+set (REQUIRED_QT_VERSION 5.14.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
 
@@ -137,7 +137,7 @@ ecm_setup_qtplugin_macro_names(
     CONFIG_CODE_VARIABLE
         PACKAGE_SETUP_AUTOMOC_VARIABLES
 )
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050d00)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
 add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054B00)
 
 #add_definitions(-Wno-deprecated)
