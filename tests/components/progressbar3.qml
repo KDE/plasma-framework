@@ -160,5 +160,40 @@ ComponentBase {
             }
         }
 
+        ColumnLayout {
+            PlasmaComponents.Label {
+                text: "This should do one 'indefinite' animation cycle and then continuously animate to 100% in chunks of 10%."
+                wrapMode: Text.WordWrap
+                Layout.preferredWidth: progressBarWidth
+            }
+            PlasmaComponents.ProgressBar {
+                id: animatingProgressBar
+                from: 0
+                to: 100
+                // Bug 430544: A ProgressBar that was indeterminate once will
+                // not update its bar size according to its value anymore
+                // Set to false again in the Timer below
+                indeterminate: true
+
+                Timer {
+                    interval: 500
+                    triggeredOnStart: true
+                    running: true
+                    repeat: true
+                    onTriggered: {
+                        animatingProgressBar.indeterminate = false;
+
+                        // ProgressBar clamps "value" by "to" (100), so we can't
+                        // just blindly increase and then check >= 100
+                        if (animatingProgressBar.value === 100) {
+                            animatingProgressBar.value = 0;
+                        } else {
+                            animatingProgressBar.value += 10;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
