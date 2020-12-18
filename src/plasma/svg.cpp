@@ -10,6 +10,7 @@
 #include "private/theme_p.h"
 
 #include <cmath>
+#include <array>
 
 #include <QCoreApplication>
 #include <QDir>
