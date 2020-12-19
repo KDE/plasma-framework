@@ -328,7 +328,7 @@ void Calendar::nextYear()
 void Calendar::previousYear()
 {
     // Negative years don't make sense
-    if (m_displayedDate.year() >= 0) {
+    if (m_displayedDate.year() >= 1) {
         setDisplayedDate(m_displayedDate.addYears(-1));
     }
 }
