@@ -85,7 +85,7 @@ Item {
     Connections {
         target: mouseArea
 
-        onClicked: {
+        function onClicked(mouse) {
             if (control.menu && getMenuInstance().__popupVisible) {
                 select(input.cursorPosition, input.cursorPosition);
             } else {
@@ -98,7 +98,7 @@ Item {
             }
             popupTimer.restart();
         }
-        onPressAndHold: {
+        function onPressAndHold(mouse) {
             input.activate();
             var pos = input.positionAt(mouseArea.mouseX, mouseArea.mouseY);
             input.select(pos, pos);
@@ -109,14 +109,14 @@ Item {
 
     Connections {
         target: input
-        onSelectionStartChanged: popupTimer.restart()
-        onSelectionEndChanged: popupTimer.restart()
-        onActiveFocusChanged: popupTimer.restart()
+        function onSelectionStartChanged() {popupTimer.restart()}
+        function onSelectionEndChanged() {popupTimer.restart()}
+        function onActiveFocusChanged() {popupTimer.restart()}
     }
 
     Connections {
         target: flickable
-        onMovingChanged: popupTimer.restart()
+        function onMovingChanged() {popupTimer.restart()}
     }
 
     Timer {

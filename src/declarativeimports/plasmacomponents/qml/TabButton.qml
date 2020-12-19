@@ -68,20 +68,24 @@ Item {
     //long notation to not make it overwritten by implementations
     Connections {
         target: (root != undefined) ? root : undefined
-        onPressedChanged: {
+        function onPressedChanged() {
             //TabBar is the granparent
             internal.tabBar.currentTab = root
             internal.tabBar.forceActiveFocus()
         }
-        onClicked: {
+        function onClicked() {
             if (internal.tabGroup) {
                 internal.tabGroup.currentTab = tab
             }
             //TabBar is the granparent, done here too in case of no tabgroup
             internal.tabBar.currentTab = root
         }
-        onVisibleChanged: root.parent.childrenChanged()
-        onTextChanged: root.parent.childrenChanged()
+        function onVisibleChanged() {
+            root.parent.childrenChanged()
+        }
+        function onTextChanged() {
+            root.parent.childrenChanged()
+        }
     }
 
     QtObject {

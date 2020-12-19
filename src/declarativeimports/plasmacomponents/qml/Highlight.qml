@@ -33,7 +33,7 @@ Item {
 
     Connections {
         target: highlight.ListView.view
-        onCurrentIndexChanged: {
+        function onCurrentIndexChanged() {
             if (highlight.ListView.view.currentIndex >= 0) {
                 background.opacity = 1
             } else {

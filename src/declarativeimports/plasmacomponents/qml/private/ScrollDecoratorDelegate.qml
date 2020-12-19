@@ -87,7 +87,7 @@ PlasmaCore.FrameSvgItem {
 
     Connections {
         target: flickableItem
-        onMovingChanged: {
+        function onMovingChanged() {
             if (flickableItem.moving) {
                 opacityTimer.running = false
                 background.opacity = 1

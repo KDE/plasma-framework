@@ -25,7 +25,7 @@ BusyIndicatorStyle {
 
         Connections {
             target: control
-            onRunningChanged: {
+            function onRunningChanged() {
                 rotationAnimator.from = rotation
                 rotationAnimator.to = rotation + 360
             }

@@ -14,13 +14,6 @@ install(DIRECTORY kirigamiplasmadesktopstyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/
 
 set(QQC2_VERSION "2.${Qt5QuickControls2_VERSION_MINOR}")
 
-if (Qt5Qml_VERSION_STRING VERSION_GREATER_EQUAL 5.14)
-    set(DISABLE_UNDER_QT_5_14 "")
-    set(DISABLE_AT_QT_5_14 "//Disabled since Qt 5.14 ")
-else()
-    set(DISABLE_UNDER_QT_5_14 "//Needs Qt 5.14 ")
-    set(DISABLE_AT_QT_5_14 "")
-endif()
 
 # Find all the source qml files
 FILE(GLOB_RECURSE inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"

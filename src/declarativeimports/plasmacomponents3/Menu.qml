@@ -13,13 +13,13 @@ import org.kde.kirigami 2.5 as Kirigami
 T.Menu {
     id: control
 
-@DISABLE_UNDER_QQC2_2_4@ palette: Kirigami.Theme.palette
+    palette: Kirigami.Theme.palette
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem ? contentItem.implicitWidth + leftPadding + rightPadding : 0)
     implicitHeight: Math.max(background ? background.implicitHeight : 0,
                              contentItem ? contentItem.implicitHeight : 0) + topPadding + bottomPadding
 
-@DISABLE_UNDER_QQC2_2_3@    delegate: MenuItem { width: parent.width; onImplicitWidthChanged: control.contentItem.contentItem.childrenChanged() }
+    delegate: MenuItem { width: parent.width; onImplicitWidthChanged: control.contentItem.contentItem.childrenChanged() }
 
     margins: 0
     leftPadding: background.margins.left
@@ -53,8 +53,7 @@ T.Menu {
     Connections {
         target: control.contentItem.contentItem
 
-@DISABLE_AT_QT_5_14@ onChildrenChanged: {
-@DISABLE_UNDER_QT_5_14@ function onChildrenChanged() {
+        function onChildrenChanged() {
             for (var i in control.contentItem.contentItem.children) {
                 var child = control.contentItem.contentItem.children[i];
                 if (child.checkable) {

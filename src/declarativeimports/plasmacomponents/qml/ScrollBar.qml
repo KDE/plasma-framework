@@ -116,15 +116,15 @@ Item {
 
         Connections {
             target: flickableItem
-            onContentHeightChanged: {
+            function onContentHeightChanged() {
                 range.value = flickableItem.contentY
             }
-            onContentYChanged: {
+            function onContentYChanged() {
                 if (internalLoader.isVertical) {
                     range.value = flickableItem.contentY
                 }
             }
-            onContentXChanged: {
+            function onContentXChanged() {
                 if (!internalLoader.isVertical) {
                     range.value = flickableItem.contentX
                 }
@@ -132,8 +132,12 @@ Item {
         }
         Connections {
             target: internalLoader.item.handle
-            onYChanged: updateFromHandleTimer.running = true
-            onXChanged: updateFromHandleTimer.running = true
+            function onYChanged() {
+                updateFromHandleTimer.running = true
+            }
+            function onXChanged() {
+                updateFromHandleTimer.running = true
+            }
         }
         PlasmaComponents.RangeModel {
             id: range

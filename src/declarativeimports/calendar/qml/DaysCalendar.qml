@@ -244,7 +244,7 @@ Item {
 
     Connections {
         target: theme
-        onTextColorChanged: {
+        function onTextColorChanged() {
             canvas.requestPaint();
         }
     }

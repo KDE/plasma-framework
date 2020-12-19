@@ -46,7 +46,9 @@ QtQuickControlStyle.ScrollViewStyle {
     Component.onCompleted: syncVelocity()
     Connections {
         target: control
-        onContentItemChanged: syncVelocity()
+        function onContentItemChanged() {
+            syncVelocity()
+        }
     }
 
     frame: Item {

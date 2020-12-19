@@ -195,7 +195,7 @@ QtQuickControlStyle.ButtonStyle {
             }
             Connections {
                 target: control
-                onHoveredChanged: {
+                function onHoveredChanged() {
                     if (style.controlHovered) {
                         control.z += 2
                     } else {

@@ -64,7 +64,7 @@ Item {
         Connections {
             target: theme
             //fallback if inline-background doesn't work
-            onThemeChanged: {
+            function onThemeChanged() {
                 fallbackComponent.svgPath = fallbackComponent.filePath("/dialogs/background.svgz")
                 shadowFrame.visible = backgroundSvg.hasElement("shadow-top")
             }

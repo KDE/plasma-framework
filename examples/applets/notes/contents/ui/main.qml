@@ -18,7 +18,7 @@ PlasmaCore.SvgItem {
 
     Connections {
         target: plasmoid
-        onExternalData: {
+        function onExternalData(mimetype, data) {
             if (mimetype === "text/plain") {
                 noteText.text = data
             }

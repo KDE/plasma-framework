@@ -40,7 +40,7 @@ Item {
 
     Connections {
         target: listView
-        onModelChanged: {
+        function onModelChanged() {
             if (listView && listView.model) {
                 internal.initDirtyObserver()
             }

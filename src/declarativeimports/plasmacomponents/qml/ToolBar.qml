@@ -147,7 +147,9 @@ Item{
             newContainer.opacity = 1
             oldContainer.opacity = 0
         }
-        onToolsChanged: connection.internalToolsChanged()
+        function onToolsChanged() {
+            connection.internalToolsChanged()
+        }
         Component.onCompleted: connection.internalToolsChanged()
     }
 
