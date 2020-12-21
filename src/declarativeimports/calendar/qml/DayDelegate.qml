@@ -68,7 +68,6 @@ MouseArea {
                 0
             }
         }
-        Behavior on opacity { NumberAnimation { duration: PlasmaCore.Units.shortDuration*2 } }
         color: PlasmaCore.Theme.textColor
     }
 
@@ -85,7 +84,6 @@ MouseArea {
             }
         }
         visible: !today
-        Behavior on opacity { NumberAnimation { duration: PlasmaCore.Units.shortDuration*2 } }
         color: PlasmaCore.Theme.highlightColor
         z: todayRect.z - 1
     }
@@ -118,8 +116,5 @@ MouseArea {
         // -1 is an undocumented same as unset (see qquickvaluetypes)
         font.pointSize: -1
         color: today ? PlasmaCore.Theme.backgroundColor : PlasmaCore.Theme.textColor
-        Behavior on color {
-            ColorAnimation { duration: PlasmaCore.Units.shortDuration * 2 }
-        }
     }
 }
