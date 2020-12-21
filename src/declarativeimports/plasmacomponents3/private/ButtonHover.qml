@@ -25,7 +25,6 @@ Item {
             rightMargin: -margins.right
             bottomMargin: -margins.bottom
         }
-        opacity: 0
         imagePath: "widgets/button"
         prefix: "hover"
     }
@@ -37,48 +36,14 @@ Item {
             name: "hovered"
             PropertyChanges {
                 target: hoverEffect
-                opacity: 1
+                visible: true
             }
         },
         State {
             name: "hidden"
             PropertyChanges {
                 target: hoverEffect
-                opacity: 0
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            from: "*"
-            to: "hidden"
-            SequentialAnimation {
-                OpacityAnimator {
-                    duration: units.veryShortDuration
-                    easing.type: Easing.OutQuad
-                }
-                PropertyAction {
-                    target: root
-                    property: "visible"
-                    value: false
-                }
-            }
-        },
-        Transition {
-            from: "*"
-            to: "hovered"
-            SequentialAnimation {
-                PropertyAction {
-                    target: root
-                    property: "visible"
-                    value: true
-                }
-                OpacityAnimator {
-                    // Using a shorter duration here makes things feel more responsive.
-                    duration: units.veryShortDuration
-                    easing.type: Easing.OutQuad
-                }
+                visible: false
             }
         }
     ]

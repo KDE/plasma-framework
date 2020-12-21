@@ -50,47 +50,14 @@ Item {
             name: "shown"
             PropertyChanges {
                 target: shadowEffect
-                opacity: 1
+                visible: true
             }
         },
         State {
             name: "hidden"
             PropertyChanges {
                 target: shadowEffect
-                opacity: 0
-            }
-        }
-    ]
-    transitions: [
-        Transition {
-            from: "*"
-            to: "shown"
-            SequentialAnimation {
-                PropertyAction {
-                    target: root
-                    property: "visible"
-                    value: true
-                }
-                OpacityAnimator {
-                    duration: units.veryShortDuration
-                    easing.type: Easing.OutQuad
-                }
-            }
-        },
-        Transition {
-            from: "*"
-            to: "hidden"
-            SequentialAnimation {
-                OpacityAnimator {
-                    // Same duration as pressed and flat background hovered state animations
-                    duration: units.veryShortDuration
-                    easing.type: Easing.OutQuad
-                }
-                PropertyAction {
-                    target: root
-                    property: "visible"
-                    value: false
-                }
+                visible: false
             }
         }
     ]
