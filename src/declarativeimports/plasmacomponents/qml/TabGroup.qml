@@ -127,7 +127,7 @@ FocusScope {
             function incomingDone() {
                 state = ""
                 if (priv.incomingPage) {
-                    if (priv.incomingPage.status != undefined) {
+                    if (priv.incomingPage instanceof PlasmaComponents.Page) {
                         priv.incomingPage.status = PlasmaComponents.PageStatus.Active
                     }
                     priv.incomingPage = null
@@ -136,7 +136,7 @@ FocusScope {
 
             function outgoingDone() {
                 if (priv.outgoingPage) {
-                    if (priv.outgoingPage.status != undefined) {
+                    if (priv.outgoingPage instanceof PlasmaComponents.Page) {
                         priv.outgoingPage.status = PlasmaComponents.PageStatus.Active
                     }
                     priv.outgoingPage.visible = false
@@ -251,7 +251,7 @@ FocusScope {
             currentTabContainer.visible = true
             incomingPage = currentTabContainer.children[0]
             incomingPage.visible = true
-            if (incomingPage.status != undefined) {
+            if (incomingPage instanceof PlasmaComponents.Page) {
                 incomingPage.status = PlasmaComponents.PageStatus.Activating
             }
             if (currentIndex < newCurrentIndex) {
