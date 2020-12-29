@@ -8,6 +8,7 @@
 #include "private/appletquickitem_p.h"
 #include "debug_p.h"
 
+#include <QJsonArray>
 #include <QQmlExpression>
 #include <QQmlProperty>
 #include <QQmlContext>
@@ -590,16 +591,26 @@ void AppletQuickItem::init()
 
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError() || d->applet->failedToLaunch()) {
         QString reason;
+        QJsonObject errorData;
+        errorData[QStringLiteral("appletName")] = i18n("Unknown Applet");
+        errorData[QStringLiteral("isDebugMode")] = qEnvironmentVariableIntValue("PLASMA_ENABLE_QML_DEBUG") != 0;
+
         if (d->applet->failedToLaunch()) {
             reason = d->applet->launchErrorMessage();
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
         } else if (d->applet->kPackage().isValid()) {
             const auto errors = d->qmlObject->mainComponent()->errors();
+            QStringList errorList;
             for (const QQmlError &error : errors) {
                 reason += error.toString() + QLatin1Char('\n');
+                errorList << error.toString();
             }
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList(errorList);
+            errorData[QStringLiteral("appletName")] = d->applet->kPackage().metadata().name();
             reason = i18n("Error loading QML file: %1", reason);
         } else {
             reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
         }
 
         d->qmlObject->setSource(d->coronaPackage.fileUrl("appleterror"));
@@ -609,6 +620,8 @@ void AppletQuickItem::init()
         if (d->qmlObject->mainComponent()->isError()) {
             return;
         } else {
+            d->qmlObject->rootObject()->setProperty("errorInformation", errorData);
+            // TODO KF6: remove in favour of newer errorInformation
             d->qmlObject->rootObject()->setProperty("reason", reason);
         }
 
