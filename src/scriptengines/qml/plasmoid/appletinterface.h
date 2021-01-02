@@ -215,7 +215,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * This is typically only used by the default configuration module
      *
      */
-    Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut NOTIFY globalShortcutChanged)
+    Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut RESET setGlobalShortcut NOTIFY globalShortcutChanged)
 
     /**
      * An interface to the native C++ plasmoid, if implemented
@@ -420,7 +420,7 @@ public:
     void setHideOnWindowDeactivate(bool hide);
 
     QKeySequence globalShortcut() const;
-    void setGlobalShortcut(const QKeySequence &keySequence);
+    void setGlobalShortcut(const QKeySequence &keySequence = QKeySequence());
 
     QObject *nativeInterface();
 
