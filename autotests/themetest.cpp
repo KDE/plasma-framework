@@ -5,6 +5,7 @@
 */
 
 #include "themetest.h"
+#include "../src/plasma/private/svg_p.h"
 #include <QStandardPaths>
 #include <QApplication>
 #include <QSignalSpy>
@@ -18,8 +19,23 @@
 #include <KSelectionOwner>
 #endif
 
-#define QLSEP QLatin1Char('_')
-#define CACHE_ID_WITH_SIZE(size, id, state, devicePixelRatio) QString::number(int(size.width())) % QLSEP % QString::number(int(size.height())) % QLSEP % id % QLSEP % QString::number(state) % QLSEP % QString::number(int(devicePixelRatio))
+QString cacheIdHash(const Plasma::SvgPrivate::CacheId &id)
+{
+    static const uint seed = 0x9e3779b9;
+    std::array<uint, 10> parts = {
+        ::qHash(id.width),
+        ::qHash(id.height),
+        ::qHash(id.elementName),
+        ::qHash(id.filePath),
+        ::qHash(id.status),
+        ::qHash(id.devicePixelRatio),
+        ::qHash(id.scaleFactor),
+        ::qHash(id.colorGroup),
+        ::qHash(id.extraFlags),
+        ::qHash(id.lastModified)
+    };
+    return QString::number(qHashRange(parts.begin(), parts.end(), seed));
+}
 
 void ThemeTest::initTestCase()
 {
@@ -73,9 +89,9 @@ void ThemeTest::loadSvgIcon()
 
     m_svg->pixmap(); //trigger the SVG being loaded
 
-    QString cacheId = CACHE_ID_WITH_SIZE(QSize(48, 48), iconPath, Plasma::Svg::Normal, m_svg->devicePixelRatio()) % QLSEP % QString::number(m_svg->colorGroup());
-
     QFileInfo info(iconPath);
+
+    QString cacheId = cacheIdHash(Plasma::SvgPrivate::CacheId{48, 48, iconPath, QString(), m_svg->status(), m_svg->devicePixelRatio(), m_svg->scaleFactor(), m_svg->colorGroup(), 0, info.lastModified().toSecsSinceEpoch()});
 
     QPixmap result;
     QVERIFY(m_svg->theme()->findInCache(cacheId, result, info.lastModified().toSecsSinceEpoch()));
