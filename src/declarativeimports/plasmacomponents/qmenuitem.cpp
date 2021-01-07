@@ -47,6 +47,17 @@ void QMenuItem::setAction(QAction *a)
         connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
         connect(m_action, &QAction::toggled, this, &QMenuItem::toggled);
         connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
+        // HACK QMenuItem doesn't delete other people's QAction (see m_action->parent() check above)
+        // but it does not take kindly to the QAction being deleted under it
+        // as a workaround for crashing when this happens, replace it by a dummy action again
+        // TODO this entire ownership handling in QMenu(Item) needs to be refactored...
+        connect(m_action, &QObject::destroyed, this, [this] {
+            if (m_action->parent() != this) {
+                m_action = new QAction(this);
+                m_action->setVisible(false);
+                emit actionChanged();
+            }
+        });
 
         connect(this, &QQuickItem::visibleChanged, this, &QMenuItem::updateAction);
         connect(this, &QQuickItem::enabledChanged, this, &QMenuItem::updateAction);
