@@ -18,6 +18,7 @@
 #if HAVE_X11
 #include <KSelectionOwner>
 #endif
+#include <array>
 
 QString cacheIdHash(const Plasma::SvgPrivate::CacheId &id)
 {
