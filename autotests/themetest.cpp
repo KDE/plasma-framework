@@ -92,7 +92,7 @@ void ThemeTest::loadSvgIcon()
 
     QFileInfo info(iconPath);
 
-    QString cacheId = cacheIdHash(Plasma::SvgPrivate::CacheId{48, 48, iconPath, QString(), m_svg->status(), m_svg->devicePixelRatio(), m_svg->scaleFactor(), m_svg->colorGroup(), 0, info.lastModified().toSecsSinceEpoch()});
+    QString cacheId = cacheIdHash(Plasma::SvgPrivate::CacheId{48, 48, iconPath, QString(), m_svg->status(), m_svg->devicePixelRatio(), m_svg->scaleFactor(), m_svg->colorGroup(), 0, static_cast<uint>(info.lastModified().toSecsSinceEpoch())});
 
     QPixmap result;
     QVERIFY(m_svg->theme()->findInCache(cacheId, result, info.lastModified().toSecsSinceEpoch()));
