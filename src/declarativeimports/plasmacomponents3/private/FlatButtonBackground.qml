@@ -44,7 +44,6 @@ Item {
          */
         // The fallback is "normal" to match PC2 behavior. Some 3rd party themes depend on this.
         prefix: ["toolbutton-hover", "normal"]
-        opacity: 0
     }
 
     PlasmaCore.FrameSvgItem {
@@ -78,7 +77,7 @@ Item {
             }
             PropertyChanges {
                 target: surfaceHover
-                opacity: 0
+                visible: false
             }
             PropertyChanges {
                 target: surfacePressed
@@ -97,7 +96,7 @@ Item {
             }
             PropertyChanges {
                 target: surfaceHover
-                opacity: 1
+                visible: true
             }
             PropertyChanges {
                 target: surfacePressed
@@ -116,7 +115,7 @@ Item {
             }
             PropertyChanges {
                 target: surfaceHover
-                opacity: 0
+                visible: false
             }
             PropertyChanges {
                 target: surfacePressed
@@ -134,13 +133,18 @@ Item {
             from: "*"
             to: "normal"
             SequentialAnimation {
+                PropertyAction {
+                    targets: [surfaceHover]
+                    property: "visible"
+                    value: false
+                }
                 NumberAnimation {
                     property: "opacity"
                     duration: units.shortDuration
                     easing.type: Easing.OutQuad
                 }
                 PropertyAction {
-                    targets: [surfaceHover, surfacePressed]
+                    targets: [surfacePressed]
                     property: "visible"
                     value: false
                 }
