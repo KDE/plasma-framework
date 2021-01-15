@@ -26,6 +26,7 @@
 
 #include <packageurlinterceptor.h>
 #include <private/package_p.h>
+#include <qloggingcategory.h>
 
 namespace PlasmaQuick
 {
@@ -612,6 +613,9 @@ void AppletQuickItem::init()
             reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());
             errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
         }
+
+        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("appletName")];
+        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("errors")];
 
         d->qmlObject->setSource(d->coronaPackage.fileUrl("appleterror"));
         d->qmlObject->completeInitialization();
