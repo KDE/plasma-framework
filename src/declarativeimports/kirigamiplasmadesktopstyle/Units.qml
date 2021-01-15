@@ -9,7 +9,6 @@ import QtQuick.Window 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import QtQuick.Controls 1.4 as QtQuickControls
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
-import org.kde.kirigami 2.4
 
 pragma Singleton
 
@@ -46,12 +45,12 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
-        property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int enormous: Math.floor(128 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1))
+        property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int enormous: Math.floor(128 * devicePixelRatio * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
     }
 
     /**
