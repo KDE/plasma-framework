@@ -191,7 +191,7 @@ void ColorScope::setInherit(bool inherit)
         return;
     }
     m_inherit = inherit;
-    emit inheritChanged();
+    Q_EMIT inheritChanged();
     checkColorGroupChanged();
 }
 

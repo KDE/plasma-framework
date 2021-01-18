@@ -97,7 +97,7 @@ void SignalRelay::checkQueueing()
 {
     //qCDebug(LOG_PLASMA) << m_queued;
     if (m_queued) {
-        emit dataUpdated(dc->objectName(), d->data);
+        Q_EMIT dataUpdated(dc->objectName(), d->data);
         m_queued = false;
         //TODO: should we re-align our timer at this point, to avoid
         //      constant queueing due to more-or-less constant time
@@ -116,7 +116,7 @@ void SignalRelay::checkQueueing()
 
 void SignalRelay::forceImmediateUpdate()
 {
-    emit dataUpdated(dc->objectName(), d->data);
+    Q_EMIT dataUpdated(dc->objectName(), d->data);
 }
 
 void SignalRelay::timerEvent(QTimerEvent *event)
@@ -136,10 +136,10 @@ void SignalRelay::timerEvent(QTimerEvent *event)
         checkAlignment();
     }
 
-    emit dc->updateRequested(dc);
+    Q_EMIT dc->updateRequested(dc);
     if (d->hasUpdates()) {
         //qCDebug(LOG_PLASMA) << "emitting data updated directly" << d->data;
-        emit dataUpdated(dc->objectName(), d->data);
+        Q_EMIT dataUpdated(dc->objectName(), d->data);
         m_queued = false;
     } else {
         // the source wasn't actually updated; so let's put ourselves in the queue

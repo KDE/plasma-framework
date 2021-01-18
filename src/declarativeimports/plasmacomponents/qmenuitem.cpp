@@ -55,7 +55,7 @@ void QMenuItem::setAction(QAction *a)
             if (m_action->parent() != this) {
                 m_action = new QAction(this);
                 m_action->setVisible(false);
-                emit actionChanged();
+                Q_EMIT actionChanged();
             }
         });
 
@@ -63,7 +63,7 @@ void QMenuItem::setAction(QAction *a)
         connect(this, &QQuickItem::enabledChanged, this, &QMenuItem::updateAction);
         connect(this, &QObject::destroyed, this, &QMenuItem::deleteLater);
 
-        emit actionChanged();
+        Q_EMIT actionChanged();
     }
 }
 
@@ -80,7 +80,7 @@ void QMenuItem::setIcon(const QVariant &i)
     } else if (i.canConvert<QString>()) {
         m_action->setIcon(QIcon::fromTheme(i.toString()));
     }
-    emit iconChanged();
+    Q_EMIT iconChanged();
 }
 
 bool QMenuItem::separator() const

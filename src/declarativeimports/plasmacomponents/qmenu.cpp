@@ -34,7 +34,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
         connect(m_menu, &QMenu::aboutToHide, this, [ = ]() {
                 m_status = DialogStatus::Closed;
-                emit statusChanged();
+                Q_EMIT statusChanged();
         });
     }
 }
@@ -105,7 +105,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
     }
 
     m_visualParent = parent;
-    emit visualParentChanged();
+    Q_EMIT visualParentChanged();
 }
 
 QWindow *QMenuProxy::transientParent()
@@ -123,7 +123,7 @@ void QMenuProxy::setTransientParent(QWindow *parent)
     }
 
     m_menu->windowHandle()->setTransientParent(parent);
-    emit transientParentChanged();
+    Q_EMIT transientParentChanged();
 }
 
 Plasma::Types::PopupPlacement QMenuProxy::placement() const
@@ -136,7 +136,7 @@ void QMenuProxy::setPlacement(Plasma::Types::PopupPlacement placement)
     if (m_placement != placement) {
         m_placement = placement;
 
-        emit placementChanged();
+        Q_EMIT placementChanged();
     }
 }
 
@@ -150,7 +150,7 @@ void QMenuProxy::setMinimumWidth(int width)
     if (m_menu->minimumWidth() != width) {
         m_menu->setMinimumWidth(width);
 
-        emit minimumWidthChanged();
+        Q_EMIT minimumWidthChanged();
     }
 }
 
@@ -164,7 +164,7 @@ void QMenuProxy::setMaximumWidth(int width)
     if (m_menu->maximumWidth() != width) {
         m_menu->setMaximumWidth(width);
 
-        emit maximumWidthChanged();
+        Q_EMIT maximumWidthChanged();
     }
 }
 
@@ -271,8 +271,8 @@ void QMenuProxy::itemTriggered(QAction *action)
     for (int i = 0; i < m_items.count(); ++i) {
         QMenuItem *item = m_items.at(i);
         if (item->action() == action) {
-            emit triggered(item);
-            emit triggeredIndex(i);
+            Q_EMIT triggered(item);
+            Q_EMIT triggeredIndex(i);
             break;
         }
 
@@ -453,7 +453,7 @@ void QMenuProxy::openInternal(QPoint pos)
 
     m_menu->popup(pos);
     m_status = DialogStatus::Open;
-    emit statusChanged();
+    Q_EMIT statusChanged();
 }
 
 QQuickItem *QMenuProxy::parentItem() const

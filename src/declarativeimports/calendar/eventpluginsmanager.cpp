@@ -105,7 +105,7 @@ public:
             m_manager->m_enabledPlugins.removeOne(pluginPath);
         }
 
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
 
         return true;
     }

@@ -47,8 +47,8 @@ void SvgItem::setElementId(const QString &elementID)
     }
 
     m_elementID = elementID;
-    emit elementIdChanged();
-    emit naturalSizeChanged();
+    Q_EMIT elementIdChanged();
+    Q_EMIT naturalSizeChanged();
 
     scheduleImageUpdate();
 }
@@ -92,8 +92,8 @@ void SvgItem::setSvg(Plasma::Svg *svg)
 
     scheduleImageUpdate();
 
-    emit svgChanged();
-    emit naturalSizeChanged();
+    Q_EMIT svgChanged();
+    Q_EMIT naturalSizeChanged();
 }
 
 Plasma::Svg *SvgItem::svg() const

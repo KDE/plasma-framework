@@ -92,7 +92,7 @@ void DaysModel::update()
     }
 
     // We always have 42 items (or weeks * num of days in week) so we only have to tell the view that the data changed.
-    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0));
+    Q_EMIT dataChanged(index(0, 0), index(m_data->count() - 1, 0));
 }
 
 void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data)
@@ -105,7 +105,7 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
     }
 
     // only the containsEventItems roles may have changed
-    emit dataChanged(index(0, 0), index(m_data->count() - 1, 0),
+    Q_EMIT dataChanged(index(0, 0), index(m_data->count() - 1, 0),
                      {containsEventItems, containsMajorEventItems, containsMinorEventItems});
 
     Q_EMIT agendaUpdated(QDate::currentDate());

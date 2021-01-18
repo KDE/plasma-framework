@@ -485,7 +485,7 @@ void IconItemTest::implicitSize()
     KIconLoader::global()->reconfigure(QString());
     // merely changing the setting and calling reconfigure won't emit this signal,
     // the KCM uses a method "newIconLoader" method which does that but it's deprecated
-    emit KIconLoader::global()->iconLoaderSettingsChanged();
+    Q_EMIT KIconLoader::global()->iconLoaderSettingsChanged();
 
     QCOMPARE(widthSpy.count(), 1);
     QCOMPARE(heightSpy.count(), 1);

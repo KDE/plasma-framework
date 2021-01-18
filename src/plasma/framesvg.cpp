@@ -910,7 +910,7 @@ void FrameSvgPrivate::updateAndSignalSizes()
         return;
     }
     updateSizes(frame);
-    emit q->repaintNeeded();
+    Q_EMIT q->repaintNeeded();
 }
 
 QSizeF FrameSvgPrivate::frameSize(FrameData *frame) const

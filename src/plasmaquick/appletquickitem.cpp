@@ -229,7 +229,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
 
     compactRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
 
-    emit q->compactRepresentationItemChanged(compactRepresentationItem);
+    Q_EMIT q->compactRepresentationItemChanged(compactRepresentationItem);
 
     return compactRepresentationItem;
 }
@@ -247,14 +247,14 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
     } else {
         fullRepresentation = qmlObject->mainComponent();
         fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->rootObject());
-        emit q->fullRepresentationChanged(fullRepresentation);
+        Q_EMIT q->fullRepresentationChanged(fullRepresentation);
     }
 
     if (!fullRepresentationItem) {
         return nullptr;
     }
 
-    emit q->fullRepresentationItemChanged(fullRepresentationItem);
+    Q_EMIT q->fullRepresentationItemChanged(fullRepresentationItem);
 
     return fullRepresentationItem;
 }
@@ -382,7 +382,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             currentRepresentationItem = item;
             connectLayoutAttached(item);
             expanded = true;
-            emit q->expandedChanged(true);
+            Q_EMIT q->expandedChanged(true);
         }
 
         //Icon
@@ -414,7 +414,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             connectLayoutAttached(compactItem);
 
             expanded = false;
-            emit q->expandedChanged(false);
+            Q_EMIT q->expandedChanged(false);
         }
     }
 }
@@ -658,14 +658,14 @@ void AppletQuickItem::init()
         d->fullRepresentation = d->qmlObject->mainComponent();
         d->fullRepresentationItem = qobject_cast<QQuickItem*>(d->qmlObject->rootObject());
 
-        emit fullRepresentationChanged(d->fullRepresentation);
+        Q_EMIT fullRepresentationChanged(d->fullRepresentation);
     }
 
     //default compactRepresentation is a simple icon provided by the shell package
     if (!d->compactRepresentation) {
         d->compactRepresentation = new QQmlComponent(engine, this);
         d->compactRepresentation->loadUrl(d->coronaPackage.fileUrl("defaultcompactrepresentation"));
-        emit compactRepresentationChanged(d->compactRepresentation);
+        Q_EMIT compactRepresentationChanged(d->compactRepresentation);
     }
 
     //default compactRepresentationExpander is the popup in which fullRepresentation goes
@@ -752,7 +752,7 @@ void AppletQuickItem::setSwitchWidth(int width)
 
     d->switchWidth = width;
     d->compactRepresentationCheck();
-    emit switchWidthChanged(width);
+    Q_EMIT switchWidthChanged(width);
 }
 
 int AppletQuickItem::switchHeight() const
@@ -768,7 +768,7 @@ void AppletQuickItem::setSwitchHeight(int height)
 
     d->switchHeight = height;
     d->compactRepresentationCheck();
-    emit switchHeightChanged(height);
+    Q_EMIT switchHeightChanged(height);
 }
 
 QQmlComponent *AppletQuickItem::compactRepresentation()
@@ -783,7 +783,7 @@ void AppletQuickItem::setCompactRepresentation(QQmlComponent *component)
     }
 
     d->compactRepresentation = component;
-    emit compactRepresentationChanged(component);
+    Q_EMIT compactRepresentationChanged(component);
 }
 
 QQmlComponent *AppletQuickItem::fullRepresentation()
@@ -815,7 +815,7 @@ void AppletQuickItem::setFullRepresentation(QQmlComponent *component)
     }
 
     d->fullRepresentation = component;
-    emit fullRepresentationChanged(component);
+    Q_EMIT fullRepresentationChanged(component);
 }
 
 QQmlComponent *AppletQuickItem::preferredRepresentation()
@@ -830,7 +830,7 @@ void AppletQuickItem::setPreferredRepresentation(QQmlComponent *component)
     }
 
     d->preferredRepresentation = component;
-    emit preferredRepresentationChanged(component);
+    Q_EMIT preferredRepresentationChanged(component);
     d->compactRepresentationCheck();
 }
 
@@ -856,7 +856,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     d->expanded = expanded;
-    emit expandedChanged(expanded);
+    Q_EMIT expandedChanged(expanded);
 }
 
 bool AppletQuickItem::isActivationTogglesExpanded() const
@@ -870,7 +870,7 @@ void AppletQuickItem::setActivationTogglesExpanded(bool activationTogglesExpande
         return;
     }
     d->activationTogglesExpanded = activationTogglesExpanded;
-    emit activationTogglesExpandedChanged(activationTogglesExpanded);
+    Q_EMIT activationTogglesExpandedChanged(activationTogglesExpanded);
 }
 
 ////////////Internals

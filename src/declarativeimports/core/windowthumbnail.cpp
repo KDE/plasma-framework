@@ -281,7 +281,7 @@ void WindowThumbnail::setWinId(uint32_t winId)
         startRedirecting();
     }
 
-    emit winIdChanged();
+    Q_EMIT winIdChanged();
 }
 
 qreal WindowThumbnail::paintedWidth() const
@@ -316,7 +316,7 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
     const QSizeF size(node->texture()->textureSize().scaled(boundingRect().size().toSize(), Qt::KeepAspectRatio));
     if (size != m_paintedSize) {
         m_paintedSize = size;
-        emit paintedSizeChanged();
+        Q_EMIT paintedSizeChanged();
     }
     const qreal x = boundingRect().x() + (boundingRect().width() - size.width()) / 2;
     const qreal y = boundingRect().y() + (boundingRect().height() - size.height()) / 2;
@@ -897,7 +897,7 @@ void WindowThumbnail::setThumbnailAvailable(bool thumbnailAvailable)
 {
     if (m_thumbnailAvailable != thumbnailAvailable) {
         m_thumbnailAvailable = thumbnailAvailable;
-        emit thumbnailAvailableChanged();
+        Q_EMIT thumbnailAvailableChanged();
     }
 }
 

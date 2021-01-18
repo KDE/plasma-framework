@@ -103,7 +103,7 @@ void ToolTip::setMainItem(QQuickItem *mainItem)
     if (m_mainItem.data() != mainItem) {
         m_mainItem = mainItem;
 
-        emit mainItemChanged();
+        Q_EMIT mainItemChanged();
 
         if (!isValid() && s_dialog && s_dialog->owner() == this) {
             s_dialog->setVisible(false);
@@ -117,7 +117,7 @@ void ToolTip::showToolTip()
         return;
     }
 
-    emit aboutToShow();
+    Q_EMIT aboutToShow();
 
     ToolTipDialog *dlg = tooltipDialogInstance();
 
@@ -166,7 +166,7 @@ void ToolTip::setMainText(const QString &mainText)
     }
 
     m_mainText = mainText;
-    emit mainTextChanged();
+    Q_EMIT mainTextChanged();
 
     if (!isValid() && s_dialog && s_dialog->owner() == this) {
         s_dialog->setVisible(false);
@@ -185,7 +185,7 @@ void ToolTip::setSubText(const QString &subText)
     }
 
     m_subText = subText;
-    emit subTextChanged();
+    Q_EMIT subTextChanged();
 
     if (!isValid() && s_dialog && s_dialog->owner() == this) {
         s_dialog->setVisible(false);
@@ -204,7 +204,7 @@ void ToolTip::setTextFormat(int format)
     }
 
     m_textFormat = format;
-    emit textFormatChanged();
+    Q_EMIT textFormatChanged();
 }
 
 Plasma::Types::Location ToolTip::location() const
@@ -218,7 +218,7 @@ void ToolTip::setLocation(Plasma::Types::Location location)
         return;
     }
     m_location = location;
-    emit locationChanged();
+    Q_EMIT locationChanged();
 }
 
 void ToolTip::setActive(bool active)
@@ -231,7 +231,7 @@ void ToolTip::setActive(bool active)
     if (!active) {
         tooltipDialogInstance()->dismiss();
     }
-    emit activeChanged();
+    Q_EMIT activeChanged();
 }
 
 void ToolTip::setInteractive(bool interactive)
@@ -242,7 +242,7 @@ void ToolTip::setInteractive(bool interactive)
 
     m_interactive = interactive;
 
-    emit interactiveChanged();
+    Q_EMIT interactiveChanged();
 }
 
 void ToolTip::setTimeout(int timeout)
@@ -272,7 +272,7 @@ void ToolTip::setIcon(const QVariant &icon)
     }
 
     m_icon = icon;
-    emit iconChanged();
+    Q_EMIT iconChanged();
 }
 
 QVariant ToolTip::image() const
@@ -291,7 +291,7 @@ void ToolTip::setImage(const QVariant &image)
     }
 
     m_image = image;
-    emit imageChanged();
+    Q_EMIT imageChanged();
 }
 
 bool ToolTip::containsMouse() const
@@ -303,7 +303,7 @@ void ToolTip::setContainsMouse(bool contains)
 {
     if (m_containsMouse != contains) {
         m_containsMouse = contains;
-        emit containsMouseChanged();
+        Q_EMIT containsMouseChanged();
     }
     if (!contains) {
         tooltipDialogInstance()->dismiss();

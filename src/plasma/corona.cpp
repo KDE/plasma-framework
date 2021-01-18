@@ -68,7 +68,7 @@ Plasma::Package Corona::package() const
 void Corona::setPackage(const Plasma::Package &package)
 {
     setKPackage(*package.d->internalPackage);
-    emit packageChanged(package);
+    Q_EMIT packageChanged(package);
 }
 
 KPackage::Package Corona::kPackage() const
@@ -79,7 +79,7 @@ KPackage::Package Corona::kPackage() const
 void Corona::setKPackage(const KPackage::Package &package)
 {
     d->package = package;
-    emit kPackageChanged(package);
+    Q_EMIT kPackageChanged(package);
 }
 
 void Corona::saveLayout(const QString &configName) const
@@ -344,7 +344,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     d->immutability = immutable;
     d->updateContainmentImmutability();
     //tell non-containments that might care (like plasmaapp or a custom corona)
-    emit immutabilityChanged(immutable);
+    Q_EMIT immutabilityChanged(immutable);
 
     //update our actions
     QAction *action = d->actions.action(QStringLiteral("lock widgets"));
@@ -410,7 +410,7 @@ void Corona::setEditMode(bool edit)
     }
 
     d->editMode = edit;
-    emit editModeChanged(edit);
+    Q_EMIT editModeChanged(edit);
 }
 
 bool Corona::isEditMode() const
@@ -542,7 +542,7 @@ void CoronaPrivate::containmentDestroyed(QObject *obj)
 void CoronaPrivate::syncConfig()
 {
     q->config()->sync();
-    emit q->configSynced();
+    Q_EMIT q->configSynced();
 }
 
 Containment *CoronaPrivate::addContainment(const QString &name, const QVariantList &args, uint id, int lastScreen, bool delayedInit)
@@ -622,10 +622,10 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         containment->save(cg);
         q->requestConfigSync();
         containment->flushPendingConstraintsEvents();
-        emit q->containmentAdded(containment);
+        Q_EMIT q->containmentAdded(containment);
         //if id = 0 a new containment has been created, not restored
         if (id == 0) {
-            emit q->containmentCreated(containment);
+            Q_EMIT q->containmentCreated(containment);
         }
     }
 
@@ -706,7 +706,7 @@ void CoronaPrivate::notifyContainmentsReady()
     }
 
     if (containmentsStarting <= 0) {
-        emit q->startupCompleted();
+        Q_EMIT q->startupCompleted();
     }
 }
 
@@ -717,7 +717,7 @@ void CoronaPrivate::containmentReady(bool ready)
     }
     --containmentsStarting;
     if (containmentsStarting <= 0) {
-        emit q->startupCompleted();
+        Q_EMIT q->startupCompleted();
     }
 }
 

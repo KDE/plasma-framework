@@ -63,7 +63,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
             this, &ContainmentInterface::editModeChanged);
 
     if (!m_appletInterfaces.isEmpty()) {
-        emit appletsChanged();
+        Q_EMIT appletsChanged();
     }
 }
 
@@ -76,7 +76,7 @@ void ContainmentInterface::init()
     m_activityInfo = new KActivities::Info(m_containment->activity(), this);
     connect(m_activityInfo, &KActivities::Info::nameChanged,
             this, &ContainmentInterface::activityNameChanged);
-    emit activityNameChanged();
+    Q_EMIT activityNameChanged();
 
     if (!m_containment->wallpaper().isEmpty()) {
         loadWallpaper();
@@ -147,7 +147,7 @@ void ContainmentInterface::init()
                 m_activityInfo = new KActivities::Info(m_containment->activity(), this);
                 connect(m_activityInfo, &KActivities::Info::nameChanged,
                         this, &ContainmentInterface::activityNameChanged);
-                emit activityNameChanged();
+                Q_EMIT activityNameChanged();
             });
     connect(m_containment.data(), &Plasma::Containment::wallpaperChanged,
             this, &ContainmentInterface::loadWallpaper);
@@ -198,8 +198,8 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
 
         blockSignals(false);
 
-        emit appletAdded(appletGraphicObject, geom.x(), geom.y());
-        emit appletsChanged();
+        Q_EMIT appletAdded(appletGraphicObject, geom.x(), geom.y());
+        Q_EMIT appletsChanged();
     } else {
         blockSignals(false);
     }
@@ -214,7 +214,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
 
     AppletInterface *appletInterface = applet->property("_plasma_graphicObject").value<AppletInterface *>();
     if (appletInterface) {
-        emit appletInterface->externalData(mimetype, data);
+        Q_EMIT appletInterface->externalData(mimetype, data);
     }
 }
 
@@ -251,7 +251,7 @@ void ContainmentInterface::addApplet(AppletInterface *applet, int x, int y)
     blockSignals(true);
     m_containment->addApplet(applet->applet());
     blockSignals(false);
-    emit appletAdded(applet, x, y);
+    Q_EMIT appletAdded(applet, x, y);
 }
 
 QPointF ContainmentInterface::mapFromApplet(AppletInterface *applet, int x, int y)
@@ -757,8 +757,8 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
             [this](QObject *obj) {
                 m_appletInterfaces.removeAll(obj);
             });
-    emit appletAdded(appletGraphicObject, appletGraphicObject->m_positionBeforeRemoval.x(), appletGraphicObject->m_positionBeforeRemoval.y());
-    emit appletsChanged();
+    Q_EMIT appletAdded(appletGraphicObject, appletGraphicObject->m_positionBeforeRemoval.x(), appletGraphicObject->m_positionBeforeRemoval.y());
+    Q_EMIT appletsChanged();
 }
 
 void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
@@ -768,8 +768,8 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
         m_appletInterfaces.removeAll(appletGraphicObject);
         appletGraphicObject->m_positionBeforeRemoval = appletGraphicObject->mapToItem(this, QPointF());
     }
-    emit appletRemoved(appletGraphicObject);
-    emit appletsChanged();
+    Q_EMIT appletRemoved(appletGraphicObject);
+    Q_EMIT appletsChanged();
 }
 
 void ContainmentInterface::loadWallpaper()
@@ -938,10 +938,10 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     m_contextMenu = desktopMenu;
 
-    emit m_containment->contextualActionsAboutToShow();
+    Q_EMIT m_containment->contextualActionsAboutToShow();
 
     if (applet) {
-        emit applet->contextualActionsAboutToShow();
+        Q_EMIT applet->contextualActionsAboutToShow();
         addAppletActions(desktopMenu, applet, event);
     } else {
         addContainmentActions(desktopMenu, event);

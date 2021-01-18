@@ -71,7 +71,7 @@ void Application::setApplication(const QString &application)
 
     d->application = application;
 
-    emit applicationChanged(application);
+    Q_EMIT applicationChanged(application);
 
     if (d->running) {
         start();

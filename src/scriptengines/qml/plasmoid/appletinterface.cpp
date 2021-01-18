@@ -67,7 +67,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
     connect(applet(), &Plasma::Applet::titleChanged,
             this, [this]() {
                 if (m_toolTipMainText.isNull()) {
-                    emit toolTipMainTextChanged();
+                    Q_EMIT toolTipMainTextChanged();
                 }
             });
 
@@ -88,8 +88,8 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
             [this](bool configurationRequired, const QString &reason) {
         Q_UNUSED(configurationRequired);
         Q_UNUSED(reason);
-        emit configurationRequiredChanged();
-        emit configurationRequiredReasonChanged();
+        Q_EMIT configurationRequiredChanged();
+        Q_EMIT configurationRequiredReasonChanged();
     });
 
     connect(applet(), &Plasma::Applet::activated,
@@ -114,7 +114,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
         connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
             if (id == applet()->containment()->screen()) {
-                emit screenGeometryChanged();
+                Q_EMIT screenGeometryChanged();
             }
         });
 
@@ -160,7 +160,7 @@ void AppletInterface::init()
     AppletQuickItem::init();
 
     geometryChanged(QRectF(), QRectF(x(), y(), width(), height()));
-    emit busyChanged();
+    Q_EMIT busyChanged();
 
     updateUiReadyConstraint();
 
@@ -182,9 +182,9 @@ void AppletInterface::init()
     });
 
     if (m_args.count() == 1) {
-        emit externalData(QString(), m_args.first());
+        Q_EMIT externalData(QString(), m_args.first());
     } else if (!m_args.isEmpty()) {
-        emit externalData(QString(), m_args);
+        Q_EMIT externalData(QString(), m_args);
     }
 }
 
@@ -311,7 +311,7 @@ void AppletInterface::setToolTipMainText(const QString &text)
         m_toolTipMainText = text;
     }
 
-    emit toolTipMainTextChanged();
+    Q_EMIT toolTipMainTextChanged();
 }
 
 QString AppletInterface::toolTipSubText() const
@@ -336,7 +336,7 @@ void AppletInterface::setToolTipSubText(const QString &text)
         m_toolTipSubText = text;
     }
 
-    emit toolTipSubTextChanged();
+    Q_EMIT toolTipSubTextChanged();
 }
 
 int AppletInterface::toolTipTextFormat() const
@@ -351,7 +351,7 @@ void AppletInterface::setToolTipTextFormat(int format)
     }
 
     m_toolTipTextFormat = format;
-    emit toolTipTextFormatChanged();
+    Q_EMIT toolTipTextFormatChanged();
 }
 
 QQuickItem *AppletInterface::toolTipItem() const
@@ -369,7 +369,7 @@ void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
     connect(m_toolTipItem.data(), &QObject::destroyed,
             this, &AppletInterface::toolTipItemChanged);
 
-    emit toolTipItemChanged();
+    Q_EMIT toolTipItemChanged();
 }
 
 bool AppletInterface::isBusy() const
@@ -582,7 +582,7 @@ void AppletInterface::setAssociatedApplication(const QString &string)
     }
 
     applet()->setAssociatedApplication(string);
-    emit associatedApplicationChanged();
+    Q_EMIT associatedApplicationChanged();
 }
 
 QString AppletInterface::associatedApplication() const
@@ -597,7 +597,7 @@ void AppletInterface::setAssociatedApplicationUrls(const QList<QUrl> &urls)
     }
 
     applet()->setAssociatedApplicationUrls(urls);
-    emit associatedApplicationUrlsChanged();
+    Q_EMIT associatedApplicationUrlsChanged();
 }
 
 QList<QUrl> AppletInterface::associatedApplicationUrls() const
@@ -636,7 +636,7 @@ void AppletInterface::setHideOnWindowDeactivate(bool hide)
 {
     if (m_hideOnDeactivate != hide) {
         m_hideOnDeactivate = hide;
-        emit hideOnWindowDeactivateChanged();
+        Q_EMIT hideOnWindowDeactivateChanged();
     }
 }
 
@@ -848,7 +848,7 @@ bool AppletInterface::event(QEvent *event)
 
 void AppletInterface::prepareContextualActions()
 {
-    emit applet()->contextualActionsAboutToShow();
+    Q_EMIT applet()->contextualActionsAboutToShow();
 }
 
 bool AppletInterface::eventFilter(QObject *watched, QEvent *event)

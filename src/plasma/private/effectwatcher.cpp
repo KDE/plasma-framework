@@ -67,7 +67,7 @@ bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message
         bool nowEffectActive = isEffectActive();
         if (m_effectActive != nowEffectActive) {
             m_effectActive = nowEffectActive;
-            emit effectChanged(m_effectActive);
+            Q_EMIT effectChanged(m_effectActive);
         }
     }
     return false;

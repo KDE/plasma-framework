@@ -145,10 +145,10 @@ void QRangeModelPrivate::emitValueAndPositionIfChanged(const qreal oldValue, con
     const qreal newValue = q->value();
     const qreal newPosition = q->position();
     if (!qFuzzyCompare(newValue, oldValue)) {
-        emit q->valueChanged(newValue);
+        Q_EMIT q->valueChanged(newValue);
     }
     if (!qFuzzyCompare(newPosition, oldPosition)) {
-        emit q->positionChanged(newPosition);
+        Q_EMIT q->positionChanged(newPosition);
     }
 }
 
@@ -215,10 +215,10 @@ void QRangeModel::setPositionRange(qreal min, qreal max)
     d->pos = d->equivalentPosition(d->value);
 
     if (emitPosAtMinChanged) {
-        emit positionAtMinimumChanged(d->posatmin);
+        Q_EMIT positionAtMinimumChanged(d->posatmin);
     }
     if (emitPosAtMaxChanged) {
-        emit positionAtMaximumChanged(d->posatmax);
+        Q_EMIT positionAtMaximumChanged(d->posatmax);
     }
 
     d->emitValueAndPositionIfChanged(value(), oldPosition);
@@ -250,10 +250,10 @@ void QRangeModel::setRange(qreal min, qreal max)
     d->pos = d->equivalentPosition(d->value);
 
     if (emitMinimumChanged) {
-        emit minimumChanged(d->minimum);
+        Q_EMIT minimumChanged(d->minimum);
     }
     if (emitMaximumChanged) {
-        emit maximumChanged(d->maximum);
+        Q_EMIT maximumChanged(d->maximum);
     }
 
     d->emitValueAndPositionIfChanged(oldValue, oldPosition);
@@ -320,7 +320,7 @@ void QRangeModel::setStepSize(qreal stepSize)
     const qreal oldPosition = position();
     d->stepSize = stepSize;
 
-    emit stepSizeChanged(d->stepSize);
+    Q_EMIT stepSizeChanged(d->stepSize);
     d->emitValueAndPositionIfChanged(oldValue, oldPosition);
 }
 
@@ -485,7 +485,7 @@ void QRangeModel::setInverted(bool inverted)
     }
 
     d->inverted = inverted;
-    emit invertedChanged(d->inverted);
+    Q_EMIT invertedChanged(d->inverted);
 
     // After updating the internal value, the position property can change.
     setPosition(d->equivalentPosition(d->value));

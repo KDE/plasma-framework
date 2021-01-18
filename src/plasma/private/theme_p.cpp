@@ -366,7 +366,7 @@ void ThemePrivate::colorsChanged()
     tooltipColorScheme = KColorScheme(QPalette::Active, KColorScheme::Tooltip, colors);
     palette = KColorScheme::createApplicationPalette(colors);
     scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
-    emit applicationPaletteChange();
+    Q_EMIT applicationPaletteChange();
 }
 
 void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
@@ -380,7 +380,7 @@ void ThemePrivate::notifyOfChanged()
     //qCDebug(LOG_PLASMA) << cachesToDiscard;
     discardCache(cachesToDiscard);
     cachesToDiscard = NoCache;
-    emit themeChanged();
+    Q_EMIT themeChanged();
 }
 
 const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::Status status)

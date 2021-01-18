@@ -173,8 +173,8 @@ void WallpaperInterface::loadFinished()
         qWarning() << "Error loading the wallpaper, package not found";
     }
 
-    emit packageChanged();
-    emit configurationChanged();
+    Q_EMIT packageChanged();
+    Q_EMIT configurationChanged();
 }
 
 QList<QAction *> WallpaperInterface::contextualActions() const

@@ -86,15 +86,15 @@ QString DeclarativeAppletScript::filePath(const QString &type, const QString &fi
 void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)
 {
     if (constraints & Plasma::Types::FormFactorConstraint) {
-        emit formFactorChanged();
+        Q_EMIT formFactorChanged();
     }
 
     if (constraints & Plasma::Types::LocationConstraint) {
-        emit locationChanged();
+        Q_EMIT locationChanged();
     }
 
     if (constraints & Plasma::Types::ContextConstraint) {
-        emit contextChanged();
+        Q_EMIT contextChanged();
     }
 }
 

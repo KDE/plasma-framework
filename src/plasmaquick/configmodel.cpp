@@ -117,7 +117,7 @@ void ConfigModelPrivate::clear()
         categories.pop_front();
     }
     q->endResetModel();
-    emit q->countChanged();
+    Q_EMIT q->countChanged();
 }
 
 void ConfigModelPrivate::appendCategory(ConfigCategory *c)
@@ -133,7 +133,7 @@ void ConfigModelPrivate::appendCategory(ConfigCategory *c)
         const int row = categories.indexOf(c);
         if (row > -1) {
             QModelIndex modelIndex = q->index(row);
-            emit q->dataChanged(modelIndex, modelIndex);
+            Q_EMIT q->dataChanged(modelIndex, modelIndex);
         }
     };
 
@@ -144,7 +144,7 @@ void ConfigModelPrivate::appendCategory(ConfigCategory *c)
     QObject::connect(c, &ConfigCategory::visibleChanged, q, emitChange);
 
     q->endInsertRows();
-    emit q->countChanged();
+    Q_EMIT q->countChanged();
 }
 
 void ConfigModelPrivate::removeCategory(ConfigCategory *c)
@@ -169,7 +169,7 @@ void ConfigModelPrivate::removeCategoryAt(int index)
     }
 
     q->endRemoveRows();
-    emit q->countChanged();
+    Q_EMIT q->countChanged();
 }
 
 QVariant ConfigModelPrivate::get(int row) const

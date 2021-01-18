@@ -129,7 +129,7 @@ void Service::setName(const QString &name)
 
     registerOperationsScheme();
 
-    emit serviceReady(this);
+    Q_EMIT serviceReady(this);
 }
 
 void Service::setOperationEnabled(const QString &operation, bool enable)
@@ -144,7 +144,7 @@ void Service::setOperationEnabled(const QString &operation, bool enable)
         d->disabledOperations.insert(operation);
     }
 
-    emit operationEnabledChanged(operation, enable);
+    Q_EMIT operationEnabledChanged(operation, enable);
 }
 
 bool Service::isOperationEnabled(const QString &operation) const

@@ -172,7 +172,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         q->actions()->addAction(QStringLiteral("alternatives"), a);
         QObject::connect(a, &QAction::triggered, q, [this] {
             if (q->containment()) {
-                emit q->containment()->appletAlternativesRequested(q);
+                Q_EMIT q->containment()->appletAlternativesRequested(q);
             }
         });
 
@@ -219,7 +219,7 @@ void AppletPrivate::cleanUpAndDelete()
     if (q->isContainment()) {
         // prematurely emit our destruction if we are a Containment,
         // giving Corona a chance to remove this Containment from its collection
-        emit q->QObject::destroyed(q);
+        Q_EMIT q->QObject::destroyed(q);
     }
 
     q->deleteLater();
@@ -228,9 +228,9 @@ void AppletPrivate::cleanUpAndDelete()
 void AppletPrivate::setDestroyed(bool destroyed)
 {
     transient = destroyed;
-    emit q->destroyedChanged(destroyed);
+    Q_EMIT q->destroyedChanged(destroyed);
     //when an applet gets transient, it's "systemimmutable"
-    emit q->immutabilityChanged(q->immutability());
+    Q_EMIT q->immutabilityChanged(q->immutability());
 
     Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
     if (asContainment) {
@@ -282,9 +282,9 @@ void AppletPrivate::askDestroy()
                     if (!q->isContainment() && q->containment()) {
                         Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
                         if (containmentApplet && containmentApplet->d->deleteNotificationTimer) {
-                            emit containmentApplet->destroyedChanged(false);
+                            Q_EMIT containmentApplet->destroyedChanged(false);
                             //when an applet gets transient, it's "systemimmutable"
-                            emit q->immutabilityChanged(q->immutability());
+                            Q_EMIT q->immutabilityChanged(q->immutability());
                             delete containmentApplet->d->deleteNotificationTimer;
                             containmentApplet->d->deleteNotificationTimer = nullptr;
                         }
@@ -294,7 +294,7 @@ void AppletPrivate::askDestroy()
                             return a1->id() < a2->id();
                         });
                         q->containment()->d->applets.insert(position, q);
-                        emit q->containment()->appletAdded(q);
+                        Q_EMIT q->containment()->appletAdded(q);
                     }
                     if (deleteNotification) {
                         deleteNotification->close();
@@ -329,7 +329,7 @@ void AppletPrivate::askDestroy()
                     if (deleteNotification) {
                         deleteNotification->close();
                     } else {
-                        emit q->destroyedChanged(true);
+                        Q_EMIT q->destroyedChanged(true);
                         cleanUpAndDelete();
                     }
                 });
@@ -337,7 +337,7 @@ void AppletPrivate::askDestroy()
         }
         if (!q->isContainment() && q->containment()) {
             q->containment()->d->applets.removeAll(q);
-            emit q->containment()->appletRemoved(q);
+            Q_EMIT q->containment()->appletRemoved(q);
         }
     }
 }
@@ -391,7 +391,7 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
 void AppletPrivate::requestConfiguration()
 {
     if (q->containment()) {
-        emit q->containment()->configureRequested(q);
+        Q_EMIT q->containment()->configureRequested(q);
     }
 }
 

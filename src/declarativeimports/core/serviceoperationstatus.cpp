@@ -32,7 +32,7 @@ void ServiceOperationStatus::setService(Plasma::Service *service)
 
     m_service = service;
     updateStatus();
-    emit serviceChanged();
+    Q_EMIT serviceChanged();
 }
 
 Plasma::Service *ServiceOperationStatus::service() const
@@ -48,7 +48,7 @@ void ServiceOperationStatus::setOperation(const QString &operation)
 
     m_operation = operation;
     updateStatus();
-    emit operationChanged();
+    Q_EMIT operationChanged();
 }
 
 QString ServiceOperationStatus::operation() const
@@ -64,7 +64,7 @@ void ServiceOperationStatus::setEnabled(bool enabled)
 
     m_enabled = enabled;
     updateStatus();
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 }
 
 bool ServiceOperationStatus::isEnabled() const
@@ -81,7 +81,7 @@ void ServiceOperationStatus::updateStatus()
     bool enabled = m_service.data()->isOperationEnabled(m_operation);
     if (enabled != m_enabled) {
         m_enabled = enabled;
-        emit enabledChanged();
+        Q_EMIT enabledChanged();
     }
 }
 

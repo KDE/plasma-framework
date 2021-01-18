@@ -113,7 +113,7 @@ void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 
 void ContainmentPrivate::triggerShowAddWidgets()
 {
-    emit q->showAddWidgetsInterface(QPointF());
+    Q_EMIT q->showAddWidgetsInterface(QPointF());
 }
 
 void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints constraints)
@@ -202,8 +202,8 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 {
     applets.removeAll(applet);
 
-    emit q->appletRemoved(applet);
-    emit q->configNeedsSaving();
+    Q_EMIT q->appletRemoved(applet);
+    Q_EMIT q->configNeedsSaving();
 }
 
 bool ContainmentPrivate::isPanelContainment() const
@@ -217,7 +217,7 @@ void ContainmentPrivate::setStarted()
         q->Applet::d->started = true;
 
         if (uiReady) {
-            emit q->uiReadyChanged(true);
+            Q_EMIT q->uiReadyChanged(true);
         }
     }
 }
@@ -228,7 +228,7 @@ void ContainmentPrivate::setUiReady()
     if (!uiReady) {
         uiReady = true;
         if (q->Applet::d->started && (appletsUiReady || applets.isEmpty()) && loadingApplets.isEmpty()) {
-            emit q->uiReadyChanged(true);
+            Q_EMIT q->uiReadyChanged(true);
         }
     }
 }
@@ -240,7 +240,7 @@ void ContainmentPrivate::appletLoaded(Applet* applet)
     if (loadingApplets.isEmpty() && !appletsUiReady) {
         appletsUiReady = true;
         if (q->Applet::d->started && uiReady) {
-            emit q->uiReadyChanged(true);
+            Q_EMIT q->uiReadyChanged(true);
         }
     }
 }

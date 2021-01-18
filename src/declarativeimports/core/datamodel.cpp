@@ -79,7 +79,7 @@ void SortFilterModel::setModel(QAbstractItemModel *model)
         syncRoleNames();
     }
 
-    emit sourceModelChanged(model);
+    Q_EMIT sourceModelChanged(model);
 }
 
 bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
@@ -189,7 +189,7 @@ void SortFilterModel::setSortColumn(int column)
         return;
     }
     sort(column, sortOrder());
-    emit sortColumnChanged();
+    Q_EMIT sortColumnChanged();
 }
 
 QVariantMap SortFilterModel::get(int row) const
@@ -434,7 +434,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     } else if (delta < 0) {
         endRemoveRows();
     }
-    emit dataChanged(createIndex(sourceIndex, 0),
+    Q_EMIT dataChanged(createIndex(sourceIndex, 0),
                      createIndex(sourceIndex + qMin(list.length(), oldLength), 0));
 }
 

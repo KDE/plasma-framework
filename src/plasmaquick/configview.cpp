@@ -321,7 +321,7 @@ void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
     }
 
     d->applet.data()->setGlobalShortcut(shortcut);
-    emit appletGlobalShortcutChanged();
+    Q_EMIT appletGlobalShortcutChanged();
 }
 
 //To emulate Qt::WA_DeleteOnClose that QWindow doesn't have

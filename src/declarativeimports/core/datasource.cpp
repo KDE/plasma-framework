@@ -42,7 +42,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
             if (m_dataEngine) {
                 m_connectedSources.append(source);
                 m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
-                emit sourceConnected(source);
+                Q_EMIT sourceConnected(source);
             }
         }
     }
@@ -53,14 +53,14 @@ void DataSource::setConnectedSources(const QStringList &sources)
             sourcesChanged = true;
             if (m_dataEngine) {
                 m_dataEngine->disconnectSource(source, this);
-                emit sourceDisconnected(source);
+                Q_EMIT sourceDisconnected(source);
             }
         }
     }
 
     if (sourcesChanged) {
         m_connectedSources = sources;
-        emit connectedSourcesChanged();
+        Q_EMIT connectedSourcesChanged();
     }
 }
 
@@ -73,7 +73,7 @@ void DataSource::setEngine(const QString &e)
     m_engine = e;
 
     if (m_engine.isEmpty()) {
-        emit engineChanged();
+        Q_EMIT engineChanged();
         return;
     }
 
@@ -81,7 +81,7 @@ void DataSource::setEngine(const QString &e)
     Plasma::DataEngine *engine = dataEngine(m_engine);
     if (!engine) {
         qWarning() << "DataEngine" << m_engine << "not found";
-        emit engineChanged();
+        Q_EMIT engineChanged();
         return;
     }
 
@@ -112,7 +112,7 @@ void DataSource::setEngine(const QString &e)
 
     updateSources();
 
-    emit engineChanged();
+    Q_EMIT engineChanged();
 }
 
 void DataSource::setInterval(const int interval)
@@ -123,7 +123,7 @@ void DataSource::setInterval(const int interval)
 
     m_interval = interval;
     setupData();
-    emit intervalChanged();
+    Q_EMIT intervalChanged();
 }
 
 void DataSource::setIntervalAlignment(Plasma::Types::IntervalAlignment intervalAlignment)
@@ -134,7 +134,7 @@ void DataSource::setIntervalAlignment(Plasma::Types::IntervalAlignment intervalA
 
     m_intervalAlignment = intervalAlignment;
     setupData();
-    emit intervalAlignmentChanged();
+    Q_EMIT intervalAlignmentChanged();
 }
 
 void DataSource::setupData()
@@ -150,7 +150,7 @@ void DataSource::setupData()
 
     for (const QString &source : qAsConst(m_connectedSources)) {
         m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
-        emit sourceConnected(source);
+        Q_EMIT sourceConnected(source);
     }
 }
 
@@ -159,8 +159,8 @@ void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine
     //it can arrive also data we don't explicitly connected a source
     if (m_connectedSources.contains(sourceName)) {
         m_data->insert(sourceName, data);
-        emit dataChanged();
-        emit newData(sourceName, data);
+        Q_EMIT dataChanged();
+        Q_EMIT newData(sourceName, data);
     } else if (m_dataEngine) {
         m_dataEngine->disconnectSource(sourceName, this);
     }
@@ -188,8 +188,8 @@ void DataSource::removeSource(const QString &source)
     //TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {
         m_connectedSources.removeAll(source);
-        emit sourceDisconnected(source);
-        emit connectedSourcesChanged();
+        Q_EMIT sourceDisconnected(source);
+        Q_EMIT connectedSourcesChanged();
     }
 
     if (m_dataEngine) {
@@ -223,8 +223,8 @@ void DataSource::connectSource(const QString &source)
     m_connectedSources.append(source);
     if (m_dataEngine) {
         m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
-        emit sourceConnected(source);
-        emit connectedSourcesChanged();
+        Q_EMIT sourceConnected(source);
+        Q_EMIT connectedSourcesChanged();
     }
 }
 
@@ -233,8 +233,8 @@ void DataSource::disconnectSource(const QString &source)
     if (m_dataEngine && m_connectedSources.contains(source)) {
         m_connectedSources.removeAll(source);
         m_dataEngine->disconnectSource(source, this);
-        emit sourceDisconnected(source);
-        emit connectedSourcesChanged();
+        Q_EMIT sourceDisconnected(source);
+        Q_EMIT connectedSourcesChanged();
     }
 }
 
@@ -247,7 +247,7 @@ void DataSource::updateSources()
 
     if (sources != m_sources) {
         m_sources = sources;
-        emit sourcesChanged();
+        Q_EMIT sourcesChanged();
     }
 }
 

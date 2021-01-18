@@ -45,12 +45,12 @@ void Calendar::setDisplayedDate(const QDate &dateTime)
     //  m_dayHelper->setDate(m_displayedDate.year(), m_displayedDate.month());
 
     updateData();
-    emit displayedDateChanged();
+    Q_EMIT displayedDateChanged();
     if (oldMonth != m_displayedDate.month()) {
-        emit monthNameChanged();
+        Q_EMIT monthNameChanged();
     }
     if (oldYear != m_displayedDate.year()) {
-        emit yearChanged();
+        Q_EMIT yearChanged();
     }
 }
 
@@ -79,14 +79,14 @@ void Calendar::setToday(const QDateTime &dateTime)
         // if the resetToToday() was called
         updateData();
     }
-    emit todayChanged();
+    Q_EMIT todayChanged();
 }
 
 void Calendar::resetToToday()
 {
     m_displayedDate = m_today;
     updateData();
-    emit displayedDateChanged();
+    Q_EMIT displayedDateChanged();
 }
 
 int Calendar::types() const
@@ -103,7 +103,7 @@ void Calendar::setTypes(int types)
 //    m_types = static_cast<Types>(types);
 //    updateTypes();
 
-    emit typesChanged();
+    Q_EMIT typesChanged();
 }
 
 int Calendar::days()
@@ -116,7 +116,7 @@ void Calendar::setDays(int days)
     if (m_days != days) {
         m_days = days;
         updateData();
-        emit daysChanged();
+        Q_EMIT daysChanged();
     }
 }
 
@@ -130,7 +130,7 @@ void Calendar::setWeeks(int weeks)
     if (m_weeks != weeks) {
         m_weeks = weeks;
         updateData();
-        emit weeksChanged();
+        Q_EMIT weeksChanged();
     }
 }
 
@@ -156,7 +156,7 @@ void Calendar::setFirstDayOfWeek(int day)
         }
 
         updateData();
-        emit firstDayOfWeekChanged();
+        Q_EMIT firstDayOfWeekChanged();
     }
 }
 
@@ -292,7 +292,7 @@ void Calendar::updateData()
         const DayData &data = m_dayList.at(i);
         m_weekList.append(QDate(data.yearNumber, data.monthNumber, data.dayNumber).weekNumber());
     }
-    emit weeksModelChanged();
+    Q_EMIT weeksModelChanged();
     m_daysModel->update();
 
 //    qDebug() << "---------------------------------------------------------------";

@@ -41,7 +41,7 @@ void CalendarData::setStartDate(const QDate &dateTime)
 
     m_startDate = dateTime;
 //   m_filteredList->setStartDate(m_startDate);
-    emit startDateChanged();
+    Q_EMIT startDateChanged();
 }
 
 QDate CalendarData::endDate() const
@@ -57,7 +57,7 @@ void CalendarData::setEndDate(const QDate &dateTime)
 
     m_endDate = dateTime;
     //  m_filteredList->setEndDate(m_endDate);
-    emit endDateChanged();
+    Q_EMIT endDateChanged();
 }
 
 int CalendarData::types() const

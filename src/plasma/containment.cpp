@@ -135,7 +135,7 @@ void Containment::init()
     //HACK: this is valid only in the systray case
     connect(this, &Containment::configureRequested, this, [=] (Plasma::Applet *a) {
         if (Plasma::Applet *p = qobject_cast<Plasma::Applet *>(parent())) {
-            emit p->containment()->configureRequested(a);
+            Q_EMIT p->containment()->configureRequested(a);
         }
     });
 }
@@ -308,7 +308,7 @@ void Containment::setContainmentType(Plasma::Types::ContainmentType type)
     }
 
     d->type = type;
-    emit containmentTypeChanged();
+    Q_EMIT containmentTypeChanged();
 }
 
 Corona *Containment::corona() const
@@ -339,8 +339,8 @@ void Containment::setFormFactor(Types::FormFactor formFactor)
 
     KConfigGroup c = config();
     c.writeEntry("formfactor", (int)formFactor);
-    emit configNeedsSaving();
-    emit formFactorChanged(formFactor);
+    Q_EMIT configNeedsSaving();
+    Q_EMIT formFactorChanged(formFactor);
 }
 
 void Containment::setContainmentDisplayHints(Types::ContainmentDisplayHints hints)
@@ -350,7 +350,7 @@ void Containment::setContainmentDisplayHints(Types::ContainmentDisplayHints hint
     }
 
     d->containmentDisplayHints = hints;
-    emit containmentDisplayHintsChanged(hints);
+    Q_EMIT containmentDisplayHintsChanged(hints);
 }
 
 void Containment::setLocation(Types::Location location)
@@ -369,15 +369,15 @@ void Containment::setLocation(Types::Location location)
 
     KConfigGroup c = config();
     c.writeEntry("location", (int)location);
-    emit configNeedsSaving();
-    emit locationChanged(location);
+    Q_EMIT configNeedsSaving();
+    Q_EMIT locationChanged(location);
 }
 
 Applet *Containment::createApplet(const QString &name, const QVariantList &args)
 {
     Plasma::Applet *applet = d->createApplet(name, args);
     if (applet) {
-        emit appletCreated(applet);
+        Q_EMIT appletCreated(applet);
     }
     return applet;
 }
@@ -404,7 +404,7 @@ void Containment::addApplet(Applet *applet)
     Containment *currentContainment = applet->containment();
 
     if (currentContainment && currentContainment != this) {
-        emit currentContainment->appletRemoved(applet);
+        Q_EMIT currentContainment->appletRemoved(applet);
 
         disconnect(applet, nullptr, currentContainment, nullptr);
         connect(currentContainment, nullptr, applet, nullptr);
@@ -464,7 +464,7 @@ void Containment::addApplet(Applet *applet)
 
         if (isNew) {
             applet->save(*applet->d->mainConfigGroup());
-            emit configNeedsSaving();
+            Q_EMIT configNeedsSaving();
         }
         //FIXME: an on-appear animation would be nice to have again
     }
@@ -472,7 +472,7 @@ void Containment::addApplet(Applet *applet)
     applet->updateConstraints(Plasma::Types::AllConstraints);
     applet->flushPendingConstraintsEvents();
 
-    emit appletAdded(applet);
+    Q_EMIT appletAdded(applet);
 
     if (!currentContainment) {
         applet->updateConstraints(Plasma::Types::StartupCompletedConstraint);
@@ -509,8 +509,8 @@ void Containment::setWallpaper(const QString &pluginName)
 
         KConfigGroup cfg = config();
         cfg.writeEntry("wallpaperplugin", d->wallpaper);
-        emit configNeedsSaving();
-        emit wallpaperChanged();
+        Q_EMIT configNeedsSaving();
+        Q_EMIT wallpaperChanged();
     }
 }
 
@@ -555,7 +555,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         }
     }
 
-    emit configNeedsSaving();
+    Q_EMIT configNeedsSaving();
 }
 
 QHash<QString, ContainmentActions *> &Containment::containmentActions()
@@ -578,8 +578,8 @@ void Containment::setActivity(const QString &activityId)
     KConfigGroup c = config();
     c.writeEntry("activityId", activityId);
 
-    emit configNeedsSaving();
-    emit activityChanged(activityId);
+    Q_EMIT configNeedsSaving();
+    Q_EMIT activityChanged(activityId);
 }
 
 QString Containment::activity() const
@@ -595,10 +595,10 @@ void Containment::reactToScreenChange()
         d->lastScreen = newScreen;
         KConfigGroup c = config();
         c.writeEntry("lastScreen", d->lastScreen);
-        emit configNeedsSaving();
+        Q_EMIT configNeedsSaving();
     }
 
-    emit screenChanged(newScreen);
+    Q_EMIT screenChanged(newScreen);
 }
 
 } // Plasma namespace

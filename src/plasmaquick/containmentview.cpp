@@ -72,13 +72,13 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     containment = cont;
 
     if (oldLoc != location()) {
-        emit q->locationChanged(location());
+        Q_EMIT q->locationChanged(location());
     }
     if (oldForm != formFactor()) {
-        emit q->formFactorChanged(formFactor());
+        Q_EMIT q->formFactorChanged(formFactor());
     }
 
-    emit q->containmentChanged();
+    Q_EMIT q->containmentChanged();
 
     //we are QuickViewSharedEngine::SizeRootObjectToView, but that's not enough, as
     //the root object isn't immediately resized (done at the resizeEvent handler).

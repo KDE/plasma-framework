@@ -384,10 +384,10 @@ void IconItem::setSource(const QVariant &source)
 
     updateImplicitSize();
 
-    emit sourceChanged();
+    Q_EMIT sourceChanged();
 
     if (isValid() != oldValid) {
-        emit validChanged();
+        Q_EMIT validChanged();
     }
 }
 
@@ -403,7 +403,7 @@ void IconItem::setColorGroup(Plasma::Theme::ColorGroup group)
     }
 
     m_colorGroup = group;
-    emit colorGroupChanged();
+    Q_EMIT colorGroupChanged();
 }
 
 Plasma::Theme::ColorGroup IconItem::colorGroup() const
@@ -419,7 +419,7 @@ void IconItem::setOverlays(const QStringList &overlays)
     }
     m_overlays = overlays;
     schedulePixmapUpdate();
-    emit overlaysChanged();
+    Q_EMIT overlaysChanged();
 }
 
 QStringList IconItem::overlays() const
@@ -445,7 +445,7 @@ void IconItem::setActive(bool active)
         m_allowNextAnimation = true;
         schedulePixmapUpdate();
     }
-    emit activeChanged();
+    Q_EMIT activeChanged();
 }
 
 bool IconItem::isAnimated() const
@@ -460,7 +460,7 @@ void IconItem::setAnimated(bool animated)
     }
 
     m_animated = animated;
-    emit animatedChanged();
+    Q_EMIT animatedChanged();
 }
 
 bool IconItem::usesPlasmaTheme() const
@@ -482,7 +482,7 @@ void IconItem::setUsesPlasmaTheme(bool usesPlasmaTheme)
     setSource(src);
 
     update();
-    emit usesPlasmaThemeChanged();
+    Q_EMIT usesPlasmaThemeChanged();
 }
 
 bool IconItem::roundToIconSize() const
@@ -499,10 +499,10 @@ void IconItem::setRoundToIconSize(bool roundToIconSize)
     const QSize oldPaintedSize = paintedSize();
 
     m_roundToIconSize = roundToIconSize;
-    emit roundToIconSizeChanged();
+    Q_EMIT roundToIconSizeChanged();
 
     if (oldPaintedSize != paintedSize()) {
-        emit paintedSizeChanged();
+        Q_EMIT paintedSizeChanged();
     }
 
     schedulePixmapUpdate();
@@ -559,7 +559,7 @@ void IconItem::setStatus(Plasma::Svg::Status status)
     }
 
     m_status = status;
-    emit statusChanged();
+    Q_EMIT statusChanged();
 }
 
 Plasma::Svg::Status IconItem::status() const
@@ -571,14 +571,14 @@ void IconItem::setImplicitHeight2(int height)
 {
     m_implicitHeightSetByUser = true;
     setImplicitHeight(height);
-    emit implicitHeightChanged2();
+    Q_EMIT implicitHeightChanged2();
 }
 
 void IconItem::setImplicitWidth2(int width)
 {
     m_implicitWidthSetByUser = true;
     setImplicitWidth(width);
-    emit implicitWidthChanged2();
+    Q_EMIT implicitWidthChanged2();
 }
 
 void IconItem::updatePolish()
@@ -735,7 +735,7 @@ void IconItem::loadPixmap()
     m_textureChanged = true;
 
     if (oldPaintedSize != paintedSize()) {
-        emit paintedSizeChanged();
+        Q_EMIT paintedSizeChanged();
     }
 
     //don't animate initial setting
@@ -792,7 +792,7 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
         }
 
         if (paintedSize(oldGeometry.size()) != paintedSize(newGeometry.size())) {
-            emit paintedSizeChanged();
+            Q_EMIT paintedSizeChanged();
         }
     }
 

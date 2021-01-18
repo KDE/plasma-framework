@@ -68,7 +68,7 @@ void DataContainer::setModel(QAbstractItemModel *model)
 
     d->model = model;
     model->setParent(this);
-    emit modelChanged(objectName(), model);
+    Q_EMIT modelChanged(objectName(), model);
 }
 
 QAbstractItemModel *DataContainer::model()
@@ -338,7 +338,7 @@ void DataContainer::checkForUpdate()
 {
     //qCDebug(LOG_PLASMA) << objectName() << d->dirty;
     if (d->dirty) {
-        emit dataUpdated(objectName(), d->data);
+        Q_EMIT dataUpdated(objectName(), d->data);
 
         //copy as checkQueueing can result in deletion of the relay
         const auto relays = d->relays;
@@ -354,7 +354,7 @@ void DataContainer::forceImmediateUpdate()
 {
     if (d->dirty) {
         d->dirty = false;
-        emit dataUpdated(objectName(), d->data);
+        Q_EMIT dataUpdated(objectName(), d->data);
     }
 
     for (SignalRelay *relay : qAsConst(d->relays)) {
@@ -395,9 +395,9 @@ void DataContainer::timerEvent(QTimerEvent *event)
             //NOTE: Notifying visualization of the model destruction before actual deletion avoids crashes in some edge cases
             if (d->model) {
                 d->model.clear();
-                emit modelChanged(objectName(), nullptr);
+                Q_EMIT modelChanged(objectName(), nullptr);
             }
-            emit becameUnused(objectName());
+            Q_EMIT becameUnused(objectName());
         }
         d->checkUsageTimer.stop();
     } else if (event->timerId() == d->storageTimer.timerId()) {

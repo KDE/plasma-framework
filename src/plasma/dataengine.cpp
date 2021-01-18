@@ -177,7 +177,7 @@ void DataEngine::setData(const QString &source, const QString &key, const QVaria
     s->setData(key, value);
 
     if (isNew && source != d->waitingSourceRequest) {
-        emit sourceAdded(source);
+        Q_EMIT sourceAdded(source);
     }
 
     d->scheduleSourcesUpdated();
@@ -199,7 +199,7 @@ void DataEngine::setData(const QString &source, const QVariantMap &data)
     }
 
     if (isNew && source != d->waitingSourceRequest) {
-        emit sourceAdded(source);
+        Q_EMIT sourceAdded(source);
     }
 
     d->scheduleSourcesUpdated();
@@ -262,7 +262,7 @@ void DataEngine::addSource(DataContainer *source)
                      this, SLOT(internalUpdateSource(DataContainer*)));
     QObject::connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed(QObject*)));
     d->sources.insert(source->objectName(), source);
-    emit sourceAdded(source->objectName());
+    Q_EMIT sourceAdded(source->objectName());
     d->scheduleSourcesUpdated();
 }
 
@@ -295,7 +295,7 @@ void DataEngine::removeSource(const QString &source)
         d->sources.erase(it);
         s->disconnect(this);
         s->deleteLater();
-        emit sourceRemoved(source);
+        Q_EMIT sourceRemoved(source);
     }
 }
 
@@ -309,7 +309,7 @@ void DataEngine::removeAllSources()
         it.remove();
         s->disconnect(this);
         s->deleteLater();
-        emit sourceRemoved(source);
+        Q_EMIT sourceRemoved(source);
     }
 }
 
@@ -561,7 +561,7 @@ void DataEnginePrivate::sourceDestroyed(QObject *object)
     while (it != sources.end()) {
         if (it.value() == object) {
             sources.erase(it);
-            emit q->sourceRemoved(object->objectName());
+            Q_EMIT q->sourceRemoved(object->objectName());
             break;
         }
         ++it;
@@ -592,7 +592,7 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
                     *newSource = true;
                 }
                 QObject::connect(s, &DataContainer::becameUnused, q, &DataEngine::removeSource);
-                emit q->sourceAdded(sourceName);
+                Q_EMIT q->sourceAdded(sourceName);
             }
         }
         waitingSourceRequest.clear();

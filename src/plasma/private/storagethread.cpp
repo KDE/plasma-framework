@@ -122,7 +122,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
 
     if (!query.exec()) {
         m_db.commit();
-        emit newResult(caller, false);
+        Q_EMIT newResult(caller, false);
         return;
     }
 
@@ -178,7 +178,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
         if (!query.exec()) {
             //qCDebug(LOG_PLASMA) << "query failed:" << query.lastQuery() << query.lastError().text();
             m_db.commit();
-            emit newResult(caller, false);
+            Q_EMIT newResult(caller, false);
             return;
         }
 
@@ -186,7 +186,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
     }
     m_db.commit();
 
-    emit newResult(caller, true);
+    Q_EMIT newResult(caller, true);
 }
 
 void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &params)
@@ -259,7 +259,7 @@ void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &pa
         result = false;
     }
 
-    emit newResult(caller, result);
+    Q_EMIT newResult(caller, result);
 }
 
 void StorageThread::deleteEntry(QPointer<StorageJob> wcaller, const QVariantMap &params)
@@ -289,7 +289,7 @@ void StorageThread::deleteEntry(QPointer<StorageJob> wcaller, const QVariantMap 
     const bool success = query.exec();
     m_db.commit();
 
-    emit newResult(caller, success);
+    Q_EMIT newResult(caller, success);
 }
 
 void StorageThread::expire(QPointer<StorageJob> wcaller, const QVariantMap &params)
@@ -319,7 +319,7 @@ void StorageThread::expire(QPointer<StorageJob> wcaller, const QVariantMap &para
 
     const bool success = query.exec();
 
-    emit newResult(caller, success);
+    Q_EMIT newResult(caller, success);
 }
 
 void StorageThread::run()

@@ -78,7 +78,7 @@ void AppletScript::setLaunchErrorMessage(const QString &reason)
 void AppletScript::configNeedsSaving() const
 {
     if (applet()) {
-        emit applet()->configNeedsSaving();
+        Q_EMIT applet()->configNeedsSaving();
     }
 }
 

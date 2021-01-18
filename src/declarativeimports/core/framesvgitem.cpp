@@ -236,7 +236,7 @@ QVector<qreal> FrameSvgItemMargins::margins() const
 
 void FrameSvgItemMargins::update()
 {
-    emit marginsChanged();
+    Q_EMIT marginsChanged();
 }
 
 void FrameSvgItemMargins::setFixed(bool fixed)
@@ -246,7 +246,7 @@ void FrameSvgItemMargins::setFixed(bool fixed)
     }
 
     m_fixed = fixed;
-    emit marginsChanged();
+    Q_EMIT marginsChanged();
 }
 
 bool FrameSvgItemMargins::isFixed() const
@@ -261,7 +261,7 @@ void FrameSvgItemMargins::setInset(bool inset)
     }
 
     m_inset = inset;
-    emit marginsChanged();
+    Q_EMIT marginsChanged();
 }
 
 bool FrameSvgItemMargins::isInset() const
@@ -333,7 +333,7 @@ void FrameSvgItem::setImagePath(const QString &path)
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    emit imagePathChanged();
+    Q_EMIT imagePathChanged();
 
     if (isComponentComplete()) {
         applyPrefixes();
@@ -378,7 +378,7 @@ void FrameSvgItem::setPrefix(const QVariant &prefixes)
         setImplicitHeight(m_frameSvg->marginSize(Plasma::Types::TopMargin) + m_frameSvg->marginSize(Plasma::Types::BottomMargin));
     }
 
-    emit prefixChanged();
+    Q_EMIT prefixChanged();
 
     if (isComponentComplete()) {
         m_frameSvg->resizeFrame(QSizeF(width(), height()));
@@ -431,7 +431,7 @@ void FrameSvgItem::setColorGroup(Plasma::Theme::ColorGroup group)
 
     m_frameSvg->setColorGroup(group);
 
-    emit colorGroupChanged();
+    Q_EMIT colorGroupChanged();
 }
 
 Plasma::Theme::ColorGroup FrameSvgItem::colorGroup() const
@@ -463,7 +463,7 @@ void FrameSvgItem::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders bord
     CheckMarginsChange checkMargins(m_oldMargins, m_margins);
 
     m_frameSvg->setEnabledBorders(borders);
-    emit enabledBordersChanged();
+    Q_EMIT enabledBordersChanged();
     m_textureChanged = true;
     update();
 }
@@ -498,7 +498,7 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
     // the above only triggers updatePaintNode, so we have to inform subscribers
     // about the potential change of the mask explicitly here
     if (isComponentComplete) {
-        emit maskChanged();
+        Q_EMIT maskChanged();
     }
 }
 
@@ -538,8 +538,8 @@ void FrameSvgItem::doUpdate()
 
     update();
 
-    emit maskChanged();
-    emit repaintNeeded();
+    Q_EMIT maskChanged();
+    Q_EMIT repaintNeeded();
 }
 
 Plasma::FrameSvg *FrameSvgItem::frameSvg() const
@@ -689,7 +689,7 @@ void FrameSvgItem::applyPrefixes()
     if (m_prefixes.isEmpty()) {
         m_frameSvg->setElementPrefix(QString());
         if (oldPrefix != m_frameSvg->prefix()) {
-            emit usedPrefixChanged();
+            Q_EMIT usedPrefixChanged();
         }
         return;
     }
@@ -707,7 +707,7 @@ void FrameSvgItem::applyPrefixes()
         m_frameSvg->setElementPrefix(m_prefixes.constLast());
     }
     if (oldPrefix != m_frameSvg->prefix()) {
-        emit usedPrefixChanged();
+        Q_EMIT usedPrefixChanged();
     }
 }
 

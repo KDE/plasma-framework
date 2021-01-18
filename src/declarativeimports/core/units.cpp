@@ -35,7 +35,7 @@ bool SharedAppFilter::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == QCoreApplication::instance()) {
         if (event->type() == QEvent::ApplicationFontChange) {
-            emit fontChanged();
+            Q_EMIT fontChanged();
         }
     }
     return QObject::eventFilter(watched, event);
@@ -101,7 +101,7 @@ void Units::updateAnimationSpeed()
 
     if (longDuration != m_longDuration) {
         m_longDuration = longDuration;
-        emit durationChanged();
+        Q_EMIT durationChanged();
     }
 }
 
@@ -121,8 +121,8 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizeHints->insert(QStringLiteral("panel"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Panel)));
     m_iconSizeHints->insert(QStringLiteral("desktop"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
 
-    emit iconSizesChanged();
-    emit iconSizeHintsChanged();
+    Q_EMIT iconSizesChanged();
+    Q_EMIT iconSizeHintsChanged();
 }
 
 QQmlPropertyMap *Units::iconSizes() const
@@ -214,7 +214,7 @@ void Units::updateDevicePixelRatio()
     // that magic ratio follows the definition of "device independent pixel" by Microsoft
     m_devicePixelRatio = (qreal)dpi / (qreal)96;
     iconLoaderSettingsChanged();
-    emit devicePixelRatioChanged();
+    Q_EMIT devicePixelRatioChanged();
 }
 
 int Units::gridUnit() const
@@ -241,13 +241,13 @@ void Units::updateSpacing()
     }
     if (gridUnit != m_gridUnit) {
         m_gridUnit = gridUnit;
-        emit gridUnitChanged();
+        Q_EMIT gridUnitChanged();
     }
 
     if (gridUnit != m_largeSpacing) {
         m_smallSpacing = qMax(2, (int)(gridUnit / 4)); // 1/4 of gridUnit, at least 2
         m_largeSpacing = gridUnit; // msize.height
-        emit spacingChanged();
+        Q_EMIT spacingChanged();
     }
 }
 

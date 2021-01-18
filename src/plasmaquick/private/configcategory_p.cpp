@@ -33,7 +33,7 @@ void ConfigCategory::setName(const QString &name)
     }
 
     m_name = name;
-    emit nameChanged();
+    Q_EMIT nameChanged();
 }
 
 QString ConfigCategory::icon() const
@@ -48,7 +48,7 @@ void ConfigCategory::setIcon(const QString &icon)
     }
 
     m_icon = icon;
-    emit iconChanged();
+    Q_EMIT iconChanged();
 }
 
 QString ConfigCategory::source() const
@@ -63,7 +63,7 @@ void ConfigCategory::setSource(const QString &source)
     }
 
     m_source = source;
-    emit sourceChanged();
+    Q_EMIT sourceChanged();
 }
 
 QString ConfigCategory::pluginName() const
@@ -78,7 +78,7 @@ void ConfigCategory::setPluginName(const QString &name)
     }
 
     m_pluginName = name;
-    emit pluginNameChanged();
+    Q_EMIT pluginNameChanged();
 }
 
 bool ConfigCategory::visible() const
@@ -93,7 +93,7 @@ void ConfigCategory::setVisible(bool visible)
     }
 
     m_visible = visible;
-    emit visibleChanged();
+    Q_EMIT visibleChanged();
 }
 
 }

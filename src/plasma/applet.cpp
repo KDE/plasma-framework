@@ -126,7 +126,7 @@ Applet::~Applet()
         d->resetConfigurationObject();
     }
     //let people know that i will die
-    emit appletDeleted(this);
+    Q_EMIT appletDeleted(this);
 
     // ConfigLoader is deleted when AppletPrivate closes not Applet
     // It saves on closure and emits a signal.
@@ -220,9 +220,9 @@ void Applet::restore(KConfigGroup &group)
     if (ok) {
         d->userBackgroundHints = Plasma::Types::BackgroundHints(value);
         d->userBackgroundHintsInitialized = true;
-        emit userBackgroundHintsChanged();
+        Q_EMIT userBackgroundHintsChanged();
         if (d->backgroundHints & Plasma::Types::ConfigurableBackground) {
-            emit effectiveBackgroundHintsChanged();
+            Q_EMIT effectiveBackgroundHintsChanged();
         }
     }
 }
@@ -240,7 +240,7 @@ void Applet::setLaunchErrorMessage(const QString &message)
 void Applet::saveState(KConfigGroup &group) const
 {
     if (d->script) {
-        emit d->script->saveState(group);
+        Q_EMIT d->script->saveState(group);
     }
 
     if (group.config()->name() != config().config()->name()) {
@@ -368,7 +368,7 @@ void Applet::setTitle(const QString &title)
     }
 
     d->customTitle = title;
-    emit titleChanged(title);
+    Q_EMIT titleChanged(title);
 }
 
 QString Applet::icon() const
@@ -383,7 +383,7 @@ void Applet::setIcon(const QString &icon)
     }
 
     d->icon = icon;
-    emit iconChanged(icon);
+    Q_EMIT iconChanged(icon);
 }
 
 bool Applet::isBusy() const
@@ -398,7 +398,7 @@ void Applet::setBusy(bool busy)
     }
 
     d->busy = busy;
-    emit busyChanged(busy);
+    Q_EMIT busyChanged(busy);
 }
 
 Plasma::Types::BackgroundHints Applet::backgroundHints() const
@@ -415,10 +415,10 @@ void Applet::setBackgroundHints(Plasma::Types::BackgroundHints hint)
     Plasma::Types::BackgroundHints oldeffectiveHints = effectiveBackgroundHints();
 
     d->backgroundHints = hint;
-    emit backgroundHintsChanged();
+    Q_EMIT backgroundHintsChanged();
 
     if (oldeffectiveHints != effectiveBackgroundHints()) {
-        emit effectiveBackgroundHintsChanged();
+        Q_EMIT effectiveBackgroundHintsChanged();
     }
 }
 
@@ -451,10 +451,10 @@ void Applet::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
         containment()->corona()->requestConfigSync();
     }
 
-    emit userBackgroundHintsChanged();
+    Q_EMIT userBackgroundHintsChanged();
 
     if (d->backgroundHints & Plasma::Types::ConfigurableBackground) {
-        emit effectiveBackgroundHintsChanged();
+        Q_EMIT effectiveBackgroundHintsChanged();
     }
 }
 
@@ -549,7 +549,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->needsConfig = needsConfig;
     d->configurationRequiredReason = reason;
 
-    emit configurationRequiredChanged(needsConfig, reason);
+    Q_EMIT configurationRequiredChanged(needsConfig, reason);
 }
 
 bool Applet::isUserConfiguring() const
@@ -564,7 +564,7 @@ void Applet::setUserConfiguring(bool configuring)
     }
 
     d->userConfiguring = configuring;
-    emit userConfiguringChanged(configuring);
+    Q_EMIT userConfiguringChanged(configuring);
 }
 
 Types::ItemStatus Applet::status() const
@@ -578,7 +578,7 @@ void Applet::setStatus(const Types::ItemStatus status)
         return;
     }
     d->itemStatus = status;
-    emit statusChanged(status);
+    Q_EMIT statusChanged(status);
 }
 
 void Applet::flushPendingConstraintsEvents()
@@ -645,7 +645,7 @@ void Applet::flushPendingConstraintsEvents()
         //an immutable constraint will always happen at startup
         //make sure don't emit a change signal for nothing
         if (d->oldImmutability != immutability()) {
-            emit immutabilityChanged(immutability());
+            Q_EMIT immutabilityChanged(immutability());
         }
         d->oldImmutability = immutability();
     }
@@ -671,11 +671,11 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::Types::FormFactorConstraint) {
-        emit formFactorChanged(formFactor());
+        Q_EMIT formFactorChanged(formFactor());
     }
 
     if (c & Plasma::Types::LocationConstraint) {
-        emit locationChanged(location());
+        Q_EMIT locationChanged(location());
     }
 }
 
@@ -892,7 +892,7 @@ void Applet::timerEvent(QTimerEvent *event)
         KConfigGroup cg;
 
         save(cg);
-        emit configNeedsSaving();
+        Q_EMIT configNeedsSaving();
     }
 }
 
