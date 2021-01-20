@@ -508,7 +508,7 @@ Item {
                 anchors.leftMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing
                 anchors.rightMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing * 2
 
-                height: (PlasmaCore.Units.iconSizes.smallMedium + PlasmaCore.Units.smallSpacing * 2) * actionsList.count
+                height: PlasmaCore.Units.gridUnit * 2 * actionsList.count
 
                 focus: true
                 clip: true
