@@ -231,7 +231,7 @@
         <rect style="fill:#00ff00;fill-opacity:1;stroke:none" id="hint-left-inset" width="4" height="0.000001" x="930.36218" y="-13.000004" transform="matrix(0,1,-1,0,0,0)"/>
         <rect id="thick-hint-top-margin" x="34" y="910.36218" width="4.0000019" height="8.0000048" fill="#f0f"/>
         <rect id="thick-hint-bottom-margin" x="30" y="946.36218" width="4" height="8.0001907" fill="#f0f"/>
-        <rect id="thick-right-margin" transform="rotate(90)" x="932.36218" y="-56.999985" width="3.9999771" height="7.9999847" fill="#f0f"/>
+        <rect id="thick-hint-right-margin" transform="rotate(90)" x="932.36218" y="-56.999985" width="3.9999771" height="7.9999847" fill="#f0f"/>
         <rect id="thick-hint-left-margin" transform="rotate(90)" x="928.36218" y="-21" width="4.0000229" height="8.0000076" fill="#f0f"/>
         <rect id="hint-bottom-margin" x="34" y="950.36218" width="4" height="4.0002136" fill="#800080"/>
         <rect id="hint-right-margin" transform="rotate(90)" x="928.36218" y="-56.999985" width="3.9999771" height="3.9999847" fill="#800080"/>
