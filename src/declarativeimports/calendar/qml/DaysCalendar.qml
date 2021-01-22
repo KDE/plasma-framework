@@ -70,7 +70,7 @@ Item {
     }
 
     QQC1.Stack.onStatusChanged: {
-        if (Stack.status === Stack.Inactive) {
+        if (QQC1.Stack.status === QQC1.Stack.Inactive) {
             daysCalendar.transformScale = 1
             opacity = 1
         }
