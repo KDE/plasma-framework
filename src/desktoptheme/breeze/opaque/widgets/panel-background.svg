@@ -12,7 +12,7 @@
    viewBox="0 0 173 56.000004"
    id="svg2"
    version="1.1"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
    sodipodi:docname="panel-background.svg">
   <defs
      id="defs4">
@@ -73,19 +73,19 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.699422"
-     inkscape:cx="41.598735"
-     inkscape:cy="28.851737"
+     inkscape:cx="32.83686"
+     inkscape:cy="27.287711"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
      borderlayer="true"
      units="px"
-     inkscape:window-width="1343"
-     inkscape:window-height="908"
-     inkscape:window-x="1499"
-     inkscape:window-y="248"
-     inkscape:window-maximized="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1007"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      showguides="true"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -141,36 +141,6 @@
          y="916.36218"
          class="ColorScheme-Background" />
     </g>
-    <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
-       id="hint-top-margin"
-       width="4"
-       height="2"
-       x="33"
-       y="920.36218" />
-    <rect
-       y="946.36218"
-       x="33"
-       height="2"
-       width="4"
-       id="hint-bottom-margin"
-       style="fill:#ff00ff;fill-opacity:1;stroke:none" />
-    <rect
-       y="-46.999985"
-       x="930.36218"
-       height="2"
-       width="4"
-       id="hint-right-margin"
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
-       transform="matrix(0,1,-1,0,0,0)" />
-    <rect
-       style="fill:#ff00ff;fill-opacity:1;stroke:none"
-       id="hint-left-margin"
-       width="4"
-       height="2"
-       x="930.36218"
-       y="-21"
-       transform="matrix(0,1,-1,0,0,0)" />
     <g
        id="topright">
       <path
@@ -431,34 +401,70 @@
          class="ColorScheme-Text" />
     </g>
     <rect
+       style="fill:#ff00ff"
        id="thick-hint-top-margin"
-       x="34"
-       y="911.36218"
+       x="35"
+       y="910.36218"
        width="4.0000019"
-       height="8.0000048"
-       fill="#ff00ff" />
+       height="8.0000048" />
     <rect
+       style="fill:#ff00ff"
        id="thick-hint-bottom-margin"
-       x="29.999998"
-       y="945.36218"
+       x="31"
+       y="946.36218"
        width="4"
-       height="8.0001907"
-       fill="#ff00ff" />
+       height="8.0001907" />
     <rect
+       style="fill:#ff00ff"
        id="thick-hint-right-margin"
        transform="rotate(90)"
        x="932.36218"
-       y="-55.999977"
+       y="-56.999985"
        width="3.9999771"
-       height="7.9999847"
-       fill="#ff00ff" />
+       height="7.9999847" />
     <rect
+       style="fill:#ff00ff"
        id="thick-hint-left-margin"
        transform="rotate(90)"
        x="928.36218"
-       y="-21.999989"
+       y="-21"
        width="4.0000229"
-       height="8.0000076"
-       fill="#ff00ff" />
+       height="8.0000076" />
+    <rect
+       style="fill:#800080"
+       id="hint-bottom-margin"
+       x="35"
+       y="950.36218"
+       width="4"
+       height="4.0002136" />
+    <rect
+       style="fill:#800080"
+       id="hint-right-margin"
+       transform="rotate(90)"
+       x="928.36218"
+       y="-56.999985"
+       width="3.9999771"
+       height="3.9999847" />
+    <rect
+       style="fill:#800080"
+       id="hint-left-margin"
+       transform="rotate(90)"
+       x="932.36218"
+       y="-17"
+       width="4.0000229"
+       height="4.0000076" />
+    <rect
+       style="fill:#800080"
+       id="hint-top-margin"
+       x="31"
+       y="910.36218"
+       width="4.0000019"
+       height="3.9999795" />
+    <rect
+       x="1"
+       id="thick-center"
+       y="960.36218"
+       width="2"
+       height="2" />
   </g>
 </svg>
