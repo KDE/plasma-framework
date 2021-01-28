@@ -59,11 +59,11 @@ T.SpinBox {
                 mouse.accepted = false
             }
             onWheel: {
-                if (wheel.angleDelta.y > 0 && control.value <= control.to) {
-                    control.value += control.stepSize
+                if (wheel.angleDelta.y > 0 && control.value* Math.sign(control.to - control.from) <= control.to) {
+                    control.value += control.stepSize * Math.sign(control.to - control.from)
                     control.valueModified()
-                } else if (wheel.angleDelta.y < 0 && control.value >= control.from) {
-                    control.value -= control.stepSize
+                } else if (wheel.angleDelta.y < 0 && control.value >= control.from* Math.sign(control.to - control.from)) {
+                    control.value -= control.stepSize * Math.sign(control.to - control.from)
                     control.valueModified()
                 }
             }
