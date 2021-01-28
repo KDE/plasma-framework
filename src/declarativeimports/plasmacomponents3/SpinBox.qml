@@ -60,10 +60,10 @@ T.SpinBox {
             }
             onWheel: {
                 if (wheel.angleDelta.y > 0 && control.value <= control.to) {
-                    control.value -= control.stepSize
+                    control.value += control.stepSize
                     control.valueModified()
                 } else if (wheel.angleDelta.y < 0 && control.value >= control.from) {
-                    control.value += control.stepSize
+                    control.value -= control.stepSize
                     control.valueModified()
                 }
             }
