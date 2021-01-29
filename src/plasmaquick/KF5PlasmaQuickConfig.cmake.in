@@ -8,7 +8,7 @@ find_dependency(KF5Plasma "@KF5_DEP_VERSION@")
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaQuickTargets.cmake")
 
 set(PlasmaQuick_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
-set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_KF5_INCLUDE_INSTALL_DIR@")
+set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_KDE_INSTALL_INCLUDEDIR_KF5@")
 
 set(PlasmaQuick_LIBRARIES KF5::PlasmaQuick)
 
