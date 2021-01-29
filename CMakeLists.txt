@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(KF5_VERSION "5.79.0") # handled by release scripts
-set(KF5_DEP_VERSION "5.79.0") # handled by release scripts
-project(Plasma VERSION ${KF5_VERSION})
+set(KF_VERSION "5.79.0") # handled by release scripts
+set(KF_DEP_VERSION "5.79.0") # handled by release scripts
+project(Plasma VERSION ${KF_VERSION})
 
 # ECM setup
 include(FeatureSummary)
@@ -42,7 +42,7 @@ set (REQUIRED_QT_VERSION 5.14.0)
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
 
-find_package(KF5 ${KF5_DEP_VERSION} REQUIRED
+find_package(KF5 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
         Activities
         Archive

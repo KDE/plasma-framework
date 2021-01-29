@@ -88,7 +88,7 @@ install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF5_INSTALL_TARGET
 ecm_generate_export_header(KF5PlasmaQuick
     BASE_NAME PlasmaQuick
     GROUP_BASE_NAME KF
-    VERSION ${KF5_VERSION}
+    VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.12 5.25 5.36
 )
@@ -126,7 +126,7 @@ configure_package_config_file(
     PATH_VARS  KDE_INSTALL_INCLUDEDIR_KF5 CMAKE_INSTALL_PREFIX
 )
 
-ecm_setup_version(${KF5_VERSION}
+ecm_setup_version(${KF_VERSION}
                   VARIABLE_PREFIX PLASMAQUICK
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfigVersion.cmake" )
 

@@ -81,7 +81,7 @@ ecm_generate_export_header(KF5Plasma
     EXPORT_FILE_NAME plasma/plasma_export.h
     BASE_NAME Plasma
     GROUP_BASE_NAME KF
-    VERSION ${KF5_VERSION}
+    VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46 5.67 5.77 5.78
 )
@@ -204,7 +204,7 @@ if(BUILD_QCH)
         KF5Plasma_QCH
         NAME Plasma
         BASE_NAME KF5Plasma
-        VERSION ${KF5_VERSION}
+        VERSION ${KF_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
             ${Plasma_HEADERS}
