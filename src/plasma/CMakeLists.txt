@@ -124,7 +124,7 @@ target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
 )
 target_include_directories(KF5Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5};${KF5_INCLUDE_INSTALL_DIR}/Plasma>"
+  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5};${KDE_INSTALL_INCLUDEDIR_KF5}/Plasma>"
 )
 
 set_target_properties(KF5Plasma PROPERTIES
