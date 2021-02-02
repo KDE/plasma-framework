@@ -20,7 +20,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
-     inkscape:window-height="1016"
+     inkscape:window-height="986"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
      inkscape:pageopacity="1"
@@ -31,12 +31,12 @@
      bordercolor="#666666"
      pagecolor="#eff0f1"
      id="base"
-     inkscape:zoom="32"
-     inkscape:cx="38.140625"
-     inkscape:cy="25.125"
+     inkscape:zoom="64"
+     inkscape:cx="116.80469"
+     inkscape:cy="-37.296875"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:current-layer="focus-bottomleft"
+     inkscape:current-layer="svg2"
      showgrid="true"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -270,7 +270,7 @@
        y1="-35"
        x2="186"
        y2="-33"
-       gradientTransform="matrix(1,0,0,1.5,0,16.5)" />
+       gradientTransform="matrix(1,0,0,2,0,31)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4119"
@@ -360,10 +360,10 @@
     <rect
        y="-35"
        x="150"
-       height="2"
+       height="1"
        width="80"
        id="rect3984"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
+       style="fill:currentColor;fill-opacity:1;stroke:none;stroke-width:0.999997"
        class="ColorScheme-ViewBackground" />
     <rect
        style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
@@ -385,16 +385,7 @@
      id="base-topleft"
      transform="translate(-115,-2)"
      inkscape:label="#g4039">
-    <rect
-       y="-34"
-       x="149"
-       height="1"
-       width="1"
-       id="rect4014"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
-       class="ColorScheme-ViewBackground" />
     <path
-       transform="matrix(2,0,0,2,-150,36)"
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
        d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
@@ -405,7 +396,8 @@
        id="path3920"
        style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
        sodipodi:type="arc"
-       class="ColorScheme-Text" />
+       class="ColorScheme-Text"
+       transform="matrix(2,0,0,2,-150,36)" />
     <path
        sodipodi:end="4.712389"
        sodipodi:start="3.1415927"
@@ -420,26 +412,11 @@
        class="ColorScheme-ViewBackground"
        transform="translate(0,1)" />
     <rect
-       class="ColorScheme-Text"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
-       id="rect3851"
-       width="1"
-       height="1"
-       x="148"
-       y="-34" />
-    <rect
-       style="fill:#eff0f1;fill-opacity:0.01;stroke:none;stroke-width:18.8976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"
-       id="rect2526-3"
-       width="2"
-       height="2"
-       x="146"
-       y="-35" />
-    <rect
        style="fill:#eff0f1;fill-opacity:0.01;stroke:none;stroke-width:18.8976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"
        id="rect2526-3-5"
-       width="2"
+       width="4"
        height="2"
-       x="148"
+       x="146"
        y="-38" />
   </g>
   <rect
@@ -464,12 +441,12 @@
        style="opacity:1;fill:currentColor;fill-opacity:1;stroke:none"
        class="ColorScheme-ViewFocus" />
     <rect
-       y="-36"
+       y="-39"
        x="150"
-       height="3"
+       height="4"
        width="80"
        id="rect4051"
-       style="fill:url(#linearGradient4077);fill-opacity:1;stroke:none" />
+       style="fill:url(#linearGradient4077);fill-opacity:1;stroke:none;stroke-width:0.999999" />
     <rect
        class="ColorScheme-ViewFocus"
        style="fill:currentColor;fill-opacity:0.4"
@@ -691,68 +668,6 @@
      width="7"
      id="base-hint-left-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.08012" />
-  <g
-     id="base-topright">
-    <rect
-       transform="scale(-1,1)"
-       class="ColorScheme-ViewBackground"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
-       id="rect3857"
-       width="1"
-       height="1"
-       x="-116"
-       y="-36" />
-    <path
-       transform="matrix(-2,0,0,2,415,34)"
-       sodipodi:end="4.712389"
-       sodipodi:start="3.1415927"
-       d="m 149,-35 a 1,1 0 0 1 1,-1 v 1 z"
-       sodipodi:ry="1"
-       sodipodi:rx="1"
-       sodipodi:cy="-35"
-       sodipodi:cx="150"
-       id="path3859"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
-       sodipodi:type="arc"
-       class="ColorScheme-Text"
-       sodipodi:arc-type="slice" />
-    <path
-       transform="matrix(-1,0,0,1,265,-1)"
-       class="ColorScheme-ViewBackground"
-       sodipodi:type="arc"
-       style="fill:currentColor;fill-opacity:1;stroke:none"
-       id="path3861"
-       sodipodi:cx="150"
-       sodipodi:cy="-35"
-       sodipodi:rx="1"
-       sodipodi:ry="1"
-       d="m 149,-35 a 1,1 0 0 1 1,-1 l 0,1 z"
-       sodipodi:start="3.1415927"
-       sodipodi:end="4.712389" />
-    <rect
-       transform="scale(-1,1)"
-       y="-36"
-       x="-117"
-       height="1"
-       width="1"
-       id="rect3863"
-       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
-       class="ColorScheme-Text" />
-    <rect
-       style="fill:#eff0f1;fill-opacity:0.01;stroke:none;stroke-width:18.8976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"
-       id="rect2526-3-6-2"
-       width="2"
-       height="2"
-       x="115"
-       y="-40" />
-    <rect
-       style="fill:#eff0f1;fill-opacity:0.01;stroke:none;stroke-width:18.8976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"
-       id="rect2526-3-6-9"
-       width="2"
-       height="2"
-       x="117"
-       y="-37" />
-  </g>
   <g
      id="base-bottomright"
      transform="matrix(-1,0,0,1,265,-2)">
@@ -1298,5 +1213,45 @@
        x="-232"
        y="35"
        transform="scale(-1)" />
+  </g>
+  <g
+     id="base-topright"
+     transform="rotate(90,133.5,-52.5)"
+     inkscape:label="#g4039">
+    <path
+       sodipodi:end="4.712389"
+       sodipodi:start="3.1415927"
+       sodipodi:ry="1"
+       sodipodi:rx="1"
+       sodipodi:cy="-35"
+       sodipodi:cx="150"
+       id="path3920-6"
+       style="opacity:0.25;fill:currentColor;fill-opacity:1;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-Text"
+       transform="matrix(2,0,0,2,-150,36)"
+       sodipodi:arc-type="slice"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 v 1 z" />
+    <path
+       sodipodi:end="4.712389"
+       sodipodi:start="3.1415927"
+       sodipodi:ry="1"
+       sodipodi:rx="1"
+       sodipodi:cy="-35"
+       sodipodi:cx="150"
+       id="path4016-7"
+       style="fill:currentColor;fill-opacity:1;stroke:none"
+       sodipodi:type="arc"
+       class="ColorScheme-ViewBackground"
+       transform="translate(0,1)"
+       sodipodi:arc-type="slice"
+       d="m 149,-35 a 1,1 0 0 1 1,-1 v 1 z" />
+    <rect
+       style="fill:#eff0f1;fill-opacity:0.01;stroke:none;stroke-width:18.8976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:2"
+       id="rect2526-3-5-5"
+       width="4"
+       height="2"
+       x="146"
+       y="-38" />
   </g>
 </svg>
