@@ -51,7 +51,7 @@ import "private" as Private
     topInset: location == PlasmoidHeading.Location.Footer ? 0 : backgroundMetrics.getMargin("top")
     bottomInset: location == PlasmoidHeading.Location.Footer ? backgroundMetrics.getMargin("bottom") : 0
 
-    PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.WindowColorGroup
+    PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
     PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
