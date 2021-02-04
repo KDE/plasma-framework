@@ -10,6 +10,7 @@ target_sources(plasmacomponentsplugin PRIVATE
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
+    exclusivegroup.h
     )
 
 target_link_libraries(plasmacomponentsplugin

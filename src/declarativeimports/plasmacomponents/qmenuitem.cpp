@@ -42,6 +42,9 @@ void QMenuItem::setAction(QAction *a)
 
         setVisible(m_action->isVisible());
         setEnabled(m_action->isEnabled());
+        if (m_exclusiveGroup != nullptr) {
+            m_exclusiveGroup->addAction(m_action);
+        }
 
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
         connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
@@ -103,6 +106,21 @@ void QMenuItem::setSection(bool s)
     m_section = s;
 }
 
+void QMenuItem::setExclusiveGroup(ExclusiveGroup *grp)
+{
+    Q_ASSERT(m_action != nullptr);
+
+    if (m_exclusiveGroup == grp) {
+        return;
+    }
+    if (m_exclusiveGroup != nullptr) {
+        m_exclusiveGroup->removeAction(m_action);
+    }
+
+    m_exclusiveGroup = grp;
+    m_exclusiveGroup->addAction(m_action);
+}
+
 QString QMenuItem::text() const
 {
     return m_action->text();
@@ -138,6 +156,9 @@ void QMenuItem::setChecked(bool checked)
 
 void QMenuItem::updateAction()
 {
+    if (m_exclusiveGroup != nullptr) {
+        m_exclusiveGroup->addAction(m_action);
+    }
     m_action->setVisible(isVisible());
     m_action->setEnabled(isEnabled());
 }

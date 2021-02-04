@@ -11,6 +11,8 @@
 #include <QAction>
 #include <QQuickItem>
 
+#include "exclusivegroup.h"
+
 class QMenuItem : public QQuickItem
 {
     Q_OBJECT
@@ -33,6 +35,7 @@ class QMenuItem : public QQuickItem
     Q_PROPERTY(QAction *action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(bool checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
     Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY toggled)
+    Q_PROPERTY(ExclusiveGroup *exclusiveGroup MEMBER m_exclusiveGroup WRITE setExclusiveGroup NOTIFY exclusiveGroupChanged)
 
 public:
     explicit QMenuItem(QQuickItem *parent = nullptr);
@@ -54,6 +57,8 @@ public:
     bool checked() const;
     void setChecked(bool checked);
 
+    void setExclusiveGroup(ExclusiveGroup* grp);
+
 Q_SIGNALS:
     void clicked();
 
@@ -64,10 +69,12 @@ Q_SIGNALS:
     void textChanged();
     void toggled(bool checked);
     void checkableChanged();
+    void exclusiveGroupChanged();
 
 private:
     void updateAction();
-    QAction *m_action;
+    QAction *m_action = nullptr;
+    ExclusiveGroup *m_exclusiveGroup = nullptr;
     QVariant m_icon;
     bool m_section;
 };
