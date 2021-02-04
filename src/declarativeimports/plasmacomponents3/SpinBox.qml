@@ -37,7 +37,7 @@ T.SpinBox {
         font: control.font
         color: theme.viewTextColor
         selectionColor: theme.highlightColor
-        selectedTextColor: theme.selectedTextColor
+        selectedTextColor: theme.highlightedTextColor
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 
