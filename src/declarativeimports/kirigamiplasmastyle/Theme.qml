@@ -8,66 +8,71 @@ pragma Singleton
 
 import QtQuick 2.4
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2.16 as Kirigami
 
-QtObject {
-    property color textColor: theme.textColor
-    property color disabledTextColor: Qt.rgba(theme.textColor.r, theme.textColor.g, theme.textColor.b, 0.6)
+Kirigami.BasicThemeDefinition {
+    textColor: theme.textColor
+    disabledTextColor: Qt.rgba(theme.textColor.r, theme.textColor.g, theme.textColor.b, 0.6)
 
-    property color highlightColor: theme.highlightColor
-    property color highlightedTextColor: theme.highlightedTextColor
-    property color backgroundColor: theme.backgroundColor
-    property color alternateBackgroundColor: Qt.darker(theme.backgroundColor, 1.05)
+    highlightColor: theme.highlightColor
+    highlightedTextColor: theme.highlightedTextColor
+    backgroundColor: theme.backgroundColor
+    alternateBackgroundColor: Qt.darker(theme.backgroundColor, 1.05)
+
+    focusColor: theme.highlightColor
+    hoverColor: theme.highlightColor
+
     //TODO: don't make this invisible
-    property color activeTextColor: theme.highlightColor
-    property color linkColor: theme.linkColor
-    property color visitedLinkColor: theme.visitedLinkColor
-    property color negativeTextColor: theme.negativeTextColor
-    property color neutralTextColor: theme.neutralTextColor
-    property color positiveTextColor: theme.positiveTextColor
+    activeTextColor: theme.highlightColor
+    linkColor: theme.linkColor
+    visitedLinkColor: theme.visitedLinkColor
+    negativeTextColor: theme.negativeTextColor
+    neutralTextColor: theme.neutralTextColor
+    positiveTextColor: theme.positiveTextColor
 
-    property color buttonTextColor: theme.buttonTextColor
-    property color buttonBackgroundColor: theme.buttonBackgroundColor
-    property color buttonAlternateBackgroundColor: Qt.darker(theme.buttonBackgroundColor, 1.05)
-    property color buttonHoverColor: theme.buttonHoverColor
-    property color buttonFocusColor: theme.buttonFocusColor
+    buttonTextColor: theme.buttonTextColor
+    buttonBackgroundColor: theme.buttonBackgroundColor
+    buttonAlternateBackgroundColor: Qt.darker(theme.buttonBackgroundColor, 1.05)
+    buttonHoverColor: theme.buttonHoverColor
+    buttonFocusColor: theme.buttonFocusColor
 
-    property color viewTextColor: theme.viewTextColor
-    property color viewBackgroundColor: theme.viewBackgroundColor
-    property color viewAlternateBackgroundColor: Qt.darker(theme.viewBackgroundColor, 1.05)
-    property color viewHoverColor: theme.viewHoverColor
-    property color viewFocusColor: theme.viewFocusColor
+    viewTextColor: theme.viewTextColor
+    viewBackgroundColor: theme.viewBackgroundColor
+    viewAlternateBackgroundColor: Qt.darker(theme.viewBackgroundColor, 1.05)
+    viewHoverColor: theme.viewHoverColor
+    viewFocusColor: theme.viewFocusColor
 
-    property color selectionTextColor: theme.highlightedTextColor
-    property color selectionBackgroundColor: theme.highlightColor
-    property color selectionAlternateBackgroundColor: Qt.darker(theme.highlightColor, 1.05)
-    property color selectionHoverColor: theme.buttonHoverColor
-    property color selectionFocusColor: theme.buttonFocusColor
+    selectionTextColor: theme.highlightedTextColor
+    selectionBackgroundColor: theme.highlightColor
+    selectionAlternateBackgroundColor: Qt.darker(theme.highlightColor, 1.05)
+    selectionHoverColor: theme.buttonHoverColor
+    selectionFocusColor: theme.buttonFocusColor
 
-    property color tooltipTextColor: theme.complementaryTextColor
-    property color tooltipBackgroundColor: theme.complementaryBackgroundColor
-    property color tooltipAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
-    property color tooltipHoverColor: theme.complementaryHoverColor
-    property color tooltipFocusColor: theme.complementaryFocusColor
+    tooltipTextColor: theme.complementaryTextColor
+    tooltipBackgroundColor: theme.complementaryBackgroundColor
+    tooltipAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
+    tooltipHoverColor: theme.complementaryHoverColor
+    tooltipFocusColor: theme.complementaryFocusColor
 
-    property color complementaryTextColor: theme.complementaryTextColor
-    property color complementaryBackgroundColor: theme.complementaryBackgroundColor
-    property color complementaryAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
-    property color complementaryHoverColor: theme.complementaryHoverColor
-    property color complementaryFocusColor: theme.complementaryFocusColor
+    complementaryTextColor: theme.complementaryTextColor
+    complementaryBackgroundColor: theme.complementaryBackgroundColor
+    complementaryAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
+    complementaryHoverColor: theme.complementaryHoverColor
+    complementaryFocusColor: theme.complementaryFocusColor
 
-    property color headerTextColor: theme.headerTextColor
-    property color headerBackgroundColor: theme.headerBackgroundColor
-    property color headerAlternateBackgroundColor: Qt.darker(theme.headerBackgroundColor, 1.05)
-    property color headerHoverColor: theme.headerHoverColor
-    property color headerFocusColor: theme.headerFocusColor
+    headerTextColor: theme.headerTextColor
+    headerBackgroundColor: theme.headerBackgroundColor
+    headerAlternateBackgroundColor: Qt.darker(theme.headerBackgroundColor, 1.05)
+    headerHoverColor: theme.headerHoverColor
+    headerFocusColor: theme.headerFocusColor
 
-    property variant defaultFont: theme.defaultFont
-    property variant smallFont: theme.smallestFont
+    defaultFont: theme.defaultFont
+    smallFont: theme.smallestFont
 
-    function __propagateColorSet(object, context) {
-        object.PlasmaCore.ColorScope.inherit = false;
-        switch(context) {
+    onSync: {
+        object.PlasmaCore.ColorScope.inherit = false
+
+        switch (object.Kirigami.Theme.colorSet) {
         case Kirigami.Theme.Window:
             object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.NormalColorGroup;
             break;
@@ -91,8 +96,4 @@ QtObject {
             break;
         }
     }
-    function __propagateTextColor(object, color) {}
-    function __propagateBackgroundColor(object, color) {}
-    function __propagatePrimaryColor(object, color) {}
-    function __propagateAccentColor(object, color) {}
 }
