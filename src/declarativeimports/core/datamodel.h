@@ -16,6 +16,8 @@
 
 class QTimer;
 
+// All classes here will hopefully be removed in KF6 (along with DataEngines in general)
+
 namespace Plasma
 {
 class DataSource;
