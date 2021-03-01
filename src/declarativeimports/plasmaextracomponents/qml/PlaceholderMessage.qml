@@ -1,8 +1,8 @@
 /*
-    SPDX-FileCopyrightText: 2020 Nate Graham <nate@kde.org>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+ *  SPDX-FileCopyrightText: 2020 Nate Graham <nate@kde.org>
+ *
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
@@ -92,7 +92,8 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *         visible: root.networkConnected
  *
  *         icon.name: "network-disconnect"
- *         text: "Network disconnected; unable to load content"
+ *         text: "Unable to load content
+ *         explanation: "Please try again later"
  *     }
  * }
  * @endcode
@@ -160,12 +161,26 @@ ColumnLayout {
      * text: string
      * The text to show as a placeholder label
      *
-     * Optional. Not setting any text is useful when you only want to display
-     * an icon, action button, and/or other custom content
+     * Optional; if not defined, the message will have no large text label
+     * text. If both text: and explanation: are omitted, the message will have
+     * no text and only an icon, action button, and/or other custom content.
      *
      * @since 5.72
      */
-    property alias text: label.text
+    property string text
+
+    /**
+     * explanation: string
+     * Smaller explanatory text to show below the larger title-style text
+     *
+     * Useful for providing a user-friendly explanation for how to proceed.
+     *
+     * Optional; if not defined, the message will have no supplementary
+     * explanatory text.
+     *
+     * @since 5.80
+     */
+    property string explanation
 
     /**
      * iconName: string
@@ -205,18 +220,28 @@ ColumnLayout {
     }
 
     PlasmaExtras.Heading {
-        id: label
-
+        text: root.text
         visible: text.length > 0
+
+        level: 2
         opacity: 0.5
 
         Layout.fillWidth: true
-        Layout.alignment: Qt.AlignHCenter
         horizontalAlignment: Qt.AlignHCenter
 
-        level: 2
-
         wrapMode: Text.WordWrap
+    }
+
+    PlasmaComponents3.Label {
+        text: root.text
+        visible:  root.explanation !== ""
+
+        opacity: 0.5
+
+        horizontalAlignment: Qt.AlignHCenter
+        wrapMode: Text.WordWrap
+
+        Layout.fillWidth: true
     }
 
     PlasmaComponents3.Button {
