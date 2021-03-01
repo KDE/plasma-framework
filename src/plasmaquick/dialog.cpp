@@ -228,10 +228,14 @@ void DialogPrivate::updateTheme()
         q->setMask(QRegion());
         DialogShadows::self()->removeWindow(q);
     } else {
+        auto prefix = QStringLiteral("");
+        if ((backgroundHints & Dialog::SolidBackground) == Dialog::SolidBackground) {
+            prefix = QStringLiteral("solid/");
+        }
         if (type == Dialog::Tooltip) {
-            frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
+            frameSvgItem->setImagePath(prefix + QStringLiteral("widgets/tooltip"));
         } else {
-            frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
+            frameSvgItem->setImagePath(prefix + QStringLiteral("dialogs/background"));
         }
 
         KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->mask());
@@ -758,10 +762,14 @@ void DialogPrivate::applyType()
     if (backgroundHints == Dialog::NoBackground) {
         frameSvgItem->setImagePath(QString());
     } else {
+        auto prefix = QStringLiteral("");
+        if ((backgroundHints & Dialog::SolidBackground) == Dialog::SolidBackground) {
+            prefix = QStringLiteral("solid/");
+        }
         if (type == Dialog::Tooltip) {
-            frameSvgItem->setImagePath(QStringLiteral("widgets/tooltip"));
+            frameSvgItem->setImagePath(prefix + QStringLiteral("widgets/tooltip"));
         } else {
-            frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
+            frameSvgItem->setImagePath(prefix + QStringLiteral("dialogs/background"));
         }
     }
 

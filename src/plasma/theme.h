@@ -366,6 +366,21 @@ public:
      */
     bool backgroundContrastEnabled() const;
 
+    /** This method allows Plasma to enable and disable the adaptive
+     * transparency option of the panel, which allows user to decide
+     * whether the panel should be always transparent, always opaque
+     * or only opaque when a window is maximized.
+     * The configuration in the metadata.desktop file of the theme
+     * could look like this (for a lighter background):
+     * \code
+     * [AdaptiveTransparency]
+     * enabled=true
+     * \endcode
+     * @return Whether or not to enable the adaptive transparency
+     * @since 5.20
+     */
+    bool adaptiveTransparencyEnabled() const;
+
     /** This method allows Plasma to set a background contrast effect
      * for a given theme, improving readability. The value is read
      * from the "contrast" key in the "ContrastEffect" group in the

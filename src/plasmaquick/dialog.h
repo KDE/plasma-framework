@@ -159,7 +159,8 @@ public:
 
     enum BackgroundHints {
         NoBackground = 0,         /**< Not drawing a background under the applet, the dialog has its own implementation */
-        StandardBackground = 1   /**< The standard background from the theme is drawn */
+        StandardBackground = 1,   /**< The standard background from the theme is drawn */
+        SolidBackground = 2,     /**< The solid version of the background is preferred */
     };
     Q_ENUM(BackgroundHints)
 

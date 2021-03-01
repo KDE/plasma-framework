@@ -102,6 +102,8 @@ defaultHeight=1080
 [ContrastEffect]
 enabled=true
 contrast=0.2
-#intensity is disabled, in order to auto adjust to the chosen theme color
-#intensity=2.0
-saturation=1.7
+intensity=1.4
+saturation=10
+
+[AdaptiveTransparency]
+enabled=true

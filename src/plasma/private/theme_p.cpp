@@ -63,6 +63,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
       backgroundIntensity(qQNaN()),
       backgroundSaturation(qQNaN()),
       backgroundContrastEnabled(true),
+      adaptiveTransparencyEnabled(false),
       blurBehindEnabled(true),
       apiMajor(1),
       apiMinor(0),
@@ -753,6 +754,18 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     }
 }
 
+
+void ThemePrivate::processAdaptiveTransparencySettings(KConfigBase *metadata)
+{
+    KConfigGroup cg;
+    if (metadata->hasGroup("AdaptiveTransparency")) {
+        cg = KConfigGroup(metadata, "ContrastEffect");
+        adaptiveTransparencyEnabled = cg.readEntry("enabled", false);
+    } else {
+        adaptiveTransparencyEnabled = false;
+    }
+}
+
 void ThemePrivate::processBlurBehindSettings(KConfigBase *metadata)
 {
     KConfigGroup cg;
@@ -832,6 +845,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         processContrastSettings(&metadata);
         processBlurBehindSettings(&metadata);
+        processAdaptiveTransparencySettings(&metadata);
 
         processWallpaperSettings(&metadata);
 
