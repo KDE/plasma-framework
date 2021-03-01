@@ -40,6 +40,7 @@ QtObject {
      * * desktop
      */
     property QtObject iconSizes: QtObject {
+        property int sizeForLabels: fontMetrics.roundedIconSize(fontMetrics.height)
         property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
         property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
         property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
