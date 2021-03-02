@@ -797,6 +797,10 @@ bool AppletInterface::event(QEvent *event)
                 continue;
             }
 
+            if (!a->isEnabled()) {
+                continue;
+            }
+
             // this will happen on a normal, non emacs shortcut
             if (seq.matches(a->shortcut()) == QKeySequence::ExactMatch) {
                 event->accept();
