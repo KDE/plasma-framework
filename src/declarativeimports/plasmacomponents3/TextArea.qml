@@ -83,6 +83,8 @@ T.TextArea {
         text: control.placeholderText
         font: control.font
         color: theme.viewTextColor
+        opacity: 0.5
+        enabled: false
         horizontalAlignment: control.horizontalAlignment
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
