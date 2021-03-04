@@ -74,7 +74,7 @@ ProgressBarStyle {
                 PropertyAnimation {
                     target: progressSvg
                     property: "x"
-                    duration: 800
+                    duration: PlasmaCore.Units.veryLongDuration * 2
                     // The progress Item's width might be left over from the previous state
                     // so we use the control.width/height directly instead
                     to: control.width - units.gridUnit * 2
@@ -88,7 +88,7 @@ ProgressBarStyle {
                 PropertyAnimation {
                     target: progressSvg
                     property: "x"
-                    duration: 800
+                    duration: PlasmaCore.Units.veryLongDuration * 2
                     to: 0
                 }
             }

@@ -30,7 +30,7 @@ T.Dialog {
             from: 0
             to: 1
             easing.type: Easing.InOutQuad
-            duration: 250
+            duration: PlasmaCore.Units.longDuration
         }
     }
 
@@ -40,7 +40,7 @@ T.Dialog {
             from: 1
             to: 0
             easing.type: Easing.InOutQuad
-            duration: 250
+            duration: PlasmaCore.Units.longDuration
         }
     }
 

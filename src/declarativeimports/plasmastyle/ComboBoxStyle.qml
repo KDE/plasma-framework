@@ -93,8 +93,8 @@ QtQuickControlStyle.ComboBoxStyle {
                 to: "normal"
                 //Cross fade from pressed to normal
                 ParallelAnimation {
-                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: 100 }
-                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: 100 }
+                    NumberAnimation { target: surfaceNormal; property: "opacity"; to: 1; duration: PlasmaCore.Units.shortDuration }
+                    NumberAnimation { target: surfacePressed; property: "opacity"; to: 0; duration: PlasmaCore.Units.shortDuration }
                 }
             }
         ]

@@ -35,8 +35,12 @@ BusyIndicatorStyle {
             id: rotationAnimator
             from: 0
             to: 360
+            // Not using a standard duration value because we don't want the
+            // animation to spin faster or slower based on the user's animation
+            // scaling preferences; it doesn't make sense in this context
             duration: 2000
-            running: control.running && control.visible && control.opacity > 0;
+            // Don't want it to animate at all if the user has disabled animations
+            running: control.running && control.visible && control.opacity > 0 && PlasmaCore.Units.longDuration > 1;
             loops: Animation.Infinite
         }
     }

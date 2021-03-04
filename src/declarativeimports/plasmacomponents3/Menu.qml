@@ -72,7 +72,7 @@ T.Menu {
             from: 0
             to: 1
             easing.type: Easing.InOutQuad
-            duration: 150
+            duration: PlasmaCore.Units.shortDuration
         }
     }
 
@@ -82,7 +82,7 @@ T.Menu {
             from: 1
             to: 0
             easing.type: Easing.InOutQuad
-            duration: 150
+            duration: PlasmaCore.Units.shortDuration
         }
     }
 

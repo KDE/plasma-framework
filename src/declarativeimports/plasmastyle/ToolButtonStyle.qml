@@ -390,8 +390,8 @@ QtQuickControlStyle.ButtonStyle {
                 Transition {
                     //Cross fade from pressed to normal
                     ParallelAnimation {
-                        NumberAnimation { target: surfaceNormal; property: "opacity"; duration: 100 }
-                        NumberAnimation { target: surfacePressed; property: "opacity"; duration: 100 }
+                        NumberAnimation { target: surfaceNormal; property: "opacity"; duration: PlasmaCore.Units.shortDuration }
+                        NumberAnimation { target: surfacePressed; property: "opacity"; duration: PlasmaCore.Units.shortDuration }
                     }
                 }
             ]

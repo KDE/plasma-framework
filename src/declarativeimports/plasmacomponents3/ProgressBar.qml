@@ -45,7 +45,7 @@ T.ProgressBar {
             PropertyAnimation {
                 target: indicator
                 property: "x"
-                duration: 800
+                duration: PlasmaCore.Units.veryLongDuration * 2
                 to: control.width - indicator.width
                 onToChanged: {
                     //the animation won't update the boundaries automatically
@@ -57,7 +57,7 @@ T.ProgressBar {
             PropertyAnimation {
                 target: indicator
                 property: "x"
-                duration: 800
+                duration: PlasmaCore.Units.veryLongDuration * 2
                 to: 0
             }
         }
