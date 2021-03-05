@@ -7,6 +7,8 @@
 #ifndef PLASMA_SVG_P_H
 #define PLASMA_SVG_P_H
 
+#include "svg.h"
+
 #include <QExplicitlySharedDataPointer>
 #include <QHash>
 #include <QObject>
@@ -16,7 +18,6 @@
 
 namespace Plasma
 {
-class Svg;
 
 class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {

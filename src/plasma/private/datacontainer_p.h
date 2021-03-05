@@ -7,6 +7,7 @@
 #ifndef PLASMA_DATACONTAINER_P_H
 #define PLASMA_DATACONTAINER_P_H
 
+#include "datacontainer.h"
 #include "servicejob.h"
 #include "storage_p.h"
 

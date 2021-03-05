@@ -5,7 +5,6 @@
 */
 
 #include "datacontainer_p.h" //krazy:exclude=includes
-#include "datacontainer.h" //krazy:exclude=includes
 
 namespace Plasma
 {
