@@ -26,8 +26,6 @@ public:
     PluginTest(int &argc, char **argv, QCommandLineParser *parser);
     virtual ~PluginTest();
 
-    void showPackageInfo(const QString &pluginName);
-
 public Q_SLOTS:
     void runMain();
     bool loadKPlugin();
