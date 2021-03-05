@@ -9,26 +9,26 @@
 #include "tooltip.h"
 #include "tooltipdialog.h"
 
-#include <QQmlEngine>
 #include <QDebug>
+#include <QQmlEngine>
 
 #include "framesvgitem.h"
-#include <KWindowEffects>
 #include <KDirWatch>
+#include <KWindowEffects>
 
 ToolTipDialog *ToolTip::s_dialog = nullptr;
-int ToolTip::s_dialogUsers  = 0;
+int ToolTip::s_dialogUsers = 0;
 
 ToolTip::ToolTip(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_tooltipsEnabledGlobally(false),
-      m_containsMouse(false),
-      m_location(Plasma::Types::Floating),
-      m_textFormat(Qt::AutoText),
-      m_active(true),
-      m_interactive(false),
-      m_timeout(4000),
-      m_usingDialog(false)
+    : QQuickItem(parent)
+    , m_tooltipsEnabledGlobally(false)
+    , m_containsMouse(false)
+    , m_location(Plasma::Types::Floating)
+    , m_textFormat(Qt::AutoText)
+    , m_active(true)
+    , m_interactive(false)
+    , m_timeout(4000)
+    , m_usingDialog(false)
 {
     setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
@@ -331,7 +331,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         // It need to be considered only when other items can deal with tooltip area
         if (m_active) {
             tooltipDialogInstance()->keepalive();
-            //FIXME: showToolTip needs to be renamed in sync or something like that
+            // FIXME: showToolTip needs to be renamed in sync or something like that
             showToolTip();
         }
     } else {

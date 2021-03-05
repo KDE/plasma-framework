@@ -7,22 +7,21 @@
 #include "containmentactions.h"
 #include "containment.h"
 
-#include "private/containmentactions_p.h"
 #include "private/containment_p.h"
+#include "private/containmentactions_p.h"
 
+#include <QContextMenuEvent>
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QWheelEvent>
-#include <QContextMenuEvent>
 
-#include <QDebug>
 #include <KLocalizedString>
+#include <QDebug>
 
 #include "version.h"
 
 namespace Plasma
 {
-
 ContainmentActions::ContainmentActions(QObject *parentObject)
     : d(new ContainmentActionsPrivate({}, this))
 {
@@ -84,17 +83,17 @@ QWidget *ContainmentActions::createConfigurationInterface(QWidget *parent)
 
 void ContainmentActions::configurationAccepted()
 {
-    //do nothing by default
+    // do nothing by default
 }
 
 void ContainmentActions::performNextAction()
 {
-    //do nothing by default, implement in subclasses
+    // do nothing by default, implement in subclasses
 }
 
 void ContainmentActions::performPreviousAction()
 {
-    //do nothing by default, implement in subclasses
+    // do nothing by default, implement in subclasses
 }
 
 QList<QAction *> ContainmentActions::contextualActions()

@@ -7,8 +7,8 @@
 #include "serviceoperationstatus.h"
 
 ServiceOperationStatus::ServiceOperationStatus(QObject *parent)
-    : QObject(parent),
-      m_enabled(false)
+    : QObject(parent)
+    , m_enabled(false)
 {
 }
 
@@ -26,8 +26,7 @@ void ServiceOperationStatus::setService(Plasma::Service *service)
         disconnect(m_service.data(), nullptr, this, nullptr);
     }
     if (service) {
-        connect(service, &Plasma::Service::operationEnabledChanged,
-                this, &ServiceOperationStatus::updateStatus);
+        connect(service, &Plasma::Service::operationEnabledChanged, this, &ServiceOperationStatus::updateStatus);
     }
 
     m_service = service;
@@ -84,4 +83,3 @@ void ServiceOperationStatus::updateStatus()
         Q_EMIT enabledChanged();
     }
 }
-

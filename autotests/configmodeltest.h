@@ -21,6 +21,4 @@ private Q_SLOTS:
     void configSchemeFromPackage();
     void emptySourceWithApplet();
     void notEmptySourceWithApplet();
-
 };
-

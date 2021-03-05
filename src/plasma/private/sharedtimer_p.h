@@ -11,7 +11,6 @@
 
 namespace Plasma
 {
-
 class Timer;
 
 class TimerDrive : public QObject
@@ -37,4 +36,3 @@ private:
 } // namespace Plasma
 
 #endif
-

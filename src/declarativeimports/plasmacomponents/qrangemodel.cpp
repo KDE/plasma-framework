@@ -33,7 +33,6 @@
 
 namespace Plasma
 {
-
 QRangeModelPrivate::QRangeModelPrivate(QRangeModel *qq)
     : q_ptr(qq)
 {
@@ -157,7 +156,8 @@ void QRangeModelPrivate::emitValueAndPositionIfChanged(const qreal oldValue, con
 */
 
 QRangeModel::QRangeModel(QObject *parent)
-    : QObject(parent), d_ptr(new QRangeModelPrivate(this))
+    : QObject(parent)
+    , d_ptr(new QRangeModelPrivate(this))
 {
     Q_D(QRangeModel);
     d->init();
@@ -169,7 +169,8 @@ QRangeModel::QRangeModel(QObject *parent)
 */
 
 QRangeModel::QRangeModel(QRangeModelPrivate &dd, QObject *parent)
-    : QObject(parent), d_ptr(&dd)
+    : QObject(parent)
+    , d_ptr(&dd)
 {
     Q_D(QRangeModel);
     d->init();
@@ -518,4 +519,3 @@ void QRangeModel::toMaximum()
 }
 
 } // Plasma namespace
-

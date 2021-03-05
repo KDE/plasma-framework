@@ -13,8 +13,8 @@
 #include <QCommandLineParser>
 #include <QStringList>
 #include <QTimer>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 namespace Plasma
 {
@@ -25,8 +25,8 @@ public:
     QCommandLineParser *parser;
 };
 
-DPITest::DPITest(int &argc, char **argv, QCommandLineParser *parser) :
-    QGuiApplication(argc, argv)
+DPITest::DPITest(int &argc, char **argv, QCommandLineParser *parser)
+    : QGuiApplication(argc, argv)
 {
     d = new DPITestPrivate;
     d->parser = parser;

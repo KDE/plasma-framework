@@ -14,7 +14,6 @@
 
 namespace Plasma
 {
-
 /**
  * @class QuickTheme plasma/theme.h <Plasma/Theme>
  *
@@ -84,8 +83,6 @@ class QuickTheme : public Plasma::Theme
 public:
     explicit QuickTheme(QObject *parent = nullptr);
     ~QuickTheme();
-
-
 
     /**
      * @return The theme's colorscheme's text color
@@ -291,7 +288,6 @@ public:
      */
     QColor complementaryNegativeTextColor() const;
 
-
     /**
      * @return The theme's colorscheme's text color of "header" areas
      * @since 5.0
@@ -347,4 +343,3 @@ Q_SIGNALS:
 } // Plasma namespace
 
 #endif // multiple inclusion guard
-

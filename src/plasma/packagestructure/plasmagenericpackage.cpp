@@ -6,10 +6,10 @@
 
 #include "plasma.h"
 
+#include "packages_p.h"
 #include <KLocalizedString>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
-#include "packages_p.h"
 
 K_EXPORT_KPACKAGE_PACKAGE_WITH_JSON(Plasma::GenericPackage, "plasmageneric-packagestructure.json")
 

@@ -27,7 +27,6 @@ class QMatrix;
 
 namespace Plasma
 {
-
 class FrameSvgPrivate;
 
 /**
@@ -269,12 +268,12 @@ public:
     Q_INVOKABLE void clearCache();
 
     /**
-      * Returns a pixmap of the SVG represented by this object.
-      *
-      * @param elelementId the ID string of the element to render, or an empty
-      *                  string for the whole SVG (the default)
-      * @return a QPixmap of the rendered SVG
-      */
+     * Returns a pixmap of the SVG represented by this object.
+     *
+     * @param elelementId the ID string of the element to render, or an empty
+     *                  string for the whole SVG (the default)
+     * @return a QPixmap of the rendered SVG
+     */
     Q_INVOKABLE QPixmap framePixmap();
 
     /**
@@ -283,8 +282,7 @@ public:
      * @param target the target rectangle on the paint device
      * @param source the portion rectangle of the source image
      */
-    Q_INVOKABLE void paintFrame(QPainter *painter, const QRectF &target,
-                                const QRectF &source = QRectF());
+    Q_INVOKABLE void paintFrame(QPainter *painter, const QRectF &target, const QRectF &source = QRectF());
 
     /**
      * Paints the loaded SVG with the elements that represents the border
@@ -321,7 +319,7 @@ private:
     FrameSvgPrivate *const d;
     friend class FrameData;
 
-    //Q_PRIVATE_SLOT(d, void updateSizes())
+    // Q_PRIVATE_SLOT(d, void updateSizes())
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FrameSvg::EnabledBorders)

@@ -6,17 +6,20 @@
 
 #include "plasma.h"
 
+#include "config-plasma.h"
+#include "packages_p.h"
 #include <KLocalizedString>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
-#include "packages_p.h"
-#include "config-plasma.h"
 
 class DataEnginePackage : public Plasma::ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    DataEnginePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
+    DataEnginePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
+        : ChangeableMainScriptPackage(parent, args)
+    {
+    }
 
     void initPackage(KPackage::Package *package) override
     {
@@ -36,7 +39,6 @@ public:
         package->addDirectoryDefinition("translations", QStringLiteral("locale"), i18n("Translations"));
     }
 };
-
 
 K_EXPORT_KPACKAGE_PACKAGE_WITH_JSON(DataEnginePackage, "dataengine-packagestructure.json")
 

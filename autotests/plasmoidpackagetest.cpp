@@ -7,11 +7,11 @@
 #include "plasmoidpackagetest.h"
 #include "../config-plasma.h"
 
+#include <KJob>
 #include <QDir>
 #include <QFile>
-#include <kzip.h>
-#include <KJob>
 #include <QStandardPaths>
+#include <kzip.h>
 
 #include <QDebug>
 
@@ -246,7 +246,7 @@ void PlasmoidPackageTest::createAndInstallPackage()
     KZip package(packagePath);
     QVERIFY(package.open(QIODevice::ReadOnly));
     const KArchiveDirectory *dir = package.directory();
-    QVERIFY(dir);//
+    QVERIFY(dir); //
     QVERIFY(dir->entry("metadata.desktop"));
     const KArchiveEntry *contentsEntry = dir->entry("contents");
     QVERIFY(contentsEntry);
@@ -258,12 +258,12 @@ void PlasmoidPackageTest::createAndInstallPackage()
     m_defaultPackageStructure = new Plasma::PackageStructure(this);
     Plasma::Package *p = new Plasma::Package(m_defaultPackageStructure);
     qDebug() << "Installing " << archivePath;
-    //const QString packageRoot = "plasma/plasmoids/";
-    //const QString servicePrefix = "plasma-applet-";
+    // const QString packageRoot = "plasma/plasmoids/";
+    // const QString servicePrefix = "plasma-applet-";
     KJob *job = p->install(archivePath, m_packageRoot);
-    connect(job, SIGNAL(finished(KJob*)), SLOT(packageInstalled(KJob*)));
+    connect(job, SIGNAL(finished(KJob *)), SLOT(packageInstalled(KJob *)));
 
-    //QVERIFY(p->isValid());
+    // QVERIFY(p->isValid());
     delete p;
 }
 
@@ -271,12 +271,12 @@ void PlasmoidPackageTest::packageInstalled(KJob *j)
 {
     qDebug() << "!!!!!!!!!!!!!!!!!!!! package installed" << (j->error() == KJob::NoError);
     QVERIFY(j->error() == KJob::NoError);
-    //QVERIFY(p->path());
+    // QVERIFY(p->path());
 
     Plasma::Package *p = new Plasma::Package(m_defaultPackageStructure);
     KJob *jj = p->uninstall("org.kde.microblog-qml", m_packageRoot);
-    //QObject::disconnect(j, SIGNAL(finished(KJob*)), this, SLOT(packageInstalled(KJob*)));
-    connect(jj, SIGNAL(finished(KJob*)), SLOT(packageInstalled(KJob*)));
+    // QObject::disconnect(j, SIGNAL(finished(KJob*)), this, SLOT(packageInstalled(KJob*)));
+    connect(jj, SIGNAL(finished(KJob *)), SLOT(packageInstalled(KJob *)));
 }
 
 void PlasmoidPackageTest::packageUninstalled(KJob *j)

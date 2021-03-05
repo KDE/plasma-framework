@@ -15,8 +15,7 @@
 
 namespace Plasma
 {
-
-class EffectWatcher: public QObject, public QAbstractNativeEventFilter
+class EffectWatcher : public QObject, public QAbstractNativeEventFilter
 {
     Q_OBJECT
 

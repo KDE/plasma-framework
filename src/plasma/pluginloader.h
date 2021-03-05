@@ -7,13 +7,12 @@
 #ifndef PLUGIN_LOADER_H
 #define PLUGIN_LOADER_H
 
+#include <KPluginInfo>
 #include <plasma/package.h>
 #include <plasma/plasma.h>
-#include <KPluginInfo>
 
 namespace Plasma
 {
-
 class Applet;
 class Containment;
 class ContainmentActions;
@@ -22,7 +21,7 @@ class Service;
 
 class PluginLoaderPrivate;
 
-//TODO:
+// TODO:
 // * add loadWallpaper
 // * add KPluginInfo listing support for Containments (already loaded via the applet loading code)
 
@@ -52,8 +51,7 @@ public:
      * @param args to send the applet extra arguments
      * @return a pointer to the loaded applet, or 0 on load failure
      **/
-    Applet *loadApplet(const QString &name, uint appletId = 0,
-                       const QVariantList &args = QVariantList());
+    Applet *loadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList());
 
     /**
      * Load a dataengine plugin.
@@ -128,8 +126,7 @@ public:
      * @param args to send the containmentactions extra arguments
      * @return a ContainmentActions object
      **/
-    ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName,
-            const QVariantList &args = QVariantList());
+    ContainmentActions *loadContainmentActions(Containment *parent, const QString &containmentActionsName, const QVariantList &args = QVariantList());
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 30)
     /**
@@ -239,8 +236,7 @@ public:
      * @return list of categories
      * @param visibleOnly true if it should only return applets that are marked as visible
      */
-    QStringList listAppletCategories(const QString &parentApp = QString(),
-                                     bool visibleOnly = true);
+    QStringList listAppletCategories(const QString &parentApp = QString(), bool visibleOnly = true);
 
     /**
      * Sets the list of custom categories that are used in addition to the default
@@ -278,8 +274,7 @@ public:
      *                  list of all containments.
      * @return list of containments
      **/
-    static KPluginInfo::List listContainments(const QString &category = QString(),
-            const QString &parentApp = QString());
+    static KPluginInfo::List listContainments(const QString &category = QString(), const QString &parentApp = QString());
 
     /**
      * Returns a list of all known containments that match the parameters.
@@ -299,9 +294,7 @@ public:
      *                  list of all containments, matching categories/type.
      * @return list of containments
      **/
-    static KPluginInfo::List listContainmentsOfType(const QString &type,
-            const QString &category = QString(),
-            const QString &parentApp = QString());
+    static KPluginInfo::List listContainmentsOfType(const QString &type, const QString &category = QString(), const QString &parentApp = QString());
 
     /**
      * @return a list of all known types of containments on this system
@@ -396,8 +389,7 @@ protected:
      * @param args to send the applet extra arguments
      * @return a pointer to the loaded applet, or 0 on load failure
      **/
-    virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0,
-                                       const QVariantList &args = QVariantList());
+    virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList());
 
     /**
      * A re-implementable method that allows subclasses to override

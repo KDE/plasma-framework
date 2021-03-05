@@ -13,7 +13,6 @@
 
 namespace Plasma
 {
-
 class QRangeModelPrivate;
 
 class QRangeModel : public QObject
@@ -86,7 +85,6 @@ protected:
 private:
     Q_DISABLE_COPY(QRangeModel)
     Q_DECLARE_PRIVATE(QRangeModel)
-
 };
 
 } // Plasma namespace

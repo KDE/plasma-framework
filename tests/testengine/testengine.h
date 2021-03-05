@@ -19,7 +19,7 @@ class TestEngine : public Plasma::DataEngine
 
 public:
     struct MyUserType {
-        int     a;
+        int a;
         QString b;
     };
 

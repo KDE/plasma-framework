@@ -13,8 +13,8 @@
 
 #include <KConfigGroup>
 
-#include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
+#include <plasma/plasma_export.h>
 
 class QIODevice;
 class QWidget;
@@ -23,7 +23,6 @@ class QQuickItem;
 
 namespace Plasma
 {
-
 class ServiceJob;
 class ServicePrivate;
 
@@ -168,8 +167,7 @@ protected:
      * @param parameters the parameters set by the user for the operation
      * @return a ServiceJob that can be started and monitored by the consumer
      */
-    virtual ServiceJob *createJob(const QString &operation,
-                                  QVariantMap &parameters) = 0;
+    virtual ServiceJob *createJob(const QString &operation, QVariantMap &parameters) = 0;
 
     /**
      * By default this is based on the file in plasma/services/name.operations, but can be
@@ -213,13 +211,12 @@ private:
 /**
  * Register a service when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_SERVICE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_SERVICE(libname, classname)                                                                                                            \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)                                                                                                    \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#define K_EXPORT_PLASMA_SERVICE_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_SERVICE_WITH_JSON(libname, classname, jsonFile)                                                                                        \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard
-

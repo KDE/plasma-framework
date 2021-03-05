@@ -6,17 +6,20 @@
 
 #include "plasma.h"
 
+#include "config-plasma.h"
+#include "packages_p.h"
+#include <KLocalizedString>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
-#include <KLocalizedString>
-#include "packages_p.h"
-#include "config-plasma.h"
 
 class PlasmoidPackage : public Plasma::GenericPackage
 {
     Q_OBJECT
 public:
-    PlasmoidPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : GenericPackage(parent, args) {}
+    PlasmoidPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
+        : GenericPackage(parent, args)
+    {
+    }
 
     void initPackage(KPackage::Package *package) override
     {

@@ -8,10 +8,7 @@
 
 #include <QTest>
 
-
 #include "plasma/framesvg.h"
-
-
 
 class FrameSvgTest : public QObject
 {
@@ -33,4 +30,3 @@ private:
 };
 
 #endif
-

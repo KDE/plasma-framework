@@ -8,25 +8,23 @@
 #include "configview.h"
 
 #include <QDebug>
-#include <QQuickItem>
 #include <QQmlContext>
-#include <QTimer>
-#include <QScreen>
 #include <QQmlEngine>
+#include <QQuickItem>
+#include <QScreen>
+#include <QTimer>
 
 #include <KLocalizedContext>
 
 #include "plasma/pluginloader.h"
-#include <packageurlinterceptor.h>
 #include <kdeclarative/kdeclarative.h>
+#include <packageurlinterceptor.h>
 
 namespace PlasmaQuick
 {
-
 class ViewPrivate
 {
 public:
-
     ViewPrivate(Plasma::Corona *corona, View *view);
     ~ViewPrivate();
 
@@ -44,8 +42,8 @@ public:
 };
 
 ViewPrivate::ViewPrivate(Plasma::Corona *cor, View *view)
-    : q(view),
-      corona(cor)
+    : q(view)
+    , corona(cor)
 {
 }
 
@@ -66,9 +64,9 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment, nullptr, q, nullptr);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (oldGraphicObject) {
-//             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
-            //make sure the graphic object won't die with us
-            //FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
+            //             qDebug() << "Old graphics Object:" << oldGraphicObject << "Old containment" << containment.data();
+            // make sure the graphic object won't die with us
+            // FIXME:we need a way to reparent to *NO* graphics item, but this makes Qt crash
             oldGraphicObject->setParent(containment);
         }
         containment->reactToScreenChange();
@@ -87,16 +85,11 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
 
     if (cont) {
         cont->reactToScreenChange();
-        QObject::connect(cont, &Plasma::Containment::locationChanged,
-                         q, &View::locationChanged);
-        QObject::connect(cont, &Plasma::Containment::formFactorChanged,
-                         q, &View::formFactorChanged);
-        QObject::connect(cont, &Plasma::Containment::configureRequested,
-                         q, &View::showConfigurationInterface);
-        QObject::connect(cont, SIGNAL(destroyedChanged(bool)),
-                         q, SLOT(updateDestroyed(bool)));
-        if (cont->containmentType() == Plasma::Types::PanelContainment ||
-            cont->containmentType() == Plasma::Types::CustomPanelContainment) {
+        QObject::connect(cont, &Plasma::Containment::locationChanged, q, &View::locationChanged);
+        QObject::connect(cont, &Plasma::Containment::formFactorChanged, q, &View::formFactorChanged);
+        QObject::connect(cont, &Plasma::Containment::configureRequested, q, &View::showConfigurationInterface);
+        QObject::connect(cont, SIGNAL(destroyedChanged(bool)), q, SLOT(updateDestroyed(bool)));
+        if (cont->containmentType() == Plasma::Types::PanelContainment || cont->containmentType() == Plasma::Types::CustomPanelContainment) {
             q->setVisible(!cont->destroyed() && cont->isUiReady());
         }
     } else {
@@ -106,9 +99,9 @@ void ViewPrivate::setContainment(Plasma::Containment *cont)
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
 
     if (graphicObject) {
-//         qDebug() << "using as graphic containment" << graphicObject << containment.data();
+        //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
-        //by resizing before adding, it will avoid some resizes in most cases
+        // by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setSize(q->size());
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
@@ -170,13 +163,12 @@ void ViewPrivate::updateDestroyed(bool destroyed)
 }
 
 View::View(Plasma::Corona *corona, QWindow *parent)
-    : QQuickView(parent),
-      d(new ViewPrivate(corona, this))
+    : QQuickView(parent)
+    , d(new ViewPrivate(corona, this))
 {
     setColor(Qt::transparent);
 
-    QObject::connect(screen(), &QScreen::geometryChanged,
-                     this, &View::screenGeometryChanged);
+    QObject::connect(screen(), &QScreen::geometryChanged, this, &View::screenGeometryChanged);
 
     const auto pkg = corona->kPackage();
     if (pkg.isValid()) {
@@ -188,24 +180,26 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         localizedContextObject->setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
         engine()->rootContext()->setContextObject(localizedContextObject);
 
-        //binds things like kconfig and icons
+        // binds things like kconfig and icons
         KDeclarative::KDeclarative::setupEngine(engine()); // ### how to make sure to do this only once per engine?
     } else {
         qWarning() << "Invalid home screen package";
     }
 
-    //Force QtQuickControls to use the "Plasma" style for this engine.
-    //this way is possible to mix QtQuickControls and plasma components in applets
-    //while still having the desktop style in configuration dialogs
+    // Force QtQuickControls to use the "Plasma" style for this engine.
+    // this way is possible to mix QtQuickControls and plasma components in applets
+    // while still having the desktop style in configuration dialogs
     QQmlComponent c(engine());
-    c.setData("import QtQuick 2.1\n\
+    c.setData(
+        "import QtQuick 2.1\n\
         import QtQuick.Controls 1.0\n\
         import QtQuick.Controls.Private 1.0\n \
         Item {\
           Component.onCompleted: {\
             Settings.styleName = \"Plasma\";\
           }\
-        }", QUrl());
+        }",
+        QUrl());
     QObject *o = c.create();
     o->deleteLater();
 

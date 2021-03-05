@@ -23,15 +23,15 @@ void DialogNativeTest::initTestCase()
 
     m_panel = new QQuickView;
     m_panel->setGeometry(0, 0, 50, 50);
-    m_panel->setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
+    m_panel->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_panel2 = new QQuickView;
     m_panel2->setGeometry(100, 0, 50, 50);
-    m_panel2->setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
+    m_panel2->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_panel3 = new QQuickView;
     m_panel3->setGeometry(200, 0, 50, 50);
-    m_panel3->setFlags(Qt::FramelessWindowHint|Qt::WindowDoesNotAcceptFocus);
+    m_panel3->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_content = new QQuickItem;
     m_content->setWidth(100);

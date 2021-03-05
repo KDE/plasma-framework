@@ -24,7 +24,6 @@ class QMatrix;
 
 namespace Plasma
 {
-
 class FrameSvgPrivate;
 class SvgPrivate;
 
@@ -161,8 +160,7 @@ public:
      * @param elementId  the ID string of the element to render, or an empty
      *                 string for the whole SVG (the default)
      */
-    Q_INVOKABLE void paint(QPainter *painter, const QPointF &point,
-                           const QString &elementID = QString());
+    Q_INVOKABLE void paint(QPainter *painter, const QPointF &point, const QString &elementID = QString());
 
     /**
      * Paints all or part of the SVG represented by this object
@@ -178,8 +176,7 @@ public:
      * @param elementId  the ID string of the element to render, or an empty
      *                 string for the whole SVG (the default)
      */
-    Q_INVOKABLE void paint(QPainter *painter, int x, int y,
-                           const QString &elementID = QString());
+    Q_INVOKABLE void paint(QPainter *painter, int x, int y, const QString &elementID = QString());
 
     /**
      * Paints all or part of the SVG represented by this object
@@ -190,8 +187,7 @@ public:
      * @param elementId  the ID string of the element to render, or an empty
      *                 string for the whole SVG (the default)
      */
-    Q_INVOKABLE void paint(QPainter *painter, const QRectF &rect,
-                           const QString &elementID = QString());
+    Q_INVOKABLE void paint(QPainter *painter, const QRectF &rect, const QString &elementID = QString());
 
     /**
      * Paints all or part of the SVG represented by this object
@@ -204,8 +200,7 @@ public:
      * @param elementId  the ID string of the element to render, or an empty
      *                 string for the whole SVG (the default)
      */
-    Q_INVOKABLE void paint(QPainter *painter, int x, int y, int width,
-                           int height, const QString &elementID = QString());
+    Q_INVOKABLE void paint(QPainter *painter, int x, int y, int width, int height, const QString &elementID = QString());
 
     /**
      * The size of the SVG.
@@ -501,4 +496,3 @@ private:
 } // Plasma namespace
 
 #endif // multiple inclusion guard
-

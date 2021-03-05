@@ -6,8 +6,8 @@
 */
 
 #include <KLocalizedString>
-#include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QCommandLineParser>
 
 #include "plugintest.h"
 
@@ -23,8 +23,9 @@ int main(int argc, char **argv)
     parser->addVersionOption();
     parser->setApplicationDescription(description);
 
-    parser->addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"), i18nc("Do not translate <name>", "Show plugins"), QStringLiteral("name")));
+    parser->addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"),
+                                         i18nc("Do not translate <name>", "Show plugins"),
+                                         QStringLiteral("name")));
 
     return app.exec();
 }
-

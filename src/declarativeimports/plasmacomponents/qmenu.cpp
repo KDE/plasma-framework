@@ -8,8 +8,8 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QQuickWindow>
 #include <QQuickItem>
+#include <QQuickWindow>
 #include <QScreen>
 #include <QTimer>
 #include <QVersionNumber>
@@ -18,10 +18,10 @@
 
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
-    : QObject(parent),
-      m_menu(nullptr),
-      m_status(DialogStatus::Closed),
-      m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
+    : QObject(parent)
+    , m_menu(nullptr)
+    , m_status(DialogStatus::Closed)
+    , m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
         m_menu = new QMenu(nullptr);
@@ -32,9 +32,9 @@ QMenuProxy::QMenuProxy(QObject *parent)
 
         KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
-        connect(m_menu, &QMenu::aboutToHide, this, [ = ]() {
-                m_status = DialogStatus::Closed;
-                Q_EMIT statusChanged();
+        connect(m_menu, &QMenu::aboutToHide, this, [=]() {
+            m_status = DialogStatus::Closed;
+            Q_EMIT statusChanged();
         });
     }
 }
@@ -79,13 +79,13 @@ void QMenuProxy::setVisualParent(QObject *parent)
         return;
     }
 
-    //if the old parent was a QAction, disconnect the menu from it
+    // if the old parent was a QAction, disconnect the menu from it
     QAction *action = qobject_cast<QAction *>(m_visualParent.data());
     if (action) {
         action->setMenu(nullptr);
         m_menu->clear();
     }
-    //if parent is a QAction, become a submenu
+    // if parent is a QAction, become a submenu
     action = qobject_cast<QAction *>(parent);
     if (action) {
         action->setMenu(m_menu);
@@ -179,7 +179,7 @@ bool QMenuProxy::event(QEvent *event)
     case QEvent::ChildAdded: {
         QChildEvent *ce = static_cast<QChildEvent *>(event);
         QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
-        //FIXME: linear complexity here
+        // FIXME: linear complexity here
         if (mi && !m_items.contains(mi)) {
             if (mi->separator()) {
                 m_menu->addSection(mi->text());
@@ -195,7 +195,7 @@ bool QMenuProxy::event(QEvent *event)
         QChildEvent *ce = static_cast<QChildEvent *>(event);
         QMenuItem *mi = qobject_cast<QMenuItem *>(ce->child());
 
-        //FIXME: linear complexity here
+        // FIXME: linear complexity here
         if (mi) {
             m_menu->removeAction(mi->action());
             m_items.removeAll(mi);
@@ -275,7 +275,6 @@ void QMenuProxy::itemTriggered(QAction *action)
             Q_EMIT triggeredIndex(i);
             break;
         }
-
     }
 }
 
@@ -293,7 +292,7 @@ void QMenuProxy::rebuildMenu()
         } else {
             m_menu->addAction(item->action());
             if (item->action()->menu()) {
-                //This ensures existence of the QWindow
+                // This ensures existence of the QWindow
                 m_menu->winId();
                 item->action()->menu()->winId();
                 item->action()->menu()->windowHandle()->setTransientParent(m_menu->windowHandle());
@@ -377,48 +376,48 @@ void QMenuProxy::openRelative()
         }
     };
 
-    switch(m_placement) {
-        case Types::TopPosedLeftAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(0, -m_menu->height()));
-            boundaryCorrection(-m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
-            break;
-        }
-        case Types::LeftPosedTopAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
-            boundaryCorrection(m_menu->width() + parentItem->width(), -m_menu->height() + parentItem->height());
-            break;
-        }
-        case Types::TopPosedRightAlignedPopup:
-            pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), -m_menu->height()));
-            boundaryCorrection(m_menu->width() - parentItem->width(), m_menu->height() + parentItem->height());
-            break;
-        case Types::RightPosedTopAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(parentItem->width(), 0));
-            boundaryCorrection(-m_menu->width() - parentItem->width(), -m_menu->height() + parentItem->height());
-            break;
-        }
-        case Types::LeftPosedBottomAlignedPopup:
-            pos = parentItem->mapToScene(QPointF(-m_menu->width(), -m_menu->height() + parentItem->height()));
-            boundaryCorrection(m_menu->width() + parentItem->width(), m_menu->height() - parentItem->height());
-            break;
-        case Types::BottomPosedLeftAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(0, parentItem->height()));
-            boundaryCorrection(-m_menu->width() + parentItem->width(), -m_menu->height() - parentItem->height());
-            break;
-        }
-        case Types::BottomPosedRightAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), parentItem->height()));
-            boundaryCorrection(m_menu->width() - parentItem->width(), -m_menu->height() - parentItem->height());
-            break;
-        }
-        case Types::RightPosedBottomAlignedPopup: {
-            pos = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height() + parentItem->height()));
-            boundaryCorrection(-m_menu->width() - parentItem->width(), m_menu->height() - parentItem->height());
-            break;
-        }
-        default:
-            open();
-            return;
+    switch (m_placement) {
+    case Types::TopPosedLeftAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(0, -m_menu->height()));
+        boundaryCorrection(-m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
+        break;
+    }
+    case Types::LeftPosedTopAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
+        boundaryCorrection(m_menu->width() + parentItem->width(), -m_menu->height() + parentItem->height());
+        break;
+    }
+    case Types::TopPosedRightAlignedPopup:
+        pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), -m_menu->height()));
+        boundaryCorrection(m_menu->width() - parentItem->width(), m_menu->height() + parentItem->height());
+        break;
+    case Types::RightPosedTopAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(parentItem->width(), 0));
+        boundaryCorrection(-m_menu->width() - parentItem->width(), -m_menu->height() + parentItem->height());
+        break;
+    }
+    case Types::LeftPosedBottomAlignedPopup:
+        pos = parentItem->mapToScene(QPointF(-m_menu->width(), -m_menu->height() + parentItem->height()));
+        boundaryCorrection(m_menu->width() + parentItem->width(), m_menu->height() - parentItem->height());
+        break;
+    case Types::BottomPosedLeftAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(0, parentItem->height()));
+        boundaryCorrection(-m_menu->width() + parentItem->width(), -m_menu->height() - parentItem->height());
+        break;
+    }
+    case Types::BottomPosedRightAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), parentItem->height()));
+        boundaryCorrection(m_menu->width() - parentItem->width(), -m_menu->height() - parentItem->height());
+        break;
+    }
+    case Types::RightPosedBottomAlignedPopup: {
+        pos = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height() + parentItem->height()));
+        boundaryCorrection(-m_menu->width() - parentItem->width(), m_menu->height() - parentItem->height());
+        break;
+    }
+    default:
+        open();
+        return;
     }
 
     openInternal(pos.toPoint());
@@ -429,7 +428,7 @@ void QMenuProxy::openInternal(QPoint pos)
     QQuickItem *parentItem = this->parentItem();
 
     if (parentItem && parentItem->window()) {
-        //create the QWindow
+        // create the QWindow
         m_menu->winId();
         m_menu->windowHandle()->setTransientParent(parentItem->window());
 
@@ -441,14 +440,14 @@ void QMenuProxy::openInternal(QPoint pos)
             }
         };
 
-        //pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
-        //post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
+        // pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
+        // post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
         if (QVersionNumber::fromString(QString::fromLatin1(qVersion())) > QVersionNumber(5, 8, 0)) {
             QTimer::singleShot(0, this, ungrabMouseHack);
         } else {
             ungrabMouseHack();
         }
-        //end workaround
+        // end workaround
     }
 
     m_menu->popup(pos);
@@ -469,5 +468,3 @@ void QMenuProxy::close()
 {
     m_menu->hide();
 }
-
-

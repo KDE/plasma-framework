@@ -7,14 +7,13 @@
 #ifndef SVGITEM_P
 #define SVGITEM_P
 
-#include <QQuickItem>
 #include <QImage>
+#include <QQuickItem>
 
 #include "units.h"
 
 namespace Plasma
 {
-
 class Svg;
 
 /**
@@ -48,7 +47,7 @@ class SvgItem : public QQuickItem
     Q_PROPERTY(QSizeF naturalSize READ naturalSize NOTIFY naturalSizeChanged)
 
 public:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
 
     explicit SvgItem(QQuickItem *parent = nullptr);
     ~SvgItem() override;
@@ -62,7 +61,7 @@ public:
     QSizeF naturalSize() const;
 
     QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override;
-/// @endcond
+    /// @endcond
 
 Q_SIGNALS:
     void elementIdChanged();
@@ -70,10 +69,10 @@ Q_SIGNALS:
     void naturalSizeChanged();
 
 protected Q_SLOTS:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
     void updateNeeded();
     void updateDevicePixelRatio();
-/// @endcond
+    /// @endcond
 
 private:
     void scheduleImageUpdate();

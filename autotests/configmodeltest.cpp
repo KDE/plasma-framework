@@ -13,8 +13,8 @@
 
 #include <KConfigLoader>
 
-#include <QQmlEngine>
 #include <QQmlComponent>
+#include <QQmlEngine>
 
 void ConfigModelTest::configSchemeFromPackage()
 {
@@ -37,7 +37,7 @@ void ConfigModelTest::configSchemeFromPackage()
     QCOMPARE(configModel->get(0).toMap().value(QStringLiteral("icon")).toString(), QStringLiteral("plasma"));
     QCOMPARE(configModel->get(0).toMap().value(QStringLiteral("source")).toString(), QStringLiteral("ConfigGeneral.qml"));
     QCOMPARE(configModel->get(0).toMap().value(QStringLiteral("pluginName")).toString(), QString());
-    QVERIFY(!configModel->get(0).toMap().value(QStringLiteral("kcm")).value<void*>());
+    QVERIFY(!configModel->get(0).toMap().value(QStringLiteral("kcm")).value<void *>());
 
     delete component;
     delete applet;
@@ -108,4 +108,3 @@ void ConfigModelTest::notEmptySourceWithApplet()
 }
 
 QTEST_MAIN(ConfigModelTest)
-

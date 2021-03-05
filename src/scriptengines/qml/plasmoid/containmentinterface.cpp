@@ -7,35 +7,35 @@
 */
 
 #include "containmentinterface.h"
-#include "wallpaperinterface.h"
 #include "dropmenu.h"
+#include "wallpaperinterface.h"
 #include <kdeclarative/qmlobject.h>
 
+#include <QApplication>
 #include <QClipboard>
+#include <QMimeData>
 #include <QQmlExpression>
 #include <QQmlProperty>
-#include <QMimeData>
-#include <QVersionNumber>
 #include <QScreen>
-#include <QApplication>
+#include <QVersionNumber>
 
-#include <KActionCollection>
 #include <KAcceleratorManager>
+#include <KActionCollection>
 #include <KAuthorized>
-#include <QDebug>
 #include <KLocalizedString>
-#include <KUrlMimeData>
-#include <QMimeDatabase>
 #include <KNotification>
+#include <KUrlMimeData>
+#include <QDebug>
+#include <QMimeDatabase>
 
 #include <KIO/DropJob>
 #include <KIO/MimetypeJob>
 #include <KIO/TransferJob>
 
-#include <plasma.h>
 #include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
+#include <plasma.h>
 
 #include <KPackage/Package>
 #include <KPackage/PackageLoader>
@@ -45,22 +45,19 @@
 #include <packageurlinterceptor.h>
 
 ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args)
-    : AppletInterface(parent, args),
-      m_wallpaperInterface(nullptr),
-      m_activityInfo(nullptr),
-      m_wheelDelta(0)
+    : AppletInterface(parent, args)
+    , m_wallpaperInterface(nullptr)
+    , m_activityInfo(nullptr)
+    , m_wheelDelta(0)
 {
     m_containment = static_cast<Plasma::Containment *>(appletScript()->applet()->containment());
 
     setAcceptedMouseButtons(Qt::AllButtons);
 
-    connect(m_containment.data(), &Plasma::Containment::appletRemoved,
-            this, &ContainmentInterface::appletRemovedForward);
-    connect(m_containment.data(), &Plasma::Containment::appletAdded,
-            this, &ContainmentInterface::appletAddedForward);
+    connect(m_containment.data(), &Plasma::Containment::appletRemoved, this, &ContainmentInterface::appletRemovedForward);
+    connect(m_containment.data(), &Plasma::Containment::appletAdded, this, &ContainmentInterface::appletAddedForward);
 
-    connect(m_containment->corona(), &Plasma::Corona::editModeChanged,
-            this, &ContainmentInterface::editModeChanged);
+    connect(m_containment->corona(), &Plasma::Corona::editModeChanged, this, &ContainmentInterface::editModeChanged);
 
     if (!m_appletInterfaces.isEmpty()) {
         Q_EMIT appletsChanged();
@@ -74,8 +71,7 @@ void ContainmentInterface::init()
     }
 
     m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-    connect(m_activityInfo, &KActivities::Info::nameChanged,
-            this, &ContainmentInterface::activityNameChanged);
+    connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentInterface::activityNameChanged);
     Q_EMIT activityNameChanged();
 
     if (!m_containment->wallpaper().isEmpty()) {
@@ -84,7 +80,7 @@ void ContainmentInterface::init()
 
     AppletInterface::init();
 
-    //Create the ToolBox
+    // Create the ToolBox
     if (m_containment) {
         KConfigGroup defaults;
         if (m_containment->containmentType() == Plasma::Types::DesktopContainment) {
@@ -125,40 +121,33 @@ void ContainmentInterface::init()
                 qWarning() << "Toolbox not loading, toolbox package is either invalid or disabled.";
             }
         }
-
     }
 
-    //set parent, both as object hierarchically and visually
-    //do this only for containments, applets will do it in compactrepresentationcheck
+    // set parent, both as object hierarchically and visually
+    // do this only for containments, applets will do it in compactrepresentationcheck
     if (qmlObject()->rootObject()) {
         qmlObject()->rootObject()->setProperty("parent", QVariant::fromValue(this));
 
-        //set anchors
+        // set anchors
         QQmlExpression expr(qmlObject()->engine()->rootContext(), qmlObject()->rootObject(), QStringLiteral("parent"));
         QQmlProperty prop(qmlObject()->rootObject(), QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
     }
 
-    connect(m_containment.data(), &Plasma::Containment::activityChanged,
-            this, &ContainmentInterface::activityChanged);
-    connect(m_containment.data(), &Plasma::Containment::activityChanged, this,
-            [ = ]() {
-                delete m_activityInfo;
-                m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-                connect(m_activityInfo, &KActivities::Info::nameChanged,
-                        this, &ContainmentInterface::activityNameChanged);
-                Q_EMIT activityNameChanged();
-            });
-    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged,
-            this, &ContainmentInterface::loadWallpaper);
-    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged,
-            this, &ContainmentInterface::containmentTypeChanged);
+    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, &ContainmentInterface::activityChanged);
+    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, [=]() {
+        delete m_activityInfo;
+        m_activityInfo = new KActivities::Info(m_containment->activity(), this);
+        connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentInterface::activityNameChanged);
+        Q_EMIT activityNameChanged();
+    });
+    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentInterface::loadWallpaper);
+    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged, this, &ContainmentInterface::containmentTypeChanged);
 
-    connect(m_containment.data()->actions(), &KActionCollection::changed,
-            this, &ContainmentInterface::actionsChanged);
+    connect(m_containment.data()->actions(), &KActionCollection::changed, this, &ContainmentInterface::actionsChanged);
 }
 
-QList <QObject *> ContainmentInterface::applets()
+QList<QObject *> ContainmentInterface::applets()
 {
     return m_appletInterfaces;
 }
@@ -180,14 +169,14 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
 
 Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
 {
-    //HACK
-    //This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
+    // HACK
+    // This is necessary to delay the appletAdded signal (of containmentInterface) AFTER the applet graphics object has been created
     blockSignals(true);
     Plasma::Applet *applet = m_containment->createApplet(plugin, args);
 
     if (applet) {
         QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
-        //invalid applet?
+        // invalid applet?
         if (!appletGraphicObject) {
             blockSignals(false);
             return applet;
@@ -260,10 +249,10 @@ QPointF ContainmentInterface::mapFromApplet(AppletInterface *applet, int x, int 
         return QPointF();
     }
 
-    //x,y in absolute screen coordinates of current view
+    // x,y in absolute screen coordinates of current view
     QPointF pos = applet->mapToScene(QPointF(x, y));
     pos = QPointF(pos + applet->window()->geometry().topLeft());
-    //return the coordinate in the relative view's coords
+    // return the coordinate in the relative view's coords
     return pos - window()->geometry().topLeft();
 }
 
@@ -273,12 +262,12 @@ QPointF ContainmentInterface::mapToApplet(AppletInterface *applet, int x, int y)
         return QPointF();
     }
 
-    //x,y in absolute screen coordinates of current view
+    // x,y in absolute screen coordinates of current view
     QPointF pos(x, y);
     pos = QPointF(pos + window()->geometry().topLeft());
-    //the coordinate in the relative view's coords
+    // the coordinate in the relative view's coords
     pos = pos - applet->window()->geometry().topLeft();
-    //make it relative to applet coords
+    // make it relative to applet coords
     return pos - applet->mapToScene(QPointF(0, 0));
 }
 
@@ -291,15 +280,17 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     }
 
     if (!reg.isEmpty()) {
-        //make it relative
+        // make it relative
         QRect geometry = m_containment->corona()->screenGeometry(screenId);
-        reg.translate(- geometry.topLeft());
+        reg.translate(-geometry.topLeft());
     } else {
         reg = QRect(0, 0, width(), height());
     }
 
     const QRect rect(qBound(reg.boundingRect().left(), x, reg.boundingRect().right() + 1 - w),
-                     qBound(reg.boundingRect().top(), y, reg.boundingRect().bottom() + 1 - h), w, h);
+                     qBound(reg.boundingRect().top(), y, reg.boundingRect().bottom() + 1 - h),
+                     w,
+                     h);
     const QRectF ar = availableScreenRect();
     QRect tempRect(rect);
 
@@ -312,7 +303,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
 
     // top left corner
     if (rect.center().x() <= ar.center().x() && rect.center().y() <= ar.center().y()) {
-        //QRegion::contains doesn't do what it would suggest, so do reg.intersected(rect) != rect instead
+        // QRegion::contains doesn't do what it would suggest, so do reg.intersected(rect) != rect instead
         if (reg.intersected(rect) != rect) {
             tempRect = QRect(qMax(rect.left(), (int)ar.left()), rect.top(), w, h);
             if (reg.intersected(tempRect) == tempRect) {
@@ -330,7 +321,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
             return rect.topLeft();
         }
 
-    //bottom left corner
+        // bottom left corner
     } else if (rect.center().x() <= ar.center().x() && rect.center().y() > ar.center().y()) {
         if (reg.intersected(rect) != rect) {
             tempRect = QRect(qMax(rect.left(), (int)ar.left()), rect.top(), w, h);
@@ -349,7 +340,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
             return rect.topLeft();
         }
 
-    //top right corner
+        // top right corner
     } else if (rect.center().x() > ar.center().x() && rect.center().y() <= ar.center().y()) {
         if (reg.intersected(rect) != rect) {
             tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), rect.top(), w, h);
@@ -368,7 +359,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
             return rect.topLeft();
         }
 
-    //bottom right corner
+        // bottom right corner
     } else if (rect.center().x() > ar.center().x() && rect.center().y() > ar.center().y()) {
         if (reg.intersected(rect) != rect) {
             tempRect = QRect(qMin(rect.left(), (int)(ar.right() + 1 - w)), rect.top(), w, h);
@@ -408,11 +399,11 @@ void ContainmentInterface::setEditMode(bool edit)
 
 void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y, KIO::DropJob *dropJob)
 {
-    QMimeData* mime = qobject_cast<QMimeData*>(mimeDataProxy);
+    QMimeData *mime = qobject_cast<QMimeData *>(mimeDataProxy);
     if (mime) {
         processMimeData(mime, x, y, dropJob);
     } else {
-        processMimeData(mimeDataProxy->property("mimeData").value<QMimeData*>(), x, y, dropJob);
+        processMimeData(mimeDataProxy->property("mimeData").value<QMimeData *>(), x, y, dropJob);
     }
 }
 
@@ -433,7 +424,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         dropJob->setParent(m_dropMenu);
     }
 
-    //const QMimeData *mimeData = data;
+    // const QMimeData *mimeData = data;
 
     qDebug() << "Arrived mimeData" << mimeData->urls() << mimeData->formats() << "at" << x << ", " << y;
 
@@ -444,16 +435,21 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
     }
 
     if (mimeData->hasFormat(QStringLiteral("text/x-plasmoidservicename"))) {
-        QString data = QString::fromUtf8( mimeData->data(QStringLiteral("text/x-plasmoidservicename")) );
+        QString data = QString::fromUtf8(mimeData->data(QStringLiteral("text/x-plasmoidservicename")));
         const QStringList appletNames = data.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         for (const QString &appletName : appletNames) {
             qDebug() << "adding" << appletName;
 
-            metaObject()->invokeMethod(this, "createApplet", Qt::QueuedConnection, Q_ARG(QString, appletName), Q_ARG(QVariantList, QVariantList()), Q_ARG(QRectF, QRectF(x, y, -1, -1)));
+            metaObject()->invokeMethod(this,
+                                       "createApplet",
+                                       Qt::QueuedConnection,
+                                       Q_ARG(QString, appletName),
+                                       Q_ARG(QVariantList, QVariantList()),
+                                       Q_ARG(QRectF, QRectF(x, y, -1, -1)));
         }
         delete m_dropMenu.data();
     } else if (mimeData->hasUrls()) {
-        //TODO: collect the mimetypes of available script engines and offer
+        // TODO: collect the mimetypes of available script engines and offer
         //      to create widgets out of the matching URLs, if any
         const QList<QUrl> urls = KUrlMimeData::urlsFromMimeData(mimeData);
         m_dropMenu->setUrls(urls);
@@ -477,8 +473,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         job->setParent(m_dropMenu.data());
 
         QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
-        QObject::connect(job, &KIO::MimetypeJob::mimeTypeFound,
-                this, &ContainmentInterface::mimeTypeRetrieved);
+        QObject::connect(job, &KIO::MimetypeJob::mimeTypeFound, this, &ContainmentInterface::mimeTypeRetrieved);
 
     } else {
         bool deleteDropMenu = true;
@@ -499,13 +494,13 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
                 pluginFormats.insert(plugin.pluginId(), format);
             }
         }
-        //qDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
+        // qDebug() << "Mimetype ..." << formats << seenPlugins.keys() << pluginFormats.values();
 
         QString selectedPlugin;
 
         if (seenPlugins.isEmpty()) {
-        //do nothing
-        //directly create if only one offer only if the containment didn't pass an existing plugin
+            // do nothing
+            // directly create if only one offer only if the containment didn't pass an existing plugin
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
             Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
@@ -577,7 +572,6 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
         qDebug() << "No applets found matching the url (" << tjob->url() << ") or the mimetype (" << mimetype << ")";
         return;
     } else {
-
         qDebug() << "Received a suitable dropEvent at " << m_dropMenu->dropPoint();
         qDebug() << "Bailing out. Cannot find associated dropEvent related to the TransferJob";
 
@@ -587,9 +581,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         QList<KPluginMetaData> wallpaperList;
 
-        if (m_containment->containmentType() != Plasma::Types::PanelContainment
-            && m_containment->containmentType() != Plasma::Types::CustomPanelContainment) {
-
+        if (m_containment->containmentType() != Plasma::Types::PanelContainment && m_containment->containmentType() != Plasma::Types::CustomPanelContainment) {
             if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
                 wallpaperList << m_wallpaperInterface->kPackage().metadata();
             } else {
@@ -618,13 +610,17 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     KJob *installJob = package.update(packagePath);
                     connect(installJob, &KJob::result, this, [this, packagePath, structure](KJob *job) {
                         auto fail = [](const QString &text) {
-                            KNotification::event(QStringLiteral("plasmoidInstallationFailed"), i18n("Package Installation Failed"),
-                                                 text, QStringLiteral("dialog-error"), nullptr, KNotification::CloseOnTimeout, QStringLiteral("plasma_workspace"));
+                            KNotification::event(QStringLiteral("plasmoidInstallationFailed"),
+                                                 i18n("Package Installation Failed"),
+                                                 text,
+                                                 QStringLiteral("dialog-error"),
+                                                 nullptr,
+                                                 KNotification::CloseOnTimeout,
+                                                 QStringLiteral("plasma_workspace"));
                         };
 
                         // if the applet is already installed, just add it to the containment
-                        if (job->error() != KJob::NoError
-                            && job->error() != Package::PackageAlreadyInstalledError
+                        if (job->error() != KJob::NoError && job->error() != Package::PackageAlreadyInstalledError
                             && job->error() != Package::NewerVersionAlreadyInstalledError) {
                             fail(job->errorText());
                             return;
@@ -642,7 +638,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                             return;
                         }
 
-                        createApplet(package.metadata().pluginId(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
+                        createApplet(package.metadata().pluginId(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
                     });
                 });
             }
@@ -661,7 +657,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 action->setData(info.pluginId());
                 const QUrl url = tjob->url();
                 connect(action, &QAction::triggered, this, [this, action, mimetype, url]() {
-                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
+                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
@@ -670,14 +666,14 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 m_dropMenu->addAction(action);
                 action->setData(QStringLiteral("org.kde.plasma.icon"));
                 const QUrl url = tjob->url();
-                connect(action, &QAction::triggered, this, [this, action, mimetype, url](){
-                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
+                connect(action, &QAction::triggered, this, [this, action, mimetype, url]() {
+                    Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
 
             QHash<QAction *, QString> actionsToWallpapers;
-            if (!wallpaperList.isEmpty())  {
+            if (!wallpaperList.isEmpty()) {
                 QAction *action = new QAction(i18n("Wallpaper"), m_dropMenu);
                 action->setSeparator(true);
                 m_dropMenu->addAction(action);
@@ -697,7 +693,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                     actionsToWallpapers.insert(action, info.pluginId());
                     const QUrl url = tjob->url();
                     connect(action, &QAction::triggered, this, [this, url]() {
-                        //set wallpapery stuff
+                        // set wallpapery stuff
                         if (m_wallpaperInterface && url.isValid()) {
                             m_wallpaperInterface->setUrl(url);
                         }
@@ -705,9 +701,9 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 }
             }
         } else {
-            //case in which we created the menu ourselves, just the "fetching type entry, directly create the icon applet
+            // case in which we created the menu ourselves, just the "fetching type entry, directly create the icon applet
             if (!m_dropMenu->isDropjobMenu()) {
-                Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
+                Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
                 setAppletArgs(applet, mimetype, tjob->url().toString());
             } else {
                 QAction *action;
@@ -719,8 +715,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 m_dropMenu->addAction(action);
 
                 const QUrl url = tjob->url();
-                connect(action, &QAction::triggered, this, [this, mimetype, url](){
-                    Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1,-1)));
+                connect(action, &QAction::triggered, this, [this, mimetype, url]() {
+                    Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
                     setAppletArgs(applet, mimetype, url.toString());
                 });
             }
@@ -738,11 +734,11 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     AppletInterface *appletGraphicObject = applet->property("_plasma_graphicObject").value<AppletInterface *>();
     AppletInterface *contGraphicObject = m_containment->property("_plasma_graphicObject").value<AppletInterface *>();
 
-//     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
-//              << "Applet: " << applet << applet->title() << appletGraphicObject;
+    //     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
+    //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
-    //applets can not have a graphic object if they don't have a script engine loaded
-    //this can happen if they were loaded with an invalid metadata
+    // applets can not have a graphic object if they don't have a script engine loaded
+    // this can happen if they were loaded with an invalid metadata
     if (!appletGraphicObject) {
         return;
     }
@@ -753,10 +749,9 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     }
 
     m_appletInterfaces << appletGraphicObject;
-    connect(appletGraphicObject, &QObject::destroyed, this,
-            [this](QObject *obj) {
-                m_appletInterfaces.removeAll(obj);
-            });
+    connect(appletGraphicObject, &QObject::destroyed, this, [this](QObject *obj) {
+        m_appletInterfaces.removeAll(obj);
+    });
     Q_EMIT appletAdded(appletGraphicObject, appletGraphicObject->m_positionBeforeRemoval.x(), appletGraphicObject->m_positionBeforeRemoval.y());
     Q_EMIT appletsChanged();
 }
@@ -774,8 +769,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (m_containment->containmentType() != Plasma::Types::DesktopContainment &&
-            m_containment->containmentType() != Plasma::Types::CustomContainment) {
+    if (m_containment->containmentType() != Plasma::Types::DesktopContainment && m_containment->containmentType() != Plasma::Types::CustomContainment) {
         return;
     }
 
@@ -783,12 +777,12 @@ void ContainmentInterface::loadWallpaper()
         m_wallpaperInterface = new WallpaperInterface(this);
 
         m_wallpaperInterface->setZ(-1000);
-        //Qml seems happier if the parent gets set in this way
+        // Qml seems happier if the parent gets set in this way
         m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 
         connect(m_wallpaperInterface, &WallpaperInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
 
-        //set anchors
+        // set anchors
         QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, QStringLiteral("parent"));
         QQmlProperty prop(m_wallpaperInterface, QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
@@ -815,21 +809,22 @@ QString ContainmentInterface::activityName() const
 
 QList<QObject *> ContainmentInterface::actions() const
 {
-    //FIXME: giving directly a QList<QAction*> crashes
+    // FIXME: giving directly a QList<QAction*> crashes
 
     QStringList actionOrder;
-    actionOrder << QStringLiteral("add widgets") << QStringLiteral("manage activities") << QStringLiteral("remove") << QStringLiteral("lock widgets") << QStringLiteral("run associated application") << QStringLiteral("configure");
+    actionOrder << QStringLiteral("add widgets") << QStringLiteral("manage activities") << QStringLiteral("remove") << QStringLiteral("lock widgets")
+                << QStringLiteral("run associated application") << QStringLiteral("configure");
     QHash<QString, QAction *> orderedActions;
-    //use a multimap to sort by action type
+    // use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     int i = 0;
     auto listActions = m_containment->actions()->actions();
     for (QAction *a : qAsConst(listActions)) {
         if (!actionOrder.contains(a->objectName())) {
-            //FIXME QML visualizations don't support menus for now, *and* there is no way to
-            //distinguish them on QML side
+            // FIXME QML visualizations don't support menus for now, *and* there is no way to
+            // distinguish them on QML side
             if (!a->menu()) {
-                actions.insert(a->data().toInt()*100 + i, a);
+                actions.insert(a->data().toInt() * 100 + i, a);
                 ++i;
             }
         } else {
@@ -841,15 +836,15 @@ QList<QObject *> ContainmentInterface::actions() const
     listActions = m_containment->corona()->actions()->actions();
     for (QAction *a : qAsConst(listActions)) {
         if (a->objectName() == QLatin1String("lock widgets") || a->menu()) {
-            //It is up to the Containment to decide if the user is allowed or not
-            //to lock/unluck the widgets, so corona should not add one when there is none
+            // It is up to the Containment to decide if the user is allowed or not
+            // to lock/unluck the widgets, so corona should not add one when there is none
             //(user is not allow) and it shouldn't add another one when there is already
-            //one
+            // one
             continue;
         }
 
         if (!actionOrder.contains(a->objectName())) {
-            actions.insert(a->data().toInt()*100 + i, a);
+            actions.insert(a->data().toInt() * 100 + i, a);
         } else {
             orderedActions[a->objectName()] = a;
         }
@@ -873,8 +868,7 @@ void ContainmentInterface::setContainmentDisplayHints(Plasma::Types::Containment
     m_containment->setContainmentDisplayHints(hints);
 }
 
-
-//PROTECTED--------------------
+// PROTECTED--------------------
 
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
@@ -884,8 +878,8 @@ void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
 {
-    //even if the menu is executed synchronously, other events may be processed
-    //by the qml incubator when plasma is loading, so we need to guard there
+    // even if the menu is executed synchronously, other events may be processed
+    // by the qml incubator when plasma is loading, so we need to guard there
     if (m_contextMenu) {
         m_contextMenu.data()->close();
         return;
@@ -899,9 +893,9 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    //the plugin can be a single action or a context menu
-    //Don't have an action list? execute as single action
-    //and set the event position as action data
+    // the plugin can be a single action or a context menu
+    // Don't have an action list? execute as single action
+    // and set the event position as action data
     if (plugin->contextualActions().length() == 1) {
         QAction *action = plugin->contextualActions().at(0);
         action->setData(event->pos());
@@ -910,7 +904,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    //FIXME: very inefficient appletAt() implementation
+    // FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = nullptr;
     for (QObject *appletObject : qAsConst(m_appletInterfaces)) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
@@ -922,14 +916,14 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
             }
         }
     }
-    //qDebug() << "Invoking menu for applet" << applet;
+    // qDebug() << "Invoking menu for applet" << applet;
 
     QMenu *desktopMenu = new QMenu;
 
-    //this is a workaround where Qt now creates the menu widget
-    //in .exec before oxygen can polish it and set the following attribute
+    // this is a workaround where Qt now creates the menu widget
+    // in .exec before oxygen can polish it and set the following attribute
     desktopMenu->setAttribute(Qt::WA_TranslucentBackground);
-    //end workaround
+    // end workaround
 
     if (desktopMenu->winId()) {
         desktopMenu->windowHandle()->setTransientParent(window());
@@ -947,29 +941,28 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         addContainmentActions(desktopMenu, event);
     }
 
-    //this is a workaround where Qt will fail to realize a mouse has been released
+    // this is a workaround where Qt will fail to realize a mouse has been released
 
     // this happens if a window which does not accept focus spawns a new window that takes focus and X grab
     // whilst the mouse is depressed
     // https://bugreports.qt.io/browse/QTBUG-59044
     // this causes the next click to go missing
 
-    //by releasing manually we avoid that situation
+    // by releasing manually we avoid that situation
     auto ungrabMouseHack = [this]() {
         if (window() && window()->mouseGrabberItem()) {
             window()->mouseGrabberItem()->ungrabMouse();
         }
     };
 
-    //pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
-    //post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
+    // pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
+    // post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
     if (QVersionNumber::fromString(QLatin1String(qVersion())) > QVersionNumber(5, 8, 0)) {
         QTimer::singleShot(0, this, ungrabMouseHack);
-    }
-    else {
+    } else {
         ungrabMouseHack();
     }
-    //end workaround
+    // end workaround
 
     QPoint pos = event->globalPos();
     if (window() && m_containment->containmentType() == Plasma::Types::PanelContainment) {
@@ -1073,16 +1066,16 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
         addContainmentActions(desktopMenu, event);
     }
 
-    if (m_containment->immutability() == Plasma::Types::Mutable &&
-        (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
+    if (m_containment->immutability() == Plasma::Types::Mutable
+        && (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
         QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
-        //qDebug() << "checking for removal" << closeApplet;
+        // qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu->isEmpty()) {
                 desktopMenu->addSeparator();
             }
 
-            //qDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
+            // qDebug() << "adding close action" << closeApplet->isEnabled() << closeApplet->isVisible();
             desktopMenu->addAction(closeApplet);
         }
     }
@@ -1090,13 +1083,12 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
 
 void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event)
 {
-    if (m_containment->corona()->immutability() != Plasma::Types::Mutable &&
-            !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {
-        //qDebug() << "immutability";
+    if (m_containment->corona()->immutability() != Plasma::Types::Mutable && !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {
+        // qDebug() << "immutability";
         return;
     }
 
-    //this is what ContainmentPrivate::prepareContainmentActions was
+    // this is what ContainmentPrivate::prepareContainmentActions was
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
     Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
 
@@ -1117,11 +1109,10 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
     QList<QAction *> actions = plugin->contextualActions();
 
     if (actions.isEmpty()) {
-        //it probably didn't bother implementing the function. give the user a chance to set
-        //a better plugin.  note that if the user sets no-plugin this won't happen...
-        if ((m_containment->containmentType() != Plasma::Types::PanelContainment &&
-                m_containment->containmentType() != Plasma::Types::CustomPanelContainment) &&
-                m_containment->actions()->action(QStringLiteral("configure"))) {
+        // it probably didn't bother implementing the function. give the user a chance to set
+        // a better plugin.  note that if the user sets no-plugin this won't happen...
+        if ((m_containment->containmentType() != Plasma::Types::PanelContainment && m_containment->containmentType() != Plasma::Types::CustomPanelContainment)
+            && m_containment->actions()->action(QStringLiteral("configure"))) {
             desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
         }
     } else {
@@ -1139,6 +1130,5 @@ bool ContainmentInterface::isLoading() const
     }
     return loading;
 }
-
 
 #include "moc_containmentinterface.cpp"

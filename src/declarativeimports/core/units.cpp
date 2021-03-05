@@ -8,19 +8,18 @@
 
 #include "units.h"
 
-#include <QGuiApplication>
 #include <QDebug>
-#include <QtGlobal>
+#include <QFontMetrics>
+#include <QGuiApplication>
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QScreen>
-#include <QFontMetrics>
+#include <QtGlobal>
 #include <cmath>
 
 #include <KIconLoader>
 
 const int defaultLongDuration = 200;
-
 
 SharedAppFilter::SharedAppFilter(QObject *parent)
     : QObject(parent)
@@ -29,7 +28,8 @@ SharedAppFilter::SharedAppFilter(QObject *parent)
 }
 
 SharedAppFilter::~SharedAppFilter()
-{}
+{
+}
 
 bool SharedAppFilter::eventFilter(QObject *watched, QEvent *event)
 {
@@ -44,12 +44,12 @@ bool SharedAppFilter::eventFilter(QObject *watched, QEvent *event)
 SharedAppFilter *Units::s_sharedAppFilter = nullptr;
 
 Units::Units(QObject *parent)
-    : QObject(parent),
-      m_gridUnit(-1),
-      m_devicePixelRatio(-1),
-      m_smallSpacing(-1),
-      m_largeSpacing(-1),
-      m_longDuration(defaultLongDuration) // default base value for animations
+    : QObject(parent)
+    , m_gridUnit(-1)
+    , m_devicePixelRatio(-1)
+    , m_smallSpacing(-1)
+    , m_largeSpacing(-1)
+    , m_longDuration(defaultLongDuration) // default base value for animations
 {
     if (!s_sharedAppFilter) {
         s_sharedAppFilter = new SharedAppFilter();
@@ -64,18 +64,16 @@ Units::Units(QObject *parent)
     QObject::connect(s_sharedAppFilter, &SharedAppFilter::fontChanged, this, &Units::updateSpacing);
 
     m_animationSpeedWatcher = KConfigWatcher::create(KSharedConfig::openConfig());
-    connect(m_animationSpeedWatcher.data(), &KConfigWatcher::configChanged, this,
-        [this](const KConfigGroup &group, const QByteArrayList &names) {
-            if (group.name() == QLatin1String("KDE") && names.contains(QByteArrayLiteral("AnimationDurationFactor"))) {
-                updateAnimationSpeed();
-            }
+    connect(m_animationSpeedWatcher.data(), &KConfigWatcher::configChanged, this, [this](const KConfigGroup &group, const QByteArrayList &names) {
+        if (group.name() == QLatin1String("KDE") && names.contains(QByteArrayLiteral("AnimationDurationFactor"))) {
+            updateAnimationSpeed();
+        }
     });
     updateAnimationSpeed();
 }
 
 Units::~Units()
 {
-
 }
 
 Units &Units::instance()
@@ -104,7 +102,6 @@ void Units::updateAnimationSpeed()
         Q_EMIT durationChanged();
     }
 }
-
 
 void Units::iconLoaderSettingsChanged()
 {
@@ -141,7 +138,7 @@ int Units::roundToIconSize(int size)
     if (size <= 0) {
         return 0;
     } else if (size < KIconLoader::SizeSmall) {
-        return KIconLoader::SizeSmall/2;
+        return KIconLoader::SizeSmall / 2;
     } else if (size < KIconLoader::SizeSmallMedium) {
         return KIconLoader::SizeSmall;
 
@@ -263,7 +260,7 @@ int Units::shortDuration() const
 
 int Units::veryShortDuration() const
 {
-	return qRound(m_longDuration * 0.25);
+    return qRound(m_longDuration * 0.25);
 }
 
 int Units::veryLongDuration() const
@@ -272,4 +269,3 @@ int Units::veryLongDuration() const
 }
 
 #include "moc_units.cpp"
-

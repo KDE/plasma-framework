@@ -12,11 +12,10 @@
 
 namespace Plasma
 {
-
 EffectWatcher::EffectWatcher(const QString &property, QObject *parent)
-    : QObject(parent),
-      m_property(XCB_ATOM_NONE),
-      m_isX11(QX11Info::isPlatformX11())
+    : QObject(parent)
+    , m_property(XCB_ATOM_NONE)
+    , m_isX11(QX11Info::isPlatformX11())
 {
     init(property);
 }

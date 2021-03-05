@@ -13,7 +13,6 @@
 
 namespace Plasma
 {
-
 Types::Types(QObject *parent)
     : QObject(parent)
 {
@@ -30,7 +29,7 @@ Types::Direction locationToDirection(Types::Location location)
     case Types::Desktop:
     case Types::TopEdge:
     case Types::FullScreen:
-        //TODO: should we be smarter for floating and planer?
+        // TODO: should we be smarter for floating and planer?
         //      perhaps we should take a QRect and/or QPos as well?
         return Types::Down;
     case Types::BottomEdge:
@@ -51,7 +50,7 @@ Types::Direction locationToInverseDirection(Types::Location location)
     case Types::Desktop:
     case Types::TopEdge:
     case Types::FullScreen:
-        //TODO: should we be smarter for floating and planer?
+        // TODO: should we be smarter for floating and planer?
         //      perhaps we should take a QRect and/or QPos as well?
         return Types::Up;
     case Types::BottomEdge:

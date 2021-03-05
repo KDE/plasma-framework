@@ -7,12 +7,12 @@
 #ifndef COLORSCOPE_H
 #define COLORSCOPE_H
 
-#include <QQuickItem>
-#include <QPointer>
-#include <QSharedPointer>
-#include <QVariant>
 #include <Plasma/Plasma>
 #include <Plasma/Theme>
+#include <QPointer>
+#include <QQuickItem>
+#include <QSharedPointer>
+#include <QVariant>
 
 class QQuickItem;
 
@@ -61,7 +61,7 @@ class ColorScope : public QQuickItem
      * Color of foreground objects with a "neutral message" connotation (usually yellow)
      */
     Q_PROPERTY(QColor neutralTextColor READ neutralTextColor NOTIFY colorsChanged)
- 
+
     /**
      * Color of foreground objects with a "negative message" connotation (usually red)
      */
@@ -79,7 +79,7 @@ class ColorScope : public QQuickItem
     Q_PROPERTY(bool inherit READ inherit WRITE setInherit NOTIFY inheritChanged)
 
 public:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
     explicit ColorScope(QQuickItem *parent = nullptr, QObject *parentObject = nullptr);
     ~ColorScope() override;
 
@@ -101,7 +101,7 @@ public:
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static ColorScope *qmlAttachedProperties(QObject *object);
 
-/// @endcond
+    /// @endcond
 
     ColorScope *findParentScope();
     void itemChange(ItemChange change, const ItemChangeData &value) override;
@@ -113,7 +113,7 @@ Q_SIGNALS:
 
 private:
     void checkColorGroupChanged();
-    void setParentScope(ColorScope * parentScope);
+    void setParentScope(ColorScope *parentScope);
 
     bool m_inherit;
     Plasma::Theme::ColorGroup m_group;
@@ -126,7 +126,6 @@ private:
 
     static QWeakPointer<Plasma::Theme> s_theme;
     QSharedPointer<Plasma::Theme> m_theme;
-
 };
 
 QML_DECLARE_TYPEINFO(ColorScope, QML_HAS_ATTACHED_PROPERTIES)

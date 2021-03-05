@@ -15,7 +15,6 @@ class QCommandLineParser;
 
 namespace Plasma
 {
-
 class PluginTestPrivate;
 
 class PluginTest : public QApplication

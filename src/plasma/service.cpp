@@ -12,30 +12,29 @@
 #include <QFile>
 #include <QTimer>
 
-#include <QDebug>
-#include <KService>
-#include <KSharedConfig>
 #include <KConfigLoader>
 #include <KConfigSkeleton>
+#include <KService>
+#include <KSharedConfig>
+#include <QDebug>
 
 #include <QStandardPaths>
 
-#include "version.h"
-#include "pluginloader.h"
 #include "debug_p.h"
+#include "pluginloader.h"
+#include "version.h"
 
 namespace Plasma
 {
-
 Service::Service(QObject *parent)
-    : QObject(parent),
-      d(new ServicePrivate(this))
+    : QObject(parent)
+    , d(new ServicePrivate(this))
 {
 }
 
 Service::Service(QObject *parent, const QVariantList &args)
-    : QObject(parent),
-      d(new ServicePrivate(this))
+    : QObject(parent)
+    , d(new ServicePrivate(this))
 {
     Q_UNUSED(args)
 }
@@ -76,7 +75,7 @@ QVariantMap Service::operationDescription(const QString &operationName)
         return QVariantMap();
     }
 
-    //qCDebug(LOG_PLASMA) << "operation" << operationName
+    // qCDebug(LOG_PLASMA) << "operation" << operationName
     //         << "requested, has keys" << d->operationsMap.keys();
     return d->operationsMap.value(operationName);
 }
@@ -187,7 +186,8 @@ void Service::registerOperationsScheme()
         return;
     }
 
-    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/services/") + d->name + QStringLiteral(".operations"));
+    const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/services/") + d->name + QStringLiteral(".operations"));
 
     if (path.isEmpty()) {
 #ifndef NDEBUG

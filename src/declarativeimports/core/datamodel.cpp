@@ -13,19 +13,15 @@
 
 namespace Plasma
 {
-
 SortFilterModel::SortFilterModel(QObject *parent)
     : QSortFilterProxyModel(parent)
 {
     setObjectName(QStringLiteral("SortFilterModel"));
     setDynamicSortFilter(true);
-    connect(this, &QAbstractItemModel::rowsInserted,
-            this, &SortFilterModel::countChanged);
-    connect(this, &QAbstractItemModel::rowsRemoved,
-            this, &SortFilterModel::countChanged);
-    connect(this, &QAbstractItemModel::modelReset,
-            this, &SortFilterModel::countChanged);
-    connect(this,  &SortFilterModel::countChanged, this, &SortFilterModel::syncRoleNames);
+    connect(this, &QAbstractItemModel::rowsInserted, this, &SortFilterModel::countChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &SortFilterModel::countChanged);
+    connect(this, &QAbstractItemModel::modelReset, this, &SortFilterModel::countChanged);
+    connect(this, &SortFilterModel::countChanged, this, &SortFilterModel::syncRoleNames);
 }
 
 SortFilterModel::~SortFilterModel()
@@ -49,10 +45,10 @@ void SortFilterModel::syncRoleNames()
     setSortRole(m_sortRole);
 }
 
-QHash<int,QByteArray> SortFilterModel::roleNames() const
+QHash<int, QByteArray> SortFilterModel::roleNames() const
 {
     if (sourceModel()) {
-       return sourceModel()->roleNames();
+        return sourceModel()->roleNames();
     }
     return {};
 }
@@ -82,7 +78,7 @@ void SortFilterModel::setModel(QAbstractItemModel *model)
     Q_EMIT sourceModelChanged(model);
 }
 
-bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
+bool SortFilterModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
     if (m_filterCallback.isCallable()) {
         QJSValueList args;
@@ -132,7 +128,7 @@ QJSValue SortFilterModel::filterCallback() const
     return m_filterCallback;
 }
 
-void SortFilterModel::setFilterCallback(const QJSValue& callback)
+void SortFilterModel::setFilterCallback(const QJSValue &callback)
 {
     if (m_filterCallback.strictlyEquals(callback)) {
         return;
@@ -222,22 +218,19 @@ int SortFilterModel::mapRowFromSource(int row) const
 }
 
 DataModel::DataModel(QObject *parent)
-    : QAbstractItemModel(parent),
-      m_dataSource(nullptr),
-      m_maxRoleId(Qt::UserRole + 1)
+    : QAbstractItemModel(parent)
+    , m_dataSource(nullptr)
+    , m_maxRoleId(Qt::UserRole + 1)
 {
-    //There is one reserved role name: DataEngineSource
+    // There is one reserved role name: DataEngineSource
     m_roleNames[m_maxRoleId] = QByteArrayLiteral("DataEngineSource");
     m_roleIds[QStringLiteral("DataEngineSource")] = m_maxRoleId;
     ++m_maxRoleId;
 
     setObjectName(QStringLiteral("DataModel"));
-    connect(this, &QAbstractItemModel::rowsInserted,
-            this, &DataModel::countChanged);
-    connect(this, &QAbstractItemModel::rowsRemoved,
-            this, &DataModel::countChanged);
-    connect(this, &QAbstractItemModel::modelReset,
-            this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::rowsInserted, this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::modelReset, this, &DataModel::countChanged);
 }
 
 DataModel::~DataModel()
@@ -251,7 +244,7 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
     }
 
     if (m_keyRoleFilter.isEmpty()) {
-        //an item is represented by a source: keys are roles m_roleLevel == FirstLevel
+        // an item is represented by a source: keys are roles m_roleLevel == FirstLevel
         QVariantList list;
 
         if (!m_dataSource->data()->isEmpty()) {
@@ -270,12 +263,11 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
         }
         setItems(QString(), list);
     } else {
-        //a key that matches the one we want exists and is a list of DataEngine::Data
-        if (data.contains(m_keyRoleFilter) &&
-                data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
+        // a key that matches the one we want exists and is a list of DataEngine::Data
+        if (data.contains(m_keyRoleFilter) && data.value(m_keyRoleFilter).canConvert<QVariantList>()) {
             setItems(sourceName, data.value(m_keyRoleFilter).value<QVariantList>());
         } else if (m_keyRoleFilterRE.isValid()) {
-            //try to match the key we want with a regular expression if set
+            // try to match the key we want with a regular expression if set
             QVariantList list;
             QVariantMap::const_iterator i;
             for (i = data.constBegin(); i != data.constEnd(); ++i) {
@@ -310,12 +302,9 @@ void DataModel::setDataSource(QObject *object)
         dataUpdated(key, m_dataSource->data()->value(key).value<Plasma::DataEngine::Data>());
     }
 
-    connect(m_dataSource, &DataSource::newData,
-            this, &DataModel::dataUpdated);
-    connect(m_dataSource, &DataSource::sourceRemoved,
-            this, &DataModel::removeSource);
-    connect(m_dataSource, &DataSource::sourceDisconnected,
-            this, &DataModel::removeSource);
+    connect(m_dataSource, &DataSource::newData, this, &DataModel::dataUpdated);
+    connect(m_dataSource, &DataSource::sourceRemoved, this, &DataModel::removeSource);
+    connect(m_dataSource, &DataSource::sourceDisconnected, this, &DataModel::removeSource);
 }
 
 QObject *DataModel::dataSource() const
@@ -373,18 +362,18 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     const int delta = list.length() - oldLength;
     const bool firstRun = m_items.isEmpty();
 
-    //At what row number the first item associated to this source starts
+    // At what row number the first item associated to this source starts
     int sourceIndex = 0;
-    QMap<QString, QVector<QVariant> >::const_iterator i;
+    QMap<QString, QVector<QVariant>>::const_iterator i;
     for (i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
         if (i.key() == sourceName) {
             break;
         }
         sourceIndex += i.value().count();
     }
-    //signal as inserted the rows at the end, all the other rows will signal a dataupdated.
-    //better than a model reset because doesn't cause deletion and re-creation of every list item on a qml ListView, repeaters etc.
-    //the first run it gets reset because otherwise setRoleNames gets broken
+    // signal as inserted the rows at the end, all the other rows will signal a dataupdated.
+    // better than a model reset because doesn't cause deletion and re-creation of every list item on a qml ListView, repeaters etc.
+    // the first run it gets reset because otherwise setRoleNames gets broken
     if (firstRun) {
         beginResetModel();
     } else if (delta > 0) {
@@ -392,7 +381,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     } else if (delta < 0) {
         beginRemoveRows(QModelIndex(), sourceIndex + list.length(), sourceIndex + oldLength - 1);
     }
-    //convert to vector, so data() will be O(1)
+    // convert to vector, so data() will be O(1)
     m_items[sourceName] = list.toVector();
 
     if (!list.isEmpty()) {
@@ -434,8 +423,7 @@ void DataModel::setItems(const QString &sourceName, const QVariantList &list)
     } else if (delta < 0) {
         endRemoveRows();
     }
-    Q_EMIT dataChanged(createIndex(sourceIndex, 0),
-                     createIndex(sourceIndex + qMin(list.length(), oldLength), 0));
+    Q_EMIT dataChanged(createIndex(sourceIndex, 0), createIndex(sourceIndex + qMin(list.length(), oldLength), 0));
 }
 
 QHash<int, QByteArray> DataModel::roleNames() const
@@ -445,10 +433,10 @@ QHash<int, QByteArray> DataModel::roleNames() const
 
 void DataModel::removeSource(const QString &sourceName)
 {
-    //FIXME: find a way to remove only the proper things also in the case where sources are items
+    // FIXME: find a way to remove only the proper things also in the case where sources are items
 
     if (m_keyRoleFilter.isEmpty()) {
-        //source name in the map, linear scan
+        // source name in the map, linear scan
         for (int i = 0; i < m_items.value(QString()).count(); ++i) {
             if (m_items.value(QString())[i].value<QVariantMap>().value(QStringLiteral("DataEngineSource")) == sourceName) {
                 beginRemoveRows(QModelIndex(), i, i);
@@ -459,7 +447,7 @@ void DataModel::removeSource(const QString &sourceName)
         }
     } else {
         if (m_items.contains(sourceName)) {
-            //At what row number the first item associated to this source starts
+            // At what row number the first item associated to this source starts
             int sourceIndex = 0;
             for (auto i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
                 if (i.key() == sourceName) {
@@ -468,7 +456,7 @@ void DataModel::removeSource(const QString &sourceName)
                 sourceIndex += i.value().count();
             }
 
-            //source name as key of the map
+            // source name as key of the map
 
             int count = m_items.value(sourceName).count();
             if (count > 0) {
@@ -484,15 +472,14 @@ void DataModel::removeSource(const QString &sourceName)
 
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
-    if (!index.isValid() || index.column() > 0 ||
-            index.row() < 0 || index.row() >= countItems()) {
+    if (!index.isValid() || index.column() > 0 || index.row() < 0 || index.row() >= countItems()) {
         return QVariant();
     }
 
     int count = 0;
     int actualRow = 0;
     QString source;
-    QMap<QString, QVector<QVariant> >::const_iterator i;
+    QMap<QString, QVector<QVariant>>::const_iterator i;
     for (i = m_items.constBegin(); i != m_items.constEnd(); ++i) {
         const int oldCount = count;
         count += i.value().count();
@@ -504,8 +491,8 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         }
     }
 
-    //is it the reserved role: DataEngineSource ?
-    //also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
+    // is it the reserved role: DataEngineSource ?
+    // also, if each source is an item DataEngineSource is a role between all the others, otherwise we know it from the role variable
     if (!m_keyRoleFilter.isEmpty() && m_roleNames.value(role) == "DataEngineSource") {
         return source;
     } else {
@@ -540,8 +527,8 @@ QModelIndex DataModel::parent(const QModelIndex &child) const
 
 int DataModel::rowCount(const QModelIndex &parent) const
 {
-    //this is not a tree
-    //TODO: make it possible some day?
+    // this is not a tree
+    // TODO: make it possible some day?
     if (parent.isValid()) {
         return 0;
     }
@@ -572,4 +559,3 @@ QVariantMap DataModel::get(int row) const
 }
 
 }
-

@@ -7,9 +7,9 @@
 #ifndef FADINGNODE_H
 #define FADINGNODE_H
 
+#include <QRectF>
 #include <QSGGeometryNode>
 #include <QSGTexture>
-#include <QRectF>
 
 /**
  * This node fades between two textures using a shader
@@ -29,6 +29,7 @@ public:
      */
     void setProgress(qreal progress);
     void setRect(const QRectF &bounds);
+
 private:
     QScopedPointer<QSGTexture> m_source;
     QScopedPointer<QSGTexture> m_target;

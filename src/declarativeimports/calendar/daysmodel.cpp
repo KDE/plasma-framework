@@ -9,18 +9,17 @@
 #include "eventdatadecorator.h"
 #include "eventpluginsmanager.h"
 
-#include <QDebug>
 #include <QByteArray>
+#include <QDebug>
 #include <QDir>
 #include <QMetaObject>
 
-DaysModel::DaysModel(QObject *parent) :
-    QAbstractListModel(parent),
-    m_pluginsManager(nullptr),
-    m_lastRequestedEventsStartDate(QDate()),
-    m_agendaNeedsUpdate(false)
+DaysModel::DaysModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , m_pluginsManager(nullptr)
+    , m_lastRequestedEventsStartDate(QDate())
+    , m_agendaNeedsUpdate(false)
 {
-
 }
 
 DaysModel::~DaysModel()
@@ -50,7 +49,6 @@ int DaysModel::rowCount(const QModelIndex &parent) const
 QVariant DaysModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
-
         const DayData &currentData = m_data->at(index.row());
         const QDate currentDate(currentData.yearNumber, currentData.monthNumber, currentData.dayNumber);
 
@@ -105,8 +103,7 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
     }
 
     // only the containsEventItems roles may have changed
-    Q_EMIT dataChanged(index(0, 0), index(m_data->count() - 1, 0),
-                     {containsEventItems, containsMajorEventItems, containsMinorEventItems});
+    Q_EMIT dataChanged(index(0, 0), index(m_data->count() - 1, 0), {containsEventItems, containsMajorEventItems, containsMinorEventItems});
 
     Q_EMIT agendaUpdated(QDate::currentDate());
 }
@@ -131,8 +128,7 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
     for (const QDate date : qAsConst(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex,
-                               {containsEventItems, containsMajorEventItems, containsMinorEventItems});
+            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems, containsMajorEventItems, containsMinorEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
@@ -158,14 +154,13 @@ void DaysModel::onEventRemoved(const QString &uid)
     for (const QDate date : qAsConst(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
-            Q_EMIT dataChanged(changedIndex, changedIndex,
-                               {containsEventItems, containsMajorEventItems, containsMinorEventItems});
+            Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems, containsMajorEventItems, containsMinorEventItems});
         }
         Q_EMIT agendaUpdated(date);
     }
 }
 
-QList<QObject*> DaysModel::eventsForDate(const QDate &date)
+QList<QObject *> DaysModel::eventsForDate(const QDate &date)
 {
     if (m_lastRequestedAgendaDate == date && !m_agendaNeedsUpdate) {
         return m_qmlData;
@@ -231,7 +226,7 @@ bool DaysModel::hasMinorEventAtDate(const QDate &date) const
 
 void DaysModel::setPluginsManager(QObject *manager)
 {
-    EventPluginsManager *m = qobject_cast<EventPluginsManager*>(manager);
+    EventPluginsManager *m = qobject_cast<EventPluginsManager *>(manager);
 
     if (!m) {
         return;
@@ -244,27 +239,21 @@ void DaysModel::setPluginsManager(QObject *manager)
 
     m_pluginsManager = m;
 
-    connect(m_pluginsManager, &EventPluginsManager::dataReady,
-            this, &DaysModel::onDataReady);
-    connect(m_pluginsManager, &EventPluginsManager::eventModified,
-            this, &DaysModel::onEventModified);
-    connect(m_pluginsManager, &EventPluginsManager::eventRemoved,
-            this, &DaysModel::onEventRemoved);
-    connect(m_pluginsManager, &EventPluginsManager::pluginsChanged,
-            this, &DaysModel::update);
+    connect(m_pluginsManager, &EventPluginsManager::dataReady, this, &DaysModel::onDataReady);
+    connect(m_pluginsManager, &EventPluginsManager::eventModified, this, &DaysModel::onEventModified);
+    connect(m_pluginsManager, &EventPluginsManager::eventRemoved, this, &DaysModel::onEventRemoved);
+    connect(m_pluginsManager, &EventPluginsManager::pluginsChanged, this, &DaysModel::update);
 
     QMetaObject::invokeMethod(this, "update", Qt::QueuedConnection);
 }
 
 QHash<int, QByteArray> DaysModel::roleNames() const
 {
-    return {
-        {isCurrent, "isCurrent"},
-        {containsEventItems, "containsEventItems"},
-        {containsMajorEventItems, "containsMajorEventItems"},
-        {containsMinorEventItems, "containsMinorEventItems"},
-        {dayNumber, "dayNumber"},
-        {monthNumber, "monthNumber"},
-        {yearNumber, "yearNumber"}
-    };
+    return {{isCurrent, "isCurrent"},
+            {containsEventItems, "containsEventItems"},
+            {containsMajorEventItems, "containsMajorEventItems"},
+            {containsMinorEventItems, "containsMinorEventItems"},
+            {dayNumber, "dayNumber"},
+            {monthNumber, "monthNumber"},
+            {yearNumber, "yearNumber"}};
 }

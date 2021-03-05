@@ -12,9 +12,9 @@
 
 // Qt
 #include <QAbstractNativeEventFilter>
-#include <QSGSimpleTextureNode>
-#include <QQuickItem>
 #include <QPointer>
+#include <QQuickItem>
+#include <QSGSimpleTextureNode>
 #include <QWindow>
 // xcb
 #if HAVE_XCB_COMPOSITE
@@ -32,7 +32,6 @@ class KWindowInfo;
 
 namespace Plasma
 {
-
 class WindowTextureNode;
 
 /**
@@ -117,7 +116,7 @@ private:
     xcb_damage_damage_t m_damage;
     xcb_pixmap_t m_pixmap;
 
-/*The following must *only* be used from the render thread*/
+    /*The following must *only* be used from the render thread*/
     uint m_texture;
 #if HAVE_GLX
     bool windowToTextureGLX(WindowTextureNode *textureNode);
@@ -152,6 +151,7 @@ public:
     WindowTextureNode();
     virtual ~WindowTextureNode();
     void reset(QSGTexture *texture);
+
 private:
     QScopedPointer<QSGTexture> m_texture;
 };

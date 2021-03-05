@@ -8,7 +8,7 @@
 
 #include "private/storage_p.h"
 
-//Qt
+// Qt
 #include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlField>
@@ -16,25 +16,22 @@
 #include <QSqlRecord>
 #include <QThreadStorage>
 
-//KDE
+// KDE
 #include <QDebug>
 
-//Plasma
+// Plasma
 #include "applet.h"
 #include "dataengine.h"
 #include "storagethread_p.h"
 
-StorageJob::StorageJob(const QString &destination,
-                       const QString &operation,
-                       const QVariantMap &parameters,
-                       QObject *parent)
-    : ServiceJob(destination, operation, parameters, parent),
-      m_clientName(destination)
+StorageJob::StorageJob(const QString &destination, const QString &operation, const QVariantMap &parameters, QObject *parent)
+    : ServiceJob(destination, operation, parameters, parent)
+    , m_clientName(destination)
 {
     Plasma::StorageThread::self()->start();
     connect(Plasma::StorageThread::self(), &Plasma::StorageThread::newResult, this, &StorageJob::resultSlot);
     qRegisterMetaType<StorageJob *>();
-    qRegisterMetaType<QPointer<StorageJob> >();
+    qRegisterMetaType<QPointer<StorageJob>>();
 }
 
 StorageJob::~StorageJob()
@@ -58,7 +55,7 @@ QString StorageJob::clientName() const
 
 void StorageJob::start()
 {
-    //FIXME: QHASH
+    // FIXME: QHASH
     QVariantMap params = parameters();
 
     QString valueGroup = params[QStringLiteral("group")].toString();
@@ -72,7 +69,11 @@ void StorageJob::start()
     } else if (operationName() == QLatin1String("retrieve")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "retrieve", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("delete")) {
-        QMetaObject::invokeMethod(Plasma::StorageThread::self(), "deleteEntry", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
+        QMetaObject::invokeMethod(Plasma::StorageThread::self(),
+                                  "deleteEntry",
+                                  Qt::QueuedConnection,
+                                  Q_ARG(QPointer<StorageJob>, me),
+                                  Q_ARG(QVariantMap, params));
     } else if (operationName() == QLatin1String("expire")) {
         QMetaObject::invokeMethod(Plasma::StorageThread::self(), "expire", Qt::QueuedConnection, Q_ARG(QPointer<StorageJob>, me), Q_ARG(QVariantMap, params));
     } else {
@@ -100,12 +101,12 @@ Plasma::ServiceJob *Storage::createJob(const QString &operation, QVariantMap &pa
     return new StorageJob(m_clientName, operation, parameters, this);
 }
 
-//Storage implementation
+// Storage implementation
 Storage::Storage(QObject *parent)
-    : Plasma::Service(parent),
-      m_clientName(QStringLiteral("data"))
+    : Plasma::Service(parent)
+    , m_clientName(QStringLiteral("data"))
 {
-    //search among parents for an applet or dataengine: if found call the table as its plugin name
+    // search among parents for an applet or dataengine: if found call the table as its plugin name
     QObject *parentObject = this;
 
     while ((parentObject = parentObject->parent())) {

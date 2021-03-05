@@ -7,10 +7,10 @@
 #ifndef APPLETQUICKITEM_P_H
 #define APPLETQUICKITEM_P_H
 
-#include <QQmlComponent>
-#include <QQuickItem>
-#include <QQmlEngine>
 #include <KPackage/Package>
+#include <QQmlComponent>
+#include <QQmlEngine>
+#include <QQuickItem>
 
 //
 //  W A R N I N G
@@ -22,7 +22,6 @@
 //
 // We mean it.
 //
-
 
 namespace Plasma
 {
@@ -36,13 +35,12 @@ class QmlObject;
 
 namespace PlasmaQuick
 {
-
 class AppletQuickItem;
 
 class AppletQuickItemPrivate
 {
 public:
-    //weight values for the logic for when or if to preload
+    // weight values for the logic for when or if to preload
     enum PreloadWeights {
         DefaultPreloadWeight = 50,
         DefaultLauncherPreloadWeight = 100,
@@ -68,17 +66,17 @@ public:
     QQuickItem *createFullRepresentationItem();
     QQuickItem *createCompactRepresentationExpanderItem();
 
-    //true if the applet is at a size in which it should be expanded,
-    //false if is too small and should be an icon
+    // true if the applet is at a size in which it should be expanded,
+    // false if is too small and should be an icon
     bool appletShouldBeExpanded() const;
-    //ensures the popup is preloaded, don't expand yet
+    // ensures the popup is preloaded, don't expand yet
     void preloadForExpansion();
 
-    //look into item, and return the Layout attached property, if found
+    // look into item, and return the Layout attached property, if found
     void connectLayoutAttached(QObject *item);
     void propagateSizeHint(const QByteArray &layoutProperty);
 
-    //handlers of Layout signals, private slots
+    // handlers of Layout signals, private slots
     void compactRepresentationCheck();
     void minimumWidthChanged();
     void minimumHeightChanged();
@@ -106,7 +104,7 @@ public:
     QPointer<QQuickItem> currentRepresentationItem;
     QPointer<QObject> testItem;
 
-    //Attached layout objects: own and the representation's one
+    // Attached layout objects: own and the representation's one
     QPointer<QObject> representationLayout;
     QPointer<QObject> ownLayout;
 
@@ -119,7 +117,7 @@ public:
 
     bool expanded : 1;
     bool activationTogglesExpanded : 1;
-    bool initComplete: 1;
+    bool initComplete : 1;
 
     static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };

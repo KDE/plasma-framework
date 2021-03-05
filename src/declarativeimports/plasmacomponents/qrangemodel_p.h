@@ -25,7 +25,6 @@
 
 namespace Plasma
 {
-
 class QRangeModelPrivate
 {
     Q_DECLARE_PUBLIC(QRangeModel)

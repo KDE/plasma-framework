@@ -9,16 +9,16 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
-#include <QObject>
 #include <QKeySequence>
+#include <QObject>
 #include <QUrl>
 
 #include <KConfigGroup>
 #include <KPluginInfo>
 
+#include <plasma/framesvg.h>
 #include <plasma/plasma.h>
 #include <plasma/version.h>
-#include <plasma/framesvg.h>
 
 #include <KPackage/Package>
 
@@ -27,7 +27,6 @@ class KConfigLoader;
 
 namespace Plasma
 {
-
 class AppletPrivate;
 class Containment;
 class DataEngine;
@@ -79,7 +78,7 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(Plasma::Types::BackgroundHints effectiveBackgroundHints READ effectiveBackgroundHints NOTIFY effectiveBackgroundHintsChanged FINAL)
 
 public:
-//CONSTRUCTORS
+    // CONSTRUCTORS
     /**
      * @param parent the QObject this applet is parented to
      * @param serviceId the name of the .desktop file containing the
@@ -114,7 +113,7 @@ public:
 
     ~Applet() override;
 
-//BOOKKEEPING
+    // BOOKKEEPING
     /**
      * @return the id of this applet
      */
@@ -182,14 +181,14 @@ public:
      */
     Types::ContainmentDisplayHints containmentDisplayHints() const;
 
-//CONFIGURATION
+    // CONFIGURATION
     /**
-    * Returns the KConfigGroup to access the applets configuration.
-    *
-    * This config object will write to an instance
-    * specific config file named \<appletname\>\<instanceid\>rc
-    * in the Plasma appdata directory.
-    **/
+     * Returns the KConfigGroup to access the applets configuration.
+     *
+     * This config object will write to an instance
+     * specific config file named \<appletname\>\<instanceid\>rc
+     * in the Plasma appdata directory.
+     **/
     KConfigGroup config() const;
 
     /**
@@ -259,7 +258,7 @@ public:
      */
     void setUserConfiguring(bool configuring);
 
-//UTILS
+// UTILS
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
     /**
      * Accessor for the associated Package object if any.
@@ -290,7 +289,7 @@ public:
      */
     void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
 
-//METADATA
+// METADATA
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
     /**
      * @return metadata information about this plugin
@@ -406,12 +405,13 @@ public:
     void setUserBackgroundHints(Plasma::Types::BackgroundHints hint);
 
     /**
-     * The effective background hints the applet will have: it will follow userBackgroundHints only if backgroundHints has the Plasma::Types::ConfigurableBackground flag set
+     * The effective background hints the applet will have: it will follow userBackgroundHints only if backgroundHints has the
+     * Plasma::Types::ConfigurableBackground flag set
      * @since 5.65
      */
     Plasma::Types::BackgroundHints effectiveBackgroundHints() const;
 
-//ACTIONS
+    // ACTIONS
     /**
      * Returns a list of context-related QAction instances.
      *
@@ -439,7 +439,7 @@ public:
      */
     QKeySequence globalShortcut() const;
 
-// ASSOCIATED APPLICATION
+    // ASSOCIATED APPLICATION
     /**
      * Sets an application associated to this applet, that will be
      * regarded as a full view of what is represented in the applet
@@ -480,14 +480,14 @@ public:
      */
     bool hasValidAssociatedApplication() const;
 
-//Completely UI-specific, remove or move to scriptengine
+    // Completely UI-specific, remove or move to scriptengine
     /**
      * @return true if this plasmoid provides a GUI configuration
      **/
     bool hasConfigurationInterface() const;
 
 Q_SIGNALS:
-//BOOKEEPING
+    // BOOKEEPING
     /**
      * Emitted when the immutability changes
      * @since 4.4
@@ -543,7 +543,7 @@ Q_SIGNALS:
      */
     void effectiveBackgroundHintsChanged();
 
-//CONFIGURATION
+    // CONFIGURATION
     /**
      * Emitted when an applet has changed values in its configuration
      * and wishes for them to be saved at the next save point. As this implies
@@ -559,7 +559,7 @@ Q_SIGNALS:
      */
     void userConfiguringChanged(bool configuring);
 
-//ACTIONS
+    // ACTIONS
     /**
      * Emitted just before the contextual actions are about to show
      * For instance just before the context menu containing the actions
@@ -573,7 +573,7 @@ Q_SIGNALS:
      */
     void activated();
 
-//TODO: fix usage in containment, port to QObject::destroyed
+    // TODO: fix usage in containment, port to QObject::destroyed
     /**
      * Emitted when the applet is deleted
      */
@@ -599,7 +599,7 @@ Q_SIGNALS:
     void configurationRequiredChanged(bool needsConfig, const QString &reason);
 
 public Q_SLOTS:
-//BOOKKEEPING
+    // BOOKKEEPING
     /**
      * Call this method when the applet fails to launch properly. An
      * optional reason can be provided.
@@ -635,14 +635,14 @@ public Q_SLOTS:
      */
     void setStatus(const Types::ItemStatus stat);
 
-//CONFIGURATION
+    // CONFIGURATION
     /**
      * Called when applet configuration values have changed.
      */
-    //TODO KF6: make it not a slot anymore and protected
+    // TODO KF6: make it not a slot anymore and protected
     virtual void configChanged();
 
-//UTILS
+    // UTILS
     /**
      * Sends all pending constraints updates to the applet. Will usually
      * be called automatically, but can also be called manually if needed.
@@ -661,19 +661,19 @@ public Q_SLOTS:
      **/
     virtual void init();
 
-//ASSOCIATED APPLICATION
+    // ASSOCIATED APPLICATION
     /**
-    * Open the application associated to this applet, if it's not set
-    * but some urls are, open those urls with the proper application
-    * for their mimetype
-    * @see setAssociatedApplication()
-    * @see setAssociatedApplicationUrls()
-    * @since 4.4
-    */
+     * Open the application associated to this applet, if it's not set
+     * but some urls are, open those urls with the proper application
+     * for their mimetype
+     * @see setAssociatedApplication()
+     * @see setAssociatedApplicationUrls()
+     * @since 4.4
+     */
     void runAssociatedApplication();
 
 protected:
-//CONSTRUCTORS
+    // CONSTRUCTORS
     /**
      * This constructor is to be used with the plugin loading systems
      * found in KPluginInfo and KService. The argument list is expected
@@ -686,7 +686,7 @@ protected:
      */
     Applet(QObject *parent, const QVariantList &args);
 
-//CONFIGURATION
+    // CONFIGURATION
     /**
      * When called, the Applet should write any information needed as part
      * of the Applet's running state to the configuration object in config()
@@ -722,7 +722,7 @@ protected:
      */
     void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
-//UTILS
+    // UTILS
     /**
      * Called when any of the constraints for the applet have been updated. These constraints
      * range from notifying when the applet has officially "started up" to when geometry changes
@@ -743,7 +743,7 @@ protected:
      */
     virtual void constraintsEvent(Plasma::Types::Constraints constraints);
 
-//TODO: timerEvent should go into AppletPrivate
+    // TODO: timerEvent should go into AppletPrivate
     /**
      * Reimplemented from QObject
      */
@@ -769,7 +769,7 @@ private:
 
     AppletPrivate *const d;
 
-    //Corona needs to access setLaunchErrorMessage and init
+    // Corona needs to access setLaunchErrorMessage and init
     friend class Corona;
     friend class CoronaPrivate;
     friend class Containment;
@@ -787,12 +787,12 @@ private:
 /**
  * Register an applet when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_APPLET(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_APPLET(libname, classname)                                                                                                             \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)                                                                                                    \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#define K_EXPORT_PLASMA_APPLET_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_APPLET_WITH_JSON(libname, classname, jsonFile)                                                                                         \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard

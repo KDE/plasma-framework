@@ -6,8 +6,8 @@
 
 #include "plasmacomponentsplugin.h"
 
-#include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 #include <QQuickItem>
 
 #include "qrangemodel.h"
@@ -39,7 +39,7 @@ EngineBookKeeping *EngineBookKeeping::self()
 
 QQmlEngine *EngineBookKeeping::engine() const
 {
-    //for components creation, any engine will do, as long is valid
+    // for components creation, any engine will do, as long is valid
     if (m_engines.isEmpty()) {
         qWarning() << "No engines found, this should never happen";
         return nullptr;
@@ -50,8 +50,7 @@ QQmlEngine *EngineBookKeeping::engine() const
 
 void EngineBookKeeping::insertEngine(QQmlEngine *engine)
 {
-    connect(engine, &QObject::destroyed,
-            this, &EngineBookKeeping::engineDestroyed);
+    connect(engine, &QObject::destroyed, this, &EngineBookKeeping::engineDestroyed);
     m_engines.insert(engine);
 }
 
@@ -81,4 +80,3 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 }
 
 #include "moc_plasmacomponentsplugin.cpp"
-

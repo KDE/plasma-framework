@@ -12,14 +12,13 @@
 #include <QTimer>
 
 #include <KJob>
-#include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
+#include <plasma/plasma_export.h>
 
 class QAbstractItemModel;
 
 namespace Plasma
 {
-
 class DataContainerPrivate;
 
 /**
@@ -130,8 +129,7 @@ public:
      * @param pollingInterval the time in milliseconds between updates
      * @param alignment the clock position to align updates to
      **/
-    void connectVisualization(QObject *visualization, uint pollingInterval,
-                              Plasma::Types::IntervalAlignment alignment);
+    void connectVisualization(QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment alignment);
 
     /**
      * sets this data container to be automatically stored.

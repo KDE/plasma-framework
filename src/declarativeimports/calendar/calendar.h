@@ -8,10 +8,10 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include <QObject>
-#include <QDate>
 #include <QAbstractListModel>
+#include <QDate>
 #include <QJsonArray>
+#include <QObject>
 
 #include "daydata.h"
 #include "daysmodel.h"
@@ -111,7 +111,6 @@ class Calendar : public QObject
      * where the exact names usable in QML are being set.
      */
     Q_PROPERTY(QAbstractListModel *daysModel READ daysModel CONSTANT)
-
 
 public:
     enum Type {

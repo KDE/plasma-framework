@@ -6,12 +6,12 @@
 
 #include "dataenginetracker.h"
 
-#include <QTime>
 #include <QDebug>
+#include <QTime>
 
 DataEngineTracker::DataEngineTracker(Plasma::DataEngine *engine, QObject *parent)
-    : QObject(parent),
-      m_engine(engine)
+    : QObject(parent)
+    , m_engine(engine)
 {
     connect(engine, SIGNAL(sourceAdded(QString)), this, SLOT(sourceAdded(QString)));
     connect(engine, SIGNAL(sourceRemoved(QString)), this, SLOT(sourceRemoved(QString)));
@@ -40,4 +40,3 @@ void DataEngineTracker::sourceRemoved(const QString &source)
 }
 
 #include <dataenginetracker.moc>
-

@@ -14,12 +14,14 @@
 
 namespace Plasma
 {
-
 class ChangeableMainScriptPackage : public KPackage::PackageStructure
 {
     Q_OBJECT
 public:
-    ChangeableMainScriptPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : KPackage::PackageStructure(parent, args) {}
+    ChangeableMainScriptPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
+        : KPackage::PackageStructure(parent, args)
+    {
+    }
 
     void initPackage(KPackage::Package *package) override;
     void pathChanged(KPackage::Package *package) override;
@@ -32,7 +34,10 @@ class GenericPackage : public ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    GenericPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList()) : ChangeableMainScriptPackage(parent, args) {}
+    GenericPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
+        : ChangeableMainScriptPackage(parent, args)
+    {
+    }
     void initPackage(KPackage::Package *package) override;
 };
 

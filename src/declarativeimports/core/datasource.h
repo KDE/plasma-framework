@@ -11,13 +11,13 @@
 #define DATASOURCE_H
 
 #include <QObject>
+#include <QQmlParserStatus>
+#include <QQmlPropertyMap>
 #include <QScopedPointer>
 #include <QtQml>
-#include <QQmlPropertyMap>
-#include <QQmlParserStatus>
 
-#include <Plasma/DataEngineConsumer>
 #include <Plasma/DataEngine>
+#include <Plasma/DataEngineConsumer>
 
 class QQmlPropertyMap;
 
@@ -124,7 +124,7 @@ public:
      * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
      */
     Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT)
-    QQmlPropertyMap *models()  const
+    QQmlPropertyMap *models() const
     {
         return m_models;
     }

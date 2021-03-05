@@ -7,9 +7,9 @@
 #ifndef TIMETRACKER_H
 #define TIMETRACKER_H
 
+#include <QDateTime>
 #include <QObject>
 #include <QVariantMap>
-#include <QDateTime>
 #include <QVector>
 
 #include "plasma/plasma_export.h"
@@ -19,14 +19,12 @@ namespace Plasma
 class Containment;
 class Applet;
 
-struct TimeEvent
-{
+struct TimeEvent {
     QDateTime moment;
     QString comment;
 };
 
-struct ObjectHistory
-{
+struct ObjectHistory {
     QVariantMap initial;
     QVector<TimeEvent> events;
 };
@@ -45,9 +43,9 @@ struct ObjectHistory
 
 class PLASMA_EXPORT TimeTracker : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    explicit TimeTracker(QObject* applet);
+    explicit TimeTracker(QObject *applet);
     virtual ~TimeTracker();
 
 private Q_SLOTS:

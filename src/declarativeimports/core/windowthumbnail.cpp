@@ -19,14 +19,13 @@
 #include <xcb/composite.h>
 #if HAVE_GLX
 #include <GL/glx.h>
-typedef void (*glXBindTexImageEXT_func)(Display *dpy, GLXDrawable drawable,
-                                        int buffer, const int *attrib_list);
+typedef void (*glXBindTexImageEXT_func)(Display *dpy, GLXDrawable drawable, int buffer, const int *attrib_list);
 typedef void (*glXReleaseTexImageEXT_func)(Display *dpy, GLXDrawable drawable, int buffer);
 #endif
 #if HAVE_EGL
-typedef EGLImageKHR(*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint *);
-typedef EGLBoolean(*eglDestroyImageKHR_func)(EGLDisplay, EGLImageKHR);
-typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
+typedef EGLImageKHR (*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint *);
+typedef EGLBoolean (*eglDestroyImageKHR_func)(EGLDisplay, EGLImageKHR);
+typedef GLvoid (*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 #endif // HAVE_EGL
 #endif
 
@@ -34,17 +33,14 @@ typedef GLvoid(*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 
 namespace Plasma
 {
-
 #if HAVE_XCB_COMPOSITE
 #if HAVE_GLX
-class DiscardGlxPixmapRunnable : public QRunnable {
+class DiscardGlxPixmapRunnable : public QRunnable
+{
 public:
-    DiscardGlxPixmapRunnable(
-        uint,
-        QFunctionPointer,
-        xcb_pixmap_t
-    );
+    DiscardGlxPixmapRunnable(uint, QFunctionPointer, xcb_pixmap_t);
     void run() override;
+
 private:
     uint m_texture;
     QFunctionPointer m_releaseTexImage;
@@ -52,11 +48,12 @@ private:
 };
 
 DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
-    : QRunnable(),
-    m_texture(texture),
-    m_releaseTexImage(deleteFunction),
-    m_glxPixmap(pixmap)
-{}
+    : QRunnable()
+    , m_texture(texture)
+    , m_releaseTexImage(deleteFunction)
+    , m_glxPixmap(pixmap)
+{
+}
 
 void DiscardGlxPixmapRunnable::run()
 {
@@ -67,17 +64,15 @@ void DiscardGlxPixmapRunnable::run()
         glDeleteTextures(1, &m_texture);
     }
 }
-#endif //HAVE_GLX
+#endif // HAVE_GLX
 
 #if HAVE_EGL
-class DiscardEglPixmapRunnable : public QRunnable {
+class DiscardEglPixmapRunnable : public QRunnable
+{
 public:
-    DiscardEglPixmapRunnable(
-        uint,
-        QFunctionPointer,
-        EGLImageKHR
-    );
+    DiscardEglPixmapRunnable(uint, QFunctionPointer, EGLImageKHR);
     void run() override;
+
 private:
     uint m_texture;
     QFunctionPointer m_eglDestroyImageKHR;
@@ -85,11 +80,12 @@ private:
 };
 
 DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, QFunctionPointer deleteFunction, EGLImageKHR image)
-    : QRunnable(),
-    m_texture(texture),
-    m_eglDestroyImageKHR(deleteFunction),
-    m_image(image)
-{}
+    : QRunnable()
+    , m_texture(texture)
+    , m_eglDestroyImageKHR(deleteFunction)
+    , m_image(image)
+{
+}
 
 void DiscardEglPixmapRunnable::run()
 {
@@ -98,8 +94,8 @@ void DiscardEglPixmapRunnable::run()
         glDeleteTextures(1, &m_texture);
     }
 }
-#endif//HAVE_EGL
-#endif //HAVE_XCB_COMPOSITE
+#endif // HAVE_EGL
+#endif // HAVE_XCB_COMPOSITE
 
 WindowTextureNode::WindowTextureNode()
     : QSGSimpleTextureNode()
@@ -219,22 +215,19 @@ void WindowThumbnail::releaseResources()
 #if HAVE_XCB_COMPOSITE
 
 #if HAVE_GLX && HAVE_EGL
-    //only one (or none) should be set, but never both
+    // only one (or none) should be set, but never both
     Q_ASSERT(m_glxPixmap == XCB_PIXMAP_NONE || m_image == EGL_NO_IMAGE_KHR);
 #endif
 #if HAVE_GLX || HAVE_EGL
     QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
 #endif
 
-    //data is deleted in the render thread (with relevant GLX calls)
-    //note runnable may be called *after* this is deleted
-    //but the pointer is held by the WindowThumbnail which is in the main thread
+    // data is deleted in the render thread (with relevant GLX calls)
+    // note runnable may be called *after* this is deleted
+    // but the pointer is held by the WindowThumbnail which is in the main thread
 #if HAVE_GLX
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
-        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture,
-                                                        m_releaseTexImage,
-                                                        m_glxPixmap),
-                                                        m_renderStage);
+        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture, m_releaseTexImage, m_glxPixmap), m_renderStage);
 
         m_glxPixmap = XCB_PIXMAP_NONE;
         m_texture = 0;
@@ -242,10 +235,7 @@ void WindowThumbnail::releaseResources()
 #endif
 #if HAVE_EGL
     if (m_image != EGL_NO_IMAGE_KHR) {
-        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture,
-                                                        m_eglDestroyImageKHR,
-                                                        m_image),
-                                                        m_renderStage);
+        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture, m_eglDestroyImageKHR, m_image), m_renderStage);
 
         m_image = EGL_NO_IMAGE_KHR;
         m_texture = 0;
@@ -253,8 +243,6 @@ void WindowThumbnail::releaseResources()
 #endif
 #endif
 }
-
-
 
 uint32_t WindowThumbnail::winId() const
 {
@@ -434,13 +422,9 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
             xcb_connection_t *c = QX11Info::connection();
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
 
-            const EGLint attribs[] = {
-                EGL_IMAGE_PRESERVED_KHR, EGL_TRUE,
-                EGL_NONE
-            };
-            m_image = ((eglCreateImageKHR_func)(m_eglCreateImageKHR))(eglGetCurrentDisplay(), EGL_NO_CONTEXT,
-                      EGL_NATIVE_PIXMAP_KHR,
-                      (EGLClientBuffer)m_pixmap, attribs);
+            const EGLint attribs[] = {EGL_IMAGE_PRESERVED_KHR, EGL_TRUE, EGL_NONE};
+            m_image = ((eglCreateImageKHR_func)(
+                m_eglCreateImageKHR))(eglGetCurrentDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_PIXMAP_KHR, (EGLClientBuffer)m_pixmap, attribs);
 
             if (m_image == EGL_NO_IMAGE_KHR) {
                 qDebug() << "failed to create egl image";
@@ -471,9 +455,8 @@ void WindowThumbnail::resolveEGLFunctions()
     }
     auto *context = window()->openglContext();
     QList<QByteArray> extensions = QByteArray(eglQueryString(display, EGL_EXTENSIONS)).split(' ');
-    if (extensions.contains(QByteArrayLiteral("EGL_KHR_image")) ||
-            (extensions.contains(QByteArrayLiteral("EGL_KHR_image_base")) &&
-             extensions.contains(QByteArrayLiteral("EGL_KHR_image_pixmap")))) {
+    if (extensions.contains(QByteArrayLiteral("EGL_KHR_image"))
+        || (extensions.contains(QByteArrayLiteral("EGL_KHR_image_base")) && extensions.contains(QByteArrayLiteral("EGL_KHR_image_pixmap")))) {
         if (context->hasExtension(QByteArrayLiteral("GL_OES_EGL_image"))) {
             qDebug() << "Have EGL texture from pixmap";
             m_eglCreateImageKHR = context->getProcAddress(QByteArrayLiteral("eglCreateImageKHR"));
@@ -572,20 +555,18 @@ void WindowThumbnail::bindGLXTexture()
     resetDamaged();
 }
 
-struct FbConfigInfo
-{
+struct FbConfigInfo {
     GLXFBConfig fbConfig;
     int textureFormat;
 };
 
-struct GlxGlobalData
-{
-    GlxGlobalData() {
-	xcb_connection_t * const conn = QX11Info::connection();
+struct GlxGlobalData {
+    GlxGlobalData()
+    {
+        xcb_connection_t *const conn = QX11Info::connection();
 
         // Fetch the render pict formats
-        reply = xcb_render_query_pict_formats_reply(conn,
-                        xcb_render_query_pict_formats_unchecked(conn), nullptr);
+        reply = xcb_render_query_pict_formats_reply(conn, xcb_render_query_pict_formats_unchecked(conn), nullptr);
 
         // Init the visual ID -> format ID hash table
         for (auto screens = xcb_render_query_pict_formats_screens_iterator(reply); screens.rem; xcb_render_pictscreen_next(&screens)) {
@@ -621,7 +602,8 @@ struct GlxGlobalData
         }
     }
 
-    ~GlxGlobalData() {
+    ~GlxGlobalData()
+    {
         qDeleteAll(visualFbConfigHash);
         std::free(reply);
     }
@@ -663,31 +645,42 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
         return nullptr;
     }
 
-    const int red_bits   = qPopulationCount(direct->red_mask);
+    const int red_bits = qPopulationCount(direct->red_mask);
     const int green_bits = qPopulationCount(direct->green_mask);
-    const int blue_bits  = qPopulationCount(direct->blue_mask);
+    const int blue_bits = qPopulationCount(direct->blue_mask);
     const int alpha_bits = qPopulationCount(direct->alpha_mask);
 
     const int depth = visualDepth(visual);
 
     const auto rgb_sizes = std::tie(red_bits, green_bits, blue_bits);
 
-    const int attribs[] = {
-        GLX_RENDER_TYPE,                  GLX_RGBA_BIT,
-        GLX_DRAWABLE_TYPE,                GLX_WINDOW_BIT | GLX_PIXMAP_BIT,
-        GLX_X_VISUAL_TYPE,                GLX_TRUE_COLOR,
-        GLX_X_RENDERABLE,                 True,
-        GLX_CONFIG_CAVEAT,                int(GLX_DONT_CARE), // The ARGB32 visual is marked non-conformant in Catalyst
-        GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT, int(GLX_DONT_CARE),
-        GLX_BUFFER_SIZE,                  red_bits + green_bits + blue_bits + alpha_bits,
-        GLX_RED_SIZE,                     red_bits,
-        GLX_GREEN_SIZE,                   green_bits,
-        GLX_BLUE_SIZE,                    blue_bits,
-        GLX_ALPHA_SIZE,                   alpha_bits,
-        GLX_STENCIL_SIZE,                 0,
-        GLX_DEPTH_SIZE,                   0,
-        0
-    };
+    const int attribs[] = {GLX_RENDER_TYPE,
+                           GLX_RGBA_BIT,
+                           GLX_DRAWABLE_TYPE,
+                           GLX_WINDOW_BIT | GLX_PIXMAP_BIT,
+                           GLX_X_VISUAL_TYPE,
+                           GLX_TRUE_COLOR,
+                           GLX_X_RENDERABLE,
+                           True,
+                           GLX_CONFIG_CAVEAT,
+                           int(GLX_DONT_CARE), // The ARGB32 visual is marked non-conformant in Catalyst
+                           GLX_FRAMEBUFFER_SRGB_CAPABLE_EXT,
+                           int(GLX_DONT_CARE),
+                           GLX_BUFFER_SIZE,
+                           red_bits + green_bits + blue_bits + alpha_bits,
+                           GLX_RED_SIZE,
+                           red_bits,
+                           GLX_GREEN_SIZE,
+                           green_bits,
+                           GLX_BLUE_SIZE,
+                           blue_bits,
+                           GLX_ALPHA_SIZE,
+                           alpha_bits,
+                           GLX_STENCIL_SIZE,
+                           0,
+                           GLX_DEPTH_SIZE,
+                           0,
+                           0};
 
     if (QByteArray((char *)glGetString(GL_RENDERER)).contains("llvmpipe")) {
         return nullptr;
@@ -710,22 +703,22 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
 
     for (int i = 0; i < count; i++) {
         int red, green, blue;
-        glXGetFBConfigAttrib(dpy, configs[i], GLX_RED_SIZE,   &red);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_RED_SIZE, &red);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_GREEN_SIZE, &green);
-        glXGetFBConfigAttrib(dpy, configs[i], GLX_BLUE_SIZE,  &blue);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BLUE_SIZE, &blue);
 
         if (std::tie(red, green, blue) != rgb_sizes)
             continue;
 
         xcb_visualid_t visual;
-        glXGetFBConfigAttrib(dpy, configs[i], GLX_VISUAL_ID, (int *) &visual);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_VISUAL_ID, (int *)&visual);
 
         if (visualDepth(visual) != depth)
             continue;
 
         int bind_rgb, bind_rgba;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &bind_rgba);
-        glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGB_EXT,  &bind_rgb);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGB_EXT, &bind_rgb);
 
         if (!bind_rgb && !bind_rgba)
             continue;
@@ -737,7 +730,7 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
             continue;
 
         int depth, stencil;
-        glXGetFBConfigAttrib(dpy, configs[i], GLX_DEPTH_SIZE,   &depth);
+        glXGetFBConfigAttrib(dpy, configs[i], GLX_DEPTH_SIZE, &depth);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_STENCIL_SIZE, &stencil);
 
         int texture_format;
@@ -768,10 +761,9 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
         const FBConfig &candidate = candidates.front();
 
         info = new FbConfigInfo;
-        info->fbConfig      = candidate.config;
+        info->fbConfig = candidate.config;
         info->textureFormat = candidate.format;
     }
-
 
     return info;
 }
@@ -801,12 +793,7 @@ bool WindowThumbnail::loadGLXTexture()
 
     glGenTextures(1, &m_texture);
 
-    const int attrs[] = {
-        GLX_TEXTURE_FORMAT_EXT, info->textureFormat,
-        GLX_MIPMAP_TEXTURE_EXT, false,
-        GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-        XCB_NONE
-    };
+    const int attrs[] = {GLX_TEXTURE_FORMAT_EXT, info->textureFormat, GLX_MIPMAP_TEXTURE_EXT, false, GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT, XCB_NONE};
 
     m_glxPixmap = glXCreatePixmap(QX11Info::display(), info->fbConfig, m_pixmap, attrs);
 
@@ -890,8 +877,6 @@ bool WindowThumbnail::startRedirecting()
     return false;
 #endif
 }
-
-
 
 void WindowThumbnail::setThumbnailAvailable(bool thumbnailAvailable)
 {

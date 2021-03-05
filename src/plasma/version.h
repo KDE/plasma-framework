@@ -12,20 +12,19 @@
 #include <plasma/plasma_export.h>
 #include <plasma_version.h>
 
-#define PLASMA_MAKE_VERSION(a,b,c) (((a) << 16) | ((b) << 8) | (c))
+#define PLASMA_MAKE_VERSION(a, b, c) (((a) << 16) | ((b) << 8) | (c))
 
 /**
  * Compile-time macro for checking the plasma version. Not useful for
  * detecting the version of libplasma at runtime.
  */
-#define PLASMA_IS_VERSION(a,b,c) (PLASMA_VERSION >= PLASMA_MAKE_VERSION(a,b,c))
+#define PLASMA_IS_VERSION(a, b, c) (PLASMA_VERSION >= PLASMA_MAKE_VERSION(a, b, c))
 
 /**
  * Namespace for everything in libplasma
  */
 namespace Plasma
 {
-
 /**
  * The runtime version of libplasma
  */

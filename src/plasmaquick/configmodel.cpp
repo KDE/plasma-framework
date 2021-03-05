@@ -5,31 +5,30 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "private/configcategory_p.h"
-#include "configview.h"
 #include "configmodel.h"
 #include "Plasma/Applet"
 #include "Plasma/Containment"
+#include "configview.h"
+#include "private/configcategory_p.h"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QQmlComponent>
-#include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 #include <QQuickItem>
 
 #include <KLocalizedString>
-#include <kdeclarative/kdeclarative.h>
 #include <KQuickAddons/ConfigModule>
+#include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
 namespace PlasmaQuick
 {
-
 //////////////////////////////ConfigModel
 
 class ConfigModelPrivate
@@ -69,7 +68,7 @@ ConfigCategory *ConfigModelPrivate::categories_at(QQmlListProperty<ConfigCategor
     ConfigModel *model = qobject_cast<ConfigModel *>(prop->object);
     if (!model || index >= model->d->categories.count() || index < 0) {
         return nullptr;
-    }  else {
+    } else {
         return model->d->categories.at(index);
     }
 }
@@ -190,10 +189,9 @@ QVariant ConfigModelPrivate::get(int row) const
 }
 
 ConfigModel::ConfigModel(QObject *parent)
-    : QAbstractListModel(parent),
-      d(new ConfigModelPrivate(this))
+    : QAbstractListModel(parent)
+    , d(new ConfigModelPrivate(this))
 {
-
 }
 
 ConfigModel::~ConfigModel()
@@ -219,12 +217,11 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         return d->categories.at(index.row())->name();
     case IconRole:
         return d->categories.at(index.row())->icon();
-    case SourceRole:
-    {
+    case SourceRole: {
         const QString source = d->categories.at(index.row())->source();
         // Quick check if source is an absolute path or not
         if (d->appletInterface && !source.isEmpty() && !(source.startsWith(QLatin1Char('/')) && source.endsWith(QLatin1String("qml")))) {
-            if(!d->appletInterface.data()->kPackage().isValid())
+            if (!d->appletInterface.data()->kPackage().isValid())
                 qWarning() << "wrong applet" << d->appletInterface.data()->pluginMetaData().name();
             return d->appletInterface.data()->kPackage().fileUrl("ui", source);
         } else {
@@ -238,7 +235,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
     case KCMRole: {
         const QString pluginName = d->categories.at(index.row())->pluginName();
         const QString pluginPath = KPluginLoader::findPlugin(pluginName);
-        //no kcm is registered for this row, it's a normal qml-only entry
+        // no kcm is registered for this row, it's a normal qml-only entry
         if (pluginName.isEmpty() || pluginPath.isEmpty()) {
             return QVariant();
         }
@@ -248,11 +245,11 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         }
 
         KPluginLoader loader(pluginPath);
-        KPluginFactory* factory = loader.factory();
+        KPluginFactory *factory = loader.factory();
         if (!factory) {
             qWarning() << "Error loading KCM:" << loader.errorString();
         } else {
-            KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule >(const_cast<ConfigModel *>(this));
+            KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule>(const_cast<ConfigModel *>(this));
             if (!cm) {
                 qWarning() << "Error creating KCM object from plugin" << loader.fileName();
             }
@@ -289,8 +286,7 @@ QVariant ConfigModel::get(int row) const
     return d->get(row);
 }
 
-void ConfigModel::appendCategory(const QString &iconName, const QString &name,
-                                 const QString &path, const QString &pluginName)
+void ConfigModel::appendCategory(const QString &iconName, const QString &name, const QString &path, const QString &pluginName)
 {
     ConfigCategory *cat = new ConfigCategory(this);
     cat->setIcon(iconName);
@@ -300,8 +296,7 @@ void ConfigModel::appendCategory(const QString &iconName, const QString &name,
     d->appendCategory(cat);
 }
 
-void ConfigModel::appendCategory(const QString &iconName, const QString &name,
-                                 const QString &path, const QString &pluginName, bool visible)
+void ConfigModel::appendCategory(const QString &iconName, const QString &name, const QString &path, const QString &pluginName, bool visible)
 {
     ConfigCategory *cat = new ConfigCategory(this);
     cat->setIcon(iconName);
@@ -344,11 +339,12 @@ Plasma::Applet *ConfigModel::applet() const
 
 QQmlListProperty<ConfigCategory> ConfigModel::categories()
 {
-    return QQmlListProperty<ConfigCategory>(this, nullptr, ConfigModelPrivate::categories_append,
+    return QQmlListProperty<ConfigCategory>(this,
+                                            nullptr,
+                                            ConfigModelPrivate::categories_append,
                                             ConfigModelPrivate::categories_count,
                                             ConfigModelPrivate::categories_at,
                                             ConfigModelPrivate::categories_clear);
-
 }
 
 }

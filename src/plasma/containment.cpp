@@ -13,23 +13,23 @@
 #include "config-plasma.h"
 
 #include <QClipboard>
+#include <QContextMenuEvent>
 #include <QDebug>
 #include <QFile>
-#include <QContextMenuEvent>
 #include <QMimeData>
+#include <QMimeDatabase>
 #include <QPainter>
 #include <QTemporaryFile>
-#include <QMimeDatabase>
 
 #include <KAuthorized>
-#include <KLocalizedString>
-#include <KConfigSkeleton>
 #include <KConfigLoader>
+#include <KConfigSkeleton>
+#include <KLocalizedString>
 
 #include "containmentactions.h"
 #include "corona.h"
-#include "pluginloader.h"
 #include "debug_p.h"
+#include "pluginloader.h"
 
 #include "private/applet_p.h"
 
@@ -37,12 +37,9 @@
 
 namespace Plasma
 {
-
-Containment::Containment(QObject *parent,
-                         const QString &serviceId,
-                         uint containmentId)
-    : Applet(parent, serviceId, containmentId),
-      d(new ContainmentPrivate(this))
+Containment::Containment(QObject *parent, const QString &serviceId, uint containmentId)
+    : Applet(parent, serviceId, containmentId)
+    , d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -51,8 +48,8 @@ Containment::Containment(QObject *parent,
 }
 
 Containment::Containment(QObject *parent, const QVariantList &args)
-    : Applet(parent, args),
-      d(new ContainmentPrivate(this))
+    : Applet(parent, args)
+    , d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -60,8 +57,8 @@ Containment::Containment(QObject *parent, const QVariantList &args)
 }
 
 Containment::Containment(const KPluginMetaData &md, uint appletId)
-    : Applet(md, nullptr, appletId),
-      d(new ContainmentPrivate(this))
+    : Applet(md, nullptr, appletId)
+    , d(new ContainmentPrivate(this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -80,8 +77,8 @@ void Containment::init()
     static_cast<Applet *>(this)->d->setupScripting();
 
     if (d->type == Types::NoContainmentType) {
-        //setContainmentType(Plasma::Types::DesktopContainment);
-        //Try to determine the containment type. It must be done as soon as possible
+        // setContainmentType(Plasma::Types::DesktopContainment);
+        // Try to determine the containment type. It must be done as soon as possible
         QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
 
         if (type == QLatin1String("Panel")) {
@@ -90,18 +87,18 @@ void Containment::init()
             setContainmentType(Plasma::Types::CustomContainment);
         } else if (type == QLatin1String("CustomPanel")) {
             setContainmentType(Plasma::Types::CustomPanelContainment);
-            //default to desktop
+            // default to desktop
         } else {
             setContainmentType(Plasma::Types::DesktopContainment);
         }
     }
 
-    //connect actions
+    // connect actions
     ContainmentPrivate::addDefaultActions(actions(), this);
     bool unlocked = immutability() == Types::Mutable;
 
-    //fix the text of the actions that need title()
-    //btw, do we really want to use title() when it's a desktopcontainment?
+    // fix the text of the actions that need title()
+    // btw, do we really want to use title() when it's a desktopcontainment?
     QAction *closeApplet = actions()->action(QStringLiteral("remove"));
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove %1", title()));
@@ -126,14 +123,14 @@ void Containment::init()
 
     if (immutability() != Types::SystemImmutable && corona()) {
         QAction *lockDesktopAction = corona()->actions()->action(QStringLiteral("lock widgets"));
-        //keep a pointer so nobody notices it moved to corona
+        // keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
             actions()->addAction(QStringLiteral("lock widgets"), lockDesktopAction);
         }
     }
 
-    //HACK: this is valid only in the systray case
-    connect(this, &Containment::configureRequested, this, [=] (Plasma::Applet *a) {
+    // HACK: this is valid only in the systray case
+    connect(this, &Containment::configureRequested, this, [=](Plasma::Applet *a) {
         if (Plasma::Applet *p = qobject_cast<Plasma::Applet *>(parent())) {
             Q_EMIT p->containment()->configureRequested(a);
         }
@@ -176,28 +173,28 @@ void Containment::restore(KConfigGroup &group)
         KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
         cfg = KConfigGroup(&cfg, QString::number(containmentType()));
 
-        //qCDebug(LOG_PLASMA) << cfg.keyList();
+        // qCDebug(LOG_PLASMA) << cfg.keyList();
         if (cfg.exists()) {
-            const auto keyList =  cfg.keyList();
+            const auto keyList = cfg.keyList();
             for (const QString &key : keyList) {
-                //qCDebug(LOG_PLASMA) << "loading" << key;
+                // qCDebug(LOG_PLASMA) << "loading" << key;
                 setContainmentActions(key, cfg.readEntry(key, QString()));
             }
-        } else { //shell defaults
+        } else { // shell defaults
             KConfigGroup defaultActionsCfg;
 
             switch (d->type) {
-                case Plasma::Types::PanelContainment:
-                    /* fall through*/
-                case Plasma::Types::CustomPanelContainment:
-                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
-                    break;
-                case Plasma::Types::DesktopContainment:
-                    defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
-                    break;
-                default:
-                    //for any other type of containment, there are no defaults
-                    break;
+            case Plasma::Types::PanelContainment:
+                /* fall through*/
+            case Plasma::Types::CustomPanelContainment:
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
+                break;
+            case Plasma::Types::DesktopContainment:
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
+                break;
+            default:
+                // for any other type of containment, there are no defaults
+                break;
             }
             if (defaultActionsCfg.isValid()) {
                 defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
@@ -233,7 +230,7 @@ void Containment::save(KConfigGroup &g) const
     // locking is saved in Applet::save
     Applet::save(group);
 
-//     group.writeEntry("screen", d->screen);
+    //     group.writeEntry("screen", d->screen);
     group.writeEntry("lastScreen", d->lastScreen);
     group.writeEntry("formfactor", (int)d->formFactor);
     group.writeEntry("location", (int)d->location);
@@ -257,7 +254,7 @@ void Containment::restoreContents(KConfigGroup &group)
 {
     KConfigGroup applets(&group, "Applets");
 
-    //restore the applets ordered by id
+    // restore the applets ordered by id
     QStringList groups = applets.groupList();
     std::sort(groups.begin(), groups.end());
 
@@ -265,7 +262,7 @@ void Containment::restoreContents(KConfigGroup &group)
     // are added from left to right or top to bottom for a panel containment
     QList<KConfigGroup> appletConfigs;
     for (const QString &appletGroup : qAsConst(groups)) {
-        //qCDebug(LOG_PLASMA) << "reading from applet group" << appletGroup;
+        // qCDebug(LOG_PLASMA) << "reading from applet group" << appletGroup;
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
     }
@@ -284,7 +281,7 @@ void Containment::restoreContents(KConfigGroup &group)
         d->createApplet(plugin, QVariantList(), appId);
     }
 
-    //if there are no applets, none of them is "loading"
+    // if there are no applets, none of them is "loading"
     if (Containment::applets().isEmpty()) {
         d->appletsUiReady = true;
     }
@@ -313,9 +310,9 @@ void Containment::setContainmentType(Plasma::Types::ContainmentType type)
 
 Corona *Containment::corona() const
 {
-    if(Plasma::Corona* corona = qobject_cast<Corona *>(parent())) {
+    if (Plasma::Corona *corona = qobject_cast<Corona *>(parent())) {
         return corona;
-    //case in which this containment is child of an applet, hello systray :)
+        // case in which this containment is child of an applet, hello systray :)
     } else {
         Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(parent());
         if (parentApplet && parentApplet->containment()) {
@@ -332,7 +329,7 @@ void Containment::setFormFactor(Types::FormFactor formFactor)
         return;
     }
 
-    //qCDebug(LOG_PLASMA) << "switching FF to " << formFactor;
+    // qCDebug(LOG_PLASMA) << "switching FF to " << formFactor;
     d->formFactor = formFactor;
 
     updateConstraints(Plasma::Types::FormFactorConstraint);
@@ -413,14 +410,14 @@ void Containment::addApplet(Applet *applet)
         applet->setParent(this);
 
         // now move the old config to the new location
-        //FIXME: this doesn't seem to get the actual main config group containing plugin=, etc
+        // FIXME: this doesn't seem to get the actual main config group containing plugin=, etc
         KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
 
         disconnect(applet, &Applet::activated, currentContainment, &Applet::activated);
-        //change the group to its configloader, if any
-        //FIXME: this is very, very brutal
+        // change the group to its configloader, if any
+        // FIXME: this is very, very brutal
         if (applet->configScheme()) {
             const QString oldGroupPrefix = QStringLiteral("Containments") + QString::number(currentContainment->id()) + QStringLiteral("Applets");
             const QString newGroupPrefix = QStringLiteral("Containments") + QString::number(id()) + QStringLiteral("Applets");
@@ -436,8 +433,8 @@ void Containment::addApplet(Applet *applet)
         applet->setParent(this);
     }
 
-    //make sure the applets are sorted by id
-    auto position = std::lower_bound(d->applets.begin(), d->applets.end(), applet, [](Plasma::Applet *a1,  Plasma::Applet *a2) {
+    // make sure the applets are sorted by id
+    auto position = std::lower_bound(d->applets.begin(), d->applets.end(), applet, [](Plasma::Applet *a1, Plasma::Applet *a2) {
         return a1->id() < a2->id();
     });
     d->applets.insert(position, applet);
@@ -447,7 +444,7 @@ void Containment::addApplet(Applet *applet)
     }
 
     connect(applet, &Applet::configNeedsSaving, this, &Applet::configNeedsSaving);
-    connect(applet, SIGNAL(appletDeleted(Plasma::Applet*)), this, SLOT(appletDeleted(Plasma::Applet*)));
+    connect(applet, SIGNAL(appletDeleted(Plasma::Applet *)), this, SLOT(appletDeleted(Plasma::Applet *)));
     connect(applet, SIGNAL(statusChanged(Plasma::Types::ItemStatus)), this, SLOT(checkStatus(Plasma::Types::ItemStatus)));
     connect(applet, &Applet::activated, this, &Applet::activated);
     connect(this, &Containment::containmentDisplayHintsChanged, applet, &Applet::containmentDisplayHintsChanged);
@@ -466,7 +463,7 @@ void Containment::addApplet(Applet *applet)
             applet->save(*applet->d->mainConfigGroup());
             Q_EMIT configNeedsSaving();
         }
-        //FIXME: an on-appear animation would be nice to have again
+        // FIXME: an on-appear animation would be nice to have again
     }
 
     applet->updateConstraints(Plasma::Types::AllConstraints);
@@ -490,7 +487,7 @@ QList<Applet *> Containment::applets() const
 int Containment::screen() const
 {
     Q_ASSERT(corona());
-    if (Corona* c = corona()) {
+    if (Corona *c = corona()) {
         return c->screenForContainment(this);
     } else {
         return -1;
@@ -534,9 +531,9 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
     if (pluginName.isEmpty()) {
         cfg.deleteEntry(trigger);
     } else if (plugin) {
-        //it already existed, just reload config
-        plugin->setContainment(this); //to be safe
-        //FIXME make a truly unique config group
+        // it already existed, just reload config
+        plugin->setContainment(this); // to be safe
+        // FIXME make a truly unique config group
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
 
@@ -550,7 +547,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
             KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
             plugin->restore(pluginConfig);
         } else {
-            //bad plugin... gets removed. is this a feature or a bug?
+            // bad plugin... gets removed. is this a feature or a bug?
             cfg.deleteEntry(trigger);
         }
     }

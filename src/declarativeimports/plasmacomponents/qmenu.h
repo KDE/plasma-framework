@@ -7,13 +7,13 @@
 #ifndef QMENU_PROXY_H
 #define QMENU_PROXY_H
 
-#include <QObject>
-#include <QMenu>
-#include <QPointer>
-#include <QQmlListProperty>
-#include "qmenuitem.h"
 #include "enums.h"
 #include "plasma.h"
+#include "qmenuitem.h"
+#include <QMenu>
+#include <QObject>
+#include <QPointer>
+#include <QQmlListProperty>
 
 class QDeclarativeItem;
 
@@ -66,7 +66,8 @@ class QMenuProxy : public QObject
     Q_PROPERTY(QWindow *transientParent READ transientParent WRITE setTransientParent NOTIFY transientParentChanged)
 
     /**
-     * the visualParent is used to position the menu. it can be an item on the scene, like a button (that will open the menu on clicked) or another menuitem (in this case this will be a submenu)
+     * the visualParent is used to position the menu. it can be an item on the scene, like a button (that will open the menu on clicked) or another menuitem (in
+     * this case this will be a submenu)
      */
     Q_PROPERTY(QObject *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
     Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
@@ -181,5 +182,4 @@ private:
     Plasma::Types::PopupPlacement m_placement;
 };
 
-#endif //QMENU_PROXY_H
-
+#endif // QMENU_PROXY_H

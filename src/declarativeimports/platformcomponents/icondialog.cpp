@@ -21,7 +21,6 @@
 class IconDialog::Private
 {
 public:
-
     utils::SharedSingleton<KIconDialog> dialog;
 };
 
@@ -56,4 +55,3 @@ void IconDialog::closeDialog()
 IconDialog::~IconDialog()
 {
 }
-

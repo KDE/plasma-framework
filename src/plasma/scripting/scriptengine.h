@@ -8,8 +8,8 @@
 #define PLASMA_SCRIPTENGINE_H
 
 #include <plasma/package.h>
-#include <plasma/plasma_export.h>
 #include <plasma/plasma.h>
+#include <plasma/plasma_export.h>
 
 #include <QObject>
 #include <QRect>
@@ -19,7 +19,6 @@ class QPainter;
 
 namespace Plasma
 {
-
 class Applet;
 class AppletScript;
 class DataEngine;
@@ -94,4 +93,3 @@ PLASMA_EXPORT DataEngineScript *loadScriptEngine(const QString &language, DataEn
 } // namespace Plasma
 
 #endif
-

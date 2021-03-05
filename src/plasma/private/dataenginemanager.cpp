@@ -14,15 +14,14 @@
 #include <QStandardPaths>
 
 #include "datacontainer.h"
-#include "pluginloader.h"
-#include "private/dataengine_p.h"
-#include "private/datacontainer_p.h"
-#include "scripting/scriptengine.h"
 #include "debug_p.h"
+#include "pluginloader.h"
+#include "private/datacontainer_p.h"
+#include "private/dataengine_p.h"
+#include "scripting/scriptengine.h"
 
 namespace Plasma
 {
-
 class NullEngine : public DataEngine
 {
 public:
@@ -41,7 +40,8 @@ class DataEngineManagerPrivate
 public:
     DataEngineManagerPrivate()
         : nullEng(nullptr)
-    {}
+    {
+    }
 
     ~DataEngineManagerPrivate()
     {
@@ -81,7 +81,7 @@ DataEngineManager *DataEngineManager::self()
 DataEngineManager::DataEngineManager()
     : d(new DataEngineManagerPrivate)
 {
-    //startTimer(30000);
+    // startTimer(30000);
 }
 
 DataEngineManager::~DataEngineManager()
@@ -169,7 +169,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
             out << "                * " << dc->objectName() << '\n';
             out << "                       Data count: " << dc->d->data.count() << '\n';
             out << "                       Stored: " << dc->isStorageEnabled() << " \n";
-            const int directs = dc->receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
+            const int directs = dc->receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data)));
             if (directs > 0) {
                 out << "                       Direction Connections: " << directs << " \n";
             }
@@ -189,7 +189,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
     }
     out << "\n\n";
 #endif
-//    killTimer(event->timerId());
+    //    killTimer(event->timerId());
 }
 
 } // namespace Plasma

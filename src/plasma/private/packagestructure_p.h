@@ -10,14 +10,14 @@
 
 #include "../packagestructure.h"
 
+#include <QPointer>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
-#include <QPointer>
 
 namespace Plasma
 {
-
-class PackageStructureWrapper : public KPackage::PackageStructure {
+class PackageStructureWrapper : public KPackage::PackageStructure
+{
     Q_OBJECT
 
 public:
@@ -42,11 +42,13 @@ class PackageStructurePrivate
 {
 public:
     PackageStructurePrivate(PackageStructure *str)
-        : q(str),
-        internalStructure(nullptr)
-    {}
+        : q(str)
+        , internalStructure(nullptr)
+    {
+    }
     ~PackageStructurePrivate()
-    {}
+    {
+    }
 
     void installPathChanged(const QString &path);
 

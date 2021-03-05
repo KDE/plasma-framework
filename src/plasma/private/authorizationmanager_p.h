@@ -31,7 +31,6 @@ class Server;
 
 namespace Plasma
 {
-
 class AuthorizationInterface;
 class AuthorizationRule;
 class Credentials;
@@ -51,20 +50,19 @@ public:
     void addCredentials(const Credentials &identity);
     void saveRules();
 
-    AuthorizationManager        *q;
-    Jolie::Server               *server;
-    AuthorizationManager::AuthorizationPolicy
-    authorizationPolicy;
-    AuthorizationInterface      *authorizationInterface;
-    AuthorizationInterface      *customAuthorizationInterface;
-    KWallet::Wallet             *wallet;
+    AuthorizationManager *q;
+    Jolie::Server *server;
+    AuthorizationManager::AuthorizationPolicy authorizationPolicy;
+    AuthorizationInterface *authorizationInterface;
+    AuthorizationInterface *customAuthorizationInterface;
+    KWallet::Wallet *wallet;
 
-    Credentials                 myCredentials;
-    QMap<QString, Credentials>  identities;
-    QList<AuthorizationRule *>   rules;
-    KConfigGroup                identitiesConfig;
-    KConfigGroup                rulesConfig;
-    bool                        locked;
+    Credentials myCredentials;
+    QMap<QString, Credentials> identities;
+    QList<AuthorizationRule *> rules;
+    KConfigGroup identitiesConfig;
+    KConfigGroup rulesConfig;
+    bool locked;
 };
 
 }

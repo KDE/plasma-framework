@@ -15,16 +15,16 @@
 #include <QTimer>
 
 #include <KActionCollection>
-#include <QDebug>
-#include <KService>
-#include <KLocalizedString>
 #include <KConfigLoader>
+#include <KLocalizedString>
+#include <KService>
+#include <QDebug>
 
-#include <Plasma/Plasma>
+#include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
 #include <Plasma/Package>
+#include <Plasma/Plasma>
 #include <Plasma/PluginLoader>
-#include <Plasma/ContainmentActions>
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
@@ -32,85 +32,64 @@
 #include <kdeclarative/qmlobject.h>
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
-    : AppletQuickItem(script->applet(), parent),
-      m_configuration(nullptr),
-      m_appletScriptEngine(script),
-      m_toolTipTextFormat(0),
-      m_toolTipItem(nullptr),
-      m_args(args),
-      m_hideOnDeactivate(true),
-      m_oldKeyboardShortcut(0),
-      m_dummyNativeInterface(nullptr),
-      m_positionBeforeRemoval(QPointF(-1, -1))
+    : AppletQuickItem(script->applet(), parent)
+    , m_configuration(nullptr)
+    , m_appletScriptEngine(script)
+    , m_toolTipTextFormat(0)
+    , m_toolTipItem(nullptr)
+    , m_args(args)
+    , m_hideOnDeactivate(true)
+    , m_oldKeyboardShortcut(0)
+    , m_dummyNativeInterface(nullptr)
+    , m_positionBeforeRemoval(QPointF(-1, -1))
 {
     qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
 
-    connect(this, &AppletInterface::configNeedsSaving,
-            applet(), &Plasma::Applet::configNeedsSaving);
-    connect(applet(), &Plasma::Applet::immutabilityChanged,
-            this, &AppletInterface::immutabilityChanged);
-    connect(applet(), &Plasma::Applet::userConfiguringChanged,
-            this, &AppletInterface::userConfiguringChanged);
+    connect(this, &AppletInterface::configNeedsSaving, applet(), &Plasma::Applet::configNeedsSaving);
+    connect(applet(), &Plasma::Applet::immutabilityChanged, this, &AppletInterface::immutabilityChanged);
+    connect(applet(), &Plasma::Applet::userConfiguringChanged, this, &AppletInterface::userConfiguringChanged);
 
-    connect(applet(), &Plasma::Applet::contextualActionsAboutToShow,
-            this, &AppletInterface::contextualActionsAboutToShow);
+    connect(applet(), &Plasma::Applet::contextualActionsAboutToShow, this, &AppletInterface::contextualActionsAboutToShow);
 
-    connect(applet(), &Plasma::Applet::statusChanged,
-            this, &AppletInterface::statusChanged);
+    connect(applet(), &Plasma::Applet::statusChanged, this, &AppletInterface::statusChanged);
 
-    connect(applet(), &Plasma::Applet::destroyedChanged,
-            this, &AppletInterface::destroyedChanged);
+    connect(applet(), &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
 
-    connect(applet(), &Plasma::Applet::titleChanged,
-            this, &AppletInterface::titleChanged);
+    connect(applet(), &Plasma::Applet::titleChanged, this, &AppletInterface::titleChanged);
 
-    connect(applet(), &Plasma::Applet::titleChanged,
-            this, [this]() {
-                if (m_toolTipMainText.isNull()) {
-                    Q_EMIT toolTipMainTextChanged();
-                }
-            });
+    connect(applet(), &Plasma::Applet::titleChanged, this, [this]() {
+        if (m_toolTipMainText.isNull()) {
+            Q_EMIT toolTipMainTextChanged();
+        }
+    });
 
-    connect(applet(), &Plasma::Applet::iconChanged,
-            this, &AppletInterface::iconChanged);
+    connect(applet(), &Plasma::Applet::iconChanged, this, &AppletInterface::iconChanged);
 
-    connect(applet(), &Plasma::Applet::busyChanged,
-            this, &AppletInterface::busyChanged);
+    connect(applet(), &Plasma::Applet::busyChanged, this, &AppletInterface::busyChanged);
 
-    connect(applet(), &Plasma::Applet::backgroundHintsChanged,
-            this, &AppletInterface::backgroundHintsChanged);
-    connect(applet(), &Plasma::Applet::effectiveBackgroundHintsChanged,
-            this, &AppletInterface::effectiveBackgroundHintsChanged);
-    connect(applet(), &Plasma::Applet::userBackgroundHintsChanged,
-            this, &AppletInterface::userBackgroundHintsChanged);
-    
-    connect(applet(), &Plasma::Applet::configurationRequiredChanged, this,
-            [this](bool configurationRequired, const QString &reason) {
+    connect(applet(), &Plasma::Applet::backgroundHintsChanged, this, &AppletInterface::backgroundHintsChanged);
+    connect(applet(), &Plasma::Applet::effectiveBackgroundHintsChanged, this, &AppletInterface::effectiveBackgroundHintsChanged);
+    connect(applet(), &Plasma::Applet::userBackgroundHintsChanged, this, &AppletInterface::userBackgroundHintsChanged);
+
+    connect(applet(), &Plasma::Applet::configurationRequiredChanged, this, [this](bool configurationRequired, const QString &reason) {
         Q_UNUSED(configurationRequired);
         Q_UNUSED(reason);
         Q_EMIT configurationRequiredChanged();
         Q_EMIT configurationRequiredReasonChanged();
     });
 
-    connect(applet(), &Plasma::Applet::activated,
-            this, &AppletInterface::activated);
-    connect(applet(), &Plasma::Applet::containmentDisplayHintsChanged,
-            this, &AppletInterface::containmentDisplayHintsChanged);
+    connect(applet(), &Plasma::Applet::activated, this, &AppletInterface::activated);
+    connect(applet(), &Plasma::Applet::containmentDisplayHintsChanged, this, &AppletInterface::containmentDisplayHintsChanged);
 
-    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged,
-            this, &AppletInterface::formFactorChanged);
-    connect(appletScript(), &DeclarativeAppletScript::locationChanged,
-            this, &AppletInterface::locationChanged);
-    connect(appletScript(), &DeclarativeAppletScript::contextChanged,
-            this, &AppletInterface::contextChanged);
+    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged, this, &AppletInterface::formFactorChanged);
+    connect(appletScript(), &DeclarativeAppletScript::locationChanged, this, &AppletInterface::locationChanged);
+    connect(appletScript(), &DeclarativeAppletScript::contextChanged, this, &AppletInterface::contextChanged);
 
     if (applet()->containment()) {
-        connect(applet()->containment(), &Plasma::Containment::screenChanged,
-                this, &AppletInterface::screenChanged);
+        connect(applet()->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenChanged);
 
         // Screen change implies geo change for good measure.
-        connect(applet()->containment(), &Plasma::Containment::screenChanged,
-                this, &AppletInterface::screenGeometryChanged);
+        connect(applet()->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenGeometryChanged);
 
         connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
             if (id == applet()->containment()->screen()) {
@@ -118,20 +97,16 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
             }
         });
 
-        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged,
-                this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRectChanged,
-                this, &ContainmentInterface::availableScreenRectChanged);
+        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged, this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentInterface::availableScreenRectChanged);
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
-        //if both compactRepresentationItem and fullRepresentationItem exist,
-        //the applet is in a popup
+        // if both compactRepresentationItem and fullRepresentationItem exist,
+        // the applet is in a popup
         if (expanded) {
-            if (compactRepresentationItem() && fullRepresentationItem() &&
-                fullRepresentationItem()->window() && compactRepresentationItem()->window() &&
-                fullRepresentationItem()->window() != compactRepresentationItem()->window() &&
-                fullRepresentationItem()->parentItem()) {
+            if (compactRepresentationItem() && fullRepresentationItem() && fullRepresentationItem()->window() && compactRepresentationItem()->window()
+                && fullRepresentationItem()->window() != compactRepresentationItem()->window() && fullRepresentationItem()->parentItem()) {
                 fullRepresentationItem()->parentItem()->installEventFilter(this);
             } else if (fullRepresentationItem() && fullRepresentationItem()->parentItem()) {
                 fullRepresentationItem()->parentItem()->removeEventFilter(this);
@@ -166,11 +141,10 @@ void AppletInterface::init()
 
     connect(this, &AppletInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
 
-    connect(applet(), &Plasma::Applet::activated, this,
-    [ = ]() {
+    connect(applet(), &Plasma::Applet::activated, this, [=]() {
         // in case the applet doesn't want to get shrunk on reactivation,
         // we always expand it again (only in order to conform with legacy behaviour)
-        bool activate = !( isExpanded() && isActivationTogglesExpanded() );
+        bool activate = !(isExpanded() && isActivationTogglesExpanded());
 
         setExpanded(activate);
         if (activate) {
@@ -190,14 +164,14 @@ void AppletInterface::init()
 
 void AppletInterface::destroyedChanged(bool destroyed)
 {
-    //if an item loses its scene before losing the focus, will never
-    //be able to gain focus again
+    // if an item loses its scene before losing the focus, will never
+    // be able to gain focus again
     if (destroyed && window() && window()->activeFocusItem()) {
         QQuickItem *focus = window()->activeFocusItem();
         QQuickItem *candidate = focus;
         bool isAncestor = false;
 
-        //search if the current focus item is a child or grandchild of the applet
+        // search if the current focus item is a child or grandchild of the applet
         while (candidate) {
             if (candidate == this) {
                 isAncestor = true;
@@ -207,7 +181,7 @@ void AppletInterface::destroyedChanged(bool destroyed)
         }
 
         if (isAncestor) {
-            //Found? remove focus for the whole hierarchy
+            // Found? remove focus for the whole hierarchy
             candidate = focus;
 
             while (candidate && candidate != this) {
@@ -298,15 +272,15 @@ QString AppletInterface::toolTipMainText() const
 
 void AppletInterface::setToolTipMainText(const QString &text)
 {
-    //Here we are abusing the difference between a null and an empty string.
-    //by default is null so falls back to the name
-    //the fist time it gets set, an empty non null one is set, and won't fallback anymore
+    // Here we are abusing the difference between a null and an empty string.
+    // by default is null so falls back to the name
+    // the fist time it gets set, an empty non null one is set, and won't fallback anymore
     if (!m_toolTipMainText.isNull() && m_toolTipMainText == text) {
         return;
     }
 
     if (text.isEmpty()) {
-        m_toolTipMainText = QStringLiteral("");//this "" makes it non-null
+        m_toolTipMainText = QStringLiteral(""); // this "" makes it non-null
     } else {
         m_toolTipMainText = text;
     }
@@ -325,13 +299,13 @@ QString AppletInterface::toolTipSubText() const
 
 void AppletInterface::setToolTipSubText(const QString &text)
 {
-    //Also there the difference between null and empty gets exploited
+    // Also there the difference between null and empty gets exploited
     if (!m_toolTipSubText.isNull() && m_toolTipSubText == text) {
         return;
     }
 
     if (text.isEmpty()) {
-        m_toolTipSubText = QStringLiteral("");//this "" makes it non-null
+        m_toolTipSubText = QStringLiteral(""); // this "" makes it non-null
     } else {
         m_toolTipSubText = text;
     }
@@ -366,8 +340,7 @@ void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
     }
 
     m_toolTipItem = toolTipItem;
-    connect(m_toolTipItem.data(), &QObject::destroyed,
-            this, &AppletInterface::toolTipItemChanged);
+    connect(m_toolTipItem.data(), &QObject::destroyed, this, &AppletInterface::toolTipItemChanged);
 
     Q_EMIT toolTipItemChanged();
 }
@@ -562,8 +535,7 @@ bool AppletInterface::userConfiguring() const
 int AppletInterface::apiVersion() const
 {
     // Look for C++ plugins first
-    auto filter = [](const KPluginMetaData &md) -> bool
-    {
+    auto filter = [](const KPluginMetaData &md) -> bool {
         return md.value(QStringLiteral("X-Plasma-API")) == QLatin1String("declarativeappletscript")
             && md.value(QStringLiteral("X-Plasma-ComponentTypes")).contains(QLatin1String("Applet"));
     };
@@ -617,7 +589,7 @@ Plasma::Types::ItemStatus AppletInterface::status() const
 
 int AppletInterface::screen() const
 {
-    if (Plasma::Containment* c = applet()->containment()) {
+    if (Plasma::Containment *c = applet()->containment()) {
         return c->screen();
     }
 
@@ -647,12 +619,12 @@ bool AppletInterface::hideOnWindowDeactivate() const
 
 void AppletInterface::setConstraintHints(Plasma::Types::ConstraintHints hints)
 {
-	m_constraintHints = hints;
+    m_constraintHints = hints;
 }
 
 Plasma::Types::ConstraintHints AppletInterface::constraintHints() const
 {
-	return m_constraintHints;
+    return m_constraintHints;
 }
 
 QKeySequence AppletInterface::globalShortcut() const
@@ -667,7 +639,7 @@ void AppletInterface::setGlobalShortcut(const QKeySequence &sequence)
 
 QObject *AppletInterface::nativeInterface()
 {
-    if (qstrcmp(applet()->metaObject()->className(),"Plasma::Applet") != 0) {
+    if (qstrcmp(applet()->metaObject()->className(), "Plasma::Applet") != 0) {
         return applet();
     } else {
         if (!m_dummyNativeInterface) {
@@ -705,10 +677,11 @@ QString AppletInterface::downloadPath(const QString &file)
 
 QString AppletInterface::downloadPath() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/") + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/")
+        + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
 
     if (!QFile::exists(downloadDir)) {
-        QDir dir({ QLatin1Char('/') });
+        QDir dir({QLatin1Char('/')});
         dir.mkpath(downloadDir);
     }
 
@@ -717,7 +690,8 @@ QString AppletInterface::downloadPath() const
 
 QStringList AppletInterface::downloadedFiles() const
 {
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/") + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
+    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/")
+        + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
     QDir dir(downloadDir);
     return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
 }
@@ -754,7 +728,7 @@ QVariantList AppletInterface::availableScreenRegion() const
     const auto itEnd = reg.end();
     for (; it != itEnd; ++it) {
         QRect rect = *it;
-        //make it relative
+        // make it relative
         QRect geometry = applet()->containment()->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
         regVal << QVariant::fromValue(QRectF(rect));
@@ -774,7 +748,7 @@ QRect AppletInterface::availableScreenRect() const
 
     if (screenId > -1) {
         rect = applet()->containment()->corona()->availableScreenRect(screenId);
-        //make it relative
+        // make it relative
         QRect geometry = applet()->containment()->corona()->screenGeometry(screenId);
         rect.moveTo(rect.topLeft() - geometry.topLeft());
     }
@@ -789,10 +763,10 @@ bool AppletInterface::event(QEvent *event)
     // so do a simple keyboard shortcut matching here
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
-        QKeySequence seq(ke->key()|ke->modifiers());
+        QKeySequence seq(ke->key() | ke->modifiers());
 
-        QList <QAction *> actions = applet()->actions()->actions();
-        //find the wallpaper action if we are a containment
+        QList<QAction *> actions = applet()->actions()->actions();
+        // find the wallpaper action if we are a containment
         ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
         if (ci) {
             WallpaperInterface *wi = ci->wallpaperInterface();
@@ -801,33 +775,32 @@ bool AppletInterface::event(QEvent *event)
             }
         }
 
-        //add any actions of the corona
+        // add any actions of the corona
         if (applet()->containment() && applet()->containment()->corona()) {
             actions << applet()->containment()->corona()->actions()->actions();
         }
 
         bool keySequenceUsed = false;
         for (auto a : qAsConst(actions)) {
-
             if (a->shortcut().isEmpty()) {
                 continue;
             }
 
-            //this will happen on a normal, non emacs shortcut
+            // this will happen on a normal, non emacs shortcut
             if (seq.matches(a->shortcut()) == QKeySequence::ExactMatch) {
                 event->accept();
                 a->trigger();
                 m_oldKeyboardShortcut = 0;
                 return true;
 
-            //first part of an emacs style shortcut?
+                // first part of an emacs style shortcut?
             } else if (seq.matches(a->shortcut()) == QKeySequence::PartialMatch) {
                 keySequenceUsed = true;
-                m_oldKeyboardShortcut = ke->key()|ke->modifiers();
+                m_oldKeyboardShortcut = ke->key() | ke->modifiers();
 
-            //no match at all, but it can be the second part of an emacs style shortcut
+                // no match at all, but it can be the second part of an emacs style shortcut
             } else {
-                QKeySequence seq(m_oldKeyboardShortcut, ke->key()|ke->modifiers());
+                QKeySequence seq(m_oldKeyboardShortcut, ke->key() | ke->modifiers());
 
                 if (seq.matches(a->shortcut()) == QKeySequence::ExactMatch) {
                     event->accept();
@@ -856,9 +829,9 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *e = static_cast<QMouseEvent *>(event);
 
-        //pass it up to the applet
-        //well, actually we have to pass it to the *containment*
-        //because all the code for showing an applet's contextmenu is actually in Containment.
+        // pass it up to the applet
+        // well, actually we have to pass it to the *containment*
+        // because all the code for showing an applet's contextmenu is actually in Containment.
         Plasma::Containment *c = applet()->containment();
         if (c) {
             const QString trigger = Plasma::ContainmentActions::eventToString(event);
@@ -872,9 +845,9 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 return false;
             }
 
-            //the plugin can be a single action or a context menu
-            //Don't have an action list? execute as single action
-            //and set the event position as action data
+            // the plugin can be a single action or a context menu
+            // Don't have an action list? execute as single action
+            // and set the event position as action data
             if (plugin->contextualActions().length() == 1) {
                 // but first check whether we are not a popup
                 // we don't want to randomly creates applets without confirmation

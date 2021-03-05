@@ -9,20 +9,20 @@
 #include "dropmenu.h"
 #include "containmentinterface.h"
 
-#include <QApplication>
-#include <QUrl>
-#include <QMenu>
-#include <QJSValue>
 #include <QAction>
+#include <QApplication>
+#include <QJSValue>
 #include <QList>
+#include <QMenu>
+#include <QUrl>
 
 #include <KIO/DropJob>
 #include <KLocalizedString>
 
 DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent)
-    : QObject(parent),
-    m_dropPoint(dropPoint),
-    m_dropJob(dropJob)
+    : QObject(parent)
+    , m_dropPoint(dropPoint)
+    , m_dropJob(dropJob)
 {
     if (!dropJob) {
         m_menu = new QMenu(i18n("Content dropped"));
@@ -75,7 +75,7 @@ void DropMenu::addAction(QAction *action)
 
 bool DropMenu::isDropjobMenu() const
 {
-    return (m_dropJob? true : false);
+    return (m_dropJob ? true : false);
 }
 
 void DropMenu::setMultipleMimetypes(bool multipleMimetypes)
@@ -89,6 +89,5 @@ bool DropMenu::isMultipleMimetypes() const
 {
     return m_multipleMimetypes;
 }
-
 
 #include "moc_dropmenu.cpp"

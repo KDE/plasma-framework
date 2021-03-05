@@ -8,29 +8,28 @@
 #include "framesvgitem.h"
 
 #include <QQuickWindow>
-#include <QSGTexture>
 #include <QSGGeometry>
+#include <QSGTexture>
 
 #include <QDebug>
 #include <QPainter>
 
-#include <plasma/private/framesvg_p.h>
 #include <plasma/private/framesvg_helpers.h>
+#include <plasma/private/framesvg_p.h>
 
-#include <QuickAddons/ManagedTextureNode>
 #include <QuickAddons/ImageTexturesCache>
+#include <QuickAddons/ManagedTextureNode>
 
 #include <cmath> //floor()
 
 namespace Plasma
 {
-
 Q_GLOBAL_STATIC(ImageTexturesCache, s_cache)
 
 class FrameNode : public QSGNode
 {
 public:
-    FrameNode(const QString& prefix, FrameSvg* svg)
+    FrameNode(const QString &prefix, FrameSvg *svg)
         : QSGNode()
         , leftWidth(0)
         , rightWidth(0)
@@ -47,9 +46,9 @@ public:
             bottomHeight = svg->elementSize(prefix % QLatin1String("bottom")).height();
     }
 
-    QRect contentsRect(const QSize& size) const
+    QRect contentsRect(const QSize &size) const
     {
-        const QSize contentSize(size.width() - leftWidth  - rightWidth, size.height() - topHeight  - bottomHeight);
+        const QSize contentSize(size.width() - leftWidth - rightWidth, size.height() - topHeight - bottomHeight);
 
         return QRect(QPoint(leftWidth, topHeight), contentSize);
     }
@@ -65,14 +64,14 @@ class FrameItemNode : public ManagedTextureNode
 {
 public:
     enum FitMode {
-        //render SVG at native resolution then stretch it in openGL
+        // render SVG at native resolution then stretch it in openGL
         FastStretch,
-        //on resize re-render the part of the frame from the SVG
+        // on resize re-render the part of the frame from the SVG
         Stretch,
         Tile,
     };
 
-    FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)
+    FrameItemNode(FrameSvgItem *frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode *parent)
         : ManagedTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
@@ -83,12 +82,12 @@ public:
 
         if (m_fitMode == Tile) {
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
-                static_cast<QSGTextureMaterial*>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
-                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGTextureMaterial *>(material())->setHorizontalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial *>(opaqueMaterial())->setHorizontalWrapMode(QSGTexture::Repeat);
             }
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
-                static_cast<QSGTextureMaterial*>(material())->setVerticalWrapMode(QSGTexture::Repeat);
-                static_cast<QSGOpaqueTextureMaterial*>(opaqueMaterial())->setVerticalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGTextureMaterial *>(material())->setVerticalWrapMode(QSGTexture::Repeat);
+                static_cast<QSGOpaqueTextureMaterial *>(opaqueMaterial())->setVerticalWrapMode(QSGTexture::Repeat);
             }
         }
 
@@ -97,8 +96,8 @@ public:
             m_elementNativeSize = m_frameSvg->frameSvg()->elementSize(elementId);
 
             if (m_elementNativeSize.isEmpty()) {
-                //if the default element is empty, we can avoid the slower tiling path
-                //this also avoids a divide by 0 error
+                // if the default element is empty, we can avoid the slower tiling path
+                // this also avoids a divide by 0 error
                 m_fitMode = FastStretch;
             }
 
@@ -115,37 +114,37 @@ public:
         setTexture(s_cache->loadTexture(m_frameSvg->window(), m_frameSvg->frameSvg()->image(size, elementId), options));
     }
 
-    void reposition(const QRect& frameGeometry, QSize& fullSize)
+    void reposition(const QRect &frameGeometry, QSize &fullSize)
     {
         QRect nodeRect = FrameSvgHelpers::sectionRect(m_border, frameGeometry, fullSize);
 
-        //ensure we're not passing a weird rectangle to updateTexturedRectGeometry
-        if(!nodeRect.isValid() || nodeRect.isEmpty())
+        // ensure we're not passing a weird rectangle to updateTexturedRectGeometry
+        if (!nodeRect.isValid() || nodeRect.isEmpty())
             nodeRect = QRect();
 
-        //the position of the relevant texture within this texture ID.
-        //for atlas' this will only be a small part of the texture
+        // the position of the relevant texture within this texture ID.
+        // for atlas' this will only be a small part of the texture
         QRectF textureRect;
 
         if (m_fitMode == Tile) {
-            textureRect = QRectF(0,0,1,1); //we can never be in an atlas for tiled images.
+            textureRect = QRectF(0, 0, 1, 1); // we can never be in an atlas for tiled images.
 
-            //if tiling horizontally
+            // if tiling horizontally
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
                 // cmp. CSS3's border-image-repeat: "repeat", though with first tile not centered, but aligned to left
-                textureRect.setWidth((qreal) nodeRect.width() / m_elementNativeSize.width());
+                textureRect.setWidth((qreal)nodeRect.width() / m_elementNativeSize.width());
             }
-            //if tiling vertically
+            // if tiling vertically
             if (m_border == FrameSvg::LeftBorder || m_border == FrameSvg::RightBorder || m_border == FrameSvg::NoBorder) {
                 // cmp. CSS3's border-image-repeat: "repeat", though with first tile not centered, but aligned to top
-                textureRect.setHeight((qreal) nodeRect.height() / m_elementNativeSize.height());
+                textureRect.setHeight((qreal)nodeRect.height() / m_elementNativeSize.height());
             }
         } else if (m_fitMode == Stretch) {
             QString prefix = m_frameSvg->frameSvg()->actualPrefix();
 
             QString elementId = prefix + FrameSvgHelpers::borderToElementId(m_border);
 
-            //re-render the SVG at new size
+            // re-render the SVG at new size
             updateTexture(nodeRect.size(), elementId);
             textureRect = texture()->normalizedTextureSubRect();
         } else if (texture()) { // for fast stretch.
@@ -157,7 +156,7 @@ public:
     }
 
 private:
-    FrameSvgItem* m_frameSvg;
+    FrameSvgItem *m_frameSvg;
     FrameSvg::EnabledBorders m_border;
     QSGNode *m_lastParent;
     QSize m_elementNativeSize;
@@ -165,19 +164,19 @@ private:
 };
 
 FrameSvgItemMargins::FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent)
-    : QObject(parent),
-      m_frameSvg(frameSvg),
-      m_fixed(false),
-      m_inset(false)
+    : QObject(parent)
+    , m_frameSvg(frameSvg)
+    , m_fixed(false)
+    , m_inset(false)
 {
-    //qDebug() << "margins at: " << left() << top() << right() << bottom();
+    // qDebug() << "margins at: " << left() << top() << right() << bottom();
 }
 
 qreal FrameSvgItemMargins::left() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::LeftMargin);
-    } else if(m_inset){
+    } else if (m_inset) {
         return m_frameSvg->insetSize(Types::LeftMargin);
     } else {
         return m_frameSvg->marginSize(Types::LeftMargin);
@@ -188,7 +187,7 @@ qreal FrameSvgItemMargins::top() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::TopMargin);
-    } else if(m_inset){
+    } else if (m_inset) {
         return m_frameSvg->insetSize(Types::TopMargin);
     } else {
         return m_frameSvg->marginSize(Types::TopMargin);
@@ -199,7 +198,7 @@ qreal FrameSvgItemMargins::right() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::RightMargin);
-    } else if(m_inset){
+    } else if (m_inset) {
         return m_frameSvg->insetSize(Types::RightMargin);
     } else {
         return m_frameSvg->marginSize(Types::RightMargin);
@@ -210,7 +209,7 @@ qreal FrameSvgItemMargins::bottom() const
 {
     if (m_fixed) {
         return m_frameSvg->fixedMarginSize(Types::BottomMargin);
-    } else if(m_inset){
+    } else if (m_inset) {
         return m_frameSvg->insetSize(Types::BottomMargin);
     } else {
         return m_frameSvg->marginSize(Types::BottomMargin);
@@ -270,13 +269,13 @@ bool FrameSvgItemMargins::isInset() const
 }
 
 FrameSvgItem::FrameSvgItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_margins(nullptr),
-      m_fixedMargins(nullptr),
-      m_insetMargins(nullptr),
-      m_textureChanged(false),
-      m_sizeChanged(false),
-      m_fastPath(true)
+    : QQuickItem(parent)
+    , m_margins(nullptr)
+    , m_fixedMargins(nullptr)
+    , m_insetMargins(nullptr)
+    , m_textureChanged(false)
+    , m_sizeChanged(false)
+    , m_fastPath(true)
 {
     m_frameSvg = new Plasma::FrameSvg(this);
     setFlag(ItemHasContents, true);
@@ -293,9 +292,11 @@ FrameSvgItem::~FrameSvgItem()
 class CheckMarginsChange
 {
 public:
-    CheckMarginsChange(QVector<qreal>& oldMargins, FrameSvgItemMargins *marginsObject)
-        : m_oldMargins(oldMargins), m_marginsObject(marginsObject)
-    {}
+    CheckMarginsChange(QVector<qreal> &oldMargins, FrameSvgItemMargins *marginsObject)
+        : m_oldMargins(oldMargins)
+        , m_marginsObject(marginsObject)
+    {
+    }
 
     ~CheckMarginsChange()
     {
@@ -308,7 +309,7 @@ public:
     }
 
 private:
-    QVector<qreal>& m_oldMargins;
+    QVector<qreal> &m_oldMargins;
     FrameSvgItemMargins *const m_marginsObject;
 };
 
@@ -352,7 +353,7 @@ QString FrameSvgItem::imagePath() const
 void FrameSvgItem::setPrefix(const QVariant &prefixes)
 {
     QStringList prefixList;
-    //is this a simple string?
+    // is this a simple string?
     if (prefixes.canConvert<QString>()) {
         prefixList << prefixes.toString();
     } else if (prefixes.canConvert<QStringList>()) {
@@ -478,14 +479,12 @@ bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
     return m_frameSvg->hasElementPrefix(prefix);
 }
 
-
 QRegion FrameSvgItem::mask() const
 {
     return m_frameSvg->mask();
 }
 
-void FrameSvgItem::geometryChanged(const QRectF &newGeometry,
-                                   const QRectF &oldGeometry)
+void FrameSvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     const bool isComponentComplete = this->isComponentComplete();
     if (isComponentComplete) {
@@ -512,7 +511,7 @@ void FrameSvgItem::doUpdate()
     CheckMarginsChange checkFixedMargins(m_oldFixedMargins, m_fixedMargins);
     CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
-    //if the theme changed, the available prefix may have changed as well
+    // if the theme changed, the available prefix may have changed as well
     applyPrefixes();
 
     if (implicitWidth() <= 0) {
@@ -525,12 +524,12 @@ void FrameSvgItem::doUpdate()
 
     QString prefix = m_frameSvg->actualPrefix();
     bool hasOverlay = !prefix.startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(prefix % QLatin1String("overlay"));
-    bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % QLatin1String("hint-compose-over-border")) &&
-                m_frameSvg->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"));
+    bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % QLatin1String("hint-compose-over-border"))
+        && m_frameSvg->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"));
     m_fastPath = !hasOverlay && !hasComposeOverBorder;
 
-    //software rendering (at time of writing Qt5.10) doesn't seem to like our tiling/stretching in the 9-tiles.
-    //also when using QPainter it's arguably faster to create and cache pixmaps of the whole frame, which is what the slow path does
+    // software rendering (at time of writing Qt5.10) doesn't seem to like our tiling/stretching in the 9-tiles.
+    // also when using QPainter it's arguably faster to create and cache pixmaps of the whole frame, which is what the slow path does
     if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
         m_fastPath = false;
     }
@@ -549,8 +548,7 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
-    if (!window() || !m_frameSvg ||
-        (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_frameSvg->prefix()))) {
+    if (!window() || !m_frameSvg || (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_frameSvg->prefix()))) {
         delete oldNode;
         return nullptr;
     }
@@ -567,12 +565,12 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             QString prefix = m_frameSvg->actualPrefix();
             oldNode = new FrameNode(prefix, m_frameSvg);
 
-            bool tileCenter = (m_frameSvg->hasElement(QStringLiteral("hint-tile-center"))
-                            || m_frameSvg->hasElement(prefix % QLatin1String("hint-tile-center")));
-            bool stretchBorders = (m_frameSvg->hasElement(QStringLiteral("hint-stretch-borders"))
-                                || m_frameSvg->hasElement(prefix % QLatin1String("hint-stretch-borders")));
+            bool tileCenter =
+                (m_frameSvg->hasElement(QStringLiteral("hint-tile-center")) || m_frameSvg->hasElement(prefix % QLatin1String("hint-tile-center")));
+            bool stretchBorders =
+                (m_frameSvg->hasElement(QStringLiteral("hint-stretch-borders")) || m_frameSvg->hasElement(prefix % QLatin1String("hint-stretch-borders")));
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
-            FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile: FrameItemNode::Stretch;
+            FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile : FrameItemNode::Stretch;
 
             new FrameItemNode(this, FrameSvg::NoBorder, centerFitMode, oldNode);
             if (enabledBorders() & (FrameSvg::TopBorder | FrameSvg::LeftBorder)) {
@@ -594,7 +592,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
                 new FrameItemNode(this, FrameSvg::BottomBorder | FrameSvg::RightBorder, FrameItemNode::FastStretch, oldNode);
             }
             if (enabledBorders() & FrameSvg::LeftBorder) {
-                new FrameItemNode(this, FrameSvg::LeftBorder,  borderFitMode, oldNode);
+                new FrameItemNode(this, FrameSvg::LeftBorder, borderFitMode, oldNode);
             }
             if (enabledBorders() & FrameSvg::RightBorder) {
                 new FrameItemNode(this, FrameSvg::RightBorder, borderFitMode, oldNode);
@@ -611,7 +609,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         }
 
         if (m_sizeChanged) {
-            FrameNode* frameNode = static_cast<FrameNode*>(oldNode);
+            FrameNode *frameNode = static_cast<FrameNode *>(oldNode);
             QSize frameSize(width(), height());
             QRect geometry = frameNode->contentsRect(frameSize);
             QSGNode *node = oldNode->firstChild();
@@ -627,7 +625,7 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
         if (!textureNode) {
             delete oldNode;
             textureNode = new ManagedTextureNode;
-            m_textureChanged = true; //force updating the texture on our newly created node
+            m_textureChanged = true; // force updating the texture on our newly created node
             oldNode = textureNode;
         }
         textureNode->setFiltering(filtering);
@@ -667,7 +665,7 @@ void FrameSvgItem::updateDevicePixelRatio()
 {
     m_frameSvg->setScaleFactor(qMax<qreal>(1.0, floor(Units::instance().devicePixelRatio())));
 
-    //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+    // devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     const auto newDevicePixelRation = qMax<qreal>(1.0, floor(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
 
@@ -679,7 +677,6 @@ void FrameSvgItem::updateDevicePixelRatio()
 
 void FrameSvgItem::applyPrefixes()
 {
-
     if (m_frameSvg->imagePath().isEmpty()) {
         return;
     }
@@ -703,7 +700,7 @@ void FrameSvgItem::applyPrefixes()
         }
     }
     if (!found) {
-        //this setElementPrefix is done to keep the same behavior as before, when it was a simple string
+        // this setElementPrefix is done to keep the same behavior as before, when it was a simple string
         m_frameSvg->setElementPrefix(m_prefixes.constLast());
     }
     if (oldPrefix != m_frameSvg->prefix()) {
@@ -711,7 +708,7 @@ void FrameSvgItem::applyPrefixes()
     }
 }
 
-void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData & value)
+void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
 {
     if (change == ItemSceneChange && value.window) {
         updateDevicePixelRatio();
@@ -721,4 +718,3 @@ void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::I
 }
 
 } // Plasma namespace
-

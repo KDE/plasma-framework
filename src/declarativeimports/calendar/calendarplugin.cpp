@@ -5,14 +5,14 @@
 */
 
 #include "calendarplugin.h"
-#include "calendardata.h"
 #include "calendar.h"
+#include "calendardata.h"
 #include "eventdatadecorator.h"
 #include "eventpluginsmanager.h"
 
-#include <QtQml>
-#include <QQmlEngine>
 #include <QAbstractListModel>
+#include <QQmlEngine>
+#include <QtQml>
 
 static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -30,6 +30,5 @@ void CalendarPlugin::registerTypes(const char *uri)
     qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
     qmlRegisterAnonymousType<QAbstractListModel>(uri, 1);
     qmlRegisterSingletonType<EventPluginsManager>(uri, 2, 0, "EventPluginsManager", event_plugins_manager_provider);
-    qmlRegisterUncreatableType<EventDataDecorator>(uri, 2, 0, "EventDataDecorator",
-                                                   QStringLiteral("Unabel to create EventDataDecorator from QML"));
+    qmlRegisterUncreatableType<EventDataDecorator>(uri, 2, 0, "EventDataDecorator", QStringLiteral("Unabel to create EventDataDecorator from QML"));
 }

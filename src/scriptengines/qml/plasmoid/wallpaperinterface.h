@@ -7,8 +7,8 @@
 #ifndef WALLPAPERINTERFACE_H
 #define WALLPAPERINTERFACE_H
 
-#include <QQuickItem>
 #include <QQmlEngine>
+#include <QQuickItem>
 
 #include <KPackage/Package>
 
@@ -48,8 +48,7 @@ public:
      * @param formFactor the format of the wallpaper being search for (e.g. desktop)
      * @return list of wallpapers
      */
-    static QList<KPluginMetaData> listWallpaperMetadataForMimetype(const QString &mimetype,
-            const QString &formFactor = QString());
+    static QList<KPluginMetaData> listWallpaperMetadataForMimetype(const QString &mimetype, const QString &formFactor = QString());
 
     KPackage::Package kPackage() const;
 
@@ -65,8 +64,7 @@ public:
 
     void setUrl(const QUrl &urls);
 
-    Q_INVOKABLE void setAction(const QString &name, const QString &text,
-                               const QString &icon = QString(), const QString &shortcut = QString());
+    Q_INVOKABLE void setAction(const QString &name, const QString &text, const QString &icon = QString(), const QString &shortcut = QString());
 
     Q_INVOKABLE void removeAction(const QString &name);
 

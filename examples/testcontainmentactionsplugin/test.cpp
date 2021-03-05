@@ -6,9 +6,8 @@
 
 #include "test.h"
 
-
-#include <QDebug>
 #include <KActionCollection>
+#include <QDebug>
 
 #include <Plasma/Containment>
 
@@ -44,14 +43,14 @@ void ContextTest::init(const KConfigGroup &config)
 
 QWidget *ContextTest::createConfigurationInterface(QWidget *parent)
 {
-    //m_currentText = m_text;
+    // m_currentText = m_text;
     QWidget *widget = new QWidget(parent);
     m_ui.setupUi(widget);
 
     m_ui.text->setText(m_text);
-    //FIXME this way or just get it on close?
-    //connect(m_ui.text, SIGNAL(changed(QColor)), this, SLOT(setColor(QColor)));
-    //connect(this, SIGNAL(settingsChanged(bool)), parent, SLOT(settingsChanged(bool)));
+    // FIXME this way or just get it on close?
+    // connect(m_ui.text, SIGNAL(changed(QColor)), this, SLOT(setColor(QColor)));
+    // connect(this, SIGNAL(settingsChanged(bool)), parent, SLOT(settingsChanged(bool)));
     return widget;
 }
 

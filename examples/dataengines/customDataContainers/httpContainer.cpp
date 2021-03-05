@@ -9,8 +9,8 @@
 #include <kio/job.h>
 
 HttpContainer::HttpContainer(const QUrl &url, QObject *parent)
-    : Plasma::DataContainer(parent),
-      m_url(url)
+    : Plasma::DataContainer(parent)
+    , m_url(url)
 {
     // Since we are grabbing data over the network, we request a
     // backing store. This way, if the network is down or on first start
@@ -29,9 +29,8 @@ void HttpContainer::fetchUrl(bool reload)
     m_data.clear();
 
     KIO::TransferJob *job = KIO::get(m_url, reload ? KIO::Reload : KIO::NoReload, KIO::HideProgressInfo);
-    connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(data(KIO::Job*,QByteArray)));
-    connect(job, SIGNAL(finished(KJob*)), this, SLOT(fetchFinished(KJob*)));
+    connect(job, SIGNAL(data(KIO::Job *, QByteArray)), this, SLOT(data(KIO::Job *, QByteArray)));
+    connect(job, SIGNAL(finished(KJob *)), this, SLOT(fetchFinished(KJob *)));
 
     if (m_job) {
         m_job.data()->kill();
@@ -76,5 +75,3 @@ void HttpContainer::fetchFinished(KJob *job)
         m_data.clear();
     }
 }
-
-

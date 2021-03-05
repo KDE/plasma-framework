@@ -12,7 +12,6 @@
 
 namespace Plasma
 {
-
 class DataEngineScriptPrivate
 {
 public:
@@ -20,8 +19,8 @@ public:
 };
 
 DataEngineScript::DataEngineScript(QObject *parent)
-    : ScriptEngine(parent),
-      d(new DataEngineScriptPrivate)
+    : ScriptEngine(parent)
+    , d(new DataEngineScriptPrivate)
 {
 }
 
@@ -86,8 +85,7 @@ KPluginMetaData DataEngineScript::metadata() const
     return d->dataEngine->metadata();
 }
 
-void DataEngineScript::setData(const QString &source, const QString &key,
-                               const QVariant &value)
+void DataEngineScript::setData(const QString &source, const QString &key, const QVariant &value)
 {
     if (d->dataEngine) {
         d->dataEngine->setData(source, key, value);

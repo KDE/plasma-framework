@@ -9,20 +9,16 @@
 
 #include "../servicejob.h"
 
+#include <QHash>
 #include <QString>
 #include <QVariant>
-#include <QHash>
 
 namespace Plasma
 {
-
 class ServiceJobPrivate
 {
 public:
-    ServiceJobPrivate(ServiceJob *owner,
-                      const QString &dest,
-                      const QString &op,
-                      const QVariantMap &params);
+    ServiceJobPrivate(ServiceJob *owner, const QString &dest, const QString &op, const QVariantMap &params);
 
     void preventAutoStart();
     void autoStart();

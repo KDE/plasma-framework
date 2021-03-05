@@ -17,8 +17,8 @@
 #include <Plasma/Applet>
 #include <Plasma/Theme>
 
-#include <appletquickitem.h>
 #include "declarativeappletscript.h"
+#include <appletquickitem.h>
 
 class QAction;
 class QActionGroup;
@@ -95,7 +95,6 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * @since 5.19
      */
     Q_PROPERTY(QQuickItem *toolTipItem READ toolTipItem WRITE setToolTipItem NOTIFY toolTipItemChanged)
-
 
     /**
      * Icon to represent the plasmoid
@@ -230,7 +229,8 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     /**
      * Reason why the manual user configuration is required
      */
-    Q_PROPERTY(QString configurationRequiredReason READ configurationRequiredReason WRITE setConfigurationRequiredReason NOTIFY configurationRequiredReasonChanged)
+    Q_PROPERTY(
+        QString configurationRequiredReason READ configurationRequiredReason WRITE setConfigurationRequiredReason NOTIFY configurationRequiredReasonChanged)
 
     /**
      * screen area free of panels: the coordinates are relative to the containment,
@@ -263,7 +263,7 @@ public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
 
-//API not intended for the QML part
+    // API not intended for the QML part
 
     DeclarativeAppletScript *appletScript() const;
 
@@ -274,7 +274,7 @@ public:
 
     void executeAction(const QString &name);
 
-//QML API-------------------------------------------------------------------
+    // QML API-------------------------------------------------------------------
 
     /**
      * Set this to true if the plasmoid needs to be configured in order to work. The containment will display reason as a message to ask the user to configure.
@@ -288,14 +288,14 @@ public:
     Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
     /**
      * Add an action to the Plasmoid contextual menu.
-     * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called instead.
+     * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called
+     * instead.
      * @param: action name
      * @text: user visible displayed text
      * @icon: user visible optional displayed icon
      * @shortcut: shortcut to trigger this action
      */
-    Q_INVOKABLE void setAction(const QString &name, const QString &text,
-                               const QString &icon = QString(), const QString &shortcut = QString());
+    Q_INVOKABLE void setAction(const QString &name, const QString &text, const QString &icon = QString(), const QString &shortcut = QString());
 
     Q_INVOKABLE void removeAction(const QString &name);
 
@@ -355,7 +355,7 @@ public:
         return qobject_cast<AppletInterface *>(AppletQuickItem::qmlAttachedProperties(object));
     }
 
-//PROPERTY ACCESSORS-------------------------------------------------------------------
+    // PROPERTY ACCESSORS-------------------------------------------------------------------
     QString pluginName() const;
 
     QString icon() const;
@@ -424,7 +424,7 @@ public:
 
     QObject *nativeInterface();
 
-    //NOTE: setConfigurationRequiredProperty because ambiguous with the
+    // NOTE: setConfigurationRequiredProperty because ambiguous with the
     // setConfigurationRequired invokable
     bool configurationRequired() const;
     void setConfigurationRequiredProperty(bool required);
@@ -458,7 +458,7 @@ Q_SIGNALS:
      */
     void contextualActionsAboutToShow();
 
-//PROPERTY change notifiers--------------
+    // PROPERTY change notifiers--------------
     void iconChanged();
     void titleChanged();
     void toolTipMainTextChanged();
@@ -499,27 +499,26 @@ protected:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
-   /*
-   * Returns true if this plasmoid or a dependent feature (i.e wallpaper) is loading
-   */
+    /*
+     * Returns true if this plasmoid or a dependent feature (i.e wallpaper) is loading
+     */
     virtual bool isLoading() const;
-   /*
-   * Set UIReadyConstraint if we're not currently loading
-   */
+    /*
+     * Set UIReadyConstraint if we're not currently loading
+     */
     void updateUiReadyConstraint();
 
 private Q_SLOTS:
     void destroyedChanged(bool destroyed);
 
 private:
-
     QStringList m_actions;
     QHash<QString, QActionGroup *> m_actionGroups;
 
     KDeclarative::ConfigPropertyMap *m_configuration;
     DeclarativeAppletScript *m_appletScriptEngine;
 
-//UI-specific members ------------------
+    // UI-specific members ------------------
 
     QString m_toolTipMainText;
     QString m_toolTipSubText;
@@ -528,12 +527,12 @@ private:
     QVariantList m_args;
     bool m_hideOnDeactivate : 1;
     bool m_loading = false;
-    //this is used to build an emacs style shortcut
+    // this is used to build an emacs style shortcut
     int m_oldKeyboardShortcut;
     QObject *m_dummyNativeInterface;
 
     friend class ContainmentInterface;
-    //This is used by ContainmentInterface
+    // This is used by ContainmentInterface
     QPointF m_positionBeforeRemoval;
     Plasma::Types::ConstraintHints m_constraintHints = Plasma::Types::ConstraintHints::NoHint;
 };

@@ -11,7 +11,6 @@
 
 namespace Plasma
 {
-
 class DataEngineManagerPrivate;
 
 /**
@@ -22,7 +21,7 @@ class DataEngineManagerPrivate;
  * Plasma::DataEngineManager provides facilities for listing, loading and
  * according to reference count unloading of DataEngines.
  **/
-class DataEngineManager: public QObject
+class DataEngineManager : public QObject
 {
     Q_OBJECT
 public:

@@ -9,10 +9,10 @@
 #ifndef TOOLTIPOBJECT_H
 #define TOOLTIPOBJECT_H
 
-#include <QQuickItem>
-#include <QPointer>
-#include <QVariant>
 #include <Plasma/Plasma>
+#include <QPointer>
+#include <QQuickItem>
+#include <QVariant>
 
 class QQuickItem;
 class ToolTipDialog;
@@ -107,7 +107,8 @@ class ToolTip : public QQuickItem
 
     /**
      * if interactive is false (default), the tooltip will automatically hide
-     * itself as soon as the mouse leaves the tooltiparea, if is true, if the mouse leaves tooltiparea and goes over the tooltip itself, the tooltip won't hide, so it will be possible to interact with tooltip contents
+     * itself as soon as the mouse leaves the tooltiparea, if is true, if the mouse leaves tooltiparea and goes over the tooltip itself, the tooltip won't hide,
+     * so it will be possible to interact with tooltip contents
      */
     Q_PROPERTY(bool interactive MEMBER m_interactive WRITE setInteractive NOTIFY interactiveChanged)
 
@@ -118,7 +119,7 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(int timeout MEMBER m_timeout WRITE setTimeout)
 
 public:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
     explicit ToolTip(QQuickItem *parent = nullptr);
     ~ToolTip() override;
 
@@ -151,7 +152,7 @@ public:
     void setInteractive(bool interactive);
 
     void setTimeout(int timeout);
-/// @endcond
+    /// @endcond
 
 public Q_SLOTS:
 
@@ -167,13 +168,13 @@ public Q_SLOTS:
     void hideToolTip();
 
 protected:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
     bool childMouseEventFilter(QQuickItem *item, QEvent *event) override;
     void hoverEnterEvent(QHoverEvent *event) override;
     void hoverLeaveEvent(QHoverEvent *event) override;
 
     ToolTipDialog *tooltipDialogInstance();
-/// @endcond
+    /// @endcond
 
 Q_SIGNALS:
     void mainItemChanged();
@@ -215,9 +216,9 @@ private:
     int m_interval;
     int m_timeout;
 
-    //ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
-    //are deleted too later after some stuff in the qml runtime has already been deleted,
-    //causing a crash on exit
+    // ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
+    // are deleted too later after some stuff in the qml runtime has already been deleted,
+    // causing a crash on exit
     bool m_usingDialog : 1;
     static ToolTipDialog *s_dialog;
     static int s_dialogUsers;

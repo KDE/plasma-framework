@@ -23,7 +23,7 @@
  * }
  * @endcode
  */
-class Application: public QObject
+class Application : public QObject
 {
     Q_OBJECT
 
@@ -62,4 +62,3 @@ private:
 };
 
 #endif /* APPLICATION_H */
-

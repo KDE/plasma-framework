@@ -5,9 +5,9 @@
 */
 
 #include "customcorona.h"
-#include <QDebug>
-#include <QAction>
 #include <KActionCollection>
+#include <QAction>
+#include <QDebug>
 
 #include <KPackage/Package>
 #include <KPackage/PackageLoader>
@@ -17,23 +17,27 @@ CustomCorona::CustomCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
     KPackage::Package package = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Shell"));
-    //applications that want to load a plasma scene would have to load their own shell.. TODO: have a simple shell in plasma-framework for this purpose?
+    // applications that want to load a plasma scene would have to load their own shell.. TODO: have a simple shell in plasma-framework for this purpose?
     package.setPath(QStringLiteral("org.kde.plasma.desktop"));
     setKPackage(package);
 
-    qmlRegisterUncreatableType<PlasmaQuick::ContainmentView>("org.kde.plasma.shell", 2, 0, "Desktop", QStringLiteral("It is not possible to create objects of type Desktop"));
+    qmlRegisterUncreatableType<PlasmaQuick::ContainmentView>("org.kde.plasma.shell",
+                                                             2,
+                                                             0,
+                                                             "Desktop",
+                                                             QStringLiteral("It is not possible to create objects of type Desktop"));
 
     m_view = new PlasmaQuick::ContainmentView(this);
     m_view->setSource(package.fileUrl("views", QStringLiteral("Desktop.qml")));
     m_view->show();
-    
+
     load();
 }
 
 QRect CustomCorona::screenGeometry(int id) const
 {
     Q_UNUSED(id);
-    //TODO?
+    // TODO?
     return QRect();
 }
 
@@ -56,10 +60,10 @@ void CustomCorona::load()
         saveLayout(QStringLiteral("exampleplasmashell-appletsrc"));
     }
 
-    //don't let containments to be removed
+    // don't let containments to be removed
     for (auto c : containments()) {
         if (c->containmentType() == Plasma::Types::DesktopContainment) {
-            //example of a shell without a wallpaper
+            // example of a shell without a wallpaper
             c->setWallpaper(QStringLiteral("null"));
             m_view->setContainment(c);
             if (QAction *removeAction = c->actions()->action(QStringLiteral("remove"))) {

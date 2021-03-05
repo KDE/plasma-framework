@@ -6,20 +6,20 @@
 
 #include "tooltipdialog.h"
 
-#include <QQmlEngine>
-#include <QQuickItem>
 #include <QDebug>
 #include <QPlatformSurfaceEvent>
+#include <QQmlEngine>
+#include <QQuickItem>
 
-#include <kdeclarative/qmlobjectsharedengine.h>
 #include <KWindowSystem>
+#include <kdeclarative/qmlobjectsharedengine.h>
 
-ToolTipDialog::ToolTipDialog(QQuickItem  *parent)
-    : Dialog(parent),
-      m_qmlObject(nullptr),
-      m_hideTimeout(4000),
-      m_interactive(false),
-      m_owner(nullptr)
+ToolTipDialog::ToolTipDialog(QQuickItem *parent)
+    : Dialog(parent)
+    , m_qmlObject(nullptr)
+    , m_hideTimeout(4000)
+    , m_interactive(false)
+    , m_owner(nullptr)
 {
     setLocation(Plasma::Types::Floating);
     setType(Dialog::WindowType::Tooltip);
@@ -42,7 +42,7 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
     }
 
     if (!m_qmlObject->rootObject()) {
-        //HACK: search our own import
+        // HACK: search our own import
         const auto paths = m_qmlObject->engine()->importPathList();
         for (const QString &path : paths) {
             if (QFile::exists(path + QStringLiteral("/org/kde/plasma/core"))) {

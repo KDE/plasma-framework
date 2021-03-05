@@ -5,8 +5,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "dialogshadows_p.h"
 #include "debug_p.h"
+#include "dialogshadows_p.h"
 
 #include <KWindowShadow>
 
@@ -50,8 +50,8 @@ public:
 Q_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
 
 DialogShadows::DialogShadows(QObject *parent, const QString &prefix)
-    : Plasma::Svg(parent),
-      d(new Private(this))
+    : Plasma::Svg(parent)
+    , d(new Private(this))
 {
     setImagePath(prefix);
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateShadows()));
@@ -75,8 +75,7 @@ void DialogShadows::addWindow(QWindow *window, Plasma::FrameSvg::EnabledBorders 
 
     d->m_windows[window] = enabledBorders;
     d->updateShadow(window, enabledBorders);
-    connect(window, SIGNAL(destroyed(QObject*)),
-            this, SLOT(windowDestroyed(QObject*)), Qt::UniqueConnection);
+    connect(window, SIGNAL(destroyed(QObject *)), this, SLOT(windowDestroyed(QObject *)), Qt::UniqueConnection);
 }
 
 void DialogShadows::removeWindow(QWindow *window)
@@ -102,7 +101,6 @@ void DialogShadows::setEnabledBorders(QWindow *window, Plasma::FrameSvg::Enabled
 
     d->updateShadow(window, enabledBorders);
 }
-
 
 void DialogShadows::Private::windowDestroyed(QObject *deletedObject)
 {
@@ -176,8 +174,7 @@ void DialogShadows::Private::updateShadow(QWindow *window, Plasma::FrameSvg::Ena
         shadow->setTopTile(nullptr);
     }
 
-    if (enabledBorders & Plasma::FrameSvg::TopBorder &&
-        enabledBorders & Plasma::FrameSvg::RightBorder) {
+    if (enabledBorders & Plasma::FrameSvg::TopBorder && enabledBorders & Plasma::FrameSvg::RightBorder) {
         shadow->setTopRightTile(m_tiles.at(1));
     } else {
         shadow->setTopRightTile(nullptr);
@@ -189,8 +186,7 @@ void DialogShadows::Private::updateShadow(QWindow *window, Plasma::FrameSvg::Ena
         shadow->setRightTile(nullptr);
     }
 
-    if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
-        enabledBorders & Plasma::FrameSvg::RightBorder) {
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder && enabledBorders & Plasma::FrameSvg::RightBorder) {
         shadow->setBottomRightTile(m_tiles.at(3));
     } else {
         shadow->setBottomRightTile(nullptr);
@@ -202,8 +198,7 @@ void DialogShadows::Private::updateShadow(QWindow *window, Plasma::FrameSvg::Ena
         shadow->setBottomTile(nullptr);
     }
 
-    if (enabledBorders & Plasma::FrameSvg::BottomBorder &&
-        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+    if (enabledBorders & Plasma::FrameSvg::BottomBorder && enabledBorders & Plasma::FrameSvg::LeftBorder) {
         shadow->setBottomLeftTile(m_tiles.at(5));
     } else {
         shadow->setBottomLeftTile(nullptr);
@@ -215,8 +210,7 @@ void DialogShadows::Private::updateShadow(QWindow *window, Plasma::FrameSvg::Ena
         shadow->setLeftTile(nullptr);
     }
 
-    if (enabledBorders & Plasma::FrameSvg::TopBorder &&
-        enabledBorders & Plasma::FrameSvg::LeftBorder) {
+    if (enabledBorders & Plasma::FrameSvg::TopBorder && enabledBorders & Plasma::FrameSvg::LeftBorder) {
         shadow->setTopLeftTile(m_tiles.at(7));
     } else {
         shadow->setTopLeftTile(nullptr);
@@ -279,4 +273,3 @@ bool DialogShadows::enabled() const
 }
 
 #include "moc_dialogshadows_p.cpp"
-

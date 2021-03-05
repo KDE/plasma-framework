@@ -5,35 +5,34 @@
 */
 
 #include "theme.h"
-#include "private/theme_p.h"
 #include "private/svg_p.h"
+#include "private/theme_p.h"
 
 #include <QFile>
-#include <QFontDatabase>
 #include <QFileInfo>
+#include <QFontDatabase>
+#include <QFontMetrics>
 #include <QMutableListIterator>
 #include <QPair>
 #include <QStringBuilder>
-#include <QTimer>
 #include <QThread>
-#include <QFontMetrics>
+#include <QTimer>
 
 #include "config-plasma.h"
 
 #include <KColorScheme>
 #include <KConfigGroup>
-#include <QDebug>
 #include <KDirWatch>
 #include <KImageCache>
 #include <KWindowEffects>
 #include <KWindowSystem>
+#include <QDebug>
 #include <QStandardPaths>
 
 #include "debug_p.h"
 
 namespace Plasma
 {
-
 Theme::Theme(QObject *parent)
     : QObject(parent)
 {
@@ -45,8 +44,7 @@ Theme::Theme(QObject *parent)
     d = ThemePrivate::globalTheme;
 
     if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-                d, &ThemePrivate::onAppExitCleanup);
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     connect(d, &ThemePrivate::defaultFontChanged, this, &Theme::defaultFontChanged);
@@ -56,7 +54,7 @@ Theme::Theme(QObject *parent)
 Theme::Theme(const QString &themeName, QObject *parent)
     : QObject(parent)
 {
-    auto& priv = ThemePrivate::themes[themeName];
+    auto &priv = ThemePrivate::themes[themeName];
     if (!priv) {
         priv = new ThemePrivate;
     }
@@ -71,8 +69,7 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->cacheTheme = useCache;
     d->fixedName = true;
     if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-                d, &ThemePrivate::onAppExitCleanup);
+        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
     }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
@@ -105,15 +102,14 @@ void Theme::setThemeName(const QString &themeName)
             delete ThemePrivate::themes.take(d->themeName);
         }
 
-        auto& priv = ThemePrivate::themes[themeName];
+        auto &priv = ThemePrivate::themes[themeName];
         if (!priv) {
             priv = new ThemePrivate;
         }
         priv->ref.ref();
         d = priv;
         if (QCoreApplication::instance()) {
-            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
-                    d, &ThemePrivate::onAppExitCleanup);
+            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
         }
         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
@@ -131,7 +127,7 @@ QString Theme::imagePath(const QString &name) const
     // look for a compressed svg file in the theme
     if (name.contains(QLatin1String("../")) || name.isEmpty()) {
         // we don't support relative paths
-        //qCDebug(LOG_PLASMA) << "Theme says: bad image path " << name;
+        // qCDebug(LOG_PLASMA) << "Theme says: bad image path " << name;
         return QString();
     }
 
@@ -170,7 +166,7 @@ QString Theme::imagePath(const QString &name) const
     return path;
 }
 
-QString Theme::backgroundPath(const QString& image) const
+QString Theme::backgroundPath(const QString &image) const
 {
     return d->imagePath(themeName(), QStringLiteral("/appbackgrounds/"), image);
 }
@@ -179,7 +175,6 @@ QString Theme::styleSheet(const QString &css) const
 {
     return d->processStyleSheet(css, Svg::Status::Normal);
 }
-
 
 QPalette Theme::palette() const
 {
@@ -194,7 +189,7 @@ QString Theme::wallpaperPath(const QSize &size) const
 
     if (size.isValid()) {
         // try to customize the paper to the size requested
-        //TODO: this should do better than just fallback to the default size.
+        // TODO: this should do better than just fallback to the default size.
         //      a "best fit" matching would be far better, so we don't end
         //      up returning a 1920x1200 wallpaper for a 640x480 request ;)
         image = image.arg(size.width()).arg(size.height());
@@ -202,7 +197,7 @@ QString Theme::wallpaperPath(const QSize &size) const
         image = defaultImage;
     }
 
-    //TODO: the theme's wallpaper overrides regularly installed wallpapers.
+    // TODO: the theme's wallpaper overrides regularly installed wallpapers.
     //      should it be possible for user installed (e.g. locateLocal) wallpapers
     //      to override the theme?
     if (d->hasWallpapers) {
@@ -216,14 +211,14 @@ QString Theme::wallpaperPath(const QSize &size) const
 
     if (fullPath.isEmpty()) {
         // we failed to find it in the theme, so look in the standard directories
-        //qCDebug(LOG_PLASMA) << "looking for" << image;
+        // qCDebug(LOG_PLASMA) << "looking for" << image;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + image);
     }
 
     if (fullPath.isEmpty()) {
         // we still failed to find it in the theme, so look for the default in
         // the standard directories
-        //qCDebug(LOG_PLASMA) << "looking for" << defaultImage;
+        // qCDebug(LOG_PLASMA) << "looking for" << defaultImage;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + defaultImage);
 
         if (fullPath.isEmpty()) {
@@ -248,8 +243,8 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !(d->findInTheme(name % QLatin1String(".svgz"), d->themeName, false).isEmpty()) ||
-           !(d->findInTheme(name % QLatin1String(".svg"), d->themeName, false).isEmpty());
+    return !(d->findInTheme(name % QLatin1String(".svgz"), d->themeName, false).isEmpty())
+        || !(d->findInTheme(name % QLatin1String(".svg"), d->themeName, false).isEmpty());
 }
 
 KSharedConfigPtr Theme::colorScheme() const
@@ -281,7 +276,7 @@ bool Theme::useGlobalSettings() const
 
 bool Theme::findInCache(const QString &key, QPixmap &pix, unsigned int lastModified)
 {
-    //TODO KF6: Make lastModified non-optional.
+    // TODO KF6: Make lastModified non-optional.
     if (lastModified == 0) {
         qCWarning(LOG_PLASMA) << "findInCache with a lastModified timestamp of 0 is deprecated";
         return false;
@@ -325,7 +320,7 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QStrin
         d->keysToCache[key] = id;
         d->idsToCache[id] = key;
 
-        //always start timer in d->pixmapSaveTimer's thread
+        // always start timer in d->pixmapSaveTimer's thread
         QMetaObject::invokeMethod(d->pixmapSaveTimer, "start", Qt::QueuedConnection);
     }
 }
@@ -372,7 +367,6 @@ void Theme::insertIntoRectsCache(const QString &image, const QString &element, c
 
 void Theme::invalidateRectsCache(const QString &image)
 {
-    
     SvgRectsCache::instance()->dropImageFromCache(image);
 }
 
@@ -426,7 +420,7 @@ qreal Theme::backgroundContrast() const
         // If we're using a dark background color, darken the background
         if (qGray(color(Plasma::Theme::BackgroundColor).rgb()) < 127) {
             return 0.45;
-        // for a light theme lighten up the background
+            // for a light theme lighten up the background
         } else {
             return 0.3;
         }

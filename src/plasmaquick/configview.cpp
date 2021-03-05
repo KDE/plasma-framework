@@ -4,37 +4,36 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "private/configcategory_p.h"
 #include "configview.h"
-#include "configmodel.h"
 #include "Plasma/Applet"
 #include "Plasma/Containment"
+#include "configmodel.h"
+#include "private/configcategory_p.h"
 //#include "plasmoid/wallpaperinterface.h"
 #include "kdeclarative/configpropertymap.h"
 
 #include <QDebug>
 #include <QDir>
 #include <QQmlComponent>
-#include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 #include <QQuickItem>
 
 #include <KAuthorized>
-#include <KLocalizedString>
 #include <KLocalizedContext>
+#include <KLocalizedString>
+#include <KQuickAddons/ConfigModule>
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
-#include <KQuickAddons/ConfigModule>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 
-//Unfortunately QWINDOWSIZE_MAX is not exported
-#define DIALOGSIZE_MAX ((1<<24)-1)
+// Unfortunately QWINDOWSIZE_MAX is not exported
+#define DIALOGSIZE_MAX ((1 << 24) - 1)
 
 namespace PlasmaQuick
 {
-
 //////////////////////////////ConfigView
 
 class ConfigViewPrivate
@@ -52,19 +51,19 @@ public:
     void mainItemLoaded();
 
     ConfigView *q;
-    QPointer <Plasma::Applet> applet;
+    QPointer<Plasma::Applet> applet;
     ConfigModel *configModel;
     ConfigModel *kcmConfigModel;
     Plasma::Corona *corona;
 
-    //Attached Layout property of mainItem, if any
-    QPointer <QObject> mainItemLayout;
+    // Attached Layout property of mainItem, if any
+    QPointer<QObject> mainItemLayout;
 };
 
 ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
-    : q(view),
-      applet(appl),
-      corona(nullptr)
+    : q(view)
+    , applet(appl)
+    , corona(nullptr)
 {
 }
 
@@ -92,11 +91,11 @@ void ConfigViewPrivate::init()
 
     KDeclarative::KDeclarative::setupEngine(q->engine()); // ### how to make sure to do this only once per engine?
 
-    //FIXME: problem on nvidia, all windows should be transparent or won't show
+    // FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
     q->setTitle(i18n("%1 Settings", applet.data()->title()));
 
-    //systray case
+    // systray case
     if (!applet.data()->containment()->corona()) {
         Plasma::Applet *a = qobject_cast<Plasma::Applet *>(applet.data()->containment()->parent());
         if (a) {
@@ -124,9 +123,9 @@ void ConfigViewPrivate::init()
 
     auto plasmoid = applet.data()->property("_plasma_graphicObject").value<QObject *>();
     q->engine()->rootContext()->setContextProperties({QQmlContext::PropertyPair{QStringLiteral("plasmoid"), QVariant::fromValue(plasmoid)},
-                                                                                                  QQmlContext::PropertyPair{QStringLiteral("configDialog"), QVariant::fromValue(q)}});
+                                                      QQmlContext::PropertyPair{QStringLiteral("configDialog"), QVariant::fromValue(q)}});
 
-    //config model local of the applet
+    // config model local of the applet
     QQmlComponent *component = new QQmlComponent(q->engine(), applet.data()->kPackage().fileUrl("configmodel"), q);
     QObject *object = component->create(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
@@ -142,9 +141,12 @@ void ConfigViewPrivate::init()
     // filter out non-authorized KCMs
     // KAuthorized expects KCMs with .desktop suffix, so we can't just pass everything
     // to KAuthorized::authorizeControlModules verbatim
-    kcms.erase(std::remove_if(kcms.begin(), kcms.end(), [](const QString &kcm) {
-        return !KAuthorized::authorizeControlModule(kcm + QLatin1String(".desktop"));
-    }), kcms.end());
+    kcms.erase(std::remove_if(kcms.begin(),
+                              kcms.end(),
+                              [](const QString &kcm) {
+                                  return !KAuthorized::authorizeControlModule(kcm + QLatin1String(".desktop"));
+                              }),
+               kcms.end());
 
     if (!kcms.isEmpty()) {
         if (!configModel) {
@@ -158,7 +160,8 @@ void ConfigViewPrivate::init()
             KPluginMetaData md(loader.fileName());
 
             if (!md.isValid()) {
-                qWarning() << "Could not find" << kcm << "requested by X-Plasma-ConfigPlugins. Ensure that it exists, is a QML KCM, and lives in the 'kcms/' subdirectory.";
+                qWarning() << "Could not find" << kcm
+                           << "requested by X-Plasma-ConfigPlugins. Ensure that it exists, is a QML KCM, and lives in the 'kcms/' subdirectory.";
                 continue;
             }
 
@@ -173,7 +176,7 @@ void ConfigViewPrivate::updateMinimumWidth()
 {
     if (mainItemLayout) {
         q->setMinimumWidth(mainItemLayout.data()->property("minimumWidth").toInt());
-        //Sometimes setMinimumWidth doesn't actually resize: Qt bug?
+        // Sometimes setMinimumWidth doesn't actually resize: Qt bug?
 
         q->setWidth(qMax(q->width(), q->minimumWidth()));
     } else {
@@ -185,7 +188,7 @@ void ConfigViewPrivate::updateMinimumHeight()
 {
     if (mainItemLayout) {
         q->setMinimumHeight(mainItemLayout.data()->property("minimumHeight").toInt());
-        //Sometimes setMinimumHeight doesn't actually resize: Qt bug?
+        // Sometimes setMinimumHeight doesn't actually resize: Qt bug?
 
         q->setHeight(qMax(q->height(), q->minimumHeight()));
     } else {
@@ -231,19 +234,17 @@ void ConfigViewPrivate::mainItemLoaded()
         q->resize(cg.readEntry("DialogWidth", q->width()), cg.readEntry("DialogHeight", q->height()));
     }
 
-    //Extract the representation's Layout, if any
+    // Extract the representation's Layout, if any
     QObject *layout = nullptr;
 
-    //Search a child that has the needed Layout properties
-    //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+    // Search a child that has the needed Layout properties
+    // HACK: here we are not type safe, but is the only way to access to a pointer of Layout
     const auto children = q->rootObject()->children();
     for (QObject *child : children) {
-        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-            ) {
+        // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
+            && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
+            && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
             layout = child;
             break;
         }
@@ -263,10 +264,9 @@ void ConfigViewPrivate::mainItemLoaded()
     }
 }
 
-
 ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
-    : QQuickView(parent),
-      d(new ConfigViewPrivate(applet, this))
+    : QQuickView(parent)
+    , d(new ConfigViewPrivate(applet, this))
 {
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
@@ -324,7 +324,7 @@ void ConfigView::setAppletGlobalShortcut(const QString &shortcut)
     Q_EMIT appletGlobalShortcutChanged();
 }
 
-//To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
+// To emulate Qt::WA_DeleteOnClose that QWindow doesn't have
 void ConfigView::hideEvent(QHideEvent *ev)
 {
     QQuickWindow::hideEvent(ev);

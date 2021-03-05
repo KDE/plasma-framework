@@ -61,7 +61,6 @@ QString FallbackComponent::filePath(const QString &key)
         if (tmpPath.isAbsolute()) {
             resolved = m_basePath + path + key;
         } else {
-
             resolved = QStandardPaths::locate(QStandardPaths::GenericDataLocation, m_basePath + QLatin1Char('/') + path + key);
         }
 
@@ -73,4 +72,3 @@ QString FallbackComponent::filePath(const QString &key)
 
     return resolved;
 }
-

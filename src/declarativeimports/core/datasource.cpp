@@ -12,10 +12,10 @@
 namespace Plasma
 {
 DataSource::DataSource(QObject *parent)
-    : QObject(parent),
-      m_ready(false),
-      m_interval(0),
-      m_intervalAlignment(Plasma::Types::NoAlignment)
+    : QObject(parent)
+    , m_ready(false)
+    , m_interval(0)
+    , m_intervalAlignment(Plasma::Types::NoAlignment)
 {
     m_models = new QQmlPropertyMap(this);
     m_data = new QQmlPropertyMap(this);
@@ -24,7 +24,6 @@ DataSource::DataSource(QObject *parent)
 
 void DataSource::classBegin()
 {
-
 }
 
 void DataSource::componentComplete()
@@ -143,8 +142,8 @@ void DataSource::setupData()
         return;
     }
 
-//     qDebug() << " loading engine " << m_engine;
-    //FIXME: should all services be deleted just because we're changing the interval, etc?
+    //     qDebug() << " loading engine " << m_engine;
+    // FIXME: should all services be deleted just because we're changing the interval, etc?
     qDeleteAll(m_services);
     m_services.clear();
 
@@ -156,7 +155,7 @@ void DataSource::setupData()
 
 void DataSource::dataUpdated(const QString &sourceName, const Plasma::DataEngine::Data &data)
 {
-    //it can arrive also data we don't explicitly connected a source
+    // it can arrive also data we don't explicitly connected a source
     if (m_connectedSources.contains(sourceName)) {
         m_data->insert(sourceName, data);
         Q_EMIT dataChanged();
@@ -174,8 +173,8 @@ void DataSource::modelChanged(const QString &sourceName, QAbstractItemModel *mod
     }
 
     m_models->insert(sourceName, QVariant::fromValue(model));
-    //FIXME: this will break in the case a second model is set
-    connect(model, &QObject::destroyed, m_models, [ = ]() {
+    // FIXME: this will break in the case a second model is set
+    connect(model, &QObject::destroyed, m_models, [=]() {
         m_models->clear(sourceName);
     });
 }
@@ -185,7 +184,7 @@ void DataSource::removeSource(const QString &source)
     m_data->clear(source);
     m_models->clear(source);
 
-    //TODO: emit those signals as last thing
+    // TODO: emit those signals as last thing
     if (m_connectedSources.contains(source)) {
         m_connectedSources.removeAll(source);
         Q_EMIT sourceDisconnected(source);

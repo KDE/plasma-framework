@@ -15,48 +15,47 @@
 #include <cmath>
 #include <limits>
 
+#include <QAbstractButton>
 #include <QFile>
 #include <QList>
-#include <QAbstractButton>
 #include <QMessageBox>
 #include <QMetaEnum>
 
 #include <KActionCollection>
 #include <KAuthorized>
 #include <KColorScheme>
+#include <KConfigLoader>
 #include <KDesktopFile>
-#include <QDebug>
 #include <KGlobalAccel>
 #include <KLocalizedString>
 #include <KService>
-#include <KConfigLoader>
 #include <KWindowSystem>
+#include <QDebug>
 
 #include "containment.h"
 #include "corona.h"
 #include "package.h"
 #include "plasma.h"
-#include "scripting/appletscript.h"
 #include "pluginloader.h"
+#include "scripting/appletscript.h"
 
+#include "debug_p.h"
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/package_p.h"
-#include "debug_p.h"
 
 namespace Plasma
 {
-
 static KPluginMetaData appletMetadataForDirectory(const QString &path)
 {
     return QFile::exists(path + QLatin1String("/metadata.json"))
-                ? KPluginMetaData(path + QLatin1String("/metadata.json"))
-                : KPluginMetaData::fromDesktopFile(path + QLatin1String("/metadata.desktop"), { QStringLiteral("plasma-applet.desktop") });
+        ? KPluginMetaData(path + QLatin1String("/metadata.json"))
+        : KPluginMetaData::fromDesktopFile(path + QLatin1String("/metadata.desktop"), {QStringLiteral("plasma-applet.desktop")});
 }
 
 Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
-    :  QObject(parent),
-       d(new AppletPrivate(info, appletId, this))
+    : QObject(parent)
+    , d(new AppletPrivate(info, appletId, this))
 {
     qCDebug(LOG_PLASMA) << " From KPluginMetaData, valid? " << info.isValid();
     // WARNING: do not access config() OR globalConfig() in this method!
@@ -66,13 +65,13 @@ Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
 }
 
 Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
-    :  Applet(info.toMetaData(), parent, appletId)
+    : Applet(info.toMetaData(), parent, appletId)
 {
 }
 
 Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
-    :  QObject(parent),
-       d(new AppletPrivate(KPluginMetaData(serviceID), appletId, this))
+    : QObject(parent)
+    , d(new AppletPrivate(KPluginMetaData(serviceID), appletId, this))
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
@@ -81,8 +80,8 @@ Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
 }
 
 Applet::Applet(QObject *parentObject, const QVariantList &args)
-    :  QObject(nullptr),
-       d(new AppletPrivate(KPluginMetaData(), args.count() > 2 ? args[2].toInt() : 0, this))
+    : QObject(nullptr)
+    , d(new AppletPrivate(KPluginMetaData(), args.count() > 2 ? args[2].toInt() : 0, this))
 {
     setParent(parentObject);
     if (!args.isEmpty()) {
@@ -113,8 +112,8 @@ Applet::Applet(QObject *parentObject, const QVariantList &args)
 }
 
 Applet::Applet(const QString &packagePath, uint appletId)
-    : QObject(nullptr),
-      d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
+    : QObject(nullptr)
+    , d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
 {
     d->init(packagePath);
     d->setupPackage();
@@ -125,7 +124,7 @@ Applet::~Applet()
     if (d->transient) {
         d->resetConfigurationObject();
     }
-    //let people know that i will die
+    // let people know that i will die
     Q_EMIT appletDeleted(this);
 
     // ConfigLoader is deleted when AppletPrivate closes not Applet
@@ -137,7 +136,7 @@ Applet::~Applet()
 
 void Applet::init()
 {
-    //Don't implement anything here, it will be overridden by subclasses
+    // Don't implement anything here, it will be overridden by subclasses
 }
 
 uint Applet::id() const
@@ -156,7 +155,7 @@ void Applet::save(KConfigGroup &g) const
         group = *d->mainConfigGroup();
     }
 
-    //qCDebug(LOG_PLASMA) << "saving" << pluginName() << "to" << group.name();
+    // qCDebug(LOG_PLASMA) << "saving" << pluginName() << "to" << group.name();
     // we call the dptr member directly for locked since isImmutable()
     // also checks kiosk and parent containers
     group.writeEntry("immutability", (int)d->immutability);
@@ -180,7 +179,6 @@ void Applet::save(KConfigGroup &g) const
 
 void Applet::restore(KConfigGroup &group)
 {
-
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     KConfigGroup shortcutConfig(&group, "Shortcuts");
@@ -199,12 +197,11 @@ void Applet::restore(KConfigGroup &group)
     }
 
     // local shortcut, if any
-    //TODO: implement; the shortcut will need to be registered with the containment
+    // TODO: implement; the shortcut will need to be registered with the containment
     /*
     #include "accessmanager.h"
+    #include "authorizationmanager.h"
     #include "private/plasmoidservice_p.h"
-    #include "authorizationmanager.h"
-    #include "authorizationmanager.h"
     shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
     if (!shortcutText.isEmpty()) {
         //TODO: implement; the shortcut
@@ -287,11 +284,11 @@ KConfigGroup Applet::globalConfig() const
 void Applet::destroy()
 {
     if (immutability() != Types::Mutable || d->transient || !d->started) {
-        return; //don't double delete
+        return; // don't double delete
     }
 
     d->setDestroyed(true);
-    //FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
+    // FIXME: an animation on leave if !isContainment() would be good again .. which should be handled by the containment class
     d->cleanUpAndDelete();
 }
 
@@ -336,12 +333,12 @@ void Applet::updateConstraints(Plasma::Types::Constraints constraints)
 
 void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
 {
-    //NOTE: do NOT put any code in here that reacts to constraints updates
+    // NOTE: do NOT put any code in here that reacts to constraints updates
     //      as it will not get called for any applet that reimplements constraintsEvent
     //      without calling the Applet:: version as well, which it shouldn't need to.
     //      INSTEAD put such code into flushPendingConstraintsEvents
     Q_UNUSED(constraints)
-    //qCDebug(LOG_PLASMA) << constraints << "constraints are FormFactor: " << formFactor()
+    // qCDebug(LOG_PLASMA) << constraints << "constraints are FormFactor: " << formFactor()
     //         << ", Location: " << location();
     if (d->script) {
         d->script->constraintsEvent(constraints);
@@ -424,8 +421,7 @@ void Applet::setBackgroundHints(Plasma::Types::BackgroundHints hint)
 
 Plasma::Types::BackgroundHints Applet::effectiveBackgroundHints() const
 {
-    if (d->userBackgroundHintsInitialized
-        && (d->backgroundHints & Plasma::Types::ConfigurableBackground)) {
+    if (d->userBackgroundHintsInitialized && (d->backgroundHints & Plasma::Types::ConfigurableBackground)) {
         return d->userBackgroundHints;
     } else {
         return d->backgroundHints;
@@ -458,7 +454,6 @@ void Applet::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
     }
 }
 
-
 KPluginInfo Applet::pluginInfo() const
 {
     return KPluginInfo(d->appletDescription);
@@ -478,7 +473,7 @@ Types::ImmutabilityType Applet::immutability() const
         return Types::SystemImmutable;
     }
 
-    //Returning the more strict immutability between the applet immutability, Containment and Corona
+    // Returning the more strict immutability between the applet immutability, Containment and Corona
     Types::ImmutabilityType upperImmutability = Types::Mutable;
 
     if (isContainment()) {
@@ -591,7 +586,7 @@ void Applet::flushPendingConstraintsEvents()
         d->constraintsTimer.stop();
     }
 
-    //qCDebug(LOG_PLASMA) << "flushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    // qCDebug(LOG_PLASMA) << "flushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
     Plasma::Types::Constraints c = d->pendingConstraints;
     d->pendingConstraints = Types::NoConstraint;
 
@@ -600,7 +595,7 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     if (c & Plasma::Types::StartupCompletedConstraint) {
-        //common actions
+        // common actions
         bool unlocked = immutability() == Types::Mutable;
         QAction *closeApplet = d->actions->action(QStringLiteral("remove"));
         if (closeApplet) {
@@ -611,7 +606,6 @@ void Applet::flushPendingConstraintsEvents()
 
         QAction *configAction = d->actions->action(QStringLiteral("configure"));
         if (configAction) {
-
             if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
                 configAction->setVisible(canConfig);
@@ -642,8 +636,8 @@ void Applet::flushPendingConstraintsEvents()
             action->setEnabled(canConfig);
         }
 
-        //an immutable constraint will always happen at startup
-        //make sure don't emit a change signal for nothing
+        // an immutable constraint will always happen at startup
+        // make sure don't emit a change signal for nothing
         if (d->oldImmutability != immutability()) {
             Q_EMIT immutabilityChanged(immutability());
         }
@@ -681,7 +675,7 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    //qCDebug(LOG_PLASMA) << "empty context actions";
+    // qCDebug(LOG_PLASMA) << "empty context actions";
     return d->script ? d->script->contextualActions() : QList<QAction *>();
 }
 
@@ -695,7 +689,7 @@ Types::FormFactor Applet::formFactor() const
     Containment *c = containment();
     QObject *pw = qobject_cast<QObject *>(parent());
     Plasma::Applet *parentApplet = qobject_cast<Plasma::Applet *>(pw);
-    //assumption: this loop is usually is -really- short or doesn't run at all
+    // assumption: this loop is usually is -really- short or doesn't run at all
     while (!parentApplet && pw && pw->parent()) {
         pw = pw->parent();
         parentApplet = qobject_cast<Plasma::Applet *>(pw);
@@ -742,8 +736,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
         d->activationAction->setText(i18n("Activate %1 Widget", title()));
         d->activationAction->setObjectName(QStringLiteral("activate widget %1").arg(id())); // NO I18N
         connect(d->activationAction, &QAction::triggered, this, &Applet::activated);
-        connect(d->activationAction, SIGNAL(changed()),
-                this, SLOT(globalShortcutChanged()));
+        connect(d->activationAction, SIGNAL(changed()), this, SLOT(globalShortcutChanged()));
     } else if (d->activationAction->shortcut() == shortcut) {
         return;
     }
@@ -898,13 +891,13 @@ void Applet::timerEvent(QTimerEvent *event)
 
 bool Applet::isContainment() const
 {
-    //HACK: this is a special case for the systray
-    //containment in an applet that is not a containment
+    // HACK: this is a special case for the systray
+    // containment in an applet that is not a containment
     Applet *pa = qobject_cast<Applet *>(parent());
     if (pa && !pa->isContainment()) {
         return true;
     }
-    //normal "acting as a containment" condition
+    // normal "acting as a containment" condition
     return qobject_cast<const Containment *>(this) && qobject_cast<Corona *>(parent());
 }
 

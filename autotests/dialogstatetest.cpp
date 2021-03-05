@@ -5,8 +5,8 @@
 */
 
 #include "dialogstatetest.h"
-#include <QSignalSpy>
 #include <KWindowSystem>
+#include <QSignalSpy>
 
 void DialogStateTest::initTestCase()
 {

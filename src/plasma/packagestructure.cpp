@@ -5,31 +5,30 @@
 */
 
 #include "packagestructure.h"
-#include <QDebug>
+#include "debug_p.h"
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
-#include "debug_p.h"
+#include <QDebug>
 
 #include <kpackage/packageloader.h>
 #include <kpackage/packagestructure.h>
 
 #include <QVariantMap>
 
-#include <KJob>
 #include <KDesktopFile>
-#include <QDir>
-#include <QFile>
+#include <KJob>
 #include <QDBusConnection>
 #include <QDBusPendingCall>
+#include <QDir>
+#include <QFile>
 
 namespace Plasma
 {
-
 QHash<KPackage::Package *, Plasma::Package *> PackageStructureWrapper::s_packagesMap;
 
 PackageStructureWrapper::PackageStructureWrapper(Plasma::PackageStructure *structure, QObject *parent, const QVariantList &args)
-    : KPackage::PackageStructure(parent, args),
-      m_struct(structure)
+    : KPackage::PackageStructure(parent, args)
+    , m_struct(structure)
 {
 }
 
@@ -39,7 +38,6 @@ PackageStructureWrapper::~PackageStructureWrapper()
 
 void PackageStructureWrapper::initPackage(KPackage::Package *package)
 {
-
     if (!m_struct || !s_packagesMap.contains(package)) {
         return;
     }
@@ -74,8 +72,6 @@ KJob *PackageStructureWrapper::uninstall(KPackage::Package *package, const QStri
     return m_struct->uninstall(s_packagesMap.value(package), packageRoot);
 }
 
-
-
 void PackageStructurePrivate::installPathChanged(const QString &path)
 {
     KJob *job = qobject_cast<KJob *>(q->sender());
@@ -86,7 +82,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
     const QString servicePrefix = job->property("servicePrefix").toString();
     const QString serviceName = job->property("serviceName").toString();
 
-    //uninstall
+    // uninstall
     if (path.isEmpty()) {
         if (serviceName.isEmpty()) {
             return;
@@ -99,7 +95,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             qCWarning(LOG_PLASMA) << "Unable to remove " << service;
         }
 
-    //install
+        // install
     } else {
         if (!servicePrefix.isEmpty()) {
             // and now we register it as a service =)
@@ -117,7 +113,7 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             // used by the installing app in any case, and the
             // package is properly installed - aseigo
 
-            //TODO: remove installation of the desktop file in kservices5 when possible
+            // TODO: remove installation of the desktop file in kservices5 when possible
 
             const QString serviceName = servicePrefix + pluginName + QStringLiteral(".desktop");
 
@@ -147,16 +143,16 @@ void PackageStructurePrivate::installPathChanged(const QString &path)
             }
         }
     }
-    const auto call = QDBusMessage::createMethodCall(QStringLiteral("org.kde.kded5"), QStringLiteral("/kbuildsycoca"),
-        QStringLiteral("org.kde.kbuildsycoca"), QStringLiteral("recreate"));
+    const auto call = QDBusMessage::createMethodCall(QStringLiteral("org.kde.kded5"),
+                                                     QStringLiteral("/kbuildsycoca"),
+                                                     QStringLiteral("org.kde.kbuildsycoca"),
+                                                     QStringLiteral("recreate"));
     QDBusConnection::sessionBus().asyncCall(call);
 }
 
-
-
 PackageStructure::PackageStructure(QObject *parent, const QVariantList &args)
-    : QObject(parent),
-      d(new PackageStructurePrivate(this))
+    : QObject(parent)
+    , d(new PackageStructurePrivate(this))
 {
     if (!args.isEmpty() && args.first().canConvert<QString>()) {
         d->internalStructure = KPackage::PackageLoader::self()->loadPackageStructure(args.first().toString());
@@ -179,8 +175,8 @@ void PackageStructure::initPackage(Package *package)
 
 void PackageStructure::pathChanged(Package *package)
 {
-   if (d->internalStructure && !qobject_cast<PackageStructureWrapper *>(d->internalStructure)) {
-       d->internalStructure->pathChanged(package->d->internalPackage);
+    if (d->internalStructure && !qobject_cast<PackageStructureWrapper *>(d->internalStructure)) {
+        d->internalStructure->pathChanged(package->d->internalPackage);
     }
 }
 

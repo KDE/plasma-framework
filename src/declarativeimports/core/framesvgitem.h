@@ -7,8 +7,8 @@
 #ifndef FRAMESVGITEM_P
 #define FRAMESVGITEM_P
 
-#include <QQuickItem>
 #include <QQmlParserStatus>
+#include <QQuickItem>
 
 #include <Plasma/FrameSvg>
 
@@ -16,7 +16,6 @@
 
 namespace Plasma
 {
-
 class FrameSvg;
 
 /**
@@ -58,7 +57,6 @@ class FrameSvgItemMargins : public QObject
      */
     Q_PROPERTY(qreal vertical READ vertical NOTIFY marginsChanged)
 
-
 public:
     FrameSvgItemMargins(Plasma::FrameSvg *frameSvg, QObject *parent = nullptr);
 
@@ -89,7 +87,6 @@ private:
     bool m_fixed;
     bool m_inset;
 };
-
 
 /**
  * @class FrameSvgItem
@@ -222,8 +219,7 @@ public:
     void setStatus(Plasma::Svg::Status status);
     Plasma::Svg::Status status() const;
 
-    void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
     QRegion mask() const;
 
@@ -234,13 +230,13 @@ public:
 
     QSGNode *updatePaintNode(QSGNode *, UpdatePaintNodeData *) override;
 
-    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData & data) override;
+    void itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &data) override;
 
 protected:
     void classBegin() override;
     void componentComplete() override;
 
-/// @endcond
+    /// @endcond
 
 Q_SIGNALS:
     void imagePathChanged();

@@ -7,15 +7,14 @@
 #ifndef STORAGETHREAD_H
 #define STORAGETHREAD_H
 
-#include <QThread>
-#include <QSqlDatabase>
 #include <QPointer>
+#include <QSqlDatabase>
+#include <QThread>
 
 #include "storage_p.h"
 
 namespace Plasma
 {
-
 class StorageThread : public QThread
 {
     Q_OBJECT

@@ -11,23 +11,28 @@
 #include <QPainter>
 #include <QPalette>
 #include <QPropertyAnimation>
-#include <QSGSimpleTextureNode>
 #include <QQuickWindow>
+#include <QSGSimpleTextureNode>
 
-#include <KIconLoader>
 #include <KIconEffect>
+#include <KIconLoader>
 #include <KIconTheme>
 
 #include "fadingnode_p.h"
-#include <QuickAddons/ManagedTextureNode>
 #include "theme.h"
 #include "units.h"
+#include <QuickAddons/ManagedTextureNode>
 
 class IconItemSource
 {
 public:
-    explicit IconItemSource(IconItem *iconItem) : m_iconItem(iconItem) {}
-    virtual ~IconItemSource() {}
+    explicit IconItemSource(IconItem *iconItem)
+        : m_iconItem(iconItem)
+    {
+    }
+    virtual ~IconItemSource()
+    {
+    }
 
     virtual bool isValid() const = 0;
     virtual const QSize size() const = 0;
@@ -45,7 +50,10 @@ protected:
 class NullSource : public IconItemSource
 {
 public:
-    explicit NullSource(IconItem *iconItem) : IconItemSource(iconItem) {}
+    explicit NullSource(IconItem *iconItem)
+        : IconItemSource(iconItem)
+    {
+    }
 
     bool isValid() const override
     {
@@ -67,7 +75,8 @@ public:
 class QIconSource : public IconItemSource
 {
 public:
-    explicit QIconSource(const QIcon &icon, IconItem *iconItem) : IconItemSource(iconItem)
+    explicit QIconSource(const QIcon &icon, IconItem *iconItem)
+        : IconItemSource(iconItem)
     {
         m_icon = icon;
     }
@@ -97,7 +106,8 @@ private:
 class QImageSource : public IconItemSource
 {
 public:
-    explicit QImageSource(const QImage &imageIcon, IconItem *iconItem) : IconItemSource(iconItem)
+    explicit QImageSource(const QImage &imageIcon, IconItem *iconItem)
+        : IconItemSource(iconItem)
     {
         m_imageIcon = imageIcon;
     }
@@ -130,7 +140,8 @@ private:
 class SvgSource : public IconItemSource
 {
 public:
-    explicit SvgSource(const QString &sourceString, IconItem* iconItem) : IconItemSource(iconItem)
+    explicit SvgSource(const QString &sourceString, IconItem *iconItem)
+        : IconItemSource(iconItem)
     {
         m_svgIcon = new Plasma::Svg(iconItem);
         m_svgIcon->setColorGroup(iconItem->colorGroup());
@@ -149,17 +160,17 @@ public:
         });
 
         if (iconItem->usesPlasmaTheme()) {
-            //try as a svg icon from plasma theme
+            // try as a svg icon from plasma theme
             m_svgIcon->setImagePath(QLatin1String("icons/") + sourceString.section(QLatin1Char('-'), 0, 0));
             m_svgIcon->setContainsMultipleImages(true);
         }
 
-        //success?
+        // success?
         if (iconItem->usesPlasmaTheme() && m_svgIcon->isValid() && m_svgIcon->hasElement(sourceString)) {
             m_svgIconName = sourceString;
-            //ok, svg not available from the plasma theme
+            // ok, svg not available from the plasma theme
         } else {
-            //try to load from iconloader an svg with Plasma::Svg
+            // try to load from iconloader an svg with Plasma::Svg
             const auto *iconTheme = KIconLoader::global()->theme();
             QString iconPath;
             if (iconTheme) {
@@ -175,13 +186,14 @@ public:
                 m_svgIcon->setImagePath(iconPath);
                 m_svgIconName = sourceString;
             } else {
-                //fail, cleanup
+                // fail, cleanup
                 delete m_svgIcon;
             }
         }
     }
 
-    ~SvgSource() {
+    ~SvgSource()
+    {
         if (m_svgIcon) {
             QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
         }
@@ -196,13 +208,13 @@ public:
     {
         QSize s;
         if (m_svgIcon) { // FIXME: Check Svg::isValid()? Considered expensive by apidox.
-            //resize() resets the icon to its implicit size, specified
+            // resize() resets the icon to its implicit size, specified
             m_svgIcon->resize();
 
-            //plasma theme icon, where one file contains multiple images
+            // plasma theme icon, where one file contains multiple images
             if (m_svgIcon->hasElement(m_svgIconName)) {
                 s = m_svgIcon->elementSize(m_svgIconName);
-            //normal icon: one image per file, page size is icon size
+                // normal icon: one image per file, page size is icon size
             } else {
                 s = m_svgIcon->size();
             }
@@ -248,35 +260,32 @@ private:
 };
 
 IconItem::IconItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_iconItemSource(new NullSource(this)),
-      m_status(Plasma::Svg::Normal),
-      m_active(false),
-      m_animated(true),
-      m_usesPlasmaTheme(true),
-      m_roundToIconSize(true),
-      m_textureChanged(false),
-      m_sizeChanged(false),
-      m_allowNextAnimation(false),
-      m_blockNextAnimation(false),
-      m_implicitHeightSetByUser(false),
-      m_implicitWidthSetByUser(false),
-      m_colorGroup(Plasma::Theme::NormalColorGroup),
-      m_animValue(0)
+    : QQuickItem(parent)
+    , m_iconItemSource(new NullSource(this))
+    , m_status(Plasma::Svg::Normal)
+    , m_active(false)
+    , m_animated(true)
+    , m_usesPlasmaTheme(true)
+    , m_roundToIconSize(true)
+    , m_textureChanged(false)
+    , m_sizeChanged(false)
+    , m_allowNextAnimation(false)
+    , m_blockNextAnimation(false)
+    , m_implicitHeightSetByUser(false)
+    , m_implicitWidthSetByUser(false)
+    , m_colorGroup(Plasma::Theme::NormalColorGroup)
+    , m_animValue(0)
 {
     m_animation = new QPropertyAnimation(this);
-    connect(m_animation, &QPropertyAnimation::valueChanged,
-            this, &IconItem::valueChanged);
-    connect(m_animation, &QPropertyAnimation::finished,
-            this, &IconItem::animationFinished);
+    connect(m_animation, &QPropertyAnimation::valueChanged, this, &IconItem::valueChanged);
+    connect(m_animation, &QPropertyAnimation::finished, this, &IconItem::animationFinished);
     m_animation->setTargetObject(this);
     m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-    m_animation->setDuration(250); //FIXME from theme
+    m_animation->setDuration(250); // FIXME from theme
 
     setFlag(ItemHasContents, true);
 
-    connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged,
-            this, &IconItem::updateImplicitSize);
+    connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &IconItem::updateImplicitSize);
 
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
@@ -346,9 +355,7 @@ void IconItem::setSource(const QVariant &source)
         }
 
         if (!localFile.isEmpty()) {
-            if (sourceString.endsWith(QLatin1String(".svg")) ||
-                sourceString.endsWith(QLatin1String(".svgz")) ||
-                sourceString.endsWith(QLatin1String(".ico"))) {
+            if (sourceString.endsWith(QLatin1String(".svg")) || sourceString.endsWith(QLatin1String(".svgz")) || sourceString.endsWith(QLatin1String(".ico"))) {
                 QIcon icon = QIcon(localFile);
                 m_iconItemSource.reset(new QIconSource(icon, this));
             } else {
@@ -359,14 +366,14 @@ void IconItem::setSource(const QVariant &source)
             m_iconItemSource.reset(new SvgSource(sourceString, this));
 
             if (!m_iconItemSource->isValid()) {
-                //if we started with a QIcon use that.
+                // if we started with a QIcon use that.
                 QIcon icon = source.value<QIcon>();
                 if (icon.isNull()) {
                     icon = QIcon::fromTheme(sourceString);
                 }
                 m_iconItemSource.reset(new QIconSource(icon, this));
 
-                //since QIcon is rendered by KIconLoader, watch for when its configuration changes now and reload as needed.
+                // since QIcon is rendered by KIconLoader, watch for when its configuration changes now and reload as needed.
                 connect(KIconLoader::global(), &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
             }
         }
@@ -412,7 +419,6 @@ Plasma::Theme::ColorGroup IconItem::colorGroup() const
     return m_colorGroup;
 }
 
-
 void IconItem::setOverlays(const QStringList &overlays)
 {
     if (overlays == m_overlays) {
@@ -427,7 +433,6 @@ QStringList IconItem::overlays() const
 {
     return m_overlays;
 }
-
 
 bool IconItem::isActive() const
 {
@@ -588,7 +593,7 @@ void IconItem::updatePolish()
     loadPixmap();
 }
 
-QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
+QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData)
 
@@ -598,7 +603,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
     }
 
     if (m_animation->state() == QAbstractAnimation::Running) {
-        FadingNode *animatingNode = dynamic_cast<FadingNode*>(oldNode);
+        FadingNode *animatingNode = dynamic_cast<FadingNode *>(oldNode);
 
         if (!animatingNode || m_textureChanged) {
             delete oldNode;
@@ -623,7 +628,7 @@ QSGNode* IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
 
         return animatingNode;
     } else {
-        ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode*>(oldNode);
+        ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode *>(oldNode);
 
         if (!textureNode || m_textureChanged) {
             delete oldNode;
@@ -692,7 +697,7 @@ void IconItem::loadPixmap()
         size = Units::roundToIconSize(size);
     }
 
-    //final pixmap to paint
+    // final pixmap to paint
     QPixmap result;
     if (size <= 0) {
         m_iconPixmap = QPixmap();
@@ -739,7 +744,7 @@ void IconItem::loadPixmap()
         Q_EMIT paintedSizeChanged();
     }
 
-    //don't animate initial setting
+    // don't animate initial setting
     bool animated = (m_animated || m_allowNextAnimation) && !m_oldIconPixmap.isNull() && !m_sizeChanged && !m_blockNextAnimation;
 
     if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
@@ -775,14 +780,12 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
             connect(m_window.data(), &QWindow::visibleChanged, this, &IconItem::windowVisibleChanged);
         }
         schedulePixmapUpdate();
-
     }
 
     QQuickItem::itemChange(change, value);
 }
 
-void IconItem::geometryChanged(const QRectF &newGeometry,
-                               const QRectF &oldGeometry)
+void IconItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     if (newGeometry.size() != oldGeometry.size()) {
         m_sizeChanged = true;

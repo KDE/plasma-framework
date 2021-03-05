@@ -22,7 +22,6 @@ class QPainter;
 
 namespace Plasma
 {
-
 class AppletScriptPrivate;
 class Extender;
 
@@ -154,12 +153,11 @@ private:
     AppletScriptPrivate *const d;
 };
 
-#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
+#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
-#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON(libname, classname, jsonFile)                                                                             \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
-} //Plasma namespace
+} // Plasma namespace
 
 #endif

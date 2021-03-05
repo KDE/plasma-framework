@@ -8,8 +8,8 @@
 #ifndef CONFIGMODEL_H
 #define CONFIGMODEL_H
 
-#include <QQmlListProperty>
 #include <QAbstractListModel>
+#include <QQmlListProperty>
 
 #include <plasmaquick/plasmaquick_export.h>
 
@@ -31,7 +31,6 @@ class Applet;
 
 namespace PlasmaQuick
 {
-
 class ConfigPropertyMap;
 
 class ConfigCategoryPrivate;
@@ -67,11 +66,9 @@ public:
      * add a new category in the model
      * @param ConfigCategory the new category
      **/
-    void appendCategory(const QString &iconName, const QString &name,
-                        const QString &path, const QString &pluginName);
+    void appendCategory(const QString &iconName, const QString &name, const QString &path, const QString &pluginName);
 
-    Q_INVOKABLE void appendCategory(const QString &iconName, const QString &name,
-                        const QString &path, const QString &pluginName, bool visible);
+    Q_INVOKABLE void appendCategory(const QString &iconName, const QString &name, const QString &path, const QString &pluginName, bool visible);
     // QML Engine isn't particularly smart resolving namespaces, hence fully qualified signature
     Q_INVOKABLE void appendCategory(PlasmaQuick::ConfigCategory *category);
 

@@ -6,11 +6,8 @@
 
 #include "quicktheme.h"
 
-
-
 namespace Plasma
 {
-
 QuickTheme::QuickTheme(QObject *parent)
     : Theme(parent)
 {
@@ -190,7 +187,6 @@ QColor QuickTheme::complementaryNegativeTextColor() const
 {
     return Plasma::Theme::color(Plasma::Theme::TextColor, Plasma::Theme::ComplementaryColorGroup);
 }
-
 
 QColor QuickTheme::headerTextColor() const
 {

@@ -54,4 +54,3 @@ private:
 
     QQuickView *m_view;
 };
-

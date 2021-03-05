@@ -9,29 +9,23 @@
 
 #include "utils/d_ptr_implementation.h"
 
-#include <QDebug>
 #include <QCoreApplication>
+#include <QDebug>
 
 Application::Private::Private(Application *parent)
     : running(false)
     , q(parent)
 {
-    connect(
-        &process, &QProcess::stateChanged,
-        this,     &Private::stateChanged
-    );
-    connect(
-        &process, SIGNAL(error(QProcess::ProcessError)),
-        this,     SLOT(errorFound(QProcess::ProcessError))
-    );
+    connect(&process, &QProcess::stateChanged, this, &Private::stateChanged);
+    connect(&process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(errorFound(QProcess::ProcessError)));
     process.setProcessChannelMode(QProcess::MergedChannels);
 }
 
 void Application::Private::stateChanged(QProcess::ProcessState newState)
 {
     Q_UNUSED(newState)
-    //running = (newState != QProcess::NotRunning);
-    //q->runningChanged(running);
+    // running = (newState != QProcess::NotRunning);
+    // q->runningChanged(running);
 }
 
 void Application::Private::errorFound(QProcess::ProcessError err)
@@ -41,7 +35,8 @@ void Application::Private::errorFound(QProcess::ProcessError err)
 }
 
 Application::Application(QObject *parent)
-    : QObject(parent), d(this)
+    : QObject(parent)
+    , d(this)
 {
 }
 
@@ -107,4 +102,3 @@ void Application::terminate()
 {
     d->process.terminate();
 }
-

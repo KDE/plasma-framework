@@ -9,11 +9,11 @@
 #define ICONITEM_H
 
 #include <QIcon>
-#include <QQuickItem>
 #include <QPixmap>
 #include <QPointer>
-#include <QVariant>
+#include <QQuickItem>
 #include <QTimer>
+#include <QVariant>
 
 #include <plasma/svg.h>
 
@@ -51,8 +51,8 @@ class IconItem : public QQuickItem
     Q_PROPERTY(Plasma::Theme::ColorGroup colorGroup READ colorGroup WRITE setColorGroup NOTIFY colorGroupChanged)
 
     /**
-      * Specifies the overlay(s) for this icon
-      */
+     * Specifies the overlay(s) for this icon
+     */
     Q_PROPERTY(QStringList overlays READ overlays WRITE setOverlays NOTIFY overlaysChanged)
 
     /**
@@ -145,11 +145,10 @@ public:
     void setImplicitWidth2(int height);
 
     void updatePolish() override;
-    QSGNode* updatePaintNode(QSGNode * oldNode, UpdatePaintNodeData * updatePaintNodeData) override;
+    QSGNode *updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData) override;
 
     void itemChange(ItemChange change, const ItemChangeData &value) override;
-    void geometryChanged(const QRectF &newGeometry,
-                         const QRectF &oldGeometry) override;
+    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
     void componentComplete() override;
 
@@ -180,9 +179,9 @@ private:
     QSize paintedSize(const QSizeF &containerSize = QSizeF()) const;
     void updateImplicitSize();
 
-    //all the ways we can set an source. Only one of them will be valid
+    // all the ways we can set an source. Only one of them will be valid
     QScopedPointer<IconItemSource> m_iconItemSource;
-    //this contains the raw variant it was passed
+    // this contains the raw variant it was passed
     QVariant m_source;
     Plasma::Svg::Status m_status;
 
@@ -205,7 +204,7 @@ private:
 
     Plasma::Theme::ColorGroup m_colorGroup;
 
-    //animation on pixmap change
+    // animation on pixmap change
     QPropertyAnimation *m_animation;
     qreal m_animValue;
 

@@ -9,53 +9,49 @@
 #include "private/svg_p.h"
 #include "private/theme_p.h"
 
-#include <cmath>
 #include <array>
+#include <cmath>
 
+#include <QBuffer>
 #include <QCoreApplication>
 #include <QDir>
 #include <QMatrix>
 #include <QPainter>
+#include <QRegularExpression>
 #include <QStringBuilder>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <QBuffer>
-#include <QRegularExpression>
 
 #include <KColorScheme>
 #include <KConfigGroup>
-#include <QDebug>
 #include <KFilterDev>
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIconTheme>
+#include <QDebug>
 
 #include "applet.h"
+#include "debug_p.h"
 #include "package.h"
 #include "theme.h"
-#include "debug_p.h"
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
 {
-    std::array<uint, 10> parts = {
-        ::qHash(id.width),
-        ::qHash(id.height),
-        ::qHash(id.elementName),
-        ::qHash(id.filePath),
-        ::qHash(id.status),
-        ::qHash(id.devicePixelRatio),
-        ::qHash(id.scaleFactor),
-        ::qHash(id.colorGroup),
-        ::qHash(id.extraFlags),
-        ::qHash(id.lastModified)
-    };
+    std::array<uint, 10> parts = {::qHash(id.width),
+                                  ::qHash(id.height),
+                                  ::qHash(id.elementName),
+                                  ::qHash(id.filePath),
+                                  ::qHash(id.status),
+                                  ::qHash(id.devicePixelRatio),
+                                  ::qHash(id.scaleFactor),
+                                  ::qHash(id.colorGroup),
+                                  ::qHash(id.extraFlags),
+                                  ::qHash(id.lastModified)};
     return qHashRange(parts.begin(), parts.end(), seed);
 }
 
-
 namespace Plasma
 {
-
 class SvgRectsCacheSingleton
 {
 public:
@@ -71,11 +67,7 @@ SharedSvgRenderer::SharedSvgRenderer(QObject *parent)
 {
 }
 
-SharedSvgRenderer::SharedSvgRenderer(
-    const QString &filename,
-    const QString &styleSheet,
-    QHash<QString, QRectF> &interestingElements,
-    QObject *parent)
+SharedSvgRenderer::SharedSvgRenderer(const QString &filename, const QString &styleSheet, QHash<QString, QRectF> &interestingElements, QObject *parent)
     : QSvgRenderer(parent)
 {
     KCompressionDevice file(filename, KCompressionDevice::GZip);
@@ -85,20 +77,13 @@ SharedSvgRenderer::SharedSvgRenderer(
     load(file.readAll(), styleSheet, interestingElements);
 }
 
-SharedSvgRenderer::SharedSvgRenderer(
-    const QByteArray &contents,
-    const QString &styleSheet,
-    QHash<QString, QRectF> &interestingElements,
-    QObject *parent)
+SharedSvgRenderer::SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements, QObject *parent)
     : QSvgRenderer(parent)
 {
     load(contents, styleSheet, interestingElements);
 }
 
-bool SharedSvgRenderer::load(
-    const QByteArray &contents,
-    const QString &styleSheet,
-    QHash<QString, QRectF> &interestingElements)
+bool SharedSvgRenderer::load(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements)
 {
     // Apply the style sheet.
     if (!styleSheet.isEmpty() && contents.contains("current-color-scheme")) {
@@ -110,9 +95,8 @@ bool SharedSvgRenderer::load(
         buffer.open(QIODevice::WriteOnly);
         QXmlStreamWriter writer(&buffer);
         while (!reader.atEnd()) {
-            if (reader.readNext() == QXmlStreamReader::StartElement &&
-                reader.qualifiedName() == QLatin1String("style") &&
-                reader.attributes().value(QLatin1String("id")) == QLatin1String("current-color-scheme")) {
+            if (reader.readNext() == QXmlStreamReader::StartElement && reader.qualifiedName() == QLatin1String("style")
+                && reader.attributes().value(QLatin1String("id")) == QLatin1String("current-color-scheme")) {
                 writer.writeStartElement(QLatin1String("style"));
                 writer.writeAttributes(reader.attributes());
                 writer.writeCharacters(styleSheet);
@@ -154,16 +138,16 @@ bool SharedSvgRenderer::load(
 SvgRectsCache::SvgRectsCache(QObject *parent)
     : QObject(parent)
 {
-    const QString svgElementsFile = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + QStringLiteral("plasma-svgelements");
+    const QString svgElementsFile =
+        QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + QStringLiteral("plasma-svgelements");
     m_svgElementsCache = KSharedConfig::openConfig(svgElementsFile, KConfig::SimpleConfig);
 
     m_configSyncTimer = new QTimer(this);
     m_configSyncTimer->setSingleShot(true);
     m_configSyncTimer->setInterval(5000);
-    connect(m_configSyncTimer, &QTimer::timeout,
-            this, [this]() {
-                m_svgElementsCache->sync();
-            });
+    connect(m_configSyncTimer, &QTimer::timeout, this, [this]() {
+        m_svgElementsCache->sync();
+    });
 }
 
 SvgRectsCache *SvgRectsCache::instance()
@@ -279,8 +263,8 @@ QList<QSize> SvgRectsCache::sizeHintsForId(const QString &path, const QString &i
 
 void SvgRectsCache::insertSizeHintForId(const QString &path, const QString &id, const QSize &size)
 {
-    //TODO: need to make this more efficient
-    auto sizeListToString = [] (const QList<QSize> &list) {
+    // TODO: need to make this more efficient
+    auto sizeListToString = [](const QList<QSize> &list) {
         QString ret;
         for (const auto &s : list) {
             ret += QString::number(s.width()) % QLatin1Char('x') % QString::number(s.height()) % QLatin1Char(',');
@@ -352,7 +336,11 @@ QStringList SvgRectsCache::cachedKeysForPath(const QString &path) const
     QStringList list = imageGroup.keyList();
     QStringList filtered;
 
-    std::copy_if (list.begin(), list.end(), std::back_inserter(filtered), [](const QString element){bool ok; element.toLong(&ok); return ok;} );
+    std::copy_if(list.begin(), list.end(), std::back_inserter(filtered), [](const QString element) {
+        bool ok;
+        element.toLong(&ok);
+        return ok;
+    });
     return filtered;
 }
 
@@ -364,22 +352,22 @@ void SvgRectsCache::updateLastModified(const QString &filePath, unsigned int las
 }
 
 SvgPrivate::SvgPrivate(Svg *svg)
-    : q(svg),
-      renderer(nullptr),
-      styleCrc(0),
-      colorGroup(Plasma::Theme::NormalColorGroup),
-      lastModified(0),
-      devicePixelRatio(1.0),
-      scaleFactor(s_lastScaleFactor),
-      status(Svg::Status::Normal),
-      multipleImages(false),
-      themed(false),
-      useSystemColors(false),
-      fromCurrentTheme(false),
-      applyColors(false),
-      usesColors(false),
-      cacheRendering(true),
-      themeFailed(false)
+    : q(svg)
+    , renderer(nullptr)
+    , styleCrc(0)
+    , colorGroup(Plasma::Theme::NormalColorGroup)
+    , lastModified(0)
+    , devicePixelRatio(1.0)
+    , scaleFactor(s_lastScaleFactor)
+    , status(Svg::Status::Normal)
+    , multipleImages(false)
+    , themed(false)
+    , useSystemColors(false)
+    , fromCurrentTheme(false)
+    , applyColors(false)
+    , usesColors(false)
+    , cacheRendering(true)
+    , themeFailed(false)
 {
 }
 
@@ -388,14 +376,14 @@ SvgPrivate::~SvgPrivate()
     eraseRenderer();
 }
 
-//This function is meant for the rects cache
+// This function is meant for the rects cache
 SvgPrivate::CacheId SvgPrivate::cacheId(const QString &elementId) const
 {
     auto idSize = size.isValid() && size != naturalSize ? size : QSizeF{-1.0, -1.0};
     return CacheId{idSize.width(), idSize.height(), path, elementId, status, devicePixelRatio, scaleFactor, -1, 0, lastModified};
 }
 
-//This function is meant for the pixmap cache
+// This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &id, const QSize &size) const
 {
     auto cacheId = CacheId{double(size.width()), double(size.height()), path, id, status, devicePixelRatio, scaleFactor, colorGroup, 0, lastModified};
@@ -406,22 +394,20 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 {
     QString actualPath = imagePath;
     if (imagePath.startsWith(QLatin1String("file://"))) {
-        //length of file://
+        // length of file://
         actualPath.remove(0, 7);
     }
 
     bool isThemed = !actualPath.isEmpty() && !QDir::isAbsolutePath(actualPath);
     bool inIconTheme = false;
 
-    //an absolute path.. let's try if this actually an *icon* theme
+    // an absolute path.. let's try if this actually an *icon* theme
     if (!isThemed && !actualPath.isEmpty()) {
         const auto *iconTheme = KIconLoader::global()->theme();
         isThemed = inIconTheme = iconTheme && actualPath.startsWith(iconTheme->dir());
     }
     // lets check to see if we're already set to this file
-    if (isThemed == themed &&
-            ((themed && themePath == actualPath) ||
-             (!themed && path == actualPath))) {
+    if (isThemed == themed && ((themed && themePath == actualPath) || (!themed && path == actualPath))) {
         return false;
     }
 
@@ -429,7 +415,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // if we don't have any path right now and are going to set one,
     // then lets not schedule a repaint because we are just initializing!
-    bool updateNeeded = true; //!path.isEmpty() || !themePath.isEmpty();
+    bool updateNeeded = true; //! path.isEmpty() || !themePath.isEmpty();
 
     QObject::disconnect(actualTheme(), SIGNAL(themeChanged()), q, SLOT(themeChanged()));
     if (isThemed && !themed && s_systemColorsCache) {
@@ -511,7 +497,7 @@ Theme *SvgPrivate::cacheAndColorsTheme()
     } else {
         // use a separate cache source for unthemed svg's
         if (!s_systemColorsCache) {
-            //FIXME: reference count this, so that it is deleted when no longer in use
+            // FIXME: reference count this, so that it is deleted when no longer in use
             s_systemColorsCache = new Plasma::Theme(QStringLiteral("internal-system-colors"));
         }
 
@@ -533,17 +519,14 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
             QSizeF bestFit(-1, -1);
 
             for (const auto &hint : elementSizeHints) {
-
-                if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio &&
-                        (!bestFit.isValid() ||
-                         (bestFit.width() * bestFit.height()) > (hint.width() * hint.height()))) {
+                if (hint.width() >= s.width() * ratio && hint.height() >= s.height() * ratio
+                    && (!bestFit.isValid() || (bestFit.width() * bestFit.height()) > (hint.width() * hint.height()))) {
                     bestFit = hint;
                 }
             }
 
             if (bestFit.isValid()) {
-                actualElementId = QString::number(bestFit.width()) % QLatin1Char('-') %
-                                  QString::number(bestFit.height()) % QLatin1Char('-') % elementId;
+                actualElementId = QString::number(bestFit.width()) % QLatin1Char('-') % QString::number(bestFit.height()) % QLatin1Char('-') % elementId;
             }
         }
     }
@@ -567,7 +550,7 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
     QPixmap p;
     if (cacheRendering && cacheAndColorsTheme()->findInCache(id, p, lastModified)) {
         p.setDevicePixelRatio(ratio);
-        //qCDebug(LOG_PLASMA) << "found cached version of " << id << p.size();
+        // qCDebug(LOG_PLASMA) << "found cached version of " << id << p.size();
         return p;
     }
 
@@ -575,8 +558,8 @@ QPixmap SvgPrivate::findInCache(const QString &elementId, qreal ratio, const QSi
 
     QRectF finalRect = makeUniform(renderer->boundsOnElement(actualElementId), QRect(QPoint(0, 0), size));
 
-    //don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
-    //makeUniform should never change the size so much that it gains or loses a whole pixel
+    // don't alter the pixmap size or it won't match up properly to, e.g., FrameSvg elements
+    // makeUniform should never change the size so much that it gains or loses a whole pixel
     p = QPixmap(size);
 
     p.fill(Qt::transparent);
@@ -615,9 +598,9 @@ void SvgPrivate::createRenderer()
 
     if (themed && path.isEmpty() && !themeFailed) {
         Applet *applet = qobject_cast<Applet *>(q->parent());
-        //FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
-        //C++; however, I'm not sure this has any real world runtime impact. something to measure
-        //for.
+        // FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
+        // C++; however, I'm not sure this has any real world runtime impact. something to measure
+        // for.
         if (applet && applet->kPackage().isValid()) {
             const KPackage::Package package = applet->kPackage();
             path = package.filePath("images", themePath + QLatin1String(".svg"));
@@ -679,8 +662,7 @@ void SvgPrivate::createRenderer()
 
 void SvgPrivate::eraseRenderer()
 {
-    if (renderer &&
-        renderer->ref.loadRelaxed() == 2) {
+    if (renderer && renderer->ref.loadRelaxed() == 2) {
         // this and the cache reference it
         s_renderers.erase(s_renderers.find(styleCrc + path));
     }
@@ -711,7 +693,7 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
     QRectF rect;
     const CacheId cacheId = SvgPrivate::cacheId(elementId);
     bool found = SvgRectsCache::instance()->findElementRect(cacheId, rect);
-    //This is a corner case where we are *sure* the element is not valid
+    // This is a corner case where we are *sure* the element is not valid
     if (!found) {
         rect = findAndCacheElementRect(elementId);
     }
@@ -721,26 +703,27 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
 
 QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
 {
-    //we need to check the id before createRenderer(), otherwise it may generate a different id compared to the previous cacheId)( call
+    // we need to check the id before createRenderer(), otherwise it may generate a different id compared to the previous cacheId)( call
     const CacheId cacheId = SvgPrivate::cacheId(elementId);
 
     createRenderer();
 
-    //This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
+    // This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
     QRectF elementRect = renderer->elementExists(elementId) ?
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                         renderer->transformForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
+                                                            renderer->transformForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect()
+                                                            :
 #else
-                         renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() :
+                                                            renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect()
+                                                            :
 #endif
-                         QRectF();
+                                                            QRectF();
     naturalSize = renderer->defaultSize() * scaleFactor;
 
     qreal dx = size.width() / renderer->defaultSize().width();
     qreal dy = size.height() / renderer->defaultSize().height();
 
-    elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy,
-                         elementRect.width() * dx, elementRect.height() * dy);
+    elementRect = QRectF(elementRect.x() * dx, elementRect.y() * dy, elementRect.width() * dx, elementRect.height() * dy);
     SvgRectsCache::instance()->insert(cacheId, elementRect, lastModified);
 
     return elementRect;
@@ -775,8 +758,8 @@ bool Svg::eventFilter(QObject *watched, QEvent *event)
     return QObject::eventFilter(watched, event);
 }
 
-//Following two are utility functions to snap rendered elements to the pixel grid
-//to and from are always 0 <= val <= 1
+// Following two are utility functions to snap rendered elements to the pixel grid
+// to and from are always 0 <= val <= 1
 qreal SvgPrivate::closestDistance(qreal to, qreal from)
 {
     qreal a = to - from;
@@ -784,7 +767,7 @@ qreal SvgPrivate::closestDistance(qreal to, qreal from)
         return 0;
     } else if (to > from) {
         qreal b = to - from - 1;
-        return (qAbs(a) > qAbs(b)) ?  b : a;
+        return (qAbs(a) > qAbs(b)) ? b : a;
     } else {
         qreal b = 1 + to - from;
         return (qAbs(a) > qAbs(b)) ? b : a;
@@ -804,7 +787,7 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
     qreal div_x = dst.x() / orig.x();
     qreal div_y = dst.y() / orig.y();
 
-    //horizontal snap
+    // horizontal snap
     if (!qFuzzyIsNull(div_x) && !qFuzzyCompare(div_w, div_x)) {
         qreal rem_orig = orig.x() - (floor(orig.x()));
         qreal rem_dst = dst.x() - (floor(dst.x()));
@@ -812,7 +795,7 @@ QRectF SvgPrivate::makeUniform(const QRectF &orig, const QRectF &dst)
         res.translate(offset + offset * div_w, 0);
         res.setWidth(res.width() + offset);
     }
-    //vertical snap
+    // vertical snap
     if (!qFuzzyIsNull(div_y) && !qFuzzyCompare(div_h, div_y)) {
         qreal rem_orig = orig.y() - (floor(orig.y()));
         qreal rem_dst = dst.y() - (floor(dst.y()));
@@ -841,7 +824,7 @@ void SvgPrivate::themeChanged()
     setImagePath(currentPath);
     q->resize();
 
-    //qCDebug(LOG_PLASMA) << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
+    // qCDebug(LOG_PLASMA) << themePath << ">>>>>>>>>>>>>>>>>> theme changed";
     Q_EMIT q->repaintNeeded();
 }
 
@@ -862,8 +845,8 @@ QPointer<Theme> SvgPrivate::s_systemColorsCache;
 qreal SvgPrivate::s_lastScaleFactor = 1.0;
 
 Svg::Svg(QObject *parent)
-    : QObject(parent),
-      d(new SvgPrivate(this))
+    : QObject(parent)
+    , d(new SvgPrivate(this))
 {
 }
 
@@ -874,8 +857,8 @@ Svg::~Svg()
 
 void Svg::setDevicePixelRatio(qreal ratio)
 {
-    //be completely integer for now
-    //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+    // be completely integer for now
+    // devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     if (floor(d->devicePixelRatio) == floor(ratio)) {
         return;
@@ -895,11 +878,10 @@ qreal Svg::devicePixelRatio()
     return d->devicePixelRatio;
 }
 
-
 void Svg::setScaleFactor(qreal ratio)
 {
-    //be completely integer for now
-    //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+    // be completely integer for now
+    // devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
     if (floor(d->scaleFactor) == floor(ratio)) {
         return;
@@ -907,7 +889,7 @@ void Svg::setScaleFactor(qreal ratio)
 
     d->scaleFactor = floor(ratio);
     d->s_lastScaleFactor = d->scaleFactor;
-    //not resize() because we want to do it unconditionally
+    // not resize() because we want to do it unconditionally
     QRectF rect;
 
     d->naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
@@ -963,8 +945,7 @@ void Svg::paint(QPainter *painter, const QPointF &point, const QString &elementI
 {
     Q_ASSERT(painter->device());
     const int ratio = painter->device()->devicePixelRatio();
-    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, ratio, size()) :
-                d->findInCache(elementID, ratio));
+    QPixmap pix((elementID.isNull() || d->multipleImages) ? d->findInCache(elementID, ratio, size()) : d->findInCache(elementID, ratio));
 
     if (pix.isNull()) {
         return;
@@ -1011,8 +992,7 @@ void Svg::resize(qreal width, qreal height)
 
 void Svg::resize(const QSizeF &size)
 {
-    if (qFuzzyCompare(size.width(), d->size.width()) &&
-            qFuzzyCompare(size.height(), d->size.height())) {
+    if (qFuzzyCompare(size.width(), d->size.width()) && qFuzzyCompare(size.height(), d->size.height())) {
         return;
     }
 
@@ -1022,8 +1002,7 @@ void Svg::resize(const QSizeF &size)
 
 void Svg::resize()
 {
-    if (qFuzzyCompare(d->naturalSize.width(), d->size.width()) &&
-            qFuzzyCompare(d->naturalSize.height(), d->size.height())) {
+    if (qFuzzyCompare(d->naturalSize.width(), d->size.width()) && qFuzzyCompare(d->naturalSize.height(), d->size.height())) {
         return;
     }
 
@@ -1056,7 +1035,7 @@ bool Svg::isValid() const
         return false;
     }
 
-    //try very hard to avoid creation of a parser
+    // try very hard to avoid creation of a parser
     QRectF rect;
     QSizeF naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
     if (!naturalSize.isEmpty()) {
@@ -1161,5 +1140,5 @@ Svg::Status Svg::status() const
 
 } // Plasma namespace
 
-#include "private/moc_svg_p.cpp"
 #include "moc_svg.cpp"
+#include "private/moc_svg_p.cpp"

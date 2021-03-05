@@ -14,15 +14,14 @@
 #include <KPluginInfo>
 #include <KService>
 
-#include <plasma/version.h>
 #include <plasma/plasma.h>
 #include <plasma/service.h>
+#include <plasma/version.h>
 
 class QAbstractItemModel;
 
 namespace Plasma
 {
-
 class DataContainer;
 class DataEngineScript;
 class Package;
@@ -136,10 +135,10 @@ public:
      *                        If the data has not changed, no update will be sent.
      * @param intervalAlignment the number of ms to align the interval to
      **/
-    Q_INVOKABLE void connectSource(
-        const QString &source, QObject *visualization,
-        uint pollingInterval = 0,
-        Plasma::Types::IntervalAlignment intervalAlignment = Types::NoAlignment) const;
+    Q_INVOKABLE void connectSource(const QString &source,
+                                   QObject *visualization,
+                                   uint pollingInterval = 0,
+                                   Plasma::Types::IntervalAlignment intervalAlignment = Types::NoAlignment) const;
 
     /**
      * Connects all currently existing sources to an object for data updates.
@@ -169,9 +168,8 @@ public:
      *                        If the data has not changed, no update will be sent.
      * @param intervalAlignment the number of ms to align the interval to
      **/
-    Q_INVOKABLE void connectAllSources(QObject *visualization, uint pollingInterval = 0,
-                                       Plasma::Types::IntervalAlignment intervalAlignment =
-                                           Types::NoAlignment) const;
+    Q_INVOKABLE void
+    connectAllSources(QObject *visualization, uint pollingInterval = 0, Plasma::Types::IntervalAlignment intervalAlignment = Types::NoAlignment) const;
 
     /**
      * Disconnects a source from an object that was receiving data updates.
@@ -455,12 +453,12 @@ private:
 /**
  * Register a data engine when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_DATAENGINE(libname, classname)                                                                                                         \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)                                                                                                    \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#define K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(libname, classname, jsonFile)                                                                                     \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // multiple inclusion guard

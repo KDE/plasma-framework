@@ -23,7 +23,7 @@ Calendar::Calendar(QObject *parent)
     m_daysModel->setSourceData(&m_dayList);
 
     //  m_dayHelper = new CalendarDayHelper(this);
-//   connect(m_dayHelper, SIGNAL(calendarChanged()), this, SLOT(updateData()));
+    //   connect(m_dayHelper, SIGNAL(calendarChanged()), this, SLOT(updateData()));
 }
 
 QDateTime Calendar::displayedDate() const
@@ -100,8 +100,8 @@ void Calendar::setTypes(int types)
         return;
     }
 
-//    m_types = static_cast<Types>(types);
-//    updateTypes();
+    //    m_types = static_cast<Types>(types);
+    //    updateTypes();
 
     Q_EMIT typesChanged();
 }
@@ -239,7 +239,7 @@ void Calendar::updateData()
 
     if (daysBeforeCurrentMonth > 0) {
         QDate previousMonth = m_displayedDate.addMonths(-1);
-        //QDate previousMonth(m_displayedDate.year(), m_displayedDate.month() - 1, 1);
+        // QDate previousMonth(m_displayedDate.year(), m_displayedDate.month() - 1, 1);
         for (int i = 0; i < daysBeforeCurrentMonth; i++) {
             DayData day;
             day.isCurrent = false;
@@ -259,7 +259,6 @@ void Calendar::updateData()
         day.monthNumber = m_displayedDate.month();
         day.yearNumber = m_displayedDate.year();
         m_dayList << day;
-
     }
 
     if (daysAfterCurrentMonth > 0) {
@@ -295,16 +294,16 @@ void Calendar::updateData()
     Q_EMIT weeksModelChanged();
     m_daysModel->update();
 
-//    qDebug() << "---------------------------------------------------------------";
-//    qDebug() << "Date obj: " << m_displayedDate;
-//    qDebug() << "Month: " << m_displayedDate.month();
-//    qDebug() << "m_days: " << m_days;
-//    qDebug() << "m_weeks: " << m_weeks;
-//    qDebug() << "Days before this month: " << daysBeforeCurrentMonth;
-//    qDebug() << "Days after this month: " << daysAfterCurrentMonth;
-//    qDebug() << "Days in current month: " << m_displayedDate.daysInMonth();
-//    qDebug() << "m_dayList size: " << m_dayList.count();
-//    qDebug() << "---------------------------------------------------------------";
+    //    qDebug() << "---------------------------------------------------------------";
+    //    qDebug() << "Date obj: " << m_displayedDate;
+    //    qDebug() << "Month: " << m_displayedDate.month();
+    //    qDebug() << "m_days: " << m_days;
+    //    qDebug() << "m_weeks: " << m_weeks;
+    //    qDebug() << "Days before this month: " << daysBeforeCurrentMonth;
+    //    qDebug() << "Days after this month: " << daysAfterCurrentMonth;
+    //    qDebug() << "Days in current month: " << m_displayedDate.daysInMonth();
+    //    qDebug() << "m_dayList size: " << m_dayList.count();
+    //    qDebug() << "---------------------------------------------------------------";
 }
 
 void Calendar::nextDecade()

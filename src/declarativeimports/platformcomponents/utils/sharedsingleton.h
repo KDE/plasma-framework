@@ -11,8 +11,7 @@
 
 namespace utils
 {
-
-template <typename Target>
+template<typename Target>
 class SharedSingleton
 {
 public:
@@ -39,10 +38,9 @@ private:
     static std::weak_ptr<Target> s_instance;
 };
 
-template <typename Target>
+template<typename Target>
 std::weak_ptr<Target> SharedSingleton<Target>::s_instance;
 
 } // namespace utils
 
 #endif /* SHARED_SINGLETON_P_H */
-

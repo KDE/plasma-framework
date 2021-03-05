@@ -19,7 +19,7 @@ class QQuickItem;
 
 class SharedAppFilter : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 public:
     explicit SharedAppFilter(QObject *parent = nullptr);
     ~SharedAppFilter() override;
@@ -62,8 +62,8 @@ class Units : public QObject
      * * desktop (DEPRECATED: use iconSizeHints instead)
      *
      */
-    //note the iconSizeChanged signal indicates that one (or more) of these icons have changed
-    //but the property map itself remains constant
+    // note the iconSizeChanged signal indicates that one (or more) of these icons have changed
+    // but the property map itself remains constant
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
 
     /**
@@ -77,8 +77,8 @@ class Units : public QObject
      * * panel
      * * desktop
      */
-    //note the iconSizeHintsChanged signal indicates that one (or more) of these icons have changed
-    //but the property map itself remains constant
+    // note the iconSizeHintsChanged signal indicates that one (or more) of these icons have changed
+    // but the property map itself remains constant
     Q_PROPERTY(QQmlPropertyMap *iconSizeHints READ iconSizeHints CONSTANT)
 
     // layout hints
@@ -132,7 +132,7 @@ class Units : public QObject
     Q_PROPERTY(int veryLongDuration READ veryLongDuration NOTIFY durationChanged)
 
 public:
-/// @cond INTERNAL_DOCS
+    /// @cond INTERNAL_DOCS
 
     ~Units();
 
@@ -198,7 +198,7 @@ public:
      * @since 5.78
      */
     int veryShortDuration() const;
-/// @endcond
+    /// @endcond
 
     /**
      * @return a size rounded tothe nearest inferior standard icon size.
@@ -222,10 +222,10 @@ private Q_SLOTS:
 
 private:
     Units(QObject *parent = nullptr);
-    Units(Units const&) = delete; // Copy construct
-    Units(Units&&) = delete; // Move construct
-    Units& operator=(Units const&) = delete; // Copy assign
-    Units& operator=(Units &&) = delete; // Move assign
+    Units(Units const &) = delete; // Copy construct
+    Units(Units &&) = delete; // Move construct
+    Units &operator=(Units const &) = delete; // Copy assign
+    Units &operator=(Units &&) = delete; // Move assign
 
     void updateDevicePixelRatio();
     void updateAnimationSpeed();
@@ -248,5 +248,4 @@ private:
     int m_longDuration;
 };
 
-#endif //UNITS_H
-
+#endif // UNITS_H

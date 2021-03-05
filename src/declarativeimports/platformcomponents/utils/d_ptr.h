@@ -11,8 +11,7 @@
 
 namespace utils
 {
-
-template <typename T>
+template<typename T>
 class d_ptr
 {
 private:
@@ -21,19 +20,19 @@ private:
 public:
     d_ptr();
 
-    template <typename ...Args>
-    d_ptr(Args  &&...);
+    template<typename... Args>
+    d_ptr(Args &&...);
 
     ~d_ptr();
 
     T *operator->() const;
 };
 
-#define D_PTR \
-    class Private;                            \
-    friend class Private;                     \
-    const ::utils::d_ptr<Private> d     \
-     
+#define D_PTR                                                                                                                                                  \
+    class Private;                                                                                                                                             \
+    friend class Private;                                                                                                                                      \
+    const ::utils::d_ptr<Private> d
+
 } // namespace utils
 
 #endif

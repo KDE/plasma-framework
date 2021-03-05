@@ -10,13 +10,12 @@
 #define PLASMA_DATAENGINECONSUMER_P_H
 
 #include <QMap>
+#include <QObject>
 #include <QSet>
 #include <QUrl>
-#include <QObject>
 
 namespace Plasma
 {
-
 class DataEngineConsumer;
 class Service;
 class ServiceMonitor;
@@ -38,4 +37,3 @@ public Q_SLOTS:
 } // namespace Plasma
 
 #endif
-

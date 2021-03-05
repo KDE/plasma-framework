@@ -8,8 +8,8 @@
 
 #include <QTest>
 
-#include "plasma/theme.h"
 #include "plasma/svg.h"
+#include "plasma/theme.h"
 
 class ThemeTest : public QObject
 {
@@ -30,4 +30,3 @@ private:
 };
 
 #endif
-

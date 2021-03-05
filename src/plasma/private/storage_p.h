@@ -14,17 +14,14 @@
 #include <plasma/service.h>
 #include <plasma/servicejob.h>
 
-//Begin StorageJob
+// Begin StorageJob
 class StorageJob : public Plasma::ServiceJob
 {
     Q_OBJECT
     Q_PROPERTY(QVariantMap data READ data WRITE setData)
 
 public:
-    StorageJob(const QString &destination,
-               const QString &operation,
-               const QVariantMap &parameters,
-               QObject *parent = nullptr);
+    StorageJob(const QString &destination, const QString &operation, const QVariantMap &parameters, QObject *parent = nullptr);
     ~StorageJob() override;
     void setData(const QVariantMap &data);
     QVariantMap data() const;
@@ -38,7 +35,7 @@ private:
     QString m_clientName;
     QVariantMap m_data;
 };
-//End StorageJob
+// End StorageJob
 
 class Storage : public Plasma::Service
 {
@@ -55,4 +52,4 @@ private:
     QString m_clientName;
 };
 
-#endif //PLASMA_STORAGE_P_H
+#endif // PLASMA_STORAGE_P_H

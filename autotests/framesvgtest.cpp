@@ -7,8 +7,6 @@
 #include "framesvgtest.h"
 #include <QStandardPaths>
 
-
-
 void FrameSvgTest::initTestCase()
 {
     QStandardPaths::setTestModeEnabled(true);
@@ -37,25 +35,25 @@ void FrameSvgTest::margins()
 
 void FrameSvgTest::contentsRect()
 {
-    m_frameSvg->resizeFrame(QSize(100,100));
+    m_frameSvg->resizeFrame(QSize(100, 100));
     QCOMPARE(m_frameSvg->contentsRect(), QRectF(26, 26, 48, 48));
 }
 
 void FrameSvgTest::repaintBlocked()
 {
-    //check the properties to be correct even if set during a repaint blocked transaction
+    // check the properties to be correct even if set during a repaint blocked transaction
     m_frameSvg->setRepaintBlocked(true);
     QVERIFY(m_frameSvg->isRepaintBlocked());
 
     m_frameSvg->setElementPrefix("prefix");
-    m_frameSvg->setEnabledBorders(Plasma::FrameSvg::TopBorder|Plasma::FrameSvg::LeftBorder);
-    m_frameSvg->resizeFrame(QSizeF(100,100));
-    
+    m_frameSvg->setEnabledBorders(Plasma::FrameSvg::TopBorder | Plasma::FrameSvg::LeftBorder);
+    m_frameSvg->resizeFrame(QSizeF(100, 100));
+
     m_frameSvg->setRepaintBlocked(false);
 
     QCOMPARE(m_frameSvg->prefix(), QString("prefix"));
-    QCOMPARE(m_frameSvg->enabledBorders(), Plasma::FrameSvg::TopBorder|Plasma::FrameSvg::LeftBorder);
-    QCOMPARE(m_frameSvg->frameSize(), QSizeF(100,100));
+    QCOMPARE(m_frameSvg->enabledBorders(), Plasma::FrameSvg::TopBorder | Plasma::FrameSvg::LeftBorder);
+    QCOMPARE(m_frameSvg->frameSize(), QSizeF(100, 100));
 }
 
 void FrameSvgTest::setTheme()

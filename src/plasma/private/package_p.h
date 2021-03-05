@@ -16,7 +16,6 @@
 
 namespace Plasma
 {
-
 class PackagePrivate : public QSharedData
 {
 public:

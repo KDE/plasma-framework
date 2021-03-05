@@ -42,7 +42,7 @@ protected Q_SLOTS:
 
 private:
     QHash<qint64, QString> m_items;
-    QHash<qint64, QList<QList<qint64> > > m_childItems;
+    QHash<qint64, QList<QList<qint64>>> m_childItems;
     qint64 nextId;
     qint64 newId()
     {
@@ -59,17 +59,17 @@ private:
     friend class ModelMoveCommand;
     friend class ModelResetCommand;
     friend class ModelResetCommandFixed;
-
 };
 
 class ModelChangeCommand : public QObject
 {
     Q_OBJECT
 public:
-
     explicit ModelChangeCommand(DynamicTreeModel *model, QObject *parent = nullptr);
 
-    virtual ~ModelChangeCommand() {}
+    virtual ~ModelChangeCommand()
+    {
+    }
 
     void setAncestorRowNumbers(QList<int> rowNumbers)
     {
@@ -101,7 +101,6 @@ protected:
     int m_numCols;
     int m_startRow;
     int m_endRow;
-
 };
 
 typedef QList<ModelChangeCommand *> ModelChangeCommandList;
@@ -111,9 +110,10 @@ class ModelInsertCommand : public ModelChangeCommand
     Q_OBJECT
 
 public:
-
     explicit ModelInsertCommand(DynamicTreeModel *model, QObject *parent = nullptr);
-    virtual ~ModelInsertCommand() {}
+    virtual ~ModelInsertCommand()
+    {
+    }
 
     virtual void doCommand();
 };
@@ -124,7 +124,9 @@ class ModelMoveCommand : public ModelChangeCommand
 public:
     ModelMoveCommand(DynamicTreeModel *model, QObject *parent);
 
-    virtual ~ModelMoveCommand() {}
+    virtual ~ModelMoveCommand()
+    {
+    }
 
     virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
 
@@ -160,7 +162,6 @@ public:
 
     virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
     virtual void emitPostSignal();
-
 };
 
 /**
@@ -176,7 +177,6 @@ public:
 
     virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
     virtual void emitPostSignal();
-
 };
 
 #endif

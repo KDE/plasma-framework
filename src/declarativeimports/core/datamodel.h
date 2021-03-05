@@ -18,7 +18,6 @@ class QTimer;
 
 namespace Plasma
 {
-
 class DataSource;
 class DataModel;
 
@@ -134,7 +133,7 @@ Q_SIGNALS:
 
 protected:
     int roleNameToId(const QString &name) const;
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;    
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
     QHash<int, QByteArray> roleNames() const override;
 
 protected Q_SLOTS:
@@ -167,8 +166,8 @@ class DataModel : public QAbstractItemModel
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
 
     /**
-     * it's a regular expression. If the DataSource is connected to more than one source, only inserts data from sources matching this filter expression in the model.
-     * If we want to have a source watch all sources beginning with say "name:", the required regexp would be sourceFilter: "name:.*"
+     * it's a regular expression. If the DataSource is connected to more than one source, only inserts data from sources matching this filter expression in the
+     * model. If we want to have a source watch all sources beginning with say "name:", the required regexp would be sourceFilter: "name:.*"
      */
     Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
 
@@ -196,12 +195,10 @@ public:
     void setSourceFilter(const QString &key);
     QString sourceFilter() const;
 
-    //Reimplemented
+    // Reimplemented
     QVariant data(const QModelIndex &index, int role) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role = Qt::DisplayRole) const override;
-    QModelIndex index(int row, int column,
-                      const QModelIndex &parent = QModelIndex()) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &child) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -239,7 +236,7 @@ private:
     QRegExp m_keyRoleFilterRE;
     QString m_sourceFilter;
     QRegExp m_sourceFilterRE;
-    QMap<QString, QVector<QVariant> > m_items;
+    QMap<QString, QVector<QVariant>> m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
     int m_maxRoleId;

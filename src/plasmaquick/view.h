@@ -9,9 +9,9 @@
 
 #include <QtQuick/QQuickView>
 
-#include <plasmaquick/plasmaquick_export.h>
-#include "plasma/corona.h"
 #include "plasma/containment.h"
+#include "plasma/corona.h"
+#include <plasmaquick/plasmaquick_export.h>
 
 //
 //  W A R N I N G
@@ -28,7 +28,6 @@
 
 namespace PlasmaQuick
 {
-
 class ViewPrivate;
 
 /**

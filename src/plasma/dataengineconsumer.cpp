@@ -13,13 +13,12 @@
 
 #include <QDebug>
 
+#include "debug_p.h"
 #include "private/dataenginemanager_p.h"
 #include "servicejob.h"
-#include "debug_p.h"
 
 namespace Plasma
 {
-
 void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 {
 #ifndef NDEBUG
@@ -55,8 +54,7 @@ void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidServic
     QVariantMap op = plasmoidService->operationDescription(QStringLiteral("DataEngine"));
     op[QStringLiteral("EngineName")] = engineNameForService.value(plasmoidService);
     plasmoidService->startOperationCall(op);
-    connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob*)),
-            this, SLOT(slotJobFinished(Plasma::ServiceJob*)));
+    connect(plasmoidService, SIGNAL(finished(Plasma::ServiceJob *)), this, SLOT(slotJobFinished(Plasma::ServiceJob *)));
 }
 
 DataEngineConsumer::DataEngineConsumer()
@@ -90,4 +88,3 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 } // namespace Plasma
 
 #include "private/moc_dataengineconsumer_p.cpp"
-

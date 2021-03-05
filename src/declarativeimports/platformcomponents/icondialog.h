@@ -28,7 +28,7 @@
  * icon = iconDialog.openDialog()
  * @endcode
  */
-class IconDialog: public QObject
+class IconDialog : public QObject
 {
     Q_OBJECT
 
@@ -44,4 +44,3 @@ private:
 };
 
 #endif /* ICONDIALOG_H */
-

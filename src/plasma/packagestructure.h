@@ -11,16 +11,15 @@
 
 #include <KPluginInfo>
 
+#include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
-#include <plasma/package.h>
 #include <plasma/version.h>
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
 
 namespace Plasma
 {
-
 class PackageStructurePrivate;
 
 class PLASMA_EXPORT PackageStructure : public QObject
@@ -28,7 +27,6 @@ class PLASMA_EXPORT PackageStructure : public QObject
     Q_OBJECT
 
 public:
-
     PLASMA_DEPRECATED_VERSION(5, 6, "Use KPackage API")
     explicit PackageStructure(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
@@ -91,12 +89,12 @@ private:
 /**
  * Register a Package class when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_PACKAGE(libname, classname)                                                                                                            \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)                                                                                                    \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile)                                                                                                 \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
 #endif // PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)

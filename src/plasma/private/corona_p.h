@@ -17,7 +17,6 @@ class KShortcutsDialog;
 
 namespace Plasma
 {
-
 class Containment;
 
 class CoronaPrivate

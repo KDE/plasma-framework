@@ -7,9 +7,9 @@
 #ifndef CALENDARDATA_H
 #define CALENDARDATA_H
 
-#include <QObject>
-#include <QFlags>
 #include <QDate>
+#include <QFlags>
+#include <QObject>
 
 class QAbstractItemModel;
 

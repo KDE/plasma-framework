@@ -10,9 +10,9 @@
 #include "servicejob.h"
 #include "storage_p.h"
 
-#include <QTimerEvent>
-#include <QElapsedTimer>
 #include <QBasicTimer>
+#include <QElapsedTimer>
+#include <QTimerEvent>
 
 #include <QAbstractItemModel>
 
@@ -27,13 +27,13 @@ class DataContainerPrivate
 {
 public:
     DataContainerPrivate(DataContainer *container)
-        : q(container),
-          storage(nullptr),
-          storageCount(0),
-          dirty(false),
-          cached(false),
-          enableStorage(false),
-          isStored(true)
+        : q(container)
+        , storage(nullptr)
+        , storageCount(0)
+        , dirty(false)
+        , cached(false)
+        , enableStorage(false)
+        , isStored(true)
     {
     }
 
@@ -47,9 +47,8 @@ public:
      **/
     void checkUsage();
 
-    SignalRelay *signalRelay(const DataContainer *dc, QObject *visualization,
-                             uint pollingInterval, Plasma::Types::IntervalAlignment align,
-                             bool immediateUpdate);
+    SignalRelay *
+    signalRelay(const DataContainer *dc, QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment align, bool immediateUpdate);
 
     bool hasUpdates();
 
@@ -77,7 +76,7 @@ public:
     QBasicTimer storageTimer;
     QBasicTimer checkUsageTimer;
     QPointer<QAbstractItemModel> model;
-    int  storageCount;
+    int storageCount;
     bool dirty : 1;
     bool cached : 1;
     bool enableStorage : 1;
@@ -89,8 +88,7 @@ class SignalRelay : public QObject
     Q_OBJECT
 
 public:
-    SignalRelay(DataContainer *parent, DataContainerPrivate *data,
-                uint ival, Plasma::Types::IntervalAlignment align, bool immediateUpdate);
+    SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint ival, Plasma::Types::IntervalAlignment align, bool immediateUpdate);
 
     int receiverCount() const;
     bool isUnused() const;
@@ -117,4 +115,3 @@ protected:
 } // Plasma namespace
 
 #endif // multiple inclusion guard
-

@@ -5,13 +5,13 @@
 */
 
 #include "dataengine.h"
-#include "private/dataengine_p.h"
 #include "private/datacontainer_p.h"
+#include "private/dataengine_p.h"
 
 #include <QAbstractItemModel>
 #include <QQueue>
-#include <QTimer>
 #include <QTime>
+#include <QTimer>
 #include <QTimerEvent>
 #include <QVariant>
 
@@ -23,23 +23,23 @@
 #include "datacontainer.h"
 #include "package.h"
 #include "pluginloader.h"
-#include "service.h"
 #include "scripting/dataenginescript.h"
+#include "service.h"
 
+#include "config-plasma.h"
 #include "private/service_p.h"
 #include "private/storage_p.h"
-#include "config-plasma.h"
 
 namespace Plasma
 {
-
 DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     : DataEngine(plugin.toMetaData(), parent)
-{}
+{
+}
 
 DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
-    : QObject(parent),
-      d(new DataEnginePrivate(this, plugin))
+    : QObject(parent)
+    , d(new DataEnginePrivate(this, plugin))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -51,8 +51,8 @@ DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
 }
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
-    : QObject(parent),
-      d(new DataEnginePrivate(this, KPluginInfo(args).toMetaData(), args))
+    : QObject(parent)
+    , d(new DataEnginePrivate(this, KPluginInfo(args).toMetaData(), args))
 {
     if (d->script) {
         d->setupScriptSupport();
@@ -62,7 +62,7 @@ DataEngine::DataEngine(QObject *parent, const QVariantList &args)
 
 DataEngine::~DataEngine()
 {
-    //qCDebug(LOG_PLASMA) << objectName() << ": bye bye birdy! ";
+    // qCDebug(LOG_PLASMA) << objectName() << ": bye bye birdy! ";
     delete d;
 }
 
@@ -97,11 +97,9 @@ KPluginMetaData DataEngine::metadata() const
     return d->dataEngineDescription;
 }
 
-void DataEngine::connectSource(const QString &source, QObject *visualization,
-                               uint pollingInterval,
-                               Plasma::Types::IntervalAlignment intervalAlignment) const
+void DataEngine::connectSource(const QString &source, QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment intervalAlignment) const
 {
-    //qCDebug(LOG_PLASMA) << "connectSource" << source;
+    // qCDebug(LOG_PLASMA) << "connectSource" << source;
     bool newSource;
     DataContainer *s = d->requestSource(source, &newSource);
 
@@ -113,14 +111,12 @@ void DataEngine::connectSource(const QString &source, QObject *visualization,
         if (newSource && !s->data().isEmpty()) {
             newSource = false;
         }
-        d->connectSource(s, visualization, pollingInterval, intervalAlignment,
-                         !newSource || pollingInterval > 0);
-        //qCDebug(LOG_PLASMA) << " ==> source connected";
+        d->connectSource(s, visualization, pollingInterval, intervalAlignment, !newSource || pollingInterval > 0);
+        // qCDebug(LOG_PLASMA) << " ==> source connected";
     }
 }
 
-void DataEngine::connectAllSources(QObject *visualization, uint pollingInterval,
-                                   Plasma::Types::IntervalAlignment intervalAlignment) const
+void DataEngine::connectAllSources(QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment intervalAlignment) const
 {
     for (DataContainer *s : qAsConst(d->sources)) {
         d->connectSource(s, visualization, pollingInterval, intervalAlignment);
@@ -155,8 +151,8 @@ bool DataEngine::updateSourceEvent(const QString &source)
     if (d->script) {
         return d->script->updateSourceEvent(source);
     } else {
-        //qCDebug(LOG_PLASMA) << source;
-        return false; //TODO: should this be true to trigger, even needless, updates on every tick?
+        // qCDebug(LOG_PLASMA) << source;
+        return false; // TODO: should this be true to trigger, even needless, updates on every tick?
     }
 }
 
@@ -258,9 +254,8 @@ void DataEngine::addSource(DataContainer *source)
         return;
     }
 
-    QObject::connect(source, SIGNAL(updateRequested(DataContainer*)),
-                     this, SLOT(internalUpdateSource(DataContainer*)));
-    QObject::connect(source, SIGNAL(destroyed(QObject*)), this, SLOT(sourceDestroyed(QObject*)));
+    QObject::connect(source, SIGNAL(updateRequested(DataContainer *)), this, SLOT(internalUpdateSource(DataContainer *)));
+    QObject::connect(source, SIGNAL(destroyed(QObject *)), this, SLOT(sourceDestroyed(QObject *)));
     d->sources.insert(source->objectName(), source);
     Q_EMIT sourceAdded(source->objectName());
     d->scheduleSourcesUpdated();
@@ -335,17 +330,17 @@ QHash<QString, DataContainer *> DataEngine::containerDict() const
 
 void DataEngine::timerEvent(QTimerEvent *event)
 {
-    //qCDebug(LOG_PLASMA);
+    // qCDebug(LOG_PLASMA);
     if (event->timerId() == d->updateTimerId) {
         // if the freq update is less than 0, don't bother
         if (d->minPollingInterval < 0) {
-            //qCDebug(LOG_PLASMA) << "uh oh.. no polling allowed!";
+            // qCDebug(LOG_PLASMA) << "uh oh.. no polling allowed!";
             return;
         }
 
         // minPollingInterval
         if (d->updateTimer.elapsed() < d->minPollingInterval) {
-            //qCDebug(LOG_PLASMA) << "hey now.. slow down!";
+            // qCDebug(LOG_PLASMA) << "hey now.. slow down!";
             return;
         }
 
@@ -370,7 +365,7 @@ void DataEngine::updateAllSources()
     QHashIterator<QString, Plasma::DataContainer *> it(d->sources);
     while (it.hasNext()) {
         it.next();
-        //qCDebug(LOG_PLASMA) << "updating" << it.key();
+        // qCDebug(LOG_PLASMA) << "updating" << it.key();
         if (it.value()->isUsed()) {
             updateSourceEvent(it.key());
         }
@@ -403,15 +398,16 @@ void DataEngine::setStorageEnabled(const QString &source, bool store)
 
 // Private class implementations
 DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, const QVariantList &args)
-    : q(e),
-      dataEngineDescription(md),
-      refCount(-1), // first ref
-      checkSourcesTimerId(0),
-      updateTimerId(0),
-      minPollingInterval(-1),
-      valid(false),
-      script(nullptr),
-      package(nullptr)
+    : q(e)
+    , dataEngineDescription(md)
+    , refCount(-1)
+    , // first ref
+    checkSourcesTimerId(0)
+    , updateTimerId(0)
+    , minPollingInterval(-1)
+    , valid(false)
+    , script(nullptr)
+    , package(nullptr)
 {
     updateTimer.start();
 
@@ -424,10 +420,9 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
         QString api = dataEngineDescription.value(QStringLiteral("X-Plasma-API"));
 
         if (!api.isEmpty()) {
-            const QString path =
-                QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginId(),
-                                       QStandardPaths::LocateDirectory);
+            const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                        QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginId(),
+                                                        QStandardPaths::LocateDirectory);
             package = new Package(PluginLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), api));
             package->setPath(path);
 
@@ -457,25 +452,24 @@ DataEnginePrivate::~DataEnginePrivate()
 
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)
 {
-    if (minPollingInterval > 0 &&
-            source->timeSinceLastUpdate() < (uint)minPollingInterval) {
+    if (minPollingInterval > 0 && source->timeSinceLastUpdate() < (uint)minPollingInterval) {
         // skip updating this source; it's been too soon
-        //qCDebug(LOG_PLASMA) << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
-        //but fake an update so that the signalrelay that triggered this gets the data from the
-        //recent update. this way we don't have to worry about queuing - the relay will send a
-        //signal immediately and everyone else is undisturbed.
+        // qCDebug(LOG_PLASMA) << "internal update source is delaying" << source->timeSinceLastUpdate() << minPollingInterval;
+        // but fake an update so that the signalrelay that triggered this gets the data from the
+        // recent update. this way we don't have to worry about queuing - the relay will send a
+        // signal immediately and everyone else is undisturbed.
         source->setNeedsUpdate();
         return;
     }
 
     if (q->updateSourceEvent(source->objectName())) {
-        //qCDebug(LOG_PLASMA) << "queuing an update";
+        // qCDebug(LOG_PLASMA) << "queuing an update";
         scheduleSourcesUpdated();
-    }/* else {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "no update";
-#endif
-    }*/
+    } /* else {
+ #ifndef NDEBUG
+         // qCDebug(LOG_PLASMA) << "no update";
+ #endif
+     }*/
 }
 
 void DataEnginePrivate::ref()
@@ -505,23 +499,23 @@ DataContainer *DataEnginePrivate::source(const QString &sourceName, bool createW
         return nullptr;
     }
 
-    //qCDebug(LOG_PLASMA) << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";
+    // qCDebug(LOG_PLASMA) << "DataEngine " << q->objectName() << ": could not find DataContainer " << sourceName << ", creating";
     DataContainer *s = new DataContainer(q);
     s->setObjectName(sourceName);
     sources.insert(sourceName, s);
-    QObject::connect(s, SIGNAL(destroyed(QObject*)), q, SLOT(sourceDestroyed(QObject*)));
-    QObject::connect(s, SIGNAL(updateRequested(DataContainer*)),
-                     q, SLOT(internalUpdateSource(DataContainer*)));
+    QObject::connect(s, SIGNAL(destroyed(QObject *)), q, SLOT(sourceDestroyed(QObject *)));
+    QObject::connect(s, SIGNAL(updateRequested(DataContainer *)), q, SLOT(internalUpdateSource(DataContainer *)));
 
     return s;
 }
 
-void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
+void DataEnginePrivate::connectSource(DataContainer *s,
+                                      QObject *visualization,
                                       uint pollingInterval,
                                       Plasma::Types::IntervalAlignment align,
                                       bool immediateCall)
 {
-    //qCDebug(LOG_PLASMA) << "connect source called" << s->objectName() << "with interval" << pollingInterval;
+    // qCDebug(LOG_PLASMA) << "connect source called" << s->objectName() << "with interval" << pollingInterval;
 
     if (pollingInterval > 0) {
         // never more frequently than allowed, never more than 20 times per second
@@ -535,21 +529,16 @@ void DataEnginePrivate::connectSource(DataContainer *s, QObject *visualization,
     if (immediateCall) {
         // we don't want to do an immediate call if we are simply
         // reconnecting
-        //qCDebug(LOG_PLASMA) << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
-        immediateCall = !s->data().isEmpty() &&
-                        !s->visualizationIsConnected(visualization);
+        // qCDebug(LOG_PLASMA) << "immediate call requested, we have:" << s->visualizationIsConnected(visualization);
+        immediateCall = !s->data().isEmpty() && !s->visualizationIsConnected(visualization);
     }
 
     s->connectVisualization(visualization, pollingInterval, align);
 
     if (immediateCall) {
-        QMetaObject::invokeMethod(visualization, "dataUpdated",
-                                  Q_ARG(QString, s->objectName()),
-                                  Q_ARG(Plasma::DataEngine::Data, s->data()));
+        QMetaObject::invokeMethod(visualization, "dataUpdated", Q_ARG(QString, s->objectName()), Q_ARG(Plasma::DataEngine::Data, s->data()));
         if (s->d->model) {
-            QMetaObject::invokeMethod(visualization, "modelChanged",
-                                      Q_ARG(QString, s->objectName()),
-                                      Q_ARG(QAbstractItemModel*, s->d->model.data()));
+            QMetaObject::invokeMethod(visualization, "modelChanged", Q_ARG(QString, s->objectName()), Q_ARG(QAbstractItemModel *, s->d->model.data()));
         }
         s->d->dirty = false;
     }
@@ -574,7 +563,7 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
         *newSource = false;
     }
 
-    //qCDebug(LOG_PLASMA) << "requesting source " << sourceName;
+    // qCDebug(LOG_PLASMA) << "requesting source " << sourceName;
     DataContainer *s = source(sourceName, false);
 
     if (!s) {

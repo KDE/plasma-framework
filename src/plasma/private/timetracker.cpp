@@ -5,14 +5,14 @@
 */
 
 #include "timetracker.h"
-#include <containment.h>
-#include <QMetaObject>
-#include <QFile>
 #include <QDebug>
-#include <QJsonDocument>
+#include <QFile>
 #include <QJsonArray>
-#include <QTimer>
+#include <QJsonDocument>
+#include <QMetaObject>
 #include <QMetaProperty>
+#include <QTimer>
+#include <containment.h>
 
 using namespace Plasma;
 
@@ -21,18 +21,21 @@ Q_GLOBAL_STATIC_WITH_ARGS(const qint64, s_beginning, (QDateTime::currentDateTime
 struct TimeTrackerWriter : QObject {
     Q_OBJECT
 public:
-    TimeTrackerWriter() {
-        QObject::connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, static_cast<void (TimeTrackerWriter::*)()>(&TimeTrackerWriter::print));
+    TimeTrackerWriter()
+    {
+        QObject::connect(QCoreApplication::instance(),
+                         &QCoreApplication::aboutToQuit,
+                         this,
+                         static_cast<void (TimeTrackerWriter::*)()>(&TimeTrackerWriter::print));
     }
 
-    void print() {
+    void print()
+    {
         QJsonArray array;
 
         for (const ObjectHistory &history : qAsConst(m_data)) {
-            array.append(QJsonObject {
-                { QStringLiteral("events"), serializeEvents(history.events) },
-                { QStringLiteral("initial"), QJsonValue::fromVariant(history.initial) }
-            });
+            array.append(QJsonObject{{QStringLiteral("events"), serializeEvents(history.events)},
+                                     {QStringLiteral("initial"), QJsonValue::fromVariant(history.initial)}});
         }
         Q_ASSERT(array.count() == m_data.count());
         QJsonDocument doc;
@@ -44,22 +47,20 @@ public:
         f.write(doc.toJson());
     }
 
-    void feed(QObject* obj, const ObjectHistory& tracker)
+    void feed(QObject *obj, const ObjectHistory &tracker)
     {
         m_data[obj] = tracker;
     }
 
-    QHash<QObject*, ObjectHistory> m_data;
+    QHash<QObject *, ObjectHistory> m_data;
 
 private:
-    QJsonArray serializeEvents(const QVector<TimeEvent>& events) const {
+    QJsonArray serializeEvents(const QVector<TimeEvent> &events) const
+    {
         QJsonArray ret;
         Q_ASSERT(!events.isEmpty());
         for (const TimeEvent &ev : events) {
-            ret.append(QJsonObject {
-                { QStringLiteral("comment"), ev.comment },
-                { QStringLiteral("time"), ev.moment.toMSecsSinceEpoch() - *s_beginning }
-            });
+            ret.append(QJsonObject{{QStringLiteral("comment"), ev.comment}, {QStringLiteral("time"), ev.moment.toMSecsSinceEpoch() - *s_beginning}});
         }
         Q_ASSERT(ret.count() == events.count());
         return ret;
@@ -67,12 +68,12 @@ private:
 };
 Q_GLOBAL_STATIC(TimeTrackerWriter, s_writer)
 
-TimeTracker::TimeTracker(QObject* o)
+TimeTracker::TimeTracker(QObject *o)
     : QObject(o)
 {
     *s_beginning * 1; // ensure it's initialized
 
-    QTimer* t = new QTimer(this);
+    QTimer *t = new QTimer(this);
     t->setInterval(2000);
     t->setSingleShot(false);
     connect(t, &QTimer::timeout, this, &TimeTracker::sync);
@@ -83,13 +84,14 @@ TimeTracker::TimeTracker(QObject* o)
 
 void TimeTracker::init()
 {
-    m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("constructed %1 %2").arg(QString::fromUtf8(parent()->metaObject()->className()), parent()->objectName()) });
+    m_history.events.append(TimeEvent{QDateTime::currentDateTime(),
+                                      QStringLiteral("constructed %1 %2").arg(QString::fromUtf8(parent()->metaObject()->className()), parent()->objectName())});
 
     QMetaMethod propChange = metaObject()->method(metaObject()->indexOfSlot("propertyChanged()"));
-    Q_ASSERT(propChange.isValid() && metaObject()->indexOfSlot("propertyChanged()")>=0);
+    Q_ASSERT(propChange.isValid() && metaObject()->indexOfSlot("propertyChanged()") >= 0);
 
-    QObject* o = parent();
-    for (int i = 0, pc = o->metaObject()->propertyCount(); i<pc; ++i) {
+    QObject *o = parent();
+    for (int i = 0, pc = o->metaObject()->propertyCount(); i < pc; ++i) {
         QMetaProperty prop = o->metaObject()->property(i);
         m_history.initial[QString::fromUtf8(prop.name())] = prop.read(o);
 
@@ -112,15 +114,16 @@ void TimeTracker::propertyChanged()
 {
     Q_ASSERT(sender() == parent());
 
-    const QMetaObject* mo = parent()->metaObject();
+    const QMetaObject *mo = parent()->metaObject();
 
-    for (int i = 0, pc = mo->propertyCount(); i<pc; ++i) {
+    for (int i = 0, pc = mo->propertyCount(); i < pc; ++i) {
         const QMetaProperty prop = mo->property(i);
         if (prop.notifySignalIndex() == senderSignalIndex()) {
             QString val;
             QDebug d(&val);
             d << prop.read(parent());
-            m_history.events.append(TimeEvent { QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(QString::fromUtf8(prop.name()), val.trimmed())});
+            m_history.events.append(
+                TimeEvent{QDateTime::currentDateTime(), QStringLiteral("property %1 changed to %2").arg(QString::fromUtf8(prop.name()), val.trimmed())});
         }
     }
 }

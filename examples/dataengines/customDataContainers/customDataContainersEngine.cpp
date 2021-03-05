@@ -4,8 +4,8 @@
     SPDX-License-Identifier: BSD-2-Clause
 */
 
-#include <QUrl>
 #include <QDebug>
+#include <QUrl>
 
 #include "customDataContainersEngine.h"
 
@@ -68,4 +68,3 @@ K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.customDataContainers, Data
 
 // include the moc file so the build system makes it for us
 #include "customDataContainersEngine.moc"
-

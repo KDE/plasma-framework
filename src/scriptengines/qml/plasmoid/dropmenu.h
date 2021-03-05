@@ -5,8 +5,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef DROPMENU_H 
-#define DROPMENU_H 
+#ifndef DROPMENU_H
+#define DROPMENU_H
 
 #include <QObject>
 #include <QPoint>

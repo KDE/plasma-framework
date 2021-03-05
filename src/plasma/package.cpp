@@ -12,16 +12,16 @@
 #include <QTemporaryDir>
 
 #include <KArchive>
-#include <QDebug>
 #include <KDesktopFile>
-#include <KTar>
-#include <kzip.h>
 #include <KJob>
+#include <KTar>
+#include <QDebug>
+#include <kzip.h>
 
 #include "config-plasma.h"
 
-#include <QStandardPaths>
 #include <QMimeDatabase>
+#include <QStandardPaths>
 
 #include "packagestructure.h"
 #include "pluginloader.h"
@@ -30,19 +30,16 @@
 
 namespace Plasma
 {
-
-
 PackagePrivate::PackagePrivate()
-    : internalPackage(nullptr),
-      fallbackPackage(nullptr),
-      structure(nullptr)
+    : internalPackage(nullptr)
+    , fallbackPackage(nullptr)
+    , structure(nullptr)
 {
 }
 
 PackagePrivate::~PackagePrivate()
 {
 }
-
 
 Package::Package(PackageStructure *structure)
     : d(new Plasma::PackagePrivate())
@@ -292,8 +289,8 @@ KJob *Package::install(const QString &sourcePackage, const QString &packageRoot)
 {
     const QString src = sourcePackage;
     const QString dest = packageRoot.isEmpty() ? defaultPackageRoot() : packageRoot;
-    //qCDebug(LOG_PLASMA) << "Source: " << src;
-    //qCDebug(LOG_PLASMA) << "PackageRoot: " << dest;
+    // qCDebug(LOG_PLASMA) << "Source: " << src;
+    // qCDebug(LOG_PLASMA) << "PackageRoot: " << dest;
     KJob *j = d->structure->install(this, src, dest);
     return j;
 }

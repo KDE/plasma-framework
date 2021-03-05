@@ -4,26 +4,25 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <math.h>
 #include <float.h> // FLT_MAX
+#include <math.h>
 
 #include <QCoreApplication>
-#include <QFileInfo>
 #include <QDebug>
+#include <QFileInfo>
 
 #include <KConfigGroup>
 #include <KDesktopFile>
 #include <KLocalizedString>
 
-#include <kdeclarative/kdeclarative.h>
-#include "packages_p.h"
 #include "config-plasma.h"
+#include "packages_p.h"
+#include <kdeclarative/kdeclarative.h>
 
 #include <kpackage/package.h>
 
 namespace Plasma
 {
-
 void ChangeableMainScriptPackage::initPackage(KPackage::Package *package)
 {
     package->addFileDefinition("mainscript", QStringLiteral("ui/main.qml"), i18n("Main Script File"));
@@ -94,4 +93,3 @@ void GenericPackage::initPackage(KPackage::Package *package)
 }
 
 } // namespace Plasma
-

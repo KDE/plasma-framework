@@ -8,8 +8,8 @@
 #ifndef PLASMA_THEME_H
 #define PLASMA_THEME_H
 
-#include <QGuiApplication>
 #include <QFont>
+#include <QGuiApplication>
 #include <QObject>
 
 #include <KPluginInfo>
@@ -21,7 +21,6 @@ class KPluginMetaData;
 
 namespace Plasma
 {
-
 class ThemePrivate;
 class SvgPrivate;
 
@@ -47,7 +46,7 @@ class PLASMA_EXPORT Theme : public QObject
     Q_PROPERTY(bool useGlobalSettings READ useGlobalSettings NOTIFY themeChanged)
     Q_PROPERTY(QString wallpaperPath READ wallpaperPath NOTIFY themeChanged)
 
-    //fonts
+    // fonts
     Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY defaultFontChanged)
     Q_PROPERTY(QFont smallestFont READ smallestFont NOTIFY smallestFontChanged)
 
@@ -66,7 +65,7 @@ public:
         FocusColor = 4, /**< color for focus effect on view */
         LinkColor = 5, /**< color for clickable links */
         VisitedLinkColor = 6, /**< color visited clickable links */
-        HighlightedTextColor = 7,/**< color contrasting with HighlightColor, to be used for instance with */
+        HighlightedTextColor = 7, /**< color contrasting with HighlightColor, to be used for instance with */
         PositiveTextColor = 8, /**< color of foreground objects with a "positive message" connotation (usually green) */
         NeutralTextColor = 9, /**< color of foreground objects with a "neutral message" connotation (usually yellow) */
         NegativeTextColor = 10, /**< color of foreground objects with a "negative message" connotation (usually red) */
@@ -476,4 +475,3 @@ private:
 } // Plasma namespace
 
 #endif // multiple inclusion guard
-

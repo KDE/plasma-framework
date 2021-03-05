@@ -7,9 +7,9 @@
 #ifndef APPLETQUICKITEM_H
 #define APPLETQUICKITEM_H
 
-#include <QQuickItem>
 #include <QQmlComponent>
 #include <QQmlEngine>
+#include <QQuickItem>
 #include <QTimer>
 
 #include <Plasma/Package>
@@ -39,7 +39,6 @@ class QmlObject;
 
 namespace PlasmaQuick
 {
-
 class AppletQuickItemPrivate;
 
 class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
@@ -82,10 +81,10 @@ public:
     AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
     ~AppletQuickItem() override;
 
-////API NOT SUPPOSED TO BE USED BY QML
+    ////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
 
-    //Make the constructor lighter and delay the actual instantiation of the qml in the applet
+    // Make the constructor lighter and delay the actual instantiation of the qml in the applet
     virtual void init();
 
 #if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 36)
@@ -105,7 +104,7 @@ public:
     QObject *rootItem();
     QObject *testItem();
 
-////PROPERTY ACCESSORS
+    ////PROPERTY ACCESSORS
     int switchWidth() const;
     void setSwitchWidth(int width);
 
@@ -127,11 +126,11 @@ public:
     bool isActivationTogglesExpanded() const;
     void setActivationTogglesExpanded(bool activationTogglesExpanded);
 
-////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
+    ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletQuickItem *qmlAttachedProperties(QObject *object);
 
 Q_SIGNALS:
-//Property signals
+    // Property signals
     void switchWidthChanged(int width);
     void switchHeightChanged(int height);
 
@@ -148,7 +147,7 @@ Q_SIGNALS:
 protected:
     KDeclarative::QmlObject *qmlObject();
 
-    //Reimplementation
+    // Reimplementation
     void childEvent(QChildEvent *event) override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
     void itemChange(ItemChange change, const ItemChangeData &value) override;

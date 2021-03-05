@@ -9,8 +9,8 @@
 #include "appbackgroundprovider_p.h"
 #include "fallbackcomponent.h"
 
-#include <QtQml>
 #include <QQmlEngine>
+#include <QtQml>
 
 // #include <KSharedConfig>
 // #include <KConfigGroup>
@@ -26,5 +26,3 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }
-
-

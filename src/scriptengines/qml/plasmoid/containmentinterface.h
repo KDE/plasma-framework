@@ -28,7 +28,6 @@ namespace KActivities
 class Info;
 }
 
-
 /**
  * @class ContainmentInterface
  *
@@ -44,7 +43,7 @@ class ContainmentInterface : public AppletInterface
      * List of applets this containment has: the containments
      * KF6: this should be AppletQuickItem *
      */
-    Q_PROPERTY(QList <QObject *> applets READ applets NOTIFY appletsChanged)
+    Q_PROPERTY(QList<QObject *> applets READ applets NOTIFY appletsChanged)
 
     /**
      * Type of this containment TODO: notify
@@ -75,12 +74,13 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
 
-    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY containmentDisplayHintsChanged)
+    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY
+                   containmentDisplayHintsChanged)
 
 public:
     ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
 
-//Not for QML
+    // Not for QML
     Plasma::Containment *containment() const
     {
         return m_containment.data();
@@ -91,7 +91,7 @@ public:
         return m_wallpaperInterface;
     }
 
-//For QML use
+    // For QML use
     QList<QObject *> applets();
 
     Plasma::Types::ContainmentType containmentType() const;
@@ -184,7 +184,7 @@ Q_SIGNALS:
      */
     void appletRemoved(QObject *applet);
 
-    //Property notifiers
+    // Property notifiers
     void activityChanged();
     void activityNameChanged();
     void appletsChanged();

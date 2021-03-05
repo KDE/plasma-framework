@@ -5,8 +5,8 @@
 */
 
 #include <QApplication>
-#include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QCommandLineParser>
 
 #include <KDBusService>
 #include <KLocalizedString>

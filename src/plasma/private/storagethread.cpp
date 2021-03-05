@@ -7,21 +7,20 @@
 #include "storagethread_p.h"
 
 #include <QCoreApplication>
-#include <QDir>
-#include <QSqlError>
-#include <QSqlQuery>
-#include <QSqlField>
-#include <QSqlDriver>
-#include <QSqlRecord>
 #include <QDataStream>
+#include <QDir>
+#include <QSqlDriver>
+#include <QSqlError>
+#include <QSqlField>
+#include <QSqlQuery>
+#include <QSqlRecord>
 
+#include "debug_p.h"
 #include <QDebug>
 #include <QStandardPaths>
-#include "debug_p.h"
 
 namespace Plasma
 {
-
 class StorageThreadSingleton
 {
 public:
@@ -75,7 +74,9 @@ void StorageThread::initializeDb(StorageJob *caller)
         qCWarning(LOG_PLASMA) << "Unable to open the plasma storage cache database: " << m_db.lastError();
     } else if (!m_db.tables().contains(caller->clientName())) {
         QSqlQuery query(m_db);
-        query.prepare(QStringLiteral("create table ") + caller->clientName() + QStringLiteral(" (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, accessTime datetime, primary key (valueGroup, id))"));
+        query.prepare(QStringLiteral("create table ") + caller->clientName()
+                      + QStringLiteral(" (valueGroup varchar(256), id varchar(256), txt TEXT, int INTEGER, float REAL, binary BLOB, creationTime datetime, "
+                                       "accessTime datetime, primary key (valueGroup, id))"));
         if (!query.exec()) {
             qCWarning(LOG_PLASMA) << "Unable to create table for" << caller->clientName();
             m_db.close();
@@ -117,7 +118,8 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
         ids.append(m_db.driver()->formatValue(field));
     }
 
-    query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup = :valueGroup and id in (") + ids + QStringLiteral(");"));
+    query.prepare(QStringLiteral("delete from ") + caller->clientName() + QStringLiteral(" where valueGroup = :valueGroup and id in (") + ids
+                  + QStringLiteral(");"));
     query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
 
     if (!query.exec()) {
@@ -126,7 +128,8 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
         return;
     }
 
-    query.prepare(QStringLiteral("insert into ") + caller->clientName() + QStringLiteral(" values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))"));
+    query.prepare(QStringLiteral("insert into ") + caller->clientName()
+                  + QStringLiteral(" values(:valueGroup, :id, :txt, :int, :float, :binary, date('now'), date('now'))"));
     query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
     query.bindValue(QStringLiteral(":txt"), QVariant());
     query.bindValue(QStringLiteral(":int"), QVariant());
@@ -143,7 +146,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
     it.toFront();
     while (it.hasNext()) {
         it.next();
-        //qCDebug(LOG_PLASMA) << "going to insert" << valueGroup << it.key();
+        // qCDebug(LOG_PLASMA) << "going to insert" << valueGroup << it.key();
         query.bindValue(QStringLiteral(":id"), it.key());
 
         QString field;
@@ -176,7 +179,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
         }
 
         if (!query.exec()) {
-            //qCDebug(LOG_PLASMA) << "query failed:" << query.lastQuery() << query.lastError().text();
+            // qCDebug(LOG_PLASMA) << "query failed:" << query.lastQuery() << query.lastError().text();
             m_db.commit();
             Q_EMIT newResult(caller, false);
             return;
@@ -205,9 +208,9 @@ void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &pa
 
     QSqlQuery query(m_db);
 
-    //a bit redundant but should be the faster way with less string concatenation as possible
+    // a bit redundant but should be the faster way with less string concatenation as possible
     if (params[QStringLiteral("key")].toString().isEmpty()) {
-        //update modification time
+        // update modification time
         query.prepare(QStringLiteral("update ") + clientName + QStringLiteral(" set accessTime=date('now') where valueGroup=:valueGroup"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.exec();
@@ -215,7 +218,7 @@ void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &pa
         query.prepare(QStringLiteral("select * from ") + clientName + QStringLiteral(" where valueGroup=:valueGroup"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
     } else {
-        //update modification time
+        // update modification time
         query.prepare(QStringLiteral("update ") + clientName + QStringLiteral(" set accessTime=date('now') where valueGroup=:valueGroup and id=:key"));
         query.bindValue(QStringLiteral(":valueGroup"), valueGroup);
         query.bindValue(QStringLiteral(":key"), params[QStringLiteral("key")].toString());

@@ -11,7 +11,7 @@
 
 #include <QProcess>
 
-class Application::Private: public QObject
+class Application::Private : public QObject
 {
     Q_OBJECT
 public:
@@ -30,4 +30,3 @@ private:
 };
 
 #endif /* APPLICATION_P_H */
-

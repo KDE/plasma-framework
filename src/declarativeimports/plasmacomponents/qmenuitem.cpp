@@ -8,9 +8,9 @@
 #include "qmenuitem.h"
 
 QMenuItem::QMenuItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_action(nullptr),
-      m_section(false)
+    : QQuickItem(parent)
+    , m_action(nullptr)
+    , m_section(false)
 {
     setAction(new QAction(this));
 }
@@ -141,6 +141,3 @@ void QMenuItem::updateAction()
     m_action->setVisible(isVisible());
     m_action->setEnabled(isEnabled());
 }
-
-
-

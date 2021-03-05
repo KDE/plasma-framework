@@ -5,13 +5,13 @@
 */
 
 #include "appletquickitem.h"
-#include "private/appletquickitem_p.h"
 #include "debug_p.h"
+#include "private/appletquickitem_p.h"
 
 #include <QJsonArray>
+#include <QQmlContext>
 #include <QQmlExpression>
 #include <QQmlProperty>
-#include <QQmlContext>
 #include <QQuickWindow>
 #include <QRandomGenerator>
 
@@ -30,22 +30,21 @@
 
 namespace PlasmaQuick
 {
-
 QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
 
 AppletQuickItemPrivate::PreloadPolicy AppletQuickItemPrivate::s_preloadPolicy = AppletQuickItemPrivate::Uninitialized;
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
-    : q(item),
-      switchWidth(-1),
-      switchHeight(-1),
-      applet(a),
-      expanded(false),
-      activationTogglesExpanded(true),
-      initComplete(false)
+    : q(item)
+    , switchWidth(-1)
+    , switchHeight(-1)
+    , applet(a)
+    , expanded(false)
+    , activationTogglesExpanded(true)
+    , initComplete(false)
 {
     if (s_preloadPolicy == Uninitialized) {
-        //default as Adaptive
+        // default as Adaptive
         s_preloadPolicy = Adaptive;
 
         if (qEnvironmentVariableIsSet("PLASMA_PRELOAD_POLICY")) {
@@ -82,43 +81,44 @@ int AppletQuickItemPrivate::preloadWeight() const
     int defaultWeight;
     const QStringList provides(KPluginMetaData::readStringList(applet->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides")));
 
-    //some applet types we want a bigger weight
+    // some applet types we want a bigger weight
     if (provides.contains(QLatin1String("org.kde.plasma.launchermenu"))) {
         defaultWeight = DefaultLauncherPreloadWeight;
     } else {
         defaultWeight = DefaultPreloadWeight;
     }
-    //default widgets to be barely preloaded
-    return qBound(0, applet->config().readEntry(QStringLiteral("PreloadWeight"), qMax(defaultWeight, applet->pluginMetaData().rawData().value(QStringLiteral("X-Plasma-PreloadWeight")).toInt())), 100);
+    // default widgets to be barely preloaded
+    return qBound(0,
+                  applet->config().readEntry(QStringLiteral("PreloadWeight"),
+                                             qMax(defaultWeight, applet->pluginMetaData().rawData().value(QStringLiteral("X-Plasma-PreloadWeight")).toInt())),
+                  100);
 }
 
 void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
 {
     QObject *layout = nullptr;
 
-    //Extract the representation's Layout, if any
-    //No Item?
+    // Extract the representation's Layout, if any
+    // No Item?
     if (!item) {
         return;
     }
 
-    //Search a child that has the needed Layout properties
-    //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+    // Search a child that has the needed Layout properties
+    // HACK: here we are not type safe, but is the only way to access to a pointer of Layout
     const auto lstChildren = item->children();
     for (QObject *child : lstChildren) {
-        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-           ) {
+        // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
+            && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
+            && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
             layout = child;
             break;
         }
     }
 
-    //if the compact repr doesn't export a Layout.* attached property,
-    //reset our own with default values
+    // if the compact repr doesn't export a Layout.* attached property,
+    // reset our own with default values
     if (!layout) {
         if (ownLayout) {
             ownLayout->setProperty("minimumWidth", 0);
@@ -133,7 +133,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
         return;
     }
 
-    //propagate all the size hints
+    // propagate all the size hints
     propagateSizeHint("minimumWidth");
     propagateSizeHint("minimumHeight");
     propagateSizeHint("preferredWidth");
@@ -143,28 +143,25 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillWidth");
     propagateSizeHint("fillHeight");
 
-
     QObject *ownLayout = nullptr;
 
     const auto children = q->children();
     for (QObject *child : children) {
-        //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-                child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-                child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-           ) {
+        // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
+            && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
+            && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
             ownLayout = child;
             break;
         }
     }
 
-    //this should never happen, since we ask to create it if doesn't exists
+    // this should never happen, since we ask to create it if doesn't exists
     if (!ownLayout) {
         return;
     }
 
-    //if the representation didn't change, don't do anything
+    // if the representation didn't change, don't do anything
     if (representationLayout == layout) {
         return;
     }
@@ -173,26 +170,18 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
         QObject::disconnect(representationLayout, nullptr, q, nullptr);
     }
 
-    //Here we can't use the new connect syntax because we can't link against QtQuick layouts
-    QObject::connect(layout, SIGNAL(minimumWidthChanged()),
-                     q, SLOT(minimumWidthChanged()));
-    QObject::connect(layout, SIGNAL(minimumHeightChanged()),
-                     q, SLOT(minimumHeightChanged()));
+    // Here we can't use the new connect syntax because we can't link against QtQuick layouts
+    QObject::connect(layout, SIGNAL(minimumWidthChanged()), q, SLOT(minimumWidthChanged()));
+    QObject::connect(layout, SIGNAL(minimumHeightChanged()), q, SLOT(minimumHeightChanged()));
 
-    QObject::connect(layout, SIGNAL(preferredWidthChanged()),
-                     q, SLOT(preferredWidthChanged()));
-    QObject::connect(layout, SIGNAL(preferredHeightChanged()),
-                     q, SLOT(preferredHeightChanged()));
+    QObject::connect(layout, SIGNAL(preferredWidthChanged()), q, SLOT(preferredWidthChanged()));
+    QObject::connect(layout, SIGNAL(preferredHeightChanged()), q, SLOT(preferredHeightChanged()));
 
-    QObject::connect(layout, SIGNAL(maximumWidthChanged()),
-                     q, SLOT(maximumWidthChanged()));
-    QObject::connect(layout, SIGNAL(maximumHeightChanged()),
-                     q, SLOT(maximumHeightChanged()));
+    QObject::connect(layout, SIGNAL(maximumWidthChanged()), q, SLOT(maximumWidthChanged()));
+    QObject::connect(layout, SIGNAL(maximumHeightChanged()), q, SLOT(maximumHeightChanged()));
 
-    QObject::connect(layout, SIGNAL(fillWidthChanged()),
-                     q, SLOT(fillWidthChanged()));
-    QObject::connect(layout, SIGNAL(fillHeightChanged()),
-                     q, SLOT(fillHeightChanged()));
+    QObject::connect(layout, SIGNAL(fillWidthChanged()), q, SLOT(fillWidthChanged()));
+    QObject::connect(layout, SIGNAL(fillHeightChanged()), q, SLOT(fillHeightChanged()));
 
     representationLayout = layout;
     AppletQuickItemPrivate::ownLayout = ownLayout;
@@ -227,7 +216,8 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
     QVariantHash initialProperties;
     initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
 
-    compactRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
+    compactRepresentationItem =
+        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
 
     Q_EMIT q->compactRepresentationItemChanged(compactRepresentationItem);
 
@@ -243,10 +233,11 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
     if (fullRepresentation && fullRepresentation != qmlObject->mainComponent()) {
         QVariantHash initialProperties;
         initialProperties[QStringLiteral("parent")] = QVariant();
-        fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
+        fullRepresentationItem =
+            qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
     } else {
         fullRepresentation = qmlObject->mainComponent();
-        fullRepresentationItem = qobject_cast<QQuickItem*>(qmlObject->rootObject());
+        fullRepresentationItem = qobject_cast<QQuickItem *>(qmlObject->rootObject());
         Q_EMIT q->fullRepresentationChanged(fullRepresentation);
     }
 
@@ -269,13 +260,14 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
         return compactRepresentationExpanderItem;
     }
 
-    compactRepresentationExpanderItem = qobject_cast<QQuickItem*>(qmlObject->createObjectFromComponent(compactRepresentationExpander, QtQml::qmlContext(qmlObject->rootObject())));
+    compactRepresentationExpanderItem =
+        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentationExpander, QtQml::qmlContext(qmlObject->rootObject())));
 
     if (!compactRepresentationExpanderItem) {
         return nullptr;
     }
 
-    compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject*>(createCompactRepresentationItem()));
+    compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject *>(createCompactRepresentationItem()));
 
     return compactRepresentationExpanderItem;
 }
@@ -289,12 +281,12 @@ bool AppletQuickItemPrivate::appletShouldBeExpanded() const
         if (switchWidth > 0 && switchHeight > 0) {
             return q->width() > switchWidth && q->height() > switchHeight;
 
-            //if a size to switch wasn't set, determine what representation to always chose
+            // if a size to switch wasn't set, determine what representation to always chose
         } else {
-            //preferred representation set?
+            // preferred representation set?
             if (preferredRepresentation) {
                 return preferredRepresentation == fullRepresentation;
-                //Otherwise, base on FormFactor
+                // Otherwise, base on FormFactor
             } else {
                 return (applet->formFactor() != Plasma::Types::Horizontal && applet->formFactor() != Plasma::Types::Vertical);
             }
@@ -311,24 +303,22 @@ void AppletQuickItemPrivate::preloadForExpansion()
     createFullRepresentationItem();
 
     // When not already expanded, also preload the expander
-    if (!expanded && !applet->isContainment() &&
-            (!preferredRepresentation ||
-                preferredRepresentation != fullRepresentation)) {
+    if (!expanded && !applet->isContainment() && (!preferredRepresentation || preferredRepresentation != fullRepresentation)) {
         createCompactRepresentationExpanderItem();
     }
 
     if (!appletShouldBeExpanded() && compactRepresentationExpanderItem) {
-        compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject*>(createFullRepresentationItem()));
+        compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant::fromValue<QObject *>(createFullRepresentationItem()));
     } else if (fullRepresentationItem) {
-        fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject*>(q));
+        fullRepresentationItem->setProperty("parent", QVariant::fromValue<QObject *>(q));
     }
 
-    //preallocate nodes
+    // preallocate nodes
     if (fullRepresentationItem && fullRepresentationItem->window()) {
         fullRepresentationItem->window()->create();
     }
 
-    qCDebug(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << ( QDateTime::currentMSecsSinceEpoch() - time) << "msec";
+    qCDebug(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << (QDateTime::currentMSecsSinceEpoch() - time) << "msec";
 }
 
 void AppletQuickItemPrivate::compactRepresentationCheck()
@@ -341,26 +331,24 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
         return;
     }
 
-    //ignore 0 sizes;
+    // ignore 0 sizes;
     if (q->width() <= 0 || q->height() <= 0) {
         return;
     }
 
     bool full = appletShouldBeExpanded();
 
-    if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem) ||
-            (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)
-        ) {
+    if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem)
+        || (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)) {
         return;
     }
 
-
-    //Expanded
+    // Expanded
     if (full) {
         QQuickItem *item = createFullRepresentationItem();
 
         if (item) {
-            //unwire with the expander
+            // unwire with the expander
             if (compactRepresentationExpanderItem) {
                 compactRepresentationExpanderItem->setProperty("fullRepresentation", QVariant());
                 compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant());
@@ -369,7 +357,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             item->setParentItem(q);
             {
-                //set anchors
+                // set anchors
                 QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, QStringLiteral("parent"));
                 QQmlProperty prop(item, QStringLiteral("anchors.fill"));
                 prop.write(expr.evaluate());
@@ -385,18 +373,18 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             Q_EMIT q->expandedChanged(true);
         }
 
-        //Icon
+        // Icon
     } else {
         QQuickItem *compactItem = createCompactRepresentationItem();
         QQuickItem *compactExpanderItem = createCompactRepresentationExpanderItem();
 
         if (compactItem && compactExpanderItem) {
-            //set the root item as the main visible item
+            // set the root item as the main visible item
             compactItem->setVisible(true);
             compactExpanderItem->setParentItem(q);
             compactExpanderItem->setVisible(true);
             {
-                //set anchors
+                // set anchors
                 QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactExpanderItem, QStringLiteral("parent"));
                 QQmlProperty prop(compactExpanderItem, QStringLiteral("anchors.fill"));
                 prop.write(expr.evaluate());
@@ -406,8 +394,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
                 fullRepresentationItem->setProperty("parent", QVariant());
             }
 
-            compactExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject*>(compactItem));
-            //The actual full representation will be connected when created
+            compactExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject *>(compactItem));
+            // The actual full representation will be connected when created
             compactExpanderItem->setProperty("fullRepresentation", QVariant());
 
             currentRepresentationItem = compactItem;
@@ -459,12 +447,9 @@ void AppletQuickItemPrivate::fillHeightChanged()
     propagateSizeHint("fillHeight");
 }
 
-
-
-
 AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
-    : QQuickItem(parent),
-      d(new AppletQuickItemPrivate(applet, this))
+    : QQuickItem(parent)
+    , d(new AppletQuickItemPrivate(applet, this))
 {
     d->init();
 
@@ -499,12 +484,12 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
 AppletQuickItem::~AppletQuickItem()
 {
-    //decrease weight
+    // decrease weight
     if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
         d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), qMax(0, d->preloadWeight() - AppletQuickItemPrivate::PreloadWeightDecrement));
     }
 
-    //Here the order is important
+    // Here the order is important
     delete d->compactRepresentationItem;
     delete d->fullRepresentationItem;
     delete d->compactRepresentationExpanderItem;
@@ -517,24 +502,24 @@ AppletQuickItem::~AppletQuickItem()
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     QQmlContext *context;
-    //is it using shared engine mode?
+    // is it using shared engine mode?
     if (!QtQml::qmlEngine(object)->parent()) {
         context = QtQml::qmlContext(object);
-        //search the root context of the applet in which the object is in
+        // search the root context of the applet in which the object is in
         while (context) {
-            //the rootcontext of an applet is a child of the engine root context
+            // the rootcontext of an applet is a child of the engine root context
             if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
                 break;
             }
 
             context = context->parentContext();
         }
-    //otherwise index by root context
+        // otherwise index by root context
     } else {
         context = QtQml::qmlEngine(object)->rootContext();
     }
-    //at the moment of the attached object creation, the root item is the only one that hasn't a parent
-    //only way to avoid creation of this attached for everybody but the root item
+    // at the moment of the attached object creation, the root item is the only one that hasn't a parent
+    // only way to avoid creation of this attached for everybody but the root item
     if (!object->parent() && AppletQuickItemPrivate::s_rootObjects.contains(context)) {
         return AppletQuickItemPrivate::s_rootObjects.value(context);
     } else {
@@ -549,7 +534,7 @@ Plasma::Applet *AppletQuickItem::applet() const
 
 void AppletQuickItem::init()
 {
-    //FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
+    // FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
     if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
         return;
     }
@@ -558,21 +543,21 @@ void AppletQuickItem::init()
 
     Q_ASSERT(d->applet);
 
-    //Initialize the main QML file
+    // Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine();
 
-    //if the engine of the qmlObject is different from the static one, then we
-    //are using an old version of the api in which every applet had one engine
-    //so initialize a private url interceptor
+    // if the engine of the qmlObject is different from the static one, then we
+    // are using an old version of the api in which every applet had one engine
+    // so initialize a private url interceptor
     if (d->applet->kPackage().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->kPackage());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->setUrlInterceptor(interceptor);
     }
 
-    //Force QtQuickControls to use the "Plasma" style for this engine.
-    //this way is possible to mix QtQuickControls and plasma components in applets
-    //while still having the desktop style in configuration dialogs
+    // Force QtQuickControls to use the "Plasma" style for this engine.
+    // this way is possible to mix QtQuickControls and plasma components in applets
+    // while still having the desktop style in configuration dialogs
     if (!engine->property("_plasma_qqc_style_set").toBool()) {
         QQmlComponent c(engine);
         c.setData(QByteArrayLiteral("import QtQuick 2.1\n\
@@ -582,7 +567,8 @@ void AppletQuickItem::init()
               Component.onCompleted: {\
                 Settings.styleName = \"Plasma\";\
               }\
-            }"), QUrl());
+            }"),
+                  QUrl());
         QObject *o = c.create();
         o->deleteLater();
         engine->setProperty(("_plasma_qqc_style_set"), true);
@@ -590,7 +576,8 @@ void AppletQuickItem::init()
 
     d->qmlObject->setSource(d->applet->kPackage().fileUrl("mainscript"));
 
-    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError() || d->applet->failedToLaunch()) {
+    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()
+        || d->applet->failedToLaunch()) {
         QString reason;
         QJsonObject errorData;
         errorData[QStringLiteral("appletName")] = i18n("Unknown Applet");
@@ -620,7 +607,7 @@ void AppletQuickItem::init()
         d->qmlObject->setSource(d->coronaPackage.fileUrl("appleterror"));
         d->qmlObject->completeInitialization();
 
-        //even the error message QML may fail
+        // even the error message QML may fail
         if (d->qmlObject->mainComponent()->isError()) {
             return;
         } else {
@@ -634,9 +621,9 @@ void AppletQuickItem::init()
 
     d->qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), this);
 
-    //initialize size, so an useless resize less
+    // initialize size, so an useless resize less
     QVariantHash initialProperties;
-    //initialize with our size only if valid
+    // initialize with our size only if valid
     if (width() > 0 && height() > 0) {
         const qreal w = parentItem() ? std::min(parentItem()->width(), width()) : width();
         const qreal h = parentItem() ? std::min(parentItem()->height(), height()) : height();
@@ -646,29 +633,29 @@ void AppletQuickItem::init()
     d->qmlObject->setInitializationDelayed(false);
     d->qmlObject->completeInitialization(initialProperties);
 
-    //otherwise, initialize our size to root object's size
+    // otherwise, initialize our size to root object's size
     if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
         const qreal w = d->qmlObject->rootObject()->property("width").value<qreal>();
         const qreal h = d->qmlObject->rootObject()->property("height").value<qreal>();
         setSize(parentItem() ? QSizeF(std::min(parentItem()->width(), w), std::min(parentItem()->height(), h)) : QSizeF(w, h));
     }
 
-    //default fullrepresentation is our root main component, if none specified
+    // default fullrepresentation is our root main component, if none specified
     if (!d->fullRepresentation) {
         d->fullRepresentation = d->qmlObject->mainComponent();
-        d->fullRepresentationItem = qobject_cast<QQuickItem*>(d->qmlObject->rootObject());
+        d->fullRepresentationItem = qobject_cast<QQuickItem *>(d->qmlObject->rootObject());
 
         Q_EMIT fullRepresentationChanged(d->fullRepresentation);
     }
 
-    //default compactRepresentation is a simple icon provided by the shell package
+    // default compactRepresentation is a simple icon provided by the shell package
     if (!d->compactRepresentation) {
         d->compactRepresentation = new QQmlComponent(engine, this);
         d->compactRepresentation->loadUrl(d->coronaPackage.fileUrl("defaultcompactrepresentation"));
         Q_EMIT compactRepresentationChanged(d->compactRepresentation);
     }
 
-    //default compactRepresentationExpander is the popup in which fullRepresentation goes
+    // default compactRepresentationExpander is the popup in which fullRepresentation goes
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         QUrl compactExpanderUrl = d->containmentPackage.fileUrl("compactapplet");
@@ -685,39 +672,36 @@ void AppletQuickItem::init()
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
     qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
 
-    //if we're expanded we don't care about preloading because it will already be the case
-    //as well as for containments
-    if (d->applet->isContainment() ||
-        d->expanded || d->preferredRepresentation == d->fullRepresentation) {
+    // if we're expanded we don't care about preloading because it will already be the case
+    // as well as for containments
+    if (d->applet->isContainment() || d->expanded || d->preferredRepresentation == d->fullRepresentation) {
         return;
     }
 
     if (!d->applet->isContainment() && d->applet->containment()) {
-        connect(d->applet->containment(), &Plasma::Containment::uiReadyChanged,
-            this, [this](bool uiReady) {
-                if (uiReady && d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
-                    const int preloadWeight = d->preloadWeight();
-                    qCDebug(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
+        connect(d->applet->containment(), &Plasma::Containment::uiReadyChanged, this, [this](bool uiReady) {
+            if (uiReady && d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
+                const int preloadWeight = d->preloadWeight();
+                qCDebug(LOG_PLASMAQUICK) << "New Applet " << d->applet->title() << "with a weight of" << preloadWeight;
 
-                    //don't preload applets less then a certain weight
-                    if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
-                        //spread the creation over a random delay to make it look
-                        //plasma started already, and load the popup in the background
-                        //without big noticeable freezes, the bigger the weight the smaller is likely
-                        //to be the delay, smaller minimum walue, smaller spread
-                        const int min = (100 - preloadWeight) * 20;
-                        const int max = (100 - preloadWeight) * 100;
-                        const int delay = QRandomGenerator::global()->bounded((max + 1) - min) + min;
-                        QTimer::singleShot(delay, this, [this, delay]() {
-                            qCDebug(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay/1000 << "seconds";
-                            d->preloadForExpansion();
-                        });
-                    }
+                // don't preload applets less then a certain weight
+                if (d->s_preloadPolicy >= AppletQuickItemPrivate::Aggressive || preloadWeight >= AppletQuickItemPrivate::DelayedPreloadWeight) {
+                    // spread the creation over a random delay to make it look
+                    // plasma started already, and load the popup in the background
+                    // without big noticeable freezes, the bigger the weight the smaller is likely
+                    // to be the delay, smaller minimum walue, smaller spread
+                    const int min = (100 - preloadWeight) * 20;
+                    const int max = (100 - preloadWeight) * 100;
+                    const int delay = QRandomGenerator::global()->bounded((max + 1) - min) + min;
+                    QTimer::singleShot(delay, this, [this, delay]() {
+                        qCDebug(LOG_PLASMAQUICK) << "Delayed preload of " << d->applet->title() << "after" << (qreal)delay / 1000 << "seconds";
+                        d->preloadForExpansion();
+                    });
                 }
-            });
+            }
+        });
     }
 }
-
 
 Plasma::Package AppletQuickItem::appletPackage() const
 {
@@ -801,7 +785,7 @@ QObject *AppletQuickItem::testItem()
 
         d->testItem = d->qmlObject->createObjectFromSource(url, QtQml::qmlContext(rootItem()));
         if (d->testItem) {
-            d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject*>(this));
+            d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject *>(this));
         }
     }
 
@@ -847,7 +831,7 @@ void AppletQuickItem::setExpanded(bool expanded)
 
     if (expanded) {
         d->preloadForExpansion();
-        //increase on open, ignore containments
+        // increase on open, ignore containments
         if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive && !d->applet->isContainment()) {
             const int newWeight = qMin(d->preloadWeight() + AppletQuickItemPrivate::PreloadWeightIncrement, 100);
             d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), newWeight);
@@ -921,7 +905,7 @@ void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &o
 void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
-        //we have a window: create the representations if needed
+        // we have a window: create the representations if needed
         if (value.window) {
             init();
         }
@@ -933,4 +917,3 @@ void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
 }
 
 #include "moc_appletquickitem.cpp"
-

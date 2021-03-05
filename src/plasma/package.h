@@ -19,13 +19,13 @@ class KJob;
 // not 5.6, as last Plasma API using this class only got removed later
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
 
-namespace KPackage {
-    class Package;
+namespace KPackage
+{
+class Package;
 }
 
 namespace Plasma
 {
-
 /**
  * @class Package plasma/package.h <Plasma/Package>
  *
@@ -66,7 +66,7 @@ namespace Plasma
  *
  * @deprecated Since 5.6, use KPackage::Package instead
  **/
-//TODO: write documentation on USING a package
+// TODO: write documentation on USING a package
 
 class PackagePrivate;
 class PackageStructure;
@@ -193,8 +193,8 @@ public:
     bool allowExternalPaths() const;
 
     /**
-      * @return the package metadata object.
-      */
+     * @return the package metadata object.
+     */
     KPluginInfo metadata() const;
 
     /**
@@ -366,6 +366,4 @@ Q_DECLARE_METATYPE(Plasma::Package)
 
 #endif // PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
 
-
 #endif
-

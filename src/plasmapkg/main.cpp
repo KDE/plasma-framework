@@ -51,19 +51,19 @@ int main(int argc, char **argv)
 
     QStringList params = app.arguments().mid(1);
 
-    //plasmapkg2 had some hardcoded types, kpackagetool5 requires the servicetype passed as the type parameter
-    //convert between the two
-    //user passed -t typeName
+    // plasmapkg2 had some hardcoded types, kpackagetool5 requires the servicetype passed as the type parameter
+    // convert between the two
+    // user passed -t typeName
     int typeIndex = params.indexOf(QLatin1String("-t"));
     if (typeIndex > -1 && params.length() > typeIndex + 1) {
         params[typeIndex + 1] = typeFromLegacy(params.value(typeIndex + 1));
     } else {
-        //user passed --type typeName
+        // user passed --type typeName
         typeIndex = params.indexOf(QLatin1String("--type"));
         if (typeIndex > -1 && params.length() > typeIndex + 1) {
             params[typeIndex + 1] = typeFromLegacy(params.value(typeIndex + 1));
         } else {
-            //user passed --type=typeName
+            // user passed --type=typeName
             typeIndex = params.indexOf(QRegularExpression(QStringLiteral("--type=.*")));
             if (typeIndex > -1) {
                 params[typeIndex] = QStringLiteral("--type=") + typeFromLegacy(params.value(typeIndex).replace(QStringLiteral("--type="), QString()));
@@ -78,4 +78,3 @@ int main(int argc, char **argv)
 
     return p.exitCode();
 }
-

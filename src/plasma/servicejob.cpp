@@ -12,14 +12,12 @@
 
 namespace Plasma
 {
-
-ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest,
-                                     const QString &op, const QVariantMap &params)
-    : q(owner),
-      destination(dest),
-      operation(op),
-      parameters(params),
-      m_allowAutoStart(true)
+ServiceJobPrivate::ServiceJobPrivate(ServiceJob *owner, const QString &dest, const QString &op, const QVariantMap &params)
+    : q(owner)
+    , destination(dest)
+    , operation(op)
+    , parameters(params)
+    , m_allowAutoStart(true)
 {
 }
 
@@ -42,12 +40,11 @@ void ServiceJobPrivate::autoStart()
     }
 }
 
-ServiceJob::ServiceJob(const QString &destination, const QString &operation,
-                       const QVariantMap &parameters, QObject *parent)
-    : KJob(parent),
-      d(new ServiceJobPrivate(this, destination, operation, parameters))
+ServiceJob::ServiceJob(const QString &destination, const QString &operation, const QVariantMap &parameters, QObject *parent)
+    : KJob(parent)
+    , d(new ServiceJobPrivate(this, destination, operation, parameters))
 {
-    connect(this, SIGNAL(finished(KJob*)), this, SLOT(preventAutoStart()));
+    connect(this, SIGNAL(finished(KJob *)), this, SLOT(preventAutoStart()));
 }
 
 ServiceJob::~ServiceJob()

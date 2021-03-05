@@ -9,7 +9,6 @@
 
 namespace PlasmaQuick
 {
-
 ///////////////////////ConfigCategory
 
 ConfigCategory::ConfigCategory(QObject *parent)
@@ -19,7 +18,8 @@ ConfigCategory::ConfigCategory(QObject *parent)
 }
 
 ConfigCategory::~ConfigCategory()
-{}
+{
+}
 
 QString ConfigCategory::name() const
 {

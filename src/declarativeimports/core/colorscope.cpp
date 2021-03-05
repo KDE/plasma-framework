@@ -8,9 +8,9 @@
 
 #include "colorscope.h"
 
+#include <QColor>
 #include <QQmlContext>
 #include <QQmlEngine>
-#include <QColor>
 #include <QQuickWindow>
 
 #include <PlasmaQuick/AppletQuickItem>
@@ -20,11 +20,11 @@ QHash<QObject *, ColorScope *> ColorScope::s_attachedScopes = QHash<QObject *, C
 QWeakPointer<Plasma::Theme> ColorScope::s_theme;
 
 ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
-    : QQuickItem(parent),
-      m_inherit(false),
-      m_group(Plasma::Theme::NormalColorGroup),
-      m_parent(parentObject),
-      m_actualGroup(Plasma::Theme::NormalColorGroup)
+    : QQuickItem(parent)
+    , m_inherit(false)
+    , m_group(Plasma::Theme::NormalColorGroup)
+    , m_parent(parentObject)
+    , m_actualGroup(Plasma::Theme::NormalColorGroup)
 {
     m_theme = s_theme.toStrongRef();
     if (!m_theme) {
@@ -38,20 +38,17 @@ ColorScope::ColorScope(QQuickItem *parent, QObject *parentObject)
     connect(this, &ColorScope::colorGroupChanged, this, &ColorScope::colorsChanged);
 
     if (parentObject && qobject_cast<QQuickItem *>(parentObject)) {
-        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::windowChanged,
-            this, [this]() {
-                findParentScope();
-                checkColorGroupChanged();
-            });
+        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::windowChanged, this, [this]() {
+            findParentScope();
+            checkColorGroupChanged();
+        });
 
-        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::parentChanged,
-            this, [this]() {
-                findParentScope();
-                checkColorGroupChanged();
-            });
+        connect(static_cast<QQuickItem *>(parentObject), &QQuickItem::parentChanged, this, [this]() {
+            findParentScope();
+            checkColorGroupChanged();
+        });
     } else if (parent) {
-        connect(parent, &QQuickItem::parentChanged,
-            this, &ColorScope::checkColorGroupChanged);
+        connect(parent, &QQuickItem::parentChanged, this, &ColorScope::checkColorGroupChanged);
     }
 }
 
@@ -77,21 +74,19 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
     return s;
 }
 
-void ColorScope::setParentScope(ColorScope* parentScope)
+void ColorScope::setParentScope(ColorScope *parentScope)
 {
     if (parentScope == m_parentScope)
         return;
 
     if (m_parentScope) {
-        disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged,
-                this, &ColorScope::checkColorGroupChanged);
+        disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged, this, &ColorScope::checkColorGroupChanged);
     }
 
     m_parentScope = parentScope;
 
     if (parentScope) {
-        connect(parentScope, &ColorScope::colorGroupChanged,
-                this, &ColorScope::checkColorGroupChanged);
+        connect(parentScope, &ColorScope::colorGroupChanged, this, &ColorScope::checkColorGroupChanged);
     }
 }
 
@@ -198,7 +193,7 @@ void ColorScope::setInherit(bool inherit)
 void ColorScope::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
-        //we have a window: create the representations if needed
+        // we have a window: create the representations if needed
         if (value.window) {
             findParentScope();
             checkColorGroupChanged();

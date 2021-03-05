@@ -15,7 +15,6 @@
 
 namespace Plasma
 {
-
 class ServiceJobPrivate;
 
 /**
@@ -52,8 +51,7 @@ public:
      * @param parameters  the parameters of the @p action
      * @param parent      the parent object for this service
      */
-    ServiceJob(const QString &destination, const QString &operation,
-               const QVariantMap &parameters, QObject *parent = nullptr);
+    ServiceJob(const QString &destination, const QString &operation, const QVariantMap &parameters, QObject *parent = nullptr);
 
     /**
      * Destructor
@@ -110,4 +108,3 @@ private:
 } // namespace Plasma
 
 #endif // multiple inclusion guard
-

@@ -24,7 +24,6 @@ class KKeySequenceWidget;
 
 namespace Plasma
 {
-
 class AppletScript;
 class Service;
 
@@ -93,7 +92,7 @@ public:
     QBasicTimer constraintsTimer;
     QBasicTimer *modificationsTimer;
 
-    QPointer <KNotification> deleteNotification;
+    QPointer<KNotification> deleteNotification;
     QTimer *deleteNotificationTimer;
 
     QString configurationRequiredReason;

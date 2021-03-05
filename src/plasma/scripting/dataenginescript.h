@@ -9,13 +9,12 @@
 
 #include <KPluginInfo>
 
-#include <plasma/plasma_export.h>
 #include <plasma/dataengine.h>
+#include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
 
 namespace Plasma
 {
-
 class DataEngineScriptPrivate;
 class Service;
 
@@ -114,8 +113,7 @@ protected:
      */
     KPluginMetaData metadata() const;
 
-    void setData(const QString &source, const QString &key,
-                 const QVariant &value);
+    void setData(const QString &source, const QString &key, const QVariant &value);
     void setData(const QString &source, const QVariant &value);
 
     /**
@@ -129,7 +127,7 @@ protected:
     void removeAllData(const QString &source);
     void removeData(const QString &source, const QString &key);
     void setMinimumPollingInterval(int minimumMs);
-    int  minimumPollingInterval() const;
+    int minimumPollingInterval() const;
     void setPollingInterval(uint frequency);
     void removeAllSources();
     void addSource(DataContainer *source);
@@ -142,12 +140,11 @@ private:
     DataEngineScriptPrivate *const d;
 };
 
-#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
+#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
-#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
+#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON(libname, classname, jsonFile)                                                                         \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
-} //Plasma namespace
+} // Plasma namespace
 
 #endif

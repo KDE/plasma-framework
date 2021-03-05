@@ -8,23 +8,23 @@
 */
 
 #include "dialog.h"
-#include "config-plasma.h"
 #include "../declarativeimports/core/framesvgitem.h"
+#include "config-plasma.h"
+#include "configview.h"
 #include "dialogshadows_p.h"
 #include "view.h"
-#include "configview.h"
 
-#include <QQuickItem>
-#include <QTimer>
 #include <QLayout>
-#include <QScreen>
 #include <QMenu>
 #include <QPointer>
+#include <QQuickItem>
+#include <QScreen>
+#include <QTimer>
 
 #include <QPlatformSurfaceEvent>
 
-#include <KWindowSystem>
 #include <KWindowSystem/KWindowInfo>
+#include <KWindowSystem>
 
 #include <kquickaddons/quickviewsharedengine.h>
 
@@ -48,26 +48,25 @@
 #include <QtPlatformHeaders/QXcbWindowFunctions>
 #endif
 
-//Unfortunately QWINDOWSIZE_MAX is not exported
-#define DIALOGSIZE_MAX ((1<<24)-1)
+// Unfortunately QWINDOWSIZE_MAX is not exported
+#define DIALOGSIZE_MAX ((1 << 24) - 1)
 
 namespace PlasmaQuick
 {
-
 class DialogPrivate
 {
 public:
     DialogPrivate(Dialog *dialog)
-        : q(dialog),
-          location(Plasma::Types::BottomEdge),
-          frameSvgItem(nullptr),
-          hasMask(false),
-          type(Dialog::Normal),
-          hideOnWindowDeactivate(false),
-          outputOnly(false),
-          visible(false),
-          componentComplete(dialog->parent() == nullptr),
-          backgroundHints(Dialog::StandardBackground)
+        : q(dialog)
+        , location(Plasma::Types::BottomEdge)
+        , frameSvgItem(nullptr)
+        , hasMask(false)
+        , type(Dialog::Normal)
+        , hideOnWindowDeactivate(false)
+        , outputOnly(false)
+        , visible(false)
+        , componentComplete(dialog->parent() == nullptr)
+        , backgroundHints(Dialog::StandardBackground)
     {
         hintsCommitTimer.setSingleShot(true);
         hintsCommitTimer.setInterval(0);
@@ -76,7 +75,7 @@ public:
 
     void updateInputShape();
 
-    //SLOTS
+    // SLOTS
     /**
      * Sync Borders updates the enabled borders of the frameSvgItem depending
      * on the geometry of the window.
@@ -84,7 +83,7 @@ public:
      * \param windowGeometry The window geometry which should be taken into
      * consideration when activating/deactivating certain borders
      */
-    void syncBorders(const QRect& windowGeometry);
+    void syncBorders(const QRect &windowGeometry);
 
     /**
      * This function sets the blurBehind, background contrast and shadows. It
@@ -112,7 +111,7 @@ public:
      */
     void updateLayoutParameters();
 
-    QRect availableScreenGeometryForPosition(const QPoint& pos) const;
+    QRect availableScreenGeometryForPosition(const QPoint &pos) const;
 
     /**
      * This function checks the current position of the dialog and repositions
@@ -152,11 +151,11 @@ public:
     bool componentComplete;
     Dialog::BackgroundHints backgroundHints;
 
-    //Attached Layout property of mainItem, if any
-    QPointer <QObject> mainItemLayout;
+    // Attached Layout property of mainItem, if any
+    QPointer<QObject> mainItemLayout;
 };
 
-QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
+QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint &pos) const
 {
     // FIXME: QWindow::screen() never ever changes if the window is moved across
     //        virtual screens (normal two screens with X), this seems to be intentional
@@ -167,9 +166,9 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     QRect avail;
     const auto screens = QGuiApplication::screens();
     for (QScreen *screen : screens) {
-        //we check geometry() but then take availableGeometry()
-        //to reliably check in which screen a position is, we need the full
-        //geometry, including areas for panels
+        // we check geometry() but then take availableGeometry()
+        // to reliably check in which screen a position is, we need the full
+        // geometry, including areas for panels
         if (screen->geometry().contains(pos)) {
             avail = screen->availableGeometry();
             break;
@@ -192,12 +191,12 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint& pos) const
     return avail;
 }
 
-void DialogPrivate::syncBorders(const QRect& geom)
+void DialogPrivate::syncBorders(const QRect &geom)
 {
     QRect avail = availableScreenGeometryForPosition(geom.topLeft());
     int borders = Plasma::FrameSvg::AllBorders;
 
-    //Tooltips always have all the borders
+    // Tooltips always have all the borders
     // floating windows have all borders
     if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating) {
         if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
@@ -240,11 +239,12 @@ void DialogPrivate::updateTheme()
 
         KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->mask());
 
-        KWindowEffects::enableBackgroundContrast(q->winId(), theme.backgroundContrastEnabled(),
-                theme.backgroundContrast(),
-                theme.backgroundIntensity(),
-                theme.backgroundSaturation(),
-                frameSvgItem->mask());
+        KWindowEffects::enableBackgroundContrast(q->winId(),
+                                                 theme.backgroundContrastEnabled(),
+                                                 theme.backgroundContrast(),
+                                                 theme.backgroundIntensity(),
+                                                 theme.backgroundSaturation(),
+                                                 frameSvgItem->mask());
 
         if (KWindowSystem::compositingActive()) {
             if (hasMask) {
@@ -296,8 +296,8 @@ void DialogPrivate::updateVisibility(bool visible)
             }
 
 #if HAVE_KWAYLAND
-            //if is a wayland window that was hidden, we need
-            //to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
+            // if is a wayland window that was hidden, we need
+            // to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
             if (shellSurface && type != Dialog::OnScreenDisplay) {
                 shellSurface->setPosition(q->position());
             }
@@ -321,7 +321,7 @@ void DialogPrivate::updateVisibility(bool visible)
         case Plasma::Types::BottomEdge:
             slideLocation = KWindowEffects::BottomEdge;
             break;
-        //no edge, no slide
+        // no edge, no slide
         default:
             break;
         }
@@ -347,10 +347,10 @@ void DialogPrivate::updateMinimumWidth()
 
     q->setMinimumWidth(0);
 
-    //this is to try to get the internal item resized a tad before, but
-    //the flicker almost always happen anyways, so is *probably* useless
-    //this other kind of flicker is the view not being always focused exactly
-    //on the scene
+    // this is to try to get the internal item resized a tad before, but
+    // the flicker almost always happen anyways, so is *probably* useless
+    // this other kind of flicker is the view not being always focused exactly
+    // on the scene
     auto margin = frameSvgItem->fixedMargins();
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt() + margin->left() + margin->right();
     if (q->screen()) {
@@ -373,10 +373,10 @@ void DialogPrivate::updateMinimumHeight()
 
     q->setMinimumHeight(0);
 
-    //this is to try to get the internal item resized a tad before, but
-    //the flicker almost always happen anyways, so is *probably* useless
-    //this other kind of flicker is the view not being always focused exactly
-    //on the scene
+    // this is to try to get the internal item resized a tad before, but
+    // the flicker almost always happen anyways, so is *probably* useless
+    // this other kind of flicker is the view not being always focused exactly
+    // on the scene
     auto margin = frameSvgItem->fixedMargins();
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt() + margin->top() + margin->bottom();
     if (q->screen()) {
@@ -479,31 +479,27 @@ void DialogPrivate::updateLayoutParameters()
     QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
     getSizeHints(min, max);
 
-    const QSize finalSize(qBound(min.width(), q->width(), max.width()),
-                          qBound(min.height(), q->height(), max.height()));
+    const QSize finalSize(qBound(min.width(), q->width(), max.width()), qBound(min.height(), q->height(), max.height()));
 
     if (visualParent) {
-        //it's important here that we're using re->size() as size, we don't want to do recursive resizeEvents
+        // it's important here that we're using re->size() as size, we don't want to do recursive resizeEvents
         const QRect geom(q->popupPosition(visualParent, finalSize), finalSize);
         q->adjustGeometry(geom);
     } else {
         q->resize(finalSize);
     }
 
-    mainItem->setPosition(QPointF(margin->left(),
-                        margin->top()));
-    mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(),
-                        q->height() - margin->top() - margin->bottom()));
+    mainItem->setPosition(QPointF(margin->left(), margin->top()));
+    mainItem->setSize(QSizeF(q->width() - margin->left() - margin->right(), q->height() - margin->top() - margin->bottom()));
 
-    frameSvgItem->setSize(QSizeF(q->width(),
-                            q->height()));
+    frameSvgItem->setSize(QSizeF(q->width(), q->height()));
 
     repositionIfOffScreen();
     updateTheme();
 
-    //FIXME: this seems to interfere with the geometry change that
-    //sometimes is still going on, causing flicker (this one is two repositions happening in quick succession).
-    //it may have to be delayed further
+    // FIXME: this seems to interfere with the geometry change that
+    // sometimes is still going on, causing flicker (this one is two repositions happening in quick succession).
+    // it may have to be delayed further
     q->setMinimumSize(min);
     q->setMaximumSize(max);
 
@@ -566,12 +562,10 @@ void DialogPrivate::updateInputShape()
         }
         if (outputOnly) {
             // set input shape, so that it doesn't accept any input events
-            xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT,
-                                 XCB_CLIP_ORDERING_UNSORTED, q->winId(), 0, 0, 0, nullptr);
+            xcb_shape_rectangles(c, XCB_SHAPE_SO_SET, XCB_SHAPE_SK_INPUT, XCB_CLIP_ORDERING_UNSORTED, q->winId(), 0, 0, 0, nullptr);
         } else {
             // delete the shape
-            xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT,
-                           q->winId(), 0, 0, XCB_PIXMAP_NONE);
+            xcb_shape_mask(c, XCB_SHAPE_SO_INTERSECT, XCB_SHAPE_SK_INPUT, q->winId(), 0, 0, XCB_PIXMAP_NONE);
         }
     }
 #endif
@@ -593,9 +587,7 @@ void DialogPrivate::syncToMainItemSize()
         // fixedMargins will get all the borders, no matter if they are enabled
         auto margins = frameSvgItem->fixedMargins();
 
-        const QSize fullSize = QSize(mainItem->width(), mainItem->height()) +
-                               QSize(margins->left() + margins->right(),
-                                     margins->top() + margins->bottom());
+        const QSize fullSize = QSize(mainItem->width(), mainItem->height()) + QSize(margins->left() + margins->right(), margins->top() + margins->bottom());
 
         // We get the popup position with the fullsize as we need the popup
         // position in order to determine our actual size, as the position
@@ -606,20 +598,18 @@ void DialogPrivate::syncToMainItemSize()
         // the borders. This way when syncBorders is called, it has a geometry
         // to work with.
         syncBorders(geom);
-    }
-    else {
+    } else {
         syncBorders(q->geometry());
     }
 
-    QSize s = QSize(mainItem->width(), mainItem->height()) +
-                    QSize(frameSvgItem->fixedMargins()->left() + frameSvgItem->fixedMargins()->right(),
-                          frameSvgItem->fixedMargins()->top() + frameSvgItem->fixedMargins()->bottom());
+    QSize s = QSize(mainItem->width(), mainItem->height())
+        + QSize(frameSvgItem->fixedMargins()->left() + frameSvgItem->fixedMargins()->right(),
+                frameSvgItem->fixedMargins()->top() + frameSvgItem->fixedMargins()->bottom());
 
     QSize min;
     QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
     getSizeHints(min, max);
-    s = QSize(qBound(min.width(), s.width(), max.width()),
-              qBound(min.height(), s.height(), max.height()));
+    s = QSize(qBound(min.width(), s.width(), max.width()), qBound(min.height(), s.height(), max.height()));
 
     q->contentItem()->setSize(s);
 
@@ -641,8 +631,7 @@ void DialogPrivate::syncToMainItemSize()
         q->resize(s);
     }
 
-    mainItem->setPosition(QPointF(frameSvgItem->fixedMargins()->left(),
-                            frameSvgItem->fixedMargins()->top()));
+    mainItem->setPosition(QPointF(frameSvgItem->fixedMargins()->left(), frameSvgItem->fixedMargins()->top()));
 
     updateTheme();
 }
@@ -661,8 +650,7 @@ void DialogPrivate::slotWindowPositionChanged()
     if (mainItem) {
         auto margin = frameSvgItem->fixedMargins();
         mainItem->setPosition(QPoint(margin->left(), margin->top()));
-        mainItem->setSize(QSize(q->width() - margin->left() - margin->right(),
-                                q->height() - margin->top() - margin->bottom()));
+        mainItem->setSize(QSize(q->width() - margin->left() - margin->right(), q->height() - margin->top() - margin->bottom()));
     }
 }
 
@@ -672,7 +660,7 @@ bool DialogPrivate::mainItemContainsPosition(const QPointF &point) const
         return false;
     }
 
-    return QRectF(mainItem->mapToScene(QPoint(0,0)), QSizeF(mainItem->width(), mainItem->height())).contains(point);
+    return QRectF(mainItem->mapToScene(QPoint(0, 0)), QSizeF(mainItem->width(), mainItem->height())).contains(point);
 }
 
 QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
@@ -681,10 +669,9 @@ QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
         return point;
     }
 
-    QRectF itemRect(mainItem->mapToScene(QPoint(0,0)), QSizeF(mainItem->width(), mainItem->height()));
+    QRectF itemRect(mainItem->mapToScene(QPoint(0, 0)), QSizeF(mainItem->width(), mainItem->height()));
 
-    return QPointF(qBound(itemRect.left(), point.x(), itemRect.right()),
-                   qBound(itemRect.top(), point.y(), itemRect.bottom()));
+    return QPointF(qBound(itemRect.left(), point.x(), itemRect.right()), qBound(itemRect.top(), point.y(), itemRect.bottom()));
 }
 
 void DialogPrivate::setupWaylandIntegration()
@@ -716,28 +703,28 @@ void DialogPrivate::applyType()
 #if HAVE_X11
         if (KWindowSystem::isPlatformX11()) {
             switch (type) {
-                case Dialog::Normal:
-                    Q_UNREACHABLE();
-                    break;
-                case Dialog::Dock:
-                    wmType = QXcbWindowFunctions::WmWindowType::Dock;
-                    break;
-                case Dialog::DialogWindow:
-                    wmType = QXcbWindowFunctions::WmWindowType::Dialog;
-                    break;
-                case Dialog::PopupMenu:
-                    wmType = QXcbWindowFunctions::WmWindowType::PopupMenu;
-                    break;
-                case Dialog::Tooltip:
-                    wmType = QXcbWindowFunctions::WmWindowType::Tooltip;
-                    break;
-                case Dialog::Notification:
-                    wmType = QXcbWindowFunctions::WmWindowType::Notification;
-                    break;
-                case Dialog::OnScreenDisplay:
-                case Dialog::CriticalNotification:
-                    // Not supported by Qt
-                    break;
+            case Dialog::Normal:
+                Q_UNREACHABLE();
+                break;
+            case Dialog::Dock:
+                wmType = QXcbWindowFunctions::WmWindowType::Dock;
+                break;
+            case Dialog::DialogWindow:
+                wmType = QXcbWindowFunctions::WmWindowType::Dialog;
+                break;
+            case Dialog::PopupMenu:
+                wmType = QXcbWindowFunctions::WmWindowType::PopupMenu;
+                break;
+            case Dialog::Tooltip:
+                wmType = QXcbWindowFunctions::WmWindowType::Tooltip;
+                break;
+            case Dialog::Notification:
+                wmType = QXcbWindowFunctions::WmWindowType::Notification;
+                break;
+            case Dialog::OnScreenDisplay:
+            case Dialog::CriticalNotification:
+                // Not supported by Qt
+                break;
             }
 
             if (wmType) {
@@ -753,8 +740,8 @@ void DialogPrivate::applyType()
         q->setFlags(Qt::FramelessWindowHint | q->flags());
     }
 
-    //an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
-    //see bug 370433
+    // an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
+    // see bug 370433
     if (type == Dialog::OnScreenDisplay) {
         q->setFlags((q->flags() & ~Qt::Dialog) | Qt::Window);
     }
@@ -786,17 +773,20 @@ void DialogPrivate::applyType()
 #endif
 }
 
-
 Dialog::Dialog(QQuickItem *parent)
-    : QQuickWindow(parent ? parent->window() : nullptr),
-      d(new DialogPrivate(this))
+    : QQuickWindow(parent ? parent->window() : nullptr)
+    , d(new DialogPrivate(this))
 {
     setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
-    connect(this, &QWindow::xChanged, [=]() { d->slotWindowPositionChanged(); });
-    connect(this, &QWindow::yChanged, [=]() { d->slotWindowPositionChanged(); });
+    connect(this, &QWindow::xChanged, [=]() {
+        d->slotWindowPositionChanged();
+    });
+    connect(this, &QWindow::yChanged, [=]() {
+        d->slotWindowPositionChanged();
+    });
 
     // Given dialogs are skip task bar and don't have a decoration
     // minimizing them using e.g. "minimize all" should just close them
@@ -806,23 +796,18 @@ Dialog::Dialog(QQuickItem *parent)
         }
     });
 
-    connect(this, &QWindow::visibleChanged,
-            this, &Dialog::visibleChangedProxy);
-    connect(this, SIGNAL(visibleChanged(bool)),
-            this, SLOT(updateInputShape()));
-    connect(this, SIGNAL(outputOnlyChanged()),
-            this, SLOT(updateInputShape()));
+    connect(this, &QWindow::visibleChanged, this, &Dialog::visibleChangedProxy);
+    connect(this, SIGNAL(visibleChanged(bool)), this, SLOT(updateInputShape()));
+    connect(this, SIGNAL(outputOnlyChanged()), this, SLOT(updateInputShape()));
 
-    //HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
+    // HACK: this property is invoked due to the initialization that gets done to contentItem() in the getter
     property("data");
-    //Create the FrameSvg background.
+    // Create the FrameSvg background.
     d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    //This is needed as a transition thing for KWayland
+    // This is needed as a transition thing for KWayland
     setProperty("__plasma_frameSvg", QVariant::fromValue(d->frameSvgItem->frameSvg()));
 
-    connect(&d->theme, SIGNAL(themeChanged()),
-            this, SLOT(updateTheme()));
-
+    connect(&d->theme, SIGNAL(themeChanged()), this, SLOT(updateTheme()));
 }
 
 Dialog::~Dialog()
@@ -863,21 +848,19 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             connect(mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
             d->slotMainItemSizeChanged();
 
-            //Extract the representation's Layout, if any
+            // Extract the representation's Layout, if any
             QObject *layout = nullptr;
             setMinimumSize(QSize(0, 0));
             setMaximumSize(QSize(DIALOGSIZE_MAX, DIALOGSIZE_MAX));
 
-            //Search a child that has the needed Layout properties
-            //HACK: here we are not type safe, but is the only way to access to a pointer of Layout
+            // Search a child that has the needed Layout properties
+            // HACK: here we are not type safe, but is the only way to access to a pointer of Layout
             const auto lstChild = mainItem->children();
             for (QObject *child : lstChild) {
-                //find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-                if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() &&
-                        child->property("preferredWidth").isValid() && child->property("preferredHeight").isValid() &&
-                        child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid() &&
-                        child->property("fillWidth").isValid() && child->property("fillHeight").isValid()
-                   ) {
+                // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
+                if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
+                    && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
+                    && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
                     layout = child;
                     break;
                 }
@@ -886,9 +869,9 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             d->mainItemLayout = layout;
 
             if (layout) {
-                //Why queued connections?
-                //we need to be sure that the properties are
-                //already *all* updated when we call the management code
+                // Why queued connections?
+                // we need to be sure that the properties are
+                // already *all* updated when we call the management code
                 connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
                 connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
@@ -896,10 +879,9 @@ void Dialog::setMainItem(QQuickItem *mainItem)
 
                 d->updateLayoutParameters();
             }
-
         }
 
-        //if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
+        // if this is called in Component.onCompleted we have to wait a loop the item is added to a scene
         Q_EMIT mainItemChanged();
     }
 }
@@ -935,7 +917,7 @@ void Dialog::setVisualParent(QQuickItem *visualParent)
 QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 {
     if (!item) {
-        //If no item was specified try to align at the center of the parent view
+        // If no item was specified try to align at the center of the parent view
         QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
         if (parentItem) {
             QScreen *screen = parentItem->window()->screen();
@@ -949,7 +931,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
                 return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height() / 2);
             case Plasma::Types::BottomEdge:
                 return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().bottom() - size.height());
-            //Default center in the screen
+            // Default center in the screen
             default:
                 return screen->geometry().center() - QPoint(size.width() / 2, size.height() / 2);
             }
@@ -966,10 +948,10 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         return QPoint();
     }
 
-    //if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock
+    // if the item is in a dock or in a window that ignores WM we want to position the popups outside of the dock
     const KWindowInfo winInfo(item->window()->winId(), NET::WMWindowType);
-    const bool outsideParentWindow = ((winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint))
-            && item->window()->mask().isNull();
+    const bool outsideParentWindow =
+        ((winInfo.windowType(NET::AllTypesMask) == NET::Dock) || (item->window()->flags() & Qt::X11BypassWindowManagerHint)) && item->window()->mask().isNull();
 
     QRect parentGeometryBounds;
     if (outsideParentWindow) {
@@ -982,16 +964,12 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
-    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2,
-                          parentGeometryBounds.top() - size.height());
-    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2,
-                             parentGeometryBounds.bottom());
+    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.top() - size.height());
+    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.bottom());
 
-    const QPoint leftPoint(parentGeometryBounds.left() - size.width(),
-                           pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint leftPoint(parentGeometryBounds.left() - size.width(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
-    const QPoint rightPoint(parentGeometryBounds.right(),
-                            pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint rightPoint(parentGeometryBounds.right(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
     QPoint dialogPos;
     if (d->location == Plasma::Types::TopEdge) {
@@ -1004,14 +982,14 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         dialogPos = topPoint;
     }
 
-    //find the correct screen for the item
-    //we do not rely on item->window()->screen() because
-    //QWindow::screen() is always only the screen where the window gets first created
-    //not actually the current window. See QWindow::screen() documentation
+    // find the correct screen for the item
+    // we do not rely on item->window()->screen() because
+    // QWindow::screen() is always only the screen where the window gets first created
+    // not actually the current window. See QWindow::screen() documentation
     QRect avail = item->window()->screen()->availableGeometry();
 
     if (outsideParentWindow && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
-        //make the panel look it's inside the panel, in order to not make it look cut
+        // make the panel look it's inside the panel, in order to not make it look cut
         switch (d->location) {
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:
@@ -1106,35 +1084,32 @@ void Dialog::adjustGeometry(const QRect &geom)
     setGeometry(geom);
 }
 
-void Dialog::resizeEvent(QResizeEvent* re)
+void Dialog::resizeEvent(QResizeEvent *re)
 {
     QQuickWindow::resizeEvent(re);
 
-    //it's a spontaneous event generated in qguiapplication.cpp QGuiApplicationPrivate::processWindowScreenChangedEvent
-    //QWindowSystemInterfacePrivate::GeometryChangeEvent gce(window, QHighDpi::fromNativePixels(window->handle()->geometry(), window), QRect());
-    //This happens before the first show event when there is more than one screen,
-    //right after the window has been created, the window is still 0x0,
-    //but the resize event gets delivered with 0x0 again and executed with all the bad side effects
-    //this seems to happen for every window when there are multiple screens, so something we have probably to watch out for in the future
+    // it's a spontaneous event generated in qguiapplication.cpp QGuiApplicationPrivate::processWindowScreenChangedEvent
+    // QWindowSystemInterfacePrivate::GeometryChangeEvent gce(window, QHighDpi::fromNativePixels(window->handle()->geometry(), window), QRect());
+    // This happens before the first show event when there is more than one screen,
+    // right after the window has been created, the window is still 0x0,
+    // but the resize event gets delivered with 0x0 again and executed with all the bad side effects
+    // this seems to happen for every window when there are multiple screens, so something we have probably to watch out for in the future
     if (re->size().isEmpty() || re->size() == re->oldSize()) {
         return;
     }
 
-    //A dialog can be resized even if no mainItem has ever been set
+    // A dialog can be resized even if no mainItem has ever been set
     if (!d->mainItem) {
         return;
     }
 
     d->mainItem->disconnect(this);
 
-    d->frameSvgItem->setSize(QSizeF(re->size().width(),
-                                re->size().height()));
+    d->frameSvgItem->setSize(QSizeF(re->size().width(), re->size().height()));
     auto margin = d->frameSvgItem->fixedMargins();
-    d->mainItem->setPosition(QPointF(margin->left(),
-                                margin->top()));
+    d->mainItem->setPosition(QPointF(margin->left(), margin->top()));
 
-    d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(),
-            re->size().height() - margin->top() - margin->bottom()));
+    d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(), re->size().height() - margin->top() - margin->bottom()));
 
     QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
     QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
@@ -1169,9 +1144,8 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         QWindow *parentWindow = transientParent();
 
         while (parentWindow) {
-            if (parentWindow->isActive() &&
-                !(parentWindow->flags() & Qt::WindowDoesNotAcceptFocus)) {
-                parentHasFocus  = true;
+            if (parentWindow->isActive() && !(parentWindow->flags() & Qt::WindowDoesNotAcceptFocus)) {
+                parentHasFocus = true;
 
                 break;
             }
@@ -1182,7 +1156,8 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || (focusWindow->type() & Qt::Popup) == Qt::Popup);
 
-        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
+        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const View *>(focusWindow)
+            || qobject_cast<const ConfigView *>(focusWindow);
 
         if (viewClicked || (!parentHasFocus && !childHasFocus)) {
             setVisible(false);
@@ -1207,7 +1182,7 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
-        auto ee = static_cast<QExposeEvent*>(event);
+        auto ee = static_cast<QExposeEvent *>(event);
 
         if (!KWindowSystem::isPlatformWayland() || ee->region().isNull()) {
             return QQuickWindow::event(event);
@@ -1223,8 +1198,8 @@ bool Dialog::event(QEvent *event)
          * see https://phabricator.kde.org/T6064
          */
 #if HAVE_KWAYLAND
-        //sometimes non null regions arrive even for non visible windows
-        //for which surface creation would fail
+        // sometimes non null regions arrive even for non visible windows
+        // for which surface creation would fail
         if (!d->shellSurface && isVisible()) {
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
             d->setupWaylandIntegration();
@@ -1261,27 +1236,29 @@ bool Dialog::event(QEvent *event)
      */
     if (d->mainItem && !d->mainItem->size().isEmpty()) {
         switch (event->type()) {
-            case QEvent::MouseMove:
-            case QEvent::MouseButtonPress:
-            case QEvent::MouseButtonRelease: {
-                QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease: {
+            QMouseEvent *me = static_cast<QMouseEvent *>(event);
 
-                //don't mess with position if the cursor is actually outside the view:
-                //somebody is doing a click and drag that must not break when the cursor i outside
-                if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
-                    QMouseEvent me2(me->type(),
-                                    d->positionAdjustedForMainItem(me->windowPos()),
-                                    d->positionAdjustedForMainItem(me->windowPos()),
-                                    d->positionAdjustedForMainItem(me->windowPos()) + position(),
-                                    me->button(), me->buttons(), me->modifiers());
+            // don't mess with position if the cursor is actually outside the view:
+            // somebody is doing a click and drag that must not break when the cursor i outside
+            if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
+                QMouseEvent me2(me->type(),
+                                d->positionAdjustedForMainItem(me->windowPos()),
+                                d->positionAdjustedForMainItem(me->windowPos()),
+                                d->positionAdjustedForMainItem(me->windowPos()) + position(),
+                                me->button(),
+                                me->buttons(),
+                                me->modifiers());
 
-                    if (isVisible()) {
-                        QCoreApplication::sendEvent(this, &me2);
-                    }
-                    return true;
+                if (isVisible()) {
+                    QCoreApplication::sendEvent(this, &me2);
                 }
-                break;
+                return true;
             }
+            break;
+        }
 
         case QEvent::Wheel: {
             QWheelEvent *we = static_cast<QWheelEvent *>(event);
@@ -1291,8 +1268,12 @@ bool Dialog::event(QEvent *event)
             if (!d->mainItemContainsPosition(pos)) {
                 QWheelEvent we2(d->positionAdjustedForMainItem(pos),
                                 d->positionAdjustedForMainItem(pos) + position(),
-                                we->pixelDelta(), we->angleDelta(),
-                                we->buttons(), we->modifiers(), we->phase(), false /*inverted*/);
+                                we->pixelDelta(),
+                                we->angleDelta(),
+                                we->buttons(),
+                                we->modifiers(),
+                                we->phase(),
+                                false /*inverted*/);
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &we2);
@@ -1302,51 +1283,60 @@ bool Dialog::event(QEvent *event)
             break;
         }
 
-            case QEvent::DragEnter: {
-                QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
-                if (!d->mainItemContainsPosition(de->pos())) {
-                    QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                                        de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+        case QEvent::DragEnter: {
+            QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                    de->possibleActions(),
+                                    de->mimeData(),
+                                    de->mouseButtons(),
+                                    de->keyboardModifiers());
 
-                    if (isVisible()) {
-                        QCoreApplication::sendEvent(this, &de2);
-                    }
-                    return true;
+                if (isVisible()) {
+                    QCoreApplication::sendEvent(this, &de2);
                 }
-                break;
+                return true;
             }
-            //DragLeave just works
-            case QEvent::DragLeave:
-                break;
-            case QEvent::DragMove: {
-                QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
-                if (!d->mainItemContainsPosition(de->pos())) {
-                    QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                                    de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+            break;
+        }
+        // DragLeave just works
+        case QEvent::DragLeave:
+            break;
+        case QEvent::DragMove: {
+            QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                                   de->possibleActions(),
+                                   de->mimeData(),
+                                   de->mouseButtons(),
+                                   de->keyboardModifiers());
 
-                    if (isVisible()) {
-                        QCoreApplication::sendEvent(this, &de2);
-                    }
-                    return true;
+                if (isVisible()) {
+                    QCoreApplication::sendEvent(this, &de2);
                 }
-                break;
+                return true;
             }
-            case QEvent::Drop: {
-                QDropEvent *de = static_cast<QDropEvent *>(event);
-                if (!d->mainItemContainsPosition(de->pos())) {
-                    QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                                de->possibleActions(), de->mimeData(), de->mouseButtons(), de->keyboardModifiers());
+            break;
+        }
+        case QEvent::Drop: {
+            QDropEvent *de = static_cast<QDropEvent *>(event);
+            if (!d->mainItemContainsPosition(de->pos())) {
+                QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+                               de->possibleActions(),
+                               de->mimeData(),
+                               de->mouseButtons(),
+                               de->keyboardModifiers());
 
-                    if (isVisible()) {
-                        QCoreApplication::sendEvent(this, &de2);
-                    }
-                    return true;
+                if (isVisible()) {
+                    QCoreApplication::sendEvent(this, &de2);
                 }
-                break;
+                return true;
             }
+            break;
+        }
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -1400,8 +1390,8 @@ void Dialog::setOutputOnly(bool outputOnly)
 
 void Dialog::setVisible(bool visible)
 {
-    //only update real visibility when we have finished component completion
-    //and all flags have been set
+    // only update real visibility when we have finished component completion
+    // and all flags have been set
 
     d->visible = visible;
     if (d->componentComplete) {
@@ -1412,7 +1402,7 @@ void Dialog::setVisible(bool visible)
         // Bug 381242: Qt remembers minimize state and re-applies it when showing
         setWindowStates(windowStates() & ~Qt::WindowMinimized);
         QQuickWindow::setVisible(visible);
-        //signal will be emitted and proxied from the QQuickWindow code
+        // signal will be emitted and proxied from the QQuickWindow code
     } else {
         Q_EMIT visibleChangedProxy();
     }

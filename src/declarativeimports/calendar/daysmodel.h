@@ -22,12 +22,12 @@ class DaysModel : public QAbstractListModel
 public:
     enum Roles {
         isCurrent = Qt::UserRole + 1,
-        //containsHolidayItems,
+        // containsHolidayItems,
         containsEventItems,
         containsMajorEventItems,
         containsMinorEventItems,
-        //containsTodoItems,
-        //containsJournalItems,
+        // containsTodoItems,
+        // containsJournalItems,
         dayNumber,
         monthNumber,
         yearNumber,
@@ -41,7 +41,7 @@ public:
 
     Q_INVOKABLE void setPluginsManager(QObject *manager);
 
-    Q_INVOKABLE QList<QObject*> eventsForDate(const QDate &date);
+    Q_INVOKABLE QList<QObject *> eventsForDate(const QDate &date);
 
     QHash<int, QByteArray> roleNames() const override;
 
@@ -63,9 +63,9 @@ private:
 
     EventPluginsManager *m_pluginsManager = nullptr;
     QList<DayData> *m_data = nullptr;
-    QList<QObject*> m_qmlData;
+    QList<QObject *> m_qmlData;
     QDate m_lastRequestedAgendaDate;
-    QList<CalendarEvents::CalendarEventsPlugin*> m_eventPlugins;
+    QList<CalendarEvents::CalendarEventsPlugin *> m_eventPlugins;
     QMultiHash<QDate, CalendarEvents::EventData> m_eventsData;
     QDate m_lastRequestedEventsStartDate; // this is always this+42 days
     bool m_agendaNeedsUpdate;

@@ -9,8 +9,8 @@
 
 #include "dialog.h"
 
-#include <QTimer>
 #include <QQuickWindow>
+#include <QTimer>
 #include <QVariant>
 
 class QQuickItem;

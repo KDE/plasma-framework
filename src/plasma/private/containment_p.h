@@ -11,10 +11,10 @@
 #include <KActionCollection>
 #include <QSet>
 
-#include "plasma.h"
 #include "applet.h"
-#include "corona.h"
 #include "containmentactions.h"
+#include "corona.h"
+#include "plasma.h"
 
 class KJob;
 
@@ -25,7 +25,6 @@ class Job;
 
 namespace Plasma
 {
-
 class Containment;
 
 class ContainmentPrivate
@@ -64,7 +63,7 @@ public:
 
     void setUiReady();
     void setStarted();
-    void appletLoaded(Applet* applet);
+    void appletLoaded(Applet *applet);
 
     Containment *q;
     Types::FormFactor formFactor;
@@ -72,8 +71,8 @@ public:
     Types::ContainmentDisplayHints containmentDisplayHints = Types::NoContainmentDisplayHint;
 
     QList<Applet *> applets;
-    //Applets still considered not ready
-    QSet <Applet *> loadingApplets;
+    // Applets still considered not ready
+    QSet<Applet *> loadingApplets;
     QString wallpaper;
     QHash<QString, ContainmentActions *> localActionPlugins;
     int lastScreen;

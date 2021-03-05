@@ -7,8 +7,8 @@
 #ifndef EVENTDATADECORATOR_H
 #define EVENTDATADECORATOR_H
 
-#include <QObject>
 #include <QDateTime>
+#include <QObject>
 #include <QString>
 
 #include <CalendarEvents/CalendarEventsPlugin>

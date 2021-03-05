@@ -5,17 +5,17 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include <QFile>
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQmlExpression>
 #include <QQmlProperty>
-#include <QFile>
 #include <QTimer>
 #include <QWidget>
 
 #include <KConfigGroup>
-#include <QDebug>
 #include <KLocalizedString>
+#include <QDebug>
 
 #include <Plasma/Applet>
 #include <Plasma/Corona>
@@ -29,25 +29,26 @@
 #include "plasmoid/containmentinterface.h"
 #include "plasmoid/wallpaperinterface.h"
 
-#include <kdeclarative/qmlobject.h>
 #include <kdeclarative/configpropertymap.h>
+#include <kdeclarative/qmlobject.h>
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
-    : Plasma::AppletScript(parent),
-      m_interface(nullptr),
-      m_args(args)
+    : Plasma::AppletScript(parent)
+    , m_interface(nullptr)
+    , m_args(args)
 {
-    //qmlRegisterType<AppletInterface>();
-    //FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
+    // qmlRegisterType<AppletInterface>();
+    // FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
     /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
                                              QLatin1String("Do not create objects of type Plasmoid"));*/
-    qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
-            QStringLiteral("Do not create objects of type Plasmoid"));
-    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid", 2, 0, "Containment",
-            QStringLiteral("Do not create objects of type Containment"));
+    qmlRegisterUncreatableType<AppletInterface>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
+    qmlRegisterUncreatableType<ContainmentInterface>("org.kde.plasma.plasmoid",
+                                                     2,
+                                                     0,
+                                                     "Containment",
+                                                     QStringLiteral("Do not create objects of type Containment"));
 
-    qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper",
-            QStringLiteral("Do not create objects of type Wallpaper"));
+    qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
 
     qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>("org.kde.plasma.plasmoid", 1);
 }
@@ -58,9 +59,9 @@ DeclarativeAppletScript::~DeclarativeAppletScript()
 
 bool DeclarativeAppletScript::init()
 {
-    //make possible to import extensions from the package
-    //FIXME: probably to be removed, would make possible to use native code from within the package :/
-    //m_interface->qmlObject()->engine()->addImportPath(package()->path()+"/contents/imports");
+    // make possible to import extensions from the package
+    // FIXME: probably to be removed, would make possible to use native code from within the package :/
+    // m_interface->qmlObject()->engine()->addImportPath(package()->path()+"/contents/imports");
 
     Plasma::Applet *a = applet();
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
@@ -68,7 +69,7 @@ bool DeclarativeAppletScript::init()
     if (pc && pc->isContainment()) {
         m_interface = new ContainmentInterface(this, m_args);
 
-        //fail? so it's a normal Applet
+        // fail? so it's a normal Applet
     } else {
         m_interface = new AppletInterface(this, m_args);
     }
@@ -115,4 +116,3 @@ QList<QAction *> DeclarativeAppletScript::contextualActions()
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON(plasma_appletscript_declarative, DeclarativeAppletScript, "plasma-scriptengine-applet-declarative.json")
 
 #include "declarativeappletscript.moc"
-

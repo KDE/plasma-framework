@@ -7,18 +7,18 @@
 #include "testengine.h"
 
 #include <QBitArray>
-#include <QDate>
-#include <QLocale>
-#include <QUrl>
 #include <QBitmap>
 #include <QBrush>
 #include <QCursor>
+#include <QDate>
 #include <QFont>
 #include <QIcon>
+#include <QLocale>
 #include <QPalette>
 #include <QPen>
 #include <QSizePolicy>
 #include <QTextFormat>
+#include <QUrl>
 
 Q_DECLARE_METATYPE(TestEngine::MyUserType)
 
@@ -70,7 +70,7 @@ void TestEngine::init()
     // QVariant::Image
     setData(dsn, QStringLiteral("QImage"), QVariant(QImage(56, 78, QImage::Format_Mono)));
     // QVariant::Int
-    setData(dsn, QStringLiteral("int"), QVariant((int) - 4321));
+    setData(dsn, QStringLiteral("int"), QVariant((int)-4321));
     // QVariant::KeySequence (???)
     // QVariant::Line
     setData(dsn, QStringLiteral("QLine"), QVariant(QLine(12, 34, 56, 78)));
@@ -83,7 +83,7 @@ void TestEngine::init()
     // QVariant::Locale
     setData(dsn, QStringLiteral("QLocale"), QVariant(QLocale(QStringLiteral("fr_FR"))));
     // QVariant::LongLong
-    setData(dsn, QStringLiteral("qlonglong"), QVariant((qlonglong) - 4321));
+    setData(dsn, QStringLiteral("qlonglong"), QVariant((qlonglong)-4321));
     // QVariant::Map
     QMap<QString, QVariant> map;
     for (int i = 0; i < 123; ++i) {

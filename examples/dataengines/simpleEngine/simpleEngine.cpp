@@ -28,7 +28,6 @@ SimpleEngine::SimpleEngine(QObject *parent, const QVariantList &args)
 
 void SimpleEngine::init()
 {
-
     // So now we will set up some sources.
     // Each DataEngine will, generally, be loaded once. Each DataEngine
     // can provide multiple sets of data keyed by a string, called "Sources".
@@ -59,4 +58,3 @@ K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.simpleEngine, SimpleEngine
 
 // include the moc file so the build system makes it for us
 #include "simpleEngine.moc"
-

@@ -7,10 +7,10 @@
 #ifndef DIALOG_PROXY_P
 #define DIALOG_PROXY_P
 
-#include <QQuickItem>
-#include <QQuickWindow>
 #include <QPoint>
 #include <QQmlParserStatus>
+#include <QQuickItem>
+#include <QQuickWindow>
 #include <QScopedPointer>
 
 #include <Plasma/Plasma>
@@ -36,7 +36,6 @@ class QScreen;
 
 namespace PlasmaQuick
 {
-
 class DialogPrivate;
 
 /**
@@ -158,16 +157,16 @@ public:
     Q_ENUM(WindowType)
 
     enum BackgroundHints {
-        NoBackground = 0,         /**< Not drawing a background under the applet, the dialog has its own implementation */
-        StandardBackground = 1,   /**< The standard background from the theme is drawn */
-        SolidBackground = 2,     /**< The solid version of the background is preferred */
+        NoBackground = 0, /**< Not drawing a background under the applet, the dialog has its own implementation */
+        StandardBackground = 1, /**< The standard background from the theme is drawn */
+        SolidBackground = 2, /**< The solid version of the background is preferred */
     };
     Q_ENUM(BackgroundHints)
 
     explicit Dialog(QQuickItem *parent = nullptr);
     ~Dialog() override;
 
-    //PROPERTIES ACCESSORS
+    // PROPERTIES ACCESSORS
     QQuickItem *mainItem() const;
     void setMainItem(QQuickItem *mainItem);
 
@@ -213,7 +212,7 @@ Q_SIGNALS:
     void outputOnlyChanged();
     void flagsChanged();
     void backgroundHintsChanged();
-    void visibleChangedProxy(); //redeclaration of QQuickWindow::visibleChanged
+    void visibleChangedProxy(); // redeclaration of QQuickWindow::visibleChanged
     /**
      * Emitted when the @see hideOnWindowDeactivate property is @c true and this dialog lost focus to a
      * window that is neither a parent dialog to nor a child dialog of this dialog.
@@ -226,7 +225,7 @@ protected:
      */
     virtual void adjustGeometry(const QRect &geom);
 
-    //Reimplementations
+    // Reimplementations
     void classBegin() override;
     void componentComplete() override;
     void resizeEvent(QResizeEvent *re) override;

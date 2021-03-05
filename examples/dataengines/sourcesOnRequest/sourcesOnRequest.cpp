@@ -94,4 +94,3 @@ K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.sourcesOnRequest, SourcesO
 
 // include the moc file so the build system makes it for us
 #include "sourcesOnRequest.moc"
-

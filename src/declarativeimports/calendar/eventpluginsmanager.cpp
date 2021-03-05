@@ -8,12 +8,12 @@
 
 #include <CalendarEvents/CalendarEventsPlugin>
 
-#include <QCoreApplication>
 #include <QAbstractListModel>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QDir>
 #include <QJsonObject>
 #include <QPluginLoader>
-#include <QDir>
-#include <QDebug>
 
 #include <KPluginLoader>
 #include <KPluginMetaData>
@@ -22,7 +22,8 @@ class EventPluginsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    EventPluginsModel(EventPluginsManager *manager) : QAbstractListModel(manager)
+    EventPluginsModel(EventPluginsManager *manager)
+        : QAbstractListModel(manager)
     {
         m_manager = manager;
         m_roles = QAbstractListModel::roleNames();
@@ -64,28 +65,26 @@ public:
         const EventPluginsManager::PluginData metadata = it.value();
 
         switch (role) {
-            case Qt::DisplayRole:
-                return metadata.name;
-            case Qt::ToolTipRole:
-                return metadata.desc;
-            case Qt::DecorationRole:
-                return metadata.icon;
-            case Qt::UserRole:
-            {
-                // The currentPlugin path contains the full path including
-                // the plugin filename, so it needs to be cut off from the last '/'
-                const QStringRef pathRef = currentPlugin.leftRef(currentPlugin.lastIndexOf(QLatin1Char('/')));
-                const QString qmlFilePath = metadata.configUi;
-                return QString(pathRef % QLatin1Char('/') % qmlFilePath);
-            }
-            case Qt::UserRole + 1:
-                return currentPlugin;
-            case Qt::EditRole:
-                return m_manager->m_enabledPlugins.contains(currentPlugin);
+        case Qt::DisplayRole:
+            return metadata.name;
+        case Qt::ToolTipRole:
+            return metadata.desc;
+        case Qt::DecorationRole:
+            return metadata.icon;
+        case Qt::UserRole: {
+            // The currentPlugin path contains the full path including
+            // the plugin filename, so it needs to be cut off from the last '/'
+            const QStringRef pathRef = currentPlugin.leftRef(currentPlugin.lastIndexOf(QLatin1Char('/')));
+            const QString qmlFilePath = metadata.configUi;
+            return QString(pathRef % QLatin1Char('/') % qmlFilePath);
+        }
+        case Qt::UserRole + 1:
+            return currentPlugin;
+        case Qt::EditRole:
+            return m_manager->m_enabledPlugins.contains(currentPlugin);
         }
 
         return QVariant();
-
     }
 
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override
@@ -123,18 +122,12 @@ private:
 EventPluginsManager::EventPluginsManager(QObject *parent)
     : QObject(parent)
 {
-    auto plugins = KPluginLoader::findPlugins(
-            QStringLiteral("plasmacalendarplugins"),
-            [](const KPluginMetaData &md) {
-                return md.serviceTypes().contains(QLatin1String("PlasmaCalendar/Plugin"));
-            });
+    auto plugins = KPluginLoader::findPlugins(QStringLiteral("plasmacalendarplugins"), [](const KPluginMetaData &md) {
+        return md.serviceTypes().contains(QLatin1String("PlasmaCalendar/Plugin"));
+    });
     for (const KPluginMetaData &plugin : qAsConst(plugins)) {
         m_availablePlugins.insert(plugin.fileName(),
-                                  { plugin.name(),
-                                    plugin.description(),
-                                    plugin.iconName(),
-                                    plugin.value(QStringLiteral("X-KDE-PlasmaCalendar-ConfigUi"))
-                                  });
+                                  {plugin.name(), plugin.description(), plugin.iconName(), plugin.value(QStringLiteral("X-KDE-PlasmaCalendar-ConfigUi"))});
     }
 
     // Fallback for legacy pre-KPlugin plugins so we can still load them
@@ -160,11 +153,10 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
             if (loader.metaData().value(QStringLiteral("IID")) == QLatin1String("org.kde.CalendarEventsPlugin")) {
                 const auto md = loader.metaData().value(QStringLiteral("MetaData")).toObject();
                 m_availablePlugins.insert(absolutePath,
-                                          { md.value(QStringLiteral("Name")).toString(),
-                                            md.value(QStringLiteral("Description")).toString(),
-                                            md.value(QStringLiteral("Icon")).toString(),
-                                            md.value(QStringLiteral("ConfigUi")).toString()
-                                          });
+                                          {md.value(QStringLiteral("Name")).toString(),
+                                           md.value(QStringLiteral("Description")).toString(),
+                                           md.value(QStringLiteral("Icon")).toString(),
+                                           md.value(QStringLiteral("ConfigUi")).toString()});
             }
         }
     }
@@ -229,19 +221,16 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
 
     QObject *obj = loader.instance();
     if (obj) {
-        CalendarEvents::CalendarEventsPlugin *eventsPlugin = qobject_cast<CalendarEvents::CalendarEventsPlugin*>(obj);
+        CalendarEvents::CalendarEventsPlugin *eventsPlugin = qobject_cast<CalendarEvents::CalendarEventsPlugin *>(obj);
         if (eventsPlugin) {
             qDebug() << "Loading Calendar plugin" << eventsPlugin;
             eventsPlugin->setProperty("pluginPath", absolutePath);
             m_plugins << eventsPlugin;
 
             // Connect the relay signals
-            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::dataReady,
-                    this, &EventPluginsManager::dataReady);
-            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventModified,
-                    this, &EventPluginsManager::eventModified);
-            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventRemoved,
-                    this, &EventPluginsManager::eventRemoved);
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::dataReady, this, &EventPluginsManager::dataReady);
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventModified, this, &EventPluginsManager::eventModified);
+            connect(eventsPlugin, &CalendarEvents::CalendarEventsPlugin::eventRemoved, this, &EventPluginsManager::eventRemoved);
         } else {
             // not our/valid plugin, so unload it
             loader.unload();
@@ -251,12 +240,12 @@ void EventPluginsManager::loadPlugin(const QString &absolutePath)
     }
 }
 
-QList<CalendarEvents::CalendarEventsPlugin*> EventPluginsManager::plugins() const
+QList<CalendarEvents::CalendarEventsPlugin *> EventPluginsManager::plugins() const
 {
     return m_plugins;
 }
 
-QAbstractListModel* EventPluginsManager::pluginsModel() const
+QAbstractListModel *EventPluginsManager::pluginsModel() const
 {
     return m_model;
 }

@@ -44,21 +44,22 @@ public:
         ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
         StartupCompletedConstraint = 16, /**< application startup has completed */
         ContextConstraint = 32, /**< the context (e.g. activity) has changed */
-        UiReadyConstraint = 64, /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
-        AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-                         ImmutableConstraint,
+        UiReadyConstraint = 64,
+        /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
+        AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | ImmutableConstraint,
     };
     Q_ENUM(Constraint)
     Q_DECLARE_FLAGS(Constraints, Constraint)
 
     /**
-	 * This enumeration lists the various hints that an applet can pass to its
-	 * constraint regarding the way that it is represented
+     * This enumeration lists the various hints that an applet can pass to its
+     * constraint regarding the way that it is represented
      */
-    enum ConstraintHints { //TODO KF6 ConstraintHints -> ConstraintHint
-		NoHint = 0,
-		CanFillArea = 1, /**< The CompactRepresentation can fill the area and ignore constraint margins*/ // (TODO: KF6 CanFillArea -> CompactRepresentationFillArea)
-		MarginAreasSeparator = CanFillArea | 2, /**< The applet acts as a separator between the standard and slim panel margin areas*/
+    enum ConstraintHints { // TODO KF6 ConstraintHints -> ConstraintHint
+        NoHint = 0,
+        CanFillArea = 1,
+        /**< The CompactRepresentation can fill the area and ignore constraint margins*/ // (TODO: KF6 CanFillArea -> CompactRepresentationFillArea)
+        MarginAreasSeparator = CanFillArea | 2, /**< The applet acts as a separator between the standard and slim panel margin areas*/
     };
     Q_DECLARE_FLAGS(ConstraintFlags, ConstraintHints)
     Q_FLAG(ConstraintFlags)
@@ -69,20 +70,20 @@ public:
      * (e.g. in Plasma, a Corona on the desktop or on a panel).
      **/
     enum FormFactor {
-        Planar = 0,  /**< The applet lives in a plane and has two
-                    degrees of freedom to grow. Optimize for
-                    desktop, laptop or tablet usage: a high
-                    resolution screen 1-3 feet distant from the
-                    viewer. */
+        Planar = 0, /**< The applet lives in a plane and has two
+                   degrees of freedom to grow. Optimize for
+                   desktop, laptop or tablet usage: a high
+                   resolution screen 1-3 feet distant from the
+                   viewer. */
         MediaCenter, /**< As with Planar, the applet lives in a plane
                     but the interface should be optimized for
                     medium-to-high resolution screens that are
                     5-15 feet distant from the viewer. Sometimes
                     referred to as a "ten foot interface".*/
-        Horizontal,  /**< The applet is constrained vertically, but
-                    can expand horizontally. */
-        Vertical,     /**< The applet is constrained horizontally, but
-                    can expand vertically. */
+        Horizontal, /**< The applet is constrained vertically, but
+                   can expand horizontally. */
+        Vertical, /**< The applet is constrained horizontally, but
+                can expand vertically. */
         Application, /**< The Applet lives in a plane and should be optimized to look as a full application,
                      for the desktop or the particular device. */
     };
@@ -94,9 +95,12 @@ public:
      */
     enum ContainmentDisplayHint {
         NoContainmentDisplayHint = 0,
-        ContainmentDrawsPlasmoidHeading = 1, /**< The containment will draw an titlebar-looking header for the applets, so the applets shouldn't attempt to paint a similar thing **/
-        ContainmentForcesSquarePlasmoids = 2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
-        DesktopFullyCovered = 4, /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
+        ContainmentDrawsPlasmoidHeading =
+            1, /**< The containment will draw an titlebar-looking header for the applets, so the applets shouldn't attempt to paint a similar thing **/
+        ContainmentForcesSquarePlasmoids =
+            2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
+        DesktopFullyCovered =
+            4, /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
     };
     Q_ENUM(ContainmentDisplayHint)
     Q_DECLARE_FLAGS(ContainmentDisplayHints, ContainmentDisplayHint)
@@ -108,9 +112,9 @@ public:
      * while PanelContainments are accessories which can be present multiple per screen.
      */
     enum ContainmentType {
-        NoContainmentType = -1,  /**< @internal */
-        DesktopContainment = 0,  /**< A desktop containment */
-        PanelContainment,        /**< A desktop panel */
+        NoContainmentType = -1, /**< @internal */
+        DesktopContainment = 0, /**< A desktop containment */
+        PanelContainment, /**< A desktop panel */
 
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific */
@@ -123,11 +127,12 @@ public:
      * A descriptive type for QActions, to help categorizing them when presented to the user
      */
     enum ActionType {
-        AddAction = 0,   /**< The action will cause something new being created*/
-        ConfigureAction = 100,   /**< The Action will make some kind of configuration ui to appear */
-        ControlAction = 200,  /**< Generic control, similar to ConfigureAction TODO: better doc */
-        MiscAction = 300,  /**< A type of action that doesn't fit in the other categories */
-        DestructiveAction = 400,  /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separated from other actions */
+        AddAction = 0, /**< The action will cause something new being created*/
+        ConfigureAction = 100, /**< The Action will make some kind of configuration ui to appear */
+        ControlAction = 200, /**< Generic control, similar to ConfigureAction TODO: better doc */
+        MiscAction = 300, /**< A type of action that doesn't fit in the other categories */
+        DestructiveAction =
+            400, /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separated from other actions */
         UserAction = DestructiveAction + 1000, /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
     };
     Q_ENUM(ActionType)
@@ -140,9 +145,9 @@ public:
      **/
     enum Direction {
         Down = 0, /**< Display downards */
-        Up,       /**< Display upwards */
-        Left,     /**< Display to the left */
-        Right,     /**< Display to the right */
+        Up, /**< Display upwards */
+        Left, /**< Display to the left */
+        Right, /**< Display to the right */
     };
     Q_ENUM(Direction)
 
@@ -153,13 +158,13 @@ public:
     enum Location {
         Floating = 0, /**< Free floating. Neither geometry or z-ordering
                      is described precisely by this value. */
-        Desktop,      /**< On the planar desktop layer, extending across
-                     the full screen from edge to edge */
-        FullScreen,   /**< Full screen */
-        TopEdge,      /**< Along the top of the screen*/
-        BottomEdge,   /**< Along the bottom of the screen*/
-        LeftEdge,     /**< Along the left side of the screen */
-        RightEdge,     /**< Along the right side of the screen */
+        Desktop, /**< On the planar desktop layer, extending across
+                the full screen from edge to edge */
+        FullScreen, /**< Full screen */
+        TopEdge, /**< Along the top of the screen*/
+        BottomEdge, /**< Along the bottom of the screen*/
+        LeftEdge, /**< Along the left side of the screen */
+        RightEdge, /**< Along the right side of the screen */
     };
     Q_ENUM(Location)
 
@@ -168,11 +173,11 @@ public:
      *
      **/
     enum Position {
-        LeftPositioned,    /**< Positioned left */
-        RightPositioned,   /**< Positioned right */
-        TopPositioned,     /**< Positioned top */
-        BottomPositioned,  /**< Positioned bottom */
-        CenterPositioned,   /**< Positioned in the center */
+        LeftPositioned, /**< Positioned left */
+        RightPositioned, /**< Positioned right */
+        TopPositioned, /**< Positioned top */
+        BottomPositioned, /**< Positioned bottom */
+        CenterPositioned, /**< Positioned in the center */
     };
     Q_ENUM(Position)
 
@@ -181,23 +186,23 @@ public:
      *
      **/
     enum PopupPlacement {
-        FloatingPopup = 0,            /**< Free floating, non attached popup */
-        TopPosedLeftAlignedPopup,     /**< Popup positioned on the top, aligned
-                                     to the left of the widget */
-        TopPosedRightAlignedPopup,    /**< Popup positioned on the top, aligned
-                                     to the right of the widget */
-        LeftPosedTopAlignedPopup,     /**< Popup positioned on the left, aligned
-                                     to the top of the widget */
-        LeftPosedBottomAlignedPopup,  /**< Popup positioned on the left, aligned
-                                     to the bottom of the widget */
-        BottomPosedLeftAlignedPopup,  /**< Popup positioned on the bottom, aligned
-                                     to the left of the widget */
+        FloatingPopup = 0, /**< Free floating, non attached popup */
+        TopPosedLeftAlignedPopup, /**< Popup positioned on the top, aligned
+                                 to the left of the widget */
+        TopPosedRightAlignedPopup, /**< Popup positioned on the top, aligned
+                                  to the right of the widget */
+        LeftPosedTopAlignedPopup, /**< Popup positioned on the left, aligned
+                                 to the top of the widget */
+        LeftPosedBottomAlignedPopup, /**< Popup positioned on the left, aligned
+                                    to the bottom of the widget */
+        BottomPosedLeftAlignedPopup, /**< Popup positioned on the bottom, aligned
+                                    to the left of the widget */
         BottomPosedRightAlignedPopup, /**< Popup positioned on the bottom, aligned
                                      to the right of the widget */
-        RightPosedTopAlignedPopup,    /**< Popup positioned on the right, aligned
-                                     to the top of the widget */
-        RightPosedBottomAlignedPopup,  /**< Popup positioned on the right, aligned
-                                     to the bottom of the widget */
+        RightPosedTopAlignedPopup, /**< Popup positioned on the right, aligned
+                                  to the top of the widget */
+        RightPosedBottomAlignedPopup, /**< Popup positioned on the right, aligned
+                                    to the bottom of the widget */
     };
     Q_ENUM(PopupPlacement)
 
@@ -205,9 +210,9 @@ public:
      * Flip enumeration
      */
     enum FlipDirection {
-        NoFlip = 0,          /**< Do not flip */
-        HorizontalFlip = 1,  /**< Flip horizontally */
-        VerticalFlip = 2,     /**< Flip vertically */
+        NoFlip = 0, /**< Do not flip */
+        HorizontalFlip = 1, /**< Flip horizontally */
+        VerticalFlip = 2, /**< Flip vertically */
     };
     Q_ENUM(FlipDirection)
     Q_DECLARE_FLAGS(Flip, FlipDirection)
@@ -228,9 +233,9 @@ public:
      * system (e.g. kiosk setups).
      */
     enum ImmutabilityType {
-        Mutable = 1,        /**< The item can be modified in any way **/
-        UserImmutable = 2,  /**< The user has requested a lock down, and can undo
-                           the lock down at any time **/
+        Mutable = 1, /**< The item can be modified in any way **/
+        UserImmutable = 2, /**< The user has requested a lock down, and can undo
+                          the lock down at any time **/
         SystemImmutable = 4, /**<  the item is locked down by the system, the user
                            can't unlock it **/
     };
@@ -241,11 +246,11 @@ public:
      * or plugins, supported by plasma.
      */
     enum ComponentType {
-        AppletComponent = 1,      /**< Plasma::Applet based plugins **/
-        DataEngineComponent = 2,  /**< Plasma::DataEngine based plugins **/
-        ContainmentComponent = 4,/**< Plasma::Containment based plugins **/
-        WallpaperComponent = 8,   /**< Plasma::Wallpaper based plugins **/
-        GenericComponent = 16,      /** Generic repositories of files, usually they keep QML files and their assets **/
+        AppletComponent = 1, /**< Plasma::Applet based plugins **/
+        DataEngineComponent = 2, /**< Plasma::DataEngine based plugins **/
+        ContainmentComponent = 4, /**< Plasma::Containment based plugins **/
+        WallpaperComponent = 8, /**< Plasma::Wallpaper based plugins **/
+        GenericComponent = 16, /** Generic repositories of files, usually they keep QML files and their assets **/
     };
     Q_ENUM(ComponentType)
     Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
@@ -269,21 +274,21 @@ public:
         NeedsAttentionStatus = 3, /**< The Item needs attention **/
         RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
         AcceptingInputStatus = 5, /**< The Item is accepting input **/
-        //FIXME KF6: this should be the smallest status
-        HiddenStatus = 6,    /**< The Item will be hidden totally  **/
+        // FIXME KF6: this should be the smallest status
+        HiddenStatus = 6, /**< The Item will be hidden totally  **/
     };
     Q_ENUM(ItemStatus)
 
     enum TrustLevel {
-        UnverifiableTrust = 0,      /**< The trust of the object can not be verified, usually because no
-                                     trust information (e.g. a cryptographic signature) was provided */
-        CompletelyUntrusted,        /**< The signature is broken/expired/false */
-        UnknownTrusted,             /**< The signature is valid, but the key is unknown */
-        UserTrusted,                /**< The signature is valid and made with a key signed by one of the
-                                     user's own keys*/
-        SelfTrusted,                /**< The signature is valid and made with one of the user's own keys*/
-        FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
-        UltimatelyTrusted,           /**< The signature is valid and made with the vendor's key*/
+        UnverifiableTrust = 0, /**< The trust of the object can not be verified, usually because no
+                                trust information (e.g. a cryptographic signature) was provided */
+        CompletelyUntrusted, /**< The signature is broken/expired/false */
+        UnknownTrusted, /**< The signature is valid, but the key is unknown */
+        UserTrusted, /**< The signature is valid and made with a key signed by one of the
+                      user's own keys*/
+        SelfTrusted, /**< The signature is valid and made with one of the user's own keys*/
+        FullyTrusted, /**< The signature is valid and made with a key signed by the vendor's key*/
+        UltimatelyTrusted, /**< The signature is valid and made with the vendor's key*/
     };
     Q_ENUM(TrustLevel)
 
@@ -291,15 +296,15 @@ public:
      * Description on how draw a background for the applet
      */
     enum BackgroundHints {
-        NoBackground = 0,         /**< Not drawing a background under the applet, the applet has its own implementation */
-        StandardBackground = 1,   /**< The standard background from the theme is drawn */
+        NoBackground = 0, /**< Not drawing a background under the applet, the applet has its own implementation */
+        StandardBackground = 1, /**< The standard background from the theme is drawn */
         TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
         ShadowBackground = 4, /**< The applet won't have a svg background but a drop shadow of its content done via a shader */
         ConfigurableBackground = 8, /** If the hint has this flag, the user is able to configure this background */
         DefaultBackground = StandardBackground, /**< Default settings: both standard background */
     };
     Q_ENUM(BackgroundHints)
-    //TODO KF6: BackgroundHint and BackgroundHints
+    // TODO KF6: BackgroundHint and BackgroundHints
     Q_DECLARE_FLAGS(BackgroundFlags, BackgroundHints)
 
 private:

@@ -6,13 +6,11 @@
 #ifndef DIALOGNATIVETEST_H
 #define DIALOGNATIVETEST_H
 
-#include <QTest>
-#include <QQuickView>
 #include <QQuickItem>
+#include <QQuickView>
+#include <QTest>
 
 #include "plasmaquick/dialog.h"
-
-
 
 class DialogNativeTest : public QObject
 {
@@ -37,4 +35,3 @@ private:
 };
 
 #endif
-

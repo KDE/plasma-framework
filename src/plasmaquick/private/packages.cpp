@@ -12,20 +12,20 @@
 #include <KLocalizedString>
 #include <kdeclarative/kdeclarative.h>
 
-#include <Plasma/Package>
 #include "../plasma/config-plasma.h"
+#include <Plasma/Package>
 
 void LookAndFeelPackage::initPackage(Plasma::Package *package)
 {
     // https://community.kde.org/Plasma/lookAndFeelPackage
     package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/look-and-feel/"));
 
-    //Defaults
+    // Defaults
     package->addFileDefinition("defaults", QStringLiteral("defaults"), i18n("Default settings for theme, etc."));
-    //Colors
+    // Colors
     package->addFileDefinition("colors", QStringLiteral("colors"), i18n("Color scheme to use for applications."));
 
-    //Directories
+    // Directories
     package->addDirectoryDefinition("previews", QStringLiteral("previews"), i18n("Preview Images"));
     package->addFileDefinition("loginmanagerpreview", QStringLiteral("previews/loginmanager.png"), i18n("Preview for the Login Manager"));
     package->addFileDefinition("lockscreenpreview", QStringLiteral("previews/lockscreen.png"), i18n("Preview for the Lock Screen"));
@@ -49,7 +49,9 @@ void LookAndFeelPackage::initPackage(Plasma::Package *package)
     package->addFileDefinition("userswitchermainscript", QStringLiteral("userswitcher/UserSwitcher.qml"), i18n("Main Script for User Switcher"));
 
     package->addDirectoryDefinition("desktopswitcher", QStringLiteral("desktopswitcher"), i18n("Virtual Desktop Switcher"));
-    package->addFileDefinition("desktopswitchermainscript", QStringLiteral("desktopswitcher/DesktopSwitcher.qml"), i18n("Main Script for Virtual Desktop Switcher"));
+    package->addFileDefinition("desktopswitchermainscript",
+                               QStringLiteral("desktopswitcher/DesktopSwitcher.qml"),
+                               i18n("Main Script for Virtual Desktop Switcher"));
 
     package->addDirectoryDefinition("osd", QStringLiteral("osd"), i18n("On-Screen Display Notifications"));
     package->addFileDefinition("osdmainscript", QStringLiteral("osd/Osd.qml"), i18n("Main Script for On-Screen Display Notifications"));
@@ -61,11 +63,12 @@ void LookAndFeelPackage::initPackage(Plasma::Package *package)
     package->addFileDefinition("runcommandmainscript", QStringLiteral("runcommand/RunCommand.qml"), i18n("Main Script KRunner"));
 
     package->addDirectoryDefinition("windowdecoration", QStringLiteral("windowdecoration"), i18n("Window Decoration"));
-    package->addFileDefinition("windowdecorationmainscript", QStringLiteral("windowdecoration/WindowDecoration.qml"), i18n("Main Script for Window Decoration"));
+    package->addFileDefinition("windowdecorationmainscript",
+                               QStringLiteral("windowdecoration/WindowDecoration.qml"),
+                               i18n("Main Script for Window Decoration"));
 
     package->addDirectoryDefinition("windowswitcher", QStringLiteral("windowswitcher"), i18n("Window Switcher"));
     package->addFileDefinition("windowswitchermainscript", QStringLiteral("windowswitcher/WindowSwitcher.qml"), i18n("Main Script for Window Switcher"));
-
 }
 
 void QmlWallpaperPackage::initPackage(Plasma::Package *package)

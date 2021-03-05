@@ -32,7 +32,9 @@ class EngineTest : public QObject
 {
     Q_OBJECT
 public:
-    EngineTest() {}
+    EngineTest()
+    {
+    }
 
 public Q_SLOTS:
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);

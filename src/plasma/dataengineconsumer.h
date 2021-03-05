@@ -13,7 +13,6 @@
 
 namespace Plasma
 {
-
 class DataEngine;
 class DataEngineConsumerPrivate;
 
@@ -61,4 +60,3 @@ private:
 } // namespace Plasma
 
 #endif
-

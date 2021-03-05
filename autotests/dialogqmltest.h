@@ -10,18 +10,15 @@
 
 #include "plasmaquick/dialog.h"
 
-
-
 class DialogQmlTest : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void loadAndShow();
+
 private:
     bool m_dialogShown;
-
 };
 
 #endif
-

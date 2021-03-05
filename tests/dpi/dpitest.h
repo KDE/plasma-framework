@@ -14,7 +14,6 @@ class QCommandLineParser;
 
 namespace Plasma
 {
-
 class DPITestPrivate;
 
 class DPITest : public QGuiApplication

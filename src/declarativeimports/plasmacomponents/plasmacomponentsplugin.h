@@ -29,7 +29,7 @@ private Q_SLOTS:
     void engineDestroyed(QObject *deleted);
 
 private:
-    QSet <QQmlEngine *> m_engines;
+    QSet<QQmlEngine *> m_engines;
 };
 
 class PlasmaComponentsPlugin : public QQmlExtensionPlugin

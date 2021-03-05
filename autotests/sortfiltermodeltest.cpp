@@ -10,9 +10,9 @@
 // KDE
 
 // Qt
+#include <QSignalSpy>
 #include <QStandardItemModel>
 #include <QStringListModel>
-#include <QSignalSpy>
 #include <QTest>
 
 using namespace Plasma;
@@ -25,7 +25,7 @@ void SortFilterModelTest::setModel()
     QStandardItemModel model;
 
     SortFilterModel filterModel;
-    QSignalSpy spy(&filterModel, SIGNAL(sourceModelChanged(QObject*)));
+    QSignalSpy spy(&filterModel, SIGNAL(sourceModelChanged(QObject *)));
 
     filterModel.setModel(&model);
     QCOMPARE(spy.count(), 1);
@@ -102,4 +102,3 @@ void SortFilterModelTest::mapRowFromSource()
     QCOMPARE(filterModel.mapRowFromSource(2), 1);
     QCOMPARE(filterModel.mapRowFromSource(-1), -1);
 }
-

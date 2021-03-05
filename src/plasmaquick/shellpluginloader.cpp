@@ -10,10 +10,10 @@
 #include <QDebug>
 
 ShellPluginLoader::ShellPluginLoader()
-    : Plasma::PluginLoader()/*, when BC can be broken, these should become class members
-      m_lnfPackage(0),
-      m_qmlPackage(0),
-      m_layoutPackage(0)*/
+    : Plasma::PluginLoader() /*, when BC can be broken, these should become class members
+       m_lnfPackage(0),
+       m_qmlPackage(0),
+       m_layoutPackage(0)*/
 {
     Q_ASSERT(false);
 }
@@ -22,7 +22,7 @@ ShellPluginLoader::~ShellPluginLoader()
 {
 }
 
-Plasma::Package ShellPluginLoader::internalLoadPackage(const QString &/*packageFormat*/, const QString &/*specialization*/)
+Plasma::Package ShellPluginLoader::internalLoadPackage(const QString & /*packageFormat*/, const QString & /*specialization*/)
 {
     Q_ASSERT(false);
     return Plasma::Package();
@@ -32,4 +32,3 @@ void ShellPluginLoader::init()
 {
     Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
 }
-

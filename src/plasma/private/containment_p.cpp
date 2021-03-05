@@ -9,34 +9,34 @@
 
 #include "private/containment_p.h"
 
-#include <QDebug>
 #include <KLocalizedString>
 #include <KWindowSystem>
+#include <QDebug>
 
 #include "config-plasma.h"
 
 #include "pluginloader.h"
 
+#include "debug_p.h"
 #include "private/applet_p.h"
 #include "timetracker.h"
-#include "debug_p.h"
 
 namespace Plasma
 {
-
 const char ContainmentPrivate::defaultWallpaper[] = "org.kde.image";
 
-ContainmentPrivate::ContainmentPrivate(Containment *c):
-    q(c),
-    formFactor(Types::Planar),
-    location(Types::Floating),
-    lastScreen(-1), // never had a screen
-    type(Plasma::Types::NoContainmentType),
-    uiReady(false),
-    appletsUiReady(false)
+ContainmentPrivate::ContainmentPrivate(Containment *c)
+    : q(c)
+    , formFactor(Types::Planar)
+    , location(Types::Floating)
+    , lastScreen(-1)
+    , // never had a screen
+    type(Plasma::Types::NoContainmentType)
+    , uiReady(false)
+    , appletsUiReady(false)
 {
-    //if the parent is an applet (i.e we are the systray)
-    //we want to follow screen changed signals from the parent's containment
+    // if the parent is an applet (i.e we are the systray)
+    // we want to follow screen changed signals from the parent's containment
     auto appletParent = qobject_cast<Plasma::Applet *>(c->parent());
     if (appletParent) {
         QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
@@ -48,14 +48,13 @@ Plasma::ContainmentPrivate::~ContainmentPrivate()
     applets.clear();
 }
 
-
 void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
 {
     actions->setConfigGroup(QStringLiteral("Shortcuts-Containment"));
 
-    //adjust applet actions
+    // adjust applet actions
     QAction *appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("remove")));
-    appAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::ALT+Qt::Key_R));
+    appAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::ALT + Qt::Key_R));
     if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this Panel"));
     } else {
@@ -64,16 +63,16 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
 
     appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("configure")));
     if (appAction) {
-        appAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::ALT+Qt::Key_S));
+        appAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::ALT + Qt::Key_S));
         appAction->setText(i18n("Activity Settings"));
     }
 
-    //add our own actions
+    // add our own actions
     QAction *appletBrowserAction = actions->add<QAction>(QStringLiteral("add widgets"));
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-    appletBrowserAction->setShortcut(QKeySequence(Qt::ALT+Qt::Key_D, Qt::Key_A));
+    appletBrowserAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::Key_A));
     appletBrowserAction->setData(Plasma::Types::AddAction);
 }
 
@@ -91,7 +90,7 @@ void ContainmentPrivate::configChanged()
 
 void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
 {
-    //qCDebug(LOG_PLASMA) << "================== "<< appletStatus << q->status();
+    // qCDebug(LOG_PLASMA) << "================== "<< appletStatus << q->status();
     if (appletStatus == q->status()) {
         return;
     }
@@ -122,9 +121,9 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         return;
     }
 
-    //qCDebug(LOG_PLASMA) << "got containmentConstraintsEvent" << constraints;
+    // qCDebug(LOG_PLASMA) << "got containmentConstraintsEvent" << constraints;
     if (constraints & Plasma::Types::ImmutableConstraint) {
-        //update actions
+        // update actions
         const bool unlocked = q->immutability() == Types::Mutable;
 
         QAction *action = q->actions()->action(QStringLiteral("remove"));
@@ -191,7 +190,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
     }
 
     q->addApplet(applet);
-    //mirror behavior of resorecontents: if an applet is not valid, set it immediately to uiReady
+    // mirror behavior of resorecontents: if an applet is not valid, set it immediately to uiReady
     if (!applet->pluginMetaData().isValid()) {
         applet->updateConstraints(Plasma::Types::UiReadyConstraint);
     }
@@ -224,7 +223,7 @@ void ContainmentPrivate::setStarted()
 
 void ContainmentPrivate::setUiReady()
 {
-    //if we are the containment and there is still some uncomplete applet, we're still incomplete
+    // if we are the containment and there is still some uncomplete applet, we're still incomplete
     if (!uiReady) {
         uiReady = true;
         if (q->Applet::d->started && (appletsUiReady || applets.isEmpty()) && loadingApplets.isEmpty()) {
@@ -233,7 +232,7 @@ void ContainmentPrivate::setUiReady()
     }
 }
 
-void ContainmentPrivate::appletLoaded(Applet* applet)
+void ContainmentPrivate::appletLoaded(Applet *applet)
 {
     loadingApplets.remove(applet);
 

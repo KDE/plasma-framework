@@ -11,14 +11,13 @@
 
 #include "applet.h"
 #include "dataengine.h"
+#include "debug_p.h"
 #include "package.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
-#include "debug_p.h"
 
 namespace Plasma
 {
-
 static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
@@ -28,8 +27,8 @@ static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::fu
         if (!filter(plugin))
             continue;
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
-        if (((types & Types::AppletComponent)     && componentTypes.contains(QLatin1String("Applet")))
-          ||((types & Types::DataEngineComponent) && componentTypes.contains(QLatin1String("DataEngine")))) {
+        if (((types & Types::AppletComponent) && componentTypes.contains(QLatin1String("Applet")))
+            || ((types & Types::DataEngineComponent) && componentTypes.contains(QLatin1String("DataEngine")))) {
             ret << plugin;
         }
     }
@@ -37,14 +36,14 @@ static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::fu
 }
 
 ScriptEngine::ScriptEngine(QObject *parent)
-    : QObject(parent),
-      d(nullptr)
+    : QObject(parent)
+    , d(nullptr)
 {
 }
 
 ScriptEngine::~ScriptEngine()
 {
-//    delete d;
+    //    delete d;
 }
 
 bool ScriptEngine::init()
@@ -65,7 +64,9 @@ QString ScriptEngine::mainScript() const
 QStringList knownLanguages(Types::ComponentTypes types)
 {
     QStringList languages;
-    const QVector<KPluginMetaData> plugins = listEngines(types, [] (const KPluginMetaData &) -> bool { return true;});
+    const QVector<KPluginMetaData> plugins = listEngines(types, [](const KPluginMetaData &) -> bool {
+        return true;
+    });
 
     for (const auto &plugin : plugins)
         languages << plugin.value(QStringLiteral("X-Plasma-API"));
@@ -76,8 +77,7 @@ QStringList knownLanguages(Types::ComponentTypes types)
 typedef QHash<QString, QSharedPointer<KPluginLoader>> EngineCache;
 Q_GLOBAL_STATIC(EngineCache, engines)
 
-ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent,
-    const QVariantList &args = QVariantList())
+ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent, const QVariantList &args = QVariantList())
 {
     Q_UNUSED(parent);
 
@@ -89,8 +89,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
     }
 
     ScriptEngine *engine = nullptr;
-    auto filter = [&language](const KPluginMetaData &md) -> bool
-    {
+    auto filter = [&language](const KPluginMetaData &md) -> bool {
         return md.value(QStringLiteral("X-Plasma-API")) == language;
     };
 
@@ -111,8 +110,7 @@ ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QOb
 
 AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QVariantList &args)
 {
-    AppletScript *engine =
-        static_cast<AppletScript *>(loadEngine(language, Types::AppletComponent, applet, args));
+    AppletScript *engine = static_cast<AppletScript *>(loadEngine(language, Types::AppletComponent, applet, args));
 
     if (engine) {
         engine->setApplet(applet);
@@ -123,8 +121,7 @@ AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QV
 
 DataEngineScript *loadScriptEngine(const QString &language, DataEngine *dataEngine, const QVariantList &args)
 {
-    DataEngineScript *engine =
-        static_cast<DataEngineScript *>(loadEngine(language, Types::DataEngineComponent, dataEngine, args));
+    DataEngineScript *engine = static_cast<DataEngineScript *>(loadEngine(language, Types::DataEngineComponent, dataEngine, args));
 
     if (engine) {
         engine->setDataEngine(dataEngine);

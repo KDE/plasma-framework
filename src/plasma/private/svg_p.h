@@ -7,16 +7,15 @@
 #ifndef PLASMA_SVG_P_H
 #define PLASMA_SVG_P_H
 
+#include <QExplicitlySharedDataPointer>
 #include <QHash>
+#include <QObject>
 #include <QPointer>
 #include <QSharedData>
 #include <QSvgRenderer>
-#include <QExplicitlySharedDataPointer>
-#include <QObject>
 
 namespace Plasma
 {
-
 class Svg;
 
 class SharedSvgRenderer : public QSvgRenderer, public QSharedData
@@ -26,23 +25,12 @@ public:
     typedef QExplicitlySharedDataPointer<SharedSvgRenderer> Ptr;
 
     explicit SharedSvgRenderer(QObject *parent = nullptr);
-    SharedSvgRenderer(
-        const QString &filename,
-        const QString &styleSheet,
-        QHash<QString, QRectF> &interestingElements,
-        QObject *parent = nullptr);
+    SharedSvgRenderer(const QString &filename, const QString &styleSheet, QHash<QString, QRectF> &interestingElements, QObject *parent = nullptr);
 
-    SharedSvgRenderer(
-        const QByteArray &contents,
-        const QString &styleSheet,
-        QHash<QString, QRectF> &interestingElements,
-        QObject *parent = nullptr);
+    SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements, QObject *parent = nullptr);
 
 private:
-    bool load(
-        const QByteArray &contents,
-        const QString &styleSheet,
-        QHash<QString, QRectF> &interestingElements);
+    bool load(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements);
 };
 
 class SvgPrivate
@@ -57,17 +45,17 @@ public:
         double devicePixelRatio;
         double scaleFactor;
         int colorGroup;
-        uint extraFlags; //Not used here, used for enabledborders in FrameSvg
+        uint extraFlags; // Not used here, used for enabledborders in FrameSvg
         uint lastModified;
     };
 
     SvgPrivate(Svg *svg);
     ~SvgPrivate();
 
-    //This function is meant for the rects cache
+    // This function is meant for the rects cache
     CacheId cacheId(const QString &elementId) const;
 
-    //This function is meant for the pixmap cache
+    // This function is meant for the pixmap cache
     QString cachePath(const QString &path, const QSize &size) const;
 
     bool setImagePath(const QString &imagePath);
@@ -85,13 +73,13 @@ public:
 
     void checkColorHints();
 
-    //Following two are utility functions to snap rendered elements to the pixel grid
-    //to and from are always 0 <= val <= 1
+    // Following two are utility functions to snap rendered elements to the pixel grid
+    // to and from are always 0 <= val <= 1
     qreal closestDistance(qreal to, qreal from);
 
     QRectF makeUniform(const QRectF &orig, const QRectF &dst);
 
-    //Slots
+    // Slots
     void themeChanged();
     void colorsChanged();
 
@@ -122,8 +110,8 @@ public:
     bool themeFailed : 1;
 };
 
-
-class SvgRectsCache : public QObject {
+class SvgRectsCache : public QObject
+{
     Q_OBJECT
 public:
     SvgRectsCache(QObject *parent = nullptr);
@@ -159,7 +147,7 @@ private:
     QTimer *m_configSyncTimer = nullptr;
     QString m_iconThemePath;
     KSharedConfigPtr m_svgElementsCache;
-    /* 
+    /*
      * We are indexing in the hash cache ids by their "digested" uint out of qHash(CacheId)
      * because we need to serialize it and unserialize it to a config file,
      * which is more efficient to do that with the uint directly rather than a CacheId struct serialization
@@ -168,10 +156,8 @@ private:
     QHash<QString, QSet<unsigned int>> m_invalidElements;
     QHash<QString, QList<QSize>> m_sizeHintsForId;
 };
-
 }
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed = 0);
 
 #endif
-

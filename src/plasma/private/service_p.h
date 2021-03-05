@@ -7,20 +7,19 @@
 #ifndef SERVICE_P_H
 #define SERVICE_P_H
 
-#include "servicejob.h"
 #include "service.h"
+#include "servicejob.h"
 
 #include <QMap>
 #include <QMultiHash>
-#include <QWidget>
 #include <QSet>
+#include <QWidget>
 
-#include <KPluginInfo>
 #include <KLocalizedString>
+#include <KPluginInfo>
 
 namespace Plasma
 {
-
 class NullServiceJob : public ServiceJob
 {
 public:
@@ -79,4 +78,3 @@ public:
 } // namespace Plasma
 
 #endif
-

@@ -7,18 +7,18 @@
 #include "iconitemtest.h"
 
 #include <QIcon>
-#include <QQmlEngine>
-#include <QQmlContext>
 #include <QQmlComponent>
+#include <QQmlContext>
+#include <QQmlEngine>
 #include <QQuickItemGrabResult>
 #include <QSignalSpy>
 
-#include <KIconLoader>
 #include <KIconEngine>
+#include <KIconLoader>
 #include <KIconTheme>
 
-#include "plasma/theme.h"
 #include "plasma/svg.h"
+#include "plasma/theme.h"
 
 #include "utils.h"
 
@@ -40,11 +40,11 @@ void IconItemTest::initTestCase()
     Plasma::TestUtils::installPlasmaTheme("breeze-light");
     Plasma::TestUtils::installPlasmaTheme("breeze-dark");
 
-    qputenv("XDG_DATA_DIRS",  qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
+    qputenv("XDG_DATA_DIRS", qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
 
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
-    if(!QDir(configPath).mkpath(QStringLiteral("."))) {
+    if (!QDir(configPath).mkpath(QStringLiteral("."))) {
         qFatal("Failed to create test configuration directory.");
     }
 
@@ -99,7 +99,7 @@ QQuickItem *IconItemTest::createIconItem()
         spy.wait();
     }
 
-    QQuickItem *item = qobject_cast<QQuickItem*>(component.create(m_view->engine()->rootContext()));
+    QQuickItem *item = qobject_cast<QQuickItem *>(component.create(m_view->engine()->rootContext()));
     Q_ASSERT(item && qstrcmp(item->metaObject()->className(), "IconItem") == 0);
     item->setParentItem(m_view->rootObject());
     return item;
@@ -143,7 +143,7 @@ void IconItemTest::loadPixmap()
     QCOMPARE(sourcePixmap, item->property("source").value<QPixmap>());
 }
 
-//tests setting icon from a QImage
+// tests setting icon from a QImage
 void IconItemTest::loadImage()
 {
     QScopedPointer<QQuickItem> item(createIconItem());
@@ -308,7 +308,7 @@ void IconItemTest::themeChange()
     QQuickItem *item1 = createIconItem();
     item1->setProperty("animated", false);
     item1->setProperty("source", "zoom-fit-height");
-    Plasma::Svg *svg1 = item1->findChild<Plasma::Svg*>();
+    Plasma::Svg *svg1 = item1->findChild<Plasma::Svg *>();
     changeTheme(svg1->theme(), "breeze-light");
     QImage img1 = grabImage(item1);
     changeTheme(svg1->theme(), "breeze-dark");
@@ -321,7 +321,7 @@ void IconItemTest::themeChange()
     item2->setProperty("width", 22);
     item2->setProperty("height", 22);
     item2->setProperty("source", "tst-plasma-framework-test-icon");
-    Plasma::Svg *svg2 = item2->findChild<Plasma::Svg*>();
+    Plasma::Svg *svg2 = item2->findChild<Plasma::Svg *>();
     changeTheme(svg2->theme(), "breeze-light");
     img1 = grabImage(item2);
     changeTheme(svg2->theme(), "breeze-dark");
@@ -335,7 +335,7 @@ void IconItemTest::qiconFromTheme()
     QQuickItem *item1 = createIconItem();
     QIcon icon1 = QIcon::fromTheme("konversation");
     item1->setProperty("source", icon1);
-    QVERIFY(item1->findChild<Plasma::Svg*>());
+    QVERIFY(item1->findChild<Plasma::Svg *>());
     QVERIFY(!imageIsEmpty(grabImage(item1)));
     QCOMPARE(icon1, item1->property("source").value<QIcon>());
 
@@ -343,7 +343,7 @@ void IconItemTest::qiconFromTheme()
     QQuickItem *item2 = createIconItem();
     QIcon icon2 = QIcon::fromTheme("tst-plasma-framework-test-icon");
     item2->setProperty("source", icon2);
-    QVERIFY(item2->findChild<Plasma::Svg*>());
+    QVERIFY(item2->findChild<Plasma::Svg *>());
     QVERIFY(!imageIsEmpty(grabImage(item2)));
     QCOMPARE(icon2, item2->property("source").value<QIcon>());
 }
@@ -354,7 +354,7 @@ void IconItemTest::changeColorGroup()
     QQuickItem *item = createIconItem();
     item->setProperty("animated", false);
     item->setProperty("source", "zoom-fit-height");
-    Plasma::Svg *svg = item->findChild<Plasma::Svg*>();
+    Plasma::Svg *svg = item->findChild<Plasma::Svg *>();
     // not using "breeze" theme as that one follows system color scheme
     // and that one might not have a complementary group or a broken one
     changeTheme(svg->theme(), "breeze-light");
@@ -533,4 +533,3 @@ void IconItemTest::roundToIconSize()
 }
 
 QTEST_MAIN(IconItemTest)
-

@@ -6,25 +6,24 @@
 */
 
 #include "theme_p.h"
+#include "debug_p.h"
 #include "framesvg.h"
 #include "framesvg_p.h"
 #include "svg_p.h"
-#include "debug_p.h"
 
-#include <QGuiApplication>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QFontDatabase>
-#include <QDir>
+#include <QGuiApplication>
 
 #include <KDirWatch>
-#include <KWindowEffects>
 #include <KIconLoader>
 #include <KIconTheme>
+#include <KWindowEffects>
 
 namespace Plasma
 {
-
 const char ThemePrivate::defaultTheme[] = "default";
 const char ThemePrivate::themeRcFile[] = "plasmarc";
 // the system colors theme is used to cache unthemed svgs with colorization needs
@@ -38,36 +37,36 @@ ThemePrivate *ThemePrivate::globalTheme = nullptr;
 QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate *>();
 
 ThemePrivate::ThemePrivate(QObject *parent)
-    : QObject(parent),
-      colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(nullptr)),
-      selectionColorScheme(QPalette::Active, KColorScheme::Selection, KSharedConfigPtr(nullptr)),
-      buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(nullptr)),
-      viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(nullptr)),
-      complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(nullptr)),
-      headerColorScheme(QPalette::Active, KColorScheme::Header, KSharedConfigPtr(nullptr)),
-      tooltipColorScheme(QPalette::Active, KColorScheme::Tooltip, KSharedConfigPtr(nullptr)),
-      defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME)),
-      defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX)),
-      defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH),
-      defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT),
-      pixmapCache(nullptr),
-      cacheSize(0),
-      cachesToDiscard(NoCache),
-      compositingActive(KWindowSystem::self()->compositingActive()),
-      backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast)),
-      isDefault(true),
-      useGlobal(true),
-      hasWallpapers(false),
-      fixedName(false),
-      backgroundContrast(qQNaN()),
-      backgroundIntensity(qQNaN()),
-      backgroundSaturation(qQNaN()),
-      backgroundContrastEnabled(true),
-      adaptiveTransparencyEnabled(false),
-      blurBehindEnabled(true),
-      apiMajor(1),
-      apiMinor(0),
-      apiRevision(0)
+    : QObject(parent)
+    , colorScheme(QPalette::Active, KColorScheme::Window, KSharedConfigPtr(nullptr))
+    , selectionColorScheme(QPalette::Active, KColorScheme::Selection, KSharedConfigPtr(nullptr))
+    , buttonColorScheme(QPalette::Active, KColorScheme::Button, KSharedConfigPtr(nullptr))
+    , viewColorScheme(QPalette::Active, KColorScheme::View, KSharedConfigPtr(nullptr))
+    , complementaryColorScheme(QPalette::Active, KColorScheme::Complementary, KSharedConfigPtr(nullptr))
+    , headerColorScheme(QPalette::Active, KColorScheme::Header, KSharedConfigPtr(nullptr))
+    , tooltipColorScheme(QPalette::Active, KColorScheme::Tooltip, KSharedConfigPtr(nullptr))
+    , defaultWallpaperTheme(QStringLiteral(DEFAULT_WALLPAPER_THEME))
+    , defaultWallpaperSuffix(QStringLiteral(DEFAULT_WALLPAPER_SUFFIX))
+    , defaultWallpaperWidth(DEFAULT_WALLPAPER_WIDTH)
+    , defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT)
+    , pixmapCache(nullptr)
+    , cacheSize(0)
+    , cachesToDiscard(NoCache)
+    , compositingActive(KWindowSystem::self()->compositingActive())
+    , backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast))
+    , isDefault(true)
+    , useGlobal(true)
+    , hasWallpapers(false)
+    , fixedName(false)
+    , backgroundContrast(qQNaN())
+    , backgroundIntensity(qQNaN())
+    , backgroundSaturation(qQNaN())
+    , backgroundContrastEnabled(true)
+    , adaptiveTransparencyEnabled(false)
+    , blurBehindEnabled(true)
+    , apiMajor(1)
+    , apiMinor(0)
+    , apiRevision(0)
 {
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
@@ -84,7 +83,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
 
     if (QPixmap::defaultDepth() > 8) {
 #if HAVE_X11
-        //watch for background contrast effect property changes as well
+        // watch for background contrast effect property changes as well
         if (!s_backgroundContrastEffectWatcher) {
             s_backgroundContrastEffectWatcher = new EffectWatcher(QStringLiteral("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION"));
         }
@@ -107,10 +106,9 @@ ThemePrivate::ThemePrivate(QObject *parent)
     // ... but also remove/recreate cycles, like KConfig does it
     connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged);
 
-    QObject::connect(KIconLoader::global(), &KIconLoader::iconChanged,
-        this, [this]() {
-            scheduleThemeChangeNotification(PixmapCache|SvgElementsCache);
-        });
+    QObject::connect(KIconLoader::global(), &KIconLoader::iconChanged, this, [this]() {
+        scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
+    });
 
     connect(KWindowSystem::self(), &KWindowSystem::compositingChanged, this, &ThemePrivate::compositingChanged);
 }
@@ -161,7 +159,9 @@ bool ThemePrivate::useCache()
             KDirWatch::self()->removeFile(themeMetadataPath);
         }
         if (isRegularTheme) {
-            themeMetadataPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QStringLiteral("/metadata.desktop"));
+            themeMetadataPath =
+                QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % themeName % QStringLiteral("/metadata.desktop"));
             const auto *iconTheme = KIconLoader::global()->theme();
             if (iconTheme) {
                 iconThemeMetadataPath = iconTheme->dir() + QStringLiteral("index.theme");
@@ -184,18 +184,13 @@ bool ThemePrivate::useCache()
 
                 // watch the metadata file for changes at runtime
                 KDirWatch::self()->addFile(themeMetadataPath);
-                QObject::connect(KDirWatch::self(), &KDirWatch::created,
-                                 this, &ThemePrivate::settingsFileChanged,
-                                 Qt::UniqueConnection);
-                QObject::connect(KDirWatch::self(), &KDirWatch::dirty,
-                                 this, &ThemePrivate::settingsFileChanged,
-                                 Qt::UniqueConnection);
+                QObject::connect(KDirWatch::self(), &KDirWatch::created, this, &ThemePrivate::settingsFileChanged, Qt::UniqueConnection);
+                QObject::connect(KDirWatch::self(), &KDirWatch::dirty, this, &ThemePrivate::settingsFileChanged, Qt::UniqueConnection);
 
                 if (!iconThemeMetadataPath.isEmpty()) {
                     KDirWatch::self()->addFile(iconThemeMetadataPath);
                 }
             }
-
 
             // now we check for, and remove if necessary, old caches
             QDir cacheDir(QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation));
@@ -203,12 +198,10 @@ bool ThemePrivate::useCache()
 
             const auto files = cacheDir.entryInfoList();
             for (const QFileInfo &file : files) {
-                if (currentCacheFileName.isEmpty() ||
-                        !file.absoluteFilePath().endsWith(currentCacheFileName)) {
+                if (currentCacheFileName.isEmpty() || !file.absoluteFilePath().endsWith(currentCacheFileName)) {
                     QFile::remove(file.absoluteFilePath());
                 }
             }
-
         }
 
         // now we do a sanity check: if the metadata.desktop file is newer than the cache, drop the cache
@@ -221,14 +214,15 @@ bool ThemePrivate::useCache()
             // the cache should be dropped; we need a way to detect system color change when the
             // application is not running.
             // check for expired cache
-            const QString cacheFilePath = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + cacheFile + QLatin1String(".kcache");
+            const QString cacheFilePath =
+                QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation) + QLatin1Char('/') + cacheFile + QLatin1String(".kcache");
             if (!cacheFilePath.isEmpty()) {
                 const QFileInfo cacheFileInfo(cacheFilePath);
                 const QFileInfo metadataFileInfo(themeMetadataPath);
                 const QFileInfo iconThemeMetadataFileInfo(iconThemeMetadataPath);
 
-                cachesTooOld = (cacheFileInfo.lastModified().toSecsSinceEpoch() < metadataFileInfo.lastModified().toSecsSinceEpoch()) ||
-                        (cacheFileInfo.lastModified().toSecsSinceEpoch() < iconThemeMetadataFileInfo.lastModified().toSecsSinceEpoch());
+                cachesTooOld = (cacheFileInfo.lastModified().toSecsSinceEpoch() < metadataFileInfo.lastModified().toSecsSinceEpoch())
+                    || (cacheFileInfo.lastModified().toSecsSinceEpoch() < iconThemeMetadataFileInfo.lastModified().toSecsSinceEpoch());
             }
         }
 
@@ -266,7 +260,7 @@ void ThemePrivate::onAppExitCleanup()
     cacheTheme = false;
 }
 
-QString ThemePrivate::imagePath(const QString& theme, const QString& type, const QString& image)
+QString ThemePrivate::imagePath(const QString &theme, const QString &type, const QString &image)
 {
     QString subdir = QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % type % image;
     return QStandardPaths::locate(QStandardPaths::GenericDataLocation, subdir);
@@ -290,7 +284,7 @@ QString ThemePrivate::findInTheme(const QString &image, const QString &theme, bo
 
     QString search = imagePath(theme, type, image);
 
-    //not found or compositing enabled
+    // not found or compositing enabled
     if (search.isEmpty()) {
         search = imagePath(theme, QStringLiteral("/"), image);
     }
@@ -307,7 +301,7 @@ void ThemePrivate::compositingChanged(bool active)
 #if HAVE_X11
     if (compositingActive != active) {
         compositingActive = active;
-        //qCDebug(LOG_PLASMA) << QTime::currentTime();
+        // qCDebug(LOG_PLASMA) << QTime::currentTime();
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 #endif
@@ -378,7 +372,7 @@ void ThemePrivate::scheduleThemeChangeNotification(CacheTypes caches)
 
 void ThemePrivate::notifyOfChanged()
 {
-    //qCDebug(LOG_PLASMA) << cachesToDiscard;
+    // qCDebug(LOG_PLASMA) << cachesToDiscard;
     discardCache(cachesToDiscard);
     cachesToDiscard = NoCache;
     Q_EMIT themeChanged();
@@ -390,7 +384,8 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     if (css.isEmpty()) {
         stylesheet = cachedDefaultStyleSheet;
         if (stylesheet.isEmpty()) {
-            stylesheet = QStringLiteral("\n\
+            stylesheet = QStringLiteral(
+                "\n\
                         body {\n\
                             color: %textcolor;\n\
                             generalfont-size: %fontsize;\n\
@@ -412,8 +407,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     QHash<QString, QString> elements;
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
-    elements[QStringLiteral("%textcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
-    elements[QStringLiteral("%backgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%textcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
+    elements[QStringLiteral("%backgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%visitedlink")] = color(Theme::VisitedLinkColor, Theme::NormalColorGroup).name();
@@ -424,8 +421,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%neutraltextcolor")] = color(Theme::NeutralTextColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%negativetextcolor")] = color(Theme::NegativeTextColor, Theme::NormalColorGroup).name();
 
-    elements[QStringLiteral("%buttontextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ButtonColorGroup).name();
-    elements[QStringLiteral("%buttonbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttontextcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ButtonColorGroup).name();
+    elements[QStringLiteral("%buttonbackgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhovercolor")] = color(Theme::HoverColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonfocuscolor")] = color(Theme::FocusColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ButtonColorGroup).name();
@@ -433,17 +432,21 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%buttonneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ButtonColorGroup).name();
     elements[QStringLiteral("%buttonnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ButtonColorGroup).name();
 
-    elements[QStringLiteral("%viewtextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ViewColorGroup).name();
-    elements[QStringLiteral("%viewbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewtextcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ViewColorGroup).name();
+    elements[QStringLiteral("%viewbackgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhovercolor")] = color(Theme::HoverColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewfocuscolor")] = color(Theme::FocusColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewpositivetextcolor")] = color(Theme::PositiveTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ViewColorGroup).name();
     elements[QStringLiteral("%viewnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ViewColorGroup).name();
-    
-    elements[QStringLiteral("%tooltiptextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ToolTipColorGroup).name();
-    elements[QStringLiteral("%tooltipbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ToolTipColorGroup).name();
+
+    elements[QStringLiteral("%tooltiptextcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ToolTipColorGroup).name();
+    elements[QStringLiteral("%tooltipbackgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ToolTipColorGroup).name();
     elements[QStringLiteral("%tooltiphovercolor")] = color(Theme::HoverColor, Theme::ToolTipColorGroup).name();
     elements[QStringLiteral("%tooltipfocuscolor")] = color(Theme::FocusColor, Theme::ToolTipColorGroup).name();
     elements[QStringLiteral("%tooltiphighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ToolTipColorGroup).name();
@@ -451,8 +454,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%tooltipneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ToolTipColorGroup).name();
     elements[QStringLiteral("%tooltipnegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ToolTipColorGroup).name();
 
-    elements[QStringLiteral("%complementarytextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
-    elements[QStringLiteral("%complementarybackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarytextcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::ComplementaryColorGroup).name();
+    elements[QStringLiteral("%complementarybackgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhovercolor")] = color(Theme::HoverColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryfocuscolor")] = color(Theme::FocusColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementaryhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::ComplementaryColorGroup).name();
@@ -460,8 +465,10 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     elements[QStringLiteral("%complementaryneutraltextcolor")] = color(Theme::NeutralTextColor, Theme::ComplementaryColorGroup).name();
     elements[QStringLiteral("%complementarynegativetextcolor")] = color(Theme::NegativeTextColor, Theme::ComplementaryColorGroup).name();
 
-        elements[QStringLiteral("%headertextcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::HeaderColorGroup).name();
-    elements[QStringLiteral("%headerbackgroundcolor")] = color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headertextcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::HeaderColorGroup).name();
+    elements[QStringLiteral("%headerbackgroundcolor")] =
+        color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::HeaderColorGroup).name();
     elements[QStringLiteral("%headerhovercolor")] = color(Theme::HoverColor, Theme::HeaderColorGroup).name();
     elements[QStringLiteral("%headerfocuscolor")] = color(Theme::FocusColor, Theme::HeaderColorGroup).name();
     elements[QStringLiteral("%headerhighlightedtextcolor")] = color(Theme::HighlightedTextColor, Theme::HeaderColorGroup).name();
@@ -585,7 +592,7 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
         stylesheet += skel.arg(QStringLiteral("HeaderPositiveText"), QStringLiteral("%headerpositivetextcolor"));
         stylesheet += skel.arg(QStringLiteral("HeaderNeutralText"), QStringLiteral("%headerneutraltextcolor"));
         stylesheet += skel.arg(QStringLiteral("HeaderNegativeText"), QStringLiteral("%headernegativetextcolor"));
-        
+
         stylesheet += skel.arg(QStringLiteral("TootipText"), QStringLiteral("%tooltiptextcolor"));
         stylesheet += skel.arg(QStringLiteral("TootipBackground"), QStringLiteral("%tooltipbackgroundcolor"));
         stylesheet += skel.arg(QStringLiteral("TootipHover"), QStringLiteral("%tooltiphovercolor"));
@@ -625,7 +632,7 @@ void ThemePrivate::settingsChanged(bool emitChanges)
     if (fixedName) {
         return;
     }
-    //qCDebug(LOG_PLASMA) << "Settings Changed!";
+    // qCDebug(LOG_PLASMA) << "Settings Changed!";
     KConfigGroup cg = config();
     setThemeName(cg.readEntry("name", ThemePrivate::defaultTheme), false, emitChanges);
 }
@@ -634,9 +641,9 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
 {
     const KColorScheme *scheme = nullptr;
 
-    //Before 5.0 Plasma theme really only used Normal and Button
-    //many old themes are built on this assumption and will break
-    //otherwise
+    // Before 5.0 Plasma theme really only used Normal and Button
+    // many old themes are built on this assumption and will break
+    // otherwise
     if (apiMajor < 5 && group != Theme::NormalColorGroup) {
         group = Theme::ButtonColorGroup;
     }
@@ -652,7 +659,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         break;
     }
 
-    //this doesn't have a real kcolorscheme
+    // this doesn't have a real kcolorscheme
     case Theme::ComplementaryColorGroup: {
         scheme = &complementaryColorScheme;
         break;
@@ -662,7 +669,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
         scheme = &headerColorScheme;
         break;
     }
-    
+
     case Theme::ToolTipColorGroup: {
         scheme = &tooltipColorScheme;
         break;
@@ -675,10 +682,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
     }
     }
 
-
-
     switch (role) {
-
     case Theme::TextColor:
         return scheme->foreground(KColorScheme::NormalText).color();
 
@@ -754,7 +758,6 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     }
 }
 
-
 void ThemePrivate::processAdaptiveTransparencySettings(KConfigBase *metadata)
 {
     KConfigGroup cg;
@@ -793,11 +796,15 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     // the system colors.
     bool realTheme = theme != QLatin1String(systemColorsTheme);
     if (realTheme) {
-        QString themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop"));
+        QString themePath =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop"));
 
         if (themePath.isEmpty() && themeName.isEmpty()) {
             // note: can't use QStringLiteral("foo" "bar") on Windows
-            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"), QStandardPaths::LocateDirectory);
+            themePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                               QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/default"),
+                                               QStandardPaths::LocateDirectory);
 
             if (themePath.isEmpty()) {
                 return;
@@ -815,10 +822,12 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     themeName = theme;
 
     // load the color scheme config
-    const QString colorsFile = realTheme ? QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/colors"))
-                               : QString();
+    const QString colorsFile = realTheme
+        ? QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                 QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/colors"))
+        : QString();
 
-    //qCDebug(LOG_PLASMA) << "we're going for..." << colorsFile << "*******************";
+    // qCDebug(LOG_PLASMA) << "we're going for..." << colorsFile << "*******************";
 
     if (colorsFile.isEmpty()) {
         colors = nullptr;
@@ -839,7 +848,9 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
     // load the wallpaper settings, if any
     if (realTheme) {
-        const QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop")));
+        const QString metadataPath(
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QLatin1String("/metadata.desktop")));
         KConfig metadata(metadataPath, KConfig::SimpleConfig);
         pluginMetaData = KPluginMetaData(metadataPath);
 
@@ -856,7 +867,9 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
             fallbackThemes.append(fallback);
 
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % fallback % QStringLiteral("/metadata.desktop")));
+            QString metadataPath(
+                QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                       QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % fallback % QStringLiteral("/metadata.desktop")));
             KConfig metadata(metadataPath, KConfig::SimpleConfig);
             KConfigGroup cg(&metadata, "Settings");
             fallback = cg.readEntry("FallbackTheme", QString());
@@ -867,13 +880,15 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         }
 
         for (const QString &theme : qAsConst(fallbackThemes)) {
-            QString metadataPath(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));
+            QString metadataPath(
+                QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                       QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));
             KConfig metadata(metadataPath, KConfig::SimpleConfig);
             processWallpaperSettings(&metadata);
         }
 
-        //Check for what Plasma version the theme has been done
-        //There are some behavioral differences between KDE4 Plasma and Plasma 5
+        // Check for what Plasma version the theme has been done
+        // There are some behavioral differences between KDE4 Plasma and Plasma 5
         cg = KConfigGroup(&metadata, "Desktop Entry");
         const QString apiVersion = cg.readEntry("X-Plasma-API", QString());
         apiMajor = 1;
@@ -900,7 +915,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         cg.sync();
     }
 
-    if(emitChanged) {
+    if (emitChanged) {
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     }
 }

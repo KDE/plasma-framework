@@ -9,27 +9,26 @@
 #include "config-plasma.h"
 #include "debug_p.h"
 
-#include <QAction>
-#include <QHash>
-#include <QFile>
-#include <QDebug>
-#include <QMimeDatabase>
 #include <KSycoca>
+#include <QAction>
+#include <QDebug>
+#include <QFile>
+#include <QHash>
+#include <QMimeDatabase>
 
-#include <QStandardPaths>
-#include <KLocalizedString>
 #include <KActionCollection>
 #include <KApplicationTrader>
 #include <KIO/ApplicationLauncherJob>
-#include <KIO/OpenUrlJob>
 #include <KIO/JobUiDelegate>
+#include <KIO/OpenUrlJob>
+#include <KLocalizedString>
 #include <KNotificationJobUiDelegate>
+#include <QStandardPaths>
 
 #include "plasma/applet.h"
 
 namespace Plasma
 {
-
 class AssociatedApplicationManagerPrivate
 {
 public:
@@ -52,7 +51,7 @@ public:
     {
         QMimeDatabase mimeDb;
 
-        QHash<const Plasma::Applet *, QList<QUrl> >::iterator i;
+        QHash<const Plasma::Applet *, QList<QUrl>>::iterator i;
         for (i = urlLists.begin(); i != urlLists.end(); ++i) {
             QAction *a = i.key()->actions()->action(QStringLiteral("run associated application"));
             if (a) {
@@ -70,7 +69,7 @@ public:
     }
 
     QHash<const Plasma::Applet *, QString> applicationNames;
-    QHash<const Plasma::Applet *, QList<QUrl> > urlLists;
+    QHash<const Plasma::Applet *, QList<QUrl>> urlLists;
 };
 
 class AssociatedApplicationManagerSingleton
@@ -82,8 +81,8 @@ public:
 Q_GLOBAL_STATIC(AssociatedApplicationManagerSingleton, privateAssociatedApplicationManagerSelf)
 
 AssociatedApplicationManager::AssociatedApplicationManager(QObject *parent)
-    : QObject(parent),
-      d(new AssociatedApplicationManagerPrivate())
+    : QObject(parent)
+    , d(new AssociatedApplicationManagerPrivate())
 {
     connect(KSycoca::self(), SIGNAL(databaseChanged()), this, SLOT(updateActionNames()));
 }
@@ -108,7 +107,7 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
         if (hasAppBefore) {
             d->applicationNames.remove(applet);
             if (!hasUrls) {
-                disconnect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+                disconnect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
             }
         }
         return;
@@ -125,7 +124,7 @@ void AssociatedApplicationManager::setApplication(Plasma::Applet *applet, const 
                 a->setText(i18n("Run the Associated Application"));
             }
         } else if (!hasAppBefore) {
-            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+            connect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
         }
     }
 }
@@ -145,7 +144,7 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
         if (hasUrlsBefore) {
             d->urlLists.remove(applet);
             if (!hasApp) {
-                disconnect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+                disconnect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
             }
         }
         return;
@@ -168,11 +167,11 @@ void AssociatedApplicationManager::setUrls(Plasma::Applet *applet, const QList<Q
             }
         }
         if (!hasUrlsBefore) {
-            connect(applet, SIGNAL(destroyed(QObject*)), this, SLOT(cleanupApplet(QObject*)));
+            connect(applet, SIGNAL(destroyed(QObject *)), this, SLOT(cleanupApplet(QObject *)));
         }
     }
 }
-//TODO: updateAction slot, called on setting of url or app, and on sycoca change
+// TODO: updateAction slot, called on setting of url or app, and on sycoca change
 QList<QUrl> AssociatedApplicationManager::urls(const Plasma::Applet *applet) const
 {
     return d->urlLists.value(applet);
@@ -208,4 +207,3 @@ bool AssociatedApplicationManager::appletHasValidAssociatedApplication(const Pla
 } // namespace Plasma
 
 #include <moc_associatedapplicationmanager_p.cpp>
-

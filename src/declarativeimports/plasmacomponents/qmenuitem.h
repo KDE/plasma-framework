@@ -73,4 +73,3 @@ private:
 };
 
 #endif // QMENUITEM_H
-

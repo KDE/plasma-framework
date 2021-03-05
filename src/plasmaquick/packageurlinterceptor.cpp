@@ -7,26 +7,26 @@
 #include "packageurlinterceptor.h"
 
 #include <QDebug>
-#include <QQmlEngine>
 #include <QFile>
 #include <QFileInfo>
 #include <QFileSelector>
+#include <QQmlEngine>
 #include <QStandardPaths>
 
-#include <Plasma/PluginLoader>
 #include <Plasma/Package>
+#include <Plasma/PluginLoader>
 
 #include <kdeclarative/kdeclarative.h>
 
 namespace PlasmaQuick
 {
-
-class PackageUrlInterceptorPrivate {
+class PackageUrlInterceptorPrivate
+{
 public:
     PackageUrlInterceptorPrivate(QQmlEngine *engine, PackageUrlInterceptor *interceptor, const KPackage::Package &p)
-        : q(interceptor),
-          package(p),
-          engine(engine)
+        : q(interceptor)
+        , package(p)
+        , engine(engine)
     {
         selector = new QFileSelector;
     }
@@ -45,12 +45,11 @@ public:
     bool forcePlasmaStyle = false;
 };
 
-
 PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const KPackage::Package &p)
-    : QQmlAbstractUrlInterceptor(),
-      d(new PackageUrlInterceptorPrivate(engine, this, p))
+    : QQmlAbstractUrlInterceptor()
+    , d(new PackageUrlInterceptorPrivate(engine, this, p))
 {
-    //d->allowedPaths << d->engine->importPathList();
+    // d->allowedPaths << d->engine->importPathList();
 }
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
@@ -85,7 +84,7 @@ void PackageUrlInterceptor::setForcePlasmaStyle(bool force)
 
 QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlInterceptor::DataType type)
 {
-    //qDebug() << "Intercepted URL:" << path << type;
+    // qDebug() << "Intercepted URL:" << path << type;
 
     const QString urlPath = path.path();
     // Don't intercept qmldir files, to prevent double interception
@@ -93,8 +92,7 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
         return path;
     }
     // We assume we never rewritten qml/qmldir files
-    if (urlPath.endsWith(QLatin1String("qml"))
-        || urlPath.endsWith(QLatin1String("/inline"))) {
+    if (urlPath.endsWith(QLatin1String("qml")) || urlPath.endsWith(QLatin1String("/inline"))) {
         return d->selector->select(path);
     }
     const QString prefix = QString::fromUtf8(prefixForType(type, urlPath));
@@ -103,18 +101,15 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     QString plainPath = path.toString();
     const int index = plainPath.indexOf(marker);
     if (index != -1) {
-        plainPath = plainPath.leftRef(index)
-                    + QLatin1Char('/') + prefix + QLatin1Char('/') + plainPath.midRef(index + marker.size());
+        plainPath = plainPath.leftRef(index) + QLatin1Char('/') + prefix + QLatin1Char('/') + plainPath.midRef(index + marker.size());
 
         const QUrl url = QUrl(plainPath);
         const QString newPath = url.path();
-        //search it in a resource or as a file on disk
-        if (!(plainPath.contains(QLatin1String("qrc")) && QFile::exists(QLatin1Char(':') + newPath))
-            && !QFile::exists(newPath)) {
+        // search it in a resource or as a file on disk
+        if (!(plainPath.contains(QLatin1String("qrc")) && QFile::exists(QLatin1Char(':') + newPath)) && !QFile::exists(newPath)) {
             return d->selector->select(path);
         }
-        qWarning() <<"Warning: all files used by qml by the plasmoid should be in ui/. The file in the path"
-                   << plainPath << "was expected at" << path;
+        qWarning() << "Warning: all files used by qml by the plasmoid should be in ui/. The file in the path" << plainPath << "was expected at" << path;
         // This deprecated code path doesn't support selectors
         return url;
     }

@@ -5,10 +5,10 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include <QCommandLineOption>
+#include <QCommandLineParser>
 #include <QScreen>
 #include <plasma/theme.h>
-#include <QCommandLineParser>
-#include <QCommandLineOption>
 
 #include <KLocalizedString>
 
@@ -26,8 +26,9 @@ int main(int argc, char **argv)
     parser->addVersionOption();
     parser->setApplicationDescription(description);
 
-    parser->addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"), i18nc("Do not translate <name>", "Show icon sizes"), QStringLiteral("name")));
+    parser->addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("show"),
+                                         i18nc("Do not translate <name>", "Show icon sizes"),
+                                         QStringLiteral("name")));
 
     return app.exec();
 }
-

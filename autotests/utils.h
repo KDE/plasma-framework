@@ -6,20 +6,21 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <QString>
 #include <QDir>
 #include <QStandardPaths>
+#include <QString>
 #include <QTest>
 
-namespace Plasma {
-namespace TestUtils {
-
+namespace Plasma
+{
+namespace TestUtils
+{
 static void copyPath(const QString &src, const QString &dst)
 {
     QDir dir(src);
 
     const auto dirList = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    for (const auto &d : dirList ) {
+    for (const auto &d : dirList) {
         QString dst_path = dst + QLatin1Char('/') + d;
         dir.mkpath(dst_path);
         copyPath(src + QLatin1Char('/') + d, dst_path);
@@ -49,12 +50,11 @@ static void installPlasmaTheme(const QString &theme = QStringLiteral("breeze"))
 
     const QString colorsFile = QFINDTESTDATA("../src/desktoptheme/" + theme + "/colors");
     if (!colorsFile.isEmpty()) {
-            QFile::copy(colorsFile, themePath.filePath("colors"));
+        QFile::copy(colorsFile, themePath.filePath("colors"));
     }
-
 }
 
-} //TestUtils
-} //Plasma
+} // TestUtils
+} // Plasma
 
 #endif

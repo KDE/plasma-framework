@@ -9,10 +9,10 @@ class DayData
 {
 public:
     bool isCurrent;
-//   bool containsHolidayItems;
-//   bool containsEventItems;
-//   bool containsTodoItems;
-//   bool containsJournalItems;
+    //   bool containsHolidayItems;
+    //   bool containsEventItems;
+    //   bool containsTodoItems;
+    //   bool containsJournalItems;
     int dayNumber;
     int monthNumber;
     int yearNumber;

@@ -8,8 +8,8 @@
 #define CONTEXTTEST_HEADER
 
 #include "ui_config.h"
-#include <plasma/containmentactions.h>
 #include <QString>
+#include <plasma/containmentactions.h>
 
 class ContextTest : public Plasma::ContainmentActions
 {

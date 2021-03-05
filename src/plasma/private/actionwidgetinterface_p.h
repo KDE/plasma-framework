@@ -13,14 +13,13 @@
 
 namespace Plasma
 {
-
-template <class T>
+template<class T>
 class ActionWidgetInterface : public ThemedWidgetInterface<T>
 {
 public:
     ActionWidgetInterface(T *parent)
-        : ThemedWidgetInterface<T>(parent),
-          action(nullptr)
+        : ThemedWidgetInterface<T>(parent)
+        , action(nullptr)
     {
     }
 
@@ -48,8 +47,8 @@ public:
             this->q->setEnabled(false);
             return;
         }
-        //we don't get told *what* changed, just that something changed
-        //so we update everything we care about
+        // we don't get told *what* changed, just that something changed
+        // so we update everything we care about
         this->q->setIcon(action->icon());
         this->q->setText(action->iconText());
         this->q->setEnabled(action->isEnabled());
@@ -84,4 +83,3 @@ public:
 
 } // namespace Plasma
 #endif
-

@@ -9,8 +9,8 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "waylandintegration_p.h"
 #include "debug_p.h"
+#include "waylandintegration_p.h"
 
 #include <KWayland/Client/connection_thread.h>
 #include <KWayland/Client/plasmashell.h>
@@ -39,8 +39,7 @@ WaylandIntegration::~WaylandIntegration()
 KWayland::Client::PlasmaShell *WaylandIntegration::waylandPlasmaShell()
 {
     if (!m_waylandPlasmaShell && m_registry) {
-        const KWayland::Client::Registry::AnnouncedInterface interface =
-                m_registry->interface(KWayland::Client::Registry::Interface::PlasmaShell);
+        const KWayland::Client::Registry::AnnouncedInterface interface = m_registry->interface(KWayland::Client::Registry::Interface::PlasmaShell);
 
         if (interface.name == 0) {
             qCWarning(LOG_PLASMAQUICK) << "The compositor does not support the plasma shell protocol";

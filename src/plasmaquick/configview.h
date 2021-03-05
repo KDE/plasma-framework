@@ -30,7 +30,6 @@ class Applet;
 
 namespace PlasmaQuick
 {
-
 class ConfigViewPrivate;
 
 class ConfigModel;

@@ -9,10 +9,10 @@
 #include <KLocalizedString>
 // Qt
 #include <QJSEngine>
-#include <QQmlEngine>
 #include <QQmlContext>
+#include <QQmlEngine>
 
-static QJSValue singletonTypeExampleProvider(QQmlEngine* engine, QJSEngine* scriptEngine)
+static QJSValue singletonTypeExampleProvider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
 
@@ -21,8 +21,7 @@ static QJSValue singletonTypeExampleProvider(QQmlEngine* engine, QJSEngine* scri
     return helloWorld;
 }
 
-
-void %{APPNAME}Plugin::registerTypes(const char* uri)
+void % {APPNAME} Plugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.private.%{APPNAMELC}"));
 

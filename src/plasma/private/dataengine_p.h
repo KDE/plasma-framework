@@ -13,7 +13,6 @@
 
 namespace Plasma
 {
-
 class Service;
 
 class DataEnginePrivate
@@ -22,8 +21,7 @@ public:
     DataEnginePrivate(DataEngine *e, const KPluginMetaData &info, const QVariantList &args = QVariantList());
     ~DataEnginePrivate();
     DataContainer *source(const QString &sourceName, bool createWhenMissing = true);
-    void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval,
-                       Plasma::Types::IntervalAlignment align, bool immediateCall = true);
+    void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment align, bool immediateCall = true);
     DataContainer *requestSource(const QString &sourceName, bool *newSource = nullptr);
     void internalUpdateSource(DataContainer *);
     void setupScriptSupport();

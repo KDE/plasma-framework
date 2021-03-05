@@ -7,11 +7,12 @@
 #ifndef EVENTPLUGINSMANAGER_H
 #define EVENTPLUGINSMANAGER_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QStringList>
 
-namespace CalendarEvents {
+namespace CalendarEvents
+{
 class CalendarEventsPlugin;
 class EventData;
 }
@@ -28,8 +29,8 @@ public:
     explicit EventPluginsManager(QObject *parent = nullptr);
     ~EventPluginsManager();
 
-    QList<CalendarEvents::CalendarEventsPlugin*> plugins() const;
-    QAbstractListModel* pluginsModel() const;
+    QList<CalendarEvents::CalendarEventsPlugin *> plugins() const;
+    QAbstractListModel *pluginsModel() const;
 
     // This is a helper function to set which plugins
     // are enabled without needing to go through setEnabledPlugins
@@ -55,7 +56,7 @@ private:
 
     friend class EventPluginsModel;
     EventPluginsModel *m_model = nullptr;
-    QList<CalendarEvents::CalendarEventsPlugin*> m_plugins;
+    QList<CalendarEvents::CalendarEventsPlugin *> m_plugins;
     struct PluginData {
         QString name;
         QString desc;
@@ -67,4 +68,3 @@ private:
 };
 
 #endif
-

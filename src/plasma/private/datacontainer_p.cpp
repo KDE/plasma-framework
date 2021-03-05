@@ -4,24 +4,23 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "datacontainer.h" //krazy:exclude=includes
 #include "datacontainer_p.h" //krazy:exclude=includes
+#include "datacontainer.h" //krazy:exclude=includes
 
 namespace Plasma
 {
-
-SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc, QObject *visualization,
-        uint pollingInterval,
-        Plasma::Types::IntervalAlignment align,
-        bool immediateUpdate)
+SignalRelay *DataContainerPrivate::signalRelay(const DataContainer *dc,
+                                               QObject *visualization,
+                                               uint pollingInterval,
+                                               Plasma::Types::IntervalAlignment align,
+                                               bool immediateUpdate)
 {
     QMap<uint, SignalRelay *>::const_iterator relayIt = relays.constFind(pollingInterval);
     SignalRelay *relay = nullptr;
 
-    //FIXME what if we have two applets with the same interval and different alignment?
+    // FIXME what if we have two applets with the same interval and different alignment?
     if (relayIt == relays.constEnd()) {
-        relay = new SignalRelay(const_cast<DataContainer *>(dc), this,
-                                pollingInterval, align, immediateUpdate);
+        relay = new SignalRelay(const_cast<DataContainer *>(dc), this, pollingInterval, align, immediateUpdate);
         relays[pollingInterval] = relay;
     } else {
         relay = relayIt.value();
@@ -42,17 +41,16 @@ bool DataContainerPrivate::hasUpdates()
     return dirty;
 }
 
-SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint ival,
-                         Plasma::Types::IntervalAlignment align, bool immediateUpdate)
-    : QObject(parent),
-      dc(parent),
-      d(data),
-      m_interval(ival),
-      m_align(align),
-      m_resetTimer(true),
-      m_queued(true)
+SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint ival, Plasma::Types::IntervalAlignment align, bool immediateUpdate)
+    : QObject(parent)
+    , dc(parent)
+    , d(data)
+    , m_interval(ival)
+    , m_align(align)
+    , m_resetTimer(true)
+    , m_queued(true)
 {
-    //qCDebug(LOG_PLASMA) << "signal relay with time of" << m_timerId << "being set up";
+    // qCDebug(LOG_PLASMA) << "signal relay with time of" << m_timerId << "being set up";
     m_timerId = startTimer(immediateUpdate ? 0 : m_interval);
     if (m_align != Plasma::Types::NoAlignment) {
         checkAlignment();
@@ -61,12 +59,12 @@ SignalRelay::SignalRelay(DataContainer *parent, DataContainerPrivate *data, uint
 
 int SignalRelay::receiverCount() const
 {
-    return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)));
+    return receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data)));
 }
 
 bool SignalRelay::isUnused() const
 {
-    return receivers(SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data))) < 1;
+    return receivers(SIGNAL(dataUpdated(QString, Plasma::DataEngine::Data))) < 1;
 }
 
 void SignalRelay::checkAlignment()
@@ -81,8 +79,7 @@ void SignalRelay::checkAlignment()
         int minutes = t.minute();
         int seconds = t.second();
         if (minutes > 1 || seconds > 10) {
-            newTime = ((60 - minutes) * 1000 * 60) +
-                      ((60 - seconds) * 1000) + 500;
+            newTime = ((60 - minutes) * 1000 * 60) + ((60 - seconds) * 1000) + 500;
         }
     }
 
@@ -95,11 +92,11 @@ void SignalRelay::checkAlignment()
 
 void SignalRelay::checkQueueing()
 {
-    //qCDebug(LOG_PLASMA) << m_queued;
+    // qCDebug(LOG_PLASMA) << m_queued;
     if (m_queued) {
         Q_EMIT dataUpdated(dc->objectName(), d->data);
         m_queued = false;
-        //TODO: should we re-align our timer at this point, to avoid
+        // TODO: should we re-align our timer at this point, to avoid
         //      constant queueing due to more-or-less constant time
         //      async update time? this might make sense for
         //      staggered accesses to the same source by multiple
@@ -138,13 +135,13 @@ void SignalRelay::timerEvent(QTimerEvent *event)
 
     Q_EMIT dc->updateRequested(dc);
     if (d->hasUpdates()) {
-        //qCDebug(LOG_PLASMA) << "emitting data updated directly" << d->data;
+        // qCDebug(LOG_PLASMA) << "emitting data updated directly" << d->data;
         Q_EMIT dataUpdated(dc->objectName(), d->data);
         m_queued = false;
     } else {
         // the source wasn't actually updated; so let's put ourselves in the queue
         // so we get a dataUpdated() call when the data does arrive
-        //qCDebug(LOG_PLASMA) << "queued";
+        // qCDebug(LOG_PLASMA) << "queued";
         m_queued = true;
     }
 }

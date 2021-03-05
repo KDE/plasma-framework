@@ -4,13 +4,12 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <plasma/version.h>
-#include <QDebug>
 #include "debug_p.h"
+#include <QDebug>
+#include <plasma/version.h>
 
 namespace Plasma
 {
-
 unsigned int version()
 {
     return PLASMA_VERSION;
@@ -61,4 +60,3 @@ bool isPluginVersionCompatible(unsigned int version)
 }
 
 } // Plasma namespace
-

@@ -8,32 +8,32 @@
 
 #include <KPluginFactory>
 
-#include <QDebug>
+#include <KLocalizedString>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KShell>
 #include <KSycoca>
-#include <KLocalizedString>
+#include <QDebug>
 
-#include <plasma/applet.h>
-#include <plasma/packagestructure.h>
-#include <plasma/package.h>
-#include <plasma/pluginloader.h>
-#include <plasma/dataengine.h>
 #include <KJob>
+#include <plasma/applet.h>
+#include <plasma/dataengine.h>
+#include <plasma/package.h>
+#include <plasma/packagestructure.h>
+#include <plasma/pluginloader.h>
 
 #include <QCommandLineParser>
-#include <QDir>
 #include <QDBusInterface>
+#include <QDir>
 #include <QFileInfo>
+#include <QJsonObject>
 #include <QMap>
 #include <QStandardPaths>
 #include <QStringList>
 #include <QTimer>
-#include <QJsonObject>
 
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 
 namespace Plasma
 {
@@ -44,8 +44,8 @@ public:
     QCommandLineParser *parser;
 };
 
-PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser) :
-    QApplication(argc, argv) // QApp needed for CursorNotificationHandler (QWidget)
+PluginTest::PluginTest(int &argc, char **argv, QCommandLineParser *parser)
+    : QApplication(argc, argv) // QApp needed for CursorNotificationHandler (QWidget)
 {
     d = new PluginTestPrivate;
     d->parser = parser;
@@ -60,12 +60,12 @@ PluginTest::~PluginTest()
 void PluginTest::runMain()
 {
     qDebug() << "plugin test runs: ";
-    //loadDataEngine();
-//     qDebug() << " - - - -- - - - - ------------------------------------\n";
-//     qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
-//     //loadKQPlugin();
+    // loadDataEngine();
+    //     qDebug() << " - - - -- - - - - ------------------------------------\n";
+    //     qDebug() << " libs are in: " << QCoreApplication::libraryPaths();
+    //     //loadKQPlugin();
     qDebug() << "::: loadKPlugin() == " << loadKPlugin();
-//
+    //
     qDebug() << " - - - -- - - - - ------------------------------------\n";
     qDebug() << "::: loadFromPlasma() == " << loadFromPlasma();
     exit(0);
@@ -78,18 +78,18 @@ bool PluginTest::loadKPlugin()
     qDebug() << "Load KPlugin";
     QString pluginPath = QStringLiteral("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/");
     QCoreApplication::addLibraryPath(pluginPath);
-    //QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
+    // QPluginLoader loader("/home/sebas/kf5/install/lib/x86_64-linux-gnu/kplugins/libkqpluginfactory.so", this);
     QPluginLoader loader(QStringLiteral("/home/sebas/kf5/install/lib/x86_64-linux-gnu/plugins/kf5/kplugins/libplasma_engine_time.so"), this);
     KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader.instance());
-    //QObject *factory = loader.instance();
+    // QObject *factory = loader.instance();
     if (factory) {
         qDebug() << "loaded successfully and cast";
         qDebug() << "metadata: " << loader.metaData();
-        //QObject *o = factory->createPlugin("time");
-        //qDebug() << " objec name:" << o->objectName();
-        //Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
+        // QObject *o = factory->createPlugin("time");
+        // qDebug() << " objec name:" << o->objectName();
+        // Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
         Plasma::DataEngine *time_engine = nullptr;
-//         Plasma::DataEngine *time_engine = factory->create(this, QVariantList());
+        //         Plasma::DataEngine *time_engine = factory->create(this, QVariantList());
         time_engine = factory->create<Plasma::DataEngine>(this, QVariantList());
 
         if (time_engine) {
@@ -99,15 +99,13 @@ bool PluginTest::loadKPlugin()
             ok = true;
         } else {
             qDebug() << "Timeengine failed to load. :(";
-
         }
 
     } else {
         qDebug() << "loading failed somehow";
     }
-    //KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
+    // KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
     return ok;
-
 }
 
 bool PluginTest::loadFromPlasma()
@@ -124,7 +122,6 @@ bool PluginTest::loadFromPlasma()
             qDebug() << "SOURCE: " << engine->sources();
             ok = true;
         }
-
     }
     return ok;
 }
@@ -172,4 +169,3 @@ void PluginTest::dataUpdated(QString s, Plasma::DataEngine::Data d)
 } // namespace Plasma
 
 #include "moc_plugintest.cpp"
-

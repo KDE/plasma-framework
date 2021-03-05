@@ -5,16 +5,15 @@
 */
 
 #include "coronatest.h"
-#include <KSycoca>
 #include <KActionCollection>
-#include <QStandardPaths>
+#include <KSycoca>
 #include <QAction>
 #include <QApplication>
-#include <QSignalSpy>
-#include <QRandomGenerator>
 #include <QProcess>
-Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId,
-                                   const QVariantList &args)
+#include <QRandomGenerator>
+#include <QSignalSpy>
+#include <QStandardPaths>
+Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     Q_UNUSED(args)
     if (name == QLatin1String("simpleapplet")) {
@@ -35,13 +34,13 @@ SimpleCorona::SimpleCorona(QObject *parent)
 }
 
 SimpleCorona::~SimpleCorona()
-{}
-
+{
+}
 
 QRect SimpleCorona::screenGeometry(int screen) const
 {
-    //completely arbitrary, still not tested
-    return QRect(100*screen, 100, 100, 100);
+    // completely arbitrary, still not tested
+    return QRect(100 * screen, 100, 100, 100);
 }
 
 int SimpleCorona::screenForContainment(const Plasma::Containment *c) const
@@ -52,10 +51,10 @@ int SimpleCorona::screenForContainment(const Plasma::Containment *c) const
     return 0;
 }
 
-SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appletId)
+SimpleApplet::SimpleApplet(QObject *parent, const QString &serviceId, uint appletId)
     : Plasma::Applet(parent, serviceId, appletId)
 {
-    //updateConstraints(Plasma::Types::UiReadyConstraint);
+    // updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
     m_timer.setInterval(QRandomGenerator::global()->bounded((500 + 1) - 100) + 100);
     m_timer.start();
@@ -64,11 +63,10 @@ SimpleApplet::SimpleApplet(QObject *parent , const QString &serviceId, uint appl
     });
 }
 
-
-SimpleContainment::SimpleContainment(QObject *parent , const QString &serviceId, uint appletId)
+SimpleContainment::SimpleContainment(QObject *parent, const QString &serviceId, uint appletId)
     : Plasma::Containment(parent, serviceId, appletId)
 {
-    //updateConstraints(Plasma::Types::UiReadyConstraint);
+    // updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
     m_timer.setInterval(QRandomGenerator::global()->bounded((500 + 1) - 100) + 100);
     m_timer.start();
@@ -77,10 +75,10 @@ SimpleContainment::SimpleContainment(QObject *parent , const QString &serviceId,
     });
 }
 
-SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parent , const QString &serviceId, uint appletId)
+SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parent, const QString &serviceId, uint appletId)
     : Plasma::Containment(parent, serviceId, appletId)
 {
-    //This containment will *never* be isUiReady()
+    // This containment will *never* be isUiReady()
 }
 
 static void runKBuildSycoca()
@@ -99,7 +97,6 @@ static void runKBuildSycoca()
     proc.waitForFinished();
     QCOMPARE(proc.exitStatus(), QProcess::NormalExit);
 }
-
 
 void CoronaTest::initTestCase()
 {
@@ -140,21 +137,18 @@ void CoronaTest::restore()
             break;
         }
     }
-
-
 }
-
 
 void CoronaTest::checkOrder()
 {
     QCOMPARE(m_corona->containments().count(), 3);
 
-    //check containments order
+    // check containments order
     QCOMPARE(m_corona->containments().at(0)->id(), (uint)1);
     QCOMPARE(m_corona->containments().at(1)->id(), (uint)4);
     QCOMPARE(m_corona->containments().at(2)->id(), (uint)5);
 
-    //check applets order
+    // check applets order
     QCOMPARE(m_corona->containments().at(0)->applets().count(), 2);
     QCOMPARE(m_corona->containments().at(0)->applets().at(0)->id(), (uint)2);
     QCOMPARE(m_corona->containments().at(0)->applets().at(1)->id(), (uint)3);
@@ -177,9 +171,9 @@ void CoronaTest::addRemoveApplets()
     m_corona->containments().at(0)->createApplet(QStringLiteral("invalid"));
     QCOMPARE(m_corona->containments().at(0)->applets().count(), 3);
 
-    //remove action present
+    // remove action present
     QVERIFY(m_corona->containments().at(0)->applets().at(0)->actions()->action(QStringLiteral("remove")));
-    //kill an applet
+    // kill an applet
     m_corona->containments().at(0)->applets().at(0)->destroy();
 
     QSignalSpy spy(m_corona->containments().at(0)->applets().at(0), SIGNAL(destroyed()));
@@ -187,11 +181,11 @@ void CoronaTest::addRemoveApplets()
     QCOMPARE(m_corona->containments().at(0)->applets().count(), 2);
 }
 
-//this test has to be the last, since systemimmutability
-//can't be programmatically unlocked
+// this test has to be the last, since systemimmutability
+// can't be programmatically unlocked
 void CoronaTest::immutability()
 {
-    //immutability
+    // immutability
     QCOMPARE(m_corona->immutability(), Plasma::Types::Mutable);
     m_corona->setImmutability(Plasma::Types::UserImmutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::UserImmutable);
@@ -229,7 +223,7 @@ void CoronaTest::immutability()
         }
     }
 
-    //can't unlock systemimmutable
+    // can't unlock systemimmutable
     m_corona->setImmutability(Plasma::Types::Mutable);
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
@@ -244,4 +238,3 @@ void CoronaTest::immutability()
 }
 
 QTEST_MAIN(CoronaTest)
-

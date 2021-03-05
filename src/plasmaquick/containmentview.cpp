@@ -8,23 +8,21 @@
 #include "configview.h"
 
 #include <QDebug>
-#include <QQuickItem>
 #include <QQmlContext>
-#include <QTimer>
-#include <QScreen>
 #include <QQmlEngine>
+#include <QQuickItem>
+#include <QScreen>
+#include <QTimer>
 
 #include "plasma/pluginloader.h"
-#include <packageurlinterceptor.h>
 #include <kdeclarative/kdeclarative.h>
+#include <packageurlinterceptor.h>
 
 namespace PlasmaQuick
 {
-
 class ContainmentViewPrivate
 {
 public:
-
     ContainmentViewPrivate(Plasma::Corona *corona, ContainmentView *view);
     ~ContainmentViewPrivate();
 
@@ -42,8 +40,8 @@ public:
 };
 
 ContainmentViewPrivate::ContainmentViewPrivate(Plasma::Corona *cor, ContainmentView *view)
-    : q(view),
-      corona(cor)
+    : q(view)
+    , corona(cor)
 {
 }
 
@@ -63,7 +61,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     if (containment) {
         QObject::disconnect(containment, nullptr, q, nullptr);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
-        if (auto item = qobject_cast<QQuickItem*>(oldGraphicObject)) {
+        if (auto item = qobject_cast<QQuickItem *>(oldGraphicObject)) {
             item->setVisible(false);
         }
         containment->reactToScreenChange();
@@ -80,34 +78,32 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
 
     Q_EMIT q->containmentChanged();
 
-    //we are QuickViewSharedEngine::SizeRootObjectToView, but that's not enough, as
-    //the root object isn't immediately resized (done at the resizeEvent handler).
-    //by resizing it just before restoring the containment, it removes a chain of resizes at startup
+    // we are QuickViewSharedEngine::SizeRootObjectToView, but that's not enough, as
+    // the root object isn't immediately resized (done at the resizeEvent handler).
+    // by resizing it just before restoring the containment, it removes a chain of resizes at startup
     if (q->rootObject()) {
         q->rootObject()->setSize(q->size());
     }
     if (cont) {
         cont->reactToScreenChange();
-        QObject::connect(cont, &Plasma::Containment::locationChanged,
-                         q, &ContainmentView::locationChanged);
-        QObject::connect(cont, &Plasma::Containment::formFactorChanged,
-                         q, &ContainmentView::formFactorChanged);
-        QObject::connect(cont, &Plasma::Containment::configureRequested,
-                         q, &ContainmentView::showConfigurationInterface);
-        QObject::connect(cont, SIGNAL(destroyedChanged(bool)),
-                         q, SLOT(updateDestroyed(bool)));
+        QObject::connect(cont, &Plasma::Containment::locationChanged, q, &ContainmentView::locationChanged);
+        QObject::connect(cont, &Plasma::Containment::formFactorChanged, q, &ContainmentView::formFactorChanged);
+        QObject::connect(cont, &Plasma::Containment::configureRequested, q, &ContainmentView::showConfigurationInterface);
+        QObject::connect(cont, SIGNAL(destroyedChanged(bool)), q, SLOT(updateDestroyed(bool)));
 
         // Panels are created invisible and the code below ensures they are only
         // shown once their contents have settled to avoid visual glitches on startup
-        if (cont->containmentType() == Plasma::Types::PanelContainment ||
-            cont->containmentType() == Plasma::Types::CustomPanelContainment) {
-
-            QObject::connect(cont, &Plasma::Containment::uiReadyChanged,
-                             q, [this, cont](bool ready) {
-                if (ready && !cont->destroyed()) {
-                    q->setVisible(true);
-                }
-            }, Qt::QueuedConnection);
+        if (cont->containmentType() == Plasma::Types::PanelContainment || cont->containmentType() == Plasma::Types::CustomPanelContainment) {
+            QObject::connect(
+                cont,
+                &Plasma::Containment::uiReadyChanged,
+                q,
+                [this, cont](bool ready) {
+                    if (ready && !cont->destroyed()) {
+                        q->setVisible(true);
+                    }
+                },
+                Qt::QueuedConnection);
 
             q->setVisible(!cont->destroyed() && cont->isUiReady());
         }
@@ -118,10 +114,10 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
 
     if (graphicObject) {
-//         qDebug() << "using as graphic containment" << graphicObject << containment.data();
+        //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
 
         graphicObject->setFocus(true);
-        //by resizing before adding, it will avoid some resizes in most cases
+        // by resizing before adding, it will avoid some resizes in most cases
         graphicObject->setSize(q->size());
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
@@ -183,13 +179,12 @@ void ContainmentViewPrivate::updateDestroyed(bool destroyed)
 }
 
 ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
-    : KQuickAddons::QuickViewSharedEngine(parent),
-      d(new ContainmentViewPrivate(corona, this))
+    : KQuickAddons::QuickViewSharedEngine(parent)
+    , d(new ContainmentViewPrivate(corona, this))
 {
     setColor(Qt::transparent);
 
-    QObject::connect(screen(), &QScreen::geometryChanged,
-                     this, &ContainmentView::screenGeometryChanged);
+    QObject::connect(screen(), &QScreen::geometryChanged, this, &ContainmentView::screenGeometryChanged);
 
     if (corona->kPackage().isValid()) {
         const auto info = corona->kPackage().metadata();
@@ -202,18 +197,20 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
         qWarning() << "Invalid home screen package";
     }
 
-    //Force QtQuickControls to use the "Plasma" style for this engine.
-    //this way is possible to mix QtQuickControls and plasma components in applets
-    //while still having the desktop style in configuration dialogs
+    // Force QtQuickControls to use the "Plasma" style for this engine.
+    // this way is possible to mix QtQuickControls and plasma components in applets
+    // while still having the desktop style in configuration dialogs
     QQmlComponent c(engine());
-    c.setData("import QtQuick 2.1\n\
+    c.setData(
+        "import QtQuick 2.1\n\
         import QtQuick.Controls 1.0\n\
         import QtQuick.Controls.Private 1.0\n \
         Item {\
           Component.onCompleted: {\
             Settings.styleName = \"Plasma\";\
           }\
-        }", QUrl());
+        }",
+        QUrl());
     QObject *o = c.create();
     o->deleteLater();
 

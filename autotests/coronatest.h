@@ -16,17 +16,15 @@
 class SimpleLoader : public Plasma::PluginLoader
 {
 protected:
-    virtual Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0,
-                                       const QVariantList &args = QVariantList()) override;
+    virtual Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList()) override;
 };
-
 
 class SimpleCorona : public Plasma::Corona
 {
     Q_OBJECT
 
 public:
-    explicit SimpleCorona(QObject * parent = nullptr);
+    explicit SimpleCorona(QObject *parent = nullptr);
     ~SimpleCorona();
 
     QRect screenGeometry(int) const override;
@@ -39,6 +37,7 @@ class SimpleApplet : public Plasma::Applet
 
 public:
     explicit SimpleApplet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+
 private:
     QTimer m_timer;
 };
@@ -49,6 +48,7 @@ class SimpleContainment : public Plasma::Containment
 
 public:
     explicit SimpleContainment(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+
 private:
     QTimer m_timer;
 };
@@ -82,4 +82,3 @@ private:
 };
 
 #endif
-

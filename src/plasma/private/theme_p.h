@@ -8,16 +8,16 @@
 #ifndef PLASMA_THEME_P_H
 #define PLASMA_THEME_P_H
 
-#include "theme.h"
 #include "svg.h"
+#include "theme.h"
 #include <QHash>
 
-#include <QDebug>
 #include <KColorScheme>
 #include <KImageCache>
+#include <KPluginMetaData>
 #include <KSharedDataCache>
 #include <KWindowSystem>
-#include <KPluginMetaData>
+#include <QDebug>
 #include <QTimer>
 
 #include <config-plasma.h>
@@ -29,10 +29,9 @@
 
 namespace Plasma
 {
-
 class Theme;
 
-//NOTE: Default wallpaper can be set from the theme configuration
+// NOTE: Default wallpaper can be set from the theme configuration
 #define DEFAULT_WALLPAPER_THEME "default"
 #define DEFAULT_WALLPAPER_SUFFIX ".png"
 static const int DEFAULT_WALLPAPER_WIDTH = 1920;
@@ -93,7 +92,7 @@ public:
 #if HAVE_X11
     static EffectWatcher *s_backgroundContrastEffectWatcher;
 #endif
-//Ref counting of ThemePrivate instances
+    // Ref counting of ThemePrivate instances
     static ThemePrivate *globalTheme;
     static QHash<QString, ThemePrivate *> themes;
 
@@ -146,7 +145,7 @@ public:
     bool adaptiveTransparencyEnabled;
     bool blurBehindEnabled;
 
-    //Version number of Plasma the Theme has been designed for
+    // Version number of Plasma the Theme has been designed for
     int apiMajor;
     int apiMinor;
     int apiRevision;

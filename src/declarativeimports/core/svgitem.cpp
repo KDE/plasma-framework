@@ -7,10 +7,10 @@
 
 #include "svgitem.h"
 
-#include <QQuickWindow>
-#include <QSGTexture>
-#include <QRectF>
 #include <QDebug>
+#include <QQuickWindow>
+#include <QRectF>
+#include <QSGTexture>
 
 #include "plasma/svg.h"
 
@@ -20,10 +20,9 @@
 
 namespace Plasma
 {
-
 SvgItem::SvgItem(QQuickItem *parent)
-    : QQuickItem(parent),
-      m_textureChanged(false)
+    : QQuickItem(parent)
+    , m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
     connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
@@ -109,7 +108,7 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         return nullptr;
     }
 
-    //this is more than just an optimization, uploading a null image to QSGAtlasTexture causes a crash
+    // this is more than just an optimization, uploading a null image to QSGAtlasTexture causes a crash
     if (width() == 0.0 || height() == 0.0) {
         delete oldNode;
         return nullptr;
@@ -121,14 +120,14 @@ QSGNode *SvgItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updateP
         m_textureChanged = true;
     }
 
-    //TODO use a heuristic to work out when to redraw
-    //if !m_smooth and size is approximate simply change the textureNode.rect without
-    //updating the material
+    // TODO use a heuristic to work out when to redraw
+    // if !m_smooth and size is approximate simply change the textureNode.rect without
+    // updating the material
 
     if (m_textureChanged || textureNode->texture()->textureSize() != QSize(width(), height())) {
-        //despite having a valid size sometimes we still get a null QImage from Plasma::Svg
-        //loading a null texture to an atlas fatals
-        //Dave E fixed this in Qt in 5.3.something onwards but we need this for now
+        // despite having a valid size sometimes we still get a null QImage from Plasma::Svg
+        // loading a null texture to an atlas fatals
+        // Dave E fixed this in Qt in 5.3.something onwards but we need this for now
         if (m_image.isNull()) {
             delete textureNode;
             return nullptr;
@@ -160,7 +159,7 @@ void SvgItem::updateNeeded()
 void SvgItem::updateDevicePixelRatio()
 {
     if (m_svg) {
-        //devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
+        // devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
         //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
         if (window()) {
             m_svg.data()->setDevicePixelRatio(qMax<qreal>(1.0, floor(window()->devicePixelRatio())));
@@ -182,7 +181,7 @@ void SvgItem::updatePolish()
     QQuickItem::updatePolish();
 
     if (m_svg) {
-        //setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
+        // setContainsMultipleImages has to be done there since m_frameSvg can be shared with somebody else
         m_textureChanged = true;
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         m_image = m_svg.data()->image(QSize(width(), height()), m_elementID);
@@ -199,4 +198,3 @@ void SvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeomet
 }
 
 } // Plasma namespace
-

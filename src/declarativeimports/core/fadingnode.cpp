@@ -6,15 +6,14 @@
 
 #include "fadingnode_p.h"
 
-#include <QSGSimpleMaterialShader>
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
+#include <QSGSimpleMaterialShader>
 
-struct FadingMaterialState
-{
-   QSGTexture *source = nullptr;
-   QSGTexture *target = nullptr;
-   qreal progress;
+struct FadingMaterialState {
+    QSGTexture *source = nullptr;
+    QSGTexture *target = nullptr;
+    qreal progress;
 };
 
 class FadingMaterialShader : public QSGSimpleMaterialShader<FadingMaterialState>
@@ -23,17 +22,17 @@ class FadingMaterialShader : public QSGSimpleMaterialShader<FadingMaterialState>
 public:
     FadingMaterialShader();
     using QSGSimpleMaterialShader<FadingMaterialState>::updateState;
-    void updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState) override;
+    void updateState(const FadingMaterialState *newState, const FadingMaterialState *oldState) override;
     QList<QByteArray> attributes() const override;
 
     void initialize() override;
+
 private:
-    QOpenGLFunctions *glFuncs  = nullptr;
+    QOpenGLFunctions *glFuncs = nullptr;
     int m_progressId = 0;
     int m_sourceRectId = 0;
     int m_targetRectId = 0;
 };
-
 
 FadingMaterialShader::FadingMaterialShader()
 {
@@ -46,7 +45,7 @@ QList<QByteArray> FadingMaterialShader::attributes() const
     return {QByteArrayLiteral("qt_Vertex"), QByteArrayLiteral("qt_MultiTexCoord0")};
 }
 
-void FadingMaterialShader::updateState(const FadingMaterialState* newState, const FadingMaterialState* oldState)
+void FadingMaterialShader::updateState(const FadingMaterialState *newState, const FadingMaterialState *oldState)
 {
     if (!oldState || oldState->source != newState->source) {
         glFuncs->glActiveTexture(GL_TEXTURE0);
@@ -65,7 +64,7 @@ void FadingMaterialShader::updateState(const FadingMaterialState* newState, cons
     }
 
     if (!oldState || oldState->progress != newState->progress) {
-        program()->setUniformValue(m_progressId, (GLfloat) newState->progress);
+        program()->setUniformValue(m_progressId, (GLfloat)newState->progress);
     }
 }
 
@@ -75,7 +74,7 @@ void FadingMaterialShader::initialize()
         // shader not linked, exit otherwise we crash, BUG: 336272
         return;
     }
-    QSGSimpleMaterialShader< FadingMaterialState >::initialize();
+    QSGSimpleMaterialShader<FadingMaterialState>::initialize();
     glFuncs = QOpenGLContext::currentContext()->functions();
     program()->bind();
     program()->setUniformValue("u_src", 0);
@@ -86,10 +85,9 @@ void FadingMaterialShader::initialize()
     m_targetRectId = program()->uniformLocation("u_target_rect");
 }
 
-
-FadingNode::FadingNode(QSGTexture *source, QSGTexture *target):
-    m_source(source),
-    m_target(target)
+FadingNode::FadingNode(QSGTexture *source, QSGTexture *target)
+    : m_source(source)
+    , m_target(target)
 {
     QSGSimpleMaterial<FadingMaterialState> *m = FadingMaterialShader::createMaterial();
     m->setFlag(QSGMaterial::Blending);
@@ -115,7 +113,7 @@ void FadingNode::setRect(const QRectF &bounds)
 
 void FadingNode::setProgress(qreal progress)
 {
-    QSGSimpleMaterial<FadingMaterialState> *m = static_cast<QSGSimpleMaterial<FadingMaterialState>*>(material());
+    QSGSimpleMaterial<FadingMaterialState> *m = static_cast<QSGSimpleMaterial<FadingMaterialState> *>(material());
     m->state()->source = m_source.data();
     m->state()->target = m_target.data();
     m->state()->progress = progress;

@@ -17,7 +17,6 @@ class QAction;
 
 namespace Plasma
 {
-
 class CoronaPrivate;
 
 /**
@@ -125,12 +124,10 @@ public:
      * @param defaultArgs optional arguments to pass in when creating a Containment if needed
      * @since 5.45
      */
-    Containment *containmentForScreen(int screen,
-                                      const QString &activity,
-                                      const QString &defaultPluginIfNonExistent,
-                                      const QVariantList &defaultArgs = QVariantList());
+    Containment *
+    containmentForScreen(int screen, const QString &activity, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs = QVariantList());
 
-    //TODO KF6: add activity here, can't be done now as the overload would get confused
+    // TODO KF6: add activity here, can't be done now as the overload would get confused
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 46)
     /**
      * Returns the Containment, if any, for a given physical screen
@@ -154,9 +151,7 @@ public:
      * @deprecated Since 5.46, use containmentForScreen(int, const QString &, const QString &, const QVariantList &)
      */
     PLASMA_DEPRECATED_VERSION(5, 46, "Use Corona::containmentForScreen(int, const QString &, const QString &, const QVariantList &)")
-    Containment *containmentForScreen(int screen,
-                                      const QString &defaultPluginIfNonExistent,
-                                      const QVariantList &defaultArgs = QVariantList());
+    Containment *containmentForScreen(int screen, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs = QVariantList());
 #endif
 
     /**
@@ -258,7 +253,7 @@ public:
     Types::ImmutabilityType immutability() const;
 
     /**
-     * Set the Corona globally into "edit mode" 
+     * Set the Corona globally into "edit mode"
      * Only when the corona is of mutable type can be set of edit mode.
      * This indicates the UI to make easy for the user to manipulate applets.
      * @param edit
@@ -429,8 +424,8 @@ protected:
      * or successfully loaded.
      * @see addContainment
      **/
-    Containment *createContainmentDelayed(const QString &name,
-                                          const QVariantList &args = QVariantList());
+    Containment *createContainmentDelayed(const QString &name, const QVariantList &args = QVariantList());
+
 private:
     CoronaPrivate *const d;
 
@@ -446,4 +441,3 @@ private:
 } // namespace Plasma
 
 #endif
-
