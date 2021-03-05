@@ -1083,7 +1083,8 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
 
 void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event)
 {
-    if (m_containment->corona()->immutability() != Plasma::Types::Mutable && !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {
+    if (m_containment->corona()->immutability() != Plasma::Types::Mutable //
+        && !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {
         // qDebug() << "immutability";
         return;
     }
@@ -1111,8 +1112,10 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
     if (actions.isEmpty()) {
         // it probably didn't bother implementing the function. give the user a chance to set
         // a better plugin.  note that if the user sets no-plugin this won't happen...
-        if ((m_containment->containmentType() != Plasma::Types::PanelContainment && m_containment->containmentType() != Plasma::Types::CustomPanelContainment)
-            && m_containment->actions()->action(QStringLiteral("configure"))) {
+        /* clang-format off */
+        if ((m_containment->containmentType() != Plasma::Types::PanelContainment
+                && m_containment->containmentType() != Plasma::Types::CustomPanelContainment)
+            && m_containment->actions()->action(QStringLiteral("configure"))) { /* clang-format on */
             desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
         }
     } else {

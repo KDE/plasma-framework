@@ -153,9 +153,10 @@ private:
 /**
  * Register a containmentactions when it is contained in a loadable module
  */
-
-#define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile)                                                                             \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
+/* clang-format off */
+#define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+/* clang-format on */
 
 #endif // PLASMA_CONTAINMENTACTIONS_H

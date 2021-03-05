@@ -401,8 +401,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
     : q(e)
     , dataEngineDescription(md)
     , refCount(-1)
-    , // first ref
-    checkSourcesTimerId(0)
+    , checkSourcesTimerId(0) // first ref
     , updateTimerId(0)
     , minPollingInterval(-1)
     , valid(false)

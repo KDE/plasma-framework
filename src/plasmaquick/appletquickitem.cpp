@@ -109,9 +109,15 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     const auto lstChildren = item->children();
     for (QObject *child : lstChildren) {
         // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
-            && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
-            && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
+        /* clang-format off */
+        if (child->property("minimumWidth").isValid()
+            && child->property("minimumHeight").isValid()
+            && child->property("preferredWidth").isValid()
+            && child->property("preferredHeight").isValid()
+            && child->property("maximumWidth").isValid()
+            && child->property("maximumHeight").isValid()
+            && child->property("fillWidth").isValid()
+            && child->property("fillHeight").isValid()) { /* clang-format on */
             layout = child;
             break;
         }
@@ -148,9 +154,15 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     const auto children = q->children();
     for (QObject *child : children) {
         // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
-            && child->property("preferredHeight").isValid() && child->property("maximumWidth").isValid() && child->property("maximumHeight").isValid()
-            && child->property("fillWidth").isValid() && child->property("fillHeight").isValid()) {
+        /* clang-format off */
+        if (child->property("minimumWidth").isValid()
+            && child->property("minimumHeight").isValid()
+            && child->property("preferredWidth").isValid()
+            && child->property("preferredHeight").isValid()
+            && child->property("maximumWidth").isValid()
+            && child->property("maximumHeight").isValid()
+            && child->property("fillWidth").isValid()
+            && child->property("fillHeight").isValid()) { /* clang-format on */
             ownLayout = child;
             break;
         }

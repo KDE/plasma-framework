@@ -437,8 +437,9 @@ QPixmap FrameSvgPrivate::alphaMask()
         return maskFrame->cachedBackground;
     }
 
-    const bool shouldUpdate =
-        maskFrame->enabledBorders != frame->enabledBorders || maskFrame->frameSize != frameSize(frame.data()) || maskFrame->imagePath != frame->imagePath;
+    const bool shouldUpdate = (maskFrame->enabledBorders != frame->enabledBorders //
+                               || maskFrame->frameSize != frameSize(frame.data()) //
+                               || maskFrame->imagePath != frame->imagePath);
     if (shouldUpdate) {
         maskFrame = lookupOrCreateMaskFrame(frame, maskPrefix, maskRequestedPrefix);
         if (!maskFrame->cachedBackground.isNull()) {

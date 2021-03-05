@@ -11,12 +11,12 @@
 #include "private/containmentactions_p.h"
 
 #include <QContextMenuEvent>
+#include <QDebug>
 #include <QMetaEnum>
 #include <QMouseEvent>
 #include <QWheelEvent>
 
 #include <KLocalizedString>
-#include <QDebug>
 
 #include "version.h"
 

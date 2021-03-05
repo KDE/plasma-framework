@@ -265,7 +265,8 @@ void AppletPrivate::askDestroy()
             deleteNotification->setTitle(i18n("Widget Removed"));
             deleteNotification->setText(i18n("The widget \"%1\" has been removed.", q->title().toHtmlEscaped()));
         } else if (asContainment
-                   && (asContainment->containmentType() == Types::PanelContainment || asContainment->containmentType() == Types::CustomPanelContainment)) {
+                   && (asContainment->containmentType() == Types::PanelContainment //
+                       || asContainment->containmentType() == Types::CustomPanelContainment)) {
             deleteNotification->setTitle(i18n("Panel Removed"));
             deleteNotification->setText(i18n("A panel has been removed."));
             // This will never happen with our current shell, but could with a custom one

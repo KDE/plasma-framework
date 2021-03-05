@@ -105,8 +105,14 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
         // if both compactRepresentationItem and fullRepresentationItem exist,
         // the applet is in a popup
         if (expanded) {
-            if (compactRepresentationItem() && fullRepresentationItem() && fullRepresentationItem()->window() && compactRepresentationItem()->window()
-                && fullRepresentationItem()->window() != compactRepresentationItem()->window() && fullRepresentationItem()->parentItem()) {
+            /* clang-format off */
+            if (compactRepresentationItem()
+                && fullRepresentationItem()
+                && fullRepresentationItem()->window()
+                && compactRepresentationItem()->window()
+                && fullRepresentationItem()->window() != compactRepresentationItem()->window()
+                && fullRepresentationItem()->parentItem()) {
+                /* clang-format on */
                 fullRepresentationItem()->parentItem()->installEventFilter(this);
             } else if (fullRepresentationItem() && fullRepresentationItem()->parentItem()) {
                 fullRepresentationItem()->parentItem()->removeEventFilter(this);

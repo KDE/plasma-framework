@@ -60,8 +60,13 @@ public:
         // failed by type, let's try by extension
         const QString &extension = fileName.mid(fileName.lastIndexOf(QLatin1Char('.')) + 1).toLower();
 
-        if (extension == QLatin1String("svg") || extension == QStringLiteral("svgz") || extension == QLatin1String("png") || extension == QStringLiteral("gif")
-            || extension == QLatin1String("jpg") || extension == QStringLiteral("jpeg")) {
+        /* clang-format off */
+        if (extension == QLatin1String("svg")
+            || extension == QStringLiteral("svgz")
+            || extension == QLatin1String("png")
+            || extension == QStringLiteral("gif")
+            || extension == QLatin1String("jpg")
+            || extension == QStringLiteral("jpeg")) { /* clang-format on */
             return QByteArray("images");
             // FIXME: are those necessary? are they *always* caught by type?
         } else if (extension == QLatin1String("js")) {

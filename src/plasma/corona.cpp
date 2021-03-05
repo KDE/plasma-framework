@@ -10,17 +10,17 @@
 #include "corona.h"
 #include "private/corona_p.h"
 
+#include <QDebug>
 #include <QGuiApplication>
 #include <QMimeData>
 #include <QPainter>
 #include <QScreen>
 #include <QTimer>
 
-#include <cmath>
-
 #include <KLocalizedString>
 #include <KWindowSystem>
-#include <QDebug>
+
+#include <cmath>
 
 #include "containment.h"
 #include "debug_p.h"
@@ -180,8 +180,9 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
 Containment *Corona::containmentForScreen(int screen) const
 {
     for (Containment *containment : qAsConst(d->containments)) {
-        if (containment->screen() == screen
-            && (containment->containmentType() == Plasma::Types::DesktopContainment || containment->containmentType() == Plasma::Types::CustomContainment)) {
+        if (containment->screen() == screen //
+            && (containment->containmentType() == Plasma::Types::DesktopContainment //
+                || containment->containmentType() == Plasma::Types::CustomContainment)) {
             return containment;
         }
     }
@@ -199,8 +200,11 @@ Containment *Corona::containmentForScreen(int screen, const QString &activity, c
     Containment *containment = nullptr;
 
     for (Containment *cont : qAsConst(d->containments)) {
-        if (cont->lastScreen() == screen && (cont->activity().isEmpty() || cont->activity() == activity)
-            && (cont->containmentType() == Plasma::Types::DesktopContainment || cont->containmentType() == Plasma::Types::CustomContainment)) {
+        /* clang-format off */
+        if (cont->lastScreen() == screen
+            && (cont->activity().isEmpty() || cont->activity() == activity)
+            && (cont->containmentType() == Plasma::Types::DesktopContainment
+                || cont->containmentType() == Plasma::Types::CustomContainment)) { /* clang-format on */
             containment = cont;
         }
     }
@@ -231,8 +235,9 @@ QList<Containment *> Corona::containmentsForActivity(const QString &activity)
     }
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [activity](Containment *cont) {
-        return cont->activity() == activity
-            && (cont->containmentType() == Plasma::Types::DesktopContainment || cont->containmentType() == Plasma::Types::CustomContainment);
+        return cont->activity() == activity //
+            && (cont->containmentType() == Plasma::Types::DesktopContainment //
+                || cont->containmentType() == Plasma::Types::CustomContainment);
     });
 
     return conts;
@@ -247,8 +252,9 @@ QList<Containment *> Corona::containmentsForScreen(int screen)
     }
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [screen](Containment *cont) {
-        return cont->lastScreen() == screen
-            && (cont->containmentType() == Plasma::Types::DesktopContainment || cont->containmentType() == Plasma::Types::CustomContainment);
+        return cont->lastScreen() == screen //
+            && (cont->containmentType() == Plasma::Types::DesktopContainment //
+                || cont->containmentType() == Plasma::Types::CustomContainment);
     });
 
     return conts;
@@ -410,7 +416,12 @@ bool Corona::isEditMode() const
 QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
 {
     QList<Plasma::Types::Location> freeEdges;
-    freeEdges << Plasma::Types::TopEdge << Plasma::Types::BottomEdge << Plasma::Types::LeftEdge << Plasma::Types::RightEdge;
+    /* clang-format off */
+    freeEdges << Plasma::Types::TopEdge
+              << Plasma::Types::BottomEdge
+              << Plasma::Types::LeftEdge
+              << Plasma::Types::RightEdge;
+    /* clang-format on */
 
     const auto containments = this->containments();
     for (Containment *containment : containments) {

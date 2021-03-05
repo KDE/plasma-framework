@@ -150,7 +150,9 @@ void WallpaperInterface::syncWallpaperPackage()
 
 void WallpaperInterface::loadFinished()
 {
-    if (m_qmlObject->mainComponent() && m_qmlObject->rootObject() && !m_qmlObject->mainComponent()->isError()) {
+    if (m_qmlObject->mainComponent() //
+        && m_qmlObject->rootObject() //
+        && !m_qmlObject->mainComponent()->isError()) {
         m_qmlObject->rootObject()->setProperty("z", -1000);
         m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
 

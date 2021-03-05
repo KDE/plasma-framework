@@ -198,7 +198,8 @@ bool ThemePrivate::useCache()
 
             const auto files = cacheDir.entryInfoList();
             for (const QFileInfo &file : files) {
-                if (currentCacheFileName.isEmpty() || !file.absoluteFilePath().endsWith(currentCacheFileName)) {
+                if (currentCacheFileName.isEmpty() //
+                    || !file.absoluteFilePath().endsWith(currentCacheFileName)) {
                     QFile::remove(file.absoluteFilePath());
                 }
             }
@@ -384,8 +385,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     if (css.isEmpty()) {
         stylesheet = cachedDefaultStyleSheet;
         if (stylesheet.isEmpty()) {
+            /* clang-format off */
             stylesheet = QStringLiteral(
-                "\n\
+                        "\n\
                         body {\n\
                             color: %textcolor;\n\
                             generalfont-size: %fontsize;\n\
@@ -396,6 +398,7 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
                         a:visited { color: %visitedlink; }\n\
                         a:hover   { color: %hoveredlink; text-decoration: none; }\n\
                         ");
+            /* clang-format on */
             stylesheet = cachedDefaultStyleSheet = processStyleSheet(stylesheet, status);
         }
 

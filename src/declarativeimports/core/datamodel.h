@@ -161,13 +161,16 @@ class DataModel : public QAbstractItemModel
     Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
 
     /**
-     *  It's a regular expression. Only data with keys that match this filter expression will be inserted in the model
+     * It's a regular expression. Only data with keys that match this filter
+     * expression will be inserted in the model
      */
     Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
 
     /**
-     * it's a regular expression. If the DataSource is connected to more than one source, only inserts data from sources matching this filter expression in the
-     * model. If we want to have a source watch all sources beginning with say "name:", the required regexp would be sourceFilter: "name:.*"
+     * It's a regular expression. If the DataSource is connected to more than one source,
+     * only inserts data from sources matching this filter expression in the model. If we
+     * want to have a source watch all sources beginning with say "name:", the required
+     * regexp would be sourceFilter: "name:.*"
      */
     Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
 

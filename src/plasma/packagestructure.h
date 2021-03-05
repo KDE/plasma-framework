@@ -89,13 +89,16 @@ private:
 /**
  * Register a Package class when it is contained in a loadable module
  */
-#define K_EXPORT_PLASMA_PACKAGE(libname, classname)                                                                                                            \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)                                                                                                    \
+
+/* clang-format off */
+#define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
+    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
 
-#define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile)                                                                                                 \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
+#define K_EXPORT_PLASMA_PACKAGE_WITH_JSON(classname, jsonFile) \
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
     K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+/* clang-format on */
 
 #endif // PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
 

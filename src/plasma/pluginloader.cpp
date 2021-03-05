@@ -89,17 +89,30 @@ QSet<QString> PluginLoaderPrivate::knownCategories()
     // this is to trick the translation tools into making the correct
     // strings for translation
     QSet<QString> categories = s_customCategories;
-    categories << QStringLiteral(I18N_NOOP("Accessibility")).toLower() << QStringLiteral(I18N_NOOP("Application Launchers")).toLower()
-               << QStringLiteral(I18N_NOOP("Astronomy")).toLower() << QStringLiteral(I18N_NOOP("Date and Time")).toLower()
-               << QStringLiteral(I18N_NOOP("Development Tools")).toLower() << QStringLiteral(I18N_NOOP("Education")).toLower()
-               << QStringLiteral(I18N_NOOP("Environment and Weather")).toLower() << QStringLiteral(I18N_NOOP("Examples")).toLower()
-               << QStringLiteral(I18N_NOOP("File System")).toLower() << QStringLiteral(I18N_NOOP("Fun and Games")).toLower()
-               << QStringLiteral(I18N_NOOP("Graphics")).toLower() << QStringLiteral(I18N_NOOP("Language")).toLower()
-               << QStringLiteral(I18N_NOOP("Mapping")).toLower() << QStringLiteral(I18N_NOOP("Miscellaneous")).toLower()
-               << QStringLiteral(I18N_NOOP("Multimedia")).toLower() << QStringLiteral(I18N_NOOP("Online Services")).toLower()
-               << QStringLiteral(I18N_NOOP("Productivity")).toLower() << QStringLiteral(I18N_NOOP("System Information")).toLower()
-               << QStringLiteral(I18N_NOOP("Utilities")).toLower() << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower()
-               << QStringLiteral(I18N_NOOP("Clipboard")).toLower() << QStringLiteral(I18N_NOOP("Tasks")).toLower();
+    /* clang-format off */
+    categories << QStringLiteral(I18N_NOOP("Accessibility")).toLower()
+               << QStringLiteral(I18N_NOOP("Application Launchers")).toLower()
+               << QStringLiteral(I18N_NOOP("Astronomy")).toLower()
+               << QStringLiteral(I18N_NOOP("Date and Time")).toLower()
+               << QStringLiteral(I18N_NOOP("Development Tools")).toLower()
+               << QStringLiteral(I18N_NOOP("Education")).toLower()
+               << QStringLiteral(I18N_NOOP("Environment and Weather")).toLower()
+               << QStringLiteral(I18N_NOOP("Examples")).toLower()
+               << QStringLiteral(I18N_NOOP("File System")).toLower()
+               << QStringLiteral(I18N_NOOP("Fun and Games")).toLower()
+               << QStringLiteral(I18N_NOOP("Graphics")).toLower()
+               << QStringLiteral(I18N_NOOP("Language")).toLower()
+               << QStringLiteral(I18N_NOOP("Mapping")).toLower()
+               << QStringLiteral(I18N_NOOP("Miscellaneous")).toLower()
+               << QStringLiteral(I18N_NOOP("Multimedia")).toLower()
+               << QStringLiteral(I18N_NOOP("Online Services")).toLower()
+               << QStringLiteral(I18N_NOOP("Productivity")).toLower()
+               << QStringLiteral(I18N_NOOP("System Information")).toLower()
+               << QStringLiteral(I18N_NOOP("Utilities")).toLower()
+               << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower()
+               << QStringLiteral(I18N_NOOP("Clipboard")).toLower()
+               << QStringLiteral(I18N_NOOP("Tasks")).toLower();
+    /* clang-format on */
     return categories;
 }
 
@@ -273,7 +286,8 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
         return md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
     };
     auto filterParentApp = [&category, &parentApp](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
+        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp //
+            && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
     };
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
@@ -564,7 +578,8 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (parentApp.isEmpty() || pa == parentApp) && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
+        return (parentApp.isEmpty() || pa == parentApp) //
+            && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
     };
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
@@ -597,7 +612,8 @@ QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool vi
     const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
     auto filter = [&parentApp, &excluded, visibleOnly](const KPluginMetaData &md) -> bool {
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (parentApp.isEmpty() || pa == parentApp) && (excluded.isEmpty() || excluded.contains(md.value(QStringLiteral("X-KDE-PluginInfo-Category"))))
+        return (parentApp.isEmpty() || pa == parentApp) //
+            && (excluded.isEmpty() || excluded.contains(md.value(QStringLiteral("X-KDE-PluginInfo-Category")))) //
             && (!visibleOnly || !md.isHidden());
     };
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);

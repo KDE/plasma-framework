@@ -106,9 +106,10 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(bool active MEMBER m_active WRITE setActive NOTIFY activeChanged)
 
     /**
-     * if interactive is false (default), the tooltip will automatically hide
-     * itself as soon as the mouse leaves the tooltiparea, if is true, if the mouse leaves tooltiparea and goes over the tooltip itself, the tooltip won't hide,
-     * so it will be possible to interact with tooltip contents
+     * If interactive is false (default), the tooltip will automatically hide
+     * itself as soon as the mouse leaves the tooltiparea, if is true, if the
+     * mouse leaves tooltiparea and goes over the tooltip itself, the tooltip
+     * won't hide, so it will be possible to interact with tooltip contents.
      */
     Q_PROPERTY(bool interactive MEMBER m_interactive WRITE setInteractive NOTIFY interactiveChanged)
 

@@ -355,7 +355,9 @@ void IconItem::setSource(const QVariant &source)
         }
 
         if (!localFile.isEmpty()) {
-            if (sourceString.endsWith(QLatin1String(".svg")) || sourceString.endsWith(QLatin1String(".svgz")) || sourceString.endsWith(QLatin1String(".ico"))) {
+            if (sourceString.endsWith(QLatin1String(".svg")) //
+                || sourceString.endsWith(QLatin1String(".svgz")) //
+                || sourceString.endsWith(QLatin1String(".ico"))) {
                 QIcon icon = QIcon(localFile);
                 m_iconItemSource.reset(new QIconSource(icon, this));
             } else {

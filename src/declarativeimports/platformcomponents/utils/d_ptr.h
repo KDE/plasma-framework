@@ -28,10 +28,12 @@ public:
     T *operator->() const;
 };
 
-#define D_PTR                                                                                                                                                  \
-    class Private;                                                                                                                                             \
-    friend class Private;                                                                                                                                      \
+/* clang-format off */
+#define D_PTR \
+    class Private; \
+    friend class Private; \
     const ::utils::d_ptr<Private> d
+/* clang-format on */
 
 } // namespace utils
 

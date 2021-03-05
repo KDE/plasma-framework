@@ -523,13 +523,16 @@ void FrameSvgItem::doUpdate()
     }
 
     QString prefix = m_frameSvg->actualPrefix();
-    bool hasOverlay = !prefix.startsWith(QLatin1String("mask-")) && m_frameSvg->hasElement(prefix % QLatin1String("overlay"));
+    bool hasOverlay = (!prefix.startsWith(QLatin1String("mask-")) //
+                       && m_frameSvg->hasElement(prefix % QLatin1String("overlay")));
     bool hasComposeOverBorder = m_frameSvg->hasElement(prefix % QLatin1String("hint-compose-over-border"))
         && m_frameSvg->hasElement(QLatin1String("mask-") % prefix % QLatin1String("center"));
     m_fastPath = !hasOverlay && !hasComposeOverBorder;
 
-    // software rendering (at time of writing Qt5.10) doesn't seem to like our tiling/stretching in the 9-tiles.
-    // also when using QPainter it's arguably faster to create and cache pixmaps of the whole frame, which is what the slow path does
+    // Software rendering (at time of writing Qt5.10) doesn't seem to like our
+    // tiling/stretching in the 9-tiles.
+    // Also when using QPainter it's arguably faster to create and cache pixmaps
+    // of the whole frame, which is what the slow path does
     if (QQuickWindow::sceneGraphBackend() == QLatin1String("software")) {
         m_fastPath = false;
     }
@@ -548,7 +551,9 @@ Plasma::FrameSvg *FrameSvgItem::frameSvg() const
 
 QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaintNodeData *)
 {
-    if (!window() || !m_frameSvg || (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) && !m_frameSvg->hasElementPrefix(m_frameSvg->prefix()))) {
+    if (!window() || !m_frameSvg //
+        || (!m_frameSvg->hasElementPrefix(m_frameSvg->actualPrefix()) //
+            && !m_frameSvg->hasElementPrefix(m_frameSvg->prefix()))) {
         delete oldNode;
         return nullptr;
     }
@@ -565,10 +570,10 @@ QSGNode *FrameSvgItem::updatePaintNode(QSGNode *oldNode, QQuickItem::UpdatePaint
             QString prefix = m_frameSvg->actualPrefix();
             oldNode = new FrameNode(prefix, m_frameSvg);
 
-            bool tileCenter =
-                (m_frameSvg->hasElement(QStringLiteral("hint-tile-center")) || m_frameSvg->hasElement(prefix % QLatin1String("hint-tile-center")));
-            bool stretchBorders =
-                (m_frameSvg->hasElement(QStringLiteral("hint-stretch-borders")) || m_frameSvg->hasElement(prefix % QLatin1String("hint-stretch-borders")));
+            bool tileCenter = (m_frameSvg->hasElement(QStringLiteral("hint-tile-center")) //
+                               || m_frameSvg->hasElement(prefix % QLatin1String("hint-tile-center")));
+            bool stretchBorders = (m_frameSvg->hasElement(QStringLiteral("hint-stretch-borders")) //
+                                   || m_frameSvg->hasElement(prefix % QLatin1String("hint-stretch-borders")));
             FrameItemNode::FitMode borderFitMode = stretchBorders ? FrameItemNode::Stretch : FrameItemNode::Tile;
             FrameItemNode::FitMode centerFitMode = tileCenter ? FrameItemNode::Tile : FrameItemNode::Stretch;
 

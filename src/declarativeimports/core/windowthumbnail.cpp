@@ -455,8 +455,9 @@ void WindowThumbnail::resolveEGLFunctions()
     }
     auto *context = window()->openglContext();
     QList<QByteArray> extensions = QByteArray(eglQueryString(display, EGL_EXTENSIONS)).split(' ');
-    if (extensions.contains(QByteArrayLiteral("EGL_KHR_image"))
-        || (extensions.contains(QByteArrayLiteral("EGL_KHR_image_base")) && extensions.contains(QByteArrayLiteral("EGL_KHR_image_pixmap")))) {
+    if (extensions.contains(QByteArrayLiteral("EGL_KHR_image")) //
+        || (extensions.contains(QByteArrayLiteral("EGL_KHR_image_base")) //
+            && extensions.contains(QByteArrayLiteral("EGL_KHR_image_pixmap")))) {
         if (context->hasExtension(QByteArrayLiteral("GL_OES_EGL_image"))) {
             qDebug() << "Have EGL texture from pixmap";
             m_eglCreateImageKHR = context->getProcAddress(QByteArrayLiteral("eglCreateImageKHR"));
@@ -793,7 +794,16 @@ bool WindowThumbnail::loadGLXTexture()
 
     glGenTextures(1, &m_texture);
 
-    const int attrs[] = {GLX_TEXTURE_FORMAT_EXT, info->textureFormat, GLX_MIPMAP_TEXTURE_EXT, false, GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT, XCB_NONE};
+    /* clang-format off */
+    const int attrs[] = {
+        GLX_TEXTURE_FORMAT_EXT,
+        info->textureFormat,
+        GLX_MIPMAP_TEXTURE_EXT,
+        false,
+        GLX_TEXTURE_TARGET_EXT,
+        GLX_TEXTURE_2D_EXT,
+        XCB_NONE};
+    /* clang-format on */
 
     m_glxPixmap = glXCreatePixmap(QX11Info::display(), info->fbConfig, m_pixmap, attrs);
 

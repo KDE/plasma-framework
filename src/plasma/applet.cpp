@@ -12,10 +12,8 @@
 
 #include "config-plasma.h"
 
-#include <cmath>
-#include <limits>
-
 #include <QAbstractButton>
+#include <QDebug>
 #include <QFile>
 #include <QList>
 #include <QMessageBox>
@@ -30,7 +28,6 @@
 #include <KLocalizedString>
 #include <KService>
 #include <KWindowSystem>
-#include <QDebug>
 
 #include "containment.h"
 #include "corona.h"
@@ -43,6 +40,9 @@
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
 #include "private/package_p.h"
+
+#include <cmath>
+#include <limits>
 
 namespace Plasma
 {

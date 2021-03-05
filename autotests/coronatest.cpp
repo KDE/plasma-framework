@@ -7,12 +7,14 @@
 #include "coronatest.h"
 #include <KActionCollection>
 #include <KSycoca>
+
 #include <QAction>
 #include <QApplication>
 #include <QProcess>
 #include <QRandomGenerator>
 #include <QSignalSpy>
 #include <QStandardPaths>
+
 Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     Q_UNUSED(args)
