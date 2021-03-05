@@ -19,7 +19,7 @@
 
 #include <KIconLoader>
 
-const int defaultLongDuration = 250;
+const int defaultLongDuration = 200;
 
 
 SharedAppFilter::SharedAppFilter(QObject *parent)
@@ -258,12 +258,12 @@ int Units::longDuration() const
 
 int Units::shortDuration() const
 {
-    return qMax(1, qRound(m_longDuration * 0.6));
+    return qMax(1, qRound(m_longDuration * 0.5));
 }
 
 int Units::veryShortDuration() const
 {
-	return qRound(m_longDuration * 0.3);
+	return qRound(m_longDuration * 0.25);
 }
 
 int Units::veryLongDuration() const
