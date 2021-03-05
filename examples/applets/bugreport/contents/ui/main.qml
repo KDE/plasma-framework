@@ -17,7 +17,7 @@ Item {
 
     PlasmaCore.IconItem {
         source: "kbugbuster"
-        width: units.iconSizes.large
+        width: PlasmaCore.Units.iconSizes.large
         height: width
         anchors {
             right: col.right
@@ -29,10 +29,10 @@ Item {
     Column {
         id: col
 
-        spacing: units.largeSpacing /2
+        spacing: PlasmaCore.Units.largeSpacing /2
         anchors {
             fill: parent
-            margins: units.largeSpacing
+            margins: PlasmaCore.Units.largeSpacing
         }
 
         PlasmaExtras.Heading {

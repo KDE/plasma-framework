@@ -12,8 +12,8 @@ import "private" as Private
 T.RangeSlider {
     id: control
 
-    implicitWidth: control.orientation === Qt.Horizontal ? units.gridUnit * 12 : units.gridUnit * 1.6
-    implicitHeight: control.orientation === Qt.Horizontal ? units.gridUnit * 1.6 : units.gridUnit * 12
+    implicitWidth: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 12 : PlasmaCore.Units.gridUnit * 1.6
+    implicitHeight: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 1.6 : PlasmaCore.Units.gridUnit * 12
 
     PlasmaCore.Svg {
         id: grooveSvg
@@ -78,8 +78,8 @@ T.RangeSlider {
         prefix: "groove"
         colorGroup: PlasmaCore.ColorScope.colorGroup
         readonly property bool horizontal: control.orientation === Qt.Horizontal
-        implicitWidth: horizontal ? units.gridUnit * 8 : margins.left + margins.right
-        implicitHeight: horizontal ? margins.top + margins.bottom : units.gridUnit * 8
+        implicitWidth: horizontal ? PlasmaCore.Units.gridUnit * 8 : margins.left + margins.right
+        implicitHeight: horizontal ? margins.top + margins.bottom : PlasmaCore.Units.gridUnit * 8
         width: horizontal ? control.availableWidth : implicitWidth
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent

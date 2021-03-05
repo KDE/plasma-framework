@@ -17,16 +17,16 @@ import "mobiletextselection" as MobileTextSelection
 T.ComboBox {
     id: control
 
-    implicitWidth: Math.max(units.gridUnit, contentItem.implicitWidth)
+    implicitWidth: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitWidth)
                              + leftPadding + rightPadding + indicator.implicitWidth + rightPadding
-    implicitHeight: Math.max(units.gridUnit, contentItem.implicitHeight)
+    implicitHeight: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitHeight)
                             + topPadding + bottomPadding
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     hoverEnabled: true
     topPadding: surfaceNormal.margins.top
     leftPadding: surfaceNormal.margins.left
-    rightPadding: surfaceNormal.margins.right + units.gridUnit * 2
+    rightPadding: surfaceNormal.margins.right + PlasmaCore.Units.gridUnit * 2
     bottomPadding: surfaceNormal.margins.bottom
 
     delegate: ItemDelegate {
@@ -37,7 +37,7 @@ T.ComboBox {
     }
 
     indicator: PlasmaCore.SvgItem {
-        implicitWidth: units.iconSizes.small
+        implicitWidth: PlasmaCore.Units.iconSizes.small
         implicitHeight: implicitWidth
         anchors {
             right: parent.right

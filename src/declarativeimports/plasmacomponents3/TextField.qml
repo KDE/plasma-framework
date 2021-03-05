@@ -36,10 +36,10 @@ T.TextField {
                                                               && (echoMode == TextInput.Normal || control.text.length > 0)
 
     implicitWidth: Math.max((placeholderText ? placeholder.implicitWidth : 0),
-                            units.gridUnit * 8,
+                            PlasmaCore.Units.gridUnit * 8,
                             contentWidth)
                             + base.margins.left + base.margins.right
-    implicitHeight: Math.max(units.gridUnit, contentHeight)
+    implicitHeight: Math.max(PlasmaCore.Units.gridUnit, contentHeight)
                             + topPadding + bottomPadding
 
     leftPadding: base.margins.left + (LayoutMirroring.enabled ? inlineButtonRow.width : 0)
@@ -120,13 +120,13 @@ T.TextField {
         PlasmaCore.IconItem {
             id: showPasswordButton
             source: __effectiveRevealPasswordButtonShown ? (control.echoMode === TextInput.Normal ? "visibility": "hint") : ""
-            height: Math.max(control.height * 0.8, units.iconSizes.small)
+            height: Math.max(control.height * 0.8, PlasmaCore.Units.iconSizes.small)
             width: height
             opacity: (__effectiveRevealPasswordButtonShown && control.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -144,13 +144,13 @@ T.TextField {
             id: clearButton
             //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
             source: clearButtonShown ? (LayoutMirroring.enabled ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl") : ""
-            height: Math.max(control.height * 0.8, units.iconSizes.small)
+            height: Math.max(control.height * 0.8, PlasmaCore.Units.iconSizes.small)
             width: height
             opacity: (control.length > 0 && clearButtonShown && control.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

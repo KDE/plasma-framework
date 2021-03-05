@@ -88,7 +88,7 @@ T.Menu {
 
     background: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/background"
-        implicitWidth: units.gridUnit * 8
-        implicitHeight: units.gridUnit * 2
+        implicitWidth: PlasmaCore.Units.gridUnit * 8
+        implicitHeight: PlasmaCore.Units.gridUnit * 2
     }
 }

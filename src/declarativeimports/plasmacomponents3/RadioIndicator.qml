@@ -18,7 +18,7 @@ PlasmaCore.SvgItem {
     opacity: control.enabled ? 1 : 0.6
 
     implicitWidth: implicitHeight
-    implicitHeight: units.iconSizes.small
+    implicitHeight: PlasmaCore.Units.iconSizes.small
 
     PlasmaCore.SvgItem {
         id: checkmark
@@ -33,7 +33,7 @@ PlasmaCore.SvgItem {
         }
         Behavior on opacity {
             NumberAnimation {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

@@ -14,8 +14,8 @@ import "private" as Private
 T.SpinBox {
     id: control
 
-    implicitWidth: Math.max(units.gridUnit * 6, contentItem.implicitWidth + 2 * padding + up.indicator.implicitWidth + down.indicator.implicitWidth)
-    implicitHeight: units.gridUnit * 1.6
+    implicitWidth: Math.max(PlasmaCore.Units.gridUnit * 6, contentItem.implicitWidth + 2 * padding + up.indicator.implicitWidth + down.indicator.implicitWidth)
+    implicitHeight: PlasmaCore.Units.gridUnit * 1.6
 
     padding: 6
     leftPadding: padding + height
@@ -74,7 +74,7 @@ T.SpinBox {
             // How many pixels you have to drag to change the value by one unit
             // of 'control.stepSize'; bigger magnitudes will require more movement
             // to achieve the same change in spinbox value
-            property int magnitude: units.gridUnit
+            property int magnitude: PlasmaCore.Units.gridUnit
 
             target: null // Don't actually move anything, we just want drag data
             xAxis.enabled: true

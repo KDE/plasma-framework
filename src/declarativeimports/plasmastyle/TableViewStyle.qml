@@ -53,7 +53,7 @@ QtQuickControlStyle.TableViewStyle {
 
 
     rowDelegate: Rectangle {
-        height: Math.round(units.gridUnit * 1.2)
+        height: Math.round(PlasmaCore.Units.gridUnit * 1.2)
         property color selectedColor: styleData.hasActiveFocus ? theme.viewHoverColor: theme.viewFocusColor
 
         color: styleData.selected ? selectedColor :
@@ -113,8 +113,8 @@ QtQuickControlStyle.TableViewStyle {
         svg: scrollbarSvg
         visible: scrollbarSvg.arrowPresent
         //if there is no arrow we don't want to waste space, a tiny margin does look better though
-        implicitWidth: scrollbarSvg.arrowPresent ? scrollbarWidthHint : units.smallSpacing
-        implicitHeight: scrollbarSvg.arrowPresent ? scrollbarWidthHint : units.smallSpacing
+        implicitWidth: scrollbarSvg.arrowPresent ? scrollbarWidthHint : PlasmaCore.Units.smallSpacing
+        implicitHeight: scrollbarSvg.arrowPresent ? scrollbarWidthHint : PlasmaCore.Units.smallSpacing
         elementId: {
             if (styleData.pressed) {
                 return styleData.horizontal ? "sunken-arrow-right" : "sunken-arrow-down"
@@ -130,8 +130,8 @@ QtQuickControlStyle.TableViewStyle {
     decrementControl: PlasmaCore.SvgItem {
         svg: scrollbarSvg
         visible: scrollbarSvg.arrowPresent
-        implicitWidth: scrollbarSvg.arrowPresent ? scrollbarWidthHint : units.smallSpacing
-        implicitHeight: scrollbarSvg.arrowPresent ? scrollbarWidthHint : units.smallSpacing
+        implicitWidth: scrollbarSvg.arrowPresent ? scrollbarWidthHint : PlasmaCore.Units.smallSpacing
+        implicitHeight: scrollbarSvg.arrowPresent ? scrollbarWidthHint : PlasmaCore.Units.smallSpacing
         elementId: {
             if (styleData.pressed) {
                 return styleData.horizontal ? "sunken-arrow-left" : "sunken-arrow-up"

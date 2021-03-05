@@ -15,12 +15,12 @@ PlasmaCore.ColorScope {
     id: tooltipContentItem
 
     property Item toolTip
-    property int preferredTextWidth: units.gridUnit * 20
+    property int preferredTextWidth: PlasmaCore.Units.gridUnit * 20
 
-    Layout.minimumWidth: childrenRect.width + units.gridUnit
-    Layout.minimumHeight: childrenRect.height + units.gridUnit
-    Layout.maximumWidth: childrenRect.width + units.gridUnit
-    Layout.maximumHeight: childrenRect.height + units.gridUnit
+    Layout.minimumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
+    Layout.minimumHeight: childrenRect.height + PlasmaCore.Units.gridUnit
+    Layout.maximumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
+    Layout.maximumHeight: childrenRect.height + PlasmaCore.Units.gridUnit
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
@@ -32,10 +32,10 @@ PlasmaCore.ColorScope {
         anchors {
             left: parent.left
             top: parent.top
-            margins: units.gridUnit / 2
+            margins: PlasmaCore.Units.gridUnit / 2
         }
 
-        spacing: units.largeSpacing
+        spacing: PlasmaCore.Units.largeSpacing
 
         Image {
             id: tooltipImage
@@ -50,8 +50,8 @@ PlasmaCore.ColorScope {
             source: toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             visible: toolTip != null && toolTip.icon != "" && toolTip.image == "" && valid
-            Layout.preferredWidth: units.iconSizes.medium
-            Layout.preferredHeight: units.iconSizes.medium
+            Layout.preferredWidth: PlasmaCore.Units.iconSizes.medium
+            Layout.preferredHeight: PlasmaCore.Units.iconSizes.medium
         }
 
         ColumnLayout {

@@ -20,7 +20,7 @@ T.RadioButton {
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 1
-    spacing: Math.round(units.gridUnit / 8)
+    spacing: Math.round(PlasmaCore.Units.gridUnit / 8)
 
     hoverEnabled: true
 

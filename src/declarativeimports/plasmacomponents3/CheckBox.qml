@@ -22,7 +22,7 @@ T.CheckBox {
 
     leftPadding: control.indicator && !control.mirrored ? control.indicator.width + control.spacing : 0
     rightPadding: control.indicator && control.mirrored ? control.indicator.width + control.spacing : 0
-    spacing: units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
 
@@ -38,14 +38,14 @@ T.CheckBox {
 
     contentItem: RowLayout {
         opacity: control.enabled ? 1 : 0.6
-        spacing: units.smallSpacing
+        spacing: PlasmaCore.Units.smallSpacing
 
         PlasmaCore.IconItem {
             source: control.icon.name || control.icon.source
             visible: source.length > 0
 
-            implicitWidth: units.iconSizes.smallMedium
-            implicitHeight: units.iconSizes.smallMedium
+            implicitWidth: PlasmaCore.Units.iconSizes.smallMedium
+            implicitHeight: PlasmaCore.Units.iconSizes.smallMedium
         }
 
         Label {

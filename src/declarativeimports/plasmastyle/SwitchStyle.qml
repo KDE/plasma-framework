@@ -40,7 +40,7 @@ QtQuickControlStyle.SwitchStyle {
 
             opacity: checked ? 1 : 0
             Behavior on opacity {
-                PropertyAnimation { duration: units.shortDuration * 2 }
+                PropertyAnimation { duration: PlasmaCore.Units.shortDuration * 2 }
             }
         }
     }

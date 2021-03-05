@@ -13,7 +13,7 @@ PlasmaCore.FrameSvgItem {
     property Item control
     imagePath: "widgets/button"
     prefix: "normal"
-    implicitWidth: units.iconSizes.small
+    implicitWidth: PlasmaCore.Units.iconSizes.small
     implicitHeight: implicitWidth
     opacity: control.enabled ? 1 : 0.6
 
@@ -47,7 +47,7 @@ PlasmaCore.FrameSvgItem {
         }
         Behavior on opacity {
             NumberAnimation {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

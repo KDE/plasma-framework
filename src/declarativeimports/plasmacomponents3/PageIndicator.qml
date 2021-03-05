@@ -15,11 +15,11 @@ T.PageIndicator {
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
-    padding: units.smallSpacing
-    spacing: units.smallSpacing
+    padding: PlasmaCore.Units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     delegate: Rectangle {
-        implicitWidth: units.gridUnit/2
+        implicitWidth: PlasmaCore.Units.gridUnit/2
         implicitHeight: implicitWidth
 
         radius: width
@@ -28,7 +28,7 @@ T.PageIndicator {
         opacity: index === currentIndex ? 0.9 : pressed ? 0.7 : 0.5
         Behavior on opacity {
             OpacityAnimator {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

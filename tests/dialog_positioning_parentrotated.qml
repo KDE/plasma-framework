@@ -16,7 +16,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 ColumnLayout
 {
-    height: units.gridUnit * 20
+    height: PlasmaCore.Units.gridUnit * 20
     Controls.Label {
         id: label
         text: "Press the button and make sure the popup is on the correct place"
@@ -46,7 +46,7 @@ ColumnLayout
             id: menuColumn
             Layout.minimumWidth: menuColumn.implicitWidth
             Layout.minimumHeight: menuColumn.implicitHeight
-            spacing: units.smallSpacing
+            spacing: PlasmaCore.Units.smallSpacing
 
             PlasmaExtras.Heading {
                 level: 3

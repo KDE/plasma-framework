@@ -10,8 +10,8 @@ import "private" as Private
 
 Item {
     property Item control
-    implicitWidth: Math.round(units.gridUnit * 1.5)
-    implicitHeight : units.gridUnit
+    implicitWidth: Math.round(PlasmaCore.Units.gridUnit * 1.5)
+    implicitHeight : PlasmaCore.Units.gridUnit
 
     opacity: control.enabled ? 1 : 0.6
 
@@ -35,7 +35,7 @@ Item {
         opacity: control.checked ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -50,7 +50,7 @@ Item {
         elementId: "normal"
 
         implicitWidth: implicitHeight
-        implicitHeight: units.gridUnit
+        implicitHeight: PlasmaCore.Units.gridUnit
 
         Private.RoundShadow {
             anchors.fill: parent
@@ -59,7 +59,7 @@ Item {
         }
         Behavior on x {
             XAnimator {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

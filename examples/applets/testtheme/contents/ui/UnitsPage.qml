@@ -21,12 +21,12 @@ Item {
 
     id: themePage
     anchors {
-        margins: units.largeSpacing
+        margins: PlasmaCore.Units.largeSpacing
     }
 
     Column {
         //anchors.fill: parent
-        //spacing: units.smallSpacing/2
+        //spacing: PlasmaCore.Units.smallSpacing/2
 
         PlasmaExtras.Heading {
             width: parent.width
@@ -41,7 +41,7 @@ Item {
                 width: cwidth/2
                 onClicked: {
                     print("DPI Button onClicked");
-                    var d = units.devicePixelRatio * 96;
+                    var d = PlasmaCore.Units.devicePixelRatio * 96;
                     dpilabel.text = "\t" + d;
                 }
             }
@@ -51,48 +51,48 @@ Item {
         }
         Row {
             PlasmaComponents.Label {
-                text: "units.devicePixelRatio: "
+                text: "PlasmaCore.Units.devicePixelRatio: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: units.devicePixelRatio
+                text: PlasmaCore.Units.devicePixelRatio
             }
         }
 
         Row {
             PlasmaComponents.Label {
-                text: "units.gridUnit: "
+                text: "PlasmaCore.Units.gridUnit: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: units.gridUnit
+                text: PlasmaCore.Units.gridUnit
             }
         }
 
         Row {
             PlasmaComponents.Label {
-                text: "units.largeSpacing: "
+                text: "PlasmaCore.Units.largeSpacing: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: units.largeSpacing
+                text: PlasmaCore.Units.largeSpacing
             }
         }
         Row {
             PlasmaComponents.Label {
-                text: "units.smallSpacing: "
+                text: "PlasmaCore.Units.smallSpacing: "
                 width: cwidth
             }
             PlasmaComponents.Label {
                 width: cheight
                 height: cheight / 2
-                text: units.smallSpacing
+                text: PlasmaCore.Units.smallSpacing
             }
         }
 

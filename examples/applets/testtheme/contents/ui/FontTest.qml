@@ -18,15 +18,15 @@ Column {
     width: 400
     height: 400
 
-    spacing: units.gridUnit
+    spacing: PlasmaCore.Units.gridUnit
 
     id: themePage
     anchors {
-        margins: units.largeSpacing
+        margins: PlasmaCore.Units.largeSpacing
     }
 
     Row {
-        spacing: units.gridUnit/2
+        spacing: PlasmaCore.Units.gridUnit/2
         PlasmaComponents.CheckBox {
             id: boxesCheck
             text: "Show Boxes"
@@ -56,24 +56,24 @@ Column {
 
     FontGizmo {
         id: giz2
-        font.pixelSize: units.gridUnit * 1
+        font.pixelSize: PlasmaCore.Units.gridUnit * 1
     }
 
     FontGizmo {
         id: giz3
-        font.pixelSize: units.gridUnit * 2
+        font.pixelSize: PlasmaCore.Units.gridUnit * 2
     }
 
     FontGizmo {
         id: giz4
-        font.pixelSize: units.gridUnit * 2
+        font.pixelSize: PlasmaCore.Units.gridUnit * 2
         text: "AlignTop"
         verticalAlignment: Text.AlignTop
     }
 
     FontGizmo {
         id: giz5
-        font.pixelSize: units.gridUnit * 2
+        font.pixelSize: PlasmaCore.Units.gridUnit * 2
         text: "AlignVCenter"
         verticalAlignment: Text.AlignVCenter
     }
@@ -86,7 +86,7 @@ Column {
 //
     Rectangle {
         width: parent.width
-        height: units.gridUnit * 6
+        height: PlasmaCore.Units.gridUnit * 6
 
         color: "transparent"
         border.width: boxesCheck.checked ? 1 : 0
@@ -95,7 +95,7 @@ Column {
         Rectangle {
             id: img
             color: "orange"
-            height: units.gridUnit * 2
+            height: PlasmaCore.Units.gridUnit * 2
             width: height
             anchors {
                 top: parent.top
@@ -113,11 +113,11 @@ Column {
             text: "That's a Headline"
 
             //height: paintedHeight
-            height: units.gridUnit
+            height: PlasmaCore.Units.gridUnit
             font.pixelSize: height
             anchors {
                 left: img.right
-                leftMargin: units.gridUnit / 2
+                leftMargin: PlasmaCore.Units.gridUnit / 2
                 top: img.top
             }
         }

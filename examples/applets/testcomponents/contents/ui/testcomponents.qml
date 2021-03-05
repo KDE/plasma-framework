@@ -18,11 +18,11 @@ Item {
     width: 100
     height: 100
     clip: true
-    Layout.minimumWidth: units.gridUnit * 20
-    Layout.minimumHeight: units.gridUnit * 30
+    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
+    Layout.minimumHeight: PlasmaCore.Units.gridUnit * 30
 
-    property int _s: units.iconSizes.small
-    property int _h: units.iconSizes.desktop
+    property int _s: PlasmaCore.Units.iconSizes.small
+    property int _h: PlasmaCore.Units.iconSizes.desktop
 
     PlasmaCore.DataSource {
         id: dataSource

@@ -14,7 +14,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import "private" as Private
 
 QtQuickControlStyle.ComboBoxStyle {
-    drowDownButtonWidth: units.iconSizes.small
+    drowDownButtonWidth: PlasmaCore.Units.iconSizes.small
 
     label: PlasmaComponents.Label {
         text: control.currentText

@@ -11,7 +11,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.ProgressBar {
     id: control
 
-    implicitWidth: units.gridUnit * 8
+    implicitWidth: PlasmaCore.Units.gridUnit * 8
     implicitHeight: background.implicitHeight
 
     hoverEnabled: true
@@ -36,7 +36,7 @@ T.ProgressBar {
             running: control.indeterminate && control.visible
 
             onStarted: indicator.width = Qt.binding(function() {
-                return units.gridUnit * 2;
+                return PlasmaCore.Units.gridUnit * 2;
             });
             onStopped: indicator.width = Qt.binding(function() {
                 return indicator.parent.width * control.position;

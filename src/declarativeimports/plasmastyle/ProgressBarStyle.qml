@@ -36,7 +36,7 @@ ProgressBarStyle {
     }
 
     background: Item {
-        implicitWidth: units.gridUnit * 14
+        implicitWidth: PlasmaCore.Units.gridUnit * 14
         implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
         PlasmaCore.FrameSvgItem {
             anchors.centerIn: parent
@@ -56,7 +56,7 @@ ProgressBarStyle {
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup
 
-            width: control.indeterminate ? units.gridUnit * 2 : Math.max(margins.left + margins.right, parent.width)
+            width: control.indeterminate ? PlasmaCore.Units.gridUnit * 2 : Math.max(margins.left + margins.right, parent.width)
             height: style.implicitHeight
             visible: control.indeterminate || currentProgress > 0
 
@@ -77,7 +77,7 @@ ProgressBarStyle {
                     duration: PlasmaCore.Units.veryLongDuration * 2
                     // The progress Item's width might be left over from the previous state
                     // so we use the control.width/height directly instead
-                    to: control.width - units.gridUnit * 2
+                    to: control.width - PlasmaCore.Units.gridUnit * 2
                     onToChanged: {
                         //the animation won't update the boundaries automatically
                         if (anim.running) {

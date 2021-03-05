@@ -12,8 +12,8 @@ import "private" as Private
 T.Slider {
     id: control
 
-    implicitWidth: control.orientation === Qt.Horizontal ? units.gridUnit * 12 : units.gridUnit * 1.6
-    implicitHeight: control.orientation === Qt.Horizontal ? units.gridUnit * 1.6 : units.gridUnit * 12
+    implicitWidth: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 12 : PlasmaCore.Units.gridUnit * 1.6
+    implicitHeight: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 1.6 : PlasmaCore.Units.gridUnit * 12
 
     wheelEnabled: true
     snapMode: T.Slider.SnapOnRelease
@@ -55,8 +55,8 @@ T.Slider {
         prefix: "groove"
         colorGroup: PlasmaCore.ColorScope.colorGroup
         readonly property bool horizontal: control.orientation === Qt.Horizontal
-        implicitWidth: horizontal ? units.gridUnit * 8 : margins.left + margins.right
-        implicitHeight: horizontal ? margins.top + margins.bottom : units.gridUnit * 8
+        implicitWidth: horizontal ? PlasmaCore.Units.gridUnit * 8 : margins.left + margins.right
+        implicitHeight: horizontal ? margins.top + margins.bottom : PlasmaCore.Units.gridUnit * 8
         width: horizontal ? control.availableWidth : implicitWidth
         height: horizontal ? implicitHeight : control.availableHeight
         anchors.centerIn: parent
@@ -90,9 +90,9 @@ T.Slider {
             Rectangle {
                 color: PlasmaCore.ColorScope.textColor
                 opacity: 0.3
-                width: background.horizontal ? units.devicePixelRatio : units.gridUnit/2
-                height: background.horizontal ? units.gridUnit/2 : units.devicePixelRatio
-                y: background.horizontal ? background.height + units.devicePixelRatio : handle.height / 2 + index * ((repeater.height - handle.height) / (repeater.count > 1 ? repeater.count - 1 : 1))
+                width: background.horizontal ? PlasmaCore.Units.devicePixelRatio : PlasmaCore.Units.gridUnit/2
+                height: background.horizontal ? PlasmaCore.Units.gridUnit/2 : PlasmaCore.Units.devicePixelRatio
+                y: background.horizontal ? background.height + PlasmaCore.Units.devicePixelRatio : handle.height / 2 + index * ((repeater.height - handle.height) / (repeater.count > 1 ? repeater.count - 1 : 1))
                 x: background.horizontal ? handle.width / 2 + index * ((repeater.width - handle.width) / (repeater.count > 1 ? repeater.count - 1 : 1)) : background.width
             }
         }

@@ -27,7 +27,7 @@ Text {
     text: "Lesley 40:83 - (" + font.family + ")"
     height: paintedHeightCheck.checked ? paintedHeight : 22
     //anchors.fill: parent
-    //spacing: units.smallSpacing/2
+    //spacing: PlasmaCore.Units.smallSpacing/2
     verticalAlignment: Text.AlignTop
 
     Rectangle {

@@ -25,7 +25,7 @@ QtQuickControlStyle.ButtonStyle {
     property int minimumHeight
 
     label: RowLayout {
-        spacing: units.smallSpacing
+        spacing: PlasmaCore.Units.smallSpacing
 
         property real minimumWidth: implicitWidth + style.padding.left + style.padding.right
         onMinimumWidthChanged: {
@@ -46,8 +46,8 @@ QtQuickControlStyle.ButtonStyle {
         PlasmaCore.IconItem {
             id: icon
             source: control.iconName || control.iconSource
-            Layout.minimumWidth: valid ? units.iconSizes.tiny : 0
-            Layout.preferredWidth: valid ? units.iconSizes.small : 0
+            Layout.minimumWidth: valid ? PlasmaCore.Units.iconSizes.tiny : 0
+            Layout.preferredWidth: valid ? PlasmaCore.Units.iconSizes.small : 0
             visible: valid
             Layout.minimumHeight: Layout.minimumWidth
             Layout.preferredHeight: Layout.preferredWidth
@@ -80,7 +80,7 @@ QtQuickControlStyle.ButtonStyle {
             id: arrow
             when: control.menu !== null
             visible: when
-            Layout.minimumWidth: units.iconSizes.small
+            Layout.minimumWidth: PlasmaCore.Units.iconSizes.small
             Layout.maximumWidth: Layout.minimumWidth
             Layout.alignment: Qt.AlignVCenter
             height: width

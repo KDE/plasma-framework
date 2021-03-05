@@ -21,12 +21,12 @@ QtQuickControlStyle.CalendarStyle {
 
 
     background: Item {
-        implicitWidth: Math.max(250, Math.round(units.gridUnit * 14))
-        implicitHeight: Math.max(250, Math.round(units.gridUnit * 14))
+        implicitWidth: Math.max(250, Math.round(PlasmaCore.Units.gridUnit * 14))
+        implicitHeight: Math.max(250, Math.round(PlasmaCore.Units.gridUnit * 14))
     }
 
     navigationBar: Item {
-        height: Math.round(units.gridUnit * 2.73)
+        height: Math.round(PlasmaCore.Units.gridUnit * 2.73)
 
         PlasmaComponents.ToolButton {
             id: previousMonth
@@ -42,7 +42,7 @@ QtQuickControlStyle.CalendarStyle {
             text: styleData.title
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: units.gridUnit * 1.25
+            font.pixelSize: PlasmaCore.Units.gridUnit * 1.25
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: previousMonth.right
             anchors.leftMargin: 2
@@ -97,7 +97,7 @@ QtQuickControlStyle.CalendarStyle {
     }
 
     dayOfWeekDelegate: Item {
-        implicitHeight: Math.round(units.gridUnit * 2.25)
+        implicitHeight: Math.round(PlasmaCore.Units.gridUnit * 2.25)
         PlasmaComponents.Label {
             text: control.__locale.dayName(styleData.dayOfWeek, control.dayOfWeekFormat)
             anchors.centerIn: parent
@@ -105,7 +105,7 @@ QtQuickControlStyle.CalendarStyle {
     }
 
     weekNumberDelegate: Item {
-        implicitWidth: Math.round(units.gridUnit * 2)
+        implicitWidth: Math.round(PlasmaCore.Units.gridUnit * 2)
         PlasmaComponents.Label {
             text: styleData.weekNumber
             anchors.centerIn: parent

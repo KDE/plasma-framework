@@ -40,7 +40,7 @@ QtQuickControlStyle.TabViewStyle {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             Behavior on opacity {
                 PropertyAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
         }

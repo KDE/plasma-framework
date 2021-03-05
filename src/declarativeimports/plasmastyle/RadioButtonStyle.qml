@@ -20,7 +20,7 @@ QtQuickControlStyle.RadioButtonStyle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.bottom
-            height: 1 * units.devicePixelRatio
+            height: 1 * PlasmaCore.Units.devicePixelRatio
             color: theme.highlightColor
             visible: control.activeFocus
         }
@@ -28,7 +28,7 @@ QtQuickControlStyle.RadioButtonStyle {
     //Not needed?
     background: Item {}
 
-    spacing: units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     indicator: PlasmaCore.SvgItem {
         svg: PlasmaCore.Svg {
@@ -38,7 +38,7 @@ QtQuickControlStyle.RadioButtonStyle {
         elementId: "normal"
         opacity: control.enabled ? 1 : 0.6
 
-        width: units.iconSizes.small
+        width: PlasmaCore.Units.iconSizes.small
         height: width
 
         PlasmaCore.SvgItem {
@@ -54,7 +54,7 @@ QtQuickControlStyle.RadioButtonStyle {
             }
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

@@ -19,8 +19,8 @@ ColumnLayout {
          Layout.minimumHeight: rect1.height
          Rectangle {
             id: rect1
-            width: units.gridUnit * 30
-            height: units.gridUnit * 15
+            width: PlasmaCore.Units.gridUnit * 30
+            height: PlasmaCore.Units.gridUnit * 15
             color: PlasmaCore.ColorScope.backgroundColor
 
             Column {
@@ -48,7 +48,7 @@ ColumnLayout {
                 }
                 Rectangle {
                     width: parent.width
-                    height: units.gridUnit * 3
+                    height: PlasmaCore.Units.gridUnit * 3
                     color: PlasmaCore.ColorScope.textColor
                 }
             }
@@ -61,8 +61,8 @@ ColumnLayout {
          Layout.minimumHeight: rect1.height
          Rectangle {
              id: rect2
-             width: units.gridUnit * 30
-             height: units.gridUnit * 15
+             width: PlasmaCore.Units.gridUnit * 30
+             height: PlasmaCore.Units.gridUnit * 15
              color: PlasmaCore.ColorScope.backgroundColor
          }
     }

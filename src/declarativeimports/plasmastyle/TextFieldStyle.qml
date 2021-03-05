@@ -74,11 +74,11 @@ QtQuickControlStyle.TextFieldStyle {
 
             //TODO: if QtControls gets a component for this, use it instead of this hardcoded heuristic
             root.padding.right = Qt.binding(function() {
-                var actionIconSize = Math.max(control.height * 0.8, units.iconSizes.small);
+                var actionIconSize = Math.max(control.height * 0.8, PlasmaCore.Units.iconSizes.small);
                 //actionCount is an int of the number of items
                 var actionCount = (control.hasOwnProperty("clearButtonShown") && control.clearButtonShown) +
                                   (control.hasOwnProperty("__effectiveRevealPasswordButtonShown") && control.__effectiveRevealPasswordButtonShown);
-                return base.margins.right + (actionIconSize * actionCount) + (actionCount > 0 ? units.smallSpacing : 0);
+                return base.margins.right + (actionIconSize * actionCount) + (actionCount > 0 ? PlasmaCore.Units.smallSpacing : 0);
             })
         }
     }

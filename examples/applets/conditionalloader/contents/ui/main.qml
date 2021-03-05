@@ -19,7 +19,7 @@ Rectangle {
     height: 100
     radius: 10
     smooth: true
-    Layout.minimumWidth: units.gridUnit * 20
+    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
     Layout.minimumHeight: column.implicitHeight
 
     Plasmoid.compactRepresentation: Component {

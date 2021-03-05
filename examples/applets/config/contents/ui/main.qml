@@ -14,7 +14,7 @@ Item {
     id: root
     width: 100
     height: 100
-    Layout.minimumWidth: units.gridUnit * 20
+    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
     Layout.minimumHeight: column.implicitHeight
 
 

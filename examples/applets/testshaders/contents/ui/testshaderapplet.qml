@@ -17,10 +17,10 @@ Item {
     width: 400
     height: 400
 
-    Layout.minimumWidth: units.gridUnit * 20
-    Layout.minimumHeight: units.gridUnit * 30
-    property int _s: units.iconSizes.small
-    property int _h: units.iconSizes.desktop
+    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
+    Layout.minimumHeight: PlasmaCore.Units.gridUnit * 30
+    property int _s: PlasmaCore.Units.iconSizes.small
+    property int _h: PlasmaCore.Units.iconSizes.desktop
     property int _m: 12
 
     Item {
@@ -35,7 +35,7 @@ Item {
                 right: parent.right
                 top: parent.top
             }
-            height: units.iconSizes.toolbar * 1.5
+            height: PlasmaCore.Units.iconSizes.toolbar * 1.5
 
             PlasmaComponents.TabButton { tab: colorShower; text: tab.pageName; }
             PlasmaComponents.TabButton { tab: wobbleExample; text: tab.pageName; }

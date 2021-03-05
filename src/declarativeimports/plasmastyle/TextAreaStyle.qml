@@ -48,7 +48,7 @@ QtQuickControlStyle.TextAreaStyle {
             style.padding.left = base.margins.left
             style.padding.top = base.margins.top
             //TODO: if QtControls gets a component for this, use it instead of this hardcoded heuristic
-            style.padding.right = base.margins.right + (control.clearButtonShown ? Math.max(control.parent.height*0.8, units.iconSizes.small)+units.smallSpacing : 0)
+            style.padding.right = base.margins.right + (control.clearButtonShown ? Math.max(control.parent.height*0.8, PlasmaCore.Units.iconSizes.small)+PlasmaCore.Units.smallSpacing : 0)
             style.padding.bottom = base.margins.bottom
         }
     }

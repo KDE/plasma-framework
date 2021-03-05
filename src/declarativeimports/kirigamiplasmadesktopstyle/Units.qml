@@ -28,7 +28,7 @@ QtObject {
     property int gridUnit: fontMetrics.height
 
     /**
-     * units.iconSizes provides access to platform-dependent icon sizing
+     * PlasmaCore.Units.iconSizes provides access to platform-dependent icon sizing
      *
      * The icon sizes provided are normalized for different DPI, so icons
      * will scale depending on the DPI.
@@ -55,7 +55,7 @@ QtObject {
     }
 
     /**
-     * units.smallSpacing is the amount of spacing that should be used around smaller UI elements,
+     * PlasmaCore.Units.smallSpacing is the amount of spacing that should be used around smaller UI elements,
      * for example as spacing in Columns. Internally, this size depends on the size of
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
@@ -63,7 +63,7 @@ QtObject {
     property int smallSpacing: Math.floor(gridUnit/4)
 
     /**
-     * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
+     * PlasmaCore.Units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
      * for example between an icon and the corresponding text. Internally, this size depends on
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
@@ -73,34 +73,34 @@ QtObject {
     /**
      * The ratio between physical and device-independent pixels. This value does not depend on the \
      * size of the configured font. If you want to take font sizes into account when scaling elements,
-     * use theme.mSize(theme.defaultFont), units.smallSpacing and units.largeSpacing.
+     * use theme.mSize(theme.defaultFont), PlasmaCore.Units.smallSpacing and PlasmaCore.Units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
     property real devicePixelRatio: Math.max(1, ((fontMetrics.font.pixelSize*0.75) / fontMetrics.font.pointSize))
 
     /**
-     * units.longDuration should be used for longer, screen-covering animations, for opening and
+     * PlasmaCore.Units.longDuration should be used for longer, screen-covering animations, for opening and
      * closing of dialogs and other "not too small" animations
      */
-    property int longDuration: units.longDuration
+    property int longDuration: PlasmaCore.Units.longDuration
 
     /**
-     * units.shortDuration should be used for short animations, such as accentuating a UI event,
+     * PlasmaCore.Units.shortDuration should be used for short animations, such as accentuating a UI event,
      * hover events, etc..
      */
-    property int shortDuration: units.shortDuration
+    property int shortDuration: PlasmaCore.Units.shortDuration
 
     /**
-     * units.veryLongDuration should be used for specialty animations that benefit
+     * PlasmaCore.Units.veryLongDuration should be used for specialty animations that benefit
      * from being even longer than longDuration.
      */
-    property int veryLongDuration: units.veryLongDuration
+    property int veryLongDuration: PlasmaCore.Units.veryLongDuration
 
      /**                                                                                                                                                                                                              
-      * units.veryShortDuration should be used for elements that should have a hint of smoothness,                                                                                                                
+      * PlasmaCore.Units.veryShortDuration should be used for elements that should have a hint of smoothness,                                                                                                                
       * but otherwise animate near instantly.                                                                                                                                                                         
       */                                                                                                                                                                                                              
-     property int veryShortDuration: units.veryShortDuration
+     property int veryShortDuration: PlasmaCore.Units.veryShortDuration
 
     readonly property QtObject __styleItem: QtQuickControlsPrivate.StyleItem {elementType: "frame" }
 

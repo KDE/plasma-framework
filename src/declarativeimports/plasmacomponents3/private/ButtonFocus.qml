@@ -52,7 +52,7 @@ Item {
             to: "hidden"
             SequentialAnimation {
                 OpacityAnimator {
-                    duration: units.shortDuration
+                    duration: PlasmaCore.Units.shortDuration
                     easing.type: Easing.OutQuad
                 }
                 PropertyAction {
@@ -72,7 +72,7 @@ Item {
                     value: true
                 }
                 OpacityAnimator {
-                    duration: units.shortDuration
+                    duration: PlasmaCore.Units.shortDuration
                     easing.type: Easing.OutQuad
                 }
             }

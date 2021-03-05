@@ -113,7 +113,7 @@ Item {
         Transition {
             PropertyAnimation {
                 properties: "opacity"
-                duration: units.veryShortDuration
+                duration: PlasmaCore.Units.veryShortDuration
                 easing.type: Easing.OutQuad
             }
         }

@@ -42,7 +42,7 @@ ColumnLayout
             id: menuColumn
             Layout.minimumWidth: menuColumn.implicitWidth
             Layout.minimumHeight: menuColumn.implicitHeight
-            spacing: units.smallSpacing
+            spacing: PlasmaCore.Units.smallSpacing
 
             PlasmaExtras.Heading {
                 level: 3

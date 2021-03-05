@@ -33,9 +33,9 @@ QtQuickControlStyle.ButtonStyle {
         RowLayout {
             id: buttonContent
             anchors.fill: parent
-            spacing: units.smallSpacing
+            spacing: PlasmaCore.Units.smallSpacing
 
-            Layout.preferredHeight: Math.max(units.iconSizes.small, label.implicitHeight)
+            Layout.preferredHeight: Math.max(PlasmaCore.Units.iconSizes.small, label.implicitHeight)
 
             property real minimumWidth: Layout.minimumWidth + style.padding.left + style.padding.right
             onMinimumWidthChanged: {
@@ -98,7 +98,7 @@ QtQuickControlStyle.ButtonStyle {
                 id: arrow
                 when: control.menu !== null
                 visible: when
-                Layout.minimumWidth: units.iconSizes.small
+                Layout.minimumWidth: PlasmaCore.Units.iconSizes.small
                 Layout.maximumWidth: Layout.minimumWidth
 
                 Layout.minimumHeight: Layout.minimumWidth
@@ -174,7 +174,7 @@ QtQuickControlStyle.ButtonStyle {
                 //internal: if there is no hover status, don't paint on mouse over in touchscreens
                 opacity: (control.pressed || control.checked || !style.flat || (roundShadow.hasOverState && style.controlHovered)) ? 1 : 0
                 Behavior on opacity {
-                    PropertyAnimation { duration: units.longDuration }
+                    PropertyAnimation { duration: PlasmaCore.Units.longDuration }
                 }
             }
         }

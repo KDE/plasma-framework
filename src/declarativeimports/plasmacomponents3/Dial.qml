@@ -12,7 +12,7 @@ import "private" as Private
 T.Dial {
     id: control
 
-    implicitWidth: units.gridUnit * 5
+    implicitWidth: PlasmaCore.Units.gridUnit * 5
     implicitHeight: implicitWidth
     hoverEnabled: true
     onPositionChanged: canvas.requestPaint()
@@ -53,7 +53,7 @@ T.Dial {
         x: (control.width/2) + Math.cos((-(control.angle-90)*Math.PI)/180) * (control.width/2-width/2) - width/2
         y: (control.height/2) + Math.sin(((control.angle-90)*Math.PI)/180) * (control.height/2-height/2) - height/2
 
-        implicitHeight: Math.floor(units.gridUnit*1.6)
+        implicitHeight: Math.floor(PlasmaCore.Units.gridUnit*1.6)
         implicitWidth: implicitHeight
 
         Private.RoundShadow {
@@ -82,7 +82,7 @@ T.Dial {
             height: width
             anchors.centerIn: parent
             Behavior on opacity {
-                NumberAnimation { duration: units.longDuration }
+                NumberAnimation { duration: PlasmaCore.Units.longDuration }
             }
         }
     }

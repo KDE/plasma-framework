@@ -35,7 +35,7 @@ Style  {
             id: label
             anchors.top: parent.top
             anchors.left: checkboxloader.right
-            anchors.margins: units.smallSpacing
+            anchors.margins: PlasmaCore.Units.smallSpacing
             text: control.title
         }
 

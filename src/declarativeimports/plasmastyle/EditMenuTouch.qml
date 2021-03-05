@@ -128,7 +128,7 @@ Item {
                 var endRect = input.positionToRectangle(input.selectionEnd);
 
                 var pos = getMenuInstance().parent.mapFromItem(input, (startRect.x + endRect.x)/2 - getMenuInstance().width/2, endRect.y);
-                pos.y += (pos.y + getMenuInstance().height + units.gridUnit) > getMenuInstance().parent.height ? -units.smallSpacing - getMenuInstance().height : units.gridUnit*2;
+                pos.y += (pos.y + getMenuInstance().height + PlasmaCore.Units.gridUnit) > getMenuInstance().parent.height ? -PlasmaCore.Units.smallSpacing - getMenuInstance().height : PlasmaCore.Units.gridUnit*2;
 
                 getMenuInstance().dismiss();
                 getMenuInstance().popup(pos);

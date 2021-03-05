@@ -14,11 +14,11 @@ T.Switch {
 
     implicitWidth: Math.max(background ? background.implicitWidth : 0,
                             contentItem.implicitWidth + leftPadding + rightPadding)
-    implicitHeight: units.gridUnit * 1.6
+    implicitHeight: PlasmaCore.Units.gridUnit * 1.6
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: 1
-    spacing: Math.round(units.gridUnit / 8)
+    spacing: Math.round(PlasmaCore.Units.gridUnit / 8)
 
     hoverEnabled: true
 

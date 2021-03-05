@@ -14,7 +14,7 @@ T.DialogButtonBox {
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
-    spacing: units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
     leftPadding: parent.leftPadding
     topPadding: parent.topPadding
     rightPadding: parent.rightPadding
@@ -27,7 +27,7 @@ T.DialogButtonBox {
 
     contentItem: ListView {
         implicitWidth: contentWidth
-        implicitHeight: units.gridUnit * 1.6
+        implicitHeight: PlasmaCore.Units.gridUnit * 1.6
 
         model: control.contentModel
         spacing: control.spacing

@@ -36,9 +36,9 @@ QtQuickControlStyle.ScrollViewStyle {
 
         // QTBUG-35608
         // default values are hardcoded in qtdeclarative/src/quick/items/qquickflickablebehavior_p.h
-        control.flickableItem.flickDeceleration = Math.round(1500 * units.devicePixelRatio);
+        control.flickableItem.flickDeceleration = Math.round(1500 * PlasmaCore.Units.devicePixelRatio);
         // double maximum speed so it feels better
-        control.flickableItem.maximumFlickVelocity = Math.round(2500 * units.devicePixelRatio);
+        control.flickableItem.maximumFlickVelocity = Math.round(2500 * PlasmaCore.Units.devicePixelRatio);
 
         control.flickableItem.interactive = true;
     }
@@ -76,7 +76,7 @@ QtQuickControlStyle.ScrollViewStyle {
             opacity: !visible || flickableItem.atYBeginning ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -102,7 +102,7 @@ QtQuickControlStyle.ScrollViewStyle {
             opacity: !visible || flickableItem.atYEnd ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -127,7 +127,7 @@ QtQuickControlStyle.ScrollViewStyle {
             opacity: !visible || flickableItem.atXBeginning ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -152,7 +152,7 @@ QtQuickControlStyle.ScrollViewStyle {
             opacity: !visible || flickableItem.atXEnd ? 0 : 1
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -172,7 +172,7 @@ QtQuickControlStyle.ScrollViewStyle {
         opacity: styleData.hovered ? 1 : 0
         Behavior on opacity {
             NumberAnimation {
-                duration: units.longDuration
+                duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }
@@ -200,8 +200,8 @@ QtQuickControlStyle.ScrollViewStyle {
         svg: scrollbarSvg
         visible: scrollbarSvg.arrowPresent
         //if there is no arrow we don't want to waste space, a tiny margin does look better though
-        implicitWidth: scrollbarSvg.arrowPresent ? widthHint : units.smallSpacing
-        implicitHeight: scrollbarSvg.arrowPresent ? widthHint : units.smallSpacing
+        implicitWidth: scrollbarSvg.arrowPresent ? widthHint : PlasmaCore.Units.smallSpacing
+        implicitHeight: scrollbarSvg.arrowPresent ? widthHint : PlasmaCore.Units.smallSpacing
         elementId: {
             if (styleData.pressed) {
                 return styleData.horizontal ? "sunken-arrow-right" : "sunken-arrow-down"
@@ -217,8 +217,8 @@ QtQuickControlStyle.ScrollViewStyle {
     decrementControl: PlasmaCore.SvgItem {
         svg: scrollbarSvg
         visible: scrollbarSvg.arrowPresent
-        implicitWidth: scrollbarSvg.arrowPresent ? widthHint : units.smallSpacing
-        implicitHeight: scrollbarSvg.arrowPresent ? widthHint : units.smallSpacing
+        implicitWidth: scrollbarSvg.arrowPresent ? widthHint : PlasmaCore.Units.smallSpacing
+        implicitHeight: scrollbarSvg.arrowPresent ? widthHint : PlasmaCore.Units.smallSpacing
         elementId: {
             if (styleData.pressed) {
                 return styleData.horizontal ? "sunken-arrow-left" : "sunken-arrow-up"

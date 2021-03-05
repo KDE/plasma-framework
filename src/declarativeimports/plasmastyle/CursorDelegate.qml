@@ -12,14 +12,14 @@ Item {
 
     property Item input: parent
 
-    width: units.smallSpacing
+    width: PlasmaCore.Units.smallSpacing
     height: input.cursorRectangle.height
     visible: input.activeFocus && input.selectionStart === input.selectionEnd
 
 
     Rectangle {
-        width: units.smallSpacing
-        height: parent.height + units.gridUnit
+        width: PlasmaCore.Units.smallSpacing
+        height: parent.height + PlasmaCore.Units.gridUnit
         radius: width
         color: theme.highlightColor
     }
@@ -27,7 +27,7 @@ Item {
     Rectangle {
         id: handle
         x: -width/2 + parent.width/2
-        width: units.gridUnit
+        width: PlasmaCore.Units.gridUnit
         height: width
         radius: width
         color: theme.highlightColor

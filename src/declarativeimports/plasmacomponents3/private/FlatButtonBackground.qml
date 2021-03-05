@@ -140,7 +140,7 @@ Item {
                 }
                 NumberAnimation {
                     property: "opacity"
-                    duration: units.shortDuration
+                    duration: PlasmaCore.Units.shortDuration
                     easing.type: Easing.OutQuad
                 }
                 PropertyAction {
@@ -162,7 +162,7 @@ Item {
                 NumberAnimation {
                     property: "opacity"
                     // Using a shorter duration here makes things feel more responsive.
-                    duration: units.shortDuration/2
+                    duration: PlasmaCore.Units.shortDuration/2
                     easing.type: Easing.OutQuad
                 }
                 PropertyAction {
@@ -184,7 +184,7 @@ Item {
                 NumberAnimation {
                     property: "opacity"
                     // Using a shorter duration here makes things feel more responsive.
-                    duration: units.shortDuration/2
+                    duration: PlasmaCore.Units.shortDuration/2
                     easing.type: Easing.OutQuad
                 }
                 PropertyAction {

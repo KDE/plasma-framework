@@ -21,7 +21,7 @@ Item {
 
     id: themePage
     anchors {
-        margins: units.largeSpacing
+        margins: PlasmaCore.Units.largeSpacing
     }
 
     FontTest {

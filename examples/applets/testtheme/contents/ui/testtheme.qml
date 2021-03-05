@@ -17,11 +17,11 @@ Item {
     width: 300
     height: 400
     clip: true
-    Layout.minimumWidth: units.gridUnit * 10
-    Layout.minimumHeight: units.gridUnit * 10
+    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 10
+    Layout.minimumHeight: PlasmaCore.Units.gridUnit * 10
 
-    property int _s: units.iconSizes.small
-    property int _h: units.iconSizes.medium
+    property int _s: PlasmaCore.Units.iconSizes.small
+    property int _h: PlasmaCore.Units.iconSizes.medium
 
     PlasmaComponents.TabBar {
         id: tabBar
@@ -77,7 +77,7 @@ Item {
         visible: false
         anchors {
             bottom: parent.bottom
-            bottomMargin: units.largeSpacing/2
+            bottomMargin: PlasmaCore.Units.largeSpacing/2
             left: sliderLabel.right
             right: parent.right
         }
@@ -87,14 +87,14 @@ Item {
         focus: true
         onValueChanged: {
             var r = value / 96;
-            print("Setting units.devicePixelRatio: " + r);
-            units.devicePixelRatio = r;
+            print("Setting PlasmaCore.Units.devicePixelRatio: " + r);
+            PlasmaCore.Units.devicePixelRatio = r;
             if (value == 0) {
-                value = units.devicePixelRatio * 96;
+                value = PlasmaCore.Units.devicePixelRatio * 96;
             }
         }
 
-        Component.onCompleted: dprSlider.value = units.devicePixelRatio * 96
+        Component.onCompleted: dprSlider.value = PlasmaCore.Units.devicePixelRatio * 96
     }
 
 

@@ -20,19 +20,19 @@ QtQuickControlStyle.CheckBoxStyle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.top: parent.bottom
-            height: 1 * units.devicePixelRatio
+            height: 1 * PlasmaCore.Units.devicePixelRatio
             color: theme.highlightColor
             visible: control.activeFocus
         }
     }
     background: Item {}
 
-    spacing: units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     indicator: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/button"
         prefix: "normal"
-        width: units.iconSizes.small
+        width: PlasmaCore.Units.iconSizes.small
         height: width
         opacity: control.enabled ? 1 : 0.6
 
@@ -57,7 +57,7 @@ QtQuickControlStyle.CheckBoxStyle {
             }
             Behavior on opacity {
                 NumberAnimation {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }

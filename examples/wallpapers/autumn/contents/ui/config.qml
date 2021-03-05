@@ -16,10 +16,10 @@ Column {
     property alias cfg_Speed: slider.value
 
     Row {
-        spacing: units.largeSpacing / 2
+        spacing: PlasmaCore.Units.largeSpacing / 2
 
         QtControls.Label {
-            width: formAlignment - units.largeSpacing
+            width: formAlignment - PlasmaCore.Units.largeSpacing
             horizontalAlignment: Text.AlignRight
             text: "Speed:"
         }

@@ -15,10 +15,10 @@ Item {
 
     property int cheight: 48
     property int cwidth: themePage.width / 1.2
-    property int _m: units.gridUnit / 2 * units.devicePixelRatio
+    property int _m: PlasmaCore.Units.gridUnit / 2 * PlasmaCore.Units.devicePixelRatio
 
     anchors {
-        margins: units.largeSpacing
+        margins: PlasmaCore.Units.largeSpacing
     }
     Column {
         id: col
@@ -42,7 +42,7 @@ Item {
     PlasmaComponents.Label {
         id: cheatLabel
         text: "Cheating with the font size. This label scales with the devicePixelRatio <b>on top of</b> font rendering. Just to show how text scaling can work dynamically. Normal labels scale with the font size. For demonstration purposes we're faking scaled fonts here, to show how layouts' flows change."
-        font.pointSize: theme.defaultFont.pointSize * units.devicePixelRatio / 1.8
+        font.pointSize: theme.defaultFont.pointSize * PlasmaCore.Units.devicePixelRatio / 1.8
         wrapMode: Text.WordWrap
         anchors {
             margins: _m
@@ -54,7 +54,7 @@ Item {
     Image {
         id: apeImage
         objectName: "apeImage"
-        height: parent.height / 6 * units.devicePixelRatio
+        height: parent.height / 6 * PlasmaCore.Units.devicePixelRatio
         //width: height
         anchors {
             top: cheatLabel.top
@@ -68,41 +68,41 @@ Item {
         anchors {
             left: parent.left
             top: cheatLabel.height > apeImage.height ?  cheatLabel.bottom : apeImage.bottom
-            topMargin: units.largeSpacing
+            topMargin: PlasmaCore.Units.largeSpacing
             right: parent.right
         }
         //height: _h
         //width: parent.width
-        spacing: units.smallSpacing
+        spacing: PlasmaCore.Units.smallSpacing
 
         PlasmaCore.IconItem {
             source: "configure"
-            width: units.iconSizes.small
+            width: PlasmaCore.Units.iconSizes.small
             height: width
         }
         PlasmaCore.IconItem {
             source: "dialog-ok"
-            width: units.iconSizes.smallMedium
+            width: PlasmaCore.Units.iconSizes.smallMedium
             height: width
         }
         PlasmaCore.IconItem {
             source: "resize-tr2bl"
-            width: units.iconSizes.medium
+            width: PlasmaCore.Units.iconSizes.medium
             height: width
         }
         PlasmaCore.IconItem {
             source: "akonadi"
-            width: units.iconSizes.large
+            width: PlasmaCore.Units.iconSizes.large
             height: width
         }
         PlasmaCore.IconItem {
             source: "clock"
-            width: units.iconSizes.huge
+            width: PlasmaCore.Units.iconSizes.huge
             height: width
         }
 //         KQuickControlsAddons.QIconItem {
 //             icon: "preferences-desktop-icons"
-//             width: units.iconSizes.enormous
+//             width: PlasmaCore.Units.iconSizes.enormous
 //             height: width
 //         }
 

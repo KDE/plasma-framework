@@ -12,10 +12,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 QtQuickControlStyle.StatusBarStyle {
 
     padding {
-        left: units.smallSpacing
-        right: units.smallSpacing
-        top: units.smallSpacing
-        bottom: units.smallSpacing/2
+        left: PlasmaCore.Units.smallSpacing
+        right: PlasmaCore.Units.smallSpacing
+        top: PlasmaCore.Units.smallSpacing
+        bottom: PlasmaCore.Units.smallSpacing/2
     }
 
 

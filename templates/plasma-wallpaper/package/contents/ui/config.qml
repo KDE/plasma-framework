@@ -16,7 +16,7 @@ ColumnLayout {
     property alias cfg_DisplayText: textField.text
 
     RowLayout {
-        spacing: units.largeSpacing / 2
+        spacing: PlasmaCore.Units.largeSpacing / 2
 
         // To allow aligned integration in the settings form,
         // "formAlignment" is a property injected by the config containment
@@ -24,7 +24,7 @@ ColumnLayout {
         QtControls.Label {
             Layout.minimumWidth: width
             Layout.maximumWidth: width
-            width: formAlignment - units.largeSpacing
+            width: formAlignment - PlasmaCore.Units.largeSpacing
             horizontalAlignment: Text.AlignRight
 
             // use i18nd in config QML, as the default textdomain is set to that of the config container

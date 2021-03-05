@@ -19,7 +19,7 @@ T.TabButton {
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: units.smallSpacing
+    padding: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
 
@@ -50,8 +50,8 @@ T.TabButton {
             Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : Number.POSITIVE_INFINITY
             Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : Number.POSITIVE_INFINITY
 
-            implicitWidth: control.icon.width > 0 ? control.icon.width : units.iconSizes.smallMedium
-            implicitHeight: control.icon.height > 0 ? control.icon.height : units.iconSizes.smallMedium
+            implicitWidth: control.icon.width > 0 ? control.icon.width : PlasmaCore.Units.iconSizes.smallMedium
+            implicitHeight: control.icon.height > 0 ? control.icon.height : PlasmaCore.Units.iconSizes.smallMedium
 
             colorGroup: control.PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly

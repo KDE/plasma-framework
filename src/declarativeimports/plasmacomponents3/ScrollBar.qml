@@ -33,7 +33,7 @@ T.ScrollBar {
             }
             // the separator line doesn't work yet with the plasmoids design
             visible: typeof plasmoid === "undefined"
-            width: units.devicePixelRatio
+            width: PlasmaCore.Units.devicePixelRatio
             color: PlasmaCore.ColorScope.textColor
             opacity: 0.1
         }
@@ -46,7 +46,7 @@ T.ScrollBar {
             opacity: controlRoot.hovered
             Behavior on opacity {
                 OpacityAnimator {
-                    duration: units.longDuration
+                    duration: PlasmaCore.Units.longDuration
                 }
             }
         }

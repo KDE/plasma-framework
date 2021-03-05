@@ -21,7 +21,7 @@ T.SwitchDelegate {
     bottomPadding: background.margins.bottom
     leftPadding: background.margins.left
     rightPadding: background.margins.right
-    spacing: units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     contentItem: Label {
         leftPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
