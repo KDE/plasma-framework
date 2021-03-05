@@ -46,7 +46,7 @@ public:
         ContextConstraint = 32, /**< the context (e.g. activity) has changed */
         UiReadyConstraint = 64, /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
         AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint |
-                         ImmutableConstraint
+                         ImmutableConstraint,
     };
     Q_ENUM(Constraint)
     Q_DECLARE_FLAGS(Constraints, Constraint)
@@ -83,7 +83,7 @@ public:
                     can expand horizontally. */
         Vertical,     /**< The applet is constrained horizontally, but
                     can expand vertically. */
-        Application /**< The Applet lives in a plane and should be optimized to look as a full application,
+        Application, /**< The Applet lives in a plane and should be optimized to look as a full application,
                      for the desktop or the particular device. */
     };
     Q_ENUM(FormFactor)
@@ -96,7 +96,7 @@ public:
         NoContainmentDisplayHint = 0,
         ContainmentDrawsPlasmoidHeading = 1, /**< The containment will draw an titlebar-looking header for the applets, so the applets shouldn't attempt to paint a similar thing **/
         ContainmentForcesSquarePlasmoids = 2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
-        DesktopFullyCovered = 4 /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
+        DesktopFullyCovered = 4, /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
     };
     Q_ENUM(ContainmentDisplayHint)
     Q_DECLARE_FLAGS(ContainmentDisplayHints, ContainmentDisplayHint)
@@ -115,7 +115,7 @@ public:
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific */
         CustomPanelContainment = 128, /**< A customized desktop panel */
-        CustomEmbeddedContainment = 129 /**< A customized containment embedded in another applet */
+        CustomEmbeddedContainment = 129, /**< A customized containment embedded in another applet */
     };
     Q_ENUM(ContainmentType)
 
@@ -128,7 +128,7 @@ public:
         ControlAction = 200,  /**< Generic control, similar to ConfigureAction TODO: better doc */
         MiscAction = 300,  /**< A type of action that doesn't fit in the other categories */
         DestructiveAction = 400,  /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separated from other actions */
-        UserAction = DestructiveAction + 1000 /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
+        UserAction = DestructiveAction + 1000, /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
     };
     Q_ENUM(ActionType)
 
@@ -142,7 +142,7 @@ public:
         Down = 0, /**< Display downards */
         Up,       /**< Display upwards */
         Left,     /**< Display to the left */
-        Right     /**< Display to the right */
+        Right,     /**< Display to the right */
     };
     Q_ENUM(Direction)
 
@@ -159,7 +159,7 @@ public:
         TopEdge,      /**< Along the top of the screen*/
         BottomEdge,   /**< Along the bottom of the screen*/
         LeftEdge,     /**< Along the left side of the screen */
-        RightEdge     /**< Along the right side of the screen */
+        RightEdge,     /**< Along the right side of the screen */
     };
     Q_ENUM(Location)
 
@@ -172,7 +172,7 @@ public:
         RightPositioned,   /**< Positioned right */
         TopPositioned,     /**< Positioned top */
         BottomPositioned,  /**< Positioned bottom */
-        CenterPositioned   /**< Positioned in the center */
+        CenterPositioned,   /**< Positioned in the center */
     };
     Q_ENUM(Position)
 
@@ -196,7 +196,7 @@ public:
                                      to the right of the widget */
         RightPosedTopAlignedPopup,    /**< Popup positioned on the right, aligned
                                      to the top of the widget */
-        RightPosedBottomAlignedPopup  /**< Popup positioned on the right, aligned
+        RightPosedBottomAlignedPopup,  /**< Popup positioned on the right, aligned
                                      to the bottom of the widget */
     };
     Q_ENUM(PopupPlacement)
@@ -207,7 +207,7 @@ public:
     enum FlipDirection {
         NoFlip = 0,          /**< Do not flip */
         HorizontalFlip = 1,  /**< Flip horizontally */
-        VerticalFlip = 2     /**< Flip vertically */
+        VerticalFlip = 2,     /**< Flip vertically */
     };
     Q_ENUM(FlipDirection)
     Q_DECLARE_FLAGS(Flip, FlipDirection)
@@ -218,7 +218,7 @@ public:
     enum IntervalAlignment {
         NoAlignment = 0, /**< No alignment **/
         AlignToMinute, /**< Align to the minute **/
-        AlignToHour /**< Align to the hour **/
+        AlignToHour, /**< Align to the hour **/
     };
     Q_ENUM(IntervalAlignment)
 
@@ -231,7 +231,7 @@ public:
         Mutable = 1,        /**< The item can be modified in any way **/
         UserImmutable = 2,  /**< The user has requested a lock down, and can undo
                            the lock down at any time **/
-        SystemImmutable = 4 /**<  the item is locked down by the system, the user
+        SystemImmutable = 4, /**<  the item is locked down by the system, the user
                            can't unlock it **/
     };
     Q_ENUM(ImmutabilityType)
@@ -245,7 +245,7 @@ public:
         DataEngineComponent = 2,  /**< Plasma::DataEngine based plugins **/
         ContainmentComponent = 4,/**< Plasma::Containment based plugins **/
         WallpaperComponent = 8,   /**< Plasma::Wallpaper based plugins **/
-        GenericComponent = 16      /** Generic repositories of files, usually they keep QML files and their assets **/
+        GenericComponent = 16,      /** Generic repositories of files, usually they keep QML files and their assets **/
     };
     Q_ENUM(ComponentType)
     Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
@@ -254,7 +254,7 @@ public:
         TopMargin = 0, /**< The top margin **/
         BottomMargin, /**< The bottom margin **/
         LeftMargin, /**< The left margin **/
-        RightMargin /**< The right margin **/
+        RightMargin, /**< The right margin **/
     };
     Q_ENUM(MarginEdge)
 
@@ -270,7 +270,7 @@ public:
         RequiresAttentionStatus = 4, /**< The Item needs persistent attention **/
         AcceptingInputStatus = 5, /**< The Item is accepting input **/
         //FIXME KF6: this should be the smallest status
-        HiddenStatus = 6    /**< The Item will be hidden totally  **/
+        HiddenStatus = 6,    /**< The Item will be hidden totally  **/
     };
     Q_ENUM(ItemStatus)
 
@@ -283,7 +283,7 @@ public:
                                      user's own keys*/
         SelfTrusted,                /**< The signature is valid and made with one of the user's own keys*/
         FullyTrusted,               /**< The signature is valid and made with a key signed by the vendor's key*/
-        UltimatelyTrusted           /**< The signature is valid and made with the vendor's key*/
+        UltimatelyTrusted,           /**< The signature is valid and made with the vendor's key*/
     };
     Q_ENUM(TrustLevel)
 
@@ -296,7 +296,7 @@ public:
         TranslucentBackground = 2, /**< An alternate version of the background is drawn, usually more translucent */
         ShadowBackground = 4, /**< The applet won't have a svg background but a drop shadow of its content done via a shader */
         ConfigurableBackground = 8, /** If the hint has this flag, the user is able to configure this background */
-        DefaultBackground = StandardBackground /**< Default settings: both standard background */
+        DefaultBackground = StandardBackground, /**< Default settings: both standard background */
     };
     Q_ENUM(BackgroundHints)
     //TODO KF6: BackgroundHint and BackgroundHints

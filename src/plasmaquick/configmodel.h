@@ -58,7 +58,7 @@ public:
         SourceRole,
         PluginNameRole,
         VisibleRole,
-        KCMRole
+        KCMRole,
     };
     explicit ConfigModel(QObject *parent = nullptr);
     ~ConfigModel() override;

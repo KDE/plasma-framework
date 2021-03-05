@@ -70,7 +70,7 @@ public:
         PositiveTextColor = 8, /**< color of foreground objects with a "positive message" connotation (usually green) */
         NeutralTextColor = 9, /**< color of foreground objects with a "neutral message" connotation (usually yellow) */
         NegativeTextColor = 10, /**< color of foreground objects with a "negative message" connotation (usually red) */
-        DisabledTextColor = 11 /**< color of disabled text @since 5.64 */
+        DisabledTextColor = 11, /**< color of disabled text @since 5.64 */
     };
 
     enum ColorGroup {
@@ -79,7 +79,7 @@ public:
         ViewColorGroup = 2,
         ComplementaryColorGroup = 3,
         HeaderColorGroup,
-        ToolTipColorGroup
+        ToolTipColorGroup,
     };
     Q_ENUM(ColorGroup)
 

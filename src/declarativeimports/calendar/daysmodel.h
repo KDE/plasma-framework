@@ -30,7 +30,7 @@ public:
         //containsJournalItems,
         dayNumber,
         monthNumber,
-        yearNumber
+        yearNumber,
     };
 
     explicit DaysModel(QObject *parent = nullptr);

@@ -48,14 +48,14 @@ public:
         DefaultLauncherPreloadWeight = 100,
         DelayedPreloadWeight = 25,
         PreloadWeightIncrement = 5,
-        PreloadWeightDecrement = 8
+        PreloadWeightDecrement = 8,
     };
 
     enum PreloadPolicy {
         Uninitialized = -1,
         None = 0,
         Adaptive = 1,
-        Aggressive = 2
+        Aggressive = 2,
     };
 
     AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);

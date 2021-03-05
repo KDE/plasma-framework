@@ -41,7 +41,7 @@ static const int DEFAULT_WALLPAPER_HEIGHT = 1200;
 enum CacheType {
     NoCache = 0,
     PixmapCache = 1,
-    SvgElementsCache = 2
+    SvgElementsCache = 2,
 };
 Q_DECLARE_FLAGS(CacheTypes, CacheType)
 Q_DECLARE_OPERATORS_FOR_FLAGS(CacheTypes)

@@ -142,7 +142,7 @@ public:
 
     enum UpdateType {
         UpdateFrame,
-        UpdateFrameAndMargins
+        UpdateFrameAndMargins,
     };
 
     void generateBackground(const QSharedPointer<FrameData> &frame);

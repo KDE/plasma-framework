@@ -54,7 +54,7 @@ class PLASMA_EXPORT Svg : public QObject
 public:
     enum Status {
         Normal = 0,
-        Selected
+        Selected,
     };
     Q_ENUM(Status)
 

@@ -69,7 +69,7 @@ public:
         FastStretch,
         //on resize re-render the part of the frame from the SVG
         Stretch,
-        Tile
+        Tile,
     };
 
     FrameItemNode(FrameSvgItem* frameSvg, FrameSvg::EnabledBorders borders, FitMode fitMode, QSGNode* parent)

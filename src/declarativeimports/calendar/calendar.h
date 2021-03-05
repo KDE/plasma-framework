@@ -118,7 +118,7 @@ public:
         Holiday = 1,
         Event = 2,
         Todo = 4,
-        Journal = 8
+        Journal = 8,
     };
     Q_ENUM(Type)
     Q_DECLARE_FLAGS(Types, Type)
@@ -126,7 +126,7 @@ public:
     enum DateMatchingPrecision {
         MatchYear,
         MatchYearAndMonth,
-        MatchYearMonthAndDay
+        MatchYearMonthAndDay,
     };
     Q_ENUM(DateMatchingPrecision)
 

@@ -38,7 +38,7 @@ public:
     enum Change {
         NoChange = 0,
         DataEngineChanged = 1,
-        SourcesChanged = 2
+        SourcesChanged = 2,
     };
     Q_DECLARE_FLAGS(Changes, Change)
 

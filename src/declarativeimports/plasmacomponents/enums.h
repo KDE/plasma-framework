@@ -18,7 +18,7 @@ public:
         Opening,
         Open,
         Closing,
-        Closed
+        Closed,
     };
     Q_ENUM(Status)
 };
@@ -33,7 +33,7 @@ public:
         LockPortrait,
         LockLandscape,
         LockPrevious,
-        Manual
+        Manual,
     };
     Q_ENUM(Orientation)
 };
@@ -47,7 +47,7 @@ public:
         Inactive,
         Activating,
         Active,
-        Deactivating
+        Deactivating,
     };
     Q_ENUM(Status)
 };

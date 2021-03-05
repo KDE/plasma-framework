@@ -76,7 +76,7 @@ public:
         BottomBorder = 2,
         LeftBorder = 4,
         RightBorder = 8,
-        AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder
+        AllBorders = TopBorder | BottomBorder | LeftBorder | RightBorder,
     };
     Q_DECLARE_FLAGS(EnabledBorders, EnabledBorder)
     Q_FLAG(EnabledBorders)

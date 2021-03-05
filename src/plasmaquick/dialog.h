@@ -153,7 +153,7 @@ public:
         Tooltip = NET::Tooltip,
         Notification = NET::Notification,
         OnScreenDisplay = NET::OnScreenDisplay,
-        CriticalNotification = NET::CriticalNotification
+        CriticalNotification = NET::CriticalNotification,
     };
     Q_ENUM(WindowType)
 
