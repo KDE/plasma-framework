@@ -1,0 +1,275 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Dutch "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Plasma-pakketbeheer</title>
+<date
+>2014-04-25</date>
+<releaseinfo
+>Frameworks 5.0</releaseinfo>
+<productname
+>KDE Frameworks</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>&plasma;-pakketten installeren, verwijderen of weergeven</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> pad</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> type</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> pad</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> naam</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> pad</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> naam</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> pad</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Beschrijving</title>
+<para
+><command
+>plasmapkg2</command
+> is een commandoregelhulpmiddel om &plasma;-pakketten te installeren, in een lijst te tonen of te verwijderen .</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Opties</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+> pad</replaceable
+></term>
+<listitem
+><para
+>Genereer een SHA1-hash voor het pakket in <quote
+>pad</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Voor installeren of verwijderen, van toepassing op pakketten die beschikbaar gemaakt zijn voor alle gebruikers.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+> type</replaceable
+></term>
+<listitem
+><para
+>Het type pakket, &eg; thema, bureaubladachtergrond, plasmoid, gegevens-engine, startprogramma, indelingssjabloon, &etc; [plasmoid].</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+> pad</replaceable
+></term>
+<listitem
+><para
+>Installeer het pakket in <quote
+>pad</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+> naam</replaceable
+></term>
+<listitem
+><para
+>Informatie over pakket <quote
+>naam</quote
+> tonen.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+> pad</replaceable
+></term>
+<listitem
+><para
+>Het pakket opwaarderen in <quote
+>pad</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Alle geïnstalleerde pakketten tonen</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>Toont alle bekende te installeren pakkettypen </para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+> naam</replaceable
+></term>
+<listitem
+><para
+>Verwijder het pakket genaamd <quote
+>naam</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+> pad</replaceable
+></term>
+<listitem
+><para
+>Absoluut pad naar de hoofdmap van het pakket. Indien niet opgegeven zullen de standaard gegevensmappen voor deze &plasma;-sessie worden doorzocht.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Zie ook</title>
+
+<para
+>Meer gedetailleerde gebruikersdocumentatie is beschikbaar op <ulink url="help:/plasma-desktop"
+>help:/plasma-desktop</ulink
+> (ofwel voer deze &URL; in in &konqueror; of voer uit <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Auteurs</title>
+<para
+><command
+>plasmapkg2</command
+> is geschreven door <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+>.</para>
+</refsect1>
+
+</refentry>

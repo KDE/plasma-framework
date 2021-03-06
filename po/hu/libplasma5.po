@@ -1,0 +1,826 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2013, 2014.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2014, 2015, 2019.
+# Kiszel Kristóf <kiszel.kristof@gmail.com>, 2017, 2018, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-02-26 02:42+0100\n"
+"PO-Revision-Date: 2021-01-03 13:08+0100\n"
+"Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 21.03.70\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Ünnepnapok"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Események"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Tennivaló"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Egyéb"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:152
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Ma"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:154
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Naptára visszaállítása a mai napra"
+
+#: declarativeimports/calendar/qml/MonthView.qml:236
+#, kde-format
+msgid "Previous Month"
+msgstr "Előző hónap"
+
+#: declarativeimports/calendar/qml/MonthView.qml:237
+#, kde-format
+msgid "Next Month"
+msgstr "Következő hónap"
+
+#: declarativeimports/calendar/qml/MonthView.qml:264
+#, kde-format
+msgid "Previous Year"
+msgstr "Előző év"
+
+#: declarativeimports/calendar/qml/MonthView.qml:265
+#, kde-format
+msgid "Next Year"
+msgstr "Következő év"
+
+#: declarativeimports/calendar/qml/MonthView.qml:297
+#, kde-format
+msgid "Previous Decade"
+msgstr "Előző évtized"
+
+#: declarativeimports/calendar/qml/MonthView.qml:298
+#, kde-format
+msgid "Next Decade"
+msgstr "Következő évtized"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:100
+#, kde-format
+msgid "More actions"
+msgstr "További műveletek"
+
+#: plasma/applet.cpp:361
+#, kde-format
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: plasma/applet.cpp:742
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "%1 felületi elem aktiválása"
+
+#: plasma/containment.cpp:107 plasma/private/applet_p.cpp:107
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "A(z) %1 eltávolítása"
+
+#: plasma/containment.cpp:113
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "Edit %1..."
+msgstr "A(z) %1 szerkesztése…"
+
+#: plasma/containment.cpp:116 plasma/private/applet_p.cpp:112
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "A(z) %1 beállítása…"
+
+#: plasma/corona.cpp:357 plasma/corona.cpp:477
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Felületi elemek zárolása"
+
+#: plasma/corona.cpp:357
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Felületi elemek feloldása"
+
+#: plasma/corona.cpp:406
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Kilépés a szerkesztőmódból"
+
+#: plasma/corona.cpp:408 plasma/corona.cpp:492
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Belépés a szerkesztőmódba"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Hozzon-e létre gyorsítótárat a lemezen a témához, vagy sem."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"A téma gyorsítótárának maximális mérete, kilobájtban megadva. Ezek a fájlok "
+"ritkán használtak, vagyis a maximális méret nem mindig lesz kihasználva, "
+"ugyanakkor biztonságosabb nagyobb méretet beállítani."
+
+#: plasma/packagestructure/dataenginepackage.cpp:26
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Data Files"
+msgstr "Adatfájlok"
+
+#: plasma/packagestructure/dataenginepackage.cpp:28
+#: plasma/packagestructure/packages.cpp:87 plasmaquick/private/packages.cpp:106
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Végrehajtható szkriptek"
+
+#: plasma/packagestructure/dataenginepackage.cpp:33
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Szolgáltatásleírások"
+
+#: plasma/packagestructure/dataenginepackage.cpp:36
+#: plasma/packagestructure/packages.cpp:93 plasmaquick/private/packages.cpp:111
+#, kde-format
+msgid "Translations"
+msgstr "Fordítások"
+
+#: plasma/packagestructure/packages.cpp:29
+#: plasma/packagestructure/packages.cpp:49 plasmaquick/private/packages.cpp:73
+#: plasmaquick/private/packages.cpp:118
+#, kde-format
+msgid "Main Script File"
+msgstr "Fő szkriptfájl"
+
+#: plasma/packagestructure/packages.cpp:30
+#, kde-format
+msgid "Tests"
+msgstr "Tesztek"
+
+#: plasma/packagestructure/packages.cpp:71 plasmaquick/private/packages.cpp:90
+#, kde-format
+msgid "Images"
+msgstr "Képek"
+
+#: plasma/packagestructure/packages.cpp:72 plasmaquick/private/packages.cpp:91
+#, kde-format
+msgid "Themed Images"
+msgstr "Témázott képek"
+
+#: plasma/packagestructure/packages.cpp:78 plasmaquick/private/packages.cpp:97
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Beállításdefiníciók"
+
+#: plasma/packagestructure/packages.cpp:83 plasmaquick/private/packages.cpp:102
+#, kde-format
+msgid "User Interface"
+msgstr "Felhasználói felület"
+
+#: plasma/packagestructure/packages.cpp:91
+#, kde-format
+msgid "Screenshot"
+msgstr "Képernyőkép"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:27
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Képek párbeszédablakokhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:29
+#: plasma/packagestructure/plasmathemepackage.cpp:31
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Általános párbeszédablak-háttér"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:33
+#: plasma/packagestructure/plasmathemepackage.cpp:35
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Téma a kijelentkező párbeszédablakhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:37
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Háttérképcsomagok"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:39
+#, kde-format
+msgid "Images for widgets"
+msgstr "Képek a felületi elemekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:41
+#: plasma/packagestructure/plasmathemepackage.cpp:43
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Háttérkép a felületi elemekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:45
+#: plasma/packagestructure/plasmathemepackage.cpp:47
+#, kde-format
+msgid "Analog clock face"
+msgstr "Analóg óralap"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:49
+#: plasma/packagestructure/plasmathemepackage.cpp:51
+#, kde-format
+msgid "Background image for panels"
+msgstr "Háttérkép panelekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:53
+#: plasma/packagestructure/plasmathemepackage.cpp:55
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Háttérkép grafikus felületi elemekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:57
+#: plasma/packagestructure/plasmathemepackage.cpp:59
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Háttérkép buboréksúgókhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:61
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Átlátszatlan képek párbeszédablakokhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:63
+#: plasma/packagestructure/plasmathemepackage.cpp:65
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Átlátszatlan általános párbeszédablak háttér"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:67
+#: plasma/packagestructure/plasmathemepackage.cpp:69
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Átlátszatlan téma a kijelentkező párbeszédablakhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:71
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Átlátszatlan képek felületi elemekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:73
+#: plasma/packagestructure/plasmathemepackage.cpp:75
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Átlátszatlan háttérkép panelekhez"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:77
+#: plasma/packagestructure/plasmathemepackage.cpp:79
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Átlátszatlan háttérkép buboréksúgókhoz"
+
+#: plasma/packagestructure/plasmathemepackage.cpp:81
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme beállítófájl"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:26
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Beállító felhasználói felület oldalmodellek"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:27
+#, kde-format
+msgid "Configuration XML file"
+msgstr "XML beállítófájl"
+
+#: plasma/packagestructure/plasmoidpackage.cpp:38
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Egyéni kiterjesztő kompakt kisalkalmazásokhoz"
+
+#: plasma/pluginloader.cpp:92
+#, kde-format
+msgid "Accessibility"
+msgstr "Akadálymentesítés"
+
+#: plasma/pluginloader.cpp:93
+#, kde-format
+msgid "Application Launchers"
+msgstr "Alkalmazásindítók"
+
+#: plasma/pluginloader.cpp:94
+#, kde-format
+msgid "Astronomy"
+msgstr "Csillagászat"
+
+#: plasma/pluginloader.cpp:95
+#, kde-format
+msgid "Date and Time"
+msgstr "Dátum és idő"
+
+#: plasma/pluginloader.cpp:96
+#, kde-format
+msgid "Development Tools"
+msgstr "Fejlesztőeszközök"
+
+#: plasma/pluginloader.cpp:97
+#, kde-format
+msgid "Education"
+msgstr "Oktatás"
+
+#: plasma/pluginloader.cpp:98
+#, kde-format
+msgid "Environment and Weather"
+msgstr "Környezet és időjárás"
+
+#: plasma/pluginloader.cpp:99
+#, kde-format
+msgid "Examples"
+msgstr "Példák"
+
+#: plasma/pluginloader.cpp:100
+#, kde-format
+msgid "File System"
+msgstr "Fájlrendszer"
+
+#: plasma/pluginloader.cpp:101
+#, kde-format
+msgid "Fun and Games"
+msgstr "Játék és szórakozás"
+
+#: plasma/pluginloader.cpp:102
+#, kde-format
+msgid "Graphics"
+msgstr "Grafika"
+
+#: plasma/pluginloader.cpp:103
+#, kde-format
+msgid "Language"
+msgstr "Nyelv"
+
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Mapping"
+msgstr "Térképek"
+
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Miscellaneous"
+msgstr "Egyebek"
+
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Multimedia"
+msgstr "Multimédia"
+
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Online Services"
+msgstr "Internetes szolgáltatások"
+
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Productivity"
+msgstr "Termelékenység"
+
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "System Information"
+msgstr "Rendszer információk"
+
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Utilities"
+msgstr "Segédprogramok"
+
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "Ablakok és feladatok"
+
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "Clipboard"
+msgstr "Vágólap"
+
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Tasks"
+msgstr "Feladatok"
+
+#: plasma/pluginloader.cpp:636 plasma/pluginloader.cpp:637
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Egyebek"
+
+#: plasma/private/applet_p.cpp:127
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"A(z) %1 felületi elem nem határozta meg, hogy melyik ScriptEngine-t "
+"használja."
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Nem sikerült megnyitni ezt a csomagot: %1. Igénylő elem: %2."
+
+#: plasma/private/applet_p.cpp:165
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Nem sikerült megnyitni ezt a szkriptmodult: %1. Igénylő elem: %2."
+
+#: plasma/private/applet_p.cpp:170
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Alternatívák megjelenítése…"
+
+#: plasma/private/applet_p.cpp:266
+#, kde-format
+msgid "Widget Removed"
+msgstr "Elem eltávolítva"
+
+#: plasma/private/applet_p.cpp:267
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "A(z) „%1” elem eltávolításra került."
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panel eltávolítva"
+
+#: plasma/private/applet_p.cpp:270
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Egy panel eltávolításra került."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Asztal eltávolítva"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Egy asztal eltávolításra került."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Undo"
+msgstr "Visszavonás"
+
+#: plasma/private/applet_p.cpp:367
+#, kde-format
+msgid "Widget Settings"
+msgstr "Felületi elem beállítások"
+
+#: plasma/private/applet_p.cpp:374
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Felületi elem eltávolítása"
+
+#: plasma/private/applet_p.cpp:381
+#: plasma/private/associatedapplicationmanager.cpp:66
+#: plasma/private/associatedapplicationmanager.cpp:125
+#: plasma/private/associatedapplicationmanager.cpp:167
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "A társított alkalmazás futtatása"
+
+#: plasma/private/applet_p.cpp:472
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Nem sikerült inicializálni a szkriptet"
+
+#: plasma/private/associatedapplicationmanager.cpp:63
+#: plasma/private/associatedapplicationmanager.cpp:164
+#, kde-format
+msgid "Open with %1"
+msgstr "Megnyitás ezzel: %1"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Panel eltávolítása"
+
+#: plasma/private/containment_p.cpp:62
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Aktivitás eltávolítása"
+
+#: plasma/private/containment_p.cpp:68
+#, kde-format
+msgid "Activity Settings"
+msgstr "Tevékenység beállítások"
+
+#: plasma/private/containment_p.cpp:74
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Felületi elemek hozzáadása…"
+
+#: plasma/private/containment_p.cpp:190
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "A kért komponens nem található: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"A felületi elemek hálózaton történő megosztásakor lehetővé teszi ehhez a "
+"felületi elemhez való hozzáférést másik számítógépről mint távirányítóról."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Felületi elem megosztása a hálózaton"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Bárki számára szabad hozzáférést enged ehhez a felületi elemhez"
+
+#: plasma/private/service_p.h:34
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Érvénytelen (null) szolgáltatás, nem végezhető el semmilyen művelet."
+
+#: plasmaquick/appletquickitem.cpp:596
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Ismeretlen kisalkalmazás"
+
+#: plasmaquick/appletquickitem.cpp:611
+#, fuzzy, kde-format
+#| msgid "Error loading QML file: %1"
+msgid "Error loading QML file: %1 %2"
+msgstr "Hiba a QML fájl betöltése közben: %1"
+
+#: plasmaquick/appletquickitem.cpp:613
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Hiba a kisalkalmazás betöltésekor: a csomag nem létezik. %1"
+
+#: plasmaquick/configview.cpp:97
+#, kde-format
+msgid "%1 Settings"
+msgstr "Beállítások: %1"
+
+#: plasmaquick/private/packages.cpp:24
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "Alapértelmezett beállítások témákhoz, stb."
+
+#: plasmaquick/private/packages.cpp:26
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "Az alkalmazások által használandó színséma."
+
+#: plasmaquick/private/packages.cpp:29
+#, kde-format
+msgid "Preview Images"
+msgstr "Előnézeti képek"
+
+#: plasmaquick/private/packages.cpp:30
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "Előnézet a bejelentkezéskezelőhöz"
+
+#: plasmaquick/private/packages.cpp:31
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "Előnézet a zárolóképernyőhöz"
+
+#: plasmaquick/private/packages.cpp:32
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "Előnézet a felhasználóváltóhoz"
+
+#: plasmaquick/private/packages.cpp:33
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "Előnézet a virtuálisasztal-váltóhoz"
+
+#: plasmaquick/private/packages.cpp:34
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "Előnézet a nyitóképernyőhöz"
+
+#: plasmaquick/private/packages.cpp:35
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "Előnézet a KRunnerhöz"
+
+#: plasmaquick/private/packages.cpp:36
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "Előnézet az ablakdekorációkhoz"
+
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "Előnézet az ablakváltóhoz"
+
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Login Manager"
+msgstr "Bejelentkezéskezelő"
+
+#: plasmaquick/private/packages.cpp:40
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "A bejelentkezéskezelő fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Logout Dialog"
+msgstr "Kijelentkező párbeszédablak"
+
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "A kijelentkező párbeszédablak fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Screenlocker"
+msgstr "Képernyőzár"
+
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "A zárolóképernyő fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "Felhasználói felület gyors felhasználóváltáshoz"
+
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "A felhasználóváltó fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:51
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "Virtuálisasztal-váltó"
+
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "A virtuálisasztal-váltó fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:54
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "Képernyőn megjelenő értesítések"
+
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "A képernyőn megjelenő értesítések fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:57
+#, kde-format
+msgid "Splash Screen"
+msgstr "Nyitóképernyő"
+
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "A nyitóképernyő fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:60
+#, kde-format
+msgid "KRunner UI"
+msgstr "KRunner UI"
+
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "A KRunner fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:63
+#, kde-format
+msgid "Window Decoration"
+msgstr "Ablakdekoráció"
+
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "Az ablakdekoráció fő szkriptje"
+
+#: plasmaquick/private/packages.cpp:66
+#, kde-format
+msgid "Window Switcher"
+msgstr "Ablakváltó"
+
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "Az ablakváltó fő szkriptje"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:605
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma csomag"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:609
+#, kde-format
+msgid "Install"
+msgstr "Telepítés"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:621
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Sikertelen csomagtelepítés"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:641
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "A most ejtett csomag érvénytelen."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:650
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#, kde-format
+msgid "Widgets"
+msgstr "Elemek"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:655
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "A(z) %1 hozzáadása"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:669
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:718
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Ikon hozzáadása"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:681
+#, kde-format
+msgid "Wallpaper"
+msgstr "Háttérkép"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:691
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "A(z) %1 beállítása"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Tartalom ejtve"
