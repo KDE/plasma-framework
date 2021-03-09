@@ -100,9 +100,9 @@ defaultHeight=1080
 
 [ContrastEffect]
 enabled=true
-contrast=0.17
-intensity=1.25
-saturation=9
+contrast=0.2
+intensity=2.0
+saturation=1.7
 
 [AdaptiveTransparency]
 enabled=true
