@@ -35,22 +35,38 @@ T.TextField {
                                                               && KAuthorized.authorize("lineedit_reveal_password")
                                                               && (echoMode == TextInput.Normal || control.text.length > 0)
 
-    implicitWidth: Math.max((placeholderText ? placeholder.implicitWidth : 0),
-                            PlasmaCore.Units.gridUnit * 8,
-                            contentWidth)
-                            + base.margins.left + base.margins.right
-    implicitHeight: Math.max(PlasmaCore.Units.gridUnit, contentHeight)
-                            + topPadding + bottomPadding
+    // Can't guarantee that background will always be present or have the margins property
+    readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
 
-    leftPadding: base.margins.left + (LayoutMirroring.enabled ? inlineButtonRow.width : 0)
-    topPadding: base.margins.top
-    rightPadding: base.margins.right + (LayoutMirroring.enabled ? 0 : inlineButtonRow.width)
-    bottomPadding: base.margins.bottom
+    /* It might be preferrable to do background width OR content width if we
+     * want content to stay within the background rather than expanding the
+     * control, but this is maintaining compatibility with the pre-existing
+     * behavior. Use the following 2 lines if you want text to stay within the
+     * background:
+    implicitBackgroundWidth + leftInset + rightInset
+    || Math.ceil(Math.max(contentWidth, placeholder.implicitWidth)) + leftPadding + rightPadding
+     */
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            Math.ceil(Math.max(contentWidth, placeholder.implicitWidth)) + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding,
+                             placeholder.implicitHeight + topPadding + bottomPadding)
 
-    color: theme.viewTextColor
-    selectionColor: theme.highlightColor
-    selectedTextColor: theme.highlightedTextColor
+    leftPadding: (__hasBackgroundAndMargins ? background.margins.left : 0) + (mirrored ? inlineButtonRow.width : 0)
+    topPadding: __hasBackgroundAndMargins ? background.margins.top : 0
+    rightPadding: (__hasBackgroundAndMargins ? background.margins.right : 0) + (mirrored ? 0 : inlineButtonRow.width)
+    bottomPadding: __hasBackgroundAndMargins ? background.margins.bottom : 0
+
+    PlasmaCore.ColorScope.inherit: !background || !background.visible
+    PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ViewColorGroup
+
+    color: PlasmaCore.Theme.textColor
+    placeholderTextColor: PlasmaCore.Theme.disabledTextColor
+    selectionColor: PlasmaCore.Theme.highlightColor
+    selectedTextColor: PlasmaCore.Theme.highlightedTextColor
     verticalAlignment: TextInput.AlignVCenter
+    // Manually setting this fixes alignment in RTL layouts
+    horizontalAlignment: TextInput.AlignLeft
     opacity: control.enabled ? 1 : 0.6
     hoverEnabled: !Kirigami.Settings.tabletMode
 
@@ -97,24 +113,23 @@ T.TextField {
         id: placeholder
         x: control.leftPadding
         y: control.topPadding
-        width: control.width - (control.leftPadding + control.rightPadding)
-        height: control.height - (control.topPadding + control.bottomPadding)
+        width: control.availableWidth
+        height: control.availableHeight
 
         text: control.placeholderText
         font: control.font
-        color: theme.viewTextColor
-        opacity: 0.5
-        enabled: false
+        color: control.placeholderTextColor
         horizontalAlignment: control.horizontalAlignment
         verticalAlignment: control.verticalAlignment
         visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
+        renderType: control.renderType
     }
 
     Row {
         id: inlineButtonRow
         anchors.right: control.right
-        anchors.rightMargin: PlasmaCore.Units.smallSpacing
+        anchors.rightMargin: control.__hasBackgroundAndMargins ? background.margins.right : 0
         anchors.verticalCenter: control.verticalCenter
 
         PlasmaCore.IconItem {
@@ -157,23 +172,22 @@ T.TextField {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    control.text = ""
+                    control.clear()
                     control.forceActiveFocus()
                 }
             }
         }
     }
 
-    background: Item {
+    background: PlasmaCore.FrameSvgItem {
+        implicitWidth: PlasmaCore.Units.gridUnit * 8 + margins.left + margins.right
+        implicitHeight: PlasmaCore.Units.gridUnit + margins.top + margins.bottom
+        imagePath: "widgets/lineedit"
+        prefix: "base"
+
         Private.TextFieldFocus {
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
             anchors.fill: parent
-        }
-        PlasmaCore.FrameSvgItem {
-            id: base
-            anchors.fill: parent
-            imagePath: "widgets/lineedit"
-            prefix: "base"
         }
     }
 }
