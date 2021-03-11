@@ -759,7 +759,7 @@ void ThemePrivate::processAdaptiveTransparencySettings(KConfigBase *metadata)
 {
     KConfigGroup cg;
     if (metadata->hasGroup("AdaptiveTransparency")) {
-        cg = KConfigGroup(metadata, "ContrastEffect");
+        cg = KConfigGroup(metadata, "AdaptiveTransparency");
         adaptiveTransparencyEnabled = cg.readEntry("enabled", false);
     } else {
         adaptiveTransparencyEnabled = false;
