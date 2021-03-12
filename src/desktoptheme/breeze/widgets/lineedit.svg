@@ -20,7 +20,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
-     inkscape:window-height="986"
+     inkscape:window-height="1016"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
      inkscape:pageopacity="1"
@@ -31,9 +31,9 @@
      bordercolor="#666666"
      pagecolor="#eff0f1"
      id="base"
-     inkscape:zoom="64"
-     inkscape:cx="116.80469"
-     inkscape:cy="-37.296875"
+     inkscape:zoom="11.313709"
+     inkscape:cx="71.285202"
+     inkscape:cy="19.710601"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:current-layer="svg2"
@@ -449,7 +449,7 @@
        style="fill:url(#linearGradient4077);fill-opacity:1;stroke:none;stroke-width:0.999999" />
     <rect
        class="ColorScheme-ViewFocus"
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        id="rect4015"
        width="80"
        height="2"
@@ -461,7 +461,7 @@
      transform="translate(-115,44)"
      inkscape:label="#g4067">
     <path
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        d="m 115,5 v 2 c 1.10457,0 2,0.8954305 2,2 h 2 c 0,-2 -2,-4 -4,-4 z"
        transform="translate(115,-44)"
        id="path3948-61"
@@ -861,7 +861,7 @@
     <rect
        class="ColorScheme-ViewFocus"
        inkscape:label="#rect4065"
-       style="fill:currentColor;fill-opacity:0.4;stroke-width:0.953463"
+       style="fill:currentColor;fill-opacity:0;stroke-width:0.953463"
        id="rect4040"
        width="2"
        height="20"
@@ -897,7 +897,7 @@
     <rect
        class="ColorScheme-ViewFocus"
        inkscape:label="#rect4065"
-       style="fill:currentColor;fill-opacity:0.4;stroke-width:0.953463"
+       style="fill:currentColor;fill-opacity:0;stroke-width:0.953463"
        id="rect4070"
        width="2"
        height="20"
@@ -930,7 +930,7 @@
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        d="m 115,35 v -2 c 1.10457,0 2,-0.895431 2,-2 h 2 c 0,2 -2,4 -4,4 z"
        id="path3948-61-5"
        class="ColorScheme-ViewFocus"
@@ -963,7 +963,7 @@
        height="2"
        width="80"
        id="rect4060"
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        inkscape:label="#rect4063"
        class="ColorScheme-ViewFocus" />
   </g>
@@ -979,7 +979,7 @@
        class="ColorScheme-ViewFocus" />
     <path
        inkscape:connector-curvature="0"
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        d="m 115,35 v -2 c 1,0 2,-1 2,-2 l 2,0 c 0,2.209139 -1.79087,4 -4,4 z"
        id="path3948-61-50"
        class="ColorScheme-ViewFocus"
@@ -991,7 +991,7 @@
      inkscape:label="#g4067">
     <path
        inkscape:connector-curvature="0"
-       style="fill:currentColor;fill-opacity:0.4"
+       style="fill:currentColor;fill-opacity:0"
        d="m 115,5 v 2 c 1.10457,0 2,0.8954305 2,2 h 2 c 0,-2 -2.11113,-4 -4,-4 z"
        transform="translate(115,-44)"
        id="path3948-61-7"
