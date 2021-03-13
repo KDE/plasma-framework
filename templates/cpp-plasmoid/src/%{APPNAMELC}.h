@@ -3,19 +3,20 @@
     SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-#ifndef % {APPNAMEUC } _H
-#define % {APPNAMEUC } _H
+#ifndef %{APPNAMEUC}_H
+#define %{APPNAMEUC}_H
+
 
 #include <Plasma/Applet>
 
-class % {APPNAME} : public Plasma::Applet
+class %{APPNAME} : public Plasma::Applet
 {
     Q_OBJECT
     Q_PROPERTY(QString nativeText READ nativeText CONSTANT)
 
 public:
-    % {APPNAME}(QObject * parent, const QVariantList &args);
-    ~ % {APPNAME}();
+    %{APPNAME}( QObject *parent, const QVariantList &args );
+    ~%{APPNAME}();
 
     QString nativeText() const;
 
