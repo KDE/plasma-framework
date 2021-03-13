@@ -29,7 +29,7 @@ import "private" as Private
         /**
          * Indicates that it's used as a footer of the plasmoid, touching the bottom border
          */
-        Footer,
+        Footer
     }
 
     /**
