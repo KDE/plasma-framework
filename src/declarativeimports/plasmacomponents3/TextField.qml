@@ -111,6 +111,7 @@ T.TextField {
 
     Label {
         id: placeholder
+        enabled: false
         x: control.leftPadding
         y: control.topPadding
         width: control.availableWidth
