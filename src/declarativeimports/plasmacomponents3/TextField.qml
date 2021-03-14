@@ -52,9 +52,9 @@ T.TextField {
                              contentHeight + topPadding + bottomPadding,
                              placeholder.implicitHeight + topPadding + bottomPadding)
 
-    leftPadding: (__hasBackgroundAndMargins ? background.margins.left : 0) + (mirrored ? inlineButtonRow.width : 0)
+    leftPadding: (__hasBackgroundAndMargins ? background.margins.left : 0) + (control.mirrored ? inlineButtonRow.width : 0)
     topPadding: __hasBackgroundAndMargins ? background.margins.top : 0
-    rightPadding: (__hasBackgroundAndMargins ? background.margins.right : 0) + (mirrored ? 0 : inlineButtonRow.width)
+    rightPadding: (__hasBackgroundAndMargins ? background.margins.right : 0) + (control.mirrored ? 0 : inlineButtonRow.width)
     bottomPadding: __hasBackgroundAndMargins ? background.margins.bottom : 0
 
     PlasmaCore.ColorScope.inherit: !background || !background.visible
