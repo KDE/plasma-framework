@@ -21,13 +21,13 @@ import "private" as Private
 FocusScope {
     id: root
     /**
-     * type:list<Item>
+     * \property list<Item> TabBar::content
      * The content of the TabBarLayout.
      */
     default property alias content: tabBarLayout.data
 
     /**
-     * type:TabBarLayout
+     * \property TabBarLayout TabBar::tabBarLayout
      * The layout of the TabBar.
      */
     property alias layout: tabBarLayout
