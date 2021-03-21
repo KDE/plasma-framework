@@ -11,6 +11,9 @@ import QtQuick.Controls.Private 1.0
 import QtQuick.Controls.Styles 1.2 as QtQuickControlStyle
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
+/**
+ * \internal
+ */
 QtQuickControlStyle.MenuStyle {
     id: styleRoot
 

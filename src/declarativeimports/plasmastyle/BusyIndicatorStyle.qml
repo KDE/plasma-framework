@@ -9,6 +9,9 @@ import QtQuick.Controls.Styles 1.2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 
+/**
+ * \internal
+ */
 BusyIndicatorStyle {
     indicator: PlasmaCore.SvgItem {
         id: indicatorItem

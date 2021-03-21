@@ -16,6 +16,9 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 
 import "private" as Private
 
+/**
+ * \internal
+ */
 QtQuickControlStyle.TextAreaStyle {
     id: style
 

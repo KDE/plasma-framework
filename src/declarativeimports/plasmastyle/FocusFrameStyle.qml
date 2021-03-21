@@ -7,6 +7,9 @@
 import QtQuick 2.2
 
 //FocusFrameStyle is not exported
+/**
+ * \internal
+ */
 Item {
     property int margin: 0
 }

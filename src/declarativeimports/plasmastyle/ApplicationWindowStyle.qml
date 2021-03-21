@@ -9,7 +9,9 @@ import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.3 as QtQuickControlStyle
 import org.kde.plasma.core 2.0 as PlasmaCore
 
-
+/**
+ * \internal
+ */
 QtQuickControlStyle.ApplicationWindowStyle {
 
     property Component background: Rectangle {

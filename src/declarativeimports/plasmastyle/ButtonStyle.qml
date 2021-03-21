@@ -17,6 +17,9 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import "private" as Private
 import "private/Util.js" as Util
 
+/**
+ * \internal
+ */
 QtQuickControlStyle.ButtonStyle {
     id: style
 

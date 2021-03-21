@@ -7,6 +7,9 @@
 import QtQuick 2.2
 import org.kde.plasma.core 2.0 as PlasmaCore
 
+/**
+ * \internal
+ */
 Item {
     width: PlasmaCore.Units.gridUnit
     x: -width
