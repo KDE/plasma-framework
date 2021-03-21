@@ -7,20 +7,6 @@
     SPDX-License-Identifier: BSD-3-Clause
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 2.1
-
-Description:
- TODO
-
-Properties:
-
-**/
-
 import QtQuick 2.1
 import org.kde.kquickcontrolsaddons 2.0
 import "AppManager.js" as Utils
