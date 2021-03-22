@@ -450,7 +450,8 @@ void IconItem::setActive(bool active)
     m_active = active;
 
     if (isComponentComplete()) {
-        m_allowNextAnimation = true;
+        m_allowNextAnimation = false;
+        m_blockNextAnimation = true;
         schedulePixmapUpdate();
     }
     Q_EMIT activeChanged();
