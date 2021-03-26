@@ -9,6 +9,7 @@ import QtQuick 2.0
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as Components
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.kde.plasma.calendar 2.0
 
@@ -47,13 +48,6 @@ MouseArea {
             result = result && current.getDate() === thisDate.getDate()
         }
         return result
-    }
-
-    onHeightChanged: {
-        // this is needed here as the text is first rendered, counting with the default root.cellHeight
-        // then root.cellHeight actually changes to whatever it should be, but the Label does not pick
-        // it up after that, so we need to change it explicitly after the cell size changes
-        label.font.pixelSize = Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
     }
 
     Rectangle {
@@ -97,7 +91,7 @@ MouseArea {
         sourceComponent: eventsMarkerComponent
     }
 
-    Components.Label {
+    PlasmaExtras.Heading {
         id: label
         anchors {
             fill: todayRect
@@ -110,11 +104,6 @@ MouseArea {
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
         fontSizeMode: Text.HorizontalFit
-        font.pixelSize: Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
-        // Plasma component set point size, this code wants to set pixel size
-        // Setting both results in a warning
-        // -1 is an undocumented same as unset (see qquickvaluetypes)
-        font.pointSize: -1
         color: today ? PlasmaCore.Theme.backgroundColor : PlasmaCore.Theme.textColor
     }
 }
