@@ -139,7 +139,7 @@ ecm_setup_qtplugin_macro_names(
         PACKAGE_SETUP_AUTOMOC_VARIABLES
 )
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00)
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x054F00)
+add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055000)
 
 #add_definitions(-Wno-deprecated)
 
