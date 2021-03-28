@@ -277,6 +277,7 @@ KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
 }
 #endif
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 81)
 KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
 {
     KPluginInfo::List list;
@@ -304,6 +305,7 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
 
     return list;
 }
+#endif
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {

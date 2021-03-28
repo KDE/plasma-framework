@@ -86,6 +86,7 @@ public:
     static KPluginInfo::List listEngineInfo(const QString &parentApp = QString());
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 81)
     /**
      * Returns a list of all known dataengines filtering by category.
      *
@@ -99,9 +100,12 @@ public:
      *                  The default value of QString() will result in a
      *                  list of all dataengines in specified categories.
      * @return list of dataengines
+     * @deprecated since 5.81, use listDataEngineMetaData() instead.
      * @since 4.3
      **/
+    PLASMA_DEPRECATED_VERSION(5, 81, "Use listDataEngineMetaData instead")
     static KPluginInfo::List listEngineInfoByCategory(const QString &category, const QString &parentApp = QString());
+#endif
 
     /**
      * Load a Service plugin.
