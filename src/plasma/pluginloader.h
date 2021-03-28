@@ -323,12 +323,16 @@ public:
      */
     static QStringList listContainmentTypes();
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
      * Returns a list of all known containments associated with a certain MimeType
      *
      * @return list of containments
+     * @deprecated since 5.83, use listAppletMetaData() with custom filtering instead.
      **/
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use listAppletMetaData() with custom filtering")
     static KPluginInfo::List listContainmentsForMimeType(const QString &mimeType);
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 77)
     /**
