@@ -663,6 +663,28 @@ KPluginInfo::List PluginLoader::listContainments(const QString &category, const 
     return listContainmentsOfType(QString(), category, parentApp);
 }
 
+QList<KPluginMetaData> PluginLoader::listContainmentsMetaData(std::function<bool(const KPluginMetaData &)> filter)
+{
+    auto ownFilter = [filter](const KPluginMetaData &md) -> bool {
+        if (!md.serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
+            return false;
+        }
+
+        return filter(md);
+    };
+
+    return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), ownFilter);
+}
+
+QList<KPluginMetaData> PluginLoader::listContainmentsMetaDataOfType(const QString &type)
+{
+    auto filter = [type](const KPluginMetaData &md) -> bool {
+        return md.value(QStringLiteral("X-Plasma-ContainmentType")) == type;
+    };
+
+    return listContainmentsMetaData(filter);
+}
+
 KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type, const QString &category, const QString &parentApp)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "General");

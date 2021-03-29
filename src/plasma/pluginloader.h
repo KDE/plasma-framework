@@ -281,6 +281,24 @@ public:
     static KPluginInfo::List listContainments(const QString &category = QString(), const QString &parentApp = QString());
 
     /**
+     * Returns a list of all known containments.
+     *
+     * @param filter An optional predicate that can be used for filtering.
+     *
+     * @return list of containments
+     */
+    static QList<KPluginMetaData> listContainmentsMetaData(std::function<bool(const KPluginMetaData &)> filter = {});
+
+    /**
+     * Returns a list of containments of the specified type.
+     *
+     * @param type The target containment type
+     *
+     * @return list of containments
+     */
+    static QList<KPluginMetaData> listContainmentsMetaDataOfType(const QString &type);
+
+    /**
      * Returns a list of all known containments that match the parameters.
      *
      * @param type Only containments with this string in X-Plasma-ContainmentType

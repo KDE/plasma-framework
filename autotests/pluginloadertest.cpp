@@ -55,6 +55,10 @@ void PluginTest::listContainmentsOfType()
     const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType(QStringLiteral("Desktop"));
     qDebug() << "Desktop Containments: " << plugins.count();
     QVERIFY(plugins.count() > 0 || m_buildonly);
+
+    const QList<KPluginMetaData> pluginsMetaData = Plasma::PluginLoader::listContainmentsMetaDataOfType(QStringLiteral("Desktop"));
+    qDebug() << "Desktop Containments MetaData: " << pluginsMetaData.count();
+    QVERIFY(pluginsMetaData.count() > 0 || m_buildonly);
 }
 
 static const auto source = QStringLiteral("Europe/Sofia");
