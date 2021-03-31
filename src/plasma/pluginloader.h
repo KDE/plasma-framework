@@ -263,6 +263,7 @@ public:
      */
     QString appletCategory(const QString &appletName);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
      * Returns a list of all known containments.
      *
@@ -276,9 +277,12 @@ public:
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
      *                  list of all containments.
+     * @deprecated since 5.83, use PluginLoader::listContainmentsMetaData
      * @return list of containments
      **/
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use PluginLoader::listContainmentsMetaData")
     static KPluginInfo::List listContainments(const QString &category = QString(), const QString &parentApp = QString());
+#endif
 
     /**
      * Returns a list of all known containments.
@@ -298,6 +302,7 @@ public:
      */
     static QList<KPluginMetaData> listContainmentsMetaDataOfType(const QString &type);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
      * Returns a list of all known containments that match the parameters.
      *
@@ -314,9 +319,12 @@ public:
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
      *                  list of all containments, matching categories/type.
+     * @deprecated since 5.83, use PluginLoader::listContainmentsMetaDataOfType
      * @return list of containments
      **/
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use PluginLoader::listContainmentsMetaDataOfType")
     static KPluginInfo::List listContainmentsOfType(const QString &type, const QString &category = QString(), const QString &parentApp = QString());
+#endif
 
     /**
      * @return a list of all known types of containments on this system

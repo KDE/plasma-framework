@@ -52,9 +52,11 @@ void PluginTest::listContainmentActions()
 
 void PluginTest::listContainmentsOfType()
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     const KPluginInfo::List plugins = Plasma::PluginLoader::listContainmentsOfType(QStringLiteral("Desktop"));
     qDebug() << "Desktop Containments: " << plugins.count();
     QVERIFY(plugins.count() > 0 || m_buildonly);
+#endif
 
     const QList<KPluginMetaData> pluginsMetaData = Plasma::PluginLoader::listContainmentsMetaDataOfType(QStringLiteral("Desktop"));
     qDebug() << "Desktop Containments MetaData: " << pluginsMetaData.count();
