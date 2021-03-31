@@ -111,6 +111,36 @@ QtObject {
     property int toolTipDelay: Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : 700
 
     /**
+     * Time in milliseconds equivalent to the theoretical human moment, which can be used
+     * to determine whether how long to wait until the user should be informed of something,
+     * or can be used as the limit for how long something should wait before being
+     * automatically initiated.
+     *
+     * Some examples:
+     *
+     * - When the user types text in a search field, wait no longer than this duration after
+     *   the user completes typing before starting the search
+     * - When loading data which would commonly arrive rapidly enough to not require interaction,
+     *   wait this long before showing a spinner
+     *
+     * This might seem an arbitrary number, but given the psychological effect that three
+     * seconds seems to be what humans consider a moment (and in the case of waiting for
+     * something to happen, a moment is that time when you think "this is taking a bit long,
+     * isn't it?"), the idea is to postpone for just before such a conceptual moment. The reason
+     * for the two seconds, rather than three, is to function as a middle ground: Not long enough
+     * that the user would think that something has taken too long, for also not so fast as to
+     * happen too soon.
+     *
+     * See also
+     * https://www.psychologytoday.com/blog/all-about-addiction/201101/tick-tock-tick-hugs-and-life-in-3-second-intervals
+     * (the actual paper is hidden behind an academic paywall and consequently not readily
+     * available to us, so the source will have to be the blog entry above)
+     *
+     * @since 5.81
+     */
+    property int humanMoment: 2000
+
+    /**
      * metrics used by the default font
      */
     property variant fontMetrics: TextMetrics {

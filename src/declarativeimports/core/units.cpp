@@ -268,4 +268,9 @@ int Units::veryLongDuration() const
     return m_longDuration * 2;
 }
 
+int Units::humanMoment() const
+{
+    return 2000;
+}
+
 #include "moc_units.cpp"
