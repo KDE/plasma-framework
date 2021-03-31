@@ -9,8 +9,6 @@
 
 #include <QStringList>
 
-#include <KPluginInfo>
-
 #include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>

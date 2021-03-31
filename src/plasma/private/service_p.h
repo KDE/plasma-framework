@@ -16,7 +16,6 @@
 #include <QWidget>
 
 #include <KLocalizedString>
-#include <KPluginInfo>
 
 namespace Plasma
 {
