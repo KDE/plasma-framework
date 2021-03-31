@@ -222,9 +222,10 @@ void SvgRectsCache::loadImageFromCache(const QString &path, uint lastModified)
 
     for (const auto &key : imageGroup.keyList()) {
         bool ok = false;
+        uint keyUInt = key.toUInt(&ok);
         if (ok) {
             const QRectF rect = imageGroup.readEntry(key, QRectF());
-            m_localRectCache.insert(key.toUInt(), rect);
+            m_localRectCache.insert(keyUInt, rect);
         }
     }
 }
