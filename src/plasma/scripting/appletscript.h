@@ -142,10 +142,14 @@ protected:
      */
     Package package() const override;
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 81)
     /**
      * @return the KPluginInfo associated with this plasmoid
+     * @deprecated since 5.81, use applet()->pluginMetaData() instead.
      */
+    PLASMA_DEPRECATED_VERSION(5, 81, "Use applet()->pluginMetaData() instead.")
     KPluginInfo description() const;
+#endif
 
 private:
     friend class Applet;

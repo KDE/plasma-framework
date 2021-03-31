@@ -97,11 +97,13 @@ Package AppletScript::package() const
     return d->applet->package();
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 81)
 KPluginInfo AppletScript::description() const
 {
     Q_ASSERT(d->applet);
     return d->applet->pluginInfo();
 }
+#endif
 
 Plasma::Types::ContainmentType AppletScript::containmentType() const
 {
