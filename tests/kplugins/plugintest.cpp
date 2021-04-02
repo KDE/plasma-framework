@@ -9,10 +9,7 @@
 #include <KPluginFactory>
 
 #include <KLocalizedString>
-#include <KService>
-#include <KServiceTypeTrader>
 #include <KShell>
-#include <KSycoca>
 #include <QDebug>
 
 #include <KJob>
