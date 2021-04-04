@@ -60,6 +60,7 @@ T.TabButton {
         }
         Label {
             id: label
+            Layout.fillWidth: true
             Layout.alignment: control.display != T.AbstractButton.TextBesideIcon || icon.source.length === 0 ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignLeft
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
