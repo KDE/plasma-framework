@@ -500,21 +500,21 @@
      y="16"
      x="10"
      height="2"
-     width="4"
+     width="6"
      id="pressed-hint-left-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <rect
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="pressed-hint-right-margin"
-     width="4"
+     width="6"
      height="2"
      x="35"
      y="16" />
   <rect
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="normal-hint-left-margin"
-     width="4"
-     height="1.9999999"
+     width="6"
+     height="2"
      x="17"
      y="58" />
   <rect
@@ -535,7 +535,7 @@
      y="58"
      x="38"
      height="2"
-     width="4"
+     width="6"
      id="normal-hint-right-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <g
@@ -772,14 +772,14 @@
   <rect
      y="95"
      x="10"
-     height="1.9999999"
-     width="4"
+     height="2"
+     width="6"
      id="section-hint-left-margin"
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
   <rect
      style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
      id="section-hint-right-margin"
-     width="4"
+     width="6"
      height="2"
      x="34.965229"
      y="95" />
