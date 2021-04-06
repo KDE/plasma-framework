@@ -91,7 +91,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *         visible: root.networkConnected
  *
- *         icon.name: "network-disconnect"
+ *         iconName: "network-disconnect"
  *         text: "Unable to load content
  *         explanation: "Please try again later"
  *     }
@@ -114,7 +114,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *         visible: root.loading
  *
- *         icon.name: "my-awesome-app-icon"
+ *         iconName: "my-awesome-app-icon"
  *         text: "Loading this awesome app"
  *
  *         PlasmaComponents3.ProgressBar {
