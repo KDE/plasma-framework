@@ -24,3 +24,4 @@ cmake-build-debug*
 .idea
 /.clang-format
 /compile_commands.json
+.clangd
