@@ -61,13 +61,12 @@ T.TabButton {
         Label {
             id: label
             Layout.fillWidth: true
-            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon || icon.source.length === 0 ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignLeft
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: control.display != T.AbstractButton.TextBesideIcon || icon.source.length === 0 ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
