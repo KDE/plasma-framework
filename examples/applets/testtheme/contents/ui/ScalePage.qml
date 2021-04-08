@@ -42,7 +42,7 @@ Item {
     PlasmaComponents.Label {
         id: cheatLabel
         text: "Cheating with the font size. This label scales with the devicePixelRatio <b>on top of</b> font rendering. Just to show how text scaling can work dynamically. Normal labels scale with the font size. For demonstration purposes we're faking scaled fonts here, to show how layouts' flows change."
-        font.pointSize: theme.defaultFont.pointSize * PlasmaCore.Units.devicePixelRatio / 1.8
+        font.pointSize: PlasmaCore.Theme.defaultFont.pointSize * PlasmaCore.Units.devicePixelRatio / 1.8
         wrapMode: Text.WordWrap
         anchors {
             margins: _m

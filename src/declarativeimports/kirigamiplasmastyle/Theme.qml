@@ -11,88 +11,88 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.16 as Kirigami
 
 Kirigami.BasicThemeDefinition {
-    textColor: theme.textColor
-    disabledTextColor: Qt.rgba(theme.textColor.r, theme.textColor.g, theme.textColor.b, 0.6)
+    textColor: PlasmaCore.Theme.textColor
+    disabledTextColor: Qt.rgba(PlasmaCore.Theme.textColor.r, PlasmaCore.Theme.textColor.g, PlasmaCore.Theme.textColor.b, 0.6)
 
-    highlightColor: theme.highlightColor
-    highlightedTextColor: theme.highlightedTextColor
-    backgroundColor: theme.backgroundColor
-    alternateBackgroundColor: Qt.darker(theme.backgroundColor, 1.05)
+    highlightColor: PlasmaCore.Theme.highlightColor
+    highlightedTextColor: PlasmaCore.Theme.highlightedTextColor
+    backgroundColor: PlasmaCore.Theme.backgroundColor
+    alternateBackgroundColor: Qt.darker(PlasmaCore.Theme.backgroundColor, 1.05)
 
-    focusColor: theme.highlightColor
-    hoverColor: theme.highlightColor
+    focusColor: PlasmaCore.Theme.highlightColor
+    hoverColor: PlasmaCore.Theme.highlightColor
 
     //TODO: don't make this invisible
-    activeTextColor: theme.highlightColor
-    linkColor: theme.linkColor
-    visitedLinkColor: theme.visitedLinkColor
-    negativeTextColor: theme.negativeTextColor
-    neutralTextColor: theme.neutralTextColor
-    positiveTextColor: theme.positiveTextColor
+    activeTextColor: PlasmaCore.Theme.highlightColor
+    linkColor: PlasmaCore.Theme.linkColor
+    visitedLinkColor: PlasmaCore.Theme.visitedLinkColor
+    negativeTextColor: PlasmaCore.Theme.negativeTextColor
+    neutralTextColor: PlasmaCore.Theme.neutralTextColor
+    positiveTextColor: PlasmaCore.Theme.positiveTextColor
 
-    buttonTextColor: theme.buttonTextColor
-    buttonBackgroundColor: theme.buttonBackgroundColor
-    buttonAlternateBackgroundColor: Qt.darker(theme.buttonBackgroundColor, 1.05)
-    buttonHoverColor: theme.buttonHoverColor
-    buttonFocusColor: theme.buttonFocusColor
+    buttonTextColor: PlasmaCore.Theme.buttonTextColor
+    buttonBackgroundColor: PlasmaCore.Theme.buttonBackgroundColor
+    buttonAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.buttonBackgroundColor, 1.05)
+    buttonHoverColor: PlasmaCore.Theme.buttonHoverColor
+    buttonFocusColor: PlasmaCore.Theme.buttonFocusColor
 
-    viewTextColor: theme.viewTextColor
-    viewBackgroundColor: theme.viewBackgroundColor
-    viewAlternateBackgroundColor: Qt.darker(theme.viewBackgroundColor, 1.05)
-    viewHoverColor: theme.viewHoverColor
-    viewFocusColor: theme.viewFocusColor
+    viewTextColor: PlasmaCore.Theme.viewTextColor
+    viewBackgroundColor: PlasmaCore.Theme.viewBackgroundColor
+    viewAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.viewBackgroundColor, 1.05)
+    viewHoverColor: PlasmaCore.Theme.viewHoverColor
+    viewFocusColor: PlasmaCore.Theme.viewFocusColor
 
-    selectionTextColor: theme.highlightedTextColor
-    selectionBackgroundColor: theme.highlightColor
-    selectionAlternateBackgroundColor: Qt.darker(theme.highlightColor, 1.05)
-    selectionHoverColor: theme.buttonHoverColor
-    selectionFocusColor: theme.buttonFocusColor
+    selectionTextColor: PlasmaCore.Theme.highlightedTextColor
+    selectionBackgroundColor: PlasmaCore.Theme.highlightColor
+    selectionAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.highlightColor, 1.05)
+    selectionHoverColor: PlasmaCore.Theme.buttonHoverColor
+    selectionFocusColor: PlasmaCore.Theme.buttonFocusColor
 
-    tooltipTextColor: theme.complementaryTextColor
-    tooltipBackgroundColor: theme.complementaryBackgroundColor
-    tooltipAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
-    tooltipHoverColor: theme.complementaryHoverColor
-    tooltipFocusColor: theme.complementaryFocusColor
+    tooltipTextColor: PlasmaCore.Theme.complementaryTextColor
+    tooltipBackgroundColor: PlasmaCore.Theme.complementaryBackgroundColor
+    tooltipAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.complementaryBackgroundColor, 1.05)
+    tooltipHoverColor: PlasmaCore.Theme.complementaryHoverColor
+    tooltipFocusColor: PlasmaCore.Theme.complementaryFocusColor
 
-    complementaryTextColor: theme.complementaryTextColor
-    complementaryBackgroundColor: theme.complementaryBackgroundColor
-    complementaryAlternateBackgroundColor: Qt.darker(theme.complementaryBackgroundColor, 1.05)
-    complementaryHoverColor: theme.complementaryHoverColor
-    complementaryFocusColor: theme.complementaryFocusColor
+    complementaryTextColor: PlasmaCore.Theme.complementaryTextColor
+    complementaryBackgroundColor: PlasmaCore.Theme.complementaryBackgroundColor
+    complementaryAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.complementaryBackgroundColor, 1.05)
+    complementaryHoverColor: PlasmaCore.Theme.complementaryHoverColor
+    complementaryFocusColor: PlasmaCore.Theme.complementaryFocusColor
 
-    headerTextColor: theme.headerTextColor
-    headerBackgroundColor: theme.headerBackgroundColor
-    headerAlternateBackgroundColor: Qt.darker(theme.headerBackgroundColor, 1.05)
-    headerHoverColor: theme.headerHoverColor
-    headerFocusColor: theme.headerFocusColor
+    headerTextColor: PlasmaCore.Theme.headerTextColor
+    headerBackgroundColor: PlasmaCore.Theme.headerBackgroundColor
+    headerAlternateBackgroundColor: Qt.darker(PlasmaCore.Theme.headerBackgroundColor, 1.05)
+    headerHoverColor: PlasmaCore.Theme.headerHoverColor
+    headerFocusColor: PlasmaCore.Theme.headerFocusColor
 
-    defaultFont: theme.defaultFont
-    smallFont: theme.smallestFont
+    defaultFont: PlasmaCore.Theme.defaultFont
+    smallFont: PlasmaCore.Theme.smallestFont
 
     onSync: {
         object.PlasmaCore.ColorScope.inherit = false
 
-        switch (object.Kirigami.Theme.colorSet) {
-        case Kirigami.Theme.Window:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.NormalColorGroup;
+        switch (object.Kirigami.PlasmaCore.Theme.colorSet) {
+        case Kirigami.PlasmaCore.Theme.Window:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.NormalColorGroup;
             break;
-        case Kirigami.Theme.Button:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.ButtonColorGroup;
+        case Kirigami.PlasmaCore.Theme.Button:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.ButtonColorGroup;
             break;
-        case Kirigami.Theme.View:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.ViewColorGroup;
+        case Kirigami.PlasmaCore.Theme.View:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.ViewColorGroup;
             break;
-        case Kirigami.Theme.Selection:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.NormalColorGroup;
+        case Kirigami.PlasmaCore.Theme.Selection:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.NormalColorGroup;
             break;
-        case Kirigami.Theme.Tooltip:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.ComplementaryColorGroup;
+        case Kirigami.PlasmaCore.Theme.Tooltip:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.ComplementaryColorGroup;
             break;
-        case Kirigami.Theme.Complementary:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.ComplementaryColorGroup;
+        case Kirigami.PlasmaCore.Theme.Complementary:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.ComplementaryColorGroup;
             break;
-        case Kirigami.Theme.Header:
-            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.Theme.HeaderColorGroup;
+        case Kirigami.PlasmaCore.Theme.Header:
+            object.PlasmaCore.ColorScope.colorGroup = PlasmaCore.PlasmaCore.Theme.HeaderColorGroup;
             break;
         }
     }

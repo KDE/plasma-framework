@@ -38,7 +38,7 @@ PlasmaComponents.Page {
 
         PlasmaComponents.Label {
             text: "This is the smallest readable Font."
-            font: theme.smallestFont
+            font: PlasmaCore.Theme.smallestFont
 
         }
         Row {
@@ -49,7 +49,7 @@ PlasmaComponents.Page {
             Rectangle {
                 width: cheight
                 height: cheight / 2
-                color: theme.textColor
+                color: PlasmaCore.Theme.textColor
             }
         }
         Row {
@@ -71,7 +71,7 @@ PlasmaComponents.Page {
             Rectangle {
                 width: cheight
                 height: cheight / 2
-                color: theme.highlightColor
+                color: PlasmaCore.Theme.highlightColor
             }
         }
         Row {
@@ -82,7 +82,7 @@ PlasmaComponents.Page {
             Rectangle {
                 width: cheight
                 height: cheight / 2
-                color: theme.viewBackgroundColor
+                color: PlasmaCore.Theme.viewBackgroundColor
             }
         }
     }

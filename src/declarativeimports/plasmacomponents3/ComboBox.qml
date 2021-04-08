@@ -191,7 +191,7 @@ T.ComboBox {
                 margins: -1
             }
             radius: 2
-            color: theme.viewBackgroundColor
+            color: PlasmaCore.Theme.viewBackgroundColor
             border.color: Qt.rgba(PlasmaCore.ColorScope.textColor.r, PlasmaCore.ColorScope.textColor.g, PlasmaCore.ColorScope.textColor.b, 0.3)
             layer.enabled: true
 

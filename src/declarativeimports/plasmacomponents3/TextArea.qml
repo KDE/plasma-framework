@@ -25,9 +25,9 @@ T.TextArea {
 
     padding: 6
 
-    color: theme.viewTextColor
-    selectionColor: theme.highlightColor
-    selectedTextColor: theme.highlightedTextColor
+    color: PlasmaCore.Theme.viewTextColor
+    selectionColor: PlasmaCore.Theme.highlightColor
+    selectedTextColor: PlasmaCore.Theme.highlightedTextColor
     opacity: control.enabled ? 1 : 0.6
     wrapMode: Text.WordWrap
     verticalAlignment: TextEdit.AlignTop
@@ -82,7 +82,7 @@ T.TextArea {
 
         text: control.placeholderText
         font: control.font
-        color: theme.viewTextColor
+        color: PlasmaCore.Theme.viewTextColor
         opacity: 0.5
         enabled: false
         horizontalAlignment: control.horizontalAlignment

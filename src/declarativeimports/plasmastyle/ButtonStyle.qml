@@ -66,10 +66,10 @@ QtQuickControlStyle.ButtonStyle {
             text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
             textFormat: Text.StyledText
             height: undefined
-            font: control.font || theme.defaultFont
+            font: control.font || PlasmaCore.Theme.defaultFont
             visible: control.text != ""
             Layout.fillWidth: true
-            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? theme.highlightedTextColor : theme.buttonTextColor
+            color: buttonSvg.hasElement("hint-focus-highlighted-background") && control.activeFocus && !control.pressed && !control.checked ? PlasmaCore.Theme.highlightedTextColor : PlasmaCore.Theme.buttonTextColor
             horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight

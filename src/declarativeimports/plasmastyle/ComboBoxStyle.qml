@@ -22,7 +22,7 @@ QtQuickControlStyle.ComboBoxStyle {
     label: PlasmaComponents.Label {
         text: control.currentText
         elide: Text.ElideRight
-        color: theme.buttonTextColor
+        color: PlasmaCore.Theme.buttonTextColor
         verticalAlignment: Text.AlignTop
         horizontalAlignment: Text.AlignLeft
     }
@@ -37,10 +37,10 @@ QtQuickControlStyle.ComboBoxStyle {
 
         //QtQuickControls tries to be helpful and adds on the margin sizes for us
         //to compensate, we have to subtract our margins here in order to do the  max 1.6 lines high tall feature
-        implicitHeight: Math.max(theme.mSize(theme.defaultFont).height*1.6 - surfaceNormal.margins.top - surfaceNormal.margins.bottom,
-                                    theme.mSize(theme.defaultFont).height)
+        implicitHeight: Math.max(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6 - surfaceNormal.margins.top - surfaceNormal.margins.bottom,
+                                    PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height)
 
-        implicitWidth: theme.mSize(theme.defaultFont).width*12
+        implicitWidth: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width*12
 
         Private.ButtonShadow {
             anchors.fill: parent

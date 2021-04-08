@@ -29,7 +29,7 @@ T.RadioDelegate {
 
         text: control.text
         font: control.font
-        color: theme.viewTextColor
+        color: PlasmaCore.Theme.viewTextColor
         elide: Text.ElideRight
         visible: control.text
         horizontalAlignment: Text.AlignLeft

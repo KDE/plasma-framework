@@ -26,11 +26,11 @@ QtQuickControlStyle.TextAreaStyle {
        id: svs
     }
 
-    font: theme.defaultFont
+    font: PlasmaCore.Theme.defaultFont
     backgroundColor: "transparent"
-    textColor: control.backgroundVisible ? theme.viewTextColor : PlasmaCore.ColorScope.textColor
-    selectionColor: control.backgroundVisible ? theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
-    selectedTextColor: control.backgroundVisible ? theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
+    textColor: control.backgroundVisible ? PlasmaCore.Theme.viewTextColor : PlasmaCore.ColorScope.textColor
+    selectionColor: control.backgroundVisible ? PlasmaCore.Theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
+    selectedTextColor: control.backgroundVisible ? PlasmaCore.Theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
 
     // Work around Qt bug where NativeRendering breaks for non-integer scale factors
     // https://bugreports.qt.io/browse/QTBUG-70481

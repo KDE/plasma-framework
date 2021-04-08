@@ -68,7 +68,7 @@ Item {
             bottom: parent.bottom
             left: parent.left
         }
-        width: theme.mSize(theme.defaultFont).width * 5
+        width: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 5
         text: "dpi: " + dprSlider.value
     }
 

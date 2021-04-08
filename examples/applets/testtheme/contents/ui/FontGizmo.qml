@@ -21,7 +21,7 @@ Text {
     renderType: QtQuickControlsPrivate.Settings.isMobile || Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
     font.pointSize: 22
 
-    //font.family: theme.defaultFont.family
+    //font.family: PlasmaCore.Theme.defaultFont.family
     font.family: fontCheck.text
     font.weight: lightCheck.checked ? Font.Light : Font.Normal
     text: "Lesley 40:83 - (" + font.family + ")"

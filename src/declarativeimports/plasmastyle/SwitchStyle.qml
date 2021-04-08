@@ -32,7 +32,7 @@ QtQuickControlStyle.SwitchStyle {
     groove: PlasmaCore.FrameSvgItem {
         imagePath: "widgets/slider"
         prefix: "groove"
-        implicitHeight: theme.mSize(theme.defaultFont).height
+        implicitHeight: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height
         implicitWidth: height * 2
 
         PlasmaCore.FrameSvgItem {

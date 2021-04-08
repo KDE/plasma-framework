@@ -35,9 +35,9 @@ T.SpinBox {
         opacity: control.enabled ? 1 : 0.6
 
         font: control.font
-        color: theme.viewTextColor
-        selectionColor: theme.highlightColor
-        selectedTextColor: theme.highlightedTextColor
+        color: PlasmaCore.Theme.viewTextColor
+        selectionColor: PlasmaCore.Theme.highlightColor
+        selectedTextColor: PlasmaCore.Theme.highlightedTextColor
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 

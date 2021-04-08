@@ -21,9 +21,8 @@ T.Label {
     renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
 
     //font data is the system one by default
-    //TODO: from theme singleton?
     color: PlasmaCore.ColorScope.textColor
-    linkColor: theme.linkColor
+    linkColor: PlasmaCore.Theme.linkColor
 
     opacity: enabled? 1 : 0.6
 

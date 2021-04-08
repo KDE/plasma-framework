@@ -434,7 +434,7 @@ public:
      * You can use it like this in QML Items:
      * \code
      * Item {
-     *     width: theme.mSize(theme.defaultFont).height
+     *     width: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height
      *     height: width
      * }
      * \endcode

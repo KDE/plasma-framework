@@ -21,10 +21,10 @@ import "private" as Private
 QtQuickControlStyle.TextFieldStyle {
     id: root
 
-    textColor: control.enabled ? theme.viewTextColor : Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.6)
-    selectionColor: theme.highlightColor
-    selectedTextColor: theme.viewHighlightedTextColor
-    placeholderTextColor: Qt.rgba(theme.viewTextColor.r, theme.viewTextColor.g, theme.viewTextColor.b, 0.5)
+    textColor: control.enabled ? PlasmaCore.Theme.viewTextColor : Qt.rgba(PlasmaCore.Theme.viewTextColor.r, PlasmaCore.Theme.viewTextColor.g, PlasmaCore.Theme.viewTextColor.b, 0.6)
+    selectionColor: PlasmaCore.Theme.highlightColor
+    selectedTextColor: PlasmaCore.Theme.viewHighlightedTextColor
+    placeholderTextColor: Qt.rgba(PlasmaCore.Theme.viewTextColor.r, PlasmaCore.Theme.viewTextColor.g, PlasmaCore.Theme.viewTextColor.b, 0.5)
 
     /*
      * Since the password echo is a circle without vertical or horizontal lines, it won't be
@@ -49,7 +49,7 @@ QtQuickControlStyle.TextFieldStyle {
 
         implicitHeight: Math.max(metrics.height * 1.6,
                                  metrics.height + base.margins.top + base.margins.bottom)
-        implicitWidth: theme.mSize(theme.defaultFont).width * 12
+        implicitWidth: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 12
         opacity: control.enabled ? 1 : 0.6
 
         TextMetrics {

@@ -26,9 +26,9 @@ QtQuickControlStyle.SpinBoxStyle {
 
     horizontalAlignment: Qt.AlignRight
 
-    textColor: theme.viewTextColor
-    selectionColor: theme.viewFocusColor
-    selectedTextColor: theme.viewBackgroundColor
+    textColor: PlasmaCore.Theme.viewTextColor
+    selectionColor: PlasmaCore.Theme.viewFocusColor
+    selectedTextColor: PlasmaCore.Theme.viewBackgroundColor
 
 
     // Work around Qt bug where NativeRendering breaks for non-integer scale factors
@@ -67,8 +67,8 @@ QtQuickControlStyle.SpinBoxStyle {
 
 
     background: Item {
-        implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
-        implicitWidth: theme.mSize(theme.defaultFont).width * 12
+        implicitHeight: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 1.6
+        implicitWidth: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width * 12
 
         Private.TextFieldFocus {
             id: hover

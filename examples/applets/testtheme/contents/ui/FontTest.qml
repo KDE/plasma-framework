@@ -50,7 +50,7 @@ Column {
 
     FontGizmo {
         id: giz1
-        font: theme.smallestFont
+        font: PlasmaCore.Theme.smallestFont
         //font.family: "Oxygen-Sans"
     }
 

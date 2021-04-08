@@ -37,7 +37,7 @@ T.ScrollView {
         Component {
             id: backgroundComponent
             Rectangle {
-                color: theme.viewBackgroundColor
+                color: PlasmaCore.Theme.viewBackgroundColor
                 visible: false
                 anchors.fill:parent
             }

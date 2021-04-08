@@ -76,7 +76,7 @@ QtQuickControlStyle.CalendarStyle {
 
         readonly property bool addExtraMargin: control.frameVisible && styleData.selected
         readonly property color sameMonthDateTextColor: PlasmaCore.ColorScope.textColor
-        readonly property color selectedDateColor: theme.highlightColor
+        readonly property color selectedDateColor: PlasmaCore.Theme.highlightColor
         readonly property color selectedDateTextColor: PlasmaCore.ColorScope.textColor
         readonly property color differentMonthDateTextColor: Qt.rgba(PlasmaCore.ColorScope.textColor.r, PlasmaCore.ColorScope.textColor.g, PlasmaCore.ColorScope.textColor.b, 0.4)
         readonly property color invalidDateColor: Qt.rgba(PlasmaCore.ColorScope.textColor.r, PlasmaCore.ColorScope.textColor.g, PlasmaCore.ColorScope.textColor.b, 0.2)

@@ -18,9 +18,9 @@ QtQuickControlStyle.TableViewStyle {
     id: styleRoot
 
     textColor: PlasmaCore.ColorScope.textColor
-    backgroundColor: control.backgroundVisible ? theme.viewBackgroundColor : "transparent"
-    alternateBackgroundColor: Qt.darker(theme.viewBackgroundColor, 1.05)
-    highlightedTextColor: theme.viewTextColor
+    backgroundColor: control.backgroundVisible ? PlasmaCore.Theme.viewBackgroundColor : "transparent"
+    alternateBackgroundColor: Qt.darker(PlasmaCore.Theme.viewBackgroundColor, 1.05)
+    highlightedTextColor: PlasmaCore.Theme.viewTextColor
     activateItemOnSingleClick: false
 
 
@@ -39,7 +39,7 @@ QtQuickControlStyle.TableViewStyle {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: styleData.textAlignment
             anchors.leftMargin: 12
-            color: theme.buttonTextColor
+            color: PlasmaCore.Theme.buttonTextColor
             text: styleData.value
             elide: Text.ElideRight
         }
@@ -57,10 +57,10 @@ QtQuickControlStyle.TableViewStyle {
 
     rowDelegate: Rectangle {
         height: Math.round(PlasmaCore.Units.gridUnit * 1.2)
-        property color selectedColor: styleData.hasActiveFocus ? theme.viewHoverColor: theme.viewFocusColor
+        property color selectedColor: styleData.hasActiveFocus ? PlasmaCore.Theme.viewHoverColor: PlasmaCore.Theme.viewFocusColor
 
         color: styleData.selected ? selectedColor :
-                                    !styleData.alternate ? alternateBackgroundColor : theme.viewBackgroundColor
+                                    !styleData.alternate ? alternateBackgroundColor : PlasmaCore.Theme.viewBackgroundColor
     }
 
 
@@ -80,7 +80,7 @@ QtQuickControlStyle.TableViewStyle {
             anchors.verticalCenterOffset: 1
             elide: styleData.elideMode
             text: styleData.value !== undefined ? styleData.value : ""
-            color: theme.viewTextColor
+            color: PlasmaCore.Theme.viewTextColor
         }
     }
 

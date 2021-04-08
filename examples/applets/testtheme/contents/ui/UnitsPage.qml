@@ -105,7 +105,7 @@ Item {
             Rectangle {
                 width: cheight
                 height: cheight / 2
-                color: theme.highlightColor
+                color: PlasmaCore.Theme.highlightColor
             }
         }*/
     }

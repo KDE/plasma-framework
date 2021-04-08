@@ -22,7 +22,7 @@ QtQuickControlStyle.MenuStyle {
     submenuOverlap: 0
     submenuPopupDelay: 0
     __maxPopupHeight: 0
-    __leftLabelMargin: theme.mSize(theme.defaultFont).height * 2 //see RadioButtonStyle size
+    __leftLabelMargin: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 2 //see RadioButtonStyle size
 
     frame: StyleItem {
         elementType: "menu"
@@ -33,7 +33,7 @@ QtQuickControlStyle.MenuStyle {
                 fill: parent
                 margins: pixelMetric("menupanelwidth")
             }
-            color: theme.backgroundColor
+            color: PlasmaCore.Theme.backgroundColor
         }
 
         Accessible.role: Accessible.PopupMenu

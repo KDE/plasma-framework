@@ -24,7 +24,7 @@ QtQuickControlStyle.CheckBoxStyle {
             anchors.right: parent.right
             anchors.top: parent.bottom
             height: 1 * PlasmaCore.Units.devicePixelRatio
-            color: theme.highlightColor
+            color: PlasmaCore.Theme.highlightColor
             visible: control.activeFocus
         }
     }

@@ -40,7 +40,7 @@ ProgressBarStyle {
 
     background: Item {
         implicitWidth: PlasmaCore.Units.gridUnit * 14
-        implicitHeight: theme.mSize(theme.defaultFont).height * 1.6
+        implicitHeight: PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height * 1.6
         PlasmaCore.FrameSvgItem {
             anchors.centerIn: parent
             width: parent.width

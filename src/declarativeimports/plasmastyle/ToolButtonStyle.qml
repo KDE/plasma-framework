@@ -88,10 +88,10 @@ QtQuickControlStyle.ButtonStyle {
                 height: undefined
                 text: Util.stylizeEscapedMnemonics(Util.toHtmlEscaped(control.text))
                 textFormat: Text.StyledText
-                font: control.font || theme.defaultFont
+                font: control.font || PlasmaCore.Theme.defaultFont
                 visible: control.text != ""
                 Layout.fillWidth: true
-                color: (controlHovered || !flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? theme.buttonTextColor : PlasmaCore.ColorScope.textColor
+                color: (controlHovered || !flat) && buttonsurfaceChecker.usedPrefix != "toolbutton-hover" ? PlasmaCore.Theme.buttonTextColor : PlasmaCore.ColorScope.textColor
                 horizontalAlignment: icon.valid ? Text.AlignLeft : Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 elide: Text.ElideRight
@@ -135,7 +135,7 @@ QtQuickControlStyle.ButtonStyle {
         id: roundButtonComponent
         Item {
             id: roundButtonDelegate
-            implicitHeight: Math.floor(theme.mSize(theme.defaultFont).height*1.6)
+            implicitHeight: Math.floor(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6)
             implicitWidth: implicitHeight
 
             property QtObject margins: QtObject {
@@ -187,13 +187,13 @@ QtQuickControlStyle.ButtonStyle {
         id: buttonComponent
         Item {
             id: buttonSurface
-            implicitHeight: Math.floor(theme.mSize(theme.defaultFont).height*1.6)
+            implicitHeight: Math.floor(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).height*1.6)
 
             implicitWidth: {
                 if (control.text.length == 0) {
                     implicitHeight;
                 } else {
-                    Math.floor(theme.mSize(theme.defaultFont).width*12);
+                    Math.floor(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width*12);
                 }
             }
             Connections {

@@ -20,7 +20,7 @@ Item {
         width: PlasmaCore.Units.gridUnit
         height: width
         radius: width
-        color: theme.highlightColor
+        color: PlasmaCore.Theme.highlightColor
         anchors.bottom: parent.bottom
     }
     Rectangle {
@@ -30,12 +30,12 @@ Item {
             left: handle.left
             top: handle.top
         }
-        color: theme.highlightColor
+        color: PlasmaCore.Theme.highlightColor
     }
     Rectangle {
         width: PlasmaCore.Units.smallSpacing
         height: styleData.lineHeight +  PlasmaCore.Units.gridUnit/2
-        color: theme.highlightColor
+        color: PlasmaCore.Theme.highlightColor
         anchors.left: parent.left
     }
 }

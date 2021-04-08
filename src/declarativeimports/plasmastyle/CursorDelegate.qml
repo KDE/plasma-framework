@@ -24,7 +24,7 @@ Item {
         width: PlasmaCore.Units.smallSpacing
         height: parent.height + PlasmaCore.Units.gridUnit
         radius: width
-        color: theme.highlightColor
+        color: PlasmaCore.Theme.highlightColor
     }
 
     Rectangle {
@@ -33,7 +33,7 @@ Item {
         width: PlasmaCore.Units.gridUnit
         height: width
         radius: width
-        color: theme.highlightColor
+        color: PlasmaCore.Theme.highlightColor
         anchors.top: parent.bottom
     }
     MouseArea {
