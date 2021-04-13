@@ -84,9 +84,8 @@ void Calendar::setToday(const QDateTime &dateTime)
 
 void Calendar::resetToToday()
 {
-    m_displayedDate = m_today;
+    setDisplayedDate(m_today);
     updateData();
-    Q_EMIT displayedDateChanged();
 }
 
 int Calendar::types() const
