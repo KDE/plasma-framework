@@ -411,7 +411,7 @@ Item {
                         // Even if it's the default item, only make it bold when
                         // there's more than one item in the list, or else there's
                         // only one item and it's bold, which is a little bit weird
-                        font.weight: listItem.isDefault && listItem.ListView.count > 1
+                        font.weight: listItem.isDefault && listItem.ListView.view.count > 1
                                             ? Font.Bold
                                             : Font.Normal
                     }
