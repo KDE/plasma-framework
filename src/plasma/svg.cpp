@@ -710,15 +710,8 @@ QRectF SvgPrivate::findAndCacheElementRect(const QString &elementId)
     createRenderer();
 
     // This code will usually never be run because createRenderer already caches all the boundingRect in the elements in the svg
-    QRectF elementRect = renderer->elementExists(elementId) ?
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-                                                            renderer->transformForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect()
-                                                            :
-#else
-                                                            renderer->matrixForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect()
-                                                            :
-#endif
-                                                            QRectF();
+    QRectF elementRect =
+        renderer->elementExists(elementId) ? renderer->transformForElement(elementId).map(renderer->boundsOnElement(elementId)).boundingRect() : QRectF();
     naturalSize = renderer->defaultSize() * scaleFactor;
 
     qreal dx = size.width() / renderer->defaultSize().width();
