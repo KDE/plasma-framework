@@ -8,6 +8,7 @@ import QtQuick 2.6
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import "." as PC3
 
 T.GroupBox {
     id: control
@@ -21,13 +22,13 @@ T.GroupBox {
     padding: 6
     topPadding: padding + (label && label.implicitWidth > 0 ? label.implicitHeight + spacing : 0)
 
-    label: Label {
+    label: PC3.Label {
         x: control.leftPadding
         width: control.availableWidth
 
         text: control.title
         font: control.font
-        color: SystemPaletteSingleton.text(control.enabled)
+        enabled: control.enabled
         elide: Text.ElideRight
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignVCenter
