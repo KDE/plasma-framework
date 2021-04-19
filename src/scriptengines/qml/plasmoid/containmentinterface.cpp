@@ -992,6 +992,17 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     KAcceleratorManager::manage(desktopMenu);
 
+    for (auto action : desktopMenu->actions()) {
+        if (action->menu()) {
+            connect(action->menu(), &QMenu::aboutToShow, desktopMenu, [action, desktopMenu] {
+                if (action->menu()->windowHandle()) {
+                    // Need to add the transient parent otherwise Qt will create a new toplevel
+                    action->menu()->windowHandle()->setTransientParent(desktopMenu->windowHandle());
+                }
+            });
+        }
+    }
+
     desktopMenu->popup(pos);
     event->setAccepted(true);
 }
