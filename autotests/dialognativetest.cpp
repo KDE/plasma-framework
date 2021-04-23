@@ -57,6 +57,7 @@ void DialogNativeTest::cleanupTestCase()
     delete m_panel;
     delete m_panel2;
     delete m_panel3;
+    delete m_content;
 
     m_cacheDir.removeRecursively();
 }
