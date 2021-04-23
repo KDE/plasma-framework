@@ -27,6 +27,7 @@ ScrollBar 3.0 ScrollBar.qml
 ScrollView 3.0 ScrollView.qml
 Slider 3.0 Slider.qml
 SpinBox 3.0 SpinBox.qml
+SwipeView 3.0 SwipeView.qml
 SwitchDelegate 3.0 SwitchDelegate.qml
 Switch 3.0 Switch.qml
 TabBar 3.0 TabBar.qml

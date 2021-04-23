@@ -2,17 +2,21 @@
     SPDX-FileCopyrightText: 2013 Heena Mahour <heena393@gmail.com>
     SPDX-FileCopyrightText: 2013 Sebastian Kügler <sebas@kde.org>
     SPDX-FileCopyrightText: 2015 Kai Uwe Broulik <kde@privat.broulik.de>
+    SPDX-FileCopyrightText: 2021 Jan Blackquill <uhhadd@gmail.com>
+    SPDX-FileCopyrightText: 2021 Carl Schwan <carlschwan@kde.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 import QtQuick 2.0
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as Components
+import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Highlight
+import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 import org.kde.plasma.calendar 2.0
 
-MouseArea {
+PlasmaComponents3.AbstractButton {
     id: dayStyle
 
     hoverEnabled: true
@@ -21,8 +25,8 @@ MouseArea {
 
     readonly property date thisDate: new Date(yearNumber, typeof monthNumber !== "undefined" ? monthNumber - 1 : 0, typeof dayNumber !== "undefined" ? dayNumber : 1)
     readonly property bool today: {
-        var today = root.today;
-        var result = true;
+        const today = root.today;
+        let result = true;
         if (dateMatchingPrecision >= Calendar.MatchYear) {
             result = result && today.getFullYear() === thisDate.getFullYear()
         }
@@ -35,8 +39,8 @@ MouseArea {
         return result
     }
     readonly property bool selected: {
-        var current = root.currentDate;
-        var result = true;
+        const current = root.currentDate;
+        let result = true;
         if (dateMatchingPrecision >= Calendar.MatchYear) {
             result = result && current.getFullYear() === thisDate.getFullYear()
         }
@@ -49,43 +53,19 @@ MouseArea {
         return result
     }
 
-    onHeightChanged: {
-        // this is needed here as the text is first rendered, counting with the default root.cellHeight
-        // then root.cellHeight actually changes to whatever it should be, but the Label does not pick
-        // it up after that, so we need to change it explicitly after the cell size changes
-        label.font.pixelSize = Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
-    }
-
-    Rectangle {
+    PlasmaComponents2.Highlight {
         id: todayRect
         anchors.fill: parent
         opacity: {
-            if (selected && today) {
-                0.6
-            } else if (today) {
-                0.4
-            } else {
-                0
+            if (today) {
+                return 1;
+            } else if (selected) {
+                return 0.6;
+            } else if (dayStyle.hovered) {
+                return 0.3;
             }
+            return 0;
         }
-        color: PlasmaCore.Theme.textColor
-    }
-
-    Rectangle {
-        id: highlightDate
-        anchors.fill: todayRect
-        opacity: {
-            if (selected) {
-                0.6
-            } else if (dayStyle.containsMouse) {
-                0.4
-            } else {
-                0
-            }
-        }
-        visible: !today
-        color: PlasmaCore.Theme.highlightColor
-        z: todayRect.z - 1
     }
 
     Loader {
@@ -97,12 +77,8 @@ MouseArea {
         sourceComponent: eventsMarkerComponent
     }
 
-    Components.Label {
+    contentItem: PlasmaExtras.Heading {
         id: label
-        anchors {
-            fill: todayRect
-            margins: PlasmaCore.Units.smallSpacing
-        }
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         text: model.label || dayNumber
@@ -110,11 +86,5 @@ MouseArea {
         wrapMode: Text.NoWrap
         elide: Text.ElideRight
         fontSizeMode: Text.HorizontalFit
-        font.pixelSize: Math.max(PlasmaCore.Theme.smallestFont.pixelSize, Math.floor(daysCalendar.cellHeight / 3))
-        // Plasma component set point size, this code wants to set pixel size
-        // Setting both results in a warning
-        // -1 is an undocumented same as unset (see qquickvaluetypes)
-        font.pointSize: -1
-        color: today ? PlasmaCore.Theme.backgroundColor : PlasmaCore.Theme.textColor
     }
 }

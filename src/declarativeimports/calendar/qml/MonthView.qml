@@ -2,25 +2,40 @@
     SPDX-FileCopyrightText: 2013 Heena Mahour <heena393@gmail.com>
     SPDX-FileCopyrightText: 2013 Sebastian Kügler <sebas@kde.org>
     SPDX-FileCopyrightText: 2015 Kai Uwe Broulik <kde@privat.broulik.de>
+    SPDX-FileCopyrightText: 2021 Carl Schwan <carlschwan@kde.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 import QtQuick 2.0
-import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-PinchArea {
+PinchArea { // TODO KF6 switch to Item
     id: root
 
-    anchors.fill: parent
+    anchors.fill: parent // TODO KF6 don't use anchors
 
+    enabled: false
+
+    /**
+     * Currently selected month name.
+     * \property string MonthView::selectedMonth
+     */
     property alias selectedMonth: calendarBackend.monthName
+    /**
+     * Currently selected month year.
+     * \property int MonthView::selectedYear
+     */
     property alias selectedYear: calendarBackend.year
+    /**
+     * The start day of a week.
+     * \property int MonthView::firstDayOfWeek
+     * \sa Calendar::firstDayOfWeek
+     */
     property alias firstDayOfWeek: calendarBackend.firstDayOfWeek
 
     property QtObject date
@@ -39,74 +54,127 @@ PinchArea {
     property int firstDay: new Date(showDate.getFullYear(), showDate.getMonth(), 1).getDay()
     property alias today: calendarBackend.today
     property bool showWeekNumbers: false
+    property bool showCustomHeader: false
+
+    /**
+     * SwipeView currentIndex needed for binding a TabBar to the MonthView.
+     */
+    property int currentIndex: swipeView.currentIndex
 
     property alias cellHeight: mainDaysCalendar.cellHeight
     property QtObject daysModel: calendarBackend.daysModel
 
-    onPinchStarted: stack.currentItem.transformOrigin = pinch.center
-    onPinchUpdated: {
-        var item = stack.currentItem
-        if (stack.depth < 3 && pinch.scale < 1) {
-            item.transformScale = pinch.scale
-            item.opacity = pinch.scale
-        } else if (stack.depth > 1 && pinch.scale > 1) {
-            item.transformScale = pinch.scale
-            item.opacity = (2 - pinch.scale / 2)
-        }
-    }
-    onPinchFinished: {
-        var item = stack.currentItem
-        if (item.transformScale < 0.7) {
-            item.headerClicked()
-        } else if (item.transformScale > 1.4) {
-            item.activateHighlightedItem()
-        } else {
-            item.transformScale = 1
-            item.opacity = 1
-        }
-    }
-
     function isToday(date) {
-        if (date.toDateString() == new Date().toDateString()) {
-            return true;
-        }
-
-        return false;
+        return date.toDateString() === new Date().toDateString();
     }
 
     function eventDate(yearNumber,monthNumber,dayNumber) {
-        var d = new Date(yearNumber, monthNumber-1, dayNumber);
+        const d = new Date(yearNumber, monthNumber-1, dayNumber);
         return Qt.formatDate(d, "dddd dd MMM yyyy");
     }
 
+    /**
+     * Move calendar to month view showing today's date.
+     */
     function resetToToday() {
         calendarBackend.resetToToday();
         root.currentDate = root.today;
-        stack.pop(null);
+        swipeView.currentIndex = 0;
     }
 
     function updateYearOverview() {
-        var date = calendarBackend.displayedDate;
-        var day = date.getDate();
-        var year = date.getFullYear();
+        const date = calendarBackend.displayedDate;
+        const day = date.getDate();
+        const year = date.getFullYear();
 
-        for (var i = 0, j = monthModel.count; i < j; ++i) {
+        for (let i = 0, j = monthModel.count; i < j; ++i) {
             monthModel.setProperty(i, "yearNumber", year);
         }
     }
 
     function updateDecadeOverview() {
-        var date = calendarBackend.displayedDate;
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-        var year = date.getFullYear();
-        var decade = year - year % 10;
+        const date = calendarBackend.displayedDate;
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const decade = year - year % 10;
 
-        for (var i = 0, j = yearModel.count; i < j; ++i) {
-            var label = decade - 1 + i;
+        for (let i = 0, j = yearModel.count; i < j; ++i) {
+            const label = decade - 1 + i;
             yearModel.setProperty(i, "yearNumber", label);
             yearModel.setProperty(i, "label", label);
         }
+    }
+
+    /**
+     * Possible calendar views
+     */
+    enum CalendarView {
+        DayView,
+        MonthView,
+        YearView
+    }
+
+    /**
+     * Go to the next month/year/decade depending on the current
+     * calendar view displayed.
+     */
+    function nextView() {
+        if (swipeView.currentIndex === 0) {
+            calendarBackend.nextMonth();
+        } else if (swipeView.currentIndex === 1) {
+            calendarBackend.nextYear();
+        } else if (swipeView.currentIndex === 2) {
+            calendarBackend.nextDecade();
+        }
+    }
+
+    /**
+     * Go to the previous month/year/decade depending on the current
+     * calendar view displayed.
+     */
+    function previousView() {
+        if (swipeView.currentIndex === 0) {
+            calendarBackend.previousMonth();
+        } else if (swipeView.currentIndex === 1) {
+            calendarBackend.previousYear();
+        } else if (swipeView.currentIndex === 2) {
+            calendarBackend.previousDecade();
+        }
+    }
+
+    /**
+     * \return CalendarView
+     */
+    readonly property var calendarViewDisplayed: {
+        if (swipeView.currentIndex === 0) {
+            return MonthView.CalendarView.DayView;
+        } else if (swipeView.currentIndex === 1) {
+            return MonthView.CalendarView.MonthView;
+        } else if (swipeView.currentIndex === 2) {
+            return MonthView.CalendarView.YearView;
+        }
+    }
+
+    /**
+     * Show month view.
+     */
+    function showMonthView() {
+        swipeView.currentIndex = 0;
+    }
+
+    /**
+     * Show year view.
+     */
+    function showYearView() {
+        swipeView.currentIndex = 1;
+    }
+
+    /**
+     * Show month view.
+     */
+    function showDecadeView() {
+        swipeView.currentIndex = 2;
     }
 
     Calendar {
@@ -131,10 +199,11 @@ PinchArea {
         id: monthModel
 
         Component.onCompleted: {
-            for (var i = 0; i < 12; ++i) {
+            for (let i = 0; i < 12; ++i) {
                 append({
                     label: Qt.locale(Qt.locale().uiLanguages[0]).standaloneMonthName(i, Locale.LongFormat),
                     monthNumber: i + 1,
+                    yearNumber: 2050,
                     isCurrent: true
                 })
             }
@@ -146,8 +215,10 @@ PinchArea {
         id: yearModel
 
         Component.onCompleted: {
-            for (var i = 0; i < 12; ++i) {
+            for (let i = 0; i < 12; ++i) {
                 append({
+                    label: 2050, // this value will be overwritten, but it set the type of the property to int
+                    yearNumber: 2050,
                     isCurrent: (i > 0 && i < 11) // first and last year are outside the decade
                 })
             }
@@ -155,73 +226,117 @@ PinchArea {
         }
     }
 
-    // NOTE: this MouseArea is a workaround on a PinchArea quirk:
-    // When the pich is done spanning multiple child mouseareas it on't work:
-    // a MouseArea on top of all the child mouseareas that just refuses events makes the pincharea work.
-    // BUG: https://bugreports.qt.io/browse/QTBUG-76569
-    MouseArea {
-        anchors.fill: parent
-        z: 1
-        onPressed: mouse.accepted = false
-    }
+    ColumnLayout {
+        id: viewHeader
+        visible: !showCustomHeader
+        // Make sure the height of the invible item is zero, otherwise anchoring to the iten will
+        // include the height even if it is invisible.
+        height: !visible ? 0 : implicitHeight
+        width: parent.width
+        anchors {
+            top: parent.top
+        }
 
-    StackView {
-        id: stack
-
-        anchors.fill: parent
-
-        delegate: StackViewDelegate {
-            pushTransition: StackViewTransition {
-                NumberAnimation {
-                    target: exitItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "opacity"
-                    from: 1
-                    to: 0
-                }
-                NumberAnimation {
-                    target: enterItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                }
-                NumberAnimation {
-                    target: enterItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "transformScale"
-                    from: 1.5
-                    to: 1
-                }
+        RowLayout {
+            spacing: 0
+            PlasmaExtras.Heading {
+                id: heading
+                text: swipeView.currentIndex > 0 || root.selectedYear !== today.getFullYear() ? i18ndc("libplasma5", "Format: month year", "%1 %2", root.selectedMonth, root.selectedYear.toString()) : root.selectedMonth
+                level: 2
+                elide: Text.ElideRight
+                font.capitalization: Font.Capitalize
+                Layout.fillWidth: true
             }
-            popTransition: StackViewTransition {
-                NumberAnimation {
-                    target: exitItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "opacity"
-                    from: 1
-                    to: 0
+            PlasmaComponents3.ToolButton {
+                id: previousButton
+                property string tooltip: {
+                    switch(root.calendarViewDisplayed) {
+                        case MonthView.CalendarView.DayView:
+                            return i18nd("libplasma5", "Previous Month")
+                        case MonthView.CalendarView.MonthView:
+                            return i18nd("libplasma5", "Previous Year")
+                        case MonthView.CalendarView.YearView:
+                            return i18nd("libplasma5", "Previous Decade")
+                        default:
+                            return "";
+                    }
                 }
-                NumberAnimation {
-                    target: exitItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "transformScale"
-                    // so no matter how much you scaled, it would still fly towards you
-                    to: exitItem.transformScale * 1.5
+
+                icon.name: Qt.application.layoutDirection === Qt.RightToLeft ? "go-next" : "go-previous"
+                onClicked: root.previousView()
+                Accessible.name: tooltip
+                PlasmaComponents3.ToolTip { text: parent.tooltip }
+            }
+
+            PlasmaComponents3.ToolButton {
+                text: i18ndc("libplasma5", "Reset calendar to today", "Today")
+                Accessible.description: i18nd("libplasma5", "Reset calendar to today")
+                onClicked: root.resetToToday()
+            }
+
+            PlasmaComponents3.ToolButton {
+                id: nextButton
+                property string tooltip: {
+                    switch(root.calendarViewDisplayed) {
+                        case MonthView.CalendarView.DayView:
+                            return i18nd("libplasma5", "Next Month")
+                        case MonthView.CalendarView.MonthView:
+                            return i18nd("libplasma5", "Next Year")
+                        case MonthView.CalendarView.YearView:
+                            return i18nd("libplasma5", "Next Decade")
+                        default:
+                            return "";
+                    }
                 }
-                NumberAnimation {
-                    target: enterItem
-                    duration: PlasmaCore.Units.longDuration
-                    property: "opacity"
-                    from: 0
-                    to: 1
-                }
+
+                icon.name: Qt.application.layoutDirection === Qt.RightToLeft ? "go-previous" : "go-next"
+                PlasmaComponents3.ToolTip { text: parent.tooltip }
+                onClicked: root.nextView();
+                Accessible.name: tooltip
             }
         }
 
-        initialItem: DaysCalendar {
+        PlasmaComponents3.TabBar {
+            id: tabBar
+            currentIndex: swipeView.currentIndex
+            Layout.fillWidth: true
+            Layout.bottomMargin: PlasmaCore.Units.smallSpacing
+
+            PlasmaComponents3.TabButton {
+                text: i18nc("libplasma5", "Days");
+                onClicked: root.showMonthView();
+                display: PlasmaComponents3.AbstractButton.TextOnly
+            }
+            PlasmaComponents3.TabButton {
+                text: i18nd("libplasma5", "Months");
+                onClicked: root.showYearView();
+                display: PlasmaComponents3.AbstractButton.TextOnly
+            }
+            PlasmaComponents3.TabButton {
+                text: i18nd("libplasma5", "Years");
+                onClicked: root.showDecadeView();
+                display: PlasmaComponents3.AbstractButton.TextOnly
+            }
+        }
+    }
+
+    PlasmaComponents3.SwipeView {
+        id: swipeView
+        anchors {
+            top: viewHeader.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        clip: true
+
+        onCurrentIndexChanged: if (currentIndex > 1) {
+            updateDecadeOverview();
+        }
+
+        // MonthView
+        DaysCalendar {
             id: mainDaysCalendar
-            title: calendarBackend.displayedDate.getFullYear() == new Date().getFullYear() ? root.selectedMonth :  root.selectedMonth + ", " + root.selectedYear
 
             columns: calendarBackend.days
             rows: calendarBackend.weeks
@@ -233,75 +348,43 @@ PinchArea {
 
             dateMatchingPrecision: Calendar.MatchYearMonthAndDay
 
-            previousLabel: i18nd("libplasma5", "Previous Month")
-            nextLabel: i18nd("libplasma5", "Next Month")
-
-            onPrevious: calendarBackend.previousMonth()
-            onNext: calendarBackend.nextMonth()
-            onHeaderClicked:  {
-                stack.push(yearOverview)
-            }
             onActivated: {
-                var rowNumber = Math.floor(index / columns);
+                const rowNumber = Math.floor(index / columns);
                 week = 1 + calendarBackend.weeksModel[rowNumber];
                 root.currentDate = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
             }
         }
-    }
 
-    Component {
-        id: yearOverview
-
+        // YearView
         DaysCalendar {
-            title: calendarBackend.displayedDate.getFullYear()
             columns: 3
             rows: 4
 
             dateMatchingPrecision: Calendar.MatchYearAndMonth
 
             gridModel: monthModel
-
-            previousLabel: i18nd("libplasma5", "Previous Year")
-            nextLabel: i18nd("libplasma5", "Next Year")
-
-            onPrevious: calendarBackend.previousYear()
-            onNext: calendarBackend.nextYear()
-            onHeaderClicked: {
-                updateDecadeOverview();
-                stack.push(decadeOverview)
-            }
             onActivated: {
-                calendarBackend.goToMonth(date.monthNumber)
-                stack.pop()
+                calendarBackend.goToMonth(date.monthNumber);
+                swipeView.currentIndex = 0;
             }
         }
-    }
 
-    Component {
-        id: decadeOverview
-
+        // DecadeView
         DaysCalendar {
             readonly property int decade: {
-                var year = calendarBackend.displayedDate.getFullYear()
+                const year = calendarBackend.displayedDate.getFullYear()
                 return year - year % 10
             }
 
-            title: decade + " – " + (decade + 9)
             columns: 3
             rows: 4
 
             dateMatchingPrecision: Calendar.MatchYear
 
             gridModel: yearModel
-
-            previousLabel: i18nd("libplasma5", "Previous Decade")
-            nextLabel: i18nd("libplasma5", "Next Decade")
-
-            onPrevious: calendarBackend.previousDecade()
-            onNext: calendarBackend.nextDecade()
             onActivated: {
-                calendarBackend.goToYear(date.yearNumber)
-                stack.pop()
+                calendarBackend.goToYear(date.yearNumber);
+                swipeView.currentIndex = 1;
             }
         }
     }
