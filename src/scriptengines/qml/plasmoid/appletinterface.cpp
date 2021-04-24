@@ -625,7 +625,12 @@ bool AppletInterface::hideOnWindowDeactivate() const
 
 void AppletInterface::setConstraintHints(Plasma::Types::ConstraintHints hints)
 {
+    if (m_constraintHints == hints) {
+        return;
+    }
+
     m_constraintHints = hints;
+    Q_EMIT constraintHintsChanged();
 }
 
 Plasma::Types::ConstraintHints AppletInterface::constraintHints() const
