@@ -10,7 +10,6 @@
 #include <QStandardPaths>
 
 #include <KPluginLoader>
-#include <KPluginTrader>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
