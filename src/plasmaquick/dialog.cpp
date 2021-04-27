@@ -222,8 +222,8 @@ void DialogPrivate::updateTheme()
 {
     if (backgroundHints == Dialog::NoBackground) {
         frameSvgItem->setImagePath(QString());
-        KWindowEffects::enableBlurBehind(q->winId(), false);
-        KWindowEffects::enableBackgroundContrast(q->winId(), false);
+        KWindowEffects::enableBlurBehind(q, false);
+        KWindowEffects::enableBackgroundContrast(q, false);
         q->setMask(QRegion());
         DialogShadows::self()->removeWindow(q);
     } else {
@@ -237,9 +237,9 @@ void DialogPrivate::updateTheme()
             frameSvgItem->setImagePath(prefix + QStringLiteral("dialogs/background"));
         }
 
-        KWindowEffects::enableBlurBehind(q->winId(), theme.blurBehindEnabled(), frameSvgItem->mask());
+        KWindowEffects::enableBlurBehind(q, theme.blurBehindEnabled(), frameSvgItem->mask());
 
-        KWindowEffects::enableBackgroundContrast(q->winId(),
+        KWindowEffects::enableBackgroundContrast(q,
                                                  theme.backgroundContrastEnabled(),
                                                  theme.backgroundContrast(),
                                                  theme.backgroundIntensity(),
@@ -326,7 +326,7 @@ void DialogPrivate::updateVisibility(bool visible)
             break;
         }
 
-        KWindowEffects::slideWindow(q->winId(), slideLocation, -1);
+        KWindowEffects::slideWindow(q, slideLocation, -1);
     }
 
     if (visible) {
