@@ -47,7 +47,6 @@ target_link_libraries(KF5PlasmaQuick
         KF5::WindowSystem
     PRIVATE
         Qt5::Svg
-        KF5::KIOWidgets
         KF5::I18n
         KF5::IconThemes
         KF5::Service

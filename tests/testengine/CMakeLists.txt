@@ -7,4 +7,4 @@ kcoreaddons_desktop_to_json(
 
 
 target_link_libraries(plasma_engine_testengine
-                      KF5::KIOWidgets KF5::Plasma)
+                      Qt5::Widgets KF5::Plasma)
