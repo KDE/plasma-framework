@@ -303,7 +303,7 @@ PinchArea { // TODO KF6 switch to Item
             Layout.bottomMargin: PlasmaCore.Units.smallSpacing
 
             PlasmaComponents3.TabButton {
-                text: i18nc("libplasma5", "Days");
+                text: i18nd("libplasma5", "Days");
                 onClicked: root.showMonthView();
                 display: PlasmaComponents3.AbstractButton.TextOnly
             }
