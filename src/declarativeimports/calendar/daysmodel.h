@@ -8,14 +8,14 @@
 #ifndef DAYSMODEL_H
 #define DAYSMODEL_H
 
-#include <QAbstractListModel>
+#include <QAbstractItemModel>
 
 #include "daydata.h"
 #include <CalendarEvents/CalendarEventsPlugin>
 
 class EventPluginsManager;
 
-class DaysModel : public QAbstractListModel
+class DaysModel : public QAbstractItemModel
 {
     Q_OBJECT
 
@@ -31,12 +31,19 @@ public:
         dayNumber,
         monthNumber,
         yearNumber,
+        Events,
+        EventColor,
+        EventCount,
     };
 
     explicit DaysModel(QObject *parent = nullptr);
     virtual ~DaysModel();
     void setSourceData(QList<DayData> *data);
     int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+
     QVariant data(const QModelIndex &index, int role) const override;
 
     Q_INVOKABLE void setPluginsManager(QObject *manager);

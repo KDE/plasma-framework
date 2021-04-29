@@ -199,7 +199,7 @@ int Calendar::year() const
     return m_displayedDate.year();
 }
 
-QAbstractListModel *Calendar::daysModel() const
+QAbstractItemModel *Calendar::daysModel() const
 {
     return m_daysModel;
 }

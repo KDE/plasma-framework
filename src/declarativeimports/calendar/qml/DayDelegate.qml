@@ -13,6 +13,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Highlight
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import QtQml.Models 2.15
 
 import org.kde.plasma.calendar 2.0
 
@@ -20,6 +21,7 @@ PlasmaComponents3.AbstractButton {
     id: dayStyle
 
     hoverEnabled: true
+    property var dayModel: null
 
     signal activated
 
@@ -68,13 +70,23 @@ PlasmaComponents3.AbstractButton {
         }
     }
 
-    Loader {
-        active: model.containsMajorEventItems !== undefined && model.containsMajorEventItems
+    Row {
+        spacing: PlasmaCore.Units.smallSpacing
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        height: parent.height / 3
-        width: height
-        sourceComponent: eventsMarkerComponent
+        anchors.bottomMargin: PlasmaCore.Units.smallSpacing
+        anchors.horizontalCenter: parent.horizontalCenter
+        Repeater {
+            model: DelegateModel {
+                model: dayStyle.dayModel
+                rootIndex: modelIndex(index)
+                delegate: Rectangle {
+                    width: PlasmaCore.Units.smallSpacing * 1.5
+                    height: width
+                    radius: width / 2
+                    color: eventColor || PlasmaCore.Theme.highlightColor
+                }
+            }
+        }
     }
 
     contentItem: PlasmaExtras.Heading {

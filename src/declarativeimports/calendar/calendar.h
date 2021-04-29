@@ -8,13 +8,14 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include <QAbstractListModel>
 #include <QDate>
 #include <QJsonArray>
 #include <QObject>
 
 #include "daydata.h"
 #include "daysmodel.h"
+
+class QAbstractItemModel;
 
 class Calendar : public QObject
 {
@@ -110,7 +111,7 @@ class Calendar : public QObject
      * metadata about the current day. The exact metadata can be found in "daysmodel.cpp"
      * where the exact names usable in QML are being set.
      */
-    Q_PROPERTY(QAbstractListModel *daysModel READ daysModel CONSTANT)
+    Q_PROPERTY(QAbstractItemModel *daysModel READ daysModel CONSTANT)
 
 public:
     enum Type {
@@ -164,7 +165,7 @@ public:
     int year() const;
 
     // Models
-    QAbstractListModel *daysModel() const;
+    QAbstractItemModel *daysModel() const;
     QJsonArray weeksModel() const;
 
     // QML invokables

@@ -48,16 +48,6 @@ Item {
         imagePath: "widgets/calendar"
     }
 
-    Component {
-        id: eventsMarkerComponent
-
-        PlasmaCore.SvgItem {
-            id: eventsMarker
-            svg: calendarSvg
-            elementId: "event"
-        }
-    }
-
     Column {
         id: weeksColumn
         visible: showWeekNumbers
@@ -129,6 +119,7 @@ Item {
                 id: delegate
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
+                dayModel: repeater.model
 
                 onClicked: daysCalendar.activated(index, model, delegate)
 
