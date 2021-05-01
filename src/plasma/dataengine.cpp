@@ -287,10 +287,10 @@ void DataEngine::removeSource(const QString &source)
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
         s->d->store();
+        Q_EMIT sourceRemoved(source);
         d->sources.erase(it);
         s->disconnect(this);
         s->deleteLater();
-        Q_EMIT sourceRemoved(source);
     }
 }
 
@@ -301,10 +301,10 @@ void DataEngine::removeAllSources()
         it.next();
         Plasma::DataContainer *s = it.value();
         const QString source = it.key();
+        Q_EMIT sourceRemoved(source);
         it.remove();
         s->disconnect(this);
         s->deleteLater();
-        Q_EMIT sourceRemoved(source);
     }
 }
 
