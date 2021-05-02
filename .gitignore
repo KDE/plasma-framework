@@ -25,3 +25,4 @@ cmake-build-debug*
 /.clang-format
 /compile_commands.json
 .clangd
+.cache
