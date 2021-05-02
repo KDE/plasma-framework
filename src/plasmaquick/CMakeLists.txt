@@ -77,7 +77,7 @@ if(HAVE_X11)
 endif()
 
 set_target_properties(KF5PlasmaQuick PROPERTIES
-                                     VERSION ${PLASMA_VERSION_STRING}
+                                     VERSION ${PLASMA_VERSION}
                                      SOVERSION ${PLASMA_SOVERSION}
                                      EXPORT_NAME PlasmaQuick
                       )

@@ -128,7 +128,7 @@ target_include_directories(KF5Plasma INTERFACE
 )
 
 set_target_properties(KF5Plasma PROPERTIES
-                                VERSION ${PLASMA_VERSION_STRING}
+                                VERSION ${PLASMA_VERSION}
                                 SOVERSION ${PLASMA_SOVERSION}
                                 EXPORT_NAME Plasma
                       )
