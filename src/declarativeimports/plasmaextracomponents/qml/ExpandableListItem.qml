@@ -283,10 +283,32 @@ Item {
     property bool isDefault: false
 
     /*
+     * hasExpandableContent: bool (read-only)
+     * Whether or not this expandable list item is actually expandable. True if
+     * this item has either a custom view or else at least one enabled action.
+     * Otherwise false.
+     */
+    readonly property bool hasExpandableContent: {
+        // If there is custom content, assume it is expandable (otherwise what
+        // would be the point?)
+        if (customExpandedViewContent != actionsListComponent) {
+            return true;
+        }
+        // Filter out disabled items which won't appear, when determining if there
+        // are any valid actions
+        if (contextualActionsModel) {
+            return Array.from(contextualActionsModel).filter(item => item.enabled).length > 0;
+        }
+        return false;
+    }
+    /*
      * expand()
      * Show the expanded view, growing the list item to its taller size.
      */
     function expand() {
+        if (!listItem.hasExpandableContent) {
+            return;
+        }
         expandedView.active = true
         listItem.itemExpanded(listItem)
     }
@@ -296,6 +318,9 @@ Item {
      * Hide the expanded view and collapse the list item to its shorter size.
      */
     function collapse() {
+        if (!listItem.hasExpandableContent) {
+            return;
+        }
         expandedView.active = false
         listItem.itemCollapsed(listItem)
     }
@@ -305,6 +330,9 @@ Item {
      * Expand or collapse the list item depending on its current state.
      */
     function toggleExpanded() {
+        if (!listItem.hasExpandableContent) {
+            return;
+        }
         expandedView.active ? listItem.collapse() : listItem.expand()
     }
 
@@ -318,7 +346,7 @@ Item {
 
     // Handle left clicks and taps
     TapHandler {
-        enabled: listItem.isEnabled
+        enabled: listItem.isEnabled && listItem.hasExpandableContent
 
         acceptedButtons: Qt.LeftButton
 
@@ -457,6 +485,7 @@ Item {
 
                 // Expand/collapse button
                 PlasmaComponents3.ToolButton {
+                    visible: listItem.hasExpandableContent
                     icon.name: expandedView.active? "collapse" : "expand"
 
                     onClicked: listItem.toggleExpanded()
