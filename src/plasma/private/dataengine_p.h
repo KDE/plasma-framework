@@ -85,7 +85,9 @@ public:
     bool valid;
     DataEngineScript *script;
     QString serviceName;
-    Package *package;
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
+    Package *package = nullptr;
+#endif
     QString waitingSourceRequest;
 };
 

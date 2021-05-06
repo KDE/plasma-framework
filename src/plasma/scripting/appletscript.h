@@ -135,12 +135,16 @@ protected:
      */
     QString mainScript() const override;
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
+
     /**
      * @return the Package associated with this plasmoid which can
      *         be used to request resources, such as images and
      *         interface files.
      */
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
     Package package() const override;
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 81)
     /**

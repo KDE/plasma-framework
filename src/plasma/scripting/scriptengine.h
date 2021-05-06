@@ -52,12 +52,16 @@ protected:
      */
     virtual QString mainScript() const;
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     /**
      * @return the Package associated with this plasmoid which can
      *         be used to request resources, such as images and
      *         interface files.
+     * @deprecated Since 5.83 Use kpackage API instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
     virtual Package package() const;
+#endif
 
 private:
     ScriptEnginePrivate *const d;

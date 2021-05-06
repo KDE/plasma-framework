@@ -25,8 +25,11 @@
 #include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <packageurlinterceptor.h>
-#include <private/package_p.h>
 #include <qloggingcategory.h>
+
+#if PLASMAQUICK_BUILD_DEPRECATED_SINCE(5, 36)
+#include <private/package_p.h>
+#endif
 
 namespace PlasmaQuick
 {
@@ -715,6 +718,7 @@ void AppletQuickItem::init()
     }
 }
 
+#if PLASMAQUICK_BUILD_DEPRECATED_SINCE(5, 36)
 Plasma::Package AppletQuickItem::appletPackage() const
 {
     return Plasma::Package(d->appletPackage);
@@ -734,6 +738,7 @@ void AppletQuickItem::setCoronaPackage(const Plasma::Package &package)
 {
     d->coronaPackage = package.kPackage();
 }
+#endif
 
 int AppletQuickItem::switchWidth() const
 {

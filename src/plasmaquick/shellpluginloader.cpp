@@ -6,6 +6,7 @@
 
 #include "shellpluginloader.h"
 
+#if PLASMAQUICK_BUILD_DEPRECATED_SINCE(5, 25)
 #include <KPackage/PackageLoader>
 #include <QDebug>
 
@@ -32,3 +33,4 @@ void ShellPluginLoader::init()
 {
     Plasma::PluginLoader::setPluginLoader(new ShellPluginLoader);
 }
+#endif

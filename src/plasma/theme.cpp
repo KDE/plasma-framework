@@ -325,6 +325,7 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QStrin
     }
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 78)
 bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
 {
     if (!d->useCache()) {
@@ -375,6 +376,7 @@ void Theme::releaseRectsCache(const QString &image)
     Q_UNUSED(image);
     // No op: the internal svg cache always writes the invalid elements in the proper place
 }
+#endif
 
 void Theme::setCacheLimit(int kbytes)
 {
@@ -383,10 +385,12 @@ void Theme::setCacheLimit(int kbytes)
     d->pixmapCache = nullptr;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
 KPluginInfo Theme::pluginInfo() const
 {
     return KPluginInfo(d->pluginMetaData);
 }
+#endif
 
 QFont Theme::defaultFont() const
 {

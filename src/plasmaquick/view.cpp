@@ -7,6 +7,7 @@
 #include "view.h"
 #include "configview.h"
 
+#if PLASMAQUICK_BUILD_DEPRECATED_SINCE(5, 12)
 #include <QDebug>
 #include <QQmlContext>
 #include <QQmlEngine>
@@ -261,5 +262,5 @@ void View::showConfigurationInterface(Plasma::Applet *applet)
 }
 
 }
-
 #include "moc_view.cpp"
+#endif

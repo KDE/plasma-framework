@@ -326,10 +326,15 @@ public:
     static KPluginInfo::List listContainmentsOfType(const QString &type, const QString &category = QString(), const QString &parentApp = QString());
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
      * @return a list of all known types of containments on this system
      */
+    PLASMA_DEPRECATED_VERSION(5,
+                              83,
+                              "Use PluginLoader::listContainmentsMetaDataOfType and aggregate the values of the X-Plasma-ContainmentType property instead")
     static QStringList listContainmentTypes();
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
@@ -470,6 +475,7 @@ protected:
      **/
     virtual ContainmentActions *internalLoadContainmentActions(Containment *parent, const QString &containmentActionsName, const QVariantList &args);
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     /**
      * A re-implementable method that allows subclasses to override
      * the default behaviour of loadPackage. If the service requested is not recognized,
@@ -486,7 +492,7 @@ protected:
      **/
     PLASMA_DEPRECATED_VERSION(5, 30, "Use KPackage API")
     virtual Package internalLoadPackage(const QString &name, const QString &specialization);
-
+#endif
     /**
      * A re-implementable method that allows subclasses to provide additional applets
      * for listAppletInfo. If the application has no applets to give to the application,

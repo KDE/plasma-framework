@@ -25,8 +25,10 @@
 #include "debug_p.h"
 #include "package.h"
 #include "private/applet_p.h"
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 #include "private/package_p.h"
 #include "private/packagestructure_p.h"
+#endif
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
 #include <plasma/version.h>
@@ -46,7 +48,9 @@ public:
     static QSet<QString> knownCategories();
 
     static QSet<QString> s_customCategories;
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     QHash<QString, QPointer<PackageStructure>> structures;
+#endif
     bool isDefaultLoader;
 
     static QString s_dataEnginePluginDir;
@@ -122,9 +126,11 @@ PluginLoader::PluginLoader()
 
 PluginLoader::~PluginLoader()
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     for (const auto &wp : qAsConst(d->structures)) {
         delete wp;
     }
+#endif
     delete d;
 }
 
@@ -240,7 +246,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
         return nullptr;
     }
 
-    return new DataEngine(KPluginInfo(p.metadata().fileName()), nullptr);
+    return new DataEngine(p.metadata(), nullptr);
 }
 
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
@@ -404,6 +410,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     return actions;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 Package PluginLoader::loadPackage(const QString &packageFormat, const QString &specialization)
 {
     if (!d->isDefaultLoader) {
@@ -463,6 +470,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 
     return Package();
 }
+#endif
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
 {
@@ -530,6 +538,7 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
 {
     const auto plugins = listAppletMetaData(category, parentApp);
@@ -555,6 +564,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
     return KPluginInfo::fromMetaData(plugins.toVector());
 #endif
 }
+#endif
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
 {
@@ -563,11 +573,12 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString
     };
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
-
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
 {
     return KPluginInfo::fromMetaData(listAppletMetaDataForMimeType(mimeType).toVector());
 }
+#endif
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 {
@@ -602,10 +613,12 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     return filtered;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 36)
 KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
 {
     return KPluginInfo::fromMetaData(listAppletMetaDataForUrl(url).toVector());
 }
+#endif
 
 QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)
 {
@@ -725,6 +738,7 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 }
 #endif
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 QStringList PluginLoader::listContainmentTypes()
 {
     const KPluginInfo::List containmentInfos = listContainments();
@@ -739,6 +753,7 @@ QStringList PluginLoader::listContainmentTypes()
 
     return types.values();
 }
+#endif
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
 KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
@@ -839,12 +854,14 @@ Service *PluginLoader::internalLoadService(const QString &name, const QVariantLi
     return nullptr;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 Package PluginLoader::internalLoadPackage(const QString &name, const QString &specialization)
 {
     Q_UNUSED(name);
     Q_UNUSED(specialization);
     return Package();
 }
+#endif
 
 KPluginInfo::List PluginLoader::internalAppletInfo(const QString &category) const
 {

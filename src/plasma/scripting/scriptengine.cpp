@@ -51,10 +51,12 @@ bool ScriptEngine::init()
     return true;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 Package ScriptEngine::package() const
 {
     return Package();
 }
+#endif
 
 QString ScriptEngine::mainScript() const
 {

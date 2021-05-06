@@ -212,12 +212,15 @@ public:
      */
     bool isEmpty() const;
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     /**
      * Accessor for the associated Package object if any.
      *
      * @return the Package object, or 0 if none
      **/
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
     Package package() const;
+#endif
 
 Q_SIGNALS:
     /**

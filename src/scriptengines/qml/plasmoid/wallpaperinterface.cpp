@@ -114,7 +114,7 @@ void WallpaperInterface::syncWallpaperPackage()
     }
 
     m_actions->clear();
-    m_pkg = Plasma::PluginLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper")).kPackage();
+    m_pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
     m_pkg.setPath(m_wallpaperPlugin);
     if (!m_pkg.isValid()) {
         qWarning() << "Error loading the wallpaper, no valid package loaded";

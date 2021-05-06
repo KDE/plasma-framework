@@ -44,10 +44,6 @@ set(Plasma_LIB_SRCS
     private/storage.cpp
     private/storagethread.cpp
 
-#packages
-    package.cpp
-    packagestructure.cpp
-
 #graphics
     framesvg.cpp
     svg.cpp
@@ -59,6 +55,13 @@ set(Plasma_LIB_SRCS
     scripting/dataenginescript.cpp
     scripting/scriptengine.cpp
 )
+
+if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
+   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
+    #packages
+    set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} package.cpp packagestructure.cpp)
+endif()
+
 
 if(HAVE_X11)
     set(Plasma_LIB_SRCS ${Plasma_LIB_SRCS} private/effectwatcher.cpp)
@@ -83,10 +86,9 @@ ecm_generate_export_header(KF5Plasma
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
+    EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
     DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46 5.67 5.77 5.78 5.81 5.83
 )
-# TODO: add support for EXCLUDE_DEPRECATED_BEFORE_AND_AT to all Plasma libs
-# needs fixing of undeprecated API being still implemented using own deprecated API
 
 if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} XCB::XCB)

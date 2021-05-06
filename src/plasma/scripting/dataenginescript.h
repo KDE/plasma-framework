@@ -84,6 +84,7 @@ public:
     virtual Service *serviceForSource(const QString &source);
 
 protected:
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     /**
      * @return absolute path to the main script file for this plasmoid
      */
@@ -94,7 +95,9 @@ protected:
      *         be used to request resources, such as images and
      *         interface files.
      */
+    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
     Package package() const override;
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**

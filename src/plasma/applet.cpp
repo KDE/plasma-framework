@@ -39,7 +39,9 @@
 #include "debug_p.h"
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 #include "private/package_p.h"
+#endif
 
 #include <cmath>
 #include <limits>
@@ -64,10 +66,12 @@ Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
     d->setupPackage();
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
 Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
     : Applet(info.toMetaData(), parent, appletId)
 {
 }
+#endif
 
 Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
     : QObject(parent)
@@ -314,12 +318,14 @@ KConfigLoader *Applet::configScheme() const
     return d->configLoader;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 6)
 Package Applet::package() const
 {
     Package p;
     p.d->internalPackage = new KPackage::Package(d->package);
     return p;
 }
+#endif
 
 KPackage::Package Applet::kPackage() const
 {
@@ -454,10 +460,12 @@ void Applet::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
     }
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
 KPluginInfo Applet::pluginInfo() const
 {
     return KPluginInfo(d->appletDescription);
 }
+#endif
 
 KPluginMetaData Applet::pluginMetaData() const
 {
@@ -845,6 +853,7 @@ bool Applet::hasValidAssociatedApplication() const
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 19)
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 {
     const KPluginMetaData md = appletMetadataForDirectory(path);
@@ -860,6 +869,7 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 
     return nullptr;
 }
+#endif
 
 void Applet::timerEvent(QTimerEvent *event)
 {

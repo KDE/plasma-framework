@@ -47,10 +47,12 @@ ContainmentActions::~ContainmentActions()
     delete d;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
 KPluginInfo ContainmentActions::pluginInfo() const
 {
     return KPluginInfo(d->containmentActionsDescription);
 }
+#endif
 
 KPluginMetaData ContainmentActions::metadata() const
 {

@@ -29,7 +29,9 @@ class PLASMA_EXPORT Corona : public QObject
     Q_OBJECT
     Q_PROPERTY(bool isStartupCompleted READ isStartupCompleted NOTIFY startupCompleted)
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
     Q_PROPERTY(Package package READ package NOTIFY packageChanged)
+#endif
     Q_PROPERTY(KPackage::Package kPackage READ kPackage NOTIFY kPackageChanged)
 
 public:

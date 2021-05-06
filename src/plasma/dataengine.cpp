@@ -32,10 +32,12 @@
 
 namespace Plasma
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
 DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
     : DataEngine(plugin.toMetaData(), parent)
 {
 }
+#endif
 
 DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
     : QObject(parent)
@@ -87,10 +89,12 @@ Service *DataEngine::serviceForSource(const QString &source)
     return new NullService(source, this);
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
 KPluginInfo DataEngine::pluginInfo() const
 {
     return KPluginInfo(d->dataEngineDescription);
 }
+#endif
 
 KPluginMetaData DataEngine::metadata() const
 {
@@ -382,11 +386,12 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
         }
     }
 }
-
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 Package DataEngine::package() const
 {
     return d->package ? *d->package : Package();
 }
+#endif
 
 void DataEngine::setStorageEnabled(const QString &source, bool store)
 {
@@ -406,7 +411,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
     , minPollingInterval(-1)
     , valid(false)
     , script(nullptr)
-    , package(nullptr)
 {
     updateTimer.start();
 
@@ -416,6 +420,8 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
     }
 
     if (dataEngineDescription.isValid()) {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
+
         QString api = dataEngineDescription.value(QStringLiteral("X-Plasma-API"));
 
         if (!api.isEmpty()) {
@@ -438,6 +444,7 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
                 package = nullptr;
             }
         }
+#endif
     }
 }
 
@@ -445,8 +452,10 @@ DataEnginePrivate::~DataEnginePrivate()
 {
     delete script;
     script = nullptr;
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     delete package;
     package = nullptr;
+#endif
 }
 
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)
@@ -593,10 +602,6 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
 // package exists and that we have a script engine
 void DataEnginePrivate::setupScriptSupport()
 {
-    if (!package) {
-        return;
-    }
-
     /*
     #ifndef NDEBUG
     // qCDebug(LOG_PLASMA) << "sletting up script support, package is in" << package->path()

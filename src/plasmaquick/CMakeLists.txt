@@ -16,7 +16,6 @@ set(plasmaquick_LIB_SRC
     configview.cpp
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
-    private/packages.cpp
     ../declarativeimports/core/framesvgitem.cpp
     ../declarativeimports/core/units.cpp
 )
@@ -89,10 +88,9 @@ ecm_generate_export_header(KF5PlasmaQuick
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
+    EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
     DEPRECATION_VERSIONS 5.12 5.25 5.36
 )
-# TODO: add support for EXCLUDE_DEPRECATED_BEFORE_AND_AT to all Plasma libs
-# needs fixing of undeprecated API being still implemented using own deprecated API
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h

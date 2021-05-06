@@ -32,7 +32,9 @@
 #include "debug_p.h"
 #include "pluginloader.h"
 #include "private/containment_p.h"
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 #include "private/package_p.h"
+#endif
 #include "scripting/appletscript.h"
 #include "scripting/scriptengine.h"
 #include "timetracker.h"
