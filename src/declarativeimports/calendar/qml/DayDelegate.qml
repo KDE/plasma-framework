@@ -70,20 +70,23 @@ PlasmaComponents3.AbstractButton {
         }
     }
 
-    Row {
-        spacing: PlasmaCore.Units.smallSpacing
+    Loader {
+        active: model.eventCount !== undefined && model.eventCount > 0
         anchors.bottom: parent.bottom
         anchors.bottomMargin: PlasmaCore.Units.smallSpacing
         anchors.horizontalCenter: parent.horizontalCenter
-        Repeater {
-            model: DelegateModel {
-                model: dayStyle.dayModel
-                rootIndex: modelIndex(index)
-                delegate: Rectangle {
-                    width: PlasmaCore.Units.smallSpacing * 1.5
-                    height: width
-                    radius: width / 2
-                    color: eventColor || PlasmaCore.Theme.highlightColor
+        sourceComponent: Row {
+            spacing: PlasmaCore.Units.smallSpacing
+            Repeater {
+                model: DelegateModel {
+                    model: dayStyle.dayModel
+                    rootIndex: modelIndex(index)
+                    delegate: Rectangle {
+                        width: PlasmaCore.Units.smallSpacing * 1.5
+                        height: width
+                        radius: width / 2
+                        color: eventColor || PlasmaCore.Theme.highlightColor
+                    }
                 }
             }
         }
