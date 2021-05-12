@@ -40,9 +40,6 @@ QtObject {
      * * large
      * * huge
      * * enormous
-     *
-     * Not devicePixelRation-adjusted::
-     * * desktop
      */
     property QtObject iconSizes: QtObject {
         property int sizeForLabels: fontMetrics.roundedIconSize(fontMetrics.height)

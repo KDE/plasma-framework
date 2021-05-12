@@ -35,18 +35,15 @@ QtObject {
      * * large
      * * huge
      * * enormous
-     *
-     * Not devicePixelRation-adjusted::
-     * * desktop
      */
     property QtObject iconSizes: QtObject {
         property int sizeForLabels: fontMetrics.roundedIconSize(fontMetrics.height)
-        property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio) * (Settings.isMobile ? 1.5 : 1))
-        property int enormous: Math.floor(128 * devicePixelRatio * (Settings.isMobile ? 1.5 : 1))
+        property int small: Math.floor(fontMetrics.roundedIconSize((Settings.isMobile ? 22 : 16) * devicePixelRatio))
+        property int smallMedium: Math.floor(fontMetrics.roundedIconSize((Settings.isMobile ? 32 : 22) * devicePixelRatio))
+        property int medium: Math.floor(fontMetrics.roundedIconSize((Settings.isMobile ? 48 : 32) * devicePixelRatio))
+        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio))
+        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio))
+        property int enormous: Math.floor(128 * devicePixelRatio)
     }
 
     /**
