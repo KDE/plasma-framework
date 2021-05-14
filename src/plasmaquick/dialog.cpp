@@ -1197,9 +1197,7 @@ void Dialog::showEvent(QShowEvent *event)
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
-        auto ee = static_cast<QExposeEvent *>(event);
-
-        if (!KWindowSystem::isPlatformWayland() || ee->region().isNull()) {
+        if (!KWindowSystem::isPlatformWayland() || !isExposed()) {
             return QQuickWindow::event(event);
         }
 
