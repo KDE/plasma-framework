@@ -61,6 +61,8 @@ T.TabButton {
         Label {
             id: label
             Layout.fillWidth: true
+            // allow it to shrink below implicitWidth, but not exceed implicitWidth
+            Layout.maximumWidth: Math.ceil(implicitWidth)
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
