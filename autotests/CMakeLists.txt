@@ -49,7 +49,7 @@ if(HAVE_X11)
 endif()
 
 set(coronatest_srcs coronatest.cpp)
-qt5_add_resources(coronatest_srcs coronatestresources.qrc)
+qt_add_resources(coronatest_srcs coronatestresources.qrc)
 ecm_add_test(${coronatest_srcs} TEST_NAME coronatest LINK_LIBRARIES Qt5::Gui Qt5::Widgets Qt5::Test KF5::Plasma KF5::CoreAddons KF5::XmlGui)
 
 set(sortfiltermodeltest_srcs

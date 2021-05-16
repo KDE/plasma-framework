@@ -24,7 +24,7 @@ set(corebindings_SRCS
     windowthumbnail.cpp
     )
 
-qt5_add_resources(corebindings_SRCS shaders.qrc)
+qt_add_resources(corebindings_SRCS shaders.qrc)
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
