@@ -1,9 +1,9 @@
-set(customDataContainers_SRCS
+add_library(plasma_dataengine_example_customDataContainers MODULE)
+
+target_sources(plasma_dataengine_example_customDataContainers PRIVATE
     customDataContainersEngine.cpp
     httpContainer.cpp
 )
-
-add_library(plasma_dataengine_example_customDataContainers MODULE ${customDataContainers_SRCS})
 
 kcoreaddons_desktop_to_json(plasma_dataengine_example_customDataContainers plasma-dataengine-example-customDataContainers.desktop)
 

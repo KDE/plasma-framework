@@ -1,8 +1,4 @@
-set(simpleEngine_SRCS
-    simpleEngine.cpp
-)
-
-add_library(plasma_dataengine_example_simpleEngine MODULE ${simpleEngine_SRCS})
+add_library(plasma_dataengine_example_simpleEngine MODULE simpleEngine.cpp)
 
 kcoreaddons_desktop_to_json(plasma_dataengine_example_simpleEngine plasma-dataengine-example-simpleEngine.desktop)
 

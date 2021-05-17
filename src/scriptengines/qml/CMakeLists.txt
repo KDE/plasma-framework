@@ -6,15 +6,16 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
 endif()
 
 #DECLARATIVE APPLET
-set(declarative_appletscript_SRCS
+add_library(plasma_appletscript_declarative MODULE)
+
+target_sources(plasma_appletscript_declarative PRIVATE
     plasmoid/declarativeappletscript.cpp
     plasmoid/dropmenu.cpp
     plasmoid/appletinterface.cpp
     plasmoid/containmentinterface.cpp
     plasmoid/wallpaperinterface.cpp
-    )
+)
 
-add_library(plasma_appletscript_declarative MODULE ${declarative_appletscript_SRCS} )
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
 kcoreaddons_desktop_to_json(

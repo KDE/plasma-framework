@@ -1,12 +1,11 @@
-set(exampleplasmashell-app_SRCS
+add_executable(exampleplasmashell)
+
+target_sources(exampleplasmashell PRIVATE
     customcorona.cpp
     main.cpp
 )
 
-add_executable(exampleplasmashell ${exampleplasmashell-app_SRCS})
-
-target_link_libraries(
-    exampleplasmashell
+target_link_libraries(exampleplasmashell
     Qt5::Widgets
     Qt5::Quick
     Qt5::Qml

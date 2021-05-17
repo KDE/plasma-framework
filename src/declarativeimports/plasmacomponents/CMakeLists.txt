@@ -1,6 +1,8 @@
 #find_package(KF5Declarative REQUIRED NO_MODULE)
 
-set(plasmacomponents_SRCS
+add_library(plasmacomponentsplugin SHARED)
+
+target_sources(plasmacomponentsplugin PRIVATE
     #fullscreensheet.cpp
     #fullscreenwindow.cpp
     plasmacomponentsplugin.cpp
@@ -10,7 +12,6 @@ set(plasmacomponents_SRCS
     qmenuitem.cpp
     )
 
-add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
         Qt5::Core
         Qt5::Quick

@@ -4,14 +4,13 @@
 #                        TYPE REQUIRED
 #                        PURPOSE "Provides the ability to access activities from QML."
 #                       )
+add_library(plasmaextracomponentsplugin SHARED)
 
-set(plasmaextracomponents_SRCS
+target_sources(plasmaextracomponentsplugin PRIVATE
     appbackgroundprovider.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
-    )
-
-add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
+)
 
 target_link_libraries(plasmaextracomponentsplugin
         Qt5::Quick

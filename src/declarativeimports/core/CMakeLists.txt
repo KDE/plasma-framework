@@ -6,7 +6,9 @@ endif()
 
 configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
 
-set(corebindings_SRCS
+add_library(corebindingsplugin SHARED)
+
+target_sources(corebindingsplugin PRIVATE
     corebindingsplugin.cpp
     colorscope.cpp
     datamodel.cpp
@@ -22,11 +24,10 @@ set(corebindings_SRCS
     iconitem.cpp
     units.cpp
     windowthumbnail.cpp
-    )
 
-qt_add_resources(corebindings_SRCS shaders.qrc)
+    shaders.qrc
+)
 
-add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
         Qt5::Quick
         Qt5::Qml

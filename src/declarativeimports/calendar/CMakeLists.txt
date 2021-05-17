@@ -1,4 +1,6 @@
-set(calendar_SRCS
+add_library(calendarplugin SHARED)
+
+target_sources(calendarplugin PRIVATE
     calendarplugin.cpp
     #incidencemodifier.cpp
     calendar.cpp
@@ -10,8 +12,6 @@ set(calendar_SRCS
     eventdatadecorator.cpp
     eventpluginsmanager.cpp
 )
-
-add_library(calendarplugin SHARED ${calendar_SRCS})
 
 target_link_libraries(calendarplugin
     Qt5::Core
