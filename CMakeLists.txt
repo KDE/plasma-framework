@@ -102,12 +102,10 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        TYPE OPTIONAL
                       )
 
-find_package(EGL)
-set_package_properties(EGL PROPERTIES
-                       PURPOSE "Support for Window Thumbnail on EGL platform"
-                       TYPE OPTIONAL
-                      )
-set(HAVE_EGL ${EGL_FOUND})
+add_feature_info(EGL ${OpenGL_EGL_FOUND}
+                 "A platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES and OpenVG.")
+# OpenGL_EGL_FOUND is defined by FindOpenGL
+set(HAVE_EGL ${OpenGL_EGL_FOUND})
 
 if(OPENGL_FOUND AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
     set(HAVE_GLX ${HAVE_X11})
