@@ -34,12 +34,15 @@ T.TabButton {
         onActivated: control.clicked()
     }
 
+    icon.width: PlasmaCore.Units.iconSizes.smallMedium
+    icon.height: PlasmaCore.Units.iconSizes.smallMedium
+
     contentItem: GridLayout {
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
         PlasmaCore.IconItem {
             id: icon
 
-            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignRight
+            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon || !label.visible ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignRight
 
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -50,8 +53,8 @@ T.TabButton {
             Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : Number.POSITIVE_INFINITY
             Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : Number.POSITIVE_INFINITY
 
-            implicitWidth: control.icon.width > 0 ? control.icon.width : PlasmaCore.Units.iconSizes.smallMedium
-            implicitHeight: control.icon.height > 0 ? control.icon.height : PlasmaCore.Units.iconSizes.smallMedium
+            implicitWidth: control.icon.width
+            implicitHeight: control.icon.height
 
             colorGroup: control.PlasmaCore.ColorScope.colorGroup
             visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
@@ -63,12 +66,13 @@ T.TabButton {
             Layout.fillWidth: true
             // allow it to shrink below implicitWidth, but not exceed implicitWidth
             Layout.maximumWidth: Math.ceil(implicitWidth)
+            Layout.alignment: horizontalAlignment | verticalAlignment
             visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
             text: control.Kirigami.MnemonicData.richTextLabel
             font: control.font
             color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
             opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            horizontalAlignment: control.display != T.AbstractButton.TextBesideIcon || icon.source.length === 0 ? Text.AlignHCenter : Text.AlignLeft
+            horizontalAlignment: control.display != T.AbstractButton.TextBesideIcon || !icon.visible ? Text.AlignHCenter : Text.AlignLeft
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight
         }
