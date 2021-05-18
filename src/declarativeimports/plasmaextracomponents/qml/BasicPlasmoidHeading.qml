@@ -112,7 +112,7 @@ PlasmoidHeading {
                     action: modelData
                 }
                 onObjectAdded: {
-                    if (object !== plasmoid.action("configure")) {
+                    if (object.action !== plasmoid.action("configure")) {
                         configMenu.addMenuItem(object);
                     }
                 }
