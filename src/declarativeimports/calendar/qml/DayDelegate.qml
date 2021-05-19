@@ -14,6 +14,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Highlight
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import QtQml.Models 2.15
+import org.kde.kirigami 2.12 as Kirigami
 
 import org.kde.plasma.calendar 2.0
 
@@ -85,7 +86,7 @@ PlasmaComponents3.AbstractButton {
                         width: PlasmaCore.Units.smallSpacing * 1.5
                         height: width
                         radius: width / 2
-                        color: eventColor || PlasmaCore.Theme.highlightColor
+                        color: model.eventColor ? Kirigami.ColorUtils.linearInterpolation(model.eventColor, PlasmaCore.Theme.textColor, 0.2) : PlasmaCore.Theme.highlightColor
                     }
                 }
             }
