@@ -792,6 +792,8 @@ void ContainmentInterface::loadWallpaper()
         m_wallpaperInterface->deleteLater();
         m_wallpaperInterface = nullptr;
     }
+
+    Q_EMIT wallpaperInterfaceChanged();
 }
 
 QString ContainmentInterface::activity() const
