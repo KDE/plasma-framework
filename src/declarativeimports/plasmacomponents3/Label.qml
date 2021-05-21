@@ -12,9 +12,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.Label {
     id: control
 
-    height: Math.ceil(implicitHeight)
-    width: Math.ceil(implicitWidth)
-
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     activeFocusOnTab: false
