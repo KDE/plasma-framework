@@ -36,7 +36,6 @@ ecm_setup_version(PROJECT
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
                   SOVERSION 5)
 
-add_definitions(-DQT_NO_FOREACH)
 ################# now find all used packages #################
 
 set (REQUIRED_QT_VERSION 5.15.0)
