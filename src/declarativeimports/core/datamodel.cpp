@@ -21,6 +21,7 @@ SortFilterModel::SortFilterModel(QObject *parent)
     connect(this, &QAbstractItemModel::rowsInserted, this, &SortFilterModel::countChanged);
     connect(this, &QAbstractItemModel::rowsRemoved, this, &SortFilterModel::countChanged);
     connect(this, &QAbstractItemModel::modelReset, this, &SortFilterModel::countChanged);
+    connect(this, &QAbstractItemModel::layoutChanged, this, &SortFilterModel::countChanged);
     connect(this, &SortFilterModel::countChanged, this, &SortFilterModel::syncRoleNames);
 }
 
@@ -230,6 +231,7 @@ DataModel::DataModel(QObject *parent)
     setObjectName(QStringLiteral("DataModel"));
     connect(this, &QAbstractItemModel::rowsInserted, this, &DataModel::countChanged);
     connect(this, &QAbstractItemModel::rowsRemoved, this, &DataModel::countChanged);
+    connect(this, &QAbstractItemModel::layoutChanged, this, &DataModel::countChanged);
     connect(this, &QAbstractItemModel::modelReset, this, &DataModel::countChanged);
 }
 
