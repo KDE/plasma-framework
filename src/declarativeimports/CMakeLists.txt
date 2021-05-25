@@ -9,9 +9,6 @@ install(DIRECTORY plasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Control
 
 install(DIRECTORY kirigamiplasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/Plasma)
 
-install(DIRECTORY kirigamiplasmadesktopstyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/org.kde.desktop.plasma)
-
-
 set(QQC2_VERSION "2.${Qt5QuickControls2_VERSION_MINOR}")
 
 
