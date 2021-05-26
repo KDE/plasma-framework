@@ -150,8 +150,7 @@ QtObject {
     /**
      * metrics used by the default font
      */
-    property variant fontMetrics: TextMetrics {
-        text: "M"
+    property var fontMetrics: FontMetrics {
         function roundedIconSize(size) {
             if (size < 16) {
                 return size;
