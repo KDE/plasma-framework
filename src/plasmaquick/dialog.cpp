@@ -790,7 +790,6 @@ Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : nullptr)
     , d(new DialogPrivate(this))
 {
-    setClearBeforeRendering(true);
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
