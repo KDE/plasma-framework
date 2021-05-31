@@ -107,8 +107,9 @@ add_feature_info(EGL ${OpenGL_EGL_FOUND}
 # OpenGL_EGL_FOUND is defined by FindOpenGL
 set(HAVE_EGL ${OpenGL_EGL_FOUND})
 
-if(OPENGL_FOUND AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
-    set(HAVE_GLX ${HAVE_X11})
+add_feature_info(GLX ${OpenGL_GLX_FOUND} "OpenGL GLX libraries.")
+if(OpenGL_GLX_FOUND AND ${HAVE_X11} AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
+    set(HAVE_GLX ${OpenGL_GLX_FOUND})
 else()
     set(HAVE_GLX 0)
 endif()
