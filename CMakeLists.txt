@@ -104,17 +104,18 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        TYPE OPTIONAL
                       )
 
+add_feature_info(GLX ${OpenGL_GLX_FOUND} "OpenGL GLX libraries.")
+if(OpenGL_GLX_FOUND AND X11_FOUND AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
+    set(HAVE_GLX 1)
+else()
+    set(HAVE_GLX 0)
+endif()
+
 add_feature_info(EGL ${OpenGL_EGL_FOUND}
                  "A platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES and OpenVG.")
 # OpenGL_EGL_FOUND is defined by FindOpenGL
 set(HAVE_EGL ${OpenGL_EGL_FOUND})
 
-add_feature_info(GLX ${OpenGL_GLX_FOUND} "OpenGL GLX libraries.")
-if(OpenGL_GLX_FOUND AND ${HAVE_X11} AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
-    set(HAVE_GLX ${OpenGL_GLX_FOUND})
-else()
-    set(HAVE_GLX 0)
-endif()
 
 #########################################################################
 
