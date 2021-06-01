@@ -94,6 +94,8 @@ if(X11_FOUND AND XCB_XCB_FOUND)
   find_package(Qt5 REQUIRED NO_MODULE COMPONENTS X11Extras)
   #X11_Xrender discovery is done by FindX11
   #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
+else()
+  set(HAVE_X11 0)
 endif()
 
 find_package(OpenGL)
