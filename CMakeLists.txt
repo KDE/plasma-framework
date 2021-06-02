@@ -105,7 +105,7 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                       )
 
 add_feature_info(GLX ${OpenGL_GLX_FOUND} "OpenGL GLX libraries.")
-if(OpenGL_GLX_FOUND AND X11_FOUND AND (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GL"))
+if(OpenGL_GLX_FOUND AND X11_FOUND AND (Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL "GL"))
     set(HAVE_GLX 1)
 else()
     set(HAVE_GLX 0)
