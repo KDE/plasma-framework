@@ -155,8 +155,7 @@ private:
  */
 /* clang-format off */
 #define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();) \
-    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
 /* clang-format on */
 
 #endif // PLASMA_CONTAINMENTACTIONS_H

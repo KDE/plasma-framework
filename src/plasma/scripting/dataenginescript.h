@@ -146,8 +146,7 @@ private:
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON(libname, classname, jsonFile)                                                                         \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)                                                                                \
-    K_EXPORT_PLUGIN_VERSION(PLASMA_VERSION)
+    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
 } // Plasma namespace
 
 #endif
