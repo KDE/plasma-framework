@@ -188,9 +188,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
-        if (!isPluginVersionCompatible(loader)) {
-            return nullptr;
-        }
         KPluginFactory *factory = loader.factory();
         if (factory) {
             QVariantList allArgs;
@@ -334,9 +331,6 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
 
     if (!plugins.isEmpty()) {
         KPluginLoader loader(plugins.first().fileName());
-        if (!isPluginVersionCompatible(loader)) {
-            return nullptr;
-        }
         KPluginFactory *factory = loader.factory();
         if (factory) {
             service = factory->create<Plasma::Service>(nullptr, args);
@@ -391,10 +385,6 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
 
     KService::Ptr offer = offers.first();
     KPluginLoader plugin(*offer);
-
-    if (!isPluginVersionCompatible(plugin)) {
-        return nullptr;
-    }
 
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
@@ -919,29 +909,6 @@ KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
 KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
 {
     return standardInternalInfo(QStringLiteral("services"));
-}
-
-bool PluginLoader::isPluginVersionCompatible(KPluginLoader &loader)
-{
-    const quint32 version = loader.pluginVersion();
-    if (version == quint32(-1)) {
-        // unversioned, just let it through
-        qCWarning(LOG_PLASMA) << loader.fileName() << "unversioned plugin detected, may result in instability";
-        return true;
-    }
-
-    // we require PLASMA_VERSION_MAJOR and PLASMA_VERSION_MINOR
-    const quint32 minVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, 0, 0);
-    const quint32 maxVersion = PLASMA_MAKE_VERSION(PLASMA_VERSION_MAJOR, PLASMA_VERSION_MINOR, 60);
-
-    if (version < minVersion || version > maxVersion) {
-        qCWarning(LOG_PLASMA) << loader.fileName() << ": this plugin is compiled against incompatible Plasma version" << version
-                              << "This build is compatible with" << PLASMA_VERSION_MAJOR << ".0.0 (" << minVersion << ") to" << PLASMA_VERSION_STRING << "("
-                              << maxVersion << ")";
-        return false;
-    }
-
-    return true;
 }
 
 QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QString &name, const QStringList &dirs)

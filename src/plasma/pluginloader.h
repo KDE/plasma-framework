@@ -577,8 +577,6 @@ protected:
     virtual ~PluginLoader();
 
 private:
-    bool isPluginVersionCompatible(KPluginLoader &loader);
-
     PluginLoaderPrivate *const d;
 };
 
