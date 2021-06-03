@@ -15,6 +15,8 @@
 #include <QDir>
 #include <QMetaObject>
 
+constexpr int maxEventDisplayed = 5;
+
 DaysModel::DaysModel(QObject *parent)
     : QAbstractItemModel(parent)
     , m_pluginsManager(nullptr)
@@ -49,7 +51,7 @@ int DaysModel::rowCount(const QModelIndex &parent) const
     } else {
         // event count
         const auto &eventDatas = data(parent, Roles::Events).value<QList<CalendarEvents::EventData>>();
-        Q_ASSERT(eventDatas.count() <= 5);
+        Q_ASSERT(eventDatas.count() <= maxEventDisplayed);
         return eventDatas.count();
     }
 }
@@ -142,25 +144,19 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
         const DayData &currentData = m_data->at(i);
         const QDate currentDate(currentData.yearNumber, currentData.monthNumber, currentData.dayNumber);
         if (!data.values(currentDate).isEmpty()) {
-            // Make sure we don't display more than 5 events
+            // Make sure we don't display more than maxEventDisplayed events.
             const int currentCount = m_eventsData.values(currentDate).count();
-
-            if (currentCount > 5) {
+            if (currentCount >= maxEventDisplayed) {
                 break;
             }
 
-            const int additionalCount = data.values(currentDate).count();
-
-            int nextIndex = data.values(currentDate).count() - 1;
-            if (currentCount + additionalCount > 5) {
-                nextIndex = 5 - currentCount - 1;
-            }
+            const int addedEventCount = std::min(currentCount + data.values(currentDate).count(), maxEventDisplayed) - currentCount;
 
             // Add event
-            beginInsertRows(index(i, 0), 0, nextIndex);
-            int stopCounter = 0;
+            beginInsertRows(index(i, 0), 0, addedEventCount - 1);
+            int stopCounter = currentCount;
             for (const auto &dataDay : data.values(currentDate)) {
-                if (stopCounter > nextIndex) {
+                if (stopCounter >= maxEventDisplayed) {
                     break;
                 }
                 stopCounter++;
