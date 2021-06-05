@@ -100,16 +100,23 @@ void DiscardEglPixmapRunnable::run()
 WindowTextureNode::WindowTextureNode()
     : QSGSimpleTextureNode()
 {
+    setFiltering(QSGTexture::Linear);
 }
 
 WindowTextureNode::~WindowTextureNode()
 {
 }
 
+QSGTexture *WindowTextureNode::texture() const
+{
+    return QSGSimpleTextureNode::texture();
+}
+
 void WindowTextureNode::reset(QSGTexture *texture)
 {
     setTexture(texture);
     m_texture.reset(texture);
+    Q_EMIT textureChanged();
 }
 
 WindowThumbnail::WindowThumbnail(QQuickItem *parent)
@@ -290,11 +297,14 @@ bool WindowThumbnail::thumbnailAvailable() const
 QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData)
-    auto *node = static_cast<WindowTextureNode *>(oldNode);
-    if (!node) {
-        node = new WindowTextureNode();
-        node->setFiltering(QSGTexture::Linear);
+
+    Q_ASSERT(oldNode == nullptr || oldNode == m_node);
+    Q_UNUSED(oldNode)
+
+    if (!m_node) {
+        m_node = new WindowTextureNode();
     }
+    auto node = m_node;
     if (!m_xcb || m_winId == 0 || (window() && window()->winId() == m_winId)) {
         iconToTexture(node);
     } else {
@@ -906,6 +916,25 @@ void WindowThumbnail::sceneVisibilityChanged(bool visible)
         stopRedirecting();
         releaseResources();
     }
+}
+
+bool WindowThumbnail::isTextureProvider() const
+{
+    return true;
+}
+
+QSGTextureProvider *WindowThumbnail::textureProvider() const
+{
+    // When Item::layer::enabled == true, QQuickItem will be a texture
+    // provider. In this case we should prefer to return the layer rather
+    // than our texture
+    if (QQuickItem::isTextureProvider())
+        return QQuickItem::textureProvider();
+
+    if (!m_node)
+        m_node = new WindowTextureNode;
+    // will be cleaned up by QQuickWindow when updatePaintNode takes ownership
+    return m_node.data();
 }
 
 } // namespace
