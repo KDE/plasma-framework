@@ -15,6 +15,7 @@
 #include <QPointer>
 #include <QQuickItem>
 #include <QSGSimpleTextureNode>
+#include <QSGTextureProvider>
 #include <QWindow>
 // xcb
 #if HAVE_XCB_COMPOSITE
@@ -82,6 +83,9 @@ public:
     qreal paintedHeight() const;
     bool thumbnailAvailable() const;
 
+    bool isTextureProvider() const override;
+    QSGTextureProvider *textureProvider() const override;
+
 Q_SIGNALS:
     void winIdChanged();
     void paintedSizeChanged();
@@ -109,6 +113,7 @@ private:
     bool m_redirecting;
     bool m_damaged;
     int m_depth;
+    mutable QPointer<WindowTextureNode> m_node;
 #if HAVE_XCB_COMPOSITE
     xcb_pixmap_t pixmapForWindow();
     bool m_openGLFunctionsResolved;
@@ -145,12 +150,14 @@ private:
  * @brief SimpleTextureNode which cleans up the texture
  *
  */
-class WindowTextureNode : public QSGSimpleTextureNode
+class WindowTextureNode : public QSGTextureProvider, public QSGSimpleTextureNode
 {
+    Q_OBJECT
 public:
     WindowTextureNode();
     virtual ~WindowTextureNode();
     void reset(QSGTexture *texture);
+    QSGTexture *texture() const override;
 
 private:
     QScopedPointer<QSGTexture> m_texture;
