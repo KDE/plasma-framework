@@ -1,6 +1,8 @@
-
-find_package(ECM 1.6.0 CONFIG REQUIRED)
-include(${ECM_KDE_MODULE_DIR}/KDEInstallDirs.cmake)
+# To not mess up the ECM_FIND_VERSION we only include ECM if the required variables are not set
+if (NOT KDE_INSTALL_KSERVICES5DIR)
+    find_package(ECM 5.83.0 CONFIG REQUIRED)
+    include(${ECM_KDE_MODULE_DIR}/KDEInstallDirs.cmake)
+endif()
 
 set(PLASMA_RELATIVE_DATA_INSTALL_DIR "plasma")
 set(PLASMA_DATA_INSTALL_DIR "${KDE_INSTALL_DATADIR}/${PLASMA_RELATIVE_DATA_INSTALL_DIR}")
