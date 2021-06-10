@@ -61,7 +61,7 @@ T.ToolTip {
             anchors.fill: parent
             // Because the transparent one doesn't match the appearance of all
             // other ones
-            imagePath: "opaque/widgets/tooltip"
+            imagePath: "solid/widgets/tooltip"
             colorGroup: PlasmaCore.Theme.ToolTipColorGroup
             PlasmaCore.ColorScope.inherit: false
         }
