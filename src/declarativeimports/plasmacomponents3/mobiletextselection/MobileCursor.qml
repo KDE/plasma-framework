@@ -26,7 +26,7 @@ Item {
             top: parent.top
             bottom: parent.bottom
         }
-        color: Qt.tint(theme.highlightColor, Qt.rgba(1,1,1,0.4))
+        color: Qt.tint(PlasmaCore.Theme.highlightColor, Qt.rgba(1,1,1,0.4))
         radius: width
         Rectangle {
             width: Math.round(PlasmaCore.Units.gridUnit/1.5)
@@ -37,7 +37,7 @@ Item {
                 verticalCenter: parent.bottom
             }
             radius: width
-            color: Qt.tint(theme.highlightColor, Qt.rgba(1,1,1,0.4))
+            color: Qt.tint(PlasmaCore.Theme.highlightColor, Qt.rgba(1,1,1,0.4))
         }
         MouseArea {
             anchors {
