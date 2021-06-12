@@ -29,7 +29,7 @@ T.ScrollView {
         }
     }
 
- 
+
     data: [
         Kirigami.WheelHandler {
             target: controlRoot.contentItem
@@ -54,7 +54,7 @@ T.ScrollView {
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
         height: controlRoot.availableHeight
-        active: controlRoot.ScrollBar.horizontal || controlRoot.ScrollBar.horizontal.active
+        active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
     }
 
     PlasmaComponents3.ScrollBar.horizontal: PlasmaComponents3.ScrollBar {
@@ -62,6 +62,6 @@ T.ScrollView {
         x: controlRoot.leftPadding
         y: controlRoot.height - height
         width: controlRoot.availableWidth
-        active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
+        active: controlRoot.ScrollBar.horizontal || controlRoot.ScrollBar.horizontal.active
     }
 }
