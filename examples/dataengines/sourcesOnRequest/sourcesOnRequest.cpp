@@ -90,7 +90,7 @@ bool SourcesOnRequestEngine::updateSourceEvent(const QString &source)
 }
 
 // export the plugin; use the plugin name and the class name
-K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(org.kde.examples.sourcesOnRequest, SourcesOnRequestEngine, "plasma-dataengine-example-sourcesOnRequest.json")
+K_PLUGIN_CLASS_WITH_JSON(SourcesOnRequestEngine, "plasma-dataengine-example-sourcesOnRequest.json")
 
 // include the moc file so the build system makes it for us
 #include "sourcesOnRequest.moc"
