@@ -64,6 +64,6 @@ void ContextTest::save(KConfigGroup &config)
     config.writeEntry("test-text", m_text);
 }
 
-K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(containmentactions_test, ContextTest, "plasma-containmentactions-test.desktop")
+K_PLUGIN_CLASS_WITH_JSON(ContextTest, "plasma-containmentactions-test.desktop")
 
 #include "test.moc"

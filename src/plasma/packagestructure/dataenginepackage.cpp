@@ -40,6 +40,6 @@ public:
     }
 };
 
-K_EXPORT_KPACKAGE_PACKAGE_WITH_JSON(DataEnginePackage, "dataengine-packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(DataEnginePackage, "dataengine-packagestructure.json")
 
 #include "dataenginepackage.moc"
