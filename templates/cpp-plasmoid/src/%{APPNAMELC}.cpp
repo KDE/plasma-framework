@@ -21,6 +21,6 @@ QString %{APPNAME}::nativeText() const
     return m_nativeText;
 }
 
-K_EXPORT_PLASMA_APPLET_WITH_JSON(%{APPNAMELC}, %{APPNAME}, "metadata.json")
+K_PLUGIN_CLASS_WITH_JSON(%{APPNAME}, "metadata.json")
 
 #include "%{APPNAMELC}.moc"
