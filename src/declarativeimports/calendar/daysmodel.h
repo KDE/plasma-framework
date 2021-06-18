@@ -9,11 +9,11 @@
 #define DAYSMODEL_H
 
 #include <QAbstractItemModel>
+#include <QPointer>
 
 #include "daydata.h"
+#include "eventpluginsmanager.h"
 #include <CalendarEvents/CalendarEventsPlugin>
-
-class EventPluginsManager;
 
 class DaysModel : public QAbstractItemModel
 {
@@ -68,7 +68,7 @@ private:
     bool hasMajorEventAtDate(const QDate &date) const;
     bool hasMinorEventAtDate(const QDate &date) const;
 
-    EventPluginsManager *m_pluginsManager = nullptr;
+    QPointer<EventPluginsManager> m_pluginsManager;
     QList<DayData> *m_data = nullptr;
     QList<QObject *> m_qmlData;
     QDate m_lastRequestedAgendaDate;
