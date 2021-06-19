@@ -217,15 +217,18 @@ void SvgRectsCache::loadImageFromCache(const QString &path, uint lastModified)
         return;
     }
 
-    auto list = imageGroup.readEntry("Invalidelements", QList<unsigned int>());
-    m_invalidElements[path] = QSet<unsigned int>(list.begin(), list.end());
+    auto &elements = m_invalidElements[path];
+    if (elements.isEmpty()) {
+        auto list = imageGroup.readEntry("Invalidelements", QList<unsigned int>());
+        m_invalidElements[path] = QSet<unsigned int>(list.begin(), list.end());
 
-    for (const auto &key : imageGroup.keyList()) {
-        bool ok = false;
-        uint keyUInt = key.toUInt(&ok);
-        if (ok) {
-            const QRectF rect = imageGroup.readEntry(key, QRectF());
-            m_localRectCache.insert(keyUInt, rect);
+        for (const auto &key : imageGroup.keyList()) {
+            bool ok = false;
+            uint keyUInt = key.toUInt(&ok);
+            if (ok) {
+                const QRectF rect = imageGroup.readEntry(key, QRectF());
+                m_localRectCache.insert(keyUInt, rect);
+            }
         }
     }
 }
