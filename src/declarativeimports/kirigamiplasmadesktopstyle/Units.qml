@@ -46,12 +46,12 @@ QtObject {
      */
     property QtObject iconSizes: QtObject {
         property int sizeForLabels: fontMetrics.roundedIconSize(fontMetrics.height)
-        property int small: Math.floor(fontMetrics.roundedIconSize(16 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
-        property int smallMedium: Math.floor(fontMetrics.roundedIconSize(22 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
-        property int medium: Math.floor(fontMetrics.roundedIconSize(32 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
-        property int large: Math.floor(fontMetrics.roundedIconSize(48 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
-        property int huge: Math.floor(fontMetrics.roundedIconSize(64 * devicePixelRatio) * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
-        property int enormous: Math.floor(128 * devicePixelRatio * (QtQuickControlsPrivate.Settings.isMobile ? 1.5 : 1))
+        property int small: fontMetrics.roundedIconSize(16 * devicePixelRatio)
+        property int smallMedium: fontMetrics.roundedIconSize(22 * devicePixelRatio)
+        property int medium: fontMetrics.roundedIconSize(32 * devicePixelRatio)
+        property int large: fontMetrics.roundedIconSize(48 * devicePixelRatio)
+        property int huge: fontMetrics.roundedIconSize(64 * devicePixelRatio)
+        property int enormous: 128 * devicePixelRatio
     }
 
     /**
