@@ -50,6 +50,7 @@
         ],
         "Id": "Plasma/ContainmentActions",
         "Name": "Containment Actions",
+        "Name[ar]": "إجراءات الاحتواء",
         "Name[az]": "Plasma konteyneri əməlləri",
         "Name[ca@valencia]": "Accions del contenidor",
         "Name[ca]": "Accions del contenidor",
