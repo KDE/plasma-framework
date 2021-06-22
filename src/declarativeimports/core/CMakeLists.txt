@@ -58,7 +58,9 @@ if(HAVE_X11)
 endif()
 
 if(HAVE_EGL)
-    target_link_libraries(corebindingsplugin OpenGL::EGL)
+    target_link_libraries(corebindingsplugin ${EGL_TARGET})
+else()
+
 endif()
 
 if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")

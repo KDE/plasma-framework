@@ -104,6 +104,12 @@ set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        TYPE OPTIONAL
                       )
 
+find_package(EGL)
+set_package_properties(EGL PROPERTIES
+                       PURPOSE "Fallback when OpenGL not available because of missing GLVND"
+                       TYPE OPTIONAL
+                      )
+
 add_feature_info(GLX ${OpenGL_GLX_FOUND} "OpenGL GLX libraries.")
 if(OpenGL_GLX_FOUND AND X11_FOUND AND (Qt5Gui_OPENGL_IMPLEMENTATION STREQUAL "GL"))
     set(HAVE_GLX 1)
@@ -114,7 +120,14 @@ endif()
 add_feature_info(EGL ${OpenGL_EGL_FOUND}
                  "A platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES and OpenVG.")
 # OpenGL_EGL_FOUND is defined by FindOpenGL
-set(HAVE_EGL ${OpenGL_EGL_FOUND})
+if(TARGET OpenGL::EGL)
+    set(HAVE_EGL ${OpenGL_EGL_FOUND})
+    set(EGL_TARGET OpenGL::EGL)
+elseif(${EGL_FOUND})
+    set(HAVE_EGL ${EGL_FOUND})
+    set(EGL_TARGET EGL::EGL)
+    message(STATUS "Switch to EGL compatibility target EGL::EGL because OpenGL::EGL is not available")
+endif()
 
 
 #########################################################################
