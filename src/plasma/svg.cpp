@@ -693,6 +693,7 @@ QRectF SvgPrivate::elementRect(const QString &elementId)
 
     QRectF rect;
     const CacheId cacheId = SvgPrivate::cacheId(elementId);
+
     bool found = SvgRectsCache::instance()->findElementRect(cacheId, rect);
     // This is a corner case where we are *sure* the element is not valid
     if (!found) {
