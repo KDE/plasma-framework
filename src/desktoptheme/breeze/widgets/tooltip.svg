@@ -2,21 +2,21 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="173"
    height="56.000004"
    viewBox="0 0 173 56.000004"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="tooltip.svg">
+   inkscape:version="1.1 (1:1.1+202105261517+ce6663b3b7)"
+   sodipodi:docname="tooltip.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <style
      type="text/css"
      id="current-color-scheme">
@@ -268,8 +268,8 @@
      inkscape:pageopacity="0.65882353"
      inkscape:pageshadow="2"
      inkscape:zoom="21.12835"
-     inkscape:cx="90.567795"
-     inkscape:cy="40.500651"
+     inkscape:cx="141.3267"
+     inkscape:cy="44.016688"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -277,7 +277,7 @@
      borderlayer="true"
      units="px"
      inkscape:window-width="1920"
-     inkscape:window-height="997"
+     inkscape:window-height="1007"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -285,7 +285,8 @@
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
-     fit-margin-bottom="0">
+     fit-margin-bottom="0"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid3336"
@@ -536,12 +537,8 @@
        id="text4270"
        y="134.59453"
        x="195.14162"
-       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:justify;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Gill Sans"
-       xml:space="preserve"><tspan
-         y="134.59453"
-         x="195.14162"
-         id="tspan4272"
-         sodipodi:role="line" /></text>
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:14px;line-height:125%;font-family:'Gill Sans';text-align:justify;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve" />
     <g
        style="opacity:0.97899996"
        transform="matrix(-0.75,0,0,0.75,130.30761,670.84135)"
@@ -708,27 +705,27 @@
        style="fill:url(#radialGradient1028);fill-opacity:1;stroke:none;stroke-width:2" />
     <path
        style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:2"
-       d="m 126,950.36216 c 0.0672,2.18271 1.8173,3.93278 4,4 h 2 v -6 h -6 z"
+       d="m 132,954.36216 v -6 h -6 c 0,3.00004 3,6.00004 6,6 z"
        id="mask-bottomleft"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
+       sodipodi:nodetypes="cccc" />
     <path
-       sodipodi:nodetypes="cccccc"
+       sodipodi:nodetypes="cccc"
        inkscape:connector-curvature="0"
        id="mask-bottomright"
-       d="m 162,954.36216 c 2.18271,-0.0672 3.93278,-1.8173 4,-4 v -2 h -6 v 6 z"
+       d="m 166,948.36216 h -6 v 6 c 3,4e-5 6,-2.99996 6,-6 z"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:2" />
     <path
        style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:2"
-       d="m 166,918.36216 c -0.0672,-2.18271 -1.8173,-3.93278 -4,-4 h -2 v 6 h 6 z"
+       d="m 160,914.36216 v 6 h 6 c 0,-2.99996 -3,-5.99996 -6,-6 z"
        id="mask-topright"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
+       sodipodi:nodetypes="cccc" />
     <path
-       sodipodi:nodetypes="cccccc"
+       sodipodi:nodetypes="cccc"
        inkscape:connector-curvature="0"
        id="mask-topleft"
-       d="m 130,914.36216 c -2.18271,0.0672 -3.93278,1.8173 -4,4 v 2 h 6 v -6 z"
+       d="m 126,920.36216 h 6 v -6 c -3,4e-5 -6,3.00004 -6,6 z"
        style="opacity:1;fill:#000000;fill-opacity:1;stroke-width:2" />
   </g>
 </svg>
