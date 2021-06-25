@@ -256,8 +256,8 @@ void DialogPrivate::updateTheme()
             q->setMask(frameSvgItem->mask());
         }
         if (q->isVisible()) {
-            DialogShadows::self()->setScaleFactor(frameSvgItem->frameSvg()->devicePixelRatio());
-            //DialogShadows::self()->setDevicePixelRatio(frameSvgItem->frameSvg()->devicePixelRatio());
+            DialogShadows::self()->setScaleFactor(frameSvgItem->frameSvg()->scaleFactor());
+            DialogShadows::self()->setDevicePixelRatio(frameSvgItem->frameSvg()->devicePixelRatio());
             DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
         }
     }
@@ -1188,8 +1188,8 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
 void Dialog::showEvent(QShowEvent *event)
 {
     if (d->backgroundHints != Dialog::NoBackground) {
-       // DialogShadows::self()->setDevicePixelRatio(d->frameSvgItem->frameSvg()->devicePixelRatio());
-        DialogShadows::self()->setScaleFactor(d->frameSvgItem->frameSvg()->devicePixelRatio());
+        DialogShadows::self()->setDevicePixelRatio(d->frameSvgItem->frameSvg()->devicePixelRatio());
+        DialogShadows::self()->setScaleFactor(d->frameSvgItem->frameSvg()->scaleFactor());
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
 
