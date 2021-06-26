@@ -67,6 +67,10 @@ public:
         , visible(false)
         , componentComplete(dialog->parent() == nullptr)
         , backgroundHints(Dialog::StandardBackground)
+        , top_margin(0)
+        , bottom_margin(0)
+        , left_margin(0)
+        , right_margin(0)
     {
         hintsCommitTimer.setSingleShot(true);
         hintsCommitTimer.setInterval(0);
@@ -150,6 +154,10 @@ public:
     Plasma::Theme theme;
     bool componentComplete;
     Dialog::BackgroundHints backgroundHints;
+    qreal top_margin;
+    qreal bottom_margin;
+    qreal left_margin;
+    qreal right_margin;
 
     // Attached Layout property of mainItem, if any
     QPointer<QObject> mainItemLayout;
@@ -198,7 +206,8 @@ void DialogPrivate::syncBorders(const QRect &geom)
 
     // Tooltips always have all the borders
     // floating windows have all borders
-    if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating) {
+    if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating &&
+        (top_margin + bottom_margin + left_margin + right_margin) == 0) {
         if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~Plasma::FrameSvg::LeftBorder;
         }
@@ -258,6 +267,14 @@ void DialogPrivate::updateTheme()
         if (q->isVisible()) {
             DialogShadows::self()->addWindow(q, frameSvgItem->enabledBorders());
         }
+        frameSvgItem->setPrefix(QVariant(QList({QStringLiteral("floating"), QString()})));
+        if (frameSvgItem->usedPrefix() == QStringLiteral("floating")) {
+            top_margin = frameSvgItem->fixedMargins()->top();
+            left_margin = frameSvgItem->fixedMargins()->left();
+            right_margin = frameSvgItem->fixedMargins()->right();
+            bottom_margin = frameSvgItem->fixedMargins()->bottom();
+        } else top_margin = left_margin = right_margin = bottom_margin = 0;
+        frameSvgItem->setPrefix(QString());
     }
     updateInputShape();
 }
@@ -976,12 +993,12 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
-    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.top() - size.height());
-    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.bottom());
+    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.top() - size.height() - d->bottom_margin);
+    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.bottom() + d->top_margin);
 
-    const QPoint leftPoint(parentGeometryBounds.left() - size.width(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint leftPoint(parentGeometryBounds.left() - size.width() - d->right_margin, pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
-    const QPoint rightPoint(parentGeometryBounds.right(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint rightPoint(parentGeometryBounds.right() + d->left_margin, pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
 
     QPoint dialogPos;
     if (d->location == Plasma::Types::TopEdge) {
@@ -1000,17 +1017,17 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     // not actually the current window. See QWindow::screen() documentation
     QRect avail = item->window()->screen()->availableGeometry();
 
-    if (outsideParentWindow && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders) {
+    if (outsideParentWindow) { // && d->frameSvgItem->enabledBorders() != Plasma::FrameSvg::AllBorders
         // make the panel look it's inside the panel, in order to not make it look cut
         switch (d->location) {
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:
-            avail.setTop(qMax(avail.top(), parentGeometryBounds.top()));
-            avail.setBottom(qMin(avail.bottom(), parentGeometryBounds.bottom()));
+            avail.setTop(qMax(avail.top(), parentGeometryBounds.top()) + d->top_margin);
+            avail.setBottom(qMin(avail.bottom(), parentGeometryBounds.bottom()) - d->bottom_margin);
             break;
         default:
-            avail.setLeft(qMax(avail.left(), parentGeometryBounds.left()));
-            avail.setRight(qMin(avail.right(), parentGeometryBounds.right()));
+            avail.setLeft(qMax(avail.left(), parentGeometryBounds.left()) + d->left_margin);
+            avail.setRight(qMin(avail.right(), parentGeometryBounds.right()) - d->right_margin);
             break;
         }
     }
