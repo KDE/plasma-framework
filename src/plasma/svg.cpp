@@ -469,8 +469,6 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
     if ((themed && !path.isEmpty() && QFileInfo::exists(path)) || QFileInfo::exists(actualPath)) {
-        QRectF rect;
-
         naturalSize = SvgRectsCache::instance()->naturalSize(path, scaleFactor);
         if (naturalSize.isEmpty()) {
             createRenderer();
