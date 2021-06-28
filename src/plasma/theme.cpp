@@ -39,13 +39,13 @@ Theme::Theme(QObject *parent)
     if (!ThemePrivate::globalTheme) {
         ThemePrivate::globalTheme = new ThemePrivate;
         ThemePrivate::globalTheme->settingsChanged(false);
+        if (QCoreApplication::instance()) {
+            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, ThemePrivate::globalTheme, &ThemePrivate::onAppExitCleanup);
+        }
     }
     ThemePrivate::globalTheme->ref.ref();
     d = ThemePrivate::globalTheme;
 
-    if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
-    }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     connect(d, &ThemePrivate::defaultFontChanged, this, &Theme::defaultFontChanged);
     connect(d, &ThemePrivate::smallestFontChanged, this, &Theme::smallestFontChanged);
@@ -57,6 +57,9 @@ Theme::Theme(const QString &themeName, QObject *parent)
     auto &priv = ThemePrivate::themes[themeName];
     if (!priv) {
         priv = new ThemePrivate;
+        if (QCoreApplication::instance()) {
+            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, priv, &ThemePrivate::onAppExitCleanup);
+        }
     }
 
     priv->ref.ref();
@@ -68,9 +71,6 @@ Theme::Theme(const QString &themeName, QObject *parent)
     d->setThemeName(themeName, false, false);
     d->cacheTheme = useCache;
     d->fixedName = true;
-    if (QCoreApplication::instance()) {
-        connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
-    }
     connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
 }
 
@@ -105,12 +105,12 @@ void Theme::setThemeName(const QString &themeName)
         auto &priv = ThemePrivate::themes[themeName];
         if (!priv) {
             priv = new ThemePrivate;
+            if (QCoreApplication::instance()) {
+                connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, priv, &ThemePrivate::onAppExitCleanup);
+            }
         }
         priv->ref.ref();
         d = priv;
-        if (QCoreApplication::instance()) {
-            connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, d, &ThemePrivate::onAppExitCleanup);
-        }
         connect(d, &ThemePrivate::themeChanged, this, &Theme::themeChanged);
     }
 
