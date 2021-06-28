@@ -8,10 +8,13 @@ import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 
 T.Page {
-    implicitWidth: contentWidth + leftPadding + rightPadding
-    implicitHeight: contentHeight + topPadding + bottomPadding
-
-    contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
-    contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding,
+                            implicitHeaderWidth,
+                            implicitFooterWidth)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding
+                             + (implicitHeaderHeight > 0 ? implicitHeaderHeight + spacing : 0)
+                             + (implicitFooterHeight > 0 ? implicitFooterHeight + spacing : 0))
 }
  
