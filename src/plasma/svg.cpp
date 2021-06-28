@@ -457,9 +457,10 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 #endif
     }
 
-    QFileInfo info(path);
+    const QFileInfo info(path);
+    const QDateTime lastModifiedDate = info.lastModified();
 
-    lastModified = info.lastModified().toSecsSinceEpoch();
+    lastModified = lastModifiedDate.toSecsSinceEpoch();
 
     SvgRectsCache::instance()->loadImageFromCache(path, lastModified);
 
@@ -468,7 +469,7 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 
     // also images with absolute path needs to have a natural size initialized,
     // even if looks a bit weird using Theme to store non-themed stuff
-    if ((themed && !path.isEmpty() && QFileInfo::exists(path)) || QFileInfo::exists(actualPath)) {
+    if ((themed && !path.isEmpty() && lastModifiedDate.isValid()) || QFileInfo::exists(actualPath)) {
         naturalSize = SvgRectsCache::instance()->naturalSize(path, scaleFactor);
         if (naturalSize.isEmpty()) {
             createRenderer();
