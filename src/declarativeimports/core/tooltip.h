@@ -164,9 +164,15 @@ public Q_SLOTS:
     void showToolTip();
 
     /**
-     * Hides the tooltip if shown. Does not affect whether the tooltip area is active.
+     * Hides the tooltip after a grace period if shown. Does not affect whether the tooltip area is active.
      */
     void hideToolTip();
+
+    /**
+     * Hides the tooltip immediately, in comparison to hideToolTip.
+     * @since 5.84
+     */
+    void hideImmediately();
 
 protected:
     /// @cond INTERNAL_DOCS

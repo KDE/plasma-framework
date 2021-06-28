@@ -256,6 +256,12 @@ void ToolTip::hideToolTip()
     tooltipDialogInstance()->dismiss();
 }
 
+void ToolTip::hideImmediately()
+{
+    m_showTimer->stop();
+    tooltipDialogInstance()->setVisible(false);
+}
+
 QVariant ToolTip::icon() const
 {
     if (m_icon.isValid()) {
