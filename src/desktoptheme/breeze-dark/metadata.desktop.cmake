@@ -47,6 +47,7 @@ Name[x-test]=xxBreeze Darkxx
 Name[zh_CN]=暗色微风
 Name[zh_TW]=Breeze Dark
 Comment=Breeze Dark by the KDE VDG
+Comment[ar]=نسيم داكن من من مجموعة تصميم كدي
 Comment[az]=KDE VDG tərəfindən Tünd Breeze
 Comment[ca]=Brisa fosca, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa fosca pel VDG del KDE

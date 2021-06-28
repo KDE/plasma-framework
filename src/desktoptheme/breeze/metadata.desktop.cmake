@@ -47,6 +47,7 @@ Name[x-test]=xxBreezexx
 Name[zh_CN]=微风
 Name[zh_TW]=Breeze
 Comment=Breeze by the KDE VDG
+Comment[ar]=نسيم من مجموعة تصميم كدي
 Comment[az]=KDE VDG tərəfindən Breeze
 Comment[ca]=Brisa, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa pel VDG del KDE

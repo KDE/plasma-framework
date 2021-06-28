@@ -45,6 +45,7 @@ Name[x-test]=xxBreeze Lightxx
 Name[zh_CN]=亮色微风
 Name[zh_TW]=Breeze Light
 Comment=Breeze Light by the KDE VDG
+Comment[ar]=نسيم فاتح من مجموعة تصميم كدي
 Comment[az]=KDE VDG tərəfindən İşıqlı Breeze
 Comment[ca]=Brisa clara, creat pel VDG del KDE
 Comment[ca@valencia]=Brisa clara pel VDG del KDE

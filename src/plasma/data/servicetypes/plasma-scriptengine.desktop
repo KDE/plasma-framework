@@ -3,6 +3,7 @@ Type=ServiceType
 X-KDE-ServiceType=Plasma/ScriptEngine
 
 Comment=Scripting language extension for Plasma
+Comment[ar]=ملحق لغة البرمجة للبلازما
 Comment[az]=Plazma üçün skript dil əlavəsi
 Comment[bs]=Proširenje Plazme za skriptne jezike
 Comment[ca]=Extensió del llenguatge de creació de scripts per al Plasma
