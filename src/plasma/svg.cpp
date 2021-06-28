@@ -885,7 +885,6 @@ void Svg::setScaleFactor(qreal ratio)
     d->scaleFactor = floor(ratio);
     d->s_lastScaleFactor = d->scaleFactor;
     // not resize() because we want to do it unconditionally
-    QRectF rect;
 
     d->naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
     if (d->naturalSize.isEmpty()) {
@@ -1031,7 +1030,6 @@ bool Svg::isValid() const
     }
 
     // try very hard to avoid creation of a parser
-    QRectF rect;
     QSizeF naturalSize = SvgRectsCache::instance()->naturalSize(d->path, d->scaleFactor);
     if (!naturalSize.isEmpty()) {
         return true;
