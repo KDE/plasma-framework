@@ -243,8 +243,7 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !(d->findInTheme(name % QLatin1String(".svgz"), d->themeName, false).isEmpty())
-        || !(d->findInTheme(name % QLatin1String(".svg"), d->themeName, false).isEmpty());
+    return !d->findInTheme(name % QLatin1String(".svgz"), d->themeName).isEmpty() || !d->findInTheme(name % QLatin1String(".svg"), d->themeName).isEmpty();
 }
 
 KSharedConfigPtr Theme::colorScheme() const
