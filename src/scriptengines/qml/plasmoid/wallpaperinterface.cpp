@@ -15,6 +15,7 @@
 #include <KDesktopFile>
 
 #include <QDebug>
+#include <QFile>
 #include <QQmlContext>
 #include <QQmlExpression>
 #include <QQmlProperty>

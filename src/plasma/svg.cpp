@@ -15,7 +15,6 @@
 #include <QBuffer>
 #include <QCoreApplication>
 #include <QDir>
-#include <QMatrix>
 #include <QPainter>
 #include <QRegularExpression>
 #include <QStringBuilder>

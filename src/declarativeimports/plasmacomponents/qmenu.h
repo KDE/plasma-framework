@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QQmlListProperty>
+#include <QWindow>
 
 class QDeclarativeItem;
 

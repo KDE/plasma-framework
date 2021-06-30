@@ -7,6 +7,7 @@
 #include "tooltipdialog.h"
 
 #include <QDebug>
+#include <QFile>
 #include <QPlatformSurfaceEvent>
 #include <QQmlEngine>
 #include <QQuickItem>

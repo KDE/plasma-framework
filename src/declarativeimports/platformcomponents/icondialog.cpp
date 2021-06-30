@@ -9,6 +9,7 @@
 #include "utils/d_ptr_implementation.h"
 
 #include <QDebug>
+#include <QVariant>
 
 #include <KIconDialog>
 #include <KWindowSystem>

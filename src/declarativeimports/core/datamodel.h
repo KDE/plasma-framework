@@ -9,6 +9,7 @@
 
 #include <QAbstractItemModel>
 #include <QJSValue>
+#include <QRegExp>
 #include <QSortFilterProxyModel>
 #include <QVector>
 
