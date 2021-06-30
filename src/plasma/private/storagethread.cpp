@@ -253,7 +253,8 @@ void StorageThread::retrieve(QPointer<StorageJob> wcaller, const QVariantMap &pa
             } else if (!query.value(binaryColumn).isNull()) {
                 QByteArray bytes = query.value(binaryColumn).toByteArray();
                 QDataStream in(bytes);
-                QVariant v(in);
+                QVariant v;
+                in >> v;
                 data.insert(key, v);
             }
         }
