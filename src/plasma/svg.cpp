@@ -188,7 +188,8 @@ bool SvgRectsCache::findElementRect(uint id, const QString &filePath, QRectF &re
     auto it = m_localRectCache.find(id);
 
     if (it == m_localRectCache.end()) {
-        if (m_invalidElements.contains(filePath) && m_invalidElements[filePath].contains(id)) {
+        auto elements = m_invalidElements.value(filePath);
+        if (elements.contains(id)) {
             rect = QRectF();
             return true;
         }
@@ -243,7 +244,8 @@ QList<QSize> SvgRectsCache::sizeHintsForId(const QString &path, const QString &i
 {
     const QString pathId = path % id;
 
-    if (!m_sizeHintsForId.contains(pathId)) {
+    auto it = m_sizeHintsForId.constFind(pathId);
+    if (it == m_sizeHintsForId.constEnd()) {
         KConfigGroup imageGroup(m_svgElementsCache, path);
         const QStringList &encoded = imageGroup.readEntry(id, QStringList());
         QList<QSize> sizes;
@@ -261,7 +263,7 @@ QList<QSize> SvgRectsCache::sizeHintsForId(const QString &path, const QString &i
         return sizes;
     }
 
-    return m_sizeHintsForId.value(pathId);
+    return *it;
 }
 
 void SvgRectsCache::insertSizeHintForId(const QString &path, const QString &id, const QSize &size)
