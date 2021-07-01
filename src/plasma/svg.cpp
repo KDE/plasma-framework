@@ -22,8 +22,8 @@
 #include <QXmlStreamWriter>
 
 #include <KColorScheme>
+#include <KCompressionDevice>
 #include <KConfigGroup>
-#include <KFilterDev>
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIconTheme>
