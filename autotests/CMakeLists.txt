@@ -48,20 +48,27 @@ if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
 endif()
 
 if(HAVE_X11)
-    set(dialognativetest_srcs dialognativetest.cpp)
-    ecm_add_test(${dialognativetest_srcs} TEST_NAME dialognativetest LINK_LIBRARIES Qt5::Gui Qt5::Test Qt5::Qml Qt5::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick)
+    ecm_add_test(
+        dialognativetest.cpp
+        TEST_NAME dialognativetest
+        LINK_LIBRARIES Qt5::Gui Qt5::Test Qt5::Qml Qt5::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick
+    )
 endif()
 
-set(coronatest_srcs coronatest.cpp)
-qt_add_resources(coronatest_srcs coronatestresources.qrc)
-ecm_add_test(${coronatest_srcs} TEST_NAME coronatest LINK_LIBRARIES Qt5::Gui Qt5::Widgets Qt5::Test KF5::Plasma KF5::CoreAddons KF5::XmlGui)
+ecm_add_test(
+    coronatest.cpp
+    coronatestresources.qrc
+    TEST_NAME coronatest
+    LINK_LIBRARIES Qt5::Gui Qt5::Widgets Qt5::Test KF5::Plasma KF5::CoreAddons KF5::XmlGui
+)
 
-set(sortfiltermodeltest_srcs
+ecm_add_test(
     sortfiltermodeltest.cpp
     ../src/declarativeimports/core/datamodel.cpp
     ../src/declarativeimports/core/datasource.cpp
-    )
-ecm_add_test(${sortfiltermodeltest_srcs} TEST_NAME plasma-sortfiltermodeltest LINK_LIBRARIES KF5::Plasma Qt5::Gui Qt5::Test KF5::I18n KF5::Service Qt5::Qml)
+    TEST_NAME plasma-sortfiltermodeltest
+    LINK_LIBRARIES KF5::Plasma Qt5::Gui Qt5::Test KF5::I18n KF5::Service Qt5::Qml
+)
 
 
 #Add a test that i18n is not used directly in any import.
