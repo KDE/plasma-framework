@@ -6,8 +6,6 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1209)
-
 ########### next target ###############
 
 set(Plasma_LIB_SRCS
