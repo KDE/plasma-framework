@@ -14,12 +14,14 @@ import "private" as Private
  /**
   * Item to be used as a header or footer in plasmoids
   * 
-  * @inherit QtQuick.Templates.Frame
+  * @inherit QtQuick.Templates.ToolBar
   */
- T.Frame {
+ T.ToolBar {
     id: control
      /**
       * Possible positions of the heading element
+      * 
+      * @deprecated since 5.85
       */
     enum Location {
         /**
@@ -36,29 +38,32 @@ import "private" as Private
      * location: int
      * 
      * Indicates the position of the heading. The default is PlasmoidHeading.Location.Header.
+     * 
+     * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar instead
      */
     property int location: PlasmoidHeading.Location.Header
+    position: location
 
     Layout.fillWidth: true
-    bottomPadding: location == PlasmoidHeading.Location.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
-    topPadding: location == PlasmoidHeading.Location.Footer ? -backgroundMetrics.getMargin("top") : 0
+    bottomPadding: position == T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
+    topPadding: position == T.ToolBar.Footer ? -backgroundMetrics.getMargin("top") : 0
 
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
 
     leftInset: backgroundMetrics.getMargin("left")
     rightInset: backgroundMetrics.getMargin("right")
-    topInset: location == PlasmoidHeading.Location.Footer ? 0 : backgroundMetrics.getMargin("top")
-    bottomInset: location == PlasmoidHeading.Location.Footer ? backgroundMetrics.getMargin("bottom") : 0
+    topInset: position == T.ToolBar.Footer ? 0 : backgroundMetrics.getMargin("top")
+    bottomInset: position == T.ToolBar.Footer ? backgroundMetrics.getMargin("bottom") : 0
 
-    PlasmaCore.ColorScope.colorGroup: location == PlasmoidHeading.Location.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
+    PlasmaCore.ColorScope.colorGroup: position == T.ToolBar.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
     PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
-        prefix: location == PlasmoidHeading.Location.Header? 'header' : 'footer'
+        prefix: position == T.ToolBar.Header ? 'header' : 'footer'
 
         colorGroup: control.PlasmaCore.ColorScope.colorGroup
         PlasmaCore.ColorScope.inherit: false
@@ -67,23 +72,13 @@ import "private" as Private
             var borders = 0
             borders |= PlasmaCore.FrameSvg.LeftBorder
             borders |= PlasmaCore.FrameSvg.RightBorder
-            if (plasmoid.location !== PlasmaCore.Types.TopEdge || location != PlasmoidHeading.Location.Header) {
+            if (plasmoid.position !== PlasmaCore.Types.TopEdge || position != T.ToolBar.Header) {
                 borders |= PlasmaCore.FrameSvg.TopBorder
             }
-            if (plasmoid.location !== PlasmaCore.Types.BottomEdge || location != PlasmoidHeading.Location.Footer) {
+            if (plasmoid.position !== PlasmaCore.Types.BottomEdge || position != T.ToolBar.Footer) {
                 borders |= PlasmaCore.FrameSvg.BottomBorder
             }
             return borders
-        }
-        Private.BackgroundMetrics {
-            id: backgroundMetrics
-            function getMargin(margin) {
-                if (!hasInset) {
-                    return -headingSvg.fixedMargins[margin];
-                } else {
-                    return -backgroundMetrics.fixedMargins[margin] + backgroundMetrics.inset[margin]
-                }
-            }
         }
     }
  }
