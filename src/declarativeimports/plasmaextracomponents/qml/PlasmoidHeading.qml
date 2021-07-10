@@ -80,5 +80,15 @@ import "private" as Private
             }
             return borders
         }
+        Private.BackgroundMetrics {
+            id: backgroundMetrics
+            function getMargin(margin) {
+                if (!hasInset) {
+                    return -headingSvg.fixedMargins[margin];
+                } else {
+                    return -backgroundMetrics.fixedMargins[margin] + backgroundMetrics.inset[margin]
+                }
+            }
+        }
     }
  }
