@@ -65,7 +65,7 @@ function(PLASMA_INSTALL_DESKTOPTHEME_SVGS theme_name)
             if(WIN32)
                 add_custom_command(
                     OUTPUT ${_gzipped_file}
-                    COMMAND ${7z_EXECUTABLE}
+                    COMMAND 7z::7z
                     ARGS
                         a
                         -tgzip
@@ -76,7 +76,7 @@ function(PLASMA_INSTALL_DESKTOPTHEME_SVGS theme_name)
             else()
                 add_custom_command(
                     OUTPUT ${_gzipped_file}
-                    COMMAND ${gzip_EXECUTABLE}
+                    COMMAND gzip::gzip
                     ARGS
                         -9
                         -c
