@@ -173,7 +173,7 @@ public:
 
     Types::Location location = Types::Floating;
     QString prefix;
-    // sometimes the prefix we requested is not available, so prefix will be emoty
+    // sometimes the prefix we requested is not available, so prefix will be empty
     // keep track of the requested one anyways, we'll try again when the theme changes
     QString requestedPrefix;
 

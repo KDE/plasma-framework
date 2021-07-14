@@ -38,7 +38,7 @@ T.TextField {
     // Can't guarantee that background will always be present or have the margins property
     readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
 
-    /* It might be preferrable to do background width OR content width if we
+    /* It might be preferable to do background width OR content width if we
      * want content to stay within the background rather than expanding the
      * control, but this is maintaining compatibility with the pre-existing
      * behavior. Use the following 2 lines if you want text to stay within the

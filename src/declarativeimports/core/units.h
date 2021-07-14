@@ -237,7 +237,7 @@ public:
     /// @endcond
 
     /**
-     * @return a size rounded tothe nearest inferior standard icon size.
+     * @return a size rounded to the nearest inferior standard icon size.
      *           sizes larger than iconSizes.huge, it will be returned unmodified
      * @param int size the size we want to be rounded down
      * @see iconSizes

@@ -29,7 +29,7 @@ bool DataContainersEngine::sourceRequestEvent(const QString &source)
     // This engine will fetch webpages over http. First thing we do is check
     // the source to make sure it is indeed an http URL.
     QUrl url(source);
-    qDebug() << "goin to fetch" << source << url << url.scheme();
+    qDebug() << "going to fetch" << source << url << url.scheme();
     if (!url.scheme().startsWith(QLatin1String("http"), Qt::CaseInsensitive)) {
         return false;
     }

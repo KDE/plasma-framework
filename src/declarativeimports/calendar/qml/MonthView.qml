@@ -229,7 +229,7 @@ PinchArea { // TODO KF6 switch to Item
     ColumnLayout {
         id: viewHeader
         visible: !showCustomHeader
-        // Make sure the height of the invible item is zero, otherwise anchoring to the iten will
+        // Make sure the height of the invisible item is zero, otherwise anchoring to the item will
         // include the height even if it is invisible.
         height: !visible ? 0 : implicitHeight
         width: parent.width

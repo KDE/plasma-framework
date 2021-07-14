@@ -212,7 +212,7 @@ public:
      * Saves state information about this applet that will
      * be accessed when next instantiated in the restore(KConfigGroup&) method.
      *
-     * This method does not need to be reimplmented by Applet
+     * This method does not need to be reimplemented by Applet
      * subclasses, but can be useful for Applet specializations
      * (such as Containment) to do so.
      *
@@ -224,7 +224,7 @@ public:
      * Restores state information about this applet saved previously
      * in save(KConfigGroup&).
      *
-     * This method does not need to be reimplmented by Applet
+     * This method does not need to be reimplemented by Applet
      * subclasses, but can be useful for Applet specializations
      * (such as Containment) to do so.
      **/
@@ -487,7 +487,7 @@ public:
     bool hasConfigurationInterface() const;
 
 Q_SIGNALS:
-    // BOOKEEPING
+    // BOOKKEEPING
     /**
      * Emitted when the immutability changes
      * @since 4.4

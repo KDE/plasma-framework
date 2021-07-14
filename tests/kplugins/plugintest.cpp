@@ -83,7 +83,7 @@ bool PluginTest::loadKPlugin()
         qDebug() << "loaded successfully and cast";
         qDebug() << "metadata: " << loader.metaData();
         // QObject *o = factory->createPlugin("time");
-        // qDebug() << " objec name:" << o->objectName();
+        // qDebug() << " object name:" << o->objectName();
         // Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
         Plasma::DataEngine *time_engine = nullptr;
         //         Plasma::DataEngine *time_engine = factory->create(this, QVariantList());
@@ -137,7 +137,7 @@ void PluginTest::loadKQPlugin()
         qDebug() << "loaded successfully and cast";
         qDebug() << "metadata: " << loader.metaData();
         //QObject *o = factory->createPlugin("time");
-        //qDebug() << " objec name:" << o->objectName();
+        //qDebug() << " object name:" << o->objectName();
         //Plasma::DataEngine *time_engine = qobject_cast<Plasma::DataEngine*>(factory->create(this, QVariantList()));
         //Plasma::DataEngine *time_engine = factory->create(this, QVariantList());
         Plasma::DataEngine *time_engine = factory->createInstance<Plasma::DataEngine>(0, this, QVariantList());

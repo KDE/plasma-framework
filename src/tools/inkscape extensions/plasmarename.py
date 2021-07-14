@@ -47,7 +47,7 @@ class PlasmaNamesEffect(pathmodifier.PathModifier):
         else:
             return
 
-        #some euristics to normalize the values, find the least coords ans size
+        #some heuristics to normalize the values, find the least coords and size
         minX = 9999
         minY = 9999
         minWidth = 9999

@@ -174,7 +174,7 @@ public:
      * Returns a list of all known applets.
      * This may skip applets based on security settings and ExcludeCategories in the application's config.
      *
-     * @param category Only applets matchin this category will be returned.
+     * @param category Only applets matching this category will be returned.
      *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.

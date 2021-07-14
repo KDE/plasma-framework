@@ -109,7 +109,7 @@ void DataEngine::connectSource(const QString &source, QObject *visualization, ui
 
     if (s) {
         // we suppress the immediate invocation of dataUpdated here if the
-        // source was prexisting and they don't request delayed updates
+        // source was preexisting and they don't request delayed updates
         // (we want to do an immediate update in that case so they don't
         // have to wait for the first time out)
         if (newSource && !s->data().isEmpty()) {

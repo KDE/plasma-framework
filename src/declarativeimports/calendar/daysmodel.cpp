@@ -208,7 +208,7 @@ void DaysModel::onEventRemoved(const QString &uid)
     // using beginResetModel() since this creates a small visual glitches
     // if an event is removed in Korganizer and the calendar is open.
     // Using beginRemoveRows instead we make the code a lot more complex
-    // and if not done correcly will introduce bugs.
+    // and if not done correctly will introduce bugs.
     beginResetModel();
     QList<QDate> updatesList;
     auto i = m_eventsData.begin();

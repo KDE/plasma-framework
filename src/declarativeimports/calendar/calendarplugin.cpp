@@ -30,5 +30,5 @@ void CalendarPlugin::registerTypes(const char *uri)
     qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
     qmlRegisterAnonymousType<QAbstractListModel>(uri, 1);
     qmlRegisterSingletonType<EventPluginsManager>(uri, 2, 0, "EventPluginsManager", event_plugins_manager_provider);
-    qmlRegisterUncreatableType<EventDataDecorator>(uri, 2, 0, "EventDataDecorator", QStringLiteral("Unabel to create EventDataDecorator from QML"));
+    qmlRegisterUncreatableType<EventDataDecorator>(uri, 2, 0, "EventDataDecorator", QStringLiteral("Unable to create EventDataDecorator from QML"));
 }
