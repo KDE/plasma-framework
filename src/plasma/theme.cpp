@@ -243,7 +243,11 @@ bool Theme::currentThemeHasImage(const QString &name) const
         return false;
     }
 
-    return !d->findInTheme(name % QLatin1String(".svgz"), d->themeName).isEmpty() || !d->findInTheme(name % QLatin1String(".svg"), d->themeName).isEmpty();
+    QString path = d->findInTheme(name % QLatin1String(".svgz"), d->themeName);
+    if (path.isEmpty()) {
+        path = d->findInTheme(name % QLatin1String(".svg"), d->themeName);
+    }
+    return path.contains(QLatin1String("/" PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % d->themeName);
 }
 
 KSharedConfigPtr Theme::colorScheme() const
