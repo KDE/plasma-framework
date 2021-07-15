@@ -13,8 +13,6 @@
 
 #include "package.h"
 
-class KShortcutsDialog;
-
 namespace Plasma
 {
 class Containment;
