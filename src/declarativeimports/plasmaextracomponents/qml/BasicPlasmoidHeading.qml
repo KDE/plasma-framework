@@ -46,31 +46,8 @@ PlasmoidHeading {
             id: actionsButton
             visible: visibleActions > 0 && !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             checked: configMenu.status !== PC2.DialogStatus.Closed
-            property int visibleActions: 0
-            property QtObject singleAction
-
-            Component.onCompleted: updateVisibleActions()
-            function updateVisibleActions() {
-                let newSingleAction = null;
-                let newVisibleActions = 0;
-                for (let i in plasmoid.contextualActions) {
-                    let action = plasmoid.contextualActions[i];
-                    if (action.visible && action !== plasmoid.action("configure")) {
-                        newVisibleActions++;
-                        newSingleAction = action;
-                        action.changed.connect(() => {updateVisibleActions()});
-                    }
-                }
-                if (newVisibleActions > 1) {
-                    newSingleAction = null;
-                }
-                visibleActions = newVisibleActions;
-                singleAction = newSingleAction;
-            }
-            Connections {
-                target: plasmoid
-                function onContextualActionsChanged() {updateVisibleActions();}
-            }
+            property int visibleActions: menuItemFactory.count
+            property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
             icon.name: "application-menu"
             checkable: visibleActions > 1
             contentItem.opacity: visibleActions > 1
@@ -106,15 +83,24 @@ PlasmoidHeading {
             }
 
             Instantiator {
-                model: plasmoid.contextualActions
+                id: menuItemFactory
+                model: {
+                    configMenu.clearMenuItems();
+                    let actions = [];
+                    for (let i in plasmoid.contextualActions) {
+                        const action = plasmoid.contextualActions[i];
+                        if (action.visible && action !== plasmoid.action("configure")) {
+                            actions.push(action);
+                        }
+                    }
+                    return actions;
+                }
                 delegate: PC2.MenuItem {
                     id: menuItem
                     action: modelData
                 }
                 onObjectAdded: {
-                    if (object.action !== plasmoid.action("configure")) {
-                        configMenu.addMenuItem(object);
-                    }
+                    configMenu.addMenuItem(object);
                 }
             }
         }
