@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <plasma/version.h>
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 85)
+
 namespace Plasma
 {
 unsigned int version()
@@ -60,3 +62,4 @@ bool isPluginVersionCompatible(unsigned int version)
 }
 
 } // Plasma namespace
+#endif
