@@ -18,7 +18,6 @@
 
 #include <plasma/framesvg.h>
 #include <plasma/plasma.h>
-#include <plasma/version.h>
 
 #include <KPackage/Package>
 

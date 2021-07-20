@@ -31,7 +31,6 @@
 #endif
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
-#include <plasma/version.h>
 
 namespace Plasma
 {

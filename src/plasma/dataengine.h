@@ -16,7 +16,6 @@
 
 #include <plasma/plasma.h>
 #include <plasma/service.h>
-#include <plasma/version.h>
 
 class QAbstractItemModel;
 

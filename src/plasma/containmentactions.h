@@ -12,7 +12,6 @@
 #include <KPluginInfo>
 
 #include <plasma/plasma.h>
-#include <plasma/version.h>
 
 class QAction;
 class KPluginMetaData;

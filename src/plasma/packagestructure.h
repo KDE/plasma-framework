@@ -12,7 +12,6 @@
 #include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
-#include <plasma/version.h>
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
 
