@@ -155,6 +155,9 @@ int Units::roundToIconSize(int size)
     } else if (size < KIconLoader::SizeHuge) {
         return KIconLoader::SizeLarge;
 
+    } else if (size < KIconLoader::SizeEnormous) {
+        return KIconLoader::SizeHuge;
+
     } else {
         return size;
     }
