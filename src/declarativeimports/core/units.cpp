@@ -139,8 +139,10 @@ int Units::roundToIconSize(int size)
     /*Do *not* use devicePixelIconSize here, we want to use the sizes of the pixmaps of the smallest icons on the disk. And those are unaffected by dpi*/
     if (size <= 0) {
         return 0;
+
     } else if (size < KIconLoader::SizeSmall) {
         return KIconLoader::SizeSmall / 2;
+
     } else if (size < KIconLoader::SizeSmallMedium) {
         return KIconLoader::SizeSmall;
 
