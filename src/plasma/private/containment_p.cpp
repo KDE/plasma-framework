@@ -69,8 +69,8 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     // add our own actions
     QAction *appletBrowserAction = actions->add<QAction>(QStringLiteral("add widgets"));
     appletBrowserAction->setAutoRepeat(false);
-    appletBrowserAction->setText(i18n("Add Widgets..."));
-    appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
+    appletBrowserAction->setText(i18n("Add or Manage Widgets…"));
+    appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("draw-cuboid")));
     appletBrowserAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::Key_A));
     appletBrowserAction->setData(Plasma::Types::AddAction);
 }
