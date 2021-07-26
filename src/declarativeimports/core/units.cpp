@@ -136,33 +136,60 @@ QQmlPropertyMap *Units::iconSizeHints() const
 
 int Units::roundToIconSize(int size)
 {
-    /*Do *not* use devicePixelIconSize here, we want to use the sizes of the pixmaps of the smallest icons on the disk. And those are unaffected by dpi*/
+    // If not using Qt scaling (e.g. on X11 by default), manually scale all sizes
+    // according to the DPR because Qt hasn't done it for us. Otherwise all
+    // returned sizes are too small and icons are only the right size by pure
+    // chance for the larger sizes due to their large differences in size
+    qreal multiplier = 1.0;
+    QScreen *primary = QGuiApplication::primaryScreen();
+    if (primary) {
+        // Note that when using Qt scaling, the multiplier will always be 1
+        // because Qt will scale everything for us. This is good and intentional.
+        multiplier = bestIconScaleForDevicePixelRatio((qreal)primary->logicalDotsPerInchX() / (qreal)96);
+    }
+
     if (size <= 0) {
         return 0;
 
-    } else if (size < KIconLoader::SizeSmall) {
-        return KIconLoader::SizeSmall / 2;
+    } else if (size < KIconLoader::SizeSmall * multiplier) {
+        return qRound(KIconLoader::SizeSmall * multiplier);
 
-    } else if (size < KIconLoader::SizeSmallMedium) {
-        return KIconLoader::SizeSmall;
+    } else if (size < KIconLoader::SizeSmallMedium * multiplier) {
+        return qRound(KIconLoader::SizeSmall * multiplier);
 
-    } else if (size < KIconLoader::SizeMedium) {
-        return KIconLoader::SizeSmallMedium;
+    } else if (size < KIconLoader::SizeMedium * multiplier) {
+        return qRound(KIconLoader::SizeSmallMedium * multiplier);
 
-    } else if (size < KIconLoader::SizeLarge) {
-        return KIconLoader::SizeMedium;
+    } else if (size < KIconLoader::SizeLarge * multiplier) {
+        return qRound(KIconLoader::SizeMedium * multiplier);
 
-    } else if (size < KIconLoader::SizeHuge) {
-        return KIconLoader::SizeLarge;
+    } else if (size < KIconLoader::SizeHuge * multiplier) {
+        return qRound(KIconLoader::SizeLarge * multiplier);
 
-    } else if (size < KIconLoader::SizeEnormous) {
-        return KIconLoader::SizeHuge;
+    } else if (size < KIconLoader::SizeEnormous * multiplier) {
+        return qRound(KIconLoader::SizeHuge * multiplier);
 
     } else {
         return size;
     }
 }
 
+int Units::bestIconScaleForDevicePixelRatio(const int ratio)
+{
+    if (ratio < 1.5) {
+        return 1;
+    } else if (ratio < 2.0) {
+        return 1.5;
+    } else if (ratio < 2.5) {
+        return 2.0;
+    } else if (ratio < 3.0) {
+        return 2.5;
+    } else if (ratio < 3.5) {
+        return 3.0;
+    } else {
+        return ratio;
+    }
+}
 int Units::devicePixelIconSize(const int size) const
 {
     /* in kiconloader.h
@@ -180,20 +207,7 @@ int Units::devicePixelIconSize(const int size) const
     // and multiplies the global settings with the dpi ratio.
     const qreal ratio = devicePixelRatio();
 
-    if (ratio < 1.5) {
-        return size;
-    } else if (ratio < 2.0) {
-        return size * 1.5;
-    } else if (ratio < 2.5) {
-        return size * 2.0;
-    } else if (ratio < 3.0) {
-        return size * 2.5;
-    } else if (ratio < 3.5) {
-        return size * 3.0;
-    } else {
-        return size * ratio;
-    }
-    // FIXME: Add special casing for < 64 cases: align to kiconloader size
+    return size * bestIconScaleForDevicePixelRatio(ratio);
 }
 
 qreal Units::devicePixelRatio() const
