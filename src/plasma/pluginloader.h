@@ -401,19 +401,24 @@ public:
      **/
     QVector<KPluginMetaData> listContainmentActionsMetaData(const QString &parentApp);
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
     /**
      * Set the plugin loader which will be queried for all loads.
      *
      * @param loader A subclass of PluginLoader which will be supplied
      * by the application
+     * @deprecated Since 5.86, method is obsolete with the deprecation of the virtual methods
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Method is obsolete with the deprecation of the virtual methods")
     static void setPluginLoader(PluginLoader *loader);
+#endif
 
     /**
      * Return the active plugin loader
      **/
     static PluginLoader *self();
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
 protected:
     /**
      * A re-implementable method that allows subclasses to override
@@ -427,7 +432,9 @@ protected:
      *        assigned automatically.
      * @param args to send the applet extra arguments
      * @return a pointer to the loaded applet, or 0 on load failure
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual Applet *internalLoadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList());
 
     /**
@@ -439,7 +446,9 @@ protected:
      *
      * @param name the name of the engine
      * @return the data engine that was loaded, or the NullEngine on failure.
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual DataEngine *internalLoadDataEngine(const QString &name);
 
     /**
@@ -454,7 +463,9 @@ protected:
      * @param parent the parent object, if any, for the service
      *
      * @return a Service object, unlike Plasma::Service::loadService, this can return null.
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual Service *internalLoadService(const QString &name, const QVariantList &args, QObject *parent = nullptr);
 
     /**
@@ -472,10 +483,12 @@ protected:
      * @param name the plugin name, as returned by KPluginInfo::pluginName()
      * @param args to send the containmentactions extra arguments
      * @return a ContainmentActions object
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual ContainmentActions *internalLoadContainmentActions(Containment *parent, const QString &containmentActionsName, const QVariantList &args);
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
     /**
      * A re-implementable method that allows subclasses to override
      * the default behaviour of loadPackage. If the service requested is not recognized,
@@ -509,7 +522,9 @@ protected:
      *                 If an empty string is passed in, all applets are
      *                 returned.
      * @return list of applets
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual KPluginInfo::List internalAppletInfo(const QString &category) const;
 
     /**
@@ -517,22 +532,29 @@ protected:
      * for DataEngine::listDataEngines.
      *
      * @return list of dataengine info, or an empty list if none
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual KPluginInfo::List internalDataEngineInfo() const;
 
     /**
      * Returns a list of all known Service implementations
      *
      * @return list of Service info, or an empty list if none
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual KPluginInfo::List internalServiceInfo() const;
 
     /**
      * Returns a list of all known ContainmentActions implementations
      *
      * @return list of ContainmentActions info, or an empty list if none
+     * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
     virtual KPluginInfo::List internalContainmentActionsInfo() const;
+#endif
 
     /**
      * Standardized mechanism for providing internal applets by install .desktop files

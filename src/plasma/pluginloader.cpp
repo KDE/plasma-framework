@@ -133,16 +133,14 @@ PluginLoader::~PluginLoader()
     delete d;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
 void PluginLoader::setPluginLoader(PluginLoader *loader)
 {
     if (!s_pluginLoader) {
         s_pluginLoader = loader;
-    } else {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "Cannot set pluginLoader, already set!" << s_pluginLoader;
-#endif
     }
 }
+#endif
 
 PluginLoader *PluginLoader::self()
 {
@@ -163,10 +161,14 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return nullptr;
     }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
     Applet *applet = d->isDefaultLoader ? nullptr : internalLoadApplet(name, appletId, args);
     if (applet) {
         return applet;
     }
+#else
+    Applet *applet = nullptr;
+#endif
 
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
@@ -220,10 +222,14 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
     DataEngine *engine = d->isDefaultLoader ? nullptr : internalLoadDataEngine(name);
     if (engine) {
         return engine;
     }
+#else
+    DataEngine *engine = nullptr;
+#endif
 
     // Look for C++ plugins first
     const QVector<KPluginMetaData> plugins = d->dataengineCache.findPluginsById(name, {PluginLoaderPrivate::s_dataEnginePluginDir});
@@ -310,10 +316,14 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
 
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
     Service *service = d->isDefaultLoader ? nullptr : internalLoadService(name, args, parent);
     if (service) {
         return service;
     }
+#else
+    Service *service = nullptr;
+#endif
 
     // TODO: scripting API support
     if (name.isEmpty()) {
@@ -351,11 +361,14 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     if (name.isEmpty()) {
         return nullptr;
     }
-
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
     ContainmentActions *actions = d->isDefaultLoader ? nullptr : internalLoadContainmentActions(parent, name, args);
     if (actions) {
         return actions;
     }
+#else
+    ContainmentActions *actions = nullptr;
+#endif
 
     const QVector<KPluginMetaData> plugins = d->containmentactionCache.findPluginsById(name, {PluginLoaderPrivate::s_containmentActionsPluginDir});
 
@@ -389,12 +402,6 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     allArgs << offer->storageId() << args;
     QString error;
     actions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
-
-    if (!actions) {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "Couldn't load containmentActions \"" << name << "\"! reason given: " << error;
-#endif
-    }
 
     return actions;
 }
@@ -452,10 +459,6 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
         d->structures.insert(hashkey, structure);
         return Package(structure);
     }
-
-#ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "Couldn't load Package for" << packageFormat << "! reason given: " << error;
-#endif
 
     return Package();
 }
@@ -520,10 +523,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
         };
     }
 
-    QList<KPluginMetaData> list;
-    if (!d->isDefaultLoader && (parentApp.isEmpty() || parentApp == QCoreApplication::instance()->applicationName())) {
-        list = KPluginInfo::toMetaData(internalAppletInfo(category)).toList();
-    }
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
 
@@ -591,9 +590,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
             if (rx.exactMatch(url.toString())) {
-#ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << md.name() << "matches" << glob << url;
-#endif
                 filtered << md;
             }
         }
@@ -813,6 +809,7 @@ QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QStr
     return plugins;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
 Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
 {
     Q_UNUSED(name)
@@ -872,6 +869,7 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 {
     return KPluginInfo::List();
 }
+#endif
 
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {

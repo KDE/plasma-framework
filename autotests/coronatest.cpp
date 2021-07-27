@@ -15,24 +15,9 @@
 #include <QSignalSpy>
 #include <QStandardPaths>
 
-Plasma::Applet *SimpleLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
-{
-    Q_UNUSED(args)
-    if (name == QLatin1String("simpleapplet")) {
-        return new SimpleApplet(nullptr, QString(), appletId);
-    } else if (name == QLatin1String("simplecontainment")) {
-        return new SimpleContainment(nullptr, QString(), appletId);
-    } else if (name == QLatin1String("simplenoscreencontainment")) {
-        return new SimpleNoScreenContainment(nullptr, QString(), appletId);
-    } else {
-        return nullptr;
-    }
-}
-
 SimpleCorona::SimpleCorona(QObject *parent)
     : Plasma::Corona(parent)
 {
-    Plasma::PluginLoader::setPluginLoader(new SimpleLoader);
 }
 
 SimpleCorona::~SimpleCorona()

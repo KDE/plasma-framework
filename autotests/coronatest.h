@@ -13,12 +13,6 @@
 #include "plasma/corona.h"
 #include "plasma/pluginloader.h"
 
-class SimpleLoader : public Plasma::PluginLoader
-{
-protected:
-    virtual Plasma::Applet *internalLoadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList()) override;
-};
-
 class SimpleCorona : public Plasma::Corona
 {
     Q_OBJECT
