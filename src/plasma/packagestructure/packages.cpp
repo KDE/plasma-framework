@@ -41,8 +41,7 @@ void ChangeableMainScriptPackage::pathChanged(KPackage::Package *package)
         return;
     }
 
-    KPluginMetaData md(package->metadata().metaDataFileName());
-    QString mainScript = md.value(QLatin1String("X-Plasma-MainScript"));
+    const QString mainScript = package->metadata().value(QLatin1String("X-Plasma-MainScript"));
 
     if (!mainScript.isEmpty()) {
         package->addFileDefinition("mainscript", mainScript, i18n("Main Script File"));
