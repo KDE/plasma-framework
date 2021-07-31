@@ -75,6 +75,6 @@ public:
     }
 };
 
-K_PLUGIN_CLASS_WITH_JSON(ThemePackage, "plasmatheme-packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(ThemePackage, "plasma_theme_packagestructure.json")
 
-#include "plasmathemepackage.moc"
+#include "plasma_theme_packagestructure.moc"

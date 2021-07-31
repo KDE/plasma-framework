@@ -45,6 +45,6 @@ public:
     }
 };
 
-K_PLUGIN_CLASS_WITH_JSON(PlasmoidPackage, "plasmoid-packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(PlasmoidPackage, "plasma_applet_packagestructure.json")
 
-#include "plasmoidpackage.moc"
+#include "plasma_applet_packagestructure.moc"

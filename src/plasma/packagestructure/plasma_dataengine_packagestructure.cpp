@@ -40,6 +40,6 @@ public:
     }
 };
 
-K_PLUGIN_CLASS_WITH_JSON(DataEnginePackage, "dataengine-packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(DataEnginePackage, "plasma_dataengine_packagestructure.json")
 
-#include "dataenginepackage.moc"
+#include "plasma_dataengine_packagestructure.moc"

@@ -27,6 +27,6 @@ public:
     }
 };
 
-K_PLUGIN_CLASS_WITH_JSON(ContainmentActionsPackage, "containmentactions-packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(ContainmentActionsPackage, "plasma_containmentactions_packagestructure.json")
 
-#include "containmentactionspackage.moc"
+#include "plasma_containmentactions_packagestructure.moc"
