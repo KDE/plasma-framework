@@ -22,7 +22,6 @@ PlasmaComponents3.AbstractButton {
     id: dayStyle
 
     hoverEnabled: true
-    property var dayModel: null
 
     signal activated
 
@@ -79,15 +78,13 @@ PlasmaComponents3.AbstractButton {
         sourceComponent: Row {
             spacing: PlasmaCore.Units.smallSpacing
             Repeater {
-                model: DelegateModel {
-                    model: dayStyle.dayModel
-                    rootIndex: modelIndex(index)
-                    delegate: Rectangle {
-                        width: PlasmaCore.Units.smallSpacing * 1.5
-                        height: width
-                        radius: width / 2
-                        color: model.eventColor ? Kirigami.ColorUtils.linearInterpolation(model.eventColor, PlasmaCore.Theme.textColor, 0.2) : PlasmaCore.Theme.highlightColor
-                    }
+                model: eventCount
+
+                Rectangle {
+                    width: PlasmaCore.Units.smallSpacing * 1.5
+                    height: width
+                    radius: width / 2
+                    color: model.eventColor ? Kirigami.ColorUtils.linearInterpolation(model.eventColor, PlasmaCore.Theme.textColor, 0.2) : PlasmaCore.Theme.highlightColor
                 }
             }
         }
