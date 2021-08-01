@@ -119,6 +119,7 @@ Item {
                 id: delegate
                 width: daysCalendar.cellWidth
                 height: daysCalendar.cellHeight
+                dayModel: repeater.model
 
                 onClicked: daysCalendar.activated(index, model, delegate)
 
