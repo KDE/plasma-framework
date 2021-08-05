@@ -60,10 +60,11 @@ T.TextField {
     PlasmaCore.ColorScope.inherit: !background || !background.visible
     PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ViewColorGroup
 
-    color: PlasmaCore.Theme.textColor
+    color: control.backgroundVisible ? PlasmaCore.Theme.viewTextColor : PlasmaCore.ColorScope.textColor
+    selectionColor: control.backgroundVisible ? PlasmaCore.Theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
+    selectedTextColor: control.backgroundVisible ? PlasmaCore.Theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
     placeholderTextColor: PlasmaCore.Theme.disabledTextColor
-    selectionColor: PlasmaCore.Theme.highlightColor
-    selectedTextColor: PlasmaCore.Theme.highlightedTextColor
+
     verticalAlignment: TextInput.AlignVCenter
     // Manually setting this fixes alignment in RTL layouts
     horizontalAlignment: TextInput.AlignLeft
