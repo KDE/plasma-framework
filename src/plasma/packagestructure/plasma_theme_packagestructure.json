@@ -93,9 +93,6 @@
         "Name[x-test]": "xxPlasma Themexx",
         "Name[zh_CN]": "Plasma 主题",
         "Name[zh_TW]": "Plasma 主題",
-        "ServiceTypes": [
-            "KPackage/PackageStructure"
-        ],
         "Version": "1"
     },
     "X-KDE-ParentApp": "org.kde.plasmashell"

@@ -92,9 +92,6 @@
         "Name[x-test]": "xxGenericxx",
         "Name[zh_CN]": "通用",
         "Name[zh_TW]": "一般",
-        "ServiceTypes": [
-            "KPackage/PackageStructure"
-        ],
         "Version": "1"
     },
     "X-KDE-ParentApp": "org.kde.plasmashell"

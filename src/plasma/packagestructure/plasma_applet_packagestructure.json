@@ -93,9 +93,6 @@
         "Name[x-test]": "xxPlasmoidxx",
         "Name[zh_CN]": "小部件",
         "Name[zh_TW]": "元件",
-        "ServiceTypes": [
-            "KPackage/PackageStructure"
-        ],
         "Version": "1"
     },
     "X-KDE-ParentApp": "org.kde.plasmashell"

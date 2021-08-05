@@ -92,9 +92,6 @@
         "Name[x-test]": "xxData Enginexx",
         "Name[zh_CN]": "数据引擎",
         "Name[zh_TW]": "資料引擎",
-        "ServiceTypes": [
-            "KPackage/PackageStructure"
-        ],
         "Version": "1"
     },
     "X-KDE-ParentApp": "org.kde.plasmashell"

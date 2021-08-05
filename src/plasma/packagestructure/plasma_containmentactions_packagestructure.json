@@ -91,9 +91,6 @@
         "Name[x-test]": "xxContainment Actionsxx",
         "Name[zh_CN]": "容器动作",
         "Name[zh_TW]": "遏止動作",
-        "ServiceTypes": [
-            "KPackage/PackageStructure"
-        ],
         "Version": "1"
     },
     "X-KDE-ParentApp": "org.kde.plasmashell"
