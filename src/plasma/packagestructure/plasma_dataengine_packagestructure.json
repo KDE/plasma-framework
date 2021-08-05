@@ -48,7 +48,6 @@
                 "Name[zh_TW]": "Aaron Seigo"
             }
         ],
-        "Id": "Plasma/DataEngine",
         "Name": "Data Engine",
         "Name[ar]": "محرّك بيانات",
         "Name[az]": "Plasma verilənlər mənbəyi",
@@ -94,5 +93,6 @@
         "Name[zh_TW]": "資料引擎",
         "Version": "1"
     },
+    "KPackageStructure": "Plasma/DataEngine",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

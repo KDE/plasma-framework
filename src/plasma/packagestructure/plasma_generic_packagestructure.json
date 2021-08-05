@@ -48,7 +48,6 @@
                 "Name[zh_TW]": "Aaron Seigo"
             }
         ],
-        "Id": "Plasma/Generic",
         "Name": "Generic",
         "Name[ar]": "عامّة",
         "Name[az]": "Ümumi təyinatlı Plasma Paketi",
@@ -94,5 +93,6 @@
         "Name[zh_TW]": "一般",
         "Version": "1"
     },
+    "KPackageStructure": "Plasma/Generic",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

@@ -48,7 +48,6 @@
                 "Name[zh_TW]": "Aaron Seigo"
             }
         ],
-        "Id": "Plasma/ContainmentActions",
         "Name": "Containment Actions",
         "Name[ar]": "إجراءات الاحتواء",
         "Name[az]": "Plasma konteyneri əməlləri",
@@ -93,5 +92,6 @@
         "Name[zh_TW]": "遏止動作",
         "Version": "1"
     },
+    "KPackageStructure": "Plasma/ContainmentActions",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }
