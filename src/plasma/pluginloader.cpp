@@ -172,27 +172,32 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         appletId = ++AppletPrivate::s_maxAppletId;
     }
 
-    // Need to pass the empty directory because it's where plasmoids used to be
-    auto plugins = d->plasmoidCache.findPluginsById(name, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
-
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
 
-    // If the applet is using another applet package, search for the plugin of the other applet
-    if (plugins.isEmpty()) {
-        const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
-        if (!parentPlugin.isEmpty()) {
-            plugins = d->plasmoidCache.findPluginsById(parentPlugin, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
+    const QJsonValue value = p.metadata().rawData().value(QLatin1String("X-KDE-Applet-Library"));
+    QVector<KPluginMetaData> plugins;
+
+    if (value.isUndefined()) {
+        // Need to pass the empty directory because it's where plasmoids used to be
+        plugins = d->plasmoidCache.findPluginsById(name, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
+
+        // If the applet is using another applet package, search for the plugin of the other applet
+        if (plugins.isEmpty()) {
+            const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
+            if (!parentPlugin.isEmpty()) {
+                plugins = d->plasmoidCache.findPluginsById(parentPlugin, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
+            }
+        }
+    } else {
+        // Load applet by name instead of searching all available plugins, see https://phabricator.kde.org/T14757
+        if (!value.toString().isEmpty()) {
+            KPluginMetaData data(PluginLoaderPrivate::s_plasmoidsPluginDir + QLatin1Char('/') + value.toString());
+            if (data.isValid()) {
+                plugins << data;
+            }
         }
     }
-
     if (!plugins.isEmpty()) {
-        KPluginLoader loader(plugins.first().fileName());
-        KPluginFactory *factory = loader.factory();
-        if (factory) {
-            QVariantList allArgs;
-            allArgs << QVariant::fromValue(p) << loader.metaData().toVariantMap() << appletId << args;
-            applet = factory->create<Plasma::Applet>(nullptr, allArgs);
-        }
     }
     if (applet) {
         return applet;

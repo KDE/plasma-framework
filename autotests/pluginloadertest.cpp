@@ -14,7 +14,6 @@
 #include <KPluginMetaData>
 
 #include <plasma/dataengineconsumer.h>
-#include <plasma/pluginloader.h>
 
 QTEST_MAIN(PluginTest)
 
