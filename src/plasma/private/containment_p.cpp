@@ -184,7 +184,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
 
     if (!applet) {
         qCWarning(LOG_PLASMA) << "Applet" << name << "could not be loaded.";
-        applet = new Applet(nullptr, QString(), id);
+        applet = new Applet(nullptr, KPluginMetaData(), QVariantList{QVariant(), QVariant(), id});
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }
 

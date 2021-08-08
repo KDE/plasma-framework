@@ -38,8 +38,8 @@ int SimpleCorona::screenForContainment(const Plasma::Containment *c) const
     return 0;
 }
 
-SimpleApplet::SimpleApplet(QObject *parent, const QString &serviceId, uint appletId)
-    : Plasma::Applet(parent, serviceId, appletId)
+SimpleApplet::SimpleApplet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
+    : Plasma::Applet(parentObject, data, args)
 {
     // updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
@@ -50,8 +50,8 @@ SimpleApplet::SimpleApplet(QObject *parent, const QString &serviceId, uint apple
     });
 }
 
-SimpleContainment::SimpleContainment(QObject *parent, const QString &serviceId, uint appletId)
-    : Plasma::Containment(parent, serviceId, appletId)
+SimpleContainment::SimpleContainment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
+    : Plasma::Containment(parentObject, data, args)
 {
     // updateConstraints(Plasma::Types::UiReadyConstraint);
     m_timer.setSingleShot(true);
@@ -62,8 +62,8 @@ SimpleContainment::SimpleContainment(QObject *parent, const QString &serviceId, 
     });
 }
 
-SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parent, const QString &serviceId, uint appletId)
-    : Plasma::Containment(parent, serviceId, appletId)
+SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
+    : Plasma::Containment(parentObject, data, args)
 {
     // This containment will *never* be isUiReady()
 }

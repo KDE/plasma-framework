@@ -191,6 +191,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         KPluginLoader loader(plugins.first().fileName());
         KPluginFactory *factory = loader.factory();
         if (factory) {
+            factory->setMetaData(plugins.constFirst());
             QVariantList allArgs;
             allArgs << QVariant::fromValue(p) << loader.metaData().toVariantMap() << appletId << args;
             applet = factory->create<Plasma::Applet>(nullptr, allArgs);
@@ -207,9 +208,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
         if (p.metadata().serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
-            applet = new Containment(nullptr, allArgs);
+            applet = new Containment(nullptr, p.metadata(), allArgs);
         } else {
-            applet = new Applet(nullptr, allArgs);
+            applet = new Applet(nullptr, p.metadata(), allArgs);
         }
     }
 

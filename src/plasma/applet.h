@@ -78,14 +78,31 @@ class PLASMA_EXPORT Applet : public QObject
 
 public:
     // CONSTRUCTORS
+
+    /**
+     * This constructor can be used with the KCoreAddons plugin loading system.
+     * The argument list is expected to have contain the KPackage of the applet,
+     * the meta data file path (for compatibility) and an applet ID which must be a base 10 number.
+     *
+     * @param parent a QObject parent; you probably want to pass in 0
+     * @param data, KPluginMetaData used to create this plugin
+     * @param args a list of strings containing the applet id
+     * @Since 5.86
+     */
+    Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
+
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
     /**
      * @param parent the QObject this applet is parented to
      * @param serviceId the name of the .desktop file containing the
      *      information about the widget
      * @param appletId a unique id used to differentiate between multiple
      *      instances of the same Applet type
+     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
     explicit Applet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
     /**
@@ -101,14 +118,18 @@ public:
     explicit Applet(const KPluginInfo &info, QObject *parent = nullptr, uint appletId = 0);
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
     /**
      * @param parent the QObject this applet is parented to
      * @param metadata the plugin information object for this Applet
      * @param appletId a unique id used to differentiate between multiple
      *      instances of the same Applet type
      * @since 5.27
+     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
     explicit Applet(const KPluginMetaData &metadata, QObject *parent = nullptr, uint appletId = 0);
+#endif
 
     ~Applet() override;
 
@@ -672,7 +693,7 @@ public Q_SLOTS:
     void runAssociatedApplication();
 
 protected:
-    // CONSTRUCTORS
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
     /**
      * This constructor is to be used with the plugin loading systems
      * found in KPluginInfo and KService. The argument list is expected
@@ -682,8 +703,11 @@ protected:
      * @param parent a QObject parent; you probably want to pass in 0
      * @param args a list of strings containing two entries: the service id
      *      and the applet id
+     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
     Applet(QObject *parent, const QVariantList &args);
+#endif
 
     // CONFIGURATION
     /**

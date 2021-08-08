@@ -48,6 +48,7 @@
 
 namespace Plasma
 {
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
 static KPluginMetaData appletMetadataForDirectory(const QString &path)
 {
     return QFile::exists(path + QLatin1String("/metadata.json"))
@@ -120,6 +121,30 @@ Applet::Applet(const QString &packagePath, uint appletId)
     , d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
 {
     d->init(packagePath);
+    d->setupPackage();
+}
+#endif
+
+Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
+    : QObject(nullptr)
+    , d(new AppletPrivate(data, args.count() > 2 ? args[2].toInt() : 0, this))
+{
+    setParent(parentObject);
+    if (!args.isEmpty()) {
+        const QVariant first = args.first();
+        if (first.canConvert<KPackage::Package>()) {
+            d->package = first.value<KPackage::Package>();
+        }
+    }
+    d->icon = d->appletDescription.iconName();
+
+    if (args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
+        setProperty("org.kde.plasma:force-create", true);
+    }
+
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+    d->init(QString(), args.mid(3));
     d->setupPackage();
 }
 

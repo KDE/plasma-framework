@@ -37,6 +37,17 @@
 
 namespace Plasma
 {
+Containment::Containment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
+    : Applet(parentObject, data, args)
+    , d(new ContainmentPrivate(this))
+{
+    // WARNING: do not access config() OR globalConfig() in this method!
+    //          that requires a scene, which is not available at this point
+    setContainmentType(Types::CustomContainment);
+    setHasConfigurationInterface(true);
+}
+
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
 Containment::Containment(QObject *parent, const QString &serviceId, uint containmentId)
     : Applet(parent, serviceId, containmentId)
     , d(new ContainmentPrivate(this))
@@ -64,6 +75,7 @@ Containment::Containment(const KPluginMetaData &md, uint appletId)
     //          that requires a scene, which is not available at this point
     setHasConfigurationInterface(true);
 }
+#endif
 
 Containment::~Containment()
 {

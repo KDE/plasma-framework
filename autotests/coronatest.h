@@ -30,7 +30,7 @@ class SimpleApplet : public Plasma::Applet
     Q_OBJECT
 
 public:
-    explicit SimpleApplet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleApplet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
 
 private:
     QTimer m_timer;
@@ -41,7 +41,7 @@ class SimpleContainment : public Plasma::Containment
     Q_OBJECT
 
 public:
-    explicit SimpleContainment(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleContainment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
 
 private:
     QTimer m_timer;
@@ -52,7 +52,7 @@ class SimpleNoScreenContainment : public Plasma::Containment
     Q_OBJECT
 
 public:
-    explicit SimpleNoScreenContainment(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
+    explicit SimpleNoScreenContainment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
 };
 
 class CoronaTest : public QObject

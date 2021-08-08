@@ -49,14 +49,31 @@ class PLASMA_EXPORT Containment : public Applet
 
 public:
     /**
+     * This constructor can be used with the KCoreAddons plugin loading system.
+     * The argument list is expected to have contain the KPackage of the applet,
+     * the meta data file path (for compatibility) and an applet ID which must be a base 10 number.
+     *
+     * @param parent a QObject parent; you probably want to pass in 0
+     * @param data, KPluginMetaData used to create this plugin
+     * @param args a list of strings containing the applet id
+     * @since 5.86
+     */
+    explicit Containment(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
+
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
+    /**
      * @param parent the QObject this applet is parented to
      * @param serviceId the name of the .desktop file containing the
      *      information about the widget
      * @param containmentId a unique id used to differentiate between multiple
      *      instances of the same Applet type
+     * @deprecated Since 5.86, use Containment(QObject *, KPluginMetaData, QVariantList) instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "use Containment(QObject *, KPluginMetaData, QVariantList) instead")
     explicit Containment(QObject *parent = nullptr, const QString &serviceId = QString(), uint containmentId = 0);
+#endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
     /**
      * This constructor is to be used with the plugin loading systems
      * found in KPluginInfo and KService. The argument list is expected
@@ -66,8 +83,11 @@ public:
      * @param parent a QObject parent; you probably want to pass in 0
      * @param args a list of strings containing two entries: the service id
      *      and the applet id
+     * @deprecated Since 5.86, use Containment(QObject *, KPluginMetaData, QVariantList) instead
      */
+    PLASMA_DEPRECATED_VERSION(5, 86, "use Containment(QObject *, KPluginMetaData, QVariantList) instead")
     Containment(QObject *parent, const QVariantList &args);
+#endif
 
     ~Containment() override;
 
