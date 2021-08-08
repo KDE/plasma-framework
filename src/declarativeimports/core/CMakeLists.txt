@@ -76,14 +76,13 @@ install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/k
 ecm_generate_qmltypes(org.kde.plasma.core 2.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
 
 #also "install" to $BUILD_DIR/bin for unit tests
-add_custom_target(copy ALL DEPENDS corebindingsplugin)
-add_custom_command(TARGET copy POST_BUILD
+add_custom_command(TARGET corebindingsplugin POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E
                         copy ${CMAKE_CURRENT_SOURCE_DIR}/qmldir ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/qmldir)
-add_custom_command(TARGET copy POST_BUILD
+add_custom_command(TARGET corebindingsplugin POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E
                     copy $<TARGET_FILE:corebindingsplugin> ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/)
-add_custom_command(TARGET copy POST_BUILD
+add_custom_command(TARGET corebindingsplugin POST_BUILD
                     COMMAND ${CMAKE_COMMAND} -E
                         copy ${CMAKE_CURRENT_SOURCE_DIR}/private/DefaultToolTip.qml ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/private/DefaultToolTip.qml)
 
