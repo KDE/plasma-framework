@@ -81,13 +81,14 @@ PlasmaComponents3.AbstractButton {
             Repeater {
                 model: DelegateModel {
                     model: dayStyle.dayModel
-                    rootIndex: modelIndex(index)
                     delegate: Rectangle {
                         width: PlasmaCore.Units.smallSpacing * 1.5
                         height: width
                         radius: width / 2
                         color: model.eventColor ? Kirigami.ColorUtils.linearInterpolation(model.eventColor, PlasmaCore.Theme.textColor, 0.2) : PlasmaCore.Theme.highlightColor
                     }
+
+                    Component.onCompleted: rootIndex = modelIndex(index)
                 }
             }
         }
