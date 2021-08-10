@@ -209,7 +209,7 @@ void ModelMoveCommand::doCommand()
     }
 
     for (int column = 0; column < m_numCols; ++column) {
-        QList<qint64> l = m_model->m_childItems.value(srcParent.internalId())[column].mid(m_startRow, m_endRow - m_startRow + 1);
+        const QList<qint64> lst = m_model->m_childItems.value(srcParent.internalId())[column].mid(m_startRow, m_endRow - m_startRow + 1);
 
         for (int i = m_startRow; i <= m_endRow; i++) {
             m_model->m_childItems[srcParent.internalId()][column].removeAt(m_startRow);
@@ -225,7 +225,7 @@ void ModelMoveCommand::doCommand()
             }
         }
 
-        foreach (const qint64 id, l) {
+        for (const qint64 id : lst) {
             m_model->m_childItems[destParent.internalId()][column].insert(d++, id);
         }
     }
