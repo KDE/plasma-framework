@@ -123,7 +123,7 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
     : QObject(parent)
 {
     auto plugins = KPluginLoader::findPlugins(QStringLiteral("plasmacalendarplugins"), [](const KPluginMetaData &md) {
-        return md.serviceTypes().contains(QLatin1String("PlasmaCalendar/Plugin"));
+        return md.rawData().contains(QStringLiteral("KPlugin"));
     });
     for (const KPluginMetaData &plugin : qAsConst(plugins)) {
         m_availablePlugins.insert(plugin.fileName(),
