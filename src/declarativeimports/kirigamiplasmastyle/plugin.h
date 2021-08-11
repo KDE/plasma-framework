@@ -23,8 +23,7 @@ public:
     explicit Plugin(QObject *parent = nullptr);
     ~Plugin() override;
 
-    // TODO: Implement this
-    // Kirigami::PlatformTheme *createPlatformTheme(QObject *parent) override;
+    Kirigami::PlatformTheme *createPlatformTheme(QObject *parent) override;
     Kirigami::Units *createUnits(QObject *parent) override;
 };
 

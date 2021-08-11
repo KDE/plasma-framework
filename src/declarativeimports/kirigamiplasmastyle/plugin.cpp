@@ -15,6 +15,14 @@ Plugin::Plugin(QObject *parent)
 
 Plugin::~Plugin() = default;
 
+Kirigami::PlatformTheme *Plugin::createPlatformTheme(QObject *parent)
+{
+    Q_UNUSED(parent);
+    // TODO: Implement a proper C++ version of PlatformTheme. This relies on fallback
+    // behaviour in Kirigami to load the Theme.qml file.
+    return nullptr;
+}
+
 Kirigami::Units *Plugin::createUnits(QObject *parent)
 {
     Q_ASSERT(parent);
