@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/ContainmentActions",
     "KPlugin": {
         "Authors": [
             {
@@ -92,6 +93,5 @@
         "Name[zh_TW]": "遏止動作",
         "Version": "1"
     },
-    "KPackageStructure": "Plasma/ContainmentActions",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

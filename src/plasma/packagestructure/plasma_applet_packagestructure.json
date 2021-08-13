@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -94,6 +95,5 @@
         "Name[zh_TW]": "元件",
         "Version": "1"
     },
-    "KPackageStructure": "Plasma/Applet",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/DataEngine",
     "KPlugin": {
         "Authors": [
             {
@@ -93,6 +94,5 @@
         "Name[zh_TW]": "資料引擎",
         "Version": "1"
     },
-    "KPackageStructure": "Plasma/DataEngine",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }

@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Generic",
     "KPlugin": {
         "Authors": [
             {
@@ -93,6 +94,5 @@
         "Name[zh_TW]": "一般",
         "Version": "1"
     },
-    "KPackageStructure": "Plasma/Generic",
     "X-KDE-ParentApp": "org.kde.plasmashell"
 }
