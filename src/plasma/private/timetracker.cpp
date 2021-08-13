@@ -95,8 +95,9 @@ void TimeTracker::init()
         QMetaProperty prop = o->metaObject()->property(i);
         m_history.initial[QString::fromUtf8(prop.name())] = prop.read(o);
 
-        if (prop.hasNotifySignal())
+        if (prop.hasNotifySignal()) {
             connect(o, prop.notifySignal(), this, propChange);
+        }
     }
 }
 

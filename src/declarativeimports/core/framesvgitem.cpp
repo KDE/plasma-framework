@@ -36,14 +36,18 @@ public:
         , topHeight(0)
         , bottomHeight(0)
     {
-        if (svg->enabledBorders() & FrameSvg::LeftBorder)
+        if (svg->enabledBorders() & FrameSvg::LeftBorder) {
             leftWidth = svg->elementSize(prefix % QLatin1String("left")).width();
-        if (svg->enabledBorders() & FrameSvg::RightBorder)
+        }
+        if (svg->enabledBorders() & FrameSvg::RightBorder) {
             rightWidth = svg->elementSize(prefix % QLatin1String("right")).width();
-        if (svg->enabledBorders() & FrameSvg::TopBorder)
+        }
+        if (svg->enabledBorders() & FrameSvg::TopBorder) {
             topHeight = svg->elementSize(prefix % QLatin1String("top")).height();
-        if (svg->enabledBorders() & FrameSvg::BottomBorder)
+        }
+        if (svg->enabledBorders() & FrameSvg::BottomBorder) {
             bottomHeight = svg->elementSize(prefix % QLatin1String("bottom")).height();
+        }
     }
 
     QRect contentsRect(const QSize &size) const
@@ -119,8 +123,9 @@ public:
         QRect nodeRect = FrameSvgHelpers::sectionRect(m_border, frameGeometry, fullSize);
 
         // ensure we're not passing a weird rectangle to updateTexturedRectGeometry
-        if (!nodeRect.isValid() || nodeRect.isEmpty())
+        if (!nodeRect.isValid() || nodeRect.isEmpty()) {
             nodeRect = QRect();
+        }
 
         // the position of the relevant texture within this texture ID.
         // for atlas' this will only be a small part of the texture
@@ -228,7 +233,10 @@ qreal FrameSvgItemMargins::vertical() const
 
 QVector<qreal> FrameSvgItemMargins::margins() const
 {
-    qreal left, top, right, bottom;
+    qreal left;
+    qreal top;
+    qreal right;
+    qreal bottom;
     m_frameSvg->getMargins(left, top, right, bottom);
     return {left, top, right, bottom};
 }

@@ -24,8 +24,9 @@ static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::fu
     const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
     ret.reserve(plugins.size());
     for (const auto &plugin : plugins) {
-        if (!filter(plugin))
+        if (!filter(plugin)) {
             continue;
+        }
         const QStringList componentTypes = KPluginMetaData::readStringList(plugins.first().rawData(), QStringLiteral("X-Plasma-ComponentTypes"));
         if (((types & Types::AppletComponent) && componentTypes.contains(QLatin1String("Applet")))
             || ((types & Types::DataEngineComponent) && componentTypes.contains(QLatin1String("DataEngine")))) {
@@ -70,8 +71,9 @@ QStringList knownLanguages(Types::ComponentTypes types)
         return true;
     });
 
-    for (const auto &plugin : plugins)
+    for (const auto &plugin : plugins) {
         languages << plugin.value(QStringLiteral("X-Plasma-API"));
+    }
 
     return languages;
 }

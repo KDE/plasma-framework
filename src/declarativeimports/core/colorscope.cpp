@@ -76,8 +76,9 @@ ColorScope *ColorScope::qmlAttachedProperties(QObject *object)
 
 void ColorScope::setParentScope(ColorScope *parentScope)
 {
-    if (parentScope == m_parentScope)
+    if (parentScope == m_parentScope) {
         return;
+    }
 
     if (m_parentScope) {
         disconnect(m_parentScope.data(), &ColorScope::colorGroupChanged, this, &ColorScope::checkColorGroupChanged);

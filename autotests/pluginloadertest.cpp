@@ -76,7 +76,8 @@ void PluginTest::loadDataEngine()
     if (m_buildonly) {
         return;
     }
-    QPointer<Plasma::DataEngine> engine, nullEngine;
+    QPointer<Plasma::DataEngine> engine;
+    QPointer<Plasma::DataEngine> nullEngine;
     {
         Plasma::DataEngineConsumer consumer;
         engine = consumer.dataEngine(QStringLiteral("time"));

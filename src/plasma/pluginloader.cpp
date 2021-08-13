@@ -927,8 +927,9 @@ QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QStri
             plugins[metadata.pluginId()].append(metadata);
         };
 
-        for (const QString &dir : dirs)
+        for (const QString &dir : dirs) {
             KPluginLoader::forEachPlugin(dir, insertIntoCache);
+        }
     } else if (now - pluginCacheAge > maxCacheAge) {
         // cache is old and we're not within a few seconds of startup anymore
         useRuntimeCache = false;
@@ -949,8 +950,9 @@ QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QStri
     } else {
         for (const auto &dir : dirs) {
             ret = KPluginLoader::findPluginsById(dir, pluginName);
-            if (!ret.isEmpty())
+            if (!ret.isEmpty()) {
                 break;
+            }
         }
     }
     return ret;

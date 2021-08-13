@@ -236,8 +236,9 @@ void AppletPrivate::setDestroyed(bool destroyed)
     Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
     if (asContainment) {
         const auto lstApplets = asContainment->applets();
-        for (Applet *a : lstApplets)
+        for (Applet *a : lstApplets) {
             a->d->setDestroyed(destroyed);
+        }
     }
 }
 

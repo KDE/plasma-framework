@@ -122,10 +122,12 @@ void WallpaperInterface::syncWallpaperPackage()
         return;
     }
 
-    if (m_configLoader)
+    if (m_configLoader) {
         m_configLoader->deleteLater();
-    if (m_configuration)
+    }
+    if (m_configuration) {
         m_configuration->deleteLater();
+    }
     m_configLoader = nullptr;
     m_configuration = nullptr;
     if (configScheme()) {

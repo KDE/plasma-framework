@@ -553,8 +553,9 @@ void WindowThumbnail::resolveGLXFunctions()
     if (extensions.contains(QByteArrayLiteral("GLX_EXT_texture_from_pixmap"))) {
         m_bindTexImage = context->getProcAddress(QByteArrayLiteral("glXBindTexImageEXT"));
         m_releaseTexImage = context->getProcAddress(QByteArrayLiteral("glXReleaseTexImageEXT"));
-    } else
+    } else {
         qWarning() << "couldn't resolve GLX_EXT_texture_from_pixmap functions";
+    }
     m_openGLFunctionsResolved = true;
 }
 
@@ -585,8 +586,9 @@ struct GlxGlobalData {
                 const xcb_render_pictvisual_t *visuals = xcb_render_pictdepth_visuals(depths.data);
                 const int len = xcb_render_pictdepth_visuals_length(depths.data);
 
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < len; i++) {
                     visualPictFormatHash.insert(visuals[i].visual, visuals[i].format);
+                }
             }
         }
 
@@ -595,8 +597,9 @@ struct GlxGlobalData {
         const int len = xcb_render_query_pict_formats_formats_length(reply);
 
         for (int i = 0; i < len; i++) {
-            if (formats[i].type == XCB_RENDER_PICT_TYPE_DIRECT)
+            if (formats[i].type == XCB_RENDER_PICT_TYPE_DIRECT) {
                 formatInfoHash.insert(formats[i].id, &formats[i].direct);
+            }
         }
 
         // Init the visual ID -> depth hash table
@@ -607,8 +610,9 @@ struct GlxGlobalData {
                 const int len = xcb_depth_visuals_length(depth.data);
                 const xcb_visualtype_t *visuals = xcb_depth_visuals(depth.data);
 
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < len; i++) {
                     visualDepthHash.insert(visuals[i].visual_id, depth.data->depth);
+                }
             }
         }
     }
@@ -713,55 +717,67 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
     QList<FBConfig> candidates;
 
     for (int i = 0; i < count; i++) {
-        int red, green, blue;
+        int red;
+        int green;
+        int blue;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_RED_SIZE, &red);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_GREEN_SIZE, &green);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_BLUE_SIZE, &blue);
 
-        if (std::tie(red, green, blue) != rgb_sizes)
+        if (std::tie(red, green, blue) != rgb_sizes) {
             continue;
+        }
 
         xcb_visualid_t visual;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_VISUAL_ID, (int *)&visual);
 
-        if (visualDepth(visual) != depth)
+        if (visualDepth(visual) != depth) {
             continue;
+        }
 
-        int bind_rgb, bind_rgba;
+        int bind_rgb;
+        int bind_rgba;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &bind_rgba);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_RGB_EXT, &bind_rgb);
 
-        if (!bind_rgb && !bind_rgba)
+        if (!bind_rgb && !bind_rgba) {
             continue;
+        }
 
         int texture_targets;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_BIND_TO_TEXTURE_TARGETS_EXT, &texture_targets);
 
-        if ((texture_targets & GLX_TEXTURE_2D_BIT_EXT) == 0)
+        if ((texture_targets & GLX_TEXTURE_2D_BIT_EXT) == 0) {
             continue;
+        }
 
-        int depth, stencil;
+        int depth;
+        int stencil;
         glXGetFBConfigAttrib(dpy, configs[i], GLX_DEPTH_SIZE, &depth);
         glXGetFBConfigAttrib(dpy, configs[i], GLX_STENCIL_SIZE, &stencil);
 
         int texture_format;
-        if (alpha_bits)
+        if (alpha_bits) {
             texture_format = bind_rgba ? GLX_TEXTURE_FORMAT_RGBA_EXT : GLX_TEXTURE_FORMAT_RGB_EXT;
-        else
+        } else {
             texture_format = bind_rgb ? GLX_TEXTURE_FORMAT_RGB_EXT : GLX_TEXTURE_FORMAT_RGBA_EXT;
+        }
 
         candidates.append(FBConfig{configs[i], depth, stencil, texture_format});
     }
 
-    if (count > 0)
+    if (count > 0) {
         XFree(configs);
+    }
 
     std::stable_sort(candidates.begin(), candidates.end(), [](const FBConfig &left, const FBConfig &right) {
-        if (left.depth < right.depth)
+        if (left.depth < right.depth) {
             return true;
+        }
 
-        if (left.stencil < right.stencil)
+        if (left.stencil < right.stencil) {
             return true;
+        }
 
         return false;
     });
@@ -928,11 +944,13 @@ QSGTextureProvider *WindowThumbnail::textureProvider() const
     // When Item::layer::enabled == true, QQuickItem will be a texture
     // provider. In this case we should prefer to return the layer rather
     // than our texture
-    if (QQuickItem::isTextureProvider())
+    if (QQuickItem::isTextureProvider()) {
         return QQuickItem::textureProvider();
+    }
 
-    if (!m_node)
+    if (!m_node) {
         m_node = new WindowTextureNode;
+    }
     // will be cleaned up by QQuickWindow when updatePaintNode takes ownership
     return m_node.data();
 }
