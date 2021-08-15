@@ -174,7 +174,7 @@ int Units::roundToIconSize(int size)
     }
 }
 
-int Units::bestIconScaleForDevicePixelRatio(const int ratio)
+qreal Units::bestIconScaleForDevicePixelRatio(const qreal ratio)
 {
     if (ratio < 1.5) {
         return 1;

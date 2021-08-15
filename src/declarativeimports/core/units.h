@@ -271,7 +271,7 @@ private:
      * Note that this function is only relevant when using Plasma scaling and
      * when using Qt scaling, it always returns 1.
      */
-    static int bestIconScaleForDevicePixelRatio(const int ratio);
+    static qreal bestIconScaleForDevicePixelRatio(const qreal ratio);
 
     /**
      * @return The dpi-adjusted size for a given icon size
