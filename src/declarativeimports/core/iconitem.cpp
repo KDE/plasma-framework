@@ -196,6 +196,9 @@ public:
     {
         if (m_svgIcon) {
             QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
+            // the parent IconItem can outlive this IconItemSource, so delete our Plasma::Svg object
+            // explicitly to avoid leaving unreferenced Plasma::Svg objects parented to the IconItem
+            delete m_svgIcon;
         }
     }
 
