@@ -101,7 +101,9 @@ QUrl PackageUrlInterceptor::intercept(const QUrl &path, QQmlAbstractUrlIntercept
     QString plainPath = path.toString();
     const int index = plainPath.indexOf(marker);
     if (index != -1) {
-        plainPath = plainPath.leftRef(index) + QLatin1Char('/') + prefix + QLatin1Char('/') + plainPath.midRef(index + marker.size());
+        QStringView strView(plainPath);
+
+        plainPath = strView.left(index) + QLatin1Char('/') + prefix + QLatin1Char('/') + strView.mid(index + marker.size());
 
         const QUrl url = QUrl(plainPath);
         const QString newPath = url.path();

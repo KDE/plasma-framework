@@ -481,7 +481,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
 
     QFont font = QGuiApplication::font();
     elements[QStringLiteral("%fontsize")] = QStringLiteral("%1pt").arg(font.pointSize());
-    elements[QStringLiteral("%fontfamily")] = font.family().splitRef(QLatin1Char('[')).first().toString();
+    QString family{font.family()};
+    family.truncate(family.indexOf(QLatin1Char('[')));
+    elements[QStringLiteral("%fontfamily")] = family;
     elements[QStringLiteral("%smallfontsize")] = QStringLiteral("%1pt").arg(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont).pointSize());
 
     QHash<QString, QString>::const_iterator it = elements.constBegin();
@@ -898,7 +900,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         apiMinor = 0;
         apiRevision = 0;
         if (!apiVersion.isEmpty()) {
-            QVector<QStringRef> parts = apiVersion.splitRef(QLatin1Char('.'));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+            const QVector<QStringView> parts = QStringView(apiVersion).split(QLatin1Char('.'));
+#else
+            const QVector<QStringRef> parts = apiVersion.splitRef(QLatin1Char('.'));
+#endif
             if (!parts.isEmpty()) {
                 apiMajor = parts.value(0).toInt();
             }
