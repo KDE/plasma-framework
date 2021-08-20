@@ -545,7 +545,7 @@ int AppletInterface::apiVersion() const
         return md.value(QStringLiteral("X-Plasma-API")) == QLatin1String("declarativeappletscript")
             && md.value(QStringLiteral("X-Plasma-ComponentTypes")).contains(QLatin1String("Applet"));
     };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
+    QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
     if (plugins.isEmpty()) {
         return -1;
     }

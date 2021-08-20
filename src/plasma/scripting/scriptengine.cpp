@@ -21,7 +21,7 @@ namespace Plasma
 static QVector<KPluginMetaData> listEngines(Types::ComponentTypes types, std::function<bool(const KPluginMetaData &)> filter)
 {
     QVector<KPluginMetaData> ret;
-    const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(QStringLiteral("plasma/scriptengines"));
+    const QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(QStringLiteral("plasma/scriptengines"));
     ret.reserve(plugins.size());
     for (const auto &plugin : plugins) {
         if (!filter(plugin)) {

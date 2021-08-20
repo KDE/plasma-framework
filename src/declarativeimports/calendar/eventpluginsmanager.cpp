@@ -15,7 +15,6 @@
 #include <QJsonObject>
 #include <QPluginLoader>
 
-#include <KPluginLoader>
 #include <KPluginMetaData>
 
 class EventPluginsModel : public QAbstractListModel
@@ -122,7 +121,7 @@ private:
 EventPluginsManager::EventPluginsManager(QObject *parent)
     : QObject(parent)
 {
-    auto plugins = KPluginLoader::findPlugins(QStringLiteral("plasmacalendarplugins"), [](const KPluginMetaData &md) {
+    auto plugins = KPluginMetaData::findPlugins(QStringLiteral("plasmacalendarplugins"), [](const KPluginMetaData &md) {
         return md.rawData().contains(QStringLiteral("KPlugin"));
     });
     for (const KPluginMetaData &plugin : qAsConst(plugins)) {

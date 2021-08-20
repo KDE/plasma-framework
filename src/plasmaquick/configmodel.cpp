@@ -235,9 +235,8 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         return d->categories.at(index.row())->visible();
     case KCMRole: {
         const QString pluginName = d->categories.at(index.row())->pluginName();
-        const QString pluginPath = KPluginLoader::findPlugin(pluginName);
         // no kcm is registered for this row, it's a normal qml-only entry
-        if (pluginName.isEmpty() || pluginPath.isEmpty()) {
+        if (pluginName.isEmpty()) {
             return QVariant();
         }
 
@@ -245,16 +244,10 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
             return QVariant::fromValue(d->kcms.value(pluginName));
         }
 
-        KPluginLoader loader(pluginPath);
-        KPluginFactory *factory = loader.factory();
-        if (!factory) {
-            qWarning() << "Error loading KCM:" << loader.errorString();
-        } else {
-            KQuickAddons::ConfigModule *cm = factory->create<KQuickAddons::ConfigModule>(const_cast<ConfigModel *>(this));
-            if (!cm) {
-                qWarning() << "Error creating KCM object from plugin" << loader.fileName();
-            }
+        const auto result = KPluginFactory::instantiatePlugin<KQuickAddons::ConfigModule>(KPluginMetaData(pluginName), const_cast<ConfigModel *>(this));
 
+        if (result) {
+            KQuickAddons::ConfigModule *cm = result.plugin;
             if (QQmlContext *ctx = QQmlEngine::contextForObject(this)) {
                 // assign the ConfigModule the same QML context as we have so it can use the same QML engine as we do
                 QQmlEngine::setContextForObject(cm, ctx);
@@ -262,8 +255,10 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
 
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
+        } else {
+            qWarning() << "Error loading KCM:" << result.errorText;
+            return QVariant();
         }
-        return QVariant();
     }
     default:
         return QVariant();
