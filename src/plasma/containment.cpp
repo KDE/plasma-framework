@@ -43,7 +43,6 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
 {
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    setContainmentType(Types::CustomContainment);
     setHasConfigurationInterface(true);
 }
 
