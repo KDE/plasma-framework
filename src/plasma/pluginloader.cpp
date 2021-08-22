@@ -188,14 +188,10 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     if (!plugins.isEmpty()) {
-        KPluginLoader loader(plugins.first().fileName());
-        KPluginFactory *factory = loader.factory();
-        if (factory) {
-            factory->setMetaData(plugins.constFirst());
-            QVariantList allArgs;
-            allArgs << QVariant::fromValue(p) << loader.metaData().toVariantMap() << appletId << args;
-            applet = factory->create<Plasma::Applet>(nullptr, allArgs);
-        }
+        QPluginLoader loader(plugins.first().fileName());
+        QVariantList allArgs = {QVariant::fromValue(p), loader.metaData().toVariantMap(), appletId};
+        allArgs << args;
+        applet = KPluginFactory::instantiatePlugin<Plasma::Applet>(plugins.first(), nullptr, allArgs).plugin;
     }
     if (applet) {
         return applet;
@@ -235,10 +231,8 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     // Look for C++ plugins first
     const QVector<KPluginMetaData> plugins = d->dataengineCache.findPluginsById(name, {PluginLoaderPrivate::s_dataEnginePluginDir});
     if (!plugins.isEmpty()) {
-        KPluginLoader loader(plugins.constFirst().fileName());
-        const QVariantList argsWithMetaData = QVariantList() << loader.metaData().toVariantMap();
-        KPluginFactory *factory = loader.factory();
-        return factory ? factory->create<Plasma::DataEngine>(nullptr, argsWithMetaData) : nullptr;
+        const QVariantList args{QPluginLoader(plugins.constFirst().fileName()).metaData().toVariantMap()};
+        engine = KPluginFactory::instantiatePlugin<Plasma::DataEngine>(plugins.first(), nullptr, args).plugin;
     }
     if (engine) {
         return engine;
@@ -261,9 +255,9 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
     };
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
     } else {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
     for (auto &plugin : qAsConst(plugins)) {
@@ -300,9 +294,9 @@ KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category
     };
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterNormal);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterNormal);
     } else {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterParentApp);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterParentApp);
     }
 
     list = KPluginInfo::fromMetaData(plugins);
@@ -334,17 +328,9 @@ Service *PluginLoader::loadService(const QString &name, const QVariantList &args
     }
 
     // Look for C++ plugins first
-    auto filter = [&name](const KPluginMetaData &md) -> bool {
-        return md.pluginId() == name;
-    };
-    QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_servicesPluginDir, filter);
-
-    if (!plugins.isEmpty()) {
-        KPluginLoader loader(plugins.first().fileName());
-        KPluginFactory *factory = loader.factory();
-        if (factory) {
-            service = factory->create<Plasma::Service>(nullptr, args);
-        }
+    KPluginMetaData plugin = KPluginMetaData::findPluginById(PluginLoaderPrivate::s_servicesPluginDir, name);
+    if (plugin.isValid()) {
+        service = KPluginFactory::instantiatePlugin<Plasma::Service>(plugin, parent, args).plugin;
     }
 
     if (service) {
@@ -367,21 +353,14 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     if (actions) {
         return actions;
     }
-#else
-    ContainmentActions *actions = nullptr;
 #endif
 
     const QVector<KPluginMetaData> plugins = d->containmentactionCache.findPluginsById(name, {PluginLoaderPrivate::s_containmentActionsPluginDir});
 
     if (!plugins.isEmpty()) {
-        KPluginLoader loader(plugins.first().fileName());
-        KPluginFactory *factory = loader.factory();
-        if (factory) {
-            actions = factory->create<Plasma::ContainmentActions>(nullptr, {QVariant::fromValue(plugins.first())});
+        if (auto res = KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(plugins.first(), nullptr, {QVariant::fromValue(plugins.first())})) {
+            return res.plugin;
         }
-    }
-    if (actions) {
-        return actions;
     }
 
     // FIXME: this is only for backwards compatibility, but probably will have to stay
@@ -397,14 +376,12 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     }
 
     KService::Ptr offer = offers.first();
-    KPluginLoader plugin(*offer);
 
+    KPluginMetaData data(offer->library());
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
-    QString error;
-    actions = offer->createInstance<Plasma::ContainmentActions>(parent, allArgs, &error);
 
-    return actions;
+    return KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(data, nullptr, allArgs).plugin;
 }
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
@@ -439,15 +416,13 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
             return md.value(QStringLiteral("X-KDE-PluginInfo-Name")) == packageFormat;
         };
 
-        const QVector<KPluginMetaData> plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_packageStructurePluginDir, filter);
+        const QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_packageStructurePluginDir, filter);
 
         if (!plugins.isEmpty()) {
-            KPluginLoader loader(plugins.first().fileName());
-            KPluginFactory *factory = loader.factory();
-            if (!factory) {
-                qWarning() << "Error loading plugin:" << loader.errorString();
+            if (auto res = KPluginFactory::instantiatePlugin<Plasma::PackageStructure>(plugins.first())) {
+                structure = res.plugin;
             } else {
-                structure = factory->create<Plasma::PackageStructure>();
+                qWarning() << "Error loading plugin:" << res.errorString;
             }
 
             if (structure) {
@@ -756,9 +731,9 @@ QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &par
 
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
     } else {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
     return plugins;
@@ -779,9 +754,9 @@ QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QStr
 
     QVector<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir);
     } else {
-        plugins = KPluginLoader::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
+        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
     }
 
 #if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
