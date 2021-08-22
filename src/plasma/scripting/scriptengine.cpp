@@ -78,38 +78,34 @@ QStringList knownLanguages(Types::ComponentTypes types)
     return languages;
 }
 
-typedef QHash<QString, QSharedPointer<KPluginLoader>> EngineCache;
+typedef QHash<QString, KPluginMetaData> EngineCache;
 Q_GLOBAL_STATIC(EngineCache, engines)
 
 ScriptEngine *loadEngine(const QString &language, Types::ComponentType type, QObject *parent, const QVariantList &args = QVariantList())
 {
     Q_UNUSED(parent);
 
-    {
-        auto it = engines->constFind(language);
-        if (it != engines->constEnd()) {
-            return (*it)->factory()->create<Plasma::ScriptEngine>(nullptr, args);
-        }
+    const KPluginMetaData cacheData = engines->value(language);
+    if (cacheData.isValid()) {
+        return KPluginFactory::instantiatePlugin<Plasma::ScriptEngine>(cacheData, nullptr, args).plugin;
     }
 
-    ScriptEngine *engine = nullptr;
     auto filter = [&language](const KPluginMetaData &md) -> bool {
         return md.value(QStringLiteral("X-Plasma-API")) == language;
     };
 
     const QVector<KPluginMetaData> plugins = listEngines(type, filter);
     if (!plugins.isEmpty()) {
-        QSharedPointer<KPluginLoader> loader(new KPluginLoader(plugins.first().fileName()));
-        KPluginFactory *factory = loader->factory();
-        if (factory) {
-            engine = factory->create<Plasma::ScriptEngine>(nullptr, args);
-            engines->insert(language, loader);
+        const KPluginMetaData metaData = plugins.first();
+        engines->insert(language, metaData);
+        if (auto res = KPluginFactory::instantiatePlugin<Plasma::ScriptEngine>(metaData, nullptr, args)) {
+            return res.plugin;
         } else {
             qCWarning(LOG_PLASMA) << "Unable to load" << plugins.first().name() << "ScriptEngine";
         }
     }
 
-    return engine;
+    return nullptr;
 }
 
 AppletScript *loadScriptEngine(const QString &language, Applet *applet, const QVariantList &args)
