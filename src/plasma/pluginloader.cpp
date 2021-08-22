@@ -9,7 +9,6 @@
 #include <QPointer>
 #include <QStandardPaths>
 
-#include <KPluginLoader>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
@@ -893,18 +892,11 @@ QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QStri
         // Find all the plugins now, but only once
         pluginCacheAge = now;
 
-        auto insertIntoCache = [this](const QString &pluginPath) {
-            KPluginMetaData metadata(pluginPath);
-            if (!metadata.isValid()) {
-                qCDebug(LOG_PLASMA) << "invalid metadata" << pluginPath;
-                return;
-            }
-
-            plugins[metadata.pluginId()].append(metadata);
-        };
-
         for (const QString &dir : dirs) {
-            KPluginLoader::forEachPlugin(dir, insertIntoCache);
+            const auto metaDataList = KPluginMetaData::findPlugins(dir);
+            for (const KPluginMetaData &metadata : metaDataList) {
+                plugins[metadata.pluginId()].append(metadata);
+            }
         }
     } else if (now - pluginCacheAge > maxCacheAge) {
         // cache is old and we're not within a few seconds of startup anymore
@@ -915,23 +907,22 @@ QVector<KPluginMetaData> PluginLoaderPrivate::Cache::findPluginsById(const QStri
     // if name wasn't a path, pluginName == name
     const QString pluginName = name.section(QLatin1Char('/'), -1);
 
-    QVector<KPluginMetaData> ret;
-
     if (useRuntimeCache) {
         auto it = plugins.constFind(pluginName);
         if (it != plugins.constEnd()) {
-            ret = *it;
+            qCDebug(LOG_PLASMA) << "loading applet by name" << name << useRuntimeCache << (*it).size();
+            return *it;
         }
-        qCDebug(LOG_PLASMA) << "loading applet by name" << name << useRuntimeCache << ret.size();
     } else {
         for (const auto &dir : dirs) {
-            ret = KPluginLoader::findPluginsById(dir, pluginName);
-            if (!ret.isEmpty()) {
-                break;
+            KPluginMetaData res = KPluginMetaData::findPluginById(dir, pluginName);
+            if (res.isValid()) {
+                return {res};
             }
         }
     }
-    return ret;
+
+    return {};
 }
 
 } // Plasma Namespace
