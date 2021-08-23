@@ -42,7 +42,7 @@ Name[tr]=Hafif Esinti
 Name[uk]=Світла Breeze
 Name[vi]=Breeze Sáng
 Name[x-test]=xxBreeze Lightxx
-Name[zh_CN]=亮色微风
+Name[zh_CN]=Breeze 微风亮色
 Name[zh_TW]=Breeze Light
 Comment=Breeze Light by the KDE VDG
 Comment[ar]=نسيم فاتح من مجموعة تصميم كدي
@@ -79,7 +79,7 @@ Comment[tg]=Насими равшан аз KDE VDG
 Comment[uk]=Світла Breeze, автори — KDE VDG
 Comment[vi]=Breeze Sáng, do KDE VDG
 Comment[x-test]=xxBreeze Light by the KDE VDGxx
-Comment[zh_CN]=亮色微风，由 KDE VDG 创作
+Comment[zh_CN]=Breeze 微风亮色主题，由 KDE VDG (视觉设计团队) 设计制作
 Comment[zh_TW]=由 KDE VDG 團隊製作的 Breeze Light
 
 

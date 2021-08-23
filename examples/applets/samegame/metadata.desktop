@@ -41,7 +41,7 @@ Name[tr]=Aynı oyun (QML)
 Name[uk]=Та сама гра (QML)
 Name[vi]=Trò chơi Same game (QML)
 Name[x-test]=xxSame game (QML)xx
-Name[zh_CN]=相同游戏 (QML)
+Name[zh_CN]=找重游戏 (QML)
 Name[zh_TW]=Same game (QML)
 Comment=The Same game QML Qt demo converted as plasmoid
 Comment[ar]=نسخة «نفس اللعبة» ب‍QML في «كيوت» محوّلة كبلازمويد
@@ -84,7 +84,7 @@ Comment[tr]=Aynı oyunun QML Qt plasmoid olarak çevrilmiş halinin tanıtımı
 Comment[uk]=Плазмоїд-демонстрація тієї самої гри на основі QML
 Comment[vi]=Chương trình minh hoạ cho Qt, Same game, viết bằng QML, chuyển dạng thành plasmoid
 Comment[x-test]=xxThe Same game QML Qt demo converted as plasmoidxx
-Comment[zh_CN]=相同游戏 QML 的 Qt demo 转化成的小部件
+Comment[zh_CN]=找重游戏 的 QML Qt 演示程序转换而来的小部件
 Comment[zh_TW]=Same game QML Qt 展示轉換為元件
 Icon=applications-games
 

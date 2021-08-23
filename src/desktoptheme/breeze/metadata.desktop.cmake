@@ -44,7 +44,7 @@ Name[tr]=Esintili
 Name[uk]=Breeze
 Name[vi]=Breeze
 Name[x-test]=xxBreezexx
-Name[zh_CN]=微风
+Name[zh_CN]=Breeze 微风
 Name[zh_TW]=Breeze
 Comment=Breeze by the KDE VDG
 Comment[ar]=نسيم من مجموعة تصميم كدي
@@ -80,7 +80,7 @@ Comment[tg]=Насим аз KDE VDG
 Comment[uk]=Breeze, автори — KDE VDG
 Comment[vi]=Breeze, do KDE VDG
 Comment[x-test]=xxBreeze by the KDE VDGxx
-Comment[zh_CN]=微风，由 KDE VDG 创作
+Comment[zh_CN]=Breeze 微风主题，由 KDE VDG (视觉设计团队) 设计制作
 Comment[zh_TW]=由 KDE VDG 團隊製作的 Breeze
 
 

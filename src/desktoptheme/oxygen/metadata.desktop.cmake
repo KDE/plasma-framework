@@ -47,7 +47,7 @@ Name[ug]=ئوكسېگىن
 Name[uk]=Oxygen
 Name[vi]=Oxygen
 Name[x-test]=xxOxygenxx
-Name[zh_CN]=Oxygen
+Name[zh_CN]=Oxygen 轻氧
 Name[zh_TW]=Oxygen
 Comment=Theme done in the Oxygen style
 Comment[ar]=سمة مصنوعة بنمط «أكسجين»
@@ -96,7 +96,7 @@ Comment[ug]=ئوكسېگىن ئۇسلۇبىدىكى ئۆرنەك
 Comment[uk]=Тема в стилі Oxygen
 Comment[vi]=Chủ đề được tạo với kiểu cách Oxygen
 Comment[x-test]=xxTheme done in the Oxygen stylexx
-Comment[zh_CN]=Oxygen 风格的主题
+Comment[zh_CN]=Oxygen 轻氧风格的主题
 Comment[zh_TW]=以 Oxygen 樣式完成的外觀主題
 
 X-KDE-PluginInfo-Author=The Oxygen Project

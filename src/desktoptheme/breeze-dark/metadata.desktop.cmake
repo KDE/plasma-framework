@@ -44,7 +44,7 @@ Name[tr]=Esintili Koyu
 Name[uk]=Темна Breeze
 Name[vi]=Breeze Tối
 Name[x-test]=xxBreeze Darkxx
-Name[zh_CN]=暗色微风
+Name[zh_CN]=Breeze 微风暗色
 Name[zh_TW]=Breeze Dark
 Comment=Breeze Dark by the KDE VDG
 Comment[ar]=نسيم داكن من من مجموعة تصميم كدي
@@ -81,7 +81,7 @@ Comment[tg]=Насими торик аз KDE VDG
 Comment[uk]=Темна Breeze, автори — KDE VDG
 Comment[vi]=Breeze Tối, do KDE VDG
 Comment[x-test]=xxBreeze Dark by the KDE VDGxx
-Comment[zh_CN]=暗色微风，由 KDE VDG 创作
+Comment[zh_CN]=Breeze 微风暗色主题，由 KDE VDG (视觉设计团队) 设计制作
 Comment[zh_TW]=由 KDE VDG 團隊製作的 Breeze Dark
 
 

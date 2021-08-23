@@ -47,7 +47,7 @@ Name[ug]=ھاۋا
 Name[uk]=Air
 Name[vi]=Air
 Name[x-test]=xxAirxx
-Name[zh_CN]=大气
+Name[zh_CN]=Air 净空
 Name[zh_TW]=Air
 Comment=A breath of fresh air
 Comment[ar]=نسمة من الهواء المنعش
@@ -97,7 +97,7 @@ Comment[ug]=ساپ ھاۋادىن نەپەسلىنىش
 Comment[uk]=Ковток свіжого повітря
 Comment[vi]=Một luồng không khí trong lành
 Comment[x-test]=xxA breath of fresh airxx
-Comment[zh_CN]=呼吸清新空气
+Comment[zh_CN]=如清新空气般淡雅的主题
 Comment[zh_TW]=吸一口新鮮空氣
 
 

@@ -43,7 +43,7 @@ Name[tr]=Python Çalıştırıcı
 Name[uk]=Засіб запуску Python
 Name[vi]=Trình chạy Python
 Name[x-test]=xxPython Runnerxx
-Name[zh_CN]=Python 运行器
+Name[zh_CN]=Python Runner
 Name[zh_TW]=Python 執行器
 Comment=Plasma Runner support for Python
 Comment[ar]=دعم مشغّل «بلازما» ل‍«بايثون»
@@ -89,7 +89,7 @@ Comment[tr]=Python için Plasma Çalıştırıcı desteği
 Comment[uk]=Підтримка Python у інструментах запуску
 Comment[vi]=Hỗ trợ của trình chạy Plasma cho Python
 Comment[x-test]=xxPlasma Runner support for Pythonxx
-Comment[zh_CN]=Plasma 的 Python 运行器支持
+Comment[zh_CN]=Python 的 Plasma Runner 支持
 Comment[zh_TW]=支援 Python 的執行器
 
 X-KDE-ServiceTypes=Plasma/ScriptEngine
