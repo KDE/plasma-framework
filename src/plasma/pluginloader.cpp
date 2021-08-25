@@ -70,7 +70,7 @@ public:
         QHash<QString, KPluginMetaData> plugins;
 
     public:
-        KPluginMetaData findPluginById(const QString &name, const QStringList &dirs);
+        KPluginMetaData findPluginById(const QString &name, const QString &pluginNamespace);
     };
     Cache plasmoidCache;
     Cache dataengineCache;
@@ -174,7 +174,16 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     }
 
     // Need to pass the empty directory because it's where plasmoids used to be
-    auto plugin = d->plasmoidCache.findPluginById(name, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
+    auto plugin = d->plasmoidCache.findPluginById(name, PluginLoaderPrivate::s_plasmoidsPluginDir);
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
+    if (!plugin.isValid()) {
+        auto plugin = d->plasmoidCache.findPluginById(name, QString());
+        if (plugin.isValid()) {
+            qCWarning(LOG_PLASMA) << "The applet" << plugin.fileName()
+                                  << "is installed in a deprecated location, install it in the plasma/applets namespace instead";
+        }
+    }
+#endif
 
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
 
@@ -182,7 +191,16 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (!plugin.isValid()) {
         const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
         if (!parentPlugin.isEmpty()) {
-            plugin = d->plasmoidCache.findPluginById(parentPlugin, {PluginLoaderPrivate::s_plasmoidsPluginDir, {}});
+            plugin = d->plasmoidCache.findPluginById(parentPlugin, PluginLoaderPrivate::s_plasmoidsPluginDir);
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
+            if (!plugin.isValid()) {
+                auto plugin = d->plasmoidCache.findPluginById(name, QString());
+                if (plugin.isValid()) {
+                    qCWarning(LOG_PLASMA) << "The applet" << plugin.fileName()
+                                          << "is installed in a deprecated location, install it in the plasma/applets namespace instead";
+                }
+            }
+#endif
         }
     }
 
@@ -228,7 +246,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 #endif
 
     // Look for C++ plugins first
-    KPluginMetaData plugin = d->dataengineCache.findPluginById(name, {PluginLoaderPrivate::s_dataEnginePluginDir});
+    KPluginMetaData plugin = d->dataengineCache.findPluginById(name, PluginLoaderPrivate::s_dataEnginePluginDir);
     if (plugin.isValid()) {
         const QVariantList args{QPluginLoader(plugin.fileName()).metaData().toVariantMap()};
         engine = KPluginFactory::instantiatePlugin<Plasma::DataEngine>(plugin, nullptr, args).plugin;
@@ -354,7 +372,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     }
 #endif
 
-    KPluginMetaData plugin = d->containmentactionCache.findPluginById(name, {PluginLoaderPrivate::s_containmentActionsPluginDir});
+    KPluginMetaData plugin = d->containmentactionCache.findPluginById(name, PluginLoaderPrivate::s_containmentActionsPluginDir);
 
     if (plugin.isValid()) {
         if (auto res = KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(plugin, nullptr, {QVariant::fromValue(plugin)})) {
@@ -883,7 +901,7 @@ KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
     return standardInternalInfo(QStringLiteral("services"));
 }
 
-KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, const QStringList &dirs)
+KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, const QString &pluginNamespace)
 {
     const qint64 now = qRound64(QDateTime::currentMSecsSinceEpoch() / 1000.0);
     bool useRuntimeCache = true;
@@ -892,11 +910,9 @@ KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, 
         // Find all the plugins now, but only once
         pluginCacheAge = now;
 
-        for (const QString &dir : dirs) {
-            const auto metaDataList = KPluginMetaData::findPlugins(dir);
-            for (const KPluginMetaData &metadata : metaDataList) {
-                plugins.insert(metadata.pluginId(), metadata);
-            }
+        const auto metaDataList = KPluginMetaData::findPlugins(pluginNamespace);
+        for (const KPluginMetaData &metadata : metaDataList) {
+            plugins.insert(metadata.pluginId(), metadata);
         }
     } else if (now - pluginCacheAge > maxCacheAge) {
         // cache is old and we're not within a few seconds of startup anymore
@@ -912,15 +928,8 @@ KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, 
         qCDebug(LOG_PLASMA) << "loading applet by name" << name << useRuntimeCache << data.isValid();
         return data;
     } else {
-        for (const auto &dir : dirs) {
-            KPluginMetaData res = KPluginMetaData::findPluginById(dir, pluginName);
-            if (res.isValid()) {
-                return res;
-            }
-        }
+        return KPluginMetaData::findPluginById(pluginNamespace, pluginName);
     }
-
-    return {};
 }
 
 } // Plasma Namespace
