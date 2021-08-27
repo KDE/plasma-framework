@@ -194,9 +194,7 @@ public:
 
     ~SvgSource()
     {
-        if (m_svgIcon) {
-            QObject::disconnect(m_iconItem, nullptr, m_svgIcon, nullptr);
-        }
+        delete m_svgIcon;
     }
 
     bool isValid() const override
