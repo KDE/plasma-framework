@@ -33,7 +33,7 @@ public:
     {
         QJsonArray array;
 
-        for (const ObjectHistory &history : qAsConst(m_data)) {
+        for (const ObjectHistory &history : std::as_const(m_data)) {
             array.append(QJsonObject{{QStringLiteral("events"), serializeEvents(history.events)},
                                      {QStringLiteral("initial"), QJsonValue::fromVariant(history.initial)}});
         }

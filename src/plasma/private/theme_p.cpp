@@ -884,7 +884,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             fallbackThemes.append(QLatin1String(ThemePrivate::defaultTheme));
         }
 
-        for (const QString &theme : qAsConst(fallbackThemes)) {
+        for (const QString &theme : std::as_const(fallbackThemes)) {
             QString metadataPath(
                 QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                        QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme % QStringLiteral("/metadata.desktop")));

@@ -125,7 +125,7 @@ PluginLoader::PluginLoader()
 PluginLoader::~PluginLoader()
 {
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    for (const auto &wp : qAsConst(d->structures)) {
+    for (const auto &wp : std::as_const(d->structures)) {
         delete wp;
     }
 #endif
@@ -259,7 +259,7 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
         plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
     }
 
-    for (auto &plugin : qAsConst(plugins)) {
+    for (auto &plugin : std::as_const(plugins)) {
         engines << plugin.pluginId();
     }
 
@@ -762,7 +762,7 @@ QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QStr
     // FIXME: this is only for backwards compatibility, but probably will have to stay
     // for the time being
     QSet<QString> knownPlugins;
-    for (const KPluginMetaData &p : qAsConst(plugins)) {
+    for (const KPluginMetaData &p : std::as_const(plugins)) {
         knownPlugins.insert(p.pluginId());
     }
     QString constraint;

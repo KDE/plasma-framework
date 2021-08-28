@@ -705,7 +705,7 @@ void FrameSvgItem::applyPrefixes()
     }
 
     bool found = false;
-    for (const QString &prefix : qAsConst(m_prefixes)) {
+    for (const QString &prefix : std::as_const(m_prefixes)) {
         if (m_frameSvg->hasElementPrefix(prefix)) {
             m_frameSvg->setElementPrefix(prefix);
             found = true;

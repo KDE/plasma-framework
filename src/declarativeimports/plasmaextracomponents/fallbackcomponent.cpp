@@ -45,7 +45,7 @@ QString FallbackComponent::filePath(const QString &key)
 {
     QString resolved;
 
-    for (const QString &path : qAsConst(m_candidates)) {
+    for (const QString &path : std::as_const(m_candidates)) {
         // qDebug() << "Searching for:" << path + path;
         if (m_possiblePaths.contains(path + key)) {
             resolved = *m_possiblePaths.object(path + key);

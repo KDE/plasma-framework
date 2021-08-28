@@ -255,7 +255,7 @@ void Containment::save(KConfigGroup &g) const
 void Containment::saveContents(KConfigGroup &group) const
 {
     KConfigGroup applets(&group, "Applets");
-    for (const Applet *applet : qAsConst(d->applets)) {
+    for (const Applet *applet : std::as_const(d->applets)) {
         KConfigGroup appletConfig(&applets, QString::number(applet->id()));
         applet->save(appletConfig);
     }
@@ -272,7 +272,7 @@ void Containment::restoreContents(KConfigGroup &group)
     // Sort the applet configs in order of geometry to ensure that applets
     // are added from left to right or top to bottom for a panel containment
     QList<KConfigGroup> appletConfigs;
-    for (const QString &appletGroup : qAsConst(groups)) {
+    for (const QString &appletGroup : std::as_const(groups)) {
         // qCDebug(LOG_PLASMA) << "reading from applet group" << appletGroup;
         KConfigGroup appletConfig(&applets, appletGroup);
         appletConfigs.append(appletConfig);
@@ -369,7 +369,7 @@ void Containment::setLocation(Types::Location location)
 
     d->location = location;
 
-    for (Applet *applet : qAsConst(d->applets)) {
+    for (Applet *applet : std::as_const(d->applets)) {
         applet->updateConstraints(Plasma::Types::LocationConstraint);
     }
 

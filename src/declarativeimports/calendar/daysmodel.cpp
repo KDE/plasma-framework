@@ -193,7 +193,7 @@ void DaysModel::onEventModified(const CalendarEvents::EventData &data)
         m_agendaNeedsUpdate = true;
     }
 
-    for (const QDate date : qAsConst(updatesList)) {
+    for (const QDate date : std::as_const(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems, containsMajorEventItems, containsMinorEventItems, EventColor});
@@ -225,7 +225,7 @@ void DaysModel::onEventRemoved(const QString &uid)
         m_agendaNeedsUpdate = true;
     }
 
-    for (const QDate date : qAsConst(updatesList)) {
+    for (const QDate date : std::as_const(updatesList)) {
         const QModelIndex changedIndex = indexForDate(date);
         if (changedIndex.isValid()) {
             Q_EMIT dataChanged(changedIndex, changedIndex, {containsEventItems, containsMajorEventItems, containsMinorEventItems});
@@ -254,7 +254,7 @@ QList<QObject *> DaysModel::eventsForDate(const QDate &date)
         return b.type() > a.type() || b.startDateTime() > a.startDateTime();
     });
 
-    for (const CalendarEvents::EventData &event : qAsConst(events)) {
+    for (const CalendarEvents::EventData &event : std::as_const(events)) {
         m_qmlData << new EventDataDecorator(event, this);
     }
 

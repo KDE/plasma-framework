@@ -122,7 +122,7 @@ void DataEngine::connectSource(const QString &source, QObject *visualization, ui
 
 void DataEngine::connectAllSources(QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment intervalAlignment) const
 {
-    for (DataContainer *s : qAsConst(d->sources)) {
+    for (DataContainer *s : std::as_const(d->sources)) {
         d->connectSource(s, visualization, pollingInterval, intervalAlignment);
     }
 }
@@ -380,7 +380,7 @@ void DataEngine::updateAllSources()
 
 void DataEngine::forceImmediateUpdateOfAllVisualizations()
 {
-    for (DataContainer *source : qAsConst(d->sources)) {
+    for (DataContainer *source : std::as_const(d->sources)) {
         if (source->isUsed()) {
             source->forceImmediateUpdate();
         }

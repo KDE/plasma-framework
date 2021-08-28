@@ -723,7 +723,7 @@ void IconItem::loadPixmap()
     // It is more efficient to do it here, as KIconLoader::drawOverlays()
     // assumes that an overlay will be drawn and has some additional
     // setup time.
-    for (const QString &overlay : qAsConst(m_overlays)) {
+    for (const QString &overlay : std::as_const(m_overlays)) {
         if (!overlay.isEmpty()) {
             // There is at least one overlay, draw all overlays above m_pixmap
             // and cancel the check

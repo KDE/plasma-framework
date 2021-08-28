@@ -178,7 +178,7 @@ void CoronaTest::immutability()
     QCOMPARE(m_corona->immutability(), Plasma::Types::UserImmutable);
 
     auto containments = m_corona->containments();
-    for (Plasma::Containment *cont : qAsConst(containments)) {
+    for (Plasma::Containment *cont : std::as_const(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::UserImmutable);
         const auto lstApplets = cont->applets();
         for (Plasma::Applet *app : lstApplets) {
@@ -190,7 +190,7 @@ void CoronaTest::immutability()
     QCOMPARE(m_corona->immutability(), Plasma::Types::Mutable);
 
     containments = m_corona->containments();
-    for (Plasma::Containment *cont : qAsConst(containments)) {
+    for (Plasma::Containment *cont : std::as_const(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::Mutable);
         const auto lstApplets = cont->applets();
         for (Plasma::Applet *app : lstApplets) {
@@ -202,7 +202,7 @@ void CoronaTest::immutability()
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
     containments = m_corona->containments();
-    for (Plasma::Containment *cont : qAsConst(containments)) {
+    for (Plasma::Containment *cont : std::as_const(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
         const auto lstApplets = cont->applets();
         for (Plasma::Applet *app : lstApplets) {
@@ -215,7 +215,7 @@ void CoronaTest::immutability()
     QCOMPARE(m_corona->immutability(), Plasma::Types::SystemImmutable);
 
     containments = m_corona->containments();
-    for (Plasma::Containment *cont : qAsConst(containments)) {
+    for (Plasma::Containment *cont : std::as_const(containments)) {
         QCOMPARE(cont->immutability(), Plasma::Types::SystemImmutable);
         const auto lstApplets = cont->applets();
         for (Plasma::Applet *app : lstApplets) {

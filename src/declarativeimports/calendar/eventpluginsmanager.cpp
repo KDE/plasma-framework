@@ -124,7 +124,7 @@ EventPluginsManager::EventPluginsManager(QObject *parent)
     auto plugins = KPluginMetaData::findPlugins(QStringLiteral("plasmacalendarplugins"), [](const KPluginMetaData &md) {
         return md.rawData().contains(QStringLiteral("KPlugin"));
     });
-    for (const KPluginMetaData &plugin : qAsConst(plugins)) {
+    for (const KPluginMetaData &plugin : std::as_const(plugins)) {
         m_availablePlugins.insert(plugin.fileName(),
                                   {plugin.name(), plugin.description(), plugin.iconName(), plugin.value(QStringLiteral("X-KDE-PlasmaCalendar-ConfigUi"))});
     }
@@ -195,7 +195,7 @@ void EventPluginsManager::setEnabledPlugins(QStringList &pluginsList)
     }
 
     // Now load all the plugins left in pluginsList
-    for (const QString &pluginPath : qAsConst(pluginsList)) {
+    for (const QString &pluginPath : std::as_const(pluginsList)) {
         loadPlugin(pluginPath);
     }
 

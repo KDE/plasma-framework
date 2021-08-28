@@ -341,7 +341,7 @@ void DataContainer::forceImmediateUpdate()
         Q_EMIT dataUpdated(objectName(), d->data);
     }
 
-    for (SignalRelay *relay : qAsConst(d->relays)) {
+    for (SignalRelay *relay : std::as_const(d->relays)) {
         relay->forceImmediateUpdate();
     }
 }

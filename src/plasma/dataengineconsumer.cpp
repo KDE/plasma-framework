@@ -64,7 +64,7 @@ DataEngineConsumer::DataEngineConsumer()
 
 DataEngineConsumer::~DataEngineConsumer()
 {
-    for (const QString &engine : qAsConst(d->loadedEngines)) {
+    for (const QString &engine : std::as_const(d->loadedEngines)) {
         DataEngineManager::self()->unloadEngine(engine);
     }
 

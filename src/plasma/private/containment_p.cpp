@@ -97,7 +97,7 @@ void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)
     if (appletStatus < q->status() || appletStatus == Plasma::Types::HiddenStatus) {
         // check to see if any other applet has a higher status, and stick with that if we do
         // we'll treat HiddenStatus as lowest as we cannot change the enum value which is highest anymore
-        for (Applet *applet : qAsConst(applets)) {
+        for (Applet *applet : std::as_const(applets)) {
             if (applet->status() > appletStatus && applet->status() != Plasma::Types::HiddenStatus) {
                 appletStatus = applet->status();
             }
@@ -138,7 +138,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         }
 
         // tell the applets too
-        for (Applet *a : qAsConst(applets)) {
+        for (Applet *a : std::as_const(applets)) {
             /*Why qMin?
              * the applets immutability() is the maximum between internal applet immutability
              * and the immutability of its containment.
@@ -161,7 +161,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
     }
 
     if (appletConstraints != Types::NoConstraint) {
-        for (Applet *applet : qAsConst(applets)) {
+        for (Applet *applet : std::as_const(applets)) {
             applet->updateConstraints(appletConstraints);
         }
     }

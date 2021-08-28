@@ -409,7 +409,7 @@ QList<QObject *> AppletInterface::contextualActionsObjects() const
         return actions;
     }
 
-    for (const QString &name : qAsConst(m_actions)) {
+    for (const QString &name : std::as_const(m_actions)) {
         QAction *action = a->actions()->action(name);
 
         if (action) {
@@ -428,7 +428,7 @@ QList<QAction *> AppletInterface::contextualActions() const
         return actions;
     }
 
-    for (const QString &name : qAsConst(m_actions)) {
+    for (const QString &name : std::as_const(m_actions)) {
         QAction *action = a->actions()->action(name);
 
         if (action) {
@@ -792,7 +792,7 @@ bool AppletInterface::event(QEvent *event)
         }
 
         bool keySequenceUsed = false;
-        for (auto a : qAsConst(actions)) {
+        for (auto a : std::as_const(actions)) {
             if (a->shortcut().isEmpty()) {
                 continue;
             }

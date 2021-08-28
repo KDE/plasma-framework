@@ -153,7 +153,7 @@ void ConfigViewPrivate::init()
             configModel = new ConfigModel(q);
         }
 
-        for (const QString &kcm : qAsConst(kcms)) {
+        for (const QString &kcm : std::as_const(kcms)) {
             // Only look for KCMs in the "kcms_" folder where new QML KCMs live
             // because we don't support loading QWidgets KCMs
             KPluginMetaData md(QLatin1String("kcms/") + kcm);

@@ -45,7 +45,7 @@ public:
 
     ~DataEngineManagerPrivate()
     {
-        for (Plasma::DataEngine *engine : qAsConst(engines)) {
+        for (Plasma::DataEngine *engine : std::as_const(engines)) {
             delete engine;
         }
         engines.clear();
@@ -178,7 +178,7 @@ void DataEngineManager::timerEvent(QTimerEvent *)
             if (relays > 0) {
                 out << "                       Relays: " << dc->d->relays.count() << '\n';
                 QString times;
-                for (SignalRelay *relay : qAsConst(dc->d->relays)) {
+                for (SignalRelay *relay : std::as_const(dc->d->relays)) {
                     times.append(QLatin1Char(' ') + QString::number(relay->m_interval));
                 }
                 out << "                       Relay Timeouts: " << times << " \n";

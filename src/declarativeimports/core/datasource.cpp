@@ -46,7 +46,7 @@ void DataSource::setConnectedSources(const QStringList &sources)
         }
     }
 
-    for (const QString &source : qAsConst(m_connectedSources)) {
+    for (const QString &source : std::as_const(m_connectedSources)) {
         if (!sources.contains(source)) {
             m_data->clear(source);
             sourcesChanged = true;
@@ -147,7 +147,7 @@ void DataSource::setupData()
     qDeleteAll(m_services);
     m_services.clear();
 
-    for (const QString &source : qAsConst(m_connectedSources)) {
+    for (const QString &source : std::as_const(m_connectedSources)) {
         m_dataEngine->connectSource(source, this, m_interval, m_intervalAlignment);
         Q_EMIT sourceConnected(source);
     }

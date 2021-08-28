@@ -507,7 +507,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
             setAppletArgs(applet, pluginFormats[selectedPlugin], QString::fromUtf8(mimeData->data(pluginFormats[selectedPlugin])));
         } else {
             QHash<QAction *, QString> actionsToPlugins;
-            for (const auto &info : qAsConst(seenPlugins)) {
+            for (const auto &info : std::as_const(seenPlugins)) {
                 QAction *action;
                 if (!info.iconName().isEmpty()) {
                     action = new QAction(QIcon::fromTheme(info.iconName()), info.name(), m_dropMenu);
@@ -647,7 +647,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             action->setSeparator(true);
             m_dropMenu->addAction(action);
 
-            for (const auto &info : qAsConst(appletList)) {
+            for (const auto &info : std::as_const(appletList)) {
                 const QString actionText = i18nc("Add widget", "Add %1", info.name());
                 QAction *action = new QAction(actionText, m_dropMenu);
                 if (!info.iconName().isEmpty()) {
@@ -679,11 +679,11 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 m_dropMenu->addAction(action);
 
                 QMap<QString, KPluginMetaData> sorted;
-                for (const auto &info : qAsConst(appletList)) {
+                for (const auto &info : std::as_const(appletList)) {
                     sorted.insert(info.name(), info);
                 }
 
-                for (const KPluginMetaData &info : qAsConst(wallpaperList)) {
+                for (const KPluginMetaData &info : std::as_const(wallpaperList)) {
                     const QString actionText = i18nc("Set wallpaper", "Set %1", info.name());
                     QAction *action = new QAction(actionText, m_dropMenu);
                     if (!info.iconName().isEmpty()) {
@@ -821,7 +821,7 @@ QList<QObject *> ContainmentInterface::actions() const
     QMultiMap<int, QObject *> actions;
     int i = 0;
     auto listActions = m_containment->actions()->actions();
-    for (QAction *a : qAsConst(listActions)) {
+    for (QAction *a : std::as_const(listActions)) {
         if (!actionOrder.contains(a->objectName())) {
             // FIXME QML visualizations don't support menus for now, *and* there is no way to
             // distinguish them on QML side
@@ -836,7 +836,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
     i = 0;
     listActions = m_containment->corona()->actions()->actions();
-    for (QAction *a : qAsConst(listActions)) {
+    for (QAction *a : std::as_const(listActions)) {
         if (a->objectName() == QLatin1String("lock widgets") || a->menu()) {
             // It is up to the Containment to decide if the user is allowed or not
             // to lock/unluck the widgets, so corona should not add one when there is none
@@ -854,7 +854,7 @@ QList<QObject *> ContainmentInterface::actions() const
     }
     QList<QObject *> actionList = actions.values();
 
-    for (const QString &name : qAsConst(actionOrder)) {
+    for (const QString &name : std::as_const(actionOrder)) {
         QAction *a = orderedActions.value(name);
         if (a && !a->menu()) {
             actionList << a;
@@ -908,7 +908,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     // FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = nullptr;
-    for (QObject *appletObject : qAsConst(m_appletInterfaces)) {
+    for (QObject *appletObject : std::as_const(m_appletInterfaces)) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
             if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->localPos()))) {
                 applet = ai->applet();
