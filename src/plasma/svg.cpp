@@ -175,7 +175,7 @@ void SvgRectsCache::insert(uint id, const QString &filePath, const QRectF &rect,
         m_invalidElements[filePath] << id;
         imageGroup.writeEntry("Invalidelements", m_invalidElements[filePath].values());
     }
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 bool SvgRectsCache::findElementRect(Plasma::SvgPrivate::CacheId cacheId, QRectF &rect)
@@ -213,7 +213,7 @@ void SvgRectsCache::loadImageFromCache(const QString &path, uint lastModified)
 
     if (lastModified > savedTime) {
         imageGroup.deleteGroup();
-        QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+        QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
         return;
     }
 
@@ -237,7 +237,7 @@ void SvgRectsCache::dropImageFromCache(const QString &path)
 {
     KConfigGroup imageGroup(m_svgElementsCache, path);
     imageGroup.deleteGroup();
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 QList<QSize> SvgRectsCache::sizeHintsForId(const QString &path, const QString &id)
@@ -279,7 +279,7 @@ void SvgRectsCache::insertSizeHintForId(const QString &path, const QString &id, 
     m_sizeHintsForId[path % id].append(size);
     KConfigGroup imageGroup(m_svgElementsCache, path);
     imageGroup.writeEntry(id, sizeListToString(m_sizeHintsForId[path % id]));
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 QString SvgRectsCache::iconThemePath()
@@ -299,7 +299,7 @@ void SvgRectsCache::setIconThemePath(const QString &path)
     m_iconThemePath = path;
     KConfigGroup imageGroup(m_svgElementsCache, QStringLiteral("General"));
     imageGroup.writeEntry(QStringLiteral("IconThemePath"), path);
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 void SvgRectsCache::expireCache(const QString &path)
@@ -324,7 +324,7 @@ void SvgRectsCache::setNaturalSize(const QString &path, qreal scaleFactor, const
 
     // FIXME: needs something faster, perhaps even sprintf
     imageGroup.writeEntry(QStringLiteral("NaturalSize_") % QString::number(scaleFactor), size);
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 QSizeF SvgRectsCache::naturalSize(const QString &path, qreal scaleFactor)
@@ -353,7 +353,7 @@ void SvgRectsCache::updateLastModified(const QString &filePath, unsigned int las
 {
     KConfigGroup imageGroup(m_svgElementsCache, filePath);
     imageGroup.writeEntry("LastModified", lastModified);
-    QMetaObject::invokeMethod(m_configSyncTimer, QOverload<>::of(&QTimer::start));
+    QMetaObject::invokeMethod(m_configSyncTimer, qOverload<>(&QTimer::start));
 }
 
 SvgPrivate::SvgPrivate(Svg *svg)
