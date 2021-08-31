@@ -344,11 +344,12 @@ Item {
 
     onIsEnabledChanged: if (!listItem.isEnabled) { collapse() }
 
-    // Handle left clicks and taps
+    // Handle left clicks and taps; don't accept stylus input or else it steals
+    // events from the buttons on the list item
     TapHandler {
         enabled: listItem.isEnabled && listItem.hasExpandableContent
 
-        acceptedButtons: Qt.LeftButton
+        acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger
 
         onSingleTapped: {
             listItem.ListView.view.currentIndex = index
