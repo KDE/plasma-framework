@@ -7,7 +7,6 @@
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents // for Highlight
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -523,75 +522,36 @@ Item {
 
         // Container for actions list, so that we can add left and right margins to it
         Item {
-            height: actionsList.height
+            height: childrenRect.height
             width: mainRowLayout.width
 
-            // TODO: Implement keyboard focus
-            // TODO: Don't highlight the first item by default, unless it has focus
-            // TODO: Animate the highlight moving, as in the printers applet
-            ListView {
-                id: actionsList
-
+            ColumnLayout {
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
-                anchors.leftMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing
-                anchors.rightMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing * 2
+                anchors.leftMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing
+                anchors.rightMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing * 2
 
                 // Need to take into account disabled/invisible items
-                height: PlasmaCore.Units.gridUnit * 2 * Array.from(contextualActionsModel).filter(item => item.enabled).length
+                height: Math.ceil(PlasmaCore.Units.gridUnit * 1.5) * Array.from(contextualActionsModel).filter(item => item.enabled).length
 
-                focus: true
-                clip: true
+                spacing: 0
 
-                model: listItem.contextualActionsModel
+                Repeater {
 
-                highlight: PlasmaComponents.Highlight {}
+                    model: listItem.contextualActionsModel
 
-                delegate: MouseArea {
-                    id: actionItem
+                    delegate: PlasmaComponents3.ToolButton {
+                        Layout.fillWidth: true
 
-                    visible: model.enabled
+                        visible: model.enabled
 
-                    width: actionsList.width
-                    height: visible ? actionItemLayout.height + PlasmaCore.Units.smallSpacing * 2 : 0
+                        text: model.text
+                        icon.name: model.icon.name
 
-                    hoverEnabled: true
-
-                    onContainsMouseChanged: actionItem.ListView.view.currentIndex = (containsMouse ? index : -1)
-
-                    onClicked: {
-                        modelData.trigger()
-                        collapse()
-                    }
-
-                    RowLayout {
-                        id: actionItemLayout
-
-                        enabled: model.enabled
-
-                        anchors.left: parent.left
-                        anchors.leftMargin: PlasmaCore.Units.smallSpacing
-                        anchors.right: parent.right
-                        anchors.rightMargin: PlasmaCore.Units.smallSpacing
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        PlasmaCore.IconItem {
-                            implicitWidth: PlasmaCore.Units.iconSizes.smallMedium
-                            implicitHeight: PlasmaCore.Units.iconSizes.smallMedium
-
-                            source: model.icon.name
-                        }
-
-                        PlasmaExtras.Heading {
-                            Layout.fillWidth: true
-
-                            level: 5
-
-                            text: model.text
-                            textFormat: listItem.allowStyledText ? Text.StyledText : Text.PlainText
-                            elide: Text.ElideRight
-                            maximumLineCount: 1
+                        onClicked: {
+                            modelData.trigger()
+                            collapse()
                         }
                     }
                 }
