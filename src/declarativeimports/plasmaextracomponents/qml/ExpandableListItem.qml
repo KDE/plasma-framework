@@ -523,7 +523,7 @@ Item {
 
         // Container for actions list, so that we can add left and right margins to it
         Item {
-            height: actionsList.contentHeight
+            height: actionsList.height
             width: mainRowLayout.width
 
             // TODO: Implement keyboard focus
@@ -538,7 +538,8 @@ Item {
                 anchors.leftMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing
                 anchors.rightMargin: listItemIcon.width + PlasmaCore.Units.smallSpacing * 2
 
-                height: PlasmaCore.Units.gridUnit * 2 * actionsList.count
+                // Need to take into account disabled/invisible items
+                height: PlasmaCore.Units.gridUnit * 2 * Array.from(contextualActionsModel).filter(item => item.enabled).length
 
                 focus: true
                 clip: true
