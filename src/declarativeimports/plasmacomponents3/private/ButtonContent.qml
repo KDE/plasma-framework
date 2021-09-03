@@ -31,7 +31,7 @@ GridLayout {
 
         Layout.alignment: Qt.AlignCenter
 
-        Layout.fillWidth: true
+        Layout.fillWidth: root.parent.display !== T.Button.TextBesideIcon || label.text.length == 0
         Layout.fillHeight: true
 
         Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
