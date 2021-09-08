@@ -579,7 +579,7 @@ void DialogPrivate::syncToMainItemSize()
 {
     Q_ASSERT(mainItem);
 
-    if (!componentComplete) {
+    if (!componentComplete || q->visibility() == QWindow::Hidden) {
         return;
     }
     if (mainItem->width() <= 0 || mainItem->height() <= 0) {
@@ -1150,7 +1150,7 @@ void Dialog::resizeEvent(QResizeEvent *re)
     }
 
     // A dialog can be resized even if no mainItem has ever been set
-    if (!d->mainItem) {
+    if (!d->mainItem || !isExposed()) {
         return;
     }
 
@@ -1237,7 +1237,11 @@ bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
         if (!KWindowSystem::isPlatformWayland() || !isExposed()) {
-            return QQuickWindow::event(event);
+            auto ret = QQuickWindow::event(event);
+            if (d->mainItem) {
+                d->syncToMainItemSize();
+            }
+            return ret;
         }
 
         /*
