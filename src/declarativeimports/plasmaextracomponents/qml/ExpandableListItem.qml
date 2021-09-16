@@ -533,7 +533,7 @@ Item {
                 anchors.rightMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing * 2
 
                 // Need to take into account disabled/invisible items
-                height: Math.ceil(PlasmaCore.Units.gridUnit * 1.5) * Array.from(contextualActionsModel).filter(item => item.enabled).length
+                height: (Math.ceil(PlasmaCore.Units.gridUnit * 1.5) + PlasmaCore.Units.smallSpacing) * Array.from(contextualActionsModel).filter(item => item.enabled).length
 
                 spacing: 0
 
