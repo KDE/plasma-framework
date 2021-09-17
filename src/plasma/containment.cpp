@@ -118,7 +118,7 @@ void Containment::init()
     QAction *configAction = actions()->action(QStringLiteral("configure"));
     if (configAction) {
         if (d->type == Types::PanelContainment || d->type == Types::CustomPanelContainment) {
-            configAction->setText(i18nc("%1 is the name of the containment", "Edit %1...", title()));
+            configAction->setText(i18n("Enter Edit Mode"));
             configAction->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
         } else {
             configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", title()));
