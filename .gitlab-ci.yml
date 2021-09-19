@@ -1,0 +1,25 @@
+suse_tumbleweed_qt515:
+  stage: build
+  image: kdeorg/suse-qt515:default
+  only:
+    - branches
+    - merge_requests
+    - tags
+  tags:
+    - Linux
+  variables:
+    - KDECI_CACHE_PATH: /home/jenkins/cache/
+    - KDECI_GITLAB_SERVER: https://invent.kde.org/
+    - KDECI_PACKAGE_PROJECT: teams/ci-artifacts/suse-qt5.15
+  before_script:
+    - git clone https://invent.kde.org/sysadmin/ci-tooling --branch=work/bcooksley/gitlab-ci
+    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-tooling/repo-metadata/
+  script:
+    - python3 ci-tooling/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform SUSEQt5.15
+  artifacts:
+    expire_in: 2 weeks
+    when: on_success
+    reports:
+      cobertura: CoberturaLcovResults.xml
+      junit: JUnitTestResults.xml
+      codequality: cppcheck.json
