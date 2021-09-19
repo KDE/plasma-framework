@@ -1,6 +1,6 @@
 suse_tumbleweed_qt515:
   stage: build
-  image: kdeorg/suse-qt515:default
+  image: kdeorg/ci-suse-qt515:default
   only:
     - branches
     - merge_requests
