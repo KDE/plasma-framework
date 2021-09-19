@@ -15,7 +15,7 @@ suse_tumbleweed_qt515:
     - git clone https://invent.kde.org/sysadmin/ci-tooling --branch=work/bcooksley/gitlab-ci
     - git clone https://invent.kde.org/sysadmin/repo-metadata ci-tooling/repo-metadata/
   script:
-    - python3 ci-tooling/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform SUSEQt5.15
+    - python3 -u ci-tooling/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux
   artifacts:
     expire_in: 2 weeks
     when: on_success
