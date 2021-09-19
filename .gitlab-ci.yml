@@ -8,9 +8,9 @@ suse_tumbleweed_qt515:
   tags:
     - Linux
   variables:
-    - KDECI_CACHE_PATH: /home/jenkins/cache/
-    - KDECI_GITLAB_SERVER: https://invent.kde.org/
-    - KDECI_PACKAGE_PROJECT: teams/ci-artifacts/suse-qt5.15
+    KDECI_CACHE_PATH: /home/jenkins/cache/
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/suse-qt5.15
   before_script:
     - git clone https://invent.kde.org/sysadmin/ci-tooling --branch=work/bcooksley/gitlab-ci
     - git clone https://invent.kde.org/sysadmin/repo-metadata ci-tooling/repo-metadata/
