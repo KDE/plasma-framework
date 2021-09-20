@@ -93,7 +93,7 @@
        d="m57 49h-6v1h6c0-1-2e-5 0 0-1z"
        fill-rule="evenodd"
        opacity=".15"
-       fill="correntColor" />
+       fill="currentColor" />
   </g>
   <g
      id="header-bottomleft"
