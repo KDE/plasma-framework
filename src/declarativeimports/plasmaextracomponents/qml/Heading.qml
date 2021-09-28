@@ -58,13 +58,13 @@ Label {
         var s;
         switch (l) {
         case 1:
-            return Math.round(n * 1.50) + step;
+            return n * 1.35 + step;
         case 2:
-            return Math.round(n * 1.30) + step;
+            return n * 1.20 + step;
         case 3:
-            return Math.round(n * 1.20) + step;
+            return n * 1.15 + step;
         case 4:
-            return Math.round(n * 1.10) + step;
+            return n * 1.10 + step;
         default:
             return n + step;
         }
