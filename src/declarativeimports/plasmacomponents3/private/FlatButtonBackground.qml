@@ -8,11 +8,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: root
-    // TODO: Mark these required when our minimum Qt version is new enough.
-    property bool hovered
-    property bool pressed
-    property bool checked
-    property bool focused
+    required property bool hovered
+    required property bool pressed
+    required property bool checked
+    required property bool focused
 
     property real leftMargin: surfaceHover.margins.left
     property real topMargin: surfaceHover.margins.top
