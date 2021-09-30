@@ -31,13 +31,18 @@ T.ToolTip {
 
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
-    contentItem: Label {
-        // Strip out ampersands right before non-whitespace characters, i.e.
-        // those used to determine the alt key shortcut
-        text: control.text.replace(/&(?=\S)/g, "")
-        font: control.font
-        PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ToolTipColorGroup
-        PlasmaCore.ColorScope.inherit: false
+    contentItem: Item {
+        implicitHeight: Math.ceil(label.implicitHeight)
+        implicitWidth: Math.ceil(label.implicitWidth)
+        Label {
+            id: label
+            // Strip out ampersands right before non-whitespace characters, i.e.
+            // those used to determine the alt key shortcut
+            text: control.text.replace(/&(?=\S)/g, "")
+            font: control.font
+            PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ToolTipColorGroup
+            PlasmaCore.ColorScope.inherit: false
+        }
     }
 
     background: Item {
