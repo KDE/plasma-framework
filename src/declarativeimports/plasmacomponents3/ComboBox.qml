@@ -61,13 +61,14 @@ T.ComboBox {
         id: textField
         implicitWidth: Math.ceil(contentWidth) + leftPadding + rightPadding
         implicitHeight: Math.ceil(contentHeight) + topPadding + bottomPadding
+        palette: control.palette
         padding: 0
         text: control.editable ? control.editText : control.displayText
 
         enabled: control.editable
         autoScroll: control.editable
-        
-        readOnly: control.down || !control.hasOwnProperty("editable") || !control.editable
+
+        readOnly: control.down || !control.editable
         inputMethodHints: control.inputMethodHints
         validator: control.validator
 
