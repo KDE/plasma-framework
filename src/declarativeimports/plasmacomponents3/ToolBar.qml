@@ -21,7 +21,7 @@ T.ToolBar {
     rightPadding: background.margins.right
     bottomPadding: background.margins.bottom
 
-    contentItem: Item { }
+    spacing: PlasmaCore.Units.smallSpacing
 
     background: PlasmaCore.FrameSvgItem {
         implicitHeight: 40 // TODO: Find a good way to sync this with the size of (Button or ToolButton) + padding
