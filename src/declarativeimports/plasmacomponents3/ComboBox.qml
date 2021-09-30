@@ -28,10 +28,12 @@ T.ComboBox {
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     hoverEnabled: true
+
     topPadding: surfaceNormal.margins.top
-    leftPadding: surfaceNormal.margins.left
-    rightPadding: surfaceNormal.margins.right + PlasmaCore.Units.gridUnit * 2
+    leftPadding: surfaceNormal.margins.left + (!control.mirrored ? 0 : __indicatorMargin)
+    rightPadding: surfaceNormal.margins.right + (control.mirrored ? 0 : __indicatorMargin)
     bottomPadding: surfaceNormal.margins.bottom
+    spacing: PlasmaCore.Units.smallSpacing
 
     delegate: ItemDelegate {
         width: control.popup.width
@@ -57,6 +59,8 @@ T.ComboBox {
 
     contentItem: T.TextField {
         id: textField
+        implicitWidth: Math.ceil(contentWidth) + leftPadding + rightPadding
+        implicitHeight: Math.ceil(contentHeight) + topPadding + bottomPadding
         padding: 0
         text: control.editable ? control.editText : control.displayText
 
