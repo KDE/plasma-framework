@@ -79,7 +79,7 @@ T.ComboBox {
         selectedTextColor: Kirigami.Theme.highlightedTextColor
 
         selectByMouse: !Kirigami.Settings.tabletMode
-        cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : undefined
+        cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : null
 
         font: control.font
         horizontalAlignment: Text.AlignLeft
