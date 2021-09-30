@@ -24,6 +24,7 @@ T.TabButton {
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     padding: PlasmaCore.Units.smallSpacing
+    spacing: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
 
@@ -43,6 +44,8 @@ T.TabButton {
 
     contentItem: GridLayout {
         columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
+        rowSpacing: control.spacing
+        columnSpacing: control.spacing
         PlasmaCore.IconItem {
             id: icon
 
@@ -81,6 +84,4 @@ T.TabButton {
             elide: Text.ElideRight
         }
     }
-
-    background: Item {}
 }
