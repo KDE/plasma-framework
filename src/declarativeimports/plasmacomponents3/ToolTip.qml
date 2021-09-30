@@ -16,7 +16,7 @@ T.ToolTip {
     x: parent ? Math.round((parent.width - implicitWidth) / 2) : 0
     y: -implicitHeight - 3
 
-    visible: parent && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
+    visible: parent instanceof T.AbstractButton && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
     delay: Kirigami.Units.toolTipDelay
     timeout: 5000
 
