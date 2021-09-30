@@ -17,10 +17,14 @@ import "mobiletextselection" as MobileTextSelection
 T.ComboBox {
     id: control
 
-    implicitWidth: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitWidth)
-                             + leftPadding + rightPadding + indicator.implicitWidth + rightPadding
-    implicitHeight: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitHeight)
-                            + topPadding + bottomPadding
+    property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ? control.spacing + indicator.width : 0
+
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding,
+                             implicitIndicatorHeight + topPadding + bottomPadding)
+
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
     hoverEnabled: true

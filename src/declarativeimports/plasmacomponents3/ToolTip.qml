@@ -20,8 +20,8 @@ T.ToolTip {
     delay: Kirigami.Units.toolTipDelay
     timeout: 5000
 
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, implicitContentHeight + topPadding + bottomPadding)
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
 
     margins: PlasmaCore.Units.smallSpacing
     leftPadding: backgroundItem.margins.left
