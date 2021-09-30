@@ -11,6 +11,8 @@ import "private"
 
 T.CheckDelegate {
     id: control
+    property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ?
+        indicator.width + control.spacing : 0
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding,
@@ -26,17 +28,21 @@ T.CheckDelegate {
     rightPadding: background.margins.right
     spacing: PlasmaCore.Units.smallSpacing
 
-    contentItem: Label {
-        leftPadding: control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
-        rightPadding: !control.mirrored ? (control.indicator ? control.indicator.width : 0) + control.spacing : 0
+    icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
+    icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
 
-        text: control.text
+    contentItem: IconLabel {
+        leftPadding: !control.mirrored ? 0 : control.__indicatorMargin
+        rightPadding: control.mirrored ? 0 : control.__indicatorMargin
+        palette: control.palette
         font: control.font
-        color: PlasmaCore.Theme.viewTextColor
-        elide: Text.ElideRight
-        visible: control.text
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
+        alignment: Qt.AlignLeft
+        display: control.display
+        spacing: control.spacing
+        iconWidth: control.icon.width
+        iconHeight: control.icon.height
+        iconSource: control.icon.name || control.icon.source
+        labelText: control.text
     }
 
     indicator: CheckIndicator {

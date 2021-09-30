@@ -8,9 +8,12 @@ import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@
 import org.kde.plasma.core 2.0 as PlasmaCore
+import "private"
 
 T.Switch {
     id: control
+    property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ?
+        indicator.width + control.spacing : 0
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding,
@@ -20,31 +23,29 @@ T.Switch {
                              implicitIndicatorHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: 1
-    spacing: Math.round(PlasmaCore.Units.gridUnit / 8)
+    spacing: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
 
+    icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
+    icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
+
     indicator: SwitchIndicator {
-        LayoutMirroring.enabled: control.mirrored
-        LayoutMirroring.childrenInherit: true
-        anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-        }
+        x: !control.mirrored ? control.leftPadding : control.width - width - control.rightPadding
+        y: control.topPadding + (control.availableHeight - height) / 2
         control: control
     }
 
-    contentItem: Label {
-        leftPadding: control.indicator && !control.mirrored ? control.indicator.width + control.spacing : 0
-        rightPadding: control.indicator && control.mirrored ? control.indicator.width + control.spacing : 0
-        opacity: control.enabled ? 1 : 0.6
-        text: control.text
+    contentItem: IconLabel {
+        leftPadding: control.mirrored ? 0 : control.__indicatorMargin
+        rightPadding: !control.mirrored ? 0 : control.__indicatorMargin
+        palette: control.palette
         font: control.font
-        color: PlasmaCore.ColorScope.textColor
-        elide: Text.ElideRight
-        visible: control.text
-        horizontalAlignment: Text.AlignLeft
-        verticalAlignment: Text.AlignVCenter
+        display: control.display
+        spacing: control.spacing
+        iconWidth: control.icon.width
+        iconHeight: control.icon.height
+        iconSource: control.icon.name || control.icon.source
+        labelText: control.text
     }
 }

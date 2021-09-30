@@ -7,3 +7,4 @@ FlatButtonBackground 1.0 FlatButtonBackground.qml
 RaisedButtonBackground 1.0 RaisedButtonBackground.qml
 RoundShadow 1.0 RoundShadow.qml
 TextFieldFocus 1.0 TextFieldFocus.qml
+IconLabel 1.0 IconLabel.qml

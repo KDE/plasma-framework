@@ -9,9 +9,12 @@ import QtQuick.Layouts 1.3
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@
 import org.kde.plasma.core 2.0 as PlasmaCore
+import "private"
 
 T.CheckBox {
     id: control
+    property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ?
+        indicator.width + control.spacing : 0
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding,
@@ -21,43 +24,31 @@ T.CheckBox {
                              implicitIndicatorHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    leftPadding: control.indicator && !control.mirrored ? control.indicator.width + control.spacing : 0
-    rightPadding: control.indicator && control.mirrored ? control.indicator.width + control.spacing : 0
     spacing: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
 
+    // Keeping old default smallMedium size for compatibility
+    // with UIs that currently expect that as the default size
+    icon.width: PlasmaCore.Units.iconSizes.smallMedium
+    icon.height: PlasmaCore.Units.iconSizes.smallMedium
+
     indicator: CheckIndicator {
-        LayoutMirroring.enabled: control.mirrored
-        LayoutMirroring.childrenInherit: true
-        anchors {
-            left: parent.left
-            verticalCenter: parent.verticalCenter
-        }
+        x: !control.mirrored ? control.leftPadding : control.width - width - control.rightPadding
+        y: control.topPadding + (control.availableHeight - height) / 2
         control: control
     }
 
-    contentItem: RowLayout {
-        opacity: control.enabled ? 1 : 0.6
-        spacing: PlasmaCore.Units.smallSpacing
-
-        PlasmaCore.IconItem {
-            source: control.icon.name || control.icon.source
-            visible: source.length > 0
-
-            implicitWidth: PlasmaCore.Units.iconSizes.smallMedium
-            implicitHeight: PlasmaCore.Units.iconSizes.smallMedium
-        }
-
-        Label {
-            Layout.fillWidth: true
-            text: control.text
-            font: control.font
-            color: PlasmaCore.ColorScope.textColor
-            elide: Text.ElideRight
-            visible: control.text
-            horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-        }
+    contentItem: IconLabel {
+        leftPadding: control.mirrored ? 0 : control.__indicatorMargin
+        rightPadding: !control.mirrored ? 0 : control.__indicatorMargin
+        palette: control.palette
+        font: control.font
+        display: control.display
+        spacing: control.spacing
+        iconWidth: control.icon.width
+        iconHeight: control.icon.height
+        iconSource: control.icon.name || control.icon.source
+        labelText: control.text
     }
 }
