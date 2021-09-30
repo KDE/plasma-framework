@@ -1,51 +1,23 @@
-<svg id="svg2" version="1.1" viewBox="0 0 94 64" xmlns="http://www.w3.org/2000/svg">
-    <style id="current-color-scheme" type="text/css">.ColorScheme-Background {
-            color:#eff0f1;
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg2" version="1.1" viewBox="0 0 16 32" sodipodi:docname="checkmarks.svg" width="16" height="32" inkscape:version="1.2-dev (d80f92d1cc, 2021-09-07, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+    <defs id="defs41" />
+    <sodipodi:namedview id="namedview39" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" showgrid="true" height="32px" inkscape:current-layer="svg2">
+        <inkscape:grid type="xygrid" id="grid919" />
+    </sodipodi:namedview>
+    <style id="current-color-scheme" type="text/css">
+        .ColorScheme-Text {
+            color:#232629;
         }
         .ColorScheme-ButtonFocus{
             color:#3daee9;
-        }</style>
-    <g id="16-16-checkbox" transform="translate(60.000001 -888.36218)">
-        <path id="rect4148" d="m17.999999 904.36215h16v15.99999h-16z" fill="none"/>
-        <path id="rect4160" class="ColorScheme-ButtonFocus" transform="translate(-60.000001,888.36218)" d="m80 16c-1.108 0-2 0.892-2 2v12c0 1.108 0.892 2 2 2h12c1.108 0 2-0.892 2-2v-12c0-1.108-0.892-2-2-2h-12zm0 1h12c0.554 0 1 0.446 1 1v12c0 0.554-0.446 1-1 1h-12c-0.554 0-1-0.446-1-1v-12c0-0.554 0.446-1 1-1z" fill="currentColor"/>
-        <path id="rect887" class="ColorScheme-ButtonFocus" d="m21 907.36218h10v10h-10z" fill="currentColor" fill-rule="evenodd"/>
+        }
+    </style>
+    <g id="checkbox">
+        <rect style="fill:currentColor;fill-rule:evenodd;stroke:currentColor;fill-opacity:0.33" id="rect924" width="15" height="15" x="0.5" y="0.5" rx="2.5" ry="2.5" class="ColorScheme-ButtonFocus" />
+        <path style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:5;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" d="M 3.5,8.5 6.5,11.5 l 6,-6" id="path2684" sodipodi:nodetypes="ccc" class="ColorScheme-Text" />
     </g>
-    <g id="22-22-checkbox" transform="translate(41.000001 -891.36218)">
-        <path id="rect4148-2" d="m14.999999 901.36215h22v21.99998h-22z" fill="none"/>
-        <path id="rect4160-9" class="ColorScheme-ButtonFocus" transform="translate(-41.000001,891.36218)" d="m58 10c-1.108 0-2 0.892-2 2v18c0 1.108 0.892 2 2 2h18c1.108 0 2-0.892 2-2v-18c0-1.108-0.892-2-2-2h-18zm0 1h18c0.554 0 1 0.446 1 1v18c0 0.554-0.446 1-1 1h-18c-0.554 0-1-0.446-1-1v-18c0-0.554 0.446-1 1-1z" fill="currentColor"/>
-        <path id="rect887-2" class="ColorScheme-ButtonFocus" d="m17.999999 904.36218h16v16h-16z" fill="currentColor" fill-rule="evenodd"/>
+    <g id="radiobutton">
+        <circle style="fill:currentColor;fill-rule:evenodd;stroke:currentColor;fill-opacity:0.33" id="path978" cx="8" cy="24" r="7.5" class="ColorScheme-ButtonFocus" />
+        <circle style="fill:currentColor;fill-rule:evenodd" id="path1899" cx="8" cy="24" r="3" class="ColorScheme-Text" />
     </g>
-    <g id="24-24-checkbox" transform="translate(18.000001 -892.36218)">
-        <path id="rect4148-2-0" d="m13.999999 900.36216h24v23.99998h-24z" fill="none"/>
-        <path id="rect4160-9-9" class="ColorScheme-ButtonFocus" transform="translate(-18.000001,892.36218)" d="m34 8c-1.108 0-2 0.892-2 2v20c0 1.108 0.892 2 2 2h20c1.108 0 2-0.892 2-2v-20c0-1.108-0.892-2-2-2h-20zm0 1h20c0.554 0 1 0.446 1 1v20c0 0.554-0.446 1-1 1h-20c-0.554 0-1-0.446-1-1v-20c0-0.554 0.446-1 1-1z" fill="currentColor"/>
-        <path id="rect887-2-6" class="ColorScheme-ButtonFocus" d="m16.999999 903.36218h18v18h-18z" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <g id="checkbox" transform="matrix(1.3333333 0 0 1.3333333 -18.666665 -1200.4829)">
-        <path id="rect4148-2-0-6" d="m13.999999 900.36216h24v23.99998h-24z" fill="none"/>
-        <path id="rect4160-9-9-2" class="ColorScheme-ButtonFocus" transform="matrix(.75000002 0 0 .75000002 13.999999 900.3622)" d="m2 0c-1.108 0-2 0.89200003-2 2v28c0 1.108 0.89200003 2 2 2h28c1.108 0 2-0.892 2-2v-28c0-1.108-0.892-2-2-2h-28zm0 1h28c0.554 0 1 0.446 1 1v28c0 0.554-0.446 1-1 1h-28c-0.554 0-1-0.446-1-1v-28c0-0.554 0.446-1 1-1z" fill="currentColor"/>
-        <path id="rect887-2-6-1" class="ColorScheme-ButtonFocus" d="m16.249999 902.6122h19.500001v19.5h-19.500001z" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <g id="16-16-radiobutton" transform="translate(60.000001 -856.36215)">
-        <path id="rect4148-7" d="m17.999999 904.36215h16v15.99999h-16z" fill="none"/>
-        <path id="rect4160-92" transform="translate(-60.000001,856.36215)" d="m86 48c-4.432 0-8 3.568-8 8s3.568 8 8 8c4.431999 0 8-3.568 8-8s-3.568001-8-8-8zm0 1c3.878 0 7 3.122 7 7s-3.122 7-7 7-7-3.122-7-7 3.122-7 7-7z" class="ColorScheme-ButtonFocus" fill="currentColor"/>
-        <rect id="rect887-23" class="ColorScheme-ButtonFocus" x="21" y="907.36218" width="10" height="10" rx="200" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <g id="22-22-radiobutton" transform="translate(41.000001 -859.36215)">
-        <path id="rect4148-2-5" d="m14.999999 901.36215h22v21.99998h-22z" fill="none"/>
-        <path id="rect4160-9-92" transform="translate(-41.000001,859.36215)" d="m67 42c-6.094001 0-11 4.90602-11 11 0 6.09397 4.905999 11 11 11s11-4.90603 11-11c0-6.09398-4.905999-11-11-11zm0 1c5.54 0 10 4.46 10 10s-4.46 10-10 10-10-4.46-10-10 4.46-10 10-10z" class="ColorScheme-ButtonFocus" fill="currentColor"/>
-        <rect id="rect887-2-8" class="ColorScheme-ButtonFocus" x="17.999998" y="904.36212" width="16.000002" height="15.999971" rx="8.000001" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <g id="24-24-radiobutton" transform="translate(18.000001 -860.36215)">
-        <path id="rect4148-2-0-7" d="m13.999999 900.36216h24v23.99998h-24z" fill="none"/>
-        <path id="rect4160-9-9-3" transform="translate(-18.000001,860.36215)" d="m44 40c-6.648001 0-12 5.35201-12 12s5.351999 12 12 12 12-5.35201 12-12-5.351999-12-12-12zm0 1c6.094 0 11 4.906 11 11s-4.906 11-11 11-11-4.906-11-11 4.906-11 11-11z" class="ColorScheme-ButtonFocus" fill="currentColor"/>
-        <rect id="rect887-2-6-2" class="ColorScheme-ButtonFocus" x="16.999998" y="903.36212" width="18" height="18.000029" rx="9" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <g id="radiobutton" transform="matrix(1.3333333 0 0 1.3333333 -18.666665 -1168.4829)">
-        <path id="rect4148-2-0-6-3" d="m13.999999 900.36216h24v23.99998h-24z" fill="none"/>
-        <path id="rect4160-9-9-2-1" transform="matrix(.75000002 0 0 .75000002 13.999999 876.3622)" d="m16 32c-8.8639998 0-16 7.136014-16 16-2.3684758e-15 8.864 7.1360002 16 16 16 8.864 0 16-7.136 16-16 0-8.863986-7.136-16-16-16zm0 1c8.31 0 15 6.690014 15 15 0 8.31-6.69 15-15 15-8.3099998 0-15-6.69-15-15 0-8.309986 6.6900002-15 15-15z" class="ColorScheme-ButtonFocus" fill="currentColor"/>
-        <rect id="rect887-2-6-1-4" class="ColorScheme-ButtonFocus" x="16.25" y="902.61218" width="19.5" height="19.499985" rx="9.75" fill="currentColor" fill-rule="evenodd"/>
-    </g>
-    <rect id="rect4160-7" class="ColorScheme-ButtonFocus" x="-54" y="-2.0000584" width="15.999999" height="15.999999" rx="2" ry="2" fill="currentColor"/>
-    <rect id="rect855-5" class="ColorScheme-Background" x="-53" y="-.99999738" width="14" height="14" rx="1" ry="1" fill="currentColor" fill-rule="evenodd"/>
-    <path id="rect887-3" class="ColorScheme-ButtonFocus" d="m-50.999999 1h10v10h-10z" fill="currentColor" fill-rule="evenodd"/>
 </svg>
