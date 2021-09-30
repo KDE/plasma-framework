@@ -20,7 +20,8 @@ Item {
     id: daysCalendar
 
     signal headerClicked
-
+    signal scrollUp
+    signal scrollDown
     signal activated(int index, var date, var item)
     // so it forwards it to the delegate which then emits activated with all the necessary data
     signal activateHighlightedItem
@@ -121,8 +122,6 @@ Item {
                 height: daysCalendar.cellHeight
                 dayModel: repeater.model
 
-                onClicked: daysCalendar.activated(index, model, delegate)
-
                 Connections {
                     target: daysCalendar
                     function onActivateHighlightedItem(delegate) {
@@ -131,7 +130,35 @@ Item {
                         }
                     }
                 }
+
+                MouseArea {
+                    anchors.fill: parent
+                    property int wheelDelta: 0
+
+                    onClicked: {
+                        daysCalendar.activated(index, model, delegate)
+                    }
+                    onWheel: {
+                        var delta = wheel.angleDelta.y || wheel.angleDelta.x
+                        wheelDelta += delta
+
+                        // magic number 120 for common "one click"
+                        // See: https://doc.qt.io/qt-5/qml-qtquick-wheelevent.html#angleDelta-prop
+
+
+                        while(wheelDelta >= 120) {
+                            wheelDelta -= 120;
+                            daysCalendar.scrollDown()
+                        }
+
+                        while(wheelDelta <= -120) {
+                            wheelDelta += 120
+                            daysCalendar.scrollUp()
+                        }
+                    }
+                }
             }
         }
     }
 }
+

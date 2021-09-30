@@ -353,6 +353,9 @@ PinchArea { // TODO KF6 switch to Item
                 week = 1 + calendarBackend.weeksModel[rowNumber];
                 root.currentDate = new Date(date.yearNumber, date.monthNumber - 1, date.dayNumber)
             }
+
+            onScrollUp: root.nextView()
+            onScrollDown: root.previousView()
         }
 
         // YearView
@@ -386,6 +389,9 @@ PinchArea { // TODO KF6 switch to Item
                 calendarBackend.goToYear(date.yearNumber);
                 swipeView.currentIndex = 1;
             }
+
+            onScrollUp: calendarBackend.nextYear()
+            onScrollDown: calendarBackend.previousYear()
         }
     }
 
