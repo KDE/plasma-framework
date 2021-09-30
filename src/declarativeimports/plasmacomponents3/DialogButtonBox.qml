@@ -15,10 +15,10 @@ T.DialogButtonBox {
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
     spacing: PlasmaCore.Units.smallSpacing
-    leftPadding: parent.leftPadding
-    topPadding: parent.topPadding
-    rightPadding: parent.rightPadding
-    bottomPadding: parent.bottomPadding
+    leftPadding: parent instanceof T.Control ? parent.leftPadding : horizontalPadding
+    topPadding: parent instanceof T.Control ? parent.topPadding : verticalPadding
+    rightPadding: parent instanceof T.Control ? parent.rightPadding : horizontalPadding
+    bottomPadding: parent instanceof T.Control ? parent.bottomPadding : verticalPadding
     alignment: Qt.AlignRight
 
     delegate: Button {
