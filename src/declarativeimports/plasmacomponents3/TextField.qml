@@ -38,6 +38,13 @@ T.TextField {
     // Can't guarantee that background will always be present or have the margins property
     readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
 
+    // TextField doesn't have this property by default for whatever reason
+    property bool visualFocus: control.activeFocus && (
+        control.focusReason == Qt.TabFocusReason ||
+        control.focusReason == Qt.BacktabFocusReason ||
+        control.focusReason == Qt.ShortcutFocusReason
+    )
+
     /* It might be preferable to do background width OR content width if we
      * want content to stay within the background rather than expanding the
      * control, but this is maintaining compatibility with the pre-existing
@@ -188,7 +195,15 @@ T.TextField {
         prefix: "base"
 
         Private.TextFieldFocus {
-            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
+            state: if (control.visualFocus) {
+                "focusframe"
+            } else if (control.activeFocus) {
+                "focus"
+            } else if (control.hovered) {
+                "hover"
+            } else {
+                "hidden"
+            }
             anchors.fill: parent
         }
     }

@@ -14,16 +14,18 @@ Item {
 
     PlasmaCore.Svg {
         id: lineEditSvg
+        property bool hasFocusFrame: lineEditSvg.hasElement("focusframe-center")
+        property bool hasFocusOverBase: lineEditSvg.hasElement("hint-focus-over-base")
         imagePath: "widgets/lineedit"
         onRepaintNeeded: {
-            if (lineEditSvg.hasElement("hint-focus-over-base")) {
+            if (hasFocusOverBase) {
                 main.z = 800
             } else {
                 main.z = 0
             }
         }
         Component.onCompleted: {
-            if (lineEditSvg.hasElement("hint-focus-over-base")) {
+            if (hasFocusOverBase) {
                 main.z = 800
             } else {
                 main.z = 0
@@ -42,6 +44,7 @@ Item {
             bottomMargin: -margins.bottom
         }
         opacity: 0
+        visible: opacity > 0
         imagePath: "widgets/lineedit"
         prefix: "hover"
     }
@@ -61,6 +64,14 @@ Item {
                 target: hover
                 opacity: 1
                 prefix: "focus"
+            }
+        },
+        State {
+            name: "focusframe"
+            PropertyChanges {
+                target: hover
+                opacity: 1
+                prefix: lineEditSvg.hasFocusFrame ? "focusframe" : "focus"
             }
         },
         State {

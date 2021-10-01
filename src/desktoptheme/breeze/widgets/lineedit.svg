@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg id="svg2" height="30" style="" width="80" sodipodi:version="0.32" inkscape:version="1.1-alpha (db535a56c6, 2021-02-18, custom)" sodipodi:docname="lineedit.svg" inkscape:output_extension="org.inkscape.output.svgz.inkscape" inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/wether.png" inkscape:export-xdpi="90" inkscape:export-ydpi="90" version="1.1" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+<svg id="svg2" height="30" style="" width="80" sodipodi:version="0.32" inkscape:version="1.2-dev (942b66973d, 2021-09-28, custom)" sodipodi:docname="lineedit.svg" inkscape:output_extension="org.inkscape.output.svgz.inkscape" inkscape:export-filename="/home/pinheiro/Documents/pics/estilo/plasma/wether.png" inkscape:export-xdpi="90" inkscape:export-ydpi="90" version="1.1" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
     <defs id="defs87" />
-    <sodipodi:namedview id="namedview85" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" objecttolerance="10.0" gridtolerance="10.0" guidetolerance="10.0" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" showgrid="true" inkscape:current-layer="svg2">
+    <sodipodi:namedview id="namedview85" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" objecttolerance="10.0" gridtolerance="10.0" guidetolerance="10.0" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" showgrid="true" inkscape:current-layer="svg2" inkscape:blackoutopacity="0.0">
         <inkscape:grid type="xygrid" id="grid926" />
     </sodipodi:namedview>
     <style id="current-color-scheme" type="text/css">
@@ -131,4 +131,49 @@
     <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focus-hint-bottom-margin" width="2" height="0.0010000000475" x="40" y="110" />
     <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focus-hint-left-margin" width="2" height="0.0010000000475" x="-96" y="-0.0010000000475" transform="rotate(-90)" />
     <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focus-hint-right-margin" width="2" height="0.0010000000475" x="-96" y="80" transform="rotate(-90)" />
+    <rect id="focusframe-center" height="18" class="ColorScheme-ViewBackground" style="color:#fcfcfc;opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;stroke-width:0.999997" width="68" x="6" y="126.000999451" />
+    <g id="focusframe-topleft" transform="translate(-147.000000001,157.000999451)">
+        <path id="rect4544-0-7" d="m 35.000000001,-41 -5,5 H 35 Z" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd" transform="translate(115,2)" sodipodi:nodetypes="cccc" />
+        <path id="path2359" style="opacity:0.33;fill:currentColor;fill-rule:evenodd" d="m 150.000000001,-39 c -2.761423748,0 -5,2.2385762519 -5,5 h 2.5 c 0,-1.380711874 1.119288126,-2.5 2.5,-2.5 z" sodipodi:nodetypes="ccccc" class="ColorScheme-ViewFocus" />
+        <path id="path1655-6-5" d="m 150,-37 c -1.650930281,0 -3,1.3490697194 -3,3 h 1 c 0,-1.1104907061 0.889509294,-2 2,-2 z" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd" />
+    </g>
+    <g id="focusframe-top" style="stroke-width:0.532714" transform="matrix(3.52380952381,0,0,1,-120.333333333,159.000999451)">
+        <rect id="rect3682-20-5" height="5" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd;stroke-width:0.532714" width="21" x="35" y="-41" />
+        <rect style="opacity:0.33;fill:currentColor;fill-rule:evenodd;stroke-width:0.283784" id="rect3120" width="21" height="2.5" x="35" y="-41" class="ColorScheme-ViewFocus" />
+        <rect id="rect3804-6-6" height="1" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd;stroke-width:0.175267" width="21" x="35" y="-39" />
+    </g>
+    <g id="focusframe-topright" transform="matrix(-1,0,0,1,227,157.000999451)">
+        <path id="rect4544-2-5-9" d="m 35,-41 -5,5 h 5 z" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd" transform="translate(115,2)" sodipodi:nodetypes="cccc" />
+        <path id="path2359-3" style="opacity:0.33;fill:currentColor;fill-rule:evenodd" d="m 150,-39 c -2.761423748,0 -5,2.2385762519 -5,5 h 2.5 c 0,-1.380711874 1.119288126,-2.5 2.5,-2.5 z" sodipodi:nodetypes="ccccc" class="ColorScheme-ViewFocus" />
+        <path id="path1655-9-5-1" d="m 150,-37 c -1.650930281,0 -3,1.3490697194 -3,3 h 1 c 0,-1.1104907061 0.889509294,-2 2,-2 z" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd" />
+    </g>
+    <g id="focusframe-bottom" style="stroke-width:0.532714" transform="matrix(3.52380952381,0,0,-1,-120.333333333,111.000999451)">
+        <rect id="rect3682-2-7-7" height="5" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd;stroke-width:0.532714" width="21" x="35" y="-41" />
+        <rect style="opacity:0.33;fill:currentColor;fill-rule:evenodd;stroke-width:0.283784" id="rect3120-5" width="21" height="2.5" x="35" y="38.5" transform="scale(1,-1)" class="ColorScheme-ViewFocus" />
+        <rect id="rect3804-7-65-0" height="1" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd;stroke-width:0.175267" width="21" x="35" y="-39" />
+    </g>
+    <g id="focusframe-bottomleft" transform="matrix(1,0,0,-1,-147.000000001,113.000999451)">
+        <path id="rect4544-9-9-3" d="m 35.000000001,-40.9999999999 -5,5 L 35,-36 Z" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd" transform="translate(115,2)" sodipodi:nodetypes="cccc" />
+        <path id="path2359-7" style="opacity:0.33;fill:currentColor;fill-rule:evenodd" d="m 150.000000001,-38.9999999999 c -2.761423748,0 -5,2.2385762519 -5,5 h 2.5 c 0,-1.380711874 1.119288126,-2.5 2.5,-2.5 z" sodipodi:nodetypes="ccccc" class="ColorScheme-ViewFocus" />
+        <path id="path1655-3-3-6" d="m 150,-37 c -1.650930281,0 -3,1.3490697194 -3,3 h 1 c 0,-1.1104907061 0.889509294,-2 2,-2 z" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd" />
+    </g>
+    <g id="focusframe-bottomright" transform="rotate(180,113.5,56.5004997253)">
+        <path id="rect4544-2-0-4-6" d="m 35,-41 -5,5 h 5 z" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd" transform="translate(115,2)" sodipodi:nodetypes="cccc" />
+        <path id="path2359-6" style="opacity:0.33;fill:currentColor;fill-rule:evenodd" d="m 149.999999999,-39 c -2.761423748,0 -5,2.2385762519 -5,5 h 2.5 c 0,-1.380711874 1.119288126,-2.5 2.5,-2.5 z" sodipodi:nodetypes="ccccc" class="ColorScheme-ViewFocus" />
+        <path id="path1655-9-6-5-2" d="m 150,-37 c -1.650930281,0 -3,1.3490697194 -3,3 h 1 c 0,-1.1104907061 0.889509294,-2 2,-2 z" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd" />
+    </g>
+    <g id="focusframe-left" style="stroke-width:0.935415" transform="matrix(0,-1.14285714286,1,0,38.9999999995,187.000999451)">
+        <rect id="rect3682-6-5-1" height="5" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd;stroke-width:0.935415" width="21" x="35" y="-41" />
+        <rect style="opacity:0.33;fill:currentColor;fill-rule:evenodd;stroke-width:0.875001" id="rect4155" width="2.5" height="21" x="-41" y="-56" transform="rotate(90)" class="ColorScheme-ViewFocus" />
+        <rect id="rect3804-1-47-8" height="1" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd;stroke-width:0.307759" width="21" x="35" y="-39" />
+    </g>
+    <g id="focusframe-right" style="stroke-width:0.935415" transform="matrix(0,-1.14285714286,-1,0,41.0000000004,187.000999451)">
+        <rect id="rect3682-6-7-4-9" height="5" class="ColorScheme-ViewBackground" style="opacity:0.00100002;fill:currentColor;fill-opacity:0.00392157;fill-rule:evenodd;stroke-width:0.935415" width="21" x="35" y="-41" />
+        <rect style="opacity:0.33;fill:currentColor;fill-rule:evenodd;stroke-width:0.875001" id="rect4155-3" width="2.5" height="21" x="38.5" y="-56" transform="matrix(0,-1,-1,0,0,0)" class="ColorScheme-ViewFocus" />
+        <rect id="rect3804-1-9-30-2" height="1" class="ColorScheme-ViewFocus" style="opacity:1;fill:currentColor;fill-rule:evenodd;stroke-width:0.307759" width="21" x="35" y="-39" />
+    </g>
+    <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focusframe-hint-top-margin" width="2" height="2" x="40" y="118" />
+    <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focusframe-hint-bottom-margin" width="2" height="2" x="40" y="150.00100708" />
+    <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focusframe-hint-left-margin" width="2" height="2" x="-136.00100708" y="-2.00099992752" transform="rotate(-90)" />
+    <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:evenodd;stroke-width:1" id="focusframe-hint-right-margin" width="2" height="2" x="-136.00100708" y="80" transform="rotate(-90)" />
 </svg>
