@@ -21,6 +21,9 @@ T.ScrollView {
     implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
 
+    leftPadding: mirrored && T.ScrollBar.vertical && T.ScrollBar.vertical.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.vertical.width : 0
+    rightPadding: !mirrored && T.ScrollBar.vertical && T.ScrollBar.vertical.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.vertical.width : 0
+    bottomPadding: T.ScrollBar.horizontal && T.ScrollBar.horizontal.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.horizontal.height : 0
 
     //create a background only after Component.onCompleted, see on the component creation below for explanation
     Component.onCompleted: {

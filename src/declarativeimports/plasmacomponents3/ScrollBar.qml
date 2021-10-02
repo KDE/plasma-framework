@@ -17,12 +17,12 @@ T.ScrollBar {
 
     hoverEnabled: !Kirigami.Settings.isMobile
 
-    visible: controlRoot.size < 1.0
+    visible: (size < 1 && policy === T.ScrollBar.AsNeeded) || policy === T.ScrollBar.AlwaysOn
 
     interactive: !Kirigami.Settings.tabletMode
 
     background: Item {
-        visible: controlRoot.size < 1.0 && controlRoot.interactive
+        visible: controlRoot.interactive
         implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
         implicitHeight: implicitWidth
         Rectangle {
@@ -63,7 +63,7 @@ T.ScrollBar {
             imagePath:"widgets/scrollbar"
 
             implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
-            visible: controlRoot.interactive && controlRoot.size < 1.0
+            visible: controlRoot.interactive
             implicitHeight: implicitWidth
             colorGroup: PlasmaCore.ColorScope.colorGroup
 
