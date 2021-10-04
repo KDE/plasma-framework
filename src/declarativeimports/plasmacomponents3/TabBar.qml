@@ -11,19 +11,21 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.TabBar {
     id: control
 
-    implicitWidth: contentItem.implicitWidth
-    implicitHeight: contentItem.implicitHeight
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
 
     spacing: 0
 
     contentItem: ListView {
-        implicitWidth: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).implicitWidth * count
-        implicitHeight: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).height
+        implicitWidth: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).implicitWidth * count + spacing * (count - 1)
+        implicitHeight: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).implicitHeight
 
         model: control.contentModel
         currentIndex: control.currentIndex
 
-        spacing: 0
+        spacing: control.spacing
         orientation: ListView.Horizontal
         boundsBehavior: Flickable.StopAtBounds
         flickableDirection: Flickable.AutoFlickIfNeeded
@@ -33,14 +35,11 @@ T.TabBar {
         highlightRangeMode: ListView.ApplyRange
         preferredHighlightBegin: 40
         preferredHighlightEnd: width - 40
+        highlightResizeDuration: 0
         highlight: PlasmaCore.FrameSvgItem {
             imagePath: "widgets/tabbar"
             prefix: control.position == T.TabBar.Header ? "north-active-tab" : "south-active-tab"
             colorGroup: PlasmaCore.ColorScope.colorGroup
         }
     }
-
-
-
-    background: Item {}
 }
