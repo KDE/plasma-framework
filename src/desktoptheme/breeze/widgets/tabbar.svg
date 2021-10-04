@@ -69,8 +69,8 @@
         <rect y="446.36215" x="266" height="4" width="10" id="south-active-tab-bottomleft" style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" inkscape:label="#rect3824" />
         <rect y="437.36215" x="266" height="5" width="6" id="south-active-tab-hint-left-margin" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
         <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" id="south-active-tab-hint-right-margin" width="6" height="5" x="360" y="437.36215" />
-        <rect y="431.3621521" x="320.241241455" height="8" width="5" id="south-active-tab-hint-top-margin" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.999996" />
-        <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" id="south-active-tab-hint-bottom-margin" width="5" height="4" x="320.241241455" y="446.3621521" />
+        <rect y="431.3621521" x="320.241241455" height="10" width="5" id="south-active-tab-hint-top-margin" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" />
+        <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" id="south-active-tab-hint-bottom-margin" width="5" height="10" x="320.241241455" y="446.3621521" />
         <rect inkscape:label="#rect3814" y="408.41531" x="-366.06082" height="12" width="10" id="east-active-tab-bottom" style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" transform="matrix(0,-1,1,0,0,0)" />
         <rect inkscape:label="#rect3816" style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" id="east-active-tab-center" width="80" height="12" x="-356.06082" y="408.41531" transform="matrix(0,-1,1,0,0,0)" />
         <rect inkscape:label="#rect3818" style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" id="east-active-tab-top" width="10" height="12" x="-276.06082" y="408.41531" transform="matrix(0,-1,1,0,0,0)" />
@@ -116,8 +116,8 @@
         <g id="north-active-tab-bottom" inkscape:label="#g3826" transform="translate(243,-132.00001)">
             <rect class="ColorScheme-ButtonFocus" y="359.36218" x="40" height="3" width="80" id="rect3003-6" style="fill:currentColor;fill-opacity:1;stroke:none" />
         </g>
-        <rect y="-230.362182617" x="-318.758758545" height="8" width="5" id="north-active-tab-hint-bottom-margin" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.999996" transform="scale(-1)" />
-        <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" id="north-active-tab-hint-top-margin" width="5" height="4" x="-318.758758545" y="-214.362182617" transform="scale(-1)" />
+        <rect y="-230.362182617" x="-318.758758545" height="10" width="5" id="north-active-tab-hint-bottom-margin" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" transform="scale(-1)" />
+        <rect style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1" id="north-active-tab-hint-top-margin" width="5" height="10" x="-318.758758545" y="-220.362182617" transform="scale(-1)" />
         <g id="north-active-tab-bottomleft" inkscape:label="#g3834" transform="translate(243,-132.00001)">
             <rect style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" id="rect3073-5-7" width="10" height="3" x="30" y="359.36218" />
             <rect style="fill:currentColor;fill-opacity:1;stroke:none" id="rect3542-3" width="7" height="2.9999752" x="32.999989" y="359.36221" class="ColorScheme-ButtonFocus" />
