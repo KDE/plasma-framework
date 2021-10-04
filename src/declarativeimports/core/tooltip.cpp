@@ -338,7 +338,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         if (m_active) {
             tooltipDialogInstance()->keepalive();
             // FIXME: showToolTip needs to be renamed in sync or something like that
-            showToolTip();
+            m_showTimer->start(100);
         }
     } else {
         m_showTimer->start(m_interval);
