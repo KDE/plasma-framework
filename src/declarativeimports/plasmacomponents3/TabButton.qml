@@ -67,6 +67,15 @@ T.TabButton {
         iconItem.active: control.visualFocus
         label.text: control.Kirigami.MnemonicData.richTextLabel
         label.color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
+        Rectangle { // As long as we don't enable antialiasing, not rounding should be fine
+            parent: control.contentItem.label
+            width: Math.min(parent.width, parent.contentWidth)
+            height: PlasmaCore.Units.devicePixelRatio
+            anchors.left: parent.left
+            anchors.top: parent.bottom
+            color: PlasmaCore.ColorScope.highlightColor
+            visible: control.visualFocus
+        }
     }
 
     background: PlasmaCore.FrameSvgItem {
