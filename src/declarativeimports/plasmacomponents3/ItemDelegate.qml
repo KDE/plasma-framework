@@ -39,10 +39,10 @@ T.CheckDelegate {
         alignment: Qt.AlignLeft
         display: control.display
         spacing: control.spacing
-        iconWidth: control.icon.width
-        iconHeight: control.icon.height
-        iconSource: control.icon.name || control.icon.source
-        labelText: control.text
+        iconItem.implicitWidth: control.icon.width
+        iconItem.implicitHeight: control.icon.height
+        iconItem.source: control.icon.name || control.icon.source
+        label.text: control.text
     }
 
     background: DefaultListItemBackground {}

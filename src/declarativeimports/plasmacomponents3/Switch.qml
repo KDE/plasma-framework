@@ -44,9 +44,18 @@ T.Switch {
         alignment: Qt.AlignLeft
         display: control.display
         spacing: control.spacing
-        iconWidth: control.icon.width
-        iconHeight: control.icon.height
-        iconSource: control.icon.name || control.icon.source
-        labelText: control.text
+        iconItem.implicitWidth: control.icon.width
+        iconItem.implicitHeight: control.icon.height
+        iconItem.source: control.icon.name || control.icon.source
+        label.text: control.text
+        Rectangle { // As long as we don't enable antialiasing, not rounding should be fine
+            parent: control.contentItem.label
+            width: Math.min(parent.width, parent.contentWidth)
+            height: PlasmaCore.Units.devicePixelRatio
+            anchors.left: parent.left
+            anchors.top: parent.bottom
+            color: PlasmaCore.ColorScope.highlightColor
+            visible: control.visualFocus
+        }
     }
 }
