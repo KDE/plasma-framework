@@ -11,6 +11,7 @@ import QtQml.Models 2.1
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
+import "private"
 
 T.TabButton {
     id: control
@@ -23,7 +24,11 @@ T.TabButton {
                              implicitIndicatorHeight + topPadding + bottomPadding)
     baselineOffset: contentItem.y + contentItem.baselineOffset
 
-    padding: PlasmaCore.Units.smallSpacing
+    leftPadding: background.margins.left
+    rightPadding: background.margins.right
+    topPadding: background.margins.top
+    bottomPadding: background.margins.bottom
+
     spacing: PlasmaCore.Units.smallSpacing
 
     hoverEnabled: true
@@ -36,52 +41,47 @@ T.TabButton {
         //in case of explicit & the button manages it by itself
         enabled: !(RegExp(/\&[^\&]/).test(control.text))
         sequence: control.Kirigami.MnemonicData.sequence
-        onActivated: control.clicked()
+        onActivated: if (control.action) {
+            control.action.trigger()
+        } else if (control.checkable && !control.checked) {
+            // A checkable AbstractButton clicked by a user would normally
+            // change the checked state first before emitting clicked().
+            control.toggle()
+            // Manually emit clicked() because action.trigger() is the only
+            // button related function that automatically emits clicked()
+            control.clicked()
+        }
     }
 
     icon.width: PlasmaCore.Units.iconSizes.smallMedium
     icon.height: PlasmaCore.Units.iconSizes.smallMedium
 
-    contentItem: GridLayout {
-        columns: control.display == T.AbstractButton.TextBesideIcon ? 2 : 1
-        rowSpacing: control.spacing
-        columnSpacing: control.spacing
-        PlasmaCore.IconItem {
-            id: icon
+    contentItem: IconLabel {
+        palette: control.palette
+        font: control.font
+        display: control.display
+        spacing: control.spacing
+        iconItem.implicitWidth: control.icon.width
+        iconItem.implicitHeight: control.icon.height
+        iconItem.source: control.icon.name || control.icon.source
+        iconItem.active: control.visualFocus
+        label.text: control.Kirigami.MnemonicData.richTextLabel
+        label.color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
+    }
 
-            Layout.alignment: control.display != T.AbstractButton.TextBesideIcon || !label.visible ? Qt.AlignCenter : Qt.AlignVCenter | Qt.AlignRight
-
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-
-            Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
-            Layout.minimumHeight: Math.min(parent.width, parent.height, implicitHeight)
-
-            Layout.maximumWidth: control.icon.width > 0 ? control.icon.width : Number.POSITIVE_INFINITY
-            Layout.maximumHeight: control.icon.height > 0 ? control.icon.height : Number.POSITIVE_INFINITY
-
-            implicitWidth: control.icon.width
-            implicitHeight: control.icon.height
-
-            colorGroup: control.PlasmaCore.ColorScope.colorGroup
-            visible: source.length > 0 && control.display !== T.AbstractButton.TextOnly
-            source: control.icon ? (control.icon.name || control.icon.source) : ""
-            active: control.visualFocus
-        }
-        Label {
-            id: label
-            Layout.fillWidth: true
-            // allow it to shrink below implicitWidth, but not exceed implicitWidth
-            Layout.maximumWidth: Math.ceil(implicitWidth)
-            Layout.alignment: horizontalAlignment | verticalAlignment
-            visible: text.length > 0 && control.display !== T.AbstractButton.IconOnly
-            text: control.Kirigami.MnemonicData.richTextLabel
-            font: control.font
-            color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
-            opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            horizontalAlignment: control.display != T.AbstractButton.TextBesideIcon || !icon.visible ? Text.AlignHCenter : Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
+    background: PlasmaCore.FrameSvgItem {
+        visible: !control.ListView.view || !control.ListView.view.highlightItem
+        imagePath: "widgets/tabbar"
+        prefix: control.T.TabBar.position === T.TabBar.Footer ? "south-active-tab" : "north-active-tab"
+        enabledBorders: {
+            const borders = PlasmaCore.FrameSvgItem.LeftBorder | PlasmaCore.FrameSvgItem.RightBorder
+            if (!visible || control.checked) {
+                return borders | PlasmaCore.FrameSvgItem.TopBorder | PlasmaCore.FrameSvgItem.BottomBorder
+            } else if (control.T.TabBar.position === T.TabBar.Footer) {
+                return borders | PlasmaCore.FrameSvgItem.BottomBorder
+            } else {
+                return borders | PlasmaCore.FrameSvgItem.TopBorder
+            }
         }
     }
 }
