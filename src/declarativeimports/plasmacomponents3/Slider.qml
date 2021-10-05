@@ -7,7 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private" as Private
+import "private" as P
 
 T.Slider {
     id: control
@@ -19,34 +19,48 @@ T.Slider {
     snapMode: T.Slider.SnapOnRelease
 
     PlasmaCore.Svg {
-        id: grooveSvg
+        id: sliderSvg
         imagePath: "widgets/slider"
         colorGroup: PlasmaCore.ColorScope.colorGroup
 
     }
     handle: Item {
-        property bool horizontal: control.orientation === Qt.Horizontal
         x: Math.round(control.leftPadding + (horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2))
         y: Math.round(control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height)))
 
-        width: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").width : firstHandle.width
-        height: grooveSvg.hasElement("hint-handle-size") ? grooveSvg.elementSize("hint-handle-size").height : firstHandle.height
+        implicitWidth: sliderSvg.hasElement("hint-handle-size") ? sliderSvg.elementSize("hint-handle-size").width : firstHandle.implicitWidth
+        implicitHeight: sliderSvg.hasElement("hint-handle-size") ? sliderSvg.elementSize("hint-handle-size").height : firstHandle.implicitHeight
 
-        Private.RoundShadow {
-            anchors.fill: firstHandle
-            imagePath: "widgets/slider"
-            focusElement: parent.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
-            hoverElement: parent.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
-            shadowElement: parent.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
-            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
+        PlasmaCore.SvgItem {
+            id: shadow
+            anchors.centerIn: parent
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
+            svg: sliderSvg
+            elementId: control.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
+            visible: !control.pressed
         }
         PlasmaCore.SvgItem {
             id: firstHandle
             anchors.centerIn: parent
-            width: naturalSize.width
-            height: naturalSize.height
-            svg: grooveSvg
-            elementId: parent.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
+            svg: sliderSvg
+            elementId: control.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
+        }
+        P.HoverFocusSvgItem {
+            id: hoverFocus
+            anchors.centerIn: parent
+            svg: sliderSvg
+            focusElement: control.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
+            hoverElement: control.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
+            elementId: if (control.visualFocus) {
+                hoverFocus.focusElement
+            } else {
+                hoverFocus.hoverElement
+            }
+            // HoverFocusSvgItem contains a behavior animation
+            opacity: control.hovered || control.visualFocus
         }
     }
 
