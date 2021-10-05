@@ -411,6 +411,10 @@ void Corona::setEditMode(bool edit)
         }
     }
 
+    if (!edit) {
+        requireConfigSync();
+    }
+
     d->editMode = edit;
     Q_EMIT editModeChanged(edit);
 }
