@@ -28,7 +28,7 @@ Item {
         FlatButtonBackground {
             anchors.fill: parent
             hovered: root.parent.hovered
-            pressed: root.parent.pressed
+            pressed: root.parent.down
             checked: root.parent.checked
             focused: root.parent.visualFocus
         }
@@ -39,7 +39,7 @@ Item {
         RaisedButtonBackground {
             anchors.fill: parent
             hovered: root.parent.hovered
-            pressed: root.parent.pressed
+            pressed: root.parent.down
             checked: root.parent.checked
             focused: root.parent.visualFocus
         }
