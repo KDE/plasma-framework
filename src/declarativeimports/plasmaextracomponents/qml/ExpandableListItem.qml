@@ -365,7 +365,8 @@ Item {
         acceptedButtons: Qt.RightButton
         hoverEnabled: true
 
-        onContainsMouseChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
+        // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
+        onPositionChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
 
         // Handle right-click, if so defined
         onClicked: {
