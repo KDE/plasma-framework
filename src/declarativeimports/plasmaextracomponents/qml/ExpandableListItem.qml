@@ -343,6 +343,34 @@ Item {
 
     onIsEnabledChanged: if (!listItem.isEnabled) { collapse() }
 
+    Keys.onPressed: {
+        if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
+            if (defaultActionButtonAction) {
+                defaultActionButtonAction.trigger()
+            } else {
+                toggleExpanded();
+            }
+            event.accepted = true;
+        } else if (event.key == Qt.Key_Escape) {
+            if (expandedView.active) {
+                collapse();
+                event.accepted = true;
+            }
+            // if not active, we'll let the Escape event pass through, so it can close the applet, etc.
+        } else if (event.key == Qt.Key_Space) {
+            toggleExpanded();
+            event.accepted = true;
+        } else if (event.key == Qt.Key_Menu) {
+            if (contextMenu != undefined) {
+                contextMenu.visualParent = listItem;
+                contextMenu.prepare();
+                contextMenu.open(mouse.x, mouse.y)
+                return
+            }
+            event.accepted = true;
+        }
+    }
+
     // Handle left clicks and taps; don't accept stylus input or else it steals
     // events from the buttons on the list item
     TapHandler {
