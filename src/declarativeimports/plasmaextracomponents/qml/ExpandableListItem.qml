@@ -364,7 +364,7 @@ Item {
             if (contextMenu != undefined) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
-                contextMenu.open(mouse.x, mouse.y)
+                contextMenu.open(0, 0);
                 return
             }
             event.accepted = true;
