@@ -337,7 +337,7 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         // It need to be considered only when other items can deal with tooltip area
         if (m_active) {
             tooltipDialogInstance()->keepalive();
-            if (m_interactive) {
+            if (tooltipDialogInstance()->interactive()) {
                 // Small delay so that when the mouse is just passing through a task icon on its way to a tooltip, we won't change the tooltip
                 m_showTimer->start(200);
             } else {
