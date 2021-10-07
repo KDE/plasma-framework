@@ -7,6 +7,7 @@
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.components 2.0 as PlasmaComponents2
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -361,10 +362,10 @@ Item {
             toggleExpanded();
             event.accepted = true;
         } else if (event.key == Qt.Key_Menu) {
-            if (contextMenu != undefined) {
+            if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
-                contextMenu.open(0, 0);
+                contextMenu.openRelative();
                 return
             }
             event.accepted = true;
@@ -398,7 +399,7 @@ Item {
 
         // Handle right-click, if so defined
         onClicked: {
-            if (contextMenu != undefined) {
+            if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = parent
                 contextMenu.prepare();
                 contextMenu.open(mouse.x, mouse.y)
