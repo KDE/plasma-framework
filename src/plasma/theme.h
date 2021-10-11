@@ -448,6 +448,8 @@ public:
 
     QString backgroundPath(const QString &image) const;
 
+    static QPalette globalPalette();
+
 Q_SIGNALS:
     /**
      * Emitted when the user changes the theme. Stylesheet usage, colors, etc. should

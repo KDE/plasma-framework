@@ -173,6 +173,15 @@ QPalette Theme::palette() const
     return d->palette;
 }
 
+QPalette Theme::globalPalette()
+{
+    if (!ThemePrivate::globalTheme) {
+        ThemePrivate::globalTheme = new ThemePrivate;
+        ThemePrivate::globalTheme->settingsChanged(false);
+    }
+    return ThemePrivate::globalTheme->palette;
+}
+
 QString Theme::wallpaperPath(const QSize &size) const
 {
     QString fullPath;
