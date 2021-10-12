@@ -175,15 +175,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     // Need to pass the empty directory because it's where plasmoids used to be
     auto plugin = d->plasmoidCache.findPluginById(name, PluginLoaderPrivate::s_plasmoidsPluginDir);
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    if (!plugin.isValid()) {
-        auto plugin = d->plasmoidCache.findPluginById(name, QString());
-        if (plugin.isValid()) {
-            qCWarning(LOG_PLASMA) << "The applet" << plugin.fileName()
-                                  << "is installed in a deprecated location, install it in the plasma/applets namespace instead";
-        }
-    }
-#endif
 
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
 
@@ -192,15 +183,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
         if (!parentPlugin.isEmpty()) {
             plugin = d->plasmoidCache.findPluginById(parentPlugin, PluginLoaderPrivate::s_plasmoidsPluginDir);
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-            if (!plugin.isValid()) {
-                auto plugin = d->plasmoidCache.findPluginById(name, QString());
-                if (plugin.isValid()) {
-                    qCWarning(LOG_PLASMA) << "The applet" << plugin.fileName()
-                                          << "is installed in a deprecated location, install it in the plasma/applets namespace instead";
-                }
-            }
-#endif
         }
     }
 
