@@ -372,6 +372,9 @@ Item {
         }
     }
 
+    KeyNavigation.tab: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
+    KeyNavigation.right: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
+
     // Handle left clicks and taps; don't accept stylus input or else it steals
     // events from the buttons on the list item
     TapHandler {
@@ -511,10 +514,14 @@ Item {
                     visible: defaultActionButtonAction
                             && listItem.defaultActionButtonVisible
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
+
+                    KeyNavigation.tab: expandToggleButton
+                    KeyNavigation.right: expandToggleButton
                 }
 
                 // Expand/collapse button
                 PlasmaComponents3.ToolButton {
+                    id: expandToggleButton
                     visible: listItem.hasExpandableContent
                     icon.name: expandedView.active? "collapse" : "expand"
 
