@@ -436,10 +436,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
             }
 
             if (!script) {
-#ifndef NDEBUG
-                // qCDebug(LOG_PLASMA) << "Could not create a" << api << "ScriptEngine for the"
-                //        << dataEngineDescription.name() << "DataEngine.";
-#endif
                 delete package;
                 package = nullptr;
             }
@@ -473,11 +469,7 @@ void DataEnginePrivate::internalUpdateSource(DataContainer *source)
     if (q->updateSourceEvent(source->objectName())) {
         // qCDebug(LOG_PLASMA) << "queuing an update";
         scheduleSourcesUpdated();
-    } /* else {
- #ifndef NDEBUG
-         // qCDebug(LOG_PLASMA) << "no update";
- #endif
-     }*/
+    }
 }
 
 void DataEnginePrivate::ref()

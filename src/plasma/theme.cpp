@@ -155,14 +155,6 @@ QString Theme::imagePath(const QString &name) const
         }
     }
 
-    /*
-    if (path.isEmpty()) {
-    #ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "Theme says: bad image path " << name;
-    #endif
-    }
-    */
-
     return path;
 }
 
@@ -220,12 +212,6 @@ QString Theme::wallpaperPath(const QSize &size) const
         // the standard directories
         // qCDebug(LOG_PLASMA) << "looking for" << defaultImage;
         fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("wallpapers/") + defaultImage);
-
-        if (fullPath.isEmpty()) {
-#ifndef NDEBUG
-            // qCDebug(LOG_PLASMA) << "exhausted every effort to find a wallpaper.";
-#endif
-        }
     }
 
     return fullPath;

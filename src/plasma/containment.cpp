@@ -216,15 +216,6 @@ void Containment::restore(KConfigGroup &group)
             }
         }
     }
-
-    /*
-    #ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "Containment" << id() <<
-    #endif
-                "screen" << screen() <<
-                "geometry is" << geometry() <<
-                "config entries" << group.entryMap();
-    */
 }
 
 void Containment::save(KConfigGroup &g) const

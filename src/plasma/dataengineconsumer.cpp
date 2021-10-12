@@ -32,25 +32,6 @@ void DataEngineConsumerPrivate::slotJobFinished(Plasma::ServiceJob *job)
 
 void DataEngineConsumerPrivate::slotServiceReady(Plasma::Service *plasmoidService)
 {
-#ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "service ready!";
-#endif
-    if (!engineNameForService.contains(plasmoidService)) {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "no engine name for service!";
-#endif
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "amount of services in map: " << engineNameForService.count();
-#endif
-    } else {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "value = " << engineNameForService.value(plasmoidService);
-#endif
-    }
-
-#ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "requesting dataengine!";
-#endif
     QVariantMap op = plasmoidService->operationDescription(QStringLiteral("DataEngine"));
     op[QStringLiteral("EngineName")] = engineNameForService.value(plasmoidService);
     plasmoidService->startOperationCall(op);

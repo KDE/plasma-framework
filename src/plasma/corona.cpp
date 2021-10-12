@@ -42,9 +42,6 @@ Corona::Corona(QObject *parent)
     : QObject(parent)
     , d(new CoronaPrivate(this))
 {
-#ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Corona ctor start";
-#endif
     d->init();
 
 #ifndef NDEBUG
