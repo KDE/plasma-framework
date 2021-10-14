@@ -113,6 +113,7 @@ private:
     bool m_redirecting;
     bool m_damaged;
     int m_depth;
+    mutable WindowTextureProvider *m_textureProvider = nullptr;
 #if HAVE_XCB_COMPOSITE
     xcb_pixmap_t pixmapForWindow();
     bool m_openGLFunctionsResolved;
@@ -121,7 +122,6 @@ private:
     xcb_pixmap_t m_pixmap;
 
     /*The following must *only* be used from the render thread*/
-    mutable WindowTextureProvider *m_textureProvider = nullptr;
     uint m_texture;
 #if HAVE_GLX
     bool windowToTextureGLX(WindowTextureProvider *textureProvider);
