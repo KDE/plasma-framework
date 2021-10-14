@@ -33,7 +33,7 @@ class KWindowInfo;
 
 namespace Plasma
 {
-class WindowTextureNode;
+class WindowTextureProvider;
 
 /**
  * @brief Renders a thumbnail for the window specified by the @c winId property.
@@ -96,8 +96,8 @@ protected:
     void releaseResources() override;
 
 private:
-    void iconToTexture(WindowTextureNode *textureNode);
-    void windowToTexture(WindowTextureNode *textureNode);
+    void iconToTexture(WindowTextureProvider *textureProvider);
+    void windowToTexture(WindowTextureProvider *textureProvider);
     bool startRedirecting();
     void stopRedirecting();
     void resetDamaged();
@@ -113,7 +113,6 @@ private:
     bool m_redirecting;
     bool m_damaged;
     int m_depth;
-    mutable QPointer<WindowTextureNode> m_node;
 #if HAVE_XCB_COMPOSITE
     xcb_pixmap_t pixmapForWindow();
     bool m_openGLFunctionsResolved;
@@ -122,9 +121,10 @@ private:
     xcb_pixmap_t m_pixmap;
 
     /*The following must *only* be used from the render thread*/
+    mutable WindowTextureProvider *m_textureProvider = nullptr;
     uint m_texture;
 #if HAVE_GLX
-    bool windowToTextureGLX(WindowTextureNode *textureNode);
+    bool windowToTextureGLX(WindowTextureProvider *textureProvider);
     void resolveGLXFunctions();
     bool loadGLXTexture();
     void bindGLXTexture();
@@ -134,7 +134,7 @@ private:
     QFunctionPointer m_releaseTexImage;
 #endif // HAVE_GLX
 #if HAVE_EGL
-    bool xcbWindowToTextureEGL(WindowTextureNode *textureNode);
+    bool xcbWindowToTextureEGL(WindowTextureProvider *textureProvider);
     void resolveEGLFunctions();
     void bindEGLTexture();
     bool m_eglFunctionsResolved;
@@ -146,18 +146,13 @@ private:
 #endif
 };
 
-/**
- * @brief SimpleTextureNode which cleans up the texture
- *
- */
-class WindowTextureNode : public QSGTextureProvider, public QSGSimpleTextureNode
+class WindowTextureProvider : public QSGTextureProvider
 {
     Q_OBJECT
+
 public:
-    WindowTextureNode();
-    virtual ~WindowTextureNode();
-    void reset(QSGTexture *texture);
     QSGTexture *texture() const override;
+    void setTexture(QSGTexture *texture);
 
 private:
     QScopedPointer<QSGTexture> m_texture;

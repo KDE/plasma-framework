@@ -12,6 +12,7 @@
 #include <QOpenGLContext>
 #include <QQuickWindow>
 #include <QRunnable>
+#include <QSGImageNode>
 
 // X11
 #if HAVE_XCB_COMPOSITE
@@ -38,18 +39,20 @@ namespace Plasma
 class DiscardGlxPixmapRunnable : public QRunnable
 {
 public:
-    DiscardGlxPixmapRunnable(uint, QFunctionPointer, xcb_pixmap_t);
+    DiscardGlxPixmapRunnable(uint, WindowTextureProvider *provider, QFunctionPointer, xcb_pixmap_t);
     void run() override;
 
 private:
     uint m_texture;
+    WindowTextureProvider *m_provider;
     QFunctionPointer m_releaseTexImage;
     xcb_pixmap_t m_glxPixmap;
 };
 
-DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
+DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, WindowTextureProvider *provider, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
     : QRunnable()
     , m_texture(texture)
+    , m_provider(provider)
     , m_releaseTexImage(deleteFunction)
     , m_glxPixmap(pixmap)
 {
@@ -57,6 +60,7 @@ DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointe
 
 void DiscardGlxPixmapRunnable::run()
 {
+    delete m_provider;
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
         Display *d = QX11Info::display();
         ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
@@ -70,18 +74,20 @@ void DiscardGlxPixmapRunnable::run()
 class DiscardEglPixmapRunnable : public QRunnable
 {
 public:
-    DiscardEglPixmapRunnable(uint, QFunctionPointer, EGLImageKHR);
+    DiscardEglPixmapRunnable(uint, WindowTextureProvider *provider, QFunctionPointer, EGLImageKHR);
     void run() override;
 
 private:
     uint m_texture;
+    WindowTextureProvider *m_provider;
     QFunctionPointer m_eglDestroyImageKHR;
     EGLImageKHR m_image;
 };
 
-DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, QFunctionPointer deleteFunction, EGLImageKHR image)
+DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, WindowTextureProvider *provider, QFunctionPointer deleteFunction, EGLImageKHR image)
     : QRunnable()
     , m_texture(texture)
+    , m_provider(provider)
     , m_eglDestroyImageKHR(deleteFunction)
     , m_image(image)
 {
@@ -89,6 +95,7 @@ DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, QFunctionPointe
 
 void DiscardEglPixmapRunnable::run()
 {
+    delete m_provider;
     if (m_image != EGL_NO_IMAGE_KHR) {
         ((eglDestroyImageKHR_func)(m_eglDestroyImageKHR))(eglGetCurrentDisplay(), m_image);
         glDeleteTextures(1, &m_texture);
@@ -97,24 +104,13 @@ void DiscardEglPixmapRunnable::run()
 #endif // HAVE_EGL
 #endif // HAVE_XCB_COMPOSITE
 
-WindowTextureNode::WindowTextureNode()
-    : QSGSimpleTextureNode()
+QSGTexture *WindowTextureProvider::texture() const
 {
-    setFiltering(QSGTexture::Linear);
+    return m_texture.data();
 }
 
-WindowTextureNode::~WindowTextureNode()
+void WindowTextureProvider::setTexture(QSGTexture *texture)
 {
-}
-
-QSGTexture *WindowTextureNode::texture() const
-{
-    return QSGSimpleTextureNode::texture();
-}
-
-void WindowTextureNode::reset(QSGTexture *texture)
-{
-    setTexture(texture);
     m_texture.reset(texture);
     Q_EMIT textureChanged();
 }
@@ -234,18 +230,20 @@ void WindowThumbnail::releaseResources()
     // but the pointer is held by the WindowThumbnail which is in the main thread
 #if HAVE_GLX
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
-        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture, m_releaseTexImage, m_glxPixmap), m_renderStage);
+        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture, m_textureProvider, m_releaseTexImage, m_glxPixmap), m_renderStage);
 
         m_glxPixmap = XCB_PIXMAP_NONE;
         m_texture = 0;
+        m_textureProvider = nullptr;
     }
 #endif
 #if HAVE_EGL
     if (m_image != EGL_NO_IMAGE_KHR) {
-        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture, m_eglDestroyImageKHR, m_image), m_renderStage);
+        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture, m_textureProvider, m_eglDestroyImageKHR, m_image), m_renderStage);
 
         m_image = EGL_NO_IMAGE_KHR;
         m_texture = 0;
+        m_textureProvider = nullptr;
     }
 #endif
 #endif
@@ -298,19 +296,24 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
 {
     Q_UNUSED(updatePaintNodeData)
 
-    Q_ASSERT(oldNode == nullptr || oldNode == m_node);
-    Q_UNUSED(oldNode)
+    if (!m_textureProvider) {
+        m_textureProvider = new WindowTextureProvider();
+    }
 
-    if (!m_node) {
-        m_node = new WindowTextureNode();
-    }
-    auto node = m_node;
     if (!m_xcb || m_winId == 0 || (window() && window()->winId() == m_winId)) {
-        iconToTexture(node);
+        iconToTexture(m_textureProvider);
     } else {
-        windowToTexture(node);
+        windowToTexture(m_textureProvider);
     }
-    node->setRect(boundingRect());
+
+    QSGImageNode *node = static_cast<QSGImageNode *>(oldNode);
+    if (!node) {
+        node = window()->createImageNode();
+        qsgnode_set_description(node, QStringLiteral("windowthumbnail"));
+        node->setFiltering(QSGTexture::Linear);
+    }
+
+    node->setTexture(m_textureProvider->texture());
     const QSizeF size(node->texture()->textureSize().scaled(boundingRect().size().toSize(), Qt::KeepAspectRatio));
     if (size != m_paintedSize) {
         m_paintedSize = size;
@@ -357,7 +360,7 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
     return false;
 }
 
-void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
+void WindowThumbnail::iconToTexture(WindowTextureProvider *textureProvider)
 {
     QIcon icon;
     if (KWindowSystem::self()->hasWId(m_winId)) {
@@ -367,12 +370,12 @@ void WindowThumbnail::iconToTexture(WindowTextureNode *textureNode)
         icon = QIcon::fromTheme(QStringLiteral("plasma"));
     }
     QImage image = icon.pixmap(window(), boundingRect().size().toSize()).toImage();
-    textureNode->reset(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
+    textureProvider->setTexture(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
 }
 
 #if HAVE_XCB_COMPOSITE
 #if HAVE_GLX
-bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
+bool WindowThumbnail::windowToTextureGLX(WindowTextureProvider *textureProvider)
 {
     if (window()->openglContext()) {
         if (!m_openGLFunctionsResolved) {
@@ -403,9 +406,9 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
                 return false;
             }
 
-            textureNode->reset(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureCanUseAtlas));
+            textureProvider->setTexture(window()->createTextureFromId(m_texture, QSize(geo->width, geo->height), QQuickWindow::TextureCanUseAtlas));
         }
-        textureNode->texture()->bind();
+        textureProvider->texture()->bind();
         bindGLXTexture();
         return true;
     }
@@ -414,7 +417,7 @@ bool WindowThumbnail::windowToTextureGLX(WindowTextureNode *textureNode)
 #endif // HAVE_GLX
 
 #if HAVE_EGL
-bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
+bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureProvider *textureProvider)
 {
     EGLContext context = eglGetCurrentContext();
 
@@ -448,9 +451,9 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureNode *textureNode)
                 size.setWidth(geo->width);
                 size.setHeight(geo->height);
             }
-            textureNode->reset(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureCanUseAtlas));
+            textureProvider->setTexture(window()->createTextureFromId(m_texture, size, QQuickWindow::TextureCanUseAtlas));
         }
-        textureNode->texture()->bind();
+        textureProvider->texture()->bind();
         bindEGLTexture();
         return true;
     }
@@ -487,13 +490,13 @@ void WindowThumbnail::bindEGLTexture()
 
 #endif // HAVE_XCB_COMPOSITE
 
-void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
+void WindowThumbnail::windowToTexture(WindowTextureProvider *textureProvider)
 {
-    if (!m_damaged && textureNode->texture()) {
+    if (!m_damaged && textureProvider->texture()) {
         return;
     }
 #if HAVE_XCB_COMPOSITE
-    if (!textureNode->texture()) {
+    if (!textureProvider->texture()) {
         // the texture got discarded by the scene graph, but our mapping is still valid
         // let's discard the pixmap to have a clean state again
         releaseResources();
@@ -503,28 +506,27 @@ void WindowThumbnail::windowToTexture(WindowTextureNode *textureNode)
     }
     if (m_pixmap == XCB_PIXMAP_NONE) {
         // create above failed
-        iconToTexture(textureNode);
+        iconToTexture(textureProvider);
         setThumbnailAvailable(false);
         return;
     }
     bool fallbackToIcon = true;
 #if HAVE_GLX
-    fallbackToIcon = !windowToTextureGLX(textureNode);
+    fallbackToIcon = !windowToTextureGLX(textureProvider);
 #endif // HAVE_GLX
 #if HAVE_EGL
     if (fallbackToIcon) {
         // if glx succeeded fallbackToIcon is false, thus we shouldn't try egl
-        fallbackToIcon = !xcbWindowToTextureEGL(textureNode);
+        fallbackToIcon = !xcbWindowToTextureEGL(textureProvider);
     }
 #endif // HAVE_EGL
     if (fallbackToIcon) {
         // just for safety to not crash
-        iconToTexture(textureNode);
+        iconToTexture(textureProvider);
     }
     setThumbnailAvailable(!fallbackToIcon);
-    textureNode->markDirty(QSGNode::DirtyForceUpdate);
 #else
-    iconToTexture(textureNode);
+    iconToTexture(textureProvider);
 #endif
 }
 
@@ -948,11 +950,11 @@ QSGTextureProvider *WindowThumbnail::textureProvider() const
         return QQuickItem::textureProvider();
     }
 
-    if (!m_node) {
-        m_node = new WindowTextureNode;
+    if (!m_textureProvider) {
+        m_textureProvider = new WindowTextureProvider();
     }
-    // will be cleaned up by QQuickWindow when updatePaintNode takes ownership
-    return m_node.data();
+
+    return m_textureProvider;
 }
 
 } // namespace
