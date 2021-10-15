@@ -58,7 +58,7 @@ QList<KPluginMetaData> WallpaperInterface::listWallpaperMetadataForMimetype(cons
         if (!formFactor.isEmpty() && !md.value(QStringLiteral("X-Plasma-FormFactors")).contains(formFactor)) {
             return false;
         }
-        return KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
+        return md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimetype);
     };
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Wallpaper"), QString(), filter);
 }
@@ -185,7 +185,7 @@ QList<QAction *> WallpaperInterface::contextualActions() const
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
 {
-    return KPluginMetaData::readStringList(m_pkg.metadata().rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimetype);
+    return m_pkg.metadata().value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimetype);
 }
 
 void WallpaperInterface::setUrl(const QUrl &url)

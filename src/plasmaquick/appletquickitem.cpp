@@ -82,7 +82,7 @@ void AppletQuickItemPrivate::init()
 int AppletQuickItemPrivate::preloadWeight() const
 {
     int defaultWeight;
-    const QStringList provides(KPluginMetaData::readStringList(applet->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides")));
+    const QStringList provides = applet->pluginMetaData().value(QStringLiteral("X-Plasma-Provides"), QStringList());
 
     // some applet types we want a bigger weight
     if (provides.contains(QLatin1String("org.kde.plasma.launchermenu"))) {

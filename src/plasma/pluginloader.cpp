@@ -532,7 +532,7 @@ KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QS
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool {
-        return KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
+        return md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimeType);
     };
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
@@ -554,13 +554,13 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
         const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
         return (parentApp.isEmpty() || pa == parentApp) //
-            && !KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns")).isEmpty();
+            && !md.value(QStringLiteral("X-Plasma-DropUrlPatterns"), QStringList()).isEmpty();
     };
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
     QList<KPluginMetaData> filtered;
     for (const KPluginMetaData &md : allApplets) {
-        const QStringList urlPatterns = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropUrlPatterns"));
+        const QStringList urlPatterns = md.value(QStringLiteral("X-Plasma-DropUrlPatterns"), QStringList());
         for (const QString &glob : urlPatterns) {
             QRegExp rx(glob);
             rx.setPatternSyntax(QRegExp::Wildcard);
@@ -691,7 +691,7 @@ KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeT
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool {
         return md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
-            && KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-DropMimeTypes")).contains(mimeType);
+            && md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimeType);
     };
 
     return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());

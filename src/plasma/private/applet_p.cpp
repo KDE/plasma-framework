@@ -181,10 +181,10 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         QObject::connect(q, &Applet::contextualActionsAboutToShow, a, [=]() {
             bool hasAlternatives = false;
 
-            const QStringList provides = KPluginMetaData::readStringList(q->pluginMetaData().rawData(), QStringLiteral("X-Plasma-Provides"));
+            const QStringList provides = q->pluginMetaData().value(QStringLiteral("X-Plasma-Provides"), QStringList());
             if (!provides.isEmpty() && q->immutability() == Types::Mutable) {
                 auto filter = [&provides](const KPluginMetaData &md) -> bool {
-                    const QStringList provided = KPluginMetaData::readStringList(md.rawData(), QStringLiteral("X-Plasma-Provides"));
+                    const QStringList provided = md.value(QStringLiteral("X-Plasma-Provides"), QStringList());
                     for (const QString &p : provides) {
                         if (provided.contains(p)) {
                             return true;
