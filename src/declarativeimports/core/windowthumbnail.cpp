@@ -34,25 +34,40 @@ typedef GLvoid (*glEGLImageTargetTexture2DOES_func)(GLenum, GLeglImageOES);
 
 namespace Plasma
 {
+class DiscardTextureProviderRunnable : public QRunnable
+{
+public:
+    explicit DiscardTextureProviderRunnable(WindowTextureProvider *provider)
+        : m_provider(provider)
+    {
+    }
+
+    void run() override
+    {
+        delete m_provider;
+    }
+
+private:
+    WindowTextureProvider *m_provider;
+};
+
 #if HAVE_XCB_COMPOSITE
 #if HAVE_GLX
 class DiscardGlxPixmapRunnable : public QRunnable
 {
 public:
-    DiscardGlxPixmapRunnable(uint, WindowTextureProvider *provider, QFunctionPointer, xcb_pixmap_t);
+    DiscardGlxPixmapRunnable(uint, QFunctionPointer, xcb_pixmap_t);
     void run() override;
 
 private:
     uint m_texture;
-    WindowTextureProvider *m_provider;
     QFunctionPointer m_releaseTexImage;
     xcb_pixmap_t m_glxPixmap;
 };
 
-DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, WindowTextureProvider *provider, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
+DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, QFunctionPointer deleteFunction, xcb_pixmap_t pixmap)
     : QRunnable()
     , m_texture(texture)
-    , m_provider(provider)
     , m_releaseTexImage(deleteFunction)
     , m_glxPixmap(pixmap)
 {
@@ -60,7 +75,6 @@ DiscardGlxPixmapRunnable::DiscardGlxPixmapRunnable(uint texture, WindowTexturePr
 
 void DiscardGlxPixmapRunnable::run()
 {
-    delete m_provider;
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
         Display *d = QX11Info::display();
         ((glXReleaseTexImageEXT_func)(m_releaseTexImage))(d, m_glxPixmap, GLX_FRONT_LEFT_EXT);
@@ -74,20 +88,18 @@ void DiscardGlxPixmapRunnable::run()
 class DiscardEglPixmapRunnable : public QRunnable
 {
 public:
-    DiscardEglPixmapRunnable(uint, WindowTextureProvider *provider, QFunctionPointer, EGLImageKHR);
+    DiscardEglPixmapRunnable(uint, QFunctionPointer, EGLImageKHR);
     void run() override;
 
 private:
     uint m_texture;
-    WindowTextureProvider *m_provider;
     QFunctionPointer m_eglDestroyImageKHR;
     EGLImageKHR m_image;
 };
 
-DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, WindowTextureProvider *provider, QFunctionPointer deleteFunction, EGLImageKHR image)
+DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, QFunctionPointer deleteFunction, EGLImageKHR image)
     : QRunnable()
     , m_texture(texture)
-    , m_provider(provider)
     , m_eglDestroyImageKHR(deleteFunction)
     , m_image(image)
 {
@@ -95,7 +107,6 @@ DiscardEglPixmapRunnable::DiscardEglPixmapRunnable(uint texture, WindowTexturePr
 
 void DiscardEglPixmapRunnable::run()
 {
-    delete m_provider;
     if (m_image != EGL_NO_IMAGE_KHR) {
         ((eglDestroyImageKHR_func)(m_eglDestroyImageKHR))(eglGetCurrentDisplay(), m_image);
         glDeleteTextures(1, &m_texture);
@@ -215,14 +226,17 @@ void WindowThumbnail::itemChange(ItemChange change, const ItemChangeData &data)
 
 void WindowThumbnail::releaseResources()
 {
+    QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
+    if (m_textureProvider) {
+        window()->scheduleRenderJob(new DiscardTextureProviderRunnable(m_textureProvider), m_renderStage);
+        m_textureProvider = nullptr;
+    }
+
 #if HAVE_XCB_COMPOSITE
 
 #if HAVE_GLX && HAVE_EGL
     // only one (or none) should be set, but never both
     Q_ASSERT(m_glxPixmap == XCB_PIXMAP_NONE || m_image == EGL_NO_IMAGE_KHR);
-#endif
-#if HAVE_GLX || HAVE_EGL
-    QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
 #endif
 
     // data is deleted in the render thread (with relevant GLX calls)
@@ -230,20 +244,17 @@ void WindowThumbnail::releaseResources()
     // but the pointer is held by the WindowThumbnail which is in the main thread
 #if HAVE_GLX
     if (m_glxPixmap != XCB_PIXMAP_NONE) {
-        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture, m_textureProvider, m_releaseTexImage, m_glxPixmap), m_renderStage);
+        window()->scheduleRenderJob(new DiscardGlxPixmapRunnable(m_texture, m_releaseTexImage, m_glxPixmap), m_renderStage);
 
         m_glxPixmap = XCB_PIXMAP_NONE;
         m_texture = 0;
-        m_textureProvider = nullptr;
     }
 #endif
 #if HAVE_EGL
     if (m_image != EGL_NO_IMAGE_KHR) {
-        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture, m_textureProvider, m_eglDestroyImageKHR, m_image), m_renderStage);
-
+        window()->scheduleRenderJob(new DiscardEglPixmapRunnable(m_texture, m_eglDestroyImageKHR, m_image), m_renderStage);
         m_image = EGL_NO_IMAGE_KHR;
         m_texture = 0;
-        m_textureProvider = nullptr;
     }
 #endif
 #endif
