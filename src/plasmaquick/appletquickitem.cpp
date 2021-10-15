@@ -93,7 +93,7 @@ int AppletQuickItemPrivate::preloadWeight() const
     // default widgets to be barely preloaded
     return qBound(0,
                   applet->config().readEntry(QStringLiteral("PreloadWeight"),
-                                             qMax(defaultWeight, applet->pluginMetaData().rawData().value(QStringLiteral("X-Plasma-PreloadWeight")).toInt())),
+                                             qMax(defaultWeight, applet->pluginMetaData().value(QStringLiteral("X-Plasma-PreloadWeight"), 0))),
                   100);
 }
 

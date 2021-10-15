@@ -120,7 +120,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         return;
     }
 
-    QString api = appletDescription.rawData().value(QStringLiteral("X-Plasma-API")).toString();
+    const QString api = appletDescription.value(QStringLiteral("X-Plasma-API"));
 
     if (api.isEmpty()) {
         q->setLaunchErrorMessage(i18n("The %1 widget did not define which ScriptEngine to use.", appletDescription.name()));
@@ -132,7 +132,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         const QString packagePath = _packagePath.isEmpty() && !appletDescription.metaDataFileName().isEmpty()
             ? QFileInfo(appletDescription.metaDataFileName()).dir().path()
             : _packagePath;
-        QString path = appletDescription.rawData().value(QStringLiteral("X-Plasma-RootPath")).toString();
+        QString path = appletDescription.value(QStringLiteral("X-Plasma-RootPath"));
         if (path.isEmpty()) {
             path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
         }
