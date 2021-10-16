@@ -216,6 +216,7 @@ void Containment::restore(KConfigGroup &group)
             }
         }
     }
+    Applet::restore(group);
 }
 
 void Containment::save(KConfigGroup &g) const
