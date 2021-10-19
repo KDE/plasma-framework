@@ -180,15 +180,25 @@ public:
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
      *                 returned.
-     * @param parentApp the application to filter applets on. Uses the
-     *                  X-KDE-ParentApp entry (if any) in the plugin info.
-     *                  The default value of QString() will result in a
-     *                  list of all applets in specified categories.
      * @return list of applets
      *
      * @since 5.28
      **/
-    QList<KPluginMetaData> listAppletMetaData(const QString &category, const QString &parentApp = QString());
+    QList<KPluginMetaData> listAppletMetaData(const QString &category);
+
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
+    /**
+     * @overload
+     * @param parentApp the application to filter applets on. Uses the
+     *                  X-KDE-ParentApp entry (if any) in the plugin info.
+     *                  The default value of QString() will result in a
+     *                  list of all applets in specified categories.
+     * @deprecated Since 5.88, use PluginLoader::listAppletMetaData(const QString &category)
+     * @since 5.28
+     */
+    PLASMA_DEPRECATED_VERSION(5, 88, "Use PluginLoader::listAppletMetaData(const QString &category)")
+    QList<KPluginMetaData> listAppletMetaData(const QString &category, const QString &parentApp);
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 36)
     /**

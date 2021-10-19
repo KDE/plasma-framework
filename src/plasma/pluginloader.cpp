@@ -438,8 +438,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
     return Package();
 }
 #endif
-
-QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
+QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const QString &parentApp)
 {
     auto platforms = KDeclarative::KDeclarative::runtimePlatform();
     // For now desktop always lists everything
@@ -500,6 +499,18 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category,
 
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
+
+QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category)
+{
+    return listAppletMetaDataInternal(category, QString());
+}
+
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
+QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
+{
+    return listAppletMetaDataInternal(category, parentApp);
+}
+#endif
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
 KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
