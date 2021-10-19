@@ -507,11 +507,6 @@ void WindowThumbnail::windowToTexture(WindowTextureProvider *textureProvider)
         return;
     }
 #if HAVE_XCB_COMPOSITE
-    if (!textureProvider->texture()) {
-        // the texture got discarded by the scene graph, but our mapping is still valid
-        // let's discard the pixmap to have a clean state again
-        releaseResources();
-    }
     if (m_pixmap == XCB_PIXMAP_NONE) {
         m_pixmap = pixmapForWindow();
     }
