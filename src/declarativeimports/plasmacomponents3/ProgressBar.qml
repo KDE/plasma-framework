@@ -4,30 +4,39 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
+import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 T.ProgressBar {
     id: control
 
-    implicitWidth: PlasmaCore.Units.gridUnit * 8
-    implicitHeight: background.implicitHeight
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
 
-    hoverEnabled: true
+    hoverEnabled: false
+
+    PlasmaCore.Svg {
+        id: barSvg
+        imagePath: "widgets/bar_meter_horizontal"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
+    }
 
     contentItem: Item {
-        scale: control.mirrored ? -1 : 1
+        implicitWidth: barSvg.elementSize("hint-bar-size").width || fixedMargins.left + fixedMargins.right
+        implicitHeight: barSvg.elementSize("hint-bar-size").height || fixedMargins.top + fixedMargins.bottom
         PlasmaCore.FrameSvgItem {
-            id: indicator
+            id: barFill
             height: parent.height
-            width: parent.width * control.position
+            width: control.indeterminate ? PlasmaCore.Units.gridUnit * 2 : parent.width * control.position
+            x: control.mirrored ? parent.width - width : 0
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup
-            visible: width > indicator.fixedMargins.left
+            visible: width > fixedMargins.left + fixedMargins.right
         }
-
         SequentialAnimation {
             id: anim
             loops: Animation.Infinite
@@ -35,35 +44,26 @@ T.ProgressBar {
             alwaysRunToEnd: true
             running: control.indeterminate && control.visible
 
-            onStarted: indicator.width = Qt.binding(function() {
-                return PlasmaCore.Units.gridUnit * 2;
-            });
-            onStopped: indicator.width = Qt.binding(function() {
-                return indicator.parent.width * control.position;
-            });
-
-            PropertyAnimation {
-                target: indicator
+            NumberAnimation {
+                target: barFill
                 property: "x"
-                duration: PlasmaCore.Units.veryLongDuration * 2
-                to: control.width - indicator.width
-                onToChanged: {
-                    //the animation won't update the boundaries automatically
-                    if (anim.running) {
-                        anim.restart();
-                    }
-                }
+                to: !control.mirrored ? control.availableWidth - barFill.width : 0
+                duration: PlasmaCore.Units.humanMoment/2
+                easing.type: Easing.InOutSine
             }
-            PropertyAnimation {
-                target: indicator
+            NumberAnimation {
+                target: barFill
                 property: "x"
-                duration: PlasmaCore.Units.veryLongDuration * 2
-                to: 0
+                to: control.mirrored ? control.availableWidth - barFill.width : 0
+                duration: PlasmaCore.Units.humanMoment/2
+                easing.type: Easing.InOutSine
             }
         }
     }
 
     background: PlasmaCore.FrameSvgItem {
+        implicitWidth: PlasmaCore.Units.gridUnit * 8
+        implicitHeight: barSvg.elementSize("hint-bar-size").height || fixedMargins.top + fixedMargins.bottom
         imagePath: "widgets/bar_meter_horizontal"
         prefix: "bar-inactive"
         colorGroup: PlasmaCore.ColorScope.colorGroup
