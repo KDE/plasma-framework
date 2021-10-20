@@ -12,11 +12,16 @@ import "private" as P
 T.Slider {
     id: control
 
-    implicitWidth: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 12 : PlasmaCore.Units.gridUnit * 1.6
-    implicitHeight: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 1.6 : PlasmaCore.Units.gridUnit * 12
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitHandleWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitHandleHeight + topPadding + bottomPadding)
 
     wheelEnabled: true
     snapMode: T.Slider.SnapOnRelease
+
+    layer.enabled: opacity < 1
+    opacity: control.enabled ? 1 : 0.5
 
     PlasmaCore.Svg {
         id: sliderSvg
@@ -24,6 +29,7 @@ T.Slider {
         colorGroup: PlasmaCore.ColorScope.colorGroup
 
     }
+
     handle: Item {
         x: Math.round(control.leftPadding + (horizontal ? control.visualPosition * (control.availableWidth - width) : (control.availableWidth - width) / 2))
         y: Math.round(control.topPadding + (horizontal ? (control.availableHeight - height) / 2 : control.visualPosition * (control.availableHeight - height)))
@@ -33,12 +39,13 @@ T.Slider {
 
         PlasmaCore.SvgItem {
             id: shadow
+            z: -1
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
             implicitHeight: naturalSize.height
             svg: sliderSvg
             elementId: control.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
-            visible: !control.pressed
+            visible: enabled && !control.pressed
         }
         PlasmaCore.SvgItem {
             id: firstHandle
@@ -68,31 +75,27 @@ T.Slider {
         imagePath: "widgets/slider"
         prefix: "groove"
         colorGroup: PlasmaCore.ColorScope.colorGroup
-        readonly property bool horizontal: control.orientation === Qt.Horizontal
-        implicitWidth: horizontal ? PlasmaCore.Units.gridUnit * 8 : margins.left + margins.right
-        implicitHeight: horizontal ? margins.top + margins.bottom : PlasmaCore.Units.gridUnit * 8
-        width: horizontal ? control.availableWidth : implicitWidth
-        height: horizontal ? implicitHeight : control.availableHeight
-        anchors.centerIn: parent
-        scale: horizontal && control.mirrored ? -1 : 1
-        opacity: control.enabled ? 1 : 0.6
+        implicitWidth: control.horizontal ? PlasmaCore.Units.gridUnit * 12 : fixedMargins.left + fixedMargins.right
+        implicitHeight: control.vertical ? PlasmaCore.Units.gridUnit * 12 : fixedMargins.top + fixedMargins.bottom
+        width: control.horizontal ? control.availableWidth : implicitWidth
+        height: control.vertical ? control.availableHeight : implicitHeight
+        x: control.leftPadding + (control.horizontal ? 0 : (control.availableWidth - width) / 2)
+        y: control.topPadding + (control.vertical ? 0 : (control.availableHeight - height) / 2)
 
         PlasmaCore.FrameSvgItem {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             colorGroup: PlasmaCore.ColorScope.colorGroup
-            x: parent.horizontal ? 0 : (parent.width - width) / 2
-            y: parent.horizontal ? (parent.height - height) / 2 : parent.height - height
-            width: Math.max(margins.left + margins.right,
-                            parent.horizontal 
-                            ? (Qt.application.layoutDirection === Qt.LeftToRight
-                                ? control.visualPosition * (parent.width - control.handle.width) + control.handle.width/2
-                                : parent.width - control.visualPosition * (parent.width - control.handle.width) - control.handle.width/2)
-                            : parent.width)
-            height: Math.max(margins.top + margins.bottom,
-                             parent.horizontal
-                             ? parent.height
-                             : parent.height - control.visualPosition * (parent.height + control.handle.height) + control.handle.height/2)
+            implicitWidth: fixedMargins.left + fixedMargins.right
+            implicitHeight: fixedMargins.top + fixedMargins.bottom
+            LayoutMirroring.enabled: control.mirrored
+            anchors {
+                fill: parent
+                leftMargin: control.horizontal ? /*startPosition*/0 * parent.width - (/*startPosition*/0 * implicitWidth) : 0
+                rightMargin: control.horizontal ? (1-/*endPosition*/control.position) * parent.width - ((1-/*endPosition*/control.position) * implicitWidth) : 0
+                topMargin: control.vertical ? (1-/*endPosition*/control.position) * parent.height - ((1-/*endPosition*/control.position) * implicitHeight) : 0
+                bottomMargin: control.vertical ? /*startPosition*/0 * parent.height - (/*startPosition*/0 * implicitHeight) : 0
+            }
         }
 
         Repeater {
