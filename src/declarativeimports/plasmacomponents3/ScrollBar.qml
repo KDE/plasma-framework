@@ -4,116 +4,79 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
+import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.10 as Kirigami
+import org.kde.kirigami 2.15 as Kirigami
 
 T.ScrollBar {
     id: controlRoot
 
-    implicitWidth: background.implicitWidth
-    implicitHeight: background.implicitHeight
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            implicitContentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             implicitContentHeight + topPadding + bottomPadding)
 
-    hoverEnabled: !Kirigami.Settings.isMobile
+    hoverEnabled: interactive
 
     visible: (size < 1 && policy === T.ScrollBar.AsNeeded) || policy === T.ScrollBar.AlwaysOn
+    minimumSize: horizontal ? height / width : width / height
 
-    interactive: !Kirigami.Settings.tabletMode
+    // Working around weird default values for `margins` (== `fixedMargins`) and `inset` (== -1)
+    // TODO KF6: Use 0 as the default value for inset and margins
+    leftPadding: scrollbarSvg.hasElement(`${handle.usedPrefix}-hint-left-inset`) ? handle.inset.left : horizontalPadding
+    rightPadding: scrollbarSvg.hasElement(`${handle.usedPrefix}-hint-right-inset`) ? handle.inset.right : horizontalPadding
+    topPadding: scrollbarSvg.hasElement(`${handle.usedPrefix}-hint-top-inset`) ? handle.inset.top : verticalPadding
+    bottomPadding: scrollbarSvg.hasElement(`${handle.usedPrefix}-hint-bottom-inset`) ? handle.inset.bottom : verticalPadding
+    leftInset: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-left-inset`) ? bgFrame.inset.left : 0
+    rightInset: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-right-inset`) ? bgFrame.inset.right : 0
+    topInset: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-top-inset`) ? bgFrame.inset.top : 0
+    bottomInset: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-bottom-inset`) ? bgFrame.inset.bottom : 0
 
-    background: Item {
-        visible: controlRoot.interactive
-        implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
+    Rectangle {
+        id: separator
+        anchors.left: parent.left
+        width: controlRoot.horizontal ? parent.width : undefined
+        height: controlRoot.vertical ? parent.height : undefined
+        // I'm wary of adding things that could be considered official features
+        // of the theming system willy-nilly, so this hint is marked private.
+        // Technically, there's nothing stopping theme authors from using this
+        // anyway, but I don't want to have to support it long term until we're
+        // sure we want this.
+        visible: scrollbarSvg.hasElement("private-hint-show-separator")
+            && controlRoot.interactive
+            && (controlRoot.mirrored ? controlRoot.rightInset > 0 : controlRoot.leftInset > 0)
+        implicitWidth: PlasmaCore.Units.devicePixelRatio
         implicitHeight: implicitWidth
-        Rectangle {
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-            }
-            // the separator line doesn't work yet with the plasmoids design
-            visible: typeof plasmoid === "undefined"
-            width: PlasmaCore.Units.devicePixelRatio
-            color: PlasmaCore.ColorScope.textColor
-            opacity: 0.1
-        }
-        PlasmaCore.FrameSvgItem {
-            anchors.fill: parent
-            imagePath:"widgets/scrollbar"
-            colorGroup: PlasmaCore.ColorScope.colorGroup
-
-            prefix: controlRoot.horizontal ? "background-horizontal" : "background-vertical"
-            opacity: controlRoot.hovered
-            Behavior on opacity {
-                OpacityAnimator {
-                    duration: PlasmaCore.Units.longDuration
-                }
-            }
-        }
+        color: PlasmaCore.ColorScope.textColor
+        opacity: 0.1
     }
 
-    onPositionChanged: {
-        disappearTimer.restart();
-        handleGraphics.handleState = Math.min(1, handleGraphics.handleState + 0.1)
-    }
-
-    contentItem: Item {
-        PlasmaCore.FrameSvgItem {
-            anchors.fill: parent
-            imagePath:"widgets/scrollbar"
-
-            implicitWidth: scrollbarSvg.elementSize("hint-scrollbar-size").width 
-            visible: controlRoot.interactive
-            implicitHeight: implicitWidth
-            colorGroup: PlasmaCore.ColorScope.colorGroup
-
-            prefix: controlRoot.hovered ? "mouseover-slider" : "slider"
-        }
-        Rectangle {
-            id: handleGraphics
-
-            property real handleState: 0
-
-            visible: !controlRoot.interactive
-
-            x: Math.round(controlRoot.orientation == Qt.Vertical
-                ? (Qt.application.layoutDirection === Qt.LeftToRight
-                    ? (parent.width - width) - (parent.width/2 - width/2) * handleState
-                    : (parent.width/2 - width/2) * handleState)
-                : 0)
-            
-            y: Math.round(controlRoot.orientation == Qt.Horizontal
-                ? (parent.height - height) - (parent.height/2 - height/2) * handleState
-                : 0)
-
+    background: PlasmaCore.FrameSvgItem {
+        id: bgFrame
+        implicitWidth: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").width, fixedMargins.left + fixedMargins.right)
+        implicitHeight: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").height, fixedMargins.top + fixedMargins.bottom)
+        imagePath:"widgets/scrollbar"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
+        prefix: controlRoot.horizontal ? "background-horizontal" : "background-vertical"
+        opacity: controlRoot.hovered && controlRoot.interactive
+        visible: opacity > 0
+        Behavior on opacity {
             NumberAnimation {
-                id: resetAnim
-                target: handleGraphics
-                property: "handleState"
-                from: handleGraphics.handleState
-                to: 0
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-
-            width: Math.round(controlRoot.orientation == Qt.Vertical
-                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
-                    : parent.width)
-            height: Math.round(controlRoot.orientation == Qt.Horizontal
-                    ? Math.max(2, Kirigami.Units.smallSpacing * handleState)
-                    : parent.height)
-            radius: Math.min(width, height)
-            color: PlasmaCore.ColorScope.textColor
-            opacity: 0.3
-            Timer {
-                id: disappearTimer
-                interval: 1000
-                onTriggered: {
-                    resetAnim.restart();
-                    handleGraphics.handleState = 0;
-                }
+                duration: PlasmaCore.Units.longDuration
+                easing.type: Easing.OutCubic
             }
         }
+    }
+
+    contentItem: PlasmaCore.FrameSvgItem {
+        id: handle
+        imagePath:"widgets/scrollbar"
+        implicitWidth: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").width, fixedMargins.left + fixedMargins.right)
+        implicitHeight: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").height, fixedMargins.top + fixedMargins.bottom)
+        colorGroup: PlasmaCore.ColorScope.colorGroup
+        prefix: controlRoot.interactive && (controlRoot.pressed || controlRoot.hovered) && controlRoot.enabled ? "mouseover-slider" : "slider"
+        opacity: enabled ? 1 : 0.5
     }
 
     PlasmaCore.Svg {

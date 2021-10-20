@@ -1,1065 +1,250 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="48"
-   height="98"
-   id="svg3642"
-   sodipodi:version="0.32"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-   sodipodi:docname="scrollbar.svg"
-   inkscape:output_extension="org.inkscape.output.svgz.inkscape"
-   version="1.0">
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#eff0f1"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="1"
-     inkscape:pageshadow="2"
-     inkscape:zoom="10.934388"
-     inkscape:cx="45.891345"
-     inkscape:cy="64.405446"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:grid-bbox="true"
-     inkscape:document-units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1015"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     width="48px"
-     height="48px"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     objecttolerance="9"
-     gridtolerance="13"
-     inkscape:window-maximized="1">
-    <inkscape:grid
-       visible="true"
-       enabled="true"
-       id="grid2555"
-       type="xygrid"
-       empspacing="5"
-       snapvisiblegridlinesonly="true"
-       color="#0000ff"
-       opacity="0.01960784"
-       empcolor="#0000ff"
-       empopacity="0.03921569" />
-  </sodipodi:namedview>
-  <defs
-     id="defs3644">
-    <style
-       id="current-color-scheme"
-       type="text/css">
-      .ColorScheme-Text {
-        color:#31363b;
-        stop-color:#31363b;
-      }
-      .ColorScheme-Background {
-        color:#eff0f1;
-        stop-color:#eff0f1;
-      }
-      .ColorScheme-Highlight {
-        color:#3daee9;
-        stop-color:#3daee9;
-      }
-      .ColorScheme-ViewText {
-        color:#31363b;
-        stop-color:#31363b;
-      }
-      .ColorScheme-ViewBackground {
-        color:#fcfcfc;
-        stop-color:#fcfcfc;
-      }
-      .ColorScheme-ViewHover {
-        color:#93cee9;
-        stop-color:#93cee9;
-      }
-      .ColorScheme-ViewFocus{
-        color:#3daee9;
-        stop-color:#3daee9;
-      }
-      .ColorScheme-ButtonText {
-        color:#31363b;
-        stop-color:#31363b;
-      }
-      .ColorScheme-ButtonBackground {
-        color:#eff0f1;
-        stop-color:#eff0f1;
-      }
-      .ColorScheme-ButtonHover {
-        color:#93cee9;
-        stop-color:#93cee9;
-      }
-      .ColorScheme-ButtonFocus{
-        color:#3daee9;
-        stop-color:#3daee9;
-      }
-      </style>
-  </defs>
-  <metadata
-     id="metadata3647">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
-     inkscape:groupmode="layer"
-     inkscape:label="Layer 1"
-     id="layer1">
-    <rect
-       style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-       id="slider-center"
-       width="1"
-       height="10"
-       x="20"
-       y="20"
-       class="ColorScheme-Text" />
-    <g
-       id="slider-right"
-       transform="matrix(0.75,0,0,1,15.25,13)">
-      <path
-         id="rect3838"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3856"
-         width="4"
-         height="10"
-         x="29"
-         y="20"
-         transform="matrix(1.3333333,0,0,1,-25.666667,-13)" />
+<svg id="svg3642" height="48" style="" width="48" sodipodi:version="0.32" inkscape:version="1.2-dev (942b66973d, 2021-09-28, custom)" sodipodi:docname="scrollbar.svg" inkscape:output_extension="org.inkscape.output.svgz.inkscape" version="1.1" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+    <defs id="defs165" />
+    <sodipodi:namedview id="namedview163" pagecolor="#ffffff" bordercolor="#111111" borderopacity="1" inkscape:pageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="1" inkscape:blackoutopacity="0.0" showgrid="false" inkscape:current-layer="layer1" />
+    <style id="current-color-scheme" type="text/css">
+        .ColorScheme-Text {
+            color:#232629;
+            stop-color:#232629;
+        }
+        .ColorScheme-Background {
+            color:#eff0f1;
+            stop-color:#eff0f1;
+        }
+        .ColorScheme-Highlight {
+            color:#3daee9;
+            stop-color:#3daee9;
+        }
+        .ColorScheme-ViewText {
+            color:#232629;
+            stop-color:#232629;
+        }
+        .ColorScheme-ViewBackground {
+            color:#fcfcfc;
+            stop-color:#fcfcfc;
+        }
+        .ColorScheme-ViewHover {
+            color:#3daee9;
+            stop-color:#3daee9;
+        }
+        .ColorScheme-ViewFocus{
+            color:#3daee9;
+            stop-color:#3daee9;
+        }
+        .ColorScheme-ButtonText {
+            color:#232629;
+            stop-color:#232629;
+        }
+        .ColorScheme-ButtonBackground {
+            color:#eff0f1;
+            stop-color:#eff0f1;
+        }
+        .ColorScheme-ButtonHover {
+            color:#3daee9;
+            stop-color:#3daee9;
+        }
+        .ColorScheme-ButtonFocus{
+            color:#3daee9;
+            stop-color:#3daee9;
+        }
+    </style>
+    <g id="layer1" style="" transform="translate(-19 1)" inkscape:groupmode="layer" inkscape:label="Layer 1">
+        <rect id="hint-tile-center" height="2" rx="2.07712602615" style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero" width="2" x="65" y="-3" />
+        <rect id="private-hint-show-separator" height="2" rx="2.07712602615" style="fill:#00f;fill-opacity:1;fill-rule:nonzero;opacity:0.1" width="2" x="-13.8756103516" y="45.7764358521" ry="2.07712602615" />
+        <g id="mouseover-slider-top" style="" transform="translate(1 23)">
+            <path id="path1632-6" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <rect id="rect8453" class="ColorScheme-Highlight" height="2.5" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="7.5" />
+            <path id="path8" class="ColorScheme-Highlight" d="m 28 7 v 1 h 3 v -1 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+        </g>
+        <g id="mouseover-slider-topleft" style="" transform="translate(1 23)">
+            <path id="path1626-12" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path7466" class="ColorScheme-Highlight" d="m 27 7.5 c -1.380711874 0 -2.5 1.11928812595 -2.5 2.5 h 2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path12" class="ColorScheme-Highlight" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="fill:currentColor;fill-opacity:1" />
+        </g>
+        <g id="mouseover-slider-topright" style="" transform="translate(1 23)">
+            <path id="path1634-9" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path7466-5" class="ColorScheme-Highlight" d="m 32 7.5 c 1.380711874 0 2.5 1.11928812595 2.5 2.5 h -2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path16" class="ColorScheme-Highlight" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="fill:currentColor;fill-opacity:1" />
+        </g>
+        <g id="mouseover-slider-bottom" style="" transform="translate(1 23)">
+            <path id="path1632-5" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <rect id="rect8453-1" class="ColorScheme-Highlight" height="2.5" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="15" />
+            <path id="path20" class="ColorScheme-Highlight" d="m 28 18 v -1 h 3 v 1 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+        </g>
+        <g id="mouseover-slider-bottomleft" style="" transform="translate(1 23)">
+            <path id="rect1353-7" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path7466-2" class="ColorScheme-Highlight" d="m 27 17.5 c -1.380711874 0 -2.5 -1.1192881259 -2.5 -2.5 h 2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path24" class="ColorScheme-Highlight" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="fill:currentColor;fill-opacity:1" />
+        </g>
+        <g id="mouseover-slider-bottomright" style="" transform="translate(1 23)">
+            <path id="path1638-62" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path7466-6" class="ColorScheme-Highlight" d="m 32 17.5 c 1.380711874 0 2.5 -1.1192881259 2.5 -2.5 h -2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path28" class="ColorScheme-Highlight" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="fill:currentColor;fill-opacity:1" />
+        </g>
+        <g id="mouseover-slider-center" style="">
+            <path id="path1632-3" d="m 29 34 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="msc" class="ColorScheme-Highlight" d="m 29 34 v 3 h 3 v -3 z" style="opacity:.33;fill:currentColor" inkscape:connector-curvature="0" />
+        </g>
+        <g id="mouseover-slider-left" style="" transform="translate(1 23)">
+            <path id="path1632-35" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <rect id="rect8453-9-2" class="ColorScheme-Highlight" height="3" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="2.5" x="24.5" y="11" />
+            <path id="path33" class="ColorScheme-Highlight" d="m 24 11 v 3 h 1 v -3 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+        </g>
+        <g id="mouseover-slider-right" style="" transform="translate(1 23)">
+            <path id="path1632-7" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <rect id="rect8453-9" class="ColorScheme-Highlight" height="3" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="2.5" x="32" y="11" />
+            <path id="path37" class="ColorScheme-Highlight" d="m 34 11 v 3 h 1 v -3 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+        </g>
+        <g id="background-vertical-top" style="" transform="translate(26 -2)">
+            <path id="path1636-23" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path70" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-6" d="m 28 8 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-topleft" style="" transform="translate(26 -2)">
+            <path id="path1626-5" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path74" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-7" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-topright" style="" transform="translate(26 -2)">
+            <path id="path1634-7" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path78" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-5-6" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-bottom" style="" transform="translate(26 -2)">
+            <path id="path1636-28" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path82" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-26" d="m 28 15 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-bottomleft" style="" transform="translate(26 -2)">
+            <path id="rect1353-2" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path86" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-2-5" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-bottomright" style="" transform="translate(26 -2)">
+            <path id="path1638-0" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path90" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-6-3" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-center" style="">
+            <path id="path1636-92" d="m 54 9 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path1632-9-1" d="m 54 9 v 3 h 3 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-left" style="" transform="translate(26 -2)">
+            <path id="path1636-97" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path95" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-2-0" d="m 25 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-vertical-right" style="" transform="translate(26 -2)">
+            <path id="path1636-75" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path99" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-2-6" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-top" style="" transform="translate(1 -2)">
+            <path id="path1636-7" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path70-75" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0" d="m 28 8 v 2 h 3 v -2 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-topleft" style="" transform="translate(1 -2)">
+            <path id="path1626-3" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path74-8" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="fill:currentColor;fill-rule:evenodd;opacity:.15" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-topright" style="" transform="translate(1 -2)">
+            <path id="path1634-2" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path78-3" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-5" d="m 32 8 a -2 2 0 0 1 2 2 h -2 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-bottom" style="" transform="translate(1 -2)">
+            <path id="path1636-2" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path82-2" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7" d="m 28 15 v 2 h 3 v -2 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-bottomleft" style="" transform="translate(1 -2)">
+            <path id="rect1353-6" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path86-9" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-2" d="m 27 17 a 2 -2 0 0 1 -2 -2 h 2 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-bottomright" style="" transform="translate(1 -2)">
+            <path id="path1638-6" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path90-8" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-6" d="m 32 17 a 2 -2 0 0 0 2 -2 h -2 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-center" style="">
+            <path id="path1636-0" d="m 29 9 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path1632-9" d="m 29 9 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd;opacity:.15" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-left" style="" transform="translate(1 -2)">
+            <path id="path1636-8" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path95-3" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1" d="m 25 11 v 3 h 2 v -3 z" style="fill:currentColor;fill-rule:evenodd;stroke-width:.999996;opacity:.15" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="slider-right" style="" transform="translate(1 -2)">
+            <path id="path1636-9" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path99-06" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-2" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-top" style="" transform="translate(26 23)">
+            <path id="path1636-3" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path70-4" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-1" d="m 28 8 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-topleft" style="" transform="translate(26 23)">
+            <path id="path1626-1" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path74-0" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-9" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-topright" style="" transform="translate(26 23)">
+            <path id="path1634-0" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path78-7" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-5-62" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-bottom" style="" transform="translate(26 23)">
+            <path id="path1636-94" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path82-27" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-2" d="m 28 15 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-bottomleft" style="" transform="translate(26 23)">
+            <path id="rect1353-61" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path86-6" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-2-3" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-bottomright" style="" transform="translate(26 23)">
+            <path id="path1638-3" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path90-6" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-6-5" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-center" style="">
+            <path id="path1636-31" d="m 54 34 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path1632-9-3" d="m 54 34 v 3 h 3 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-left" style="" transform="translate(26 23)">
+            <path id="path1636-29" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path95-4" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-70" d="m 25 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <g id="background-horizontal-right" style="" transform="translate(26 23)">
+            <path id="path1636-6" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path99-9" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-9" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+        </g>
+        <rect id="background-horizontal-hint-right-inset" height="3" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="61" y="34" />
+        <rect id="background-horizontal-hint-top-inset" height="6" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="54" y="24" />
+        <rect id="background-horizontal-hint-left-inset" height="3" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="44" y="34" />
+        <rect id="background-horizontal-hint-bottom-inset" height="6" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="54" y="41" />
+        <rect id="background-vertical-hint-right-inset" height="3" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="61" y="9" />
+        <rect id="background-vertical-hint-top-inset" height="6" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="54" y="-1" />
+        <rect id="background-vertical-hint-left-inset" height="3" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="44" y="9" />
+        <rect id="background-vertical-hint-bottom-inset" height="6" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="54" y="16" />
+        <rect id="slider-hint-right-inset" height="3" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="36" y="9" />
+        <rect id="slider-hint-top-inset" height="6" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="29" y="-1" />
+        <rect id="slider-hint-left-inset" height="3" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="19" y="9" />
+        <rect id="slider-hint-bottom-inset" height="6" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="29" y="16" />
+        <rect id="mouseover-slider-hint-right-inset" height="3" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="36" y="34" />
+        <rect id="mouseover-slider-hint-top-inset" height="6" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="29" y="24" />
+        <rect id="mouseover-slider-hint-left-inset" height="3" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="19" y="34" />
+        <rect id="mouseover-slider-hint-bottom-inset" height="6" style="opacity:.5;fill:#f0f;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="29" y="41" />
+        <rect id="hint-scrollbar-size" x="71" y="3" width="6" height="6" style="fill:#ff0000;fill-rule:evenodd" />
     </g>
-    <g
-       id="slider-topright"
-       transform="matrix(0.75,0,0,0.75,15.25,13.75)">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3852"
-         width="7"
-         height="7"
-         x="26"
-         y="12"
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-18.333333)" />
-      <path
-         id="rect3840"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-    </g>
-    <g
-       id="slider-bottomright"
-       transform="matrix(0.75,0,0,0.75,15.25,18.25)">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3862"
-         width="7"
-         height="7"
-         x="26"
-         y="31"
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-24.333333)" />
-      <path
-         inkscape:connector-curvature="0"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path3871"
-         class="ColorScheme-Text" />
-    </g>
-    <g
-       id="slider-left"
-       transform="matrix(-0.75,0,0,1,25.75,13)">
-      <path
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3891"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3854"
-         width="4"
-         height="10"
-         x="16"
-         y="20"
-         transform="matrix(-1.3333333,0,0,1,39.666667,-13)" />
-    </g>
-    <g
-       id="slider-topleft"
-       transform="matrix(-0.75,0,0,0.75,25.75,13.75)">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3848"
-         width="7"
-         height="7"
-         x="16"
-         y="12"
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-18.333333)" />
-      <path
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path3895"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-    </g>
-    <g
-       id="slider-bottomleft"
-       transform="matrix(-0.75,0,0,0.75,25.75,18.25)">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3858"
-         width="7"
-         height="7"
-         x="16"
-         y="31"
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-24.333333)" />
-      <path
-         id="path3901"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-    </g>
-    <g
-       transform="matrix(0,-0.75,-0.1,0,21.7,25.75)"
-       id="slider-top">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3850"
-         width="1"
-         height="7"
-         x="24"
-         y="12"
-         transform="matrix(0,-10,-1.3333333,0,34.333333,257)" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3909"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         class="ColorScheme-Text" />
-    </g>
-    <g
-       id="slider-bottom"
-       transform="matrix(0,0.75,-0.1,0,21.7,24.25)">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3860"
-         width="1"
-         height="7"
-         x="24"
-         y="31"
-         transform="matrix(0,-10,1.3333333,0,-32.333333,257)" />
-      <path
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3915"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-    </g>
-    <rect
-       ry="11.2"
-       rx="0"
-       y="18"
-       x="0"
-       height="14"
-       width="14"
-       id="hint-scrollbar-size"
-       style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none" />
-    <rect
-       style="fill:#4e9a06;fill-opacity:1;fill-rule:nonzero;stroke:none"
-       id="hint-tile-center"
-       width="2.0329318"
-       height="2.077126"
-       x="7.2599602"
-       y="11.659418"
-       rx="0"
-       ry="2.077126" />
-    <g
-       id="background-vertical-right"
-       transform="matrix(0.75,0,0,1,36.25,13)"
-       inkscape:label="#slider-right-1">
-      <path
-         id="rect3838-1"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3872"
-         width="4"
-         height="10"
-         x="43"
-         y="20"
-         transform="matrix(1.3333333,0,0,1,-44.333333,-13)" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4264" />
-    </g>
-    <g
-       id="background-vertical-topright"
-       transform="matrix(0.75,0,0,0.75,36.25,13.75)"
-       inkscape:label="#slider-topright-5">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3868"
-         width="7"
-         height="7"
-         x="40"
-         y="12"
-         transform="matrix(1.3333333,0,0,1.3333333,-44.333333,-18.333333)" />
-      <path
-         id="rect3840-1"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path4278" />
-    </g>
-    <g
-       id="background-vertical-bottomright"
-       transform="matrix(0.75,0,0,0.75,36.25,18.25)"
-       inkscape:label="#slider-bottomright-2">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3878"
-         width="7"
-         height="7"
-         x="40"
-         y="31"
-         transform="matrix(1.3333333,0,0,1.3333333,-44.333333,-24.333333)" />
-      <path
-         inkscape:connector-curvature="0"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path3871-2"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         id="path4284"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       id="background-vertical-left"
-       transform="matrix(-0.75,0,0,1,46.75,13)"
-       inkscape:label="#slider-left-4">
-      <path
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3891-2"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3870"
-         width="4"
-         height="10"
-         x="30"
-         y="20"
-         transform="matrix(-1.3333333,0,0,1,58.333333,-13)" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         id="path4262"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <g
-       id="background-vertical-topleft"
-       transform="matrix(-0.75,0,0,0.75,46.75,13.75)"
-       inkscape:label="#slider-topleft-8">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3864"
-         width="7"
-         height="7"
-         x="30"
-         y="12"
-         transform="matrix(-1.3333333,0,0,1.3333333,58.333333,-18.333333)" />
-      <path
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path3895-9"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         id="path4274"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <g
-       id="background-vertical-bottomleft"
-       transform="matrix(-0.75,0,0,0.75,46.75,18.25)"
-       inkscape:label="#slider-bottomleft-2">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3874"
-         width="7"
-         height="7"
-         x="30"
-         y="31"
-         transform="matrix(-1.3333333,0,0,1.3333333,58.333333,-24.333333)" />
-      <path
-         id="path3901-7"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path4280" />
-    </g>
-    <g
-       transform="matrix(0,-0.75,-0.1,0,42.7,25.75)"
-       id="background-vertical-top"
-       inkscape:label="#slider-top-0">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3866"
-         width="1"
-         height="7"
-         x="38"
-         y="12"
-         transform="matrix(0,-10,-1.3333333,0,34.333333,397)" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3909-8"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4276"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       id="background-vertical-bottom"
-       transform="matrix(0,0.75,-0.1,0,42.7,24.25)"
-       inkscape:label="#slider-bottom-2">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3876"
-         width="1"
-         height="7"
-         x="38"
-         y="31"
-         transform="matrix(0,-10,1.3333333,0,-32.333333,397)" />
-      <path
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3915-5"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-Text" />
-      <path
-         class="ColorScheme-ViewBackground"
-         inkscape:connector-curvature="0"
-         id="path4282"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <rect
-       style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-       id="sunken-slider-center"
-       width="1"
-       height="10"
-       x="20"
-       y="82"
-       class="ColorScheme-ButtonHover"
-       inkscape:label="#slider-center-6" />
-    <g
-       id="sunken-slider-right"
-       transform="matrix(0.75,0,0,1,15.25,75)"
-       inkscape:label="#slider-right-9">
-      <path
-         id="rect3838-4-8"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3924"
-         width="4"
-         height="10"
-         x="29"
-         y="64"
-         transform="matrix(1.3333333,0,0,1,-25.666667,-57)" />
-    </g>
-    <g
-       id="sunken-slider-topright"
-       transform="matrix(0.75,0,0,0.75,15.25,75.75)"
-       inkscape:label="#slider-topright-4">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3920"
-         width="7"
-         height="7"
-         x="26"
-         y="56"
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-77)" />
-      <path
-         id="rect3840-2-9"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <g
-       id="sunken-slider-bottomright"
-       transform="matrix(0.75,0,0,0.75,15.25,80.25)"
-       inkscape:label="#slider-bottomright-7">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3930"
-         width="7"
-         height="7"
-         x="26"
-         y="75"
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-83)" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path3871-1-7"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <g
-       id="sunken-slider-left"
-       transform="matrix(-0.75,0,0,1,25.75,75)"
-       inkscape:label="#slider-left-5">
-      <path
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3891-9-4"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3922"
-         width="4"
-         height="10"
-         x="16"
-         y="64"
-         transform="matrix(-1.3333333,0,0,1,39.666667,-57)" />
-    </g>
-    <g
-       id="sunken-slider-topleft"
-       transform="matrix(-0.75,0,0,0.75,25.75,75.75)"
-       inkscape:label="#slider-topleft-2">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3916"
-         width="7"
-         height="7"
-         x="16"
-         y="56"
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-77)" />
-      <path
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path3895-2-1"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <g
-       id="sunken-slider-bottomleft"
-       transform="matrix(-0.75,0,0,0.75,25.75,80.25)"
-       inkscape:label="#slider-bottomleft-5">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3926"
-         width="7"
-         height="7"
-         x="16"
-         y="75"
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-83)" />
-      <path
-         id="path3901-9-9"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <g
-       transform="matrix(0,-0.75,-0.1,0,21.7,87.75)"
-       id="sunken-slider-top"
-       inkscape:label="#slider-top-5">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3918"
-         width="1"
-         height="7"
-         x="24"
-         y="56"
-         transform="matrix(0,-10,-1.3333333,0,93,257)" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path3909-6-1"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <g
-       id="sunken-slider-bottom"
-       transform="matrix(0,0.75,-0.1,0,21.7,86.25)"
-       inkscape:label="#slider-bottom-0">
-      <rect
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none"
-         id="rect3928"
-         width="1"
-         height="7"
-         x="24"
-         y="75"
-         transform="matrix(0,-10,1.3333333,0,-91,257)" />
-      <path
-         style="fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3915-6-3"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ButtonHover" />
-    </g>
-    <rect
-       inkscape:label="#slider-center-6"
-       class="ColorScheme-ButtonHover"
-       y="53"
-       x="20"
-       height="10"
-       width="1"
-       id="mouseover-slider-center"
-       style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    <g
-       inkscape:label="#slider-right-9"
-       transform="matrix(0.75,0,0,1,15.250001,46)"
-       id="mouseover-slider-right">
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path3963" />
-      <rect
-         transform="matrix(1.3333333,0,0,1,-25.666667,-57)"
-         y="64"
-         x="29"
-         height="10"
-         width="4"
-         id="rect3965"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-    </g>
-    <g
-       inkscape:label="#slider-topright-4"
-       transform="matrix(0.75,0,0,0.75,15.250001,46.75)"
-       id="mouseover-slider-topright">
-      <rect
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-77)"
-         y="56"
-         x="26"
-         height="7"
-         width="7"
-         id="rect3969"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path3971" />
-    </g>
-    <g
-       inkscape:label="#slider-bottomright-7"
-       transform="matrix(0.75,0,0,0.75,15.250001,51.25)"
-       id="mouseover-slider-bottomright">
-      <rect
-         transform="matrix(1.3333333,0,0,1.3333333,-25.666667,-83)"
-         y="75"
-         x="26"
-         height="7"
-         width="7"
-         id="rect3975"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         id="path3977"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       inkscape:label="#slider-left-5"
-       transform="matrix(-0.75,0,0,1,25.750001,46)"
-       id="mouseover-slider-left">
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         id="path3981"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <rect
-         transform="matrix(-1.3333333,0,0,1,39.666667,-57)"
-         y="64"
-         x="16"
-         height="10"
-         width="4"
-         id="rect3983"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-    </g>
-    <g
-       inkscape:label="#slider-topleft-2"
-       transform="matrix(-0.75,0,0,0.75,25.750001,46.75)"
-       id="mouseover-slider-topleft">
-      <rect
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-77)"
-         y="56"
-         x="16"
-         height="7"
-         width="7"
-         id="rect3987"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         id="path3989"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <g
-       inkscape:label="#slider-bottomleft-5"
-       transform="matrix(-0.75,0,0,0.75,25.750001,51.25)"
-       id="mouseover-slider-bottomleft">
-      <rect
-         transform="matrix(-1.3333333,0,0,1.3333333,39.666667,-83)"
-         y="75"
-         x="16"
-         height="7"
-         width="7"
-         id="rect3993"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path3995" />
-    </g>
-    <g
-       inkscape:label="#slider-top-5"
-       id="mouseover-slider-top"
-       transform="matrix(0,-0.75,-0.1,0,21.700001,58.75)">
-      <rect
-         transform="matrix(0,-10,-1.3333333,0,93,257)"
-         y="56"
-         x="24"
-         height="7"
-         width="1"
-         id="rect3999"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4001"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       inkscape:label="#slider-bottom-0"
-       transform="matrix(0,0.75,-0.1,0,21.700001,57.25)"
-       id="mouseover-slider-bottom">
-      <rect
-         transform="matrix(0,-10,1.3333333,0,-91,257)"
-         y="75"
-         x="24"
-         height="7"
-         width="1"
-         id="rect4005"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-ButtonHover"
-         inkscape:connector-curvature="0"
-         id="path4007"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.6;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <g
-       id="background-vertical-center"
-       transform="translate(3)">
-      <rect
-         inkscape:label="#slider-center-1"
-         class="ColorScheme-Text"
-         y="20"
-         x="38"
-         height="10"
-         width="1"
-         id="rect4272"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <rect
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         id="rect4266"
-         width="1"
-         height="10"
-         x="38"
-         y="20"
-         class="ColorScheme-ViewBackground"
-         inkscape:label="#slider-center-1" />
-    </g>
-    <g
-       inkscape:label="#slider-right-1"
-       transform="matrix(0.75,0,0,1,36.250001,46)"
-       id="background-horizontal-right">
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4288" />
-      <rect
-         transform="matrix(1.3333333,0,0,1,-44.333333,-13)"
-         y="20"
-         x="43"
-         height="10"
-         width="4"
-         id="rect4290"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         id="path4292"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-topright-5"
-       transform="matrix(0.75,0,0,0.75,36.250001,46.750001)"
-       id="background-horizontal-topright">
-      <rect
-         transform="matrix(1.3333333,0,0,1.3333333,-44.333333,-18.333333)"
-         y="12"
-         x="40"
-         height="7"
-         width="7"
-         id="rect4296"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path4298" />
-      <path
-         id="path4300"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-bottomright-2"
-       transform="matrix(0.75,0,0,0.75,36.250001,51.250001)"
-       id="background-horizontal-bottomright">
-      <rect
-         transform="matrix(1.3333333,0,0,1.3333333,-44.333333,-24.333333)"
-         y="31"
-         x="40"
-         height="7"
-         width="7"
-         id="rect4304"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         id="path4306"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path4308"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       transform="matrix(-0.75,0,0,1,46.750001,46)"
-       id="background-horizontal-left">
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         id="path4312"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <rect
-         transform="matrix(-1.3333333,0,0,1,58.333333,-13)"
-         y="20"
-         x="30"
-         height="10"
-         width="4"
-         id="rect4314"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4316"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-topleft-8"
-       transform="matrix(-0.75,0,0,0.75,46.750001,46.750001)"
-       id="background-horizontal-topleft">
-      <rect
-         transform="matrix(-1.3333333,0,0,1.3333333,58.333333,-18.333333)"
-         y="12"
-         x="30"
-         height="7"
-         width="7"
-         id="rect4320"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         id="path4322"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,3 v 4 h 4 C 13,4.784 11.216,3 9,3 Z"
-         id="path4324"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-bottomleft-2"
-       transform="matrix(-0.75,0,0,0.75,46.750001,51.250001)"
-       id="background-horizontal-bottomleft">
-      <rect
-         transform="matrix(-1.3333333,0,0,1.3333333,58.333333,-24.333333)"
-         y="31"
-         x="30"
-         height="7"
-         width="7"
-         id="rect4328"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         id="path4330" />
-      <path
-         id="path4332"
-         d="m 9,21 v -4 h 4 c 0,2.216 -1.784,4 -4,4 z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-top-0"
-       id="background-horizontal-top"
-       transform="matrix(0,-0.75,-0.1,0,42.700001,58.750001)">
-      <rect
-         transform="matrix(0,-10,-1.3333333,0,34.333333,397)"
-         y="12"
-         x="38"
-         height="7"
-         width="1"
-         id="rect4336"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4338"
-         inkscape:connector-curvature="0" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path4340"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       inkscape:label="#slider-bottom-2"
-       transform="matrix(0,0.75,-0.1,0,42.700001,57.250001)"
-       id="background-horizontal-bottom">
-      <rect
-         transform="matrix(0,-10,1.3333333,0,-32.333333,397)"
-         y="31"
-         x="38"
-         height="7"
-         width="1"
-         id="rect4344"
-         style="opacity:0.01000001;fill:#e4e6e8;fill-opacity:1;stroke:none" />
-      <path
-         class="ColorScheme-Text"
-         inkscape:connector-curvature="0"
-         id="path4346"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 9,7 v 10 h 4 V 7 Z"
-         id="path4348"
-         inkscape:connector-curvature="0"
-         class="ColorScheme-ViewBackground" />
-    </g>
-    <g
-       id="background-horizontal-center"
-       transform="translate(3,33)">
-      <rect
-         style="opacity:0.4;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         id="rect4352"
-         width="1"
-         height="10"
-         x="38"
-         y="20"
-         class="ColorScheme-Text"
-         inkscape:label="#slider-center-1" />
-      <rect
-         inkscape:label="#slider-center-1"
-         class="ColorScheme-ViewBackground"
-         y="20"
-         x="38"
-         height="10"
-         width="1"
-         id="rect4354"
-         style="opacity:0.2;fill:currentColor;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-  </g>
 </svg>
