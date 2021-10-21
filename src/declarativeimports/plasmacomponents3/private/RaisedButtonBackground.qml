@@ -21,7 +21,7 @@ Item {
 
     ButtonShadow {
         anchors.fill: parent
-        showShadow: !(root.checked || root.pressed)
+        showShadow: enabled && !root.checked && !root.pressed
     }
 
     PlasmaCore.FrameSvgItem {
