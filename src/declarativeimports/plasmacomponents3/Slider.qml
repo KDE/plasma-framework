@@ -83,6 +83,7 @@ T.Slider {
         y: control.topPadding + (control.vertical ? 0 : (control.availableHeight - height) / 2)
 
         PlasmaCore.FrameSvgItem {
+            id: grooveFill
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -98,19 +99,44 @@ T.Slider {
             }
         }
 
-        Repeater {
-            id: repeater
+        Loader {
+            id: tickLoader
             readonly property int stepCount: (control.to - control.from) / control.stepSize
-            model: control.stepSize && stepCount < 20 ? 1 + stepCount : 0
-            anchors.fill: parent
-
-            Rectangle {
-                color: PlasmaCore.ColorScope.textColor
-                opacity: 0.3
-                width: background.horizontal ? PlasmaCore.Units.devicePixelRatio : PlasmaCore.Units.gridUnit/2
-                height: background.horizontal ? PlasmaCore.Units.gridUnit/2 : PlasmaCore.Units.devicePixelRatio
-                y: background.horizontal ? background.height + PlasmaCore.Units.devicePixelRatio : handle.height / 2 + index * ((repeater.height - handle.height) / (repeater.count > 1 ? repeater.count - 1 : 1))
-                x: background.horizontal ? handle.width / 2 + index * ((repeater.width - handle.width) / (repeater.count > 1 ? repeater.count - 1 : 1)) : background.width
+            visible: stepCount > 0 && stepCount <= 20
+            active: visible
+            LayoutMirroring.enabled: control.mirrored
+            anchors {
+                left: control.horizontal ? parent.left : parent.right
+                top: control.vertical ? parent.top : parent.bottom
+                leftMargin: control.horizontal ? control.handle.width/2 : PlasmaCore.Units.devicePixelRatio
+                topMargin: control.vertical ? control.handle.height/2 : PlasmaCore.Units.devicePixelRatio
+            }
+            width: control.horizontal ? parent.width - control.handle.width : control.background.x
+            height: control.vertical ? parent.height - control.handle.height : control.background.y
+            sourceComponent: Grid {
+                anchors.fill: parent
+                rows: control.vertical ? tickLoader.stepCount + 1 : 1
+                columns: control.horizontal ? tickLoader.stepCount + 1 : 1
+                spacing: (control.vertical ? height : width) / tickLoader.stepCount - PlasmaCore.Units.devicePixelRatio
+                Repeater {
+                    model: tickLoader.stepCount
+                    delegate: Rectangle {
+                        property bool withinFill: (control.horizontal && x >= grooveFill.x && x <= grooveFill.x + grooveFill.width)
+                            || (control.vertical && y >= grooveFill.y && y <= grooveFill.y + grooveFill.height)
+                        width: control.vertical ? parent.width : PlasmaCore.Units.devicePixelRatio
+                        height: control.horizontal ? parent.height : PlasmaCore.Units.devicePixelRatio
+                        opacity: withinFill ? 1 : 0.3
+                        color: withinFill ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
+                    }
+                }
+                Rectangle {
+                    property bool withinFill: (control.horizontal && x >= grooveFill.x && x <= grooveFill.x + grooveFill.width)
+                        || (control.vertical && y >= grooveFill.y && y <= grooveFill.y + grooveFill.height)
+                    width: control.vertical ? parent.width : PlasmaCore.Units.devicePixelRatio
+                    height: control.horizontal ? parent.height : PlasmaCore.Units.devicePixelRatio
+                    opacity: withinFill ? 1 : 0.3
+                    color: withinFill ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
+                }
             }
         }
     }
