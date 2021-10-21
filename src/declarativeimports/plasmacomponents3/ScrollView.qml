@@ -25,25 +25,9 @@ T.ScrollView {
     rightPadding: !mirrored && T.ScrollBar.vertical && T.ScrollBar.vertical.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.vertical.width : 0
     bottomPadding: T.ScrollBar.horizontal && T.ScrollBar.horizontal.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.horizontal.height : 0
 
-    //create a background only after Component.onCompleted, see on the component creation below for explanation
-    Component.onCompleted: {
-        if (!controlRoot.background) {
-            controlRoot.background = backgroundComponent.createObject(controlRoot);
-        }
-    }
-
-
     data: [
         Kirigami.WheelHandler {
             target: controlRoot.contentItem
-        },
-        Component {
-            id: backgroundComponent
-            Rectangle {
-                color: PlasmaCore.Theme.viewBackgroundColor
-                visible: false
-                anchors.fill:parent
-            }
         }
     ]
 
