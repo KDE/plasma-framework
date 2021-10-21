@@ -17,6 +17,9 @@ Item {
     implicitWidth: PlasmaCore.Units.gridUnit + root.leftMargin + root.rightMargin
     implicitHeight: PlasmaCore.Units.gridUnit + root.topMargin + root.bottomMargin
 
+    opacity: enabled ? 1 : 0.5
+    layer.enabled: opacity < 1
+
     Loader {
         id: loader
         anchors.fill: parent
