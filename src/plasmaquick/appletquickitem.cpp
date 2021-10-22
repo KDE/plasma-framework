@@ -7,6 +7,7 @@
 #include "appletquickitem.h"
 #include "debug_p.h"
 #include "private/appletquickitem_p.h"
+#include "appletrepresentation.h"
 
 #include <QJsonArray>
 #include <QQmlContext>
@@ -647,6 +648,11 @@ void AppletQuickItem::init()
     }
     d->qmlObject->setInitializationDelayed(false);
     d->qmlObject->completeInitialization(initialProperties);
+
+    qWarning()<< "We got root object" << d->qmlObject->rootObject();
+    if (qobject_cast<AppletRepresentation *>(d->qmlObject->rootObject())) {
+        qWarning() << "WE GOT AN AppletRepresentation";
+    }
 
     // otherwise, initialize our size to root object's size
     if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {

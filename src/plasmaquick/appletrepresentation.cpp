@@ -8,7 +8,6 @@
 #include "debug_p.h"
 #include "private/appletrepresentation_p.h"
 #include "appletcontext_p.h"
-#include "plasmoid.h"
 
 #include <QJsonArray>
 #include <QQmlContext>
@@ -31,6 +30,8 @@
 
 namespace PlasmaQuick
 {
+
+QHash<Plasma::Applet *, AppletRepresentation *> AppletRepresentationPrivate::s_appletRepresentations = QHash<Plasma::Applet *, AppletRepresentation *>();
 
 AppletRepresentationPrivate::AppletRepresentationPrivate(AppletRepresentation *item)
     : q(item)
@@ -132,8 +133,8 @@ void AppletRepresentation::init(Plasma::Applet *applet, QQmlContext *rootContext
 //FIXME: remove engine param
 AppletRepresentation *AppletRepresentation::representationForApplet(Plasma::Applet *applet, QQmlEngine *engine)
 {
-    if (applet->representation()) {
-        return qobject_cast<AppletRepresentation*>(applet->representation());
+    if (AppletRepresentationPrivate::s_appletRepresentations.contains(applet)) {
+        return AppletRepresentationPrivate::s_appletRepresentations[applet];
     }
 
     AppletRepresentation *appletItem = nullptr;
@@ -145,7 +146,7 @@ AppletRepresentation *AppletRepresentation::representationForApplet(Plasma::Appl
     if (applet->kPackage().isValid()) {
         applet->setLaunchErrorMessage(i18n("Error loading Applet: package inexistent"));
     }
-    
+
     const QUrl url(applet->kPackage().fileUrl("mainscript"));
     if (url.isEmpty()) {
         applet->setLaunchErrorMessage(i18n("Error loading Applet: missing main QML file"));
@@ -155,7 +156,7 @@ AppletRepresentation *AppletRepresentation::representationForApplet(Plasma::Appl
     Q_ASSERT(engine);
 
     QQmlComponent *component = new QQmlComponent(engine, url, applet);
-    
+
     if (component->status() == QQmlComponent::Error) {
         const auto errors = component->errors();
         QStringList errorList;
@@ -186,6 +187,10 @@ AppletRepresentation *AppletRepresentation::representationForApplet(Plasma::Appl
             }
             qWarning() << i18n("QML root object not an AppletRepresentation instance");
         }
+    }
+
+    if (appletItem) {
+        AppletRepresentationPrivate::s_appletRepresentations[applet] = appletItem;
     }
 
     return appletItem;

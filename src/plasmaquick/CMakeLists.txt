@@ -16,7 +16,7 @@ set_target_properties(KF5PlasmaQuick PROPERTIES
 target_sources(KF5PlasmaQuick PRIVATE
     appletquickitem.cpp
     appletrepresentation.cpp
-    appletcontainer.cpp
+    
     appletcontext.cpp
     debug_p.cpp
     dialog.cpp
