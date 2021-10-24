@@ -55,19 +55,36 @@ T.Slider {
             svg: sliderSvg
             elementId: control.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
         }
-        P.HoverFocusSvgItem {
-            id: hoverFocus
+        PlasmaCore.SvgItem {
             anchors.centerIn: parent
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
             svg: sliderSvg
-            focusElement: control.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
-            hoverElement: control.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
-            elementId: if (control.visualFocus) {
-                hoverFocus.focusElement
-            } else {
-                hoverFocus.hoverElement
+            elementId: control.horizontal ? "horizontal-slider-focus" : "vertical-slider-focus"
+            visible: opacity > 0
+            opacity: control.visualFocus
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
             }
-            // HoverFocusSvgItem contains a behavior animation
-            opacity: control.hovered || control.visualFocus
+        }
+        PlasmaCore.SvgItem {
+            anchors.centerIn: parent
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
+            svg: sliderSvg
+            elementId: control.horizontal ? "horizontal-slider-hover" : "vertical-slider-hover"
+            visible: opacity > 0
+            opacity: control.hovered
+            Behavior on opacity {
+                enabled: control.hovered
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
     }
 
