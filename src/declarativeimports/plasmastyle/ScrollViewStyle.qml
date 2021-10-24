@@ -167,35 +167,55 @@ QtQuickControlStyle.ScrollViewStyle {
         }
     }
 
-    scrollBarBackground: PlasmaCore.FrameSvgItem {
-        imagePath:"widgets/scrollbar"
-        prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
-        implicitWidth: widthHint
-        colorGroup: PlasmaCore.ColorScope.colorGroup
-        opacity: styleData.hovered ? 1 : 0
-        Behavior on opacity {
-            NumberAnimation {
-                duration: PlasmaCore.Units.longDuration
-                easing.type: Easing.InOutQuad
+    scrollBarBackground: Item {
+        implicitWidth: Math.max(widthHint, bgFrame.fixedMargins.left + bgFrame.fixedMargins.right)
+            + bgFrame.anchors.leftMargin + bgFrame.anchors.rightMargin
+        implicitHeight: Math.max(widthHint, bgFrame.fixedMargins.top + bgFrame.fixedMargins.bottom)
+            + bgFrame.anchors.topMargin + bgFrame.anchors.bottomMargin
+        PlasmaCore.FrameSvgItem {
+            id: bgFrame
+            anchors {
+                fill: parent
+                leftMargin: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-left-inset`) ? bgFrame.inset.left : 0
+                rightMargin: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-right-inset`) ? bgFrame.inset.right : 0
+                topMargin: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-top-inset`) ? bgFrame.inset.top : 0
+                bottomMargin: scrollbarSvg.hasElement(`${bgFrame.usedPrefix}-hint-bottom-inset`) ? bgFrame.inset.bottom : 0
+            }
+            imagePath:"widgets/scrollbar"
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            prefix: styleData.horizontal ? "background-horizontal" : "background-vertical"
+            opacity: styleData.hovered
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
             }
         }
     }
 
-    handle: PlasmaCore.FrameSvgItem {
-        imagePath:"widgets/scrollbar"
-        implicitWidth: widthHint
-        implicitHeight: widthHint
-        colorGroup: PlasmaCore.ColorScope.colorGroup
-
-        prefix: {
-            if (styleData.hovered) {
-                return "sunken-slider"
+    handle: Item {
+        property bool hovered: __activeControl !== "none"
+        implicitWidth: Math.max(widthHint, handleFrame.fixedMargins.left + handleFrame.fixedMargins.right)
+            + handleFrame.anchors.leftMargin + handleFrame.anchors.rightMargin
+        implicitHeight: Math.max(widthHint, handleFrame.fixedMargins.top + handleFrame.fixedMargins.bottom)
+            + handleFrame.anchors.topMargin + handleFrame.anchors.bottomMargin
+        PlasmaCore.FrameSvgItem {
+            id: handleFrame
+            anchors {
+                fill: parent
+                leftMargin: scrollbarSvg.hasElement(`${handleFrame.usedPrefix}-hint-left-inset`) ? handleFrame.inset.left : 0
+                rightMargin: scrollbarSvg.hasElement(`${handleFrame.usedPrefix}-hint-right-inset`) ? handleFrame.inset.right : 0
+                topMargin: scrollbarSvg.hasElement(`${handleFrame.usedPrefix}-hint-top-inset`) ? handleFrame.inset.top : 0
+                bottomMargin: scrollbarSvg.hasElement(`${handleFrame.usedPrefix}-hint-bottom-inset`) ? handleFrame.inset.bottom : 0
             }
-            if (styleData.pressed) {
-                return "mouseover-slider"
-            } else {
-                return "slider"
-            }
+            imagePath:"widgets/scrollbar"
+            implicitWidth: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").width, fixedMargins.left + fixedMargins.right)
+            implicitHeight: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").height, fixedMargins.top + fixedMargins.bottom)
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            prefix: hovered && enabled ? "mouseover-slider" : "slider"
+            opacity: enabled ? 1 : 0.5
         }
     }
 
