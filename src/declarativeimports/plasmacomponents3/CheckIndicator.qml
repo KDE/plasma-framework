@@ -55,7 +55,7 @@ PlasmaCore.FrameSvgItem {
 
     Private.ButtonFocus {
         anchors.fill: parent
-        showFocus: control.activeFocus && !control.pressed
+        showFocus: control.visualFocus && !control.pressed
     }
 
     Private.ButtonHover {
