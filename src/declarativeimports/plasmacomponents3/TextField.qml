@@ -194,17 +194,50 @@ T.TextField {
         imagePath: "widgets/lineedit"
         prefix: "base"
 
-        Private.TextFieldFocus {
-            state: if (control.visualFocus) {
-                "focusframe"
-            } else if (control.activeFocus) {
-                "focus"
-            } else if (control.hovered) {
-                "hover"
-            } else {
-                "hidden"
+        PlasmaCore.FrameSvgItem {
+            anchors {
+                fill: parent
+                leftMargin: -margins.left
+                topMargin: -margins.top
+                rightMargin: -margins.right
+                bottomMargin: -margins.bottom
             }
-            anchors.fill: parent
+            imagePath: "widgets/lineedit"
+            prefix: "hover"
+            visible: opacity > 0
+            opacity: control.hovered
+            Behavior on opacity {
+                enabled: control.hovered
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
         }
+        PlasmaCore.FrameSvgItem {
+            z: lineEditSvg.hasElement("hint-focus-over-base") ? 0 : -1
+            anchors {
+                fill: parent
+                leftMargin: -margins.left
+                topMargin: -margins.top
+                rightMargin: -margins.right
+                bottomMargin: -margins.bottom
+            }
+            imagePath: "widgets/lineedit"
+            prefix: control.visualFocus && lineEditSvg.hasElement("focusframe-center") ? "focusframe" : "focus"
+            visible: opacity > 0
+            opacity: control.visualFocus || control.activeFocus
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
+            }
+        }
+    }
+
+    PlasmaCore.Svg {
+        id: lineEditSvg
+        imagePath: "widgets/lineedit"
     }
 }
