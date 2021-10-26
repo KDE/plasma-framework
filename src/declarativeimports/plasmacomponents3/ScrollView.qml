@@ -6,20 +6,18 @@
 */
 
 
-import QtQuick 2.9
-import QtQuick.Controls @QQC2_VERSION@
+import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.9 as Kirigami
-import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.kirigami 2.19 as Kirigami
 
 T.ScrollView {
     id: controlRoot
 
-    clip: true
-
-    implicitWidth: Math.max(background ? background.implicitWidth : 0, contentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(background ? background.implicitHeight : 0, contentHeight + topPadding + bottomPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
 
     leftPadding: mirrored && T.ScrollBar.vertical && T.ScrollBar.vertical.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.vertical.width : 0
     rightPadding: !mirrored && T.ScrollBar.vertical && T.ScrollBar.vertical.visible && !Kirigami.Settings.isMobile ? T.ScrollBar.vertical.width : 0
@@ -28,11 +26,14 @@ T.ScrollView {
     data: [
         Kirigami.WheelHandler {
             target: controlRoot.contentItem
+            verticalScrollBar: controlRoot.T.ScrollBar.vertical
+            horizontalScrollBar: controlRoot.T.ScrollBar.horizontal
+            verticalStepSize: PlasmaCore.Units.devicePixelRatio * 20 * Qt.styleHints.wheelScrollLines
+            horizontalStepSize: PlasmaCore.Units.devicePixelRatio * 20 * Qt.styleHints.wheelScrollLines
         }
     ]
 
-    PlasmaComponents3.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
-        id: verticalScrollBar
+    T.ScrollBar.vertical: ScrollBar {
         readonly property Flickable flickableItem: controlRoot.contentItem
         onFlickableItemChanged: {
             flickableItem.clip = true;
@@ -41,14 +42,14 @@ T.ScrollView {
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
         height: controlRoot.availableHeight
-        active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
+        active: controlRoot.T.ScrollBar.horizontal && controlRoot.T.ScrollBar.horizontal.active
     }
 
-    PlasmaComponents3.ScrollBar.horizontal: PlasmaComponents3.ScrollBar {
+    T.ScrollBar.horizontal: ScrollBar {
         parent: controlRoot
         x: controlRoot.leftPadding
         y: controlRoot.height - height
         width: controlRoot.availableWidth
-        active: controlRoot.ScrollBar.horizontal || controlRoot.ScrollBar.horizontal.active
+        active: controlRoot.T.ScrollBar.vertical && controlRoot.T.ScrollBar.vertical.active
     }
 }
