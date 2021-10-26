@@ -9,140 +9,207 @@ import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import "private" as Private
+import "private" as P
 
 T.SpinBox {
     id: control
 
-    implicitWidth: Math.max(PlasmaCore.Units.gridUnit * 6, contentItem.implicitWidth + 2 * padding + up.indicator.implicitWidth + down.indicator.implicitWidth)
-    implicitHeight: PlasmaCore.Units.gridUnit * 1.6
+    implicitWidth: Math.max(
+        implicitBackgroundWidth + leftInset + rightInset,
+        Math.max(implicitContentWidth, PlasmaCore.Units.gridUnit)
+            + spacing * 2 + leftPadding + rightPadding,
+        up.implicitIndicatorWidth + down.implicitIndicatorWidth
+    )
+    implicitHeight: Math.max(
+        implicitBackgroundHeight + topInset + bottomInset,
+        implicitContentHeight + topPadding + bottomPadding,
+        up.implicitIndicatorHeight,
+        down.implicitIndicatorHeight
+    )
 
-    padding: 6
-    leftPadding: padding + height
-    rightPadding: padding + height
-
+    leftPadding: !mirrored ? down.implicitIndicatorWidth : up.implicitIndicatorWidth
+    rightPadding: mirrored ? down.implicitIndicatorWidth : up.implicitIndicatorWidth
+    topPadding: bgLoader.topMargin
+    bottomPadding: bgLoader.bottomMargin
+    spacing: bgLoader.leftMargin
+    editable: true
+    inputMethodHints: Qt.ImhFormattedNumbersOnly
     validator: IntValidator {
         locale: control.locale.name
         bottom: Math.min(control.from, control.to)
         top: Math.max(control.from, control.to)
     }
+    wheelEnabled: true
+    hoverEnabled: Qt.styleHints.useHoverEffects
 
-    contentItem: TextInput {
+    PlasmaCore.Svg {
+        id: lineSvg
+        imagePath: "widgets/line"
+    }
+
+    up.indicator: P.FlatButtonBackground {
+        x: control.mirrored ? 0 : parent.width - width
+        implicitHeight: PlasmaCore.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
+        implicitWidth: PlasmaCore.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
+        height: parent.height
+        hovered: control.up.hovered
+        pressed: control.up.pressed
+        focused: false
+        checked: false
+        PlasmaCore.IconItem {
+            anchors.centerIn: parent
+            implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
+            implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            source: "list-add"
+        }
+        PlasmaCore.SvgItem {
+            x: control.mirrored ? parent.width - width : 0
+            z: -1
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                topMargin: bgLoader.topMargin
+                bottomMargin: bgLoader.bottomMargin
+            }
+            implicitWidth: naturalSize.width
+            implicitHeight: implicitWidth
+            elementId: "vertical-line"
+            svg: lineSvg
+        }
+    }
+
+    down.indicator: P.FlatButtonBackground {
+        x: control.mirrored ? parent.width - width : 0
+        implicitHeight: PlasmaCore.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
+        implicitWidth: PlasmaCore.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
+        height: parent.height
+        hovered: control.down.hovered
+        pressed: control.down.pressed
+        focused: false
+        checked: false
+        PlasmaCore.IconItem {
+            anchors.centerIn: parent
+            implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
+            implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
+            colorGroup: PlasmaCore.ColorScope.colorGroup
+            source: "list-remove"
+        }
+        PlasmaCore.SvgItem {
+            x: control.mirrored ? 0 : parent.width - width
+            z: -1
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                topMargin: bgLoader.topMargin
+                bottomMargin: bgLoader.bottomMargin
+            }
+            implicitWidth: naturalSize.width
+            implicitHeight: implicitWidth
+            elementId: "vertical-line"
+            svg: lineSvg
+        }
+    }
+
+    contentItem: T.TextField {
         id: textField
-        property int originalValue
-
-        text: control.textFromValue(control.value, control.locale)
-        opacity: control.enabled ? 1 : 0.6
-
+        opacity: enabled ? 1 : 0.5
+        implicitWidth: Math.ceil(contentWidth) + leftPadding + rightPadding
+        implicitHeight: Math.ceil(contentHeight) + topPadding + bottomPadding
+        palette: control.palette
+        text: control.displayText
         font: control.font
         color: PlasmaCore.Theme.viewTextColor
         selectionColor: PlasmaCore.Theme.highlightColor
         selectedTextColor: PlasmaCore.Theme.highlightedTextColor
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
-
         readOnly: !control.editable
         validator: control.validator
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
+        inputMethodHints: control.inputMethodHints
+        selectByMouse: true
+        hoverEnabled: false
+    }
 
-        // Allow adjusting the value by scrolling over it
-        MouseArea {
-            anchors.fill: parent
-
-            // Because we're stomping the Text Input's own mouse handling
-            cursorShape: Qt.IBeamCursor
-
-            // Have to cache the original value for the drag handler
-            onPressed: {
-                textField.originalValue = control.value
-                // Because we're stomping the Text Input's own mouse handling
-                mouse.accepted = false
+    background: Loader {
+        id: bgLoader
+        readonly property real leftMargin: item.leftMargin
+        readonly property real rightMargin: item.rightMargin
+        readonly property real topMargin: item.topMargin
+        readonly property real bottomMargin: item.bottomMargin
+        sourceComponent: control.editable ? editableBg : noneditableBg
+        Component {
+            id: noneditableBg
+            P.RaisedButtonBackground {
+                hovered: control.hovered
+                focused: control.visualFocus || (control.contentItem.activeFocus && (
+                    control.contentItem.focusReason == Qt.TabFocusReason ||
+                    control.contentItem.focusReason == Qt.BacktabFocusReason ||
+                    control.contentItem.focusReason == Qt.ShortcutFocusReason
+                ))
+                checked: false
+                pressed: false
             }
-            onWheel: {
-                if (wheel.angleDelta.y > 0 && control.value <= control.to) {
-                    control.value += control.stepSize
-                    control.valueModified()
-                } else if (wheel.angleDelta.y < 0 && control.value >= control.from) {
-                    control.value -= control.stepSize
-                    control.valueModified()
+        }
+        Component {
+            id: editableBg
+            PlasmaCore.FrameSvgItem {
+                readonly property real leftMargin: margins.left
+                readonly property real rightMargin: margins.right
+                readonly property real topMargin: margins.top
+                readonly property real bottomMargin: margins.bottom
+                imagePath: "widgets/lineedit"
+                prefix: "base"
+                PlasmaCore.FrameSvgItem {
+                    anchors {
+                        fill: parent
+                        leftMargin: -margins.left
+                        topMargin: -margins.top
+                        rightMargin: -margins.right
+                        bottomMargin: -margins.bottom
+                    }
+                    imagePath: "widgets/lineedit"
+                    prefix: "hover"
+                    visible: opacity > 0
+                    opacity: control.hovered
+                    Behavior on opacity {
+                        enabled: control.hovered
+                        NumberAnimation {
+                            duration: PlasmaCore.Units.longDuration
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                }
+                PlasmaCore.FrameSvgItem {
+                    property bool visualFocus: control.visualFocus || (control.contentItem.activeFocus
+                        && (control.contentItem.focusReason == Qt.TabFocusReason ||
+                            control.contentItem.focusReason == Qt.BacktabFocusReason ||
+                            control.contentItem.focusReason == Qt.ShortcutFocusReason)
+                    )
+                    z: lineEditSvg.hasElement("hint-focus-over-base") ? 0 : -1
+                    anchors {
+                        fill: parent
+                        leftMargin: -margins.left
+                        topMargin: -margins.top
+                        rightMargin: -margins.right
+                        bottomMargin: -margins.bottom
+                    }
+                    imagePath: "widgets/lineedit"
+                    prefix: visualFocus && lineEditSvg.hasElement("focusframe-center") ? "focusframe" : "focus"
+                    visible: opacity > 0
+                    opacity: visualFocus || control.activeFocus || control.contentItem.activeFocus
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: PlasmaCore.Units.longDuration
+                            easing.type: Easing.OutCubic
+                        }
+                    }
+                }
+                PlasmaCore.Svg {
+                    id: lineEditSvg
+                    imagePath: "widgets/lineedit"
                 }
             }
-        }
-
-        // Allow adjusting the value by dragging it
-        DragHandler {
-            // How many pixels you have to drag to change the value by one unit
-            // of 'control.stepSize'; bigger magnitudes will require more movement
-            // to achieve the same change in spinbox value
-            property int magnitude: PlasmaCore.Units.gridUnit
-
-            target: null // Don't actually move anything, we just want drag data
-            xAxis.enabled: true
-            yAxis.enabled: true
-
-            onTranslationChanged: {
-                // Allow dragging along both X and Y axis, and use whichever one
-                // is bigger
-                var distance
-                if (Math.abs(translation.y) > Math.abs(translation.x)) {
-                    // Invert the value since the origin is in the top left corner,
-                    // but we want dragging up make the value bigger
-                    distance = -translation.y
-                } else {
-                    distance = translation.x
-                }
-                control.value = textField.originalValue + (Math.floor(distance / magnitude) * control.stepSize)
-                control.valueModified()
-            }
-        }
-    }
-
-    up.indicator: Item {
-        x: control.mirrored ? 0 : parent.width - width
-        implicitHeight: parent.height
-        implicitWidth: implicitHeight
-        PlasmaCore.FrameSvgItem {
-            anchors {
-                fill: parent
-                margins: base.margins.right
-            }
-            imagePath: "widgets/button"
-            prefix: up.pressed ? "pressed" : "normal"
-            PlasmaComponents3.Label {
-                anchors.centerIn: parent
-                text: "+"
-            }
-        }
-    }
-
-    down.indicator:Item {
-        x: control.mirrored ? parent.width - width : 0
-        implicitHeight: parent.height
-        implicitWidth: implicitHeight
-        PlasmaCore.FrameSvgItem {
-            anchors {
-                fill: parent
-                margins: base.margins.left
-            }
-            imagePath: "widgets/button"
-            prefix: down.pressed ? "pressed" : "normal"
-            PlasmaComponents3.Label {
-                anchors.centerIn: parent
-                text: "-"
-            }
-        }
-    }
-
-    background: Item {
-        Private.TextFieldFocus {
-            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "hidden")
-            anchors.fill: parent
-        }
-        PlasmaCore.FrameSvgItem {
-            id: base
-            anchors.fill: parent
-            imagePath: "widgets/lineedit"
-            prefix: "base"
         }
     }
 }
