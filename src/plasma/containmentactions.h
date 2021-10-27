@@ -149,12 +149,15 @@ private:
 
 } // Plasma namespace
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
 /**
  * Register a containmentactions when it is contained in a loadable module
+ * @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
  */
 /* clang-format off */
 #define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
     K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
 /* clang-format on */
+#endif
 
 #endif // PLASMA_CONTAINMENTACTIONS_H

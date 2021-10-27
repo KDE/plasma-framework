@@ -132,6 +132,7 @@ endif()
 
 #########################################################################
 
+# TODO KF6 remove
 ecm_setup_qtplugin_macro_names(
     JSON_NONE
         "K_EXPORT_PLASMA_SERVICE"

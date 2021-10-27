@@ -210,9 +210,11 @@ private:
 
 /**
  * Register a service when it is contained in a loadable module
+ * @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
  */
 #define K_EXPORT_PLASMA_SERVICE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
+/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
 #define K_EXPORT_PLASMA_SERVICE_WITH_JSON(libname, classname, jsonFile) K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
 
 #endif // multiple inclusion guard

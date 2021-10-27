@@ -86,7 +86,6 @@ private:
 /**
  * Register a Package class when it is contained in a loadable module
  */
-
 /* clang-format off */
 #define K_EXPORT_PLASMA_PACKAGE(libname, classname) \
     K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)

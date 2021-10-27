@@ -143,10 +143,14 @@ private:
     DataEngineScriptPrivate *const d;
 };
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
+/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
+/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
 #define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON(libname, classname, jsonFile)                                                                         \
     K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
+#endif
 } // Plasma namespace
 
 #endif
