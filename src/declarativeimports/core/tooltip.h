@@ -200,6 +200,12 @@ Q_SIGNALS:
      * @since 5.45
      */
     void aboutToShow();
+    /**
+     * Emitted when the tooltip's visibility changes.
+     *
+     * @since 5.88
+     */
+    void toolTipVisibleChanged(bool toolTipVisible);
 
 private Q_SLOTS:
     void settingsChanged(const QString &file);

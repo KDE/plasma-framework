@@ -145,6 +145,8 @@ void ToolTip::showToolTip()
         mainItem()->setVisible(true);
     }
 
+    connect(dlg, &ToolTipDialog::visibleChanged, this, &ToolTip::toolTipVisibleChanged, Qt::UniqueConnection);
+
     dlg->setHideTimeout(m_timeout);
     dlg->setOwner(this);
     dlg->setLocation(location);
