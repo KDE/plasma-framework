@@ -566,6 +566,7 @@ protected:
     virtual KPluginInfo::List internalContainmentActionsInfo() const;
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
     /**
      * Standardized mechanism for providing internal applets by install .desktop files
      * in $APPPDATA/plasma/internal/applets/
@@ -580,7 +581,9 @@ protected:
      *                 If an empty string is passed in, all applets are
      *                 returned.
      * @return list of applets, or an empty list if none
+     * @deprecated Since 5.88, deprecated for lack of usage & obsolete with json metadata
      */
+    PLASMA_DEPRECATED_VERSION(5, 88, "deprecated for lack of usage & obsolete with json metadata")
     KPluginInfo::List standardInternalAppletInfo(const QString &category) const;
 
     /**
@@ -591,7 +594,9 @@ protected:
      * call to this method.
      *
      * @return list of dataengines
+     * @deprecated Since 5.88, deprecated for lack of usage & obsolete with json metadata
      */
+    PLASMA_DEPRECATED_VERSION(5, 88, "deprecated for lack of usage & obsolete with json metadata")
     KPluginInfo::List standardInternalDataEngineInfo() const;
 
     /**
@@ -602,8 +607,11 @@ protected:
      * call to this method.
      *
      * @return list of services
+     * @deprecated Since 5.88, deprecated for lack of usage & obsolete with json metadata
      */
+    PLASMA_DEPRECATED_VERSION(5, 88, "deprecated for lack of usage & obsolete with json metadata")
     KPluginInfo::List standardInternalServiceInfo() const;
+#endif
 
     PluginLoader();
     virtual ~PluginLoader();

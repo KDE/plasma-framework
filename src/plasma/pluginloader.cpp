@@ -857,6 +857,7 @@ KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
 }
 #endif
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
 static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
 {
     QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
@@ -893,6 +894,7 @@ KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
 {
     return standardInternalInfo(QStringLiteral("services"));
 }
+#endif
 
 KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, const QString &pluginNamespace)
 {
