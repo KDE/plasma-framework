@@ -362,8 +362,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
         }
     }
 
-    // FIXME: this is only for backwards compatibility, but probably will have to stay
-    // for the time being
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
     QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
     KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
 
@@ -375,12 +374,17 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     }
 
     KService::Ptr offer = offers.first();
+    qCWarning(LOG_PLASMA) << "Plugin" << name << "was loaded using deprecated KServiceTypeTrader."
+                          << "Use embedded json metadata and install the plugin in plasma/containmentactions namespace instead";
 
     KPluginMetaData data(offer->library());
     QVariantList allArgs;
     allArgs << offer->storageId() << args;
 
     return KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(data, nullptr, allArgs).plugin;
+#else
+    return nullptr;
+#endif
 }
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
