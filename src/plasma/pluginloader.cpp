@@ -774,8 +774,6 @@ QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QStr
     }
 
 #if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
-    // FIXME: this is only for backwards compatibility, but probably will have to stay
-    // for the time being
     QSet<QString> knownPlugins;
     for (const KPluginMetaData &p : std::as_const(plugins)) {
         knownPlugins.insert(p.pluginId());
