@@ -40,7 +40,7 @@ public:
 
 private:
     AssociatedApplicationManager(QObject *parent = nullptr);
-    ~AssociatedApplicationManager();
+    ~AssociatedApplicationManager() override;
 
     AssociatedApplicationManagerPrivate *const d;
     friend class AssociatedApplicationManagerSingleton;

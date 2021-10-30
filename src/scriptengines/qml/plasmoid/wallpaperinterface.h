@@ -40,7 +40,7 @@ class WallpaperInterface : public QQuickItem
 
 public:
     explicit WallpaperInterface(ContainmentInterface *parent = nullptr);
-    ~WallpaperInterface();
+    ~WallpaperInterface() override;
 
     /**
      * Returns a list of all known wallpapers that can accept the given mimetype

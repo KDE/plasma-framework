@@ -23,7 +23,7 @@ class PackageStructureWrapper : public KPackage::PackageStructure
 public:
     PackageStructureWrapper(Plasma::PackageStructure *structure, QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
-    ~PackageStructureWrapper();
+    ~PackageStructureWrapper() override;
 
     void initPackage(KPackage::Package *package) override;
 

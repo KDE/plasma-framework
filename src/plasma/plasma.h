@@ -30,7 +30,7 @@ class PLASMA_EXPORT Types : public QObject
     Q_OBJECT
 
 public:
-    ~Types();
+    ~Types() override;
     /**
      * The Constraint enumeration lists the various constraints that Plasma
      * objects have managed for them and which they may wish to react to,

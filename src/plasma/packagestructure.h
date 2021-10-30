@@ -27,7 +27,7 @@ public:
     PLASMA_DEPRECATED_VERSION(5, 6, "Use KPackage API")
     explicit PackageStructure(QObject *parent = nullptr, const QVariantList &args = QVariantList());
 
-    ~PackageStructure();
+    ~PackageStructure() override;
 
     /**
      * Called when a the PackageStructure should initialize a Package with the initial

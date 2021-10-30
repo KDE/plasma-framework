@@ -36,7 +36,7 @@ class PLASMA_EXPORT Corona : public QObject
 
 public:
     explicit Corona(QObject *parent = nullptr);
-    ~Corona();
+    ~Corona() override;
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
     /**

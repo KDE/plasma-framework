@@ -30,7 +30,7 @@ class QRangeModel : public QObject
 
 public:
     explicit QRangeModel(QObject *parent = nullptr);
-    virtual ~QRangeModel();
+    ~QRangeModel() override;
 
     void setRange(qreal min, qreal max);
     void setPositionRange(qreal min, qreal max);

@@ -34,7 +34,7 @@ class IconDialog : public QObject
 
 public:
     explicit IconDialog(QObject *parent = nullptr);
-    ~IconDialog();
+    ~IconDialog() override;
 
     Q_INVOKABLE QString openDialog();
     Q_INVOKABLE void closeDialog();

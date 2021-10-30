@@ -164,7 +164,7 @@ class Units : public QObject
 public:
     /// @cond INTERNAL_DOCS
 
-    ~Units();
+    ~Units() override;
 
     /**
      * @return a reference to the global Units instance

@@ -22,7 +22,7 @@ public:
      * Ownership of the textures is transferred to the node
      */
     FadingNode(QSGTexture *source, QSGTexture *target);
-    ~FadingNode();
+    ~FadingNode() override;
 
     /**
      * Set the progress fading between source and target

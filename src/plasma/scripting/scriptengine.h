@@ -37,7 +37,7 @@ class PLASMA_EXPORT ScriptEngine : public QObject
     Q_OBJECT
 
 public:
-    ~ScriptEngine();
+    ~ScriptEngine() override;
 
     /**
      * Called when it is safe to initialize the internal state of the engine

@@ -37,7 +37,7 @@ public:
     };
 
     explicit DaysModel(QObject *parent = nullptr);
-    virtual ~DaysModel();
+    ~DaysModel() override;
     void setSourceData(QList<DayData> *data);
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

@@ -23,7 +23,7 @@ class PluginTest : public QApplication
 
 public:
     PluginTest(int &argc, char **argv, QCommandLineParser *parser);
-    virtual ~PluginTest();
+    ~PluginTest() override;
 
 public Q_SLOTS:
     void runMain();

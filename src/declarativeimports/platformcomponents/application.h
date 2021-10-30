@@ -40,7 +40,7 @@ class Application : public QObject
 
 public:
     explicit Application(QObject *parent = nullptr);
-    ~Application();
+    ~Application() override;
 
     QString application() const;
     bool running() const;

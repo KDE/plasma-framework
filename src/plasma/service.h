@@ -86,7 +86,7 @@ public:
     /**
      * Destructor
      */
-    ~Service();
+    ~Service() override;
 
     /**
      * Sets the destination for this Service to operate on

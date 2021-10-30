@@ -194,7 +194,7 @@ public:
 
     /// @cond INTERNAL_DOCS
     FrameSvgItem(QQuickItem *parent = nullptr);
-    ~FrameSvgItem();
+    ~FrameSvgItem() override;
 
     void setImagePath(const QString &path);
     QString imagePath() const;

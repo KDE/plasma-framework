@@ -28,7 +28,7 @@ class DropMenu : public QObject
 
 public:
     DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent = nullptr);
-    ~DropMenu();
+    ~DropMenu() override;
 
     QList<QUrl> urls() const;
     QPoint dropPoint() const;

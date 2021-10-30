@@ -82,7 +82,7 @@ class QuickTheme : public Plasma::Theme
 
 public:
     explicit QuickTheme(QObject *parent = nullptr);
-    ~QuickTheme();
+    ~QuickTheme() override;
 
     /**
      * @return The theme's colorscheme's text color

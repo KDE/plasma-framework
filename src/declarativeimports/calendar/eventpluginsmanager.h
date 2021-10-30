@@ -27,7 +27,7 @@ class EventPluginsManager : public QObject
 
 public:
     explicit EventPluginsManager(QObject *parent = nullptr);
-    ~EventPluginsManager();
+    ~EventPluginsManager() override;
 
     QList<CalendarEvents::CalendarEventsPlugin *> plugins() const;
     QAbstractListModel *pluginsModel() const;

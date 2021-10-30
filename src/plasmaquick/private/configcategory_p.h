@@ -36,7 +36,7 @@ class ConfigCategory : public QObject
 
 public:
     ConfigCategory(QObject *parent = nullptr);
-    ~ConfigCategory();
+    ~ConfigCategory() override;
 
     QString name() const;
     void setName(const QString &name);

@@ -192,7 +192,7 @@ public:
         }
     }
 
-    ~SvgSource()
+    ~SvgSource() override
     {
         if (m_svgIcon) {
             // the parent IconItem can outlive this IconItemSource, so delete our Plasma::Svg object

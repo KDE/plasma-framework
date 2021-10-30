@@ -96,7 +96,7 @@ public:
      */
     explicit Theme(const QString &themeName, QObject *parent = nullptr);
 
-    ~Theme();
+    ~Theme() override;
 
     /**
      * Sets the current theme being used.

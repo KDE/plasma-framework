@@ -22,7 +22,7 @@ class DPITest : public QGuiApplication
 
 public:
     DPITest(int &argc, char **argv, QCommandLineParser *parser);
-    virtual ~DPITest();
+    ~DPITest() override;
 
 public Q_SLOTS:
     void runMain();

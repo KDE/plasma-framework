@@ -41,7 +41,7 @@ class ServiceOperationStatus : public QObject
 
 public:
     explicit ServiceOperationStatus(QObject *parent = nullptr);
-    ~ServiceOperationStatus();
+    ~ServiceOperationStatus() override;
 
     void setService(Plasma::Service *service);
     Plasma::Service *service() const;

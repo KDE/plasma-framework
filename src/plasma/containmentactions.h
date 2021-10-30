@@ -47,7 +47,7 @@ public:
      */
     explicit ContainmentActions(QObject *parent = nullptr);
 
-    ~ContainmentActions();
+    ~ContainmentActions() override;
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
     /**

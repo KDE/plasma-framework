@@ -184,7 +184,7 @@ class DataModel : public QAbstractItemModel
 
 public:
     DataModel(QObject *parent = nullptr);
-    ~DataModel();
+    ~DataModel() override;
 
     void setDataSource(QObject *source);
     QObject *dataSource() const;

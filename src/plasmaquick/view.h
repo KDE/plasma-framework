@@ -47,7 +47,7 @@ public:
      **/
     PLASMAQUICK_DEPRECATED_VERSION(5, 12, "Use ContainmentView")
     explicit View(Plasma::Corona *corona, QWindow *parent = nullptr);
-    virtual ~View();
+    ~View() override;
 
     /**
      * @return the corona of this view
