@@ -36,7 +36,8 @@ macro(plasma_install_package dir component)
    kpackage_install_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR} NO_DEPRECATED_WARNING)
 
    # TODO KF6 Remove
-   if (EXISTS ${dir}/metadata.desktop)
+   get_filename_component(metadata_desktop_file_absolute_path ${dir}/metadata.desktop REALPATH)
+   if (EXISTS ${metadata_desktop_file_absolute_path})
       install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
    endif()
 endmacro()
@@ -71,7 +72,8 @@ macro(plasma_install_bundled_package dir component)
    kpackage_install_bundled_package(${dir} ${component} ${root} ${PLASMA_RELATIVE_DATA_INSTALL_DIR})
 
    # TODO KF6 Remove
-   if (EXISTS ${dir}/metadata.desktop)
+   get_filename_component(metadata_desktop_file_absolute_path ${dir}/metadata.desktop REALPATH)
+   if (EXISTS ${metadata_desktop_file_absolute_path})
       install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
    endif()
 endmacro()
