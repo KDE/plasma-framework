@@ -36,7 +36,7 @@
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
 {
-    std::array<uint, 10> parts = {::qHash(id.width),
+    std::array<uint, 11> parts = {::qHash(id.width),
                                   ::qHash(id.height),
                                   ::qHash(id.elementName),
                                   ::qHash(id.filePath),
@@ -44,8 +44,26 @@ uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
                                   ::qHash(id.devicePixelRatio),
                                   ::qHash(id.scaleFactor),
                                   ::qHash(id.colorGroup),
+                                  ::qHash(id.themeKey),
                                   ::qHash(id.extraFlags),
                                   ::qHash(id.lastModified)};
+    return qHashRange(parts.begin(), parts.end(), seed);
+}
+
+uint qHash(const QColor &col, uint seed)
+{
+    std::array<uint, 3> parts = {::qHash(col.red()),
+                                 ::qHash(col.green()),
+                                 ::qHash(col.blue())};
+    return qHashRange(parts.begin(), parts.end(), seed);
+}
+
+uint qHash(Plasma::Theme *theme, Plasma::Theme::ColorGroup grp, uint seed)
+{
+    std::array<uint, 12> parts;
+    for (int role = 0; role < 12; ++role) {
+        parts[role] = ::qHash(theme->color(Plasma::Theme::ColorRole(role), grp), seed);
+    }
     return qHashRange(parts.begin(), parts.end(), seed);
 }
 
@@ -385,13 +403,13 @@ SvgPrivate::~SvgPrivate()
 SvgPrivate::CacheId SvgPrivate::cacheId(const QString &elementId) const
 {
     auto idSize = size.isValid() && size != naturalSize ? size : QSizeF{-1.0, -1.0};
-    return CacheId{idSize.width(), idSize.height(), path, elementId, status, devicePixelRatio, scaleFactor, -1, 0, lastModified};
+    return CacheId{idSize.width(), idSize.height(), path, elementId, status, devicePixelRatio, scaleFactor, -1, -1, 0, lastModified};
 }
 
 // This function is meant for the pixmap cache
 QString SvgPrivate::cachePath(const QString &id, const QSize &size) const
 {
-    auto cacheId = CacheId{double(size.width()), double(size.height()), path, id, status, devicePixelRatio, scaleFactor, colorGroup, 0, lastModified};
+    auto cacheId = CacheId{double(size.width()), double(size.height()), path, id, status, devicePixelRatio, scaleFactor, colorGroup, qHash(const_cast<SvgPrivate *>(this)->actualTheme(), colorGroup, SvgRectsCache::s_seed), 0, lastModified};
     return QString::number(qHash(cacheId, SvgRectsCache::s_seed));
 }
 
@@ -651,7 +669,7 @@ void SvgPrivate::createRenderer()
                 originalId.replace(sizeHintedKeyExpr, QStringLiteral("\\3"));
                 SvgRectsCache::instance()->insertSizeHintForId(path, originalId, elementRect.size().toSize());
 
-                const CacheId cacheId({-1.0, -1.0, path, elementId, status, devicePixelRatio, scaleFactor, -1, 0, lastModified});
+                const CacheId cacheId({-1.0, -1.0, path, elementId, status, devicePixelRatio, scaleFactor, -1, -1, 0, lastModified});
                 SvgRectsCache::instance()->insert(cacheId, elementRect, lastModified);
             }
         }
