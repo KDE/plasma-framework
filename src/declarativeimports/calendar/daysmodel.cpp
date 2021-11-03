@@ -8,7 +8,6 @@
 
 #include "daysmodel.h"
 #include "eventdatadecorator.h"
-#include "eventpluginsmanager.h"
 
 #include <QByteArray>
 #include <QDebug>
