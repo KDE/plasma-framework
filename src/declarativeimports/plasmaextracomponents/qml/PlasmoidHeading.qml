@@ -69,9 +69,7 @@ T.ToolBar {
         PlasmaCore.ColorScope.inherit: false
 
         enabledBorders: {
-            let borders = 0
-            borders |= PlasmaCore.FrameSvg.LeftBorder;
-            borders |= PlasmaCore.FrameSvg.RightBorder;
+            let borders = PlasmaCore.FrameSvg.LeftBorder | PlasmaCore.FrameSvg.RightBorder;
             if (plasmoid.position !== PlasmaCore.Types.TopEdge || position !== T.ToolBar.Header) {
                 borders |= PlasmaCore.FrameSvg.TopBorder;
             }
