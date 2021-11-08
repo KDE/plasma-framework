@@ -63,22 +63,22 @@ import "private" as Private
         id: headingSvg
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
-        prefix: position === T.ToolBar.Header ? 'header' : 'footer'
+        prefix: position === T.ToolBar.Header ? "header" : "footer"
 
         colorGroup: control.PlasmaCore.ColorScope.colorGroup
         PlasmaCore.ColorScope.inherit: false
 
         enabledBorders: {
-            var borders = 0
-            borders |= PlasmaCore.FrameSvg.LeftBorder
-            borders |= PlasmaCore.FrameSvg.RightBorder
+            let borders = 0
+            borders |= PlasmaCore.FrameSvg.LeftBorder;
+            borders |= PlasmaCore.FrameSvg.RightBorder;
             if (plasmoid.position !== PlasmaCore.Types.TopEdge || position !== T.ToolBar.Header) {
-                borders |= PlasmaCore.FrameSvg.TopBorder
+                borders |= PlasmaCore.FrameSvg.TopBorder;
             }
             if (plasmoid.position !== PlasmaCore.Types.BottomEdge || position !== T.ToolBar.Footer) {
-                borders |= PlasmaCore.FrameSvg.BottomBorder
+                borders |= PlasmaCore.FrameSvg.BottomBorder;
             }
-            return borders
+            return borders;
         }
         Private.BackgroundMetrics {
             id: backgroundMetrics
