@@ -13,14 +13,14 @@ import "private" as Private
 
  /**
   * Item to be used as a header or footer in plasmoids
-  * 
+  *
   * @inherit QtQuick.Templates.ToolBar
   */
  T.ToolBar {
     id: control
      /**
       * Possible positions of the heading element
-      * 
+      *
       * @deprecated since 5.85
       */
     enum Location {
@@ -36,9 +36,9 @@ import "private" as Private
 
     /**
      * location: int
-     * 
+     *
      * Indicates the position of the heading. The default is PlasmoidHeading.Location.Header.
-     * 
+     *
      * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar instead
      */
     property int location: PlasmoidHeading.Location.Header
