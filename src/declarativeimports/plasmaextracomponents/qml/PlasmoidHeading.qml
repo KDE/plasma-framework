@@ -45,25 +45,25 @@ import "private" as Private
     position: location
 
     Layout.fillWidth: true
-    bottomPadding: position == T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
-    topPadding: position == T.ToolBar.Footer ? -backgroundMetrics.getMargin("top") : 0
+    bottomPadding: position === T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
+    topPadding: position === T.ToolBar.Footer ? -backgroundMetrics.getMargin("top") : 0
 
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
 
     leftInset: backgroundMetrics.getMargin("left")
     rightInset: backgroundMetrics.getMargin("right")
-    topInset: position == T.ToolBar.Footer ? 0 : backgroundMetrics.getMargin("top")
-    bottomInset: position == T.ToolBar.Footer ? backgroundMetrics.getMargin("bottom") : 0
+    topInset: position === T.ToolBar.Footer ? 0 : backgroundMetrics.getMargin("top")
+    bottomInset: position === T.ToolBar.Footer ? backgroundMetrics.getMargin("bottom") : 0
 
-    PlasmaCore.ColorScope.colorGroup: position == T.ToolBar.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
+    PlasmaCore.ColorScope.colorGroup: position === T.ToolBar.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
     PlasmaCore.ColorScope.inherit: false
 
     background: PlasmaCore.FrameSvgItem {
         id: headingSvg
         visible: fromCurrentTheme
         imagePath: "widgets/plasmoidheading"
-        prefix: position == T.ToolBar.Header ? 'header' : 'footer'
+        prefix: position === T.ToolBar.Header ? 'header' : 'footer'
 
         colorGroup: control.PlasmaCore.ColorScope.colorGroup
         PlasmaCore.ColorScope.inherit: false
@@ -72,10 +72,10 @@ import "private" as Private
             var borders = 0
             borders |= PlasmaCore.FrameSvg.LeftBorder
             borders |= PlasmaCore.FrameSvg.RightBorder
-            if (plasmoid.position !== PlasmaCore.Types.TopEdge || position != T.ToolBar.Header) {
+            if (plasmoid.position !== PlasmaCore.Types.TopEdge || position !== T.ToolBar.Header) {
                 borders |= PlasmaCore.FrameSvg.TopBorder
             }
-            if (plasmoid.position !== PlasmaCore.Types.BottomEdge || position != T.ToolBar.Footer) {
+            if (plasmoid.position !== PlasmaCore.Types.BottomEdge || position !== T.ToolBar.Footer) {
                 borders |= PlasmaCore.FrameSvg.BottomBorder
             }
             return borders
