@@ -736,6 +736,13 @@ void DialogPrivate::applyType()
         if (!wmType) {
             KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
         }
+#if HAVE_KWAYLAND
+        if (type == Dialog::OnScreenDisplay) {
+            if (shellSurface) {
+                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::OnScreenDisplay);
+            }
+        }
+#endif
     } else {
         q->setFlags(Qt::FramelessWindowHint | q->flags());
 
