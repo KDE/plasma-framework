@@ -11,18 +11,18 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import QtQuick.Templates 2.12 as T
 import "private" as Private
 
- /**
-  * Item to be used as a header or footer in plasmoids
-  *
-  * @inherit QtQuick.Templates.ToolBar
-  */
- T.ToolBar {
+/**
+ * Item to be used as a header or footer in plasmoids
+ *
+ * @inherit QtQuick.Templates.ToolBar
+ */
+T.ToolBar {
     id: control
-     /**
-      * Possible positions of the heading element
-      *
-      * @deprecated since 5.85
-      */
+    /**
+     * Possible positions of the heading element
+     *
+     * @deprecated since 5.85
+     */
     enum Location {
         /**
          * Indicates that it's used as a header of the plasmoid, touching the top border
@@ -91,4 +91,4 @@ import "private" as Private
             }
         }
     }
- }
+}
