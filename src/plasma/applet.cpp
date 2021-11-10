@@ -225,18 +225,6 @@ void Applet::restore(KConfigGroup &group)
                  */
     }
 
-    // local shortcut, if any
-    // TODO: implement; the shortcut will need to be registered with the containment
-    /*
-    #include "accessmanager.h"
-    #include "authorizationmanager.h"
-    #include "private/plasmoidservice_p.h"
-    shortcutText = shortcutConfig.readEntryUntranslated("local", QString());
-    if (!shortcutText.isEmpty()) {
-        //TODO: implement; the shortcut
-    }
-    */
-
     // User background hints
     // TODO support flags in the config
     QByteArray hintsString = config().readEntry("UserBackgroundHints", QString()).toUtf8();
