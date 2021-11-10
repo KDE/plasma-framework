@@ -237,14 +237,19 @@ void DialogPrivate::updateTheme()
             frameSvgItem->setImagePath(prefix + QStringLiteral("dialogs/background"));
         }
 
-        KWindowEffects::enableBlurBehind(q, theme.blurBehindEnabled(), frameSvgItem->mask());
+        // This makes the mask slightly maller than the frame. Since the svg will have antialiasing and the mask not,
+        // there will be artifacts at the corners, if they go under the svg they're less evident
+        frameSvgItem->frameSvg()->resizeFrame(q->size() - QSize(2,2));
+        const QRegion mask = frameSvgItem->frameSvg()->mask().translated(1,1);
+        KWindowEffects::enableBlurBehind(q, theme.blurBehindEnabled(), mask);
 
         KWindowEffects::enableBackgroundContrast(q,
                                                  theme.backgroundContrastEnabled(),
                                                  theme.backgroundContrast(),
                                                  theme.backgroundIntensity(),
                                                  theme.backgroundSaturation(),
-                                                 frameSvgItem->mask());
+                                                 mask);
+        frameSvgItem->frameSvg()->resizeFrame(q->size());
 
         if (KWindowSystem::compositingActive()) {
             if (hasMask) {
