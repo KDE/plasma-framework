@@ -19,6 +19,10 @@ class ContainmentActions;
 class DataEngine;
 class Service;
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
+class Package; // FWD class so that excluding deprecated API does not cause an unknown type
+#endif
+
 class PluginLoaderPrivate;
 
 // TODO:
