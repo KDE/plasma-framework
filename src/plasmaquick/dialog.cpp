@@ -742,9 +742,25 @@ void DialogPrivate::applyType()
             KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
         }
 #if HAVE_KWAYLAND
-        if (type == Dialog::OnScreenDisplay) {
-            if (shellSurface) {
+        if (shellSurface) {
+            switch (type) {
+                case Dialog::Dock:
+                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Panel);
+                break;
+            case Dialog::Tooltip:
+                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::ToolTip);
+                break;
+            case Dialog::Notification:
+                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Notification);
+                break;
+            case Dialog::OnScreenDisplay:
                 shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::OnScreenDisplay);
+                break;
+            case Dialog::CriticalNotification:
+                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::CriticalNotification);
+                break;
+            default:
+                break;
             }
         }
 #endif
