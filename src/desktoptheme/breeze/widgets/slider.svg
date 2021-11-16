@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg id="svg2" height="128" style="" width="128" sodipodi:version="0.32" inkscape:version="1.2-dev (942b66973d, 2021-09-28, custom)" sodipodi:docname="slider.svg" inkscape:output_extension="org.inkscape.output.svgz.inkscape" inkscape:export-filename="arrow-up.png" inkscape:export-xdpi="11.25" inkscape:export-ydpi="11.25" version="1.1" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+<svg id="svg2" height="128" style="" width="128" sodipodi:version="0.32" inkscape:version="1.2-dev (0ee976412b, 2021-10-22, custom)" sodipodi:docname="slider.svg" inkscape:output_extension="org.inkscape.output.svgz.inkscape" inkscape:export-filename="arrow-up.png" inkscape:export-xdpi="11.25" inkscape:export-ydpi="11.25" version="1.1" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
     <defs id="defs107">
+        <linearGradient inkscape:collect="always" id="shadow">
+            <stop id="stop0" offset="0" style="stop-color:#000;stop-opacity:1" />
+            <stop id="stop1" offset="0.7391304374" style="stop-color:#000;stop-opacity:.2" />
+            <stop id="stop2" offset="0.8260869384" style="stop-color:#000;stop-opacity:.1" />
+            <stop id="stop3" offset="0.8695651889" style="stop-color:#000;stop-opacity:.05" />
+            <stop id="stop4" offset="1" style="stop-color:#000;stop-opacity:0" />
+        </linearGradient>
         <style id="current-color-scheme" type="text/css">
             .ColorScheme-Text {
                 color:#232629;
@@ -25,22 +32,8 @@
                 stop-color:#eff0f1;
             }
         </style>
-        <radialGradient inkscape:collect="always" xlink:href="#radialGradient9111-3" id="radialGradient1359" cx="108" cy="75" fx="108" fy="75" r="12" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.68488443284e-12,0.958333333333,-0.958333333333,2.69521037433e-12,179.875,7.9999999998)" />
-        <radialGradient id="radialGradient9111-3" gradientUnits="userSpaceOnUse" inkscape:collect="always">
-            <stop id="stop0-6" offset="0" style="stop-color:#000;stop-opacity:1" />
-            <stop id="stop1-7" offset="0.7391304374" style="stop-color:#000;stop-opacity:.2" />
-            <stop id="stop2-5" offset="0.8260869384" style="stop-color:#000;stop-opacity:.1" />
-            <stop id="stop3-3" offset="0.8695651889" style="stop-color:#000;stop-opacity:.05" />
-            <stop id="stop4-5" offset="1" style="stop-color:#000;stop-opacity:0" />
-        </radialGradient>
-        <radialGradient inkscape:collect="always" xlink:href="#radialGradient9111-3-2" id="radialGradient1359-6" cx="108" cy="75" fx="108" fy="75" r="12" gradientUnits="userSpaceOnUse" gradientTransform="matrix(2.68488443284e-12,0.958333333333,-0.958333333333,2.69521037433e-12,179.875,7.9999999998)" />
-        <radialGradient id="radialGradient9111-3-2" gradientUnits="userSpaceOnUse" inkscape:collect="always">
-            <stop id="stop0-6-9" offset="0" style="stop-color:#000;stop-opacity:1" />
-            <stop id="stop1-7-1" offset="0.7391304374" style="stop-color:#000;stop-opacity:.2" />
-            <stop id="stop2-5-2" offset="0.8260869384" style="stop-color:#000;stop-opacity:.1" />
-            <stop id="stop3-3-7" offset="0.8695651889" style="stop-color:#000;stop-opacity:.05" />
-            <stop id="stop4-5-0" offset="1" style="stop-color:#000;stop-opacity:0" />
-        </radialGradient>
+        <radialGradient inkscape:collect="always" xlink:href="#shadow" id="radialGradient1667" cx="108" cy="111.5" fx="108" fy="111.5" r="11.5" gradientUnits="userSpaceOnUse" />
+        <radialGradient inkscape:collect="always" xlink:href="#shadow" id="radialGradient1675" cx="108" cy="111.5" fx="108" fy="111.5" r="11.5" gradientUnits="userSpaceOnUse" />
     </defs>
     <sodipodi:namedview id="namedview105" pagecolor="#ffffff" bordercolor="#111111" borderopacity="1" inkscape:pageshadow="0" inkscape:pageopacity="0" inkscape:pagecheckerboard="1" inkscape:blackoutopacity="0.0" showgrid="true" inkscape:current-layer="layer1">
         <inkscape:grid type="xygrid" id="grid1133" />
@@ -69,9 +62,9 @@
             <circle id="path3926" cx="16" cy="39" r="8.33333301544" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
             <path id="path3924" d="m 17 64 a 9.99999984 9.99999984 0 0 0 -10 10 a 9.99999984 9.99999984 0 0 0 10 10 a 9.99999984 9.99999984 0 0 0 10 -10 a 9.99999984 9.99999984 0 0 0 -10 -10 z m 0 1 a 9 9 0 0 1 9 9 a 9 9 0 0 1 -9 9 a 9 9 0 0 1 -9 -9 a 9 9 0 0 1 9 -9 z" style="opacity:.3;fill:currentColor" class="ColorScheme-ButtonText" transform="matrix(.83333333333 0 0 .83333333333 1.83333333333 -22.6666666667)" />
         </g>
-        <g id="vertical-slider-shadow" style="" transform="translate(0 -36)">
+        <g id="vertical-slider-shadow" transform="translate(0 -36)" style="">
             <rect id="rect3114-3" height="26" style="opacity:.00100002;fill:#000;fill-opacity:.00392157" width="26" x="95" y="97" />
-            <circle style="fill:url(#radialGradient1359);fill-opacity:1;fill-rule:evenodd" id="path1195" cx="108" cy="111.5" r="11.5" />
+            <circle style="fill:url(#radialGradient1667);fill-opacity:1;fill-rule:evenodd" id="path1195" cx="108" cy="111.5" r="11.5" />
         </g>
         <circle id="hint-handle-size" cx="52" cy="16" r="10" style="fill:#000;fill-opacity:1" />
         <g id="groove-top" style="" transform="translate(-17)">
@@ -164,7 +157,7 @@
         </g>
         <g id="horizontal-slider-shadow">
             <rect id="rect3114-3-3" height="26" style="opacity:0.00100002;fill:#000000;fill-opacity:0.00392157" width="26" x="95" y="97" />
-            <circle style="fill:url(#radialGradient1359-6);fill-opacity:1;fill-rule:evenodd" id="path1195-6" cx="108" cy="111.5" r="11.5" />
+            <circle style="fill:url(#radialGradient1675);fill-opacity:1.0;fill-rule:evenodd" id="path1195-6" cx="108" cy="111.5" r="11.5" />
         </g>
     </g>
 </svg>
