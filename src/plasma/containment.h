@@ -138,6 +138,10 @@ public:
      */
     int screen() const;
 
+    QString screenId() const;
+
+    void setScreenId(const QString &screenId);
+
     /**
      * @return the last screen number this containment had
      *         only returns -1 if it's never ever been on a screen
@@ -247,6 +251,8 @@ Q_SIGNALS:
      * @param newScreen the screen it is now associated with
      */
     void screenChanged(int newScreen);
+
+    void screenIdChanged(const QString &screen);
 
     /**
      * Emitted when the user wants to configure/change the containment, or an applet inside it.

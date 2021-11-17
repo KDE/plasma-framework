@@ -502,6 +502,22 @@ int Containment::lastScreen() const
     return d->lastScreen;
 }
 
+QString Containment::screenId() const
+{
+    return d->screenId;
+}
+
+void Containment::setScreenId(const QString &screenId)
+{
+    if (d->screenId == screenId) {
+        return;
+    }
+
+    d->screenId = screenId;
+
+    Q_EMIT screenIdChanged(screenId);
+}
+
 void Containment::setWallpaper(const QString &pluginName)
 {
     if (pluginName != d->wallpaper) {

@@ -77,6 +77,7 @@ public:
     QHash<QString, ContainmentActions *> localActionPlugins;
     int lastScreen;
     QString activityId;
+    QString screenId;
     Types::ContainmentType type;
     bool uiReady : 1;
     bool appletsUiReady : 1;
