@@ -1243,10 +1243,10 @@ bool Dialog::event(QEvent *event)
         // sometimes non null regions arrive even for non visible windows
         // for which surface creation would fail
         if (!d->shellSurface && isVisible()) {
-            const bool ret = QQuickWindow::event(event);
             KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
             d->setupWaylandIntegration();
             d->updateVisibility(true);
+            const bool ret = QQuickWindow::event(event);
             d->updateTheme();
             return ret;
         }
