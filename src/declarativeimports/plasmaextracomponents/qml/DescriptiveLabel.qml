@@ -34,7 +34,7 @@ Label {
     /*
      * If a user can interact with this item, for example in a ListView delegate, this
      * property should be set to true when the label is being interacted with.
-     * The default is false
+     * The default is false.
      */
     property bool active: false
 
