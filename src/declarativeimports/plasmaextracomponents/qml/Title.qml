@@ -28,8 +28,5 @@ import org.kde.plasma.components 2.0
  * properties, methods and signals.
  * @deprecated use org.kde.Kirigami.Heading instead
  */
-Label {
-    id: root
-    // Match size of level 1 Heading
-    font.pointSize: Math.round(PlasmaCore.Theme.defaultFont.pointSize * 1.35)
+Heading {
 }
