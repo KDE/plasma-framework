@@ -12,7 +12,7 @@ PlasmaCore.FrameSvgItem {
     id: backgroundMetrics
     visible: false
     imagePath: {
-        if (Window.window && (Window.window instanceof PlasmaCore.Dialog)) {
+        if (Window.window instanceof PlasmaCore.Dialog) {
             return "dialogs/background";
         } else if (plasmoid.formFactor === PlasmaCore.Types.Planar) {
             return "widgets/background";
