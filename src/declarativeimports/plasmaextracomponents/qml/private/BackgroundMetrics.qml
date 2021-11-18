@@ -14,7 +14,7 @@ PlasmaCore.FrameSvgItem {
     imagePath: {
         if (Window.window && (Window.window instanceof PlasmaCore.Dialog)) {
             return "dialogs/background";
-        } else if (plasmoid.formFactor == PlasmaCore.Types.Planar) {
+        } else if (plasmoid.formFactor === PlasmaCore.Types.Planar) {
             return "widgets/background";
         // panels and other formfactors are explicitly not supported
         } else {
