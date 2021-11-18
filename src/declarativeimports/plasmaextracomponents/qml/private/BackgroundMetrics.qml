@@ -22,4 +22,4 @@ PlasmaCore.FrameSvgItem {
         }
     }
     readonly property bool hasInset: backgroundMetrics.inset.left >= 0 && backgroundMetrics.inset.right >= 0 && backgroundMetrics.inset.top >= 0 && backgroundMetrics.inset.bottom >= 0
-} 
+}
