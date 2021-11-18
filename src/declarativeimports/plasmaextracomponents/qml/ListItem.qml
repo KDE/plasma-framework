@@ -55,7 +55,7 @@ Kirigami.AbstractListItem {
     }
 
     background: PlasmaCore.FrameSvgItem {
-        id : __background
+        id: __background
         imagePath: "widgets/listitem"
         prefix: (__listItem.sectionDelegate ? "section" :
                 (__listItem.pressed || __listItem.checked) ? "pressed" : "normal")

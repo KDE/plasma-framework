@@ -523,7 +523,7 @@ Item {
                 PlasmaComponents3.ToolButton {
                     id: expandToggleButton
                     visible: listItem.hasExpandableContent
-                    icon.name: expandedView.active? "collapse" : "expand"
+                    icon.name: expandedView.active ? "collapse" : "expand"
 
                     onClicked: listItem.toggleExpanded()
                 }
