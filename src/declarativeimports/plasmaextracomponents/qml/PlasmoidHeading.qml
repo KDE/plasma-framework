@@ -48,8 +48,10 @@ T.ToolBar {
     bottomPadding: position === T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
     topPadding: position === T.ToolBar.Footer ? -backgroundMetrics.getMargin("top") : 0
 
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
 
     leftInset: backgroundMetrics.getMargin("left")
     rightInset: backgroundMetrics.getMargin("right")
