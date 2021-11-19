@@ -170,9 +170,9 @@ Item {
         }
 
         if (initialPage) {
-            if (depth == 0) {
+            if (depth === 0) {
                 push(initialPage, null, true)
-            } else if (depth == 1) {
+            } else if (depth === 1) {
                 replace(initialPage, null, true)
             } else {
                 console.log("Cannot update PageStack.initialPage")
@@ -182,7 +182,7 @@ Item {
 
     Component.onCompleted: {
         internal.completed = true
-        if (initialPage && depth == 0)
+        if (initialPage && depth === 0)
             push(initialPage, null, true)
     }
 
@@ -198,11 +198,11 @@ Item {
         // Sets the page status.
         function setPageStatus(page, status)
         {
-            if (page != null) {
+            if (page !== null) {
                 if (page.status !== undefined) {
-                    if (status == PlasmaComponents.PageStatus.Active && page.status == PlasmaComponents.PageStatus.Inactive)
+                    if (status === PlasmaComponents.PageStatus.Active && page.status === PlasmaComponents.PageStatus.Inactive)
                         page.status = PlasmaComponents.PageStatus.Activating;
-                    else if (status == PlasmaComponents.PageStatus.Inactive && page.status == PlasmaComponents.PageStatus.Active)
+                    else if (status === PlasmaComponents.PageStatus.Inactive && page.status === PlasmaComponents.PageStatus.Active)
                         page.status = PlasmaComponents.PageStatus.Deactivating;
 
                     page.status = status;
@@ -259,7 +259,7 @@ Item {
 
             // Sets pending state as current if state change is delayed
             onTransitionAnimationRunningChanged: {
-                if (!transitionAnimationRunning && pendingState != "none") {
+                if (!transitionAnimationRunning && pendingState !== "none") {
                     state = pendingState;
                     pendingState = "none";
                 }
@@ -339,17 +339,17 @@ Item {
                 transitionAnimationRunning = true;
                 internal.ongoingTransitionCount++;
                 if (root.visible) {
-                    internal.setPageStatus(page, (state == "") ? PlasmaComponents.PageStatus.Activating : PlasmaComponents.PageStatus.Deactivating);
+                    internal.setPageStatus(page, (state === "") ? PlasmaComponents.PageStatus.Activating : PlasmaComponents.PageStatus.Deactivating);
                 }
             }
 
             // Called when a transition has ended.
             function transitionEnded()
             {
-                if (state != "")
+                if (state !== "")
                     state = "Hidden";
                 if (root.visible)
-                    internal.setPageStatus(page, (state == "") ? PlasmaComponents.PageStatus.Active : PlasmaComponents.PageStatus.Inactive);
+                    internal.setPageStatus(page, (state === "") ? PlasmaComponents.PageStatus.Active : PlasmaComponents.PageStatus.Inactive);
 
                 internal.ongoingTransitionCount--;
                 transitionAnimationRunning = false;
@@ -548,11 +548,11 @@ Item {
             // Cleans up the container and then destroys it.
             function cleanup()
             {
-                if (page != null) {
-                    if (page.status == PlasmaComponents.PageStatus.Active) {
+                if (page !== null) {
+                    if (page.status === PlasmaComponents.PageStatus.Active) {
                         internal.setPageStatus(page, PlasmaComponents.PageStatus.Inactive)
                     }
-                    if (owner != container) {
+                    if (owner !== container) {
                         // container is not the owner of the page - re-parent back to original owner
                         page.visible = false;
                         page.anchors.fill = undefined
