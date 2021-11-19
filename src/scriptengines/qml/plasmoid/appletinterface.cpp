@@ -757,6 +757,11 @@ QRect AppletInterface::availableScreenRect() const
 
     int screenId = screen();
 
+    // If corona returned an invalid screenId, try to use lastScreen value if it is valid
+    if (screenId == -1 && applet()->containment()->lastScreen() > -1) {
+        screenId = applet()->containment()->lastScreen();
+    }
+
     if (screenId > -1) {
         rect = applet()->containment()->corona()->availableScreenRect(screenId);
         // make it relative
