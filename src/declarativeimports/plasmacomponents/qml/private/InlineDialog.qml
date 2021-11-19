@@ -84,7 +84,7 @@ Item {
         }
         PlasmaCore.FrameSvgItem {
             id: internal
-            property variant parentPos
+            property point parentPos
             imagePath: fallbackComponent.svgPath
             property bool under: root.visualParent ? internal.parentPos.y + root.visualParent.height + height < dismissArea.height : true
             //bindings won't work inside anchors definition

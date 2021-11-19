@@ -336,8 +336,8 @@ Item {
         expandedView.active ? listItem.collapse() : listItem.expand()
     }
 
-    signal itemExpanded(variant item)
-    signal itemCollapsed(variant item)
+    signal itemExpanded(Item item)
+    signal itemCollapsed(Item item)
 
     width: parent.width // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height

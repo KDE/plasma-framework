@@ -29,7 +29,7 @@ PlasmaComponents.Dialog {
     property string titleIcon
 
     /** the texts of all the buttons */
-    property variant buttonTexts: []
+    property var buttonTexts: []
 
     /**
      * Emitted when the use clicks on a button

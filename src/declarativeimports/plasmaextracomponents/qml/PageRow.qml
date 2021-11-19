@@ -26,7 +26,7 @@ Item {
     property int depth: Engine.getDepth()
     property Item currentPage: null
     property ToolBar toolBar
-    property variant initialPage
+    property var initialPage
     //A column is wide enough for 30 characters
     property int columnWidth: Math.round(parent.width/(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width*30)) > 0 ? parent.width/Math.round(parent.width/(PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont).width*30)) : width
     property alias clip: scrollArea.clip

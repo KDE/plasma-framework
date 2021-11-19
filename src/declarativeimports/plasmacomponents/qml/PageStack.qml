@@ -58,7 +58,7 @@ Item {
      * The page to be automatically loaded when this PageStack component gets
      * instantiated.
      */
-    property variant initialPage
+    property var initialPage
 
     /** Indicates whether there is an ongoing page transition. */
     property bool busy: internal.ongoingTransitionCount > 0
@@ -83,7 +83,7 @@ Item {
      * only time this normally happens is when an application is starting up so
      * it is not appropriate to have a transition animation anyway.
      *
-     * @param type:variant page the page to push
+     * @param type:var page the page to push
      * @param type:dict properties optional argument to define a map of
      * properties to set on the page.
      * @param type:bool immediate set to true to disable transition animations
@@ -120,7 +120,7 @@ Item {
      * element, the page is re-parented. As in the pop() operation, the
      * replaced page on the stack is re-parented back to its original parent.
      *
-     * @param type:variant page the page to push
+     * @param type:var page the page to push
      * @param type:dict properties optional argument to define a map of
      * properties to set on the page.
      * @param type:bool immediate set to true to disable transition animations

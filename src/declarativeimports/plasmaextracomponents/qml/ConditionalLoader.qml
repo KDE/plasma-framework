@@ -24,7 +24,7 @@ FocusScope {
     property alias when: loader.when
 
     /**
-     * type:variant
+     * type:var
      * It can be a string with a path name of a qml file or a Component. It's
      * the component that will be loaded when "when" is true. If the component
      * changes the old instantiated component will be deleted and the new one
@@ -48,10 +48,10 @@ FocusScope {
         focus: true
 
         property bool when: false
-        property variant conditionalSource
+        property var conditionalSource
 
         //internal
-        property variant oldConditionalSource
+        property var oldConditionalSource
 
         onWhenChanged: loadTimer.restart()
         onConditionalSourceChanged: loadTimer.restart()

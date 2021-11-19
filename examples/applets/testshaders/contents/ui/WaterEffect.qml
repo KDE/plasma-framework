@@ -24,7 +24,7 @@ Item {
 
     ShaderEffect {
         anchors.fill: parent
-        property variant source: effectsource
+        property ShaderEffectSource source: effectsource
         property real f: 0
         property real f2: 0
         property real intensity: 1

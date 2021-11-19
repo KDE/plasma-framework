@@ -138,18 +138,18 @@ ShaderExample {
 
         ShaderEffect {
             anchors.fill: theItem
-            property variant source: theSource
-            property variant shadow: ShaderEffectSource {
+            property ShaderEffectSource source: theSource
+            property ShaderEffectSource shadow: ShaderEffectSource {
                 sourceItem: ShaderEffect {
                     width: theItem.width
                     height: theItem.height
-                    property variant delta: Qt.size(0.0, 1.0 / height)
-                    property variant source: ShaderEffectSource {
+                    property size delta: Qt.size(0.0, 1.0 / height)
+                    property ShaderEffectSource source: ShaderEffectSource {
                         sourceItem: ShaderEffect {
                             width: theItem.width
                             height: theItem.height
-                            property variant delta: Qt.size(1.0 / width, 0.0)
-                            property variant source: theSource
+                            property size delta: Qt.size(1.0 / width, 0.0)
+                            property ShaderEffectSource source: theSource
                             fragmentShader: "
                                 uniform lowp float qt_Opacity;
                                 uniform sampler2D source;
@@ -179,9 +179,9 @@ ShaderExample {
                 }
             }
             property real angle: 0
-            property variant offset: Qt.point(distanceSlider.value * Math.cos(angle), distanceSlider.value * Math.sin(angle))
+            property point offset: Qt.point(distanceSlider.value * Math.cos(angle), distanceSlider.value * Math.sin(angle))
             NumberAnimation on angle { loops: Animation.Infinite; from: 0; to: Math.PI * 2; duration: 6000 }
-            property variant delta: Qt.size(offset.x / width, offset.y / height)
+            property size delta: Qt.size(offset.x / width, offset.y / height)
             property real darkness: opacitySlider.value // Changeme
             fragmentShader: "
                 uniform lowp float qt_Opacity;

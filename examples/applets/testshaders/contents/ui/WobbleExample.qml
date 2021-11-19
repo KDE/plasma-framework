@@ -97,8 +97,8 @@ ShaderExample {
 
         anchors.fill: imageItem
         //property real time
-        property variant mouse
-        property variant resolution
+        property var mouse
+        property var resolution
 
         property int fadeDuration: 250
         property real amplitude: 0.04 * amplitudeSlider.value
@@ -106,7 +106,7 @@ ShaderExample {
         property real time: 10
         property int speed: (speedSlider.maximumValue - speedSlider.value + 1)
 
-        property variant source: ShaderEffectSource {
+        property ShaderEffectSource source: ShaderEffectSource {
             sourceItem: imageItem
             hideSource: true
         }
