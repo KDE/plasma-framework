@@ -744,7 +744,8 @@ void DialogPrivate::applyType()
 #if HAVE_KWAYLAND
         if (shellSurface) {
             switch (type) {
-                case Dialog::Dock:
+            case Dialog::Dock:
+            case Dialog::PopupMenu:
                 shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Panel);
                 break;
             case Dialog::Tooltip:
