@@ -179,7 +179,7 @@ Item {
             Row {
                 id: root
                 spacing: -100
-                width: Math.max((depth-1+children[children.length-1].takenColumns) * columnWidth, childrenRect.width - 100) 
+                width: Math.max((depth-1+children[children.length-1].takenColumns) * columnWidth, childrenRect.width - 100)
 
                 height: parent.height
                 Behavior on width {
