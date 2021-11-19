@@ -77,6 +77,11 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
      */
     Q_PROPERTY(QObject *rootItem READ rootItem CONSTANT)
 
+    /**
+     * True when the applet accept keyboard navigation, compact representation will set activeFocusOnTab to this value
+     */
+    Q_PROPERTY(bool keyboardActivationEnabled WRITE setKeyboardActivationEnabled READ isKeyboardActivationEnabled NOTIFY keyboardActivationEnabledChanged)
+
 public:
     AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
     ~AppletQuickItem() override;
@@ -126,6 +131,9 @@ public:
     bool isActivationTogglesExpanded() const;
     void setActivationTogglesExpanded(bool activationTogglesExpanded);
 
+    bool isKeyboardActivationEnabled() const;
+    void setKeyboardActivationEnabled(bool keyboardActivationEnabled);
+
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletQuickItem *qmlAttachedProperties(QObject *object);
 
@@ -135,6 +143,7 @@ Q_SIGNALS:
     void switchHeightChanged(int height);
 
     void expandedChanged(bool expanded);
+    void keyboardActivationEnabledChanged(bool keyboardActivationEnabled);
     void activationTogglesExpandedChanged(bool activationTogglesExpanded);
 
     void compactRepresentationChanged(QQmlComponent *compactRepresentation);

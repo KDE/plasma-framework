@@ -45,6 +45,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
     , expanded(false)
     , activationTogglesExpanded(true)
     , initComplete(false)
+    , keyboardActivationEnabled(false)
 {
     if (s_preloadPolicy == Uninitialized) {
         // default as Adaptive
@@ -928,6 +929,20 @@ void AppletQuickItem::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
+void AppletQuickItem::setKeyboardActivationEnabled(bool keyboardActivationEnabled)
+{
+    if (d->keyboardActivationEnabled == keyboardActivationEnabled) {
+        return;
+    }
+
+    d->keyboardActivationEnabled = keyboardActivationEnabled;
+    Q_EMIT keyboardActivationEnabledChanged(keyboardActivationEnabled);
+}
+
+bool AppletQuickItem::isKeyboardActivationEnabled() const
+{
+    return d->keyboardActivationEnabled;
+}
 }
 
 #include "moc_appletquickitem.cpp"
