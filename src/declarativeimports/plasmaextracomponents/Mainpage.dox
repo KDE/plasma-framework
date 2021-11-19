@@ -2,22 +2,22 @@
 
 <h2>import org.kde.plasma.extras</h2>
 
-- \link org::kde::plasma::plasmaextracomponents::App App \endlink
-- \link org::kde::plasma::plasmaextracomponents::PageRow PageRow \endlink
-- \link org::kde::plasma::plasmaextracomponents::ScrollArea ScrollArea \endlink
-- \link org::kde::plasma::plasmaextracomponents::FallbackComponent FallbackComponent \endlink
-- \link org::kde::plasma::plasmaextracomponents::ResourceInstance ResourceInstance \endlink
+- \link org::kde::plasma::extras::App App \endlink
+- \link org::kde::plasma::extras::PageRow PageRow \endlink
+- \link org::kde::plasma::extras::ScrollArea ScrollArea \endlink
+- \link org::kde::plasma::extras::FallbackComponent FallbackComponent \endlink
+- \link org::kde::plasma::extras::ResourceInstance ResourceInstance \endlink
 
 Text formatting
-- \link org::kde::plasma::plasmaextracomponents::Heading Heading \endlink
-- \link org::kde::plasma::plasmaextracomponents::Paragraph Paragraph \endlink
-- \link org::kde::plasma::plasmaextracomponents::Title Title \endlink
+- \link org::kde::plasma::extras::Heading Heading \endlink
+- \link org::kde::plasma::extras::Paragraph Paragraph \endlink
+- \link org::kde::plasma::extras::Title Title \endlink
 
 Animations
-- \link org::kde::plasma::plasmaextracomponents::ActivateAnimation ActivateAnimation \endlink
-- \link org::kde::plasma::plasmaextracomponents::AppearAnimation AppearAnimation \endlink
-- \link org::kde::plasma::plasmaextracomponents::PressedAnimation PressedAnimation \endlink
-- \link org::kde::plasma::plasmaextracomponents::ReleasedAnimation ReleasedAnimation \endlink
+- \link org::kde::plasma::extras::ActivateAnimation ActivateAnimation \endlink
+- \link org::kde::plasma::extras::AppearAnimation AppearAnimation \endlink
+- \link org::kde::plasma::extras::PressedAnimation PressedAnimation \endlink
+- \link org::kde::plasma::extras::ReleasedAnimation ReleasedAnimation \endlink
 
 */
 
