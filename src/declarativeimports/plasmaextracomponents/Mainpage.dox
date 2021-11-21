@@ -5,8 +5,7 @@
 - \link org::kde::plasma::extras::App App \endlink
 - \link org::kde::plasma::extras::PageRow PageRow \endlink
 - \link org::kde::plasma::extras::ScrollArea ScrollArea \endlink
-- \link org::kde::plasma::extras::FallbackComponent FallbackComponent \endlink
-- \link org::kde::plasma::extras::ResourceInstance ResourceInstance \endlink
+- \link FallbackComponent FallbackComponent \endlink
 
 Text formatting
 - \link org::kde::plasma::extras::Heading Heading \endlink
