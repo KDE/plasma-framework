@@ -21,7 +21,8 @@ T.ToolBar {
     /**
      * Possible positions of the heading element
      *
-     * @deprecated since 5.85
+     * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar and
+     *  its ToolBar.Header & ToolBar.Footer enum values instead
      */
     enum Location {
         /**
@@ -41,8 +42,7 @@ T.ToolBar {
      *
      * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar instead
      */
-    property int location: PlasmoidHeading.Location.Header
-    position: location
+    property alias location: control.position
 
     Layout.fillWidth: true
     bottomPadding: position === T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
