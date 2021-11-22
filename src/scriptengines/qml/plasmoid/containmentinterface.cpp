@@ -74,10 +74,6 @@ void ContainmentInterface::init()
     connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentInterface::activityNameChanged);
     Q_EMIT activityNameChanged();
 
-    if (!m_containment->wallpaper().isEmpty()) {
-        loadWallpaper();
-    }
-
     AppletInterface::init();
 
     // Create the ToolBox
@@ -1160,6 +1156,21 @@ bool ContainmentInterface::isLoading() const
         loading |= m_wallpaperInterface->isLoading();
     }
     return loading;
+}
+
+void ContainmentInterface::itemChange(ItemChange change, const ItemChangeData &value)
+{
+    if (change == QQuickItem::ItemSceneChange) {
+        // we have a window: create the representations if needed
+        if (value.window && !m_containment->wallpaper().isEmpty()) {
+            loadWallpaper();
+        } else if (m_wallpaperInterface) {
+            m_wallpaperInterface->deleteLater();
+            m_wallpaperInterface = nullptr;
+        }
+    }
+
+    AppletInterface::itemChange(change, value);
 }
 
 #include "moc_containmentinterface.cpp"

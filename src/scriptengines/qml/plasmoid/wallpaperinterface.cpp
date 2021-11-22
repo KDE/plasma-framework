@@ -157,8 +157,11 @@ void WallpaperInterface::loadFinished()
     if (m_qmlObject->mainComponent() //
         && m_qmlObject->rootObject() //
         && !m_qmlObject->mainComponent()->isError()) {
-        m_qmlObject->rootObject()->setProperty("z", -1000);
-        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
+        QQuickItem *item = qobject_cast<QQuickItem *>(m_qmlObject->rootObject());
+        if (item) {
+            item->setZ(-1000);
+            item->setParentItem(this);
+        }
 
         // set anchors
         QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), QStringLiteral("parent"));

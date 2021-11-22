@@ -62,6 +62,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
         QObject::disconnect(containment, nullptr, q, nullptr);
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (auto item = qobject_cast<QQuickItem *>(oldGraphicObject)) {
+            item->setParentItem(nullptr); //if we changed containment, unlink it from the views
             item->setVisible(false);
         }
         containment->reactToScreenChange();
@@ -111,7 +112,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
+    QQuickItem *graphicObject = containment->property("_plasma_graphicObject").value<QQuickItem *>();
 
     if (graphicObject) {
         //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
@@ -122,9 +123,10 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
         graphicObject->setParentItem(q->rootObject());
         if (q->rootObject()) {
             q->rootObject()->setProperty("containment", QVariant::fromValue(graphicObject));
-            QObject *wpGraphicObject = containment->property("wallpaperGraphicsObject").value<QObject *>();
+            QQuickItem *wpGraphicObject = containment->property("wallpaperGraphicsObject").value<QQuickItem *>();
             if (wpGraphicObject) {
                 q->rootObject()->setProperty("wallpaper", QVariant::fromValue(wpGraphicObject));
+                wpGraphicObject->setVisible(true);
             }
         } else {
             qWarning() << "Could not set containment property on rootObject";
@@ -220,6 +222,16 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
 ContainmentView::~ContainmentView()
 {
     delete d;
+}
+
+void ContainmentView::destroy()
+{
+    QObject *graphicObject = d->containment->property("_plasma_graphicObject").value<QObject *>();
+    if (auto item = qobject_cast<QQuickItem *>(graphicObject)) {
+        item->setParentItem(nullptr); // First, remove the item from the view
+        item->setVisible(false);
+    }
+    deleteLater(); // delete the view
 }
 
 Plasma::Corona *ContainmentView::corona() const

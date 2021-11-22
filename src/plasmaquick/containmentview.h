@@ -43,6 +43,8 @@ public:
     explicit ContainmentView(Plasma::Corona *corona, QWindow *parent = nullptr);
     ~ContainmentView() override;
 
+    void destroy();
+
     /**
      * @return the corona of this view
      **/
