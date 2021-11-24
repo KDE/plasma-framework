@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.15
+import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
@@ -19,12 +19,9 @@ T.TextArea {
     implicitWidth: Math.max(contentWidth + leftPadding + rightPadding,
                             background ? background.implicitWidth : 0,
                             placeholder.implicitWidth + leftPadding + rightPadding)
-    Binding on implicitHeight {
-        value: Math.max(contentHeight + topPadding + bottomPadding,
-                        background ? background.implicitHeight : 0,
-                        placeholder.implicitHeight + topPadding + bottomPadding)
-        delayed: true // Fix binding loop warnings (BUG 445459)
-    }
+    implicitHeight: Math.max(contentHeight + topPadding + bottomPadding,
+                             background ? background.implicitHeight : 0,
+                             placeholder.implicitHeight + topPadding + bottomPadding)
 
     padding: 6
 
