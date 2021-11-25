@@ -336,6 +336,14 @@ void AppletQuickItemPrivate::preloadForExpansion()
     qCDebug(LOG_PLASMAQUICK) << "Applet" << applet->title() << "loaded after" << (QDateTime::currentMSecsSinceEpoch() - time) << "msec";
 }
 
+void AppletQuickItemPrivate::anchorsFillParent(QQuickItem *item)
+{
+    // just set once, don't bind
+    QQmlProperty prop(item, QStringLiteral("anchors.fill"));
+    QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, QStringLiteral("parent"));
+    prop.write(expr.evaluate());
+}
+
 void AppletQuickItemPrivate::compactRepresentationCheck()
 {
     if (!initComplete) {
@@ -371,12 +379,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             }
 
             item->setParentItem(q);
-            {
-                // set anchors
-                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), item, QStringLiteral("parent"));
-                QQmlProperty prop(item, QStringLiteral("anchors.fill"));
-                prop.write(expr.evaluate());
-            }
+            anchorsFillParent(item);
 
             if (compactRepresentationItem) {
                 compactRepresentationItem->setVisible(false);
@@ -384,12 +387,13 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
 
             currentRepresentationItem = item;
             connectLayoutAttached(item);
+
             expanded = true;
             Q_EMIT q->expandedChanged(true);
         }
 
-        // Icon
     } else {
+        // Icon
         QQuickItem *compactItem = createCompactRepresentationItem();
         QQuickItem *compactExpanderItem = createCompactRepresentationExpanderItem();
 
@@ -398,12 +402,7 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             compactItem->setVisible(true);
             compactExpanderItem->setParentItem(q);
             compactExpanderItem->setVisible(true);
-            {
-                // set anchors
-                QQmlExpression expr(QtQml::qmlContext(qmlObject->rootObject()), compactExpanderItem, QStringLiteral("parent"));
-                QQmlProperty prop(compactExpanderItem, QStringLiteral("anchors.fill"));
-                prop.write(expr.evaluate());
-            }
+            anchorsFillParent(compactExpanderItem);
 
             if (fullRepresentationItem) {
                 fullRepresentationItem->setProperty("parent", QVariant());

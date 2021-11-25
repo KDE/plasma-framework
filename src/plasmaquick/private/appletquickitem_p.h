@@ -77,6 +77,7 @@ public:
     void propagateSizeHint(const QByteArray &layoutProperty);
 
     // handlers of Layout signals, private slots
+    void anchorsFillParent(QQuickItem *item);
     void compactRepresentationCheck();
     void minimumWidthChanged();
     void minimumHeightChanged();
