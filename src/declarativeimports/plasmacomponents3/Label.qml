@@ -24,7 +24,7 @@ T.Label {
     color: PlasmaCore.ColorScope.textColor
     linkColor: PlasmaCore.Theme.linkColor
 
-    opacity: enabled? 1 : 0.6
+    opacity: enabled ? 1 : 0.6
 
     Accessible.role: Accessible.StaticText
     Accessible.name: text
