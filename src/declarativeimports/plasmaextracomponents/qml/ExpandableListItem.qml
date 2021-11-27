@@ -5,6 +5,7 @@
 */
 
 import QtQuick 2.14
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Menu
@@ -155,7 +156,7 @@ Item {
      *
      * Optional; if not defined, no default action button will be displayed.
      */
-    property alias defaultActionButtonAction: defaultActionButton.action
+    property Action defaultActionButtonAction
 
     /*
      * defaultActionButtonVisible: bool
@@ -343,6 +344,7 @@ Item {
 
     Keys.onPressed: {
         if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
+            listItem.ListView.view.currentIndex = index;
             if (defaultActionButtonAction) {
                 defaultActionButtonAction.trigger()
             } else {
@@ -356,9 +358,11 @@ Item {
             }
             // if not active, we'll let the Escape event pass through, so it can close the applet, etc.
         } else if (event.key == Qt.Key_Space) {
+            listItem.ListView.view.currentIndex = index;
             toggleExpanded();
             event.accepted = true;
         } else if (event.key == Qt.Key_Menu) {
+            listItem.ListView.view.currentIndex = index;
             if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
@@ -389,23 +393,43 @@ Item {
         }
     }
 
+    property bool __hovered: false
+    PlasmaCore.FrameSvgItem {
+        id: hoverBackground
+        opacity: (listItem.ListView.view.currentIndex == index) ? 0 : (__hovered ? 0.5 : 0)
+        imagePath: "widgets/viewitem"
+        prefix: "hover"
+
+        anchors.fill: parent
+    }
+
     // We still need a MouseArea to handle right-click
     MouseArea {
         anchors.fill: parent
 
-        acceptedButtons: Qt.RightButton
+        enabled: listItem.isEnabled
+
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
         hoverEnabled: true
 
         // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
-        onPositionChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
+        onPositionChanged: __hovered = containsMouse
+
+        onExited: {
+            __hovered = false;
+        }
 
         // Handle right-click, if so defined
         onClicked: {
-            if (contextMenu instanceof PlasmaComponents2.Menu) {
-                contextMenu.visualParent = parent
-                contextMenu.prepare();
-                contextMenu.open(mouse.x, mouse.y)
-                return
+            if (mouse.button == Qt.RightButton) {
+                if (contextMenu instanceof PlasmaComponents2.Menu) {
+                    contextMenu.visualParent = parent
+                    contextMenu.prepare();
+                    contextMenu.open(mouse.x, mouse.y)
+                    return
+                }
+            } else {
+                listItem.ListView.view.currentIndex = index;
             }
         }
 
@@ -513,6 +537,14 @@ Item {
                             && listItem.defaultActionButtonVisible
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
 
+                    text: defaultActionButtonAction.text
+                    icon.name: defaultActionButtonAction.icon.name
+
+                    onClicked: {
+                        listItem.ListView.view.currentIndex = index;
+                        defaultActionButtonAction.trigger();
+                    }
+
                     KeyNavigation.tab: expandToggleButton
                     KeyNavigation.right: expandToggleButton
 
@@ -528,10 +560,13 @@ Item {
                     text: expandedView.expanded ? i18ndc("libplasma5", "@action:button", "Collapse") : i18ndc("libplasma5", "@action:button", "Expand")
                     icon.name: expandedView.expanded ? "collapse" : "expand"
 
-                    onClicked: listItem.toggleExpanded()
-
                     PlasmaComponents3.ToolTip {
                         text: parent.text
+                    }
+
+                    onClicked: {
+                        listItem.ListView.view.currentIndex = index;
+                        listItem.toggleExpanded()
                     }
                 }
             }

@@ -73,6 +73,15 @@ Item {
     implicitHeight: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
     PlasmaCore.FrameSvgItem {
+        id: hoverBackground
+        opacity: (listItem.ListView.view.currentIndex == index) ? 0 : (containsMouse ? 0.5 : 0)
+        imagePath: "widgets/viewitem"
+        prefix: "hover"
+
+        anchors.fill: parent
+    }
+
+    PlasmaCore.FrameSvgItem {
         id : background
         imagePath: "widgets/listitem"
         prefix: (listItem.sectionDelegate ? "section" :
@@ -99,7 +108,10 @@ Item {
         enabled: false
         hoverEnabled: true
 
-        onClicked: listItem.clicked()
+        onClicked:  {
+            listItem.ListView.view.currentIndex = index;
+            listItem.clicked()
+        }
         onPressAndHold: listItem.pressAndHold()
 
         Item {
