@@ -394,14 +394,12 @@ Item {
     }
 
     property bool __hovered: false
-    PlasmaCore.FrameSvgItem {
+
+    PlasmaComponents2.Highlight {
         id: hoverBackground
+        anchors.fill: parent
         visible: listItem.ListView.view.currentIndex !== index && __hovered
         opacity: 0.5
-        imagePath: "widgets/viewitem"
-        prefix: "hover"
-
-        anchors.fill: parent
     }
 
     // We still need a MouseArea to handle right-click

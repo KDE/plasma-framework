@@ -72,14 +72,11 @@ Item {
 
     implicitHeight: paddingItem.childrenRect.height + background.margins.top + background.margins.bottom
 
-    PlasmaCore.FrameSvgItem {
+    Highlight {
         id: hoverBackground
+        anchors.fill: parent
         visible: listItem.ListView.view.currentIndex !== index && containsMouse
         opacity: 0.5
-        imagePath: "widgets/viewitem"
-        prefix: "hover"
-
-        anchors.fill: parent
     }
 
     PlasmaCore.FrameSvgItem {
