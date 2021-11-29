@@ -420,6 +420,8 @@ Item {
                     contextMenu.open(mouse.x, mouse.y)
                     return
                 }
+            } else if (mouse.button == Qt.LeftButton) {
+                listItem.toggleExpanded();
             }
         }
 
