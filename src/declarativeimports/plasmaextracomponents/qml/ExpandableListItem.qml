@@ -393,30 +393,22 @@ Item {
         }
     }
 
-    property bool __hovered: false
-
     PlasmaComponents2.Highlight {
         id: hoverBackground
         anchors.fill: parent
-        visible: listItem.ListView.view.currentIndex !== index && __hovered
+        visible: listItem.ListView.view.currentIndex !== index && mouse.containsMouse
         opacity: 0.5
     }
 
     // We still need a MouseArea to handle right-click
     MouseArea {
+        id: mouse
         anchors.fill: parent
 
         enabled: listItem.isEnabled
 
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         hoverEnabled: true
-
-        // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
-        onPositionChanged: __hovered = containsMouse
-
-        onExited: {
-            __hovered = false;
-        }
 
         // Handle right-click, if so defined
         onClicked: {
