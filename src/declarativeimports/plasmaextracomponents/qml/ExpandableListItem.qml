@@ -396,7 +396,8 @@ Item {
     property bool __hovered: false
     PlasmaCore.FrameSvgItem {
         id: hoverBackground
-        opacity: (listItem.ListView.view.currentIndex == index) ? 0 : (__hovered ? 0.5 : 0)
+        visible: listItem.ListView.view.currentIndex !== index && __hovered
+        opacity: 0.5
         imagePath: "widgets/viewitem"
         prefix: "hover"
 
