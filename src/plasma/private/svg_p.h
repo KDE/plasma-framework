@@ -30,8 +30,14 @@ public:
 
     SharedSvgRenderer(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements, QObject *parent = nullptr);
 
+    void reload();
+
 private:
     bool load(const QByteArray &contents, const QString &styleSheet, QHash<QString, QRectF> &interestingElements);
+
+    QString m_filename;
+    QString m_styleSheet;
+    QHash<QString, QRectF> m_interestingElements;
 };
 
 class SvgPrivate
@@ -125,9 +131,8 @@ public:
     bool findElementRect(SvgPrivate::CacheId cacheId, QRectF &rect);
     bool findElementRect(uint id, const QString &filePath, QRectF &rect);
 
-    void loadImageFromCache(const QString &path, uint lastModified);
+    bool loadImageFromCache(const QString &path, uint lastModified);
     void dropImageFromCache(const QString &path);
-    void expireCache(const QString &path);
 
     void setNaturalSize(const QString &path, qreal scaleFactor, const QSizeF &size);
     QSizeF naturalSize(const QString &path, qreal scaleFactor);
@@ -140,9 +145,14 @@ public:
 
     QStringList cachedKeysForPath(const QString &path) const;
 
+    unsigned int lastModifiedTimeFromCache(const QString &filePath);
+
     void updateLastModified(const QString &filePath, unsigned int lastModified);
 
     static const uint s_seed;
+
+Q_SIGNALS:
+    void lastModifiedChanged(const QString &filePath, unsigned int lastModified);
 
 private:
     QTimer *m_configSyncTimer = nullptr;
@@ -156,6 +166,7 @@ private:
     QHash<uint, QRectF> m_localRectCache;
     QHash<QString, QSet<unsigned int>> m_invalidElements;
     QHash<QString, QList<QSize>> m_sizeHintsForId;
+    QHash<QString, unsigned int> m_lastModifiedTimes;
 };
 }
 
