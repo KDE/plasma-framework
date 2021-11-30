@@ -107,7 +107,9 @@ Item {
         hoverEnabled: true
 
         onClicked:  {
-            listItem.ListView.view.currentIndex = index;
+            if (listItem.ListView.view) {
+                listItem.ListView.view.currentIndex = index;
+            }
             listItem.clicked()
         }
         onPressAndHold: listItem.pressAndHold()
