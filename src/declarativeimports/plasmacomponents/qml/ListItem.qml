@@ -75,7 +75,7 @@ Item {
     Highlight {
         id: hoverBackground
         anchors.fill: parent
-        visible: listItem.ListView.view.currentIndex !== index && containsMouse
+        visible: (listItem.ListView.view && listItem.ListView.view.currentIndex !== index) && containsMouse
         opacity: 0.5
     }
 

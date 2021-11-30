@@ -396,7 +396,7 @@ Item {
     PlasmaComponents2.Highlight {
         id: hoverBackground
         anchors.fill: parent
-        visible: listItem.ListView.view.currentIndex !== index && mouse.containsMouse
+        visible: (listItem.ListView.view && listItem.ListView.view.currentIndex !== index) && mouse.containsMouse
         opacity: 0.5
     }
 
