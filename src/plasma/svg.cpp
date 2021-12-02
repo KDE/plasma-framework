@@ -486,20 +486,23 @@ bool SvgPrivate::setImagePath(const QString &imagePath)
 #endif
     }
 
-    const QFileInfo info(path);
-    const QDateTime lastModifiedDate = info.lastModified();
+    QDateTime lastModifiedDate;
+    if (!path.isEmpty()) {
+        const QFileInfo info(path);
+        lastModifiedDate = info.lastModified();
 
-    lastModified = lastModifiedDate.toSecsSinceEpoch();
+        lastModified = lastModifiedDate.toSecsSinceEpoch();
 
-    const bool imageWasCached = SvgRectsCache::instance()->loadImageFromCache(path, lastModified);
+        const bool imageWasCached = SvgRectsCache::instance()->loadImageFromCache(path, lastModified);
 
-    if (!imageWasCached) {
-        auto i = s_renderers.constBegin();
-        while (i != s_renderers.constEnd()) {
-            if (i.key().contains(path)) {
-                i.value()->reload();
+        if (!imageWasCached) {
+            auto i = s_renderers.constBegin();
+            while (i != s_renderers.constEnd()) {
+                if (i.key().contains(path)) {
+                    i.value()->reload();
+                }
+                i++;
             }
-            i++;
         }
     }
 
