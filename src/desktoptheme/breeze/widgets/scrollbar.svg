@@ -55,91 +55,91 @@
         <rect id="private-hint-show-separator" height="2" rx="2.07712602615" style="fill:#00f;fill-opacity:1;fill-rule:nonzero;opacity:0.1" width="2" x="-13.8756103516" y="45.7764358521" ry="2.07712602615" />
         <g id="mouseover-slider-top" style="" transform="translate(1 23)">
             <path id="path1632-6" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <rect id="rect8453" class="ColorScheme-Highlight" height="2.5" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="7.5" />
+            <rect id="rect8453" class="ColorScheme-Highlight" height="2.5" style="opacity:.50;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="7.5" />
             <path id="path8" class="ColorScheme-Highlight" d="m 28 7 v 1 h 3 v -1 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
         </g>
         <g id="mouseover-slider-topleft" style="" transform="translate(1 23)">
             <path id="path1626-12" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path7466" class="ColorScheme-Highlight" d="m 27 7.5 c -1.380711874 0 -2.5 1.11928812595 -2.5 2.5 h 2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path7466" class="ColorScheme-Highlight" d="m 27 7.5 c -1.380711874 0 -2.5 1.11928812595 -2.5 2.5 h 2.5 z" style="opacity:.50;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
             <path id="path12" class="ColorScheme-Highlight" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="fill:currentColor;fill-opacity:1" />
         </g>
         <g id="mouseover-slider-topright" style="" transform="translate(1 23)">
             <path id="path1634-9" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path7466-5" class="ColorScheme-Highlight" d="m 32 7.5 c 1.380711874 0 2.5 1.11928812595 2.5 2.5 h -2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path7466-5" class="ColorScheme-Highlight" d="m 32 7.5 c 1.380711874 0 2.5 1.11928812595 2.5 2.5 h -2.5 z" style="opacity:.50;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
             <path id="path16" class="ColorScheme-Highlight" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="fill:currentColor;fill-opacity:1" />
         </g>
         <g id="mouseover-slider-bottom" style="" transform="translate(1 23)">
             <path id="path1632-5" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <rect id="rect8453-1" class="ColorScheme-Highlight" height="2.5" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="15" />
+            <rect id="rect8453-1" class="ColorScheme-Highlight" height="2.5" style="opacity:.50;fill:currentColor;fill-rule:evenodd" width="3" x="28" y="15" />
             <path id="path20" class="ColorScheme-Highlight" d="m 28 18 v -1 h 3 v 1 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
         </g>
         <g id="mouseover-slider-bottomleft" style="" transform="translate(1 23)">
             <path id="rect1353-7" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path7466-2" class="ColorScheme-Highlight" d="m 27 17.5 c -1.380711874 0 -2.5 -1.1192881259 -2.5 -2.5 h 2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path7466-2" class="ColorScheme-Highlight" d="m 27 17.5 c -1.380711874 0 -2.5 -1.1192881259 -2.5 -2.5 h 2.5 z" style="opacity:.50;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
             <path id="path24" class="ColorScheme-Highlight" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="fill:currentColor;fill-opacity:1" />
         </g>
         <g id="mouseover-slider-bottomright" style="" transform="translate(1 23)">
             <path id="path1638-62" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path7466-6" class="ColorScheme-Highlight" d="m 32 17.5 c 1.380711874 0 2.5 -1.1192881259 2.5 -2.5 h -2.5 z" style="opacity:.33;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
+            <path id="path7466-6" class="ColorScheme-Highlight" d="m 32 17.5 c 1.380711874 0 2.5 -1.1192881259 2.5 -2.5 h -2.5 z" style="opacity:.50;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="cccc" />
             <path id="path28" class="ColorScheme-Highlight" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="fill:currentColor;fill-opacity:1" />
         </g>
         <g id="mouseover-slider-center" style="">
             <path id="path1632-3" d="m 29 34 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="msc" class="ColorScheme-Highlight" d="m 29 34 v 3 h 3 v -3 z" style="opacity:.33;fill:currentColor" inkscape:connector-curvature="0" />
+            <path id="msc" class="ColorScheme-Highlight" d="m 29 34 v 3 h 3 v -3 z" style="opacity:.50;fill:currentColor" inkscape:connector-curvature="0" />
         </g>
         <g id="mouseover-slider-left" style="" transform="translate(1 23)">
             <path id="path1632-35" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <rect id="rect8453-9-2" class="ColorScheme-Highlight" height="3" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="2.5" x="24.5" y="11" />
+            <rect id="rect8453-9-2" class="ColorScheme-Highlight" height="3" style="opacity:.50;fill:currentColor;fill-rule:evenodd" width="2.5" x="24.5" y="11" />
             <path id="path33" class="ColorScheme-Highlight" d="m 24 11 v 3 h 1 v -3 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
         </g>
         <g id="mouseover-slider-right" style="" transform="translate(1 23)">
             <path id="path1632-7" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <rect id="rect8453-9" class="ColorScheme-Highlight" height="3" style="opacity:.33;fill:currentColor;fill-rule:evenodd" width="2.5" x="32" y="11" />
+            <rect id="rect8453-9" class="ColorScheme-Highlight" height="3" style="opacity:.50;fill:currentColor;fill-rule:evenodd" width="2.5" x="32" y="11" />
             <path id="path37" class="ColorScheme-Highlight" d="m 34 11 v 3 h 1 v -3 z" style="fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
         </g>
         <g id="background-vertical-top" style="" transform="translate(26 -2)">
-            <path id="path1636-23" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path70" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-7-0-6" d="m 28 8 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-23" d="m 28 7 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path70" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-6" d="m 28 8 v 2 h 3 v -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-topleft" style="" transform="translate(26 -2)">
-            <path id="path1626-5" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path74" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-7" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1626-5" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path74" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-7" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-topright" style="" transform="translate(26 -2)">
-            <path id="path1634-7" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path78" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-5-6" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1634-7" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path78" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-5-6" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-bottom" style="" transform="translate(26 -2)">
-            <path id="path1636-28" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path82" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-7-0-26" d="m 28 15 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-28" d="m 28 15 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path82" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-26" d="m 28 15 v 2 h 3 v -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-bottomleft" style="" transform="translate(26 -2)">
-            <path id="rect1353-2" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path86" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-2-5" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="rect1353-2" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path86" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-2-5" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-bottomright" style="" transform="translate(26 -2)">
-            <path id="path1638-0" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path90" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-6-3" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1638-0" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path90" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-6-3" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-center" style="">
-            <path id="path1636-92" d="m 54 9 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path1632-9-1" d="m 54 9 v 3 h 3 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-92" d="m 54 9 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path1632-9-1" d="m 54 9 v 3 h 3 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-left" style="" transform="translate(26 -2)">
-            <path id="path1636-97" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path95" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-2-0" d="m 25 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-97" d="m 24 11 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path95" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-2-0" d="m 25 11 v 3 h 2 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-vertical-right" style="" transform="translate(26 -2)">
-            <path id="path1636-75" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path99" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-2-6" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-75" d="m 32 11 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path99" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-2-6" d="m 32 11 v 3 h 2 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="slider-top" style="" transform="translate(1 -2)">
             <path id="path1636-7" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
@@ -186,48 +186,48 @@
             <path id="path1632-1-2" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.15;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-top" style="" transform="translate(26 23)">
-            <path id="path1636-3" d="m 28 7 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path70-4" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-7-0-1" d="m 28 8 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-3" d="m 28 7 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path70-4" class="ColorScheme-ButtonText" d="m 28 7 v 1 h 3 v -1 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-1" d="m 28 8 v 2 h 3 v -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-topleft" style="" transform="translate(26 23)">
-            <path id="path1626-1" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path74-0" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-9" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1626-1" d="m 24 10 h 3 v -3 c -1.662 0 -3 1.338 -3 3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path74-0" class="ColorScheme-ButtonText" d="m 27 7 c -1.68216 0 -3 1.31784 -3 3 h 1 a 2 2 0 0 1 2 -2 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-9" d="m 27 8 a 2 2 0 0 0 -2 2 h 2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-topright" style="" transform="translate(26 23)">
-            <path id="path1634-0" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path78-7" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-5-62" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1634-0" d="m 32 10 h 3 c 0 -1.662 -1.338 -3 -3 -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path78-7" class="ColorScheme-ButtonText" d="m 32 7 v 1 a 2 2 0 0 1 2 2 h 1 c 0 -1.68216 -1.31784 -3 -3 -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-5-62" d="m 32 8 a 2 2 0 0 1 2 2 h -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-bottom" style="" transform="translate(26 23)">
-            <path id="path1636-94" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path82-27" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-7-0-2" d="m 28 15 v 2 h 3 v -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-94" d="m 28 15 v 3 h 3 v -3 z" style="fill:currentColor;opacity:0.525;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path82-27" class="ColorScheme-ButtonText" d="m 28 18 v -1 h 3 v 1 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-7-0-2" d="m 28 15 v 2 h 3 v -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-bottomleft" style="" transform="translate(26 23)">
-            <path id="rect1353-61" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path86-6" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-2-3" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="rect1353-61" d="m 27 18 v -3 h -3 c 0 1.662 1.338 3 3 3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path86-6" class="ColorScheme-ButtonText" d="m 24 15 c 0 1.68216 1.31784 3 3 3 v -1 a 2 2 0 0 1 -2 -2 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-2-3" d="m 27 17 a 2 2 0 0 1 -2 -2 h 2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-bottomright" style="" transform="translate(26 23)">
-            <path id="path1638-3" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
-            <path id="path90-6" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" />
-            <path id="path1626-53-6-5" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
+            <path id="path1638-3" d="m 35 15 h -3 v 3 c 1.662 0 3 -1.338 3 -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" />
+            <path id="path90-6" class="ColorScheme-ButtonText" d="m 34 15 a 2 2 0 0 1 -2 2 v 1 c 1.68216 0 3 -1.31784 3 -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" />
+            <path id="path1626-53-6-5" d="m 32 17 a 2 2 0 0 0 2 -2 h -2 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-center" style="">
-            <path id="path1636-31" d="m 54 34 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path1632-9-3" d="m 54 34 v 3 h 3 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-31" d="m 54 34 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path1632-9-3" d="m 54 34 v 3 h 3 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-left" style="" transform="translate(26 23)">
-            <path id="path1636-29" d="m 24 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path95-4" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-70" d="m 25 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-29" d="m 24 11 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path95-4" class="ColorScheme-ButtonText" d="m 24 11 v 3 h 1 v -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-70" d="m 25 11 v 3 h 2 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <g id="background-horizontal-right" style="" transform="translate(26 23)">
-            <path id="path1636-6" d="m 32 11 v 3 h 3 v -3 z" style="fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
-            <path id="path99-9" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:.3;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
-            <path id="path1632-1-9" d="m 32 11 v 3 h 2 v -3 z" style="opacity:.1;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
+            <path id="path1636-6" d="m 32 11 v 3 h 3 v -3 z" style="opacity:0.525;fill:currentColor;fill-rule:evenodd" class="ColorScheme-ButtonBackground" sodipodi:nodetypes="ccccc" />
+            <path id="path99-9" class="ColorScheme-ButtonText" d="m 34 11 v 3 h 1 v -3 z" style="opacity:0.24;fill:currentColor;fill-opacity:1" inkscape:connector-curvature="0" />
+            <path id="path1632-1-9" d="m 32 11 v 3 h 2 v -3 z" style="opacity:0.09;fill:currentColor;fill-rule:evenodd;stroke-width:.999996" sodipodi:nodetypes="ccccc" class="ColorScheme-ButtonText" />
         </g>
         <rect id="background-horizontal-hint-right-inset" height="3" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="6" x="61" y="34" />
         <rect id="background-horizontal-hint-top-inset" height="6" style="opacity:.5;fill:#0ff;fill-opacity:1;fill-rule:evenodd;stroke-width:.999997" width="3" x="54" y="24" />
