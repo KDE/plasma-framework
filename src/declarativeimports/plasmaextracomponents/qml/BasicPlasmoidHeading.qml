@@ -50,7 +50,7 @@ PlasmoidHeading {
             checked: configMenu.status !== PC2.DialogStatus.Closed
             property int visibleActions: menuItemFactory.count
             property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
-            icon.name: "application-menu"
+            icon.name: "open-menu-symbolic"
             checkable: visibleActions > 1
             contentItem.opacity: visibleActions > 1
             // NOTE: it needs an IconItem because QtQuickControls2 buttons cannot load QIcons as their icon
