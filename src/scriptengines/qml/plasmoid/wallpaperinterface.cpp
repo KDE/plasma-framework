@@ -229,7 +229,6 @@ void WallpaperInterface::removeAction(const QString &name)
 
     if (action) {
         m_actions->removeAction(action);
-        delete action;
     }
     setProperty("contextualActions", QVariant::fromValue(contextualActions()));
 }
