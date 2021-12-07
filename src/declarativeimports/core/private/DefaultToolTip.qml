@@ -11,8 +11,6 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 PlasmaCore.ColorScope {
-    id: tooltipContentItem
-
     property Item toolTip
     property int preferredTextWidth: PlasmaCore.Units.gridUnit * 20
 
@@ -40,14 +38,12 @@ PlasmaCore.ColorScope {
         spacing: PlasmaCore.Units.gridUnit
 
         Image {
-            id: tooltipImage
             source: toolTip ? toolTip.image : ""
             visible: toolTip !== null && toolTip.image !== ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
         PlasmaCore.IconItem {
-            id: tooltipIcon
             animated: false
             source: toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -61,7 +57,6 @@ PlasmaCore.ColorScope {
             spacing: 0
 
             PlasmaExtras.Heading {
-                id: tooltipMaintext
                 level: 3
                 Layout.fillWidth: true
                 elide: Text.ElideRight
@@ -72,7 +67,6 @@ PlasmaCore.ColorScope {
             }
 
             PlasmaComponents.Label {
-                id: tooltipSubtext
                 Layout.fillWidth: true
                 // Unset Label default height, confuses the layout engine completely
                 // either shifting the item vertically or letting it get too wide
