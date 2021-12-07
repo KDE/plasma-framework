@@ -10,7 +10,6 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
-
 PlasmaCore.ColorScope {
     id: tooltipContentItem
 
@@ -26,6 +25,7 @@ PlasmaCore.ColorScope {
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
+
     colorGroup: PlasmaCore.Theme.NormalColorGroup
     inherit: false
 
@@ -70,6 +70,7 @@ PlasmaCore.ColorScope {
                 textFormat: Text.PlainText
                 visible: text !== ""
             }
+
             PlasmaComponents.Label {
                 id: tooltipSubtext
                 Layout.fillWidth: true
@@ -86,4 +87,3 @@ PlasmaCore.ColorScope {
         }
     }
 }
-
