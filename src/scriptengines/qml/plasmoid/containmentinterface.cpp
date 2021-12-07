@@ -752,7 +752,22 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     connect(appletGraphicObject, &QObject::destroyed, this, [this](QObject *obj) {
         m_appletInterfaces.removeAll(obj);
     });
-    Q_EMIT appletAdded(appletGraphicObject, appletGraphicObject->m_positionBeforeRemoval.x(), appletGraphicObject->m_positionBeforeRemoval.y());
+
+    QPointF removalPosition = appletGraphicObject->m_positionBeforeRemoval;
+    QPointF position = appletGraphicObject->position();
+    if (removalPosition.x() < 0.0 && removalPosition.y() < 0.0) {
+        if (position.isNull() && m_containment->containmentType() == Plasma::Types::DesktopContainment) {
+            // If no position was provided, and we're adding an applet to the desktop,
+            // add the applet to the center. This avoids always placing new applets
+            // in the top left corner, which is likely to be covered by something.
+            position = QPointF{width() / 2.0 - appletGraphicObject->width() / 2.0, //
+                               height() / 2.0 - appletGraphicObject->width() / 2.0};
+        }
+    } else {
+        position = removalPosition;
+    }
+
+    Q_EMIT appletAdded(appletGraphicObject, position.x(), position.y());
     Q_EMIT appletsChanged();
 }
 
