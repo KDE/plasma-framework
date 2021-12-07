@@ -42,7 +42,7 @@ PlasmaCore.ColorScope {
         Image {
             id: tooltipImage
             source: toolTip ? toolTip.image : ""
-            visible: toolTip != null && toolTip.image != ""
+            visible: toolTip !== null && toolTip.image !== ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
@@ -51,7 +51,7 @@ PlasmaCore.ColorScope {
             animated: false
             source: toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            visible: toolTip != null && toolTip.icon != "" && toolTip.image == "" && valid
+            visible: toolTip !== null && toolTip.icon !== "" && toolTip.image === "" && valid
             Layout.preferredWidth: PlasmaCore.Units.iconSizes.medium
             Layout.preferredHeight: PlasmaCore.Units.iconSizes.medium
         }
@@ -68,7 +68,7 @@ PlasmaCore.ColorScope {
                 wrapMode: Text.Wrap
                 text: toolTip ? toolTip.mainText : ""
                 textFormat: Text.PlainText
-                visible: text != ""
+                visible: text !== ""
             }
             PlasmaComponents.Label {
                 id: tooltipSubtext
@@ -80,7 +80,7 @@ PlasmaCore.ColorScope {
                 text: toolTip ? toolTip.subText : ""
                 textFormat: toolTip ? toolTip.textFormat : Text.AutoText
                 opacity: 0.6
-                visible: text != ""
+                visible: text !== ""
                 maximumLineCount: 8
             }
         }
