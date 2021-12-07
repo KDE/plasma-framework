@@ -17,6 +17,8 @@ PlasmaCore.ColorScope {
     property Item toolTip
     property int preferredTextWidth: PlasmaCore.Units.gridUnit * 20
 
+    // gridUnit is effectively equal to `PlasmaCore.Units.smallSpacing * 4`
+    // which is a double (both sides) of RowLayout's `anchors.margins`.
     Layout.minimumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
     Layout.minimumHeight: childrenRect.height + PlasmaCore.Units.gridUnit
     Layout.maximumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
@@ -32,10 +34,10 @@ PlasmaCore.ColorScope {
         anchors {
             left: parent.left
             top: parent.top
-            margins: PlasmaCore.Units.gridUnit / 2
+            margins: PlasmaCore.Units.smallSpacing * 2
         }
 
-        spacing: PlasmaCore.Units.largeSpacing
+        spacing: PlasmaCore.Units.gridUnit
 
         Image {
             id: tooltipImage
