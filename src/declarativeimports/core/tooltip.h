@@ -32,19 +32,15 @@ class ToolTipDialog;
  * @code
  * import org.kde.plasma.core 2.0 as PlasmaCore
  *
- * [...]
  * PlasmaCore.IconItem {
- *     ...
  *     PlasmaCore.ToolTipArea {
  *         mainText: i18n("Tooltip Title")
  *         subText: i18n("Some explanation.")
  *         icon: "plasma"
  *         // alternatively, you can specify your own component
  *         // to be loaded when the tooltip shows
- *         mainItem: Component {
- *              YourCustomItem { ...  }
- *         }
- * ... }
+ *         mainItem: YourCustomItem { }
+ *     }
  * }
  * @endcode
  *
