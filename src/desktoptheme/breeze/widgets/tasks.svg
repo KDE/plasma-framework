@@ -170,158 +170,158 @@
         <path id="path190" class="ColorScheme-PositiveText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path192" class="ColorScheme-PositiveText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="focus-left" transform="matrix(-1 0 0 -1 36 50)" opacity=".34">
+    <g id="focus-left" transform="matrix(-1 0 0 -1 36 50)" opacity=".45">
         <path id="path195" class="ColorScheme-ButtonFocus" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path197" class="ColorScheme-ButtonFocus" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path199" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="focus-right" transform="translate(0 12.999998)" opacity=".34">
+    <g id="focus-right" transform="translate(0 12.999998)" opacity=".45">
         <path id="path202" class="ColorScheme-ButtonFocus" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path204" class="ColorScheme-ButtonFocus" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path206" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="focus-center" class="ColorScheme-ButtonFocus" transform="matrix(.96296296 0 0 1 .185185 20.899999)" fill="currentColor" opacity=".34">
+    <g id="focus-center" class="ColorScheme-ButtonFocus" transform="matrix(.96296296 0 0 1 .185185 20.899999)" fill="currentColor" opacity=".45">
         <path id="path209" class="ColorScheme-ButtonFocus" d="m5 4.1h27v13h-27z" fill="currentColor"/>
     </g>
-    <g id="focus-top" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 -1 0 50.999999)" fill="currentColor" opacity=".72">
+    <g id="focus-top" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 -1 0 50.999999)" fill="currentColor" opacity=".90">
         <path id="path212" transform="scale(1,-1)" d="m5-27.999999h26v2h-26z" style=""/>
         <path id="path214" transform="scale(1 -1)" d="m5-29h26v1h-26z" style=""/>
     </g>
-    <g id="focus-topleft" transform="matrix(0,-1.5,-1,0,23,73)" opacity=".72">
+    <g id="focus-topleft" transform="matrix(0,-1.5,-1,0,23,73)" opacity=".90">
         <path id="path217" d="m32 21h2v1h-2z" fill="none"/>
         <path id="path219" class="ColorScheme-ButtonFocus" d="m32 18h2v3h-2z" fill="currentColor"/>
     </g>
-    <g id="focus-topright" transform="matrix(1,0,0,-1.4999995,0,53.499989)" opacity=".72">
+    <g id="focus-topright" transform="matrix(1,0,0,-1.4999995,0,53.499989)" opacity=".90">
         <path id="path222" transform="scale(1,-1)" d="m34-21h1v2h-1z" fill="none"/>
         <path id="path224" class="ColorScheme-ButtonFocus" d="m31 19h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="focus-bottom" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 1 36 11.999998)" fill="currentColor" opacity=".34">
+    <g id="focus-bottom" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 1 36 11.999998)" fill="currentColor" opacity=".45">
         <path id="path227" transform="scale(1 -1)" d="m5-28h26v2h-26z"/>
         <path id="path229" transform="scale(1 -1)" d="m5-29h26v1h-26z"/>
     </g>
-    <g id="focus-bottomleft" transform="matrix(-1 0 0 1 36 19.999999)" opacity=".34">
+    <g id="focus-bottomleft" transform="matrix(-1 0 0 1 36 19.999999)" opacity=".45">
         <path id="path232" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path234" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path236" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="focus-bottomright" transform="matrix(0 1 1 0 13 7)" opacity=".34">
+    <g id="focus-bottomright" transform="matrix(0 1 1 0 13 7)" opacity=".45">
         <path id="path239" transform="scale(1 -1)" d="m31-22h3v1h-3z" fill="none"/>
         <path id="path241" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path243" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="north-focus-left" transform="matrix(-1 0 0 1 72 12.999998)" opacity=".34">
+    <g id="north-focus-left" transform="matrix(-1 0 0 1 72 12.999998)" opacity=".45">
         <path id="path246" class="ColorScheme-ButtonFocus" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path248" class="ColorScheme-ButtonFocus" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path250" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="north-focus-right" transform="matrix(1 0 0 -1 36 49.999999)" opacity=".34">
+    <g id="north-focus-right" transform="matrix(1 0 0 -1 36 49.999999)" opacity=".45">
         <path id="path253" class="ColorScheme-ButtonFocus" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path255" class="ColorScheme-ButtonFocus" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path257" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="north-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(.96296296 0 0 -1 36.185185 42.1)" fill="currentColor" opacity=".34">
+    <g id="north-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(.96296296 0 0 -1 36.185185 42.1)" fill="currentColor" opacity=".45">
         <path id="path260" class="ColorScheme-ButtonFocus" d="m5 4.1h27v13h-27z" fill="currentColor"/>
     </g>
-    <g id="north-focus-bottom" class="ColorScheme-ButtonFocus" transform="translate(36 11.999998)" fill="currentColor" opacity=".72">
+    <g id="north-focus-bottom" class="ColorScheme-ButtonFocus" transform="translate(36 11.999998)" fill="currentColor" opacity=".90">
         <path id="path263" transform="scale(1,-1)" d="m5-28h26v2h-26z" style=""/>
         <path id="path265" transform="scale(1 -1)" d="m5-29h26v1h-26z" style=""/>
     </g>
-    <g id="north-focus-bottomleft" transform="matrix(0,1.4999995,-1,0,59.000001,-9.999984)" opacity=".72">
+    <g id="north-focus-bottomleft" transform="matrix(0,1.4999995,-1,0,59.000001,-9.999984)" opacity=".90">
         <path id="path268" d="m32 21h2v1h-2z" fill="none"/>
         <path id="path270" class="ColorScheme-ButtonFocus" d="m32 18h2v3h-2z" fill="currentColor"/>
     </g>
-    <g id="north-focus-bottomright" transform="matrix(1,0,0,1.4999995,36,9.5000095)" opacity=".72">
+    <g id="north-focus-bottomright" transform="matrix(1,0,0,1.4999995,36,9.5000095)" opacity=".90">
         <path id="path273" transform="scale(1,-1)" d="m34-21h1v2h-1z" fill="none"/>
         <path id="path275" class="ColorScheme-ButtonFocus" d="m31 19h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="north-focus-top" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 -1 72 50.999998)" fill="currentColor" opacity=".34">
+    <g id="north-focus-top" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 -1 72 50.999998)" fill="currentColor" opacity=".45">
         <path id="path278" transform="scale(1 -1)" d="m5-28h26v2h-26z"/>
         <path id="path280" transform="scale(1 -1)" d="m5-29h26v1h-26z"/>
     </g>
-    <g id="north-focus-topleft" transform="matrix(-1 0 0 -1 72 42.999998)" opacity=".34">
+    <g id="north-focus-topleft" transform="matrix(-1 0 0 -1 72 42.999998)" opacity=".45">
         <path id="path283" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path285" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path287" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="north-focus-topright" transform="matrix(0 -1 1 0 49 55.999999)" opacity=".34">
+    <g id="north-focus-topright" transform="matrix(0 -1 1 0 49 55.999999)" opacity=".45">
         <path id="path290" transform="scale(1 -1)" d="m31-22h3v1h-3z" fill="none"/>
         <path id="path292" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path294" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="west-focus-left" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 .84615385 107 15.846152)" fill="currentColor" opacity=".34">
+    <g id="west-focus-left" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 .84615385 107 15.846152)" fill="currentColor" opacity=".45">
         <path id="path297" d="m31 12h2v13h-2z"/>
         <path id="path299" d="m33 12h1v13h-1z"/>
     </g>
-    <g id="west-focus-right" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 -.84615385 73 47.153845)" fill="currentColor" opacity=".72">
+    <g id="west-focus-right" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 -.84615385 73 47.153845)" fill="currentColor" opacity=".90">
         <path id="path302" d="m31 12h2v13h-2z" style=""/>
         <path id="path304" d="m33 12h1v13h-1z" style=""/>
     </g>
-    <g id="west-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(1.0370294 0 0 -.84615385 70.814663 40.46923)" fill="currentColor" opacity=".34">
+    <g id="west-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(1.0370294 0 0 -.84615385 70.814663 40.46923)" fill="currentColor" opacity=".45">
         <path id="path307" class="ColorScheme-ButtonFocus" d="m5.000183 4.1h27.0002v13h-27.0002z" fill="currentColor"/>
     </g>
-    <g id="west-focus-bottom" transform="matrix(1.0769152 0 0 1 70.615439 11)" opacity=".34">
+    <g id="west-focus-bottom" transform="matrix(1.0769152 0 0 1 70.615439 11)" opacity=".45">
         <path id="path310" transform="matrix(0 1 1 0 0 0)" d="m29 5h1v26.000191h-1z" fill="none"/>
         <path id="path312" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m5-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path314" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m5-29h26.000191v1h-26.000191z" fill="currentColor"/>
     </g>
-    <g id="west-focus-topright" transform="matrix(0,-1,1.4999983,0,75.500042,56.999999)" opacity=".72">
+    <g id="west-focus-topright" transform="matrix(0,-1,1.4999983,0,75.500042,56.999999)" opacity=".90">
         <path id="path317" transform="matrix(0,-1,-1,0,0,0)" d="m-20.999994-35h1.999999v1h-1.999999z" fill="none"/>
         <path id="path319" class="ColorScheme-ButtonFocus" d="m31 18.999994h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="west-focus-bottomright" transform="matrix(1.4999983,0,0,1,56.000065,18.999999)" opacity=".72">
+    <g id="west-focus-bottomright" transform="matrix(1.4999983,0,0,1,56.000065,18.999999)" opacity=".90">
         <path id="path322" class="ColorScheme-ButtonFocus" d="m31.999994 18h2.000005v3h-2.000005z" fill="currentColor"/>
         <path id="path324" transform="matrix(0,1,1,0,0,0)" d="m21 31.999994h1v1.785735h-1z" fill="none"/>
     </g>
-    <g id="west-focus-top" transform="matrix(-1.0769152 0 0 -1 109.38438 52.000001)" opacity=".34">
+    <g id="west-focus-top" transform="matrix(-1.0769152 0 0 -1 109.38438 52.000001)" opacity=".45">
         <path id="path327" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m4.999818-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path329" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m4.999818-29h26.000191v1h-26.000191z" fill="currentColor"/>
         <path id="path331" transform="matrix(0 1 1 0 0 0)" d="m29.000008 4.999827h1v26.000191h-1z" fill="none"/>
     </g>
-    <g id="west-focus-topleft" transform="matrix(-1 0 0 -1 107 43.999998)" opacity=".34">
+    <g id="west-focus-topleft" transform="matrix(-1 0 0 -1 107 43.999998)" opacity=".45">
         <path id="path334" transform="scale(-1 1)" d="m-34 21h3v1h-3z" fill="none"/>
         <path id="path336" class="ColorScheme-ButtonFocus" d="m30.99999 18h1.999999v2h-1.999999z" fill="currentColor"/>
         <path id="path338" class="ColorScheme-ButtonFocus" d="m33.99999 18v3h-3v-1h2l-1e-6 -2z" fill="currentColor"/>
     </g>
-    <g id="west-focus-bottomleft" transform="matrix(0 1 -1 0 94.000001 5.999999)" opacity=".34">
+    <g id="west-focus-bottomleft" transform="matrix(0 1 -1 0 94.000001 5.999999)" opacity=".45">
         <path id="path341" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path343" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path345" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="east-focus-right" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 .84615385 109 15.846151)" fill="currentColor" opacity=".34">
+    <g id="east-focus-right" class="ColorScheme-ButtonFocus" transform="matrix(1 0 0 .84615385 109 15.846151)" fill="currentColor" opacity=".45">
         <path id="path348" d="m31 12h2v12.999998h-2z"/>
         <path id="path350" d="m33 12h1v13h-1z"/>
     </g>
-    <g id="east-focus-left" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 -.84615385 143 47.153845)" fill="currentColor" opacity=".72">
+    <g id="east-focus-left" class="ColorScheme-ButtonFocus" transform="matrix(-1 0 0 -.84615385 143 47.153845)" fill="currentColor" opacity=".90">
         <path id="path353" d="m31 12h2v13h-2z" style=""/>
         <path id="path355" d="m33 12h1v13h-1z" style=""/>
     </g>
-    <g id="east-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(-1.0370294 0 0 -.84615385 145.18534 40.46923)" fill="currentColor" opacity=".34">
+    <g id="east-focus-center" class="ColorScheme-ButtonFocus" transform="matrix(-1.0370294 0 0 -.84615385 145.18534 40.46923)" fill="currentColor" opacity=".45">
         <path id="path358" class="ColorScheme-ButtonFocus" d="m5.000186 4.1h27.0002v13h-27.0002z" fill="currentColor"/>
     </g>
-    <g id="east-focus-bottom" transform="matrix(-1.0769152 0 0 1 145.38456 11)" opacity=".34">
+    <g id="east-focus-bottom" transform="matrix(-1.0769152 0 0 1 145.38456 11)" opacity=".45">
         <path id="path361" transform="matrix(0 1 1 0 0 0)" d="m29 5h1v26.000191h-1z" fill="none"/>
         <path id="path363" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m4.999985-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path365" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m5-29h26.000189v1h-26.000189z" fill="currentColor"/>
     </g>
-    <g id="east-focus-topleft" transform="matrix(0,-1,-1.499999,0,140.49997,57)" opacity=".72">
+    <g id="east-focus-topleft" transform="matrix(0,-1,-1.499999,0,140.49997,57)" opacity=".90">
         <path id="path368" transform="matrix(0,-1,-1,0,0,0)" d="m-20.999994-35h2.000004v1h-2.000004z" fill="none"/>
         <path id="path370" class="ColorScheme-ButtonFocus" d="m31 18.99999h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="east-focus-bottomleft" transform="matrix(-1.499999,0,0,1,159.99995,18.999999)" opacity=".72">
+    <g id="east-focus-bottomleft" transform="matrix(-1.499999,0,0,1,159.99995,18.999999)" opacity=".90">
         <path id="path373" class="ColorScheme-ButtonFocus" d="m31.99999 18h1.999999v3h-1.999999z" fill="currentColor"/>
         <path id="path375" transform="matrix(0,1,1,0,0,0)" d="m21 31.99999h1v1.785739h-1z" fill="none"/>
     </g>
-    <g id="east-focus-top" transform="matrix(1.0769152 0 0 -1 106.61561 52.000001)" opacity=".34">
+    <g id="east-focus-top" transform="matrix(1.0769152 0 0 -1 106.61561 52.000001)" opacity=".45">
         <path id="path378" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m4.999827-28h26.000193v2h-26.000193z" fill="currentColor"/>
         <path id="path380" class="ColorScheme-ButtonFocus" transform="scale(1 -1)" d="m4.999827-29h26.000193v1h-26.000193z" fill="currentColor"/>
         <path id="path382" transform="matrix(0 1 1 0 0 0)" d="m29.000008 4.999827h1v26.000191h-1z" fill="none"/>
     </g>
-    <g id="east-focus-topright" transform="matrix(1 0 0 -1 109 43.999999)" opacity=".34">
+    <g id="east-focus-topright" transform="matrix(1 0 0 -1 109 43.999999)" opacity=".45">
         <path id="path385" transform="scale(-1 1)" d="m-34 21h3v1h-3z" fill="none"/>
         <path id="path387" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path389" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="east-focus-bottomright" transform="matrix(0 1 1 0 122 6)" opacity=".34">
+    <g id="east-focus-bottomright" transform="matrix(0 1 1 0 122 6)" opacity=".45">
         <path id="path392" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path394" class="ColorScheme-ButtonFocus" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path396" class="ColorScheme-ButtonFocus" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
@@ -638,158 +638,158 @@
         <path id="path778" class="ColorScheme-ButtonHover" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path780" class="ColorScheme-ButtonHover" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="attention-left" transform="matrix(-1 0 0 -1 36 112.99999)" opacity=".166">
+    <g id="attention-left" transform="matrix(-1 0 0 -1 36 112.99999)" opacity=".35">
         <path id="path783" class="ColorScheme-NeutralText" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="rect4949-9-2-9" class="ColorScheme-NeutralText" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path786" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="attention-right" transform="translate(0 75.999993)" opacity=".166">
+    <g id="attention-right" transform="translate(0 75.999993)" opacity=".35">
         <path id="path789" class="ColorScheme-NeutralText" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path791" class="ColorScheme-NeutralText" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path793" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="attention-center" class="ColorScheme-NeutralText" transform="matrix(.96296296 0 0 1 .185185 83.899994)" fill="currentColor" opacity=".166">
+    <g id="attention-center" class="ColorScheme-NeutralText" transform="matrix(.96296296 0 0 1 .185185 83.899994)" fill="currentColor" opacity=".35">
         <path id="path796" class="ColorScheme-NeutralText" d="m5 4.1h27v13h-27z" fill="currentColor"/>
     </g>
-    <g id="attention-top" class="ColorScheme-NeutralText" transform="matrix(1 0 0 -1 0 114)" fill="currentColor" opacity=".66">
+    <g id="attention-top" class="ColorScheme-NeutralText" transform="matrix(1 0 0 -1 0 114)" fill="currentColor" opacity=".80">
         <path id="path799" transform="scale(1,-1)" d="m5-28h26v2h-26z" style=""/>
         <path id="path801" transform="scale(1 -1)" d="m5-29h26v1h-26z" style=""/>
     </g>
-    <g id="attention-topleft" transform="matrix(0,-1.499995,-1,0,23,135.99983)" opacity=".66">
+    <g id="attention-topleft" transform="matrix(0,-1.499995,-1,0,23,135.99983)" opacity=".80">
         <path id="rect4369-7-5-09-7-4-82" d="m32 21h2v1h-2z" fill="none"/>
         <path id="path805" class="ColorScheme-NeutralText" d="m32 18h2v3h-2z" fill="currentColor"/>
     </g>
-    <g id="attention-topright" transform="matrix(1,0,0,-1.499995,0,116.49989)" opacity=".66">
+    <g id="attention-topright" transform="matrix(1,0,0,-1.499995,0,116.49989)" opacity=".80">
         <path id="path808" transform="scale(1,-1)" d="m34-21h1v2h-1z" fill="none"/>
         <path id="path810" class="ColorScheme-NeutralText" d="m31 19h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="attention-bottom" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 1 36 74.999993)" fill="currentColor" opacity=".166">
+    <g id="attention-bottom" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 1 36 74.999993)" fill="currentColor" opacity=".35">
         <path id="path813" transform="scale(1 -1)" d="m5-28h26v2h-26z"/>
         <path id="path815" transform="scale(1 -1)" d="m5-29h26v1h-26z"/>
     </g>
-    <g id="attention-bottomleft" transform="matrix(-1 0 0 1 36 82.999994)" opacity=".166">
+    <g id="attention-bottomleft" transform="matrix(-1 0 0 1 36 82.999994)" opacity=".35">
         <path id="path818" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path820" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path822" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="attention-bottomright" transform="matrix(0 1 1 0 13 69.999995)" opacity=".166">
+    <g id="attention-bottomright" transform="matrix(0 1 1 0 13 69.999995)" opacity=".35">
         <path id="path825" transform="scale(1 -1)" d="m31-22h3v1h-3z" fill="none"/>
         <path id="path827" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path829" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="north-attention-left" transform="matrix(-1 0 0 1 72 75.999993)" opacity=".166">
+    <g id="north-attention-left" transform="matrix(-1 0 0 1 72 75.999993)" opacity=".35">
         <path id="path832" class="ColorScheme-NeutralText" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="rect4949-9-2-9-0" class="ColorScheme-NeutralText" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="rect4951-3-2-7-1" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="north-attention-right" transform="matrix(1 0 0 -1 36 113)" opacity=".166">
+    <g id="north-attention-right" transform="matrix(1 0 0 -1 36 113)" opacity=".35">
         <path id="path837" class="ColorScheme-NeutralText" d="m31 12h2v13h-2z" fill="currentColor"/>
         <path id="path839" class="ColorScheme-NeutralText" d="m33 12h1v13h-1z" fill="currentColor"/>
         <path id="path841" d="m34 12h1v13h-1z" fill="none"/>
     </g>
-    <g id="north-attention-center" class="ColorScheme-NeutralText" transform="matrix(.96296296 0 0 -1 36.185185 105.1)" fill="currentColor" opacity=".166">
+    <g id="north-attention-center" class="ColorScheme-NeutralText" transform="matrix(.96296296 0 0 -1 36.185185 105.1)" fill="currentColor" opacity=".35">
         <path id="path844" class="ColorScheme-NeutralText" d="m5 4.1h27v13h-27z" fill="currentColor"/>
     </g>
-    <g id="north-attention-bottom" class="ColorScheme-NeutralText" transform="translate(36 74.999993)" fill="currentColor" opacity=".66">
+    <g id="north-attention-bottom" class="ColorScheme-NeutralText" transform="translate(36 74.999993)" fill="currentColor" opacity=".80">
         <path id="path847" transform="scale(1,-1)" d="m5-28h26v2h-26z" style=""/>
         <path id="path849" transform="scale(1 -1)" d="m5-29h26v1h-26z" style=""/>
     </g>
-    <g id="north-attention-bottomleft" transform="matrix(0,1.499997,-1,0,59,53.000096)" opacity=".66">
+    <g id="north-attention-bottomleft" transform="matrix(0,1.499997,-1,0,59,53.000096)" opacity=".80">
         <path id="rect4369-7-5-09-7-4-8" d="m32 21h2v1h-2z" fill="none"/>
         <path id="path853" class="ColorScheme-NeutralText" d="m32 18h2v3h-2z" fill="currentColor"/>
     </g>
-    <g id="north-attention-bottomright" transform="matrix(1,0,0,1.499997,36,72.500057)" opacity=".66">
+    <g id="north-attention-bottomright" transform="matrix(1,0,0,1.499997,36,72.500057)" opacity=".80">
         <path id="path856" transform="scale(1,-1)" d="m34-21h1v2h-1z" fill="none"/>
         <path id="path858" class="ColorScheme-NeutralText" d="m31 19h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="north-attention-top" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 -1 72 113.99999)" fill="currentColor" opacity=".166">
+    <g id="north-attention-top" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 -1 72 113.99999)" fill="currentColor" opacity=".35">
         <path id="path861" transform="scale(1 -1)" d="m5-28h26v2h-26z"/>
         <path id="path863" transform="scale(1 -1)" d="m5-29h26v1h-26z"/>
     </g>
-    <g id="north-attention-topleft" transform="matrix(-1 0 0 -1 72 105.99999)" opacity=".166">
+    <g id="north-attention-topleft" transform="matrix(-1 0 0 -1 72 105.99999)" opacity=".35">
         <path id="path866" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path868" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path870" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="north-attention-topright" transform="matrix(0 -1 1 0 49 118.99999)" opacity=".166">
+    <g id="north-attention-topright" transform="matrix(0 -1 1 0 49 118.99999)" opacity=".35">
         <path id="path873" transform="scale(1 -1)" d="m31-22h3v1h-3z" fill="none"/>
         <path id="path875" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path877" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="west-attention-left" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 .84615385 107 78.846147)" fill="currentColor" opacity=".166">
+    <g id="west-attention-left" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 .84615385 107 78.846147)" fill="currentColor" opacity=".35">
         <path id="path880" d="m31 12h2v13h-2z"/>
         <path id="path882" d="m33 12h1v13h-1z"/>
     </g>
-    <g id="west-attention-right" class="ColorScheme-NeutralText" transform="matrix(1 0 0 -.84615385 73 110.15384)" fill="currentColor" opacity=".66">
+    <g id="west-attention-right" class="ColorScheme-NeutralText" transform="matrix(1 0 0 -.84615385 73 110.15384)" fill="currentColor" opacity=".80">
         <path id="rect4945-8-1-3-0" d="m31 12h2v13h-2z" style=""/>
         <path id="path886" d="m33 12h1v13h-1z" style=""/>
     </g>
-    <g id="west-attention-center" class="ColorScheme-NeutralText" transform="matrix(1.0370294 0 0 -.84615385 70.814663 103.46923)" fill="currentColor" opacity=".166">
+    <g id="west-attention-center" class="ColorScheme-NeutralText" transform="matrix(1.0370294 0 0 -.84615385 70.814663 103.46923)" fill="currentColor" opacity=".35">
         <path id="rect4957-0-5-7-4" class="ColorScheme-NeutralText" d="m5.000183 4.1h27.0002v13h-27.0002z" fill="currentColor"/>
     </g>
-    <g id="west-attention-bottom" transform="matrix(1.0769152 0 0 1 70.615439 73.999995)" opacity=".166">
+    <g id="west-attention-bottom" transform="matrix(1.0769152 0 0 1 70.615439 73.999995)" opacity=".35">
         <path id="rect4369-7-5-0-5-9-7-0-5-1-0-2-0" transform="matrix(0 1 1 0 0 0)" d="m29 5h1v26.000191h-1z" fill="none"/>
         <path id="path892" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m5-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path894" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m5-29h26.000191v1h-26.000191z" fill="currentColor"/>
     </g>
-    <g id="west-attention-topright" transform="matrix(0,-1,1.4999983,0,75.500042,120)" opacity=".66">
+    <g id="west-attention-topright" transform="matrix(0,-1,1.4999983,0,75.500042,120)" opacity=".80">
         <path id="path897" transform="matrix(0,-1,-1,0,0,0)" d="m-20.999994-35h1.999999v1h-1.999999z" fill="none"/>
         <path id="path899" class="ColorScheme-NeutralText" d="m31 18.999994h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="west-attention-bottomright" transform="matrix(1.4999983,0,0,1,56.000065,81.999994)" opacity=".66">
+    <g id="west-attention-bottomright" transform="matrix(1.4999983,0,0,1,56.000065,81.999994)" opacity=".80">
         <path id="path902" class="ColorScheme-NeutralText" d="m31.999994 18h2.000005v3h-2.000005z" fill="currentColor"/>
         <path id="path904" transform="matrix(0,1,1,0,0,0)" d="m21 31.999994h1v1.785735h-1z" fill="none"/>
     </g>
-    <g id="west-attention-top" transform="matrix(-1.0769152 0 0 -1 109.38438 115)" opacity=".166">
+    <g id="west-attention-top" transform="matrix(-1.0769152 0 0 -1 109.38438 115)" opacity=".35">
         <path id="rect4997-2-6-2-7-7-77" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m4.999818-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path908" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m4.999818-29h26.000191v1h-26.000191z" fill="currentColor"/>
         <path id="path910" transform="matrix(0 1 1 0 0 0)" d="m29.000008 4.999827h1v26.000191h-1z" fill="none"/>
     </g>
-    <g id="west-attention-topleft" transform="matrix(-1 0 0 -1 107 106.99999)" opacity=".166">
+    <g id="west-attention-topleft" transform="matrix(-1 0 0 -1 107 106.99999)" opacity=".35">
         <path id="path913" transform="scale(-1 1)" d="m-34 21h3v1h-3z" fill="none"/>
         <path id="path915" class="ColorScheme-NeutralText" d="m30.99999 18h1.999999v2h-1.999999z" fill="currentColor"/>
         <path id="path917" class="ColorScheme-NeutralText" d="m33.99999 18v3h-3v-1h2l-1e-6 -2z" fill="currentColor"/>
     </g>
-    <g id="west-attention-bottomleft" transform="matrix(0 1 -1 0 94 68.999994)" opacity=".166">
+    <g id="west-attention-bottomleft" transform="matrix(0 1 -1 0 94 68.999994)" opacity=".35">
         <path id="rect4369-7-5-0-5-9-7-0-5-1-0-2-07" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="path921" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path923" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="east-attention-right" class="ColorScheme-NeutralText" transform="matrix(1 0 0 .84615385 109 78.846146)" fill="currentColor" opacity=".166">
+    <g id="east-attention-right" class="ColorScheme-NeutralText" transform="matrix(1 0 0 .84615385 109 78.846146)" fill="currentColor" opacity=".35">
         <path id="path926" d="m31 12h2v12.999998h-2z"/>
         <path id="path928" d="m33 12h1v13h-1z"/>
     </g>
-    <g id="east-attention-left" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 -.84615385 143 110.15384)" fill="currentColor" opacity=".66">
+    <g id="east-attention-left" class="ColorScheme-NeutralText" transform="matrix(-1 0 0 -.84615385 143 110.15384)" fill="currentColor" opacity=".80">
         <path id="path931" d="m31 12h2v13h-2z" style=""/>
         <path id="path933" d="m33 12h1v13h-1z" style=""/>
     </g>
-    <g id="east-attention-center" class="ColorScheme-NeutralText" transform="matrix(-1.0370294 0 0 -.84615385 145.18534 103.46923)" fill="currentColor" opacity=".166">
+    <g id="east-attention-center" class="ColorScheme-NeutralText" transform="matrix(-1.0370294 0 0 -.84615385 145.18534 103.46923)" fill="currentColor" opacity=".35">
         <path id="path936" class="ColorScheme-NeutralText" d="m5.000186 4.1h27.0002v13h-27.0002z" fill="currentColor"/>
     </g>
-    <g id="east-attention-bottom" transform="matrix(-1.0769152 0 0 1 145.38456 73.999995)" opacity=".166">
+    <g id="east-attention-bottom" transform="matrix(-1.0769152 0 0 1 145.38456 73.999995)" opacity=".35">
         <path id="path939" transform="matrix(0 1 1 0 0 0)" d="m29 5h1v26.000191h-1z" fill="none"/>
         <path id="rect4997-3-9-4-2-3" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m4.999985-28h26.000191v2h-26.000191z" fill="currentColor"/>
         <path id="path942" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m5-29h26.000189v1h-26.000189z" fill="currentColor"/>
     </g>
-    <g id="east-attention-topleft" transform="matrix(0,-1,-1.4999988,0,140.49996,120)" opacity=".66">
+    <g id="east-attention-topleft" transform="matrix(0,-1,-1.4999988,0,140.49996,120)" opacity=".80">
         <path id="path945" transform="matrix(0,-1,-1,0,0,0)" d="m-20.999994-35h2.000004v1h-2.000004z" fill="none"/>
         <path id="rect5003-5-7-5-0-9-9" class="ColorScheme-NeutralText" d="m31 18.99999h3v2h-3z" fill="currentColor"/>
     </g>
-    <g id="east-attention-bottomleft" transform="matrix(-1.4999988,0,0,1,159.99995,81.999994)" opacity=".66">
+    <g id="east-attention-bottomleft" transform="matrix(-1.4999988,0,0,1,159.99995,81.999994)" opacity=".80">
         <path id="path949" class="ColorScheme-NeutralText" d="m31.99999 18h1.999999v3h-1.999999z" fill="currentColor"/>
         <path id="path951" transform="matrix(0,1,1,0,0,0)" d="m21 31.99999h1v1.785739h-1z" fill="none"/>
     </g>
-    <g id="east-attention-top" transform="matrix(1.0769152 0 0 -1 106.61561 115)" opacity=".166">
+    <g id="east-attention-top" transform="matrix(1.0769152 0 0 -1 106.61561 115)" opacity=".35">
         <path id="path954" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m4.999827-28h26.000193v2h-26.000193z" fill="currentColor"/>
         <path id="path956" class="ColorScheme-NeutralText" transform="scale(1 -1)" d="m4.999827-29h26.000193v1h-26.000193z" fill="currentColor"/>
         <path id="path958" transform="matrix(0 1 1 0 0 0)" d="m29.000008 4.999827h1v26.000191h-1z" fill="none"/>
     </g>
-    <g id="east-attention-topright" transform="matrix(1 0 0 -1 109 107)" opacity=".166">
+    <g id="east-attention-topright" transform="matrix(1 0 0 -1 109 107)" opacity=".35">
         <path id="path961" transform="scale(-1 1)" d="m-34 21h3v1h-3z" fill="none"/>
         <path id="rect5003-5-6-8-9-3-4-9" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path964" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
     </g>
-    <g id="east-attention-bottomright" transform="matrix(0 1 1 0 122 68.999995)" opacity=".166">
+    <g id="east-attention-bottomright" transform="matrix(0 1 1 0 122 68.999995)" opacity=".35">
         <path id="path967" transform="scale(1 -1)" d="m34-21h1v3h-1z" fill="none"/>
         <path id="rect5003-5-6-8-5-7-4-2-2" class="ColorScheme-NeutralText" d="m31 18h2v2h-2z" fill="currentColor"/>
         <path id="path3643-6-3-5-7-8" class="ColorScheme-NeutralText" d="m34 18v3h-3v-1h2v-2z" fill="currentColor"/>
