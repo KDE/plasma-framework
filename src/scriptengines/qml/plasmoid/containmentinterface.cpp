@@ -788,8 +788,6 @@ void ContainmentInterface::loadWallpaper()
         m_wallpaperInterface = new WallpaperInterface(this);
 
         m_wallpaperInterface->setZ(-1000);
-        // Qml seems happier if the parent gets set in this way
-        m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
 
         connect(m_wallpaperInterface, &WallpaperInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
 
