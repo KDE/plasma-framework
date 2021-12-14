@@ -143,6 +143,17 @@ void ContainmentInterface::init()
     connect(m_containment.data()->actions(), &KActionCollection::changed, this, &ContainmentInterface::actionsChanged);
 }
 
+AppletInterface *ContainmentInterface::graphicsObjectForApplet(Plasma::Applet *applet)
+{
+    if (applet->script()) {
+        QMetaObject::invokeMethod(applet->script(), "loadQml", Qt::DirectConnection);
+    } else {
+        return nullptr;
+    }
+
+    return applet->property("_plasma_graphicObject").value<AppletInterface *>();
+}
+
 QList<QObject *> ContainmentInterface::applets()
 {
     return m_appletInterfaces;
@@ -171,7 +182,7 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
     Plasma::Applet *applet = m_containment->createApplet(plugin, args);
 
     if (applet) {
-        QQuickItem *appletGraphicObject = applet->property("_plasma_graphicObject").value<QQuickItem *>();
+        QQuickItem *appletGraphicObject = graphicsObjectForApplet(applet);
         // invalid applet?
         if (!appletGraphicObject) {
             blockSignals(false);
@@ -197,7 +208,7 @@ void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &
         return;
     }
 
-    AppletInterface *appletInterface = applet->property("_plasma_graphicObject").value<AppletInterface *>();
+    AppletInterface *appletInterface = graphicsObjectForApplet(applet);
     if (appletInterface) {
         Q_EMIT appletInterface->externalData(mimetype, data);
     }
@@ -208,7 +219,7 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
     QObject *desktop = nullptr;
     const auto lst = m_containment->corona()->containments();
     for (Plasma::Containment *c : lst) {
-        ContainmentInterface *contInterface = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
+        ContainmentInterface *contInterface = qobject_cast<ContainmentInterface *>(graphicsObjectForApplet(c));
 
         if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
@@ -727,8 +738,8 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
         return;
     }
 
-    AppletInterface *appletGraphicObject = applet->property("_plasma_graphicObject").value<AppletInterface *>();
-    AppletInterface *contGraphicObject = m_containment->property("_plasma_graphicObject").value<AppletInterface *>();
+    AppletInterface *appletGraphicObject = graphicsObjectForApplet(applet);
+    AppletInterface *contGraphicObject = graphicsObjectForApplet(m_containment);
 
     //     qDebug() << "Applet added on containment:" << m_containment->title() << contGraphicObject
     //              << "Applet: " << applet << applet->title() << appletGraphicObject;

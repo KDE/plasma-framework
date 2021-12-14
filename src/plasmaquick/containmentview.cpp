@@ -14,6 +14,7 @@
 #include <QScreen>
 #include <QTimer>
 
+#include <plasma/scripting/appletscript.h>
 #include "plasma/pluginloader.h"
 #include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
@@ -58,8 +59,11 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
     Plasma::Types::Location oldLoc = location();
     Plasma::Types::FormFactor oldForm = formFactor();
 
-    if (containment) {
+    if (containment && containment->script()) {
         QObject::disconnect(containment, nullptr, q, nullptr);
+        if (containment->script()) {
+            QMetaObject::invokeMethod(containment->script(), "loadQml", Qt::DirectConnection);
+        }
         QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
         if (auto item = qobject_cast<QQuickItem *>(oldGraphicObject)) {
             item->setParentItem(nullptr); //if we changed containment, unlink it from the views
@@ -112,6 +116,9 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
+    if (containment->script()) {
+        QMetaObject::invokeMethod(containment->script(), "loadQml", Qt::DirectConnection);
+    }
     QQuickItem *graphicObject = containment->property("_plasma_graphicObject").value<QQuickItem *>();
 
     if (graphicObject) {

@@ -59,25 +59,45 @@ DeclarativeAppletScript::~DeclarativeAppletScript()
 
 bool DeclarativeAppletScript::init()
 {
+    return true;
+}
+
+void DeclarativeAppletScript::loadQml()
+{
+    if (m_interface) {
+        return;
+    }
     // make possible to import extensions from the package
     // FIXME: probably to be removed, would make possible to use native code from within the package :/
     // m_interface->qmlObject()->engine()->addImportPath(package()->path()+"/contents/imports");
-
+qWarning()<<"AAAAAA"<<this<<applet()->title();
     Plasma::Applet *a = applet();
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(a);
 
     if (pc && pc->isContainment()) {
         m_interface = new ContainmentInterface(this, m_args);
+        for (auto a : pc->applets()) {
+            if (auto scriptImpl = qobject_cast<DeclarativeAppletScript *>(a->script())) {
+                scriptImpl->loadQml();
+            }
+        }
 
-        // fail? so it's a normal Applet
+    // fail? so it's a normal Applet
     } else {
         m_interface = new AppletInterface(this, m_args);
     }
 
     m_interface->setParent(this);
-
-    return true;
 }
+
+void DeclarativeAppletScript::destroyQml()
+{
+    if (m_interface) {
+        m_interface->deleteLater();
+        m_interface = nullptr;
+    }
+}
+
 
 QString DeclarativeAppletScript::filePath(const QString &type, const QString &file) const
 {

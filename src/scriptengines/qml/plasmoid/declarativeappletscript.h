@@ -32,6 +32,9 @@ public:
 public Q_SLOTS:
     void executeAction(const QString &name);
 
+    void loadQml();
+    void destroyQml();
+
 protected:
     bool init() override;
 

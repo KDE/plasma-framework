@@ -160,6 +160,7 @@ public:
 
 protected:
     void init() override;
+    AppletInterface *graphicsObjectForApplet(Plasma::Applet *applet);
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;

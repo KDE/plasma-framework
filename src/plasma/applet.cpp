@@ -798,6 +798,11 @@ bool Applet::hasConfigurationInterface() const
     return d->hasConfigurationInterface;
 }
 
+Plasma::AppletScript *Applet::script()
+{
+    return d->script;
+}
+
 void Applet::setHasConfigurationInterface(bool hasInterface)
 {
     if (hasInterface == d->hasConfigurationInterface) {

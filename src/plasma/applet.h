@@ -27,6 +27,7 @@ class KConfigLoader;
 namespace Plasma
 {
 class AppletPrivate;
+class AppletScript;
 class Containment;
 class DataEngine;
 class Package;
@@ -505,6 +506,12 @@ public:
      * @return true if this plasmoid provides a GUI configuration
      **/
     bool hasConfigurationInterface() const;
+
+    /**
+     * @return The scriptengine if any, or nullptr
+     * @since 5.90
+     */
+    Plasma::AppletScript *script();
 
 Q_SIGNALS:
     // BOOKKEEPING
