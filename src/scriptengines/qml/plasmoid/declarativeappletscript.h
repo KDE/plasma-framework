@@ -44,7 +44,7 @@ Q_SIGNALS:
     void contextChanged();
 
 private:
-    AppletInterface *m_interface;
+    QPointer<AppletInterface>m_interface;
     QVariantList m_args;
     friend class AppletLoader;
     friend class AppletInterface;

@@ -1173,9 +1173,8 @@ void ContainmentInterface::itemChange(ItemChange change, const ItemChangeData &v
         // we have a window: create the representations if needed
         if (value.window && !m_containment->wallpaper().isEmpty()) {
             loadWallpaper();
-        } else if (m_wallpaperInterface) {
-            m_wallpaperInterface->deleteLater();
-            m_wallpaperInterface = nullptr;
+        } else if (!value.window) {
+            deleteLater();
         }
     }
 

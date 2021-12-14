@@ -198,8 +198,9 @@ Q_SIGNALS:
     void editModeChanged();
     void wallpaperInterfaceChanged();
 
-protected Q_SLOTS:
+public Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
+protected Q_SLOTS:
     void appletRemovedForward(Plasma::Applet *applet);
     void loadWallpaper();
     void dropJobResult(KJob *job);
