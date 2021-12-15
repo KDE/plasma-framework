@@ -130,4 +130,5 @@
         <path d="M 3,6 H 0 V 0 H 6 V 3 C 6,4.6568542489 4.6568542489,6 3,6 Z" inkscape:label="#shadow-bottomright" style="opacity:0.00100002;fill:#000000;fill-opacity:0.0039215689" id="path95-4-2" />
         <path id="path2368-7-5" style="fill:url(#radialGradient3268-6-6);fill-opacity:1;fill-rule:evenodd;stroke-width:0.999997" d="M 6,0 V 3 C 6,4.6568542489 4.6568542489,6 3,6 H 0 V 16 H 3 A 13,13 0 0 0 16,3 V 0 Z" />
     </g>
+    <rect style="fill:#0000ff;fill-rule:evenodd" id="private-hint-use-shadow" width="5" height="5" x="-14" y="0" />
 </svg>

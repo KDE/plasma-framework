@@ -55,7 +55,7 @@ T.ToolTip {
             anchors.rightMargin: -margins.right
             anchors.topMargin: -margins.top
             anchors.bottomMargin: -margins.bottom
-            imagePath: "widgets/tooltip"
+            imagePath: "solid/widgets/tooltip"
             prefix: "shadow"
             colorGroup: PlasmaCore.Theme.ToolTipColorGroup
             PlasmaCore.ColorScope.inherit: false
