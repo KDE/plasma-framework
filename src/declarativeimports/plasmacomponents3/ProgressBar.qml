@@ -29,35 +29,43 @@ T.ProgressBar {
         implicitHeight: barSvg.elementSize("hint-bar-size").height || fixedMargins.top + fixedMargins.bottom
         PlasmaCore.FrameSvgItem {
             id: barFill
+            property bool visibleIndeterminate: control.indeterminate && barFill.parent.visible
+            property real indeterminateWidth: Math.round(parent.width / 4)
             height: parent.height
-            width: control.indeterminate ? PlasmaCore.Units.gridUnit * 2 : parent.width * control.position
+            width: anim.actuallyRunning ? indeterminateWidth : parent.width * control.position
             x: control.mirrored ? parent.width - width : 0
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
             colorGroup: PlasmaCore.ColorScope.colorGroup
-            visible: width > fixedMargins.left + fixedMargins.right
+            visible: width >= fixedMargins.left + fixedMargins.right
         }
         SequentialAnimation {
             id: anim
+            // `running` is set to false before the animation actually stops.
+            // We need an extra property to see if it's actually still running so
+            // the fill doesn't go out of bounds when `running` switches to false.
+            property bool actuallyRunning: barFill.visibleIndeterminate
             loops: Animation.Infinite
 
             alwaysRunToEnd: true
-            running: control.indeterminate && control.visible
+            running: barFill.visibleIndeterminate
 
             NumberAnimation {
                 target: barFill
                 property: "x"
-                to: !control.mirrored ? control.availableWidth - barFill.width : 0
+                to: !control.mirrored ? control.availableWidth - barFill.indeterminateWidth : 0
                 duration: PlasmaCore.Units.humanMoment/2
                 easing.type: Easing.InOutSine
             }
             NumberAnimation {
                 target: barFill
                 property: "x"
-                to: control.mirrored ? control.availableWidth - barFill.width : 0
+                to: control.mirrored ? control.availableWidth - barFill.indeterminateWidth : 0
                 duration: PlasmaCore.Units.humanMoment/2
                 easing.type: Easing.InOutSine
             }
+            onStarted: actuallyRunning = true
+            onStopped: actuallyRunning = false
         }
     }
 
