@@ -44,6 +44,11 @@ public:
     ~ContainmentView() override;
 
     /**
+     * Unassign any containment UI from this view, then delete it
+     */
+    void destroy();
+
+    /**
      * @return the corona of this view
      **/
     Plasma::Corona *corona() const;
