@@ -47,7 +47,7 @@ class Units : public QObject
     Q_PROPERTY(int gridUnit READ gridUnit NOTIFY gridUnitChanged)
 
     /**
-     * units.iconSizes provides access to platform-dependent icon sizing
+     * Units.iconSizes provides access to platform-dependent icon sizing
      *
      * The icon sizes provided are normalized for different DPI, so icons
      * will scale depending on the DPI.
@@ -67,7 +67,7 @@ class Units : public QObject
     Q_PROPERTY(QQmlPropertyMap *iconSizes READ iconSizes CONSTANT)
 
     /**
-     * units.iconSizeHints provides access to user-configurable icon size hints,
+     * Units.iconSizeHints provides access to user-configurable icon size hints,
      * to be used where appropriate in the user interface.
      *
      * Conceptually, an icon size hint is a key that has one of the sizes from
@@ -84,7 +84,7 @@ class Units : public QObject
     // layout hints
 
     /**
-     * units.smallSpacing is the amount of spacing that should be used around smaller UI elements,
+     * Units.smallSpacing is the amount of spacing that should be used around smaller UI elements,
      * for example as spacing in Columns. Internally, this size depends on the size of
      * the default font as rendered on the screen, so it takes user-configured font size and DPI
      * into account.
@@ -92,7 +92,7 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
 
     /**
-     * units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
+     * Units.largeSpacing is the amount of spacing that should be used inside bigger UI elements,
      * for example between an icon and the corresponding text. Internally, this size depends on
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
@@ -108,25 +108,25 @@ class Units : public QObject
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)
 
     /**
-     * units.longDuration should be used for longer, screen-covering animations, for opening and
+     * Units.longDuration should be used for longer, screen-covering animations, for opening and
      * closing of dialogs and other "not too small" animations
      */
     Q_PROPERTY(int longDuration READ longDuration NOTIFY durationChanged)
 
     /**
-     * units.shortDuration should be used for short animations, such as accentuating a UI event,
+     * Units.shortDuration should be used for short animations, such as accentuating a UI event,
      * hover events, etc..
      */
     Q_PROPERTY(int shortDuration READ shortDuration NOTIFY durationChanged)
 
     /**
-     * units.veryShortDuration should be used for elements that should animate near instantly,
+     * Units.veryShortDuration should be used for elements that should animate near instantly,
      * but should have a hint of smoothness
      */
     Q_PROPERTY(int veryShortDuration READ veryShortDuration NOTIFY durationChanged)
 
     /**
-     * units.veryLongDuration should be used for specialty animations that benefit
+     * Units.veryLongDuration should be used for specialty animations that benefit
      * from being even longer than longDuration.
      */
     Q_PROPERTY(int veryLongDuration READ veryLongDuration NOTIFY durationChanged)
