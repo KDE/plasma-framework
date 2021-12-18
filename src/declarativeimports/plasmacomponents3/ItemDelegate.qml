@@ -9,7 +9,7 @@ import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import "private"
 
-T.CheckDelegate {
+T.ItemDelegate {
     id: control
     property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ?
         indicator.width + control.spacing : 0
