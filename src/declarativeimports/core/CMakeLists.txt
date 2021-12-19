@@ -28,6 +28,19 @@ target_sources(corebindingsplugin PRIVATE
     shaders.qrc
 )
 
+ecm_qt_declare_logging_category(corebindingsplugin
+    HEADER loggingcategory.h
+    IDENTIFIER PlasmaCoreLog
+    CATEGORY_NAME org.kde.plasma.core
+    DEFAULT_SEVERITY Warning
+)
+
+ecm_generate_export_header(corebindingsplugin
+    VERSION ${KF_VERSION}
+    BASE_NAME PlasmaCore
+    DEPRECATION_VERSIONS 5.90
+)
+
 target_link_libraries(corebindingsplugin
         Qt5::Quick
         Qt5::Qml

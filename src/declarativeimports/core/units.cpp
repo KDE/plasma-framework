@@ -15,9 +15,49 @@
 #include <QQuickWindow>
 #include <QScreen>
 #include <QtGlobal>
+
+#include <chrono>
 #include <cmath>
 
 #include <KIconLoader>
+
+#include "loggingcategory.h"
+
+using clock = std::chrono::steady_clock;
+
+const clock::duration rateLimit = std::chrono::seconds(1);
+
+/* Print a deprecation warning that is rate limited to only display once in
+ * every time period as determined by rateLimit. We keep track of how often this
+ * is called and display that if it is larger than 0.
+ *
+ * This is done to prevent flooding the logs with "X is deprecated" messages
+ * that are all the same and don't provide any new information after the first.
+ */
+void rateLimitWarning(const char *method, const char *since, const char *message)
+{
+    static QMap<QString, QPair<clock::time_point, int>> messages;
+
+    auto methodString = QString::fromUtf8(method);
+
+    if (!messages.contains(methodString)) {
+        messages.insert(methodString, qMakePair(clock::time_point{}, 0));
+    }
+
+    auto entry = messages.value(methodString);
+    if (clock::now() - entry.first < rateLimit) {
+        messages[methodString].second += 1;
+        return;
+    }
+
+    qCWarning(PlasmaCoreLog).nospace() << method << " is deprecated (since " << since << "): " << message;
+
+    if (entry.second > 0) {
+        qCWarning(PlasmaCoreLog) << "Previous message repeats" << entry.second << "times.";
+    }
+
+    messages[methodString] = qMakePair(clock::now(), 0);
+}
 
 const int defaultLongDuration = 200;
 
@@ -247,6 +287,7 @@ int Units::smallSpacing() const
 
 int Units::largeSpacing() const
 {
+    rateLimitWarning("PlasmaCore.Units.largeSpacing", "5.90", "This is inconsistent with Kirigami, and equals to gridUnit. Use `smallSpacing * 2` until KF6.");
     return m_largeSpacing;
 }
 

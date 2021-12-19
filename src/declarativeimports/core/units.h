@@ -15,6 +15,8 @@
 
 #include <KConfigWatcher>
 
+#include <plasmacore_export.h>
+
 class QQuickItem;
 
 class SharedAppFilter : public QObject
@@ -96,6 +98,8 @@ class Units : public QObject
      * for example between an icon and the corresponding text. Internally, this size depends on
      * the size of the default font as rendered on the screen, so it takes user-configured font
      * size and DPI into account.
+     *
+     * @deprecated since 5.90 This is inconsistent with Kirigami, and equals to gridUnit. Use `smallSpacing * 2` until KF6.
      */
     Q_PROPERTY(int largeSpacing READ largeSpacing NOTIFY spacingChanged)
 
@@ -202,7 +206,14 @@ public:
     /**
      * @return Pixel value for large spacing between elements.
      * @since 5.0
+     * @deprecated since 5.90 This is inconsistent with Kirigami, and equals to gridUnit. Use `smallSpacing * 2` until KF6.
      */
+#if PLASMACORE_ENABLE_DEPRECATED_SINCE(5, 90)
+    // TODO KF6 merge with Kirigami.Units, or at least fix the inconsistency
+    PLASMACORE_DEPRECATED_VERSION(5, 90, "This is inconsistent with Kirigami, and equals to gridUnit. Use `smallSpacing * 2` until KF6.")
+    qreal devicePixelRatio() const;
+#endif
+
     int largeSpacing() const;
 
     /**
