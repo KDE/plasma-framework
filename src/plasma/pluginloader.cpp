@@ -9,6 +9,7 @@
 #include <QPointer>
 #include <QStandardPaths>
 
+#include <KLazyLocalizedString>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
@@ -91,28 +92,28 @@ QSet<QString> PluginLoaderPrivate::knownCategories()
     // strings for translation
     QSet<QString> categories = s_customCategories;
     /* clang-format off */
-    categories << QStringLiteral(I18N_NOOP("Accessibility")).toLower()
-               << QStringLiteral(I18N_NOOP("Application Launchers")).toLower()
-               << QStringLiteral(I18N_NOOP("Astronomy")).toLower()
-               << QStringLiteral(I18N_NOOP("Date and Time")).toLower()
-               << QStringLiteral(I18N_NOOP("Development Tools")).toLower()
-               << QStringLiteral(I18N_NOOP("Education")).toLower()
-               << QStringLiteral(I18N_NOOP("Environment and Weather")).toLower()
-               << QStringLiteral(I18N_NOOP("Examples")).toLower()
-               << QStringLiteral(I18N_NOOP("File System")).toLower()
-               << QStringLiteral(I18N_NOOP("Fun and Games")).toLower()
-               << QStringLiteral(I18N_NOOP("Graphics")).toLower()
-               << QStringLiteral(I18N_NOOP("Language")).toLower()
-               << QStringLiteral(I18N_NOOP("Mapping")).toLower()
-               << QStringLiteral(I18N_NOOP("Miscellaneous")).toLower()
-               << QStringLiteral(I18N_NOOP("Multimedia")).toLower()
-               << QStringLiteral(I18N_NOOP("Online Services")).toLower()
-               << QStringLiteral(I18N_NOOP("Productivity")).toLower()
-               << QStringLiteral(I18N_NOOP("System Information")).toLower()
-               << QStringLiteral(I18N_NOOP("Utilities")).toLower()
-               << QStringLiteral(I18N_NOOP("Windows and Tasks")).toLower()
-               << QStringLiteral(I18N_NOOP("Clipboard")).toLower()
-               << QStringLiteral(I18N_NOOP("Tasks")).toLower();
+    categories << kli18n("Accessibility").toString().toLower()
+               << kli18n("Application Launchers").toString().toLower()
+               << kli18n("Astronomy").toString().toLower()
+               << kli18n("Date and Time").toString().toLower()
+               << kli18n("Development Tools").toString().toLower()
+               << kli18n("Education").toString().toLower()
+               << kli18n("Environment and Weather").toString().toLower()
+               << kli18n("Examples").toString().toLower()
+               << kli18n("File System").toString().toLower()
+               << kli18n("Fun and Games").toString().toLower()
+               << kli18n("Graphics").toString().toLower()
+               << kli18n("Language").toString().toLower()
+               << kli18n("Mapping").toString().toLower()
+               << kli18n("Miscellaneous").toString().toLower()
+               << kli18n("Multimedia").toString().toLower()
+               << kli18n("Online Services").toString().toLower()
+               << kli18n("Productivity").toString().toLower()
+               << kli18n("System Information").toString().toLower()
+               << kli18n("Utilities").toString().toLower()
+               << kli18n("Windows and Tasks").toString().toLower()
+               << kli18n("Clipboard").toString().toLower()
+               << kli18n("Tasks").toString().toLower();
     /* clang-format on */
     return categories;
 }
