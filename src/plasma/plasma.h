@@ -101,6 +101,8 @@ public:
             2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
         DesktopFullyCovered =
             4, /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
+        ContainmentOpaque =
+            8, /**< The containment is explicitly configured as opaque by the user */
     };
     Q_ENUM(ContainmentDisplayHint)
     Q_DECLARE_FLAGS(ContainmentDisplayHints, ContainmentDisplayHint)
