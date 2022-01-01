@@ -1,0 +1,663 @@
+# Translation of libplasma5.po to Ukrainian
+# Copyright (C) 2018-2021 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2013, 2014, 2015, 2016, 2018, 2019, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: libplasma5\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-27 00:40+0000\n"
+"PO-Revision-Date: 2021-04-28 09:45+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Вихідні дні"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Події"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Завдання"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Інше"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Попередній місяць"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Попередній рік"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Попередня декада"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Сьогодні"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Сьогоднішній день у календарі"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Наступний місяць"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Наступний рік"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Наступна декада"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Дні"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Місяці"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Роки"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "Гаразд"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:79
+#, kde-format
+msgid "More actions"
+msgstr "Додаткові дії"
+
+#: plasma/applet.cpp:377
+#, kde-format
+msgid "Unknown"
+msgstr "Невідомий"
+
+#: plasma/applet.cpp:757
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Задіяти віджет «%1»"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Вилучити аплет «%1»"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:498
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Увійти до режиму редагування"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Налаштувати «%1»…"
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Заблокувати віджети"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Розблокувати віджети"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Вийти з режиму редагування"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Визначає, чи слід створювати кеш теми на диску."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Максимальний розмір кешу теми на диску у кілобайтах. Зауважте, що файли кешу "
+"є доволі рідкісними, отже, максимальний обсяг може бути і не використано. "
+"Тому встановлення більшого розміру забезпечить безпечне користування темами."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Головний файл скрипту"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Тести"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Зображення"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Тематичні зображення"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Визначення налаштування"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Інтерфейс користувача"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Файли даних"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Скрипти"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Знімок вікна"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Переклади"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:29
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Модель сторінок налаштовування інтерфейсу"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration XML file"
+msgstr "XML-файл налаштування"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:41
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Нетиповий доповнювач для компактних аплетів"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Описи служб"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Зображення для вікон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Загальне тло вікна"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Тема для вікна виходу"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Пакунки зображень тла стільниці"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Зображення для віджетів"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Зображення тла для віджетів"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Циферблат аналогового годинника"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Зображення тла для панелей"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Тло для віджетів графіки"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Зображення тла для підказок"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Непрозорі зображення для діалогових вікон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Непрозоре тло типового діалогового вікна"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Непрозора тема для вікна виходу"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Непрозорі зображення для віджетів"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Непрозоре зображення для тла панелей"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Непрозоре зображення для тла підказок"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Файл налаштування KColorScheme"
+
+#: plasma/pluginloader.cpp:95
+msgid "Accessibility"
+msgstr "Доступність"
+
+#: plasma/pluginloader.cpp:96
+msgid "Application Launchers"
+msgstr "Інструменти запуску програм"
+
+#: plasma/pluginloader.cpp:97
+msgid "Astronomy"
+msgstr "Астрономія"
+
+#: plasma/pluginloader.cpp:98
+msgid "Date and Time"
+msgstr "Дата і час"
+
+#: plasma/pluginloader.cpp:99
+msgid "Development Tools"
+msgstr "Інструменти для розробки"
+
+#: plasma/pluginloader.cpp:100
+msgid "Education"
+msgstr "Освіта"
+
+#: plasma/pluginloader.cpp:101
+msgid "Environment and Weather"
+msgstr "Середовище і погода"
+
+#: plasma/pluginloader.cpp:102
+msgid "Examples"
+msgstr "Приклади"
+
+#: plasma/pluginloader.cpp:103
+msgid "File System"
+msgstr "Файлова система"
+
+#: plasma/pluginloader.cpp:104
+msgid "Fun and Games"
+msgstr "Забавки та ігри"
+
+#: plasma/pluginloader.cpp:105
+msgid "Graphics"
+msgstr "Графіка"
+
+#: plasma/pluginloader.cpp:106
+msgid "Language"
+msgstr "Мова"
+
+#: plasma/pluginloader.cpp:107
+msgid "Mapping"
+msgstr "Картографія"
+
+#: plasma/pluginloader.cpp:108
+msgid "Miscellaneous"
+msgstr "Різне"
+
+#: plasma/pluginloader.cpp:109
+msgid "Multimedia"
+msgstr "Мультимедіа"
+
+#: plasma/pluginloader.cpp:110
+msgid "Online Services"
+msgstr "Мережеві служби"
+
+#: plasma/pluginloader.cpp:111
+msgid "Productivity"
+msgstr "Офісні програми"
+
+#: plasma/pluginloader.cpp:112
+msgid "System Information"
+msgstr "Системна інформація"
+
+#: plasma/pluginloader.cpp:113
+msgid "Utilities"
+msgstr "Інструменти"
+
+#: plasma/pluginloader.cpp:114
+msgid "Windows and Tasks"
+msgstr "Вікна і завдання"
+
+#: plasma/pluginloader.cpp:115
+msgid "Clipboard"
+msgstr "Буфер обміну"
+
+#: plasma/pluginloader.cpp:116
+msgid "Tasks"
+msgstr "Завдання"
+
+#: plasma/pluginloader.cpp:614 plasma/pluginloader.cpp:615
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Різне"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"Віджетом %1 не визначено, який з рушіїв скриптів (ScriptEngine) "
+"використовувати."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Не вдалося відкрити пакунок %1, потрібний для віджета %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Не вдалося створити рушій скриптів %1 для віджета %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Показати альтернативи…"
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Віджет вилучено"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Віджет «%1» було вилучено."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Панель вилучено"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Панель було вилучено."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Стільницю вилучено"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Стільницю було вилучено."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Вернути"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Параметри віджета"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Вилучити цей віджет"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Запустити пов’язану програму"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Спроба ініціалізації скрипту завершилася невдало"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Відкрити за допомогою %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Вилучити цю панель"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Вилучити цей простір дій"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Налаштувати простір дій"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Додати віджети..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Не вдалося знайти потрібного компонента: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Оприлюднення віджета у мережі надасть вам змогу отримувати доступ до цього "
+"віджета з іншого комп’ютера для віддаленого керування."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Оприлюднити цей віджет у мережі"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Дозволити доступ будь-кому вільний доступ до цього віджета"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Некоректна (нульова) служба, не вдалося виконати жодних дій."
+
+#: plasmaquick/appletquickitem.cpp:595
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Невідомий аплет"
+
+#: plasmaquick/appletquickitem.cpp:610
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Помилка під час завантаження файла QML: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:612
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Помилка під час спроби завантажити аплет: пакунка не існує. %1"
+
+#: plasmaquick/configview.cpp:96
+#, kde-format
+msgid "%1 Settings"
+msgstr "Налаштувати віджет «%1»"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Plasma Package"
+msgstr "Пакунок Плазми"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:601
+#, kde-format
+msgid "Install"
+msgstr "Встановити"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:614
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Не вдалося встановити пакунок"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:637
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Скинутий вами пакунок є некоректним."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:646
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:710
+#, kde-format
+msgid "Widgets"
+msgstr "Віджети"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:651
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Додати %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:665
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Додати піктограму"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:677
+#, kde-format
+msgid "Wallpaper"
+msgstr "Шпалери"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Встановити %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Скинуто дані"

@@ -1,0 +1,659 @@
+# Copyright (C) YEAR This file is copyright:
+# This file is distributed under the same license as the plasma-framework package.
+#
+# Phu Hung Nguyen <phu.nguyen@kdemail.net>, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma-framework\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-27 00:40+0000\n"
+"PO-Revision-Date: 2021-05-03 22:21+0200\n"
+"Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
+"Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Lokalize 20.08.1\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Ngày lễ"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Sự kiện"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Cần làm"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Khác"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Tháng trước"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Năm trước"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Thập kỉ trước"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Hôm nay"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Đặt lại lịch về hôm nay"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Tháng sau"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Năm sau"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Thập kỉ sau"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Ngày"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Tháng"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Năm"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Huỷ"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:79
+#, kde-format
+msgid "More actions"
+msgstr "Các hành động khác"
+
+#: plasma/applet.cpp:377
+#, kde-format
+msgid "Unknown"
+msgstr "Không rõ"
+
+#: plasma/applet.cpp:757
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Kích hoạt phụ kiện %1"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Xoá bỏ %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:498
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Đi vào Chế độ Sửa"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Cấu hình %1..."
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Khoá các phụ kiện"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Bỏ khoá các phụ kiện"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Thoát khỏi chế độ sửa"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Có tạo bộ nhớ sẵn trên đĩa cho chủ đề này hay không."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Kích thước tối đa của bộ nhớ sẵn trên đĩa cho chủ đề, tính theo ki-lô byte. "
+"Lưu ý rằng các tệp này là các tệp thưa, nên kích thước tối đa kia có thể sẽ "
+"không bị đạt đến. Vì vậy, đặt một kích thước lớn thường cũng không gây vấn "
+"đề gì."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Tệp kịch bản chính"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Bài kiểm thử"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Ảnh"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Ảnh theo chủ đề"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Định nghĩa cấu hình"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Giao diện người dùng"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Tệp dữ liệu"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Kịch bản thực thi được"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Ảnh chụp màn hình"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Bản dịch"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:29
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Mô hình các trang giao diện cấu hình"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Tệp XML cấu hình"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:41
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Bộ mở rộng tự chọn cho các tiểu ứng dụng gọn"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Mô tả dịch vụ"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Ảnh cho hộp thoại"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Nền hộp thoại trơn"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Chủ đề cho hộp thoại đăng xuất"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Gói phông nền"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Ảnh cho phụ kiện"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Ảnh nền cho phụ kiện"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Mặt đồng hồ kim"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Ảnh nền cho bảng"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Nền cho phụ kiện vẽ biểu đồ"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Ảnh nền cho chú giải"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Ảnh đục cho hộp thoại"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Nền hộp thoại trơn đục"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Chủ đề đục cho hộp thoại đăng xuất"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Ảnh đục cho phụ kiện"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Ảnh nền đục cho bảng"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Ảnh nền đục cho chú giải"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Tệp cấu hình KColorScheme"
+
+#: plasma/pluginloader.cpp:95
+msgid "Accessibility"
+msgstr "Hỗ trợ truy cập"
+
+#: plasma/pluginloader.cpp:96
+msgid "Application Launchers"
+msgstr "Các mục khởi chạy ứng dụng"
+
+#: plasma/pluginloader.cpp:97
+msgid "Astronomy"
+msgstr "Thiên văn học"
+
+#: plasma/pluginloader.cpp:98
+msgid "Date and Time"
+msgstr "Ngày giờ"
+
+#: plasma/pluginloader.cpp:99
+msgid "Development Tools"
+msgstr "Công cụ phát triển"
+
+#: plasma/pluginloader.cpp:100
+msgid "Education"
+msgstr "Giáo dục"
+
+#: plasma/pluginloader.cpp:101
+msgid "Environment and Weather"
+msgstr "Môi trường và Thời tiết"
+
+#: plasma/pluginloader.cpp:102
+msgid "Examples"
+msgstr "Ví dụ"
+
+#: plasma/pluginloader.cpp:103
+msgid "File System"
+msgstr "Hệ thống tệp"
+
+#: plasma/pluginloader.cpp:104
+msgid "Fun and Games"
+msgstr "Giải trí và trò chơi"
+
+#: plasma/pluginloader.cpp:105
+msgid "Graphics"
+msgstr "Đồ hoạ"
+
+#: plasma/pluginloader.cpp:106
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: plasma/pluginloader.cpp:107
+msgid "Mapping"
+msgstr "Bản đồ"
+
+#: plasma/pluginloader.cpp:108
+msgid "Miscellaneous"
+msgstr "Hỗn hợp"
+
+#: plasma/pluginloader.cpp:109
+msgid "Multimedia"
+msgstr "Đa phương tiện"
+
+#: plasma/pluginloader.cpp:110
+msgid "Online Services"
+msgstr "Dịch vụ trực tuyến"
+
+#: plasma/pluginloader.cpp:111
+msgid "Productivity"
+msgstr "Năng suất"
+
+#: plasma/pluginloader.cpp:112
+msgid "System Information"
+msgstr "Thông tin hệ thống"
+
+#: plasma/pluginloader.cpp:113
+msgid "Utilities"
+msgstr "Tiện ích"
+
+#: plasma/pluginloader.cpp:114
+msgid "Windows and Tasks"
+msgstr "Cửa sổ và Tác vụ"
+
+#: plasma/pluginloader.cpp:115
+msgid "Clipboard"
+msgstr "Bảng nháp"
+
+#: plasma/pluginloader.cpp:116
+msgid "Tasks"
+msgstr "Tác vụ"
+
+#: plasma/pluginloader.cpp:614 plasma/pluginloader.cpp:615
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Hỗn hợp"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Phụ kiện %1 không xác định sẽ dùng ScriptEngine nào."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Không mở được gói %1 cần để dùng cho phụ kiện %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Không tạo được một ScriptEngine %1 cho phụ kiện %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Hiện các lựa chọn khác..."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Đã xoá bỏ phụ kiện"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Phụ kiện \"%1\" đã bị xoá bỏ."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Đã xoá bỏ bảng"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Một bảng đã bị xoá bỏ."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Đã xoá bỏ bàn làm việc"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Một bàn làm việc đã bị xoá bỏ."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Đảo ngược"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Thiết lập phụ kiện"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Xoá bỏ phụ kiện này"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Chạy ứng dụng liên kết"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Khởi tạo kịch bản thất bại"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Mở bằng %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Xoá bỏ bảng này"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Xoá bỏ Hoạt động này"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Thiết lập Hoạt động"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Thêm phụ kiện..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Không tìm thấy thành phần được yêu cầu: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Việc chia sẻ một phụ kiện trong mạng cho phép bạn truy cập phụ kiện này từ "
+"một máy tính khác như là một điều khiển từ xa."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Chia sẻ phụ kiện này trong mạng"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Cho phép mọi người tự do truy cập phụ kiện này"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Dịch vụ không hợp lệ (null), không thực hiện được thao tác nào."
+
+#: plasmaquick/appletquickitem.cpp:595
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Tiểu ứng dụng không rõ"
+
+#: plasmaquick/appletquickitem.cpp:610
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Lỗi tải tệp QML: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:612
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Lỗi tải tiểu ứng dụng: gói không tồn tại. %1"
+
+#: plasmaquick/configview.cpp:96
+#, kde-format
+msgid "%1 Settings"
+msgstr "Thiết lập %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Plasma Package"
+msgstr "Gói Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:601
+#, kde-format
+msgid "Install"
+msgstr "Cài đặt"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:614
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Cài đặt gói thất bại"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:637
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Gói mà bạn vừa thả không hợp lệ."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:646
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:710
+#, kde-format
+msgid "Widgets"
+msgstr "Phụ kiện"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:651
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Thêm %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:665
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Thêm biểu tượng"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:677
+#, kde-format
+msgid "Wallpaper"
+msgstr "Phông nền"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Đặt %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Nội dung được thả"

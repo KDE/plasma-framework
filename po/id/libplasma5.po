@@ -1,0 +1,662 @@
+# Indonesian translations for plasmapkg package.
+# Copyright (C) 2010 This_file_is_part_of_KDE
+# This file is distributed under the same license as the plasmapkg package.
+# Andhika Padmawan <andhika.padmawan@gmail.com>, 2010-2014.
+# Wantoyo <wantoyek@gmail.com>, 2017, 2018, 2019, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasmapkg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-27 00:40+0000\n"
+"PO-Revision-Date: 2021-03-05 18:14+0700\n"
+"Last-Translator: Wantoyo <wantoyek@gmail.com>\n"
+"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 20.12.1\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Hari Raya"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Peristiwa"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Kegiatan"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Lainnya"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Bulan Kemarin"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Tahun Kemarin"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Dasawarsa Kemarin"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Hari Ini"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Set ulang kalender ke hari ini"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Bulan Depan"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Tahun Depan"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Dasawarsa Depan"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, fuzzy, kde-format
+#| msgid "Next Month"
+msgid "Months"
+msgstr "Bulan Depan"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "Oke"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Batal"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:79
+#, kde-format
+msgid "More actions"
+msgstr "Aksi selebihnya"
+
+#: plasma/applet.cpp:377
+#, kde-format
+msgid "Unknown"
+msgstr "Tidak diketahui"
+
+#: plasma/applet.cpp:757
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktifkan Widget %1"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Hapus %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:498
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Masuki Mode Edit"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Konfigurasikan %1..."
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Kunci Widget"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Lepas-kunci Widget"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Keluarkan Mode Edit"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+"Apakah iya atau tidak untuk menciptakan sebuah cache on-disk untuk tema."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Ukuran maksimum cache Tema yang ada di disk dalam kilobita. Perhatikan bahwa "
+"file ini adalah file yang jarang, jadi ukuran maksimal mungkin tidak "
+"digunakan. Dengan ukuran yang lebih besar maka biasanya cukup aman."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "File Skrip Utama"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Ujian"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Citra"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Citra Bertema"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Konfigurasi Definisi"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Antarmuka Pengguna"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "File Data"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Skrip Dapat Dieksekusi"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Screenshot"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Terjemahan"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:29
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Konfigurasi model halaman UI"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Konfigurasi file XML"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:41
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Pembentang kustom untuk applet tersusun rapat"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Deskripsi Layanan"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Citra untuk dialog"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Latarbelakang dialog generik"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Tema untuk dialog logout"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Paket-paket wallpaper"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Citra untuk widget"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Citra latarbelakang untuk widget"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Muka jam analog"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Citra latarbelakang untuk panel"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Latarbelakang untuk menggrafik widget"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Citra latarbelakang untuk tip alat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Citra kekusaman untuk dialog"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Latarbelakang dialog generik kekusaman"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Tema kekusaman untuk dialog logout"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Citra kekusaman untuk widget"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Citra latarbelakang kekusaman untuk panel"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Citra latarbelakang kekusaman untuk tip alat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "File konfigurasi KColorScheme"
+
+#: plasma/pluginloader.cpp:95
+msgid "Accessibility"
+msgstr "Aksesibilitas"
+
+#: plasma/pluginloader.cpp:96
+msgid "Application Launchers"
+msgstr "Peluncur Aplikasi"
+
+#: plasma/pluginloader.cpp:97
+msgid "Astronomy"
+msgstr "Ilmu Perbintangan"
+
+#: plasma/pluginloader.cpp:98
+msgid "Date and Time"
+msgstr "Tanggal dan Waktu"
+
+#: plasma/pluginloader.cpp:99
+msgid "Development Tools"
+msgstr "Peralatan Pengembangan"
+
+#: plasma/pluginloader.cpp:100
+msgid "Education"
+msgstr "Edukasi"
+
+#: plasma/pluginloader.cpp:101
+msgid "Environment and Weather"
+msgstr "Environment dan Cuaca"
+
+#: plasma/pluginloader.cpp:102
+msgid "Examples"
+msgstr "Contoh"
+
+#: plasma/pluginloader.cpp:103
+msgid "File System"
+msgstr "Sistem File"
+
+#: plasma/pluginloader.cpp:104
+msgid "Fun and Games"
+msgstr "Hiburan dan Permainan"
+
+#: plasma/pluginloader.cpp:105
+msgid "Graphics"
+msgstr "Grafik"
+
+#: plasma/pluginloader.cpp:106
+msgid "Language"
+msgstr "Bahasa"
+
+#: plasma/pluginloader.cpp:107
+msgid "Mapping"
+msgstr "Pemetaan"
+
+#: plasma/pluginloader.cpp:108
+msgid "Miscellaneous"
+msgstr "Beraneka"
+
+#: plasma/pluginloader.cpp:109
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#: plasma/pluginloader.cpp:110
+msgid "Online Services"
+msgstr "Layanan Online"
+
+#: plasma/pluginloader.cpp:111
+msgid "Productivity"
+msgstr "Produktifitas"
+
+#: plasma/pluginloader.cpp:112
+msgid "System Information"
+msgstr "Informasi Sistem"
+
+#: plasma/pluginloader.cpp:113
+msgid "Utilities"
+msgstr "Utilitas"
+
+#: plasma/pluginloader.cpp:114
+msgid "Windows and Tasks"
+msgstr "Window dan Tugas"
+
+#: plasma/pluginloader.cpp:115
+msgid "Clipboard"
+msgstr "Papan-klip"
+
+#: plasma/pluginloader.cpp:116
+msgid "Tasks"
+msgstr "Tugas"
+
+#: plasma/pluginloader.cpp:614 plasma/pluginloader.cpp:615
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Beraneka"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Widget %1 tidak mendefinisikan ScriptEngine mana yang digunakan."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Tidak dapat membuka paket %1 yang diperlukan terhadap widget %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Tidak dapat menciptakan sebuah ScriptEngine %1 terhadap widget %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Tampilkan Alternatifnya..."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Widget Dihapus"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Widget \"%1\" telah dihapus."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panel Dihapus"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Sebuah panel telah dihapus."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Desktop Dihapus"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Sebuah desktop telah dihapus."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Urungkan"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Pengaturan Widget"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Hapus Widget ini"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Jalankan Aplikasi Yang Berhubungan"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Gagal pemasangan skrip"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Buka dengan %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Hapus panel ini"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Hapus Activity ini"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Pengaturan Activity"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Tambah Widget..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Tidak dapat menemukan komponen yang diminta: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Berbagi widget di jaringan memperkenankanmu mengakses widget ini dari "
+"komputer lainnya sebagai kendali jarak jauh."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Bagikan widget ini pada jaringan"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Perkenankan siapa saja untuk akses secara bebas widget ini"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Layanan (null) tidak absah, tidak bisa melakukan operasi apa pun."
+
+#: plasmaquick/appletquickitem.cpp:595
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Applet tak diketahui"
+
+#: plasmaquick/appletquickitem.cpp:610
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Galat pemuatan file QML: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:612
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Error Memuat Applet: tak beradanya paket. %1"
+
+#: plasmaquick/configview.cpp:96
+#, kde-format
+msgid "%1 Settings"
+msgstr "Pengaturan %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Plasma Package"
+msgstr "Paket Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:601
+#, kde-format
+msgid "Install"
+msgstr "Instal"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:614
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Gagal Penginstalan Paket"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:637
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Paket yang baru saja kamu taruh adalah tidak absah."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:646
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:710
+#, kde-format
+msgid "Widgets"
+msgstr "Widgets"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:651
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Tambah %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:665
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Tambahkan Ikon"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:677
+#, kde-format
+msgid "Wallpaper"
+msgstr "Wallpaper"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Set %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Isi yang ditaruh"

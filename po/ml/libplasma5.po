@@ -1,0 +1,659 @@
+# Malayalam localization of libplasma5
+# Copyright (C) 2019 This file is copyright:
+# This file is distributed under the same license as the plasma-framework package.
+# ലക്ഷ്മി സുനില്‍ <lakshmisunil12@gmail.com>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma-framework\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-12-27 00:40+0000\n"
+"PO-Revision-Date: 2019-12-14 15:16+0530\n"
+"Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
+"Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
+"org.in>\n"
+"Language: ml\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "അവധിദിനങ്ങള്‍"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "പരിപാടികള്‍"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "ചെയ്യാനുള്ളവ"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "മറ്റുള്ളവ"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "മുന്‍മാസം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "മുന്‍വര്‍ഷം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "മുന്‍ദശാബ്ദം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "ഇന്ന്"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "കലണ്ടര്‍ ഇന്നത്തേക്ക്മാറ്റുക"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "അടുത്തമാസം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "അടുത്തവര്‍ഷം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "അടുത്തദശാബ്ദം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, fuzzy, kde-format
+#| msgid "Next Month"
+msgid "Months"
+msgstr "അടുത്തമാസം"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "ശരി"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "റദ്ദാക്കുക"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:79
+#, kde-format
+msgid "More actions"
+msgstr ""
+
+#: plasma/applet.cpp:377
+#, kde-format
+msgid "Unknown"
+msgstr "അജ്ഞാതം"
+
+#: plasma/applet.cpp:757
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "%1 വിഡ്ജറ്റ് സജീവമാക്കുക"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "%1 കളയുക"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:498
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr ""
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "%1 സജ്ജീകരിക്കുക..."
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "വിഡ്ജറ്റുകൾ വെച്ചുറപ്പിക്കുക"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "വിഡ്ജറ്റുകളുടെ വിലക്കഴിക്കുക"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "പ്രമേയത്തിനായുള്ള ഓണ്‍-ഡിസ്ക് കാഷെ സൃഷ്ടിക്കണോ വേണ്ടയോ."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "പ്രധാനസ്ക്രിപ്റ്റ് ഫയല്‍"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "പരിശോധനകള്‍"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "ചിത്രങ്ങള്‍"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "പ്രമേയമുള്ള ചിത്രങ്ങള്‍"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "സജ്ജീകരണ നിര്‍വചനങ്ങള്‍"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "സമ്പർക്കമുഖം"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "ഡാറ്റ ഫയലുകള്‍"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "പ്രവര്‍ത്തിപ്പിക്കാവുന്ന സ്ക്രിപ്റ്റുകള്‍"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "സ്ക്രീന്‍ഷോട്ട്"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "പരിഭാഷ"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:29
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "സജ്ജീകരണ സമ്പർക്കമുഖങ്ങളുടെ മാതൃക"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration XML file"
+msgstr "സജ്ജീകരണ എക്സ് എം എൽ ഫയൽ"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:41
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr ""
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "സേവനവിവരണം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "ഡയലോഗിനായുള്ള ചിത്രങ്ങള്‍"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "പൊതുവായ ഡയലോഗ് പശ്ചാത്തലം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "പുറത്തിറങ്ങുന്നതിനുള്ള ഡയലോഗിന്റെ പ്രമേയം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "പശ്ചാത്തലചിത്രപാക്കേജുകള്‍"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള ചിത്രങ്ങള്‍"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "അനലോഗ് ഘടികാരപ്രതലം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "പാളികള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "ഗ്രാഫിംഗ് വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "സൂചനകള്‍ക്കുള്ള പശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "ഡയലോഗുകൾക്കുള്ള അതാര്യ ചിത്രങ്ങൾ"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "പൊതുവായ ഡയലോഗുകളുടെ അതാര്യ പശ്ചാത്തലം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "ലോഗൗട്ട് ഡയലോഗിനായുള്ള അതാര്യ പ്രമേയം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "വിഡ്ജറ്റിനായുള്ള അതാര്യ ചിത്രങ്ങള്‍"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "പാളികള്‍ക്കായുള്ള അതാര്യ പശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "സൂചനകള്‍ക്കുള്ള അതാര്യപശ്ചാത്തലചിത്രം"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "കെ കളര്‍സ്കീം സജ്ജീകരണ ഫയ"
+
+#: plasma/pluginloader.cpp:95
+msgid "Accessibility"
+msgstr "പ്രാപ്യത"
+
+#: plasma/pluginloader.cpp:96
+msgid "Application Launchers"
+msgstr "ആപ്ലിക്കേഷന്‍ ലോഞ്ചര്‍"
+
+#: plasma/pluginloader.cpp:97
+msgid "Astronomy"
+msgstr "ജ്യോതിശാസ്ത്രം"
+
+#: plasma/pluginloader.cpp:98
+msgid "Date and Time"
+msgstr "തീയതിയും സമയവും"
+
+#: plasma/pluginloader.cpp:99
+msgid "Development Tools"
+msgstr "വികസനത്തിനായുള്ള ഉപകരണങ്ങ"
+
+#: plasma/pluginloader.cpp:100
+msgid "Education"
+msgstr "വിദ്യാഭ്യാസം"
+
+#: plasma/pluginloader.cpp:101
+msgid "Environment and Weather"
+msgstr "പരിസരവും കാലാവസ്ഥയും"
+
+#: plasma/pluginloader.cpp:102
+msgid "Examples"
+msgstr "ഉദാഹരണങ്ങള്‍"
+
+#: plasma/pluginloader.cpp:103
+msgid "File System"
+msgstr "ഫയല്‍ സിസ്റ്റം"
+
+#: plasma/pluginloader.cpp:104
+msgid "Fun and Games"
+msgstr "കേളിയും കളികളും"
+
+#: plasma/pluginloader.cpp:105
+msgid "Graphics"
+msgstr "ഗ്രാഫിക്സ്"
+
+#: plasma/pluginloader.cpp:106
+msgid "Language"
+msgstr "ഭാഷ"
+
+#: plasma/pluginloader.cpp:107
+msgid "Mapping"
+msgstr "മാപ്പിംഗ്"
+
+#: plasma/pluginloader.cpp:108
+msgid "Miscellaneous"
+msgstr "പലവക"
+
+#: plasma/pluginloader.cpp:109
+msgid "Multimedia"
+msgstr "മള്‍ട്ടിമീഡിയ"
+
+#: plasma/pluginloader.cpp:110
+msgid "Online Services"
+msgstr "ഓണ്‍ലൈന്‍ സേവനങ്ങള്‍"
+
+#: plasma/pluginloader.cpp:111
+msgid "Productivity"
+msgstr "ഉത്പാദനക്ഷമത"
+
+#: plasma/pluginloader.cpp:112
+msgid "System Information"
+msgstr "സിസ്റ്റം അറിവ്"
+
+#: plasma/pluginloader.cpp:113
+msgid "Utilities"
+msgstr "ഉപകരണങ്ങൾ"
+
+#: plasma/pluginloader.cpp:114
+msgid "Windows and Tasks"
+msgstr "ജാലകങ്ങളും ജോലികളും"
+
+#: plasma/pluginloader.cpp:115
+msgid "Clipboard"
+msgstr "ഓര്‍മ്മച്ചെപ്പ്"
+
+#: plasma/pluginloader.cpp:116
+msgid "Tasks"
+msgstr "ജോലികള്‍"
+
+#: plasma/pluginloader.cpp:614 plasma/pluginloader.cpp:615
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "പലവക"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "%1 വിഡ്ജറ്റ് ഏത് സ്ക്രിപ്റ്റ് എന്‍ജിനാണ് ഉപയോഗിക്കേണ്ടതെന്ന് നിര്‍വചിച്ചിട്ടില്ല."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "%2 വിഡ്ജറ്റിനാവശ്യമായ %1 പാക്കേജ് തുറക്കാനായില്ല."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "%2 വിഡ്ജറ്റിനു വേണ്ട %1 സ്ക്രിപ്റ്റ് എന്‍ജിന്‍ സൃഷ്ടിക്കുവാനായില്ല."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "മറ്റു മാര്‍ഗങ്ങള്‍ കാണിക്കുക..."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടു"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "%1 വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "പാളി നീക്കംചെയ്യപ്പെട്ടു"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "ഒരു പാളി നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "പണിയിടം നീക്കംചെയ്യപ്പെട്ടു"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "ഒരു പണിയിടം നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "തിരിച്ചെടുക്കുക"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "വിഡ്ജറ്റ് ക്രമീകരണങ്ങള്‍"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "ഈ വിഡ്ജറ്റ് നീക്കംചെയ്യുക"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "ബന്ധപ്പെട്ട ആപ്ലിക്കേഷന്‍ പ്രവര്‍ത്തിപ്പിക്കുക"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "സ്ക്രിപ്റ്റ് ആരംഭിക്കല്‍ പരാജയപ്പെട്ടു"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "%1-ഓടുകൂടി തുറക്കുക"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "ഈ പാളി നീക്കംചെയ്യുക"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "ഈ പ്രവൃത്തി നീക്കംചെയ്യുക"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "പ്രവൃത്തി ക്രമീകരണങ്ങള്‍"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "വിഡ്ജറ്റ് ചേര്‍ക്കുക..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "ആവശ്യപ്പെട്ട ഘടകം കണ്ടെത്തുവാനായില്ല: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"ഒരു വി‍‍ഡ്ജറ്റ് ശൃഖലയില്‍ പങ്കുവയ്ക്കുന്നത് ആ വിഡ്ജറ്റ് വിദൂരത്തിലുള്ള മറ്റൊരു കമ്പ്യൂട്ടറില്‍ നിന്ന് "
+"നിയന്ത്രിക്കാന്‍ അനുവദിക്കുന്നു."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "ഈ വിഡ്ജറ്റ് ശൃംഖലയില്‍ പങ്കുവയ്ക്കുക"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "എല്ലാവരേയും ഈ വിഡ്ജറ്റ് ഉപയോഗിക്കാന്‍ അനുവദിക്കുക"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "അസാധുവായ സേവനം, യാതൊരു പ്രക്രിയയും നിര്‍വഹിക്കാനാവുന്നില്ല."
+
+#: plasmaquick/appletquickitem.cpp:595
+#, fuzzy, kde-format
+#| msgid "Unknown"
+msgid "Unknown Applet"
+msgstr "അജ്ഞാതം"
+
+#: plasmaquick/appletquickitem.cpp:610
+#, fuzzy, kde-format
+#| msgid "Error loading QML file: %1"
+msgid "Error loading QML file: %1 %2"
+msgstr "ക്യുഎംഎല്‍ ഫയല്‍ തുറക്കുന്നതിനിടയില്‍ പിശക്: %1"
+
+#: plasmaquick/appletquickitem.cpp:612
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "ആപ്‌ലെറ്റ് ലോഡ് ചെയ്യുന്നതിൽ പിശക് : പാക്കേജ് നിലവിലില്ല. %1"
+
+#: plasmaquick/configview.cpp:96
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 ക്രമീകരണങ്ങള്‍"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Plasma Package"
+msgstr "പ്ലാസ്മ പാക്കേജ്"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:601
+#, kde-format
+msgid "Install"
+msgstr "ഇന്‍സ്റ്റാള്‍"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:614
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "പാക്കേജ് ഇന്‍സ്റ്റാളേഷന്‍ പരാജയപ്പെട്ടു"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:637
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "നിങ്ങളിപ്പോള്‍ നല്‍കിയ പാക്കേജ് സ്വീകാര്യമല്ല."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:646
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:710
+#, kde-format
+msgid "Widgets"
+msgstr "വിഡ്ജറ്റുകള്‍"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:651
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "%1 ചേര്‍ക്കുക [വിഡ്ജറ്റ് ചേര്‍ക്കുക]"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:665
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:714
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "സൂചനാചിത്രങ്ങള്‍ ചേര്‍ക്കുക"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:677
+#, kde-format
+msgid "Wallpaper"
+msgstr "പശ്ചാത്തലചിത്രം"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "%1 -നെ തീര്‍ച്ചപ്പെടുത്തുക"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "ഉള്ളടക്കം ഉപേക്ഷിക്കപ്പെട്ടു"
