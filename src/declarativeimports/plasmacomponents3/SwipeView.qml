@@ -3,6 +3,7 @@
 
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
+import org.kde.plasma.core 2.0 as PlasmaCore
 
 T.SwipeView {
     id: control
@@ -26,7 +27,7 @@ T.SwipeView {
         highlightRangeMode: ListView.StrictlyEnforceRange
         preferredHighlightBegin: 0
         preferredHighlightEnd: 0
-        highlightMoveDuration: 250
+        highlightMoveDuration: PlasmaCore.Units.longDuration
         maximumFlickVelocity: 4 * (control.orientation === Qt.Horizontal ? width : height)
     }
 }
