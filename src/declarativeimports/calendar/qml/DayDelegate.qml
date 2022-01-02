@@ -10,7 +10,6 @@
 import QtQuick 2.0
 import org.kde.plasma.calendar 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Highlight
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import QtQml.Models 2.15
@@ -56,9 +55,10 @@ PlasmaComponents3.AbstractButton {
         return result
     }
 
-    PlasmaComponents2.Highlight {
+    PlasmaExtras.Highlight {
         id: todayRect
         anchors.fill: parent
+        hovered: true
         opacity: {
             if (today) {
                 return 1;

@@ -18,6 +18,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  * (TODO, make optional? e.g. animate: false)
  *
  * @inherit QtQuick.Item
+ * @deprecated Use PlasmaExtras.Highlight instead.
  */
 Item {
     id: highlight
@@ -30,6 +31,8 @@ Item {
     property bool pressed: false
     width: ListView.view ? ListView.view.width : undefined
     property alias marginHints: background.margins;
+
+    Component.onCompleted: console.warn("PlasmaComponents2.Highlight is deprecated. Use PlasmaExtras.Highlight instead.", (new Error).stack)
 
     Connections {
         target: highlight.ListView.view
