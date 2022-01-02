@@ -2,10 +2,15 @@
 
 <h2>import org.kde.plasma.extras</h2>
 
-- \link org::kde::plasma::extras::App App \endlink
-- \link org::kde::plasma::extras::PageRow PageRow \endlink
-- \link org::kde::plasma::extras::ScrollArea ScrollArea \endlink
-- \link FallbackComponent FallbackComponent \endlink
+Heading
+- \link org::kde::plasma::extras::BasicPlasmoidHeading BasicPlasmoidHeading \endlink
+- \link org::kde::plasma::extras::PlasmoidHeading PlasmoidHeading \endlink
+
+List views
+- \link org::kde::plasma::extras::ExpandableListItem ExpandableListItem \endlink
+- \link org::kde::plasma::extras::ListItem ListItem \endlink
+- \link org::kde::plasma::extras::Highlight Highlight \endlink
+- \link org::kde::plasma::extras::PlaceholderMessage PlaceholderMessage \endlink
 
 Text formatting
 - \link org::kde::plasma::extras::Heading Heading \endlink
@@ -17,6 +22,12 @@ Animations
 - \link org::kde::plasma::extras::AppearAnimation AppearAnimation \endlink
 - \link org::kde::plasma::extras::PressedAnimation PressedAnimation \endlink
 - \link org::kde::plasma::extras::ReleasedAnimation ReleasedAnimation \endlink
+
+Obsolete components
+- \link org::kde::plasma::extras::App App \endlink
+- \link org::kde::plasma::extras::PageRow PageRow \endlink
+- \link org::kde::plasma::extras::ScrollArea ScrollArea \endlink
+- \link FallbackComponent FallbackComponent \endlink
 
 */
 
