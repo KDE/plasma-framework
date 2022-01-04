@@ -14,10 +14,10 @@ target_sources(calendarplugin PRIVATE
 )
 
 target_link_libraries(calendarplugin
-    Qt5::Core
-    Qt5::Quick
-    Qt5::Qml
-    Qt5::Gui
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Quick
+    Qt${QT_MAJOR_VERSION}::Qml
+    Qt${QT_MAJOR_VERSION}::Gui
     KF5::I18n
     KF5::CalendarEvents
     KF5::CoreAddons

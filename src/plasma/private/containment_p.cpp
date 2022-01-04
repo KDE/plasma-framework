@@ -53,7 +53,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
 
     // adjust applet actions
     QAction *appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("remove")));
-    appAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::ALT + Qt::Key_R));
+    appAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::ALT | Qt::Key_R));
     if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this Panel"));
     } else {
@@ -62,7 +62,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
 
     appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("configure")));
     if (appAction) {
-        appAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::ALT + Qt::Key_S));
+        appAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::ALT | Qt::Key_S));
         appAction->setText(i18n("Activity Settings"));
     }
 
@@ -71,7 +71,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
-    appletBrowserAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_D, Qt::Key_A));
+    appletBrowserAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::Key_A));
     appletBrowserAction->setData(Plasma::Types::AddAction);
 }
 

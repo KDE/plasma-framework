@@ -25,8 +25,8 @@ kcoreaddons_desktop_to_json(
 
 
 target_link_libraries(plasma_appletscript_declarative
-    Qt5::Quick
-    Qt5::Qml
+    Qt${QT_MAJOR_VERSION}::Quick
+    Qt${QT_MAJOR_VERSION}::Qml
     KF5::Activities
     KF5::KIOCore
     KF5::KIOWidgets
@@ -41,7 +41,7 @@ target_link_libraries(plasma_appletscript_declarative
 
 
 install(TARGETS plasma_appletscript_declarative DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/scriptengines)
-install(FILES data/plasma-scriptengine-applet-declarative.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
-install(FILES data/plasma-wallpaper.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
+install(FILES data/plasma-scriptengine-applet-declarative.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR})
+install(FILES data/plasma-wallpaper.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPESDIR})
 
 

@@ -714,7 +714,7 @@ void SvgPrivate::eraseRenderer()
     }
 
     renderer = nullptr;
-    styleCrc = 0;
+    styleCrc = QChar(0);
 }
 
 QRectF SvgPrivate::elementRect(const QString &elementId)

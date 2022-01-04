@@ -3,7 +3,7 @@ add_executable(plugintest
     plugintest.cpp
 )
 
-target_link_libraries(plugintest KF5::Plasma KF5::I18n Qt5::DBus Qt5::Widgets)
+target_link_libraries(plugintest KF5::Plasma KF5::I18n Qt${QT_MAJOR_VERSION}::DBus Qt${QT_MAJOR_VERSION}::Widgets)
 
 #install(TARGETS plugintest ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 

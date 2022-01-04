@@ -87,18 +87,23 @@ ecm_generate_export_header(KF5Plasma
 )
 
 if(HAVE_X11)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras ${X11_LIBRARIES} XCB::XCB)
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} XCB::XCB)
+    if (TARGET Qt5::X11Extras)
+        set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras)
+    elseif(TARGET Qt6::Gui)
+        set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt6::GuiPrivate)
+    endif()
 endif()
 
 target_link_libraries(KF5Plasma
 PUBLIC
     KF5::Service # For kplugininfo.h and kservice.h
-    Qt5::Gui
+    Qt${QT_MAJOR_VERSION}::Gui
     KF5::Package
 PRIVATE
-    Qt5::Sql
-    Qt5::Svg
-    Qt5::DBus
+    Qt${QT_MAJOR_VERSION}::Sql
+    Qt${QT_MAJOR_VERSION}::Svg
+    Qt${QT_MAJOR_VERSION}::DBus
     KF5::Archive
     KF5::GuiAddons #kimagecache
     KF5::I18n
@@ -122,7 +127,7 @@ target_include_directories(KF5Plasma PUBLIC
   "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
 )
 target_include_directories(KF5Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5};${KDE_INSTALL_INCLUDEDIR_KF5}/Plasma>"
+  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF};${KDE_INSTALL_INCLUDEDIR_KF}/Plasma>"
 )
 
 ########### install files ###############
@@ -163,14 +168,14 @@ set(PlasmaScripting_HEADERS
 install(FILES
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasma COMPONENT Devel)
 
 install(FILES ${Plasma_CamelCase_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/Plasma COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/Plasma COMPONENT Devel)
 
 
 install(FILES ${PlasmaScripting_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasma/scripting COMPONENT Devel)
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasma/scripting COMPONENT Devel)
 
 install(FILES
    data/servicetypes/plasma-applet.desktop
@@ -183,7 +188,7 @@ install(FILES
    data/servicetypes/plasma-service.desktop
    data/servicetypes/plasma-shell.desktop
    data/servicetypes/plasma-lookandfeel.desktop
-   DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
+   DESTINATION ${KDE_INSTALL_KSERVICETYPESDIR})
 
 install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)

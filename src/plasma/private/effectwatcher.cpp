@@ -45,7 +45,11 @@ void EffectWatcher::init(const QString &property)
     }
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#else
 bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
+#endif
 {
     Q_UNUSED(result);
     // A faster comparison than eventType != "xcb_generic_event_t"

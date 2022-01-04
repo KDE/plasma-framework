@@ -15,7 +15,7 @@ set(PLASMA_SCRIPTENGINES_PLUGINDIR ${KDE_INSTALL_PLUGINDIR}/plasma/scriptengines
 set(PLASMA_CONTAINMENTACTIONS_PLUGINDIR ${KDE_INSTALL_PLUGINDIR}/plasma/containmentactions)
 
 include(CMakeFindDependencyMacro)
-find_dependency(Qt5Gui "@REQUIRED_QT_VERSION@")
+find_dependency(Qt@QT_MAJOR_VERSION@Gui "@REQUIRED_QT_VERSION@")
 find_dependency(KF5Package "@KF_DEP_VERSION@")
 find_dependency(KF5Service "@KF_DEP_VERSION@")
 find_dependency(KF5WindowSystem "@KF_DEP_VERSION@")

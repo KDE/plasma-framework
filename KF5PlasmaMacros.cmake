@@ -1,5 +1,5 @@
 # To not mess up the ECM_FIND_VERSION we only include ECM if the required variables are not set
-if (NOT KDE_INSTALL_KSERVICES5DIR)
+if (NOT KDE_INSTALL_KSERVICESDIR)
     find_package(ECM 5.83.0 CONFIG REQUIRED)
     include(${ECM_KDE_MODULE_DIR}/KDEInstallDirs.cmake)
 endif()
@@ -38,7 +38,7 @@ macro(plasma_install_package dir component)
    # TODO KF6 Remove
    get_filename_component(metadata_desktop_file_absolute_path ${dir}/metadata.desktop REALPATH)
    if (EXISTS ${metadata_desktop_file_absolute_path})
-      install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
+      install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR} RENAME plasma-${type}-${component}.desktop)
    endif()
 endmacro()
 
@@ -74,7 +74,7 @@ macro(plasma_install_bundled_package dir component)
    # TODO KF6 Remove
    get_filename_component(metadata_desktop_file_absolute_path ${dir}/metadata.desktop REALPATH)
    if (EXISTS ${metadata_desktop_file_absolute_path})
-      install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} RENAME plasma-${type}-${component}.desktop)
+      install(FILES ${dir}/metadata.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR} RENAME plasma-${type}-${component}.desktop)
    endif()
 endmacro()
 

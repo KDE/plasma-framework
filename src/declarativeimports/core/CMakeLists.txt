@@ -29,12 +29,12 @@ target_sources(corebindingsplugin PRIVATE
 )
 
 target_link_libraries(corebindingsplugin
-        Qt5::Quick
-        Qt5::Qml
+        Qt${QT_MAJOR_VERSION}::Quick
+        Qt${QT_MAJOR_VERSION}::Qml
         KF5::Declarative
         KF5::IconThemes
         KF5::I18n
-        Qt5::Svg
+        Qt${QT_MAJOR_VERSION}::Svg
         KF5::Service #for kplugininfo.h
         KF5::WindowSystem
         KF5::Plasma
@@ -44,7 +44,11 @@ target_link_libraries(corebindingsplugin
 
 if(HAVE_X11)
   target_link_libraries(corebindingsplugin ${X11_LIBRARIES} XCB::XCB )
-  target_link_libraries(corebindingsplugin Qt5::X11Extras)
+  if (TARGET Qt5::X11Extras)
+      target_link_libraries(corebindingsplugin Qt5::X11Extras)
+  elseif(TARGET Qt6::Gui)
+      target_link_libraries(corebindingsplugin Qt6::GuiPrivate)
+  endif()
 
   if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     target_link_libraries(corebindingsplugin
@@ -64,9 +68,9 @@ else()
 
 endif()
 
-if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")
-    target_link_libraries(corebindingsplugin Qt5::Gui_GLESv2)
-endif()
+#if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")
+#    target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
+#endif()
 
 install(TARGETS corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)

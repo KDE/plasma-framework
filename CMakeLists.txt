@@ -40,7 +40,7 @@ ecm_setup_version(PROJECT
 
 set (REQUIRED_QT_VERSION 5.15.2)
 
-find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
+find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
 
 find_package(KF5 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
@@ -91,7 +91,11 @@ set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding
                       )
 if(X11_FOUND AND XCB_XCB_FOUND)
   set(HAVE_X11 1)
-  find_package(Qt5 REQUIRED NO_MODULE COMPONENTS X11Extras)
+  if (QT_MAJOR_VERSION STREQUAL "5")
+      find_package(Qt5X11Extras ${REQUIRED_QT_VERSION} NO_MODULE)
+  elseif (QT_MAJOR_VERSION STREQUAL "6")
+      find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h
+  endif()
   #X11_Xrender discovery is done by FindX11
   #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
 else()
@@ -231,7 +235,7 @@ install(EXPORT KF5PlasmaTargets
         COMPONENT Devel)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel )
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF} COMPONENT Devel )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

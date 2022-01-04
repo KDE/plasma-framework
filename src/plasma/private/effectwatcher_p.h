@@ -24,8 +24,11 @@ public:
 
 protected:
     bool isEffectActive() const;
-
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *) override;
+#else
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override;
+#endif
 
 Q_SIGNALS:
     void effectChanged(bool on);

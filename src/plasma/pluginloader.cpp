@@ -13,6 +13,7 @@
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
+#include <QRegExp>
 #include <kdeclarative/kdeclarative.h>
 #include <kpackage/packageloader.h>
 

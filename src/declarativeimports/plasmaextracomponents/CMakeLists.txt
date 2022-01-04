@@ -13,8 +13,8 @@ target_sources(plasmaextracomponentsplugin PRIVATE
 )
 
 target_link_libraries(plasmaextracomponentsplugin
-        Qt5::Quick
-        Qt5::Qml
+        Qt${QT_MAJOR_VERSION}::Quick
+        Qt${QT_MAJOR_VERSION}::Qml
         ${KACTIVITIES_LIBRARY}
         KF5::Service
         KF5::Plasma)

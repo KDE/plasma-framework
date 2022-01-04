@@ -46,13 +46,13 @@ target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURR
 
 target_link_libraries(KF5PlasmaQuick
     PUBLIC
-        Qt5::Gui
-        Qt5::Quick
-        Qt5::Qml
+        Qt${QT_MAJOR_VERSION}::Gui
+        Qt${QT_MAJOR_VERSION}::Quick
+        Qt${QT_MAJOR_VERSION}::Qml
         KF5::Plasma
         KF5::WindowSystem
     PRIVATE
-        Qt5::Svg
+        Qt${QT_MAJOR_VERSION}::Svg
         KF5::I18n
         KF5::IconThemes
         KF5::Service
@@ -72,10 +72,14 @@ endif()
 if(HAVE_X11)
     target_link_libraries(KF5PlasmaQuick
         PRIVATE
-            Qt5::X11Extras
             ${X11_LIBRARIES}
             XCB::XCB
     )
+    if (TARGET Qt5::X11Extras)
+        target_link_libraries(KF5PlasmaQuick PRIVATE Qt5::X11Extras)
+    elseif(TARGET Qt6::Gui)
+        target_link_libraries(KF5PlasmaQuick PRIVATE Qt6::GuiPrivate)
+    endif()
 
     if(XCB_SHAPE_FOUND)
         target_link_libraries(KF5PlasmaQuick PRIVATE XCB::SHAPE)
@@ -110,10 +114,10 @@ ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
 )
 
 install(FILES ${plasmaquick_LIB_INCLUDES}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/plasmaquick COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasmaquick COMPONENT Devel)
 
 install(FILES ${PlasmaQuick_CamelCase_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/PlasmaQuick COMPONENT Devel)
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/PlasmaQuick COMPONENT Devel)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5PlasmaQuick")
 
@@ -121,7 +125,7 @@ configure_package_config_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-    PATH_VARS  KDE_INSTALL_INCLUDEDIR_KF5 CMAKE_INSTALL_PREFIX
+    PATH_VARS  KDE_INSTALL_INCLUDEDIR_KF CMAKE_INSTALL_PREFIX
 )
 
 ecm_setup_version(${KF_VERSION}

@@ -14,4 +14,4 @@ target_link_libraries(plasma_dataengine_example_customDataContainers
 )
 
 install(TARGETS plasma_dataengine_example_customDataContainers DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/dataengine)
-install(FILES plasma-dataengine-example-customDataContainers.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+install(FILES plasma-dataengine-example-customDataContainers.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR} )

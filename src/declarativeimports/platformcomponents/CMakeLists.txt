@@ -10,9 +10,9 @@ target_sources(platformcomponentsplugin PRIVATE
 )
 
 target_link_libraries(platformcomponentsplugin
-    Qt5::Core
-    Qt5::DBus
-    Qt5::Qml
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::DBus
+    Qt${QT_MAJOR_VERSION}::Qml
     KF5::WindowSystem
     KF5::IconThemes
 )

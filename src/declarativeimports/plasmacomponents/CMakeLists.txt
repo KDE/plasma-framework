@@ -13,10 +13,10 @@ target_sources(plasmacomponentsplugin PRIVATE
     )
 
 target_link_libraries(plasmacomponentsplugin
-        Qt5::Core
-        Qt5::Quick
-        Qt5::Qml
-        Qt5::Gui
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Quick
+        Qt${QT_MAJOR_VERSION}::Qml
+        Qt${QT_MAJOR_VERSION}::Gui
         KF5::WidgetsAddons # for KAcceleratorManager
         KF5::Declarative
         KF5::Plasma
