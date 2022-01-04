@@ -78,7 +78,9 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(QObject *rootItem READ rootItem CONSTANT)
 
     /**
-     * True when the applet accept keyboard navigation, compact representation will set activeFocusOnTab to this value
+     * This property holds whether the applet accepts keyboard navigation.
+     *
+     * The compact representation will set `activeFocusOnTab` to this value.
      */
     Q_PROPERTY(bool keyboardActivationEnabled WRITE setKeyboardActivationEnabled READ isKeyboardActivationEnabled NOTIFY keyboardActivationEnabledChanged)
 
