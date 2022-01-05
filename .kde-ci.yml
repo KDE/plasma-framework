@@ -35,13 +35,16 @@ Dependencies:
     'frameworks/threadweaver' : '@same'
     'frameworks/kunitconversion' : '@same'
     'frameworks/kwallet' : '@same'
-    'frameworks/kwayland' : '@same'
     'frameworks/kwidgetsaddons' : '@same'
     'frameworks/kwindowsystem' : '@same'
     'frameworks/kxmlgui' : '@same'
     'frameworks/ktexteditor' : '@same'
     'frameworks/oxygen-icons5' : '@same'
     'frameworks/kirigami' : '@same'
+
+- 'on': ['Linux', 'FreeBSD']
+  'require':
+    'frameworks/kwayland' : '@same'
 
 Options:
   test-before-installing: True
