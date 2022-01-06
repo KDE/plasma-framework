@@ -68,9 +68,9 @@ else()
 
 endif()
 
-#if (${Qt5Gui_OPENGL_IMPLEMENTATION} STREQUAL "GLESv2")
-#    target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
-#endif()
+if(${QT_ENABLED_PUBLIC_FEATURES} MATCHES "opengles2")
+    target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
+endif()
 
 install(TARGETS corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
 install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)

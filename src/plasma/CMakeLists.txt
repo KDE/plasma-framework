@@ -89,9 +89,9 @@ ecm_generate_export_header(KF5Plasma
 if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} XCB::XCB)
     if (TARGET Qt5::X11Extras)
-        set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt5::X11Extras)
+        list(APPEND PLASMA_EXTRA_LIBS Qt5::X11Extras)
     elseif(TARGET Qt6::Gui)
-        set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} Qt6::GuiPrivate)
+        list(APPEND PLASMA_EXTRA_LIBS Qt6::GuiPrivate)
     endif()
 endif()
 

@@ -9,7 +9,7 @@ include(ECMAddTests)
 
 find_package(KF5CoreAddons REQUIRED)
 find_package(KF5XmlGui REQUIRED)
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt${QT_MAJOR_VERSION}Widgets REQUIRED)
 
 # add_definitions( -DKDESRCDIR=${CMAKE_CURRENT_SOURCE_DIR} )
 
