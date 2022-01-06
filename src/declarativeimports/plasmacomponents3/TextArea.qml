@@ -4,7 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
+import QtQuick 2.15
 import QtQuick.Window 2.2
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
@@ -102,5 +102,13 @@ T.TextArea {
             imagePath: "widgets/lineedit"
             prefix: "base"
         }
+    }
+
+    // Workaround I-beam cursor not being used when
+    // readOnly == true && selectByMouse == true.
+    // https://bugreports.qt.io/browse/QTBUG-99604
+    // Shouldn't interfere with TextArea::hovered.
+    HoverHandler {
+        cursorShape: control.selectByMouse ? Qt.IBeamCursor : undefined
     }
 }
