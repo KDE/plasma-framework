@@ -8,7 +8,7 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include <Kirigami2/KirigamiPluginFactory>
+#include <Kirigami/KirigamiPluginFactory>
 #include <QObject>
 
 class Plugin : public Kirigami::KirigamiPluginFactoryV2
