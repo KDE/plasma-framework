@@ -52,7 +52,7 @@ public:
     void componentComplete() override;
 
     /**
-     * true if the connection to the Plasma DataEngine is valid
+     * True iff the connection to the Plasma DataEngine is valid.
      */
     Q_PROPERTY(bool valid READ valid)
     bool valid() const
@@ -61,7 +61,7 @@ public:
     }
 
     /**
-     * Polling interval in milliseconds when the data will be fetched again. If 0 no polling will be done.
+     * Polling interval in milliseconds when the data will be fetched again. If 0, no polling will be done.
      */
     Q_PROPERTY(int interval READ interval WRITE setInterval NOTIFY intervalChanged)
     int interval() const
@@ -71,7 +71,7 @@ public:
     void setInterval(const int interval);
 
     /**
-     * The interval to align polling to
+     * The interval to align polling to.
      */
     Q_PROPERTY(Plasma::Types::IntervalAlignment intervalAlignment READ intervalAlignment WRITE setIntervalAlignment NOTIFY intervalAlignmentChanged)
     Plasma::Types::IntervalAlignment intervalAlignment() const
@@ -92,7 +92,7 @@ public:
     void setEngine(const QString &e);
 
     /**
-     * String array of all the source names connected to the DataEngine
+     * List of all the sources connected to the DataEngine.
      */
     Q_PROPERTY(QStringList connectedSources READ connectedSources WRITE setConnectedSources NOTIFY connectedSourcesChanged)
     QStringList connectedSources() const
@@ -102,7 +102,7 @@ public:
     void setConnectedSources(const QStringList &s);
 
     /**
-     * Read only string array of all the sources available from the DataEngine (connected or not)
+     * Read-only list of all the sources available from the DataEngine (connected or not).
      */
     Q_PROPERTY(QStringList sources READ sources NOTIFY sourcesChanged)
     QStringList sources() const
@@ -112,7 +112,13 @@ public:
 
     /**
      * All the data fetched by this dataengine.
-     * This is a map of maps. At the first level, there are the source names, at the second, they keys set by the DataEngine
+     * This is a map of maps.
+     *
+     *   1. At the first level, there are the source names.
+     *   2. At the second level, there are source-specific keys set by the DataEngine.
+     *
+     * Refer to a particular DataEngine implementation for available sources,
+     * keys and expected value types.
      */
     Q_PROPERTY(QQmlPropertyMap *data READ data CONSTANT)
     QQmlPropertyMap *data() const
@@ -122,8 +128,10 @@ public:
 
     /**
      * All the models associated to this DataEngine, indexed by source.
-     * In order for a model to be present, besides being implemented in the DataEngine,
-     * The user has to be connected to its source, so the source name has to be present in the connectedSources property.
+     *
+     * In order for a model to be available, besides being implemented in the
+     * DataEngine, the user has to be connected to its source, i.e. the
+     * source name has to be present in connectedSources list.
      */
     Q_PROPERTY(QQmlPropertyMap *models READ models CONSTANT)
     QQmlPropertyMap *models() const
@@ -138,12 +146,12 @@ public:
     Q_INVOKABLE QObject *serviceForSource(const QString &source);
 
     /**
-     * Connect a new source. It adds it to connectedSources
+     * Connects a new source and adds it to the connectedSources list.
      */
     Q_INVOKABLE void connectSource(const QString &source);
 
     /**
-     * Disconnects from a DataEngine Source. It also removes it from connectedSources
+     * Disconnects from a DataEngine source and removes it from the connectedSources list.
      */
     Q_INVOKABLE void disconnectSource(const QString &source);
 
