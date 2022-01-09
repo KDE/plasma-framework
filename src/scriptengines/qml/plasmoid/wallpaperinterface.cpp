@@ -7,11 +7,11 @@
 #include "wallpaperinterface.h"
 
 #include "containmentinterface.h"
-#include <kdeclarative/configpropertymap.h>
 #include <kdeclarative/qmlobjectsharedengine.h>
 
 #include <KActionCollection>
 #include <KConfigLoader>
+#include <KConfigPropertyMap>
 #include <KDesktopFile>
 
 #include <QDebug>
@@ -73,7 +73,7 @@ QString WallpaperInterface::pluginName() const
     return m_wallpaperPlugin;
 }
 
-KDeclarative::ConfigPropertyMap *WallpaperInterface::configuration() const
+KConfigPropertyMap *WallpaperInterface::configuration() const
 {
     return m_configuration;
 }
@@ -132,7 +132,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_configLoader = nullptr;
     m_configuration = nullptr;
     if (configScheme()) {
-        m_configuration = new KDeclarative::ConfigPropertyMap(configScheme(), this);
+        m_configuration = new KConfigPropertyMap(configScheme(), this);
     }
 
     m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
