@@ -169,6 +169,7 @@ protected:
     void addContainmentActions(QMenu *desktopMenu, QEvent *event);
 
     virtual bool isLoading() const override;
+    void itemChange(ItemChange change, const ItemChangeData &value) override;
 
 Q_SIGNALS:
     /**
