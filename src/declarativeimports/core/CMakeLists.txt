@@ -59,7 +59,7 @@ if(HAVE_X11)
 endif()
 
 if(HAVE_EGL)
-    target_link_libraries(corebindingsplugin ${EGL_TARGET})
+    target_link_libraries(corebindingsplugin OpenGL::EGL)
 else()
 
 endif()
