@@ -7,7 +7,6 @@
 
 
 import QtQuick 2.9
-import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.9 as Kirigami
@@ -31,7 +30,7 @@ T.ScrollView {
         }
     ]
 
-    PlasmaComponents3.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
+    T.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
         id: verticalScrollBar
         readonly property Flickable flickableItem: controlRoot.contentItem
         onFlickableItemChanged: {
@@ -41,14 +40,14 @@ T.ScrollView {
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
         height: controlRoot.availableHeight
-        active: controlRoot.ScrollBar.vertical || controlRoot.ScrollBar.vertical.active
+        active: controlRoot.T.ScrollBar.vertical || controlRoot.T.ScrollBar.vertical.active
     }
 
-    PlasmaComponents3.ScrollBar.horizontal: PlasmaComponents3.ScrollBar {
+    T.ScrollBar.horizontal: PlasmaComponents3.ScrollBar {
         parent: controlRoot
         x: controlRoot.leftPadding
         y: controlRoot.height - height
         width: controlRoot.availableWidth
-        active: controlRoot.ScrollBar.horizontal || controlRoot.ScrollBar.horizontal.active
+        active: controlRoot.T.ScrollBar.horizontal || controlRoot.T.ScrollBar.horizontal.active
     }
 }
