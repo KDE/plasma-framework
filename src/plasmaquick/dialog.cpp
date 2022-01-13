@@ -19,8 +19,6 @@
 #include <QPointer>
 #include <QQuickItem>
 #include <QScreen>
-#include <QTimer>
-
 #include <QPlatformSurfaceEvent>
 
 #include <KWindowSystem/KWindowInfo>
@@ -68,9 +66,6 @@ public:
         , componentComplete(dialog->parent() == nullptr)
         , backgroundHints(Dialog::StandardBackground)
     {
-        hintsCommitTimer.setSingleShot(true);
-        hintsCommitTimer.setInterval(0);
-        QObject::connect(&hintsCommitTimer, SIGNAL(timeout()), q, SLOT(updateLayoutParameters()));
     }
 
     void updateInputShape();
@@ -136,7 +131,6 @@ public:
     Plasma::FrameSvgItem *frameSvgItem;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
-    QTimer hintsCommitTimer;
 #if HAVE_KWAYLAND
     QPointer<KWayland::Client::PlasmaShellSurface> shellSurface;
 #endif
@@ -364,7 +358,7 @@ void DialogPrivate::updateMinimumWidth()
     q->contentItem()->setWidth(qMax(q->width(), minimumWidth));
     q->setWidth(qMax(q->width(), minimumWidth));
 
-    hintsCommitTimer.start();
+    updateLayoutParameters();
 }
 
 void DialogPrivate::updateMinimumHeight()
@@ -390,7 +384,7 @@ void DialogPrivate::updateMinimumHeight()
     q->contentItem()->setHeight(qMax(q->height(), minimumHeight));
     q->setHeight(qMax(q->height(), minimumHeight));
 
-    hintsCommitTimer.start();
+    updateLayoutParameters();
 }
 
 void DialogPrivate::updateMaximumWidth()
@@ -409,10 +403,10 @@ void DialogPrivate::updateMaximumWidth()
     if (q->screen()) {
         maximumWidth = qMin(q->screen()->availableGeometry().width(), maximumWidth);
     }
-    q->contentItem()->setWidth(qMax(q->width(), maximumWidth));
-    q->setWidth(qMax(q->width(), maximumWidth));
+    q->contentItem()->setWidth(qMin(q->width(), maximumWidth));
+    q->setWidth(qMin(q->width(), maximumWidth));
 
-    hintsCommitTimer.start();
+    updateLayoutParameters();
 }
 
 void DialogPrivate::updateMaximumHeight()
@@ -431,10 +425,10 @@ void DialogPrivate::updateMaximumHeight()
     if (q->screen()) {
         maximumHeight = qMin(q->screen()->availableGeometry().height(), maximumHeight);
     }
-    q->contentItem()->setHeight(qMax(q->height(), maximumHeight));
+    q->contentItem()->setHeight(qMin(q->height(), maximumHeight));
     q->setHeight(qMin(q->height(), maximumHeight));
 
-    hintsCommitTimer.start();
+    updateLayoutParameters();
 }
 
 void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
@@ -502,9 +496,6 @@ void DialogPrivate::updateLayoutParameters()
     repositionIfOffScreen();
     updateTheme();
 
-    // FIXME: this seems to interfere with the geometry change that
-    // sometimes is still going on, causing flicker (this one is two repositions happening in quick succession).
-    // it may have to be delayed further
     q->setMinimumSize(min);
     q->setMaximumSize(max);
 
@@ -868,8 +859,6 @@ QQuickItem *Dialog::mainItem() const
 void Dialog::setMainItem(QQuickItem *mainItem)
 {
     if (d->mainItem != mainItem) {
-        d->hintsCommitTimer.stop();
-
         if (d->mainItem) {
             disconnect(d->mainItem, nullptr, this, nullptr);
             d->mainItem->setParentItem(nullptr);
@@ -909,9 +898,10 @@ void Dialog::setMainItem(QQuickItem *mainItem)
             d->mainItemLayout = layout;
 
             if (layout) {
-                // Why queued connections?
-                // we need to be sure that the properties are
-                // already *all* updated when we call the management code
+                // These connections are direct. They run on the GUI thread.
+                // If the underlying QQuickItem is sane, these properties should be updated atomically in one cycle
+                // of the GUI thread event loop, denying the chance for the event loop to run a QQuickItem::update() call in between.
+                // So we avoid rendering a frame in between with inconsistent geometry properties which would cause flickering issues.
                 connect(layout, SIGNAL(minimumWidthChanged()), this, SLOT(updateMinimumWidth()));
                 connect(layout, SIGNAL(minimumHeightChanged()), this, SLOT(updateMinimumHeight()));
                 connect(layout, SIGNAL(maximumWidthChanged()), this, SLOT(updateMaximumWidth()));
