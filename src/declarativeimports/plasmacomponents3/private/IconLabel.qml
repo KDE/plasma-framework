@@ -24,6 +24,7 @@ T.Control {
     PlasmaCore.ColorScope.inherit: true
     implicitWidth: implicitContentWidth + leftPadding + rightPadding
     implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    hoverEnabled: false
     contentItem: Item {
         implicitWidth: gridLayout.implicitWidth
         implicitHeight: gridLayout.implicitHeight
