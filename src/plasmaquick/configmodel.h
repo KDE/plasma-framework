@@ -59,6 +59,8 @@ public:
         VisibleRole,
         KCMRole,
     };
+    Q_ENUM(Roles);
+
     explicit ConfigModel(QObject *parent = nullptr);
     ~ConfigModel() override;
 
