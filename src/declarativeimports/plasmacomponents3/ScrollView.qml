@@ -27,6 +27,10 @@ T.ScrollView {
     data: [
         Kirigami.WheelHandler {
             target: controlRoot.contentItem
+            // `Qt.styleHints.wheelScrollLines * 20` is the default scroll speed.
+            // ` * PlasmaCore.Units.devicePixelRatio` is needed because Plasma doesn't use Qt scaling on X11.
+            horizontalStepSize: Qt.styleHints.wheelScrollLines * 20 * PlasmaCore.Units.devicePixelRatio
+            verticalStepSize: Qt.styleHints.wheelScrollLines * 20 * PlasmaCore.Units.devicePixelRatio
         }
     ]
 
