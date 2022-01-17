@@ -206,7 +206,7 @@ Containment *Corona::containmentForScreen(int screen, const QString &activity, c
     for (Containment *cont : std::as_const(d->containments)) {
         /* clang-format off */
         if (cont->lastScreen() == screen
-            && (cont->activity().isEmpty() || cont->activity() == activity)
+            && ((cont->activity().isEmpty() || activity.isEmpty()) || cont->activity() == activity)
             && (cont->containmentType() == Plasma::Types::DesktopContainment
                 || cont->containmentType() == Plasma::Types::CustomContainment)) { /* clang-format on */
             containment = cont;
