@@ -114,8 +114,9 @@ set_package_properties(EGL PROPERTIES
                        TYPE OPTIONAL
                       )
 
-add_feature_info(GLX OpenGL_GLX_FOUND "OpenGL GLX libraries.")
-if(OpenGL_GLX_FOUND AND X11_FOUND AND (QT_ENABLED_PUBLIC_FEATURES MATCHES "opengl"))
+get_target_property(QtGui_Enabled_Features Qt${QT_MAJOR_VERSION}::Gui QT_ENABLED_PUBLIC_FEATURES)
+if(OpenGL_GLX_FOUND AND X11_FOUND AND (QtGui_Enabled_Features MATCHES "opengl"))
+    add_feature_info(GLX OpenGL_GLX_FOUND "OpenGL GLX libraries.")
     set(HAVE_GLX 1)
 else()
     set(HAVE_GLX 0)
