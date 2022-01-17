@@ -122,10 +122,11 @@ else()
     set(HAVE_GLX 0)
 endif()
 
-add_feature_info(EGL OpenGL_EGL_FOUND
-                 "A platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES and OpenVG.")
+
 # OpenGL_EGL_FOUND is defined by FindOpenGL
 if(TARGET OpenGL::EGL)
+    add_feature_info(EGL OpenGL_EGL_FOUND
+                     "A platform-agnostic mechanism for creating rendering surfaces for use with other graphics libraries, such as OpenGL|ES and OpenVG.")
     set(HAVE_EGL 1)
 else()
     set(HAVE_EGL 0)
