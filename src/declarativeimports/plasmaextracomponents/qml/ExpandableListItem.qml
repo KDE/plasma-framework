@@ -407,21 +407,17 @@ Item {
 
         enabled: listItem.isEnabled
 
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        acceptedButtons: Qt.RightButton
         hoverEnabled: true
 
         // Handle right-click, if so defined
         onClicked: {
             listItem.ListView.view.currentIndex = index;
-            if (mouse.button == Qt.RightButton) {
-                if (contextMenu instanceof PlasmaComponents2.Menu) {
-                    contextMenu.visualParent = parent
-                    contextMenu.prepare();
-                    contextMenu.open(mouse.x, mouse.y)
-                    return
-                }
-            } else if (mouse.button == Qt.LeftButton) {
-                listItem.toggleExpanded();
+            if (contextMenu instanceof PlasmaComponents2.Menu) {
+                contextMenu.visualParent = parent;
+                contextMenu.prepare();
+                contextMenu.open(mouse.x, mouse.y);
+                return;
             }
         }
 
