@@ -343,8 +343,9 @@ Item {
     onEnabledChanged: if (!listItem.enabled) { collapse() }
 
     Keys.onPressed: {
+        let view = listItem.ListView.view ?? listItem.GridView.view
         if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
-            listItem.ListView.view.currentIndex = index;
+            if (view) { view.currentIndex = index }
             if (defaultActionButtonAction) {
                 defaultActionButtonAction.trigger()
             } else {
@@ -358,11 +359,11 @@ Item {
             }
             // if not active, we'll let the Escape event pass through, so it can close the applet, etc.
         } else if (event.key == Qt.Key_Space) {
-            listItem.ListView.view.currentIndex = index;
+            if (view) { view.currentIndex = index }
             toggleExpanded();
             event.accepted = true;
         } else if (event.key == Qt.Key_Menu) {
-            listItem.ListView.view.currentIndex = index;
+            if (view) { view.currentIndex = index }
             if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
@@ -388,7 +389,8 @@ Item {
         acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger
 
         onSingleTapped: {
-            listItem.ListView.view.currentIndex = index
+            let view = listItem.ListView.view ?? listItem.GridView.view
+            if (view) { view.currentIndex = index }
             listItem.toggleExpanded()
         }
     }
@@ -396,7 +398,10 @@ Item {
     PlasmaComponents2.Highlight {
         id: hoverBackground
         anchors.fill: parent
-        visible: (listItem.ListView.view && listItem.ListView.view.currentIndex !== index) && mouse.containsMouse
+        visible: {
+            let view = listItem.ListView.view ?? listItem.GridView.view
+            return (view && view.currentIndex !== index) && mouse.containsMouse
+        }
         opacity: 0.5
     }
 
@@ -412,7 +417,8 @@ Item {
 
         // Handle right-click, if so defined
         onClicked: {
-            listItem.ListView.view.currentIndex = index;
+            let view = listItem.ListView.view ?? listItem.GridView.view
+            if (view) { view.currentIndex = index }
             if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = parent;
                 contextMenu.prepare();
@@ -483,9 +489,10 @@ Item {
                         // Even if it's the default item, only make it bold when
                         // there's more than one item in the list, or else there's
                         // only one item and it's bold, which is a little bit weird
-                        font.weight: listItem.isDefault && listItem.ListView.view.count > 1
-                                            ? Font.Bold
-                                            : Font.Normal
+                        font.weight: {
+                            let view = listItem.ListView.view ?? listItem.GridView.view
+                            return (listItem.isDefault && view && view.count > 1) ? Font.Bold : Font.Normal
+                        }
                     }
 
                     PlasmaComponents3.Label {
@@ -529,7 +536,8 @@ Item {
                     icon.name: defaultActionButtonAction.icon.name
 
                     onClicked: {
-                        listItem.ListView.view.currentIndex = index;
+                        let view = listItem.ListView.view ?? listItem.GridView.view
+                        if (view) { view.currentIndex = index }
                         defaultActionButtonAction.trigger();
                     }
 
@@ -553,7 +561,8 @@ Item {
                     }
 
                     onClicked: {
-                        listItem.ListView.view.currentIndex = index;
+                        let view = listItem.ListView.view ?? listItem.GridView.view
+                        if (view) { view.currentIndex = index }
                         listItem.toggleExpanded()
                     }
                 }
