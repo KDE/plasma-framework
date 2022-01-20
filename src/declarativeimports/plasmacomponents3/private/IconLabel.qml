@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 
-T.Control {
+Item {
     id: root
     property int alignment: 0 // Null alignment
     property int display: T.AbstractButton.TextBesideIcon
@@ -21,12 +21,35 @@ T.Control {
     property alias iconItem: iconItem
     property alias label: label
 
+    property real leftPadding: 0
+    property real rightPadding: 0
+    property real topPadding: 0
+    property real bottomPadding: 0
+
+    property real spacing: 0
+
+    property var font
+    property var palette
+
     PlasmaCore.ColorScope.inherit: true
-    implicitWidth: implicitContentWidth + leftPadding + rightPadding
-    implicitHeight: implicitContentHeight + topPadding + bottomPadding
-    contentItem: Item {
+
+    implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
+    implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
+
+    Item {
+        id: contentItem
+
+        anchors {
+            fill: parent
+            leftMargin: parent.leftPadding
+            rightMargin: parent.rightPadding
+            topMargin: parent.topPadding
+            bottomMargin: parent.bottomPadding
+        }
+
         implicitWidth: gridLayout.implicitWidth
         implicitHeight: gridLayout.implicitHeight
+
         GridLayout {
             id: gridLayout
             rowSpacing: root.spacing
