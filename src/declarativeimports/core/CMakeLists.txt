@@ -70,7 +70,7 @@ else()
 
 endif()
 
-if(QtGui_Enabled_Features MATCHES "opengles2")
+if(TARGET Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
     target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
 endif()
 
