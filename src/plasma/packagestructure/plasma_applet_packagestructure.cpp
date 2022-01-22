@@ -34,10 +34,11 @@ public:
     {
         ChangeableMainScriptPackage::pathChanged(package);
 
-        if (!package->metadata().isValid()) {
+        const KPluginMetaData md = package->metadata();
+        if (!md.isValid()) {
             return;
         }
-        if (package->metadata().serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
+        if (md.serviceTypes().contains(QLatin1String("Plasma/Containment")) || md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))) {
             package->addFileDefinition("compactapplet", QStringLiteral("applet/CompactApplet.qml"), i18n("Custom expander for compact applets"));
         } else {
             package->removeDefinition("compactapplet");

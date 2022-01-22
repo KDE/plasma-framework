@@ -35,6 +35,10 @@
 
 namespace Plasma
 {
+inline bool isContainmentMetaData(const KPluginMetaData &md)
+{
+    return md.serviceTypes().contains(QLatin1String("Plasma/Containment")) || md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"));
+}
 static PluginLoader *s_pluginLoader = nullptr;
 
 class PluginLoaderPrivate
@@ -204,7 +208,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         QVariantList allArgs;
         allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
-        if (p.metadata().serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
+        if (isContainmentMetaData(p.metadata())) {
             applet = new Containment(nullptr, p.metadata(), allArgs);
         } else {
             applet = new Applet(nullptr, p.metadata(), allArgs);
@@ -657,11 +661,7 @@ KPluginInfo::List PluginLoader::listContainments(const QString &category, const 
 QList<KPluginMetaData> PluginLoader::listContainmentsMetaData(std::function<bool(const KPluginMetaData &)> filter)
 {
     auto ownFilter = [filter](const KPluginMetaData &md) -> bool {
-        if (!md.serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
-            return false;
-        }
-
-        return filter(md);
+        return isContainmentMetaData(md) && filter(md);
     };
 
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), ownFilter);
@@ -681,7 +681,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type, cons
 {
     KConfigGroup group(KSharedConfig::openConfig(), "General");
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool {
-        if (!md.serviceTypes().contains(QLatin1String("Plasma/Containment"))) {
+        if (isContainmentMetaData(md)) {
             return false;
         }
         if (!parentApp.isEmpty() && md.value(QStringLiteral("X-KDE-ParentApp")) != parentApp) {
@@ -707,8 +707,7 @@ KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type, cons
 KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool {
-        return md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
-            && md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimeType);
+        return isContainmentMetaData(md) && md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimeType);
     };
 
     return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
