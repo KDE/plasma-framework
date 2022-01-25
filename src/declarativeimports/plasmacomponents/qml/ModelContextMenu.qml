@@ -68,5 +68,4 @@ PlasmaComponents.ContextMenu {
         onObjectAdded: menu.addMenuItem(object)
         onObjectRemoved: menu.removeMenuItem(object)
     }
-    Accessible.role: Accessible.PopupMenu
 }
