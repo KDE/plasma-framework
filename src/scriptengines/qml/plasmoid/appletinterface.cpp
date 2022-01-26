@@ -650,14 +650,7 @@ void AppletInterface::setGlobalShortcut(const QKeySequence &sequence)
 
 QObject *AppletInterface::nativeInterface()
 {
-    if (qstrcmp(applet()->metaObject()->className(), "Plasma::Applet") != 0) {
-        return applet();
-    } else {
-        if (!m_dummyNativeInterface) {
-            m_dummyNativeInterface = new QObject(this);
-        }
-        return m_dummyNativeInterface;
-    }
+    return applet();
 }
 
 bool AppletInterface::configurationRequired() const
