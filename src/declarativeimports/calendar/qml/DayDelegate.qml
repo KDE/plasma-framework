@@ -27,6 +27,10 @@ PlasmaComponents3.AbstractButton {
     signal activated
 
     readonly property date thisDate: new Date(yearNumber, typeof monthNumber !== "undefined" ? monthNumber - 1 : 0, typeof dayNumber !== "undefined" ? dayNumber : 1)
+
+    Accessible.name: thisDate.toLocaleDateString(Qt.locale(), Locale.LongFormat)
+    Accessible.description: (model.eventCount !== undefined && model.eventCount > 0) ? i18ndp("libplasma5", "%1 event", "%1 events") : ''
+
     readonly property bool today: {
         const today = root.today;
         let result = true;
@@ -61,10 +65,11 @@ PlasmaComponents3.AbstractButton {
         anchors.fill: parent
         opacity: {
             if (today) {
-                return 1;
+                // TODO Increase the contrast between focused and unfocused
+                return dayStyle.activeFocus ? 1 : 0.9;
             } else if (selected) {
-                return 0.6;
-            } else if (dayStyle.hovered) {
+                return dayStyle.activeFocus ? 0.6 : 0.5;
+            } else if (dayStyle.hovered || dayStyle.activeFocus) {
                 return 0.3;
             }
             return 0;
