@@ -115,6 +115,27 @@ class ToolTip : public QQuickItem
      */
     Q_PROPERTY(int timeout MEMBER m_timeout WRITE setTimeout)
 
+    /**
+     * Enable triangle mouse filtering.
+     */
+    Q_PROPERTY(bool triangleMouseFiltering MEMBER m_triangleMouseFiltering WRITE setTriangleMouseFiltering NOTIFY triangleMouseFilteringChanged)
+
+    /**
+     * The position of the mouse at the time the tooltip was opened.
+     */
+    Q_PROPERTY(QPoint toolTipOpenedPoint MEMBER m_toolTipOpenedPoint NOTIFY toolTipOpenedPointChanged)
+
+    /**
+     * The point where the mouse movement began, for triangle mouse filtering.
+     */
+    Q_PROPERTY(QPoint triangleMouseStartPoint MEMBER m_triangleMouseStartPoint WRITE setTriangleMouseStartPoint NOTIFY triangleMouseStartPointChanged)
+
+    /**
+     * The ToolTipArea where the mouse movement began, for triangle mouse filtering.
+     */
+    Q_PROPERTY(
+        ToolTip *triangleMouseStartAreaItem MEMBER m_triangleMouseStartAreaItem WRITE setTriangleMouseStartAreaItem NOTIFY triangleMouseStartAreaItemChanged)
+
 public:
     /// @cond INTERNAL_DOCS
     explicit ToolTip(QQuickItem *parent = nullptr);
@@ -149,6 +170,17 @@ public:
     void setInteractive(bool interactive);
 
     void setTimeout(int timeout);
+
+    bool triangleMouseFiltering();
+    void setTriangleMouseFiltering(bool filtering);
+
+    QPoint toolTipOpenedPoint();
+
+    QPoint triangleMouseStartPoint();
+    void setTriangleMouseStartPoint(QPoint startPoint);
+
+    ToolTip *triangleMouseStartAreaItem();
+    void setTriangleMouseStartAreaItem(ToolTip *startArea);
     /// @endcond
 
 public Q_SLOTS:
@@ -175,6 +207,7 @@ protected:
     bool childMouseEventFilter(QQuickItem *item, QEvent *event) override;
     void hoverEnterEvent(QHoverEvent *event) override;
     void hoverLeaveEvent(QHoverEvent *event) override;
+    void hoverMoveEvent(QHoverEvent *event) override;
 
     ToolTipDialog *tooltipDialogInstance();
     /// @endcond
@@ -202,6 +235,10 @@ Q_SIGNALS:
      * @since 5.88
      */
     void toolTipVisibleChanged(bool toolTipVisible);
+    void triangleMouseFilteringChanged();
+    void toolTipOpenedPointChanged();
+    void triangleMouseStartPointChanged();
+    void triangleMouseStartAreaItemChanged();
 
 private Q_SLOTS:
     void settingsChanged(const QString &file);
@@ -224,6 +261,11 @@ private:
     bool m_interactive;
     int m_interval;
     int m_timeout;
+    bool m_triangleMouseFiltering;
+    QPoint m_triangleMouseStartPoint;
+    QPoint m_triangleMouseLastPoint;
+    QPoint m_toolTipOpenedPoint;
+    ToolTip *m_triangleMouseStartAreaItem;
 
     // ToolTipDialog is not a Q_GLOBAL_STATIC because QQuickwindows as global static
     // are deleted too later after some stuff in the qml runtime has already been deleted,

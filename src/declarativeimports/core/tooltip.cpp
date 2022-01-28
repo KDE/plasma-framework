@@ -6,6 +6,8 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include <cmath>
+
 #include "tooltip.h"
 #include "tooltipdialog.h"
 
@@ -29,6 +31,9 @@ ToolTip::ToolTip(QQuickItem *parent)
     , m_interactive(false)
     , m_timeout(4000)
     , m_usingDialog(false)
+    , m_triangleMouseFiltering(false)
+    , m_triangleMouseStartAreaItem(nullptr)
+    , m_triangleMouseStartPoint(0, 0)
 {
     setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
@@ -318,11 +323,72 @@ void ToolTip::setContainsMouse(bool contains)
     }
 }
 
+bool ToolTip::triangleMouseFiltering()
+{
+    return m_triangleMouseFiltering;
+}
+
+void ToolTip::setTriangleMouseFiltering(bool filtering)
+{
+    if (filtering != m_triangleMouseFiltering) {
+        m_triangleMouseFiltering = filtering;
+        Q_EMIT triangleMouseFilteringChanged();
+    }
+}
+
+QPoint ToolTip::toolTipOpenedPoint()
+{
+    return m_toolTipOpenedPoint;
+}
+
+QPoint ToolTip::triangleMouseStartPoint()
+{
+    return m_triangleMouseStartPoint;
+}
+
+void ToolTip::setTriangleMouseStartPoint(QPoint startPoint)
+{
+    if (startPoint != m_triangleMouseStartPoint) {
+        m_triangleMouseStartPoint = startPoint;
+        m_triangleMouseLastPoint = QPoint(0, 0);
+        Q_EMIT triangleMouseStartPointChanged();
+    }
+}
+
+ToolTip *ToolTip::triangleMouseStartAreaItem()
+{
+    return m_triangleMouseStartAreaItem;
+}
+
+void ToolTip::setTriangleMouseStartAreaItem(ToolTip *startPoint)
+{
+    if (startPoint != m_triangleMouseStartAreaItem) {
+        m_triangleMouseStartAreaItem = startPoint;
+        Q_EMIT triangleMouseStartAreaItemChanged();
+    }
+}
+
+/* a point P is in triangle ABC if ar(ABC) == ar(PAB) + ar(PBC) + ar (PCA)
+   the actual area of a triangle is (determinant)/2
+   but for comparing areas, we don't need the division by 2 (it cancels out),
+   so by not doing it we can avoid dealing with floats plus save on a division operation */
+
+int twiceAreaTriangle(QPoint A, QPoint B, QPoint C)
+{
+    return std::abs((A.x() * (B.y() - C.y()) + B.x() * (C.y() - A.y()) + C.x() * (A.y() - B.y())));
+}
+
+bool inTriangle(QPoint P, QPoint A, QPoint B, QPoint C)
+{
+    int arABC = twiceAreaTriangle(A, B, C);
+    int arPAB = twiceAreaTriangle(P, A, B);
+    int arPBC = twiceAreaTriangle(P, B, C);
+    int arPCA = twiceAreaTriangle(P, C, A);
+    return (arABC == (arPAB + arPBC + arPCA));
+}
+
 void ToolTip::hoverEnterEvent(QHoverEvent *event)
 {
-    Q_UNUSED(event)
-    setContainsMouse(true);
-
     if (!m_tooltipsEnabledGlobally) {
         return;
     }
@@ -330,6 +396,11 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
     if (!isValid()) {
         return;
     }
+
+    m_toolTipOpenedPoint = event->pos();
+    Q_EMIT toolTipOpenedPointChanged();
+
+    setContainsMouse(true);
 
     if (tooltipDialogInstance()->isVisible()) {
         // We signal the tooltipmanager that we're "potentially interested,
@@ -340,10 +411,66 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
         if (m_active) {
             tooltipDialogInstance()->keepalive();
             // FIXME: showToolTip needs to be renamed in sync or something like that
-            showToolTip();
+            if (m_triangleMouseFiltering) {
+                QPoint toolTipLeft, toolTipRight, eventPos, tmStartPoint, tmLastPoint, tmBasePoint;
+                auto tldgi = tooltipDialogInstance();
+
+                // toolTip{Left,Right} refer to the two corners of the tooltip which are adjacent to the ToolTipArea
+                if (m_location == Plasma::Types::BottomEdge) {
+                    toolTipLeft = QPoint(tldgi->x(), tldgi->y() + tldgi->height());
+                    toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y() + tldgi->height());
+                } else if (m_location == Plasma::Types::LeftEdge) {
+                    toolTipLeft = QPoint(tldgi->x(), tldgi->y());
+                    toolTipRight = QPoint(tldgi->x(), tldgi->y() + tldgi->height());
+                } else if (m_location == Plasma::Types::RightEdge) {
+                    toolTipLeft = QPoint(tldgi->x() + tldgi->width(), tldgi->y());
+                    toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y() + tldgi->height());
+                } else if (m_location == Plasma::Types::TopEdge) {
+                    toolTipLeft = QPoint(tldgi->x(), tldgi->y());
+                    toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y());
+                }
+
+                eventPos = mapToGlobal(event->pos()).toPoint();
+                tmStartPoint = mapToGlobal(m_triangleMouseStartPoint).toPoint();
+                tmLastPoint = mapToGlobal(m_triangleMouseLastPoint).toPoint();
+
+                if (m_triangleMouseStartAreaItem) {
+                    /* Sometimes the tooltip opens up when the user is entering the task manager area,
+                       so we also check from slightly off the midpoint of the base of the ToolTipArea.
+                       This makes the filter significantly more reliable in practice, while still
+                       allowing instant switching by sliding along the actual screen edge. */
+                    if (m_location == Plasma::Types::BottomEdge) {
+                        tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() / 2, m_triangleMouseStartAreaItem->height() - 2);
+                    } else if (m_location == Plasma::Types::LeftEdge) {
+                        tmBasePoint = QPoint(2, m_triangleMouseStartAreaItem->height() / 2);
+                    } else if (m_location == Plasma::Types::RightEdge) {
+                        tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() - 2, m_triangleMouseStartAreaItem->height() / 2);
+                    } else if (m_location == Plasma::Types::TopEdge) {
+                        tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() / 2, 2);
+                    }
+                    tmBasePoint = m_triangleMouseStartAreaItem->mapToGlobal(tmBasePoint).toPoint();
+                }
+
+                if (inTriangle(eventPos, tmStartPoint, toolTipLeft, toolTipRight)
+                    || (tmLastPoint != QPoint(0, 0) && inTriangle(eventPos, tmLastPoint, toolTipLeft, toolTipRight))
+                    || (tmBasePoint != QPoint(0, 0) && inTriangle(eventPos, tmBasePoint, toolTipLeft, toolTipRight))) {
+                    m_showTimer->start(500);
+                } else {
+                    showToolTip();
+                }
+            } else {
+                showToolTip();
+            }
         }
     } else {
         m_showTimer->start(m_interval);
+    }
+}
+
+void ToolTip::hoverMoveEvent(QHoverEvent *event)
+{
+    if (m_triangleMouseFiltering && this == m_triangleMouseStartAreaItem) {
+        m_triangleMouseLastPoint = event->pos();
     }
 }
 

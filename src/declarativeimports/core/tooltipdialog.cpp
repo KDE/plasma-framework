@@ -69,6 +69,7 @@ void ToolTipDialog::hideEvent(QHideEvent *event)
 {
     m_showTimer->stop();
 
+    setVisible(false);
     Dialog::hideEvent(event);
 }
 
