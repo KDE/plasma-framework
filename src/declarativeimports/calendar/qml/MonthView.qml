@@ -329,6 +329,7 @@ PinchArea { // TODO KF6 switch to Item
             bottom: parent.bottom
         }
         clip: true
+        activeFocusOnTab: false
 
         onCurrentIndexChanged: if (currentIndex > 1) {
             updateDecadeOverview();

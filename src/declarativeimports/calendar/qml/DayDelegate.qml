@@ -29,7 +29,7 @@ PlasmaComponents3.AbstractButton {
     readonly property date thisDate: new Date(yearNumber, typeof monthNumber !== "undefined" ? monthNumber - 1 : 0, typeof dayNumber !== "undefined" ? dayNumber : 1)
 
     Accessible.name: thisDate.toLocaleDateString(Qt.locale(), Locale.LongFormat)
-    Accessible.description: (model.eventCount !== undefined && model.eventCount > 0) ? i18ndp("libplasma5", "%1 event", "%1 events") : ''
+    Accessible.description: (model.eventCount !== undefined && model.eventCount > 0) ? i18ndp("libplasma5", "%1 event", "%1 events") : i18nd("libplasma5", "No events")
 
     readonly property bool today: {
         const today = root.today;
@@ -60,17 +60,32 @@ PlasmaComponents3.AbstractButton {
         return result
     }
 
+    PlasmaCore.FrameSvgItem {
+        id: focusEffect
+        anchors {
+            fill: parent
+            leftMargin: -margins.left
+            topMargin: -margins.top
+            rightMargin: -margins.right
+            bottomMargin: -margins.bottom
+        }
+        opacity: dayStyle.activeFocus ? 1 : 0
+        imagePath: "widgets/button"
+        prefix: ["toolbutton-focus", "focus"]
+    }
+
     PlasmaComponents2.Highlight {
         id: todayRect
         anchors.fill: parent
         opacity: {
             if (today) {
-                // TODO Increase the contrast between focused and unfocused
-                return dayStyle.activeFocus ? 1 : 0.9;
+                return 1;
             } else if (selected) {
-                return dayStyle.activeFocus ? 0.6 : 0.5;
-            } else if (dayStyle.hovered || dayStyle.activeFocus) {
+                return 0.6;
+            } else if (dayStyle.hovered) {
                 return 0.3;
+            } else if (dayStyle.activeFocus) {
+                return 0.1;
             }
             return 0;
         }
