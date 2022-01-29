@@ -340,7 +340,11 @@ QSGNode *WindowThumbnail::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData 
     return node;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *message, long int *result)
+#else
+bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
+#endif
 {
     Q_UNUSED(result)
     if (!m_xcb || !m_composite || eventType != QByteArrayLiteral("xcb_generic_event_t")) {
