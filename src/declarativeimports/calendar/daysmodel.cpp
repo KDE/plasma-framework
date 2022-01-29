@@ -149,7 +149,7 @@ void DaysModel::onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &
                 break;
             }
 
-            const int addedEventCount = std::min(currentCount + data.values(currentDate).count(), maxEventDisplayed) - currentCount;
+            const int addedEventCount = std::min<int>(currentCount + data.values(currentDate).count(), maxEventDisplayed) - currentCount;
 
             // Add event
             beginInsertRows(index(i, 0), 0, addedEventCount - 1);
