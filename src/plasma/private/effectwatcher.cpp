@@ -8,7 +8,11 @@
 
 #include <QCoreApplication>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <private/qtx11extras_p.h>
+#else
 #include <QtX11Extras/QX11Info>
+#endif
 
 namespace Plasma
 {
