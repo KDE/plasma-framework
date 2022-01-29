@@ -99,13 +99,13 @@ void SortFilterModel::setFilterRegExp(const QString &exp)
     if (exp == filterRegExp()) {
         return;
     }
-    QSortFilterProxyModel::setFilterRegExp(QRegExp(exp, Qt::CaseInsensitive));
+    QSortFilterProxyModel::setFilterRegularExpression(QRegularExpression(exp, QRegularExpression::CaseInsensitiveOption));
     Q_EMIT filterRegExpChanged(exp);
 }
 
 QString SortFilterModel::filterRegExp() const
 {
-    return QSortFilterProxyModel::filterRegExp().pattern();
+    return QSortFilterProxyModel::filterRegularExpression().pattern();
 }
 
 void SortFilterModel::setFilterString(const QString &filterString)
@@ -237,9 +237,15 @@ DataModel::~DataModel()
 {
 }
 
+static bool isExactMatch(const QRegularExpression &re, const QString &s)
+{
+    const auto match = re.match(s);
+    return match.hasMatch() && s.size() == match.capturedLength();
+}
+
 void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
 {
-    if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(sourceName)) {
+    if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !isExactMatch(m_sourceFilterRE, sourceName)) {
         return;
     }
 
@@ -250,7 +256,7 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
         if (!m_dataSource->data()->isEmpty()) {
             const auto lst = m_dataSource->data()->keys();
             for (const QString &key : lst) {
-                if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !m_sourceFilterRE.exactMatch(key)) {
+                if (!m_sourceFilter.isEmpty() && m_sourceFilterRE.isValid() && !isExactMatch(m_sourceFilterRE, key)) {
                     continue;
                 }
                 QVariant value = m_dataSource->data()->value(key);
@@ -271,7 +277,7 @@ void DataModel::dataUpdated(const QString &sourceName, const QVariantMap &data)
             QVariantList list;
             QVariantMap::const_iterator i;
             for (i = data.constBegin(); i != data.constEnd(); ++i) {
-                if (m_keyRoleFilterRE.exactMatch(i.key())) {
+                if (isExactMatch(m_keyRoleFilterRE, i.key())) {
                     list.append(i.value());
                 }
             }
@@ -326,7 +332,7 @@ void DataModel::setKeyRoleFilter(const QString &key)
     }
 
     m_keyRoleFilter = key;
-    m_keyRoleFilterRE = QRegExp(m_keyRoleFilter);
+    m_keyRoleFilterRE = QRegularExpression(m_keyRoleFilter);
 }
 
 QString DataModel::keyRoleFilter() const
@@ -341,7 +347,7 @@ void DataModel::setSourceFilter(const QString &key)
     }
 
     m_sourceFilter = key;
-    m_sourceFilterRE = QRegExp(key);
+    m_sourceFilterRE = QRegularExpression(key);
     /*
      FIXME: if the user changes the source filter, it won't immediately be reflected in the
      available data

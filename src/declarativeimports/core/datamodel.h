@@ -9,7 +9,7 @@
 
 #include <QAbstractItemModel>
 #include <QJSValue>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSortFilterProxyModel>
 #include <QVector>
 
@@ -239,9 +239,9 @@ private Q_SLOTS:
 private:
     DataSource *m_dataSource;
     QString m_keyRoleFilter;
-    QRegExp m_keyRoleFilterRE;
+    QRegularExpression m_keyRoleFilterRE;
     QString m_sourceFilter;
-    QRegExp m_sourceFilterRE;
+    QRegularExpression m_sourceFilterRE;
     QMap<QString, QVector<QVariant>> m_items;
     QHash<int, QByteArray> m_roleNames;
     QHash<QString, int> m_roleIds;
