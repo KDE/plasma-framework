@@ -368,23 +368,11 @@ void ToolTip::setTriangleMouseStartAreaItem(ToolTip *startItem)
     }
 }
 
-/* a point P is in triangle ABC if ar(ABC) == ar(PAB) + ar(PBC) + ar (PCA)
-   the actual area of a triangle is (determinant)/2
-   but for comparing areas, we don't need the division by 2 (it cancels out),
-   so by not doing it we can avoid dealing with floats plus save on a division operation */
-
-int twiceAreaTriangle(QPoint A, QPoint B, QPoint C)
+static inline bool inTriangle(QPoint &P, QPoint &A, QPoint &B, QPoint &C)
 {
-    return std::abs((A.x() * (B.y() - C.y()) + B.x() * (C.y() - A.y()) + C.x() * (A.y() - B.y())));
-}
-
-bool inTriangle(QPoint P, QPoint A, QPoint B, QPoint C)
-{
-    int arABC = twiceAreaTriangle(A, B, C);
-    int arPAB = twiceAreaTriangle(P, A, B);
-    int arPBC = twiceAreaTriangle(P, B, C);
-    int arPCA = twiceAreaTriangle(P, C, A);
-    return (arABC == (arPAB + arPBC + arPCA));
+    QPolygon poly;
+    poly << A << B << C;
+    return poly.containsPoint(P, Qt::OddEvenFill);
 }
 
 void ToolTip::hoverEnterEvent(QHoverEvent *event)
