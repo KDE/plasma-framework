@@ -492,7 +492,11 @@ QRegion FrameSvgItem::mask() const
     return m_frameSvg->mask();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void FrameSvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+#else
+void FrameSvgItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+#endif
 {
     const bool isComponentComplete = this->isComponentComplete();
     if (isComponentComplete) {
@@ -500,7 +504,11 @@ void FrameSvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldG
         m_sizeChanged = true;
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+#endif
 
     // the above only triggers updatePaintNode, so we have to inform subscribers
     // about the potential change of the mask explicitly here

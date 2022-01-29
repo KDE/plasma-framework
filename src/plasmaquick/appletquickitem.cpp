@@ -908,11 +908,15 @@ void AppletQuickItem::childEvent(QChildEvent *event)
     QQuickItem::childEvent(event);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
-    Q_UNUSED(oldGeometry)
-
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+void AppletQuickItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+{
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+#endif
     d->compactRepresentationCheck();
 }
 

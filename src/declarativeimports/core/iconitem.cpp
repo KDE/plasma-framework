@@ -789,7 +789,11 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
     QQuickItem::itemChange(change, value);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void IconItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
+#else
+void IconItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
+#endif
 {
     if (newGeometry.size() != oldGeometry.size()) {
         m_sizeChanged = true;
@@ -804,7 +808,11 @@ void IconItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeome
         }
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QQuickItem::geometryChanged(newGeometry, oldGeometry);
+#else
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+#endif
 }
 
 void IconItem::componentComplete()
