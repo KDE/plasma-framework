@@ -232,7 +232,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
     initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
 
     compactRepresentationItem =
-        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
+        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentation, qmlContext(qmlObject->rootObject()), initialProperties));
 
     Q_EMIT q->compactRepresentationItemChanged(compactRepresentationItem);
 
@@ -249,7 +249,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
         QVariantHash initialProperties;
         initialProperties[QStringLiteral("parent")] = QVariant();
         fullRepresentationItem =
-            qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(fullRepresentation, QtQml::qmlContext(qmlObject->rootObject()), initialProperties));
+            qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(fullRepresentation, qmlContext(qmlObject->rootObject()), initialProperties));
     } else {
         fullRepresentation = qmlObject->mainComponent();
         fullRepresentationItem = qobject_cast<QQuickItem *>(qmlObject->rootObject());
@@ -276,7 +276,7 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
     }
 
     compactRepresentationExpanderItem =
-        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentationExpander, QtQml::qmlContext(qmlObject->rootObject())));
+        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentationExpander, qmlContext(qmlObject->rootObject())));
 
     if (!compactRepresentationExpanderItem) {
         return nullptr;
@@ -515,12 +515,12 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     QQmlContext *context;
     // is it using shared engine mode?
-    if (!QtQml::qmlEngine(object)->parent()) {
-        context = QtQml::qmlContext(object);
+    if (!qmlEngine(object)->parent()) {
+        context = qmlContext(object);
         // search the root context of the applet in which the object is in
         while (context) {
             // the rootcontext of an applet is a child of the engine root context
-            if (context->parentContext() == QtQml::qmlEngine(object)->rootContext()) {
+            if (context->parentContext() == qmlEngine(object)->rootContext()) {
                 break;
             }
 
@@ -528,7 +528,7 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
         }
         // otherwise index by root context
     } else {
-        context = QtQml::qmlEngine(object)->rootContext();
+        context = qmlEngine(object)->rootContext();
     }
     // at the moment of the attached object creation, the root item is the only one that hasn't a parent
     // only way to avoid creation of this attached for everybody but the root item
@@ -797,7 +797,7 @@ QObject *AppletQuickItem::testItem()
             return nullptr;
         }
 
-        d->testItem = d->qmlObject->createObjectFromSource(url, QtQml::qmlContext(rootItem()));
+        d->testItem = d->qmlObject->createObjectFromSource(url, qmlContext(rootItem()));
         if (d->testItem) {
             d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject *>(this));
         }
