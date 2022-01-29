@@ -108,13 +108,19 @@ QString ContainmentActions::eventToString(QEvent *event)
     QString trigger;
     Qt::KeyboardModifiers modifiers;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    const auto &mo = QObject::staticQtMetaObject;
+#else
+    const auto &mo = Qt::staticMetaObject;
+#endif
+
     switch (event->type()) {
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
     case QEvent::MouseButtonDblClick: {
         QMouseEvent *e = static_cast<QMouseEvent *>(event);
-        int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-        QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+        int m = mo.indexOfEnumerator("MouseButtons");
+        QMetaEnum mouse = mo.enumerator(m);
         trigger += QString::fromLatin1(mouse.valueToKey(e->button()));
         modifiers = e->modifiers();
         break;
@@ -129,8 +135,8 @@ QString ContainmentActions::eventToString(QEvent *event)
         break;
     }
     case QEvent::ContextMenu: {
-        int m = QObject::staticQtMetaObject.indexOfEnumerator("MouseButtons");
-        QMetaEnum mouse = QObject::staticQtMetaObject.enumerator(m);
+        int m = mo.indexOfEnumerator("MouseButtons");
+        QMetaEnum mouse = mo.enumerator(m);
         trigger = QString::fromLatin1(mouse.valueToKey(Qt::RightButton));
         modifiers = Qt::NoModifier;
         break;
@@ -139,8 +145,8 @@ QString ContainmentActions::eventToString(QEvent *event)
         return QString();
     }
 
-    int k = QObject::staticQtMetaObject.indexOfEnumerator("KeyboardModifiers");
-    QMetaEnum kbd = QObject::staticQtMetaObject.enumerator(k);
+    int k = mo.indexOfEnumerator("KeyboardModifiers");
+    QMetaEnum kbd = mo.enumerator(k);
     trigger += QLatin1Char(';') + QString::fromLatin1(kbd.valueToKeys(modifiers));
 
     return trigger;
