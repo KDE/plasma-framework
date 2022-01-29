@@ -30,10 +30,10 @@ ToolTip::ToolTip(QQuickItem *parent)
     , m_active(true)
     , m_interactive(false)
     , m_timeout(4000)
-    , m_usingDialog(false)
     , m_triangleMouseFiltering(false)
-    , m_triangleMouseStartAreaItem(nullptr)
     , m_triangleMouseStartPoint(0, 0)
+    , m_triangleMouseStartAreaItem(nullptr)
+    , m_usingDialog(false)
 {
     setAcceptHoverEvents(true);
     setFiltersChildMouseEvents(true);
@@ -323,7 +323,7 @@ void ToolTip::setContainsMouse(bool contains)
     }
 }
 
-bool ToolTip::triangleMouseFiltering()
+bool ToolTip::triangleMouseFiltering() const
 {
     return m_triangleMouseFiltering;
 }
@@ -336,12 +336,12 @@ void ToolTip::setTriangleMouseFiltering(bool filtering)
     }
 }
 
-QPoint ToolTip::toolTipOpenedPoint()
+QPoint ToolTip::toolTipOpenedPoint() const
 {
     return m_toolTipOpenedPoint;
 }
 
-QPoint ToolTip::triangleMouseStartPoint()
+QPoint ToolTip::triangleMouseStartPoint() const
 {
     return m_triangleMouseStartPoint;
 }
@@ -355,15 +355,15 @@ void ToolTip::setTriangleMouseStartPoint(QPoint startPoint)
     }
 }
 
-ToolTip *ToolTip::triangleMouseStartAreaItem()
+ToolTip *ToolTip::triangleMouseStartAreaItem() const
 {
     return m_triangleMouseStartAreaItem;
 }
 
-void ToolTip::setTriangleMouseStartAreaItem(ToolTip *startPoint)
+void ToolTip::setTriangleMouseStartAreaItem(ToolTip *startItem)
 {
-    if (startPoint != m_triangleMouseStartAreaItem) {
-        m_triangleMouseStartAreaItem = startPoint;
+    if (startItem != m_triangleMouseStartAreaItem) {
+        m_triangleMouseStartAreaItem = startItem;
         Q_EMIT triangleMouseStartAreaItemChanged();
     }
 }
@@ -413,21 +413,26 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
             // FIXME: showToolTip needs to be renamed in sync or something like that
             if (m_triangleMouseFiltering) {
                 QPoint toolTipLeft, toolTipRight, eventPos, tmStartPoint, tmLastPoint, tmBasePoint;
-                auto tldgi = tooltipDialogInstance();
+                const ToolTipDialog *const tldgi = tooltipDialogInstance();
 
                 // toolTip{Left,Right} refer to the two corners of the tooltip which are adjacent to the ToolTipArea
-                if (m_location == Plasma::Types::BottomEdge) {
+                switch (m_location) {
+                case Plasma::Types::BottomEdge:
                     toolTipLeft = QPoint(tldgi->x(), tldgi->y() + tldgi->height());
                     toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y() + tldgi->height());
-                } else if (m_location == Plasma::Types::LeftEdge) {
+                    break;
+                case Plasma::Types::LeftEdge:
                     toolTipLeft = QPoint(tldgi->x(), tldgi->y());
                     toolTipRight = QPoint(tldgi->x(), tldgi->y() + tldgi->height());
-                } else if (m_location == Plasma::Types::RightEdge) {
+                    break;
+                case Plasma::Types::RightEdge:
                     toolTipLeft = QPoint(tldgi->x() + tldgi->width(), tldgi->y());
                     toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y() + tldgi->height());
-                } else if (m_location == Plasma::Types::TopEdge) {
+                    break;
+                case Plasma::Types::TopEdge:
                     toolTipLeft = QPoint(tldgi->x(), tldgi->y());
                     toolTipRight = QPoint(tldgi->x() + tldgi->width(), tldgi->y());
+                    break;
                 }
 
                 eventPos = mapToGlobal(event->pos()).toPoint();
@@ -439,14 +444,19 @@ void ToolTip::hoverEnterEvent(QHoverEvent *event)
                        so we also check from slightly off the midpoint of the base of the ToolTipArea.
                        This makes the filter significantly more reliable in practice, while still
                        allowing instant switching by sliding along the actual screen edge. */
-                    if (m_location == Plasma::Types::BottomEdge) {
+                    switch (m_location) {
+                    case Plasma::Types::BottomEdge:
                         tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() / 2, m_triangleMouseStartAreaItem->height() - 2);
-                    } else if (m_location == Plasma::Types::LeftEdge) {
+                        break;
+                    case Plasma::Types::LeftEdge:
                         tmBasePoint = QPoint(2, m_triangleMouseStartAreaItem->height() / 2);
-                    } else if (m_location == Plasma::Types::RightEdge) {
+                        break;
+                    case Plasma::Types::RightEdge:
                         tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() - 2, m_triangleMouseStartAreaItem->height() / 2);
-                    } else if (m_location == Plasma::Types::TopEdge) {
+                        break;
+                    case Plasma::Types::TopEdge:
                         tmBasePoint = QPoint(m_triangleMouseStartAreaItem->width() / 2, 2);
+                        break;
                     }
                     tmBasePoint = m_triangleMouseStartAreaItem->mapToGlobal(tmBasePoint).toPoint();
                 }

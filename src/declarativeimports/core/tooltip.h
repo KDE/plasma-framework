@@ -116,22 +116,30 @@ class ToolTip : public QQuickItem
     Q_PROPERTY(int timeout MEMBER m_timeout WRITE setTimeout)
 
     /**
-     * Enable triangle mouse filtering.
+     * Enable triangle mouse filtering. Off by default.
+     *
+     * @since 5.92
      */
     Q_PROPERTY(bool triangleMouseFiltering MEMBER m_triangleMouseFiltering WRITE setTriangleMouseFiltering NOTIFY triangleMouseFilteringChanged)
 
     /**
      * The position of the mouse at the time the tooltip was opened.
+     *
+     * @since 5.92
      */
     Q_PROPERTY(QPoint toolTipOpenedPoint MEMBER m_toolTipOpenedPoint NOTIFY toolTipOpenedPointChanged)
 
     /**
      * The point where the mouse movement began, for triangle mouse filtering.
+     *
+     * @since 5.92
      */
     Q_PROPERTY(QPoint triangleMouseStartPoint MEMBER m_triangleMouseStartPoint WRITE setTriangleMouseStartPoint NOTIFY triangleMouseStartPointChanged)
 
     /**
      * The ToolTipArea where the mouse movement began, for triangle mouse filtering.
+     *
+     * @since 5.92
      */
     Q_PROPERTY(
         ToolTip *triangleMouseStartAreaItem MEMBER m_triangleMouseStartAreaItem WRITE setTriangleMouseStartAreaItem NOTIFY triangleMouseStartAreaItemChanged)
@@ -171,15 +179,28 @@ public:
 
     void setTimeout(int timeout);
 
-    bool triangleMouseFiltering();
+    /**
+     * @since 5.92
+     */
+    bool triangleMouseFiltering() const;
+    /**
+     * @since 5.92
+     */
     void setTriangleMouseFiltering(bool filtering);
 
-    QPoint toolTipOpenedPoint();
+    QPoint toolTipOpenedPoint() const;
 
-    QPoint triangleMouseStartPoint();
+    QPoint triangleMouseStartPoint() const;
     void setTriangleMouseStartPoint(QPoint startPoint);
 
-    ToolTip *triangleMouseStartAreaItem();
+    /**
+     * @since 5.92
+     */
+    ToolTip *triangleMouseStartAreaItem() const;
+
+    /**
+     * @since 5.92
+     */
     void setTriangleMouseStartAreaItem(ToolTip *startArea);
     /// @endcond
 
@@ -235,9 +256,29 @@ Q_SIGNALS:
      * @since 5.88
      */
     void toolTipVisibleChanged(bool toolTipVisible);
+    /**
+     * Emitted when triangle filtering is turned on or off.
+     *
+     * @since 5.92
+     */
     void triangleMouseFilteringChanged();
+    /**
+     * Emitted when the point the tooltip was opened from changes.
+     *
+     * @since 5.92
+     */
     void toolTipOpenedPointChanged();
+    /**
+     * Emitted when the start point for the triangle filtering changes.
+     *
+     * @since 5.92
+     */
     void triangleMouseStartPointChanged();
+    /**
+     * Emitted when the ToolTipArea from where the filtering started changes.
+     *
+     * @since 5.92
+     */
     void triangleMouseStartAreaItemChanged();
 
 private Q_SLOTS:
