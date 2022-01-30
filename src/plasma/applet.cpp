@@ -769,8 +769,7 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
 
     d->activationAction->setShortcut(shortcut);
     d->globalShortcutEnabled = true;
-    QList<QKeySequence> seqs;
-    seqs << shortcut;
+    QList<QKeySequence> seqs{shortcut};
     KGlobalAccel::self()->setShortcut(d->activationAction, seqs, KGlobalAccel::NoAutoloading);
     d->globalShortcutChanged();
 }
