@@ -130,6 +130,8 @@ void ContainmentInterface::init()
         prop.write(expr.evaluate());
     }
 
+    setFiltersChildMouseEvents(true);
+
     connect(m_containment.data(), &Plasma::Containment::activityChanged, this, &ContainmentInterface::activityChanged);
     connect(m_containment.data(), &Plasma::Containment::activityChanged, this, [=]() {
         delete m_activityInfo;
@@ -883,6 +885,31 @@ void ContainmentInterface::setContainmentDisplayHints(Plasma::Types::Containment
 
 // PROTECTED--------------------
 
+bool ContainmentInterface::childMouseEventFilter(QQuickItem *item, QEvent *event)
+{
+    if (event->type() != QEvent::MouseButtonPress) {
+        return QQuickItem::childMouseEventFilter(item, event);
+    }
+
+    QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+    if (me->button() != Qt::RightButton) {
+        return QQuickItem::childMouseEventFilter(item, event);
+    }
+
+    QQuickItem *it = item;
+
+    while (it) {
+        if (AppletInterface *ai = qobject_cast<AppletInterface *>(it)) {
+            m_targetAppletInterface = ai;
+            break;
+        }
+        it = it->parentItem();
+    }
+
+    return QQuickItem::childMouseEventFilter(item, event);
+}
+
 void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
 {
     event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
@@ -917,17 +944,10 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    // FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = nullptr;
-    for (QObject *appletObject : std::as_const(m_appletInterfaces)) {
-        if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
-            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->localPos()))) {
-                applet = ai->applet();
-                break;
-            } else {
-                ai = nullptr;
-            }
-        }
+
+    if (m_targetAppletInterface && m_targetAppletInterface->isVisible()) {
+        applet = m_targetAppletInterface->applet();
     }
     // qDebug() << "Invoking menu for applet" << applet;
 
@@ -1017,6 +1037,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
 
     desktopMenu->popup(pos);
+    m_targetAppletInterface.clear();
     event->setAccepted(true);
 }
 

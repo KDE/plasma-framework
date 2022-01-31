@@ -160,6 +160,7 @@ public:
 
 protected:
     void init() override;
+    bool childMouseEventFilter(QQuickItem *item, QEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
@@ -218,6 +219,7 @@ private:
     QPointer<Plasma::Containment> m_containment;
     QPointer<QMenu> m_contextMenu;
     QPointer<DropMenu> m_dropMenu;
+    QPointer<AppletInterface> m_targetAppletInterface;
     int m_wheelDelta;
     friend class AppletInterface;
 };
