@@ -16,11 +16,11 @@ GridLayout {
     property string labelText: ""
 
     readonly property bool usingFocusBackground: !parent.flat && buttonSvg.hasElement("hint-focus-highlighted-background") && parent.visualFocus && !(parent.pressed || parent.checked)
-    
+
     PlasmaCore.ColorScope.inherit: true
 
     columns: parent.display == T.Button.TextBesideIcon ? 2 : 1
-    
+
     rowSpacing: parent.spacing
     columnSpacing: rowSpacing
 
