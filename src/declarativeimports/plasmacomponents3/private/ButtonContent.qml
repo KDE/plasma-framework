@@ -34,8 +34,8 @@ GridLayout {
         Layout.fillWidth: root.parent.display !== T.Button.TextBesideIcon || root.labelText.length === 0
         Layout.fillHeight: true
 
-        Layout.minimumWidth: Math.min(parent.width, parent.height, implicitWidth)
-        Layout.minimumHeight: Math.min(parent.width, parent.height, implicitHeight)
+        Layout.minimumWidth: Math.min(root.width, root.height, implicitWidth)
+        Layout.minimumHeight: Math.min(root.width, root.height, implicitHeight)
 
         Layout.maximumWidth: root.parent.icon.width > 0 ? root.parent.icon.width : Number.POSITIVE_INFINITY
         Layout.maximumHeight: root.parent.icon.height > 0 ? root.parent.icon.height : Number.POSITIVE_INFINITY
@@ -45,16 +45,16 @@ GridLayout {
         colorGroup: parent.PlasmaCore.ColorScope.colorGroup
         visible: source.length > 0 && root.parent.display !== T.Button.TextOnly
         source: root.parent.icon ? (root.parent.icon.name || root.parent.icon.source) : ""
-        status: usingFocusBackground ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+        status: root.usingFocusBackground ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
     }
     PlasmaComponents.Label {
         id: label
         Layout.fillWidth: true
         Layout.fillHeight: true
         visible: text.length > 0 && root.parent.display !== T.Button.IconOnly
-        text: labelText
+        text: root.labelText
         font: root.parent.font
-        color: usingFocusBackground ? PlasmaCore.ColorScope.highlightedTextColor : PlasmaCore.ColorScope.textColor
+        color: root.usingFocusBackground ? PlasmaCore.ColorScope.highlightedTextColor : PlasmaCore.ColorScope.textColor
         horizontalAlignment: root.parent.display !== T.Button.TextUnderIcon && icon.visible ? Text.AlignLeft : Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
