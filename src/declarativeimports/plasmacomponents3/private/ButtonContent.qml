@@ -16,6 +16,7 @@ GridLayout {
     property string labelText: ""
 
     readonly property bool usingFocusBackground: !parent.flat && buttonSvg.hasElement("hint-focus-highlighted-background") && parent.visualFocus && !(parent.pressed || parent.checked)
+    readonly property int defaultIconSize: parent.flat ? PlasmaCore.Units.iconSizes.smallMedium : PlasmaCore.Units.iconSizes.small
 
     PlasmaCore.ColorScope.inherit: true
 
@@ -26,8 +27,6 @@ GridLayout {
 
     PlasmaCore.IconItem {
         id: icon
-
-        readonly property int defaultIconSize: root.parent.flat ? PlasmaCore.Units.iconSizes.smallMedium : PlasmaCore.Units.iconSizes.small
 
         Layout.alignment: Qt.AlignCenter
 
@@ -40,8 +39,8 @@ GridLayout {
         Layout.maximumWidth: root.parent.icon.width > 0 ? root.parent.icon.width : Number.POSITIVE_INFINITY
         Layout.maximumHeight: root.parent.icon.height > 0 ? root.parent.icon.height : Number.POSITIVE_INFINITY
 
-        implicitWidth: root.parent.icon.width > 0 ? root.parent.icon.width : defaultIconSize
-        implicitHeight: root.parent.icon.height > 0 ? root.parent.icon.height : defaultIconSize
+        implicitWidth: root.parent.icon.width > 0 ? root.parent.icon.width : root.defaultIconSize
+        implicitHeight: root.parent.icon.height > 0 ? root.parent.icon.height : root.defaultIconSize
         colorGroup: parent.PlasmaCore.ColorScope.colorGroup
         visible: source.length > 0 && root.parent.display !== T.Button.TextOnly
         source: root.parent.icon ? (root.parent.icon.name || root.parent.icon.source) : ""
