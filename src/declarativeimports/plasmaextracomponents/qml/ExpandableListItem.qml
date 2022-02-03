@@ -265,11 +265,11 @@ Item {
 
     /*
      * isEnabled: bool
-     * Whether or not this list item should be enabled and interactive.
+     * Just an alias for Item::enabled property.
      *
-     * Optional; defaults to true.
+     * @deprecated Use `enabled` directly.
      */
-    property bool isEnabled: true
+    property alias isEnabled: listItem.enabled
 
     /*
      * isDefault: bool
@@ -342,7 +342,7 @@ Item {
     width: parent.width // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
 
-    onIsEnabledChanged: if (!listItem.isEnabled) { collapse() }
+    onEnabledChanged: if (!listItem.enabled) { collapse() }
 
     Keys.onPressed: {
         if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
@@ -378,7 +378,7 @@ Item {
     // Handle left clicks and taps; don't accept stylus input or else it steals
     // events from the buttons on the list item
     TapHandler {
-        enabled: listItem.isEnabled && listItem.hasExpandableContent
+        enabled: listItem.hasExpandableContent
 
         acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger
 
@@ -391,8 +391,6 @@ Item {
     // We still need a MouseArea to handle right-click
     MouseArea {
         anchors.fill: parent
-
-        enabled: listItem.isEnabled
 
         acceptedButtons: Qt.RightButton
         hoverEnabled: true
@@ -510,7 +508,6 @@ Item {
                 PlasmaComponents3.ToolButton {
                     id: defaultActionButton
 
-                    enabled: listItem.isEnabled
                     visible: defaultActionButtonAction
                             && listItem.defaultActionButtonVisible
                             && (!busyIndicator.visible || listItem.showDefaultActionButtonWhenBusy)
