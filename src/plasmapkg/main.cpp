@@ -9,8 +9,10 @@
  */
 
 #include <QCoreApplication>
+#include <QDebug>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 QString typeFromLegacy(const QString &type)
 {
@@ -73,7 +75,12 @@ int main(int argc, char **argv)
 
     QProcess p;
     p.setProcessChannelMode(QProcess::ForwardedChannels);
-    p.start(QLatin1String("kpackagetool5"), params);
+    const QString exec = QStandardPaths::findExecutable(QStringLiteral("kpackagetool5"));
+    if (exec.isEmpty()) {
+        qWarning() << "Couldn't find kpackagetool5 executable.";
+        return -1;
+    }
+    p.start(exec, params);
     p.waitForFinished();
 
     return p.exitCode();
