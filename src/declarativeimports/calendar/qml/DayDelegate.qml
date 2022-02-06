@@ -13,6 +13,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Highlight
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import QtQml 2.15 // For Date
 import QtQml.Models 2.15
 import org.kde.kirigami 2.12 as Kirigami
 
@@ -94,14 +95,61 @@ PlasmaComponents3.AbstractButton {
         }
     }
 
-    contentItem: PlasmaExtras.Heading {
-        id: label
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        text: model.label || dayNumber
-        opacity: isCurrent ? 1.0 : 0.5
-        wrapMode: Text.NoWrap
-        elide: Text.ElideRight
-        fontSizeMode: Text.HorizontalFit
+    contentItem: Item {
+        // ColumnLayout makes scrolling too slow, so use anchors to position labels
+        anchors.fill: parent
+
+        PlasmaExtras.Heading {
+            id: label
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+                bottom: subDayLabel.top
+            }
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: model.label || dayNumber
+            opacity: isCurrent ? 1.0 : 0.5
+            wrapMode: Text.NoWrap
+            elide: Text.ElideRight
+            fontSizeMode: Text.HorizontalFit
+        }
+
+        Loader {
+            id: subDayLabel
+            active: !!model.subDayLabel && model.subDayLabel.length > 0
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+
+            sourceComponent: PlasmaComponents3.Label {
+                elide: Text.ElideRight
+                font.pointSize: Kirigami.Theme.smallFont.pointSize
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                maximumLineCount: 1
+                opacity: label.opacity
+                text: model.subDayLabel
+                textFormat: Text.PlainText
+                wrapMode: Text.NoWrap
+            }
+        }
+
+        Loader {
+            id: tooltipLoader
+            active: !!model.alternateYearNumber && !!model.alternateMonthNumber && !!model.alternateDayNumber
+
+            sourceComponent: PlasmaComponents3.ToolTip {
+                visible: Kirigami.Settings.isMobile? dayStyle.pressed : dayStyle.hovered
+            }
+
+            onLoaded: {
+                const date = Date.fromLocaleString(Qt.locale("en_US"), `${model.alternateYearNumber}-${model.alternateMonthNumber}-${model.alternateDayNumber}`, "yyyy-M-d");
+                item.text = date.toLocaleDateString(Qt.locale());
+            }
+        }
     }
 }
