@@ -34,6 +34,12 @@ public:
         Events,
         EventColor,
         EventCount,
+        AlternateDayNumber, /**< The day number from the alternate calendar system @since 5.94 */
+        AlternateMonthNumber, /**< The month number from the alternate calendar system @since 5.94 */
+        AlternateYearNumber, /**< The year number from the alternate calendar system @since 5.94 */
+        SubDayLabel, /**< The label that is displayed under the day number @since 5.94 */
+        SubMonthLabel, /**< The label that is displayed under the month number @since 5.94 */
+        SubYearLabel, /**< The label that is displayed under the year number @since 5.94 */
     };
 
     explicit DaysModel(QObject *parent = nullptr);
@@ -62,6 +68,8 @@ private Q_SLOTS:
     void onDataReady(const QMultiHash<QDate, CalendarEvents::EventData> &data);
     void onEventModified(const CalendarEvents::EventData &data);
     void onEventRemoved(const QString &uid);
+    void onAlternateDateReady(const QHash<QDate, QDate> &data);
+    void onSubLabelReady(const QHash<QDate, CalendarEvents::CalendarEventsPlugin::SubLabel> &data);
 
 private:
     QModelIndex indexForDate(const QDate &date);
@@ -74,6 +82,8 @@ private:
     QDate m_lastRequestedAgendaDate;
     QList<CalendarEvents::CalendarEventsPlugin *> m_eventPlugins;
     QMultiHash<QDate, CalendarEvents::EventData> m_eventsData;
+    QHash<QDate /* Gregorian */, QDate> m_alternateDatesData;
+    QHash<QDate, CalendarEvents::CalendarEventsPlugin::SubLabel> m_subLabelsData;
     QDate m_lastRequestedEventsStartDate; // this is always this+42 days
     bool m_agendaNeedsUpdate;
 };
