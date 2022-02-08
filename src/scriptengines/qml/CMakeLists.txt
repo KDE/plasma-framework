@@ -38,6 +38,9 @@ target_link_libraries(plasma_appletscript_declarative
     KF5::Package
     KF5::Notifications
 )
+if (QT_MAJOR_VERSION EQUAL "6")
+    target_link_libraries(plasma_appletscript_declarative KF5::ConfigQml)
+endif()
 
 
 install(TARGETS plasma_appletscript_declarative DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/scriptengines)

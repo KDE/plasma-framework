@@ -28,7 +28,11 @@
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <kdeclarative/configpropertymap.h>
+#else
+#include <KConfigPropertyMap>
+#endif
 #include <kdeclarative/qmlobject.h>
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
@@ -136,7 +140,11 @@ void AppletInterface::init()
         return;
     }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
+#else
+    m_configuration = new KConfigPropertyMap(applet()->configScheme(), this);
+#endif
 
     AppletQuickItem::init();
 

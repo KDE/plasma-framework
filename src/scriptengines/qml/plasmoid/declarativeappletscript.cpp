@@ -29,7 +29,12 @@
 #include "plasmoid/containmentinterface.h"
 #include "plasmoid/wallpaperinterface.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <kdeclarative/configpropertymap.h>
+#else
+#include <KConfigPropertyMap>
+#endif
+
 #include <kdeclarative/qmlobject.h>
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
@@ -50,7 +55,11 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
 
     qmlRegisterUncreatableType<WallpaperInterface>("org.kde.plasma.plasmoid", 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>("org.kde.plasma.plasmoid", 1);
+#else
+    qmlRegisterAnonymousType<KConfigPropertyMap>("org.kde.plasma.plasmoid", 1);
+#endif
 }
 
 DeclarativeAppletScript::~DeclarativeAppletScript()

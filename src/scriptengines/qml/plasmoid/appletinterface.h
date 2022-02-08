@@ -24,10 +24,13 @@ class QAction;
 class QActionGroup;
 class QmlAppletScript;
 class QSizeF;
+class KConfigPropertyMap;
 
 namespace KDeclarative
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 class ConfigPropertyMap;
+#endif
 class QmlObject;
 }
 
@@ -515,7 +518,11 @@ private:
     QStringList m_actions;
     QHash<QString, QActionGroup *> m_actionGroups;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KDeclarative::ConfigPropertyMap *m_configuration;
+#else
+    KConfigPropertyMap *m_configuration;
+#endif
     DeclarativeAppletScript *m_appletScriptEngine;
 
     // UI-specific members ------------------

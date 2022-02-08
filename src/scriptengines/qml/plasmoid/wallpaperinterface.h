@@ -14,12 +14,15 @@
 
 class KConfigLoader;
 class KActionCollection;
+class KConfigPropertyMap;
 
 class ContainmentInterface;
 
 namespace KDeclarative
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 class ConfigPropertyMap;
+#endif
 class QmlObject;
 }
 
@@ -35,7 +38,11 @@ class WallpaperInterface : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QString pluginName READ pluginName NOTIFY packageChanged)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
+#else
+    Q_PROPERTY(KConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
+#endif
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
 public:
@@ -54,7 +61,11 @@ public:
 
     QString pluginName() const;
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KDeclarative::ConfigPropertyMap *configuration() const;
+#else
+    KConfigPropertyMap *configuration() const;
+#endif
 
     KConfigLoader *configScheme();
 
@@ -89,7 +100,11 @@ private:
     ContainmentInterface *m_containmentInterface;
     KDeclarative::QmlObject *m_qmlObject;
     KPackage::Package m_pkg;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KDeclarative::ConfigPropertyMap *m_configuration;
+#else
+    KConfigPropertyMap *m_configuration;
+#endif
     KConfigLoader *m_configLoader;
     KActionCollection *m_actions;
     bool m_loading = false;
