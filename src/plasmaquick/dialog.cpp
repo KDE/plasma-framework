@@ -47,7 +47,11 @@
 #endif
 
 #if HAVE_X11
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtPlatformHeaders/QXcbWindowFunctions>
+#else
+#include <qpa/qplatformwindow_p.h>
+#endif
 #endif
 
 // Unfortunately QWINDOWSIZE_MAX is not exported
@@ -705,6 +709,7 @@ void DialogPrivate::applyType()
             case Dialog::Normal:
                 q->setFlags(Qt::FramelessWindowHint | q->flags());
                 break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             case Dialog::Dock:
                 wmType = QXcbWindowFunctions::WmWindowType::Dock;
                 break;
@@ -720,6 +725,23 @@ void DialogPrivate::applyType()
             case Dialog::Notification:
                 wmType = QXcbWindowFunctions::WmWindowType::Notification;
                 break;
+#else
+            case Dialog::Dock:
+                wmType = QNativeInterface::Private::QXcbWindow::Dock;
+                break;
+            case Dialog::DialogWindow:
+                wmType = QNativeInterface::Private::QXcbWindow::Dialog;
+                break;
+            case Dialog::PopupMenu:
+                wmType = QNativeInterface::Private::QXcbWindow::PopupMenu;
+                break;
+            case Dialog::Tooltip:
+                wmType = QNativeInterface::Private::QXcbWindow::Tooltip;
+                break;
+            case Dialog::Notification:
+                wmType = QNativeInterface::Private::QXcbWindow::Notification;
+                break;
+#endif
             case Dialog::OnScreenDisplay:
             case Dialog::CriticalNotification:
                 // Not supported by Qt
@@ -727,7 +749,12 @@ void DialogPrivate::applyType()
             }
 
             if (wmType) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 QXcbWindowFunctions::setWmWindowType(q, static_cast<QXcbWindowFunctions::WmWindowType>(wmType));
+#else
+                // QXcbWindow isn't installed and thus inaccessible to us, but it does read this magic property from the window...
+                q->setProperty("_q_xcb_wm_window_type", wmType);
+#endif
             }
         }
 #endif
