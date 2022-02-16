@@ -48,6 +48,7 @@ Units::Units(QObject *parent)
     , m_gridUnit(-1)
     , m_devicePixelRatio(-1)
     , m_smallSpacing(-1)
+    , m_mediumSpacing(-1)
     , m_largeSpacing(-1)
     , m_longDuration(defaultLongDuration) // default base value for animations
 {
@@ -245,6 +246,11 @@ int Units::smallSpacing() const
     return m_smallSpacing;
 }
 
+int Units::mediumSpacing() const
+{
+    return m_mediumSpacing;
+}
+
 int Units::largeSpacing() const
 {
     return m_largeSpacing;
@@ -264,6 +270,7 @@ void Units::updateSpacing()
 
     if (gridUnit != m_largeSpacing) {
         m_smallSpacing = qMax(2, (int)(gridUnit / 4)); // 1/4 of gridUnit, at least 2
+        m_mediumSpacing = std::round(m_smallSpacing * 1.5);
         m_largeSpacing = gridUnit; // msize.height
         Q_EMIT spacingChanged();
     }

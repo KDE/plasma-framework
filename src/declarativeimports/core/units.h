@@ -92,6 +92,13 @@ class Units : public QObject
     Q_PROPERTY(int smallSpacing READ smallSpacing NOTIFY spacingChanged)
 
     /**
+     * This property holds the amount of spacing that should be used between medium UI elements,
+     * such as buttons and text fields in a toolbar.
+     * Internally, this size depends on the size of the default font as rendered on the screen,
+     * so it takes user-configured font size and DPI into account.
+     */
+    Q_PROPERTY(int mediumSpacing READ mediumSpacing NOTIFY spacingChanged)
+
     /**
      * This property is functionally identical to gridUnit. To avoid confusion, it should not be used.
      *
@@ -200,6 +207,12 @@ public:
     int smallSpacing() const;
 
     /**
+     * @return Pixel value for medium spacing between elements.
+     * @since 5.92
+     */
+    int mediumSpacing() const;
+
+    /**
      * @return Pixel value for large spacing between elements.
      * @since 5.0
      */
@@ -286,6 +299,7 @@ private:
     static SharedAppFilter *s_sharedAppFilter;
 
     int m_smallSpacing;
+    int m_mediumSpacing;
     int m_largeSpacing;
 
     KConfigWatcher::Ptr m_animationSpeedWatcher;
