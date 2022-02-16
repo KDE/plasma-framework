@@ -88,6 +88,7 @@ public:
 Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
+    void repaintNeeded();
     void isLoadingChanged();
 
 private Q_SLOTS:

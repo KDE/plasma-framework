@@ -24,6 +24,7 @@
 #include <QQmlExpression>
 #include <QQmlProperty>
 
+#include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 #include <kpackage/packageloader.h>
 
@@ -47,6 +48,7 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
         syncWallpaperPackage();
     }
     connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged, this, &WallpaperInterface::syncWallpaperPackage);
+    connect(m_containmentInterface->containment()->corona(), &Plasma::Corona::startupCompleted, this, &WallpaperInterface::repaintNeeded);
 }
 
 WallpaperInterface::~WallpaperInterface()
@@ -102,6 +104,7 @@ KConfigLoader *WallpaperInterface::configScheme()
             QFile file(xmlPath);
             m_configLoader = new KConfigLoader(cfg, &file, this);
         }
+        connect(m_configLoader, &KConfigLoader::configChanged, this, &WallpaperInterface::configurationChanged);
     }
 
     return m_configLoader;
@@ -162,6 +165,7 @@ void WallpaperInterface::syncWallpaperPackage()
     props[QStringLiteral("width")] = width();
     props[QStringLiteral("height")] = height();
     m_qmlObject->completeInitialization(props);
+    Q_EMIT repaintNeeded();
 }
 
 void WallpaperInterface::loadFinished()
