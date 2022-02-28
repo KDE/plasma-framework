@@ -77,6 +77,7 @@ Comment[sk]=Vánok od KDE VDG
 Comment[sl]=Sapica (Breeze) od KDE VDG
 Comment[sv]=Breeze av KDE:s visuella designgrupp
 Comment[tg]=Насим аз KDE VDG
+Comment[tr]=KDE VDG tarafından yapılan Esinti
 Comment[uk]=Breeze, автори — KDE VDG
 Comment[vi]=Breeze, do KDE VDG
 Comment[x-test]=xxBreeze by the KDE VDGxx
