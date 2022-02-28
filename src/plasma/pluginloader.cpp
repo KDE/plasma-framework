@@ -183,9 +183,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         appletId = ++AppletPrivate::s_maxAppletId;
     }
 
-    // Need to pass the empty directory because it's where plasmoids used to be
     auto plugin = d->plasmoidCache.findPluginById(name, PluginLoaderPrivate::s_plasmoidsPluginDir);
-
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
 
     // If the applet is using another applet package, search for the plugin of the other applet
@@ -200,7 +198,12 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         QPluginLoader loader(plugin.fileName());
         QVariantList allArgs = {QVariant::fromValue(p), loader.metaData().toVariantMap(), appletId};
         allArgs << args;
-        applet = KPluginFactory::instantiatePlugin<Plasma::Applet>(plugin, nullptr, allArgs).plugin;
+        if (KPluginFactory *factory = KPluginFactory::loadFactory(plugin).plugin) {
+            if (factory->metaData().rawData().isEmpty()) {
+                factory->setMetaData(p.metadata());
+            }
+            applet = factory->create<Plasma::Applet>(nullptr, allArgs);
+        }
     }
     if (applet) {
         return applet;
@@ -912,7 +915,7 @@ KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, 
         // Find all the plugins now, but only once
         pluginCacheAge = now;
 
-        const auto metaDataList = KPluginMetaData::findPlugins(pluginNamespace);
+        const auto metaDataList = KPluginMetaData::findPlugins(pluginNamespace, {}, KPluginMetaData::AllowEmptyMetaData);
         for (const KPluginMetaData &metadata : metaDataList) {
             plugins.insert(metadata.pluginId(), metadata);
         }
@@ -930,7 +933,13 @@ KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, 
         qCDebug(LOG_PLASMA) << "loading applet by name" << name << useRuntimeCache << data.isValid();
         return data;
     } else {
-        return KPluginMetaData::findPluginById(pluginNamespace, pluginName);
+        const QVector<KPluginMetaData> offers = KPluginMetaData::findPlugins(
+            pluginNamespace,
+            [&pluginName](const KPluginMetaData &data) {
+                return data.pluginId() == pluginName;
+            },
+            KPluginMetaData::AllowEmptyMetaData);
+        return offers.isEmpty() ? KPluginMetaData() : offers.first();
     }
 }
 
