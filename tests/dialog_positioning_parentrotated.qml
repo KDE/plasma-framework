@@ -7,7 +7,7 @@
 
 import QtQuick 2.0
 
-import QtQuick.Controls 1.1 as Controls
+import QtQuick.Controls 2.15 as Controls
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
