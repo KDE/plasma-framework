@@ -4,6 +4,7 @@ plugin plasmaextracomponentsplugin
 App 2.0 App.qml
 ConditionalLoader 2.0 ConditionalLoader.qml
 ListItem 2.0 ListItem.qml
+BasicListItem 2.0 BasicListItem.qml
 ExpandableListItem 2.0 ExpandableListItem.qml
 Heading 2.0 Heading.qml
 Paragraph 2.0 Paragraph.qml
