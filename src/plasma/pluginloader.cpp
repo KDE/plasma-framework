@@ -37,7 +37,11 @@ namespace Plasma
 {
 inline bool isContainmentMetaData(const KPluginMetaData &md)
 {
-    return md.serviceTypes().contains(QLatin1String("Plasma/Containment")) || md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"));
+    return md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        || md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
+#endif
+        ;
 }
 static PluginLoader *s_pluginLoader = nullptr;
 
