@@ -45,6 +45,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
     , expanded(false)
     , activationTogglesExpanded(true)
     , initComplete(false)
+    , compactRepresentationCheckGuard(false)
 {
     if (s_preloadPolicy == Uninitialized) {
         // default as Adaptive
@@ -357,12 +358,19 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
         return;
     }
 
+    // ignore if this widget is being checked somewhere above
+    if (compactRepresentationCheckGuard) {
+        return;
+    }
+
     bool full = appletShouldBeExpanded();
 
     if ((full && fullRepresentationItem && fullRepresentationItem == currentRepresentationItem)
         || (!full && compactRepresentationItem && compactRepresentationItem == currentRepresentationItem)) {
         return;
     }
+
+    compactRepresentationCheckGuard = true;
 
     // Expanded
     if (full) {
@@ -417,6 +425,8 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
             Q_EMIT q->expandedChanged(false);
         }
     }
+
+    compactRepresentationCheckGuard = false;
 }
 
 void AppletQuickItemPrivate::minimumWidthChanged()
