@@ -168,6 +168,8 @@ void ThemeTest::testColors()
     QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(17, 209, 25));
     QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(201, 206, 62));
     QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(237, 21, 24));
+    QCOMPARE(m_theme->backgroundContrastEnabled(), true);
+    QCOMPARE(m_theme->backgroundContrast(), 0.2);
 }
 
 void ThemeTest::testCompositingChange()
