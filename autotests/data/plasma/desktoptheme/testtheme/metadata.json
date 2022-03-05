@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "kde-artists@kde.org",
+                "Name": "KDE Visual Design Group"
+            }
+        ],
+        "Category": "",
+        "EnabledByDefault": true,
+        "Id": "default",
+        "License": "LGPL",
+        "Name": "Plasma test theme",
+        "Version": "5.20",
+        "Website": "https://plasma.kde.org"
+    },
+    "X-Plasma-API": "5.0"
+}
