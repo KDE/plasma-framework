@@ -1,0 +1,913 @@
+# Translation of libplasma5.po into Serbian.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
+# Dalibor Djuric <daliborddjuric@gmail.com>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: libplasma5\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2020-05-31 17:59+0200\n"
+"PO-Revision-Date: 2016-03-20 15:24+0100\n"
+"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Environment: kde\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:64
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Празници"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:66
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Догађаји"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:68
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Обавезе"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:70
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Друго"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:158
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Данас"
+
+#: declarativeimports/calendar/qml/DaysCalendar.qml:160
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Ресетуј календар на данас"
+
+#: declarativeimports/calendar/qml/MonthView.qml:247
+#, kde-format
+msgid "Previous Month"
+msgstr "Претходни месец"
+
+#: declarativeimports/calendar/qml/MonthView.qml:248
+#, kde-format
+msgid "Next Month"
+msgstr "Наредни месец"
+
+#: declarativeimports/calendar/qml/MonthView.qml:275
+#, kde-format
+msgid "Previous Year"
+msgstr "Претходна година"
+
+#: declarativeimports/calendar/qml/MonthView.qml:276
+#, kde-format
+msgid "Next Year"
+msgstr "Наредна година"
+
+#: declarativeimports/calendar/qml/MonthView.qml:308
+#, kde-format
+msgid "Previous Decade"
+msgstr "Претходна деценија"
+
+#: declarativeimports/calendar/qml/MonthView.qml:309
+#, kde-format
+msgid "Next Decade"
+msgstr "Наредна деценија"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:52
+#, kde-format
+msgid "OK"
+msgstr "У реду"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:53
+#, kde-format
+msgid "Cancel"
+msgstr "Одустани"
+
+#: plasma/applet.cpp:375
+#, kde-format
+msgid "Unknown"
+msgstr "Непознато"
+
+#: plasma/applet.cpp:749
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Активирај виџет %1"
+
+#: plasma/containment.cpp:120 plasma/private/applet_p.cpp:124
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "Remove this %1"
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr ""
+"Уклони овај %1|/|Уклони $[по-роду-броју %1 овај ову ово ове ове ова] $[аку "
+"%1]"
+
+#: plasma/containment.cpp:126
+#, kde-format
+msgctxt "%1 is the name of the containment"
+msgid "Edit %1..."
+msgstr ""
+
+#: plasma/containment.cpp:129 plasma/private/applet_p.cpp:129
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr ""
+
+#: plasma/corona.cpp:370 plasma/corona.cpp:490
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Закључај виџете"
+
+#: plasma/corona.cpp:370
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Откључај виџете"
+
+#: plasma/corona.cpp:419
+#, kde-format
+msgid "Finish Customizing Layout"
+msgstr ""
+
+#: plasma/corona.cpp:421 plasma/corona.cpp:505
+#, kde-format
+msgid "Customize Layout..."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Да ли направити кеш на диску за тему."
+
+# skip-rule: t-setting
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Највећа величина кеша теме на диску у килобајтима. Имајте на уму да су ови "
+"фајлови ретки, тако да задата величина не мора бити потпуно искоришћена. "
+"Зато је задавање веће вредности често сасвим безбедно."
+
+# >> @item file/directory definition
+#: plasma/packagestructure/dataenginepackage.cpp:39
+#: plasma/packagestructure/packages.cpp:98 plasmaquick/private/packages.cpp:117
+#, kde-format
+msgid "Data Files"
+msgstr "подаци"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/dataenginepackage.cpp:41
+#: plasma/packagestructure/packages.cpp:100
+#: plasmaquick/private/packages.cpp:119
+#, kde-format
+msgid "Executable Scripts"
+msgstr "извршне скрипте"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/dataenginepackage.cpp:46
+#, kde-format
+msgid "Service Descriptions"
+msgstr "описи сервиса"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/dataenginepackage.cpp:49
+#: plasma/packagestructure/packages.cpp:106
+#: plasmaquick/private/packages.cpp:124
+#, kde-format
+msgid "Translations"
+msgstr "преводи"
+
+# >> @item:intext
+#: plasma/packagestructure/packages.cpp:42
+#: plasma/packagestructure/packages.cpp:62 plasmaquick/private/packages.cpp:86
+#: plasmaquick/private/packages.cpp:131
+#, kde-format
+msgid "Main Script File"
+msgstr "главни фајл скрипте"
+
+# >> @item:intext
+#: plasma/packagestructure/packages.cpp:43
+#, kde-format
+msgid "Tests"
+msgstr "пробе"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/packages.cpp:84 plasmaquick/private/packages.cpp:103
+#, kde-format
+msgid "Images"
+msgstr "слике"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/packages.cpp:85 plasmaquick/private/packages.cpp:104
+#, kde-format
+msgid "Themed Images"
+msgstr "тематске слике"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/packages.cpp:91 plasmaquick/private/packages.cpp:110
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "дефиниције поставе"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/packages.cpp:96 plasmaquick/private/packages.cpp:115
+#, kde-format
+msgid "User Interface"
+msgstr "корисничко сучеље"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/packages.cpp:104
+#, kde-format
+msgid "Screenshot"
+msgstr "снимак екрана"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:40
+#, kde-format
+msgid "Images for dialogs"
+msgstr "слике за дијалоге"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:42
+#: plasma/packagestructure/plasmathemepackage.cpp:44
+#, kde-format
+msgid "Generic dialog background"
+msgstr "генеричка позадина дијалога"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:46
+#: plasma/packagestructure/plasmathemepackage.cpp:48
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "тема за одјавни дијалог"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:50
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "пакети тапета"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:52
+#, kde-format
+msgid "Images for widgets"
+msgstr "слике за виџете"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:54
+#: plasma/packagestructure/plasmathemepackage.cpp:56
+#, kde-format
+msgid "Background image for widgets"
+msgstr "позадинска слика за виџете"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:58
+#: plasma/packagestructure/plasmathemepackage.cpp:60
+#, kde-format
+msgid "Analog clock face"
+msgstr "лице аналогног сата"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:62
+#: plasma/packagestructure/plasmathemepackage.cpp:64
+#, kde-format
+msgid "Background image for panels"
+msgstr "позадинска слика за панеле"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:66
+#: plasma/packagestructure/plasmathemepackage.cpp:68
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "позадина за цртачке виџете"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:70
+#: plasma/packagestructure/plasmathemepackage.cpp:72
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "позадинска слика за облачиће"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:74
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "непрозирне слике за дијалоге"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:76
+#: plasma/packagestructure/plasmathemepackage.cpp:78
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "непрозирна генеричка позадина дијалога"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:80
+#: plasma/packagestructure/plasmathemepackage.cpp:82
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "непрозирна тема за одјавни дијалог"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:84
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "непрозирне слике за виџете"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:86
+#: plasma/packagestructure/plasmathemepackage.cpp:88
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "непрозирна позадинска слика за панеле"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:90
+#: plasma/packagestructure/plasmathemepackage.cpp:92
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "непрозирна позадинска слика за облачиће"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmathemepackage.cpp:94
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "поставни фајл шеме боја"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmoidpackage.cpp:39
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "модел УИ страница поставе"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmoidpackage.cpp:40
+#, kde-format
+msgid "Configuration XML file"
+msgstr "ИксМЛ фајл поставе"
+
+# >> @item file/directory definition
+#: plasma/packagestructure/plasmoidpackage.cpp:51
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "посебни проширивач за сажете аплете"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:104
+#, kde-format
+msgid "Accessibility"
+msgstr "приступачност"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:105
+#, kde-format
+msgid "Application Launchers"
+msgstr "покретачи програма"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:106
+#, kde-format
+msgid "Astronomy"
+msgstr "астрономија"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:107
+#, kde-format
+msgid "Date and Time"
+msgstr "датум и време"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:108
+#, kde-format
+msgid "Development Tools"
+msgstr "развојне алатке"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:109
+#, kde-format
+msgid "Education"
+msgstr "образовање"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:110
+#, kde-format
+msgid "Environment and Weather"
+msgstr "природа и време"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:111
+#, kde-format
+msgid "Examples"
+msgstr "примери"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:112
+#, kde-format
+msgid "File System"
+msgstr "фајл систем"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:113
+#, kde-format
+msgid "Fun and Games"
+msgstr "забава и игре"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:114
+#, kde-format
+msgid "Graphics"
+msgstr "графика"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:115
+#, kde-format
+msgid "Language"
+msgstr "језик"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:116
+#, kde-format
+msgid "Mapping"
+msgstr "картографија"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:117
+#, kde-format
+msgid "Miscellaneous"
+msgstr "разно"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:118
+#, kde-format
+msgid "Multimedia"
+msgstr "мултимедија"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:119
+#, kde-format
+msgid "Online Services"
+msgstr "сервиси на вези"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:120
+#, kde-format
+msgid "Productivity"
+msgstr "продуктивност"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:121
+#, kde-format
+msgid "System Information"
+msgstr "подаци о систему"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:122
+#, kde-format
+msgid "Utilities"
+msgstr "алатке"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:123
+#, kde-format
+msgid "Windows and Tasks"
+msgstr "прозори и задаци"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:124
+#, kde-format
+msgid "Clipboard"
+msgstr "клипборд"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:125
+#, kde-format
+msgid "Tasks"
+msgstr "задаци"
+
+# >> @item applet category
+#: plasma/pluginloader.cpp:597 plasma/pluginloader.cpp:598
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "разно"
+
+#: plasma/private/applet_p.cpp:144
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Виџет %1 не дефинише који скриптни мотор треба за њега."
+
+#: plasma/private/applet_p.cpp:161
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Не могу да отворим пакет %1 неопходан за виџет %2."
+
+#: plasma/private/applet_p.cpp:182
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Не могу да створим скриптни мотор %1 за виџет %2."
+
+#: plasma/private/applet_p.cpp:187
+#, fuzzy, kde-format
+#| msgid "Alternatives..."
+msgid "Show Alternatives..."
+msgstr "Алтернативе..."
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "Widget Removed"
+msgstr "Виџет уклоњен"
+
+#: plasma/private/applet_p.cpp:279
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Виџет „%1“ је уклоњен."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Panel Removed"
+msgstr "Панел уклоњен"
+
+#: plasma/private/applet_p.cpp:282
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Панел је уклоњен."
+
+#: plasma/private/applet_p.cpp:285
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Површ уклоњена"
+
+#: plasma/private/applet_p.cpp:286
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Површ је уклоњена."
+
+#: plasma/private/applet_p.cpp:289
+#, kde-format
+msgid "Undo"
+msgstr "Опозови"
+
+#: plasma/private/applet_p.cpp:379
+#, kde-format
+msgid "Widget Settings"
+msgstr "Поставке виџета"
+
+#: plasma/private/applet_p.cpp:386
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Уклони овај виџет"
+
+#: plasma/private/applet_p.cpp:393
+#: plasma/private/associatedapplicationmanager.cpp:79
+#: plasma/private/associatedapplicationmanager.cpp:138
+#: plasma/private/associatedapplicationmanager.cpp:180
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Изврши придружени програм"
+
+#: plasma/private/applet_p.cpp:484
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Неуспело припремање скрипте"
+
+#: plasma/private/associatedapplicationmanager.cpp:76
+#: plasma/private/associatedapplicationmanager.cpp:177
+#, kde-format
+msgid "Open with %1"
+msgstr "Отвори помоћу %1|/|Отвори $[инс-п %1]"
+
+#: plasma/private/containment_p.cpp:76
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Уклони овај панел"
+
+#: plasma/private/containment_p.cpp:78
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Уклони ову активност"
+
+#: plasma/private/containment_p.cpp:84
+#, kde-format
+msgid "Activity Settings"
+msgstr "Поставке активности"
+
+#: plasma/private/containment_p.cpp:90
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Додај виџете..."
+
+#: plasma/private/containment_p.cpp:206
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Не могу да нађем захтевану компоненту: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Дељење виџета на мрежи омогућава вам да приступите том виџету са другог "
+"рачунара као даљинским управљачем."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Подели овај виџет на мрежи"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Дозволи свима слободан приступ овом виџету"
+
+#: plasma/private/service_p.h:47
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Неисправан (нулти) сервис, не може извршити никакву операцију."
+
+#: plasmaquick/appletquickitem.cpp:615
+#, kde-format
+msgid "Error loading QML file: %1"
+msgstr "Грешка при учитавању КуМЛ фајла: %1"
+
+#: plasmaquick/appletquickitem.cpp:617
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Грешка при учитавању аплета: пакет не постоји. %1"
+
+# >> %1 is provider name
+#: plasmaquick/configview.cpp:109
+#, kde-format
+msgid "%1 Settings"
+msgstr "Поставке %1|/|Поставке $[ген %1]"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:37
+#, kde-format
+msgid "Default settings for theme, etc."
+msgstr "подразумеване поставке за тему, итд."
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:39
+#, kde-format
+msgid "Color scheme to use for applications."
+msgstr "шема боја у програмима"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:42
+#, kde-format
+msgid "Preview Images"
+msgstr "слике прегледа"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:43
+#, kde-format
+msgid "Preview for the Login Manager"
+msgstr "преглед за менаџер пријављивања"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:44
+#, kde-format
+msgid "Preview for the Lock Screen"
+msgstr "преглед за забравни екран"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:45
+#, kde-format
+msgid "Preview for the Userswitcher"
+msgstr "преглед за мењач корисника"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:46
+#, kde-format
+msgid "Preview for the Virtual Desktop Switcher"
+msgstr "преглед за мењач виртуелних површи"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:47
+#, kde-format
+msgid "Preview for Splash Screen"
+msgstr "преглед за уводни екран"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:48
+#, kde-format
+msgid "Preview for KRunner"
+msgstr "преглед за К‑извођач"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:49
+#, kde-format
+msgid "Preview for the Window Decorations"
+msgstr "преглед за декорације прозора"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:50
+#, kde-format
+msgid "Preview for Window Switcher"
+msgstr "преглед за мењач прозора"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:52
+#, kde-format
+msgid "Login Manager"
+msgstr "менаџер пријављивања"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:53
+#, kde-format
+msgid "Main Script for Login Manager"
+msgstr "главна скрипт за менаџер пријављивања"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:55
+#, kde-format
+msgid "Logout Dialog"
+msgstr "одјавни дијалог"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:56
+#, kde-format
+msgid "Main Script for Logout Dialog"
+msgstr "главна скрипта за одјавни дијалог"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:58
+#, kde-format
+msgid "Screenlocker"
+msgstr "закључавач екрана"
+
+# >> @item file/directory definition
+# rewrite-msgid: /Lock Screen/Screen Locker/
+#: plasmaquick/private/packages.cpp:59
+#, kde-format
+msgid "Main Script for Lock Screen"
+msgstr "главна скрипта за закључавач екрана"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:61
+#, kde-format
+msgid "UI for fast user switching"
+msgstr "сучеље за брзо мењање корисника"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:62
+#, kde-format
+msgid "Main Script for User Switcher"
+msgstr "главна скрипта за мењач корисника"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:64
+#, kde-format
+msgid "Virtual Desktop Switcher"
+msgstr "мењач виртуелних површи"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:65
+#, kde-format
+msgid "Main Script for Virtual Desktop Switcher"
+msgstr "главна скрипта за мењач виртуелних површи"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:67
+#, kde-format
+msgid "On-Screen Display Notifications"
+msgstr "обавештења у екранском приказу"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:68
+#, kde-format
+msgid "Main Script for On-Screen Display Notifications"
+msgstr "главна скрипта за обавештења у екранском приказу"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:70
+#, kde-format
+msgid "Splash Screen"
+msgstr "уводни екран"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:71
+#, kde-format
+msgid "Main Script for Splash Screen"
+msgstr "главна скрипта за уводни екран"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:73
+#, kde-format
+msgid "KRunner UI"
+msgstr "сучеље К‑извођача"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:74
+#, kde-format
+msgid "Main Script KRunner"
+msgstr "главна скрипта К‑извођача"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:76
+#, kde-format
+msgid "Window Decoration"
+msgstr "декорација прозора"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:77
+#, kde-format
+msgid "Main Script for Window Decoration"
+msgstr "главна скрипта за декорацију прозора"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:79
+#, kde-format
+msgid "Window Switcher"
+msgstr "мењач прозора"
+
+# >> @item file/directory definition
+#: plasmaquick/private/packages.cpp:80
+#, kde-format
+msgid "Main Script for Window Switcher"
+msgstr "главна скрипта за мењач прозора"
+
+# >> @title
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:619
+#, kde-format
+msgid "Plasma Package"
+msgstr "Плазма пакет"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:623
+#, kde-format
+msgid "Install"
+msgstr "Инсталирај"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:635
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Пропало инсталирање пакета"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:655
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Пакет који сте управо испустили није добар."
+
+# >> @title
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:664
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:728
+#, kde-format
+msgid "Widgets"
+msgstr "Виџети"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:669
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+# >> @action
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:732
+#, fuzzy, kde-format
+#| msgid "Icon"
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Иконица"
+
+# >> @title
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:695
+#, kde-format
+msgid "Wallpaper"
+msgstr "Тапет"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:705
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:42
+#, kde-format
+msgid "Content dropped"
+msgstr "Садржај превучен"
