@@ -8,6 +8,7 @@
 
 #include "appbackgroundprovider_p.h"
 #include "fallbackcomponent.h"
+#include "menu.h"
 
 #include <QQmlEngine>
 #include <QtQml>
@@ -24,5 +25,10 @@ void PlasmaExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const cha
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
+    qRegisterMetaType<MenuExtension*>();
+    qRegisterMetaType<MenuItem*>();
+    qRegisterMetaType<ForeignMenu>();
+    qmlRegisterTypesAndRevisions<ForeignMenu>("org.kde.plasma.extras", 2);
+    qmlRegisterTypesAndRevisions<MenuItem>("org.kde.plasma.extras", 2);
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }

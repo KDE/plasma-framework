@@ -10,12 +10,15 @@ target_sources(plasmaextracomponentsplugin PRIVATE
     appbackgroundprovider.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
+    menu.cpp
 )
 
 target_link_libraries(plasmaextracomponentsplugin
         Qt${QT_MAJOR_VERSION}::Quick
+        Qt${QT_MAJOR_VERSION}::Widgets
         Qt${QT_MAJOR_VERSION}::Qml
         ${KACTIVITIES_LIBRARY}
+        KF5::WidgetsAddons # for KAcceleratorManager
         KF5::Service
         KF5::Plasma)
 
