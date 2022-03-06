@@ -69,6 +69,7 @@ PlasmaComponents3.AbstractButton {
             }
             return 0;
         }
+        z: -1;
     }
 
     Loader {
