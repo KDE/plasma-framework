@@ -240,7 +240,7 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
     // Look for C++ plugins first
     KPluginMetaData plugin = d->dataengineCache.findPluginById(name, PluginLoaderPrivate::s_dataEnginePluginDir);
     if (plugin.isValid()) {
-        const QVariantList args{QPluginLoader(plugin.fileName()).metaData().toVariantMap()};
+        const QVariantList args{QVariant::fromValue(plugin)};
         engine = KPluginFactory::instantiatePlugin<Plasma::DataEngine>(plugin, nullptr, args).plugin;
     }
     if (engine) {

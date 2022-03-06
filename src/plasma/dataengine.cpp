@@ -54,8 +54,12 @@ DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent)
-    , d(new DataEnginePrivate(this, KPluginInfo(args).toMetaData(), args))
 {
+    KPluginMetaData data;
+    if (args.size() > 1 && args.first().canConvert<KPluginMetaData>()) {
+        data = args.first().value<KPluginMetaData>();
+    }
+    d = new DataEnginePrivate(this, data, args);
     if (d->script) {
         d->setupScriptSupport();
         d->script->init();
