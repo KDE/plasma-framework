@@ -447,7 +447,7 @@ private:
     Q_PRIVATE_SLOT(d, void sourceDestroyed(QObject *object))
     Q_PRIVATE_SLOT(d, void scheduleSourcesUpdated())
 
-    DataEnginePrivate *const d;
+    DataEnginePrivate *d;
 };
 
 } // Plasma namespace
