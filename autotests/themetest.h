@@ -21,6 +21,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void loadSvgIcon();
+    void testThemeConfig_data();
+    void testThemeConfig();
     void testColors();
     void testCompositingChange();
 

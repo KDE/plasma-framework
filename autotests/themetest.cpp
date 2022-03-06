@@ -119,6 +119,22 @@ void ThemeTest::loadSvgIcon()
     QVERIFY(!m_svg->theme()->findInCache(cacheId, result));
 }
 
+void ThemeTest::testThemeConfig_data()
+{
+    QTest::addColumn<QString>("themeName");
+
+    QTest::addRow("new metadata style theme") << QStringLiteral("testtheme");
+    QTest::addRow("old metadata format theme") << QStringLiteral("test_old_metadata_format_theme");
+}
+
+void ThemeTest::testThemeConfig()
+{
+    QFETCH(QString, themeName);
+    Plasma::Theme *theme = new Plasma::Theme(themeName, this);
+    QCOMPARE(theme->backgroundContrastEnabled(), true);
+    QCOMPARE(theme->backgroundContrast(), 0.23);
+}
+
 void ThemeTest::testColors()
 {
     QCOMPARE(m_theme->color(Plasma::Theme::TextColor, Plasma::Theme::NormalColorGroup), QColor(49, 54, 59));
@@ -168,8 +184,6 @@ void ThemeTest::testColors()
     QCOMPARE(m_theme->color(Plasma::Theme::PositiveTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(17, 209, 25));
     QCOMPARE(m_theme->color(Plasma::Theme::NeutralTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(201, 206, 62));
     QCOMPARE(m_theme->color(Plasma::Theme::NegativeTextColor, Plasma::Theme::ComplementaryColorGroup), QColor(237, 21, 24));
-    QCOMPARE(m_theme->backgroundContrastEnabled(), true);
-    QCOMPARE(m_theme->backgroundContrast(), 0.2);
 }
 
 void ThemeTest::testCompositingChange()
