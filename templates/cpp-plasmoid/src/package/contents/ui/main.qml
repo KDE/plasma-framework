@@ -20,7 +20,7 @@ Item {
         }
         PlasmaComponents.Label {
             Layout.alignment: Qt.AlignCenter
-            text: plasmoid.nativeInterface.nativeText
+            text: Plasmoid.nativeInterface.nativeText
         }
     }
 }

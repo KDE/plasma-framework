@@ -90,7 +90,7 @@ Image {
                         text: title
                     }
                 }
-                onClicked: pageStack.replace(Qt.createComponent(plasmoid.file("ui", page)))
+                onClicked: pageStack.replace(Qt.createComponent(Plasmoid.file("ui", page)))
             }
         }
     }

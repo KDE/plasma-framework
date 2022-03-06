@@ -17,7 +17,7 @@ PlasmaCore.SvgItem {
     elementId: "yellow-notes"
 
     Connections {
-        target: plasmoid
+        target: Plasmoid
         function onExternalData(mimetype, data) {
             if (mimetype === "text/plain") {
                 noteText.text = data
@@ -29,7 +29,7 @@ PlasmaCore.SvgItem {
         id: noteText
         anchors.fill: parent
         anchors.margins: 20
-        text: plasmoid.configuration.Text
-        onTextChanged: plasmoid.configuration.Text = text
+        text: Plasmoid.configuration.Text
+        onTextChanged: Plasmoid.configuration.Text = text
     }
 }

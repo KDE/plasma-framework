@@ -16,7 +16,7 @@ Item {
     Plasmoid.compactRepresentation: Component {
         PlasmaComponents.Button {
             text: i18n("Click me")
-            onClicked: plasmoid.expanded = !plasmoid.expanded
+            onClicked: Plasmoid.expanded = !Plasmoid.expanded
         }
     }
 

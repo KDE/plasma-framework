@@ -7,6 +7,7 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PC2
 import org.kde.plasma.components 3.0 as PlasmaComponents
@@ -28,16 +29,16 @@ PlasmoidHeading {
      */
     default property alias extraControls: extraControlsLayout.data
 
-    visible: !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+    visible: !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
 
     contentItem: RowLayout {
         Heading {
             elide: Text.ElideRight
             wrapMode: Text.NoWrap
             Layout.fillWidth: true
-            visible: (plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: (Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             level: 1
-            text: plasmoid.title
+            text: Plasmoid.title
         }
         RowLayout {
             id: extraControlsLayout
@@ -46,7 +47,7 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             id: actionsButton
-            visible: visibleActions > 0 && !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: visibleActions > 0 && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             checked: configMenu.status !== PC2.DialogStatus.Closed
             property int visibleActions: menuItemFactory.count
             property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
@@ -89,9 +90,9 @@ PlasmoidHeading {
                 model: {
                     configMenu.clearMenuItems();
                     let actions = [];
-                    for (let i in plasmoid.contextualActions) {
-                        const action = plasmoid.contextualActions[i];
-                        if (action.visible && action !== plasmoid.action("configure")) {
+                    for (let i in Plasmoid.contextualActions) {
+                        const action = Plasmoid.contextualActions[i];
+                        if (action.visible && action !== Plasmoid.action("configure")) {
                             actions.push(action);
                         }
                     }
@@ -108,11 +109,11 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             icon.name: "configure"
-            visible: plasmoid && plasmoid.action("configure") && !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: plasmoid && Plasmoid.action("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             PlasmaComponents.ToolTip {
-                text: parent.visible ? plasmoid.action("configure").text : ""
+                text: parent.visible ? Plasmoid.action("configure").text : ""
             }
-            onClicked: plasmoid.action("configure").trigger();
+            onClicked: Plasmoid.action("configure").trigger();
         }
     }
 }

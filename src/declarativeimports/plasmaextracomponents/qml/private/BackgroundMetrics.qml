@@ -6,6 +6,7 @@
 import QtQuick 2.12
 import QtQuick.Window 2.2
 
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 
 PlasmaCore.FrameSvgItem {
@@ -14,7 +15,7 @@ PlasmaCore.FrameSvgItem {
     imagePath: {
         if (Window.window instanceof PlasmaCore.Dialog) {
             return "dialogs/background";
-        } else if (plasmoid.formFactor === PlasmaCore.Types.Planar) {
+        } else if (Plasmoid.formFactor === PlasmaCore.Types.Planar) {
             return "widgets/background";
         // panels and other formfactors are explicitly not supported
         } else {

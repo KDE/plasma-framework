@@ -5,6 +5,7 @@
 */
 
 import QtQuick 2.0
+import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 
@@ -63,9 +64,9 @@ ShaderExample {
         anchors { right: parent.right; bottom: parent.bottom; }
 //         height: PlasmaCore.Units.iconSizes.toolbar
         text: "Busy"
-        checked: plasmoid.busy
+        checked: Plasmoid.busy
         onClicked: {
-            plasmoid.busy = !plasmoid.busy
+            Plasmoid.busy = !Plasmoid.busy
         }
     }
 
