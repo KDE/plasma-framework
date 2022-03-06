@@ -12,7 +12,6 @@ import org.kde.kirigami 2.2 as Kirigami
 PlasmaCore.FrameSvgItem {
     id: background
 
-    property bool separatorVisible: false
     imagePath: "widgets/listitem"
     prefix: control.highlighted || control.pressed ? "pressed" : "normal"
     
@@ -24,18 +23,6 @@ PlasmaCore.FrameSvgItem {
         prefix: "hover"
         anchors.fill: parent
         opacity: control.hovered && !control.pressed ? 1 : 0
-    }
-
-    PlasmaCore.SvgItem {
-        svg: PlasmaCore.Svg {imagePath: "widgets/listitem"}
-        elementId: "separator"
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
-        }
-        height: naturalSize.height
-        visible: separatorVisible && (listItem.sectionDelegate || (typeof(index) != "undefined" && index > 0 && !listItem.checked && !listItem.pressed))
     }
 }
 
