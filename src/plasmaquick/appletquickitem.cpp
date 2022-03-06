@@ -631,7 +631,9 @@ void AppletQuickItem::init()
         d->applet->setLaunchErrorMessage(reason);
     }
 
-    d->qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), this);
+    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
+        d->qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), this);
+    }
 
     // initialize size, so an useless resize less
     QVariantHash initialProperties;

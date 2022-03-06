@@ -147,7 +147,9 @@ void WallpaperInterface::syncWallpaperPackage()
 #endif
     }
 
-    m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
+    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
+        m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
+    }
     m_qmlObject->setSource(m_pkg.fileUrl("mainscript"));
 
     const QString rootPath = m_pkg.metadata().value(QStringLiteral("X-Plasma-RootPath"));

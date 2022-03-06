@@ -46,9 +46,11 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     QQmlContext *context = engine->rootContext();
 
     Plasma::QuickTheme *theme = new Plasma::QuickTheme(engine);
-    context->setContextProperty(QStringLiteral("theme"), theme);
 
-    context->setContextProperty(QStringLiteral("units"), &Units::instance());
+    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
+        context->setContextProperty(QStringLiteral("theme"), theme);
+        context->setContextProperty(QStringLiteral("units"), &Units::instance());
+    }
 
     if (!context->contextObject()) {
         KLocalizedContext *localizedContextObject = new KLocalizedContext(engine);
