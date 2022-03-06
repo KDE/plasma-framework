@@ -2,13 +2,14 @@
 
 # Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
 
+# do not use PACKAGE_CMAKE_INSTALL_PREFIX after calls to find_dependency, its content can change!
+set(PlasmaQuick_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
+set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_KDE_INSTALL_INCLUDEDIR_KF@")
+
 include(CMakeFindDependencyMacro)
 find_dependency(KF5Plasma "@KF_DEP_VERSION@")
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaQuickTargets.cmake")
-
-set(PlasmaQuick_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
-set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_KDE_INSTALL_INCLUDEDIR_KF@")
 
 set(PlasmaQuick_LIBRARIES KF5::PlasmaQuick)
 
