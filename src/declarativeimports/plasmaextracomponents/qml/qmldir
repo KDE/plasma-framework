@@ -2,20 +2,23 @@ module org.kde.plasma.extras
 plugin plasmaextracomponentsplugin
 
 App 2.0 App.qml
+ActionTextField 2.0 ActionTextField.qml
+BasicPlasmoidHeading 2.0 BasicPlasmoidHeading.qml
 ConditionalLoader 2.0 ConditionalLoader.qml
-ListItem 2.0 ListItem.qml
+DescriptiveLabel 2.0 DescriptiveLabel.qml
 ExpandableListItem 2.0 ExpandableListItem.qml
 Heading 2.0 Heading.qml
-Paragraph 2.0 Paragraph.qml
+Highlight 2.0 Highlight.qml
+ListItem 2.0 ListItem.qml
 PageRow 2.0 PageRow.qml
+Paragraph 2.0 Paragraph.qml
+PasswordField 2.0 PasswordField.qml
 PlaceholderMessage 2.0 PlaceholderMessage.qml
+PlasmoidHeading 2.0 PlasmoidHeading.qml
+Representation 2.0 Representation.qml
+SearchField 2.0 SearchField.qml
 ScrollArea 2.0 ScrollArea.qml
 Title 2.0 Title.qml
-DescriptiveLabel 2.0 DescriptiveLabel.qml
-PlasmoidHeading 2.0 PlasmoidHeading.qml
-BasicPlasmoidHeading 2.0 BasicPlasmoidHeading.qml
-Representation 2.0 Representation.qml
-Highlight 2.0 Highlight.qml
 
 ActivateAnimation 2.0 animations/ActivateAnimation.qml
 AppearAnimation 2.0 animations/AppearAnimation.qml

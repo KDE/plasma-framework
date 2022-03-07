@@ -20,6 +20,7 @@ T.TextField {
     /**
      * Whether the button to clear the text from TextField is visible.
      * @since 5.73
+     * @deprecated since 5.93 Use SearchField instead
      */
     property bool clearButtonShown: false
 
@@ -27,6 +28,7 @@ T.TextField {
      * Whether to show a button that allows the user to reveal the password in
      * plain text. This only makes sense if the echoMode is set to Password.
      * @since 5.73
+     * @deprecated since 5.93 Use PasswordField instead
      */
     property bool revealPasswordButtonShown: false
 

@@ -1,0 +1,166 @@
+// SPDX-FileCopyrightText: 2019 Carl Schwan <carl@carlschwan.eu>
+// SPDX-License-Identifier: LGPL-2.0-or-later
+
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as QQC2
+import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.plasma.core 2.0 as PlasmaCore
+
+/**
+ * This is advanced textfield. It is recommended to use this class when there
+ * is a need to create a create a textfield with action buttons (e.g a clear
+ * action).
+ *
+ * For common pattern like, a search field or a password field, prefer using the
+ * more specifig org::kde::extras::SearchField or org::kde::extras::PasswordField.
+ *
+ * Example usage for a search field:
+ * @code
+ * import QtQuick.Controls 2.15 as QQC2
+ * import org.kde.plasma.extras 2.0 as PlasmaExtras
+ *
+ * PlasmaExtras.ActionTextField {
+ *     id: searchField
+ *
+ *     placeholderText: "Search…"
+ *
+ *     focusSequence: StandardKey.Find
+ *
+ *     rightActions: [
+ *         QQC2..Action {
+ *             icon.name: "edit-clear"
+ *             enabled: searchField.text !== ""
+ *             onTriggered: {
+ *                 searchField.text = ""
+ *                 searchField.accepted()
+ *             }
+ *         }
+ *     ]
+ *
+ *     onAccepted: console.log("Search text is " + searchField.text)
+ * }
+ * @endcode
+ *
+ * @inherit QtQuick.Controls.TextField
+ * @since 5.93
+ * @author Carl Schwan <carl@carlschwan.eu>
+ */
+PlasmaComponents3.TextField {
+    id: root
+
+    /**
+     * This property holds a shortcut sequence that will focus the text field.
+     *
+     * @since 5.93
+     */
+    property string focusSequence
+
+    /**
+     * This property holds a list of actions that will be displayed on the left side of the text field.
+     *
+     * By default this list is empty.
+     *
+     * @since 5.93
+     */
+    property list<QQC2.Action> leftActions
+
+    /**
+     * This property holds a list of actions that will be displayed on the right side of the text field.
+     *
+     * By default this list is empty.
+     *
+     * @since 5.93
+     */
+    property list<QQC2.Action> rightActions
+
+    property alias _leftActionsRow: leftActionsRow
+    property alias _rightActionsRow: rightActionsRow
+
+    hoverEnabled: true
+
+    topPadding: __hasBackgroundAndMargins ? background.margins.top : 0
+    bottomPadding: __hasBackgroundAndMargins ? background.margins.bottom : 0
+
+    leftPadding: if (root.mirrored) {
+        return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
+    } else {
+        return _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
+    }
+    rightPadding: if (root.mirrored) {
+        return _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
+    } else {
+        return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
+    }
+
+    Behavior on leftPadding {
+        NumberAnimation {
+            duration: PlasmaCore.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Behavior on rightPadding {
+        NumberAnimation {
+            duration: PlasmaCore.Units.longDuration
+            easing.type: Easing.InOutQuad
+        }
+    }
+
+    Shortcut {
+        id: focusShortcut
+        enabled: root.focusSequence
+        sequence: root.focusSequence
+        onActivated: {
+            root.forceActiveFocus()
+            root.selectAll()
+        }
+
+        // here to make it private
+        component ActionIcon: PlasmaCore.IconItem {
+            implicitWidth: PlasmaCore.Units.iconSizes.small
+            implicitHeight: PlasmaCore.Units.iconSizes.small
+
+            anchors.verticalCenter: parent.verticalCenter
+
+            source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
+            visible: modelData.enabled
+            MouseArea {
+                onClicked: modelData.trigger()
+                cursorShape: Qt.ArrowCursor
+                anchors.fill: parent
+            }
+        }
+    }
+
+    PlasmaComponents3.ToolTip {
+        visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
+        text: root.focusSequence ? root.focusSequence : ""
+    }
+
+    Row {
+        id: leftActionsRow
+        padding: PlasmaCore.Units.smallSpacing
+        anchors.left: parent.left
+        anchors.leftMargin: PlasmaCore.Units.smallSpacing
+        anchors.verticalCenter: parent.verticalCenter
+        height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        Repeater {
+            model: root.leftActions
+            ActionIcon { }
+        }
+    }
+
+    Row {
+        id: rightActionsRow
+        padding: PlasmaCore.Units.smallSpacing
+        layoutDirection: Qt.RightToLeft
+        anchors.right: parent.right
+        anchors.rightMargin: PlasmaCore.Units.smallSpacing
+        anchors.verticalCenter: parent.verticalCenter
+        height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        Repeater {
+            model: root.rightActions
+            ActionIcon { }
+        }
+    }
+}

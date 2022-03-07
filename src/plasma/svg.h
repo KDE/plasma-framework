@@ -54,6 +54,7 @@ public:
     enum Status {
         Normal = 0,
         Selected,
+        Inactive,
     };
     Q_ENUM(Status)
 

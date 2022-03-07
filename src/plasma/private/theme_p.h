@@ -121,6 +121,7 @@ public:
     QHash<QString, QString> idsToCache;
     QHash<Theme::ColorGroup, QString> cachedSvgStyleSheets;
     QHash<Theme::ColorGroup, QString> cachedSelectedSvgStyleSheets;
+    QHash<Theme::ColorGroup, QString> cachedInactiveSvgStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *pixmapSaveTimer;
     QTimer *updateNotificationTimer;

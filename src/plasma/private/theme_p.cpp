@@ -325,6 +325,7 @@ void ThemePrivate::discardCache(CacheTypes caches)
     cachedDefaultStyleSheet = QString();
     cachedSvgStyleSheets.clear();
     cachedSelectedSvgStyleSheets.clear();
+    cachedInactiveSvgStyleSheets.clear();
 
     if (caches & SvgElementsCache) {
         discoveries.clear();
@@ -411,7 +412,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
     // If you add elements here, make sure their names are sufficiently unique to not cause
     // clashes between element keys
     elements[QStringLiteral("%textcolor")] =
-        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : Theme::TextColor, Theme::NormalColorGroup).name();
+        color(status == Svg::Status::Selected ? Theme::HighlightedTextColor : (status == Svg::Status::Inactive ? Theme::DisabledTextColor : Theme::TextColor),
+              Theme::NormalColorGroup)
+            .name();
     elements[QStringLiteral("%backgroundcolor")] =
         color(status == Svg::Status::Selected ? Theme::HighlightColor : Theme::BackgroundColor, Theme::NormalColorGroup).name();
     elements[QStringLiteral("%highlightcolor")] = color(Theme::HighlightColor, Theme::NormalColorGroup).name();
@@ -496,7 +499,9 @@ const QString ThemePrivate::processStyleSheet(const QString &css, Plasma::Svg::S
 
 const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::Status status)
 {
-    QString stylesheet = (status == Svg::Status::Selected) ? cachedSelectedSvgStyleSheets.value(group) : cachedSvgStyleSheets.value(group);
+    QString stylesheet = (status == Svg::Status::Selected)
+        ? cachedSelectedSvgStyleSheets.value(group)
+        : (status == Svg::Status::Inactive ? cachedInactiveSvgStyleSheets.value(group) : cachedSvgStyleSheets.value(group));
     if (stylesheet.isEmpty()) {
         QString skel = QStringLiteral(".ColorScheme-%1{color:%2;}");
 
@@ -610,6 +615,8 @@ const QString ThemePrivate::svgStyleSheet(Plasma::Theme::ColorGroup group, Plasm
         stylesheet = processStyleSheet(stylesheet, status);
         if (status == Svg::Status::Selected) {
             cachedSelectedSvgStyleSheets.insert(group, stylesheet);
+        } else if (status == Svg::Status::Inactive) {
+            cachedInactiveSvgStyleSheets.insert(group, stylesheet);
         } else {
             cachedSvgStyleSheets.insert(group, stylesheet);
         }
