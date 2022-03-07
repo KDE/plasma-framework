@@ -43,7 +43,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *         currentIndex: -1
  *         clip: true
  *         model: myModel
- *         highlight: PlasmaComponents.Highlight {}
+ *         highlight: PlasmaExtras.Highlight {}
  *         highlightMoveDuration: PlasmaCore.Units.longDuration
  *         highlightResizeDuration: PlasmaCore.Units.longDuration
  *         delegate: PlasmaExtras.ExpandableListItem {

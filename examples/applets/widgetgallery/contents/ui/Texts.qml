@@ -6,6 +6,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 PlasmaComponents.Page {
     height: childrenRect.height
@@ -50,7 +51,7 @@ PlasmaComponents.Page {
                     font.pixelSize: 20
                 }
 
-                PlasmaComponents.Highlight {
+                PlasmaExtras.Highlight {
                     width: 200
                     height: 100
                     Column {
