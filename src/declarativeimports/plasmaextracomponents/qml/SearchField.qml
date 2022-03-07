@@ -68,7 +68,7 @@ PlasmaExtras.ActionTextField {
     Accessible.name: i18nd("libplasma5", "Search")
     Accessible.searchEdit: true
 
-    focusSequence: StandardKey.Find
+    focusSequence: "Ctrl+F"
     inputMethodHints: Qt.ImhNoPredictiveText
     rightActions: QQC2.Action {
         icon.name: root.mirrored ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
