@@ -565,8 +565,11 @@ int AppletInterface::apiVersion() const
     return plugins.first().value(QStringLiteral("X-KDE-PluginInfo-Version")).toInt();
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
 void AppletInterface::setAssociatedApplication(const QString &string)
 {
+    qWarning() << "associatedApplication is deprecated since 5.93. Use setAction to create an action to manually launch an application with "
+                  "KIO::ApplicationLauncherJob";
     if (applet()->associatedApplication() == string) {
         return;
     }
@@ -582,6 +585,8 @@ QString AppletInterface::associatedApplication() const
 
 void AppletInterface::setAssociatedApplicationUrls(const QList<QUrl> &urls)
 {
+    qWarning() << "associatedApplication is deprecated since 5.93. Use setAction to create an action to manually launch an application with "
+                  "KIO::ApplicationLauncherJob";
     if (applet()->associatedApplicationUrls() == urls) {
         return;
     }
@@ -594,6 +599,7 @@ QList<QUrl> AppletInterface::associatedApplicationUrls() const
 {
     return applet()->associatedApplicationUrls();
 }
+#endif
 
 void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)
 {

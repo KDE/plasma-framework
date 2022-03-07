@@ -7,6 +7,9 @@
 #ifndef PLASMA_ASSOCIATEDAPPLICATIONMANAGER_P_H
 #define PLASMA_ASSOCIATEDAPPLICATIONMANAGER_P_H
 
+#include "plasma/plasma_export.h"
+
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
 #include <QObject>
 #include <QUrl>
 
@@ -48,7 +51,7 @@ private:
     Q_PRIVATE_SLOT(d, void cleanupApplet(QObject *obj))
     Q_PRIVATE_SLOT(d, void updateActionNames())
 };
-
 } // namespace Plasma
 
+#endif
 #endif // multiple inclusion guard

@@ -182,6 +182,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
     /**
      * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
      */
@@ -191,7 +192,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
      */
     Q_PROPERTY(QList<QUrl> associatedApplicationUrls WRITE setAssociatedApplicationUrls READ associatedApplicationUrls NOTIFY associatedApplicationUrlsChanged)
-
+#endif
     // TODO: This was moved up from ContainmentInterface because it is required by the
     // Task Manager applet (for "Show only tasks from this screen") and no Qt API exposes
     // screen numbering. An alternate solution that doesn't extend the applet interface
@@ -402,11 +403,13 @@ public:
 
     Plasma::Types::BackgroundHints effectiveBackgroundHints() const;
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
     void setAssociatedApplication(const QString &string);
     QString associatedApplication() const;
 
     void setAssociatedApplicationUrls(const QList<QUrl> &urls);
     QList<QUrl> associatedApplicationUrls() const;
+#endif
 
     void setStatus(const Plasma::Types::ItemStatus &status);
     Plasma::Types::ItemStatus status() const;

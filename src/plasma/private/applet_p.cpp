@@ -378,6 +378,7 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     closeApplet->setShortcut(QKeySequence(QStringLiteral("alt+d, r")));
     closeApplet->setData(Plasma::Types::DestructiveAction);
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
     QAction *runAssociatedApplication = actions->add<QAction>(QStringLiteral("run associated application"));
     runAssociatedApplication->setAutoRepeat(false);
     runAssociatedApplication->setText(i18n("Run the Associated Application"));
@@ -386,6 +387,7 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
     runAssociatedApplication->setData(Plasma::Types::ControlAction);
+#endif
 
     return actions;
 }

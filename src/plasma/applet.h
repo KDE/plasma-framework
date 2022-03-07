@@ -459,6 +459,7 @@ public:
      */
     QKeySequence globalShortcut() const;
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 93)
     // ASSOCIATED APPLICATION
     /**
      * Sets an application associated to this applet, that will be
@@ -470,7 +471,9 @@ public:
      *      \li a command in $PATH
      *      \li or an absolute path to an executable
      * @since 4.4
+     * @deprecated Since 5.93, use  @ref AppletInterface::setAction "Plasmoid.setAction" from Qml to add an action launching the application
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Use Plasmoid.setAction from Qml")
     void setAssociatedApplication(const QString &string);
 
     /**
@@ -479,26 +482,35 @@ public:
      * @see setAssociatedApplication()
      *
      * @param urls
+     * @deprecated Since 5.93, use @ref AppletInterface::setAction "Plasmoid.setAction" to add an action launching the application
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Use Plasmoid.setAction")
     void setAssociatedApplicationUrls(const QList<QUrl> &urls);
 
     /**
      * @return the application associated to this applet
      * @since 4.4
+     * @deprecated Since 5.93, see @ref Applet::setAssociatedApplication
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Use Plasmoid.setAction")
     QString associatedApplication() const;
 
     /**
      * @return the urls associated to this applet
      * @since 4.4
+     * @deprecated Since 5.93, see @ref setAssociatedApplication
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Use Plasmoid.setAction")
     QList<QUrl> associatedApplicationUrls() const;
 
     /**
      * @return true if the applet has a valid associated application or urls
      * @since 4.4
+     * @deprecated Since 5.93, see @ref setAssociatedApplication
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Use Plasmoid.setAction")
     bool hasValidAssociatedApplication() const;
+#endif
 
     // Completely UI-specific, remove or move to scriptengine
     /**
@@ -681,6 +693,7 @@ public Q_SLOTS:
      **/
     virtual void init();
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 93)
     // ASSOCIATED APPLICATION
     /**
      * Open the application associated to this applet, if it's not set
@@ -690,7 +703,9 @@ public Q_SLOTS:
      * @see setAssociatedApplicationUrls()
      * @since 4.4
      */
+    PLASMA_DEPRECATED_VERSION(5, 93, "Launch Application manually with KIO::ApplicationLauncherJob")
     void runAssociatedApplication();
+#endif
 
 protected:
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)

@@ -634,10 +634,12 @@ void Applet::flushPendingConstraintsEvents()
             }
         }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
         QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
         if (runAssociatedApplication) {
             connect(runAssociatedApplication, &QAction::triggered, this, &Applet::runAssociatedApplication, Qt::UniqueConnection);
         }
+#endif
 
         d->updateShortcuts();
     }
@@ -826,6 +828,7 @@ void Applet::configChanged()
     }
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 93)
 void Applet::setAssociatedApplication(const QString &string)
 {
     AssociatedApplicationManager::self()->setApplication(this, string);
@@ -869,6 +872,7 @@ bool Applet::hasValidAssociatedApplication() const
 {
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
+#endif
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 19)
 Applet *Applet::loadPlasmoid(const QString &path, uint appletId)

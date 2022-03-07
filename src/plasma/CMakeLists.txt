@@ -27,7 +27,6 @@ target_sources(KF5Plasma PRIVATE
     containmentactions.cpp
     corona.cpp
     private/applet_p.cpp
-    private/associatedapplicationmanager.cpp
     private/containment_p.cpp
     private/timetracker.cpp
 
@@ -54,10 +53,14 @@ target_sources(KF5Plasma PRIVATE
     scripting/scriptengine.cpp
 )
 
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
-    #packages
-    target_sources(KF5Plasma PRIVATE package.cpp packagestructure.cpp)
+if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT")
+    if (EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
+        #packages
+        target_sources(KF5Plasma PRIVATE package.cpp packagestructure.cpp)
+    endif()
+    if(EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.93.0)
+        target_sources(KF5Plasma PRIVATE private/associatedapplicationmanager.cpp)
+    endif()
 endif()
 
 
@@ -83,7 +86,7 @@ ecm_generate_export_header(KF5Plasma
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
-    DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46 5.67 5.77 5.78 5.81 5.83 5.85 5.86 5.88
+    DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46 5.67 5.77 5.78 5.81 5.83 5.85 5.86 5.88 5.93
 )
 
 if(HAVE_X11)
