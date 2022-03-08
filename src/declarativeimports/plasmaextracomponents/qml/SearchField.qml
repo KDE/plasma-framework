@@ -28,18 +28,18 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 PlasmaExtras.ActionTextField {
     id: root
 
-    property int _iconWidth: (activeFocus || root.text.length > 0 ? 0 : searchIcon.width)
+    property int _iconWidth: (activeFocus || root.text.length > 0 ? 0 : searchIcon.width + searchIcon.anchors.leftMargin)
 
     // padding to accommodate search icon nicely
     leftPadding: if (root.mirrored) {
-        return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
+        return (_rightActionsRow.visible ? _rightActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.left : 0);
     } else {
-        return _iconWidth + _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
+        return _iconWidth + (_leftActionsRow.visible ? _leftActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.left : 0);
     }
     rightPadding: if (root.mirrored) {
-        return _iconWidth + _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
+        return _iconWidth + (_leftActionsRow.visible ? _leftActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.right : 0);
     } else {
-        return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
+        return (_rightActionsRow.visible ? _rightActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.right : 0);
     }
 
     PlasmaCore.IconItem {

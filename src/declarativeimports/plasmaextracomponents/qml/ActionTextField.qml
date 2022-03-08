@@ -144,6 +144,7 @@ PlasmaComponents3.TextField {
         anchors.leftMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
         height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        visible: root.leftActions.length > 0
         Repeater {
             model: root.leftActions
             ActionIcon { }
@@ -158,6 +159,7 @@ PlasmaComponents3.TextField {
         anchors.rightMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
         height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        visible: root.rightActions.length > 0
         Repeater {
             model: root.rightActions
             ActionIcon { }
