@@ -339,7 +339,7 @@ Item {
     signal itemExpanded(Item item)
     signal itemCollapsed(Item item)
 
-    width: parent.width // Assume that we will be used as a delegate, not placed in a layout
+    width: parent ? parent.width : undefined // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
 
     onEnabledChanged: if (!listItem.enabled) { collapse() }
