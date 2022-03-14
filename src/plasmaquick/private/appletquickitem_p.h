@@ -120,8 +120,6 @@ public:
     bool activationTogglesExpanded : 1;
     bool initComplete : 1;
     bool compactRepresentationCheckGuard : 1;
-
-    static QHash<QObject *, AppletQuickItem *> s_rootObjects;
 };
 
 }

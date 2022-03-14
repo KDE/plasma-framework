@@ -33,8 +33,6 @@
 
 namespace PlasmaQuick
 {
-QHash<QObject *, AppletQuickItem *> AppletQuickItemPrivate::s_rootObjects = QHash<QObject *, AppletQuickItem *>();
-
 AppletQuickItemPrivate::PreloadPolicy AppletQuickItemPrivate::s_preloadPolicy = AppletQuickItemPrivate::Uninitialized;
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
@@ -515,9 +513,6 @@ AppletQuickItem::~AppletQuickItem()
     delete d->compactRepresentationItem;
     delete d->fullRepresentationItem;
     delete d->compactRepresentationExpanderItem;
-
-    AppletQuickItemPrivate::s_rootObjects.remove(d->qmlObject->rootContext());
-
     delete d;
 }
 
@@ -542,7 +537,7 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
     }
     // at the moment of the attached object creation, the root item is the only one that hasn't a parent
     // only way to avoid creation of this attached for everybody but the root item
-    AppletQuickItem *ret = AppletQuickItemPrivate::s_rootObjects.value(context);
+    AppletQuickItem *ret = qobject_cast<AppletQuickItem *>(context->property("_plasmoid_property").value<QObject *>());
     if (!ret) {
         qWarning() << "Could not find the Plasmoid for" << object << context << context->baseUrl();
     }
@@ -557,11 +552,11 @@ Plasma::Applet *AppletQuickItem::applet() const
 void AppletQuickItem::init()
 {
     // FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
-    if (AppletQuickItemPrivate::s_rootObjects.contains(d->qmlObject->rootContext())) {
+    if (!d->qmlObject->rootContext()->property("_plasmoid_property").isNull()) {
         return;
     }
 
-    AppletQuickItemPrivate::s_rootObjects[d->qmlObject->rootContext()] = this;
+    d->qmlObject->rootContext()->setProperty("_plasmoid_property", QVariant::fromValue<QObject *>(this));
 
     Q_ASSERT(d->applet);
 
