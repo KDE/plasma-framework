@@ -92,7 +92,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterRevision<QQuickItem, 1>(uri, 2, 0);
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
-    // KF6: check if it makes sense to call qmlRegisterInterface for any of these
+    // TODO KF6: check if it makes sense to call qmlRegisterInterface for any of these
     // as they seem currently not used as properties and are only used from JavaScript engine
     // due to being return types of Q_INVOKABLE methods,
     // so registering the pointers to the qobject meta-object system would be enough:
@@ -109,8 +109,13 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     // qmlRegisterInterface<Plasma::T>(uri, 1);
     // as this will incompatibly register with the fully namespaced name "Plasma::T",
     // not just the now explicitly passed alias name "T"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qmlRegisterInterface<Plasma::Service>("Service");
     qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
+#else
+    qRegisterMetaType<Plasma::Service>();
+    qRegisterMetaType<Plasma::ServiceJob>();
+#endif
     QT_WARNING_POP
 
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
