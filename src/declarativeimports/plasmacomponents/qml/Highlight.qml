@@ -7,9 +7,9 @@
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
- * @see org.kde.plasma.extras Highlight
+ * @see org::kde::plasma::extras::Highlight
+ * @deprecated Use org::kde::plasma::extras::Highlight instead.
  */
-
 PlasmaExtras.Highlight
 {
 }
