@@ -924,4 +924,9 @@ KPluginMetaData AppletInterface::metaData() const
     return applet()->pluginMetaData();
 }
 
+AppletInterface *AppletInterface::self()
+{
+    return this;
+}
+
 #include "moc_appletinterface.cpp"

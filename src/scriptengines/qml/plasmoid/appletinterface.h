@@ -262,6 +262,14 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(KPluginMetaData metaData READ metaData CONSTANT)
 
     Q_PROPERTY(QList<QObject *> contextualActions READ contextualActionsObjects NOTIFY contextualActionsChanged)
+
+    // TODO: Remove in KF6, it is fixed in Qt 6 via QTBUG-97427. Not an #ifdef, because that would break QML code.
+    /**
+     * Returns the Plasmoid object itself.
+     * Workaround QML limitation/bug that does not allow to use attached properties themselves as the value of an expression.
+     */
+    Q_PROPERTY(AppletInterface *self READ self CONSTANT)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -438,6 +446,8 @@ public:
     void setConstraintHints(Plasma::Types::ConstraintHints constraintHints);
 
     KPluginMetaData metaData() const;
+
+    AppletInterface *self();
 
 Q_SIGNALS:
     /**
