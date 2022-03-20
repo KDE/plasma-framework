@@ -1,0 +1,11 @@
+module org.kde.plasma.components.private
+
+AppManager.js 1.0 AppManager.js
+DualStateButton.qml 1.0 DualStateButton.qml
+InlineDialog.qml 1.0 InlineDialog.qml
+PageStack.js 1.0 PageStack.js
+ScrollBarDelegate.qml 1.0 ScrollBarDelegate.qml
+ScrollDecoratorDelegate.qml 1.0 ScrollDecoratorDelegate.qml
+SectionScroller.js 1.0 SectionScroller.js
+TabBarLayout.qml 1.0 TabBarLayout.qml
+TabGroup.js 1.0 TabGroup.js
