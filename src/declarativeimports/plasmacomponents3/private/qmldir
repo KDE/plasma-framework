@@ -1,3 +1,5 @@
+module org.kde.plasma.components.private
+
 ButtonBackground 1.0 ButtonBackground.qml
 ButtonFocus 1.0 ButtonFocus.qml
 ButtonHoverFocus 1.0 ButtonHoverFocus.qml
