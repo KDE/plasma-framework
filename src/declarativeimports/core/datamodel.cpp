@@ -114,7 +114,7 @@ void SortFilterModel::setFilterString(const QString &filterString)
         return;
     }
     m_filterString = filterString;
-    QSortFilterProxyModel::setFilterFixedString(filterString);
+    QSortFilterProxyModel::setFilterRegularExpression(QRegularExpression{QRegularExpression::escape(filterString), QRegularExpression::CaseInsensitiveOption});
     Q_EMIT filterStringChanged(filterString);
 }
 
