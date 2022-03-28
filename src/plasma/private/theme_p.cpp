@@ -20,6 +20,7 @@
 #include <KDirWatch>
 #include <KIconLoader>
 #include <KIconTheme>
+#include <KSharedConfig>
 #include <KWindowEffects>
 #include <kpluginmetadata.h>
 
@@ -38,15 +39,15 @@ ThemePrivate *ThemePrivate::globalTheme = nullptr;
 QHash<QString, ThemePrivate *> ThemePrivate::themes = QHash<QString, ThemePrivate *>();
 using QSP = QStandardPaths;
 
-KConfig configForTheme(const QString &theme)
+KSharedConfig::Ptr configForTheme(const QString &theme)
 {
     const QString baseName = QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme;
     QString configPath = QSP::locate(QSP::GenericDataLocation, baseName + QLatin1String("/plasmarc"));
     if (!configPath.isEmpty()) {
-        return KConfig(configPath, KConfig::SimpleConfig);
+        return KSharedConfig::openConfig(configPath, KConfig::SimpleConfig);
     }
     QString metadataPath = QSP::locate(QSP::GenericDataLocation, baseName + QLatin1String("/metadata.desktop"));
-    return KConfig(metadataPath, KConfig::SimpleConfig);
+    return KSharedConfig::openConfig(metadataPath, KConfig::SimpleConfig);
 }
 
 KPluginMetaData metaDataForTheme(const QString &theme)
@@ -193,7 +194,7 @@ bool ThemePrivate::useCache()
         if (!themeMetadataPath.isEmpty()) {
             KDirWatch::self()->removeFile(themeMetadataPath);
         }
-        themeMetadataPath = configForTheme(themeName).name();
+        themeMetadataPath = configForTheme(themeName)->name();
         if (isRegularTheme) {
             const auto *iconTheme = KIconLoader::global()->theme();
             if (iconTheme) {
@@ -886,23 +887,23 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     // load the wallpaper settings, if any
     if (realTheme) {
         pluginMetaData = metaDataForTheme(theme);
-        KConfig metadata = configForTheme(theme);
+        KSharedConfigPtr metadata = configForTheme(theme);
 
-        processContrastSettings(&metadata);
-        processBlurBehindSettings(&metadata);
-        processAdaptiveTransparencySettings(&metadata);
+        processContrastSettings(metadata.data());
+        processBlurBehindSettings(metadata.data());
+        processAdaptiveTransparencySettings(metadata.data());
 
-        processWallpaperSettings(&metadata);
+        processWallpaperSettings(metadata.data());
 
-        KConfigGroup cg(&metadata, "Settings");
+        KConfigGroup cg(metadata, "Settings");
         QString fallback = cg.readEntry("FallbackTheme", QString());
 
         fallbackThemes.clear();
         while (!fallback.isEmpty() && !fallbackThemes.contains(fallback)) {
             fallbackThemes.append(fallback);
 
-            KConfig metadata = configForTheme(fallback);
-            KConfigGroup cg(&metadata, "Settings");
+            KSharedConfigPtr metadata = configForTheme(fallback);
+            KConfigGroup cg(metadata, "Settings");
             fallback = cg.readEntry("FallbackTheme", QString());
         }
 
@@ -911,8 +912,8 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         }
 
         for (const QString &theme : std::as_const(fallbackThemes)) {
-            KConfig metadata = configForTheme(theme);
-            processWallpaperSettings(&metadata);
+            KSharedConfigPtr metadata = configForTheme(theme);
+            processWallpaperSettings(metadata.data());
         }
 
         // Check for what Plasma version the theme has been done
