@@ -765,7 +765,7 @@ QColor ThemePrivate::color(Theme::ColorRole role, Theme::ColorGroup group) const
     return QColor();
 }
 
-void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
+void ThemePrivate::processWallpaperSettings(const KSharedConfigPtr &metadata)
 {
     if (!defaultWallpaperTheme.isEmpty() && defaultWallpaperTheme != QLatin1String(DEFAULT_WALLPAPER_THEME)) {
         return;
@@ -788,7 +788,7 @@ void ThemePrivate::processWallpaperSettings(KConfigBase *metadata)
     defaultWallpaperHeight = cg.readEntry("defaultHeight", DEFAULT_WALLPAPER_HEIGHT);
 }
 
-void ThemePrivate::processContrastSettings(KConfigBase *metadata)
+void ThemePrivate::processContrastSettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
     if (metadata->hasGroup("ContrastEffect")) {
@@ -803,7 +803,7 @@ void ThemePrivate::processContrastSettings(KConfigBase *metadata)
     }
 }
 
-void ThemePrivate::processAdaptiveTransparencySettings(KConfigBase *metadata)
+void ThemePrivate::processAdaptiveTransparencySettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
     if (metadata->hasGroup("AdaptiveTransparency")) {
@@ -814,7 +814,7 @@ void ThemePrivate::processAdaptiveTransparencySettings(KConfigBase *metadata)
     }
 }
 
-void ThemePrivate::processBlurBehindSettings(KConfigBase *metadata)
+void ThemePrivate::processBlurBehindSettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
     if (metadata->hasGroup("BlurBehindEffect")) {
@@ -889,11 +889,11 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         pluginMetaData = metaDataForTheme(theme);
         KSharedConfigPtr metadata = configForTheme(theme);
 
-        processContrastSettings(metadata.data());
-        processBlurBehindSettings(metadata.data());
-        processAdaptiveTransparencySettings(metadata.data());
+        processContrastSettings(metadata);
+        processBlurBehindSettings(metadata);
+        processAdaptiveTransparencySettings(metadata);
 
-        processWallpaperSettings(metadata.data());
+        processWallpaperSettings(metadata);
 
         KConfigGroup cg(metadata, "Settings");
         QString fallback = cg.readEntry("FallbackTheme", QString());
@@ -913,7 +913,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         for (const QString &theme : std::as_const(fallbackThemes)) {
             KSharedConfigPtr metadata = configForTheme(theme);
-            processWallpaperSettings(metadata.data());
+            processWallpaperSettings(metadata);
         }
 
         // Check for what Plasma version the theme has been done

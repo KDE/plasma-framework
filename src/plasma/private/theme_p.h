@@ -61,10 +61,10 @@ public:
     void scheduleThemeChangeNotification(CacheTypes caches);
     bool useCache();
     void setThemeName(const QString &themeName, bool writeSettings, bool emitChanged);
-    void processWallpaperSettings(KConfigBase *metadata);
-    void processContrastSettings(KConfigBase *metadata);
-    void processAdaptiveTransparencySettings(KConfigBase *metadata);
-    void processBlurBehindSettings(KConfigBase *metadata);
+    void processWallpaperSettings(const KSharedConfigPtr &metadata);
+    void processContrastSettings(const KSharedConfigPtr &metadata);
+    void processAdaptiveTransparencySettings(const KSharedConfigPtr &metadata);
+    void processBlurBehindSettings(const KSharedConfigPtr &metadata);
 
     const QString processStyleSheet(const QString &css, Plasma::Svg::Status status);
     const QString svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::Status status);
