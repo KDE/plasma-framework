@@ -43,7 +43,7 @@ Item {
      *
      * This is set automatically when used in a ListView and GridView.
      */
-    property bool hover: ListView.view || GridView.view ? true : false
+    property bool hovered: ListView.view || GridView.view ? true : false
 
     /**
      * This property holds whether the highlight has a pressed appearance.
@@ -82,9 +82,9 @@ Item {
         imagePath: "widgets/viewitem"
         prefix: {
             if (pressed) {
-                return hover ? 'selected+hover' : 'selected';
+                return hovered ? 'selected+hover' : 'selected';
             }
-            return hover ? 'hover' : 'normal';
+            return hovered ? 'hover' : 'normal';
         }
 
         Behavior on opacity {
