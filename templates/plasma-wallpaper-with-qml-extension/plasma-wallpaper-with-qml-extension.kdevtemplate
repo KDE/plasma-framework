@@ -2,7 +2,7 @@
 Name=Simple Plasma Wallpaper with QML extension
 Name[az]=Sadə Plasma Divar kağızı QML əlavəsi ilə
 Name[ca]=Fons de pantalla senzill del Plasma amb extensió QML
-Name[ca@valencia]=Fons de pantalla senzill del Plasma amb extensió QML
+Name[ca@valencia]=Fons de pantalla senzill de Plasma amb extensió QML
 Name[cs]=Jednoduchá tapeta pro prostředí Plasma s příponou QML
 Name[da]=Simpelt Plasma-baggrundsbillede med QML-udvidelse
 Name[de]=Einfaches Plasma-Hintergrundbild mit QML-Erweiterung
@@ -39,7 +39,7 @@ Name[zh_TW]=含有 QML 副檔名的簡易 Plasma 桌布
 Comment=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[az]=QML əlavəsi kimi təqdim edilən öz APİ -sini istifadə edən Plasma üçün divar kağızı nümunələri
 Comment[ca]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió en QML
-Comment[ca@valencia]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió en QML
+Comment[ca@valencia]=Un fons de pantalla de Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió en QML
 Comment[da]=Et Plasma-baggrundsbillede der bruger et tilpasset API via et eget QML-udvidelsesplugin
 Comment[de]=Ein Plasma-Hintergrundbild, das eine benutzerdefinierte Programmierschnittstelle (API) eines eigenen QML-Erweiterungsmoduls verwendet.
 Comment[en_GB]=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
