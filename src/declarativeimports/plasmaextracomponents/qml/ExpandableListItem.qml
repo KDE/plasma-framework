@@ -12,19 +12,20 @@ import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
- * A list item that expands when clicked to show additional actions or a custom
- * view. The list item has a standardized appearance, with an icon on the left
- * badged with an optional emblem, a title and optional subtitle to the right,
- * an  optional default action button, and a button to expand and collapse the
- * list item.
+ * A list item that expands when clicked to show additional actions and/or a
+ * custom view.
+ * The list item has a standardized appearance, with an icon on the left badged
+ * with an optional emblem, a title and optional subtitle to the right, an
+ * optional default action button, and a button to expand and collapse the list
+ * item.
  *
- * When expanded, the list item shows one of two views:
- * - A list of contextually-appropriate actions if contextualActionsModel has
- *   been defined and customExpandedViewContent has not been defined.
- * - A custom view if customExpandedViewContent has been defined and
- *   contextualActionsModel has not been defined.
+ * When expanded, the list item shows a list of contextually-appropriate actions
+ * if contextualActionsModel has been defined.
+ * If customExpandedViewContent has been defined, it will show a custom view.
+ * If both have been defined, it shows both, with the actions above the custom
+ * view.
  *
- * It is not valid to define both or neither; only define one.
+ * It is not valid to define neither; define one or both.
  *
  * Note: this component should only be used for lists where the maximum number
  * of items is very low, ideally less than 10. For longer lists, consider using
@@ -234,6 +235,8 @@ Item {
      *
      * Optional; if not defined, no context menu will be displayed when the user
      * right-clicks on the list item.
+     *
+     * @deprecated since 5.94; put actions in contextualActionsModel instead
      */
     property var contextMenu
 
@@ -244,16 +247,17 @@ Item {
      * equal to the width of the list item itself, while height: will depend
      * on the component itself.
      *
-     * Optional; if not defined, the expanded view will show contextual actions
-     * instead.
+     * Optional; if not defined, no custom view actions will be displayed and
+     * you should instead define contextualActionsModel, and then actions will
+     * be shown when the user expands the list item.
      */
-    property var customExpandedViewContent: actionsListComponent
+    property var customExpandedViewContent
 
     /*
      * The actual instance of the custom view content, if loaded
      * @since 5.72
      */
-    property alias customExpandedViewContentItem: expandedView.item
+    property alias customExpandedViewContentItem: customContentLoader.item
 
     /*
      * isBusy: bool
@@ -283,25 +287,20 @@ Item {
      */
     property bool isDefault: false
 
+    readonly property int enabledActions: {
+        if (contextualActionsModel) {
+            return Array.from(contextualActionsModel).filter(item => item.enabled).length > 0;
+        }
+        return 0;
+    }
     /*
      * hasExpandableContent: bool (read-only)
      * Whether or not this expandable list item is actually expandable. True if
      * this item has either a custom view or else at least one enabled action.
      * Otherwise false.
      */
-    readonly property bool hasExpandableContent: {
-        // If there is custom content, assume it is expandable (otherwise what
-        // would be the point?)
-        if (customExpandedViewContent != actionsListComponent) {
-            return true;
-        }
-        // Filter out disabled items which won't appear, when determining if there
-        // are any valid actions
-        if (contextualActionsModel) {
-            return Array.from(contextualActionsModel).filter(item => item.enabled).length > 0;
-        }
-        return false;
-    }
+    readonly property bool hasExpandableContent: customExpandedViewContent || enabledActions > 0
+
     /*
      * expand()
      * Show the expanded view, growing the list item to its taller size.
@@ -310,7 +309,7 @@ Item {
         if (!listItem.hasExpandableContent) {
             return;
         }
-        expandedView.active = true
+        expandedView.expanded = true
         listItem.itemExpanded(listItem)
     }
 
@@ -322,7 +321,7 @@ Item {
         if (!listItem.hasExpandableContent) {
             return;
         }
-        expandedView.active = false
+        expandedView.expanded = false
         listItem.itemCollapsed(listItem)
     }
 
@@ -334,7 +333,7 @@ Item {
         if (!listItem.hasExpandableContent) {
             return;
         }
-        expandedView.active ? listItem.collapse() : listItem.expand()
+        expandedView.expanded ? listItem.collapse() : listItem.expand()
     }
 
     signal itemExpanded(Item item)
@@ -354,7 +353,7 @@ Item {
             }
             event.accepted = true;
         } else if (event.key == Qt.Key_Escape) {
-            if (expandedView.active) {
+            if (expandedView.expanded) {
                 collapse();
                 event.accepted = true;
             }
@@ -521,71 +520,100 @@ Item {
                 PlasmaComponents3.ToolButton {
                     id: expandToggleButton
                     visible: listItem.hasExpandableContent
-                    icon.name: expandedView.active ? "collapse" : "expand"
+                    icon.name: expandedView.expanded ? "collapse" : "expand"
 
                     onClicked: listItem.toggleExpanded()
                 }
             }
 
 
-            // Expanded view, by default showing the actions list
-            Loader {
+            // Expanded view with actions and/or custom content in it
+            ColumnLayout {
                 id: expandedView
 
-                visible: active
-                opacity: active ? 1.0 : 0
+                property bool expanded: false
 
-                active: false
-                sourceComponent: customExpandedViewContent
+                visible: expanded
 
-                Layout.fillWidth: true
                 Layout.margins: PlasmaCore.Units.smallSpacing
 
+                spacing: PlasmaCore.Units.smallSpacing
+                opacity: expanded ? 1.0 : 0
                 Behavior on opacity {
                     NumberAnimation {
                         duration: PlasmaCore.Units.veryLongDuration
                         easing.type: Easing.InOutCubic
                     }
                 }
-            }
-        }
-    }
 
-    // Default expanded view content: contextual actions list
-    Component {
-        id: actionsListComponent
+                // Actions list
+                Loader {
+                    id: actionsListLoader
 
-        // Container for actions list, so that we can add left and right margins to it
-        Item {
-            height: childrenRect.height
-            width: mainRowLayout.width
+                    visible: status == Loader.Ready
 
-            ColumnLayout {
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing
-                anchors.rightMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing * 2
+                    active: expandedView.expanded && listItem.enabledActions > 0
 
-                spacing: 0
+                    Layout.fillWidth: true
 
-                Repeater {
+                    sourceComponent: Item {
+                        height: childrenRect.height
+                        width: mainRowLayout.width
 
-                    model: listItem.contextualActionsModel
+                        ColumnLayout {
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.leftMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing
+                            anchors.rightMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing * 2
 
-                    delegate: PlasmaComponents3.ToolButton {
-                        Layout.fillWidth: true
+                            spacing: 0
 
-                        visible: model.enabled
+                            Repeater {
 
-                        text: model.text
-                        icon.name: model.icon.name
+                                model: listItem.contextualActionsModel
 
-                        onClicked: {
-                            modelData.trigger()
-                            collapse()
+                                delegate: PlasmaComponents3.ToolButton {
+                                    Layout.fillWidth: true
+
+                                    visible: model.enabled
+
+                                    text: model.text
+                                    icon.name: model.icon.name
+
+                                    onClicked: {
+                                        modelData.trigger()
+                                        collapse()
+                                    }
+                                }
+                            }
                         }
                     }
+                }
+
+                // Separator between the two items when both are shown
+                PlasmaCore.SvgItem {
+                    visible: actionsListLoader.active && customContentLoader.active
+
+                    Layout.fillWidth: true
+
+                    elementId: "horizontal-line"
+                    svg: PlasmaCore.Svg {
+                        imagePath: "widgets/line"
+                    }
+                }
+
+                // Custom content item, if any
+                Loader {
+                    id: customContentLoader
+
+                    visible: status == Loader.Ready
+
+                    Layout.fillWidth: true
+
+                    active: customExpandedViewContent != undefined
+                    sourceComponent: customExpandedViewContent
+
                 }
             }
         }
