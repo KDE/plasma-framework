@@ -58,7 +58,7 @@ PlasmaComponents3.AbstractButton {
     PlasmaExtras.Highlight {
         id: todayRect
         anchors.fill: parent
-        hover: true
+        hovered: true
         opacity: {
             if (today) {
                 return 1;
