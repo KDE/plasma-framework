@@ -12,6 +12,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  */
 PlasmaExtras.Highlight
 {
+    id: root
     // At some point we had the "hover" property which was replaced with "hovered"
-    property alias hover: hovered
+    property alias hover: root.hovered
 }
