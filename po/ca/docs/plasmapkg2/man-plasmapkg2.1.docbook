@@ -1,0 +1,275 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Catalan  "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Gestor de paquets Plasma</title>
+<date
+>25 d'abril de 2014</date>
+<releaseinfo
+>Frameworks 5.0</releaseinfo>
+<productname
+>Frameworks del KDE</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>Instal·la, llista, suprimeix els paquets &plasma;</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> camí</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> tipus</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> camí</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> nom</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> camí</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> nom</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> camí</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Descripció</title>
+<para
+><command
+>plasmapkg2</command
+> és una eina de la línia d'ordres per a instal·lar, llistar, suprimir els paquets del &plasma;.</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Opcions</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+> camí</replaceable
+></term>
+<listitem
+><para
+>Genera una suma de verificació SHA1 per al paquet a <quote
+>camí</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Per a instal·lar o suprimir, opera amb els paquets instal·lats per a tots els usuaris.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+> tipus</replaceable
+></term>
+<listitem
+><para
+>El tipus de paquet, &pex; tema, fons de pantalla, plasmoide, motor de dades, executor, plantilla de disposició, &etc; [plasmoide].</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+> camí</replaceable
+></term>
+<listitem
+><para
+>Instal·la el paquet al <quote
+>camí</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+> nom</replaceable
+></term>
+<listitem
+><para
+>Mostra la informació del paquet <quote
+>nom</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+> camí</replaceable
+></term>
+<listitem
+><para
+>Actualitza el paquet al <quote
+>camí</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Llista els paquets instal·lats.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>Llista tots els tipus de paquets coneguts que es poden instal·lar.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+> nom</replaceable
+></term>
+<listitem
+><para
+>Suprimeix el paquet anomenat <quote
+>nom</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+> camí</replaceable
+></term>
+<listitem
+><para
+>Camí absolut a l'arrel del paquet. Si no es proporciona, llavors se cercaran els directoris de dades estàndard per a aquesta sessió del &plasma;.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Vegeu també</title>
+
+<para
+>Hi ha disponible documentació d'usuari més detallada des de <ulink url="help:/plasma-desktop"
+>help:/plasma-desktop</ulink
+> (podeu emprar aquest &URL; al &konqueror; o bé executar <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Autors</title>
+<para
+><command
+>plasmapkg2</command
+> ha estat escrit per en <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+>.</para>
+</refsect1>
+
+</refentry>
