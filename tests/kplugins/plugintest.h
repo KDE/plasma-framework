@@ -28,7 +28,9 @@ public:
 public Q_SLOTS:
     void runMain();
     bool loadKPlugin();
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
     bool loadFromPlasma();
+#endif
     void loadKQPlugin();
     void dataUpdated(QString s, Plasma::DataEngine::Data d);
 

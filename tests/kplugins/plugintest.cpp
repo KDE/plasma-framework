@@ -63,8 +63,10 @@ void PluginTest::runMain()
     //     //loadKQPlugin();
     qDebug() << "::: loadKPlugin() == " << loadKPlugin();
     //
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
     qDebug() << " - - - -- - - - - ------------------------------------\n";
     qDebug() << "::: loadFromPlasma() == " << loadFromPlasma();
+#endif
     exit(0);
     return;
 }
@@ -105,6 +107,7 @@ bool PluginTest::loadKPlugin()
     return ok;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
 bool PluginTest::loadFromPlasma()
 {
     bool ok = false;
@@ -122,6 +125,7 @@ bool PluginTest::loadFromPlasma()
     }
     return ok;
 }
+#endif
 
 void PluginTest::loadKQPlugin()
 {

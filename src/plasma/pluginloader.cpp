@@ -229,6 +229,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     return applet;
 }
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
 DataEngine *PluginLoader::loadDataEngine(const QString &name)
 {
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
@@ -257,7 +258,9 @@ DataEngine *PluginLoader::loadDataEngine(const QString &name)
 
     return new DataEngine(p.metadata(), nullptr);
 }
+#endif
 
+#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
 QStringList PluginLoader::listAllEngines(const QString &parentApp)
 {
     QStringList engines;
@@ -283,6 +286,7 @@ QStringList PluginLoader::listAllEngines(const QString &parentApp)
 
     return engines;
 }
+#endif
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
 KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)

@@ -57,14 +57,23 @@ public:
      **/
     Applet *loadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList());
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
     /**
      * Load a dataengine plugin.
      *
      * @param name the name of the engine
      * @return the dataengine that was loaded, or the NullEngine on failure.
-     **/
+     * @deprecated Since 5.94, Dataengines are being phased out, please port away from them if possible
+     * or load the plugin from the "plasma/dataengine" namespace manually using KPluginMetaData/KPluginFactory
+     */
+    PLASMA_DEPRECATED_VERSION(
+        5,
+        94,
+        "Dataengines are being phased out, please port away from them if possible or load the plugin from the \"plasma/dataengine\" namespace manually")
     DataEngine *loadDataEngine(const QString &name);
+#endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
     /**
      * @return a listing of all known dataengines by name
      *
@@ -72,8 +81,15 @@ public:
      *                  X-KDE-ParentApp entry (if any) in the plugin info.
      *                  The default value of QString() will result in a
      *                  list of all dataengines.
+     * @deprecated Since 5.94, Dataengines are being phased out, please port away from them if possible
+     * or query the plugins in the "plasma/dataengine" namespace manually using KPluginMetaData
      */
+    PLASMA_DEPRECATED_VERSION(
+        5,
+        94,
+        "Dataengines are being phased out, please port away from them if possible or query the plugins in the \"plasma/dataengine\" namespace manually")
     static QStringList listAllEngines(const QString &parentApp = QString());
+#endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 77)
     /**
