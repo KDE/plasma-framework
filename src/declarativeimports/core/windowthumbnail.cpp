@@ -10,6 +10,7 @@
 #include <QGuiApplication>
 #include <QIcon>
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
 #include <QQuickWindow>
 #include <QRunnable>
 #include <QSGImageNode>
