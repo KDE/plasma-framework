@@ -84,8 +84,14 @@ void DialogNativeTest::position()
 {
     QVERIFY(QTest::qWaitForWindowExposed(m_dialog));
 
-    QCOMPARE(m_dialog->x(), 0);
-    QCOMPARE(m_dialog->y(), 49);
+    // Find where the outermost test-panel lives. Normally that would be
+    // at x,y = (0,0) but if the test is run on a desktop with a
+    // left-hand-edge panel, then the test-panel is placed next to it.
+    const auto upper_left_x = m_panel->x();
+    const auto upper_left_y = m_panel->y();
+
+    QCOMPARE(m_dialog->x(), upper_left_x + 0);
+    QCOMPARE(m_dialog->y(), upper_left_y + 49);
 
     m_dialog->setVisualParent(m_panel2->contentItem());
     QCOMPARE(m_dialog->x(), 69);
