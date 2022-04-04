@@ -15,7 +15,6 @@ target_sources(corebindingsplugin PRIVATE
     datasource.cpp
     #    runnermodel.cpp
     svgitem.cpp
-    fadingnode.cpp
     framesvgitem.cpp
     quicktheme.cpp
     tooltip.cpp
@@ -27,6 +26,9 @@ target_sources(corebindingsplugin PRIVATE
 
     shaders.qrc
 )
+if (NOT KF6_PORTING_TODO)
+    target_sources(corebindingsplugin PRIVATE fadingnode.cpp)
+endif()
 
 target_link_libraries(corebindingsplugin
         Qt${QT_MAJOR_VERSION}::Quick

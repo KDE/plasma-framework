@@ -164,6 +164,14 @@ add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055100)
 
 include(KF5PlasmaMacros.cmake)
 
+# temporary Qt6 porting scafolding until branching
+# (this is intentional made to fail if we forget it for KF6)
+if (TARGET Qt6::Core AND KF_VERSION VERSION_LESS 6.0)
+    message(WARNING "TODO: port fading shaders to Qt6!")
+    set(KF6_PORTING_TODO TRUE)
+    add_definitions(-DKF6_PORTING_TODO)
+endif()
+
 #########################################################################
 
 

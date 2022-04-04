@@ -24,7 +24,6 @@ Dependencies:
     'frameworks/kitemviews' : '@same'
     'frameworks/kjobwidgets' : '@same'
     'frameworks/kio' : '@same'
-    'frameworks/kross' : '@same'
     'frameworks/knotifications' : '@same'
     'frameworks/kparts' : '@same'
     'frameworks/kpackage' : '@same'
