@@ -18,12 +18,6 @@ target_sources(plasma_appletscript_declarative PRIVATE
 
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
-kcoreaddons_desktop_to_json(
-    plasma_appletscript_declarative data/plasma-scriptengine-applet-declarative.desktop
-    SERVICE_TYPES ${CMAKE_SOURCE_DIR}/src/plasma/data/servicetypes/plasma-scriptengine.desktop
-)
-
-
 target_link_libraries(plasma_appletscript_declarative
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
@@ -44,7 +38,6 @@ endif()
 
 
 install(TARGETS plasma_appletscript_declarative DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/scriptengines)
-install(FILES data/plasma-scriptengine-applet-declarative.desktop DESTINATION ${KDE_INSTALL_KSERVICESDIR})
 install(FILES data/plasma-wallpaper.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPESDIR})
 
 
