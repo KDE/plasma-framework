@@ -690,7 +690,6 @@ QList<KPluginMetaData> PluginLoader::listContainmentsMetaDataOfType(const QStrin
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
 KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type, const QString &category, const QString &parentApp)
 {
-    KConfigGroup group(KSharedConfig::openConfig(), "General");
     auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool {
         if (isContainmentMetaData(md)) {
             return false;
