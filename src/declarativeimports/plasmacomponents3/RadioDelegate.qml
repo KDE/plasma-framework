@@ -47,7 +47,7 @@ T.RadioDelegate {
 
     indicator: RadioIndicator {
         x: control.mirrored ? control.leftPadding : control.width - width - control.rightPadding
-        y: control.topPadding + (control.availableHeight - height) / 2
+        y: control.topPadding + Math.round((control.availableHeight - height) / 2)
 
         control: control
     }

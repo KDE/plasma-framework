@@ -81,7 +81,7 @@ T.MenuItem {
 
     indicator: Loader {
         x: controlRoot.mirrored ? controlRoot.width - width - controlRoot.rightPadding : controlRoot.leftPadding
-        y: controlRoot.topPadding + (controlRoot.availableHeight - height) / 2
+        y: controlRoot.topPadding + Math.round((controlRoot.availableHeight - height) / 2)
 
         visible: controlRoot.checkable
         sourceComponent: controlRoot.autoExclusive ? radioComponent : checkComponent
