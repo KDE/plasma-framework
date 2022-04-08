@@ -26,6 +26,9 @@ T.BusyIndicator {
 
     contentItem: Item {
         id: baseItem
+        // Don't want it to animate at all if the user has disabled animations
+        property bool animationRunning: visible && (control.running || opacity > 0) && PlasmaCore.Units.longDuration > 1;
+
         /* implicitWidth and implicitHeight won't work unless they come
          * from a child of the contentItem. No idea why.
          */
@@ -39,6 +42,18 @@ T.BusyIndicator {
                 duration: PlasmaCore.Units.shortDuration
                 easing.type: Easing.OutQuad
             }
+        }
+
+        // sync all busy animations so they start at a common place in the rotation
+        onAnimationRunningChanged: {
+            if (animationRunning) {
+                const date = new Date;
+                const ms = date.valueOf();
+                busyIndicatorSvgItem.rotation = ((ms % rotationAnimator.duration) / rotationAnimator.duration) * 360
+                rotationAnimator.from = busyIndicatorSvgItem.rotation
+                rotationAnimator.to = 360 + busyIndicatorSvgItem.rotation
+            }
+            rotationAnimator.running = animationRunning
         }
 
         PlasmaCore.SvgItem {
@@ -65,8 +80,6 @@ T.BusyIndicator {
                 // scaling preferences; it doesn't make sense in this context
                 duration: 2000
                 loops: Animation.Infinite
-                // Don't want it to animate at all if the user has disabled animations
-                running: visible && (control.running || baseItem.opacity > 0) && PlasmaCore.Units.longDuration > 1;
             }
         }
     }
