@@ -1,0 +1,20 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "jblow@kde.org",
+                "Name": "Joe Blow"
+            }
+        ],
+        "Category": "",
+        "Id": "org.kde.configtestpackage",
+        "License": "GPLv2+",
+        "Name": "Config Test Package",
+        "Version": "",
+        "Website": ""
+    },
+    "Keywords": "",
+    "X-KDE-ParentApp": "",
+    "X-Plasma-API": "declarativeappletscript",
+    "X-Plasma-MainScript": "ui/main.qml"
+}
