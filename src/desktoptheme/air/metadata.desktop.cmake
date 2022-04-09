@@ -110,15 +110,3 @@ X-KDE-PluginInfo-Category=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 X-Plasma-API=5.0
-
-[Wallpaper]
-defaultWallpaperTheme=Elarun
-defaultFileSuffix=.png
-defaultWidth=2560
-defaultHeight=1600
-
-[ContrastEffect]
-enabled=true
-contrast=0.3
-intensity=1.9
-saturation=1.9
