@@ -1,10 +1,10 @@
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/metadata.desktop.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/metadata.desktop"
+    "${CMAKE_CURRENT_SOURCE_DIR}/metadata.json.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/metadata.json"
     @ONLY
 )
 
 install(
-    FILES colors "${CMAKE_CURRENT_BINARY_DIR}/metadata.desktop"
+    FILES colors "${CMAKE_CURRENT_BINARY_DIR}/metadata.json"
     DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/breeze-light
 )
