@@ -11,6 +11,7 @@
 
 #include <QAction>
 #include <QBasicTimer>
+#include <QPointer>
 
 #include <KActionCollection>
 #include <KConfigSkeleton>

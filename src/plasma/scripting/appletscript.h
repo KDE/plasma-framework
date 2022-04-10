@@ -11,10 +11,12 @@
 #include <QRect>
 #include <QSizeF>
 
+#include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
+#endif
 
 #include <plasma/containment.h>
-#include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
 
 class QAction;

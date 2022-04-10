@@ -9,6 +9,10 @@
 
 #include <KPluginMetaData>
 
+#ifndef KSERVICE_BUILD_DEPRECATED_SINCE
+#define KSERVICE_BUILD_DEPRECATED_SINCE(a, b) 0
+#endif
+
 namespace Plasma
 {
 #if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)

@@ -10,11 +10,14 @@
 #include <QSignalSpy>
 #include <qtest.h>
 
-#include <KPluginInfo>
 #include <KPluginMetaData>
 
 #include <plasma/dataengineconsumer.h>
 #include <plasma/pluginloader.h>
+
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
+#include <KPluginInfo>
+#endif
 
 QTEST_MAIN(PluginTest)
 

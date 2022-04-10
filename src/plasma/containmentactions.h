@@ -9,12 +9,16 @@
 
 #include <QList>
 
+#include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
+#endif
 
 #include <plasma/plasma.h>
 
 class QAction;
 class KPluginMetaData;
+class KConfigGroup;
 
 namespace Plasma
 {

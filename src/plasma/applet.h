@@ -14,12 +14,16 @@
 #include <QUrl>
 
 #include <KConfigGroup>
+#include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
+#endif
 
 #include <plasma/framesvg.h>
 #include <plasma/plasma.h>
 
 #include <KPackage/Package>
+#include <KPluginFactory>
 
 class KActionCollection;
 class KConfigLoader;

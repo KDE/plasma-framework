@@ -10,6 +10,7 @@
 #include <QSignalSpy>
 #include <QStandardPaths>
 
+#include <KConfigGroup>
 #include <KIconLoader>
 #include <KIconTheme>
 #include <KWindowSystem>

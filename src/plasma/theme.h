@@ -12,10 +12,11 @@
 #include <QGuiApplication>
 #include <QObject>
 
-#include <KPluginInfo>
-#include <KSharedConfig>
-
 #include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
+#include <KPluginInfo>
+#endif
+#include <KSharedConfig>
 
 class KPluginMetaData;
 

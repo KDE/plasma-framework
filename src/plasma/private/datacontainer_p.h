@@ -13,6 +13,7 @@
 
 #include <QBasicTimer>
 #include <QElapsedTimer>
+#include <QPointer>
 #include <QTimerEvent>
 
 #include <QAbstractItemModel>

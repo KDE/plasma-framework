@@ -7,10 +7,12 @@
 #ifndef PLASMA_DATAENGINESCRIPT_H
 #define PLASMA_DATAENGINESCRIPT_H
 
+#include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
+#endif
 
 #include <plasma/dataengine.h>
-#include <plasma/plasma_export.h>
 #include <plasma/scripting/scriptengine.h>
 
 namespace Plasma

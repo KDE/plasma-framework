@@ -9,6 +9,7 @@
 #ifndef PLASMA_CONTAINMENT_H
 #define PLASMA_CONTAINMENT_H
 
+#include <KPluginFactory>
 #include <KSharedConfig>
 #include <plasma/applet.h>
 

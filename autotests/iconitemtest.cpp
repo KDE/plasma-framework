@@ -13,6 +13,7 @@
 #include <QQuickItemGrabResult>
 #include <QSignalSpy>
 
+#include <KConfigGroup>
 #include <KIconEngine>
 #include <KIconLoader>
 #include <KIconTheme>

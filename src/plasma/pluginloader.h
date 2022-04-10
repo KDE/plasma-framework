@@ -7,10 +7,15 @@
 #ifndef PLUGIN_LOADER_H
 #define PLUGIN_LOADER_H
 
+#include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
 #include <plasma/package.h>
+#endif
+
 #include <plasma/plasma.h>
 
+class KPluginMetaData;
 namespace Plasma
 {
 class Applet;
