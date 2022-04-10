@@ -15,8 +15,6 @@
 #include <KJob>
 #include <plasma/applet.h>
 #include <plasma/dataengine.h>
-#include <plasma/package.h>
-#include <plasma/packagestructure.h>
 #include <plasma/pluginloader.h>
 
 #include <QCommandLineParser>
