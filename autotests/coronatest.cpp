@@ -6,7 +6,6 @@
 
 #include "coronatest.h"
 #include <KActionCollection>
-#include <KSycoca>
 
 #include <QAction>
 #include <QApplication>
@@ -68,29 +67,8 @@ SimpleNoScreenContainment::SimpleNoScreenContainment(QObject *parentObject, cons
     // This containment will *never* be isUiReady()
 }
 
-static void runKBuildSycoca()
-{
-    QProcess proc;
-    const QString kbuildsycoca = QStandardPaths::findExecutable(QStringLiteral(KBUILDSYCOCA_EXENAME));
-    QVERIFY(!kbuildsycoca.isEmpty());
-    QStringList args;
-    args << QStringLiteral("--testmode");
-    proc.setProcessChannelMode(QProcess::MergedChannels); // silence kbuildsycoca output
-    proc.start(kbuildsycoca, args);
-
-    QSignalSpy spy(KSycoca::self(), SIGNAL(databaseChanged(QStringList)));
-    QVERIFY(spy.wait(10000));
-
-    proc.waitForFinished();
-    QCOMPARE(proc.exitStatus(), QProcess::NormalExit);
-}
-
 void CoronaTest::initTestCase()
 {
-    if (!KSycoca::isAvailable()) {
-        runKBuildSycoca();
-    }
-
     QStandardPaths::setTestModeEnabled(true);
     m_corona = new SimpleCorona;
 
