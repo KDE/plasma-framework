@@ -165,8 +165,8 @@ ColumnLayout {
     /**
      * The type of the message. This can be:
      *
-     * * Kirigami.PlaceholderMessage.Type.Actionable: Makes it more attention-getting. Useful when the user is expected to interact with the message.
-     * * Kirigami.PlaceholderMessage.Type.Informational: Makes it less prominent. Useful when the message in only informational.
+     * * PlasmaExtras.PlaceholderMessage.Type.Actionable: Makes it more attention-getting. Useful when the user is expected to interact with the message.
+     * * PlasmaExtras.PlaceholderMessage.Type.Informational: Makes it less prominent. Useful when the message in only informational.
      *
      * By default if an helpfulAction is provided this will be of type Actionable otherwise of type Informational.
      * @since 5.94
@@ -263,7 +263,7 @@ ColumnLayout {
         id: actionButton
 
         Layout.alignment: Qt.AlignHCenter
-        Layout.topMargin: Kirigami.Units.gridUnit
+        Layout.topMargin: PlasmaCore.Units.gridUnit
 
         visible: action && action.enabled
     }
