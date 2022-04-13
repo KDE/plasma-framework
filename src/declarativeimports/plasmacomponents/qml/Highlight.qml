@@ -4,6 +4,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+import QtQuick 2.15
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 /**
@@ -15,4 +16,5 @@ PlasmaExtras.Highlight
     id: root
     // At some point we had the "hover" property which was replaced with "hovered"
     property alias hover: root.hovered
+    hovered: true
 }
