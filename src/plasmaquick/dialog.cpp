@@ -475,7 +475,7 @@ void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
 
 void DialogPrivate::updateLayoutParameters()
 {
-    if (!componentComplete || !mainItem || !mainItemLayout) {
+    if (!componentComplete || !mainItem || !mainItemLayout || q->visibility() == QWindow::Hidden) {
         return;
     }
 
