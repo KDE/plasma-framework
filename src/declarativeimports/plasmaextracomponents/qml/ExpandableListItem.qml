@@ -395,8 +395,9 @@ Item {
         }
     }
 
-    PlasmaComponents2.Highlight {
+    PlasmaExtras.Highlight {
         id: hoverBackground
+        hovered: true
         anchors.fill: parent
         visible: {
             let view = listItem.ListView.view ?? listItem.GridView.view
