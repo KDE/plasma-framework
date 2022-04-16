@@ -56,7 +56,7 @@ DataEngine::DataEngine(QObject *parent, const QVariantList &args)
     : QObject(parent)
 {
     KPluginMetaData data;
-    if (args.size() > 1 && args.first().canConvert<KPluginMetaData>()) {
+    if (!args.isEmpty() && args.first().canConvert<KPluginMetaData>()) {
         data = args.first().value<KPluginMetaData>();
     }
     d = new DataEnginePrivate(this, data, args);
