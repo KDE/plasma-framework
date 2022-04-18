@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Miscellaneous",
         "Description": "Example applet that shows how to use Models embedded in DataEngines",
+        "Description[ca]": "Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»",
+        "Description[es]": "Miniaplicación de ejemplo que muestra cómo usar modelos integrados en motores de datos",
+        "Description[nl]": "Voorbeeld van applet dat toont hoe modellen ingebed in gegevensengines zijn te gebruiken",
+        "Description[tr]": "DataEngines içinde gömülü modellerin nice kullanılacağını gösteren örnek uygulama",
+        "Description[uk]": "Приклад аплету, який демонструє використання моделей, вбудованих до рушіїв даних",
+        "Description[x-test]": "xxExample applet that shows how to use Models embedded in DataEnginesxx",
         "Icon": "",
         "Id": "org.kde.example.dataenginemodel",
         "License": "GPL",
         "Name": "Dataengine model",
+        "Name[ca]": "Model de «Dataengine»",
+        "Name[es]": "Modelo del motor de datos",
+        "Name[nl]": "Model van gegevensengine",
+        "Name[tr]": "Veri motoru modeli",
+        "Name[uk]": "Модель рушія даних",
+        "Name[x-test]": "xxDataengine modelxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

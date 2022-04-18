@@ -3,16 +3,34 @@
         "Authors": [
             {
                 "Email": "%{EMAIL}",
-                "Name": "%{AUTHOR}"
+                "Name": "%{AUTHOR}",
+                "Name[ca]": "%{AUTHOR}",
+                "Name[es]": "%{AUTHOR}",
+                "Name[nl]": "%{AUTHOR}",
+                "Name[tr]": "%{AUTHOR}",
+                "Name[uk]": "%{AUTHOR}",
+                "Name[x-test]": "xx%{AUTHOR}xx"
             }
         ],
         "Category": "Utilities",
         "Description": "what your app does in a few words",
+        "Description[ca]": "Què fa aquesta aplicació en poques paraules",
+        "Description[es]": "Lo que hace su aplicación en pocas palabras",
+        "Description[nl]": "wat uw app doet in een paar woorden",
+        "Description[tr]": "uygulamanızı birkaç sözcükle anlatın",
+        "Description[uk]": "призначення вашої програми у декількох словах",
+        "Description[x-test]": "xxwhat your app does in a few wordsxx",
         "EnabledByDefault": true,
         "Icon": "applications-system",
         "Id": "org.kde.plasma.%{APPNAMELC}",
         "License": "LGPL-2.1+",
         "Name": "%{APPNAME}",
+        "Name[ca]": "%{APPNAME}",
+        "Name[es]": "%{APPNAME}",
+        "Name[nl]": "%{APPNAME}",
+        "Name[tr]": "%{APPNAME}",
+        "Name[uk]": "%{APPNAME}",
+        "Name[x-test]": "xx%{APPNAME}xx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

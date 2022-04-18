@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Windows and Tasks",
         "Description": "Example showing how to write your own tasks Widget",
+        "Description[ca]": "Exemple que mostra com escriure el vostre propi giny de tasques",
+        "Description[es]": "Ejemplo que muestra cómo escribir un widget de tareas personalizado",
+        "Description[nl]": "Voorbeeld die toont hoe u uw eigen taak-widget schrijft",
+        "Description[tr]": "Kendi görevler araç takımınızı nice yazabileceğiniz üzerine örnek",
+        "Description[uk]": "Приклад, який демонструє створення власного віджета задач",
+        "Description[x-test]": "xxExample showing how to write your own tasks Widgetxx",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.tasks",
         "License": "GPL",
         "Name": "Poor Man's Tasks",
+        "Name[ca]": "Tasques senzilles",
+        "Name[es]": "Tareas del hombre pobre",
+        "Name[nl]": "Taken van 'Poor Man'",
+        "Name[tr]": "Yoksul Adamın Görevleri",
+        "Name[uk]": "Задачі для початківців",
+        "Name[x-test]": "xxPoor Man's Tasksxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

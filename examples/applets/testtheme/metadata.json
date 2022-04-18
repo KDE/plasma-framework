@@ -3,7 +3,13 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "Development Tools",
@@ -11,6 +17,12 @@
         "Id": "org.kde.example.testtheme",
         "License": "GPLv2+",
         "Name": "Theme Test",
+        "Name[ca]": "Prova de tema",
+        "Name[es]": "Prueba de tema",
+        "Name[nl]": "Test van thema",
+        "Name[tr]": "Tema Sınaması",
+        "Name[uk]": "Тестування теми",
+        "Name[x-test]": "xxTheme Testxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

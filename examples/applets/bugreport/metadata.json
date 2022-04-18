@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "Development",
         "Description": "Report a bug in Plasma",
+        "Description[ca]": "Informa d'un error en el Plasma",
+        "Description[es]": "Informar de un fallo en Plasma",
+        "Description[nl]": "Een bug in Plasma rapporteren",
+        "Description[tr]": "Plasma'daki bir hatayı bildirin",
+        "Description[uk]": "Повідомити про ваду у Плазмі",
+        "Description[x-test]": "xxReport a bug in Plasmaxx",
         "Icon": "kbugbuster",
         "Id": "org.kde.example.bugreport",
         "License": "GPL",
         "Name": "Bug",
+        "Name[ca]": "Error",
+        "Name[es]": "Fallo",
+        "Name[nl]": "Bug",
+        "Name[tr]": "Hata",
+        "Name[uk]": "Вада",
+        "Name[x-test]": "xxBugxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

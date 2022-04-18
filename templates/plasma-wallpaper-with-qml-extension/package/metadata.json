@@ -3,7 +3,13 @@
         "Authors": [
             {
                 "Email": "%{EMAIL}",
-                "Name": "%{AUTHOR}"
+                "Name": "%{AUTHOR}",
+                "Name[ca]": "%{AUTHOR}",
+                "Name[es]": "%{AUTHOR}",
+                "Name[nl]": "%{AUTHOR}",
+                "Name[tr]": "%{AUTHOR}",
+                "Name[uk]": "%{AUTHOR}",
+                "Name[x-test]": "xx%{AUTHOR}xx"
             }
         ],
         "Description": "",
@@ -11,6 +17,12 @@
         "Id": "org.kde.plasma.%{APPNAMELC}",
         "License": "LGPL-2.1+",
         "Name": "%{APPNAME}",
+        "Name[ca]": "%{APPNAME}",
+        "Name[es]": "%{APPNAME}",
+        "Name[nl]": "%{APPNAME}",
+        "Name[tr]": "%{APPNAME}",
+        "Name[uk]": "%{APPNAME}",
+        "Name[x-test]": "xx%{APPNAME}xx",
         "ServiceTypes": [
             "Plasma/Wallpaper"
         ],

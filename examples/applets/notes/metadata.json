@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Miscellaneous",
         "Description": "Example on how to manage Drop data",
+        "Description[ca]": "Exemple de com gestionar dades «Drop»",
+        "Description[es]": "Ejemplo sobre cómo manejar datos soltados",
+        "Description[nl]": "Voorbeeld van hoe gegevens van Drop te beheren",
+        "Description[tr]": "Bırakma verisinin nice yönetileceği üzerine örnek",
+        "Description[uk]": "Приклад керування скинутими даними",
+        "Description[x-test]": "xxExample on how to manage Drop dataxx",
         "Icon": "org.kde.plasma.notes",
         "Id": "org.kde.example.notes",
         "License": "GPL",
         "Name": "Example notes",
+        "Name[ca]": "Notes d'exemple",
+        "Name[es]": "Notas de ejemplo",
+        "Name[nl]": "Voorbeeldnotities",
+        "Name[tr]": "Örnek notlar",
+        "Name[uk]": "Нотатки щодо прикладу",
+        "Name[x-test]": "xxExample notesxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

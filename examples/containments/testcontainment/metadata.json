@@ -3,13 +3,25 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "",
         "Id": "org.kde.example.testcontainment",
         "License": "GPLv2+",
         "Name": "Containment Test",
+        "Name[ca]": "Prova de contenidor",
+        "Name[es]": "Prueba de contenedor",
+        "Name[nl]": "Test van container",
+        "Name[tr]": "Kapsama Sınaması",
+        "Name[uk]": "Перевірка контейнера",
+        "Name[x-test]": "xxContainment Testxx",
         "ServiceTypes": [
             "Plasma/Applet",
             "Plasma/Containment"

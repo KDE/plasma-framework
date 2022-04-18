@@ -3,7 +3,13 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "Development Tools",
@@ -11,6 +17,12 @@
         "Id": "org.kde.example.testcomponents",
         "License": "GPLv2+",
         "Name": "Components Test",
+        "Name[ca]": "Prova de components",
+        "Name[es]": "Prueba de componentes",
+        "Name[nl]": "Test van componenten",
+        "Name[tr]": "Bileşenler Sınaması",
+        "Name[uk]": "Тестування компонентів",
+        "Name[x-test]": "xxComponents Testxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

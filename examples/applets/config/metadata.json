@@ -3,13 +3,25 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "",
         "Id": "org.kde.example.configuration",
         "License": "GPLv2+",
         "Name": "Configuration test",
+        "Name[ca]": "Prova de configuració",
+        "Name[es]": "Prueba de configuración",
+        "Name[nl]": "Test van instellingen",
+        "Name[tr]": "Yapılandırma Sınaması",
+        "Name[uk]": "Перевірка налаштувань",
+        "Name[x-test]": "xxConfiguration testxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

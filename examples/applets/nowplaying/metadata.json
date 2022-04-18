@@ -3,16 +3,34 @@
         "Authors": [
             {
                 "Email": "notmart@gmail.com",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Examples",
         "Description": "A proof of concept media player controller qml",
+        "Description[ca]": "Una prova del concepte de controlador en QML d'un reproductor multimèdia",
+        "Description[es]": "Una prueba de concepto de controlador de reproductor multimedia en QML",
+        "Description[nl]": "Een 'proof of concept' qml voor besturing van een mediaspeler",
+        "Description[tr]": "Kavram kanıtlayıcı bir ortam oynatıcı denetimi qml",
+        "Description[uk]": "Тестова програма для спостереження за відтворенням мультимедійних даних, написана мовою qml",
+        "Description[x-test]": "xxA proof of concept media player controller qmlxx",
         "EnabledByDefault": true,
         "Icon": "applications-multimedia",
         "Id": "org.kde.nowplaying-qml",
         "License": "GPL",
         "Name": "Now playing (QML)",
+        "Name[ca]": "Ara està en reproducció (QML)",
+        "Name[es]": "Reproduciendo (QML)",
+        "Name[nl]": "Speelt nu (QML)",
+        "Name[tr]": "Şimdi oynatılıyor (QML)",
+        "Name[uk]": "Зараз відтворюємо (QML)",
+        "Name[x-test]": "xxNow playing (QML)xx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

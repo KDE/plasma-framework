@@ -3,7 +3,13 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Miscellaneous",
@@ -12,6 +18,12 @@
         "Id": "org.kde.examples.compactrepresentation",
         "License": "GPL",
         "Name": "hello world",
+        "Name[ca]": "hola món",
+        "Name[es]": "hola mundo",
+        "Name[nl]": "hallo wereld",
+        "Name[tr]": "merhaba dünya",
+        "Name[uk]": "Привіт, світе",
+        "Name[x-test]": "xxhello worldxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

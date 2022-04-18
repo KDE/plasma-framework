@@ -3,7 +3,13 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "",
@@ -11,6 +17,12 @@
         "Id": "org.kde.autumn",
         "License": "GPLv2+",
         "Name": "Autumn",
+        "Name[ca]": "Tardor",
+        "Name[es]": "Otoño",
+        "Name[nl]": "Herfst",
+        "Name[tr]": "Güz",
+        "Name[uk]": "Осінь",
+        "Name[x-test]": "xxAutumnxx",
         "ServiceTypes": [
             "Plasma/Wallpaper"
         ],

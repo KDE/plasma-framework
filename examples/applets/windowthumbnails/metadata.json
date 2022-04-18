@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "Windows and Tasks",
         "Description": "Example showing how to display window thumbnails",
+        "Description[ca]": "Exemple que mostra com visualitzar miniatures de les finestres",
+        "Description[es]": "Ejemplo que enseña cómo mostrar miniaturas de ventanas",
+        "Description[nl]": "Voorbeeld van hoe miniaturen van vensters te tonen",
+        "Description[tr]": "Pencere küçük görsellerinin nice gösterileceğini anlatan örnek",
+        "Description[uk]": "Приклад, який демонструє показ мініатюр вікон",
+        "Description[x-test]": "xxExample showing how to display window thumbnailsxx",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.windowthumbnails",
         "License": "GPL",
         "Name": "Example window thumbnails list",
+        "Name[ca]": "Exemple de llista de miniatures de les finestres",
+        "Name[es]": "Ejemplo de lista de miniaturas de ventanas",
+        "Name[nl]": "Voorbeeld van lijst met miniaturen van vensters",
+        "Name[tr]": "Örnek pencere küçük görseller listesi",
+        "Name[uk]": "Приклад списку мініатюр вікон",
+        "Name[x-test]": "xxExample window thumbnails listxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

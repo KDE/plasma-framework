@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "Graphics",
         "Description": "Futzing with Visual Effects",
+        "Description[ca]": "Jugant amb els efectes visuals",
+        "Description[es]": "Jugando con efectos visuales",
+        "Description[nl]": "Tijd verspillen met visuele effecten",
+        "Description[tr]": "Görsel Efektlerle Oynaşma",
+        "Description[uk]": "Маніпулювання візуальними ефектами",
+        "Description[x-test]": "xxFutzing with Visual Effectsxx",
         "Icon": "plasma",
         "Id": "org.kde.example.testshaders",
         "License": "GPLv2+",
         "Name": "Shader Test",
+        "Name[ca]": "Prova de «shader»",
+        "Name[es]": "Prueba de sombreado",
+        "Name[nl]": "Test van schaduw",
+        "Name[tr]": "Gölgelendirici Sınaması",
+        "Name[uk]": "Тестування підпрограм побудови тіней",
+        "Name[x-test]": "xxShader Testxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

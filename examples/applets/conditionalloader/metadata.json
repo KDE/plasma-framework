@@ -3,13 +3,25 @@
         "Authors": [
             {
                 "Email": "mart@kde.org",
-                "Name": "Marco Martin"
+                "Name": "Marco Martin",
+                "Name[ca]": "Marco Martin",
+                "Name[es]": "Marco Martin",
+                "Name[nl]": "Marco Martin",
+                "Name[tr]": "Marco Martin",
+                "Name[uk]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx"
             }
         ],
         "Category": "",
         "Id": "org.kde.example.conditionalloader",
         "License": "GPLv2+",
         "Name": "Applet Test",
+        "Name[ca]": "Miniaplicació de prova",
+        "Name[es]": "Prueba de miniaplicación",
+        "Name[nl]": "Test van applet",
+        "Name[tr]": "Uygulamacık Sınaması",
+        "Name[uk]": "Тест аплету",
+        "Name[x-test]": "xxApplet Testxx",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

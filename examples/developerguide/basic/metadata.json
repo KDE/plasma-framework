@@ -3,15 +3,33 @@
         "Authors": [
             {
                 "Email": "sebas@kde.org",
-                "Name": "Sebastian Kügler"
+                "Name": "Sebastian Kügler",
+                "Name[ca]": "Sebastian Kügler",
+                "Name[es]": "Sebastian Kügler",
+                "Name[nl]": "Sebastian Kügler",
+                "Name[tr]": "Sebastian Kügler",
+                "Name[uk]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
         "Category": "Development",
         "Description": "Basic App",
+        "Description[ca]": "Aplicació bàsica",
+        "Description[es]": "Aplicación básica",
+        "Description[nl]": "Basis app",
+        "Description[tr]": "Yalın Uygulama",
+        "Description[uk]": "Базова програма",
+        "Description[x-test]": "xxBasic Appxx",
         "Icon": "kbugbuster",
         "Id": "org.kde.example.developerguide.basic",
         "License": "LGPLv2+",
         "Name": "Bug",
+        "Name[ca]": "Error",
+        "Name[es]": "Fallo",
+        "Name[nl]": "Bug",
+        "Name[tr]": "Hata",
+        "Name[uk]": "Вада",
+        "Name[x-test]": "xxBugxx",
         "ServiceTypes": [
             "KPackage/GenericQML"
         ],

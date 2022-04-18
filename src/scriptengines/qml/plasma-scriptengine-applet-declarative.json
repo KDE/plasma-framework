@@ -3,16 +3,34 @@
         "Authors": [
             {
                 "Email": "menard@kde.org",
-                "Name": "Alexis Menard"
+                "Name": "Alexis Menard",
+                "Name[ca]": "Alexis Menard",
+                "Name[es]": "Alexis Menard",
+                "Name[nl]": "Alexis Menard",
+                "Name[tr]": "Alexis Menard",
+                "Name[uk]": "Alexis Menard",
+                "Name[x-test]": "xxAlexis Menardxx"
             }
         ],
         "Category": "Examples",
         "Description": "Native Plasma widget written in QML and JavaScript",
+        "Description[ca]": "Giny nadiu del Plasma escrit en QML i JavaScript",
+        "Description[es]": "Widget nativo de Plasma escrito en QML y JavaScript",
+        "Description[nl]": "Hier thuishorend Plasma-widget geschreven in QML en JavaScript",
+        "Description[tr]": "QML ve JavaScript ile yazılmış yerel Plasma araç takımı",
+        "Description[uk]": "Віджет Плазми, написаний на QML та JavaScript",
+        "Description[x-test]": "xxNative Plasma widget written in QML and JavaScriptxx",
         "EnabledByDefault": true,
         "Icon": "text-x-script",
         "Id": "qmlscript",
         "License": "LGPL",
         "Name": "Declarative widget",
+        "Name[ca]": "Giny declaratiu",
+        "Name[es]": "Widget declarativo",
+        "Name[nl]": "Widget voor declaratie",
+        "Name[tr]": "Bildirimsel araç takımları",
+        "Name[uk]": "Декларативний віджет",
+        "Name[x-test]": "xxDeclarative widgetxx",
         "ServiceTypes": [
             "Plasma/ScriptEngine"
         ],
