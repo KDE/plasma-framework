@@ -99,7 +99,7 @@ target_link_libraries(KF5Plasma
 PUBLIC
     Qt${QT_MAJOR_VERSION}::Gui
     KF5::ConfigCore
-    KF5::Package
+    KF5::CoreAddons
 PRIVATE
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::Svg
@@ -121,6 +121,12 @@ PRIVATE
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.94.0)
     target_link_libraries(KF5Plasma PUBLIC KF5::Service) # For kplugininfo.h and kservice.h
+endif()
+if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
+   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.100.0)
+    target_link_libraries(KF5Plasma PUBLIC KF5::Package)
+else()
+    target_link_libraries(KF5Plasma PRIVATE KF5::Package)
 endif()
 
 set(Plasma_BUILD_INCLUDE_DIRS

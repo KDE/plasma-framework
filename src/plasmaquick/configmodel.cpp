@@ -20,6 +20,7 @@
 #include <QQuickItem>
 
 #include <KLocalizedString>
+#include <KPackage/Package>
 #include <KQuickAddons/ConfigModule>
 #include <kdeclarative/kdeclarative.h>
 

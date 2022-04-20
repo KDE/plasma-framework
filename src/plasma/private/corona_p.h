@@ -12,6 +12,7 @@
 #include <KActionCollection>
 
 #include "package.h"
+#include <KPackage/Package>
 
 namespace Plasma
 {

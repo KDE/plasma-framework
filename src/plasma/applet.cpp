@@ -26,6 +26,7 @@
 #include <KDesktopFile>
 #include <KGlobalAccel>
 #include <KLocalizedString>
+#include <KPackage/Package>
 #include <KService>
 #include <KWindowSystem>
 

@@ -22,7 +22,14 @@
 #include <plasma/framesvg.h>
 #include <plasma/plasma.h>
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
 #include <KPackage/Package>
+#else
+namespace KPackage
+{
+class Package;
+}
+#endif
 #include <KPluginFactory>
 
 class KActionCollection;

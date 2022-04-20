@@ -27,6 +27,7 @@
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIconTheme>
+#include <KPackage/Package>
 #include <QDebug>
 
 #include "applet.h"
