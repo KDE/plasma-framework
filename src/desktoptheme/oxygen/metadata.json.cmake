@@ -22,6 +22,7 @@
         "Description[ca]": "Tema fet en l'estil Oxygen",
         "Description[es]": "Tema realizado al estilo de Oxígeno",
         "Description[eu]": "Oxygen-en estilora egindako gaia",
+        "Description[fr]": "Thème réalisé selon un thème « Oxygen »",
         "Description[nl]": "Thema in Oxygen-stijl",
         "Description[sl]": "Teme izdelana v slogu Kisika",
         "Description[tr]": "Oksijen tarzında yapılmış tema",
