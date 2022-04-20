@@ -1237,11 +1237,7 @@ bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
         if (!KWindowSystem::isPlatformWayland() || !isExposed()) {
-            auto ret = QQuickWindow::event(event);
-            if (d->mainItem) {
-                d->syncToMainItemSize();
-            }
-            return ret;
+            return QQuickWindow::event(event);
         }
 
         /*
