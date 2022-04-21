@@ -9,10 +9,13 @@
                 "Name[es]": "Marco Martin",
                 "Name[eu]": "Marco Martin",
                 "Name[fr]": "Marco Martin",
+                "Name[it]": "Marco Martin",
                 "Name[nl]": "Marco Martin",
+                "Name[pt]": "Marco Martin",
                 "Name[sl]": "Marco Martin",
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
+                "Name[vi]": "Marco Martin",
                 "Name[x-test]": "xxMarco Martinxx"
             }
         ],
@@ -25,10 +28,12 @@
         "Name[es]": "Prueba de miniaplicación",
         "Name[eu]": "Aplikaziotxo-proba",
         "Name[fr]": "Test d'applets",
+        "Name[it]": "Prova applet",
         "Name[nl]": "Test van applet",
         "Name[sl]": "Preizkus appleta",
         "Name[tr]": "Uygulamacık Sınaması",
         "Name[uk]": "Тест аплету",
+        "Name[vi]": "Kiểm thử tiểu ứng dụng",
         "Name[x-test]": "xxApplet Testxx",
         "ServiceTypes": [
             "Plasma/Applet"

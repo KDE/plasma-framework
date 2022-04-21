@@ -9,10 +9,12 @@
                 "Name[es]": "%{AUTHOR}",
                 "Name[eu]": "%{AUTHOR}",
                 "Name[fr]": "%{AUTHOR}",
+                "Name[it]": "%{AUTHOR}",
                 "Name[nl]": "%{AUTHOR}",
                 "Name[sl]": "%{AUTHOR}",
                 "Name[tr]": "%{AUTHOR}",
                 "Name[uk]": "%{AUTHOR}",
+                "Name[vi]": "%{AUTHOR}",
                 "Name[x-test]": "xx%{AUTHOR}xx"
             }
         ],
@@ -26,10 +28,12 @@
         "Name[es]": "%{APPNAME}",
         "Name[eu]": "%{APPNAME}",
         "Name[fr]": "%{APPNAME}",
+        "Name[it]": "%{APPNAME}",
         "Name[nl]": "%{APPNAME}",
         "Name[sl]": "%{APPNAME}",
         "Name[tr]": "%{APPNAME}",
         "Name[uk]": "%{APPNAME}",
+        "Name[vi]": "%{APPNAME}",
         "Name[x-test]": "xx%{APPNAME}xx",
         "ServiceTypes": [
             "Plasma/Wallpaper"

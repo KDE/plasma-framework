@@ -9,10 +9,13 @@
                 "Name[es]": "Marco Martin",
                 "Name[eu]": "Marco Martin",
                 "Name[fr]": "Marco Martin",
+                "Name[it]": "Marco Martin",
                 "Name[nl]": "Marco Martin",
+                "Name[pt]": "Marco Martin",
                 "Name[sl]": "Marco Martin",
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
+                "Name[vi]": "Marco Martin",
                 "Name[x-test]": "xxMarco Martinxx"
             }
         ],
@@ -25,10 +28,12 @@
         "Name[es]": "Prueba de configuración",
         "Name[eu]": "Konfigurazio-proba",
         "Name[fr]": "Test de configuration",
+        "Name[it]": "Prova di configurazione",
         "Name[nl]": "Test van instellingen",
         "Name[sl]": "Preizkus konfiguracije",
         "Name[tr]": "Yapılandırma Sınaması",
         "Name[uk]": "Перевірка налаштувань",
+        "Name[vi]": "Kiểm thử cấu hình",
         "Name[x-test]": "xxConfiguration testxx",
         "ServiceTypes": [
             "Plasma/Applet"

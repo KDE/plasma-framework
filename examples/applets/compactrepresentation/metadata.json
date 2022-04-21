@@ -9,10 +9,13 @@
                 "Name[es]": "Marco Martin",
                 "Name[eu]": "Marco Martin",
                 "Name[fr]": "Marco Martin",
+                "Name[it]": "Marco Martin",
                 "Name[nl]": "Marco Martin",
+                "Name[pt]": "Marco Martin",
                 "Name[sl]": "Marco Martin",
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
+                "Name[vi]": "Marco Martin",
                 "Name[x-test]": "xxMarco Martinxx"
             }
         ],
@@ -27,10 +30,12 @@
         "Name[es]": "hola mundo",
         "Name[eu]": "kaixo mundua",
         "Name[fr]": "Bonjour à tout le monde",
+        "Name[it]": "ciao mondo",
         "Name[nl]": "hallo wereld",
         "Name[sl]": "pozdravljen svet",
         "Name[tr]": "merhaba dünya",
         "Name[uk]": "Привіт, світе",
+        "Name[vi]": "chào thế giới",
         "Name[x-test]": "xxhello worldxx",
         "ServiceTypes": [
             "Plasma/Applet"

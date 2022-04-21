@@ -9,10 +9,12 @@
                 "Name[es]": "Alexis Menard",
                 "Name[eu]": "Alexis Menard",
                 "Name[fr]": "Alexis Menard",
+                "Name[it]": "Alexis Menard",
                 "Name[nl]": "Alexis Menard",
                 "Name[sl]": "Alexis Menard",
                 "Name[tr]": "Alexis Menard",
                 "Name[uk]": "Alexis Menard",
+                "Name[vi]": "Alexis Menard",
                 "Name[x-test]": "xxAlexis Menardxx"
             }
         ],
@@ -22,10 +24,12 @@
         "Description[ca]": "Giny nadiu del Plasma escrit en QML i JavaScript",
         "Description[es]": "Widget nativo de Plasma escrito en QML y JavaScript",
         "Description[eu]": "Jatorriz Plasmako trepeta QML eta JabaScript-ekin idatzia",
+        "Description[it]": "Widget nativo di Plasma scritto in QML e JavaScript",
         "Description[nl]": "Hier thuishorend Plasma-widget geschreven in QML en JavaScript",
         "Description[sl]": "Domorodni Plasmin gradnik napisan v QML in JavaScriptu",
         "Description[tr]": "QML ve JavaScript ile yazılmış yerel Plasma araç takımı",
         "Description[uk]": "Віджет Плазми, написаний на QML та JavaScript",
+        "Description[vi]": "Phụ kiện nội Plasma viết bằng QML và JavaScript",
         "Description[x-test]": "xxNative Plasma widget written in QML and JavaScriptxx",
         "EnabledByDefault": true,
         "Icon": "text-x-script",
@@ -37,10 +41,12 @@
         "Name[es]": "Widget declarativo",
         "Name[eu]": "Trepeta deklaratzailea",
         "Name[fr]": "Composant graphique déclaratif",
+        "Name[it]": "Oggetto dichiarativo",
         "Name[nl]": "Widget voor declaratie",
         "Name[sl]": "Deklarativni gradnik",
         "Name[tr]": "Bildirimsel araç takımları",
         "Name[uk]": "Декларативний віджет",
+        "Name[vi]": "Phụ kiện khai báo",
         "Name[x-test]": "xxDeclarative widgetxx",
         "ServiceTypes": [
             "Plasma/ScriptEngine"

@@ -9,10 +9,13 @@
                 "Name[es]": "Marco Martin",
                 "Name[eu]": "Marco Martin",
                 "Name[fr]": "Marco Martin",
+                "Name[it]": "Marco Martin",
                 "Name[nl]": "Marco Martin",
+                "Name[pt]": "Marco Martin",
                 "Name[sl]": "Marco Martin",
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
+                "Name[vi]": "Marco Martin",
                 "Name[x-test]": "xxMarco Martinxx"
             }
         ],
@@ -25,11 +28,13 @@
         "Name[es]": "Prueba de contenedor",
         "Name[eu]": "Konfinamendu-proba",
         "Name[fr]": "Test de confinement",
+        "Name[it]": "Prova del contenitore",
         "Name[nl]": "Test van container",
         "Name[sl]": "Preizkus vsebnikov",
         "Name[sv]": "Omgivningstest",
         "Name[tr]": "Kapsama Sınaması",
         "Name[uk]": "Перевірка контейнера",
+        "Name[vi]": "Kiểm thử việc bao chứa",
         "Name[x-test]": "xxContainment Testxx",
         "ServiceTypes": [
             "Plasma/Applet",

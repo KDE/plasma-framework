@@ -9,10 +9,13 @@
                 "Name[es]": "Sebastian Kügler",
                 "Name[eu]": "Sebastian Kügler",
                 "Name[fr]": "Sebastian Kügler",
+                "Name[it]": "Sebastian Kügler",
                 "Name[nl]": "Sebastian Kügler",
+                "Name[pt]": "Sebastian Kügler",
                 "Name[sl]": "Sebastian Kügler",
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
+                "Name[vi]": "Sebastian Kügler",
                 "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
@@ -26,10 +29,12 @@
         "Name[es]": "Prueba de componentes",
         "Name[eu]": "Osagaien proba",
         "Name[fr]": "Test de composants",
+        "Name[it]": "Prova dei componenti",
         "Name[nl]": "Test van componenten",
         "Name[sl]": "Preizkus komponent",
         "Name[tr]": "Bileşenler Sınaması",
         "Name[uk]": "Тестування компонентів",
+        "Name[vi]": "Kiểm thử các thành phần",
         "Name[x-test]": "xxComponents Testxx",
         "ServiceTypes": [
             "Plasma/Applet"

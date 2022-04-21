@@ -9,10 +9,13 @@
                 "Name[es]": "Sebastian Kügler",
                 "Name[eu]": "Sebastian Kügler",
                 "Name[fr]": "Sebastian Kügler",
+                "Name[it]": "Sebastian Kügler",
                 "Name[nl]": "Sebastian Kügler",
+                "Name[pt]": "Sebastian Kügler",
                 "Name[sl]": "Sebastian Kügler",
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
+                "Name[vi]": "Sebastian Kügler",
                 "Name[x-test]": "xxSebastian Küglerxx"
             }
         ],
@@ -26,10 +29,12 @@
         "Name[es]": "Prueba de tema",
         "Name[eu]": "Gai-proba",
         "Name[fr]": "Test de thème",
+        "Name[it]": "Prova del tema",
         "Name[nl]": "Test van thema",
         "Name[sl]": "Preizkus teme",
         "Name[tr]": "Tema Sınaması",
         "Name[uk]": "Тестування теми",
+        "Name[vi]": "Kiểm thử chủ đề",
         "Name[x-test]": "xxTheme Testxx",
         "ServiceTypes": [
             "Plasma/Applet"
