@@ -800,8 +800,7 @@ void ContainmentInterface::loadWallpaper()
 
         m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
     } else if (m_wallpaperInterface && m_containment->wallpaper().isEmpty()) {
-        m_wallpaperInterface->deleteLater();
-        m_wallpaperInterface = nullptr;
+        deleteWallpaperInterface();
     }
 
     Q_EMIT wallpaperInterfaceChanged();
@@ -1165,13 +1164,19 @@ void ContainmentInterface::itemChange(ItemChange change, const ItemChangeData &v
         if (value.window && !m_containment->wallpaper().isEmpty()) {
             loadWallpaper();
         } else if (m_wallpaperInterface) {
-            m_wallpaperInterface->deleteLater();
-            m_wallpaperInterface = nullptr;
+            deleteWallpaperInterface();
             Q_EMIT wallpaperInterfaceChanged();
         }
     }
 
     AppletInterface::itemChange(change, value);
+}
+
+void ContainmentInterface::deleteWallpaperInterface()
+{
+    m_containment->setProperty("wallpaperGraphicsObject", QVariant());
+    m_wallpaperInterface->deleteLater();
+    m_wallpaperInterface = nullptr;
 }
 
 
