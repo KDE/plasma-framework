@@ -16,7 +16,8 @@
                 "Name[tr]": "KDE Görsel Tasarım Grubu",
                 "Name[uk]": "Група з візуального дизайну KDE",
                 "Name[vi]": "Đội Thiết kế Trực quan KDE",
-                "Name[x-test]": "xxKDE Visual Design Groupxx"
+                "Name[x-test]": "xxKDE Visual Design Groupxx",
+                "Name[zh_CN]": "KDE 视觉设计团队"
             }
         ],
         "Category": "",
@@ -34,6 +35,7 @@
         "Description[uk]": "Темна Breeze, автори — KDE VDG",
         "Description[vi]": "Breeze Tối, do KDE VDG",
         "Description[x-test]": "xxBreeze Dark by the KDE VDGxx",
+        "Description[zh_CN]": "Breeze 微风深色主题，由 KDE VDG (视觉设计团队) 设计制作",
         "EnabledByDefault": true,
         "Id": "breeze-dark",
         "License": "LGPL",
@@ -51,6 +53,7 @@
         "Name[uk]": "Темна Breeze",
         "Name[vi]": "Breeze Tối",
         "Name[x-test]": "xxBreeze Darkxx",
+        "Name[zh_CN]": "Breeze 微风深色",
         "Version": "@KF_VERSION@",
         "Website": "https://plasma.kde.org"
     },

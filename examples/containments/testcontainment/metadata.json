@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "",
@@ -30,12 +31,14 @@
         "Name[fr]": "Test de confinement",
         "Name[it]": "Prova del contenitore",
         "Name[nl]": "Test van container",
+        "Name[pt]": "Teste do Contentor",
         "Name[sl]": "Preizkus vsebnikov",
         "Name[sv]": "Omgivningstest",
         "Name[tr]": "Kapsama Sınaması",
         "Name[uk]": "Перевірка контейнера",
         "Name[vi]": "Kiểm thử việc bao chứa",
         "Name[x-test]": "xxContainment Testxx",
+        "Name[zh_CN]": "容器测试",
         "ServiceTypes": [
             "Plasma/Applet",
             "Plasma/Containment"

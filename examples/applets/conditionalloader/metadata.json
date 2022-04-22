@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "",
@@ -30,11 +31,13 @@
         "Name[fr]": "Test d'applets",
         "Name[it]": "Prova applet",
         "Name[nl]": "Test van applet",
+        "Name[pt]": "Teste de elemento",
         "Name[sl]": "Preizkus appleta",
         "Name[tr]": "Uygulamacık Sınaması",
         "Name[uk]": "Тест аплету",
         "Name[vi]": "Kiểm thử tiểu ứng dụng",
         "Name[x-test]": "xxApplet Testxx",
+        "Name[zh_CN]": "小部件测试",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

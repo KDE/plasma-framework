@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "Miscellaneous",
@@ -32,11 +33,13 @@
         "Name[fr]": "Bonjour à tout le monde",
         "Name[it]": "ciao mondo",
         "Name[nl]": "hallo wereld",
+        "Name[pt]": "olá mundo",
         "Name[sl]": "pozdravljen svet",
         "Name[tr]": "merhaba dünya",
         "Name[uk]": "Привіт, світе",
         "Name[vi]": "chào thế giới",
         "Name[x-test]": "xxhello worldxx",
+        "Name[zh_CN]": "hello world",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

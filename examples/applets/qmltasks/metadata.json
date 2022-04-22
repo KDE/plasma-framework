@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "Windows and Tasks",
@@ -25,13 +26,16 @@
         "Description[ca]": "Exemple que mostra com escriure el vostre propi giny de tasques",
         "Description[es]": "Ejemplo que muestra cómo escribir un widget de tareas personalizado",
         "Description[eu]": "Zure ataza propioen trepeta nola idatzi erakusten duen adibidea",
+        "Description[fr]": "Exemple montrant comment écrire vos propres tâches de composants graphiques",
         "Description[it]": "Esempio che mostra come scrivere il proprio widget",
         "Description[nl]": "Voorbeeld die toont hoe u uw eigen taak-widget schrijft",
+        "Description[pt]": "Exemplo que mostra como criar o seu próprio elemento de Tarefas",
         "Description[sl]": "Primer prikaza kako napisati vaš lastni gradnik dejavnosti",
         "Description[tr]": "Kendi görevler araç takımınızı nice yazabileceğiniz üzerine örnek",
         "Description[uk]": "Приклад, який демонструє створення власного віджета задач",
         "Description[vi]": "Ví dụ cho thấy cách viết Phụ kiện tác vụ của riêng bạn",
         "Description[x-test]": "xxExample showing how to write your own tasks Widgetxx",
+        "Description[zh_CN]": "展示如何实现您自己的任务栏小部件的示例程序",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.tasks",
         "License": "GPL",
@@ -40,13 +44,16 @@
         "Name[ca]": "Tasques senzilles",
         "Name[es]": "Tareas del hombre pobre",
         "Name[eu]": "Gizon txiroaren atazak",
+        "Name[fr]": "Tâches de l'homme pauvre",
         "Name[it]": "Operazioni semplici",
         "Name[nl]": "Taken van 'Poor Man'",
+        "Name[pt]": "Tarefas Simplificadas",
         "Name[sl]": "Naloge revnega moža",
         "Name[tr]": "Yoksul Adamın Görevleri",
         "Name[uk]": "Задачі для початківців",
         "Name[vi]": "Tác vụ của người đàn ông nghèo",
         "Name[x-test]": "xxPoor Man's Tasksxx",
+        "Name[zh_CN]": "简易版任务栏控件",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

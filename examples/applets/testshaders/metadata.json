@@ -16,7 +16,8 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
-                "Name[x-test]": "xxSebastian Küglerxx"
+                "Name[x-test]": "xxSebastian Küglerxx",
+                "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
         "Category": "Graphics",
@@ -25,13 +26,16 @@
         "Description[ca]": "Jugant amb els efectes visuals",
         "Description[es]": "Jugando con efectos visuales",
         "Description[eu]": "Denbora xahutu ikus-efektuekin",
+        "Description[fr]": "Les effets visuels à la louche",
         "Description[it]": "Divertirsi con gli effetti visuali",
         "Description[nl]": "Tijd verspillen met visuele effecten",
+        "Description[pt]": "Brincar com Efeitos Visuais",
         "Description[sl]": "Preigravanje z vizualnimi učinki",
         "Description[tr]": "Görsel Efektlerle Oynaşma",
         "Description[uk]": "Маніпулювання візуальними ефектами",
         "Description[vi]": "Thử các hiệu ứng trực quan",
         "Description[x-test]": "xxFutzing with Visual Effectsxx",
+        "Description[zh_CN]": "测试各种视觉效果",
         "Icon": "plasma",
         "Id": "org.kde.example.testshaders",
         "License": "GPLv2+",
@@ -43,11 +47,13 @@
         "Name[fr]": "Test de shader",
         "Name[it]": "Prova shader",
         "Name[nl]": "Test van schaduw",
+        "Name[pt]": "Teste de Sombreado",
         "Name[sl]": "Preizkus osenčevalnika",
         "Name[tr]": "Gölgelendirici Sınaması",
         "Name[uk]": "Тестування підпрограм побудови тіней",
         "Name[vi]": "Kiểm thử trình đánh bóng",
         "Name[x-test]": "xxShader Testxx",
+        "Name[zh_CN]": "着色器测试",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

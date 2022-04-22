@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "Miscellaneous",
@@ -25,13 +26,16 @@
         "Description[ca]": "Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»",
         "Description[es]": "Miniaplicación de ejemplo que muestra cómo usar modelos integrados en motores de datos",
         "Description[eu]": "Adibide aplikaziotxoa, «DataEngine»etan kapsulatutako modeloak nola erabili erakusten duena",
+        "Description[fr]": "Exemple d'applet montrant comment utiliser les modèles intégrés des moteurs de données",
         "Description[it]": "Applet di esempio che mostra come utilizzare i modelli integrati nei motori di dati",
         "Description[nl]": "Voorbeeld van applet dat toont hoe modellen ingebed in gegevensengines zijn te gebruiken",
+        "Description[pt]": "Elemento de exemplo que mostra como usar os Models incorporados nos DataEngines",
         "Description[sl]": "Primer apleta, ki kaže kako uporabljati modele vgrajene v podatkovne stroje",
         "Description[tr]": "DataEngines içinde gömülü modellerin nice kullanılacağını gösteren örnek uygulama",
         "Description[uk]": "Приклад аплету, який демонструє використання моделей, вбудованих до рушіїв даних",
         "Description[vi]": "Tiểu ứng dụng ví dụ cho thấy cách dùng các Model trong DataEngine",
         "Description[x-test]": "xxExample applet that shows how to use Models embedded in DataEnginesxx",
+        "Description[zh_CN]": "展示如何使用数据引擎内嵌的模型的示例小部件",
         "Icon": "",
         "Id": "org.kde.example.dataenginemodel",
         "License": "GPL",
@@ -43,12 +47,14 @@
         "Name[fr]": "Modèle de moteur de données",
         "Name[it]": "Modello del motore di dati",
         "Name[nl]": "Model van gegevensengine",
+        "Name[pt]": "Modelo de DataEngine",
         "Name[sl]": "Model podatkovnega stroja",
         "Name[sv]": "Datagränssnittsmodell",
         "Name[tr]": "Veri motoru modeli",
         "Name[uk]": "Модель рушія даних",
         "Name[vi]": "Model Dataengine",
         "Name[x-test]": "xxDataengine modelxx",
+        "Name[zh_CN]": "数据引擎模型",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

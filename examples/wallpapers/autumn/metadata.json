@@ -16,7 +16,8 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
-                "Name[x-test]": "xxSebastian Küglerxx"
+                "Name[x-test]": "xxSebastian Küglerxx",
+                "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
         "Category": "",
@@ -31,11 +32,13 @@
         "Name[fr]": "Automne",
         "Name[it]": "Autunno",
         "Name[nl]": "Herfst",
+        "Name[pt]": "Outono",
         "Name[sl]": "Jesen",
         "Name[tr]": "Güz",
         "Name[uk]": "Осінь",
         "Name[vi]": "Mùa thu",
         "Name[x-test]": "xxAutumnxx",
+        "Name[zh_CN]": "Autumn 秋色",
         "ServiceTypes": [
             "Plasma/Wallpaper"
         ],

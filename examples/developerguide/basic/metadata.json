@@ -16,7 +16,8 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
-                "Name[x-test]": "xxSebastian Küglerxx"
+                "Name[x-test]": "xxSebastian Küglerxx",
+                "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
         "Category": "Development",
@@ -28,11 +29,13 @@
         "Description[fr]": "Application de base",
         "Description[it]": "Applicazione di base",
         "Description[nl]": "Basis app",
+        "Description[pt]": "Aplicação Básica",
         "Description[sl]": "Osnovna aplikacija",
         "Description[tr]": "Yalın Uygulama",
         "Description[uk]": "Базова програма",
         "Description[vi]": "Ứng dụng cơ bản",
         "Description[x-test]": "xxBasic Appxx",
+        "Description[zh_CN]": "基本应用程序",
         "Icon": "kbugbuster",
         "Id": "org.kde.example.developerguide.basic",
         "License": "LGPLv2+",
@@ -50,6 +53,7 @@
         "Name[uk]": "Вада",
         "Name[vi]": "Lỗi",
         "Name[x-test]": "xxBugxx",
+        "Name[zh_CN]": "程序缺陷",
         "ServiceTypes": [
             "KPackage/GenericQML"
         ],

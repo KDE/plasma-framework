@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "Examples",
@@ -25,13 +26,16 @@
         "Description[ca]": "Galeria de ginys fets amb el «QtComponents» del Plasma",
         "Description[es]": "Galería de widgets realizada con QtComponents de Plasma",
         "Description[eu]": "Plasmaren «QtComponents» erabiliz egindako trepeta-galeria",
+        "Description[fr]": "galerie de composants graphiques, réalisées avec les composants Qt de Plasma",
         "Description[it]": "galleria di widget realizzata con Plasma QtComponents",
         "Description[nl]": "galerij van widgets gemaakt met Plasma QtComponents",
+        "Description[pt]": "galeria de elementos criados com os QtComponents do Plasma",
         "Description[sl]": "galerija gradnikov izdelanih s Plasma QtComponents",
         "Description[tr]": "Plasma QtComponents ile yapılmış araç takımları galerisi",
         "Description[uk]": "Галерея віджетів, створених за допомогою QtComponent-ів Плазми",
         "Description[vi]": "nơi trưng bày các phụ kiện làm bằng QtComponents của Plasma",
         "Description[x-test]": "xxgallery of widgets done with Plasma QtComponentsxx",
+        "Description[zh_CN]": "通过 Plasma Qt 部件实现的小部件展厅",
         "EnabledByDefault": true,
         "Icon": "preferences-desktop-theme",
         "Id": "org.kde.example.widgetgallery",
@@ -44,11 +48,13 @@
         "Name[fr]": "Galerie de composants graphiques",
         "Name[it]": "Galleria dei widget",
         "Name[nl]": "Galerij van widgets",
+        "Name[pt]": "Galeria de elementos",
         "Name[sl]": "Galerija gradnikov",
         "Name[tr]": "Araç takımları galerisi",
         "Name[uk]": "Галерея віджетів",
         "Name[vi]": "Bộ sưu tập phụ kiện",
         "Name[x-test]": "xxWidgets galleryxx",
+        "Name[zh_CN]": "小部件展厅",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

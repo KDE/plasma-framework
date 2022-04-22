@@ -16,7 +16,8 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx"
+                "Name[x-test]": "xxMarco Martinxx",
+                "Name[zh_CN]": "Marco Martin"
             }
         ],
         "Category": "Windows and Tasks",
@@ -25,13 +26,16 @@
         "Description[ca]": "Exemple que mostra com visualitzar miniatures de les finestres",
         "Description[es]": "Ejemplo que enseña cómo mostrar miniaturas de ventanas",
         "Description[eu]": "Leihoen koadro-txikiak nola azaldu erakusten duen adibidea",
+        "Description[fr]": "Exemple montrant comment afficher les vignettes de fenêtres",
         "Description[it]": "Esempio che mostra come visualizzare le miniature delle finestre",
         "Description[nl]": "Voorbeeld van hoe miniaturen van vensters te tonen",
+        "Description[pt]": "Exemplo que mostra como apresentar miniaturas de janelas",
         "Description[sl]": "Primer, ki prikazuje kako prikazati predogledne sličice okna",
         "Description[tr]": "Pencere küçük görsellerinin nice gösterileceğini anlatan örnek",
         "Description[uk]": "Приклад, який демонструє показ мініатюр вікон",
         "Description[vi]": "Ví dụ cho thấy cách hiển thị hình nhỏ của cửa sổ",
         "Description[x-test]": "xxExample showing how to display window thumbnailsxx",
+        "Description[zh_CN]": "窗口缩略图显示示例",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.windowthumbnails",
         "License": "GPL",
@@ -43,11 +47,13 @@
         "Name[fr]": "Exemple de liste de vignettes de fenêtres",
         "Name[it]": "Esempio di elenco di miniature delle finestre",
         "Name[nl]": "Voorbeeld van lijst met miniaturen van vensters",
+        "Name[pt]": "Lista de exemplo de miniaturas das janelas",
         "Name[sl]": "Seznam predoglednih sličic okna primera",
         "Name[tr]": "Örnek pencere küçük görseller listesi",
         "Name[uk]": "Приклад списку мініатюр вікон",
         "Name[vi]": "Danh sách ví dụ các hình nhỏ của cửa sổ",
         "Name[x-test]": "xxExample window thumbnails listxx",
+        "Name[zh_CN]": "窗口缩略图列表示例",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

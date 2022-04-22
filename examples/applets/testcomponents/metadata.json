@@ -16,7 +16,8 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
-                "Name[x-test]": "xxSebastian Küglerxx"
+                "Name[x-test]": "xxSebastian Küglerxx",
+                "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
         "Category": "Development Tools",
@@ -31,11 +32,13 @@
         "Name[fr]": "Test de composants",
         "Name[it]": "Prova dei componenti",
         "Name[nl]": "Test van componenten",
+        "Name[pt]": "Teste de Componentes",
         "Name[sl]": "Preizkus komponent",
         "Name[tr]": "Bileşenler Sınaması",
         "Name[uk]": "Тестування компонентів",
         "Name[vi]": "Kiểm thử các thành phần",
         "Name[x-test]": "xxComponents Testxx",
+        "Name[zh_CN]": "组件测试",
         "ServiceTypes": [
             "Plasma/Applet"
         ],
