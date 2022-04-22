@@ -89,6 +89,7 @@ Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
     void isLoadingChanged();
+    void repaintNeeded();
 
 private Q_SLOTS:
     void syncWallpaperPackage();
