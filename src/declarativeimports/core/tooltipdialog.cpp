@@ -20,7 +20,6 @@ ToolTipDialog::ToolTipDialog(QQuickItem *parent)
     , m_qmlObject(nullptr)
     , m_hideTimeout(4000)
     , m_interactive(false)
-    , m_extendTimeoutFlag(m_extendTimeoutFlags::None)
     , m_owner(nullptr)
 {
     setLocation(Plasma::Types::Floating);
@@ -79,29 +78,12 @@ void ToolTipDialog::resizeEvent(QResizeEvent *re)
 
 bool ToolTipDialog::event(QEvent *e)
 {
-    switch (e->type())
-    {
-    case QEvent::Enter:
+    if (e->type() == QEvent::Enter) {
         if (m_interactive) {
             m_showTimer->stop();
         }
-        break;
-    case QEvent::Leave:
-        if (m_extendTimeoutFlag == (m_extendTimeoutFlags::Resized | m_extendTimeoutFlags::Moved)) { 
-            keepalive(); // HACK: prevent tooltips from being incorrectly dismissed (BUG439522)
-        } else {
-            dismiss();
-        }
-        m_extendTimeoutFlag = m_extendTimeoutFlags::None;
-        break;
-    case QEvent::Resize:
-        m_extendTimeoutFlag = m_extendTimeoutFlags::Resized;
-        break;
-    case QEvent::Move:
-        m_extendTimeoutFlag |= m_extendTimeoutFlags::Moved;
-        break;
-    case QEvent::MouseMove:
-        m_extendTimeoutFlag = m_extendTimeoutFlags::None;
+    } else if (e->type() == QEvent::Leave) {
+        dismiss();
     }
 
     bool ret = Dialog::event(e);

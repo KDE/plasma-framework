@@ -62,15 +62,6 @@ private:
     QTimer *m_showTimer;
     int m_hideTimeout;
     bool m_interactive;
-    /**
-     * HACK: prevent tooltips from being incorrectly dismissed (BUG439522)
-     */
-    enum m_extendTimeoutFlags {
-        None = 0x0,
-        Resized = 0x1,
-        Moved = 0x2,
-    };
-    int m_extendTimeoutFlag;
     QObject *m_owner;
 };
 
