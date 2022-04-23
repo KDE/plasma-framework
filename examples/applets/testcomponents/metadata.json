@@ -4,6 +4,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[az]": "Sebastian Kügler",
                 "Name[ca@valencia]": "Sebastian Kügler",
                 "Name[ca]": "Sebastian Kügler",
                 "Name[es]": "Sebastian Kügler",
@@ -25,6 +26,7 @@
         "Id": "org.kde.example.testcomponents",
         "License": "GPLv2+",
         "Name": "Components Test",
+        "Name[az]": "Komponentlərin testləri",
         "Name[ca@valencia]": "Prova de components",
         "Name[ca]": "Prova de components",
         "Name[es]": "Prueba de componentes",

@@ -4,6 +4,7 @@
             {
                 "Email": "notmart@gmail.com",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Examples",
         "Description": "The Same game QML Qt demo converted as plasmoid",
+        "Description[az]": "Same oyunu QML-də Plasma vidjeti formasında",
         "Description[ca@valencia]": "La demo Qt en QML del joc Same convertit com a plasmoide",
         "Description[ca]": "La demo Qt en QML del joc Same convertit com a plasmoide",
         "Description[es]": "La demostración del juego «iguales» de Qt en QML convertida en plasmoide",
@@ -41,6 +43,7 @@
         "Id": "org.kde.samegame-qml",
         "License": "GPL",
         "Name": "Same game (QML)",
+        "Name[az]": "Same oyunu (QML)",
         "Name[ca@valencia]": "Joc Same (QML)",
         "Name[ca]": "Joc Same (QML)",
         "Name[es]": "Juego iguales (QML)",

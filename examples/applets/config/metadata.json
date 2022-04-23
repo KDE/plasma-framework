@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -24,6 +25,7 @@
         "Id": "org.kde.example.configuration",
         "License": "GPLv2+",
         "Name": "Configuration test",
+        "Name[az]": "Tənzimləmə testi",
         "Name[ca@valencia]": "Prova de configuració",
         "Name[ca]": "Prova de configuració",
         "Name[es]": "Prueba de configuración",

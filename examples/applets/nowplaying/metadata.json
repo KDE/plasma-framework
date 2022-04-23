@@ -4,6 +4,7 @@
             {
                 "Email": "notmart@gmail.com",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Examples",
         "Description": "A proof of concept media player controller qml",
+        "Description[az]": "QML -dəki media pleyerin idarə olunması interfeysi nümunələri",
         "Description[ca@valencia]": "Una prova del concepte de controlador en QML d'un reproductor multimèdia",
         "Description[ca]": "Una prova del concepte de controlador en QML d'un reproductor multimèdia",
         "Description[es]": "Una prueba de concepto de controlador de reproductor multimedia en QML",
@@ -41,6 +43,7 @@
         "Id": "org.kde.nowplaying-qml",
         "License": "GPL",
         "Name": "Now playing (QML)",
+        "Name[az]": "İndi oynadılan (QML)",
         "Name[ca@valencia]": "Ara està en reproducció (QML)",
         "Name[ca]": "Ara està en reproducció (QML)",
         "Name[es]": "Reproduciendo (QML)",

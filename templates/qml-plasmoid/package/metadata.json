@@ -4,6 +4,7 @@
             {
                 "Email": "%{EMAIL}",
                 "Name": "%{AUTHOR}",
+                "Name[az]": "%{MÜƏLLİF}",
                 "Name[ca@valencia]": "%{AUTHOR}",
                 "Name[ca]": "%{AUTHOR}",
                 "Name[es]": "%{AUTHOR}",
@@ -22,6 +23,7 @@
         ],
         "Category": "Utilities",
         "Description": "what your app does in a few words",
+        "Description[az]": "Bu proqramın nə işə yaradığı haqqında bir neçə söz",
         "Description[ca@valencia]": "Què fa esta aplicació en poques paraules",
         "Description[ca]": "Què fa aquesta aplicació en poques paraules",
         "Description[es]": "Lo que hace su aplicación en pocas palabras",
@@ -41,6 +43,7 @@
         "Id": "org.kde.plasma.%{APPNAMELC}",
         "License": "LGPL-2.1+",
         "Name": "%{APPNAME}",
+        "Name[az]": "%{TƏTBİQ_ADI}",
         "Name[ca@valencia]": "%{APPNAME}",
         "Name[ca]": "%{APPNAME}",
         "Name[es]": "%{APPNAME}",

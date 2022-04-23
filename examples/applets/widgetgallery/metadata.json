@@ -4,6 +4,7 @@
             {
                 "Email": "notmart@gmail.com",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Examples",
         "Description": "gallery of widgets done with Plasma QtComponents",
+        "Description[az]": "Plasmada QtComponents köməyi ilə reallaşan vidjetlər qalareyası",
         "Description[ca@valencia]": "Galeria de ginys fets amb «QtComponents» de Plasma",
         "Description[ca]": "Galeria de ginys fets amb el «QtComponents» del Plasma",
         "Description[es]": "Galería de widgets realizada con QtComponents de Plasma",
@@ -41,6 +43,7 @@
         "Id": "org.kde.example.widgetgallery",
         "License": "GPL",
         "Name": "Widgets gallery",
+        "Name[az]": "Vidjetlər qalareyası",
         "Name[ca@valencia]": "Galeria de ginys",
         "Name[ca]": "Galeria de ginys",
         "Name[es]": "Galería de widgets",

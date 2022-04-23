@@ -4,6 +4,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[az]": "Sebastian Kügler",
                 "Name[ca@valencia]": "Sebastian Kügler",
                 "Name[ca]": "Sebastian Kügler",
                 "Name[es]": "Sebastian Kügler",
@@ -22,6 +23,7 @@
         ],
         "Category": "Graphics",
         "Description": "Futzing with Visual Effects",
+        "Description[az]": "Vizual Effektlər nümunəsi",
         "Description[ca@valencia]": "Jugant amb els efectes visuals",
         "Description[ca]": "Jugant amb els efectes visuals",
         "Description[es]": "Jugando con efectos visuales",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.testshaders",
         "License": "GPLv2+",
         "Name": "Shader Test",
+        "Name[az]": "Şeyderin testi",
         "Name[ca@valencia]": "Prova de «shader»",
         "Name[ca]": "Prova de «shader»",
         "Name[es]": "Prueba de sombreado",

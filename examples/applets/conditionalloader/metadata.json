@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -24,6 +25,7 @@
         "Id": "org.kde.example.conditionalloader",
         "License": "GPLv2+",
         "Name": "Applet Test",
+        "Name[az]": "Test vidjeti",
         "Name[ca@valencia]": "Miniaplicació de prova",
         "Name[ca]": "Miniaplicació de prova",
         "Name[es]": "Prueba de miniaplicación",

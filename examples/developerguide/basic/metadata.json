@@ -4,6 +4,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[az]": "Sebastian Kügler",
                 "Name[ca@valencia]": "Sebastian Kügler",
                 "Name[ca]": "Sebastian Kügler",
                 "Name[es]": "Sebastian Kügler",
@@ -22,6 +23,7 @@
         ],
         "Category": "Development",
         "Description": "Basic App",
+        "Description[az]": "Əsas tətbiq",
         "Description[ca@valencia]": "Aplicació bàsica",
         "Description[ca]": "Aplicació bàsica",
         "Description[es]": "Aplicación básica",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.developerguide.basic",
         "License": "LGPLv2+",
         "Name": "Bug",
+        "Name[az]": "Xəta",
         "Name[ca@valencia]": "Error",
         "Name[ca]": "Error",
         "Name[es]": "Fallo",

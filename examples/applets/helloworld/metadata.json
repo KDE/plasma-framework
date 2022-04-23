@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -26,6 +27,7 @@
         "Id": "org.kde.example.helloworld",
         "License": "GPL",
         "Name": "hello world",
+        "Name[az]": "salam dünya",
         "Name[ca@valencia]": "hola món",
         "Name[ca]": "hola món",
         "Name[es]": "hola mundo",

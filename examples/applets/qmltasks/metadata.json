@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Windows and Tasks",
         "Description": "Example showing how to write your own tasks Widget",
+        "Description[az]": "Tapşırıqlar siyahısı ilə vidjet nümunələri",
         "Description[ca@valencia]": "Exemple que mostra com escriure el vostre propi giny de tasques",
         "Description[ca]": "Exemple que mostra com escriure el vostre propi giny de tasques",
         "Description[es]": "Ejemplo que muestra cómo escribir un widget de tareas personalizado",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.tasks",
         "License": "GPL",
         "Name": "Poor Man's Tasks",
+        "Name[az]": "\"Yoxsul adam\" tapşırıqları",
         "Name[ca@valencia]": "Tasques senzilles",
         "Name[ca]": "Tasques senzilles",
         "Name[es]": "Tareas del hombre pobre",

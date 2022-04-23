@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Miscellaneous",
         "Description": "Example on how to manage Drop data",
+        "Description[az]": "Daşınan elementlərlə işləmə nümunəsi",
         "Description[ca@valencia]": "Exemple de com gestionar dades «Drop»",
         "Description[ca]": "Exemple de com gestionar dades «Drop»",
         "Description[es]": "Ejemplo sobre cómo manejar datos soltados",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.notes",
         "License": "GPL",
         "Name": "Example notes",
+        "Name[az]": "Nümunə qeydlər",
         "Name[ca@valencia]": "Notes d'exemple",
         "Name[ca]": "Notes d'exemple",
         "Name[es]": "Notas de ejemplo",

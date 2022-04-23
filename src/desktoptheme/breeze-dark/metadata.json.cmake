@@ -4,6 +4,7 @@
             {
                 "Email": "kde-artists@kde.org",
                 "Name": "KDE Visual Design Group",
+                "Name[az]": "KDE Vizual Dizayn Qrupu",
                 "Name[ca@valencia]": "Grup de disseny visual de KDE",
                 "Name[ca]": "Grup de disseny visual de KDE",
                 "Name[es]": "El grupo de diseño visual de KDE",
@@ -22,6 +23,7 @@
         ],
         "Category": "",
         "Description": "Breeze Dark by the KDE VDG",
+        "Description[az]": "KDE VDG tərəfindən Breeze Qara",
         "Description[ca@valencia]": "Brisa fosca, creat pel VDG de KDE",
         "Description[ca]": "Brisa fosca, creat pel VDG del KDE",
         "Description[es]": "Brisa oscuro por KDE VDG",
@@ -40,6 +42,7 @@
         "Id": "breeze-dark",
         "License": "LGPL",
         "Name": "Breeze Dark",
+        "Name[az]": "Breeze Qara",
         "Name[ca@valencia]": "Brisa fosca",
         "Name[ca]": "Brisa fosca",
         "Name[es]": "Brisa oscuro",

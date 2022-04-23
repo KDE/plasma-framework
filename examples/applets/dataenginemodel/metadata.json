@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Miscellaneous",
         "Description": "Example applet that shows how to use Models embedded in DataEngines",
+        "Description[az]": "Plasma verilənlər mənbəyində quraşdırılmış modellərin işinin nümayişi üçün vidjet nümunələri",
         "Description[ca@valencia]": "Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»",
         "Description[ca]": "Miniaplicació de prova que mostra com usar Models incrustats en «DataEngines»",
         "Description[es]": "Miniaplicación de ejemplo que muestra cómo usar modelos integrados en motores de datos",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.dataenginemodel",
         "License": "GPL",
         "Name": "Dataengine model",
+        "Name[az]": "Verilənlər mənbəyi modeli",
         "Name[ca@valencia]": "Model de «Dataengine»",
         "Name[ca]": "Model de «Dataengine»",
         "Name[es]": "Modelo del motor de datos",

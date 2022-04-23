@@ -4,6 +4,7 @@
             {
                 "Email": "kde-artists@kde.org",
                 "Name": "KDE Visual Design Group",
+                "Name[az]": "KDE Vizual Dizayn Qrupu",
                 "Name[ca@valencia]": "Grup de disseny visual de KDE",
                 "Name[ca]": "Grup de disseny visual de KDE",
                 "Name[es]": "El grupo de diseño visual de KDE",
@@ -22,6 +23,7 @@
         ],
         "Category": "",
         "Description": "Breeze Light by the KDE VDG",
+        "Description[az]": "Breeze -İşıqlı - KDE VDG tərəfindən",
         "Description[ca@valencia]": "Brisa clara, creat pel VDG de KDE",
         "Description[ca]": "Brisa clara, creat pel VDG del KDE",
         "Description[es]": "Brisa claro por KDE VDG",
@@ -40,6 +42,7 @@
         "Id": "default",
         "License": "LGPL",
         "Name": "Breeze Light",
+        "Name[az]": "Breeze - İşıqlı",
         "Name[ca@valencia]": "Brisa clara",
         "Name[ca]": "Brisa clara",
         "Name[es]": "Brisa claro",

@@ -4,6 +4,7 @@
             {
                 "Email": "kde-artists@kde.org",
                 "Name": "The Oxygen Project",
+                "Name[az]": "Oxygen layihəsi",
                 "Name[ca@valencia]": "The Oxygen Project",
                 "Name[ca]": "The Oxygen Project",
                 "Name[es]": "El proyecto Oxígeno",
@@ -22,6 +23,7 @@
         ],
         "Category": "",
         "Description": "A breath of fresh air",
+        "Description[az]": "Bir nəfəs təmiz hava",
         "Description[ca@valencia]": "Una alenada d'aire fresc",
         "Description[ca]": "Una alenada d'aire fresc",
         "Description[es]": "Un soplo de aire fresco",
@@ -40,6 +42,7 @@
         "Id": "air",
         "License": "GPL",
         "Name": "Air",
+        "Name[az]": "Air",
         "Name[ca@valencia]": "Air",
         "Name[ca]": "Air",
         "Name[es]": "Aire",

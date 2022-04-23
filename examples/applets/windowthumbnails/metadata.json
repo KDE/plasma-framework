@@ -4,6 +4,7 @@
             {
                 "Email": "mart@kde.org",
                 "Name": "Marco Martin",
+                "Name[az]": "Marco Martin",
                 "Name[ca@valencia]": "Marco Martin",
                 "Name[ca]": "Marco Martin",
                 "Name[es]": "Marco Martin",
@@ -22,6 +23,7 @@
         ],
         "Category": "Windows and Tasks",
         "Description": "Example showing how to display window thumbnails",
+        "Description[az]": "Pəncərə miniatürlərinin necə göstəriləcəyinə nümunə",
         "Description[ca@valencia]": "Exemple que mostra com visualitzar miniatures de les finestres",
         "Description[ca]": "Exemple que mostra com visualitzar miniatures de les finestres",
         "Description[es]": "Ejemplo que enseña cómo mostrar miniaturas de ventanas",
@@ -40,6 +42,7 @@
         "Id": "org.kde.example.windowthumbnails",
         "License": "GPL",
         "Name": "Example window thumbnails list",
+        "Name[az]": "Pəncərə miniatür nümunəsi siyahısı",
         "Name[ca@valencia]": "Exemple de llista de miniatures de les finestres",
         "Name[ca]": "Exemple de llista de miniatures de les finestres",
         "Name[es]": "Ejemplo de lista de miniaturas de ventanas",

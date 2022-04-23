@@ -4,6 +4,7 @@
             {
                 "Email": "kde-artists@kde.org",
                 "Name": "The Oxygen Project",
+                "Name[az]": "Oxygen layihəsi",
                 "Name[ca@valencia]": "The Oxygen Project",
                 "Name[ca]": "The Oxygen Project",
                 "Name[es]": "El proyecto Oxígeno",
@@ -22,6 +23,7 @@
         ],
         "Category": "",
         "Description": "Theme done in the Oxygen style",
+        "Description[az]": "Mövzu Oxygen stilində hazırlanıb",
         "Description[ca@valencia]": "Tema fet en l'estil Oxygen",
         "Description[ca]": "Tema fet en l'estil Oxygen",
         "Description[es]": "Tema realizado al estilo de Oxígeno",
@@ -40,6 +42,7 @@
         "Id": "oxygen",
         "License": "GPL",
         "Name": "Oxygen",
+        "Name[az]": "Oxygen ayarları",
         "Name[ca@valencia]": "Oxygen",
         "Name[ca]": "Oxygen",
         "Name[es]": "Oxígeno",
