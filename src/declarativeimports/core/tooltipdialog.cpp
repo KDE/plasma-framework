@@ -102,9 +102,6 @@ bool ToolTipDialog::event(QEvent *e)
         break;
     case QEvent::MouseMove:
         m_extendTimeoutFlag = m_extendTimeoutFlags::None;
-        break;
-    default:
-        break;
     }
 
     bool ret = Dialog::event(e);
