@@ -620,7 +620,7 @@ void AppletQuickItem::init()
                 errorList << error.toString();
             }
             errorData[QStringLiteral("errors")] = QJsonArray::fromStringList(errorList);
-            errorData[QStringLiteral("appletName")] = d->applet->kPackage().metadata().name();
+            errorData[QStringLiteral("appletName")] = d->applet->pluginMetaData().name();
             reason = i18n("Error loading QML file: %1 %2", d->qmlObject->mainComponent()->url().toString(), reason);
         } else {
             reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());

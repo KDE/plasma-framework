@@ -30,6 +30,14 @@ namespace KPackage
 class Package;
 }
 #endif
+namespace PlasmaQuick
+{
+class AppletQuickItem;
+class ConfigViewPrivate;
+class ConfigModelPrivate;
+class ConfigModel;
+};
+class DeclarativeAppletScript;
 #include <KPluginFactory>
 
 class KActionCollection;
@@ -302,14 +310,17 @@ public:
     Package package() const;
 #endif
 
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
     /**
      * Accessor for the associated Package object if any.
      * Generally, only Plasmoids come in a Package.
      *
      * @return the Package object, or an invalid one if none
      * @since 5.6
+     * @deprecated Since 5.100, accessing an applets KPackage is deprecated. For using the metadata, use @p pluginMetaData instead.
      **/
     KPackage::Package kPackage() const;
+#endif
 
     /**
      * Called when any of the geometry constraints have been updated.
@@ -784,6 +795,10 @@ protected:
     void timerEvent(QTimerEvent *event) override;
 
 private:
+    QString filePath(const QByteArray &key, const QString &filename = QString()) const;
+#if !PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
+    KPackage::Package kPackage() const;
+#endif
     /**
      * @internal This constructor is to be used with the Package loading system.
      *
@@ -814,6 +829,12 @@ private:
     friend class GraphicsViewAppletPrivate;
     friend class PluginLoader;
     friend class AssociatedApplicationManager;
+    friend class SvgPrivate;
+    friend class PlasmaQuick::AppletQuickItem;
+    friend class PlasmaQuick::ConfigModel;
+    friend class PlasmaQuick::ConfigModelPrivate;
+    friend class PlasmaQuick::ConfigViewPrivate;
+    friend DeclarativeAppletScript;
 };
 
 } // Plasma namespace

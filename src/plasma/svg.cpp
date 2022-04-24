@@ -649,12 +649,11 @@ void SvgPrivate::createRenderer()
         // FIXME: this maybe could be more efficient if we knew if the package was empty, e.g. for
         // C++; however, I'm not sure this has any real world runtime impact. something to measure
         // for.
-        if (applet && applet->kPackage().isValid()) {
-            const KPackage::Package package = applet->kPackage();
-            path = package.filePath("images", themePath + QLatin1String(".svg"));
+        if (applet) {
+            path = applet->filePath("images", themePath + QLatin1String(".svg"));
 
             if (path.isEmpty()) {
-                path = package.filePath("images", themePath + QLatin1String(".svgz"));
+                path = applet->filePath("images", themePath + QLatin1String(".svgz"));
             }
         }
 

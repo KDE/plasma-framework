@@ -891,6 +891,14 @@ Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
 }
 #endif
 
+QString Applet::filePath(const QByteArray &key, const QString &filename) const
+{
+    if (d->package.isValid()) {
+        return d->package.filePath(key, filename);
+    }
+    return QString();
+}
+
 void Applet::timerEvent(QTimerEvent *event)
 {
     if (d->transient) {

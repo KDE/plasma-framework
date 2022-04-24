@@ -88,7 +88,7 @@ bool DeclarativeAppletScript::init()
 
 QString DeclarativeAppletScript::filePath(const QString &type, const QString &file) const
 {
-    return applet()->kPackage().filePath(type.toLocal8Bit().constData(), file);
+    return applet()->filePath(type.toLocal8Bit().constData(), file);
 }
 
 void DeclarativeAppletScript::constraintsEvent(Plasma::Types::Constraints constraints)

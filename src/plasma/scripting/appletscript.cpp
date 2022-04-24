@@ -90,7 +90,7 @@ void AppletScript::configChanged()
 QString AppletScript::mainScript() const
 {
     Q_ASSERT(d->applet);
-    return d->applet->kPackage().filePath("mainscript");
+    return d->applet->filePath("mainscript");
 }
 
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)

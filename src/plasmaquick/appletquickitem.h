@@ -12,9 +12,10 @@
 #include <QQuickItem>
 #include <QTimer>
 
-#include <Plasma/Package>
-
 #include <plasmaquick/plasmaquick_export.h>
+#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 94)
+#include <Plasma/Package>
+#endif
 
 //
 //  W A R N I N G
