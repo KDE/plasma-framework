@@ -53,6 +53,7 @@
         "Name[fr]": "Breeze Sombre",
         "Name[it]": "Brezza scuro",
         "Name[nl]": "Breeze Dark",
+        "Name[pl]": "Ciemna Bryza",
         "Name[pt]": "Brisa Escura",
         "Name[sl]": "Temna sapica",
         "Name[tr]": "Esinti Koyu",
