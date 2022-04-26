@@ -8,6 +8,8 @@
 #ifndef ICONITEM_H
 #define ICONITEM_H
 
+#include <KIconLoader>
+
 #include <QIcon>
 #include <QPixmap>
 #include <QPointer>
@@ -108,6 +110,11 @@ class IconItem : public QQuickItem
 
     Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth2 NOTIFY implicitWidthChanged2)
 
+    /**
+     * Provides fine grain control where to look for icons.
+     */
+    Q_PROPERTY(KIconLoader *loader READ loader WRITE setLoader NOTIFY loaderChanged)
+
 public:
     explicit IconItem(QQuickItem *parent = nullptr);
     ~IconItem() override;
@@ -141,6 +148,9 @@ public:
     void setStatus(Plasma::Svg::Status status);
     Plasma::Svg::Status status() const;
 
+    KIconLoader *loader() const;
+    void setLoader(KIconLoader *loader);
+
     void setImplicitHeight2(int height);
     void setImplicitWidth2(int height);
 
@@ -169,6 +179,7 @@ Q_SIGNALS:
     void statusChanged();
     void implicitHeightChanged2();
     void implicitWidthChanged2();
+    void loaderChanged();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
@@ -180,6 +191,7 @@ private Q_SLOTS:
 
 private:
     void loadPixmap();
+    void loadSource();
     QSize paintedSize(const QSizeF &containerSize = QSizeF()) const;
     void updateImplicitSize();
 
@@ -188,6 +200,7 @@ private:
     // this contains the raw variant it was passed
     QVariant m_source;
     Plasma::Svg::Status m_status;
+    KIconLoader *m_iconLoader;
 
     bool m_active;
     bool m_animated;

@@ -15,7 +15,6 @@
 #include <QSGSimpleTextureNode>
 
 #include <KIconEffect>
-#include <KIconLoader>
 #include <KIconTheme>
 
 #include "fadingnode_p.h"
@@ -93,9 +92,10 @@ public:
 
     QPixmap pixmap(const QSize &size) override
     {
-        KIconLoader::global()->setCustomPalette(Plasma::Theme::globalPalette());
+        KIconLoader *iconLoader = m_iconItem->loader();
+        iconLoader->setCustomPalette(Plasma::Theme::globalPalette());
         QPixmap result = m_icon.pixmap(window(), m_icon.actualSize(size));
-        KIconLoader::global()->resetPalette();
+        iconLoader->resetPalette();
         return result;
     }
 
@@ -171,7 +171,7 @@ public:
             // ok, svg not available from the plasma theme
         } else {
             // try to load from iconloader an svg with Plasma::Svg
-            const auto *iconTheme = KIconLoader::global()->theme();
+            const auto *iconTheme = m_iconItem->loader()->theme();
             QString iconPath;
             if (iconTheme) {
                 iconPath = iconTheme->iconPath(sourceString + QLatin1String(".svg"), qMin(iconItem->width(), iconItem->height()), KIconLoader::MatchBest);
@@ -231,7 +231,7 @@ public:
         if (!m_svgIconName.isEmpty() && m_svgIcon->hasElement(m_svgIconName)) {
             return m_svgIcon->pixmap(m_svgIconName);
         } else if (!m_svgIconName.isEmpty()) {
-            const auto *iconTheme = KIconLoader::global()->theme();
+            const auto *iconTheme = m_iconItem->loader()->theme();
             if (iconTheme) {
                 QString iconPath = iconTheme->iconPath(m_svgIconName + QLatin1String(".svg"), size.width(), KIconLoader::MatchBest);
                 if (iconPath.isEmpty()) {
@@ -265,6 +265,7 @@ IconItem::IconItem(QQuickItem *parent)
     : QQuickItem(parent)
     , m_iconItemSource(new NullSource(this))
     , m_status(Plasma::Svg::Normal)
+    , m_iconLoader(nullptr)
     , m_active(false)
     , m_animated(true)
     , m_usesPlasmaTheme(true)
@@ -286,13 +287,10 @@ IconItem::IconItem(QQuickItem *parent)
     m_animation->setDuration(250); // FIXME from theme
 
     setFlag(ItemHasContents, true);
-
-    connect(KIconLoader::global(), &KIconLoader::iconLoaderSettingsChanged, this, &IconItem::updateImplicitSize);
+    setLoader(KIconLoader::global());
 
     connect(this, &IconItem::implicitWidthChanged, this, &IconItem::implicitWidthChanged2);
     connect(this, &IconItem::implicitHeightChanged, this, &IconItem::implicitHeightChanged2);
-
-    updateImplicitSize();
 }
 
 IconItem::~IconItem()
@@ -318,7 +316,7 @@ void IconItem::updateImplicitSize()
     }
 
     // Fall back to initializing implicit size to the Dialog size.
-    const int implicitSize = KIconLoader::global()->currentSize(KIconLoader::Dialog);
+    const int implicitSize = m_iconLoader->currentSize(KIconLoader::Dialog);
 
     if (!m_implicitWidthSetByUser && !m_implicitHeightSetByUser) {
         setImplicitSize(implicitSize, implicitSize);
@@ -335,16 +333,24 @@ void IconItem::setSource(const QVariant &source)
         return;
     }
 
-    disconnect(KIconLoader::global(), &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
+    m_source = source;
+    if (isComponentComplete()) {
+        loadSource();
+    }
+    Q_EMIT sourceChanged();
+}
+
+void IconItem::loadSource()
+{
+    disconnect(m_iconLoader, &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
 
     const bool oldValid = isValid();
 
-    m_source = source;
-    QString sourceString = source.toString();
+    QString sourceString = m_source.toString();
 
     // If the QIcon was created with QIcon::fromTheme(), try to load it as svg
-    if (source.canConvert<QIcon>() && !source.value<QIcon>().name().isEmpty()) {
-        sourceString = source.value<QIcon>().name();
+    if (m_source.canConvert<QIcon>() && !m_source.value<QIcon>().name().isEmpty()) {
+        sourceString = m_source.value<QIcon>().name();
     }
 
     if (!sourceString.isEmpty()) {
@@ -371,21 +377,21 @@ void IconItem::setSource(const QVariant &source)
 
             if (!m_iconItemSource->isValid()) {
                 // if we started with a QIcon use that.
-                QIcon icon = source.value<QIcon>();
+                QIcon icon = m_source.value<QIcon>();
                 if (icon.isNull()) {
                     icon = QIcon::fromTheme(sourceString);
                 }
                 m_iconItemSource.reset(new QIconSource(icon, this));
 
                 // since QIcon is rendered by KIconLoader, watch for when its configuration changes now and reload as needed.
-                connect(KIconLoader::global(), &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
+                connect(m_iconLoader, &KIconLoader::iconChanged, this, &IconItem::iconLoaderIconChanged);
             }
         }
 
-    } else if (source.canConvert<QIcon>()) {
-        m_iconItemSource.reset(new QIconSource(source.value<QIcon>(), this));
-    } else if (source.canConvert<QImage>()) {
-        m_iconItemSource.reset(new QImageSource(source.value<QImage>(), this));
+    } else if (m_source.canConvert<QIcon>()) {
+        m_iconItemSource.reset(new QIconSource(m_source.value<QIcon>(), this));
+    } else if (m_source.canConvert<QImage>()) {
+        m_iconItemSource.reset(new QImageSource(m_source.value<QImage>(), this));
     } else {
         m_iconItemSource.reset(new NullSource(this));
     }
@@ -395,8 +401,6 @@ void IconItem::setSource(const QVariant &source)
     }
 
     updateImplicitSize();
-
-    Q_EMIT sourceChanged();
 
     if (isValid() != oldValid) {
         Q_EMIT validChanged();
@@ -577,6 +581,33 @@ Plasma::Svg::Status IconItem::status() const
     return m_status;
 }
 
+KIconLoader *IconItem::loader() const
+{
+    return m_iconLoader;
+}
+
+void IconItem::setLoader(KIconLoader *loader)
+{
+    Q_ASSERT(loader);
+    if (m_iconLoader == loader) {
+        return;
+    }
+
+    if (m_iconLoader) {
+        connect(m_iconLoader, &KIconLoader::iconLoaderSettingsChanged, this, &IconItem::updateImplicitSize);
+    }
+    m_iconLoader = loader;
+    connect(m_iconLoader, &KIconLoader::iconLoaderSettingsChanged, this, &IconItem::updateImplicitSize);
+
+    if (isComponentComplete()) {
+        if (!m_source.isNull()) {
+            loadSource();
+        }
+    }
+
+    Q_EMIT loaderChanged();
+}
+
 void IconItem::setImplicitHeight2(int height)
 {
     m_implicitHeightSetByUser = true;
@@ -732,15 +763,15 @@ void IconItem::loadPixmap()
         if (!overlay.isEmpty()) {
             // There is at least one overlay, draw all overlays above m_pixmap
             // and cancel the check
-            KIconLoader::global()->drawOverlays(m_overlays, result, KIconLoader::Desktop);
+            m_iconLoader->drawOverlays(m_overlays, result, KIconLoader::Desktop);
             break;
         }
     }
 
     if (!isEnabled()) {
-        result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::DisabledState);
+        result = m_iconLoader->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::DisabledState);
     } else if (m_active) {
-        result = KIconLoader::global()->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
+        result = m_iconLoader->iconEffect()->apply(result, KIconLoader::Desktop, KIconLoader::ActiveState);
     }
 
     const QSize oldPaintedSize = paintedSize();
@@ -823,5 +854,11 @@ void IconItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeomet
 void IconItem::componentComplete()
 {
     QQuickItem::componentComplete();
+
+    updateImplicitSize();
+
+    if (!m_source.isNull()) {
+        loadSource();
+    }
     schedulePixmapUpdate();
 }
