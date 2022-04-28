@@ -269,8 +269,9 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     , d(new ConfigViewPrivate(applet, this))
 {
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
-    qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
-    qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
+    // Only register types once
+    [[maybe_unused]] static int configModelRegisterResult = qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
+    [[maybe_unused]] static int configCategoryRegisterResult = qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
     d->init();
     connect(applet, &QObject::destroyed, this, &ConfigView::close);
     connect(this, &QQuickView::statusChanged, [=](QQuickView::Status status) {
