@@ -128,12 +128,13 @@ void ConfigViewPrivate::init()
     }
 
     // config model local of the applet
-    QQmlComponent *component = new QQmlComponent(q->engine(), applet.data()->kPackage().fileUrl("configmodel"), q);
-    QObject *object = component->create(q->engine()->rootContext());
+    QQmlComponent component(q->engine(), applet.data()->kPackage().fileUrl("configmodel"));
+    QObject *object = component.create(q->engine()->rootContext());
     configModel = qobject_cast<ConfigModel *>(object);
 
     if (configModel) {
         configModel->setApplet(applet.data());
+        configModel->setParent(q);
     } else {
         delete object;
     }
@@ -169,8 +170,6 @@ void ConfigViewPrivate::init()
             configModel->appendCategory(md.iconName(), md.name(), QString(), QLatin1String("kcms/") + kcm);
         }
     }
-
-    delete component;
 }
 
 void ConfigViewPrivate::updateMinimumWidth()
