@@ -13,6 +13,7 @@
                 "Name[fr]": "Groupe de conception graphique de KDE « VDG » (Visual Design Group)",
                 "Name[it]": "KDE Visual Design Group",
                 "Name[nl]": "KDE Visuele ontwerpgroep",
+                "Name[pl]": "Grupa oprawy graficznej KDE",
                 "Name[pt]": "Grupo de Desenho Visual do KDE",
                 "Name[sl]": "Skupina vizualnega designa KDE",
                 "Name[tr]": "KDE Görsel Tasarım Grubu",

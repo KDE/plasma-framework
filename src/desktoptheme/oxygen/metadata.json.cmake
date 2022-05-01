@@ -13,6 +13,7 @@
                 "Name[fr]": "Le projet « Oxygen »",
                 "Name[it]": "Il progetto Oxygen",
                 "Name[nl]": "Het project Oxygen",
+                "Name[pl]": "Projekt Tlenu",
                 "Name[pt]": "O Projecto Oxygen",
                 "Name[sl]": "Projekt kisik",
                 "Name[tr]": "Oksijen Projesi",
