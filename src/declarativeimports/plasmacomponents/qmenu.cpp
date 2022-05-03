@@ -301,8 +301,6 @@ void QMenuProxy::rebuildMenu()
 
 void QMenuProxy::open(int x, int y)
 {
-    qDebug() << "Opening menu at" << x << y;
-
     QQuickItem *parentItem = nullptr;
 
     if (m_visualParent) {
