@@ -41,12 +41,12 @@ static void installPlasmaTheme(const QString &theme = QStringLiteral("breeze"))
     Q_ASSERT(!qttestPath.isEmpty());
     QDir themePath(qttestPath + QLatin1String("/plasma/desktoptheme/") + destinationTheme);
 
-    auto data = QFINDTESTDATA("../src/desktoptheme/" + theme + "/metadata.desktop");
+    auto data = QFINDTESTDATA("../src/desktoptheme/" + theme + "/metadata.json");
     QFileInfo f(data);
     QVERIFY(f.dir().mkpath(themePath.path()));
 
     copyPath(f.dir().filePath("default.gzipped"), themePath.path());
-    QFile::copy(f.dir().filePath("metadata.desktop"), themePath.filePath("metadata.desktop"));
+    QFile::copy(f.dir().filePath("metadata.json"), themePath.filePath("metadata.json"));
 
     const QString colorsFile = QFINDTESTDATA("../src/desktoptheme/" + theme + "/colors");
     if (!colorsFile.isEmpty()) {
