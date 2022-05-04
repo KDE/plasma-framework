@@ -54,7 +54,11 @@ KPluginMetaData metaDataForTheme(const QString &theme)
 {
     const QString packageBasePath =
         QSP::locate(QSP::GenericDataLocation, QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/") % theme, QSP::LocateDirectory);
-    Q_ASSERT(!packageBasePath.isEmpty());
+    if (packageBasePath.isEmpty()) {
+        qWarning(LOG_PLASMA) << "Could not locate plasma theme" << theme << "in" << PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/"
+                             << "using search path" << QSP::standardLocations(QSP::GenericDataLocation);
+        return {};
+    }
     if (QFileInfo::exists(packageBasePath + QLatin1String("/metadata.json"))) {
         return KPluginMetaData::fromJsonFile(packageBasePath + QLatin1String("/metadata.json"));
     }
