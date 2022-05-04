@@ -15,6 +15,8 @@
 
 #include <plasma/plasma.h>
 
+#include <QVariant>
+
 class KPluginMetaData;
 namespace Plasma
 {
