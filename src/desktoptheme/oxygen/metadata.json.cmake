@@ -59,6 +59,7 @@
         "Name[nl]": "Oxygen",
         "Name[pl]": "Tlen",
         "Name[pt]": "Oxygen",
+        "Name[ru]": "Oxygen",
         "Name[sl]": "Kisik",
         "Name[sv]": "Oxygen",
         "Name[tr]": "Oksijen",
