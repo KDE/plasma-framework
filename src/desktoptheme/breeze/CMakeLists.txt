@@ -7,6 +7,7 @@ configure_file(
 
 install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/metadata.json"
+          plasmarc
     DESTINATION ${PLASMA_DATA_INSTALL_DIR}/desktoptheme/default
 )
 
