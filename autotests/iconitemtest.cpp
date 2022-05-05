@@ -140,7 +140,7 @@ void IconItemTest::loadPixmap()
     QVERIFY(item->property("valid").toBool());
 
     QImage capture = grabImage(item.data());
-    QCOMPARE(capture, sourcePixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied));
+    QCOMPARE(capture, sourcePixmap.toImage().convertToFormat(capture.format()));
     QCOMPARE(sourcePixmap, item->property("source").value<QPixmap>());
 }
 
@@ -155,7 +155,7 @@ void IconItemTest::loadImage()
     QVERIFY(item->property("valid").toBool());
 
     QImage capture = grabImage(item.data());
-    QCOMPARE(capture, sourceImage.convertToFormat(QImage::Format_ARGB32_Premultiplied));
+    QCOMPARE(capture, sourceImage.convertToFormat(capture.format()));
     QCOMPARE(sourceImage, item->property("source").value<QImage>());
 }
 
@@ -186,7 +186,7 @@ void IconItemTest::usesPlasmaTheme()
     svg.setImagePath("icons/konversation");
 
     QImage img1 = grabImage(item1);
-    QImage img2 = svg.image(QSize(item1->width(), item1->height()), "konversation");
+    QImage img2 = svg.image(QSize(item1->width(), item1->height()), "konversation").convertToFormat(img1.format());
     QVERIFY(!imageIsEmpty(img1));
     QVERIFY(!imageIsEmpty(img2));
     QCOMPARE(img1, img2);
