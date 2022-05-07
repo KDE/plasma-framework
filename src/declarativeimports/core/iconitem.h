@@ -20,32 +20,6 @@
 class QPropertyAnimation;
 class IconItemSource;
 class SvgSource;
-class KIconLoader;
-
-class IconLoaderInfo
-{
-    Q_GADGET
-    Q_PROPERTY(QString appDir READ appDir WRITE setAppDir FINAL)
-    Q_PROPERTY(QStringList extraSearchPaths READ extraSearchPaths WRITE setExtraSearchPaths FINAL)
-
-public:
-    IconLoaderInfo();
-
-    bool operator==(const IconLoaderInfo &other) const;
-    bool operator!=(const IconLoaderInfo &other) const;
-
-    bool isNull() const;
-
-    QString appDir() const;
-    void setAppDir(const QString &appDir);
-
-    QStringList extraSearchPaths() const;
-    void setExtraSearchPaths(const QStringList &paths);
-
-private:
-    QString m_appDir;
-    QStringList m_extraSearchPaths;
-};
 
 /**
  * @class IconItem
@@ -134,11 +108,6 @@ class IconItem : public QQuickItem
 
     Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth2 NOTIFY implicitWidthChanged2)
 
-    /**
-     * Provides a fine grain control over how the icon is loaded.
-     */
-    Q_PROPERTY(IconLoaderInfo loader READ loader WRITE setLoader NOTIFY loaderChanged)
-
 public:
     explicit IconItem(QQuickItem *parent = nullptr);
     ~IconItem() override;
@@ -172,9 +141,6 @@ public:
     void setStatus(Plasma::Svg::Status status);
     Plasma::Svg::Status status() const;
 
-    IconLoaderInfo loader() const;
-    void setLoader(const IconLoaderInfo &info);
-
     void setImplicitHeight2(int height);
     void setImplicitWidth2(int height);
 
@@ -203,7 +169,6 @@ Q_SIGNALS:
     void statusChanged();
     void implicitHeightChanged2();
     void implicitWidthChanged2();
-    void loaderChanged();
 
 private Q_SLOTS:
     void schedulePixmapUpdate();
@@ -215,19 +180,14 @@ private Q_SLOTS:
 
 private:
     void loadPixmap();
-    void loadSource();
     QSize paintedSize(const QSizeF &containerSize = QSizeF()) const;
     void updateImplicitSize();
-    KIconLoader *resolveLoader();
-    void updateLoader(KIconLoader *loader);
 
     // all the ways we can set an source. Only one of them will be valid
     QScopedPointer<IconItemSource> m_iconItemSource;
     // this contains the raw variant it was passed
     QVariant m_source;
     Plasma::Svg::Status m_status;
-    KIconLoader *m_iconLoader;
-    IconLoaderInfo m_iconLoaderInfo;
 
     bool m_active;
     bool m_animated;
