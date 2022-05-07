@@ -55,6 +55,7 @@
         "Name[az]": "Breeze - İşıqlı",
         "Name[ca@valencia]": "Brisa clara",
         "Name[ca]": "Brisa clara",
+        "Name[cs]": "Breeze Světlé",
         "Name[en_GB]": "Breeze Light",
         "Name[es]": "Brisa claro",
         "Name[eu]": "Brisa argia",

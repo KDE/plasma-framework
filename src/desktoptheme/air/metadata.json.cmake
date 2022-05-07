@@ -53,6 +53,7 @@
         "Name[az]": "Air",
         "Name[ca@valencia]": "Air",
         "Name[ca]": "Air",
+        "Name[cs]": "Vzduch",
         "Name[en_GB]": "Air",
         "Name[es]": "Aire",
         "Name[eu]": "Airea",

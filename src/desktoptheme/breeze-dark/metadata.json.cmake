@@ -55,6 +55,7 @@
         "Name[az]": "Breeze Qara",
         "Name[ca@valencia]": "Brisa fosca",
         "Name[ca]": "Brisa fosca",
+        "Name[cs]": "Breeze Tmavé",
         "Name[en_GB]": "Breeze Dark",
         "Name[es]": "Brisa oscuro",
         "Name[eu]": "Brisa iluna",

@@ -53,6 +53,7 @@
         "Name[az]": "Oxygen ayarları",
         "Name[ca@valencia]": "Oxygen",
         "Name[ca]": "Oxygen",
+        "Name[cs]": "Oxygen",
         "Name[en_GB]": "Oxygen",
         "Name[es]": "Oxígeno",
         "Name[eu]": "Oxigenoa",

@@ -55,6 +55,7 @@
         "Name[az]": "Breeze",
         "Name[ca@valencia]": "Brisa",
         "Name[ca]": "Brisa",
+        "Name[cs]": "Breeze",
         "Name[en_GB]": "Breeze",
         "Name[es]": "Brisa",
         "Name[eu]": "Brisa",
