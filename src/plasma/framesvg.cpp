@@ -336,12 +336,21 @@ QRegion FrameSvg::mask() const
     QRegion *obj = d->frame->cachedMasks.object(id);
 
     if (!obj) {
-        obj = new QRegion(QBitmap(d->alphaMask().mask()));
+        QPixmap alphaMask = d->alphaMask();
+        const qreal dpr = alphaMask.devicePixelRatio();
+
+        // region should always be in logical pixels, resize pixmap to be in the logical sizes
+        if (alphaMask.devicePixelRatio() != 1.0) {
+            alphaMask = alphaMask.scaled(alphaMask.width() / dpr, alphaMask.height() / dpr);
+        }
+
+        obj = new QRegion(QBitmap(alphaMask).mask());
         result = *obj;
         d->frame->cachedMasks.insert(id, obj);
     } else {
         result = *obj;
     }
+
     return result;
 }
 
