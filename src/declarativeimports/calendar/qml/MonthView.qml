@@ -370,6 +370,9 @@ PinchArea { // TODO KF6 switch to Item
                 calendarBackend.goToMonth(date.monthNumber);
                 swipeView.currentIndex = 0;
             }
+
+            onScrollUp: calendarBackend.nextYear()
+            onScrollDown: calendarBackend.previousYear()
         }
 
         // DecadeView
@@ -390,8 +393,8 @@ PinchArea { // TODO KF6 switch to Item
                 swipeView.currentIndex = 1;
             }
 
-            onScrollUp: calendarBackend.nextYear()
-            onScrollDown: calendarBackend.previousYear()
+            onScrollUp: calendarBackend.nextDecade()
+            onScrollDown: calendarBackend.previousDecade()
         }
     }
 
