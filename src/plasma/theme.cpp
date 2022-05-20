@@ -390,6 +390,11 @@ KPluginInfo Theme::pluginInfo() const
 }
 #endif
 
+KPluginMetaData Theme::metadata() const
+{
+    return d->pluginMetaData;
+}
+
 QFont Theme::defaultFont() const
 {
     return QGuiApplication::font();

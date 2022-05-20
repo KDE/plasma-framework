@@ -337,6 +337,13 @@ public:
 #endif
 
     /**
+     * @return plugin metadata for this theme, with information such as
+     * name, description, author, website etc
+     * @since 5.95
+     */
+    KPluginMetaData metadata() const;
+
+    /**
      * @return The default application font
      * @since 5.0
      */
