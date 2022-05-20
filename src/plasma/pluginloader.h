@@ -11,6 +11,8 @@
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
 #include <KPluginInfo>
 #include <plasma/package.h>
+#else
+class KPluginInfo;
 #endif
 
 #include <plasma/plasma.h>
@@ -562,7 +564,7 @@ protected:
      * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
     PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
-    virtual KPluginInfo::List internalAppletInfo(const QString &category) const;
+    virtual QList<KPluginInfo> internalAppletInfo(const QString &category) const;
 
     /**
      * A re-implementable method that allows subclasses to provide additional dataengines
@@ -572,7 +574,7 @@ protected:
      * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      **/
     PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
-    virtual KPluginInfo::List internalDataEngineInfo() const;
+    virtual QList<KPluginInfo> internalDataEngineInfo() const;
 
     /**
      * Returns a list of all known Service implementations
@@ -581,7 +583,7 @@ protected:
      * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      */
     PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
-    virtual KPluginInfo::List internalServiceInfo() const;
+    virtual QList<KPluginInfo> internalServiceInfo() const;
 
     /**
      * Returns a list of all known ContainmentActions implementations
@@ -590,7 +592,7 @@ protected:
      * @deprecated Since 5.86, deprecated for lack of usage, use default behaviour instead
      */
     PLASMA_DEPRECATED_VERSION(5, 86, "Deprecated for lack of usage, use default behaviour instead")
-    virtual KPluginInfo::List internalContainmentActionsInfo() const;
+    virtual QList<KPluginInfo> internalContainmentActionsInfo() const;
 #endif
 
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
