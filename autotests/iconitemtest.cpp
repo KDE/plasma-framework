@@ -132,14 +132,14 @@ void IconItemTest::changeTheme(Plasma::Theme *theme, const QString &themeName)
 
 void IconItemTest::loadPixmap()
 {
-    QScopedPointer<QQuickItem> item(createIconItem());
+    std::unique_ptr<QQuickItem> item(createIconItem());
     QPixmap sourcePixmap(QFINDTESTDATA("data/test_image.png"));
 
     item->setSize(sourcePixmap.size());
     item->setProperty("source", sourcePixmap);
     QVERIFY(item->property("valid").toBool());
 
-    QImage capture = grabImage(item.data());
+    QImage capture = grabImage(item.get());
     QCOMPARE(capture, sourcePixmap.toImage().convertToFormat(capture.format()));
     QCOMPARE(sourcePixmap, item->property("source").value<QPixmap>());
 }
@@ -147,14 +147,14 @@ void IconItemTest::loadPixmap()
 // tests setting icon from a QImage
 void IconItemTest::loadImage()
 {
-    QScopedPointer<QQuickItem> item(createIconItem());
+    std::unique_ptr<QQuickItem> item(createIconItem());
     QImage sourceImage(QFINDTESTDATA("data/test_image.png"));
 
     item->setSize(sourceImage.size());
     item->setProperty("source", sourceImage);
     QVERIFY(item->property("valid").toBool());
 
-    QImage capture = grabImage(item.data());
+    QImage capture = grabImage(item.get());
     QCOMPARE(capture, sourceImage.convertToFormat(capture.format()));
     QCOMPARE(sourceImage, item->property("source").value<QImage>());
 }

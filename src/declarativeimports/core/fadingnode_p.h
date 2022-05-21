@@ -31,8 +31,8 @@ public:
     void setRect(const QRectF &bounds);
 
 private:
-    QScopedPointer<QSGTexture> m_source;
-    QScopedPointer<QSGTexture> m_target;
+    std::unique_ptr<QSGTexture> m_source;
+    std::unique_ptr<QSGTexture> m_target;
 };
 
 #endif // PLASMAFADINGNODE_H

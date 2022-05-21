@@ -114,8 +114,8 @@ void FadingNode::setRect(const QRectF &bounds)
 void FadingNode::setProgress(qreal progress)
 {
     QSGSimpleMaterial<FadingMaterialState> *m = static_cast<QSGSimpleMaterial<FadingMaterialState> *>(material());
-    m->state()->source = m_source.data();
-    m->state()->target = m_target.data();
+    m->state()->source = m_source.get();
+    m->state()->target = m_target.get();
     m->state()->progress = progress;
     markDirty(QSGNode::DirtyMaterial);
 }

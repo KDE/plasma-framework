@@ -122,7 +122,7 @@ void DiscardEglPixmapRunnable::run()
 
 QSGTexture *WindowTextureProvider::texture() const
 {
-    return m_texture.data();
+    return m_texture.get();
 }
 
 void WindowTextureProvider::setTexture(QSGTexture *texture)

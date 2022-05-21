@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QQmlParserStatus>
 #include <QQmlPropertyMap>
-#include <QScopedPointer>
 #include <QtQml>
 
 #include <Plasma/DataEngine>
@@ -186,7 +185,7 @@ private:
     QQmlPropertyMap *m_data = nullptr;
     QQmlPropertyMap *m_models = nullptr;
     Plasma::DataEngine *m_dataEngine = nullptr;
-    QScopedPointer<Plasma::DataEngineConsumer> m_dataEngineConsumer;
+    std::unique_ptr<Plasma::DataEngineConsumer> m_dataEngineConsumer;
     QStringList m_sources;
     QStringList m_connectedSources;
     QStringList m_oldSources;

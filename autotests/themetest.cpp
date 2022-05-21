@@ -205,8 +205,8 @@ void ThemeTest::testCompositingChange()
     // fake the compositor
     QSignalSpy compositingChangedSpy(KWindowSystem::self(), &KWindowSystem::compositingChanged);
     QVERIFY(compositingChangedSpy.isValid());
-    QScopedPointer<KSelectionOwner> compositorSelection(new KSelectionOwner("_NET_WM_CM_S0"));
-    QSignalSpy claimedSpy(compositorSelection.data(), &KSelectionOwner::claimedOwnership);
+    std::unique_ptr<KSelectionOwner> compositorSelection(new KSelectionOwner("_NET_WM_CM_S0"));
+    QSignalSpy claimedSpy(compositorSelection.get(), &KSelectionOwner::claimedOwnership);
     QVERIFY(claimedSpy.isValid());
     compositorSelection->claim(true);
     QVERIFY(claimedSpy.wait());

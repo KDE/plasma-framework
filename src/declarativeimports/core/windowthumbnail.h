@@ -159,7 +159,7 @@ public:
     void setTexture(QSGTexture *texture);
 
 private:
-    QScopedPointer<QSGTexture> m_texture;
+    std::unique_ptr<QSGTexture> m_texture;
 };
 
 }
