@@ -36,16 +36,18 @@
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
 {
-    std::array<size_t, 10> parts = {::qHash(id.width),
-                                  ::qHash(id.height),
-                                  ::qHash(id.elementName),
-                                  ::qHash(id.filePath),
-                                  ::qHash(id.status),
-                                  ::qHash(id.devicePixelRatio),
-                                  ::qHash(id.scaleFactor),
-                                  ::qHash(id.colorGroup),
-                                  ::qHash(id.extraFlags),
-                                  ::qHash(id.lastModified)};
+    std::array<size_t, 10> parts = {
+        ::qHash(id.width),
+        ::qHash(id.height),
+        ::qHash(id.elementName),
+        ::qHash(id.filePath),
+        ::qHash(id.status),
+        ::qHash(id.devicePixelRatio),
+        ::qHash(id.scaleFactor),
+        ::qHash(id.colorGroup),
+        ::qHash(id.extraFlags),
+        ::qHash(id.lastModified),
+    };
     return qHashRange(parts.begin(), parts.end(), seed);
 }
 
@@ -181,7 +183,6 @@ void SvgRectsCache::insert(uint id, const QString &filePath, const QRectF &rect,
     }
 
     m_localRectCache.insert(id, rect);
-
 
     KConfigGroup imageGroup(m_svgElementsCache, filePath);
 
@@ -887,13 +888,12 @@ Svg::Svg(QObject *parent)
     : QObject(parent)
     , d(new SvgPrivate(this))
 {
-    connect(SvgRectsCache::instance(), &SvgRectsCache::lastModifiedChanged,
-            this, [this] (const QString &filePath, unsigned int lastModified) {
-                if (d->lastModified != lastModified && filePath == d->path) {
-                    d->lastModified = lastModified;
-                    Q_EMIT repaintNeeded();
-                }
-            });
+    connect(SvgRectsCache::instance(), &SvgRectsCache::lastModifiedChanged, this, [this](const QString &filePath, unsigned int lastModified) {
+        if (d->lastModified != lastModified && filePath == d->path) {
+            d->lastModified = lastModified;
+            Q_EMIT repaintNeeded();
+        }
+    });
 }
 
 Svg::~Svg()

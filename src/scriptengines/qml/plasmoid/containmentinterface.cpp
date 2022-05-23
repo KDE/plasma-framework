@@ -1184,5 +1184,4 @@ void ContainmentInterface::deleteWallpaperInterface()
     m_wallpaperInterface = nullptr;
 }
 
-
 #include "moc_containmentinterface.cpp"

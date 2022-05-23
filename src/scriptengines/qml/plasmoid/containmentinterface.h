@@ -74,7 +74,7 @@ class ContainmentInterface : public AppletInterface
      */
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
 
-    Q_PROPERTY(WallpaperInterface* wallpaper READ wallpaperInterface NOTIFY wallpaperInterfaceChanged)
+    Q_PROPERTY(WallpaperInterface *wallpaper READ wallpaperInterface NOTIFY wallpaperInterfaceChanged)
 
     Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY
                    containmentDisplayHintsChanged)

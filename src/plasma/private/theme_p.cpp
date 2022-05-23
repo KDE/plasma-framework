@@ -64,10 +64,10 @@ KPluginMetaData metaDataForTheme(const QString &theme)
     }
 #if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 92)
     else if (QFileInfo::exists(packageBasePath + QLatin1String("/metadata.desktop"))) {
-    QT_WARNING_PUSH
-    QT_WARNING_DISABLE_DEPRECATED
+        QT_WARNING_PUSH
+        QT_WARNING_DISABLE_DEPRECATED
         return KPluginMetaData::fromDesktopFile(packageBasePath + QLatin1String("/metadata.desktop"));
-    QT_WARNING_POP
+        QT_WARNING_POP
     }
 #endif
     else {

@@ -468,11 +468,8 @@ bool WindowThumbnail::xcbWindowToTextureEGL(WindowTextureProvider *textureProvid
             auto geometryCookie = xcb_get_geometry_unchecked(c, m_pixmap);
 
             const EGLint attribs[] = {EGL_IMAGE_PRESERVED_KHR, EGL_TRUE, EGL_NONE};
-            m_image = ((eglCreateImageKHR_func)(m_eglCreateImageKHR))(eglGetCurrentDisplay(),
-                                                                      EGL_NO_CONTEXT,
-                                                                      EGL_NATIVE_PIXMAP_KHR,
-                                                                      (EGLClientBuffer)(uintptr_t)m_pixmap,
-                                                                      attribs);
+            m_image = ((eglCreateImageKHR_func)(
+                m_eglCreateImageKHR))(eglGetCurrentDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_PIXMAP_KHR, (EGLClientBuffer)(uintptr_t)m_pixmap, attribs);
 
             if (m_image == EGL_NO_IMAGE_KHR) {
                 qDebug() << "failed to create egl image";

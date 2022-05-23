@@ -18,7 +18,6 @@
 
 namespace Plasma
 {
-
 class SharedSvgRenderer : public QSvgRenderer, public QSharedData
 {
     Q_OBJECT

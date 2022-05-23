@@ -16,10 +16,10 @@
 
 #include <QLayout>
 #include <QMenu>
+#include <QPlatformSurfaceEvent>
 #include <QPointer>
 #include <QQuickItem>
 #include <QScreen>
-#include <QPlatformSurfaceEvent>
 
 #include <KWindowSystem/KWindowInfo>
 #include <KWindowSystem>
@@ -241,8 +241,8 @@ void DialogPrivate::updateTheme()
 
         // This makes the mask slightly maller than the frame. Since the svg will have antialiasing and the mask not,
         // there will be artifacts at the corners, if they go under the svg they're less evident
-        frameSvgItem->frameSvg()->resizeFrame(q->size() - QSize(2,2));
-        const QRegion mask = frameSvgItem->frameSvg()->mask().translated(1,1);
+        frameSvgItem->frameSvg()->resizeFrame(q->size() - QSize(2, 2));
+        const QRegion mask = frameSvgItem->frameSvg()->mask().translated(1, 1);
         KWindowEffects::enableBlurBehind(q, theme.blurBehindEnabled(), mask);
 
         KWindowEffects::enableBackgroundContrast(q,
@@ -701,95 +701,95 @@ void DialogPrivate::setupWaylandIntegration()
 
 void DialogPrivate::applyType()
 {
-        /*QXcbWindowFunctions::WmWindowType*/ int wmType = 0;
+    /*QXcbWindowFunctions::WmWindowType*/ int wmType = 0;
 
 #if HAVE_X11
-        if (KWindowSystem::isPlatformX11()) {
-            switch (type) {
-            case Dialog::Normal:
-                q->setFlags(Qt::FramelessWindowHint | q->flags());
-                break;
+    if (KWindowSystem::isPlatformX11()) {
+        switch (type) {
+        case Dialog::Normal:
+            q->setFlags(Qt::FramelessWindowHint | q->flags());
+            break;
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            case Dialog::Dock:
-                wmType = QXcbWindowFunctions::WmWindowType::Dock;
-                break;
-            case Dialog::DialogWindow:
-                wmType = QXcbWindowFunctions::WmWindowType::Dialog;
-                break;
-            case Dialog::PopupMenu:
-                wmType = QXcbWindowFunctions::WmWindowType::PopupMenu;
-                break;
-            case Dialog::Tooltip:
-                wmType = QXcbWindowFunctions::WmWindowType::Tooltip;
-                break;
-            case Dialog::Notification:
-                wmType = QXcbWindowFunctions::WmWindowType::Notification;
-                break;
+        case Dialog::Dock:
+            wmType = QXcbWindowFunctions::WmWindowType::Dock;
+            break;
+        case Dialog::DialogWindow:
+            wmType = QXcbWindowFunctions::WmWindowType::Dialog;
+            break;
+        case Dialog::PopupMenu:
+            wmType = QXcbWindowFunctions::WmWindowType::PopupMenu;
+            break;
+        case Dialog::Tooltip:
+            wmType = QXcbWindowFunctions::WmWindowType::Tooltip;
+            break;
+        case Dialog::Notification:
+            wmType = QXcbWindowFunctions::WmWindowType::Notification;
+            break;
 #else
-            case Dialog::Dock:
-                wmType = QNativeInterface::Private::QXcbWindow::Dock;
-                break;
-            case Dialog::DialogWindow:
-                wmType = QNativeInterface::Private::QXcbWindow::Dialog;
-                break;
-            case Dialog::PopupMenu:
-                wmType = QNativeInterface::Private::QXcbWindow::PopupMenu;
-                break;
-            case Dialog::Tooltip:
-                wmType = QNativeInterface::Private::QXcbWindow::Tooltip;
-                break;
-            case Dialog::Notification:
-                wmType = QNativeInterface::Private::QXcbWindow::Notification;
-                break;
+        case Dialog::Dock:
+            wmType = QNativeInterface::Private::QXcbWindow::Dock;
+            break;
+        case Dialog::DialogWindow:
+            wmType = QNativeInterface::Private::QXcbWindow::Dialog;
+            break;
+        case Dialog::PopupMenu:
+            wmType = QNativeInterface::Private::QXcbWindow::PopupMenu;
+            break;
+        case Dialog::Tooltip:
+            wmType = QNativeInterface::Private::QXcbWindow::Tooltip;
+            break;
+        case Dialog::Notification:
+            wmType = QNativeInterface::Private::QXcbWindow::Notification;
+            break;
 #endif
-            case Dialog::OnScreenDisplay:
-            case Dialog::CriticalNotification:
-                // Not supported by Qt
-                break;
-            }
+        case Dialog::OnScreenDisplay:
+        case Dialog::CriticalNotification:
+            // Not supported by Qt
+            break;
+        }
 
-            if (wmType) {
+        if (wmType) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-                QXcbWindowFunctions::setWmWindowType(q, static_cast<QXcbWindowFunctions::WmWindowType>(wmType));
+            QXcbWindowFunctions::setWmWindowType(q, static_cast<QXcbWindowFunctions::WmWindowType>(wmType));
 #else
-                // QXcbWindow isn't installed and thus inaccessible to us, but it does read this magic property from the window...
-                q->setProperty("_q_xcb_wm_window_type", wmType);
+            // QXcbWindow isn't installed and thus inaccessible to us, but it does read this magic property from the window...
+            q->setProperty("_q_xcb_wm_window_type", wmType);
 #endif
-            }
         }
+    }
 #endif
 
-        if (!wmType && type != Dialog::Normal) {
-            KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
-        }
+    if (!wmType && type != Dialog::Normal) {
+        KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
+    }
 #if HAVE_KWAYLAND
-        if (shellSurface) {
-            if (q->flags() & Qt::WindowStaysOnTopHint) {
-                type = Dialog::Dock;
-                shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
-            }
-            switch (type) {
-                case Dialog::Dock:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Panel);
-                break;
-            case Dialog::Tooltip:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::ToolTip);
-                break;
-            case Dialog::Notification:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Notification);
-                break;
-            case Dialog::OnScreenDisplay:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::OnScreenDisplay);
-                break;
-            case Dialog::CriticalNotification:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::CriticalNotification);
-                break;
-            case Dialog::Normal:
-                shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Normal);
-            default:
-                break;
-            }
+    if (shellSurface) {
+        if (q->flags() & Qt::WindowStaysOnTopHint) {
+            type = Dialog::Dock;
+            shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
         }
+        switch (type) {
+        case Dialog::Dock:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Panel);
+            break;
+        case Dialog::Tooltip:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::ToolTip);
+            break;
+        case Dialog::Notification:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Notification);
+            break;
+        case Dialog::OnScreenDisplay:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::OnScreenDisplay);
+            break;
+        case Dialog::CriticalNotification:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::CriticalNotification);
+            break;
+        case Dialog::Normal:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Normal);
+        default:
+            break;
+        }
+    }
 #endif
 
     // an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
