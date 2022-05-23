@@ -7,9 +7,11 @@
 #ifndef PLASMA_SCRIPTENGINE_H
 #define PLASMA_SCRIPTENGINE_H
 
-#include <plasma/package.h>
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
+#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
+#include <plasma/package.h>
+#endif
 
 #include <QObject>
 #include <QRect>
