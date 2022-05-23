@@ -36,7 +36,7 @@
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)
 {
-    std::array<uint, 10> parts = {::qHash(id.width),
+    std::array<size_t, 10> parts = {::qHash(id.width),
                                   ::qHash(id.height),
                                   ::qHash(id.elementName),
                                   ::qHash(id.filePath),

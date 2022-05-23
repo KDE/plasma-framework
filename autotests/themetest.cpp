@@ -24,7 +24,7 @@
 QString cacheIdHash(const Plasma::SvgPrivate::CacheId &id)
 {
     static const uint seed = 0x9e3779b9;
-    std::array<uint, 10> parts = {::qHash(id.width),
+    std::array<size_t, 10> parts = {::qHash(id.width),
                                   ::qHash(id.height),
                                   ::qHash(id.elementName),
                                   ::qHash(id.filePath),
