@@ -37,6 +37,7 @@ class QScreen;
 namespace PlasmaQuick
 {
 class DialogPrivate;
+class AppletQuickItem;
 
 /**
  * @class Dialog
@@ -141,6 +142,12 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
 
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChangedProxy)
 
+    /**
+     * This property holds a pointer to the AppletInterface used by an applet. It is
+     * null when the dialog is not used for an applet.
+     */
+    Q_PROPERTY(AppletQuickItem *appletInterface READ appletInterface WRITE setAppletInterface NOTIFY appletInterfaceChanged)
+
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
 public:
@@ -153,6 +160,7 @@ public:
         Notification = NET::Notification,
         OnScreenDisplay = NET::OnScreenDisplay,
         CriticalNotification = NET::CriticalNotification,
+        AppletPopup = NET::AppletPopup,
     };
     Q_ENUM(WindowType)
 
@@ -196,6 +204,9 @@ public:
     bool isVisible() const;
     void setVisible(bool visible);
 
+    AppletQuickItem *appletInterface() const;
+    void setAppletInterface(AppletQuickItem *appletInterface);
+
     /**
      * @returns The suggested screen position for the popup
      * @param item the item the popup has to be positioned relatively to. if null, the popup will be positioned in the center of the window
@@ -213,6 +224,7 @@ Q_SIGNALS:
     void flagsChanged();
     void backgroundHintsChanged();
     void visibleChangedProxy(); // redeclaration of QQuickWindow::visibleChanged
+    void appletInterfaceChanged();
     /**
      * Emitted when the @see hideOnWindowDeactivate property is @c true and this dialog lost focus to a
      * window that is neither a parent dialog to nor a child dialog of this dialog.
@@ -233,6 +245,7 @@ protected:
     void focusOutEvent(QFocusEvent *ev) override;
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
+    void moveEvent(QMoveEvent *) override;
     bool event(QEvent *event) override;
 
 private:

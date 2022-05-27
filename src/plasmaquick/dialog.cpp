@@ -9,6 +9,7 @@
 
 #include "dialog.h"
 #include "../declarativeimports/core/framesvgitem.h"
+#include "appletquickitem.h"
 #include "config-plasma.h"
 #include "configview.h"
 #include "dialogshadows_p.h"
@@ -71,6 +72,8 @@ public:
         , hideOnWindowDeactivate(false)
         , outputOnly(false)
         , visible(false)
+        , resizableEdges({})
+        , appletInterface(nullptr)
         , componentComplete(dialog->parent() == nullptr)
         , backgroundHints(Dialog::StandardBackground)
     {
@@ -100,6 +103,8 @@ public:
     void updateMinimumHeight();
     void updateMaximumWidth();
     void updateMaximumHeight();
+    void updateResizableEdges();
+    void updateSizeFromAppletInterface();
 
     /**
      * Gets the maximum and minimum size hints for the window based on the contents. it doesn't actually resize anything
@@ -134,6 +139,13 @@ public:
 
     void applyType();
 
+    bool updateMouseCursor(const QPointF &globalMousePos);
+    Qt::Edges hitTest(const QPointF &pos);
+    bool hitTestLeft(const QPointF &pos);
+    bool hitTestRight(const QPointF &pos);
+    bool hitTestTop(const QPointF &pos);
+    bool hitTestBottom(const QPointF &pos);
+
     Dialog *q;
     Plasma::Types::Location location;
     Plasma::FrameSvgItem *frameSvgItem;
@@ -149,6 +161,8 @@ public:
     bool hideOnWindowDeactivate;
     bool outputOnly;
     bool visible;
+    Qt::Edges resizableEdges;
+    AppletQuickItem *appletInterface;
     Plasma::Theme theme;
     bool componentComplete;
     Dialog::BackgroundHints backgroundHints;
@@ -436,6 +450,76 @@ void DialogPrivate::updateMaximumHeight()
     q->contentItem()->setHeight(qMin(q->height(), maximumHeight));
     q->setHeight(qMin(q->height(), maximumHeight));
 
+    updateLayoutParameters();
+}
+
+void DialogPrivate::updateResizableEdges()
+{
+    if (!appletInterface) {
+        resizableEdges = {};
+        return;
+    }
+
+    QSize min;
+    QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
+    getSizeHints(min, max);
+    if (min == max) {
+        resizableEdges = {};
+        return;
+    }
+
+    switch (q->location()) {
+    case Plasma::Types::BottomEdge:
+        resizableEdges = Qt::LeftEdge | Qt::TopEdge | Qt::RightEdge;
+        break;
+    case Plasma::Types::TopEdge:
+        resizableEdges = Qt::LeftEdge | Qt::BottomEdge | Qt::RightEdge;
+        break;
+    case Plasma::Types::LeftEdge:
+        resizableEdges = Qt::TopEdge | Qt::BottomEdge | Qt::RightEdge;
+        break;
+    case Plasma::Types::RightEdge:
+        resizableEdges = Qt::LeftEdge | Qt::TopEdge | Qt::BottomEdge;
+        break;
+    case Plasma::Types::Floating:
+    case Plasma::Types::Desktop:
+    case Plasma::Types::FullScreen:
+        resizableEdges = {};
+        break;
+    }
+}
+
+void DialogPrivate::updateSizeFromAppletInterface()
+{
+    if (!appletInterface) {
+        return;
+    }
+    if (!mainItem) {
+        return;
+    }
+    if (!mainItemLayout) {
+        return;
+    }
+
+    QSize min;
+    QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
+    getSizeHints(min, max);
+    if (min == max) {
+        return;
+    }
+
+    QVariant prefHeight = mainItemLayout->property("preferredHeight");
+    QVariant prefWidth = mainItemLayout->property("preferredWidth");
+    int defHeight = prefHeight.isNull() ? min.height() : prefHeight.toInt();
+    int defWidth = prefWidth.isNull() ? min.width() : prefWidth.toInt();
+
+    KConfigGroup config = appletInterface->applet()->config();
+    qreal popupWidth = config.readEntry("popupWidth", static_cast<qreal>(defWidth));
+    qreal popupHeight = config.readEntry("popupHeight", static_cast<qreal>(defHeight));
+    mainItemLayout->setProperty("preferredWidth", popupWidth);
+    mainItemLayout->setProperty("preferredHeight", popupHeight);
+    mainItem->setWidth(popupWidth);
+    mainItem->setHeight(popupHeight);
     updateLayoutParameters();
 }
 
@@ -744,6 +828,7 @@ void DialogPrivate::applyType()
 #endif
         case Dialog::OnScreenDisplay:
         case Dialog::CriticalNotification:
+        case Dialog::AppletPopup:
             // Not supported by Qt
             break;
         }
@@ -765,7 +850,7 @@ void DialogPrivate::applyType()
 #if HAVE_KWAYLAND
     if (shellSurface) {
         if (q->flags() & Qt::WindowStaysOnTopHint) {
-            type = Dialog::Dock;
+            type = Dialog::AppletPopup;
             shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
         }
         switch (type) {
@@ -786,6 +871,9 @@ void DialogPrivate::applyType()
             break;
         case Dialog::Normal:
             shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Normal);
+            break;
+        case Dialog::AppletPopup:
+            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::AppletPopup);
         default:
             break;
         }
@@ -825,6 +913,98 @@ void DialogPrivate::applyType()
 #endif
 }
 
+bool DialogPrivate::updateMouseCursor(const QPointF &globalMousePos)
+{
+    Qt::Edges sides = hitTest(globalMousePos) & resizableEdges;
+    if (!sides) {
+        q->setCursor(Qt::ArrowCursor);
+        return false;
+    }
+
+    if (sides == Qt::Edges(Qt::LeftEdge | Qt::TopEdge)) {
+        q->setCursor(Qt::SizeFDiagCursor);
+    } else if (sides == Qt::Edges(Qt::RightEdge | Qt::TopEdge)) {
+        q->setCursor(Qt::SizeBDiagCursor);
+    } else if (sides == Qt::Edges(Qt::LeftEdge | Qt::BottomEdge)) {
+        q->setCursor(Qt::SizeBDiagCursor);
+    } else if (sides == Qt::Edges(Qt::RightEdge | Qt::BottomEdge)) {
+        q->setCursor(Qt::SizeFDiagCursor);
+    } else if (sides.testFlag(Qt::TopEdge)) {
+        q->setCursor(Qt::SizeVerCursor);
+    } else if (sides.testFlag(Qt::LeftEdge)) {
+        q->setCursor(Qt::SizeHorCursor);
+    } else if (sides.testFlag(Qt::RightEdge)) {
+        q->setCursor(Qt::SizeHorCursor);
+    } else {
+        q->setCursor(Qt::SizeVerCursor);
+    }
+
+    return true;
+}
+
+Qt::Edges DialogPrivate::hitTest(const QPointF &pos)
+{
+    bool left = hitTestLeft(pos);
+    bool right = hitTestRight(pos);
+    bool top = hitTestTop(pos);
+    bool bottom = hitTestBottom(pos);
+    Qt::Edges edges;
+    if (left) {
+        edges.setFlag(Qt::LeftEdge);
+    }
+    if (right) {
+        edges.setFlag(Qt::RightEdge);
+    }
+    if (bottom) {
+        edges.setFlag(Qt::BottomEdge);
+    }
+    if (top) {
+        edges.setFlag(Qt::TopEdge);
+    }
+
+    return edges;
+}
+
+bool DialogPrivate::hitTestLeft(const QPointF &pos)
+{
+    const QRect geometry = q->geometry();
+    const QRectF rect(geometry.x(),
+                      geometry.y(),
+                      frameSvgItem->fixedMargins()->left(),
+                      geometry.height());
+    return rect.contains(pos);
+}
+
+bool DialogPrivate::hitTestRight(const QPointF &pos)
+{
+    const QRect geometry = q->geometry();
+    const QRectF rect(geometry.x() + geometry.width() - frameSvgItem->fixedMargins()->right(),
+                      geometry.y(),
+                      frameSvgItem->fixedMargins()->right(),
+                      geometry.height());
+    return rect.contains(pos);
+}
+
+bool DialogPrivate::hitTestTop(const QPointF &pos)
+{
+    const QRect geometry = q->geometry();
+    const QRectF rect(geometry.x(),
+                      geometry.y(),
+                      geometry.width(),
+                      frameSvgItem->fixedMargins()->top());
+    return rect.contains(pos);
+}
+
+bool DialogPrivate::hitTestBottom(const QPointF &pos)
+{
+    const QRect geometry = q->geometry();
+    const QRectF rect(geometry.x(),
+                      geometry.y() + geometry.height() - frameSvgItem->fixedMargins()->bottom(),
+                      geometry.width(),
+                      frameSvgItem->fixedMargins()->bottom());
+    return rect.contains(pos);
+}
+
 Dialog::Dialog(QQuickItem *parent)
     : QQuickWindow(parent ? parent->window() : nullptr)
     , d(new DialogPrivate(this))
@@ -837,6 +1017,9 @@ Dialog::Dialog(QQuickItem *parent)
     });
     connect(this, &QWindow::yChanged, [=]() {
         d->slotWindowPositionChanged();
+    });
+    connect(this, &Dialog::locationChanged, this, [&] {
+        d->updateResizableEdges();
     });
 
     // Given dialogs are skip task bar and don't have a decoration
@@ -1139,6 +1322,10 @@ void Dialog::resizeEvent(QResizeEvent *re)
 {
     QQuickWindow::resizeEvent(re);
 
+    if (d->resizableEdges) {
+        d->updateMouseCursor(QCursor::pos());
+    }
+
     // it's a spontaneous event generated in qguiapplication.cpp QGuiApplicationPrivate::processWindowScreenChangedEvent
     // QWindowSystemInterfacePrivate::GeometryChangeEvent gce(window, QHighDpi::fromNativePixels(window->handle()->geometry(), window), QRect());
     // This happens before the first show event when there is more than one screen,
@@ -1224,6 +1411,9 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
 
 void Dialog::showEvent(QShowEvent *event)
 {
+    d->updateResizableEdges();
+    d->updateSizeFromAppletInterface();
+
     if (d->backgroundHints != Dialog::NoBackground) {
         DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
     }
@@ -1294,6 +1484,19 @@ bool Dialog::event(QEvent *event)
         case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease: {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
+            if (d->resizableEdges) {
+                if (event->type() == QEvent::MouseMove && d->updateMouseCursor(me->globalPos())) {
+                    return QQuickWindow::event(event);
+                }
+                if (event->type() == QEvent::MouseButtonPress) {
+                    const QPointF globalMousePos = me->globalPos();
+                    const Qt::Edges sides = d->hitTest(globalMousePos) & d->resizableEdges;
+                    if (sides) {
+                        startSystemResize(sides);
+                        return true;
+                    }
+                }
+            }
 
             // don't mess with position if the cursor is actually outside the view:
             // somebody is doing a click and drag that must not break when the cursor i outside
@@ -1399,7 +1602,25 @@ bool Dialog::event(QEvent *event)
 
 void Dialog::hideEvent(QHideEvent *event)
 {
+    // Persist the size if this contains an applet
+    if (d->appletInterface && d->mainItem) {
+        KConfigGroup config = d->appletInterface->applet()->config();
+        qreal w = d->mainItem->width();
+        qreal h = d->mainItem->height();
+        config.writeEntry("popupWidth", w);
+        config.writeEntry("popupHeight", h);
+        config.sync();
+    }
+
     QQuickWindow::hideEvent(event);
+}
+
+void Dialog::moveEvent(QMoveEvent *e)
+{
+    QQuickWindow::moveEvent(e);
+    if (d->resizableEdges) {
+        d->updateMouseCursor(QCursor::pos());
+    }
 }
 
 void Dialog::classBegin()
@@ -1468,6 +1689,20 @@ bool Dialog::isVisible() const
         return QQuickWindow::isVisible();
     }
     return d->visible;
+}
+
+void Dialog::setAppletInterface(AppletQuickItem *appletInterface)
+{
+    if (d->appletInterface == appletInterface) {
+        return;
+    }
+    d->appletInterface = appletInterface;
+    Q_EMIT appletInterfaceChanged();
+}
+
+AppletQuickItem *Dialog::appletInterface() const
+{
+    return d->appletInterface;
 }
 
 Dialog::BackgroundHints Dialog::backgroundHints() const
