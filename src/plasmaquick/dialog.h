@@ -37,7 +37,6 @@ class QScreen;
 namespace PlasmaQuick
 {
 class DialogPrivate;
-class AppletQuickItem;
 
 /**
  * @class Dialog
@@ -146,7 +145,7 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
      * This property holds a pointer to the AppletInterface used by an applet. It is
      * null when the dialog is not used for an applet.
      */
-    Q_PROPERTY(AppletQuickItem *appletInterface READ appletInterface WRITE setAppletInterface NOTIFY appletInterfaceChanged)
+    Q_PROPERTY(QQuickItem *appletInterface READ appletInterface WRITE setAppletInterface NOTIFY appletInterfaceChanged)
 
     Q_CLASSINFO("DefaultProperty", "mainItem")
 
@@ -204,8 +203,8 @@ public:
     bool isVisible() const;
     void setVisible(bool visible);
 
-    AppletQuickItem *appletInterface() const;
-    void setAppletInterface(AppletQuickItem *appletInterface);
+    QQuickItem *appletInterface() const;
+    void setAppletInterface(QQuickItem *appletInterface);
 
     /**
      * @returns The suggested screen position for the popup

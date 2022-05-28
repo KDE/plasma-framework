@@ -1691,16 +1691,16 @@ bool Dialog::isVisible() const
     return d->visible;
 }
 
-void Dialog::setAppletInterface(AppletQuickItem *appletInterface)
+void Dialog::setAppletInterface(QQuickItem *appletInterface)
 {
     if (d->appletInterface == appletInterface) {
         return;
     }
-    d->appletInterface = appletInterface;
+    d->appletInterface = qobject_cast<AppletQuickItem *>(appletInterface);
     Q_EMIT appletInterfaceChanged();
 }
 
-AppletQuickItem *Dialog::appletInterface() const
+QQuickItem *Dialog::appletInterface() const
 {
     return d->appletInterface;
 }
