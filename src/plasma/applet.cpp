@@ -206,6 +206,8 @@ void Applet::save(KConfigGroup &g) const
         d->configLoader->save();
         connect(d->configLoader, SIGNAL(configChanged()), this, SLOT(propagateConfigChanged()));
     }
+
+    group.sync();
 }
 
 void Applet::restore(KConfigGroup &group)
