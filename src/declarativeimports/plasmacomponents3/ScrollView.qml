@@ -44,7 +44,7 @@ T.ScrollView {
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
         height: controlRoot.availableHeight
-        active: controlRoot.T.ScrollBar.vertical || controlRoot.T.ScrollBar.vertical.active
+        active: controlRoot.T.ScrollBar.horizontal.active
     }
 
     T.ScrollBar.horizontal: PlasmaComponents3.ScrollBar {
@@ -52,6 +52,6 @@ T.ScrollView {
         x: controlRoot.leftPadding
         y: controlRoot.height - height
         width: controlRoot.availableWidth
-        active: controlRoot.T.ScrollBar.horizontal || controlRoot.T.ScrollBar.horizontal.active
+        active: controlRoot.T.ScrollBar.vertical.active
     }
 }
