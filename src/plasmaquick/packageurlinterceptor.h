@@ -30,7 +30,6 @@ namespace PlasmaQuick
 {
 class PackageUrlInterceptorPrivate;
 
-// depends from https://codereview.qt-project.org/#change,65626
 class PLASMAQUICK_EXPORT PackageUrlInterceptor : public QQmlAbstractUrlInterceptor
 {
 public:
