@@ -8,6 +8,8 @@
 
 import QtQuick 2.9
 import QtQuick.Templates @QQC2_VERSION@ as T
+import QtQml 2.15
+
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.9 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents3
@@ -31,14 +33,16 @@ T.ScrollView {
             // ` * PlasmaCore.Units.devicePixelRatio` is needed because Plasma doesn't use Qt scaling on X11.
             horizontalStepSize: Qt.styleHints.wheelScrollLines * 20 * PlasmaCore.Units.devicePixelRatio
             verticalStepSize: Qt.styleHints.wheelScrollLines * 20 * PlasmaCore.Units.devicePixelRatio
+        },
+        Binding { // TODO KF6: remove, Qt6 has this behavior by default
+            target: controlRoot.contentItem // always instanceof Flickable
+            property: 'clip'
+            value: true
+            restoreMode: Binding.RestoreBindingOrValue
         }
     ]
 
     T.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
-        readonly property Flickable flickableItem: controlRoot.contentItem
-        onFlickableItemChanged: {
-            flickableItem.clip = true;
-        }
         parent: controlRoot
         x: controlRoot.mirrored ? 0 : controlRoot.width - width
         y: controlRoot.topPadding
