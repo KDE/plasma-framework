@@ -875,7 +875,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
             // and set the event position as action data
             if (plugin->contextualActions().length() == 1) {
                 // but first check whether we are not a popup
-                // we don't want to randomly creates applets without confirmation
+                // we don't want to randomly create applets without confirmation
                 if (static_cast<QQuickItem *>(watched)->window() != ci->window()) {
                     return true;
                 }
