@@ -35,7 +35,6 @@ T.ScrollView {
     ]
 
     T.ScrollBar.vertical: PlasmaComponents3.ScrollBar {
-        id: verticalScrollBar
         readonly property Flickable flickableItem: controlRoot.contentItem
         onFlickableItemChanged: {
             flickableItem.clip = true;
