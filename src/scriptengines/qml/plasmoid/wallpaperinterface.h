@@ -11,6 +11,7 @@
 #include <QQuickItem>
 
 #include <KPackage/Package>
+#include <kdeclarative/kdeclarative_export.h>
 
 class KConfigLoader;
 class KActionCollection;
@@ -20,7 +21,7 @@ class ContainmentInterface;
 
 namespace KDeclarative
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
 class ConfigPropertyMap;
 #endif
 class QmlObject;
@@ -38,7 +39,7 @@ class WallpaperInterface : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QString pluginName READ pluginName NOTIFY packageChanged)
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
     Q_PROPERTY(KDeclarative::ConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
 #else
     Q_PROPERTY(KConfigPropertyMap *configuration READ configuration NOTIFY configurationChanged)
@@ -61,7 +62,7 @@ public:
 
     QString pluginName() const;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
     KDeclarative::ConfigPropertyMap *configuration() const;
 #else
     KConfigPropertyMap *configuration() const;
@@ -101,7 +102,7 @@ private:
     ContainmentInterface *m_containmentInterface;
     KDeclarative::QmlObject *m_qmlObject;
     KPackage::Package m_pkg;
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
     KDeclarative::ConfigPropertyMap *m_configuration;
 #else
     KConfigPropertyMap *m_configuration;

@@ -22,6 +22,7 @@ target_link_libraries(plasma_appletscript_declarative
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
     KF5::Activities
+    KF5::ConfigQml
     KF5::KIOCore
     KF5::KIOWidgets
     KF5::Declarative

@@ -7,7 +7,8 @@
 #include "wallpaperinterface.h"
 
 #include "containmentinterface.h"
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
 #include <kdeclarative/configpropertymap.h>
 #else
 #include <KConfigPropertyMap>
@@ -79,7 +80,7 @@ QString WallpaperInterface::pluginName() const
     return m_wallpaperPlugin;
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
 KDeclarative::ConfigPropertyMap *WallpaperInterface::configuration() const
 #else
 KConfigPropertyMap *WallpaperInterface::configuration() const
@@ -143,7 +144,7 @@ void WallpaperInterface::syncWallpaperPackage()
     m_configLoader = nullptr;
     m_configuration = nullptr;
     if (configScheme()) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
         m_configuration = new KDeclarative::ConfigPropertyMap(configScheme(), this);
 #else
         m_configuration = new KConfigPropertyMap(configScheme(), this);

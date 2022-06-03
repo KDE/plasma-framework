@@ -13,6 +13,7 @@
 #include <QQuickView>
 
 #include <KPluginMetaData>
+#include <kdeclarative/kdeclarative_export.h>
 
 #include <Plasma/Applet>
 #include <Plasma/Theme>
@@ -28,7 +29,7 @@ class KConfigPropertyMap;
 
 namespace KDeclarative
 {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
 class ConfigPropertyMap;
 #endif
 class QmlObject;
@@ -528,7 +529,7 @@ private:
     QStringList m_actions;
     QHash<QString, QActionGroup *> m_actionGroups;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
     KDeclarative::ConfigPropertyMap *m_configuration;
 #else
     KConfigPropertyMap *m_configuration;

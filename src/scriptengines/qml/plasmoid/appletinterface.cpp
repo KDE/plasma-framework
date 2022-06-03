@@ -28,7 +28,8 @@
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
 #include <kdeclarative/configpropertymap.h>
 #else
 #include <KConfigPropertyMap>
@@ -140,7 +141,7 @@ void AppletInterface::init()
         return;
     }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
     m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
 #else
     m_configuration = new KConfigPropertyMap(applet()->configScheme(), this);
