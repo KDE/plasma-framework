@@ -14,6 +14,7 @@
 #include <KServiceTypeTrader>
 #include <QDebug>
 #include <QRegExp>
+#include <kcoreaddons_export.h>
 #include <kdeclarative/kdeclarative.h>
 #include <kpackage/packageloader.h>
 
@@ -38,7 +39,7 @@ namespace Plasma
 inline bool isContainmentMetaData(const KPluginMetaData &md)
 {
     return md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 89)
         || md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
 #endif
         ;

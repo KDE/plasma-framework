@@ -9,6 +9,7 @@
 #include "config-plasma.h"
 #include "packages_p.h"
 #include <KLocalizedString>
+#include <kcoreaddons_export.h>
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
 
@@ -39,7 +40,7 @@ public:
             return;
         }
         if (md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 89)
             || md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
 #endif
         ) {
