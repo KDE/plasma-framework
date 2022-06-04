@@ -139,7 +139,7 @@ PlasmaComponents3.TextField {
 
     Row {
         id: leftActionsRow
-        padding: PlasmaCore.Units.smallSpacing
+        padding: visible ? PlasmaCore.Units.smallSpacing : 0
         anchors.left: parent.left
         anchors.leftMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
@@ -153,7 +153,7 @@ PlasmaComponents3.TextField {
 
     Row {
         id: rightActionsRow
-        padding: PlasmaCore.Units.smallSpacing
+        padding: visible ? PlasmaCore.Units.smallSpacing : 0
         layoutDirection: Qt.RightToLeft
         anchors.right: parent.right
         anchors.rightMargin: PlasmaCore.Units.smallSpacing
