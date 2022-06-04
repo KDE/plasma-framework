@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2019 Carl-Lucien Schwan <carl@carlschwan.eu>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
+import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -10,11 +11,13 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  * Example usage for the password field component:
  *
  * @code{.qml}
- * import org.kde.plasma.extras 2.8 as Kirigami
+ * import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  * PlasmaExtras.PasswordField {
  *     id: passwordField
- *     onAccepted: // check if passwordField.text is valid
+ *     onAccepted: {
+ *         // check if passwordField.text is valid
+ *     }
  * }
  * @endcode
  *
