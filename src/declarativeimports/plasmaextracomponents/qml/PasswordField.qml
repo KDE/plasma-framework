@@ -43,4 +43,12 @@ PlasmaExtras.ActionTextField {
         icon.name: root.showPassword ? "password-show-off" : "password-show-on"
         onTriggered: root.showPassword = !root.showPassword
     }
+
+    Keys.onPressed: {
+        if (event.matches(StandardKey.Undo)) {
+            // Disable undo action for security reasons
+            // See QTBUG-103934
+            event.accepted = true
+        }
+    }
 }
