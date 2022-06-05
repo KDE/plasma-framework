@@ -77,6 +77,43 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#7B7C7E;
+      }
+      .ColorScheme-Background{
+        color:#EFF0F1;
+      }
+      .ColorScheme-Highlight{
+        color:#3DAEE6;
+      }
+      .ColorScheme-ViewText {
+        color:#7B7C7E;
+      }
+      .ColorScheme-ViewBackground{
+        color:#FCFCFC;
+      }
+      .ColorScheme-ViewHover {
+        color:#3DAEE6;
+      }
+      .ColorScheme-ViewFocus{
+        color:#1E92FF;
+      }
+      .ColorScheme-ButtonText {
+        color:#7B7C7E;
+      }
+      .ColorScheme-ButtonBackground{
+        color:#EFF0F1;
+      }
+      .ColorScheme-ButtonHover {
+        color:#3DAEE6;
+      }
+      .ColorScheme-ButtonFocus{
+        color:#1E92FF;
+      }
+  </style>
   <defs
      id="defs5">
     <linearGradient
@@ -405,9 +442,10 @@
                inkscape:connector-curvature="0" />
           </g>
           <g
-             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#3daee9;fill-opacity:1;stroke:none;font-family:Oxygen;-inkscape-font-specification:Oxygen"
+             style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:currentColor;fill-opacity:1;stroke:none;font-family:Oxygen;-inkscape-font-specification:Oxygen"
              id="text5153"
-             transform="translate(0,6)">
+             transform="translate(0,6)"
+             class="ColorScheme-ButtonFocus" >
             <path
                id="path6197"
                d="m 1306.8865,363.0712 c 2.7474,3e-5 4.9479,0.72268 6.6015,2.16797 1.6667,1.43231 2.5,3.39195 2.5,5.8789 0,1.69273 -0.4362,3.28778 -1.3086,4.78516 -0.8724,1.48439 -2.2135,3.19663 -4.0234,5.13672 l -8.2617,8.80859 13.0273,0 0,3.00781 -16.4453,0 0,-3.6914 9.3945,-10.6836 c 1.2761,-1.45831 2.2331,-2.72784 2.8711,-3.80859 0.6511,-1.09373 0.9766,-2.17446 0.9766,-3.24219 0,-1.66664 -0.4753,-2.93617 -1.4258,-3.80859 -0.9505,-0.87237 -2.2851,-1.30857 -4.0039,-1.30859 -2.5521,2e-5 -4.6419,0.82033 -6.2695,2.46093 l -1.1328,-3.0664 c 1.914,-1.75779 4.414,-2.63669 7.5,-2.63672 m -14.8802,1.23047 3.4961,0 0,28.55468 -3.4961,0 0,-25.29296 c -1.6015,1.06773 -3.1966,1.95965 -4.7851,2.67578 l 0,-3.06641 c 1.25,-0.54685 2.845,-1.50388 4.7851,-2.87109"
@@ -428,12 +466,13 @@
            inkscape:export-ydpi="90"
            inkscape:export-xdpi="90"
            inkscape:export-filename="C:\Users\andrewl\Downloads\silly clock.png"
-           style="fill:#3daee9;fill-opacity:1;stroke:none"
+           style="fill:currentColor;fill-opacity:1;stroke:none"
            id="rect5442"
            width="20"
            height="2.7090182"
            x="927.37054"
-           y="578.95905" />
+           y="578.95905"
+           class="ColorScheme-ButtonFocus" />
         <rect
            inkscape:export-ydpi="90"
            inkscape:export-xdpi="90"
@@ -453,7 +492,8 @@
            height="2.7090182"
            width="20"
            id="rect5446"
-           style="fill:#3daee9;fill-opacity:1;stroke:none" />
+           style="fill:currentColor;fill-opacity:1;stroke:none"
+           class="ColorScheme-ButtonFocus" />
         <rect
            inkscape:export-ydpi="90"
            inkscape:export-xdpi="90"
@@ -470,12 +510,13 @@
            inkscape:export-xdpi="90"
            inkscape:export-filename="C:\Users\andrewl\Downloads\silly clock.png"
            transform="matrix(0,1,-1,0,0,0)"
-           style="fill:#3daee9;fill-opacity:1;stroke:none"
+           style="fill:currentColor;fill-opacity:1;fill-rule:nonzero;stroke:none"
            id="rect5448"
            width="20"
            height="2.7090182"
            x="651.61395"
-           y="-1019.2259" />
+           y="-1019.2259"
+           class="ColorScheme-ButtonFocus" />
         <path
            inkscape:export-ydpi="90"
            inkscape:export-xdpi="90"
