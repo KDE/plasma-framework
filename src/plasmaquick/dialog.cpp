@@ -851,7 +851,6 @@ void DialogPrivate::applyType()
     if (shellSurface) {
         if (q->flags() & Qt::WindowStaysOnTopHint) {
             type = Dialog::AppletPopup;
-            shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
         }
         switch (type) {
         case Dialog::Dock:
