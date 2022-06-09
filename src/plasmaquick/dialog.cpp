@@ -850,7 +850,11 @@ void DialogPrivate::applyType()
 #if HAVE_KWAYLAND
     if (shellSurface) {
         if (q->flags() & Qt::WindowStaysOnTopHint) {
-            type = Dialog::AppletPopup;
+            // If the AppletPopup type is not explicitly requested, then use the Dock type in this case
+            // to avoid bug #454635.
+            if (type != Dialog::AppletPopup) {
+                type = Dialog::Dock;
+            }
         }
         switch (type) {
         case Dialog::Dock:
