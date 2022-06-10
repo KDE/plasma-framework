@@ -151,10 +151,15 @@ void WallpaperInterface::syncWallpaperPackage()
 #endif
     }
 
+    /*
+     * The initialization is delayed, so it's fine to setSource first.
+     * This also prevents many undefined wallpaper warnings caused by "wallpaper" being set
+     * when the old wallpaper plugin still exists.
+     */
+    m_qmlObject->setSource(m_pkg.fileUrl("mainscript"));
     if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
         m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
     }
-    m_qmlObject->setSource(m_pkg.fileUrl("mainscript"));
 
     const QString rootPath = m_pkg.metadata().value(QStringLiteral("X-Plasma-RootPath"));
     if (!rootPath.isEmpty()) {
