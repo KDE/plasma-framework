@@ -854,6 +854,7 @@ void DialogPrivate::applyType()
             // to avoid bug #454635.
             if (type != Dialog::AppletPopup) {
                 type = Dialog::Dock;
+                shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
             }
         }
         switch (type) {
