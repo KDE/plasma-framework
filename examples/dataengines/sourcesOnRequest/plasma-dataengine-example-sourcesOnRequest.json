@@ -51,7 +51,7 @@
         "Category": "Examples",
         "Description": "A DataEngine example showing how to respond to requests for source creation and updates",
         "Description[az]": "Mənbə yaradılması və yeniləmə tələblərinə necə cavab veriləcəyini göstərən bir DataEngine nümunəsi",
-        "Description[ca@valencia]": "Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualisació de les fonts",
+        "Description[ca@valencia]": "Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts",
         "Description[ca]": "Un exemple de «DataEngine» que mostra com respondre a peticions de creació i actualització de les fonts",
         "Description[en_GB]": "A DataEngine example showing how to respond to requests for source creation and updates",
         "Description[es]": "Un ejemplo de motor de datos que muestra cómo responder a peticiones de creación y actualización de fuentes",
