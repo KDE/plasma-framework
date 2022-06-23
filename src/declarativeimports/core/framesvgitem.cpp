@@ -79,10 +79,9 @@ public:
         : ManagedTextureNode()
         , m_frameSvg(frameSvg)
         , m_border(borders)
-        , m_lastParent(parent)
         , m_fitMode(fitMode)
     {
-        m_lastParent->appendChildNode(this);
+        parent->appendChildNode(this);
 
         if (m_fitMode == Tile) {
             if (m_border == FrameSvg::TopBorder || m_border == FrameSvg::BottomBorder || m_border == FrameSvg::NoBorder) {
@@ -163,7 +162,6 @@ public:
 private:
     FrameSvgItem *m_frameSvg;
     FrameSvg::EnabledBorders m_border;
-    QSGNode *m_lastParent;
     QSize m_elementNativeSize;
     FitMode m_fitMode;
 };
