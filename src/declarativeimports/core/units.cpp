@@ -115,8 +115,9 @@ void Units::iconLoaderSettingsChanged()
     m_iconSizes->insert(QStringLiteral("large"), devicePixelIconSize(KIconLoader::SizeLarge));
     m_iconSizes->insert(QStringLiteral("huge"), devicePixelIconSize(KIconLoader::SizeHuge));
     m_iconSizes->insert(QStringLiteral("enormous"), devicePixelIconSize(KIconLoader::SizeEnormous));
-    // gridUnit is always the font height here
-    m_iconSizes->insert(QStringLiteral("sizeForLabels"), devicePixelIconSize(roundToIconSize(QFontMetrics(QGuiApplication::font()).height())));
+    // We deliberately don't feed the result into devicePixelIconSize() because
+    // roundToIconSize() already does that internally.
+    m_iconSizes->insert(QStringLiteral("sizeForLabels"), roundToIconSize(QFontMetrics(QGuiApplication::font()).height()));
 
     m_iconSizeHints->insert(QStringLiteral("panel"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Panel)));
     m_iconSizeHints->insert(QStringLiteral("desktop"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
