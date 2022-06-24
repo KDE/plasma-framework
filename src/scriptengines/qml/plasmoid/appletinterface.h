@@ -16,6 +16,7 @@
 #include <kdeclarative/kdeclarative_export.h>
 
 #include <Plasma/Applet>
+#include <Plasma/Containment>
 #include <Plasma/Theme>
 
 #include "declarativeappletscript.h"
@@ -271,6 +272,14 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(AppletInterface *self READ self CONSTANT)
 
+    /**
+     * True when the Corona is in an edit mode that allows to move
+     * things around.
+     * This is global to the Corona, all containments will have the same value for editMode
+     * @since 5.96
+     */
+    Q_PROPERTY(bool editMode READ isEditMode NOTIFY editModeChanged)
+
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
     ~AppletInterface() override;
@@ -450,6 +459,8 @@ public:
 
     AppletInterface *self();
 
+    bool isEditMode() const;
+
 Q_SIGNALS:
     /**
      * somebody else, usually the containment sent some data to the applet
@@ -498,6 +509,7 @@ Q_SIGNALS:
     void availableScreenRectChanged();
     void constraintHintsChanged();
     void contextualActionsChanged();
+    void editModeChanged();
 
     void userConfiguringChanged();
     void globalShortcutChanged();

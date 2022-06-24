@@ -50,6 +50,7 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 {
     qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
 
+    connect(applet()->containment()->corona(), &Plasma::Corona::editModeChanged, this, &AppletInterface::editModeChanged);
     connect(this, &AppletInterface::configNeedsSaving, applet(), &Plasma::Applet::configNeedsSaving);
     connect(applet(), &Plasma::Applet::immutabilityChanged, this, &AppletInterface::immutabilityChanged);
     connect(applet(), &Plasma::Applet::userConfiguringChanged, this, &AppletInterface::userConfiguringChanged);
@@ -928,6 +929,11 @@ KPluginMetaData AppletInterface::metaData() const
 AppletInterface *AppletInterface::self()
 {
     return this;
+}
+
+bool AppletInterface::isEditMode() const
+{
+    return applet()->containment()->corona()->isEditMode();
 }
 
 #include "moc_appletinterface.cpp"
