@@ -701,7 +701,7 @@ void IconItem::loadPixmap()
         return;
     }
 
-    int size = qMin(qRound(width()), qRound(height()));
+    int size = qMin(qRound(width()), qRound(height())) * window()->devicePixelRatio();
     if (m_roundToIconSize) {
         size = Units::roundToIconSize(size);
     }
