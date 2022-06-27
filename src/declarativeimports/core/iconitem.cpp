@@ -6,6 +6,9 @@
 */
 
 #include "iconitem.h"
+
+#include <cmath>
+
 #include <QDebug>
 #include <QPaintEngine>
 #include <QPainter>
@@ -254,7 +257,7 @@ public:
 private:
     qreal devicePixelRatio()
     {
-        return window() ? window()->devicePixelRatio() : qApp->devicePixelRatio();
+        return std::ceil(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio());
     }
 
     QPointer<Plasma::Svg> m_svgIcon;
@@ -701,7 +704,7 @@ void IconItem::loadPixmap()
         return;
     }
 
-    int size = qMin(qRound(width()), qRound(height())) * window()->devicePixelRatio();
+    int size = qMin(qRound(width()), qRound(height()));
     if (m_roundToIconSize) {
         size = Units::roundToIconSize(size);
     }
