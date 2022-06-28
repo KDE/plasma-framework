@@ -27,6 +27,7 @@ include(KDEPackageAppTemplates)
 include(ECMGenerateQmlTypes)
 include(ECMSetupQtPluginMacroNames)
 include(ECMMarkNonGuiExecutable)
+include(ECMDeprecationSettings)
 
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
@@ -161,8 +162,14 @@ ecm_setup_qtplugin_macro_names(
     CONFIG_CODE_VARIABLE
         PACKAGE_SETUP_AUTOMOC_VARIABLES
 )
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050e00) # must port away from qmlRegisterInterface before upgrading this to 050f00
-add_definitions(-DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x055100)
+
+ecm_set_disabled_deprecation_versions(
+    QT 5.14 # needed for qmlRegisterInterface
+    KF 5.95
+    KCOREADDONS 5.88 # KPluginMetaData::serviceTypes
+    KSERVICE 5.86 # KService::pluginKeyword
+    KDECLARATIVE 5.88 # KDeclarative::ConfigPropertyMap
+)
 
 #add_definitions(-Wno-deprecated)
 
