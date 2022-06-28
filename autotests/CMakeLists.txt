@@ -53,6 +53,12 @@ if(HAVE_X11)
         TEST_NAME dialognativetest
         LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick
     )
+    ecm_add_test(
+        iconitemhidpitest.cpp
+        TEST_NAME iconitemhidpitest
+        LINK_LIBRARIES Qt::Gui Qt::Test Qt::Qml Qt::Quick KF5::IconThemes KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick
+    )
+    set_tests_properties(iconitemhidpitest PROPERTIES ENVIRONMENT "QT_SCALE_FACTOR=1.25")
 endif()
 
 ecm_add_test(
