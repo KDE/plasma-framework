@@ -1,0 +1,275 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % Swedish "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Pakethantering för Plasma</title>
+<date
+>2014-04-25</date>
+<releaseinfo
+>Ramverk 5.0</releaseinfo>
+<productname
+>KDE Ramverk</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>Installera, lista eller ta bort paket för &plasma;</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> sökväg</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> typ</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> sökväg</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> namn</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> sökväg</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> name</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> path</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Beskrivning</title>
+<para
+><command
+>plasmapkg2</command
+>  är ett kommandoradsverktyg för att installera, lista eller ta bort &plasma;-paket.</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Väljare</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+> sökväg</replaceable
+></term>
+<listitem
+><para
+>Skapa ett SHA1-kondensat för paketet på <quote
+>sökväg</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Installation eller borttagning utförs med paket installerade för alla användare.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+> typ</replaceable
+></term>
+<listitem
+><para
+>Typ av paket, t.exd. tema (theme), skrivbordsunderlägg (wallpaper), plasmoid, datagränssnitt (dataengine), körprogram (runner), layoutmall (layout-template), etc. [plasmoid].</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+> sökväg</replaceable
+></term>
+<listitem
+><para
+>Installera paketet <quote
+>sökväg</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+> namn</replaceable
+></term>
+<listitem
+><para
+>Visa information om paketet <quote
+>namn</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+> sökväg</replaceable
+></term>
+<listitem
+><para
+>Uppgradera paketet <quote
+>sökväg</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Lista installerade paket.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>listar alla kända pakettyper som kan installeras.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+> namn</replaceable
+></term>
+<listitem
+><para
+>Ta bort paketet som heter <quote
+>namn</quote
+>.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+> sökväg</replaceable
+></term>
+<listitem
+><para
+>Absolut sökväg till paketroten. Om den inte anges, används standarddatakatalogerna för &plasma;-sessionen istället.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Se också</title>
+
+<para
+>Mer detaljerad användardokumentation är tillgänglig med <ulink url="help:/plasma-desktop"
+>help:/plasma-desktop</ulink
+> (skriv antingen in webbadressen i &konqueror;, eller kör <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Upphovsmän</title>
+<para
+><command
+>plasmapkg2</command
+> är skrivet av <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+>.</para>
+</refsect1>
+
+</refentry>
