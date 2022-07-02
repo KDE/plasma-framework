@@ -4,6 +4,7 @@ X-KDE-ServiceType=Plasma/Containment
 
 Comment=Plasma applet container and background painter
 Comment[az]=Plasma əlavəsi tutumu və arxa fon tərtibçisi
+Comment[bg]=Контейнер и фонов изобразител на приставки за Plasma
 Comment[bs]=Sadržilac plazma apleta i iscrtavač pozadine
 Comment[ca]=Contenidor de miniaplicació del Plasma i pintor de fons
 Comment[ca@valencia]=Contenidor de miniaplicació de Plasma i pintor de fons

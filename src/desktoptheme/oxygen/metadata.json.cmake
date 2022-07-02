@@ -59,6 +59,7 @@
         "License": "GPL",
         "Name": "Oxygen",
         "Name[az]": "Oxygen ayarları",
+        "Name[bg]": "Oxygen",
         "Name[ca@valencia]": "Oxygen",
         "Name[ca]": "Oxygen",
         "Name[cs]": "Oxygen",
