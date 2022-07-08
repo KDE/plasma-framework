@@ -10,7 +10,8 @@ import QtQuick.Controls @QQC2_VERSION@
 import QtQml.Models 2.1
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.plasma.components 3.0 as PC3
+import org.kde.kirigami 2.20 as Kirigami
 import "private"
 
 T.TabButton {
@@ -36,6 +37,13 @@ T.TabButton {
     Kirigami.MnemonicData.enabled: control.enabled && control.visible
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
     Kirigami.MnemonicData.label: control.text
+
+    PC3.ToolTip.text: control.text.length > 0 ? control.text : ""
+    PC3.ToolTip.visible: control.hovered
+                         && control.text.length > 0
+                        && control.display === PC3.AbstractButton.IconOnly
+    PC3.ToolTip.delay: Kirigami.Units.toolTipDelay
+    Accessible.name: control.text.length > 0 ? control.text : ""
 
     Shortcut {
         //in case of explicit & the button manages it by itself
