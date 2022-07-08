@@ -106,7 +106,7 @@ void QMenuProxy::setVisualParent(QObject *parent)
 
 QWindow *QMenuProxy::transientParent()
 {
-    if (!m_menu) {
+    if (!m_menu || !m_menu->windowHandle()) {
         return nullptr;
     }
     return m_menu->windowHandle()->transientParent();
@@ -114,7 +114,7 @@ QWindow *QMenuProxy::transientParent()
 
 void QMenuProxy::setTransientParent(QWindow *parent)
 {
-    if (parent == m_menu->windowHandle()->transientParent()) {
+    if (!m_menu || !m_menu->windowHandle() || parent == m_menu->windowHandle()->transientParent()) {
         return;
     }
 
