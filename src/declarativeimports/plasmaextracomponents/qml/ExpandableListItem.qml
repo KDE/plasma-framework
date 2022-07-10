@@ -372,6 +372,10 @@ Item {
     KeyNavigation.tab: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
     KeyNavigation.right: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
 
+    Accessible.role: Accessible.Button
+    Accessible.name: title
+    Accessible.description: subtitle
+
     // Handle left clicks and taps; don't accept stylus input or else it steals
     // events from the buttons on the list item
     TapHandler {
