@@ -515,6 +515,8 @@ Item {
 
                     KeyNavigation.tab: expandToggleButton
                     KeyNavigation.right: expandToggleButton
+
+                    Accessible.description: action ? action.Accessible.description : ""
                 }
 
                 // Expand/collapse button
