@@ -71,7 +71,11 @@ void AppletQuickItemPrivate::init()
     }
 
     qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     if (!qmlObject->engine()->urlInterceptor()) {
+#else
+    if (qmlObject->engine()->urlInterceptors().isEmpty()) {
+#endif
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->setUrlInterceptor(interceptor);
