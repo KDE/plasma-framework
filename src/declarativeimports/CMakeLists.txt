@@ -8,7 +8,11 @@ add_subdirectory(kirigamiplasmastyle)
 
 install(DIRECTORY plasmastyle/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls/Styles/Plasma)
 
-set(QQC2_VERSION "2.${Qt${QT_MAJOR_VERSION}QuickControls2_VERSION_MINOR}")
+if (QT_MAJOR_VERSION EQUAL "5")
+    set(QQC2_VERSION "2.${Qt5QuickControls2_VERSION_MINOR}")
+else ()
+    set(QQC2_VERSION "6.${Qt6Quick_VERSION_MINOR}")
+endif()
 
 
 # Find all the source qml files
