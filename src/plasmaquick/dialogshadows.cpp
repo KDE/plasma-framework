@@ -37,17 +37,6 @@ public:
     QVector<KWindowShadowTile::Ptr> m_tiles;
 };
 
-class DialogShadowsSingleton
-{
-public:
-    DialogShadowsSingleton()
-    {
-    }
-
-    DialogShadows self;
-};
-
-Q_GLOBAL_STATIC(DialogShadowsSingleton, privateDialogShadowsSelf)
 
 DialogShadows::DialogShadows(QObject *parent, const QString &prefix)
     : Plasma::Svg(parent)
@@ -64,7 +53,12 @@ DialogShadows::~DialogShadows()
 
 DialogShadows *DialogShadows::self()
 {
-    return &privateDialogShadowsSelf->self;
+    // KF6 port to Q_APPLICATION_STATIC
+    static DialogShadows *s_privateDialogShadowsSelf = nullptr;
+    if (!s_privateDialogShadowsSelf) {
+        s_privateDialogShadowsSelf = new DialogShadows(qApp);
+    }
+    return s_privateDialogShadowsSelf;
 }
 
 void DialogShadows::addWindow(QWindow *window, Plasma::FrameSvg::EnabledBorders enabledBorders)
