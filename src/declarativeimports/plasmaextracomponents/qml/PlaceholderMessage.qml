@@ -225,7 +225,7 @@ ColumnLayout {
     spacing: PlasmaCore.Units.largeSpacing
 
     PlasmaCore.IconItem {
-        visible: source != undefined
+        visible: source !== undefined
         opacity: 0.5
 
         Layout.alignment: Qt.AlignHCenter
@@ -238,7 +238,7 @@ ColumnLayout {
     PlasmaExtras.Heading {
         text: root.text
         visible: text.length > 0
-        opacity: root.type == PlaceholderMessage.Type.Actionable ? 1 : 0.65
+        opacity: root.type === PlaceholderMessage.Type.Actionable ? 1 : 0.65
 
         type: PlasmaExtras.Heading.Primary
 
@@ -251,7 +251,7 @@ ColumnLayout {
     PlasmaComponents3.Label {
         text: root.explanation
         visible:  root.explanation !== ""
-        opacity: root.type == PlaceholderMessage.Type.Actionable ? 1 : 0.65
+        opacity: root.type === PlaceholderMessage.Type.Actionable ? 1 : 0.65
 
         horizontalAlignment: Qt.AlignHCenter
         wrapMode: Text.WordWrap
