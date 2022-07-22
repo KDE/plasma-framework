@@ -6,6 +6,7 @@
 */
 
 import QtQuick 2.6
+import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
@@ -31,11 +32,8 @@ T.ToolTip {
 
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
-    contentItem: Item {
-        implicitHeight: Math.ceil(label.implicitHeight)
-        implicitWidth: Math.ceil(label.implicitWidth)
+    contentItem: RowLayout {
         Label {
-            id: label
             // Strip out ampersands right before non-whitespace characters, i.e.
             // those used to determine the alt key shortcut
             text: control.text.replace(/&(?=\S)/g, "")
@@ -44,6 +42,9 @@ T.ToolTip {
 
             PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ToolTipColorGroup
             PlasmaCore.ColorScope.inherit: false
+            Layout.fillWidth: true
+            // This value is basically arbitrary. It just looks nice.
+            Layout.maximumWidth: PlasmaCore.Units.gridUnit * 14
         }
     }
 
