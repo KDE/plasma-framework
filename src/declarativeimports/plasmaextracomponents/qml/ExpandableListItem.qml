@@ -411,7 +411,7 @@ Item {
         id: mouse
         anchors.fill: parent
 
-        enabled: listItem.isEnabled
+        enabled: listItem.enabled
 
         acceptedButtons: Qt.RightButton
         hoverEnabled: true
