@@ -32,7 +32,7 @@ class IconItem : public QQuickItem
     /**
      * Sets the icon to be displayed. Source can be one of:
      *  - iconName (as a string)
-     *  - URL
+     *  - URL (for now, only file:// URL or a absolute path are supported)
      *  - QImage
      *  - QPixmap
      *  - QIcon
