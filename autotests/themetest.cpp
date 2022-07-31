@@ -135,7 +135,7 @@ void ThemeTest::testThemeConfig_data()
 void ThemeTest::testThemeConfig()
 {
     QFETCH(QString, themeName);
-    Plasma::Theme *theme = new Plasma::Theme(themeName, this);
+    auto theme = std::make_unique<Plasma::Theme>(themeName, this);
     QCOMPARE(theme->backgroundContrastEnabled(), true);
     QCOMPARE(theme->backgroundContrast(), 0.23);
 }
