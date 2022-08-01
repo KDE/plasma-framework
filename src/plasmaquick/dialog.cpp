@@ -1353,6 +1353,8 @@ void Dialog::resizeEvent(QResizeEvent *re)
 
     d->mainItem->setSize(QSize(re->size().width() - margin->left() - margin->right(), re->size().height() - margin->top() - margin->bottom()));
 
+    d->updateTheme();
+
     QObject::connect(d->mainItem, SIGNAL(widthChanged()), this, SLOT(slotMainItemSizeChanged()));
     QObject::connect(d->mainItem, SIGNAL(heightChanged()), this, SLOT(slotMainItemSizeChanged()));
 }
