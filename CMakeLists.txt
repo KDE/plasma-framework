@@ -88,28 +88,33 @@ set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate doc
                        TYPE OPTIONAL
                       )
 
-#optional features
-find_package(X11 MODULE)
-set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
-                       URL "https://www.x.org/"
-                       TYPE OPTIONAL
-                      )
-find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE XFIXES RENDER)
-set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
-                       URL "https://xcb.freedesktop.org/"
-                       TYPE OPTIONAL
-                      )
-if(X11_FOUND AND XCB_XCB_FOUND)
-  set(HAVE_X11 1)
-  if (QT_MAJOR_VERSION STREQUAL "5")
-      find_package(Qt5X11Extras ${REQUIRED_QT_VERSION} NO_MODULE)
-  elseif (QT_MAJOR_VERSION STREQUAL "6")
-      find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h
-  endif()
-  #X11_Xrender discovery is done by FindX11
-  #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
-else()
-  set(HAVE_X11 0)
+option(WITHOUT_X11 "Build without X11 support (skips finding X11)." OFF)
+if(NOT WITHOUT_X11)
+    #optional features
+    find_package(X11 MODULE)
+    set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
+                        URL "https://www.x.org/"
+                        TYPE OPTIONAL
+                        )
+    find_package(XCB MODULE COMPONENTS XCB COMPOSITE DAMAGE SHAPE XFIXES RENDER)
+    set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
+                        URL "https://xcb.freedesktop.org/"
+                        TYPE OPTIONAL
+                        )
+    if(X11_FOUND AND XCB_XCB_FOUND)
+        set(HAVE_X11 1)
+        if (QT_MAJOR_VERSION STREQUAL "5")
+            find_package(Qt5X11Extras ${REQUIRED_QT_VERSION} NO_MODULE)
+        elseif (QT_MAJOR_VERSION STREQUAL "6")
+            find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h
+        endif()
+        #X11_Xrender discovery is done by FindX11
+        #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
+        set(HAVE_XCB_SHAPE ${XCB_SHAPE_FOUND})
+    else()
+        set(HAVE_X11 0)
+        set(HAVE_XCB_SHAPE 0)
+    endif()
 endif()
 
 find_package(OpenGL)
@@ -125,7 +130,7 @@ set_package_properties(EGL PROPERTIES
                       )
 
 get_target_property(QtGui_Enabled_Features Qt${QT_MAJOR_VERSION}::Gui QT_ENABLED_PUBLIC_FEATURES)
-if(OpenGL_GLX_FOUND AND X11_FOUND AND (QtGui_Enabled_Features MATCHES "opengl"))
+if(OpenGL_GLX_FOUND AND HAVE_X11 AND (QtGui_Enabled_Features MATCHES "opengl"))
     add_feature_info(GLX OpenGL_GLX_FOUND "OpenGL GLX libraries.")
     set(HAVE_GLX 1)
 else()

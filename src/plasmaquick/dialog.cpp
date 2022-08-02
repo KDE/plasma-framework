@@ -11,6 +11,7 @@
 #include "../declarativeimports/core/framesvgitem.h"
 #include "appletquickitem.h"
 #include "config-plasma.h"
+#include "../declarativeimports/core/config-x11.h"
 #include "configview.h"
 #include "dialogshadows_p.h"
 #include "view.h"

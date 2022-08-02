@@ -1,9 +1,3 @@
-if(HAVE_X11 AND XCB_XCB_FOUND AND XCB_SHAPE_FOUND)
-    add_definitions(-DHAVE_XCB_SHAPE=1)
-else()
-    add_definitions(-DHAVE_XCB_SHAPE=0)
-endif()
-
 add_library(KF5PlasmaQuick SHARED)
 add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
 
@@ -81,7 +75,7 @@ if(HAVE_X11)
         target_link_libraries(KF5PlasmaQuick PRIVATE Qt6::GuiPrivate)
     endif()
 
-    if(XCB_SHAPE_FOUND)
+    if(HAVE_XCB_SHAPE)
         target_link_libraries(KF5PlasmaQuick PRIVATE XCB::SHAPE)
     endif()
 endif()
