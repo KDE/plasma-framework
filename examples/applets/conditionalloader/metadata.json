@@ -63,7 +63,7 @@
         "Name[uk]": "Тест аплету",
         "Name[vi]": "Kiểm thử tiểu ứng dụng",
         "Name[x-test]": "xxApplet Testxx",
-        "Name[zh_CN]": "小部件测试",
+        "Name[zh_CN]": "小程序测试",
         "ServiceTypes": [
             "Plasma/Applet"
         ],

@@ -58,7 +58,7 @@
         "Description[uk]": "Віджет Плазми, написаний на QML та JavaScript",
         "Description[vi]": "Phụ kiện nội Plasma viết bằng QML và JavaScript",
         "Description[x-test]": "xxNative Plasma widget written in QML and JavaScriptxx",
-        "Description[zh_CN]": "使用 QML 和 JavaScript 编写的原生 Plasma 部件",
+        "Description[zh_CN]": "使用 QML 和 JavaScript 编写的原生 Plasma 挂件",
         "EnabledByDefault": true,
         "Icon": "text-x-script",
         "Id": "qmlscript",
@@ -88,7 +88,7 @@
         "Name[uk]": "Декларативний віджет",
         "Name[vi]": "Phụ kiện khai báo",
         "Name[x-test]": "xxDeclarative widgetxx",
-        "Name[zh_CN]": "程序声明小部件",
+        "Name[zh_CN]": "程序声明挂件",
         "ServiceTypes": [
             "Plasma/ScriptEngine"
         ],

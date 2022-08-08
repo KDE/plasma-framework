@@ -58,7 +58,7 @@
         "Description[uk]": "Приклад, який демонструє створення власного віджета задач",
         "Description[vi]": "Ví dụ cho thấy cách viết Phụ kiện tác vụ của riêng bạn",
         "Description[x-test]": "xxExample showing how to write your own tasks Widgetxx",
-        "Description[zh_CN]": "展示如何实现您自己的任务栏小部件的示例程序",
+        "Description[zh_CN]": "展示如何编写自定义任务栏挂件的示例程序",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.tasks",
         "License": "GPL",

@@ -58,7 +58,7 @@
         "Description[uk]": "Галерея віджетів, створених за допомогою QtComponent-ів Плазми",
         "Description[vi]": "nơi trưng bày các phụ kiện làm bằng QtComponents của Plasma",
         "Description[x-test]": "xxgallery of widgets done with Plasma QtComponentsxx",
-        "Description[zh_CN]": "通过 Plasma Qt 部件实现的小部件展厅",
+        "Description[zh_CN]": "通过 Plasma Qt 组件实现的挂件展厅",
         "EnabledByDefault": true,
         "Icon": "preferences-desktop-theme",
         "Id": "org.kde.example.widgetgallery",
@@ -90,7 +90,7 @@
         "Name[uk]": "Галерея віджетів",
         "Name[vi]": "Bộ sưu tập phụ kiện",
         "Name[x-test]": "xxWidgets galleryxx",
-        "Name[zh_CN]": "小部件展厅",
+        "Name[zh_CN]": "挂件展厅",
         "ServiceTypes": [
             "Plasma/Applet"
         ],
