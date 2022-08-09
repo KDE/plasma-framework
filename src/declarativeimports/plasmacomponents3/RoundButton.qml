@@ -14,6 +14,8 @@ import "private" as Private
 T.RoundButton {
     id: control
 
+    Accessible.role: Accessible.Button
+
     implicitWidth: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitWidth)
                             + leftPadding + rightPadding
     implicitHeight: Math.max(PlasmaCore.Units.gridUnit, contentItem.implicitHeight)
