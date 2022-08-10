@@ -290,6 +290,14 @@ Item {
     // TODO KF6: Change type to bool, and make private. Meanwhile QML converts boolean result into int property alright.
     readonly property int enabledActions: Array.from(contextualActionsModel).some(action => action.enabled)
 
+    /**
+     * expanded: bool
+     * Whether the expanded view is visible.
+     *
+     * @since 5.98
+     */
+    readonly property alias expanded: expandedView.expanded
+
     /*
      * hasExpandableContent: bool (read-only)
      * Whether or not this expandable list item is actually expandable. True if
