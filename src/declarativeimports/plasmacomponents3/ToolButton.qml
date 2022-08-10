@@ -28,6 +28,8 @@ T.ToolButton {
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
+    Accessible.onPressAction: clicked()
+
     Kirigami.MnemonicData.enabled: control.enabled && control.visible
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
     Kirigami.MnemonicData.label: control.text
