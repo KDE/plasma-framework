@@ -878,6 +878,7 @@ void DialogPrivate::applyType()
             break;
         case Dialog::AppletPopup:
             shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::AppletPopup);
+            break;
         default:
             break;
         }
