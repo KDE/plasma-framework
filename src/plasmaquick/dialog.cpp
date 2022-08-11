@@ -1506,7 +1506,7 @@ bool Dialog::event(QEvent *event)
             }
 
             // don't mess with position if the cursor is actually outside the view:
-            // somebody is doing a click and drag that must not break when the cursor i outside
+            // somebody is doing a click and drag that must not break when the cursor is outside
             if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
                 QMouseEvent me2(me->type(),
                                 d->positionAdjustedForMainItem(me->windowPos()),
