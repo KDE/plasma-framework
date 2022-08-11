@@ -51,7 +51,7 @@ public:
     void componentComplete() override;
 
     /**
-     * True iff the connection to the Plasma DataEngine is valid.
+     * True if the connection to the Plasma DataEngine is valid.
      */
     Q_PROPERTY(bool valid READ valid)
     bool valid() const
