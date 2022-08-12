@@ -14,10 +14,10 @@
 #include <KConfigGroup>
 #include <KDesktopFile>
 #include <KLocalizedString>
+#include <KRuntimePlatform>
 
 #include "config-plasma.h"
 #include "packages_p.h"
-#include <kdeclarative/kdeclarative.h>
 
 #include <kpackage/package.h>
 
@@ -52,7 +52,7 @@ void GenericPackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
 
-    QStringList platform = KDeclarative::KDeclarative::runtimePlatform();
+    QStringList platform = KRuntimePlatform::runtimePlatform();
     if (!platform.isEmpty()) {
         QMutableStringListIterator it(platform);
         while (it.hasNext()) {
