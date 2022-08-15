@@ -1,13 +1,14 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan (@ratijas) tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
-import QtQuick.Layouts 1.2
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 import QtQuick.Controls @QQC2_VERSION@
-import QtQml.Models 2.1
+import QtQml.Models 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
@@ -22,16 +23,18 @@ T.TabButton {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding)
-    baselineOffset: contentItem.y + contentItem.baselineOffset
 
+    baselineOffset: contentItem.y + contentItem.baselineOffset
+    hoverEnabled: true
+
+    topPadding: background.margins.top
     leftPadding: background.margins.left
     rightPadding: background.margins.right
-    topPadding: background.margins.top
     bottomPadding: background.margins.bottom
-
     spacing: PlasmaCore.Units.smallSpacing
 
-    hoverEnabled: true
+    icon.width: PlasmaCore.Units.iconSizes.smallMedium
+    icon.height: PlasmaCore.Units.iconSizes.smallMedium
 
     Kirigami.MnemonicData.enabled: control.enabled && control.visible
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
@@ -53,10 +56,8 @@ T.TabButton {
         }
     }
 
-    icon.width: PlasmaCore.Units.iconSizes.smallMedium
-    icon.height: PlasmaCore.Units.iconSizes.smallMedium
-
     contentItem: IconLabel {
+        mirrored: control.mirrored
         palette: control.palette
         font: control.font
         display: control.display

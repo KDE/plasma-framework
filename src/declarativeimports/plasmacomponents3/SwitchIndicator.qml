@@ -1,15 +1,20 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan (@ratijas) tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick 2.15
+import QtQuick.Templates @QQC2_VERSION@ as T
+import org.kde.plasma.core 2.1 as PlasmaCore
 import "private" as Private
 
 Item {
-    property Item control
+    id: root
+
+    required property T.AbstractButton control
+
     implicitWidth: Math.round(PlasmaCore.Units.gridUnit * 1.5)
     implicitHeight : PlasmaCore.Units.gridUnit
 
@@ -32,7 +37,7 @@ Item {
         }
         imagePath: "widgets/bar_meter_horizontal"
         prefix: "bar-active"
-        opacity: control.checked ? 1 : 0
+        opacity: root.control.checked ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
                 duration: PlasmaCore.Units.longDuration
@@ -41,7 +46,7 @@ Item {
         }
     }
     PlasmaCore.SvgItem {
-        x: control.mirrored ? (control.checked ? 0 : parent.width - width) : (control.checked ? parent.width - width : 0)
+        x: root.control.mirrored ? (root.control.checked ? 0 : parent.width - width) : (root.control.checked ? parent.width - width : 0)
         anchors.verticalCenter: parent.verticalCenter
         svg: PlasmaCore.Svg {
             id: buttonSvg
@@ -49,13 +54,13 @@ Item {
         }
         elementId: "normal"
 
-        implicitWidth: implicitHeight
+        implicitWidth: PlasmaCore.Units.gridUnit
         implicitHeight: PlasmaCore.Units.gridUnit
 
         Private.RoundShadow {
             anchors.fill: parent
             z: -1
-            state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
+            state: root.control.activeFocus ? "focus" : (root.control.hovered ? "hover" : "shadow")
         }
         Behavior on x {
             XAnimator {

@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan (@ratijas) tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,8 +12,6 @@ import "private"
 
 T.ItemDelegate {
     id: control
-    property real __indicatorMargin: control.indicator && control.indicator.visible && control.indicator.width > 0 ?
-        indicator.width + control.spacing : 0
 
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             implicitContentWidth + leftPadding + rightPadding,
@@ -20,20 +19,21 @@ T.ItemDelegate {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding,
                              implicitIndicatorHeight + topPadding + bottomPadding)
+
+    baselineOffset: contentItem.y + contentItem.baselineOffset
     hoverEnabled: true
 
     topPadding: background.margins.top
-    bottomPadding: background.margins.bottom
     leftPadding: background.margins.left
     rightPadding: background.margins.right
+    bottomPadding: background.margins.bottom
     spacing: PlasmaCore.Units.smallSpacing
 
     icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
     icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
 
     contentItem: IconLabel {
-        leftPadding: !control.mirrored ? 0 : control.__indicatorMargin
-        rightPadding: control.mirrored ? 0 : control.__indicatorMargin
+        mirrored: control.mirrored
         palette: control.palette
         font: control.font
         alignment: Qt.AlignLeft

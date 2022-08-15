@@ -1,20 +1,25 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan (@ratijas) tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.6
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick 2.15
+import QtQuick.Templates @QQC2_VERSION@ as T
+
+import org.kde.plasma.core 2.1 as PlasmaCore
 import "private" as Private
 
 PlasmaCore.FrameSvgItem {
     id: root
-    property Item control
+
+    required property T.AbstractButton control
+
     imagePath: "widgets/button"
     prefix: "normal"
     implicitWidth: PlasmaCore.Units.iconSizes.small
-    implicitHeight: implicitWidth
+    implicitHeight: PlasmaCore.Units.iconSizes.small
     opacity: control.enabled ? 1 : 0.6
 
     Private.ButtonShadow {
@@ -23,13 +28,14 @@ PlasmaCore.FrameSvgItem {
     }
 
     PlasmaCore.SvgItem {
+        anchors.fill: parent
         svg: PlasmaCore.Svg {
             id: checkmarkSvg
             imagePath: "widgets/checkmarks"
         }
         elementId: "checkbox"
         opacity: {
-            if (typeof control.checkState !== "undefined") {
+            if (control instanceof T.CheckBox) {
                 switch (control.checkState) {
                 case Qt.Checked:
                     return 1;
@@ -41,9 +47,6 @@ PlasmaCore.FrameSvgItem {
             } else {
                 return control.checked ? 1 : 0;
             }
-        }
-        anchors {
-            fill: parent
         }
         Behavior on opacity {
             NumberAnimation {

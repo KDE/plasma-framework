@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan (@ratijas) tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -11,18 +12,23 @@ import "private" as P
 
 Item {
     id: root
+
     required property T.AbstractButton control
+
     property size hintSize: radioButtonSvg.fromCurrentTheme && radioButtonSvg.hasElement("hint-size")
         ? radioButtonSvg.elementSize("hint-size")
         : Qt.size(PlasmaCore.Units.iconSizes.small, PlasmaCore.Units.iconSizes.small)
+
     implicitWidth: hintSize.width
     implicitHeight: hintSize.height
-    opacity: enabled ? 1 : 0.5
+    opacity: control.enabled ? 1 : 0.5
     layer.enabled: opacity < 1
+
     PlasmaCore.Svg {
         id: radioButtonSvg
         imagePath: "widgets/radiobutton"
     }
+
     Loader {
         anchors.fill: parent
         sourceComponent: radioButtonSvg.fromCurrentTheme
@@ -33,6 +39,7 @@ Item {
             || PlasmaCore.Theme.themeName === "breeze-dark"
             ? radiobuttonComponent : compatibilityComponent
     }
+
     // Uses newer radiobutton.svg
     Component {
         id: radiobuttonComponent
