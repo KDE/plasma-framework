@@ -60,6 +60,6 @@ PlasmaCore.FrameSvgItem {
 
     Private.ButtonHover {
         anchors.fill: parent
-        showHover: control.hovered && !control.pressed
+        showHover: control.hovered
     }
 }
