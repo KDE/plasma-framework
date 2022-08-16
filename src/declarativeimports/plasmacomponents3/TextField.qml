@@ -40,6 +40,10 @@ T.TextField {
     // Can't guarantee that background will always be present or have the margins property
     readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
 
+    // store information that echoMode was set to Password, regardless of its current value
+    property var __isPassword: false
+    onEchoModeChanged: __isPassword |= (echoMode === TextInput.Password);
+
     // TextField doesn't have this property by default for whatever reason
     property bool visualFocus: control.activeFocus && (
         control.focusReason == Qt.TabFocusReason ||
@@ -53,13 +57,12 @@ T.TextField {
      * behavior. Use the following 2 lines if you want text to stay within the
      * background:
     implicitBackgroundWidth + leftInset + rightInset
-    || Math.ceil(Math.max(contentWidth, placeholder.implicitWidth)) + leftPadding + rightPadding
+    || Math.ceil(Math.max(contentWidth + leftPadding + rightPadding, placeholder.implicitWidth))
      */
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            Math.ceil(Math.max(contentWidth, placeholder.implicitWidth)) + leftPadding + rightPadding)
+                            Math.ceil(Math.max(contentWidth + leftPadding + rightPadding, placeholder.implicitWidth)))
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-                             contentHeight + topPadding + bottomPadding,
-                             placeholder.implicitHeight + topPadding + bottomPadding)
+                             Math.max(contentHeight + topPadding + bottomPadding, placeholder.implicitHeight, __isPassword ? passwordsizeholder.implicitHeight : 0))
 
     leftPadding: (__hasBackgroundAndMargins ? background.margins.left : 0) + (control.mirrored ? inlineButtonRow.width : 0)
     topPadding: __hasBackgroundAndMargins ? background.margins.top : 0
@@ -122,19 +125,40 @@ T.TextField {
     Label {
         id: placeholder
         enabled: false
-        x: control.leftPadding
-        y: control.topPadding
-        width: control.availableWidth
-        height: control.availableHeight
-
-        text: control.placeholderText
+        x: 0
+        y: 0
+        topPadding: control.topPadding
+        bottomPadding: control.bottomPadding
+        leftPadding: control.leftPadding
+        rightPadding: control.rightPadding
+        height: control.height
+        width: control.width
         font: control.font
-        color: control.placeholderTextColor
         horizontalAlignment: control.horizontalAlignment
         verticalAlignment: control.verticalAlignment
-        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
         elide: Text.ElideRight
         renderType: control.renderType
+        text: control.placeholderText
+        visible: !control.length && !control.preeditText && (!control.activeFocus || control.horizontalAlignment !== Qt.AlignHCenter)
+        color: control.placeholderTextColor
+    }
+
+    // Object holding the size (implicitHeight) of the password dot character,
+    // so that a password TextField never gets shorter than required to display it
+    Label {
+        id: passwordsizeholder
+        enabled: false
+        visible: false
+        topPadding: control.topPadding
+        bottomPadding: control.bottomPadding
+        leftPadding: control.leftPadding
+        rightPadding: control.rightPadding
+        font: control.font
+        horizontalAlignment: control.horizontalAlignment
+        verticalAlignment: control.verticalAlignment
+        elide: Text.ElideRight
+        renderType: control.renderType
+        text: control.passwordCharacter
     }
 
     Row {
