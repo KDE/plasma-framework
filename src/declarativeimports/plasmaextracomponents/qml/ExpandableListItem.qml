@@ -406,6 +406,9 @@ Item {
 
         // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
         onPositionChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
+        onExited: if (listItem.ListView.view.currentIndex === index) {
+            listItem.ListView.view.currentIndex = -1;
+        }
 
         // Handle right-click, if so defined
         onClicked: {
