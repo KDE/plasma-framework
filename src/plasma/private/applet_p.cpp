@@ -372,14 +372,12 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     configAction->setShortcut(QKeySequence(QStringLiteral("alt+d, s")));
-    configAction->setData(Plasma::Types::ConfigureAction);
 
     QAction *closeApplet = actions->add<QAction>(QStringLiteral("remove"));
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
     closeApplet->setShortcut(QKeySequence(QStringLiteral("alt+d, r")));
-    closeApplet->setData(Plasma::Types::DestructiveAction);
 
     QAction *runAssociatedApplication = actions->add<QAction>(QStringLiteral("run associated application"));
     runAssociatedApplication->setAutoRepeat(false);
@@ -388,7 +386,6 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     runAssociatedApplication->setShortcut(QKeySequence(QStringLiteral("alt+d, t")));
     runAssociatedApplication->setVisible(false);
     runAssociatedApplication->setEnabled(false);
-    runAssociatedApplication->setData(Plasma::Types::ControlAction);
 
     return actions;
 }

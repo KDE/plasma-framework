@@ -124,20 +124,6 @@ public:
     Q_ENUM(ContainmentType)
 
     /**
-     * A descriptive type for QActions, to help categorizing them when presented to the user
-     */
-    enum ActionType {
-        AddAction = 0, /**< The action will cause something new being created*/
-        ConfigureAction = 100, /**< The Action will make some kind of configuration ui to appear */
-        ControlAction = 200, /**< Generic control, similar to ConfigureAction TODO: better doc */
-        MiscAction = 300, /**< A type of action that doesn't fit in the other categories */
-        DestructiveAction =
-            400, /**< A dangerous action, such as deletion of objects, plasmoids and files. They are intended to be shown separated from other actions */
-        UserAction = DestructiveAction + 1000, /**< If new types are needed in a C++ implementation, define them as ids more than  UserAction*/
-    };
-    Q_ENUM(ActionType)
-
-    /**
      * The Direction enumeration describes in which direction, relative to the
      * Applet (and its managing container), popup menus, expanders, balloons,
      * message boxes, arrows and other such visually associated widgets should

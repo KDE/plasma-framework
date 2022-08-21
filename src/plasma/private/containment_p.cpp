@@ -71,7 +71,6 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     appletBrowserAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::Key_A));
-    appletBrowserAction->setData(Plasma::Types::AddAction);
 }
 
 KConfigGroup ContainmentPrivate::containmentActionsConfig() const
