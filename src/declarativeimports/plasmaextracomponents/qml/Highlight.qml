@@ -5,8 +5,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.1
-import org.kde.plasma.core 2.0 as PlasmaCore
+import QtQuick 2.15
+import org.kde.plasma.core 2.1 as PlasmaCore
 
 /**
  * @brief Highlight for a list or grid item.
@@ -43,7 +43,7 @@ Item {
      *
      * This is set automatically when used in a ListView and GridView.
      */
-    property bool hovered: ListView.view || GridView.view ? true : false
+    property bool hovered: ListView.view !== null || GridView.view !== null
 
     /**
      * This property holds whether the highlight has a pressed appearance.
@@ -55,17 +55,17 @@ Item {
      *
 	 * @property int marginHints
 	 */
-    property alias marginHints: background.margins;
+    property alias marginHints: background.margins
 
-    width: ListView.view ? ListView.view.width : undefined
+    width: ListView.view !== null ? ListView.view.width : undefined
 
     Connections {
         target: highlight.ListView.view
         function onCurrentIndexChanged() {
             if (highlight.ListView.view.currentIndex >= 0) {
-                background.opacity = 1
+                background.opacity = 1;
             } else {
-                background.opacity = 0
+                background.opacity = 0;
             }
         }
     }
