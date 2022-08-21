@@ -484,7 +484,6 @@ void CoronaPrivate::init()
     lockAction->setAutoRepeat(true);
     lockAction->setIcon(QIcon::fromTheme(QStringLiteral("object-locked")));
     lockAction->setData(Plasma::Types::ControlAction);
-    lockAction->setShortcut(QKeySequence(QStringLiteral("alt+d, l")));
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
     // fake containment/applet actions
