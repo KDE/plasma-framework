@@ -45,7 +45,12 @@ T.BusyIndicator {
         }
 
         // sync all busy animations so they start at a common place in the rotation
-        onAnimationRunningChanged: {
+        onAnimationRunningChanged: startOrStopAnimation();
+
+        function startOrStopAnimation() {
+            if (rotationAnimator.running == animationRunning) {
+                return;
+            }
             if (animationRunning) {
                 const date = new Date;
                 const ms = date.valueOf();
@@ -71,8 +76,9 @@ T.BusyIndicator {
             }
             elementId: "busywidget"
 
-            RotationAnimator on rotation {
+            RotationAnimator {
                 id: rotationAnimator
+                target: busyIndicatorSvgItem
                 from: 0
                 to: 360
                 // Not using a standard duration value because we don't want the
@@ -82,5 +88,7 @@ T.BusyIndicator {
                 loops: Animation.Infinite
             }
         }
+
+        Component.onCompleted: startOrStopAnimation();
     }
 }
