@@ -10,12 +10,12 @@
 #include <QStandardPaths>
 
 #include <KLazyLocalizedString>
+#include <KRuntimePlatform>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
 #include <QRegExp>
 #include <kcoreaddons_export.h>
-#include <kdeclarative/kdeclarative.h>
 #include <kpackage/packageloader.h>
 
 #include "config-plasma.h"
@@ -462,7 +462,7 @@ Package PluginLoader::loadPackage(const QString &packageFormat, const QString &s
 #endif
 QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const QString &parentApp)
 {
-    auto platforms = KDeclarative::KDeclarative::runtimePlatform();
+    auto platforms = KRuntimePlatform::runtimePlatform();
     // For now desktop always lists everything
     if (platforms.contains(QStringLiteral("desktop"))) {
         platforms.clear();
