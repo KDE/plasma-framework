@@ -49,7 +49,10 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
         syncWallpaperPackage();
     }
     connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged, this, &WallpaperInterface::syncWallpaperPackage);
-    connect(m_containmentInterface->containment()->corona(), &Plasma::Corona::startupCompleted, this, &WallpaperInterface::repaintNeeded);
+    connect(m_containmentInterface->containment()->corona(),
+            &Plasma::Corona::startupCompleted,
+            this,
+            std::bind(&WallpaperInterface::repaintNeeded, this, Qt::transparent));
 }
 
 WallpaperInterface::~WallpaperInterface()

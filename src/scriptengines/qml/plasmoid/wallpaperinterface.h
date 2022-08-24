@@ -91,7 +91,7 @@ Q_SIGNALS:
     void packageChanged();
     void configurationChanged();
     void isLoadingChanged();
-    void repaintNeeded();
+    void repaintNeeded(const QColor &accentColor = Qt::transparent);
 
 private Q_SLOTS:
     void syncWallpaperPackage();
