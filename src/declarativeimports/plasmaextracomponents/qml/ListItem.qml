@@ -46,8 +46,8 @@ Kirigami.AbstractListItem {
     topPadding: __background.margins.top
     bottomPadding: __background.margins.bottom
 
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
+    // TODO KF6: `implicitContentWidth, implicitBackgroundWidth, leftInset and rightInset are not available in Controls 2.2 which this component is based on.
+    implicitWidth: (contentItem ? contentItem.implicitWidth : 0) + leftPadding + rightPadding
 
     // TODO KF6: Make this behave more like the normal Control default.
     // Behaving this way for backwards compatibility reasons.
