@@ -73,6 +73,7 @@ public:
         , outputOnly(false)
         , visible(false)
         , resizableEdges({})
+        , overridingCursor(false)
         , appletInterface(nullptr)
         , componentComplete(dialog->parent() == nullptr)
         , backgroundHints(Dialog::StandardBackground)
@@ -162,6 +163,7 @@ public:
     bool outputOnly;
     bool visible;
     Qt::Edges resizableEdges;
+    bool overridingCursor;
     AppletQuickItem *appletInterface;
     Plasma::Theme theme;
     bool componentComplete;
@@ -922,7 +924,10 @@ bool DialogPrivate::updateMouseCursor(const QPointF &globalMousePos)
 {
     Qt::Edges sides = hitTest(globalMousePos) & resizableEdges;
     if (!sides) {
-        q->setCursor(Qt::ArrowCursor);
+        if (overridingCursor) {
+            q->unsetCursor();
+            overridingCursor = false;
+        }
         return false;
     }
 
@@ -944,6 +949,7 @@ bool DialogPrivate::updateMouseCursor(const QPointF &globalMousePos)
         q->setCursor(Qt::SizeVerCursor);
     }
 
+    overridingCursor = true;
     return true;
 }
 
