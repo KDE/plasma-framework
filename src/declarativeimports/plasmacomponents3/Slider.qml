@@ -20,6 +20,7 @@ T.Slider {
 
     wheelEnabled: true
     snapMode: T.Slider.SnapOnRelease
+    hoverEnabled: true
 
     layer.enabled: opacity < 1
     opacity: control.enabled ? 1 : 0.5
