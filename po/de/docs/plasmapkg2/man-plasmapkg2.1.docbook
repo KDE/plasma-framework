@@ -1,0 +1,275 @@
+<?xml version="1.0" ?>
+<!DOCTYPE refentry PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+<!ENTITY % German "INCLUDE">
+]>
+
+<refentry lang="&language;">
+<refentryinfo>
+<title
+>Plasma-Paketverwaltung</title>
+<date
+>2014-04-25</date>
+<releaseinfo
+>Frameworks 5.0</releaseinfo>
+<productname
+>KDE Frameworks</productname>
+</refentryinfo>
+
+<refmeta>
+<refentrytitle
+><command
+>plasmapkg2</command
+></refentrytitle>
+<manvolnum
+>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname
+><command
+>plasmapkg2</command
+></refname>
+<refpurpose
+>Installieren, Auflisten und Entfernen von &plasma;-Paketen</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis
+><command
+>plasmapkg2</command
+> <group choice="opt"
+><option
+>--hash</option
+> <replaceable
+> path</replaceable
+></group
+> <group choice="opt"
+><option
+>-g, --global</option
+></group
+> <group choice="opt"
+><option
+>-t, --type</option
+> <replaceable
+> type</replaceable
+></group
+> <group choice="opt"
+><option
+>-i, --install</option
+> <replaceable
+> path</replaceable
+></group
+> <group choice="opt"
+><option
+>-s, --show</option
+> <replaceable
+> name</replaceable
+></group
+> <group choice="opt"
+><option
+>-u, --upgrade</option
+> <replaceable
+> path</replaceable
+></group
+> <group choice="opt"
+><option
+>-l, --list</option
+></group
+> <group choice="opt"
+><option
+>--list-types</option
+></group
+> <group choice="opt"
+><option
+>-r, --remove</option
+> <replaceable
+> name</replaceable
+></group
+> <group choice="opt"
+><option
+>-p, --packageroot</option
+> <replaceable
+> path</replaceable
+></group
+> </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1>
+<title
+>Beschreibung</title>
+<para
+><command
+>plasmapkg2</command
+> ist ein Befehlszeilenprogramm zum Installieren, Auflisten und Entfernen von &plasma;-Paketen.</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Optionen</title>
+
+<variablelist>
+<varlistentry>
+<term
+><option
+>--hash</option
+> <replaceable
+> path</replaceable
+></term>
+<listitem
+><para
+>SHA1-Hash für das Paket in <quote
+>path</quote
+> generieren.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-g, --global</option
+></term>
+<listitem
+><para
+>Zum Installieren oder Entfernen, beeinflusst Plasma-Pakete für alle Benutzer.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-t, --type</option
+> <replaceable
+> type</replaceable
+></term>
+<listitem
+><para
+>Der Pakettyp, &eg; Design, Hintergrundbild, Plasmoid, Datenquelle, Starter, Layout-Vorlage &etc;[Plasmoid].</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-i, --install</option
+> <replaceable
+> path</replaceable
+></term>
+<listitem
+><para
+>Paket in <quote
+>path</quote
+> installieren.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-s, --show</option
+> <replaceable
+> name</replaceable
+></term>
+<listitem
+><para
+>Informationen zum Paket <quote
+>name</quote
+> anzeigen.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-u, --upgrade</option
+> <replaceable
+> path</replaceable
+></term>
+<listitem
+><para
+>Paket von <quote
+>path</quote
+> aktualisieren.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-l, --list</option
+></term>
+<listitem
+><para
+>Installierte Pakete anzeigen.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>--list-types</option
+></term>
+<listitem
+><para
+>Zeigt alle Arten von Paketen an, die installiert werden können.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-r, --remove</option
+> <replaceable
+> name</replaceable
+></term>
+<listitem
+><para
+>Paket namens <quote
+>name</quote
+> entfernen.</para
+></listitem>
+</varlistentry>
+<varlistentry>
+<term
+><option
+>-p, --packageroot</option
+> <replaceable
+> path</replaceable
+></term>
+<listitem
+><para
+>Absoluter Pfad zum Paket. Falls nicht angegeben, werden die Standard-Datenpfade dieser &plasma;-Sitzung durchsucht.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1>
+<title
+>Siehe auch</title>
+
+<para
+>Weitere ausführliche Dokumentation finden Sie unter <ulink url="help:/plasma-desktop"
+>help:/plasma-desktop</ulink
+> (geben Sie diese &URL; entweder im &konqueror; ein oder starten Sie <userinput
+><command
+>khelpcenter</command
+> <parameter
+>help:/plasma-desktop</parameter
+></userinput
+>).</para>
+
+</refsect1>
+
+<refsect1>
+<title
+>Autor</title>
+<para
+><command
+>plasmapkg2</command
+> wurde von <personname
+><firstname
+>Aaron</firstname
+><surname
+>Seigo</surname
+></personname
+> <email
+>aseigo@kde.org</email
+> geschrieben.</para>
+</refsect1>
+
+</refentry>
