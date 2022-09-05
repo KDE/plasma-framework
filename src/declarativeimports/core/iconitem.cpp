@@ -606,8 +606,6 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         return nullptr;
     }
 
-// TODO KF6: port FadingNode to QSB
-#ifndef KF6_PORTING_TODO
     if (m_animation->state() == QAbstractAnimation::Running) {
         FadingNode *animatingNode = dynamic_cast<FadingNode *>(oldNode);
 
@@ -633,9 +631,6 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         }
 
         return animatingNode;
-#else
-    if (false) {
-#endif
     } else {
         ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode *>(oldNode);
 

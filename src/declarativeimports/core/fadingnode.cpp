@@ -26,7 +26,7 @@ public:
 
     QSGTexture *source = nullptr;
     QSGTexture *target = nullptr;
-    qreal progress = 0.0;
+    float progress = 0.0f;
 };
 
 class FadingMaterialShader : public QSGMaterialShader
@@ -34,6 +34,7 @@ class FadingMaterialShader : public QSGMaterialShader
 public:
     FadingMaterialShader();
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     const char *const *attributeNames() const override;
     void updateState(const QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
     void initialize() override;
@@ -45,6 +46,11 @@ private:
     int m_progressId = 0;
     int m_sourceRectId = 0;
     int m_targetRectId = 0;
+#else
+    bool updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
+    void
+    updateSampledImage(QSGMaterialShader::RenderState &state, int binding, QSGTexture **texture, QSGMaterial *newMaterial, QSGMaterial *oldMaterial) override;
+#endif
 };
 
 FadingMaterial::FadingMaterial()
@@ -79,10 +85,16 @@ int FadingMaterial::compare(const QSGMaterial *other) const
 
 FadingMaterialShader::FadingMaterialShader()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     setShaderSourceFile(QOpenGLShader::Fragment, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.frag"));
     setShaderSourceFile(QOpenGLShader::Vertex, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.vert"));
+#else
+    setShaderFileName(QSGMaterialShader::FragmentStage, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.frag.qsb"));
+    setShaderFileName(QSGMaterialShader::VertexStage, QStringLiteral(":/plasma-framework/shaders/fadingmaterial.vert.qsb"));
+#endif
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 const char *const *FadingMaterialShader::attributeNames() const
 {
     static char const *const names[] = {"qt_Vertex", "qt_MultiTexCoord0", nullptr};
@@ -137,6 +149,59 @@ void FadingMaterialShader::initialize()
     m_sourceRectId = program()->uniformLocation("u_src_rect");
     m_targetRectId = program()->uniformLocation("u_target_rect");
 }
+#else
+bool FadingMaterialShader::updateUniformData(QSGMaterialShader::RenderState &state, QSGMaterial *newMaterial, QSGMaterial *oldMaterial)
+{
+    bool changed = false;
+    QByteArray *buf = state.uniformData();
+    Q_ASSERT(buf->size() >= 104);
+
+    if (state.isMatrixDirty()) {
+        const QMatrix4x4 m = state.combinedMatrix();
+        memcpy(buf->data(), m.constData(), 64);
+        changed = true;
+    }
+
+    if (state.isOpacityDirty()) {
+        const float opacity = state.opacity();
+        memcpy(buf->data() + 100, &opacity, 4);
+        changed = true;
+    }
+
+    if (!oldMaterial || newMaterial->compare(oldMaterial) != 0) {
+        const auto material = static_cast<FadingMaterial *>(newMaterial);
+
+        QRectF rect = material->source->normalizedTextureSubRect();
+        QVector4D v(rect.x(), rect.y(), rect.width(), rect.height());
+        memcpy(buf->data() + 64, &v, 16);
+        rect = material->target->normalizedTextureSubRect();
+        v = QVector4D(rect.x(), rect.y(), rect.width(), rect.height());
+        memcpy(buf->data() + 80, &v, 16);
+        memcpy(buf->data() + 96, &material->progress, 4);
+        changed = true;
+    }
+
+    return changed;
+}
+
+void FadingMaterialShader::updateSampledImage(QSGMaterialShader::RenderState &state,
+                                              int binding,
+                                              QSGTexture **texture,
+                                              QSGMaterial *newMaterial,
+                                              QSGMaterial *oldMaterial)
+{
+    Q_UNUSED(state);
+    Q_UNUSED(oldMaterial);
+    switch (binding) {
+    case 1:
+        *texture = static_cast<FadingMaterial *>(newMaterial)->source;
+        break;
+    case 2:
+        *texture = static_cast<FadingMaterial *>(newMaterial)->target;
+        break;
+    }
+}
+#endif
 
 FadingNode::FadingNode(QSGTexture *source, QSGTexture *target)
     : m_source(source)

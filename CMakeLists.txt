@@ -43,6 +43,9 @@ ecm_setup_version(PROJECT
 set (REQUIRED_QT_VERSION 5.15.2)
 
 find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
+if (QT_MAJOR_VERSION EQUAL "6")
+    find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS ShaderTools)
+endif()
 
 find_package(KF5 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
@@ -174,14 +177,6 @@ ecm_set_disabled_deprecation_versions(
 #add_definitions(-Wno-deprecated)
 
 include(KF5PlasmaMacros.cmake)
-
-# temporary Qt6 porting scafolding until branching
-# (this is intentional made to fail if we forget it for KF6)
-if (TARGET Qt6::Core AND KF_VERSION VERSION_LESS 6.0)
-    message(WARNING "TODO: port fading shaders to Qt6!")
-    set(KF6_PORTING_TODO TRUE)
-    add_definitions(-DKF6_PORTING_TODO)
-endif()
 
 #########################################################################
 
