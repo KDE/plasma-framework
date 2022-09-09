@@ -854,7 +854,7 @@ void DialogPrivate::applyType()
         if (q->flags() & Qt::WindowStaysOnTopHint) {
             // If the AppletPopup type is not explicitly requested, then use the Dock type in this case
             // to avoid bug #454635.
-            if (type != Dialog::AppletPopup) {
+            if (type != Dialog::AppletPopup && type != Dialog::Tooltip) {
                 type = Dialog::Dock;
                 shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
             }
