@@ -318,8 +318,6 @@ public:
 private:
     FrameSvgPrivate *const d;
     friend class FrameData;
-
-    // Q_PRIVATE_SLOT(d, void updateSizes())
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(FrameSvg::EnabledBorders)
