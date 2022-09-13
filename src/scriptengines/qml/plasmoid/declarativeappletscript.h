@@ -12,10 +12,11 @@
 #include <QSet>
 
 #include <plasma/scripting/appletscript.h>
+#include <plasmaquick/plasmaquick_export.h>
 
 class AppletInterface;
 
-class DeclarativeAppletScript : public Plasma::AppletScript
+class PLASMAQUICK_EXPORT DeclarativeAppletScript : public Plasma::AppletScript
 {
     Q_OBJECT
 

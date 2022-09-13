@@ -43,20 +43,10 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
     , m_interface(nullptr)
     , m_args(args)
 {
-    const char *uri = "org.kde.plasma.plasmoid";
-    // qmlRegisterType<AppletInterface>();
-    // FIXME: use this if/when will be possible to have properties of attached items subclasses on the left hand of expressions
-    /*qmlRegisterUncreatableType<AppletLoader>("org.kde.plasma.plasmoid", 2, 0, "Plasmoid",
-                                             QLatin1String("Do not create objects of type Plasmoid"));*/
-    qmlRegisterUncreatableType<AppletInterface>(uri, 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
-    qmlRegisterUncreatableType<ContainmentInterface>(uri, 2, 0, "Containment", QStringLiteral("Do not create objects of type Containment"));
-
-    qmlRegisterUncreatableType<WallpaperInterface>(uri, 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
-
 #if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-    qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>(uri, 1);
+    qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>("", 1);
 #else
-    qmlRegisterAnonymousType<KConfigPropertyMap>(uri, 1);
+    qmlRegisterAnonymousType<KConfigPropertyMap>("", 1);
 #endif
 }
 
@@ -119,7 +109,3 @@ QList<QAction *> DeclarativeAppletScript::contextualActions()
 
     return m_interface->contextualActions();
 }
-
-K_PLUGIN_CLASS_WITH_JSON(DeclarativeAppletScript, "plasma-scriptengine-applet-declarative.json")
-
-#include "declarativeappletscript.moc"

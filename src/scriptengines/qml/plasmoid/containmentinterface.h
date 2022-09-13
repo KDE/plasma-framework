@@ -35,7 +35,7 @@ class Info;
  *
  *
  */
-class ContainmentInterface : public AppletInterface
+class PLASMAQUICK_EXPORT ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
 
