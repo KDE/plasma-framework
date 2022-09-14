@@ -573,7 +573,8 @@ void DialogPrivate::updateLayoutParameters()
     QSize max(DIALOGSIZE_MAX, DIALOGSIZE_MAX);
     getSizeHints(min, max);
 
-    const QSize finalSize(qBound(min.width(), q->width(), max.width()), qBound(min.height(), q->height(), max.height()));
+    const QSize finalSize(qBound(min.width(), q->width(), std::max(max.width(), min.width())),
+                          qBound(min.height(), q->height(), std::max(max.height(), min.height())));
 
     if (visualParent) {
         // it's important here that we're using re->size() as size, we don't want to do recursive resizeEvents
