@@ -181,7 +181,6 @@ public:
      * This may skip applets based on security settings and ExcludeCategories in the application's config.
      *
      * @param category Only applets matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
@@ -204,7 +203,6 @@ public:
      * This may skip applets based on security settings and ExcludeCategories in the application's config.
      *
      * @param category Only applets matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
@@ -307,7 +305,6 @@ public:
      * Returns a list of all known containments.
      *
      * @param category Only containments matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Miscellaneous" is passed in, then containments without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all containments are
@@ -349,7 +346,6 @@ public:
      *             in their .desktop files will be returned. Common values are panel and
      *             desktop
      * @param category Only containments matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Miscellaneous" is passed in, then containments without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all containments are
@@ -555,7 +551,6 @@ protected:
      * files for your applets.
      *
      * @param category Only applets matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are
@@ -604,7 +599,6 @@ protected:
      * call to this method.
      *
      * @param category Only applets matching this category will be returned.
-     *                 Useful in conjunction with knownCategories.
      *                 If "Misc" is passed in, then applets without a
      *                 Categories= entry are also returned.
      *                 If an empty string is passed in, all applets are

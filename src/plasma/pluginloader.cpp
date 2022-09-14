@@ -54,8 +54,6 @@ public:
     {
     }
 
-    static QSet<QString> knownCategories();
-
     static QSet<QString> s_customCategories;
 #if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
     QHash<QString, QPointer<PackageStructure>> structures;
@@ -95,38 +93,6 @@ QString PluginLoaderPrivate::s_packageStructurePluginDir = QStringLiteral("plasm
 QString PluginLoaderPrivate::s_plasmoidsPluginDir = QStringLiteral("plasma/applets");
 QString PluginLoaderPrivate::s_servicesPluginDir = QStringLiteral("plasma/services");
 QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("plasma/containmentactions");
-
-QSet<QString> PluginLoaderPrivate::knownCategories()
-{
-    // this is to trick the translation tools into making the correct
-    // strings for translation
-    QSet<QString> categories = s_customCategories;
-    /* clang-format off */
-    categories << kli18n("Accessibility").toString().toLower()
-               << kli18n("Application Launchers").toString().toLower()
-               << kli18n("Astronomy").toString().toLower()
-               << kli18n("Date and Time").toString().toLower()
-               << kli18n("Development Tools").toString().toLower()
-               << kli18n("Education").toString().toLower()
-               << kli18n("Environment and Weather").toString().toLower()
-               << kli18n("Examples").toString().toLower()
-               << kli18n("File System").toString().toLower()
-               << kli18n("Fun and Games").toString().toLower()
-               << kli18n("Graphics").toString().toLower()
-               << kli18n("Language").toString().toLower()
-               << kli18n("Mapping").toString().toLower()
-               << kli18n("Miscellaneous").toString().toLower()
-               << kli18n("Multimedia").toString().toLower()
-               << kli18n("Online Services").toString().toLower()
-               << kli18n("Productivity").toString().toLower()
-               << kli18n("System Information").toString().toLower()
-               << kli18n("Utilities").toString().toLower()
-               << kli18n("Windows and Tasks").toString().toLower()
-               << kli18n("Clipboard").toString().toLower()
-               << kli18n("Tasks").toString().toLower();
-    /* clang-format on */
-    return categories;
-}
 
 PluginLoader::PluginLoader()
     : d(new PluginLoaderPrivate)
