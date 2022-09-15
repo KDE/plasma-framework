@@ -176,17 +176,13 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return applet;
     }
 
-    if (!applet) {
-        // qCDebug(LOG_PLASMA) << name << "not a C++ applet: Falling back to an empty one";
+    QVariantList allArgs;
+    allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
-        QVariantList allArgs;
-        allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
-
-        if (isContainmentMetaData(p.metadata())) {
-            applet = new Containment(nullptr, p.metadata(), allArgs);
-        } else {
-            applet = new Applet(nullptr, p.metadata(), allArgs);
-        }
+    if (isContainmentMetaData(p.metadata())) {
+        applet = new Containment(nullptr, p.metadata(), allArgs);
+    } else {
+        applet = new Applet(nullptr, p.metadata(), allArgs);
     }
 
     const QString localePath = p.filePath("translations");
