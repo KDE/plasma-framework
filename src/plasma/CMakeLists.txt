@@ -199,7 +199,7 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 
-install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(BUILD_QCH)
     ecm_add_qch(

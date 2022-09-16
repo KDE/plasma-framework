@@ -86,7 +86,7 @@ if(HAVE_X11)
     endif()
 endif()
 
-install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ecm_generate_export_header(KF5PlasmaQuick
     BASE_NAME PlasmaQuick
