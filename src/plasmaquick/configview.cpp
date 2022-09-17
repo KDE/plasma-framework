@@ -22,7 +22,7 @@
 #include <KLocalizedContext>
 #include <KLocalizedString>
 #include <KQuickAddons/ConfigModule>
-#include <kdeclarative/kdeclarative.h>
+#include <KQuickIconProvider>
 #include <packageurlinterceptor.h>
 
 #include <Plasma/Corona>
@@ -88,7 +88,7 @@ void ConfigViewPrivate::init()
     }
     q->engine()->rootContext()->setContextObject(localizedContextObject);
 
-    KDeclarative::KDeclarative::setupEngine(q->engine()); // ### how to make sure to do this only once per engine?
+    q->engine()->addImageProvider(QStringLiteral("icon"), new KQuickIconProvider);
 
     // FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);

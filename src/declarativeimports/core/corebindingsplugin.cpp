@@ -12,8 +12,7 @@
 #include <QQmlContext>
 
 #include <KLocalizedContext>
-
-#include <kdeclarative/kdeclarative.h>
+#include <KQuickIconProvider>
 
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>
@@ -56,7 +55,7 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
         KLocalizedContext *localizedContextObject = new KLocalizedContext(engine);
         context->setContextObject(localizedContextObject);
 
-        KDeclarative::KDeclarative::setupEngine(engine);
+        engine->addImageProvider(QStringLiteral("icon"), new KQuickIconProvider);
     }
 }
 

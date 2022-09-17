@@ -16,9 +16,9 @@
 #include <QTimer>
 
 #include <KLocalizedContext>
+#include <KQuickIconProvider>
 
 #include "plasma/pluginloader.h"
-#include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
 
 namespace PlasmaQuick
@@ -181,8 +181,7 @@ View::View(Plasma::Corona *corona, QWindow *parent)
         localizedContextObject->setTranslationDomain(QStringLiteral("plasma_shell_") + pkg.metadata().pluginId());
         engine()->rootContext()->setContextObject(localizedContextObject);
 
-        // binds things like kconfig and icons
-        KDeclarative::KDeclarative::setupEngine(engine()); // ### how to make sure to do this only once per engine?
+        engine()->addImageProvider(QStringLiteral("icon"), new KQuickIconProvider);
     } else {
         qWarning() << "Invalid home screen package";
     }
