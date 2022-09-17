@@ -459,6 +459,9 @@ QPixmap FrameSvgPrivate::alphaMask()
 
     if (maskFrame->cachedBackground.isNull()) {
         generateBackground(maskFrame);
+        // When we take the maskFrame from cache, the pixel ratio gets
+        // reset to 1
+        maskFrame->cachedBackground.setDevicePixelRatio(q->devicePixelRatio());
     }
 
     return maskFrame->cachedBackground;
