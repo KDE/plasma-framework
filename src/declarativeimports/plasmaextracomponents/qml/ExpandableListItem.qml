@@ -415,17 +415,29 @@ Item {
         }
     }
 
+    component ProxyHoverToolButton : PlasmaComponents3.ToolButton {
+        onHoveredChanged: mouseArea.updateCurrentIndex(hovered)
+    }
+
     // We still need a MouseArea to handle right-click
     MouseArea {
+        id: mouseArea
+
         anchors.fill: parent
 
         acceptedButtons: Qt.RightButton
         hoverEnabled: true
 
         // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
-        onPositionChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
-        onExited: if (listItem.ListView.view.currentIndex === index) {
-            listItem.ListView.view.currentIndex = -1;
+        onPositionChanged: updateCurrentIndex(true)
+        onExited: updateCurrentIndex(false)
+
+        function updateCurrentIndex(hovered: bool) {
+            if (hovered) {
+                listItem.ListView.view.currentIndex = (containsMouse ? index : -1);
+            } else if (listItem.ListView.view.currentIndex === index) {
+                listItem.ListView.view.currentIndex = -1;
+            }
         }
 
         // Handle right-click, if so defined
@@ -535,7 +547,7 @@ Item {
                 }
 
                 // Default action button
-                PlasmaComponents3.ToolButton {
+                ProxyHoverToolButton {
                     id: defaultActionButton
 
                     visible: defaultActionButtonAction
@@ -551,7 +563,7 @@ Item {
                 }
 
                 // Expand/collapse button
-                PlasmaComponents3.ToolButton {
+                ProxyHoverToolButton {
                     id: expandToggleButton
                     visible: listItem.hasExpandableContent
 
@@ -617,7 +629,7 @@ Item {
 
                                 model: listItem.contextualActionsModel
 
-                                delegate: PlasmaComponents3.ToolButton {
+                                delegate: ProxyHoverToolButton {
                                     Layout.fillWidth: true
 
                                     visible: model.enabled
