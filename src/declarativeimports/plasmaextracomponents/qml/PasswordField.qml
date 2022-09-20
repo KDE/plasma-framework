@@ -36,6 +36,12 @@ PlasmaExtras.ActionTextField {
      */
     property bool showPassword: false
 
+    readonly property var p0: Shortcut {
+        // Let's consider this shortcut a standard, it's also supported at least by su and sudo
+        sequence: "Ctrl+Shift+U"
+        onActivated: root.clear();
+    }
+
     echoMode: root.showPassword ? TextInput.Normal : TextInput.Password
     placeholderText: i18nd("libplasma5", "Password")
     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
