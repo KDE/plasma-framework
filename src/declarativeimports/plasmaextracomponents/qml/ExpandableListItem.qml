@@ -415,18 +415,52 @@ Item {
         }
     }
 
+    // using this instead of MouseArea::onContainsMouseChanged so this doesn't trigger when the list reflows
+    HoverHandler {
+        id: hoverHandler
+
+        // Emulating onEnter event, since we don't get to have one out of the box.
+        property bool previouslyHovered: false
+        property point previousScenePosition
+
+        onPointChanged: {
+            // make sure the pointer actually moves, before triggering
+            if (hoverHandler.hovered) {
+                if (previouslyHovered) {
+                    const scenePositionChanged = (point.scenePosition.x !== previousScenePosition.x || point.scenePosition.y !== previousScenePosition.y);
+                    if (scenePositionChanged) {
+                        print("CHANGE \\O/")
+                        listItem.ListView.view.currentIndex = index;
+                    } else {
+                        print("STAYING STILL")
+                        // mouse didn't move.  listItem did.
+                    }
+                } else {
+                    print("NEW POINT")
+                    previouslyHovered = true;
+                    previousScenePosition = point.scenePosition;
+                }
+            } else {
+                print("NOT HOVERED")
+                previouslyHovered = false;
+                previousScenePosition = Qt.point(-1, -1);
+            }
+        }
+
+        onHoveredChanged: {
+            if (!hovered) {
+                if (listItem.ListView.view.currentIndex === index) {
+                    listItem.ListView.view.currentIndex = -1;
+                }
+            }
+        }
+    }
+
     // We still need a MouseArea to handle right-click
     MouseArea {
         anchors.fill: parent
 
         acceptedButtons: Qt.RightButton
-        hoverEnabled: true
-
-        // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
-        onPositionChanged: listItem.ListView.view.currentIndex = (containsMouse ? index : -1)
-        onExited: if (listItem.ListView.view.currentIndex === index) {
-            listItem.ListView.view.currentIndex = -1;
-        }
 
         // Handle right-click, if so defined
         onClicked: {
