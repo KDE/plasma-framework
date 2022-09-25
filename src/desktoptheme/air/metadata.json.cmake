@@ -85,6 +85,7 @@
         "Name[pl]": "Powietrze",
         "Name[pt]": "Ar",
         "Name[pt_BR]": "Air",
+        "Name[ru]": "Air",
         "Name[sl]": "Zrak",
         "Name[sv]": "Luft",
         "Name[tr]": "Hava",
