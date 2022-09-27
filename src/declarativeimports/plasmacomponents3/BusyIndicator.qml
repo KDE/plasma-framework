@@ -1,6 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2014 Kai Uwe Broulik <kde@privat.broulik.de>
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2022 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -67,6 +68,7 @@ T.BusyIndicator {
             /* Do not use `anchors.fill: parent` in here or else
              * the aspect ratio won't always be 1:1.
              */
+            anchors.centerIn: parent
             width: Math.min(parent.width, parent.height)
             height: width
 
