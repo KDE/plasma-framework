@@ -283,7 +283,10 @@ IconItem::IconItem(QQuickItem *parent)
     connect(m_animation, &QPropertyAnimation::finished, this, &IconItem::animationFinished);
     m_animation->setTargetObject(this);
     m_animation->setEasingCurve(QEasingCurve::InOutQuad);
-    m_animation->setDuration(250); // FIXME from theme
+    m_animation->setDuration(Units::instance().longDuration());
+    connect(&Units::instance(), &Units::durationChanged, m_animation, [=]() {
+        m_animation->setDuration(Units::instance().longDuration());
+    });
 
     setFlag(ItemHasContents, true);
 
