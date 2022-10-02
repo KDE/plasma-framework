@@ -1,0 +1,1159 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Balázs Úr <urbalazs@gmail.com>, 2013, 2014.
+# Kristóf Kiszel <ulysses@kubuntu.org>, 2014, 2015, 2019.
+# Kiszel Kristóf <kiszel.kristof@gmail.com>, 2017, 2018, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"PO-Revision-Date: 2021-09-02 09:12+0200\n"
+"Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
+"Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 21.07.70\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Ünnepnapok"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Események"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Tennivaló"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Egyéb"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%2 %1"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Előző hónap"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Előző év"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Előző évtized"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Ma"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Naptára visszaállítása a mai napra"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Következő hónap"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Következő év"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Következő évtized"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Napok"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Hónapok"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Évek"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "További műveletek"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#, kde-format
+msgid "Search…"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search"
+msgstr ""
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "%1 felületi elem aktiválása"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "A(z) %1 eltávolítása"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Belépés a szerkesztőmódba"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "A(z) %1 beállítása…"
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Felületi elemek zárolása"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Felületi elemek feloldása"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Kilépés a szerkesztőmódból"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Hozzon-e létre gyorsítótárat a lemezen a témához, vagy sem."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"A téma gyorsítótárának maximális mérete, kilobájtban megadva. Ezek a fájlok "
+"ritkán használtak, vagyis a maximális méret nem mindig lesz kihasználva, "
+"ugyanakkor biztonságosabb nagyobb méretet beállítani."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Fő szkriptfájl"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Tesztek"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Képek"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Témázott képek"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Beállításdefiníciók"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Felhasználói felület"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Adatfájlok"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Végrehajtható szkriptek"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Képernyőkép"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Fordítások"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Beállító felhasználói felület oldalmodellek"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "XML beállítófájl"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Egyéni kiterjesztő kompakt kisalkalmazásokhoz"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Szolgáltatásleírások"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Képek párbeszédablakokhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Általános párbeszédablak-háttér"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Téma a kijelentkező párbeszédablakhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Háttérképcsomagok"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Képek a felületi elemekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Háttérkép a felületi elemekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Analóg óralap"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Háttérkép panelekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Háttérkép grafikus felületi elemekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Háttérkép buboréksúgókhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Átlátszatlan képek párbeszédablakokhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Átlátszatlan általános párbeszédablak háttér"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Átlátszatlan téma a kijelentkező párbeszédablakhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Átlátszatlan képek felületi elemekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Átlátszatlan háttérkép panelekhez"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Átlátszatlan háttérkép buboréksúgókhoz"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme beállítófájl"
+
+#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Egyebek"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr ""
+"A(z) %1 felületi elem nem határozta meg, hogy melyik ScriptEngine-t "
+"használja."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Nem sikerült megnyitni ezt a csomagot: %1. Igénylő elem: %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Nem sikerült megnyitni ezt a szkriptmodult: %1. Igénylő elem: %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Alternatívák megjelenítése…"
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Elem eltávolítva"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "A(z) „%1” elem eltávolításra került."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panel eltávolítva"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Egy panel eltávolításra került."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Asztal eltávolítva"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Egy asztal eltávolításra került."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Visszavonás"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Felületi elem beállítások"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Felületi elem eltávolítása"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "A társított alkalmazás futtatása"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Nem sikerült inicializálni a szkriptet"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Megnyitás ezzel: %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Panel eltávolítása"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Aktivitás eltávolítása"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Tevékenység beállítások"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Felületi elemek hozzáadása…"
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "A kért komponens nem található: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"A felületi elemek hálózaton történő megosztásakor lehetővé teszi ehhez a "
+"felületi elemhez való hozzáférést másik számítógépről mint távirányítóról."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Felületi elem megosztása a hálózaton"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Bárki számára szabad hozzáférést enged ehhez a felületi elemhez"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Érvénytelen (null) szolgáltatás, nem végezhető el semmilyen művelet."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Ismeretlen kisalkalmazás"
+
+#: plasmaquick/appletquickitem.cpp:619
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Hiba a QML fájl betöltése közben: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:621
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Hiba a kisalkalmazás betöltésekor: a csomag nem létezik. %1"
+
+#: plasmaquick/configview.cpp:95
+#, kde-format
+msgid "%1 Settings"
+msgstr "Beállítások: %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma csomag"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Install"
+msgstr "Telepítés"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Sikertelen csomagtelepítés"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "A most ejtett csomag érvénytelen."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#, kde-format
+msgid "Widgets"
+msgstr "Elemek"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "A(z) %1 hozzáadása"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Ikon hozzáadása"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, kde-format
+msgid "Wallpaper"
+msgstr "Háttérkép"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "A(z) %1 beállítása"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Tartalom ejtve"
+
+#~ msgid "Accessibility"
+#~ msgstr "Akadálymentesítés"
+
+#~ msgid "Application Launchers"
+#~ msgstr "Alkalmazásindítók"
+
+#~ msgid "Astronomy"
+#~ msgstr "Csillagászat"
+
+#~ msgid "Date and Time"
+#~ msgstr "Dátum és idő"
+
+#~ msgid "Development Tools"
+#~ msgstr "Fejlesztőeszközök"
+
+#~ msgid "Education"
+#~ msgstr "Oktatás"
+
+#~ msgid "Environment and Weather"
+#~ msgstr "Környezet és időjárás"
+
+#~ msgid "Examples"
+#~ msgstr "Példák"
+
+#~ msgid "File System"
+#~ msgstr "Fájlrendszer"
+
+#~ msgid "Fun and Games"
+#~ msgstr "Játék és szórakozás"
+
+#~ msgid "Graphics"
+#~ msgstr "Grafika"
+
+#~ msgid "Language"
+#~ msgstr "Nyelv"
+
+#~ msgid "Mapping"
+#~ msgstr "Térképek"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Egyebek"
+
+#~ msgid "Multimedia"
+#~ msgstr "Multimédia"
+
+#~ msgid "Online Services"
+#~ msgstr "Internetes szolgáltatások"
+
+#~ msgid "Productivity"
+#~ msgstr "Termelékenység"
+
+#~ msgid "System Information"
+#~ msgstr "Rendszer információk"
+
+#~ msgid "Utilities"
+#~ msgstr "Segédprogramok"
+
+#~ msgid "Windows and Tasks"
+#~ msgstr "Ablakok és feladatok"
+
+#~ msgid "Clipboard"
+#~ msgstr "Vágólap"
+
+#~ msgid "Tasks"
+#~ msgstr "Feladatok"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Edit %1..."
+#~ msgstr "A(z) %1 szerkesztése…"
+
+#~ msgid "Default settings for theme, etc."
+#~ msgstr "Alapértelmezett beállítások témákhoz, stb."
+
+#~ msgid "Color scheme to use for applications."
+#~ msgstr "Az alkalmazások által használandó színséma."
+
+#~ msgid "Preview Images"
+#~ msgstr "Előnézeti képek"
+
+#~ msgid "Preview for the Login Manager"
+#~ msgstr "Előnézet a bejelentkezéskezelőhöz"
+
+#~ msgid "Preview for the Lock Screen"
+#~ msgstr "Előnézet a zárolóképernyőhöz"
+
+#~ msgid "Preview for the Userswitcher"
+#~ msgstr "Előnézet a felhasználóváltóhoz"
+
+#~ msgid "Preview for the Virtual Desktop Switcher"
+#~ msgstr "Előnézet a virtuálisasztal-váltóhoz"
+
+#~ msgid "Preview for Splash Screen"
+#~ msgstr "Előnézet a nyitóképernyőhöz"
+
+#~ msgid "Preview for KRunner"
+#~ msgstr "Előnézet a KRunnerhöz"
+
+#~ msgid "Preview for the Window Decorations"
+#~ msgstr "Előnézet az ablakdekorációkhoz"
+
+#~ msgid "Preview for Window Switcher"
+#~ msgstr "Előnézet az ablakváltóhoz"
+
+#~ msgid "Login Manager"
+#~ msgstr "Bejelentkezéskezelő"
+
+#~ msgid "Main Script for Login Manager"
+#~ msgstr "A bejelentkezéskezelő fő szkriptje"
+
+#~ msgid "Logout Dialog"
+#~ msgstr "Kijelentkező párbeszédablak"
+
+#~ msgid "Main Script for Logout Dialog"
+#~ msgstr "A kijelentkező párbeszédablak fő szkriptje"
+
+#~ msgid "Screenlocker"
+#~ msgstr "Képernyőzár"
+
+#~ msgid "Main Script for Lock Screen"
+#~ msgstr "A zárolóképernyő fő szkriptje"
+
+#~ msgid "UI for fast user switching"
+#~ msgstr "Felhasználói felület gyors felhasználóváltáshoz"
+
+#~ msgid "Main Script for User Switcher"
+#~ msgstr "A felhasználóváltó fő szkriptje"
+
+#~ msgid "Virtual Desktop Switcher"
+#~ msgstr "Virtuálisasztal-váltó"
+
+#~ msgid "Main Script for Virtual Desktop Switcher"
+#~ msgstr "A virtuálisasztal-váltó fő szkriptje"
+
+#~ msgid "On-Screen Display Notifications"
+#~ msgstr "Képernyőn megjelenő értesítések"
+
+#~ msgid "Main Script for On-Screen Display Notifications"
+#~ msgstr "A képernyőn megjelenő értesítések fő szkriptje"
+
+#~ msgid "Splash Screen"
+#~ msgstr "Nyitóképernyő"
+
+#~ msgid "Main Script for Splash Screen"
+#~ msgstr "A nyitóképernyő fő szkriptje"
+
+#~ msgid "KRunner UI"
+#~ msgstr "KRunner UI"
+
+#~ msgid "Main Script KRunner"
+#~ msgstr "A KRunner fő szkriptje"
+
+#~ msgid "Window Decoration"
+#~ msgstr "Ablakdekoráció"
+
+#~ msgid "Main Script for Window Decoration"
+#~ msgstr "Az ablakdekoráció fő szkriptje"
+
+#~ msgid "Window Switcher"
+#~ msgstr "Ablakváltó"
+
+#~ msgid "Main Script for Window Switcher"
+#~ msgstr "Az ablakváltó fő szkriptje"
+
+#~ msgid "Finish Customizing Layout"
+#~ msgstr "Kilépés"
+
+#~ msgid "Customize Layout..."
+#~ msgstr "Elrendezés testre szabása…"
+
+#~ msgid "Fetching file type..."
+#~ msgstr "Fájltípus lekérése…"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "%1 Options"
+#~ msgstr "%1 beállításai"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "Remove this %1"
+#~ msgstr "Eltávolítás: %1"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "%1 beállításai"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings..."
+#~ msgstr "A(z) %1 beállításai…"
+
+#~ msgid "Low color images for dialogs"
+#~ msgstr "Kevés színt használó képek párbeszédablakokhoz"
+
+#~ msgid "Low color generic dialog background"
+#~ msgstr "Kevés színt használó általános párbeszédablak háttér"
+
+#~ msgid "Low color theme for the logout dialog"
+#~ msgstr "Kevés színt használó téma a kijelentkező párbeszédablakhoz"
+
+#~ msgid "Low color background image for widgets"
+#~ msgstr "Kevés színt használó háttérkép felületi elemekhez"
+
+#~ msgid "Low color analog clock face"
+#~ msgstr "Kevés színt használó analóg óralap"
+
+#~ msgid "Low color background image for panels"
+#~ msgstr "Kevés színt használó háttérkép panelekhez"
+
+#~ msgid "Low color background for graphing widgets"
+#~ msgstr "Kevés színt használó háttér grafikus felületi elemekhez"
+
+#~ msgid "Low color background image for tooltips"
+#~ msgstr "Kevés színt használó háttérkép buboréksúgókhoz"
+
+#~ msgid "Plasma Package Manager"
+#~ msgstr "Kezelőprogram Plasma-csomagokhoz"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Generate a SHA1 hash for the package at <path>"
+#~ msgstr "SHA1 összeg generálása ehhez a csomaghoz: <path>"
+
+#~ msgid "For install or remove, operates on packages installed for all users."
+#~ msgstr ""
+#~ "Telepítéshez és eltávolításhoz, a mindenki számára elérhetően telepített "
+#~ "csomagokhoz."
+
+#~ msgctxt ""
+#~ "theme, wallpaper, etc. are keywords, but they may be translated, as both "
+#~ "versions are recognized by the application (if translated, should be same "
+#~ "as messages with 'package type' context below)"
+#~ msgid ""
+#~ "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+#~ "layout-template, etc."
+#~ msgstr ""
+#~ "A csomag típusa, például téma, háttérkép, plazmoid, adatmodul, indító, "
+#~ "elrendezéssablon, stb."
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Install the package at <path>"
+#~ msgstr "Csomag telepítése innen: <path>"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Show information of package <name>"
+#~ msgstr "A(z) <name> csomag adatainak megjelenítése"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Upgrade the package at <path>"
+#~ msgstr "Csomag frissítése innen: <path>"
+
+#~ msgid "List installed packages"
+#~ msgstr "Telepített csomagok listázása"
+
+#~ msgid "List all known package types that can be installed"
+#~ msgstr "Az összes telepíthető csomagtípus listázása"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Remove the package named <name>"
+#~ msgstr "A(z) <name> csomag eltávolítása"
+
+#~ msgid ""
+#~ "Absolute path to the package root. If not supplied, then the standard "
+#~ "data directories for this KDE session will be searched instead."
+#~ msgstr ""
+#~ "A csomag teljes elérési útja. Ha nincs megadva, akkor először a KDE-"
+#~ "munkamenet standard mappái lesznek végignézve."
+
+#~ msgid "Failed to generate a Package hash for %1"
+#~ msgstr "Nem sikerült ellenőrző összeget generálni ehhez: %1"
+
+#~ msgid "SHA1 hash for Package at %1: '%2'"
+#~ msgstr "A(z) %1 helyen lévő csomag SHA1 összege: „%2”"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaper"
+#~ msgstr "háttérkép"
+
+#~ msgctxt "package type"
+#~ msgid "plasmoid"
+#~ msgstr "plazmoid"
+
+#~ msgctxt "package type"
+#~ msgid "package"
+#~ msgstr "csomag"
+
+#~ msgctxt "package type"
+#~ msgid "theme"
+#~ msgstr "téma"
+
+#~ msgctxt "package type"
+#~ msgid "dataengine"
+#~ msgstr "adatmodul"
+
+#~ msgctxt "package type"
+#~ msgid "runner"
+#~ msgstr "futtató"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaperplugin"
+#~ msgstr "háttérképbővítmény"
+
+#~ msgctxt "package type"
+#~ msgid "lookandfeel"
+#~ msgstr "megjelenés"
+
+#~ msgctxt "package type"
+#~ msgid "shell"
+#~ msgstr "felület"
+
+#~ msgctxt "package type"
+#~ msgid "layout-template"
+#~ msgstr "elrendezéssablon"
+
+#~ msgctxt "package type"
+#~ msgid "kwineffect"
+#~ msgstr "kwin effektus"
+
+#~ msgctxt "package type"
+#~ msgid "windowswitcher"
+#~ msgstr "ablakváltó"
+
+#~ msgctxt "package type"
+#~ msgid "kwinscript"
+#~ msgstr "kwin szkript"
+
+#~ msgid "Could not find a suitable installer for package of type %1"
+#~ msgstr "Nem található telepítő a(z) %1 csomagtípushoz"
+
+#~ msgid "Listing service types: %1"
+#~ msgstr "Szolgáltatástípusok listázása: %1"
+
+#~ msgid "Error: Plugin %1 is not installed."
+#~ msgstr "Hiba: a(z) %1 bővítmény nincs telepítve."
+
+#~ msgctxt ""
+#~ "No option was given, this is the error message telling the user he needs "
+#~ "at least one, do not translate install, remove, upgrade nor list"
+#~ msgid "One of install, remove, upgrade or list is required."
+#~ msgstr ""
+#~ "Az install, remove, upgrade vagy list paraméterek valamelyikének megadása "
+#~ "szükséges."
+
+#~ msgid "Error: Can't find plugin metadata: %1"
+#~ msgstr "Hiba: nem találhatók a bővítmény metaadatai: %1"
+
+#~ msgid "Showing info for package: %1"
+#~ msgstr "Csomag adatainak megjelenítése: %1"
+
+#~ msgid "      Name : %1"
+#~ msgstr "      Név : %1"
+
+#~ msgid "   Comment : %1"
+#~ msgstr "   Megjegyzés : %1"
+
+#~ msgid "    Plugin : %1"
+#~ msgstr "    Bővítmény : %1"
+
+#~ msgid "    Author : %1"
+#~ msgstr "    Szerző : %1"
+
+#~ msgid "      Path : %1"
+#~ msgstr "      Elérési út : %1"
+
+#~ msgctxt ""
+#~ "The user entered conflicting options packageroot and global, this is the "
+#~ "error message telling the user he can use only one"
+#~ msgid ""
+#~ "The packageroot and global options conflict each other, please select "
+#~ "only one."
+#~ msgstr ""
+#~ "A packageroot és global opciók ütköznek egymással, csak egyet használjon "
+#~ "a kettő közül!"
+
+#~ msgid "Addon Name"
+#~ msgstr "Bővítménynév"
+
+#~ msgid "Service Type"
+#~ msgstr "Szolgáltatástípus"
+
+#~ msgid "Path"
+#~ msgstr "Elérési út"
+
+#~ msgid "Type Argument"
+#~ msgstr "Típusargumentum"
+
+#~ msgid "Package types that are installable with this tool:"
+#~ msgstr "Az ezzel az eszközzel telepíthető csomagtípusok:"
+
+#~ msgid "Built in:"
+#~ msgstr "Beépített:"
+
+#~ msgid "DataEngine"
+#~ msgstr "Adatmodul"
+
+#~ msgid "Layout Template"
+#~ msgstr "Elrendezéssablon"
+
+#~ msgid "Look and Feel"
+#~ msgstr "Megjelenés"
+
+#~ msgid "Package"
+#~ msgstr "Csomag"
+
+#~ msgid "Plasmoid"
+#~ msgstr "Plasmoid"
+
+#~ msgid "Runner"
+#~ msgstr "Indító"
+
+#~ msgid "Shell"
+#~ msgstr "Felület"
+
+#~ msgid "Theme"
+#~ msgstr "Téma"
+
+#~ msgid "Wallpaper Images"
+#~ msgstr "Háttérképek"
+
+#~ msgid "Animated Wallpaper"
+#~ msgstr "Animált háttérkép"
+
+#~ msgid "KWin Effect"
+#~ msgstr "KWin effektus"
+
+#~ msgid "KWin Window Switcher"
+#~ msgstr "KWin ablakváltó"
+
+#~ msgid "KWin Script"
+#~ msgstr "KWin szkript"
+
+#~ msgid "Provided by plugins:"
+#~ msgstr "Bővítmények által biztosított:"
+
+#~ msgid "Provided by .desktop files:"
+#~ msgstr ".desktop fájlok által biztosított:"
+
+#~ msgid "Successfully upgraded %1"
+#~ msgstr "Sikeresen frissítve: %1"
+
+#~ msgid "Successfully installed %1"
+#~ msgstr "Sikeresen telepítve: %1"
+
+#~ msgid "Error: Installation of %1 failed: %2"
+#~ msgstr "Hiba: a(z) %1 telepítése meghiúsult: %2"
+
+#~ msgid "Upgrading package from file: %1"
+#~ msgstr "Csomag frissítése fájlból: %1"
+
+#~ msgid "Successfully uninstalled %1"
+#~ msgstr "Sikeresen eltávolítva: %1"
+
+#~ msgid "Error: Uninstallation of %1 failed: %2"
+#~ msgstr "Hiba: a(z) %1 eltávolítása meghiúsult: %2"
+
+#~ msgid ""
+#~ "Could not load installer for package of type %1. Error reported was: %2"
+#~ msgstr ""
+#~ "Nem lehet betölteni a telepítőt a(z) %1 csomagtípushoz. A hiba oka: %2"
+
+#~ msgid "Could not create package root directory: %1"
+#~ msgstr "Nem sikerült létrehozni a csomag gyökérkönyvtárát: %1"
+
+#~ msgid "No such file: %1"
+#~ msgstr "Nincs ilyen fájl: %1"
+
+#~ msgid "Could not open package file, unsupported archive format: %1 %2"
+#~ msgstr ""
+#~ "Nem sikerült megnyitni a csomagfájlt, nem támogatott archívumformátum: %1 "
+#~ "%2"
+
+#~ msgid "Could not open package file: %1"
+#~ msgstr "Nem sikerült megnyitni a csomagfájlt: %1"
+
+#~ msgid "No metadata file in package: %1"
+#~ msgstr "Nincs metaadat fájl a csomagban: %1"
+
+#~ msgid "Package plugin name not specified: %1"
+#~ msgstr "A csomag bővítményneve nincs megadva: %1"
+
+#~ msgid "Package plugin name %1 contains invalid characters"
+#~ msgstr "A csomag bővítményneve (%1) érvénytelen karaktereket tartalmaz"
+
+#~ msgid "%1 already exists"
+#~ msgstr "%1 már létezik"
+
+#~ msgid "Could not move package to destination: %1"
+#~ msgstr "Nem sikerült áthelyezni a csomagot a célra: %1"
+
+#~ msgid "Could not copy package to destination: %1"
+#~ msgstr "Nem sikerült átmásolni a csomagot a célra: %1"
+
+#~ msgid "Could not create local service directory: %1"
+#~ msgstr "Nem sikerült helyi szolgáltatásmappát létrehozni: %1"
+
+#~ msgid ""
+#~ "Could not register package as service (this is not necessarily fatal): %1"
+#~ msgstr ""
+#~ "Nem sikerült regisztrálni a csomagot szolgáltatásként (ez nem "
+#~ "szükségszerűen végzetes): %1"
+
+#~ msgid "%1 does not exist"
+#~ msgstr "%1 nem létezik"
+
+#~ msgid "Could not delete package from: %1"
+#~ msgstr "Nem sikerült törölni a csomagot innen: %1"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Do you really want to remove this %1?"
+#~ msgstr "Biztosan el szeretné távolítani ezt: %1?"
+
+#~ msgid "Applets furniture"
+#~ msgstr "Kisalkalmazások bútor"
+
+#~ msgid "Explorer UI for adding widgets"
+#~ msgstr "Felfedező felhasználói felület felületi elemek hozzáadásához"
+
+#~ msgid "User interface for the views that will show containments"
+#~ msgstr ""
+#~ "Felhasználói felület olyan nézetekhez, amelyek elhatárolásokat "
+#~ "tartalmaznak"
+
+#~ msgid "Default layout file"
+#~ msgstr "Alapértelmezett elrendezésfájl"
+
+#~ msgid "Default plugins for containments, containmentActions, etc."
+#~ msgstr ""
+#~ "Alapértelmezett bővítmények tartalmazó elemekhez, műveletekhez, stb."
+
+#~ msgid "Error message shown when an applet fails to load"
+#~ msgstr "Hibaüzenet jelenik meg, amikor egy kisalkalmazás nem tud betöltődni"
+
+#~ msgid "QML component that shows an applet in a popup"
+#~ msgstr ""
+#~ "Olyan QML komponens, amely egy kisalkalmazást jelenít meg felugró ablakban"
+
+#~ msgid ""
+#~ "Compact representation of an applet when collapsed in a popup, for "
+#~ "instance as an icon. Applets can override this component."
+#~ msgstr ""
+#~ "Egy kisalkalmazás kompakt reprezentációja összecsukott állapotban "
+#~ "(például ikonként). A kisalkalmazások felülírhatják ezt a komponenst."
+
+#~ msgid "QML component for the configuration dialog for applets"
+#~ msgstr "QML komponens a kisalkalmazások beállító párbeszédablakához"
+
+#~ msgid "QML component for the configuration dialog for containments"
+#~ msgstr "QML komponens az elhatárolások beállító párbeszédablakához"
+
+#~ msgid "Panel configuration UI"
+#~ msgstr "Panelbeállítás felhasználói felület"
+
+#~ msgid "QML component for choosing an alternate applet"
+#~ msgstr "QML komponens alternatív kisalkalmazások választásához"
+
+#~ msgid ""
+#~ "A UI for writing, loading and running desktop scripts in the current live "
+#~ "session"
+#~ msgstr ""
+#~ "Felhasználói felület asztali szkriptek írásához, betöltéséhez és "
+#~ "futtatásához a jelenlegi munkamenetben"

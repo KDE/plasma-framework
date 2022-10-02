@@ -1,0 +1,1179 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Eloy Cuadra <ecuadra@eloihr.net>, 2013, 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"PO-Revision-Date: 2022-07-25 03:46+0200\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
+"Language-Team: Spanish <kde-l10n-es@kde.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 22.04.3\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Festividades"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Eventos"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Por hacer"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Otros"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Mes anterior"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Año anterior"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Década anterior"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Hoy"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Reiniciar el calendario a hoy"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Mes siguiente"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Año siguiente"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Década siguiente"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Días"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Meses"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Años"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "Aceptar"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "Más acciones"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr "Contraer"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr "Expandir"
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr "Contraseña"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#, kde-format
+msgid "Search…"
+msgstr "Buscar..."
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search"
+msgstr "Buscar"
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Activar el elemento gráfico %1"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Eliminar %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Entrar en el modo de edición"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Configurar %1..."
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Bloquear elementos gráficos"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Desbloquear elementos gráficos"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Salir del modo de edición"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Si se debe crear o no una caché en el disco para el tema."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"El tamaño máximo en kilobytes de la caché en disco para el tema. Tenga en "
+"cuenta que estos archivos están muy dispersos, por lo que es posible que no "
+"se utilice el tamaño máximo. Por este motivo, suele ser bastante seguro "
+"especificar un tamaño mayor."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Archivo de script principal"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Pruebas"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Imágenes"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Imágenes temáticas"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Definiciones de la configuración"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Interfaz de usuario"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Archivos de datos"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Scripts ejecutables"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Captura de pantalla"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Traducciones"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Modelo de páginas de interfaz de usuario de configuración"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Archivo XML de configuración"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Expansor personalizado para miniaplicaciones compactas"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Descripciones del servicio"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Imágenes para diálogos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Fondo general de los diálogos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Tema para el diálogo de fin de sesión"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Paquetes de fondos del escritorio"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Imágenes para los elementos gráficos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Imagen de fondo para los elementos gráficos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Carátula del reloj analógico"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Imagen de fondo para los paneles"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Fondo para los elementos gráficos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Imagen de fondo para las ayudas emergentes"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Imágenes opacas para los diálogos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Fondo opaco general para los diálogos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Tema opaco para el diálogo de fin de sesión"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Imágenes opacas para los elementos gráficos"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Imagen opaca de fondo para los paneles"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Imagen opaca de fondo para las ayudas emergentes"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Archivo de configuración de KColorScheme"
+
+#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Varios"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "El elemento gráfico %1 no ha definido el motor de scripts a usar."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr ""
+"No se ha podido abrir el paquete %1 que necesita el elemento gráfico %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr ""
+"No se ha podido crear en motor de scripts de %1 para el elemento gráfico %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Mostrar alternativas..."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Elemento gráfico eliminado"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Se ha eliminado el elemento gráfico «%1»."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panel eliminado"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Se ha eliminado un panel."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Escritorio eliminado"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Se ha eliminado un escritorio."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Deshacer"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Preferencias del elemento gráfico"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Eliminar este elemento gráfico"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Ejecutar la aplicación asociada"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "La inicialización del script ha fallado"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Abrir con %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Eliminar este panel"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Eliminar esta actividad"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Preferencias de la actividad"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Añadir elementos gráficos..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "No se ha podido encontrar el componente solicitado: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Si comparte un elemento gráfico en la red podrá acceder a él desde otro "
+"equipo como un mando a distancia."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Compartir este elemento gráfico en la red"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Permitir que todos puedan acceder libremente a este elemento gráfico"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Servicio no válido (nulo); no puede realizar operaciones."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Miniaplicación desconocida"
+
+#: plasmaquick/appletquickitem.cpp:619
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Error al cargar archivo QML: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:621
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Error cargando miniaplicación: paquete no existente. %1"
+
+#: plasmaquick/configview.cpp:95
+#, kde-format
+msgid "%1 Settings"
+msgstr "Preferencias de %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#, kde-format
+msgid "Plasma Package"
+msgstr "Paquete de Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Install"
+msgstr "Instalar"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "La instalación del paquete ha fallado"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "El paquete que acaba de soltar no es válido."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#, kde-format
+msgid "Widgets"
+msgstr "Elementos gráficos"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Añadir %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Añadir icono"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, kde-format
+msgid "Wallpaper"
+msgstr "Fondo de escritorio"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Definir %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Contenido soltado"
+
+#~ msgid "Accessibility"
+#~ msgstr "Accesibilidad"
+
+#~ msgid "Application Launchers"
+#~ msgstr "Lanzadores de aplicaciones"
+
+#~ msgid "Astronomy"
+#~ msgstr "Astronomía"
+
+#~ msgid "Date and Time"
+#~ msgstr "Fecha y hora"
+
+#~ msgid "Development Tools"
+#~ msgstr "Herramientas de desarrollo"
+
+#~ msgid "Education"
+#~ msgstr "Educación"
+
+#~ msgid "Environment and Weather"
+#~ msgstr "Entorno y meteorología"
+
+#~ msgid "Examples"
+#~ msgstr "Ejemplos"
+
+#~ msgid "File System"
+#~ msgstr "Sistema de archivos"
+
+#~ msgid "Fun and Games"
+#~ msgstr "Juegos y diversión"
+
+#~ msgid "Graphics"
+#~ msgstr "Gráficos"
+
+#~ msgid "Language"
+#~ msgstr "Idioma"
+
+#~ msgid "Mapping"
+#~ msgstr "Mapas"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Varios"
+
+#~ msgid "Multimedia"
+#~ msgstr "Multimedia"
+
+#~ msgid "Online Services"
+#~ msgstr "Servicios en línea"
+
+#~ msgid "Productivity"
+#~ msgstr "Productividad"
+
+#~ msgid "System Information"
+#~ msgstr "Información del sistema"
+
+#~ msgid "Utilities"
+#~ msgstr "Utilidades"
+
+#~ msgid "Windows and Tasks"
+#~ msgstr "Ventanas y tareas"
+
+#~ msgid "Clipboard"
+#~ msgstr "Portapapeles"
+
+#~ msgid "Tasks"
+#~ msgstr "Tareas"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Edit %1..."
+#~ msgstr "Editar %1..."
+
+#~ msgid "Default settings for theme, etc."
+#~ msgstr "Preferencias por omisión para el tema, etc."
+
+#~ msgid "Color scheme to use for applications."
+#~ msgstr "Esquema de color a usar en las aplicaciones."
+
+#~ msgid "Preview Images"
+#~ msgstr "Vista previa de imágenes"
+
+#~ msgid "Preview for the Login Manager"
+#~ msgstr "Vista previa del gestor de inicio de sesión"
+
+#~ msgid "Preview for the Lock Screen"
+#~ msgstr "Vista previa de la pantalla de bloqueo"
+
+#~ msgid "Preview for the Userswitcher"
+#~ msgstr "Vista previa del selector de usuario"
+
+#~ msgid "Preview for the Virtual Desktop Switcher"
+#~ msgstr "Vista previa del selector de escritorio virtual"
+
+#~ msgid "Preview for Splash Screen"
+#~ msgstr "Vista previa de la pantalla de anuncio"
+
+#~ msgid "Preview for KRunner"
+#~ msgstr "Vista previa de KRunner"
+
+#~ msgid "Preview for the Window Decorations"
+#~ msgstr "Vista previa de las decoraciones de la ventana"
+
+#~ msgid "Preview for Window Switcher"
+#~ msgstr "Vista previa del selector de ventanas"
+
+#~ msgid "Login Manager"
+#~ msgstr "Gestor de inicio de sesión"
+
+#~ msgid "Main Script for Login Manager"
+#~ msgstr "Script principal para el gestor de inicio de sesión"
+
+#~ msgid "Logout Dialog"
+#~ msgstr "Diálogo de cierre de sesión"
+
+#~ msgid "Main Script for Logout Dialog"
+#~ msgstr "Script principal para el diálogo de cierre de sesión"
+
+#~ msgid "Screenlocker"
+#~ msgstr "Bloqueador de pantalla"
+
+#~ msgid "Main Script for Lock Screen"
+#~ msgstr "Script principal para la pantalla de bloqueo"
+
+#~ msgid "UI for fast user switching"
+#~ msgstr "Interfaz para cambio rápido de usuario"
+
+#~ msgid "Main Script for User Switcher"
+#~ msgstr "Guion principal para el selector de usuario"
+
+#~ msgid "Virtual Desktop Switcher"
+#~ msgstr "Selector de escritorio virtual"
+
+#~ msgid "Main Script for Virtual Desktop Switcher"
+#~ msgstr "Guion principal para el selector de escritorio virtual"
+
+#~ msgid "On-Screen Display Notifications"
+#~ msgstr "Notificaciones sobre la pantalla"
+
+#~ msgid "Main Script for On-Screen Display Notifications"
+#~ msgstr "Guion principal para las notificaciones sobre la pantalla"
+
+#~ msgid "Splash Screen"
+#~ msgstr "Pantalla anunciadora"
+
+#~ msgid "Main Script for Splash Screen"
+#~ msgstr "Guion principal para la pantalla de bienvenida"
+
+#~ msgid "KRunner UI"
+#~ msgstr "Interfaz de KRunner"
+
+#~ msgid "Main Script KRunner"
+#~ msgstr "Guion principal de KRunner"
+
+#~ msgid "Window Decoration"
+#~ msgstr "Decoración de ventanas"
+
+#~ msgid "Main Script for Window Decoration"
+#~ msgstr "Guion principal para la decoración de ventanas"
+
+#~ msgid "Window Switcher"
+#~ msgstr "Selector de ventana"
+
+#~ msgid "Main Script for Window Switcher"
+#~ msgstr "Guion principal para el selector de ventana"
+
+#~ msgid "Finish Customizing Layout"
+#~ msgstr "Finalizar la personalización del diseño"
+
+#~ msgid "Customize Layout..."
+#~ msgstr "Personalizar el diseño..."
+
+#~ msgid "Fetching file type..."
+#~ msgstr "Obteniendo el tipo de archivo..."
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "%1 Options"
+#~ msgstr "Opciones de %1"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "Remove this %1"
+#~ msgstr "Eliminar este %1"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "Preferencias de %1"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings..."
+#~ msgstr "Preferencias de %1..."
+
+#~ msgid "Low color images for dialogs"
+#~ msgstr "Imágenes en color de baja resolución para los diálogos"
+
+#~ msgid "Low color generic dialog background"
+#~ msgstr "Fondo general en color de baja resolución para los diálogos"
+
+#~ msgid "Low color theme for the logout dialog"
+#~ msgstr "Tema en color de baja resolución para el diálogo de fin de sesión"
+
+#~ msgid "Low color background image for widgets"
+#~ msgstr ""
+#~ "Imagen de fondo en color de baja resolución para los elementos gráficos"
+
+#~ msgid "Low color analog clock face"
+#~ msgstr "Carátula en color de baja resolución del reloj analógico"
+
+#~ msgid "Low color background image for panels"
+#~ msgstr "Imagen de fondo en color de baja resolución para los paneles"
+
+#~ msgid "Low color background for graphing widgets"
+#~ msgstr "Fondo en color de baja resolución para los elementos gráficos"
+
+#~ msgid "Low color background image for tooltips"
+#~ msgstr ""
+#~ "Imagen de fondo en color de baja resolución para las ayudas emergentes"
+
+#~ msgid "Plasma Package Manager"
+#~ msgstr "Gestor de paquetes de Plasma"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Generate a SHA1 hash for the package at <path>"
+#~ msgstr "Generar un resumen criptográfico SHA1 para el paquete de la <path>"
+
+#~ msgid "For install or remove, operates on packages installed for all users."
+#~ msgstr ""
+#~ "Para instalar o eliminar; opera en los paquetes instalados para todos los "
+#~ "usuarios"
+
+#~ msgctxt ""
+#~ "theme, wallpaper, etc. are keywords, but they may be translated, as both "
+#~ "versions are recognized by the application (if translated, should be same "
+#~ "as messages with 'package type' context below)"
+#~ msgid ""
+#~ "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+#~ "layout-template, etc."
+#~ msgstr ""
+#~ "El tipo del paquete; por ejemplo: tema, imagen de fondo, plasmoide, motor "
+#~ "de datos, lanzador, plantilla de diseño, etc."
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Install the package at <path>"
+#~ msgstr "Instalar el paquete en <path>"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Show information of package <name>"
+#~ msgstr "Mostrar información sobre el paquete <name>"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Upgrade the package at <path>"
+#~ msgstr "Actualizar el paquete en <path>"
+
+#~ msgid "List installed packages"
+#~ msgstr "Listar los paquetes instalados"
+
+#~ msgid "List all known package types that can be installed"
+#~ msgstr "Listar todos los tipos de paquetes conocidos que se pueden instalar"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Remove the package named <name>"
+#~ msgstr "Eliminar el paquete llamado <name>"
+
+#~ msgid ""
+#~ "Absolute path to the package root. If not supplied, then the standard "
+#~ "data directories for this KDE session will be searched instead."
+#~ msgstr ""
+#~ "Ruta absoluta a la raíz del paquete. Si no se indica, se buscará en los "
+#~ "directorios de datos estándar de esta sesión de KDE."
+
+#~ msgid "Failed to generate a Package hash for %1"
+#~ msgstr ""
+#~ "No se ha podido generar el resumen criptográfico del paquete para %1"
+
+#~ msgid "SHA1 hash for Package at %1: '%2'"
+#~ msgstr "Resumen criptográfico SHA1 para el paquete en %1: «%2»"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaper"
+#~ msgstr "fondo de escritorio"
+
+#~ msgctxt "package type"
+#~ msgid "plasmoid"
+#~ msgstr "plasmoide"
+
+#~ msgctxt "package type"
+#~ msgid "package"
+#~ msgstr "paquete"
+
+#~ msgctxt "package type"
+#~ msgid "theme"
+#~ msgstr "tema"
+
+#~ msgctxt "package type"
+#~ msgid "dataengine"
+#~ msgstr "motor de datos"
+
+#~ msgctxt "package type"
+#~ msgid "runner"
+#~ msgstr "lanzador"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaperplugin"
+#~ msgstr "Complemento de fondo de escritorio"
+
+#~ msgctxt "package type"
+#~ msgid "lookandfeel"
+#~ msgstr "aspecto visual"
+
+#~ msgctxt "package type"
+#~ msgid "shell"
+#~ msgstr "intérprete de órdenes"
+
+#~ msgctxt "package type"
+#~ msgid "layout-template"
+#~ msgstr "plantilla de diseño"
+
+#~ msgctxt "package type"
+#~ msgid "kwineffect"
+#~ msgstr "efecto de kwin"
+
+#~ msgctxt "package type"
+#~ msgid "windowswitcher"
+#~ msgstr "Selector de ventanas"
+
+#~ msgctxt "package type"
+#~ msgid "kwinscript"
+#~ msgstr "guion de kwin"
+
+#~ msgid "Could not find a suitable installer for package of type %1"
+#~ msgstr ""
+#~ "No se ha podido encontrar un instalador adecuado para los paquetes de "
+#~ "tipo %1"
+
+#~ msgid "Listing service types: %1"
+#~ msgstr "Listando tipos de servicios: %1"
+
+#~ msgid "Error: Plugin %1 is not installed."
+#~ msgstr "Error: el complemento %1 no está instalado."
+
+#~ msgctxt ""
+#~ "No option was given, this is the error message telling the user he needs "
+#~ "at least one, do not translate install, remove, upgrade nor list"
+#~ msgid "One of install, remove, upgrade or list is required."
+#~ msgstr "Se necesita instalar, eliminar, modernizar o listar."
+
+#~ msgid "Error: Can't find plugin metadata: %1"
+#~ msgstr "Error: no se pueden encontrar los metadatos del complemento: %1"
+
+#~ msgid "Showing info for package: %1"
+#~ msgstr "Mostrando información del paquete: %1"
+
+#~ msgid "      Name : %1"
+#~ msgstr "      Nombre : %1"
+
+#~ msgid "   Comment : %1"
+#~ msgstr "   Comentario : %1"
+
+#~ msgid "    Plugin : %1"
+#~ msgstr "    Complemento : %1"
+
+#~ msgid "    Author : %1"
+#~ msgstr "    Autor : %1"
+
+#~ msgid "      Path : %1"
+#~ msgstr "      Ruta : %1"
+
+#~ msgctxt ""
+#~ "The user entered conflicting options packageroot and global, this is the "
+#~ "error message telling the user he can use only one"
+#~ msgid ""
+#~ "The packageroot and global options conflict each other, please select "
+#~ "only one."
+#~ msgstr ""
+#~ "Las opciones «packageroot» y «global» están en conflicto; por favor, "
+#~ "seleccione solo una."
+
+#~ msgid "Addon Name"
+#~ msgstr "Nombre del complemento"
+
+#~ msgid "Service Type"
+#~ msgstr "Tipo de servicio"
+
+#~ msgid "Path"
+#~ msgstr "Ruta"
+
+#~ msgid "Type Argument"
+#~ msgstr "Argumento del tipo"
+
+#~ msgid "Package types that are installable with this tool:"
+#~ msgstr "Tipos de paquetes que se pueden instalar con esta herramienta:"
+
+#~ msgid "Built in:"
+#~ msgstr "Integrado:"
+
+#~ msgid "DataEngine"
+#~ msgstr "Motor de datos"
+
+#~ msgid "Layout Template"
+#~ msgstr "Plantilla de distribución"
+
+#~ msgid "Look and Feel"
+#~ msgstr "Aspecto visual"
+
+#~ msgid "Package"
+#~ msgstr "Paquete"
+
+#~ msgid "Plasmoid"
+#~ msgstr "Plasmoide"
+
+#~ msgid "Runner"
+#~ msgstr "Lanzador"
+
+#~ msgid "Shell"
+#~ msgstr "Intérprete"
+
+#~ msgid "Theme"
+#~ msgstr "Tema"
+
+#~ msgid "Wallpaper Images"
+#~ msgstr "Imágenes de fondo del escritorio"
+
+#~ msgid "Animated Wallpaper"
+#~ msgstr "Fondo de escritorio animado"
+
+#~ msgid "KWin Effect"
+#~ msgstr "Efecto de KWin"
+
+#~ msgid "KWin Window Switcher"
+#~ msgstr "Selector de ventana de KWin"
+
+#~ msgid "KWin Script"
+#~ msgstr "Guion de KWin"
+
+#~ msgid "Provided by plugins:"
+#~ msgstr "Proporcionado por los complementos:"
+
+#~ msgid "Provided by .desktop files:"
+#~ msgstr "Proporcionado por los archivos .desktop:"
+
+#~ msgid "Successfully upgraded %1"
+#~ msgstr "%1 actualizado con éxito"
+
+#~ msgid "Successfully installed %1"
+#~ msgstr "%1 instalado con éxito"
+
+#~ msgid "Error: Installation of %1 failed: %2"
+#~ msgstr "Error: la instalación de %1 ha fallado; %2"
+
+#~ msgid "Upgrading package from file: %1"
+#~ msgstr "Actualizando paquete desde archivo: %1"
+
+#~ msgid "Successfully uninstalled %1"
+#~ msgstr "%1 desinstalado con éxito"
+
+#~ msgid "Error: Uninstallation of %1 failed: %2"
+#~ msgstr "Error: la desinstalación de %1 ha fallado; %2"
+
+#~ msgid ""
+#~ "Could not load installer for package of type %1. Error reported was: %2"
+#~ msgstr ""
+#~ "No se puede cargar el instalador para paquetes del tipo %1. El error "
+#~ "devuelto ha sido: %2"
+
+#~ msgid "Could not create package root directory: %1"
+#~ msgstr "No se ha podido crear el directorio raíz del paquete: %1"
+
+#~ msgid "No such file: %1"
+#~ msgstr "No existe el archivo: %1"
+
+#~ msgid "Could not open package file, unsupported archive format: %1 %2"
+#~ msgstr ""
+#~ "No se a podido abrir el archivo del paquete; formato de archivo "
+#~ "comprimido no admitido: %1 %2"
+
+#~ msgid "Could not open package file: %1"
+#~ msgstr "No se ha podido abrir el archivo del paquete: %1"
+
+#~ msgid "No metadata file in package: %1"
+#~ msgstr "No hay un archivo de metadatos en el paquete: %1"
+
+#~ msgid "Package plugin name not specified: %1"
+#~ msgstr "No se ha especificado el nombre del complemento del paquete: %1"
+
+#~ msgid "Package plugin name %1 contains invalid characters"
+#~ msgstr ""
+#~ "El nombre %1 del complemento de paquete contiene caracteres no válidos"
+
+#~ msgid "%1 already exists"
+#~ msgstr "%1 ya existe"
+
+#~ msgid "Could not move package to destination: %1"
+#~ msgstr "No se ha podido mover el paquete al destino: %1"
+
+#~ msgid "Could not copy package to destination: %1"
+#~ msgstr "No se ha podido copiar el paquete en el destino: %1"
+
+#~ msgid "Could not create local service directory: %1"
+#~ msgstr "No se ha podido crear el directorio de servicio local: %1"
+
+#~ msgid ""
+#~ "Could not register package as service (this is not necessarily fatal): %1"
+#~ msgstr ""
+#~ "No se ha podido registrar el paquete como servicio (esto no es "
+#~ "necesariamente fatal): %1"
+
+#~ msgid "%1 does not exist"
+#~ msgstr "%1 no existe"
+
+#~ msgid "Could not delete package from: %1"
+#~ msgstr "No se ha podido borrar el paquete de: %1"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Do you really want to remove this %1?"
+#~ msgstr "¿Realmente desea eliminar este %1?"
+
+#~ msgid "Applets furniture"
+#~ msgstr "Accesorios de miniaplicaciones"
+
+#~ msgid "Explorer UI for adding widgets"
+#~ msgstr "Interfaz de exploración para añadir elementos gráficos"
+
+#~ msgid "User interface for the views that will show containments"
+#~ msgstr "Interfaz de usuario para las vistas que mostrarán los contenedores"
+
+#~ msgid "Default layout file"
+#~ msgstr "Archivo de disposición por omisión"
+
+#~ msgid "Default plugins for containments, containmentActions, etc."
+#~ msgstr ""
+#~ "Complementos por omisión para contenedores, acciones de contenedores, etc."
+
+#~ msgid "Error message shown when an applet fails to load"
+#~ msgstr ""
+#~ "Mensaje de error mostrado cuando la miniaplicación falla al cargarse"
+
+#~ msgid "QML component that shows an applet in a popup"
+#~ msgstr ""
+#~ "Componente QML que muestra una miniaplicación en una ventana emergente"
+
+#~ msgid ""
+#~ "Compact representation of an applet when collapsed in a popup, for "
+#~ "instance as an icon. Applets can override this component."
+#~ msgstr ""
+#~ "Representación compacta de una miniaplicación cuando se contrae en una "
+#~ "ventana emergente, como por ejemplo un icono. Las miniaplicaciones pueden "
+#~ "redefinir este comportamiento."
+
+#~ msgid "QML component for the configuration dialog for applets"
+#~ msgstr ""
+#~ "Componente QML para el diálogo de configuración de las miniaplicaciones"
+
+#~ msgid "QML component for the configuration dialog for containments"
+#~ msgstr "Componente QML para el diálogo de configuración de los contenedores"
+
+#~ msgid "Panel configuration UI"
+#~ msgstr "Interfaz de configuración del panel"
+
+#~ msgid "QML component for choosing an alternate applet"
+#~ msgstr "Componente QML para seleccionar una miniaplicación alternativa"
+
+#~ msgid ""
+#~ "A UI for writing, loading and running desktop scripts in the current live "
+#~ "session"
+#~ msgstr ""
+#~ "Una interfaz de usuario para escribir, cargar y ejecutar guiones del "
+#~ "escritorio en la sesión actual"
+
+#~ msgid "Theme preview thumbnail"
+#~ msgstr "Miniatura de la vista previa del tema"
+
+#~ msgid "Ok"
+#~ msgstr "Aceptar"
+
+#~ msgid "search term"
+#~ msgstr "término a buscar"
+
+#~ msgid "Unnamed"
+#~ msgstr "Sin nombre"
+
+#~ msgid "Panel"
+#~ msgstr "Panel"

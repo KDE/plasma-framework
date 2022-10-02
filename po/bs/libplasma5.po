@@ -1,0 +1,1160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"PO-Revision-Date: 2014-01-31 21:06+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: bosanski <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2013-12-06 06:21+0000\n"
+"X-Generator: Launchpad (build 16863)\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr ""
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr ""
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr ""
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#, kde-format
+msgid "Search…"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search"
+msgstr ""
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Nepoznato"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktiviraj grafičku kontrolu %1"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "Remove this %1"
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Ukloni ovaj %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr ""
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr ""
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Zaključaj grafičku kontrolu"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Otključaj grafičku kontrolu"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+
+# >> @item file definition
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "glavnu datoteku skripte"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr ""
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Slike"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Tematske slike"
+
+# >> @item directory definition
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "definicije postave"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Korisnički interfejs"
+
+# >> @item directory definition
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "opšte datoteke"
+
+# >> @item directory definition
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "izvršne skripte"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr ""
+
+# >> @item directory definition
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "prevodi"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Konfiguracije UI stranica modela"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "XML konfiguracijska datoteka"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr ""
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Opis usluga"
+
+# >> @item directory definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Slike za dijaloge"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Generička pozadina dijaloga"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Tema za odjavni dijalog"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Paketi pozadinskih slika"
+
+# >> @item directory definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Slike za grafičku kontrolu"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Pozadinska slika za grafičku kontrolu"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Lice analognog sata"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Pozadinska slika za panele"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Pozadina za grafičke kontrole"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Pozadinska slika za oblačiće"
+
+# >> @item directory definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Neprozirne slike za dijaloge"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Neprozirna generička pozadina dijaloga"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Neprozirna tema za odjavni dijalog"
+
+# >> @item directory definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Neprozirne slike za grafičke kontrole"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Neprozirna pozadinska slika za panele"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Neprozirna pozadinska slika za oblačiće"
+
+# >> @item file definition
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "postavnu datoteku šeme boja"
+
+#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Ostalo"
+
+#: plasma/private/applet_p.cpp:126
+#, fuzzy, kde-format
+#| msgid "The %2 widget did not define which ScriptEngine to use."
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Dodatak %2 nije odredio koji ScriptEngine će koristiti"
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Ne mogu da otvorim paket %1 neophodan za grafičku kontrolu %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Ne mogu da stvorim skriptni motor %1 za grafičku kontrolu %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:268
+#, fuzzy, kde-format
+#| msgid "Widgets explorer UI"
+msgid "Widget Removed"
+msgstr "Istraživač dodataka UI"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr ""
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr ""
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Postavke grafičke kontrole"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Ukloni ovu grafičku kontrolu"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Izvrši pridruženi program"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Neuspjelo pripremanje skripte"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr ""
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Ukloni ovaj panel"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Ukloni ovu aktivnost"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Postavke aktivnosti"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Dodaj grafičke kontrole..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Ne mogu da nađem zahtijevanu komponentu: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Dijeljenje grafičke kontrole na mreži omogućava vam da pristupite toj "
+"grafičkoj kontroli sa drugog računara kao daljinskim upravljačem."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Podijeli ovu grafičku kontrolu na mreži"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Dozvoli svima slobodan pristup ovoj grafičkoj kontroli"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Neispravan (nulti) servis, ne može izvršiti nikakvu operaciju."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, fuzzy, kde-format
+#| msgid "Unknown"
+msgid "Unknown Applet"
+msgstr "Nepoznato"
+
+#: plasmaquick/appletquickitem.cpp:619
+#, fuzzy, kde-format
+#| msgid "Error loading QML file: %1"
+msgid "Error loading QML file: %1 %2"
+msgstr "Greška pri učitavanju QML datoteke: %1"
+
+#: plasmaquick/appletquickitem.cpp:621
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr ""
+
+#: plasmaquick/configview.cpp:95
+#, fuzzy, kde-format
+#| msgctxt "%1 is the name of the applet"
+#| msgid "%1 Settings"
+msgid "%1 Settings"
+msgstr "%1 Postavke"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#, fuzzy, kde-format
+#| msgid "Plasma Package Manager"
+msgid "Plasma Package"
+msgstr "Plasmin menadžer paketa"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Install"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#, fuzzy, kde-format
+#| msgid "Script initialization failed"
+msgid "Package Installation Failed"
+msgstr "Neuspjelo pripremanje skripte"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#, fuzzy, kde-format
+#| msgid "Lock Widgets"
+msgid "Widgets"
+msgstr "Zaključaj grafičku kontrolu"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, fuzzy, kde-format
+#| msgid "Wallpaper packages"
+msgid "Wallpaper"
+msgstr "Paketi pozadinskih slika"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr ""
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr ""
+
+#~ msgid "Accessibility"
+#~ msgstr "Pristupačnost"
+
+# >> @item applet category
+#~ msgid "Application Launchers"
+#~ msgstr "pokretači programa"
+
+#~ msgid "Astronomy"
+#~ msgstr "Astronomija"
+
+#~ msgid "Date and Time"
+#~ msgstr "Datum i vrijeme"
+
+# >> @item applet category
+#~ msgid "Development Tools"
+#~ msgstr "razvojne alatke"
+
+#~ msgid "Education"
+#~ msgstr "Obrazovanje"
+
+# >> @item applet category
+#~ msgid "Environment and Weather"
+#~ msgstr "priroda i vrijeme"
+
+#~ msgid "Examples"
+#~ msgstr "Primjeri"
+
+#~ msgid "File System"
+#~ msgstr "Datotečni sistem"
+
+# >> @item applet category
+#~ msgid "Fun and Games"
+#~ msgstr "zabava i igre"
+
+#~ msgid "Graphics"
+#~ msgstr "Grafika"
+
+#~ msgid "Language"
+#~ msgstr "Jezik"
+
+# >> @item applet category
+#~ msgid "Mapping"
+#~ msgstr "kartografija"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Ostalo"
+
+#~ msgid "Multimedia"
+#~ msgstr "Multimedija"
+
+# >> @item applet category
+#~ msgid "Online Services"
+#~ msgstr "servisi na vezi"
+
+#~ msgid "Productivity"
+#~ msgstr "Produktivnost"
+
+# >> @item applet category
+#~ msgid "System Information"
+#~ msgstr "podaci o sistemu"
+
+#~ msgid "Utilities"
+#~ msgstr "Alatke"
+
+# >> @item applet category
+#~ msgid "Windows and Tasks"
+#~ msgstr "prozori i zadaci"
+
+#, fuzzy
+#~| msgid "Themed Images"
+#~ msgid "Preview Images"
+#~ msgstr "Tematske slike"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script for Login Manager"
+#~ msgstr "glavnu datoteku skripte"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script for Logout Dialog"
+#~ msgstr "glavnu datoteku skripte"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script for Lock Screen"
+#~ msgstr "glavnu datoteku skripte"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script for User Switcher"
+#~ msgstr "glavnu datoteku skripte"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script for Splash Screen"
+#~ msgstr "glavnu datoteku skripte"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "Main Script KRunner"
+#~ msgstr "glavnu datoteku skripte"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "%1 Options"
+#~ msgstr "%1 Opcije"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "Remove this %1"
+#~ msgstr "Ukloni ovaj %1"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "%1 Postavke"
+
+#, fuzzy
+#~| msgctxt "%1 is the name of the applet"
+#~| msgid "%1 Settings"
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings..."
+#~ msgstr "%1 Postavke"
+
+# >> @item directory definition
+#~ msgid "Low color images for dialogs"
+#~ msgstr "malobojne slike za dijaloge"
+
+# >> @item file definition
+#~ msgid "Low color generic dialog background"
+#~ msgstr "malobojna generička pozadina dijaloga"
+
+# >> @item file definition
+#~ msgid "Low color theme for the logout dialog"
+#~ msgstr "malobojna tema za odjavni dijalog"
+
+# >> @item file definition
+#~ msgid "Low color background image for widgets"
+#~ msgstr "malobojna pozadinska slika za grafičke kontrole"
+
+# >> @item file definition
+#~ msgid "Low color analog clock face"
+#~ msgstr "malobojno lice analognog sata"
+
+# >> @item file definition
+#~ msgid "Low color background image for panels"
+#~ msgstr "malobojna pozadinska slika za panele"
+
+# >> @item file definition
+#~ msgid "Low color background for graphing widgets"
+#~ msgstr "malobojna pozadina za crtačke grafičke kontrole"
+
+# >> @item file definition
+#~ msgid "Low color background image for tooltips"
+#~ msgstr "malobojna pozadinska slika za oblačiće"
+
+#~ msgid "Plasma Package Manager"
+#~ msgstr "Plasmin menadžer paketa"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Generate a SHA1 hash for the package at <path>"
+#~ msgstr "Generiši SHA1 hash za paket <path>"
+
+#~ msgid "For install or remove, operates on packages installed for all users."
+#~ msgstr ""
+#~ "Pri instaliranju ili uklanjanju, radi nad paketima instaliranim za sve "
+#~ "korisnike."
+
+#~ msgctxt ""
+#~ "theme, wallpaper, etc. are keywords, but they may be translated, as both "
+#~ "versions are recognized by the application (if translated, should be same "
+#~ "as messages with 'package type' context below)"
+#~ msgid ""
+#~ "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+#~ "layout-template, etc."
+#~ msgstr ""
+#~ "Tip paketa, jedno od: plasmoid theme wallpaper dataengine runner layout-"
+#~ "template"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Install the package at <path>"
+#~ msgstr "Instaliraj paket s date putanje"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Show information of package <name>"
+#~ msgstr "Prikazi informacije o paketu <name>"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Upgrade the package at <path>"
+#~ msgstr "Nadogradi paket s date putanje"
+
+#, fuzzy
+#~| msgid "Wallpaper packages"
+#~ msgid "List installed packages"
+#~ msgstr "Paketi pozadinskih slika"
+
+#, fuzzy
+#~| msgid "lists all known Package types that can be installed"
+#~ msgid "List all known package types that can be installed"
+#~ msgstr "prikazuje sve poznate tipove paketa koji se mogu instalisati"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Remove the package named <name>"
+#~ msgstr "Ukloni paket po imenu <name>"
+
+#~ msgid ""
+#~ "Absolute path to the package root. If not supplied, then the standard "
+#~ "data directories for this KDE session will be searched instead."
+#~ msgstr ""
+#~ "Apsolutna putanja do korijena paketa. Ako se ne zada, traži se po "
+#~ "standardnim direktorijumima u ovoj sesiji KDE‑a."
+
+#, fuzzy
+#~| msgid "Could not delete package from: %1"
+#~ msgid "Failed to generate a Package hash for %1"
+#~ msgstr "Ne mogu obrisati paket sa: %1"
+
+#~ msgid "SHA1 hash for Package at %1: '%2'"
+#~ msgstr "SHA1 hash za paket na %1: '%2'"
+
+# literal-segment: wallpaper
+#~ msgctxt "package type"
+#~ msgid "wallpaper"
+#~ msgstr "wallpaper"
+
+#~ msgctxt "package type"
+#~ msgid "plasmoid"
+#~ msgstr "plasmoid"
+
+#~ msgctxt "package type"
+#~ msgid "package"
+#~ msgstr "paket"
+
+#~ msgctxt "package type"
+#~ msgid "theme"
+#~ msgstr "theme"
+
+# literal-segment: dataengine
+#~ msgctxt "package type"
+#~ msgid "dataengine"
+#~ msgstr "dataengine"
+
+# literal-segment: runner
+#~ msgctxt "package type"
+#~ msgid "runner"
+#~ msgstr "runner"
+
+#, fuzzy
+#~| msgid "Wallpaper packages"
+#~ msgctxt "package type"
+#~ msgid "wallpaperplugin"
+#~ msgstr "Paketi pozadinskih slika"
+
+#~ msgctxt "package type"
+#~ msgid "lookandfeel"
+#~ msgstr "izgled"
+
+#~ msgctxt "package type"
+#~ msgid "shell"
+#~ msgstr "školjka"
+
+# literal-segment: layout-template
+#~ msgctxt "package type"
+#~ msgid "layout-template"
+#~ msgstr "layout-template"
+
+#~ msgctxt "package type"
+#~ msgid "kwineffect"
+#~ msgstr "kwineffect"
+
+#~ msgctxt "package type"
+#~ msgid "windowswitcher"
+#~ msgstr "windowswitcher"
+
+#~ msgctxt "package type"
+#~ msgid "kwinscript"
+#~ msgstr "kwinscript"
+
+#, fuzzy
+#~| msgid "Could not delete package from: %1"
+#~ msgid "Could not find a suitable installer for package of type %1"
+#~ msgstr "Ne mogu obrisati paket sa: %1"
+
+#~ msgid "Listing service types: %1"
+#~ msgstr "Vrsta usluge:%1"
+
+#~ msgid "Error: Plugin %1 is not installed."
+#~ msgstr "Greska: %1 nije instaliran."
+
+#~ msgctxt ""
+#~ "No option was given, this is the error message telling the user he needs "
+#~ "at least one, do not translate install, remove, upgrade nor list"
+#~ msgid "One of install, remove, upgrade or list is required."
+#~ msgstr "Mora se zadati install, remove, upgrade ili list."
+
+#~ msgid "Error: Can't find plugin metadata: %1"
+#~ msgstr "Greška: Ne mogu pronaći metapodatke priključka: %1"
+
+#, fuzzy
+#~| msgid "Could not open package file: %1"
+#~ msgid "Showing info for package: %1"
+#~ msgstr "Ne mogu otvoriti paket datoteku: %1"
+
+#~ msgid "      Name : %1"
+#~ msgstr "      Ime : %1"
+
+#~ msgid "   Comment : %1"
+#~ msgstr "   Komentar : %1"
+
+#~ msgid "    Plugin : %1"
+#~ msgstr "    Umetak : %1"
+
+#~ msgid "    Author : %1"
+#~ msgstr "    Autor : %1"
+
+#~ msgid "      Path : %1"
+#~ msgstr "      Staza: %1"
+
+#~ msgctxt ""
+#~ "The user entered conflicting options packageroot and global, this is the "
+#~ "error message telling the user he can use only one"
+#~ msgid ""
+#~ "The packageroot and global options conflict each other, please select "
+#~ "only one."
+#~ msgstr ""
+#~ "Opcije packageroot i global isključuju jedna drugu, zadajte samo jednu od "
+#~ "njih."
+
+#~ msgid "Addon Name"
+#~ msgstr "Ime dodatka"
+
+#~ msgid "Service Type"
+#~ msgstr "Tip servisa"
+
+#~ msgid "Path"
+#~ msgstr "Staza"
+
+#~ msgid "Type Argument"
+#~ msgstr "Tip argumenta"
+
+#~ msgid "Package types that are installable with this tool:"
+#~ msgstr "Tipovi paketa koji se mogu instalisati ovim alatom"
+
+#~ msgid "Built in:"
+#~ msgstr "Ugrađeno:"
+
+# >> @item directory definition
+#, fuzzy
+#~| msgid "Data Files"
+#~ msgid "DataEngine"
+#~ msgstr "opšte datoteke"
+
+# literal-segment: layout-template
+#~ msgid "Layout Template"
+#~ msgstr "Predložak rasporeda"
+
+#~ msgid "Look and Feel"
+#~ msgstr "Izgled i Osjećaj"
+
+#~ msgid "Package"
+#~ msgstr "Paket"
+
+#~ msgid "Plasmoid"
+#~ msgstr "Plazmoid"
+
+# literal-segment: runner
+#~ msgid "Runner"
+#~ msgstr "Trkač"
+
+#~ msgid "Shell"
+#~ msgstr "Školjka"
+
+#~ msgid "Theme"
+#~ msgstr "Tema"
+
+#, fuzzy
+#~| msgid "Wallpaper packages"
+#~ msgid "Wallpaper Images"
+#~ msgstr "Paketi pozadinskih slika"
+
+#~ msgid "KWin Effect"
+#~ msgstr "Efekti KWin-a"
+
+#~ msgid "KWin Window Switcher"
+#~ msgstr "KWin prebacivač prozora"
+
+# >> @item file definition
+#, fuzzy
+#~| msgid "Main Script File"
+#~ msgid "KWin Script"
+#~ msgstr "glavnu datoteku skripte"
+
+#~ msgid "Provided by plugins:"
+#~ msgstr "Navedeni dodaci:"
+
+#~ msgid "Provided by .desktop files:"
+#~ msgstr "Dato preko .desktop datoteka:"
+
+#~ msgid "Successfully upgraded %1"
+#~ msgstr "Uspiješno nadograđen%1"
+
+#~ msgid "Successfully installed %1"
+#~ msgstr "Uspješno instalirano: %1"
+
+#~ msgid "Error: Installation of %1 failed: %2"
+#~ msgstr "Greska: Instalacija %1 neuspijela:%2"
+
+#, fuzzy
+#~| msgid "Could not open package file: %1"
+#~ msgid "Upgrading package from file: %1"
+#~ msgstr "Ne mogu otvoriti paket datoteku: %1"
+
+#~ msgid "Successfully uninstalled %1"
+#~ msgstr "Uspijesno izbrisan %1"
+
+#~ msgid "Error: Uninstallation of %1 failed: %2"
+#~ msgstr "Greska: Brisanje %1 neuspijelo:%2"
+
+#~ msgid ""
+#~ "Could not load installer for package of type %1. Error reported was: %2"
+#~ msgstr ""
+#~ "Ne mogu da učitam instalator za paket tipa %1. Prijavljena greška: %2"
+
+#~ msgid "Could not create package root directory: %1"
+#~ msgstr "Nije moguće kreirati korijenski direktorijum paketa: %1"
+
+#~ msgid "No such file: %1"
+#~ msgstr "Nema te datoteke: %1"
+
+#~ msgid "Could not open package file, unsupported archive format: %1 %2"
+#~ msgstr "Ne mogu otvoriti paket datoteku, nije podržan arhiv format: %1 %2"
+
+#~ msgid "Could not open package file: %1"
+#~ msgstr "Ne mogu otvoriti paket datoteku: %1"
+
+#~ msgid "No metadata file in package: %1"
+#~ msgstr "Nema datoteke metapodataka u paketu: %1"
+
+#~ msgid "Package plugin name not specified: %1"
+#~ msgstr "Paket plugin imena nije specificiran: %1"
+
+#~ msgid "Package plugin name %1 contains invalid characters"
+#~ msgstr "Paket plugin imena %1 sadrži karktere koji nisu validni"
+
+#~ msgid "%1 already exists"
+#~ msgstr "%1 već postoji"
+
+#~ msgid "Could not move package to destination: %1"
+#~ msgstr "Ne mogu premjestiti paket na destinaciju: %1"
+
+#~ msgid "Could not copy package to destination: %1"
+#~ msgstr "Ne mogu kopirati paket na destinaciju: %1"
+
+#~ msgid "Could not create local service directory: %1"
+#~ msgstr "Ne mogu kreirati lokalni servis direktorij: %1"
+
+#~ msgid ""
+#~ "Could not register package as service (this is not necessarily fatal): %1"
+#~ msgstr "Ne mogu registrovati paket kao servis (nije nužno fatalno): %1"
+
+#~ msgid "%1 does not exist"
+#~ msgstr "%1 ne postoji"
+
+#~ msgid "Could not delete package from: %1"
+#~ msgstr "Ne mogu obrisati paket sa: %1"
+
+#~ msgid "Applets furniture"
+#~ msgstr "Applets furniture"
+
+#~ msgid "Explorer UI for adding widgets"
+#~ msgstr "Istraživač UI za dodavanje dodataka"
+
+#~ msgid "User interface for the views that will show containments"
+#~ msgstr "Korisnički interfejs za poglede koji će pokazati sadržaj"
+
+#~ msgid "Default layout file"
+#~ msgstr "Zadani izgled datoteke"
+
+#, fuzzy
+#~| msgid "Default plugins for containments, containmentActions etc"
+#~ msgid "Default plugins for containments, containmentActions, etc."
+#~ msgstr "Zadani plugini za sadržaje, akcije sadržaja itd"
+
+#~ msgid "Error message shown when an applet fails to load"
+#~ msgstr "Poruka za grešku kada se applet ne može učitati"
+
+#~ msgid "QML component that shows an applet in a popup"
+#~ msgstr "QML komponenta koja pokazuje applet u iskočnom prozoru"
+
+#, fuzzy
+#~| msgid ""
+#~| "Compact representation of an applet when collapsed in a popup, for "
+#~| "instance as an icon. applets can override this component."
+#~ msgid ""
+#~ "Compact representation of an applet when collapsed in a popup, for "
+#~ "instance as an icon. Applets can override this component."
+#~ msgstr ""
+#~ "Kompaktna zastupljenost appleta kada se sažme u iskočnom prozoru, na "
+#~ "primjer kao ikona. appleti mogu nadjačati ovu komponentu."
+
+#~ msgid "QML component for the configuration dialog for applets"
+#~ msgstr "QML komponenta za konfiguracijski dijalog za applet"
+
+#~ msgid "QML component for the configuration dialog for containments"
+#~ msgstr "QML komponenta za konfiguracijski dijalog za sadržaj"
+
+#~ msgid "Panel configuration UI"
+#~ msgstr "Konfiguracija ploče UI"
+
+#, fuzzy
+#~| msgid "QML component for the configuration dialog for applets"
+#~ msgid "QML component for choosing an alternate applet"
+#~ msgstr "QML komponenta za konfiguracijski dijalog za applet"
+
+#~ msgid "search term"
+#~ msgstr "izraz za traženje"
+
+#~ msgctxt "o/o1 is the name of the applet"
+#~ msgid "Remove this %1"
+#~ msgstr "Ukloni programčić %1"
+
+#~ msgctxt "o/o1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "%1 Postavke"

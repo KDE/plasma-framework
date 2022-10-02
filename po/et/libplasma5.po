@@ -1,0 +1,1043 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marek Laane <qiilaq69@gmail.com>, 2016, 2019.
+# Mihkel Tõnnov <mihhkel@gmail.com>, 2020, 2021.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"PO-Revision-Date: 2021-09-05 15:52+0200\n"
+"Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
+"Language-Team: Estonian <>\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 21.08.1\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Pühad"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Sündmused"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Ülesanded"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Muu"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Eelmine kuu"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Eelmine aasta"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Eelmine kümnend"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Täna"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Lähtesta kalender tänasele"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Järgmine kuu"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Järgmine aasta"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Järgmine kümnend"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Päevad"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Kuud"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Aastad"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Loobu"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "Veel toiminguid"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#, kde-format
+msgid "Search…"
+msgstr ""
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search"
+msgstr ""
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Tundmatu"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktiveeri %1 vidin"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Eemalda %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Sisene kohandamisrežiimi"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Seadista apletti %1 ..."
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Lukusta vidinad"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Eemalda vidinate lukustus"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Välju kohandamisrežiimist"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Kas luua teemale kettal puhver või mitte."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Teema kettapuhvri maksimaalne suurus kilobaitides. Pane tähele, et tegu on "
+"hajusfailiga, nii et maksimaalset suurust küllap ei kasutatagi. Seepärast "
+"võib suurema suuruse määramist pidada üpris turvaliseks valikuks."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Peamine skriptifail"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Testid"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Pildid"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Teemaga pildid"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Seadistamise definitsioonid"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Kasutajaliides"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Andmefailid"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Käivitatavad skriptid"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Ekraanipilt"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Tõlked"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Seadistuse UI lehekülgede mudel"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Seadistuse XML-fail"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Kompaktsete aplettide kohandatav laiendaja"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Teenuse kirjeldused"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Dialoogide pildid"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Üldine dialoogi taust"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Väljalogimisdialoogi teema"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Taustapildipaketid"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Vidinate pildid"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Vidinate taustapilt"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Analoogkella esiplaan"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Paneelide taustapilt"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Graafikavidinate taust"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Kohtspikrite taustapilt"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Dialoogide läbipaistmatud pildid"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Üldine läbipaistmatu dialoogi taust"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Väljalogimisdialoogi läbipaistmatu teema"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Vidinate läbipaistmatud pildid"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Paneelide läbipaistmatu taustapilt"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Kohtspikrite läbipaistmatu taustapilt"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme seadistusfail"
+
+#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Muu"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Vidin %1 ei määratle, millist skriptimootorit kasutada."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Vidinale %2 vajaliku paketi %1 avamine nurjus."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "%1 skriptimootori loomine vidinale %2 nurjus."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Näita alternatiive ..."
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Vidin eemaldatud"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Vidin \"%1\" eemaldati."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Paneel eemaldatud"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Paneel eemaldati."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Töölaud eemaldatud"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Töölaud eemaldati."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Võta tagasi"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Vidina seadistused"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Eemalda see vidin"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Käivita seostatud rakendus"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Skripti initsialiseerimine nurjus"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Ava rakendusega %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Eemalda see paneel"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Eemalda see tegevus"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Tegevuse seadistused"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Lisa vidinaid ..."
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Nõutud komponenti ei leitud: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Vidina jagamine võrgus lubab sul kasutada seda vidinat ka mõnest teisest "
+"arvutist."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Vidina jagamine võrgus"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Kõik võivad takistusteta vidinat kasutada"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Vigane (tühi) teenus, ühtegi toimingut ei saa teostada."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Tundmatu aplett"
+
+#: plasmaquick/appletquickitem.cpp:619
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Tõrge QML-faili laadimisel: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:621
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Tõrge apleti laadimisel: paketti ei ole olemas. %1"
+
+#: plasmaquick/configview.cpp:95
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 seadistused"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma pakett"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Install"
+msgstr "Paigalda"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Paketi paigaldamine nurjus"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Lohistatud pakett on vigane."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#, kde-format
+msgid "Widgets"
+msgstr "Vidinad"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Lisa %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Lisa ikoon"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, kde-format
+msgid "Wallpaper"
+msgstr "Taustapilt"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Määra taustapildiks %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Kohale lohistati sisu"
+
+#~ msgid "Accessibility"
+#~ msgstr "Hõlbustus"
+
+#~ msgid "Application Launchers"
+#~ msgstr "Rakenduste käivitajad"
+
+#~ msgid "Astronomy"
+#~ msgstr "Astronoomia"
+
+#~ msgid "Date and Time"
+#~ msgstr "Kuupäev ja kellaaeg"
+
+#~ msgid "Development Tools"
+#~ msgstr "Arendustööriistad"
+
+#~ msgid "Education"
+#~ msgstr "Haridus"
+
+#~ msgid "Environment and Weather"
+#~ msgstr "Keskkond ja ilm"
+
+#~ msgid "Examples"
+#~ msgstr "Näited"
+
+#~ msgid "File System"
+#~ msgstr "Failisüsteem"
+
+#~ msgid "Fun and Games"
+#~ msgstr "Lõbu ja mängud"
+
+#~ msgid "Graphics"
+#~ msgstr "Graafika"
+
+#~ msgid "Language"
+#~ msgstr "Keel"
+
+#~ msgid "Mapping"
+#~ msgstr "Geograafia"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Muu"
+
+#~ msgid "Multimedia"
+#~ msgstr "Multimeedia"
+
+#~ msgid "Online Services"
+#~ msgstr "Võrguteenused"
+
+#~ msgid "Productivity"
+#~ msgstr "Loometegevus"
+
+#~ msgid "System Information"
+#~ msgstr "Süsteemi teave"
+
+#~ msgid "Utilities"
+#~ msgstr "Tööriistad"
+
+#~ msgid "Windows and Tasks"
+#~ msgstr "Aknad ja ülesanded"
+
+#~ msgid "Clipboard"
+#~ msgstr "Lõikepuhver"
+
+#~ msgid "Tasks"
+#~ msgstr "Ülesanded"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Edit %1..."
+#~ msgstr "Muuda %1 ..."
+
+#~ msgid "Default settings for theme, etc."
+#~ msgstr "Teema jne vaikimisi seadistused."
+
+#~ msgid "Color scheme to use for applications."
+#~ msgstr "Rakendustest kasutatav värviskeem."
+
+#~ msgid "Preview Images"
+#~ msgstr "Piltide eelvaatlus"
+
+#~ msgid "Preview for the Login Manager"
+#~ msgstr "Sisselogimishalduri eelvaatlus"
+
+#~ msgid "Preview for the Lock Screen"
+#~ msgstr "Lukustusekraani eelvaatlus"
+
+#~ msgid "Preview for the Userswitcher"
+#~ msgstr "Kasutaja vahetaja eelvaatlus"
+
+#~ msgid "Preview for the Virtual Desktop Switcher"
+#~ msgstr "Virtuaalsete töölaudade vahetaja eelvaatlus"
+
+#~ msgid "Preview for Splash Screen"
+#~ msgstr "Tiitelkuva eelvaatlus"
+
+#~ msgid "Preview for KRunner"
+#~ msgstr "KRunneri eelvaatlus"
+
+#~ msgid "Preview for the Window Decorations"
+#~ msgstr "Akna dekoratsioonide eelvaatlus"
+
+#~ msgid "Preview for Window Switcher"
+#~ msgstr "Aknavahetaja eelvaatlus"
+
+#~ msgid "Login Manager"
+#~ msgstr "Sisselogimise haldur"
+
+#~ msgid "Main Script for Login Manager"
+#~ msgstr "Sisselogimise haldur peamine skript"
+
+#~ msgid "Logout Dialog"
+#~ msgstr "Väljalogimisdialoog"
+
+#~ msgid "Main Script for Logout Dialog"
+#~ msgstr "Väljalogimisdialoogi peamine skript"
+
+#~ msgid "Screenlocker"
+#~ msgstr "Ekraani lukustaja"
+
+#~ msgid "Main Script for Lock Screen"
+#~ msgstr "Lukustusekraani peamine skript"
+
+#~ msgid "UI for fast user switching"
+#~ msgstr "Kasutajaliides kiireks kasutaja vahetamiseks"
+
+#~ msgid "Main Script for User Switcher"
+#~ msgstr "Kasutaja vahetaja peamine skript"
+
+#~ msgid "Virtual Desktop Switcher"
+#~ msgstr "Virtuaalsete töölaudade vahetaja"
+
+#~ msgid "Main Script for Virtual Desktop Switcher"
+#~ msgstr "Virtuaalsete töölaudade vahetaja peamine skript"
+
+#~ msgid "On-Screen Display Notifications"
+#~ msgstr "Ekraanimärguanded"
+
+#~ msgid "Main Script for On-Screen Display Notifications"
+#~ msgstr "Ekraanimärguannete peamine skript"
+
+#~ msgid "Splash Screen"
+#~ msgstr "Tiitelkuva"
+
+#~ msgid "Main Script for Splash Screen"
+#~ msgstr "Tiitelkuva peamine skript"
+
+#~ msgid "KRunner UI"
+#~ msgstr "KRunneri kasutajaliides"
+
+#~ msgid "Main Script KRunner"
+#~ msgstr "KRunneri peamine skript"
+
+#~ msgid "Window Decoration"
+#~ msgstr "Akna dekoratsioonid"
+
+#~ msgid "Main Script for Window Decoration"
+#~ msgstr "Akna dekoratsioonide peamine skript"
+
+#~ msgid "Window Switcher"
+#~ msgstr "Aknavahetaja"
+
+#~ msgid "Main Script for Window Switcher"
+#~ msgstr "Aknavahetaja peamine skript"
+
+#~ msgid "Finish Customizing Layout"
+#~ msgstr "Lõpeta paigutuse kohandamine"
+
+#~ msgid "Customize Layout..."
+#~ msgstr "Kohanda paigutust ..."
+
+#~ msgid "Fetching file type..."
+#~ msgstr "Failitüübi hankimine..."
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "%1 Options"
+#~ msgstr "%1 valikud"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "Apleti %1 seadistused"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings..."
+#~ msgstr "Apleti %1 seadistused..."
+
+#~ msgid "Low color images for dialogs"
+#~ msgstr "Dialoogide vähevärvilised pildid"
+
+#~ msgid "Low color generic dialog background"
+#~ msgstr "Üldine vähevärviline dialoogi taust"
+
+#~ msgid "Low color theme for the logout dialog"
+#~ msgstr "Väljalogimisdialoogi vähevärviline teema"
+
+#~ msgid "Low color background image for widgets"
+#~ msgstr "Vidinate vähevärviline taustapilt"
+
+#~ msgid "Low color analog clock face"
+#~ msgstr "Analoogkella vähevärviline esiplaan"
+
+#~ msgid "Low color background image for panels"
+#~ msgstr "Paneelide vähevärviline taustapilt"
+
+#~ msgid "Low color background for graphing widgets"
+#~ msgstr "Graafikavidinate vähevärviline taust"
+
+#~ msgid "Low color background image for tooltips"
+#~ msgstr "Kohtspikrite vähevärviline taustapilt"
+
+#~ msgid "Plasma Package Manager"
+#~ msgstr "Plasma paketihaldur"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Generate a SHA1 hash for the package at <path>"
+#~ msgstr "SHA1 räsi genereerimine paketile asukohas <path>"
+
+#~ msgid "For install or remove, operates on packages installed for all users."
+#~ msgstr ""
+#~ "Paigaldamise või eemaldamise korral käsitleb pakette, mis on paigaldatud "
+#~ "kõigi kasutajate jaoks."
+
+#~ msgctxt ""
+#~ "theme, wallpaper, etc. are keywords, but they may be translated, as both "
+#~ "versions are recognized by the application (if translated, should be same "
+#~ "as messages with 'package type' context below)"
+#~ msgid ""
+#~ "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+#~ "layout-template, etc."
+#~ msgstr ""
+#~ "Paketi tüüp, nt. teema, taustapilt, plasmoid, andmemootor, käivitaja, "
+#~ "paigutusemall vms."
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Install the package at <path>"
+#~ msgstr "Paketi paigaldamine asukohas <path>"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Show information of package <name>"
+#~ msgstr "Paketi <name> teabe näitamine"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Upgrade the package at <path>"
+#~ msgstr "Paketi uuendamine asukohas <path>"
+
+#~ msgid "List installed packages"
+#~ msgstr "Paigaldatud pakettide loetlemine"
+
+#~ msgid "List all known package types that can be installed"
+#~ msgstr "Kõigi teadaolevate paigaldatavate paketitüüpide näitamine"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Remove the package named <name>"
+#~ msgstr "Paketi <name> eemaldamine"
+
+#~ msgid ""
+#~ "Absolute path to the package root. If not supplied, then the standard "
+#~ "data directories for this KDE session will be searched instead."
+#~ msgstr ""
+#~ "Pakettide juurasukoha absoluutne asukoht. Kui seda ei anta, otsitakse "
+#~ "antud KDE seansi standardsetest andmekataloogidest."
+
+#~ msgid "Failed to generate a Package hash for %1"
+#~ msgstr "Paketi räsi genereerimine %1 jaoks nurjus"
+
+#~ msgid "SHA1 hash for Package at %1: '%2'"
+#~ msgstr "SHA1 räsi paketile asukohas %1: '%2'"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaper"
+#~ msgstr "taustapilt"
+
+#~ msgctxt "package type"
+#~ msgid "plasmoid"
+#~ msgstr "plasmoid"
+
+#~ msgctxt "package type"
+#~ msgid "package"
+#~ msgstr "pakett"
+
+#~ msgctxt "package type"
+#~ msgid "theme"
+#~ msgstr "teema"
+
+#~ msgctxt "package type"
+#~ msgid "dataengine"
+#~ msgstr "andmemootor"
+
+#~ msgctxt "package type"
+#~ msgid "runner"
+#~ msgstr "käivitaja"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaperplugin"
+#~ msgstr "taustapildiplugin"
+
+#~ msgctxt "package type"
+#~ msgid "lookandfeel"
+#~ msgstr "välimus"
+
+#~ msgctxt "package type"
+#~ msgid "shell"
+#~ msgstr "kest"
+
+#~ msgctxt "package type"
+#~ msgid "layout-template"
+#~ msgstr "paigutusemall"
+
+#~ msgctxt "package type"
+#~ msgid "kwineffect"
+#~ msgstr "kwiniefekt"
+
+#~ msgctxt "package type"
+#~ msgid "windowswitcher"
+#~ msgstr "aknavahetaja"
+
+#~ msgctxt "package type"
+#~ msgid "kwinscript"
+#~ msgstr "kwiniskript"
+
+#~ msgid "Could not find a suitable installer for package of type %1"
+#~ msgstr "Paketile tüübiga %1 ei leitud sobivat paigaldajat"
+
+#~ msgid "Listing service types: %1"
+#~ msgstr "Teenusetüüpide loend: %1"
+
+#~ msgid "Error: Plugin %1 is not installed."
+#~ msgstr "Tõrge: plugin %1 ei ole paigaldatud."
+
+#~ msgctxt ""
+#~ "No option was given, this is the error message telling the user he needs "
+#~ "at least one, do not translate install, remove, upgrade nor list"
+#~ msgid "One of install, remove, upgrade or list is required."
+#~ msgstr "Nõutav on kas install, remove, upgrade või list."
+
+#~ msgid "Error: Can't find plugin metadata: %1"
+#~ msgstr "Tõrge: plugina metaandmeid ei leitud: %1"
+
+#~ msgid "Showing info for package: %1"
+#~ msgstr "Paketi teabe näitamine: %1"
+
+#~ msgid "      Name : %1"
+#~ msgstr "      Nimi : %1"
+
+#~ msgid "   Comment : %1"
+#~ msgstr "   Kommentaar : %1"
+
+#~ msgid "    Plugin : %1"
+#~ msgstr "    Plugin : %1"
+
+#~ msgid "    Author : %1"
+#~ msgstr "    Autor : %1"
+
+#~ msgid "      Path : %1"
+#~ msgstr "      Asukoht : %1"
+
+#~ msgctxt ""
+#~ "The user entered conflicting options packageroot and global, this is the "
+#~ "error message telling the user he can use only one"
+#~ msgid ""
+#~ "The packageroot and global options conflict each other, please select "
+#~ "only one."
+#~ msgstr ""
+#~ "Paketi juurasukoht ja globaalsed valikud on konfliktis, palun vali neist "
+#~ "ainult üks."
+
+#~ msgid "Addon Name"
+#~ msgstr "Lisandi nimi"
+
+#~ msgid "Service Type"
+#~ msgstr "Teenuse tüüp"
+
+#~ msgid "Path"
+#~ msgstr "Asukoht"
+
+#~ msgid "Type Argument"
+#~ msgstr "Tüübi argument"
+
+#~ msgid "Package types that are installable with this tool:"
+#~ msgstr "Selle tööriistaga paigaldatavate pakettide tüübid:"
+
+#~ msgid "Built in:"
+#~ msgstr "Sisseehitatud:"
+
+#~ msgid "DataEngine"
+#~ msgstr "Andmemootor"
+
+#~ msgid "Layout Template"
+#~ msgstr "Paigutusemall"
+
+#~ msgid "Look and Feel"
+#~ msgstr "Välimus"
+
+#~ msgid "Package"
+#~ msgstr "Pakett"
+
+#~ msgid "Plasmoid"
+#~ msgstr "Plasmoid"
+
+#~ msgid "Runner"
+#~ msgstr "Käivitaja"
+
+#~ msgid "Shell"
+#~ msgstr "Kest"
+
+#~ msgid "Theme"
+#~ msgstr "Teema"
+
+#~ msgid "Wallpaper Images"
+#~ msgstr "Taustapildid"
+
+#~ msgid "Animated Wallpaper"
+#~ msgstr "Animeeritud taustapilt"
+
+#~ msgid "KWin Effect"
+#~ msgstr "KWini efekt"
+
+#~ msgid "KWin Window Switcher"
+#~ msgstr "KWini aknavahetaja"
+
+#~ msgid "KWin Script"
+#~ msgstr "KWini skript"
+
+#~ msgid "Provided by plugins:"
+#~ msgstr "Pluginate pakutavad:"
+
+#~ msgid "Provided by .desktop files:"
+#~ msgstr ".desktop-failide pakutavad:"
+
+#~ msgid "Successfully upgraded %1"
+#~ msgstr "%1 edukalt uuendatud"
+
+#~ msgid "Successfully installed %1"
+#~ msgstr "%1 edukalt paigaldatud"
+
+#~ msgid "Error: Installation of %1 failed: %2"
+#~ msgstr "Tõrge: %1 paigaldamine nurjus: %2"
+
+#~ msgid "Upgrading package from file: %1"
+#~ msgstr "Paketi uuendamine failist: %1"
+
+#~ msgid "Successfully uninstalled %1"
+#~ msgstr "%1 edukalt eemaldatud"
+
+#~ msgid "Error: Uninstallation of %1 failed: %2"
+#~ msgstr "Tõrge: %1 eemaldamine nurjus: %2"

@@ -1,0 +1,1325 @@
+# Translation of plasmapkg.po to Finnish
+# Copyright © 2011, 2012 This_file_is_part_of_KDE
+# This file is distributed under the same license as the kde-runtime package.
+# Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2008.
+# Teemu Rytilahti <teemu.rytilahti@d5k.net>, 2008, 2009.
+# Tommi Nieminen <translator@legisign.org>, 2010, 2011, 2014, 2018, 2019, 2020, 2021, 2022.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
+# Lasse Liehu <lasse.liehu@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2016, 2019, 2020.
+#
+# KDE Finnish translation sprint participants:
+# Author: Lliehu
+msgid ""
+msgstr ""
+"Project-Id-Version: plasmapkg\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"PO-Revision-Date: 2022-08-05 10:28+0300\n"
+"Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
+"Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-POT-Import-Date: 2012-12-01 22:22:16+0000\n"
+"X-Generator: Lokalize 20.12.0\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Vapaapäivät"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Tapahtumat"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Tehtävät"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Muut"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1 %2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Edellinen kuukausi"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Edellinen vuosi"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Edellinen vuosikymmen"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Tänään"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Palauta kalenteri tänäiseen"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Seuraava kuukausi"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Seuraava vuosi"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Seuraava vuosikymmen"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Päivät"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Kuukaudet"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Vuodet"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "OK"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Peru"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "Lisää toimintoja"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr "Supista"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr "Laajenna"
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr "Salasana"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#, kde-format
+msgid "Search…"
+msgstr "Etsi…"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search"
+msgstr "Etsi"
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Tuntematon"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktivoi sovelma %1"
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Poista %1"
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Siirry muokkaustilaan"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Asetukset: %1…|/|$[gen %1] asetukset…"
+
+#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Lukitse sovelmat"
+
+#: plasma/corona.cpp:356
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Poista sovelmien lukitus"
+
+#: plasma/corona.cpp:405
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Poistu muokkaustilasta"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Luodaanko teemaa varten levylle välimuisti."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Teemavälimuistin enimmäiskoko levyllä kilotavuina. Huomaa, että nämä ovat "
+"ns. harvoja tiedostoja, joten enimmäiskokoa ei saavuteta. Suuren koon "
+"asettaminen on siis yleensä aika turvallista."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Pääskriptitiedosto"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Testit"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Kuvat"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Teemakuvat"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Asetusmäärittelyt"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Käyttöliittymä"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Datatiedostot"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Suoritettavat skriptit"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Kuvakaappaus"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Käännökset"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Asetussivujen käyttöliittymän datamalli"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "Asetusten XML-tiedosto"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Mukautettu laajennin tiiviille sovelmille"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Palvelujen kuvaukset"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Kyselyikkunakuvat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Yleinen ikkunatausta"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Uloskirjautumisikkunan teema"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Taustakuvapaketit"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Sovelmien kuvat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Sovelmien taustakuva"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Analoginen kellotaulu"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Paneelien taustakuva"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Mittarisovelmien tausta"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Työkaluvihjeiden taustakuva"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Kyselyikkunoiden läpinäkymättömät kuvat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Yleisten kyselyikkunoiden läpinäkymättömät kuvat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Läpinäkymätön teema uloskirjautumisikkunalle"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Sovelmien läpinäkymättömät kuvat"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Paneelien läpinäkymätön taustakuva"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Työkaluvihjeiden läpinäkymätön taustakuva"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "KColorScheme-asetustiedosto"
+
+#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Sekalaiset"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "%1-sovelma ei määrittänyt käytettävää ScriptEngineä."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Sovelman %2 tarvitsemaa pakettia %1 ei voitu avata."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Sovelman %2 tarvitsemaa skriptimoottoria %1 ei voitu luoda."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Näytä vaihtoehdot…"
+
+#: plasma/private/applet_p.cpp:268
+#, kde-format
+msgid "Widget Removed"
+msgstr "Sovelma poistettu"
+
+#: plasma/private/applet_p.cpp:269
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Sovelma ”%1” on poistettu."
+
+#: plasma/private/applet_p.cpp:273
+#, kde-format
+msgid "Panel Removed"
+msgstr "Paneeli poistettu"
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Paneeli on poistettu."
+
+#: plasma/private/applet_p.cpp:277
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Työpöytä poistettu"
+
+#: plasma/private/applet_p.cpp:278
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Työpöytä on poistettu."
+
+#: plasma/private/applet_p.cpp:281
+#, kde-format
+msgid "Undo"
+msgstr "Kumoa"
+
+#: plasma/private/applet_p.cpp:369
+#, kde-format
+msgid "Widget Settings"
+msgstr "Sovelman asetukset"
+
+#: plasma/private/applet_p.cpp:376
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Poista tämä sovelma"
+
+#: plasma/private/applet_p.cpp:383
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Suorita liitetty sovellus"
+
+#: plasma/private/applet_p.cpp:474
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Skriptin alustus epäonnistui"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Avaa ohjelmalla %1"
+
+#: plasma/private/containment_p.cpp:58
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Poista tämä paneeli"
+
+#: plasma/private/containment_p.cpp:60
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Poista tämä aktiviteetti"
+
+#: plasma/private/containment_p.cpp:66
+#, kde-format
+msgid "Activity Settings"
+msgstr "Aktiviteetin asetukset"
+
+#: plasma/private/containment_p.cpp:72
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Lisää sovelmia…"
+
+#: plasma/private/containment_p.cpp:188
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Pyydettyä komponenttia ei löytynyt: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Sovelman jakaminen verkossa sallii sinun käyttää sovelmaa etänä toiselta "
+"tietokoneelta."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Jaa sovelma verkossa"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Salli kaikille vapaa pääsy tähän sovelmaan"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Viallinen (tyhjä) palvelu: ei kykene mihinkään toimintoon."
+
+#: plasmaquick/appletquickitem.cpp:604
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Tuntematon sovelma"
+
+#: plasmaquick/appletquickitem.cpp:619
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "QML-tiedoston avaaminen epäonnistui: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:621
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Sovelman lataaminen epäonnistui: pakettia ei ole olemassa. %1"
+
+#: plasmaquick/configview.cpp:95
+#, kde-format
+msgid "%1 Settings"
+msgstr "Asetukset: %1|/|$[gen %1] asetukset"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma-paketti"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#, kde-format
+msgid "Install"
+msgstr "Asenna"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Paketin asennus epäonnistui"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Pudottamasi paketti on virheellinen."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#, kde-format
+msgid "Widgets"
+msgstr "Sovelmat"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Lisää %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Lisää kuvake"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#, kde-format
+msgid "Wallpaper"
+msgstr "Tausta"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Aseta %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Sisältö pudotettu"
+
+#~ msgid "Accessibility"
+#~ msgstr "Esteettömyys"
+
+#~ msgid "Application Launchers"
+#~ msgstr "Sovelluskäynnistimet"
+
+#~ msgid "Astronomy"
+#~ msgstr "Tähtitiede"
+
+#~ msgid "Date and Time"
+#~ msgstr "Aika ja päiväys"
+
+#~ msgid "Development Tools"
+#~ msgstr "Kehitystyökalut"
+
+#~ msgid "Education"
+#~ msgstr "Opiskelu"
+
+#~ msgid "Environment and Weather"
+#~ msgstr "Sää ja ympäristö"
+
+#~ msgid "Examples"
+#~ msgstr "Esimerkit"
+
+#~ msgid "File System"
+#~ msgstr "Tiedostojärjestelmä"
+
+#~ msgid "Fun and Games"
+#~ msgstr "Pelit ja viihde"
+
+#~ msgid "Graphics"
+#~ msgstr "Grafiikka"
+
+#~ msgid "Language"
+#~ msgstr "Kieli"
+
+#~ msgid "Mapping"
+#~ msgstr "Kartat"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Sekalaiset"
+
+#~ msgid "Multimedia"
+#~ msgstr "Multimedia"
+
+#~ msgid "Online Services"
+#~ msgstr "Verkkopalvelut"
+
+#~ msgid "Productivity"
+#~ msgstr "Tuottavuus"
+
+#~ msgid "System Information"
+#~ msgstr "Järjestelmätiedot"
+
+#~ msgid "Utilities"
+#~ msgstr "Työkalut"
+
+#~ msgid "Windows and Tasks"
+#~ msgstr "Ikkunat ja tehtävät"
+
+#~ msgid "Clipboard"
+#~ msgstr "Leikepöytä"
+
+#~ msgid "Tasks"
+#~ msgstr "Tehtävät"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Edit %1..."
+#~ msgstr "Muokkaa: %1…|/|Muokkaa $[yleisnimi_pienellä $[part %1] ]…"
+
+#~ msgid "Default settings for theme, etc."
+#~ msgstr "Teeman jne. oletusasetukset"
+
+#~ msgid "Color scheme to use for applications."
+#~ msgstr "Sovellusten väriteema."
+
+#~ msgid "Preview Images"
+#~ msgstr "Esikatselukuvat"
+
+#~ msgid "Preview for the Login Manager"
+#~ msgstr "Kirjautumisruudun esikatselu"
+
+#~ msgid "Preview for the Lock Screen"
+#~ msgstr "Lukitusnäytön esikatselu"
+
+#~ msgid "Preview for the Userswitcher"
+#~ msgstr "Käyttäjänvaihdon esikatselu"
+
+#~ msgid "Preview for the Virtual Desktop Switcher"
+#~ msgstr "Virtuaalityöpöydän valitsimen esikatselu"
+
+#~ msgid "Preview for Splash Screen"
+#~ msgstr "Tervetuloruudun esikatselu"
+
+#~ msgid "Preview for KRunner"
+#~ msgstr "KRunnerin esikatselu"
+
+#~ msgid "Preview for the Window Decorations"
+#~ msgstr "Ikkunan kehyksen esikatselu"
+
+#~ msgid "Preview for Window Switcher"
+#~ msgstr "Ikkunanvalitsimen esikatselu"
+
+#~ msgid "Login Manager"
+#~ msgstr "Kirjautumisruutu"
+
+#~ msgid "Main Script for Login Manager"
+#~ msgstr "Kirjautumisruudun pääskripti"
+
+#~ msgid "Logout Dialog"
+#~ msgstr "Uloskirjautumisikkuna"
+
+#~ msgid "Main Script for Logout Dialog"
+#~ msgstr "Uloskirjautumisikkunan pääskripti"
+
+#~ msgid "Screenlocker"
+#~ msgstr "Näyttölukko"
+
+#~ msgid "Main Script for Lock Screen"
+#~ msgstr "Lukitusnäytön pääskripti"
+
+#~ msgid "UI for fast user switching"
+#~ msgstr "Nopean käyttäjänvaihdon käyttöliittymä"
+
+#~ msgid "Main Script for User Switcher"
+#~ msgstr "Käyttäjänvaihdon pääskripti"
+
+#~ msgid "Virtual Desktop Switcher"
+#~ msgstr "Virtuaalityöpöydän valitsin"
+
+#~ msgid "Main Script for Virtual Desktop Switcher"
+#~ msgstr "Virtuaalityöpöydän valitsimen pääskripti"
+
+#~ msgid "On-Screen Display Notifications"
+#~ msgstr "Kuvaruutuilmoitukset"
+
+#~ msgid "Main Script for On-Screen Display Notifications"
+#~ msgstr "Kuvaruutuilmoitusten pääskripti"
+
+#~ msgid "Splash Screen"
+#~ msgstr "Tervetuloruutu"
+
+#~ msgid "Main Script for Splash Screen"
+#~ msgstr "Tervetuloruudun pääskripti"
+
+#~ msgid "KRunner UI"
+#~ msgstr "KRunnerin käyttöliittymä"
+
+#~ msgid "Main Script KRunner"
+#~ msgstr "KRunnerin pääskripti"
+
+#~ msgid "Window Decoration"
+#~ msgstr "Ikkunan kehys"
+
+#~ msgid "Main Script for Window Decoration"
+#~ msgstr "Ikkunan kehyksen pääskripti"
+
+#~ msgid "Window Switcher"
+#~ msgstr "Ikkunanvalitsin"
+
+#~ msgid "Main Script for Window Switcher"
+#~ msgstr "Ikkunanvalitsimen pääskripti"
+
+#~ msgid "Finish Customizing Layout"
+#~ msgstr "Lopeta asettelun mukautus"
+
+#~ msgid "Customize Layout..."
+#~ msgstr "Mukauta asettelua…"
+
+#~ msgid "Fetching file type..."
+#~ msgstr "Noudetaan tiedostotyyppiä…"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "%1 Options"
+#~ msgstr "Asetukset: %1|/|$[gen %1] asetukset"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "Remove this %1"
+#~ msgstr "Poista tämä %1|/|Poista tämä $[yleisnimi_pienellä %1]"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings"
+#~ msgstr "Asetukset: %1|/|$[gen %1] asetukset"
+
+#~ msgctxt "%1 is the name of the applet"
+#~ msgid "%1 Settings..."
+#~ msgstr "Asetukset: %1…|/|$[gen %1] asetukset…"
+
+#~ msgid "Low color images for dialogs"
+#~ msgstr "Kyselyikkunoiden vähäväriset kuvat"
+
+#~ msgid "Low color generic dialog background"
+#~ msgstr "Vähävärinen yleinen ikkunatausta"
+
+#~ msgid "Low color theme for the logout dialog"
+#~ msgstr "Vähävärinen uloskirjautumisikkunateema "
+
+#~ msgid "Low color background image for widgets"
+#~ msgstr "Sovelmien vähävärinen taustakuva"
+
+#~ msgid "Low color analog clock face"
+#~ msgstr "Vähävärinen analoginen kellotaulu"
+
+#~ msgid "Low color background image for panels"
+#~ msgstr "Vähävärinen paneelien taustakuva"
+
+#~ msgid "Low color background for graphing widgets"
+#~ msgstr "Mittarisovelmien vähävärinen tausta"
+
+#~ msgid "Low color background image for tooltips"
+#~ msgstr "Työkaluvihjeiden vähävärinen taustakuva"
+
+#~ msgid "Plasma Package Manager"
+#~ msgstr "Plasman paketinhallintaohjelma"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Generate a SHA1 hash for the package at <path>"
+#~ msgstr "Luo paketin <path> SHA1-tiiviste"
+
+#~ msgid "For install or remove, operates on packages installed for all users."
+#~ msgstr "Asentaa ja poistaa kaikille käyttäjille asennettuja paketteja."
+
+#~ msgctxt ""
+#~ "theme, wallpaper, etc. are keywords, but they may be translated, as both "
+#~ "versions are recognized by the application (if translated, should be same "
+#~ "as messages with 'package type' context below)"
+#~ msgid ""
+#~ "The type of package, e.g. theme, wallpaper, plasmoid, dataengine, runner, "
+#~ "layout-template, etc."
+#~ msgstr ""
+#~ "Paketin tyyppi, esim. teema, tausta, plasmoidi, tietomoottori, "
+#~ "suoritusohjelma, asettelumallipohja jne."
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Install the package at <path>"
+#~ msgstr "Asenna paketti kohteeseen <path>"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Show information of package <name>"
+#~ msgstr "Näytä paketin <name> tiedot"
+
+#~ msgctxt "Do not translate <path>"
+#~ msgid "Upgrade the package at <path>"
+#~ msgstr "Päivitä paketti kohteeseen <path>"
+
+#~ msgid "List installed packages"
+#~ msgstr "Näytä asennetut paketit"
+
+#~ msgid "List all known package types that can be installed"
+#~ msgstr "Luettele kaikki tunnetut asennettavissa olevat pakettityypit"
+
+#~ msgctxt "Do not translate <name>"
+#~ msgid "Remove the package named <name>"
+#~ msgstr "Poista <name>-niminen paketti"
+
+#~ msgid ""
+#~ "Absolute path to the package root. If not supplied, then the standard "
+#~ "data directories for this KDE session will be searched instead."
+#~ msgstr ""
+#~ "Absoluuttinen polku paketin juureen. Jos tätä ei ole määriteltynä, niin "
+#~ "KDE:n oletustietohakemistoja käytetään sen sijasta."
+
+# %1: polku
+#~ msgid "Failed to generate a Package hash for %1"
+#~ msgstr "Paketin %1 tiivisteen luonti epäonnistui"
+
+# %1: polku
+#~ msgid "SHA1 hash for Package at %1: '%2'"
+#~ msgstr "Paketin %1 SHA1-tiiviste: \"%2\""
+
+#~ msgctxt "package type"
+#~ msgid "wallpaper"
+#~ msgstr "tausta"
+
+#~ msgctxt "package type"
+#~ msgid "plasmoid"
+#~ msgstr "plasmoidi"
+
+#~ msgctxt "package type"
+#~ msgid "package"
+#~ msgstr "paketti"
+
+#~ msgctxt "package type"
+#~ msgid "theme"
+#~ msgstr "teema"
+
+#~ msgctxt "package type"
+#~ msgid "dataengine"
+#~ msgstr "tietomoottori"
+
+#~ msgctxt "package type"
+#~ msgid "runner"
+#~ msgstr "suoritusohjelma"
+
+#~ msgctxt "package type"
+#~ msgid "wallpaperplugin"
+#~ msgstr "taustaliitännäinen"
+
+#~ msgctxt "package type"
+#~ msgid "lookandfeel"
+#~ msgstr "ulkoasujatuntuma"
+
+#~ msgctxt "package type"
+#~ msgid "shell"
+#~ msgstr "kuori"
+
+#~ msgctxt "package type"
+#~ msgid "layout-template"
+#~ msgstr "asettelumallipohja"
+
+#~ msgctxt "package type"
+#~ msgid "kwineffect"
+#~ msgstr "kwin-tehoste"
+
+#~ msgctxt "package type"
+#~ msgid "windowswitcher"
+#~ msgstr "ikkunanvalitsin"
+
+#~ msgctxt "package type"
+#~ msgid "kwinscript"
+#~ msgstr "kwin-skripti"
+
+#~ msgid "Could not find a suitable installer for package of type %1"
+#~ msgstr "Paketille, jonka tyyppi on %1, ei löytynyt sopivaa asennusohjelmaa"
+
+#~ msgid "Listing service types: %1"
+#~ msgstr "Luetellaan palvelutyypit: %1"
+
+#~ msgid "Error: Plugin %1 is not installed."
+#~ msgstr "Virhe: Liitännäistä %1 ei ole asennettuna."
+
+#~ msgctxt ""
+#~ "No option was given, this is the error message telling the user he needs "
+#~ "at least one, do not translate install, remove, upgrade nor list"
+#~ msgid "One of install, remove, upgrade or list is required."
+#~ msgstr "Joko asennus, poisto tai luettelointi on pakollinen."
+
+#~ msgid "Error: Can't find plugin metadata: %1"
+#~ msgstr "Virhe: Liitännäisen metatietoja ei löydy: %1"
+
+#~ msgid "Showing info for package: %1"
+#~ msgstr "Näytetään paketin %1 tiedot"
+
+#~ msgid "      Name : %1"
+#~ msgstr "           Nimi : %1"
+
+#~ msgid "   Comment : %1"
+#~ msgstr "      Kommentti : %1"
+
+#~ msgid "    Plugin : %1"
+#~ msgstr "   Liitännäinen : %1"
+
+#~ msgid "    Author : %1"
+#~ msgstr "         Tekijä : %1"
+
+#~ msgid "      Path : %1"
+#~ msgstr "          Polku : %1"
+
+#~ msgctxt ""
+#~ "The user entered conflicting options packageroot and global, this is the "
+#~ "error message telling the user he can use only one"
+#~ msgid ""
+#~ "The packageroot and global options conflict each other, please select "
+#~ "only one."
+#~ msgstr ""
+#~ "Paketin juurikansio ja järjestelmänlaajuiset valinnat ovat ristiriidassa: "
+#~ "valitse toinen."
+
+#~ msgid "Addon Name"
+#~ msgstr "Lisäosan nimi"
+
+#~ msgid "Service Type"
+#~ msgstr "Palvelutyyppi"
+
+#~ msgid "Path"
+#~ msgstr "Polku"
+
+#~ msgid "Type Argument"
+#~ msgstr "Tyyppiparametri"
+
+#~ msgid "Package types that are installable with this tool:"
+#~ msgstr "Tällä työkalulla asennettavissa olevat pakettityypit:"
+
+#~ msgid "Built in:"
+#~ msgstr "Sisäänrakennettu:"
+
+#~ msgid "DataEngine"
+#~ msgstr "Tietomoottori"
+
+#~ msgid "Layout Template"
+#~ msgstr "Asettelumallipohja"
+
+#~ msgid "Look and Feel"
+#~ msgstr "Ulkoasu ja tuntuma"
+
+#~ msgid "Package"
+#~ msgstr "Paketti"
+
+#~ msgid "Plasmoid"
+#~ msgstr "Plasmoidi"
+
+#~ msgid "Runner"
+#~ msgstr "Suoritusohjelma"
+
+#~ msgid "Shell"
+#~ msgstr "Kuori"
+
+#~ msgid "Theme"
+#~ msgstr "Teema"
+
+#~ msgid "Wallpaper Images"
+#~ msgstr "Taustakuvat"
+
+#~ msgid "Animated Wallpaper"
+#~ msgstr "Animoitu tausta"
+
+#~ msgid "KWin Effect"
+#~ msgstr "KWin-tehoste"
+
+#~ msgid "KWin Window Switcher"
+#~ msgstr "KWin-ikkunanvalitsin"
+
+#~ msgid "KWin Script"
+#~ msgstr "KWin-skripti"
+
+#~ msgid "Provided by plugins:"
+#~ msgstr "Liitännäisten tarjoamat:"
+
+#~ msgid "Provided by .desktop files:"
+#~ msgstr ".desktop-tiedostojen tarjoamat:"
+
+#~ msgid "Successfully upgraded %1"
+#~ msgstr "Paketti %1 päivitettiin onnistuneesti"
+
+#~ msgid "Successfully installed %1"
+#~ msgstr "Paketti %1 asennettiin onnistuneesti"
+
+#~ msgid "Error: Installation of %1 failed: %2"
+#~ msgstr "Virhe: Paketin %1 asennus epäonnistui: %2"
+
+#~ msgid "Upgrading package from file: %1"
+#~ msgstr "Päivitetään paketti tiedostosta: %1"
+
+#~ msgid "Successfully uninstalled %1"
+#~ msgstr "Paketin %1 asennuksen poisto onnistui"
+
+#~ msgid "Error: Uninstallation of %1 failed: %2"
+#~ msgstr "Virhe: Paketin %1 asennuksen poisto epäonnistui: %2"
+
+#~ msgid ""
+#~ "Could not load installer for package of type %1. Error reported was: %2"
+#~ msgstr ""
+#~ "Pakettityypille %1 sopivaa asennusohjelmaa ei voitu ladata. Virhe: %2"
+
+#~ msgid "Could not create package root directory: %1"
+#~ msgstr "Paketin juurikansion luonti epäonnistui: %1"
+
+#~ msgid "No such file: %1"
+#~ msgstr "Tiedostoa ei ole olemassa: %1"
+
+#~ msgid "Could not open package file, unsupported archive format: %1 %2"
+#~ msgstr ""
+#~ "Pakettitiedoston avaaminen epäonnistui. Arkiston tiedostomuotoa ei tueta: "
+#~ "%1 %2"
+
+#~ msgid "Could not open package file: %1"
+#~ msgstr "Pakettitiedoston avaaminen epäonnistui: %1"
+
+#~ msgid "No metadata file in package: %1"
+#~ msgstr "Ei metatietoja paketissa: %1"
+
+#~ msgid "Package plugin name not specified: %1"
+#~ msgstr "Paketin liitännäisen nimeä ei ole annettu: %1"
+
+#~ msgid "Package plugin name %1 contains invalid characters"
+#~ msgstr "Paketin liitännäisen nimessä %1 on virheellisiä merkkejä"
+
+#~ msgid "%1 already exists"
+#~ msgstr "%1 on jo olemassa"
+
+#~ msgid "Could not move package to destination: %1"
+#~ msgstr "Paketin siirtäminen kohteeseen %1 epäonnistui"
+
+#~ msgid "Could not copy package to destination: %1"
+#~ msgstr "Paketin kopiointi kohteeseen %1 epäonnistui"
+
+#~ msgid "Could not create local service directory: %1"
+#~ msgstr "Paikallisen palvelukansion %1 luonti epäonnistui"
+
+#~ msgid ""
+#~ "Could not register package as service (this is not necessarily fatal): %1"
+#~ msgstr ""
+#~ "Pakettia ei saatu rekisteröityä palveluksi (virhe ei ole välttämättä "
+#~ "vakava): %1"
+
+#~ msgid "%1 does not exist"
+#~ msgstr "%1 ei ole olemassa"
+
+#~ msgid "Could not delete package from: %1"
+#~ msgstr "Paketin poistaminen epäonnistui: %1"
+
+#~ msgctxt "%1 is the name of the containment"
+#~ msgid "Do you really want to remove this %1?"
+#~ msgstr ""
+#~ "Haluatko varmasti poistaa tämän: %1?|/|Haluatko varmasti poistaa tämän "
+#~ "$[yleisnimi_pienellä $[gen %1] ]?"
+
+#~ msgid "Applets furniture"
+#~ msgstr "Sovelmien sisustus"
+
+#~ msgid "Explorer UI for adding widgets"
+#~ msgstr "Selainkäyttöliittymä sovelmien lisäämiseen"
+
+#~ msgid "User interface for the views that will show containments"
+#~ msgstr "Käyttöliittymä näkymille, jotka näyttävät sovelmasäiliöitä"
+
+#~ msgid "Default layout file"
+#~ msgstr "Oletusasettelutiedosto"
+
+#~ msgid "Default plugins for containments, containmentActions, etc."
+#~ msgstr ""
+#~ "Oletusliitännäiset sovelmasäiliöille, sovelmasäiliöiden toiminnoille jne."
+
+#~ msgid "Error message shown when an applet fails to load"
+#~ msgstr "Virheviesti, joka näytetään, kun sovelman lataaminen epäonnistuu"
+
+#~ msgid "QML component that shows an applet in a popup"
+#~ msgstr "QML-komponentti, joka näyttää sovelman ponnahdusikkunana"
+
+#~ msgid ""
+#~ "Compact representation of an applet when collapsed in a popup, for "
+#~ "instance as an icon. Applets can override this component."
+#~ msgstr ""
+#~ "Sovelman kompakti esitystapa. Sitä käytetään, kun sovelma on "
+#~ "pienennettynä ponnahdusikkunassa kuten esimerkiksi kuvakkeena. Sovelmat "
+#~ "voivat korvata tämän komponentin."
+
+#~ msgid "QML component for the configuration dialog for applets"
+#~ msgstr "Sovelmien asetusikkunoiden QML-komponentti"
+
+#~ msgid "QML component for the configuration dialog for containments"
+#~ msgstr "Sovelmasäiliöiden asetusikkunoiden QML-komponentti"
+
+#~ msgid "Panel configuration UI"
+#~ msgstr "Paneelin asetusten käyttöliittymä"
+
+#~ msgid "QML component for choosing an alternate applet"
+#~ msgstr "QML-komponentti vaihtoehtoisen sovelman valitsemiseen"
+
+#~ msgid "Ok"
+#~ msgstr "OK"
+
+#~ msgid "search term"
+#~ msgstr "hakusana"
+
+#~ msgid "Unnamed"
+#~ msgstr "Nimetön"
+
+# pmap: =:gen=Paneelin:
+# pmap: =:yleisnimi=kyllä:
+#~ msgid "Panel"
+#~ msgstr "Paneeli"
+
+#~ msgid "Shortcut Settings"
+#~ msgstr "Pikanäppäinasetukset"
+
+#~ msgid "Settings"
+#~ msgstr "Asetukset"
+
+#~ msgctxt "@title:window"
+#~ msgid "%1 Settings"
+#~ msgstr "Sovelman %1 asetukset|/|$[gen %1] asetukset"
+
+#~ msgid "Keyboard Shortcut"
+#~ msgstr "Pikanäppäin"
+
+# Tiedosto, jossa kuvataan asetusten käyttöliittymä.
+#~ msgid "Main Config UI File"
+#~ msgstr "Asetusten pääkäyttöliittymätiedosto"
+
+# ContainmentActions is a class name
+#~ msgid "Unknown ContainmentActions"
+#~ msgstr "Tuntematon ContainmentActions"
+
+#~ msgid "This plugin needs to be configured"
+#~ msgstr "Tämä liitännäinen vaatii asettamista"
+
+#~ msgid "Animation scripts"
+#~ msgstr "Animaatioskriptit"
+
+#~ msgid "This object could not be created."
+#~ msgstr "Tätä sovelmaa ei voitu luoda."
+
+#~ msgid ""
+#~ "This object could not be created for the following reason:<p><b>%1</b></p>"
+#~ msgstr "Tätä sovelmaa ei voitu luoda seuraavasta syystä: <p><b>%1</b></p>"
+
+#~ msgid ""
+#~ "There was an error attempting to exec the associated application with "
+#~ "this widget."
+#~ msgstr "Virhe yritettäessä suorittaa sovelmaan kytkettyä sovellusta."
+
+#~ msgctxt "Error message, access to a remote service failed."
+#~ msgid "Invalid token."
+#~ msgstr "Virheellinen merkki."
+
+#~ msgctxt "Error message, access to a remote service failed."
+#~ msgid "Matching password required."
+#~ msgstr "Salasanojen tulee täsmätä."
+
+#~ msgctxt "Error message, access to a remote service failed."
+#~ msgid "Access denied."
+#~ msgstr "Pääsy kielletty."
+
+#~ msgid "Unknown error."
+#~ msgstr "Tuntematon virhe."
+
+#~ msgctxt ""
+#~ "%1 is the name of a plasmoid, %2 the name of the machine that plasmoid is "
+#~ "published on"
+#~ msgid "%1 on %2"
+#~ msgstr "%1 kohteessa %2"
+
+#~ msgid "Share"
+#~ msgstr "Jakaminen"
+
+#~ msgid "Job no longer valid, operation is not enabled."
+#~ msgstr "Työ ei ole enää kelvollinen: toimenpidettä ei ole sallittu."
+
+#~ msgid "Job no longer valid, invalid parameters."
+#~ msgstr "Työ ei ole enää kelvollinen: virheelliset parametrit."
+
+#~ msgid "Timeout."
+#~ msgstr "Aikakatkaisu."
+
+#~ msgid "Server sent an invalid plasmoid package."
+#~ msgstr "Palvelin lähetti virheellisen plasmoidipaketin."
+
+#~ msgid "You are about to open a remote widget on your system.<br>"
+#~ msgstr "Olet avaamassa etäsovelmaa järjestelmässäsi.<br>"
+
+#~ msgid "<table width=\"100%\">"
+#~ msgstr "<table width=\"100%\">"
+
+#~ msgid "<tr><td align=\"right\"><b>Name:</b></td><td>&nbsp; %1</td></tr>"
+#~ msgstr "<tr><td align=\"right\"><b>Nimi:</b></td><td>&nbsp; %1</td></tr>"
+
+#~ msgid ""
+#~ "<tr><td align=\"right\"><b>Description:</b></td><td>&nbsp; %1</td></tr>"
+#~ msgstr "<tr><td align=\"right\"><b>Kuvaus:</b></td><td>&nbsp; %1</td></tr>"
+
+#~ msgid ""
+#~ "<tr><td align=\"right\"><b>Author:</b></td><td>&nbsp; %1 &lt;%2&gt;</td></"
+#~ "tr>"
+#~ msgstr ""
+#~ "<tr><td align=\"right\"><b>Tekijä:</b></td><td>&nbsp; %1 &lt;%2&gt;</td></"
+#~ "tr>"
+
+#~ msgid "<tr><td align=\"right\"><b>Server:</b></td><td>&nbsp; %1</td></tr>"
+#~ msgstr ""
+#~ "<tr><td align=\"right\"><b>Palvelin:</b></td><td>&nbsp; %1</td></tr>"
+
+#~ msgid "</table>"
+#~ msgstr "</table>"
+
+#~ msgid "<br><br>Are you sure you want to open this widget on your system?"
+#~ msgstr "<br><br>Haluatko varmasti avata tämän sovelman järjestelmässäsi?"
+
+#~ msgid "Remote Widget"
+#~ msgstr "Etäsovelma"
+
+#~ msgid "Reject Widget"
+#~ msgstr "Hylkää sovelma"
+
+#~ msgctxt "A remote widget was rejected by the user."
+#~ msgid "User rejected"
+#~ msgstr "Käyttäjä esti"
+
+#~ msgid "Timeout"
+#~ msgstr "Aikakatkaisu"
+
+#~ msgid ""
+#~ "Your system does not provide support for the 'remote widgets' feature. "
+#~ "Access Failed."
+#~ msgstr "Järjestelmäsi ei tue etäsovelmapiirrettä. Käyttö epäonnistui."
+
+#~ msgid "Allow everybody access to %1."
+#~ msgstr "Salli kaikille pääsy palveluun %1."
+
+#~ msgid "Deny everybody access to %1"
+#~ msgstr "Torju kaikilta pääsy palveluun %1."
+
+#~ msgid "Allow %1 access to all services."
+#~ msgstr "Salli käyttäjälle %1 pääsy kaikkiin palveluihin."
+
+#~ msgid "Deny %1 access to all services."
+#~ msgstr "Torju käyttäjältä %1 pääsy kaikkiin palveluihin."
+
+#~ msgid "Allow access to %1, by %2."
+#~ msgstr "Salli käyttäjän %2 pääsy palveluun %1."
+
+#~ msgid "Deny access to %1, by %2."
+#~ msgstr "Torju käyttäjän %2 pääsy palveluun %1."
+
+#~ msgid "Allow access to %1, by %2?"
+#~ msgstr "Sallitaanko käyttäjän %2 pääsy palveluun %1?"
+
+#~ msgid "You have requested access to the %1 hosted at %2."
+#~ msgstr "Olet pyytänyt pääsyä palveluun %1 palvelimella %2."
+
+#~ msgid "Incoming connection request"
+#~ msgstr "Saapuva yhteyspyyntö"
+
+#~ msgid "Connect with remote widget"
+#~ msgstr "Yhdistä etäsovelmaan"
+
+#~ msgctxt "Package file, name of the widget"
+#~ msgid "Could not locate the %1 package required for the %2 widget."
+#~ msgstr "Sovelman %2 tarvitsemaa pakettia %1 ei löytynyt."
