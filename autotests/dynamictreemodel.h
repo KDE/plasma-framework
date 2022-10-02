@@ -115,7 +115,7 @@ public:
     {
     }
 
-    virtual void doCommand();
+    void doCommand() override;
 };
 
 class ModelMoveCommand : public ModelChangeCommand
@@ -130,7 +130,7 @@ public:
 
     virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
 
-    virtual void doCommand();
+    void doCommand() override;
 
     virtual void emitPostSignal();
 
@@ -160,8 +160,8 @@ public:
 
     virtual ~ModelResetCommand();
 
-    virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
-    virtual void emitPostSignal();
+    bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow) override;
+    void emitPostSignal() override;
 };
 
 /**
@@ -175,8 +175,8 @@ public:
 
     virtual ~ModelResetCommandFixed();
 
-    virtual bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow);
-    virtual void emitPostSignal();
+    bool emitPreSignal(const QModelIndex &srcParent, int srcStart, int srcEnd, const QModelIndex &destParent, int destRow) override;
+    void emitPostSignal() override;
 };
 
 #endif
