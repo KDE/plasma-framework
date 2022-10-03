@@ -77,8 +77,8 @@ class QIconSource : public IconItemSource
 public:
     explicit QIconSource(const QIcon &icon, IconItem *iconItem)
         : IconItemSource(iconItem)
+        , m_icon(icon)
     {
-        m_icon = icon;
     }
 
     bool isValid() const override
@@ -108,8 +108,8 @@ class QImageSource : public IconItemSource
 public:
     explicit QImageSource(const QImage &imageIcon, IconItem *iconItem)
         : IconItemSource(iconItem)
+        , m_imageIcon(imageIcon)
     {
-        m_imageIcon = imageIcon;
     }
 
     bool isValid() const override
@@ -142,8 +142,8 @@ class SvgSource : public IconItemSource
 public:
     explicit SvgSource(const QString &sourceString, IconItem *iconItem)
         : IconItemSource(iconItem)
+        , m_svgIcon(new Plasma::Svg(iconItem))
     {
-        m_svgIcon = new Plasma::Svg(iconItem);
         m_svgIcon->setColorGroup(iconItem->colorGroup());
         m_svgIcon->setStatus(iconItem->status());
         m_svgIcon->setDevicePixelRatio(devicePixelRatio());
