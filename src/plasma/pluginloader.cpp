@@ -14,7 +14,7 @@
 #include <KService>
 #include <KServiceTypeTrader>
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <kcoreaddons_export.h>
 #include <kpackage/packageloader.h>
 
@@ -557,9 +557,8 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     for (const KPluginMetaData &md : allApplets) {
         const QStringList urlPatterns = md.value(QStringLiteral("X-Plasma-DropUrlPatterns"), QStringList());
         for (const QString &glob : urlPatterns) {
-            QRegExp rx(glob);
-            rx.setPatternSyntax(QRegExp::Wildcard);
-            if (rx.exactMatch(url.toString())) {
+            QRegularExpression rx(QRegularExpression::anchoredPattern(QRegularExpression::wildcardToRegularExpression(glob)));
+            if (rx.match(url.toString()).hasMatch()) {
                 filtered << md;
             }
         }
