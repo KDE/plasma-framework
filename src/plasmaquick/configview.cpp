@@ -22,7 +22,6 @@
 #include <KLocalizedContext>
 #include <KLocalizedString>
 #include <KQuickAddons/ConfigModule>
-#include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
 
 #include <Plasma/Corona>
@@ -87,8 +86,6 @@ void ConfigViewPrivate::init()
         localizedContextObject->setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
     }
     q->engine()->rootContext()->setContextObject(localizedContextObject);
-
-    KDeclarative::KDeclarative::setupEngine(q->engine()); // ### how to make sure to do this only once per engine?
 
     // FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);

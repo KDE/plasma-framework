@@ -13,8 +13,6 @@
 
 #include <KLocalizedContext>
 
-#include <kdeclarative/kdeclarative.h>
-
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>
 
@@ -55,8 +53,6 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
     if (!context->contextObject()) {
         KLocalizedContext *localizedContextObject = new KLocalizedContext(engine);
         context->setContextObject(localizedContextObject);
-
-        KDeclarative::KDeclarative::setupEngine(engine);
     }
 }
 
