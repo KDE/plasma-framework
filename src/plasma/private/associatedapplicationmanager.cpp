@@ -19,7 +19,7 @@
 #include <KActionCollection>
 #include <KApplicationTrader>
 #include <KIO/ApplicationLauncherJob>
-#include <KIO/JobUiDelegate>
+#include <KIO/JobUiDelegateFactory>
 #include <KIO/OpenUrlJob>
 #include <KLocalizedString>
 #include <KNotificationJobUiDelegate>
@@ -194,7 +194,7 @@ void AssociatedApplicationManager::run(Plasma::Applet *applet)
     } else if (d->urlLists.contains(applet)) {
         KIO::OpenUrlJob *job = new KIO::OpenUrlJob(d->urlLists.value(applet).first());
         // TODO use a KNotifications-based ui delegate that supports the Open With dialog
-        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
+        job->setUiDelegate(KIO::createDefaultJobUiDelegate(KJobUiDelegate::AutoHandlingEnabled, nullptr));
         job->start();
     }
 }
