@@ -68,8 +68,6 @@ T.BusyIndicator {
         }
 
         PlasmaCore.SvgItem {
-            id: busyIndicatorSvgItem
-
             /* Do not use `anchors.fill: parent` in here or else
              * the aspect ratio won't always be 1:1.
              */
@@ -83,9 +81,8 @@ T.BusyIndicator {
             }
             elementId: "busywidget"
 
-            RotationAnimator {
+            RotationAnimator on rotation {
                 id: rotationAnimator
-                target: busyIndicatorSvgItem
                 from: 0
                 to: 360
                 // Not using a standard duration value because we don't want the
@@ -93,6 +90,12 @@ T.BusyIndicator {
                 // scaling preferences; it doesn't make sense in this context
                 duration: 2000
                 loops: Animation.Infinite
+                // Initially false, will be set as appropriate after
+                // initialization. Can't be bound declaratively due to the
+                // procedural nature of to/from adjustments: order of
+                // assignments is crucial, as animator won't use new to/from
+                // values while running.
+                running: false
             }
         }
 
