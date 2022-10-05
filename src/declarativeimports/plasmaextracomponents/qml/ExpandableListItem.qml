@@ -601,14 +601,14 @@ Item {
 
                     sourceComponent: Item {
                         height: childrenRect.height
-                        width: mainRowLayout.width
+                        width: actionsListLoader.width // basically, parent.width but null-proof
 
                         ColumnLayout {
                             anchors.top: parent.top
                             anchors.left: parent.left
                             anchors.right: parent.right
-                            anchors.leftMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing
-                            anchors.rightMargin: PlasmaCore.Units.gridUnit + PlasmaCore.Units.smallSpacing * 2
+                            anchors.leftMargin: PlasmaCore.Units.gridUnit
+                            anchors.rightMargin: PlasmaCore.Units.gridUnit
 
                             spacing: 0
 
