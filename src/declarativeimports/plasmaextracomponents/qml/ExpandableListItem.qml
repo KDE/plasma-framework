@@ -350,23 +350,23 @@ Item {
     onEnabledChanged: if (!listItem.enabled) { collapse() }
 
     Keys.onPressed: {
-        if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
+        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             if (defaultActionButtonAction) {
                 defaultActionButtonAction.trigger()
             } else {
                 toggleExpanded();
             }
             event.accepted = true;
-        } else if (event.key == Qt.Key_Escape) {
+        } else if (event.key === Qt.Key_Escape) {
             if (expandedView.expanded) {
                 collapse();
                 event.accepted = true;
             }
             // if not active, we'll let the Escape event pass through, so it can close the applet, etc.
-        } else if (event.key == Qt.Key_Space) {
+        } else if (event.key === Qt.Key_Space) {
             toggleExpanded();
             event.accepted = true;
-        } else if (event.key == Qt.Key_Menu) {
+        } else if (event.key === Qt.Key_Menu) {
             if (contextMenu instanceof PlasmaComponents2.Menu) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
@@ -578,10 +578,11 @@ Item {
 
                 visible: expanded
 
+                Layout.fillWidth: true
                 Layout.margins: PlasmaCore.Units.smallSpacing
 
                 spacing: PlasmaCore.Units.smallSpacing
-                opacity: expanded ? 1.0 : 0
+                opacity: expanded ? 1 : 0
                 Behavior on opacity {
                     NumberAnimation {
                         duration: PlasmaCore.Units.veryLongDuration
@@ -593,7 +594,7 @@ Item {
                 Loader {
                     id: actionsListLoader
 
-                    visible: status == Loader.Ready
+                    visible: status === Loader.Ready
 
                     active: expandedView.expanded && listItem.enabledActions
 
@@ -662,7 +663,7 @@ Item {
                 Loader {
                     id: customContentLoader
 
-                    visible: status == Loader.Ready
+                    visible: status === Loader.Ready
 
                     Layout.fillWidth: true
 
