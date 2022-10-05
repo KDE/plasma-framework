@@ -27,8 +27,11 @@ T.BusyIndicator {
 
     contentItem: Item {
         id: baseItem
-        // Don't want it to animate at all if the user has disabled animations
-        property bool animationRunning: visible && (control.running || opacity > 0) && PlasmaCore.Units.longDuration > 1
+        /* Binding on `visible` implicitly takes care of `control.visible`,
+         * `control.running` and `opacity > 0` at once.
+         * Also, don't animate at all if the user has disabled animations.
+         */
+        property bool animationRunning: visible && PlasmaCore.Units.longDuration > 1
 
         /* implicitWidth and implicitHeight won't work unless they come
          * from a child of the contentItem. No idea why.
@@ -36,10 +39,12 @@ T.BusyIndicator {
         implicitWidth: PlasmaCore.Units.gridUnit * 2
         implicitHeight: PlasmaCore.Units.gridUnit * 2
 
-        visible: opacity > 0
+        // We can't bind directly to opacity, as Animator won't update its value immediately.
+        visible: control.running || opacityAnimator.running
         opacity: control.running ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
+                id: opacityAnimator
                 duration: PlasmaCore.Units.shortDuration
                 easing.type: Easing.OutCubic
             }
