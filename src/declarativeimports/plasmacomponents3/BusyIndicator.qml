@@ -55,9 +55,9 @@ T.BusyIndicator {
             if (animationRunning) {
                 const date = new Date;
                 const ms = date.valueOf();
-                busyIndicatorSvgItem.rotation = ((ms % rotationAnimator.duration) / rotationAnimator.duration) * 360;
-                rotationAnimator.from = busyIndicatorSvgItem.rotation;
-                rotationAnimator.to = 360 + busyIndicatorSvgItem.rotation;
+                const startAngle = ((ms % rotationAnimator.duration) / rotationAnimator.duration) * 360;
+                rotationAnimator.from = startAngle;
+                rotationAnimator.to = startAngle + 360
             }
             rotationAnimator.running = animationRunning;
         }
