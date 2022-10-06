@@ -385,7 +385,7 @@ msgstr "Fitxer de configuració del KColorScheme"
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #: plasma/private/applet_p.cpp:126
 #, kde-format
@@ -602,69 +602,3 @@ msgstr "Establix %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
-
-#~ msgid "Accessibility"
-#~ msgstr "Accessibilitat"
-
-#~ msgid "Application Launchers"
-#~ msgstr "Llançadors d'aplicacions"
-
-#~ msgid "Astronomy"
-#~ msgstr "Astronomia"
-
-#~ msgid "Date and Time"
-#~ msgstr "Data i hora"
-
-#~ msgid "Development Tools"
-#~ msgstr "Eines de desenvolupament"
-
-#~ msgid "Education"
-#~ msgstr "Educació"
-
-#~ msgid "Environment and Weather"
-#~ msgstr "Medi ambient i meteorologia"
-
-#~ msgid "Examples"
-#~ msgstr "Exemples"
-
-#~ msgid "File System"
-#~ msgstr "Sistema de fitxers"
-
-#~ msgid "Fun and Games"
-#~ msgstr "Jocs i diversió"
-
-#~ msgid "Graphics"
-#~ msgstr "Gràfics"
-
-#~ msgid "Language"
-#~ msgstr "Idioma"
-
-#~ msgid "Mapping"
-#~ msgstr "Cartografia"
-
-#~ msgid "Miscellaneous"
-#~ msgstr "Miscelànea"
-
-#~ msgid "Multimedia"
-#~ msgstr "Multimèdia"
-
-#~ msgid "Online Services"
-#~ msgstr "Serveis en línia"
-
-#~ msgid "Productivity"
-#~ msgstr "Productivitat"
-
-#~ msgid "System Information"
-#~ msgstr "Informació del sistema"
-
-#~ msgid "Utilities"
-#~ msgstr "Utilitats"
-
-#~ msgid "Windows and Tasks"
-#~ msgstr "Finestres i tasques"
-
-#~ msgid "Clipboard"
-#~ msgstr "Porta-retalls"
-
-#~ msgid "Tasks"
-#~ msgstr "Tasques"
