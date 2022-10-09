@@ -130,7 +130,7 @@
 ></term>
 <listitem
 ><para
->Per a instal·lar o suprimir, opera amb els paquets instal·lats per a tots els usuaris.</para
+>Per a instal·lar o suprimir, opera sobre els paquets instal·lats per a tots els usuaris.</para
 ></listitem>
 </varlistentry>
 <varlistentry>
@@ -245,7 +245,7 @@
 <para
 >Hi ha disponible documentació d'usuari més detallada des de <ulink url="help:/plasma-desktop"
 >help:/plasma-desktop</ulink
-> (podeu emprar este &URL; a &konqueror; o bé executar <userinput
+> (podeu emprar este &URL; a dins de &konqueror; o bé executar <userinput
 ><command
 >khelpcenter</command
 > <parameter
