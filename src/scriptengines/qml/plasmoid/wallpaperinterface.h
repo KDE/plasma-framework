@@ -10,7 +10,6 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 
-#include "plasmaquick_export.h"
 #include <KPackage/Package>
 #include <kdeclarative/kdeclarative_export.h>
 
@@ -35,7 +34,7 @@ class QmlObject;
  *
  *
  */
-class PLASMAQUICK_EXPORT WallpaperInterface : public QQuickItem
+class WallpaperInterface : public QQuickItem
 {
     Q_OBJECT
 
