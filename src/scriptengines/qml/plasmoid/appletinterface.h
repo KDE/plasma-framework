@@ -48,7 +48,7 @@ class ConfigLoader;
  *
  * \@import org.kde.plasma.plasmoid
  */
-class PLASMAQUICK_EXPORT AppletInterface : public PlasmaQuick::AppletQuickItem
+class AppletInterface : public PlasmaQuick::AppletQuickItem
 {
     Q_OBJECT
 
