@@ -138,7 +138,7 @@ T.Slider {
                 Repeater {
                     model: tickLoader.stepCount + 1
                     delegate: Rectangle {
-                        property bool withinFill: index <= control.position * tickLoader.stepCount
+                        property bool withinFill: (control.horizontal ? index : stepCount - index) <= control.position * tickLoader.stepCount
                         width: control.vertical ? parent.width : PlasmaCore.Units.devicePixelRatio
                         height: control.horizontal ? parent.height : PlasmaCore.Units.devicePixelRatio
                         opacity: withinFill ? 1 : 0.3
